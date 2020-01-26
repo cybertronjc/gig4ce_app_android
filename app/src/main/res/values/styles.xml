@@ -1,0 +1,108 @@
+<resources>
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+<!--        <item name="android:backgroundTint">@android:color/white</item>-->
+        <!--<item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item> -->
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:textViewStyle">@style/AppTheme.TextStyle</item>
+    </style>
+
+    <style name="AppTheme.TextStyle" parent="android:Widget.TextView">
+        <item name="android:fontFamily">@font/lato</item>
+        <item name="android:letterSpacing">0.1</item>
+    </style>
+
+    <style name="AppTheme.TextStyle.H1">
+        <item name="android:textSize">96sp</item>
+        <item name="android:fontFamily">@font/comfortaa_light</item>
+        <item name="android:letterSpacing">-1.5</item>
+    </style>
+
+    <style name="AppTheme.TextStyle.H2">
+        <item name="android:textSize">60sp</item>
+        <item name="android:fontFamily">@font/comfortaa_light</item>
+        <item name="android:letterSpacing">-0.5</item>
+    </style>
+
+    <style name="AppTheme.TextStyle.H3">
+        <item name="android:textSize">48sp</item>
+        <item name="android:fontFamily">@font/comfortaa</item>
+        <item name="android:letterSpacing">0</item>
+    </style>
+
+    <style name="AppTheme.TextStyle.H4">
+        <item name="android:textSize">34sp</item>
+        <item name="android:fontFamily">@font/comfortaa</item>
+        <item name="android:letterSpacing">0.25</item>
+    </style>
+
+    <style name="AppTheme.TextStyle.H5">
+        <item name="android:textSize">24sp</item>
+        <item name="android:fontFamily">@font/comfortaa</item>
+        <item name="android:letterSpacing">0</item>
+    </style>
+
+    <style name="AppTheme.TextStyle.H6">
+        <item name="android:textSize">20sp</item>
+        <item name="android:fontFamily">@font/lato_bold</item>
+        <item name="android:letterSpacing">0.1</item>
+    </style>
+
+    <style name="AppTheme.TextStyle.Subtitle1">
+        <item name="android:textSize">16sp</item>
+        <item name="android:letterSpacing">0.15</item>
+    </style>
+
+    <style name="AppTheme.TextStyle.Subtitle2">
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">@font/lato_bold</item>
+        <item name="android:letterSpacing">0.1</item>
+    </style>
+
+    <style name="AppTheme.TextStyle.Body1">
+        <item name="android:textSize">16sp</item>
+        <item name="android:letterSpacing">0.15</item>
+
+    </style>
+
+    <style name="AppTheme.TextStyle.Body2">
+        <item name="android:textSize">14sp</item>
+        <item name="android:letterSpacing">0.1</item>
+    </style>
+
+    <style name="AppTheme.TextStyle.Caption">
+        <item name="android:textSize">12sp</item>
+        <item name="android:letterSpacing">0.14</item>
+    </style>
+
+    <style name="AppTheme.TextStyle.OVERLINE">
+        <item name="android:textSize">10sp</item>
+        <item name="android:letterSpacing">0.5</item>
+    </style>
+
+    <!--<style name="AppTheme.BaseButtonStyle" parent="android:Widget.Holo.Button">
+        <item name="android:fontFamily">@font/lato_bold</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:letterSpacing">1.25</item>
+    </style>-->
+
+    <style name="AppTheme.TextStyle.SectionTitle">
+        <item name="android:textSize">16sp</item>
+        <item name="fontWeight">900</item>
+    </style>
+
+    <style name="text_pagetitle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">16dp</item>
+        <item name="android:layout_marginTop">32dp</item>
+        <item name="android:fontFamily">@font/comfortaa_bold</item>
+        <item name="android:textSize">24sp</item>
+    </style>
+
+</resources>

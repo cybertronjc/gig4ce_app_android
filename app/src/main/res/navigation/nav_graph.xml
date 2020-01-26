@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.gigforce.app.modules.home.HomeFragment"
+        android:label="home"
+        tools:layout="@layout/fragment_home">
+        <action
+            android:id="@+id/action_homeFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_chatsHomeFragment"
+            app:destination="@id/chatsHomeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.gigforce.app.modules.auth.ui.main.LoginFragment"
+        android:label="LoginFragment" >
+        <action
+            android:id="@+id/action_loginFragment_to_confirmOtpFragment"
+            app:destination="@id/confirmOtpFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right"
+            app:popUpTo="@id/loginFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/confirmOtpFragment"
+        android:name="com.gigforce.app.modules.auth.ui.main.ConfirmOtpFragment"
+        android:label="fragment_confirm_otp"
+        tools:layout="@layout/fragment_confirm_otp" />
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.gigforce.app.modules.profile.ProfileFragment"
+        android:label="profile_fragment"
+        tools:layout="@layout/fragment_profile" />
+    <fragment
+        android:id="@+id/chatsHomeFragment"
+        android:name="com.gigforce.app.modules.chat.ChatsHomeFragment"
+        android:label="chats_home_fragment"
+        tools:layout="@layout/fragment_chats_home" >
+        <action
+            android:id="@+id/action_chatsHomeFragment_to_chatFragment"
+            app:destination="@id/chatFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/chatFragment"
+        android:name="com.gigforce.app.modules.chat.ChatFragment"
+        android:label="chat_fragment"
+        tools:layout="@layout/fragment_chat" />
+    <fragment
+        android:id="@+id/roasterFragment"
+        android:name="com.gigforce.app.modules.roaster.RoasterFragment"
+        android:label="RoasterFragment" >
+        <action
+            android:id="@+id/action_roasterFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.gigforce.app.modules.preferences.SettingsFragment"
+        android:label="SettingsFragment" />
+</navigation>
