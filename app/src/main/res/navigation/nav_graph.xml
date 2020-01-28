@@ -41,8 +41,7 @@
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.gigforce.app.modules.profile.ProfileFragment"
-        android:label="profile_fragment"
-        tools:layout="@layout/fragment_profile" />
+        android:label="profile_fragment" />
     <fragment
         android:id="@+id/chatsHomeFragment"
         android:name="com.gigforce.app.modules.chat.ChatsHomeFragment"

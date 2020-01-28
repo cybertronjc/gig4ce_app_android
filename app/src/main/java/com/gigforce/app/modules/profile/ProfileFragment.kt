@@ -2,6 +2,7 @@ package com.gigforce.app.modules.profile
 
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -24,12 +25,13 @@ class ProfileFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_profile, container, false)
+        Log.d("DEBUG", "ENTERED PROFILE VIEW")
+        return inflater.inflate(R.layout.fragment_profile_main_expanded, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        loadProfileImage()
+        //loadProfileImage()
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -37,15 +39,15 @@ class ProfileFragment : Fragment() {
         // viewModel =  // ViewModelProviders.of(this).get(ProfileViewModel::class.java)
     }
 
-    fun loadProfileImage() {
-        val gsReference = FirebaseStorage.getInstance()
-            .getReferenceFromUrl("gs://gigforce-dev.appspot.com/profile_pics/test.jpeg")
-
-        GlideApp.with(this.context!!)
-            .load(gsReference)
-            .placeholder(R.drawable.placeholder_user)
-            .centerCrop()
-            .into(img_profile)
-    }
+//    fun loadProfileImage() {
+//        val gsReference = FirebaseStorage.getInstance()
+//            .getReferenceFromUrl("gs://gigforce-dev.appspot.com/profile_pics/test.jpeg")
+//
+//        GlideApp.with(this.context!!)
+//            .load(gsReference)
+//            .placeholder(R.drawable.placeholder_user)
+//            .centerCrop()
+//            .into(img_profile)
+//    }
 
 }
