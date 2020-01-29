@@ -1,144 +1,243 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:isScrollContainer="true">
+    android:fillViewport="true"
+    android:textAlignment="center">
 
-    <androidx.cardview.widget.CardView
-        android:layout_width="360dp"
-        android:layout_height="150dp"
-        android:layout_marginTop="24dp"
-        app:cardBackgroundColor="#E42C64"
-        app:cardCornerRadius="10dp"
-        app:layout_constraintEnd_toEndOf="@+id/user_info_card"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/user_info_card"
-        app:layout_constraintTop_toBottomOf="@+id/cardView11" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="0dp"
+        android:isScrollContainer="true">
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardView11"
-        android:layout_width="360dp"
-        android:layout_height="150dp"
-        android:layout_marginTop="24dp"
-        app:cardBackgroundColor="#E42C64"
-        app:cardCornerRadius="10dp"
-        app:layout_constraintEnd_toEndOf="@+id/user_info_card"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="@+id/user_info_card"
-        app:layout_constraintTop_toBottomOf="@+id/cardView10" />
+        <androidx.cardview.widget.CardView
+            android:layout_width="360dp"
+            android:layout_height="150dp"
+            android:layout_marginTop="24dp"
+            app:cardBackgroundColor="#E42C64"
+            app:cardCornerRadius="10dp"
+            app:layout_constraintEnd_toEndOf="@+id/user_info_card"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/user_info_card"
+            app:layout_constraintTop_toBottomOf="@+id/cardView11" />
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardView10"
-        android:layout_width="360dp"
-        android:layout_height="150dp"
-        android:layout_marginTop="24dp"
-        app:cardBackgroundColor="#E42C64"
-        app:cardCornerRadius="10dp"
-        app:layout_constraintEnd_toEndOf="@+id/user_info_card"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/user_info_card"
-        app:layout_constraintTop_toBottomOf="@+id/cardView9" />
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardView11"
+            android:layout_width="360dp"
+            android:layout_height="150dp"
+            android:layout_marginTop="24dp"
+            app:cardBackgroundColor="#E42C64"
+            app:cardCornerRadius="10dp"
+            app:layout_constraintEnd_toEndOf="@+id/user_info_card"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="@+id/user_info_card"
+            app:layout_constraintTop_toBottomOf="@+id/cardView10" />
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardView9"
-        android:layout_width="360dp"
-        android:layout_height="150dp"
-        android:layout_marginTop="24dp"
-        app:cardBackgroundColor="#E42C64"
-        app:cardCornerRadius="10dp"
-        app:layout_constraintEnd_toEndOf="@+id/user_info_card"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="@+id/user_info_card"
-        app:layout_constraintTop_toBottomOf="@+id/cardView8" />
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardView10"
+            android:layout_width="360dp"
+            android:layout_height="150dp"
+            android:layout_marginTop="24dp"
+            app:cardBackgroundColor="#E42C64"
+            app:cardCornerRadius="10dp"
+            app:layout_constraintEnd_toEndOf="@+id/user_info_card"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/user_info_card"
+            app:layout_constraintTop_toBottomOf="@+id/cardView9" />
 
-    <ImageView
-        android:id="@+id/profile_avatar"
-        android:layout_width="fill_parent"
-        android:layout_height="331dp"
-        android:layout_marginBottom="407dp"
-        android:scaleType="fitXY"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@tools:sample/avatars" />
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardView9"
+            android:layout_width="360dp"
+            android:layout_height="150dp"
+            android:layout_marginTop="24dp"
+            app:cardBackgroundColor="#E42C64"
+            app:cardCornerRadius="10dp"
+            app:layout_constraintEnd_toEndOf="@+id/user_info_card"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="@+id/user_info_card"
+            app:layout_constraintTop_toBottomOf="@+id/cardView8">
 
-    <TextView
-        android:id="@+id/textView6"
-        android:layout_width="327dp"
-        android:layout_height="77dp"
-        android:layout_marginTop="292dp"
-        android:background="#FFFFFF"
-        app:layout_constraintEnd_toEndOf="@+id/profile_avatar"
-        app:layout_constraintHorizontal_bias="0.473"
-        app:layout_constraintStart_toStartOf="@+id/profile_avatar"
-        app:layout_constraintTop_toTopOf="@+id/profile_avatar" />
+            <TextView
+                android:id="@+id/textView8"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="250dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="10dp"
+                android:text="@string/education_card_education_text" />
 
-    <TextView
-        android:id="@+id/connection_count"
-        android:layout_width="31dp"
-        android:layout_height="41dp"
-        android:layout_marginStart="247dp"
-        android:layout_marginTop="305dp"
-        android:layout_marginEnd="49dp"
-        android:text="3"
-        app:layout_constraintEnd_toEndOf="@+id/textView6"
-        app:layout_constraintStart_toStartOf="@+id/textView6"
-        app:layout_constraintTop_toTopOf="@+id/profile_avatar" />
+            <View
+                android:id="@+id/divider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="40dp"
+                android:background="?android:attr/listDivider" />
 
-    <TextView
-        android:id="@+id/task_done"
-        android:layout_width="34dp"
-        android:layout_height="31dp"
-        android:layout_marginStart="141dp"
-        android:layout_marginTop="305dp"
-        android:layout_marginEnd="142dp"
-        android:text="17"
-        app:layout_constraintEnd_toEndOf="@+id/textView6"
-        app:layout_constraintStart_toStartOf="@+id/textView6"
-        app:layout_constraintTop_toTopOf="@+id/profile_avatar" />
+            <TextView
+                android:id="@+id/education_content"
+                android:layout_width="match_parent"
+                android:layout_height="75dp"
+                android:layout_marginTop="50dp"
+                android:text="@string/education_card_content_placeholder" />
 
-    <TextView
-        android:id="@+id/gigger_rating"
-        android:layout_width="34dp"
-        android:layout_height="31dp"
-        android:layout_marginStart="41dp"
-        android:layout_marginTop="305dp"
-        android:layout_marginEnd="247dp"
-        android:text="4"
-        app:layout_constraintEnd_toEndOf="@+id/textView6"
-        app:layout_constraintStart_toStartOf="@+id/textView6"
-        app:layout_constraintTop_toTopOf="@+id/profile_avatar" />
+            <TextView
+                android:id="@+id/education_view_more"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="270dp"
+                android:layout_marginTop="130dp"
+                android:text="@string/view_more_text" />
+        </androidx.cardview.widget.CardView>
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/user_info_card"
-        android:layout_width="360dp"
-        android:layout_height="100dp"
-        app:layout_constraintEnd_toEndOf="@+id/profile_avatar"
-        app:layout_constraintHorizontal_bias="0.49"
-        app:layout_constraintStart_toStartOf="@+id/profile_avatar"
-        app:layout_constraintTop_toBottomOf="@+id/textView6" />
+        <ImageView
+            android:id="@+id/profile_avatar"
+            android:layout_width="fill_parent"
+            android:layout_height="331dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/placeholder_user"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardView2"
-        android:layout_width="360dp"
-        android:layout_height="50dp"
-        app:layout_constraintEnd_toEndOf="@+id/user_info_card"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="@+id/user_info_card"
-        app:layout_constraintTop_toBottomOf="@+id/user_info_card" />
+        <TextView
+            android:id="@+id/textView6"
+            android:layout_width="327dp"
+            android:layout_height="77dp"
+            android:layout_marginTop="292dp"
+            android:background="#FFFFFF"
+            app:layout_constraintEnd_toEndOf="@+id/profile_avatar"
+            app:layout_constraintHorizontal_bias="0.473"
+            app:layout_constraintStart_toStartOf="@+id/profile_avatar"
+            app:layout_constraintTop_toTopOf="@+id/profile_avatar" />
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardView8"
-        android:layout_width="360dp"
-        android:layout_height="150dp"
-        android:layout_marginTop="24dp"
-        app:cardBackgroundColor="#E42C64"
-        app:cardCornerRadius="10dp"
-        app:layout_constraintEnd_toEndOf="@+id/user_info_card"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="@+id/user_info_card"
-        app:layout_constraintTop_toBottomOf="@+id/cardView2" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/connection_count"
+            android:layout_width="31dp"
+            android:layout_height="31dp"
+            android:layout_marginStart="247dp"
+            android:layout_marginTop="305dp"
+            android:layout_marginEnd="49dp"
+            android:text="3"
+            app:layout_constraintEnd_toEndOf="@+id/textView6"
+            app:layout_constraintStart_toStartOf="@+id/textView6"
+            app:layout_constraintTop_toTopOf="@+id/profile_avatar" />
+
+        <TextView
+            android:id="@+id/task_done"
+            android:layout_width="34dp"
+            android:layout_height="31dp"
+            android:layout_marginStart="141dp"
+            android:layout_marginTop="305dp"
+            android:layout_marginEnd="142dp"
+            android:text="17"
+            app:layout_constraintEnd_toEndOf="@+id/textView6"
+            app:layout_constraintStart_toStartOf="@+id/textView6"
+            app:layout_constraintTop_toTopOf="@+id/profile_avatar" />
+
+        <TextView
+            android:id="@+id/gigger_rating"
+            android:layout_width="34dp"
+            android:layout_height="31dp"
+            android:layout_marginStart="41dp"
+            android:layout_marginTop="305dp"
+            android:layout_marginEnd="247dp"
+            android:text="4"
+            app:layout_constraintEnd_toEndOf="@+id/textView6"
+            app:layout_constraintStart_toStartOf="@+id/textView6"
+            app:layout_constraintTop_toTopOf="@+id/profile_avatar" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/user_info_card"
+            android:layout_width="360dp"
+            android:layout_height="100dp"
+            app:layout_constraintEnd_toEndOf="@+id/profile_avatar"
+            app:layout_constraintHorizontal_bias="0.49"
+            app:layout_constraintStart_toStartOf="@+id/profile_avatar"
+            app:layout_constraintTop_toBottomOf="@+id/textView6">
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardView2"
+            android:layout_width="360dp"
+            android:layout_height="75dp"
+            app:layout_constraintEnd_toEndOf="@+id/user_info_card"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="@+id/user_info_card"
+            app:layout_constraintTop_toBottomOf="@+id/user_info_card">
+
+            <TextView
+                android:id="@+id/location"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="65dp"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:text="@string/default_location_text" />
+
+            <Button
+                android:id="@+id/button7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="250dp"
+                android:background="#FFFFFF"
+                android:elevation="0dp"
+                android:foreground="@drawable/ic_baseline_arrow_forward_24" />
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardView8"
+            android:layout_width="360dp"
+            android:layout_height="150dp"
+            android:layout_marginTop="24dp"
+            app:cardBackgroundColor="#E42C64"
+            app:cardCornerRadius="10dp"
+            app:layout_constraintEnd_toEndOf="@+id/user_info_card"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="@+id/user_info_card"
+            app:layout_constraintTop_toBottomOf="@+id/cardView2" />
+
+        <TextView
+            android:id="@+id/rating_text"
+            android:layout_width="62dp"
+            android:layout_height="21dp"
+            android:background="#F6F6F6"
+            android:ems="10"
+            android:inputType="textShortMessage|text"
+            android:text="@string/rating_text"
+            app:layout_constraintEnd_toEndOf="@+id/gigger_rating"
+            app:layout_constraintHorizontal_bias="0.464"
+            app:layout_constraintStart_toStartOf="@+id/gigger_rating"
+            app:layout_constraintTop_toBottomOf="@+id/gigger_rating" />
+
+        <TextView
+            android:id="@+id/tasks_done_text"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:background="#F6F6F6"
+            android:ems="10"
+            android:inputType="textShortMessage|text"
+            android:text="@string/tasks_done_text"
+            app:layout_constraintEnd_toEndOf="@+id/task_done"
+            app:layout_constraintStart_toStartOf="@+id/task_done"
+            app:layout_constraintTop_toBottomOf="@+id/task_done" />
+
+        <TextView
+            android:id="@+id/connections_text"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:background="#F6F6F6"
+            android:ems="10"
+            android:inputType="textShortMessage|text"
+            android:text="@string/connections_text"
+            app:layout_constraintEnd_toEndOf="@+id/connection_count"
+            app:layout_constraintHorizontal_bias="0.457"
+            app:layout_constraintStart_toStartOf="@+id/connection_count"
+            app:layout_constraintTop_toBottomOf="@+id/connection_count" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>

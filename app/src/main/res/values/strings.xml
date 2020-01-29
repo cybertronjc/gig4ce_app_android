@@ -22,4 +22,13 @@
     <string name="attachment_summary_on">Automatically download attachments for incoming emails
     </string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
+
+    <!-- Profile main expanded page -->
+    <string name="rating_text">Rating</string>
+    <string name="tasks_done_text">Tasks Done</string>
+    <string name="connections_text">Connections</string>
+    <string name="default_location_text">Location\n220KM away</string>
+    <string name="education_card_education_text">Education</string>
+    <string name="education_card_content_placeholder">Education content to be put here</string>
+    <string name="view_more_text">View more</string>
 </resources>

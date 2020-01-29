@@ -41,7 +41,12 @@
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.gigforce.app.modules.profile.ProfileFragment"
-        android:label="profile_fragment" />
+        android:label="profile_fragment"
+        tools:layout="@layout/fragment_profile_main_expanded">
+        <action
+            android:id="@+id/action_profileFragment_to_educationExpandedFragment"
+            app:destination="@id/educationExpandedFragment" />
+    </fragment>
     <fragment
         android:id="@+id/chatsHomeFragment"
         android:name="com.gigforce.app.modules.chat.ChatsHomeFragment"
@@ -68,4 +73,9 @@
         android:id="@+id/settingsFragment"
         android:name="com.gigforce.app.modules.preferences.SettingsFragment"
         android:label="SettingsFragment" />
+    <fragment
+        android:id="@+id/educationExpandedFragment"
+        android:name="com.gigforce.app.modules.profile.EducationExpandedFragment"
+        android:label="EducationExpandedFragment"
+        tools:layout="@layout/fragment_profile_education_expanded"/>
 </navigation>

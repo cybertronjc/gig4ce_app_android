@@ -7,11 +7,19 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.gigforce.app.R
+import com.gigforce.app.modules.profile.models.ProfileData
 import com.gigforce.app.utils.GlideApp
 import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import kotlinx.android.synthetic.main.fragment_profile.*
+import kotlinx.android.synthetic.main.fragment_profile_main_expanded.view.*
 
 class ProfileFragment : Fragment() {
 
@@ -19,35 +27,41 @@ class ProfileFragment : Fragment() {
         fun newInstance() = ProfileFragment()
     }
 
-    val viewModel: ProfileViewModel = activityViewModels<ProfileViewModel>().value
+    private lateinit var viewModel: ProfileViewModel
+    private lateinit var storage: FirebaseStorage
+    private lateinit var layout: View
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        storage = FirebaseStorage.getInstance()
         Log.d("DEBUG", "ENTERED PROFILE VIEW")
-        return inflater.inflate(R.layout.fragment_profile_main_expanded, container, false)
+        layout = inflater.inflate(R.layout.fragment_profile_main_expanded, container, false)
+        return layout
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        //loadProfileImage()
+        viewModel = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
+        loadImage("ysharma.jpg")
+
+        // load user data
+        layout.gigger_rating.text = viewModel.UserProfile.GetRating().toString()
+        layout.task_done.text = viewModel.UserProfile.GetTasksDone().toString()
+        layout.connection_count.text = viewModel.UserProfile.GetConnections().toString()
+
+        layout.education_view_more.setOnClickListener {
+            Log.d("CLICK_STATUS", "CLICK HEARD")
+            Toast.makeText(this.context, "View More Clicked", Toast.LENGTH_LONG).show()
+            this.findNavController().navigate(R.id.educationExpandedFragment)
+        }
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        // viewModel =  // ViewModelProviders.of(this).get(ProfileViewModel::class.java)
+    private fun loadImage(Path: String) {
+        var profilePicRef: StorageReference = storage.reference.child("profile_pics").child(Path)
+        GlideApp.with(this.context!!)
+            .load(profilePicRef)
+            .into(layout.profile_avatar)
     }
-
-//    fun loadProfileImage() {
-//        val gsReference = FirebaseStorage.getInstance()
-//            .getReferenceFromUrl("gs://gigforce-dev.appspot.com/profile_pics/test.jpeg")
-//
-//        GlideApp.with(this.context!!)
-//            .load(gsReference)
-//            .placeholder(R.drawable.placeholder_user)
-//            .centerCrop()
-//            .into(img_profile)
-//    }
-
 }
