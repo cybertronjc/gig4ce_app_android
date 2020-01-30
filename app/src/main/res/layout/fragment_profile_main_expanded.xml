@@ -12,6 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="0dp"
+        android:background="#f2f2f2"
         android:isScrollContainer="true">
 
         <androidx.cardview.widget.CardView

@@ -13,10 +13,12 @@ class ProfileViewModel: ViewModel() {
     var UserProfile: ProfileData
 
     init {
-        val uid = FirebaseAuth.getInstance().currentUser?.uid!!
 
-        FirebaseFirestore.getInstance()
-            .document("user_profiles/$uid")
+        //val uid = FirebaseAuth.getInstance().currentUser?.uid!!
+        val uid = "UeXaZV3KctuZ8xXLCKGF" // Test user
+
+        val db = FirebaseFirestore.getInstance()
+        db.document("user_profiles/$uid")
             .addSnapshotListener { documentSnapshot, firebaseFirestoreException ->
 
                 firebaseFirestoreException ?.let {
@@ -28,6 +30,20 @@ class ProfileViewModel: ViewModel() {
                     profileData.postValue(it.data)
                 }
             }
+
+        val docRef = db.collection("user_profiles").document(uid)
+        docRef.get()
+                .addOnSuccessListener { document ->
+                    if (document != null) {
+                        Log.d("Doc Status", "${document.data}")
+                    }
+                    else {
+                        Log.d("Doc Status", "no document for $uid")
+                    }
+                }
+                .addOnFailureListener{ exception ->
+                    Log.d("Doc Status", "get failed with ", exception)
+                }
         // load user data
         UserProfile = ProfileData(id="ysharma")
         UserProfile.SetRating(2.0F)
