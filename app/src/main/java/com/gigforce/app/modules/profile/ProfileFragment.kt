@@ -10,6 +10,8 @@ import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
@@ -38,18 +40,24 @@ class ProfileFragment : Fragment() {
         storage = FirebaseStorage.getInstance()
         Log.d("DEBUG", "ENTERED PROFILE VIEW")
         layout = inflater.inflate(R.layout.fragment_profile_main_expanded, container, false)
+
+        loadImage("ysharma.jpg")
+
         return layout
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         viewModel = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
-        loadImage("ysharma.jpg")
 
         // load user data
-        layout.gigger_rating.text = viewModel.UserProfile.GetRating().toString()
-        layout.task_done.text = viewModel.UserProfile.GetTasksDone().toString()
-        layout.connection_count.text = viewModel.UserProfile.GetConnections().toString()
+        viewModel.getProfileData().observe(this, Observer { profile ->
+            layout.gigger_rating.text = profile.rating
+            layout.task_done.text = profile.tasksDone.toString()
+            layout.connection_count.text = profile.connections.toString()
+            Log.d("ProfileFragment", profile.rating.toString())
+        })
 
         layout.education_view_more.setOnClickListener {
             Log.d("CLICK_STATUS", "CLICK HEARD")

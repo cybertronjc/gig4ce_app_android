@@ -1,52 +1,51 @@
 package com.gigforce.app.modules.profile
 
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.gigforce.app.modules.profile.models.ProfileData
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.QueryDocumentSnapshot
+import com.google.gson.Gson
 
 class ProfileViewModel: ViewModel() {
 
-    var profileData:MutableLiveData<Map<String, Any>> = MutableLiveData<Map<String, Any>>()
-    var UserProfile: ProfileData
+    var profileFirebaseRepository = ProfileFirebaseRepository()
+    var userProfileData: MutableLiveData<ProfileData> = MutableLiveData<ProfileData>()
+    val uid: String
 
-    init {
+    fun getProfileData(): MutableLiveData<ProfileData> {
+        profileFirebaseRepository.getProfile().addSnapshotListener(EventListener<DocumentSnapshot> {
+            value, e ->
 
-        //val uid = FirebaseAuth.getInstance().currentUser?.uid!!
-        val uid = "UeXaZV3KctuZ8xXLCKGF" // Test user
-
-        val db = FirebaseFirestore.getInstance()
-        db.document("user_profiles/$uid")
-            .addSnapshotListener { documentSnapshot, firebaseFirestoreException ->
-
-                firebaseFirestoreException ?.let {
-                    Log.e("/profile/viewmodel", it.message, it)
-                }
-
-                documentSnapshot ?.let {
-                    Log.d("/profile/viewmodel", "profile updated, ${it.data}")
-                    profileData.postValue(it.data)
-                }
+            if (e != null) {
+                Log.w("ProfileViewModel", "Listen failed", e)
+                return@EventListener
             }
 
-        val docRef = db.collection("user_profiles").document(uid)
-        docRef.get()
-                .addOnSuccessListener { document ->
-                    if (document != null) {
-                        Log.d("Doc Status", "${document.data}")
-                    }
-                    else {
-                        Log.d("Doc Status", "no document for $uid")
-                    }
-                }
-                .addOnFailureListener{ exception ->
-                    Log.d("Doc Status", "get failed with ", exception)
-                }
-        // load user data
-        UserProfile = ProfileData(id="ysharma")
-        UserProfile.SetRating(2.0F)
+            userProfileData = MutableLiveData(
+                ProfileData(
+                    id=uid,
+                    rating = value?.get("rating") as String,
+                    tasksDone = value?.get("tasks_done") as Long,
+                    connections = value?.get("connections") as Long)
+            )
+        })
+        return userProfileData
     }
 
+    init {
+        //uid = FirebaseAuth.getInstance().currentUser?.uid!!
+        uid = "UeXaZV3KctuZ8xXLCKGF" // Test user
+        getProfileData()
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        Log.d("ProfileViewModel", "Profile View model destroying")
+    }
 }

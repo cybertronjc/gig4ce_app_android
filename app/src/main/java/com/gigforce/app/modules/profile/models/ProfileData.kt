@@ -13,29 +13,29 @@ data class ProfileData(
     val current_work: String? = null,
     val tags: ArrayList<String> = ArrayList(),
     val dob: Date? = null,
-    var rating: Float? = null,
-    val tasksDone: Int = 0,
-    val connections: Int = 0
+    var rating: String? = null,
+    val tasksDone: Long? = null,
+    val connections: Long? = null
 ) {
 
     fun GetAge(): String {
         return "-"
     }
 
-    fun GetRating(): Float {
+    fun GetRating(): String {
         return rating!!
     }
 
-    fun SetRating(rting: Float) {
+    fun SetRating(rting: String?) {
         rating = rting
     }
 
-    fun GetTasksDone(): Int {
-        return tasksDone
+    fun GetTasksDone(): Long {
+        return tasksDone!!
     }
 
-    fun GetConnections(): Int {
-        return connections
+    fun GetConnections(): Long {
+        return connections!!
     }
 
 }
