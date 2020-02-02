@@ -57,6 +57,7 @@ class EducationExpandedFragment: Fragment() {
             Log.d("ProfileFragment", profile.rating.toString())
         })
 
+        // Navigate to bottom sheets
         layout.add_skill_button.setOnClickListener{
             this.findNavController().navigate(R.id.addSkillBottomSheetFragment)
         }
