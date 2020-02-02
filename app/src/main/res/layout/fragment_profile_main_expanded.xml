@@ -50,11 +50,13 @@
             app:layout_constraintStart_toStartOf="@+id/user_info_card"
             app:layout_constraintTop_toBottomOf="@+id/cardView9" />
 
-        <androidx.cardview.widget.CardView
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cardView9"
             android:layout_width="360dp"
-            android:layout_height="150dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
+            android:background="#E42C64"
+            android:minHeight="150dp"
             app:cardBackgroundColor="#E42C64"
             app:cardCornerRadius="10dp"
             app:layout_constraintEnd_toEndOf="@+id/user_info_card"
@@ -66,33 +68,66 @@
                 android:id="@+id/textView8"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="250dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginEnd="10dp"
-                android:text="@string/education_card_education_text" />
-
-            <View
-                android:id="@+id/divider"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="40dp"
-                android:background="?android:attr/listDivider" />
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="24dp"
+                android:text="@string/education_card_education_text"
+                android:textColor="#FFFFFF"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:layout_conversion_absoluteHeight="16dp"
+                tools:layout_conversion_absoluteWidth="77dp" />
 
             <TextView
                 android:id="@+id/education_content"
                 android:layout_width="match_parent"
-                android:layout_height="75dp"
-                android:layout_marginTop="50dp"
-                android:text="@string/education_card_content_placeholder" />
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:minHeight="75dp"
+                android:text="@string/education_card_content_placeholder"
+                android:textColor="#FFFFFF"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/divider"
+                tools:layout_conversion_absoluteHeight="75dp"
+                tools:layout_conversion_absoluteWidth="360dp" />
 
             <TextView
                 android:id="@+id/education_view_more"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="270dp"
-                android:layout_marginTop="130dp"
-                android:text="@string/view_more_text" />
-        </androidx.cardview.widget.CardView>
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="32dp"
+                android:layout_marginBottom="8dp"
+                android:text="@string/view_more_text"
+                android:textColor="#2C4AEF"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/education_exp_education_content"
+                tools:layout_conversion_absoluteHeight="16dp"
+                tools:layout_conversion_absoluteWidth="80dp" />
+
+            <View
+                android:id="@+id/divider"
+                android:layout_width="358dp"
+                android:layout_height="1dp"
+                android:layout_marginTop="16dp"
+                android:background="?android:attr/listDivider"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView8" />
+
+            <View
+                android:id="@+id/divider5"
+                android:layout_width="358dp"
+                android:layout_height="1dp"
+                android:background="?android:attr/listDivider"
+                app:layout_constraintBottom_toTopOf="@+id/education_view_more"
+                app:layout_constraintTop_toBottomOf="@+id/education_exp_education_content"
+                tools:layout_editor_absoluteX="1dp" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <ImageView
             android:id="@+id/profile_avatar"

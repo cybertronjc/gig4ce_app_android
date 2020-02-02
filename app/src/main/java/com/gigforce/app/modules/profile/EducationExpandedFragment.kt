@@ -7,6 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
 import com.gigforce.app.utils.GlideApp
@@ -14,6 +16,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import kotlinx.android.synthetic.main.fragment_profile_education_expanded.view.*
 import kotlinx.android.synthetic.main.fragment_profile_main_expanded.view.*
+import java.text.SimpleDateFormat
 
 class EducationExpandedFragment: Fragment() {
 
@@ -22,6 +25,7 @@ class EducationExpandedFragment: Fragment() {
     }
 
     private lateinit var storage: FirebaseStorage
+    lateinit var viewModel: ProfileViewModel
 
     private lateinit var layout: View
 
@@ -38,6 +42,20 @@ class EducationExpandedFragment: Fragment() {
         super.onViewCreated(view, savedInstanceState)
         storage = FirebaseStorage.getInstance()
         loadImage("ysharma.jpg")
+
+        viewModel = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
+
+        viewModel.userProfileData.observe(this, Observer { profile ->
+            var education_string: String = ""
+            var format = SimpleDateFormat("dd/MM/yyyy")
+            for (education in profile.Education!!) {
+                education_string += education.institution + "\n"
+                education_string += education.degree + " - " + education.course + "\n"
+                education_string += format.format(education.startYear) + " - " + format.format(education.endYear) + "\n\n"
+            }
+            layout.education_exp_education_content.text = education_string
+            Log.d("ProfileFragment", profile.rating.toString())
+        })
 
         layout.add_skill_button.setOnClickListener{
             this.findNavController().navigate(R.id.addSkillBottomSheetFragment)

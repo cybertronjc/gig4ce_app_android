@@ -7,21 +7,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import android.widget.Toast
-import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.bumptech.glide.Glide
 import com.gigforce.app.R
-import com.gigforce.app.modules.profile.models.ProfileData
 import com.gigforce.app.utils.GlideApp
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
-import kotlinx.android.synthetic.main.fragment_profile.*
 import kotlinx.android.synthetic.main.fragment_profile_main_expanded.view.*
+import java.text.SimpleDateFormat
 
 class ProfileFragment : Fragment() {
 
@@ -56,6 +50,15 @@ class ProfileFragment : Fragment() {
             layout.gigger_rating.text = profile.rating.toString()
             layout.task_done.text = profile.tasksDone.toString()
             layout.connection_count.text = profile.connections.toString()
+
+            var education_string: String = ""
+            var format = SimpleDateFormat("dd/MM/yyyy")
+            for (education in profile.Education!!) {
+                education_string += education.institution + "\n"
+                education_string += education.degree + " - " + education.course + "\n"
+                education_string += format.format(education.startYear) + " - " + format.format(education.endYear) + "\n\n"
+            }
+            layout.education_content.text = education_string
             Log.d("ProfileFragment", profile.rating.toString())
         })
 
