@@ -27,12 +27,10 @@ class ProfileViewModel: ViewModel() {
                 return@EventListener
             }
 
-            userProfileData = MutableLiveData(
-                ProfileData(
-                    id=uid,
-                    rating = value?.get("rating") as String,
-                    tasksDone = value?.get("tasks_done") as Long,
-                    connections = value?.get("connections") as Long)
+            Log.d("ProfileViewModel", value.toString())
+
+            userProfileData.postValue(
+                value!!.toObject(ProfileData::class.java)
             )
         })
         return userProfileData

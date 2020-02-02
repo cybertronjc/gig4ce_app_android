@@ -77,5 +77,30 @@
         android:id="@+id/educationExpandedFragment"
         android:name="com.gigforce.app.modules.profile.EducationExpandedFragment"
         android:label="EducationExpandedFragment"
-        tools:layout="@layout/fragment_profile_education_expanded"/>
+        tools:layout="@layout/fragment_profile_education_expanded">
+        <action
+            android:id="@+id/action_educationExpandedFragment_to_addSkillBottomSheetFragment"
+            app:destination="@id/addSkillBottomSheetFragment" />
+        <action
+            android:id="@+id/action_educationExpandedFragment_to_addAchievementBottomSheetFragment"
+            app:destination="@id/addAchievementBottomSheetFragment" />
+        <action
+            android:id="@+id/action_educationExpandedFragment_to_addEducationBottomSheetFragment"
+            app:destination="@id/addEducationBottomSheetFragment" />
+    </fragment>
+    <dialog
+        android:id="@+id/addSkillBottomSheetFragment"
+        android:name="com.gigforce.app.modules.profile.AddSkillBottomSheetFragment"
+        android:label="AddSkillBottomSheetFragment"
+        tools:layout="@layout/add_skill_bottom_sheet" />
+    <dialog
+        android:id="@+id/addAchievementBottomSheetFragment"
+        android:name="com.gigforce.app.modules.profile.AddAchievementBottomSheetFragment"
+        android:label="AddAchievementBottomSheetFragment"
+        tools:layout="@layout/add_achievement_bottom_sheet" />
+    <dialog
+        android:id="@+id/addEducationBottomSheetFragment"
+        android:name="com.gigforce.app.modules.profile.AddEducationBottomSheetFragment"
+        android:label="AddEducationBottomSheetFragment"
+        tools:layout="@layout/add_education_bottom_sheet" />
 </navigation>

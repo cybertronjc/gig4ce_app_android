@@ -52,8 +52,8 @@ class ProfileFragment : Fragment() {
         viewModel = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
 
         // load user data
-        viewModel.getProfileData().observe(this, Observer { profile ->
-            layout.gigger_rating.text = profile.rating
+        viewModel.userProfileData.observe(this, Observer { profile ->
+            layout.gigger_rating.text = profile.rating.toString()
             layout.task_done.text = profile.tasksDone.toString()
             layout.connection_count.text = profile.connections.toString()
             Log.d("ProfileFragment", profile.rating.toString())

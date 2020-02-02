@@ -45,4 +45,29 @@
     <string name="nav_about_text">About me</string>
     <string name="nav_gigs_text">Gigs</string>
     <string name="nav_experience_text">Experience</string>
+
+    <!-- Add New Skill Bottom Sheet -->
+    <string name="add_skill_sheet_new_skill">New Skill</string>
+    <string name="add_skill_sheet_category">Category</string>
+    <string name="add_skill_sheet_skill_name">Name of Skill</string>
+
+    <!-- Add New Achievement Bottom Sheet -->
+    <string name="add_achievement_sheet_new_achievement">New Achievement</string>
+    <string name="add_achievement_sheet_title">Title</string>
+    <string name="add_achievement_sheet_issuing_authority">Issuing Authority</string>
+    <string name="add_achievement_sheet_location">Location</string>
+    <string name="add_achievement_sheet_year">Year</string>
+
+    <!-- Add New Education Bottom Sheed -->
+    <string name="add_education_sheet_new_education">New Education</string>
+    <string name="add_education_sheet_institution">Institution</string>
+    <string name="add_education_sheet_course">Course</string>
+    <string name="add_education_sheet_degree">Degree</string>
+    <string name="add_education_sheet_start_year">Start Year</string>
+    <string name="add_education_sheet_end_year">End Year</string>
+
+    <!-- Generic strings -->
+    <string name="cancel_text">Cancel</string>
+    <string name="save_text">Save</string>
+    <string name="add_more_text">+ Add more</string>
 </resources>

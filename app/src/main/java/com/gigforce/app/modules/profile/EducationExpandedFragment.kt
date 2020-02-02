@@ -5,11 +5,14 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
 import com.gigforce.app.utils.GlideApp
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import kotlinx.android.synthetic.main.fragment_profile_education_expanded.view.*
 import kotlinx.android.synthetic.main.fragment_profile_main_expanded.view.*
 
 class EducationExpandedFragment: Fragment() {
@@ -31,16 +34,26 @@ class EducationExpandedFragment: Fragment() {
         return layout
     }
 
-//    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-//        super.onViewCreated(view, savedInstanceState)
-//        storage = FirebaseStorage.getInstance()
-//        loadImage("ysharma.jpg")
-//    }
-//
-//    private fun loadImage(Path: String) {
-//        val profilePicRef: StorageReference = storage.reference.child("profile_pics").child(Path)
-//        GlideApp.with(this.context!!)
-//            .load(profilePicRef)
-//            .into(layout.profile_avatar)
-//    }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        storage = FirebaseStorage.getInstance()
+        loadImage("ysharma.jpg")
+
+        layout.add_skill_button.setOnClickListener{
+            this.findNavController().navigate(R.id.addSkillBottomSheetFragment)
+        }
+        layout.add_achievement_button.setOnClickListener{
+            this.findNavController().navigate(R.id.addAchievementBottomSheetFragment)
+        }
+        layout.add_education_button.setOnClickListener{
+            this.findNavController().navigate(R.id.addEducationBottomSheetFragment)
+        }
+    }
+
+    private fun loadImage(Path: String) {
+        val profilePicRef: StorageReference = storage.reference.child("profile_pics").child(Path)
+        GlideApp.with(this.context!!)
+            .load(profilePicRef)
+            .into(layout.education_profile_avatar)
+    }
 }
