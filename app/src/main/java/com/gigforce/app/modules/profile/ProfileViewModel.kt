@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.gigforce.app.modules.profile.models.Education
 import com.gigforce.app.modules.profile.models.ProfileData
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
@@ -34,6 +35,10 @@ class ProfileViewModel: ViewModel() {
             )
         })
         return userProfileData
+    }
+
+    fun setProfileData(education: ArrayList<Education>) {
+        profileFirebaseRepository.setProfile(education)
     }
 
     init {

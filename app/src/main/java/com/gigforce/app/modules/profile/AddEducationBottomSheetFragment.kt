@@ -5,10 +5,18 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
+import com.gigforce.app.modules.profile.models.Education
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.android.synthetic.main.add_education_bottom_sheet.view.*
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.util.*
+import kotlin.collections.ArrayList
 
 class AddEducationBottomSheetFragment: BottomSheetDialogFragment() {
     companion object {
@@ -16,6 +24,8 @@ class AddEducationBottomSheetFragment: BottomSheetDialogFragment() {
     }
 
     lateinit var layout: View
+    lateinit var viewModel: ProfileViewModel
+    var updates: ArrayList<Education> = ArrayList()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,8 +39,23 @@ class AddEducationBottomSheetFragment: BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        viewModel = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
+
         layout.cancel_button.setOnClickListener{
             this.findNavController().navigate(R.id.educationExpandedFragment)
+        }
+
+        layout.save_button.setOnClickListener{
+            updates.add(Education(
+                institution = layout.institution_name.text.toString(),
+                course = layout.course_name.text.toString(),
+                degree = layout.degree_name.text.toString(),
+                startYear = SimpleDateFormat("dd/MM/yyyy").parse(layout.start_date.text.toString()),
+                endYear = SimpleDateFormat("dd/MM/yyyy").parse(layout.end_date.text.toString())
+            ))
+
+            viewModel.setProfileData(updates)
+            Toast.makeText(this.context, "Updated Education Section", Toast.LENGTH_LONG)
         }
     }
 }
