@@ -14,8 +14,10 @@ import com.gigforce.app.R
 import com.gigforce.app.utils.GlideApp
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import kotlinx.android.synthetic.main.fragment_profile_education_expanded.view.*
 import kotlinx.android.synthetic.main.fragment_profile_main_expanded.view.*
 import java.text.SimpleDateFormat
+import java.util.*
 
 class ProfileFragment : Fragment() {
 
@@ -51,14 +53,15 @@ class ProfileFragment : Fragment() {
             layout.task_done.text = profile.tasksDone.toString()
             layout.connection_count.text = profile.connections.toString()
 
-            var education_string: String = ""
-            var format = SimpleDateFormat("dd/MM/yyyy")
+            var educationString = ""
+            var format = SimpleDateFormat("dd/MM/yyyy", Locale.US)
             for (education in profile.Education!!) {
-                education_string += education.institution + "\n"
-                education_string += education.degree + " - " + education.course + "\n"
-                education_string += format.format(education.startYear) + " - " + format.format(education.endYear) + "\n\n"
+                educationString += education.institution + "\n"
+                educationString += education.degree + " - " + education.course + "\n"
+                educationString += format.format(education.startYear!!) + " - " + format.format(education.endYear!!) + "\n\n"
             }
-            layout.education_content.text = education_string
+            Log.d("ProfileFragment", educationString)
+            layout.education_content.text = educationString
             Log.d("ProfileFragment", profile.rating.toString())
         })
 
@@ -66,6 +69,11 @@ class ProfileFragment : Fragment() {
             Log.d("CLICK_STATUS", "CLICK HEARD")
             Toast.makeText(this.context, "View More Clicked", Toast.LENGTH_LONG).show()
             this.findNavController().navigate(R.id.educationExpandedFragment)
+        }
+
+        // back page navigation
+        layout.profile_main_expanded_back_button.setOnClickListener{
+            this.findNavController().navigate(R.id.homeFragment)
         }
     }
 

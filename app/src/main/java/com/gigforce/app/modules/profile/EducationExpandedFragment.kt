@@ -46,16 +46,29 @@ class EducationExpandedFragment: Fragment() {
         viewModel = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
 
         viewModel.userProfileData.observe(this, Observer { profile ->
-            var education_string: String = ""
+            var educationString: String = ""
             var format = SimpleDateFormat("dd/MM/yyyy")
             for (education in profile.Education!!) {
-                education_string += education.institution + "\n"
-                education_string += education.degree + " - " + education.course + "\n"
-                education_string += format.format(education.startYear) + " - " + format.format(education.endYear) + "\n\n"
+                educationString += education.institution + "\n"
+                educationString += education.degree + " - " + education.course + "\n"
+                educationString += format.format(education.startYear!!) + " - " + format.format(education.endYear!!) + "\n\n"
             }
-            layout.education_exp_education_content.text = education_string
+            layout.education_exp_education_content.text = educationString
+
+            var skillString: String = ""
+            for (skill in profile.Skill!!) {
+                skillString += skill.category + "\n"
+                skillString += skill.nameOfSkill + "\n\n"
+            }
+            layout.education_exp_skill_content.text = skillString
+
             Log.d("ProfileFragment", profile.rating.toString())
         })
+
+        // back page navigation
+        layout.education_expanded_back_button.setOnClickListener{
+            this.findNavController().navigate(R.id.profileFragment)
+        }
 
         // Navigate to bottom sheets
         layout.add_skill_button.setOnClickListener{

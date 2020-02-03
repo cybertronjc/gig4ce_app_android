@@ -1,7 +1,7 @@
 package com.gigforce.app.modules.profile
 
 import com.gigforce.app.modules.profile.models.Education
-import com.google.firebase.auth.FirebaseAuth
+import com.gigforce.app.modules.profile.models.Skill
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
@@ -16,8 +16,7 @@ class ProfileFirebaseRepository {
         return firebaseDB.collection("user_profiles").document(uid)
     }
 
-    fun setProfile(education: ArrayList<Education>) {
-        var updates: ArrayList<Map<String, Any>> = ArrayList()
+    fun setProfileEducation(education: ArrayList<Education>) {
         for(ed in education) {
             firebaseDB.collection("user_profiles")
                 .document(uid).update("Education", FieldValue.arrayUnion(
@@ -27,6 +26,18 @@ class ProfileFirebaseRepository {
                         "degree" to ed.degree,
                         "startYear" to ed.startYear!!,
                         "endYear" to ed.endYear!!
+                    )
+                ))
+        }
+    }
+
+    fun setProfileSkill(skills: ArrayList<Skill>) {
+        for(sk in skills) {
+            firebaseDB.collection("user_profiles")
+                .document(uid).update("Skill", FieldValue.arrayUnion(
+                    mapOf<String, Any>(
+                        "category" to sk.category,
+                        "nameOfSkill" to sk.nameOfSkill
                     )
                 ))
         }

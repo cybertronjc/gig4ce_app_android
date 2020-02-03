@@ -54,8 +54,9 @@ class AddEducationBottomSheetFragment: BottomSheetDialogFragment() {
                 endYear = SimpleDateFormat("dd/MM/yyyy").parse(layout.end_date.text.toString())
             ))
 
-            viewModel.setProfileData(updates)
+            viewModel.setProfileEducation(updates)
             Toast.makeText(this.context, "Updated Education Section", Toast.LENGTH_LONG)
+            this.findNavController().navigate(R.id.educationExpandedFragment)
         }
     }
 }

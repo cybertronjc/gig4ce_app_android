@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="0dp"
-        android:background="#f2f2f2"
+        android:background="#D1D1D1"
         android:isScrollContainer="true">
 
         <androidx.cardview.widget.CardView
@@ -274,6 +274,17 @@
             app:layout_constraintHorizontal_bias="0.457"
             app:layout_constraintStart_toStartOf="@+id/connection_count"
             app:layout_constraintTop_toBottomOf="@+id/connection_count" />
+
+        <TextView
+            android:id="@+id/profile_main_expanded_back_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/back_button"
+            android:foreground="@drawable/back_button"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

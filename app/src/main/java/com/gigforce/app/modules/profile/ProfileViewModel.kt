@@ -1,17 +1,13 @@
 package com.gigforce.app.modules.profile
 
 import android.util.Log
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.gigforce.app.modules.profile.models.Education
 import com.gigforce.app.modules.profile.models.ProfileData
-import com.google.firebase.auth.FirebaseAuth
+import com.gigforce.app.modules.profile.models.Skill
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.EventListener
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.QueryDocumentSnapshot
-import com.google.gson.Gson
 
 class ProfileViewModel: ViewModel() {
 
@@ -33,12 +29,18 @@ class ProfileViewModel: ViewModel() {
             userProfileData.postValue(
                 value!!.toObject(ProfileData::class.java)
             )
+
+            Log.d("ProfileViewModel", userProfileData.toString())
         })
         return userProfileData
     }
 
-    fun setProfileData(education: ArrayList<Education>) {
-        profileFirebaseRepository.setProfile(education)
+    fun setProfileEducation(education: ArrayList<Education>) {
+        profileFirebaseRepository.setProfileEducation(education)
+    }
+
+    fun setProfileSkill(skills: ArrayList<Skill>) {
+        profileFirebaseRepository.setProfileSkill(skills)
     }
 
     init {

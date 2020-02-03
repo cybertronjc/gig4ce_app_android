@@ -5,11 +5,17 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
+import com.gigforce.app.modules.profile.models.Education
+import com.gigforce.app.modules.profile.models.Skill
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import kotlinx.android.synthetic.main.add_education_bottom_sheet.view.*
 import kotlinx.android.synthetic.main.add_skill_bottom_sheet.view.*
 import kotlinx.android.synthetic.main.fragment_profile_education_expanded.view.*
+import java.text.SimpleDateFormat
 
 class AddSkillBottomSheetFragment: BottomSheetDialogFragment() {
     companion object {
@@ -17,6 +23,8 @@ class AddSkillBottomSheetFragment: BottomSheetDialogFragment() {
     }
 
     lateinit var layout: View
+    var updates: ArrayList<Skill> = ArrayList()
+    lateinit var viewModel: ProfileViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,7 +38,22 @@ class AddSkillBottomSheetFragment: BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        viewModel = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
+
         layout.add_skill_cancel_button.setOnClickListener{
+            this.findNavController().navigate(R.id.educationExpandedFragment)
+        }
+
+        layout.add_skill_save_button.setOnClickListener{
+            updates.add(
+                Skill(
+                    category = layout.add_skill_category.text.toString(),
+                    nameOfSkill = layout.add_skill_name.text.toString()
+                )
+            )
+
+            viewModel.setProfileSkill(updates)
+            Toast.makeText(this.context, "Updated Skills Section", Toast.LENGTH_LONG)
             this.findNavController().navigate(R.id.educationExpandedFragment)
         }
     }
