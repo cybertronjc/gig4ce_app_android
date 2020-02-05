@@ -1,5 +1,6 @@
 package com.gigforce.app.modules.profile
 
+import android.graphics.Color
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.util.Log
@@ -52,6 +53,19 @@ class ProfileFragment : Fragment() {
             layout.gigger_rating.text = profile.rating.toString()
             layout.task_done.text = profile.tasksDone.toString()
             layout.connection_count.text = profile.connections.toString()
+            layout.main_expanded_user_name.text = profile.name.toString()
+            layout.user_about_me.text = profile.aboutMe.toString()
+
+            Log.d("ProfileFragment", profile.isVerified.toString())
+            if (profile.isVerified) {
+                layout.main_expanded_is_verified.setBackgroundColor(Color.parseColor("#00FF00"))
+            }
+
+            var tagsString = ""
+            for (tag in profile.Tags!!) {
+                tagsString += "$tag  "
+            }
+            layout.main_tags.text = tagsString
 
             var educationString = ""
             var format = SimpleDateFormat("dd/MM/yyyy", Locale.US)

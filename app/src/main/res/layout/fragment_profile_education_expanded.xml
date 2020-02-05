@@ -18,10 +18,11 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cardView12"
             android:layout_width="360dp"
-            android:layout_height="100dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:background="#FFFFFF"
             android:elevation="5dp"
+            android:minHeight="100dp"
             app:layout_constraintEnd_toEndOf="@+id/cardView7"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/cardView7"
@@ -38,7 +39,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/textView16"
+                android:id="@+id/education_exp_achievement_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
@@ -50,11 +51,12 @@
                 android:id="@+id/divider4"
                 android:layout_width="358dp"
                 android:layout_height="1dp"
-                android:layout_marginBottom="30dp"
+                android:layout_marginBottom="8dp"
                 android:background="?android:attr/listDivider"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/education_exp_achievement_content" />
 
             <TextView
                 android:id="@+id/add_achievement_button"
@@ -103,10 +105,11 @@
                 android:id="@+id/divider3"
                 android:layout_width="358dp"
                 android:layout_height="1dp"
-                android:layout_marginBottom="30dp"
+                android:layout_marginBottom="8dp"
                 android:background="?android:attr/listDivider"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/education_exp_skill_content" />
 
             <TextView
                 android:id="@+id/add_skill_button"
@@ -326,11 +329,12 @@
                 android:id="@+id/divider2"
                 android:layout_width="358dp"
                 android:layout_height="1dp"
-                android:layout_marginBottom="30dp"
+                android:layout_marginBottom="8dp"
                 android:background="?android:attr/listDivider"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/education_exp_education_content" />
 
             <TextView
                 android:id="@+id/add_education_button"

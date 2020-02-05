@@ -44,17 +44,28 @@ class AddSkillBottomSheetFragment: BottomSheetDialogFragment() {
             this.findNavController().navigate(R.id.educationExpandedFragment)
         }
 
+        layout.add_skill_add_more_button.setOnClickListener {
+            addNewSkill()
+            layout.add_skill_category.setText("")
+            layout.add_skill_name.setText("")
+
+        }
+
         layout.add_skill_save_button.setOnClickListener{
-            updates.add(
-                Skill(
-                    category = layout.add_skill_category.text.toString(),
-                    nameOfSkill = layout.add_skill_name.text.toString()
-                )
-            )
+            addNewSkill()
 
             viewModel.setProfileSkill(updates)
             Toast.makeText(this.context, "Updated Skills Section", Toast.LENGTH_LONG)
             this.findNavController().navigate(R.id.educationExpandedFragment)
         }
+    }
+
+    private fun addNewSkill() {
+        updates.add(
+            Skill(
+                category = layout.add_skill_category.text.toString(),
+                nameOfSkill = layout.add_skill_name.text.toString()
+            )
+        )
     }
 }

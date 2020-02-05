@@ -45,18 +45,31 @@ class AddEducationBottomSheetFragment: BottomSheetDialogFragment() {
             this.findNavController().navigate(R.id.educationExpandedFragment)
         }
 
+        layout.add_more_button.setOnClickListener{
+            addNewEducation()
+            layout.institution_name.setText("")
+            layout.course_name.setText("")
+            layout.degree_name.setText("")
+            layout.start_date.setText("")
+            layout.end_date.setText("")
+        }
+
         layout.save_button.setOnClickListener{
-            updates.add(Education(
-                institution = layout.institution_name.text.toString(),
-                course = layout.course_name.text.toString(),
-                degree = layout.degree_name.text.toString(),
-                startYear = SimpleDateFormat("dd/MM/yyyy").parse(layout.start_date.text.toString()),
-                endYear = SimpleDateFormat("dd/MM/yyyy").parse(layout.end_date.text.toString())
-            ))
+            addNewEducation()
 
             viewModel.setProfileEducation(updates)
             Toast.makeText(this.context, "Updated Education Section", Toast.LENGTH_LONG)
             this.findNavController().navigate(R.id.educationExpandedFragment)
         }
+    }
+
+    private fun addNewEducation() {
+        updates.add(Education(
+            institution = layout.institution_name.text.toString(),
+            course = layout.course_name.text.toString(),
+            degree = layout.degree_name.text.toString(),
+            startYear = SimpleDateFormat("dd/MM/yyyy").parse(layout.start_date.text.toString()),
+            endYear = SimpleDateFormat("dd/MM/yyyy").parse(layout.end_date.text.toString())
+        ))
     }
 }

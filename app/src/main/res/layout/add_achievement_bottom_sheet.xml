@@ -17,7 +17,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/editTextTextPersonName6"
+        android:id="@+id/add_achievement_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -28,46 +28,46 @@
         app:layout_constraintTop_toBottomOf="@+id/textView11" />
 
     <EditText
-        android:id="@+id/editTextTextPersonName7"
+        android:id="@+id/add_achievement_authority"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:ems="10"
         android:hint="@string/add_achievement_sheet_issuing_authority"
         android:inputType="textPersonName"
-        app:layout_constraintStart_toStartOf="@+id/editTextTextPersonName6"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName6" />
+        app:layout_constraintStart_toStartOf="@+id/add_achievement_title"
+        app:layout_constraintTop_toBottomOf="@+id/add_achievement_title" />
 
     <EditText
-        android:id="@+id/editTextTextPersonName8"
+        android:id="@+id/add_achievement_location"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:ems="10"
         android:hint="@string/add_achievement_sheet_location"
         android:inputType="textPersonName"
-        app:layout_constraintStart_toStartOf="@+id/editTextTextPersonName7"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName7" />
+        app:layout_constraintStart_toStartOf="@+id/add_achievement_authority"
+        app:layout_constraintTop_toBottomOf="@+id/add_achievement_authority" />
 
     <EditText
-        android:id="@+id/editTextTextPersonName9"
+        android:id="@+id/add_achievement_year"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:ems="10"
         android:hint="@string/add_achievement_sheet_year"
-        android:inputType="textPersonName"
-        app:layout_constraintStart_toStartOf="@+id/editTextTextPersonName8"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName8" />
+        android:inputType="date"
+        app:layout_constraintStart_toStartOf="@+id/add_achievement_location"
+        app:layout_constraintTop_toBottomOf="@+id/add_achievement_location" />
 
     <TextView
-        android:id="@+id/textView14"
+        android:id="@+id/add_achievement_add_more_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="@string/add_more_text"
-        app:layout_constraintStart_toStartOf="@+id/editTextTextPersonName9"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName9" />
+        app:layout_constraintStart_toStartOf="@+id/add_achievement_year"
+        app:layout_constraintTop_toBottomOf="@+id/add_achievement_year" />
 
     <Button
         android:id="@+id/add_achievement_cancel_button"
@@ -75,16 +75,16 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="@string/cancel_text"
-        app:layout_constraintStart_toStartOf="@+id/textView14"
-        app:layout_constraintTop_toBottomOf="@+id/textView14" />
+        app:layout_constraintStart_toStartOf="@+id/add_achievement_add_more_button"
+        app:layout_constraintTop_toBottomOf="@+id/add_achievement_add_more_button" />
 
     <Button
-        android:id="@+id/button11"
+        android:id="@+id/add_achievement_save_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="16dp"
         android:text="@string/save_text"
         app:layout_constraintStart_toEndOf="@+id/add_achievement_cancel_button"
-        app:layout_constraintTop_toBottomOf="@+id/textView14" />
+        app:layout_constraintTop_toBottomOf="@+id/add_achievement_add_more_button" />
 </androidx.constraintlayout.widget.ConstraintLayout>

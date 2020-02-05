@@ -1,5 +1,6 @@
 package com.gigforce.app.modules.profile
 
+import com.gigforce.app.modules.profile.models.Achievement
 import com.gigforce.app.modules.profile.models.Education
 import com.gigforce.app.modules.profile.models.Skill
 import com.google.firebase.firestore.DocumentReference
@@ -38,6 +39,20 @@ class ProfileFirebaseRepository {
                     mapOf<String, Any>(
                         "category" to sk.category,
                         "nameOfSkill" to sk.nameOfSkill
+                    )
+                ))
+        }
+    }
+
+    fun setProfileAchievement(achievements: ArrayList<Achievement>) {
+        for (ach in achievements) {
+            firebaseDB.collection("user_profiles")
+                .document(uid).update("Achievement", FieldValue.arrayUnion(
+                    mapOf<String, Any> (
+                        "title" to ach.title,
+                        "issuingAuthority" to ach.issuingAuthority,
+                        "location" to ach.location,
+                        "year" to ach.year!!
                     )
                 ))
         }

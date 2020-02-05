@@ -42,7 +42,7 @@
         app:layout_constraintTop_toBottomOf="@+id/add_skill_category" />
 
     <TextView
-        android:id="@+id/textView19"
+        android:id="@+id/add_skill_add_more_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -56,8 +56,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="@string/cancel_text"
-        app:layout_constraintStart_toStartOf="@+id/textView19"
-        app:layout_constraintTop_toBottomOf="@+id/textView19" />
+        app:layout_constraintStart_toStartOf="@+id/add_skill_add_more_button"
+        app:layout_constraintTop_toBottomOf="@+id/add_skill_add_more_button" />
 
     <Button
         android:id="@+id/add_skill_save_button"
@@ -67,5 +67,5 @@
         android:layout_marginTop="16dp"
         android:text="@string/save_text"
         app:layout_constraintStart_toEndOf="@+id/add_skill_cancel_button"
-        app:layout_constraintTop_toBottomOf="@+id/textView19" />
+        app:layout_constraintTop_toBottomOf="@+id/add_skill_add_more_button" />
 </androidx.constraintlayout.widget.ConstraintLayout>

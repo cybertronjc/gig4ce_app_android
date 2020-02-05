@@ -62,6 +62,15 @@ class EducationExpandedFragment: Fragment() {
             }
             layout.education_exp_skill_content.text = skillString
 
+            var achievementString: String = ""
+            for (achievement in profile.Achievement!!) {
+                achievementString += achievement.title + "\n"
+                achievementString += achievement.issuingAuthority + "\n"
+                achievementString += achievement.location + "\n"
+                achievementString += format.format(achievement.year!!) + "\n\n"
+            }
+            layout.education_exp_achievement_content.text = achievementString
+
             Log.d("ProfileFragment", profile.rating.toString())
         })
 

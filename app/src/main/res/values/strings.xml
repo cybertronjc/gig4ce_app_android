@@ -41,6 +41,7 @@
     <string name="education_expanded_add_education_text">+ Add Education</string>
     <string name="education_expanded_add_skill_text">+ Add Skill</string>
     <string name="education_expanded_add_achievement_text">+ Add Achievement</string>
+    <string name="education_expanded_user_name">User Name</string>
     <string name="nav_education_text">Education</string>
     <string name="nav_about_text">About me</string>
     <string name="nav_gigs_text">Gigs</string>
@@ -56,18 +57,21 @@
     <string name="add_achievement_sheet_title">Title</string>
     <string name="add_achievement_sheet_issuing_authority">Issuing Authority</string>
     <string name="add_achievement_sheet_location">Location</string>
-    <string name="add_achievement_sheet_year">Year</string>
+    <string name="add_achievement_sheet_year">Year *</string>
 
     <!-- Add New Education Bottom Sheed -->
     <string name="add_education_sheet_new_education">New Education</string>
     <string name="add_education_sheet_institution">Institution</string>
     <string name="add_education_sheet_course">Course</string>
     <string name="add_education_sheet_degree">Degree</string>
-    <string name="add_education_sheet_start_year">Start Year</string>
-    <string name="add_education_sheet_end_year">End Year</string>
+    <string name="add_education_sheet_start_year">Start Year *</string>
+    <string name="add_education_sheet_end_year">End Year *</string>
 
     <!-- Generic strings -->
     <string name="cancel_text">Cancel</string>
     <string name="save_text">Save</string>
     <string name="add_more_text">+ Add more</string>
+    <string name="verified_text">Verified</string>
+    <string name="tags_text">Tags of User</string>
+    <string name="about_me_text">About me of user</string>
 </resources>

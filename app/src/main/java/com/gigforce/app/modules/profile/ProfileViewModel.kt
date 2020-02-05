@@ -3,6 +3,7 @@ package com.gigforce.app.modules.profile
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.gigforce.app.modules.profile.models.Achievement
 import com.gigforce.app.modules.profile.models.Education
 import com.gigforce.app.modules.profile.models.ProfileData
 import com.gigforce.app.modules.profile.models.Skill
@@ -41,6 +42,10 @@ class ProfileViewModel: ViewModel() {
 
     fun setProfileSkill(skills: ArrayList<Skill>) {
         profileFirebaseRepository.setProfileSkill(skills)
+    }
+
+    fun setProfileAchievement(achievements: ArrayList<Achievement>) {
+        profileFirebaseRepository.setProfileAchievement(achievements)
     }
 
     init {
