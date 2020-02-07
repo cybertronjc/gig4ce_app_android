@@ -40,10 +40,13 @@
 
             <TextView
                 android:id="@+id/education_exp_achievement_content"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
                 android:layout_marginTop="5dp"
-                android:text="@string/education_expanded_to_be_filled_from_profile_data"
+                android:layout_marginEnd="8dp"
+                android:text="@string/to_be_filled_from_profile_data"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/textView15"
                 app:layout_constraintTop_toBottomOf="@+id/textView15" />
 
@@ -94,10 +97,13 @@
 
             <TextView
                 android:id="@+id/education_exp_skill_content"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
                 android:layout_marginTop="5dp"
-                android:text="@string/education_expanded_to_be_filled_from_profile_data"
+                android:layout_marginEnd="8dp"
+                android:text="@string/to_be_filled_from_profile_data"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/textView12"
                 app:layout_constraintTop_toBottomOf="@+id/textView12" />
 
@@ -181,7 +187,7 @@
             app:layout_constraintTop_toBottomOf="@+id/cardView">
 
             <Button
-                android:id="@+id/button3"
+                android:id="@+id/profile_nav_to_education"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="#e42c64"
@@ -283,7 +289,7 @@
             app:layout_constraintTop_toBottomOf="@+id/cardView">
 
             <Button
-                android:id="@+id/button2"
+                android:id="@+id/profile_nav_to_about_me"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="#FFFFFF"
@@ -318,10 +324,13 @@
 
             <TextView
                 android:id="@+id/education_exp_education_content"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
                 android:layout_marginTop="5dp"
-                android:text="@string/education_expanded_to_be_filled_from_profile_data"
+                android:layout_marginEnd="8dp"
+                android:text="@string/to_be_filled_from_profile_data"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/textView9"
                 app:layout_constraintTop_toBottomOf="@+id/textView9" />
 

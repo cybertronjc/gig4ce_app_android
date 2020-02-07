@@ -32,10 +32,11 @@
     <string name="education_card_content_placeholder">Education content to be put here</string>
     <string name="view_more_text">View more</string>
     <string name="empty_dash_string">-</string>
+    <string name="about_card_about_text">About Me</string>
+    <string name="about_card_content_placeholder">About me content to be put here</string>
 
     <!-- Profile education expanded page -->
     <string name="education_expanded_Education_text">Education</string>
-    <string name="education_expanded_to_be_filled_from_profile_data">To Be Filled From Profile Data</string>
     <string name="education_expanded_skills_text">Skills</string>
     <string name="education_expanded_achievements_text">Achievements</string>
     <string name="education_expanded_add_education_text">+ Add Education</string>
@@ -59,13 +60,31 @@
     <string name="add_achievement_sheet_location">Location</string>
     <string name="add_achievement_sheet_year">Year *</string>
 
-    <!-- Add New Education Bottom Sheed -->
+    <!-- Add New Education Bottom Sheet -->
     <string name="add_education_sheet_new_education">New Education</string>
     <string name="add_education_sheet_institution">Institution</string>
     <string name="add_education_sheet_course">Course</string>
     <string name="add_education_sheet_degree">Degree</string>
     <string name="add_education_sheet_start_year">Start Year *</string>
     <string name="add_education_sheet_end_year">End Year *</string>
+
+    <!-- Add New Contact Bottom Sheet -->
+    <string name="add_contact_new_contact">New Contact</string>
+    <string name="add_contact_phone">Phone</string>
+    <string name="add_contact_email">Email</string>
+
+    <!-- About expanded page -->
+    <string name="about_expanded_bio_text">Bio</string>
+    <string name="about_expanded_language_text">Language Known</string>
+    <string name="about_expanded_add_language_text">+ Add Language</string>
+    <string name="about_expanded_contact_text">Contact Details </string>
+    <string name="about_expanded_add_contact_text">+ Add Contact</string>
+
+    <!-- Add New Language Bottom Sheet -->
+    <string name="add_language_new_language">New Language</string>
+    <string name="add_language_name">Name</string>
+    <string name="add_language_speaking_level">Speaking level</string>
+    <string name="add_language_writing_level">Writing level</string>
 
     <!-- Generic strings -->
     <string name="cancel_text">Cancel</string>
@@ -74,4 +93,5 @@
     <string name="verified_text">Verified</string>
     <string name="tags_text">Tags of User</string>
     <string name="about_me_text">About me of user</string>
+    <string name="to_be_filled_from_profile_data">To Be Filled From Profile Data</string>
 </resources>

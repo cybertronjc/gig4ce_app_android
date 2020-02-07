@@ -46,6 +46,9 @@
         <action
             android:id="@+id/action_profileFragment_to_educationExpandedFragment"
             app:destination="@id/educationExpandedFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_aboutExpandedFragment"
+            app:destination="@id/aboutExpandedFragment" />
     </fragment>
     <fragment
         android:id="@+id/chatsHomeFragment"
@@ -79,14 +82,14 @@
         android:label="EducationExpandedFragment"
         tools:layout="@layout/fragment_profile_education_expanded">
         <action
-            android:id="@+id/action_educationExpandedFragment_to_addSkillBottomSheetFragment"
-            app:destination="@id/addSkillBottomSheetFragment" />
-        <action
             android:id="@+id/action_educationExpandedFragment_to_addAchievementBottomSheetFragment"
             app:destination="@id/addAchievementBottomSheetFragment" />
         <action
             android:id="@+id/action_educationExpandedFragment_to_addEducationBottomSheetFragment"
             app:destination="@id/addEducationBottomSheetFragment" />
+        <action
+            android:id="@+id/action_educationExpandedFragment_to_addSkillBottomSheetFragment"
+            app:destination="@id/addSkillBottomSheetFragment" />
     </fragment>
     <dialog
         android:id="@+id/addSkillBottomSheetFragment"
@@ -103,4 +106,25 @@
         android:name="com.gigforce.app.modules.profile.AddEducationBottomSheetFragment"
         android:label="AddEducationBottomSheetFragment"
         tools:layout="@layout/add_education_bottom_sheet" />
+    <fragment
+        android:id="@+id/aboutExpandedFragment"
+        android:name="com.gigforce.app.modules.profile.AboutExpandedFragment"
+        android:label="AboutExpandedFragment"
+        tools:layout="@layout/fragment_profile_about_expanded">
+        <action
+            android:id="@+id/action_aboutExpandedFragment_to_addContactBottomSheetFragment"
+            app:destination="@id/addContactBottomSheetFragment" />
+        <action
+            android:id="@+id/action_aboutExpandedFragment_to_addLanguageBottomSheetFragment"
+            app:destination="@id/addLanguageBottomSheetFragment" />
+    </fragment>
+    <dialog
+        android:id="@+id/addContactBottomSheetFragment"
+        android:name="com.gigforce.app.modules.profile.AddContactBottomSheetFragment"
+        android:label="AddContactBottomSheetFragment"
+        tools:layout="@layout/add_contact_bottom_sheet"/>
+    <dialog
+        android:id="@+id/addLanguageBottomSheetFragment"
+        android:name="com.gigforce.app.modules.profile.AddLanguageBottomSheetFragment"
+        android:label="AddLanguageBottomSheetFragment" />
 </navigation>

@@ -76,8 +76,14 @@ class ProfileFragment : Fragment() {
             }
             Log.d("ProfileFragment", educationString)
             layout.education_content.text = educationString
+
+            layout.about_card_content.text = profile.bio.toString()
             Log.d("ProfileFragment", profile.rating.toString())
         })
+
+        layout.about_card_view_more_button.setOnClickListener{
+            this.findNavController().navigate(R.id.aboutExpandedFragment)
+        }
 
         layout.education_view_more.setOnClickListener {
             Log.d("CLICK_STATUS", "CLICK HEARD")

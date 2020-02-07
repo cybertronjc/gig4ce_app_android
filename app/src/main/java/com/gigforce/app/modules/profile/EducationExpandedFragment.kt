@@ -89,6 +89,10 @@ class EducationExpandedFragment: Fragment() {
         layout.add_education_button.setOnClickListener{
             this.findNavController().navigate(R.id.addEducationBottomSheetFragment)
         }
+
+        layout.profile_nav_to_about_me.setOnClickListener{
+            this.findNavController().navigate(R.id.aboutExpandedFragment)
+        }
     }
 
     private fun loadImage(Path: String) {

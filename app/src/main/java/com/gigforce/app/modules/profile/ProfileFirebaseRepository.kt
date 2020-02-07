@@ -1,6 +1,7 @@
 package com.gigforce.app.modules.profile
 
 import com.gigforce.app.modules.profile.models.Achievement
+import com.gigforce.app.modules.profile.models.Contact
 import com.gigforce.app.modules.profile.models.Education
 import com.gigforce.app.modules.profile.models.Skill
 import com.google.firebase.firestore.DocumentReference
@@ -53,6 +54,18 @@ class ProfileFirebaseRepository {
                         "issuingAuthority" to ach.issuingAuthority,
                         "location" to ach.location,
                         "year" to ach.year!!
+                    )
+                ))
+        }
+    }
+
+    fun setProfileContact(contacts: ArrayList<Contact>) {
+        for (contact in contacts) {
+            firebaseDB.collection("user_profiles")
+                .document(uid).update("Contact", FieldValue.arrayUnion(
+                    mapOf<String, Any> (
+                        "phone" to contact.phone,
+                        "email" to contact.email
                     )
                 ))
         }
