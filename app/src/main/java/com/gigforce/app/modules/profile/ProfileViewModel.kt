@@ -49,6 +49,10 @@ class ProfileViewModel: ViewModel() {
         profileFirebaseRepository.setProfileContact(contacts)
     }
 
+    fun setProfileLanguage(languages: ArrayList<Language>) {
+        profileFirebaseRepository.setProfileLanguage(languages)
+    }
+
     init {
         //uid = FirebaseAuth.getInstance().currentUser?.uid!!
         uid = "UeXaZV3KctuZ8xXLCKGF" // Test user

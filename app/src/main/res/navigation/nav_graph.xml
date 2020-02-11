@@ -49,6 +49,12 @@
         <action
             android:id="@+id/action_profileFragment_to_aboutExpandedFragment"
             app:destination="@id/aboutExpandedFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_experienceExpandedFragment"
+            app:destination="@id/experienceExpandedFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_experienceExpandedFragment2"
+            app:destination="@id/experienceExpandedFragment" />
     </fragment>
     <fragment
         android:id="@+id/chatsHomeFragment"
@@ -127,4 +133,9 @@
         android:id="@+id/addLanguageBottomSheetFragment"
         android:name="com.gigforce.app.modules.profile.AddLanguageBottomSheetFragment"
         android:label="AddLanguageBottomSheetFragment" />
+    <fragment
+        android:id="@+id/experienceExpandedFragment"
+        android:name="com.gigforce.app.modules.profile.ExperienceExpandedFragment"
+        android:label="ExperienceExpandedFragment"
+        tools:layout="@layout/fragment_profile_experience_expanded"/>
 </navigation>

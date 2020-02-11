@@ -34,6 +34,10 @@
     <string name="empty_dash_string">-</string>
     <string name="about_card_about_text">About Me</string>
     <string name="about_card_content_placeholder">About me content to be put here</string>
+    <string name="experience_card_experience_text">Experience</string>
+    
+    <!-- Profile experience expanded page -->
+    <string name="experience_expanded_add_experience_text">+ Add Experience</string>
 
     <!-- Profile education expanded page -->
     <string name="education_expanded_Education_text">Education</string>

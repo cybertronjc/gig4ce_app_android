@@ -77,6 +77,14 @@ class ProfileFragment : Fragment() {
             Log.d("ProfileFragment", educationString)
             layout.education_content.text = educationString
 
+            var experienceString = ""
+            for (exp in profile.Experience!!) {
+                experienceString += exp.company + "\n"
+                experienceString += exp.position + "\n"
+                experienceString += format.format(exp.startDate!!) + "-" + format.format(exp.endDate!!) + "\n\n"
+            }
+            layout.experience_content.text = experienceString
+
             layout.about_card_content.text = profile.bio.toString()
             Log.d("ProfileFragment", profile.rating.toString())
         })
@@ -89,6 +97,10 @@ class ProfileFragment : Fragment() {
             Log.d("CLICK_STATUS", "CLICK HEARD")
             Toast.makeText(this.context, "View More Clicked", Toast.LENGTH_LONG).show()
             this.findNavController().navigate(R.id.educationExpandedFragment)
+        }
+
+        layout.experience_card_view_more.setOnClickListener {
+            this.findNavController().navigate(R.id.experienceExpandedFragment)
         }
 
         // back page navigation

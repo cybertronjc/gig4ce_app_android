@@ -1,9 +1,6 @@
 package com.gigforce.app.modules.profile
 
-import com.gigforce.app.modules.profile.models.Achievement
-import com.gigforce.app.modules.profile.models.Contact
-import com.gigforce.app.modules.profile.models.Education
-import com.gigforce.app.modules.profile.models.Skill
+import com.gigforce.app.modules.profile.models.*
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
@@ -66,6 +63,19 @@ class ProfileFirebaseRepository {
                     mapOf<String, Any> (
                         "phone" to contact.phone,
                         "email" to contact.email
+                    )
+                ))
+        }
+    }
+
+    fun setProfileLanguage(languages: ArrayList<Language>) {
+        for (lang in languages) {
+            firebaseDB.collection("user_profiles")
+                .document(uid).update("Language", FieldValue.arrayUnion(
+                    mapOf<String, Any> (
+                        "name" to lang.name,
+                        "speakingSkill" to lang.speakingSkill,
+                        "writingSkill" to lang.writingSkill
                     )
                 ))
         }

@@ -14,6 +14,7 @@ data class ProfileData(
     var Achievement: ArrayList<Achievement>? = null,
     var Language: ArrayList<Language>? = null,
     var Contact: ArrayList<Contact>? = null,
+    var Experience: ArrayList<Experience>? = null,
     var Tags: ArrayList<String>? = null,
     var connections: Int = 0,
     var rating: Float = 0.0F,
