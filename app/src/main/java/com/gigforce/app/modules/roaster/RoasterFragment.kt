@@ -1,20 +1,24 @@
 package com.gigforce.app.modules.roaster
 
+//import com.gigforce.app.modules.onboarding.CustomAdapter
+//import com.gigforce.app.modules.onboarding.models.MessageModel
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
-import com.gigforce.app.modules.home.HomeFragment
+import com.gigforce.app.modules.onboarding.UserInfoFragment
 import com.gigforce.app.utils.GlideApp
 import kotlinx.android.synthetic.main.bottom_home.*
+import kotlinx.android.synthetic.main.fragment_roaster.*
 
-class RoasterFragment(): Fragment() {
+class RoasterFragment() : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,9 +34,39 @@ class RoasterFragment(): Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         this.gridview_actions.adapter = GridActionItemsAdapter(context!!)
+
+        // Populate dummy messages in List, you can implement your code here
+        // Populate dummy messages in List, you can implement your code here
+  /*      val messagesList: ArrayList<MessageModel> = ArrayList()
+        for (i in 0..9) {
+            messagesList.add(
+                MessageModel(
+                    "Hi",
+                    if (i % 2 == 0) CustomAdapter.MESSAGE_TYPE_IN else CustomAdapter.MESSAGE_TYPE_OUT
+                )
+            )
+        }
+
+        val adapter = CustomAdapter(this, messagesList)
+
+        recyclerView = findViewById(android.R.id.recycler_view)
+        recyclerView!!.layoutManager = LinearLayoutManager(this)
+        recyclerView!!.adapter = adapter
+        */
+
+
+
+        buttonCP?.setOnClickListener {
+            findNavController().navigate(R.id.gotoOB)
+//            Toast.makeText(activity,"captured click",Toast.LENGTH_SHORT).show();
+//            childFragmentManager.beginTransaction().apply {
+//                add(R.id.content_home, UserInfoFragment())
+//                addToBackStack(null).commit()
+//            }
+        }
     }
 
-    class GridActionItemsAdapter(val context: Context): BaseAdapter() {
+    class GridActionItemsAdapter(val context: Context) : BaseAdapter() {
 
         override fun getCount(): Int {
             return 10

@@ -9,9 +9,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.gigforce.app.R
@@ -24,7 +26,7 @@ import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.bottom_home.*
 import kotlinx.android.synthetic.main.fragment_home.*
 
-class HomeFragment: Fragment() {
+class HomeFragment: Fragment(), View.OnClickListener {
 
     private val loginViewModel: LoginViewModel by activityViewModels<LoginViewModel>()
 
@@ -38,7 +40,12 @@ class HomeFragment: Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_home, container, false)
+        val view: View = inflater.inflate(R.layout.fragment_home, container, false);
+        /*val btn: Button = view.findViewById(R.id.buttonCP) as Button
+        btn.setOnClickListener() {
+            findNavController().navigate(R.id.sampleOB)
+        }*/
+        return  view
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -64,16 +71,17 @@ class HomeFragment: Fragment() {
 
         this.pager_home.reduceDragSensitivity()
 
+
         val stateAdapter: HomeViewsAdapter = HomeViewsAdapter(this)
         this.pager_home.adapter = stateAdapter
         this.pager_home.setCurrentItem(1, false)
 
 
-        /*
-        btn_signout.setOnClickListener {
-            Toast.makeText(context, "Signing out", Toast.LENGTH_SHORT).show()
-            FirebaseAuth.getInstance().signOut()
-        }*/
+    /*
+    btn_signout.setOnClickListener {
+        Toast.makeText(context, "Signing out", Toast.LENGTH_SHORT).show()
+        FirebaseAuth.getInstance().signOut()
+    }*/
     }
 
     fun initAuth() {
@@ -99,5 +107,16 @@ class HomeFragment: Fragment() {
             }
         }
 
+    }
+
+    override fun onClick(v: View?) {
+        //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        when (v?.id) {
+            R.id.buttonCP -> {
+                findNavController().navigate(R.id.gotoOB)
+            }
+            else -> {
+            }
+        }
     }
 }

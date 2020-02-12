@@ -68,6 +68,9 @@
         <action
             android:id="@+id/action_roasterFragment_to_profileFragment"
             app:destination="@id/profileFragment" />
+        <action
+            android:id="@+id/action_roasterFragment_to_goToOB"
+            app:destination="@id/gotoOB" />
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"
@@ -103,4 +106,8 @@
         android:name="com.gigforce.app.modules.profile.AddEducationBottomSheetFragment"
         android:label="AddEducationBottomSheetFragment"
         tools:layout="@layout/add_education_bottom_sheet" />
+    <fragment
+        android:id="@+id/gotoOB"
+        android:name="com.gigforce.app.modules.onboarding.UserInfoFragment"
+        android:label="GoToOB" />
 </navigation>

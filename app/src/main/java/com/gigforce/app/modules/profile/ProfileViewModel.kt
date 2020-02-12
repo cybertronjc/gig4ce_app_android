@@ -14,7 +14,6 @@ class ProfileViewModel: ViewModel() {
 
     var profileFirebaseRepository = ProfileFirebaseRepository()
     var userProfileData: MutableLiveData<ProfileData> = MutableLiveData<ProfileData>()
-    val uid: String
 
     fun getProfileData(): MutableLiveData<ProfileData> {
         profileFirebaseRepository.getProfile().addSnapshotListener(EventListener<DocumentSnapshot> {
@@ -50,7 +49,7 @@ class ProfileViewModel: ViewModel() {
 
     init {
         //uid = FirebaseAuth.getInstance().currentUser?.uid!!
-        uid = "UeXaZV3KctuZ8xXLCKGF" // Test user
+        var uid = "UeXaZV3KctuZ8xXLCKGF" // Test user
         getProfileData()
     }
 

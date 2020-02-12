@@ -24,8 +24,7 @@ class TopProfileBar(context: Context, attrs: AttributeSet? = null)
             txt_subtitle.setText(subtitle)
 
             styledAttributes.recycle()
-
-            txt_title.setOnClickListener {
+            txt_title.setOnClickListener {//
                 TopProfileBar@this.findNavController()
                     .navigate(R.id.profileFragment)
             }
