@@ -12,8 +12,9 @@ import com.gigforce.app.R
 import com.gigforce.app.modules.onboarding.models.UserData
 import kotlinx.android.synthetic.main.recview_item.view.*
 
-class UserDataAdapter(val context: Context?, private val users: List<UserData>) : RecyclerView.Adapter<UserDataAdapter.MyViewHolder>() {
+class UserDataAdapter(val context: Context?, private var users: List<UserData>) : RecyclerView.Adapter<UserDataAdapter.MyViewHolder>() {
 
+//    private val mAdapter=RecyclerView.Adapter<UserDataAdapter.MyViewHolder>()
     companion object {
         val TAG: String = UserDataAdapter::class.java.simpleName
     }
@@ -30,6 +31,11 @@ class UserDataAdapter(val context: Context?, private val users: List<UserData>) 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val user = users[position]
         holder.setData(user, position)
+    }
+
+    fun update(modelList:ArrayList<UserData>){
+        users = modelList
+        notifyDataSetChanged()
     }
 
     inner class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
