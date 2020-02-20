@@ -92,25 +92,6 @@ class UserInfoFragment: Fragment() {
         Log.d("OnBoardingUserInfo", "called created view ")
 
         //var bottomSheetBehavior = BottomSheetBehavior.from(bottom_sheet_layout)
-        /*
-        layout.onboarding_chat_edit_text.setOnClickListener {
-            val dialog = BottomSheetDialog(view.context)
-//            if (view.getParent() != null) {
-//                (view.getParent() as ViewGroup).removeView(view) // <- fix
-//            }
-
-            val inflater =
-                context!!.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-            val bottomsheet = inflater.inflate(
-                R.layout.chat_bottom_modal_sheet, container,
-                false
-            );
-            //TODO: Change this (NOTE: Spinner)
-            dialog.setContentView(bottomsheet)
-            dialog.show()
-
-            val myStrings = arrayOf("One", "Two", "Three", "Four", "Five")
-        }*/
 
             //Adapter for spinner
             //mySpinner.adapter = ArrayAdapter(, android.R.layout.simple_spinner_item, myStrings)
@@ -138,8 +119,32 @@ class UserInfoFragment: Fragment() {
                 userList.add(userListFull[0])
                 mAdapter.update(userList)
             }
+
             layout.onboarding_chat_send_btn.setOnClickListener {
                 val userInput = layout.onboarding_chat_edit_text.text.toString();
+
+                // if code for bottom sheet
+                if(counter==3) {
+                    layout.onboarding_chat_edit_text.setOnClickListener {
+                        val dialog = BottomSheetDialog(view.context)
+//            if (view.getParent() != null) {
+//                (view.getParent() as ViewGroup).removeView(view) // <- fix
+//            }
+
+                        val inflater =
+                                context!!.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+                        val bottomsheet = inflater.inflate(
+                                R.layout.chat_bottom_modal_sheet, container,
+                                false
+                        );
+                        //TODO: Change this (NOTE: Spinner)
+                        dialog.setContentView(bottomsheet)
+                        dialog.show()
+
+                        val myStrings = arrayOf("One", "Two", "Three", "Four", "Five")
+                    }
+                }
+
                 if (userInput.isNullOrBlank()) {
                     //Error message
                     Toast.makeText(

@@ -71,6 +71,9 @@
         <action
             android:id="@+id/action_roasterFragment_to_goToOB"
             app:destination="@id/gotoOB" />
+        <action
+            android:id="@+id/action_roasterFragment_to_goToOBIntroFragment"
+            app:destination="@id/goToOBIntroFragment" />
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"
@@ -110,4 +113,8 @@
         android:id="@+id/gotoOB"
         android:name="com.gigforce.app.modules.onboarding.UserInfoFragment"
         android:label="GoToOB" />
+    <fragment
+        android:id="@+id/goToOBIntroFragment"
+        android:name="com.gigforce.app.modules.onboarding.GoToOBIntroFragment"
+        android:label="GoToOBIntroFragment" />
 </navigation>

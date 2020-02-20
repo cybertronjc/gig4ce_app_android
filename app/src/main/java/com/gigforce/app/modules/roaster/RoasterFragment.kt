@@ -17,6 +17,7 @@ import com.gigforce.app.modules.onboarding.UserInfoFragment
 import com.gigforce.app.utils.GlideApp
 import kotlinx.android.synthetic.main.bottom_home.*
 import kotlinx.android.synthetic.main.fragment_roaster.*
+import kotlinx.android.synthetic.main.fragment_roaster.buttonCP
 
 class RoasterFragment() : Fragment() {
 
@@ -58,6 +59,15 @@ class RoasterFragment() : Fragment() {
 
         buttonCP?.setOnClickListener {
             findNavController().navigate(R.id.gotoOB)
+//            Toast.makeText(activity,"captured click",Toast.LENGTH_SHORT).show();
+//            childFragmentManager.beginTransaction().apply {
+//                add(R.id.content_home, UserInfoFragment())
+//                addToBackStack(null).commit()
+//            }
+        }
+
+        sliderAdaptorButton?.setOnClickListener {
+            findNavController().navigate(R.id.goToOBIntroFragment)
 //            Toast.makeText(activity,"captured click",Toast.LENGTH_SHORT).show();
 //            childFragmentManager.beginTransaction().apply {
 //                add(R.id.content_home, UserInfoFragment())
