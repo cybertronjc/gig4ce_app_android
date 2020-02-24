@@ -28,6 +28,7 @@ allprojects {
         google()
         jcenter()
         maven { url "https://jitpack.io" }
+        maven { url "https://mymavenrepo.com/repo/jeYsRLYFzkhy617P4O1I/" }
     }
 }
 

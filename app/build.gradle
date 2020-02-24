@@ -70,6 +70,9 @@ dependencies {
     implementation 'com.google.firebase:firebase-storage:19.1.0'
     implementation 'com.firebaseui:firebase-ui-storage:4.3.2'
     implementation 'com.google.firebase:firebase-crashlytics:17.0.0-beta01'
+
+    //ID fy
+    implementation 'com.idfy:rft:1.0.3'
 }
 
 apply plugin: 'com.google.gms.google-services'
