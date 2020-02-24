@@ -72,7 +72,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-crashlytics:17.0.0-beta01'
 
     //ID fy
-    implementation 'com.idfy:rft:1.0.3'
+    //implementation 'com.idfy:rft:1.0.3'
 }
 
 apply plugin: 'com.google.gms.google-services'
