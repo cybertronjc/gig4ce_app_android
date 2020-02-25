@@ -1,6 +1,5 @@
 package com.gigforce.app.modules.home
 
-import android.content.Context
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.util.Log
@@ -8,22 +7,16 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.BaseAdapter
-import android.widget.Button
-import android.widget.ImageView
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.gigforce.app.R
 import com.gigforce.app.modules.auth.ui.main.LoginViewModel
 import com.gigforce.app.modules.chat.ChatsHomeFragment
 import com.gigforce.app.modules.roaster.RoasterFragment
-import com.gigforce.app.utils.GlideApp
 import com.gigforce.app.utils.reduceDragSensitivity
 import com.google.firebase.auth.FirebaseAuth
-import kotlinx.android.synthetic.main.bottom_home.*
 import kotlinx.android.synthetic.main.fragment_home.*
 
 class HomeFragment: Fragment(), View.OnClickListener {
@@ -49,6 +42,7 @@ class HomeFragment: Fragment(), View.OnClickListener {
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
+
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(HomeViewModel::class.java)
 
@@ -70,7 +64,6 @@ class HomeFragment: Fragment(), View.OnClickListener {
         super.onViewCreated(view, savedInstanceState)
 
         this.pager_home.reduceDragSensitivity()
-
 
         val stateAdapter: HomeViewsAdapter = HomeViewsAdapter(this)
         this.pager_home.adapter = stateAdapter
