@@ -1,6 +1,6 @@
 package com.gigforce.app.modules.onboarding.models
 
-data class UserData(var name:String)
+data class UserData(var any:String)
 
 object Supplier {
 

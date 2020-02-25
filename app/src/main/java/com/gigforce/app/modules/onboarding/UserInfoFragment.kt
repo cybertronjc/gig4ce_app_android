@@ -13,13 +13,17 @@ import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.app.R
 import com.gigforce.app.modules.onboarding.adapters.UserDataAdapter
 import com.gigforce.app.modules.onboarding.models.UserData
+import com.gigforce.app.modules.onboarding.models.UserInfo
+import com.gigforce.app.modules.profile.models.Education
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.storage.FirebaseStorage
+import kotlinx.android.synthetic.main.add_education_bottom_sheet.view.*
 import kotlinx.android.synthetic.main.chat_bottom_modal_sheet.view.*
 import kotlinx.android.synthetic.main.chat_bottom_spinner.*
 import kotlinx.android.synthetic.main.chat_bottom_spinner.view.*
 import kotlinx.android.synthetic.main.fragment_userinfo.view.*
 import kotlinx.android.synthetic.main.login_activity.*
+import java.text.SimpleDateFormat
 
 
 class UserInfoFragment: Fragment() {
@@ -66,23 +70,6 @@ class UserInfoFragment: Fragment() {
         val userList: ArrayList<UserData> = ArrayList()
         userList.add(UserData("What's your name?"))
         var counter=1;
-        /*var id:String = "",
-        var name: String = "",
-        var dob: String = "",
-        var gender: String = "",
-        var qualification: String = "",
-        var yoq: String = "",
-        var profilePic: String = "",
-        var isStudent: Boolean = false,
-        //if studentorworker is true or student
-        var partime: Boolean = false,
-        //if studentorworker is false or worker
-        var company: String = "",
-        var role: String = "",
-        var yoe: String = "",
-        //for both student and worker:
-        var hoursofwork: String = "",
-        var daysofwork: String = ""*/
 
         var editTextUserInput = layout.findViewById(R.id.onboarding_chat_edit_text) as EditText
         val mAdapter = UserDataAdapter(this.context, userList)
@@ -156,10 +143,13 @@ class UserInfoFragment: Fragment() {
 //                    if(counter==1){
 //                        userList.add(userListFull[counter-1])
 //                    }
+
+                    //adding the userinfo input from the user into the firebase
                     userList.add(UserData(userInput))
                     userList.add(userListFull[counter])
+                    addNewUserInfo(counter)
                     counter++
-                    mAdapter.update(userList);
+                    mAdapter.update(userList)
                     layout.onboarding_chat_edit_text.text = null
                     //if(counter==last){
                       //  userList.add(userListFull[counter])
@@ -168,5 +158,18 @@ class UserInfoFragment: Fragment() {
 //            this.findNavController().navigate(R.id.gotoOB) // AT the end
                 }
             }
+    }
+
+    var updatesUserInfo="";
+
+    private fun addNewUserInfo(position:int) {
+        UserInfo()[position] = layout.onboarding_chat_edit_text.text.toString();
+        updatesUserInfo = UserInfo[position];
+                name = layout.onboarding_chat_edit_text.text.toString(),
+                dob = layout.onboarding_chat_edit_text.text.toString(),
+                gender = layout.onboarding_chat_edit_text.text.toString(),
+                //dob = SimpleDateFormat("dd/MM/yyyy").parse(layout.onboarding_chat_edit_text.text.toString()),
+                qualification = layout.onboarding_chat_edit_text.text.toString()
+            )
     }
 }

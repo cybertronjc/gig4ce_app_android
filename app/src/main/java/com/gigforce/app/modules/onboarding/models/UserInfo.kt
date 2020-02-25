@@ -1,12 +1,12 @@
 package com.gigforce.app.modules.onboarding.models
 
-data class UserInfo(
-    var id:String = "",
+data class UserInfo_bk(
     var name: String = "",
     var dob: String = "",
     var gender: String = "",
-    var qualification: String = "",
-    var yoq: String = "",
+    var qualification: String = ""
+
+    /*var yoq: String = "",
     var profilePic: String = "",
     var isStudent: Boolean = false,
      //if studentorworker is true or student
@@ -17,6 +17,13 @@ data class UserInfo(
     var yoe: String = "",
      //for both student and worker:
     var hoursofwork: String = "",
-    var daysofwork: String = ""
-){
+    var daysofwork: String = ""*/
+)
+{
+
+}
+
+
+data class UserInfo(var userinfo: Map<String,String>) { // a can't be used as D.a
+
 }

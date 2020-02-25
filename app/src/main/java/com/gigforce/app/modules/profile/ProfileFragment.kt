@@ -37,9 +37,7 @@ class ProfileFragment : Fragment() {
         storage = FirebaseStorage.getInstance()
         Log.d("DEBUG", "ENTERED PROFILE VIEW")
         layout = inflater.inflate(R.layout.fragment_profile_main_expanded, container, false)
-
         loadImage("ysharma.jpg")
-
         return layout
     }
 
