@@ -11,7 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.app.R
-import com.gigforce.app.modules.onboarding.adapters.UserDataAdapter
+//import com.gigforce.app.modules.onboarding.adapters.UserDataAdapter
 import com.gigforce.app.modules.onboarding.models.UserData
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.storage.FirebaseStorage

@@ -1,12 +1,12 @@
 package com.gigforce.app.modules.onboarding.models
 
-data class UserInfo_bk(
-    var name: String = "",
-    var dob: String = "",
+data class UserInfo(
+    var name: MutableMap<String, String> = mutableMapOf<String, String>()
+    /*var dob: String = "",
     var gender: String = "",
     var qualification: String = ""
 
-    /*var yoq: String = "",
+    var yoq: String = "",
     var profilePic: String = "",
     var isStudent: Boolean = false,
      //if studentorworker is true or student
@@ -23,7 +23,7 @@ data class UserInfo_bk(
 
 }
 
-
+/*
 data class UserInfo(var userinfo: Map<String,String>) { // a can't be used as D.a
 
-}
+}*/

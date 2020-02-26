@@ -1,8 +1,10 @@
 package com.gigforce.app.modules.onboarding
 
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.gigforce.app.modules.onboarding.models.UserData
 import com.gigforce.app.modules.onboarding.models.UserInfo
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.EventListener
@@ -13,7 +15,7 @@ class UserInfoViewModel : ViewModel() {
     var userProfileData: MutableLiveData<UserInfo> = MutableLiveData<UserInfo>()
 
     fun getUserInfoData(): MutableLiveData<UserInfo> {
-        userInfoFirebaseRepository.getProfile().addSnapshotListener(EventListener<DocumentSnapshot> {
+        userInfoFirebaseRepository.getUserInfo().addSnapshotListener(EventListener<DocumentSnapshot> {
                 value, e ->
             if (e != null) {
                 Log.w("UserInfoViewModel", "Listen failed", e)
@@ -31,7 +33,12 @@ class UserInfoViewModel : ViewModel() {
         return userProfileData
     }
 
-    fun setUserProfile(userInfo: ArrayList<UserInfo>) {
+    /*fun setUserProfile(userInfo: ArrayList<UserInfo>) {
+        userInfoFirebaseRepository.setUserInfo(userInfo)
+    }*/
+
+    fun setUserProfile(userInfo: UserData)
+    {
         userInfoFirebaseRepository.setUserInfo(userInfo)
     }
 

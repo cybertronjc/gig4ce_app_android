@@ -8,12 +8,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.app.R
 import com.gigforce.app.modules.onboarding.adapters.UserDataAdapter
 import com.gigforce.app.modules.onboarding.models.UserData
 import com.gigforce.app.modules.onboarding.models.UserInfo
+import com.gigforce.app.modules.profile.ProfileViewModel
 import com.gigforce.app.modules.profile.models.Education
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.storage.FirebaseStorage
@@ -36,6 +38,8 @@ class UserInfoFragment: Fragment() {
     private lateinit var layout: View
     var recyclerView: RecyclerView? = null
 
+    private lateinit  var updatesUserInfo: UserData
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -57,6 +61,8 @@ class UserInfoFragment: Fragment() {
         Log.d("OnBoardingUserInfo", "calling created view ")
 
         //val recyclerView: RecyclerView= view!!.findViewById(R.id.recviewUserInfo)
+
+        viewModel = ViewModelProviders.of(this).get(UserInfoViewModel::class.java)
 
         val userListFull: ArrayList<UserData> = ArrayList()
         userListFull.add(UserData("What's your name?"))
@@ -128,7 +134,7 @@ class UserInfoFragment: Fragment() {
                         dialog.setContentView(bottomsheet)
                         dialog.show()
 
-                        val myStrings = arrayOf("One", "Two", "Three", "Four", "Five")
+                        //val myStrings = arrayOf("One", "Two", "Three", "Four", "Five")
                     }
                 }
 
@@ -147,7 +153,8 @@ class UserInfoFragment: Fragment() {
                     //adding the userinfo input from the user into the firebase
                     userList.add(UserData(userInput))
                     userList.add(userListFull[counter])
-                    addNewUserInfo(counter)
+                    addNewUserInfo()
+                    viewModel.setUserProfile(updatesUserInfo)
                     counter++
                     mAdapter.update(userList)
                     layout.onboarding_chat_edit_text.text = null
@@ -160,16 +167,14 @@ class UserInfoFragment: Fragment() {
             }
     }
 
-    var updatesUserInfo="";
-
-    private fun addNewUserInfo(position:int) {
-        UserInfo()[position] = layout.onboarding_chat_edit_text.text.toString();
-        updatesUserInfo = UserInfo[position];
-                name = layout.onboarding_chat_edit_text.text.toString(),
-                dob = layout.onboarding_chat_edit_text.text.toString(),
+    private fun addNewUserInfo() {
+        //UserInfo()[position] = layout.onboarding_chat_edit_text.text.toString();
+        //updatesUserInfo = UserInfo[position];
+                updatesUserInfo = UserData(layout.onboarding_chat_edit_text.text.toString())
+                /*dob = layout.onboarding_chat_edit_text.text.toString(),
                 gender = layout.onboarding_chat_edit_text.text.toString(),
                 //dob = SimpleDateFormat("dd/MM/yyyy").parse(layout.onboarding_chat_edit_text.text.toString()),
-                qualification = layout.onboarding_chat_edit_text.text.toString()
-            )
+                qualification = layout.onboarding_chat_edit_text.text.toString()*/
+            //)
     }
 }

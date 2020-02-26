@@ -10,7 +10,7 @@ class UserInfoFirebaseRepository {
     //var uid = FirebaseAuth.getInstance().currentUser?.uid!!
     var uid = "obUsers123" // Test
 
-    fun getProfile(): DocumentReference {
+    fun getUserInfo(): DocumentReference {
         return firebaseDB.collection("user_profiles").document(uid)
     }
 
@@ -18,11 +18,11 @@ class UserInfoFirebaseRepository {
             firebaseDB.collection("user_profiles")
                 .document(uid).update(
                     mapOf<String, Any> (
-                    "name" to userInfo,
-                    "dob" to userInfo.dob,
+                    "name" to userInfo
+                    /*"dob" to userInfo.dob,
                     "gender" to userInfo.gender,
                     "qualification" to userInfo.qualification
-                    /*"company" to iUInfo.company,
+                    "company" to iUInfo.company,
                     "daysOfWork" to iUInfo.daysofwork,
                      "yoq" to iUInfo.yoq,
                      "hoursOfWork" to iUInfo.hoursofwork,

@@ -47,13 +47,13 @@ class UserDataAdapter(val context: Context?, private var users: List<UserData>) 
             itemView.setOnClickListener {
                 currentUser?.let {
                     //context.showToast(currentUser!!.name + " Clicked !")
-                    Toast.makeText(context,currentUser!!.name+" Clicked!", currentPosition)
+                    Toast.makeText(context,currentUser!!.any+" Clicked!", currentPosition)
                 }
             }
 
             itemView.imgShare.setOnClickListener {
                 currentUser?.let {
-                    val message: String = "My hobby is: " + currentUser!!.name
+                    val message: String = "My hobby is: " + currentUser!!.any
 
                     val intent = Intent()
                     intent.action = Intent.ACTION_SEND
@@ -67,7 +67,7 @@ class UserDataAdapter(val context: Context?, private var users: List<UserData>) 
 
         fun setData(user: UserData?, pos: Int) {
             user?.let {
-                itemView.txvTitle.text = user.name
+                itemView.txvTitle.text = user.any
             }
 
             this.currentUser = user
