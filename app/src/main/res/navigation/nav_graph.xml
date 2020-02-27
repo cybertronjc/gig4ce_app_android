@@ -117,4 +117,8 @@
         android:id="@+id/goToOBIntroFragment"
         android:name="com.gigforce.app.modules.onboarding.GoToOBIntroFragment"
         android:label="GoToOBIntroFragment" />
+    <fragment
+        android:id="@+id/createInitProfile"
+        android:name="com.gigforce.app.modules.onboarding.CreateInitProfile"
+        android:label="CreateInitProfile" />
 </navigation>

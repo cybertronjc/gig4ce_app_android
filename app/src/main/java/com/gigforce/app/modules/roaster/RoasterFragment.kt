@@ -58,7 +58,7 @@ class RoasterFragment() : Fragment() {
 
 
         buttonCP?.setOnClickListener {
-            findNavController().navigate(R.id.gotoOB)
+            findNavController().navigate(R.id.createInitProfile)
 //            Toast.makeText(activity,"captured click",Toast.LENGTH_SHORT).show();
 //            childFragmentManager.beginTransaction().apply {
 //                add(R.id.content_home, UserInfoFragment())
