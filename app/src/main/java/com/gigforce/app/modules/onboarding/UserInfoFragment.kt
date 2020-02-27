@@ -31,7 +31,7 @@ class UserInfoFragment: Fragment() {
     private lateinit var layout: View
     var recyclerView: RecyclerView? = null
 
-    private lateinit  var updatesUserInfo: UserData 
+    private lateinit  var updatesUserInfo: UserData
 
     private var userListFull: ArrayList<UserData> = ArrayList()
     private var userInfoFull: ArrayList<String> = ArrayList()
