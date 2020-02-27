@@ -15,12 +15,12 @@ import kotlinx.android.synthetic.main.bottom_home.view.*
 class MainBottomSheet(context: Context, attributeSet: AttributeSet):
     LinearLayout(context, attributeSet)
 {
-    fun setDetaults() {
+    fun setDefaults() {
         this.orientation = LinearLayout.VERTICAL
     }
 
     init {
-        setDetaults()
+        setDefaults()
         LayoutInflater.from(context).inflate(R.layout.bottom_home, this, true)
         this.gridview_actions.adapter = GridActionItemsAdapter(context)
     }
@@ -29,8 +29,15 @@ class MainBottomSheet(context: Context, attributeSet: AttributeSet):
 
 class GridActionItemsAdapter(val context: Context): BaseAdapter() {
 
+    val actions:ArrayList<AppNavAction> = ArrayList<AppNavAction>()
+
+    init {
+
+        actions.add(AppNavAction("Logout"))
+    }
+
     override fun getCount(): Int {
-        return 15
+        return actions.size
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
@@ -57,4 +64,9 @@ class GridActionItemsAdapter(val context: Context): BaseAdapter() {
         return 0
     }
 
+}
+
+data class AppNavAction(
+    val text: String
+){
 }
