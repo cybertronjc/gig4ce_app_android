@@ -14,18 +14,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.app.R
 import com.gigforce.app.modules.onboarding.adapters.UserDataAdapter
 import com.gigforce.app.modules.onboarding.models.UserData
-import com.gigforce.app.modules.onboarding.models.UserInfo
-import com.gigforce.app.modules.profile.ProfileViewModel
-import com.gigforce.app.modules.profile.models.Education
+import com.gigforce.app.utils.GlideApp
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.storage.FirebaseStorage
-import kotlinx.android.synthetic.main.add_education_bottom_sheet.view.*
-import kotlinx.android.synthetic.main.chat_bottom_modal_sheet.view.*
-import kotlinx.android.synthetic.main.chat_bottom_spinner.*
-import kotlinx.android.synthetic.main.chat_bottom_spinner.view.*
 import kotlinx.android.synthetic.main.fragment_userinfo.view.*
 import kotlinx.android.synthetic.main.login_activity.*
-import java.text.SimpleDateFormat
 
 
 class UserInfoFragment: Fragment() {
@@ -38,7 +31,10 @@ class UserInfoFragment: Fragment() {
     private lateinit var layout: View
     var recyclerView: RecyclerView? = null
 
-    private lateinit  var updatesUserInfo: UserData
+    private lateinit  var updatesUserInfo: UserData 
+
+    private var userListFull: ArrayList<UserData> = ArrayList()
+    private var userInfoFull: ArrayList<String> = ArrayList()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -52,6 +48,13 @@ class UserInfoFragment: Fragment() {
 /*        val dialog = BottomSheetDialog(view.context)
         dialog.setContentView(view)
         dialog.show()*/
+        userListFull.add(UserData("What's your name?"));userInfoFull.add("name");
+        userListFull.add(UserData("What's your dob?"));userInfoFull.add("dob");
+        userListFull.add(UserData("What's your gender?"));userInfoFull.add("gender");
+        userListFull.add(UserData("What's your qualification?"));userInfoFull.add("qualification");
+        userListFull.add(UserData("What's your yoq?"));userInfoFull.add("yoq");
+        userListFull.add(UserData("Are you a student?"));userInfoFull.add("isStudent");
+        userListFull.add(UserData("Will you do part time work?"));userInfoFull.add("part");
         return layout
     }
 
@@ -63,15 +66,6 @@ class UserInfoFragment: Fragment() {
         //val recyclerView: RecyclerView= view!!.findViewById(R.id.recviewUserInfo)
 
         viewModel = ViewModelProviders.of(this).get(UserInfoViewModel::class.java)
-
-        val userListFull: ArrayList<UserData> = ArrayList()
-        userListFull.add(UserData("What's your name?"))
-        userListFull.add(UserData("What's your dob?"))
-        userListFull.add(UserData("What's your gender?"))
-        userListFull.add(UserData("What's your qualification?"))
-        userListFull.add(UserData("What's your yoq?"))
-        userListFull.add(UserData("Are you a student?"))
-        userListFull.add(UserData("Will you do part time work?"))
 
         val userList: ArrayList<UserData> = ArrayList()
         userList.add(UserData("What's your name?"))
@@ -153,8 +147,11 @@ class UserInfoFragment: Fragment() {
                     //adding the userinfo input from the user into the firebase
                     userList.add(UserData(userInput))
                     userList.add(userListFull[counter])
-                    addNewUserInfo()
-                    viewModel.setUserProfile(updatesUserInfo)
+                    setProfileImage()
+                    //addNewUserInfo()
+                    //viewModel.setUserProfile(updatesUserInfo)
+                    //viewModel.setUserProfile("name","pd")//userInput.toString());
+                    viewModel.setUserProfile(userInfoFull[counter-1],userInput.toString());
                     counter++
                     mAdapter.update(userList)
                     layout.onboarding_chat_edit_text.text = null
@@ -167,14 +164,16 @@ class UserInfoFragment: Fragment() {
             }
     }
 
-    private fun addNewUserInfo() {
-        //UserInfo()[position] = layout.onboarding_chat_edit_text.text.toString();
-        //updatesUserInfo = UserInfo[position];
-                updatesUserInfo = UserData(layout.onboarding_chat_edit_text.text.toString())
-                /*dob = layout.onboarding_chat_edit_text.text.toString(),
-                gender = layout.onboarding_chat_edit_text.text.toString(),
-                //dob = SimpleDateFormat("dd/MM/yyyy").parse(layout.onboarding_chat_edit_text.text.toString()),
-                qualification = layout.onboarding_chat_edit_text.text.toString()*/
-            //)
+
+    fun setProfileImage(){
+        val imageView = view?.findViewById<ImageView>(R.id.img_obprofile)
+        view?.context?.let {
+            if (imageView != null) {
+                GlideApp.with(it)
+                    .load("")
+                    .placeholder(R.drawable.placeholder_user)
+                    .into(imageView)
+            }
+        }
     }
 }

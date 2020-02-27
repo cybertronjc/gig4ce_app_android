@@ -1,9 +1,9 @@
 package com.gigforce.app.modules.onboarding.models
 
 data class UserInfo(
-    var name: MutableMap<String, String> = mutableMapOf<String, String>()
-    /*var dob: String = "",
-    var gender: String = "",
+    var name:String="",//: MutableMap<String, Any> = mutableMapOf()
+    var dob: String = ""
+    /*var gender: String = "",
     var qualification: String = ""
 
     var yoq: String = "",

@@ -37,9 +37,10 @@ class UserInfoViewModel : ViewModel() {
         userInfoFirebaseRepository.setUserInfo(userInfo)
     }*/
 
-    fun setUserProfile(userInfo: UserData)
+    //fun setUserProfile(userInfo: UserData)
+    fun setUserProfile(k:String, v:String)
     {
-        userInfoFirebaseRepository.setUserInfo(userInfo)
+        userInfoFirebaseRepository.setUserInfo(k,v)
     }
 
     init {

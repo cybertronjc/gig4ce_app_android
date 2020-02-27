@@ -14,13 +14,17 @@ class UserInfoFirebaseRepository {
         return firebaseDB.collection("user_profiles").document(uid)
     }
 
-    fun setUserInfo(userInfo: UserData) {
+    fun setUserInfo(k:String, v:String) {
+        getUserInfo().update(k, v)
+    }
+
+    fun setUserInfo_old(userInfo: UserData) {
             firebaseDB.collection("user_profiles")
                 .document(uid).update(
-                    mapOf<String, Any> (
+                    mapOf<String, UserData> (
                     "name" to userInfo
                     /*"dob" to userInfo.dob,
-                    "gender" to userInfo.gender,
+                    "gender" to userInfo.gender,getUserInfo
                     "qualification" to userInfo.qualification
                     "company" to iUInfo.company,
                     "daysOfWork" to iUInfo.daysofwork,
