@@ -27,9 +27,25 @@
         app:cardBackgroundColor="@color/colorAccent"
         app:cardCornerRadius="10dp">
 
+        <FrameLayout
+            android:id="@+id/framelayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+<!--
         <com.gigforce.app.modules.onboarding.controls.OBToggleButton
             android:id="@+id/OBToggleButton"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content" >
+        </com.gigforce.app.modules.onboarding.controls.OBToggleButton>
+-->
+        <Button
+            android:id="@+id/onboarding_chat_send_btn"
+            android:layout_width="125dp"
+            android:layout_height="45dp"
+            android:layout_marginStart="280dp"
+            android:layout_marginTop="100dp"
+            android:text=">>">
+        </Button>
     </androidx.cardview.widget.CardView>
+
 </RelativeLayout>

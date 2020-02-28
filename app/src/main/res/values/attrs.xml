@@ -8,4 +8,8 @@
     <declare-styleable name="OBToggleButtonItem">
         <attr name="text" format="string" />
     </declare-styleable>
+
+    <declare-styleable name="OBTextViewItem">
+        <attr name="textview" format="string" />
+    </declare-styleable>
 </resources>

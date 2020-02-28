@@ -5,11 +5,24 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.app.R
+import com.gigforce.app.modules.onboarding.controls.OBTextView
+import com.gigforce.app.modules.onboarding.controls.OBToggleButton
+import com.gigforce.app.modules.onboarding.controls.ViewChanger
+import com.gigforce.app.modules.onboarding.models.UserData
+import com.gigforce.app.utils.GlideApp
+import com.google.firebase.storage.FirebaseStorage
+import kotlinx.android.synthetic.main.fragment_confirm_otp.*
 import kotlinx.android.synthetic.main.fragment_create_init_profile.*
+import kotlinx.android.synthetic.main.fragment_create_init_profile.onboarding_chat_send_btn
+import kotlinx.android.synthetic.main.fragment_login.*
+import kotlinx.android.synthetic.main.fragment_userinfo.*
+import kotlinx.android.synthetic.main.fragment_userinfo.view.*
 
 /**
  * A simple [Fragment] subclass.
@@ -17,6 +30,18 @@ import kotlinx.android.synthetic.main.fragment_create_init_profile.*
  * create an instance of this fragment.
  */
 class CreateInitProfile : Fragment() {
+
+    private lateinit var viewModel: UserInfoViewModel
+    private lateinit var storage: FirebaseStorage
+    private lateinit var layout: View
+    var recyclerView: RecyclerView? = null
+
+    private lateinit  var updatesUserInfo: UserData
+
+    private var userListFull: ArrayList<UserData> = ArrayList()
+    private var userInfoFull: ArrayList<String> = ArrayList()
+
+    var counter = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,24 +55,63 @@ class CreateInitProfile : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_create_init_profile, container, false)
+        userListFull.add(UserData("What's your name?"));userInfoFull.add("name");
+        userListFull.add(UserData("What's your dob?"));userInfoFull.add("dob");
+        userListFull.add(UserData("What's your gender?"));userInfoFull.add("gender");
+        userListFull.add(UserData("What's your qualification?"));userInfoFull.add("qualification");
+        userListFull.add(UserData("What's your yoq?"));userInfoFull.add("yoq");
+        userListFull.add(UserData("Are you a student?"));userInfoFull.add("isStudent");
+        userListFull.add(UserData("Will you do part time work?"));userInfoFull.add("part");
+        layout = inflater.inflate(R.layout.fragment_create_init_profile, container, false)
+        return layout
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupRV()
+
+        onboarding_chat_send_btn?.setOnClickListener {
+            // based on counter or position value change the below view
+            setupRV()
+            when (counter) {
+                0 -> {
+                        val textView = TextView(this.context);
+                        textView.text = "I'm loving Android!"
+                        framelayout?.removeAllViews()
+                        framelayout?.addView(textView)
+                }
+                1 -> {
+                        var textView2= TextView(this.context);
+                        textView2.text = "this is second text view"
+                        framelayout?.removeAllViews()
+                        framelayout?.addView(textView2)
+                }
+                2 -> {
+                        //LayoutInflater.from(context).inflate(R.layout.item_ob_toggle, this, true)
+                    Toast.makeText(context, "counter: $counter", Toast.LENGTH_SHORT).show()
+                }
+                else -> {
+                        Toast.makeText(context, "counter: $counter", Toast.LENGTH_SHORT).show()
+                        }
+            }
+
+
+            counter++
+        }
     }
 
-    fun setupRV() {
-
+    private fun setupRV() {
         this.rv_ob_chats.layoutManager = LinearLayoutManager(this.context)
         val adapter = CreateInitProfileRVAdapter()
-
-        // some initial data
-        adapter.data.add(ObChatLogItem("in", "What's your name?"))
-        adapter.data.add(ObChatLogItem("out", "Chirag Mittal"))
-        adapter.data.add(ObChatLogItem("in", "What's your date of birth?"))
-
+        layout.onboarding_chat_send_btn.setOnClickListener {
+            if (counter == 0) {
+                adapter.data.add(ObChatLogItem("in", userInfoFull[counter].toString()))
+            } else {
+                if(counter < userInfoFull.size) {
+                    adapter.data.add(ObChatLogItem("out", "User Input"))
+                    adapter.data.add(ObChatLogItem("in", userInfoFull[counter].toString()))
+                }
+            }
+        }
         this.rv_ob_chats.adapter = adapter
     }
 
@@ -104,6 +168,19 @@ class CreateInitProfileRVAdapter: RecyclerView.Adapter<CreateInitProfileRVAdapte
         fun bind(item:ObChatLogItem) {
             view.findViewById<TextView>(R.id.txt).setText(item.text)
             // chanage profile_icon based in item.profile_icon_path
+            val imageView = view?.findViewById<ImageView>(R.id.imageView)
+            setChatUserImage(imageView)
+        }
+
+        fun setChatUserImage(imageView: ImageView){
+            view?.context?.let {
+                if (imageView != null) {
+                    GlideApp.with(it)
+                        .load("")
+                        .placeholder(R.drawable.placeholder_user)
+                        .into(imageView)
+                }
+            }
         }
     }
 }
