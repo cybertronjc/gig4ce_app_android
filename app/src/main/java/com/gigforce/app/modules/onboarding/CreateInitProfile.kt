@@ -68,10 +68,9 @@ class CreateInitProfile : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        setupRV()
         onboarding_chat_send_btn?.setOnClickListener {
             // based on counter or position value change the below view
-            setupRV()
             when (counter) {
                 0 -> {
                         val textView = TextView(this.context);
@@ -86,8 +85,11 @@ class CreateInitProfile : Fragment() {
                         framelayout?.addView(textView2)
                 }
                 2 -> {
+                    var toggleView = LayoutInflater.from(this.context).inflate(R.layout.item_toggle_ob_bottomframe,null)
                         //LayoutInflater.from(context).inflate(R.layout.item_ob_toggle, this, true)
-                    Toast.makeText(context, "counter: $counter", Toast.LENGTH_SHORT).show()
+                        //Toast.makeText(context, "counter: $counter", Toast.LENGTH_SHORT).show()
+                    framelayout?.removeAllViews()
+                    framelayout?.addView(toggleView)
                 }
                 else -> {
                         Toast.makeText(context, "counter: $counter", Toast.LENGTH_SHORT).show()
