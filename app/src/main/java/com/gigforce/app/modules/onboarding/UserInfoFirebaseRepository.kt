@@ -18,6 +18,10 @@ class UserInfoFirebaseRepository {
         getUserInfo().update(k, v)
     }
 
+    fun setUserInfo(k:String, v:Map<String,String>) {
+        getUserInfo().update(k, v)
+    }
+
     fun setUserInfo_old(userInfo: UserData) {
             firebaseDB.collection("user_profiles")
                 .document(uid).update(

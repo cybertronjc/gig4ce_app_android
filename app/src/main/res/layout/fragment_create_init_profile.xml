@@ -7,6 +7,25 @@
     android:layout_height="match_parent" >
 
     <!-- App Bar -->
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/app_bar"
+        android:layout_height="128dp"
+        android:layout_width="match_parent"
+        android:background="@color/colorAccent"
+        android:text="Create Profile"
+        android:textColor="@color/cardview_light_background"
+        android:textSize="40dp"
+        tools:ignore="PrivateResource">
+<!--
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/design_default_color_primary"
+            android:elevation="4dp"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+-->
+    </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_ob_chats"

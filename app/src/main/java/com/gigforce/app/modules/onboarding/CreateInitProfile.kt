@@ -1,10 +1,12 @@
 package com.gigforce.app.modules.onboarding
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -38,8 +40,10 @@ class CreateInitProfile : Fragment() {
 
     private lateinit  var updatesUserInfo: UserData
 
-    private var userListFull: ArrayList<UserData> = ArrayList()
-    private var userInfoFull: ArrayList<String> = ArrayList()
+    private var questions: ArrayList<String> = ArrayList()
+    private var gigerFBattr: ArrayList<String> = ArrayList()
+
+    val adapter = CreateInitProfileRVAdapter()
 
     var counter = 0
 
@@ -55,62 +59,76 @@ class CreateInitProfile : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        userListFull.add(UserData("What's your name?"));userInfoFull.add("name");
-        userListFull.add(UserData("What's your dob?"));userInfoFull.add("dob");
-        userListFull.add(UserData("What's your gender?"));userInfoFull.add("gender");
-        userListFull.add(UserData("What's your qualification?"));userInfoFull.add("qualification");
-        userListFull.add(UserData("What's your yoq?"));userInfoFull.add("yoq");
-        userListFull.add(UserData("Are you a student?"));userInfoFull.add("isStudent");
-        userListFull.add(UserData("Will you do part time work?"));userInfoFull.add("part");
+        questions.add("What's your name?");gigerFBattr.add("name");
+        questions.add("What's your dob?");gigerFBattr.add("dob");
+        questions.add("What's your gender?");gigerFBattr.add("gender");
+        questions.add("What's your qualification?");gigerFBattr.add("qualification");
+        questions.add("What's your yoq?");gigerFBattr.add("yoq");
+        questions.add("Are you a student?");gigerFBattr.add("isStudent");
+        questions.add("Will you do part time work?");gigerFBattr.add("part");
         layout = inflater.inflate(R.layout.fragment_create_init_profile, container, false)
         return layout
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupRV()
+        lateinit var userInput:String;
         onboarding_chat_send_btn?.setOnClickListener {
             // based on counter or position value change the below view
             when (counter) {
                 0 -> {
-                        val textView = TextView(this.context);
-                        textView.text = "I'm loving Android!"
+                        adapter.data.add(ObChatLogItem("in", questions[counter].toString()))
+                        //adapter.data.add(ObChatLogItem("out", gigerFBattr[counter].toString()))
+                        var editText = LayoutInflater.from(this.context).inflate(R.layout.item_edittext_ob_bottom,null)
+                        //val textView = TextView(this.context);
+                        //textView.text = "I'm loving Android!"
                         framelayout?.removeAllViews()
-                        framelayout?.addView(textView)
+                        framelayout?.addView(editText)
+                        userInput = (layout.findViewById(R.id.OBEditText) as EditText).toString()
                 }
                 1 -> {
                         var textView2= TextView(this.context);
                         textView2.text = "this is second text view"
                         framelayout?.removeAllViews()
                         framelayout?.addView(textView2)
+                    //
+                    adapter.data.add(ObChatLogItem("out", userInput))
+                    adapter.data.add(ObChatLogItem("in", questions[counter].toString()))
                 }
                 2 -> {
-                    var toggleView = LayoutInflater.from(this.context).inflate(R.layout.item_toggle_ob_bottomframe,null)
+                        var toggleView = LayoutInflater.from(this.context).inflate(R.layout.item_toggle_ob_bottomframe,null)
                         //LayoutInflater.from(context).inflate(R.layout.item_ob_toggle, this, true)
                         //Toast.makeText(context, "counter: $counter", Toast.LENGTH_SHORT).show()
-                    framelayout?.removeAllViews()
-                    framelayout?.addView(toggleView)
+                        framelayout?.removeAllViews()
+                        framelayout?.addView(toggleView)
+                    //
+                    adapter.data.add(ObChatLogItem("out", "User Input"))
+                    adapter.data.add(ObChatLogItem("in", questions[counter].toString()))
                 }
                 else -> {
+                        framelayout?.removeAllViews()
                         Toast.makeText(context, "counter: $counter", Toast.LENGTH_SHORT).show()
-                        }
+                    //
+                    adapter.data.add(ObChatLogItem("out", "User Input"))
+                    adapter.data.add(ObChatLogItem("in", questions[counter].toString()))
+                }
             }
-
-
             counter++
         }
     }
 
     private fun setupRV() {
         this.rv_ob_chats.layoutManager = LinearLayoutManager(this.context)
-        val adapter = CreateInitProfileRVAdapter()
+        //val adapter = CreateInitProfileRVAdapter()
         layout.onboarding_chat_send_btn.setOnClickListener {
             if (counter == 0) {
-                adapter.data.add(ObChatLogItem("in", userInfoFull[counter].toString()))
+                adapter.data.add(ObChatLogItem("in", gigerFBattr[counter].toString()))
             } else {
-                if(counter < userInfoFull.size) {
+                if(counter < gigerFBattr.size) {
                     adapter.data.add(ObChatLogItem("out", "User Input"))
-                    adapter.data.add(ObChatLogItem("in", userInfoFull[counter].toString()))
+                    adapter.data.add(ObChatLogItem("in", gigerFBattr[counter].toString()))
                 }
             }
         }
@@ -121,7 +139,7 @@ class CreateInitProfile : Fragment() {
         /**
          * Use this factory method to create a new instance of
          * this fragment using the provided parameters.
-         *
+             *
          * @return A new instance of fragment CreateInitProfile.
          */
         // TODO: Rename and change types and number of parameters
