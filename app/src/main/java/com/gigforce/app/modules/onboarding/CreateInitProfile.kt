@@ -103,7 +103,7 @@ class CreateInitProfile : Fragment() {
                         framelayout?.removeAllViews()
                         framelayout?.addView(editTextView)
                         var editTextInput = layout.findViewById(R.id.OBEditText) as EditText
-                        userInput = editTextInput.toString()
+                        userInput = editTextInput.text.toString()
                 }
                 1 -> {
                         var datePickerView = LayoutInflater.from(this.context).inflate(R.layout.item_datepicker_ob_bottom,null)
