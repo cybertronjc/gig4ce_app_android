@@ -15,9 +15,6 @@ class CreateInitProfileViewModel(): ViewModel() {
     lateinit var profileManager:ProfileManager
     lateinit var onboardingController: OnboardingController
 
-    val profile:LiveData<Profile>
-        get() = profileManager.profileDoc
-
     val logs:LiveData<List<OnboardingChatLog?>>
         get() = onboardingController.logs
 

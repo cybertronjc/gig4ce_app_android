@@ -32,25 +32,30 @@ class OnboardingController(val userid:String,
             .collection("OnboardingChatLogs")
             .whereEqualTo("userid", userid)
             .addSnapshotListener { snapshot, exception ->
-                val hasLogsInitiated = (_logs.value!!.size > 0)
                 _logs.postValue(snapshot?.documents?.map { item -> item.toObject(OnboardingChatLog::class.java)}?.toList())
-                if(!hasLogsInitiated)
-                    setActiveQuestionAtFirst()
+                setActiveQuestionAtFirst()
             }
     }
 
     private fun setActiveQuestionAtFirst() {
+        // last point of the log, of flow == "in"
+        // should update everytime the log is refreshed.
+        // todo: correct the logic here
         _activeQuestion.postValue(_logs.value!!.get(0))
     }
 
     fun processResponse(response: Any) {
 
+        //todo: process response here, and update profile here
+
+        // after the response is processed, next question should be created
         createNextQuestion()
     }
 
     fun createNextQuestion() {
         val profile: Profile = profileManager.profileDoc.value!!
 
+        //todo: complete this
         if(!profile.hasName()) {
             addNewQuestionInLog(
                 OnboardingChatLog(
@@ -64,6 +69,6 @@ class OnboardingController(val userid:String,
     }
 
     private fun addNewQuestionInLog(log: OnboardingChatLog){
-        // insert log into Firestore
+        //todo: insert log into Firestore
     }
 }
