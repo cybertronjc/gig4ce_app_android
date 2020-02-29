@@ -37,8 +37,11 @@ import kotlinx.android.synthetic.main.item_ob_chat_in.view.*
  */
 class CreateInitProfile : Fragment() {
 
-    private lateinit var viewModel: UserInfoViewModel
+    private lateinit var viewModel: CreateInitProfileViewModel
+
+    //todo
     private lateinit var storage: FirebaseStorage
+
     private lateinit var layout: View
     var recyclerView: RecyclerView? = null
 
@@ -88,8 +91,10 @@ class CreateInitProfile : Fragment() {
     @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(UserInfoViewModel::class.java)
+        viewModel = ViewModelProviders.of(this).get(CreateInitProfileViewModel::class.java)
+
         setupRV()
+
         lateinit var userInput:String;
         onboarding_chat_send_btn?.setOnClickListener {
             // based on counter or position value change the below view
@@ -134,7 +139,7 @@ class CreateInitProfile : Fragment() {
                 }
             }
             //add to the firebase
-            viewModel.setUserProfile(gigerAttr[counter],userInput.toString());
+            // viewModel.setUserProfile(gigerAttr[counter],userInput.toString());
             counter++
         }
     }
