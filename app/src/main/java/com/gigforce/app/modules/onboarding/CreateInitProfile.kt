@@ -19,12 +19,15 @@ import com.gigforce.app.modules.onboarding.controls.ViewChanger
 import com.gigforce.app.modules.onboarding.models.UserData
 import com.gigforce.app.utils.GlideApp
 import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import kotlinx.android.synthetic.main.fragment_confirm_otp.*
 import kotlinx.android.synthetic.main.fragment_create_init_profile.*
 import kotlinx.android.synthetic.main.fragment_create_init_profile.onboarding_chat_send_btn
 import kotlinx.android.synthetic.main.fragment_login.*
+import kotlinx.android.synthetic.main.fragment_profile_main_expanded.view.*
 import kotlinx.android.synthetic.main.fragment_userinfo.*
 import kotlinx.android.synthetic.main.fragment_userinfo.view.*
+import kotlinx.android.synthetic.main.item_ob_chat_in.view.*
 
 /**
  * A simple [Fragment] subclass.
@@ -58,7 +61,6 @@ class CreateInitProfile : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         questions.add("What's your name?");gigerFBattr.add("name");
         questions.add("What's your dob?");gigerFBattr.add("dob");
         questions.add("What's your gender?");gigerFBattr.add("gender");
@@ -66,8 +68,20 @@ class CreateInitProfile : Fragment() {
         questions.add("What's your yoq?");gigerFBattr.add("yoq");
         questions.add("Are you a student?");gigerFBattr.add("isStudent");
         questions.add("Will you do part time work?");gigerFBattr.add("part");
+
+        // Inflate the layout for this fragment
         layout = inflater.inflate(R.layout.fragment_create_init_profile, container, false)
+        storage = FirebaseStorage.getInstance()
+        //loadImage("gig_user.png")
+
         return layout
+    }
+
+    private fun loadImage(Path: String) {
+        var chatPic: StorageReference = storage.reference.child("gig4ce_logos").child(Path)
+        GlideApp.with(this.context!!)
+            .load(chatPic)
+            .into(layout.imageView)
     }
 
     @SuppressLint("SetTextI18n")
@@ -81,18 +95,20 @@ class CreateInitProfile : Fragment() {
                 0 -> {
                         adapter.data.add(ObChatLogItem("in", questions[counter].toString()))
                         //adapter.data.add(ObChatLogItem("out", gigerFBattr[counter].toString()))
-                        var editText = LayoutInflater.from(this.context).inflate(R.layout.item_edittext_ob_bottom,null)
+                        var editTextView = LayoutInflater.from(this.context).inflate(R.layout.item_edittext_ob_bottom,null)
                         //val textView = TextView(this.context);
                         //textView.text = "I'm loving Android!"
                         framelayout?.removeAllViews()
-                        framelayout?.addView(editText)
-                        userInput = (layout.findViewById(R.id.OBEditText) as EditText).toString()
+                        framelayout?.addView(editTextView)
+                        var editTextInput = layout.findViewById(R.id.OBEditText) as EditText
+                        userInput = editTextInput.toString()
                 }
                 1 -> {
-                        var textView2= TextView(this.context);
-                        textView2.text = "this is second text view"
+                        var datePickerView = LayoutInflater.from(this.context).inflate(R.layout.item_datepicker_ob_bottom,null)
+                        //var textView2= TextView(this.context);
+                        //textView2.text = "this is second text view"
                         framelayout?.removeAllViews()
-                        framelayout?.addView(textView2)
+                        framelayout?.addView(datePickerView)
                     //
                     adapter.data.add(ObChatLogItem("out", userInput))
                     adapter.data.add(ObChatLogItem("in", questions[counter].toString()))
