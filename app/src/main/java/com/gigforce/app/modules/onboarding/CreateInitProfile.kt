@@ -10,6 +10,7 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.app.R
@@ -44,7 +45,7 @@ class CreateInitProfile : Fragment() {
     private lateinit  var updatesUserInfo: UserData
 
     private var questions: ArrayList<String> = ArrayList()
-    private var gigerFBattr: ArrayList<String> = ArrayList()
+    private var gigerAttr: ArrayList<String> = ArrayList()
 
     val adapter = CreateInitProfileRVAdapter()
 
@@ -61,13 +62,13 @@ class CreateInitProfile : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        questions.add("What's your name?");gigerFBattr.add("name");
-        questions.add("What's your dob?");gigerFBattr.add("dob");
-        questions.add("What's your gender?");gigerFBattr.add("gender");
-        questions.add("What's your qualification?");gigerFBattr.add("qualification");
-        questions.add("What's your yoq?");gigerFBattr.add("yoq");
-        questions.add("Are you a student?");gigerFBattr.add("isStudent");
-        questions.add("Will you do part time work?");gigerFBattr.add("part");
+        questions.add("What's your name?");gigerAttr.add("name");
+        questions.add("What's your dob?");gigerAttr.add("dob");
+        questions.add("What's your gender?");gigerAttr.add("gender");
+        questions.add("What's your qualification?");gigerAttr.add("qualification");
+        questions.add("What's your yoq?");gigerAttr.add("yoq");
+        questions.add("Are you a student?");gigerAttr.add("isStudent");
+        questions.add("Will you do part time work?");gigerAttr.add("part");
 
         // Inflate the layout for this fragment
         layout = inflater.inflate(R.layout.fragment_create_init_profile, container, false)
@@ -87,6 +88,7 @@ class CreateInitProfile : Fragment() {
     @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel = ViewModelProviders.of(this).get(UserInfoViewModel::class.java)
         setupRV()
         lateinit var userInput:String;
         onboarding_chat_send_btn?.setOnClickListener {
@@ -94,7 +96,7 @@ class CreateInitProfile : Fragment() {
             when (counter) {
                 0 -> {
                         adapter.data.add(ObChatLogItem("in", questions[counter].toString()))
-                        //adapter.data.add(ObChatLogItem("out", gigerFBattr[counter].toString()))
+                        //adapter.data.add(ObChatLogItem("out", gigerAttr[counter].toString()))
                         var editTextView = LayoutInflater.from(this.context).inflate(R.layout.item_edittext_ob_bottom,null)
                         //val textView = TextView(this.context);
                         //textView.text = "I'm loving Android!"
@@ -131,6 +133,8 @@ class CreateInitProfile : Fragment() {
                     adapter.data.add(ObChatLogItem("in", questions[counter].toString()))
                 }
             }
+            //add to the firebase
+            viewModel.setUserProfile(gigerAttr[counter],userInput.toString());
             counter++
         }
     }
@@ -140,11 +144,11 @@ class CreateInitProfile : Fragment() {
         //val adapter = CreateInitProfileRVAdapter()
         layout.onboarding_chat_send_btn.setOnClickListener {
             if (counter == 0) {
-                adapter.data.add(ObChatLogItem("in", gigerFBattr[counter].toString()))
+                adapter.data.add(ObChatLogItem("in", gigerAttr[counter].toString()))
             } else {
-                if(counter < gigerFBattr.size) {
+                if(counter < gigerAttr.size) {
                     adapter.data.add(ObChatLogItem("out", "User Input"))
-                    adapter.data.add(ObChatLogItem("in", gigerFBattr[counter].toString()))
+                    adapter.data.add(ObChatLogItem("in", gigerAttr[counter].toString()))
                 }
             }
         }
