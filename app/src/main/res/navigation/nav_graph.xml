@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/homeFragment">
+    app:startDestination="@id/introSlidesFragment">
 
     <fragment
         android:id="@+id/homeFragment"
@@ -121,4 +121,9 @@
         android:id="@+id/createInitProfile"
         android:name="com.gigforce.app.modules.onboarding.CreateInitProfile"
         android:label="CreateInitProfile" />
+    <fragment
+        android:id="@+id/introSlidesFragment"
+        android:name="com.gigforce.app.modules.onboarding.IntroSlidesFragment"
+        android:label="fragment_intro_slides"
+        tools:layout="@layout/fragment_intro_slides" />
 </navigation>

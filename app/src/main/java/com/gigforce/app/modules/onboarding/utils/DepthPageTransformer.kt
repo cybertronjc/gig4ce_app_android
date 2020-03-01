@@ -1,4 +1,4 @@
-package com.gigforce.app.modules.onboarding
+package com.gigforce.app.modules.onboarding.utils
 
 import android.view.View
 import androidx.annotation.RequiresApi
