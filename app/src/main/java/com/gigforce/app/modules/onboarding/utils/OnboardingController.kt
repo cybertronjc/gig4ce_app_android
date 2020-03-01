@@ -41,12 +41,12 @@ class OnboardingController(val userid:String,
         // last point of the log, of flow == "in"
         // should update everytime the log is refreshed.
         // todo: correct the logic here
-//        _activeQuestion.postValue(_logs.value!!.get(_logs.value!!.size))
-        _activeQuestion.postValue(OnboardingChatLog(
-            "autoid",
-            "in","Can I know your name please?", "text", "name",
-            userid, "giger"
-        ))
+        _activeQuestion.postValue(_logs.value!!.get(_logs.value!!.size))
+//        _activeQuestion.postValue(OnboardingChatLog(
+//            "autoid",
+//            "in","Can I know your name please?", "text", "name",
+//            userid, "giger"
+//        ))
     }
 
     fun processResponse(response: Any) {

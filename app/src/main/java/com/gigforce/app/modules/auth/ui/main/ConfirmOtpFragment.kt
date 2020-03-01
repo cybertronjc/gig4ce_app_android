@@ -47,14 +47,13 @@ class ConfirmOtpFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this.activity!!).get(LoginViewModel::class.java)
-        btn_confirm.setOnClickListener { onConfirmClicked() }
+        btn_confirm.setOnClickListener { onConfirmClicked();findNavController().navigate(R.id.OBSlidesFragment) }
     }
 
     private fun onConfirmClicked() {
         val otp = edit_otp.text.toString()
         viewModel.verifyPhoneNumberWithCode(otp)
         Toast.makeText(this.context, "Code Submitted For Confirmation", Toast.LENGTH_SHORT).show()
-        findNavController().navigate(R.id.OBSlidesFragment)
     }
 
     companion object {
