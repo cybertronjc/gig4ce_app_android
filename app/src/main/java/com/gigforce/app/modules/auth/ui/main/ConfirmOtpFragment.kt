@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
 import com.google.firebase.auth.PhoneAuthProvider
 import kotlinx.android.synthetic.main.fragment_confirm_otp.*
@@ -53,6 +54,7 @@ class ConfirmOtpFragment : Fragment() {
         val otp = edit_otp.text.toString()
         viewModel.verifyPhoneNumberWithCode(otp)
         Toast.makeText(this.context, "Code Submitted For Confirmation", Toast.LENGTH_SHORT).show()
+        findNavController().navigate(R.id.OBSlidesFragment)
     }
 
     companion object {

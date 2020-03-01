@@ -37,7 +37,11 @@
         android:id="@+id/confirmOtpFragment"
         android:name="com.gigforce.app.modules.auth.ui.main.ConfirmOtpFragment"
         android:label="fragment_confirm_otp"
-        tools:layout="@layout/fragment_confirm_otp" />
+        tools:layout="@layout/fragment_confirm_otp" >
+        <action
+            android:id="@+id/action_confirmOtpFragment_to_OBSlidesFragment"
+            app:destination="@id/OBSlidesFragment" />
+    </fragment>
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.gigforce.app.modules.profile.ProfileFragment"
@@ -125,5 +129,17 @@
         android:id="@+id/introSlidesFragment"
         android:name="com.gigforce.app.modules.onboarding.IntroSlidesFragment"
         android:label="fragment_intro_slides"
-        tools:layout="@layout/fragment_intro_slides" />
+        tools:layout="@layout/fragment_intro_slides" >
+        <action
+            android:id="@+id/action_introSlidesFragment_to_chatsHomeFragment"
+            app:destination="@id/chatsHomeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/OBSlidesFragment"
+        android:name="com.gigforce.app.modules.onboarding.OBSlidesFragment"
+        android:label="OBSlidesFragment" >
+        <action
+            android:id="@+id/action_OBSlidesFragment_to_chatsHomeFragment"
+            app:destination="@id/chatsHomeFragment" />
+    </fragment>
 </navigation>
