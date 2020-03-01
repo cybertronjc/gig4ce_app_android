@@ -9,6 +9,7 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
@@ -46,7 +47,12 @@ class IntroSlidesFragment : Fragment() {
     }
 
     fun setupViewPager(){
-        this.viewpager.adapter = IntroSlidesViewPagerAdapter(this.viewpager)
+        this.viewpager.adapter = IntroSlidesViewPagerAdapter(this.viewpager, object: OnIntroSlidesCompleted(){
+
+            override fun invoke() {
+                this@IntroSlidesFragment.findNavController().navigate(getResourceToNavigateTo())
+            }
+        })
         this.viewpager.setPageTransformer(DepthPageTransformer())
         this.viewpager.registerOnPageChangeCallback(object:ViewPager2.OnPageChangeCallback(){
             override fun onPageSelected(position: Int) {
@@ -78,9 +84,12 @@ class IntroSlidesFragment : Fragment() {
     }
 }
 
-class IntroSlidesViewPagerAdapter(val viewpager:ViewPager2): RecyclerView.Adapter<IntroSlidesViewPagerAdapter.ViewHolder>(){
+class IntroSlidesViewPagerAdapter(val viewpager:ViewPager2,
+                                  val onIntroSlidesCompleted: OnIntroSlidesCompleted): RecyclerView.Adapter<IntroSlidesViewPagerAdapter.ViewHolder>(){
 
-    class ViewHolder(view:View, val viewpager:ViewPager2):RecyclerView.ViewHolder(view) {
+    class ViewHolder(view:View,
+                     val viewpager:ViewPager2,
+                     val onIntroSlidesCompleted: OnIntroSlidesCompleted):RecyclerView.ViewHolder(view) {
 
         var mainArtImageView:ImageView
         var titleTextView:TextView
@@ -98,6 +107,10 @@ class IntroSlidesViewPagerAdapter(val viewpager:ViewPager2): RecyclerView.Adapte
             nextButton.setOnClickListener {
                 if(currentPosition < 2)
                     viewpager.setCurrentItem(currentPosition+1, true)
+                else if (currentPosition == 2) {
+                    // on Final CA Executed
+                    onIntroSlidesCompleted.invoke()
+                }
             }
         }
 
@@ -137,7 +150,7 @@ class IntroSlidesViewPagerAdapter(val viewpager:ViewPager2): RecyclerView.Adapte
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view:View = LayoutInflater.from(parent.context)
             .inflate(R.layout.layout_intro_slide, parent, false)
-        return ViewHolder(view, viewpager)
+        return ViewHolder(view, viewpager, onIntroSlidesCompleted)
     }
 
     override fun getItemCount(): Int {
