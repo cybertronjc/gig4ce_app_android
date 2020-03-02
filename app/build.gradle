@@ -81,7 +81,7 @@ dependencies {
     implementation 'com.google.android.material:material:1.0.0'
     implementation 'com.github.franmontiel:LocaleChanger:0.9.2'
     implementation 'com.jakewharton:butterknife:8.8.1'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+    //annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
 
 }
 

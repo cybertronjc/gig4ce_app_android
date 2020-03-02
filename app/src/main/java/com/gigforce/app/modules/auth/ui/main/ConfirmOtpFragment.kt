@@ -1,6 +1,7 @@
 package com.gigforce.app.modules.auth.ui.main
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -47,12 +48,16 @@ class ConfirmOtpFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this.activity!!).get(LoginViewModel::class.java)
-        btn_confirm.setOnClickListener { onConfirmClicked();findNavController().navigate(R.id.OBSlidesFragment) }
+        btn_confirm.setOnClickListener { onConfirmClicked();Log.d("Login sucess!!!!!!!!!","asdfasdfas");
+            findNavController().navigate(R.id.OBSlidesFragment) }
     }
 
     private fun onConfirmClicked() {
         val otp = edit_otp.text.toString()
         viewModel.verifyPhoneNumberWithCode(otp)
+        /*
+        on success or failure
+         */
         Toast.makeText(this.context, "Code Submitted For Confirmation", Toast.LENGTH_SHORT).show()
     }
 

@@ -43,8 +43,9 @@ class LanguageSelectFragment : Fragment(){
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-        @BindView(com.gigforce.app.R.id.localeSpinner)
-        var localeSpinner: Spinner? = null
+        lateinit var layout:View;
+        ///@BindView(com.gigforce.app.R.id.localeSpinner)
+        lateinit var localeSpinner: Spinner;// = layout.findViewById(R.id.localeSpinner)
         @BindView(com.gigforce.app.R.id.currentLocale)
         var currentLocale: TextView? = null
         @BindView(com.gigforce.app.R.id.date)
@@ -55,10 +56,12 @@ class LanguageSelectFragment : Fragment(){
             inflater: LayoutInflater, container: ViewGroup?,
             savedInstanceState: Bundle?
         ): View? {
-            val view: View = inflater.inflate(R.layout.fragment_select_language, container, false)
-            //LocaleChanger.initialize(getApplicationContext(),SUPPORTED_LOCALES)
-            unbinder = ButterKnife.bind(this, view)
-            return view
+            //val view: View = inflater.inflate(R.layout.fragment_select_language, container, false)
+            layout = inflater.inflate(R.layout.fragment_select_language, container, false)
+            localeSpinner = layout.findViewById(R.id.localeSpinner)
+            LocaleChanger.initialize(this.context,SUPPORTED_LOCALES)
+            unbinder = ButterKnife.bind(this, layout)
+            return layout
         }
 
         override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -69,12 +72,12 @@ class LanguageSelectFragment : Fragment(){
                 R.layout.simple_spinner_dropdown_item,
                 SUPPORTED_LOCALES as List<Any?>
             )
-            localeSpinner!!.adapter = adapter
+            localeSpinner?.adapter = adapter
         }
 
         override fun onResume() {
             super.onResume()
-            currentLocale!!.text = Locale.getDefault().toString()
+            currentLocale?.text = Locale.getDefault().toString()
             date?.setText(DateProvider.provideSystemLocaleFormattedDate())
         }
 
