@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Gigforce</string>
+    <string name="hello_blank_fragment">हैलो खाली टुकड़ा</string>
+    <string name="title_activity_profile">प्रोफ़ाइलगतिविधि</string>
+
+    <string name="intro_slide1_title">गिगफोर्स में आपका स्वागत है</string>
+    <string name="intro_slide1_subtitle">जानें। कमाएँ। का आनंद लें।</string>
+
+    <string name="intro_slide2_title">काम होता है</string>
+    <string name="intro_slide2_subtitle">काम होने पर सूचित करें</string>
+
+    <string name="intro_slide3_title">कार्य और निरुपित</string>
+    <string name="intro_slide3_subtitle">कार्य और उन्हें कॉलेजियम को सौंपें!</string>
+
+    <string name="ob_slide1_title">ज्ञानप्राप्ति</string>
+    <string name="ob_slide1_subtitle">कैसे - १</string>
+
+    <string name="ob_slide2_title">ज्ञानप्राप्ति</string>
+    <string name="ob_slide2_subtitle">कैसे - २</string>
+
+    <string name="ob_slide3_title">ज्ञानप्राप्ति</string>
+    <string name="ob_slide3_subtitle">कैसे - ३</string>
+    <!--
+    This string is used for square devices and overridden by hello_world in
+    values-round/strings.xml for round devices.
+    -->
+    <string name="hello_world">हैलो स्क्वायर वर्ल्ड!</string>
+    <!-- Preference Titles -->
+    <string name="messages_header">संदेश</string>
+    <string name="sync_header">सिंक</string>
+
+    <!-- Messages Preferences -->
+    <string name="signature_title">आपके हस्ताक्षर</string>
+    <string name="reply_title">डिफ़ॉल्ट उत्तर कार्रवाई</string>
+
+    <!-- Sync Preferences -->
+    <string name="sync_title">ईमेल को समय-समय पर सिंक करें</string>
+    <string name="attachment_title">आने वाले अनुलग्नकों को डाउनलोड करें</string>
+    <string name="attachment_summary_on">आने वाले ईमेल के लिए स्वचालित रूप से संलग्नक डाउनलोड करें</string>
+    <string name="attachment_summary_off">मैन्युअल रूप से अनुरोध किए जाने पर केवल अनुलग्नक डाउनलोड करें</string>
+
+    <!-- Profile main expanded page -->
+    <string name="rating_text">रेटिंग</string>
+    <string name="tasks_done_text">कार्य किए गए</string>
+    <string name="connections_text">सम्बन्ध</string>
+    <string name="default_location_text">स्थान \ n220KM दूर</string>
+    <string name="education_card_education_text">शिक्षा</string>
+    <string name="education_card_content_placeholder">शिक्षा सामग्री यहां डालनी है</string>
+    <string name="view_more_text">और देखो</string>
+    <string name="empty_dash_string">-</string>
+
+    <!-- Profile education expanded page -->
+    <string name="education_expanded_Education_text">शिक्षा</string>
+    <string name="education_expanded_to_be_filled_from_profile_data">प्रोफ़ाइल डेटा से भरा जा करने के लिए</string>
+    <string name="education_expanded_skills_text">कौशल</string>
+    <string name="education_expanded_achievements_text">उपलब्धियां</string>
+    <string name="education_expanded_add_education_text">+ शिक्षा जोड़ें</string>
+    <string name="education_expanded_add_skill_text">+ कौशल जोड़ें</string>
+    <string name="education_expanded_add_achievement_text">+ उपलब्धि जोड़ें</string>
+    <string name="education_expanded_user_name">उपयोगकर्ता नाम</string>
+    <string name="nav_education_text">शिक्षा</string>
+    <string name="nav_about_text">मेरे बारे में</string>
+    <string name="nav_gigs_text">gigs</string>
+    <string name="nav_experience_text">अनुभव</string>
+
+    <!-- Add New Skill Bottom Sheet -->
+    <string name="add_skill_sheet_new_skill">नया कौशल</string>
+    <string name="add_skill_sheet_category">वर्ग</string>
+    <string name="add_skill_sheet_skill_name">कौशल का नाम</string>
+
+    <!-- Add New Achievement Bottom Sheet -->
+    <string name="add_achievement_sheet_new_achievement">नई उपलब्धि</string>
+    <string name="add_achievement_sheet_title">शीर्षक</string>
+    <string name="add_achievement_sheet_issuing_authority">जारी करने वाला प्राधिकरण</string>
+    <string name="add_achievement_sheet_location">स्थान</string>
+    <string name="add_achievement_sheet_year">साल *</string>
+
+    <!-- Add New Education Bottom Sheed -->
+    <string name="add_education_sheet_new_education">नई शिक्षा</string>
+    <string name="add_education_sheet_institution">संस्थान</string>
+    <string name="add_education_sheet_course">कोर्स</string>
+    <string name="add_education_sheet_degree">डिग्री</string>
+    <string name="add_education_sheet_start_year">शुरुवाती साल *</string>
+    <string name="add_education_sheet_end_year">अंत वर्ष *</string>
+
+    <!-- Generic strings -->
+    <string name="cancel_text">रद्द करना</string>
+    <string name="save_text">सहेजें</string>
+    <string name="add_more_text">+ और जोड़ें</string>
+    <string name="verified_text">सत्यापित</string>
+    <string name="tags_text">उपयोगकर्ता का टैग</string>
+    <string name="about_me_text">मेरे बारे में उपयोगकर्ता</string>
+
+
+    <!--language sample-->
+    <string name="update_locale">Hindi- Update Locale</string>
+    <string name="current_locale">Hindi- Current locale:</string>
+    <string name="date">Hindi- Date:</string>
+    <string name="ask_permission">Hindi- Ask permission</string>
+    <string name="check_dialog_language">Hindi- Check dialogs language</string>
+    <string name="open_new_screen">Hindi- Open new screen</string>
+    <string name="settings">Hindi- Settings</string>
+
+    </resources>

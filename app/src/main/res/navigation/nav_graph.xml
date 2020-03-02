@@ -19,6 +19,9 @@
         <action
             android:id="@+id/action_homeFragment_to_chatsHomeFragment"
             app:destination="@id/chatsHomeFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_languageSelectFragment"
+            app:destination="@id/languageSelectFragment" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
@@ -142,4 +145,8 @@
             android:id="@+id/action_OBSlidesFragment_to_chatsHomeFragment"
             app:destination="@id/chatsHomeFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/languageSelectFragment"
+        android:name="com.gigforce.app.modules.auth.utils.LanguageSelectFragment"
+        android:label="LanguageSelectFragment" />
 </navigation>

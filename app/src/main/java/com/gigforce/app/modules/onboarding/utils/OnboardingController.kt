@@ -23,7 +23,6 @@ class OnboardingController(val userid:String,
     init {
         collectionReference = FirebaseFirestore.getInstance()
             .collection("OnboardingChatLogs")
-
         addLogsListener(userid)
     }
 
