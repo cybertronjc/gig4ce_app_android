@@ -1,20 +1,19 @@
 package com.gigforce.app.modules.auth.utils
 
 //import com.franmontiel.localechanger.sample.SampleApplication.SUPPORTED_LOCALES
-import android.app.DatePickerDialog
-import android.app.DatePickerDialog.OnDateSetListener
-import android.content.res.Configuration
+
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
+import android.widget.RadioButton
+import android.widget.RadioGroup
 import android.widget.Spinner
-import android.widget.TextView
+import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.OnClick
 import butterknife.Unbinder
@@ -25,7 +24,6 @@ import java.util.*
 
 
 class LanguageSelectFragment : Fragment(){
-
 
     val SUPPORTED_LOCALES =
         Arrays.asList(
@@ -52,6 +50,7 @@ class LanguageSelectFragment : Fragment(){
         lateinit var layout:View;
         ///@BindView(com.gigforce.app.R.id.localeSpinner)
         lateinit var localeSpinner: Spinner;// = layout.findViewById(R.id.localeSpinner)
+        lateinit var radioGroup:RadioGroup;
         /*
         @BindView(com.gigforce.app.R.id.currentLocale)
         var currentLocale: TextView? = null
@@ -66,9 +65,11 @@ class LanguageSelectFragment : Fragment(){
             savedInstanceState: Bundle?
         ): View? {
             //val view: View = inflater.inflate(R.layout.fragment_select_language, container, false)
+            LocaleChanger.initialize(this.context, SUPPORTED_LOCALES)
             layout = inflater.inflate(R.layout.fragment_select_language, container, false)
-            localeSpinner = layout.findViewById(R.id.localeSpinner)
-            LocaleChanger.initialize(this.context,SUPPORTED_LOCALES)
+            //localeSpinner = layout.findViewById(R.id.localeSpinner)
+            radioGroup = layout.findViewById(R.id.groupradio);
+            radioGroup.clearCheck();
             unbinder = ButterKnife.bind(this, layout)
             return layout
         }
@@ -76,20 +77,59 @@ class LanguageSelectFragment : Fragment(){
         override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
             //super.onViewCreated(savedInstanceState)
             //setHasOptionsMenu(true)
+            /*
             val adapter: ArrayAdapter<Any?> = ArrayAdapter<Any?>(
                 activity!!,
                 R.layout.simple_spinner_dropdown_item,
                 SUPPORTED_LOCALES as List<Any?>
             )
             localeSpinner?.adapter = adapter
+            */
+            layout.nextbuttonLang.setOnClickListener(){
+                val selectedId = radioGroup.checkedRadioButtonId
+                if (selectedId == -1) {
+                    Toast.makeText(this.context,"No answer has been selected",Toast.LENGTH_SHORT).show()
+                } else {
+                    val radioButton = radioGroup.findViewById<View>(selectedId) as RadioButton
+                    //LocaleChanger.setLocale(Locale("en", "", ""))
+                    //LocaleChanger.setLocale(Locale(radioButton.text.toString(),"india",""))
+                    LocaleChanger.setLocale(Locale("hi","IN",""))
+                    updateResources(radioButton.text.toString())
+                    Toast.makeText(this.context,radioButton.text,Toast.LENGTH_SHORT).show()
+                    findNavController().navigate(R.id.loginFragment)
+                    Toast.makeText(this.context,">>>>"+LocaleChanger.getLocale().language.toString(),Toast.LENGTH_SHORT).show()
+                }
+            }
 
-            layout.localeUpdate.setOnClickListener() {
+            /*layout.localeUpdate.setOnClickListener() {
                 Log.d("????????????????????", localeSpinner!!.selectedItem.toString())
                 LocaleChanger.setLocale(localeSpinner!!.selectedItem as Locale)
                 updateResources(localeSpinner!!.selectedItem.toString())
                 findNavController().navigate(R.id.loginFragment)
+            }*/
+
+            requireActivity().onBackPressedDispatcher.addCallback {
+                // navController.popBackStack(R.id.homeFragment, false)
+                // Do Nothing on back!
+                // todo: experience need to improve.
+                LocaleChanger.resetLocale()
+                findNavController().popBackStack(R.id.introSlidesFragment,false);
             }
         }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+        val navController = findNavController()
+
+        requireActivity().onBackPressedDispatcher.addCallback {
+            // todo: experience need to improve.
+            LocaleChanger.resetLocale()
+            findNavController().popBackStack(R.id.introSlidesFragment,false);
+        }
+
+
+    }
 
     private fun updateResources(language: String)   {
         val locale = Locale(language)
@@ -104,13 +144,15 @@ class LanguageSelectFragment : Fragment(){
             currentLocale?.text = Locale.getDefault().toString()
             date?.setText(DateProvider.provideSystemLocaleFormattedDate())
         }
-*/
+
         @OnClick(R.id.localeUpdate)
         fun onUpdateLocaleClick() {
             Log.d("????????????????????",localeSpinner!!.selectedItem.toString())
             LocaleChanger.setLocale(localeSpinner!!.selectedItem as Locale)
 //            ActivityRecreationHelper.recreate(activity, false)
         }
+        */
+
 /*
         @OnClick(R.id.showDatePicker)
         fun onShowDatePickerClick() {
@@ -127,6 +169,7 @@ class LanguageSelectFragment : Fragment(){
 */
         override fun onDestroyView() {
             unbinder?.unbind()
+            LocaleChanger.resetLocale()
             super.onDestroyView()
         }
     }

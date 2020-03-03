@@ -18,5 +18,5 @@
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="150dp"
-        />
+        android:orientation="horizontal" />
 </RelativeLayout>

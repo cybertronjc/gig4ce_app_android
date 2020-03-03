@@ -1,128 +1,128 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_container"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent">
 
-<com.google.android.material.appbar.AppBarLayout
-    android:id="@+id/app_bar"
-    android:layout_height="40dp"
-    android:layout_width="match_parent"
-    android:background="@color/colorAccent"
-    android:text="Select Language"
-    android:textColor="@color/cardview_light_background"
-    android:textSize="40dp">
-
-
-</com.google.android.material.appbar.AppBarLayout>
-
-</RelativeLayout>
--->
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="200dp"
-    android:textColor="@color/cardview_light_background"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-
-    <LinearLayout
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/app_bar_lang_opt"
         android:layout_width="match_parent"
+        android:layout_height="79dp"
+        android:background="#b12582"
+        android:text="@+id/title_lang"
+        android:textAlignment="center"
+        android:textColor="#ffffff"
+        android:textSize="24dp"
+        tools:ignore="PrivateResource">
+        <!--"@color/cardview_light_background"-->
+        <TextView
+            android:id="@+id/text_view_lang"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:text="@string/title_lang"
+            android:textAlignment="center"
+            android:textColor="@color/cardview_light_background"
+            android:textSize="24dp" />
+    </com.google.android.material.appbar.AppBarLayout>
+
+
+    <RadioGroup
+        android:id="@+id/groupradio"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="90dp"
+        android:layout_marginRight="10dp"
+        android:paddingStart="25dp">
 
-        <Spinner
-            android:id="@+id/localeSpinner"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/colorAccent"
-            android:textColor="@color/cardview_light_background"
-            android:layout_marginBottom="8dp" />
-
-        <Button
-            android:id="@+id/localeUpdate"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:background="@color/colorAccent"
-            android:textColor="@color/cardview_light_background"
-            android:text="@string/update_locale"
-            android:radius="10dp"/>
-
-        <!--android:corners
-        <ImageView
-            android:id="@+id/iv_bottom_art"
+        <!--<androidx.cardview.widget.CardView
+            android:id="@+id/inputContainer"
+            android:windowSoftInputMode="stateHidden"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:scaleType="fitXY"
-            app:srcCompat="@drawable/bottomwave" />
--->
-        <!--
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="4dp"
-                    android:orientation="horizontal">
+            android:minHeight="50dp"
+            android:padding="16dp"
+            cardElevation="1dp"
+            cardCornerRadius="10dp"
+            tools:ignore="MissingConstraints"> -->
+        <RadioButton
+            android:id="@+id/radio1"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="English"
+            android:textSize="20dp" />
+        <!--        </androidx.cardview.widget.CardView> -->
 
-                    <TextView android:id="@+id/currentLocaleTitle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="8dp"
-                        android:layout_marginRight="8dp"
-                        android:text="@string/current_locale" />
+        <RadioButton
+            android:id="@+id/radio2"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="हिंदी"
+            android:textSize="20dp" />
 
-                    <TextView
-                        android:id="@+id/currentLocale"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-                </LinearLayout>
+        <RadioButton
+            android:id="@+id/radio3"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="తెలుగు"
+            android:textSize="20dp" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="4dp"
-                    android:orientation="horizontal">
+        <RadioButton
+            android:id="@+id/radio4"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="मराठी"
+            android:textSize="20dp" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="8dp"
-                        android:layout_marginRight="8dp"
-                        android:text="@string/date" />
+    </RadioGroup>
 
-                    <TextView
-                        android:id="@+id/date"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="4dp" />
-                </LinearLayout>
-                -->
-        <!--
-                <Button
-                    android:id="@+id/showDatePicker"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:text="@string/check_dialog_language" />
 
-                <Button
-                    android:id="@+id/openNewScreen"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:text="@string/open_new_screen"
-                    android:visibility="gone" />
+    <ImageView
+        android:id="@+id/nextbuttonLang"
+        android:layout_width="56dp"
+        android:layout_height="61dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="13dp"
+        app:srcCompat="@drawable/next_button" />
 
-                <Button
-                    android:id="@+id/reInitialize"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:text="Re-initialize"
-                    android:visibility="visible" />
-                   -->
+</RelativeLayout>
+    <!--
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:textColor="@color/cardview_light_background"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <Spinner
+                android:id="@+id/localeSpinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorAccent"
+                android:textColor="@color/cardview_light_background"
+                android:layout_marginBottom="8dp" />
+
+            <Button
+                android:id="@+id/localeUpdate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:background="@color/colorAccent"
+                android:textColor="@color/cardview_light_background"
+                android:text="@string/update_locale"
+                android:radius="10dp"/>
     </LinearLayout>
 </ScrollView>
+-->

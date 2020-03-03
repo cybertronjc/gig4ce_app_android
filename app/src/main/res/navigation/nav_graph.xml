@@ -142,8 +142,8 @@
         android:name="com.gigforce.app.modules.onboarding.OBSlidesFragment"
         android:label="OBSlidesFragment" >
         <action
-            android:id="@+id/action_OBSlidesFragment_to_chatsHomeFragment"
-            app:destination="@id/chatsHomeFragment" />
+            android:id="@+id/action_OBSlidesFragment_to_createInitProfile"
+            app:destination="@id/createInitProfile" />
     </fragment>
     <fragment
         android:id="@+id/languageSelectFragment"

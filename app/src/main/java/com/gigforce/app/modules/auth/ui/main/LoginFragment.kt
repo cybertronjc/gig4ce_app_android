@@ -56,6 +56,7 @@ class LoginFragment : Fragment() {
             // navController.popBackStack(R.id.homeFragment, false)
             // Do Nothing on back!
             // todo: experience need to improve.
+            //findNavController().popBackStack(R.id.languageSelectFragment,false)
         }
 
         viewModel.liveState.observeForever {

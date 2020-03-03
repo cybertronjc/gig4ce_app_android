@@ -94,13 +94,12 @@
     <string name="about_me_text">About me of user</string>
 
 
-    <!--language sample-->
-    <string name="update_locale">Change Language</string>
-    <string name="current_locale">Default- Current locale:</string>
-    <string name="date">Default- Date:</string>
-    <string name="ask_permission">Default- Ask permission</string>
-    <string name="check_dialog_language">Default- Check dialogs language</string>
-    <string name="open_new_screen">Default- Open new screen</string>
-    <string name="settings">Default- Settings</string>
+    <!--language select-->
+    <string name="title_lang">Select Language</string>
 
+
+    <!--login fragment-->
+    <string name="title_login">Please Login</string>
+    <string name="mobile_login">Enter Your Mobile No.</string>
+    <string name="confirm_login">Confirm</string>
 </resources>

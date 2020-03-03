@@ -93,13 +93,12 @@
     <string name="about_me_text">मेरे बारे में उपयोगकर्ता</string>
 
 
-    <!--language sample-->
-    <string name="update_locale">Hindi- Update Locale</string>
-    <string name="current_locale">Hindi- Current locale:</string>
-    <string name="date">Hindi- Date:</string>
-    <string name="ask_permission">Hindi- Ask permission</string>
-    <string name="check_dialog_language">Hindi- Check dialogs language</string>
-    <string name="open_new_screen">Hindi- Open new screen</string>
-    <string name="settings">Hindi- Settings</string>
+    <!--language select-->
+    <string name="title_lang">भाषा का चयन करें</string>
+
+    <!--login fragment-->
+    <string name="title_login">कृपया लॉगिन करें</string>
+    <string name="mobile_login">अपना मोबाइल नंबर दर्ज करें</string>
+    <string name="confirm_login">पुष्टि करें</string>
 
     </resources>
