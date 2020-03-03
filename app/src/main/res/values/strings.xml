@@ -95,7 +95,7 @@
 
 
     <!--language sample-->
-    <string name="update_locale">Default- Update Locale</string>
+    <string name="update_locale">Change Language</string>
     <string name="current_locale">Default- Current locale:</string>
     <string name="date">Default- Date:</string>
     <string name="ask_permission">Default- Ask permission</string>

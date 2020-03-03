@@ -1,22 +1,28 @@
 package com.gigforce.app.modules.auth.utils
 
-import com.gigforce.app.R
+//import com.franmontiel.localechanger.sample.SampleApplication.SUPPORTED_LOCALES
 import android.app.DatePickerDialog
 import android.app.DatePickerDialog.OnDateSetListener
+import android.content.res.Configuration
 import android.os.Bundle
-import android.view.*
+import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.OnClick
 import butterknife.Unbinder
 import com.franmontiel.localechanger.LocaleChanger
-//import com.franmontiel.localechanger.sample.SampleApplication.SUPPORTED_LOCALES
-import com.franmontiel.localechanger.utils.ActivityRecreationHelper
+import com.gigforce.app.R
+import kotlinx.android.synthetic.main.fragment_select_language.view.*
 import java.util.*
+
 
 class LanguageSelectFragment : Fragment(){
 
@@ -24,8 +30,8 @@ class LanguageSelectFragment : Fragment(){
     val SUPPORTED_LOCALES =
         Arrays.asList(
             Locale("en", "US"),
-            Locale("hi", "IN")
-            //Locale("fr", "FR"),
+            Locale("hi", "IN"),
+            Locale("fr", "FR")
             //Locale("ar", "JO")
         )
     /*
@@ -46,10 +52,13 @@ class LanguageSelectFragment : Fragment(){
         lateinit var layout:View;
         ///@BindView(com.gigforce.app.R.id.localeSpinner)
         lateinit var localeSpinner: Spinner;// = layout.findViewById(R.id.localeSpinner)
+        /*
         @BindView(com.gigforce.app.R.id.currentLocale)
         var currentLocale: TextView? = null
         @BindView(com.gigforce.app.R.id.date)
         var date: TextView? = null
+
+         */
         private var unbinder: Unbinder? = null
 
         override fun onCreateView(
@@ -73,20 +82,36 @@ class LanguageSelectFragment : Fragment(){
                 SUPPORTED_LOCALES as List<Any?>
             )
             localeSpinner?.adapter = adapter
+
+            layout.localeUpdate.setOnClickListener() {
+                Log.d("????????????????????", localeSpinner!!.selectedItem.toString())
+                LocaleChanger.setLocale(localeSpinner!!.selectedItem as Locale)
+                updateResources(localeSpinner!!.selectedItem.toString())
+                findNavController().navigate(R.id.loginFragment)
+            }
         }
 
-        override fun onResume() {
+    private fun updateResources(language: String)   {
+        val locale = Locale(language)
+        Locale.setDefault(locale)
+        val configuration =
+            context!!.resources.configuration
+        configuration.setLocale(locale)
+    }
+/*
+    override fun onResume() {
             super.onResume()
             currentLocale?.text = Locale.getDefault().toString()
             date?.setText(DateProvider.provideSystemLocaleFormattedDate())
         }
-
+*/
         @OnClick(R.id.localeUpdate)
         fun onUpdateLocaleClick() {
+            Log.d("????????????????????",localeSpinner!!.selectedItem.toString())
             LocaleChanger.setLocale(localeSpinner!!.selectedItem as Locale)
-            ActivityRecreationHelper.recreate(activity, false)
+//            ActivityRecreationHelper.recreate(activity, false)
         }
-
+/*
         @OnClick(R.id.showDatePicker)
         fun onShowDatePickerClick() {
             val now = Calendar.getInstance()
@@ -99,7 +124,7 @@ class LanguageSelectFragment : Fragment(){
             )
             dialog.show()
         }
-
+*/
         override fun onDestroyView() {
             unbinder?.unbind()
             super.onDestroyView()
