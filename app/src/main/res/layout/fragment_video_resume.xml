@@ -11,7 +11,8 @@
         android:id="@+id/frame_video"
         android:layout_width="match_parent"
         android:layout_height="253dp"
-        android:layout_marginTop="168dp">
+        android:layout_marginTop="168dp"
+        android:background="#f2f2f2">
 
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/viewpager"
