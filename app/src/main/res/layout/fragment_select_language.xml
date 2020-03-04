@@ -50,38 +50,44 @@
             cardCornerRadius="10dp"
             tools:ignore="MissingConstraints"> -->
         <RadioButton
-            android:id="@+id/radio1"
+            android:id="@+id/en"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:hint="en"
             android:text="English"
             android:textSize="14sp" />
         <!--        </androidx.cardview.widget.CardView> -->
 
         <RadioButton
-            android:id="@+id/radio2"
+            android:id="@+id/hi"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:hint="hi"
             android:text="हिंदी"
             android:textSize="14sp" />
 
         <RadioButton
-            android:id="@+id/radio3"
+            android:id="@+id/te"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:hint="te"
             android:text="తెలుగు"
             android:textSize="14sp" />
 
         <RadioButton
-            android:id="@+id/radio4"
+            android:id="@+id/fr"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:hint="fr"
             android:text="français"
             android:textSize="14sp" />
 
         <RadioButton
-            android:id="@+id/radio5"
+            android:id="@+id/ma"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:autoText="false"
+            android:hint="ma"
             android:text="मराठी"
             android:textSize="14sp" />
 

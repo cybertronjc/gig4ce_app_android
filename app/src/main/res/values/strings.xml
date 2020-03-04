@@ -102,4 +102,7 @@
     <string name="title_login">Please Login</string>
     <string name="mobile_login">Enter Your Mobile No.</string>
     <string name="confirm_login">Confirm</string>
+
+    <!--video resume-->
+    <string name="guidelines_video_resume">Guidelines</string>
 </resources>

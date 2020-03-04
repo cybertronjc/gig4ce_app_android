@@ -34,7 +34,8 @@
             android:layout_marginStart="164dp"
             android:layout_marginTop="208dp"
             android:layout_marginEnd="183dp"
-            android:layout_marginBottom="32dp" />
+            android:layout_marginBottom="32dp"
+            android:orientation="horizontal" />
     </FrameLayout>
 
     <Button
@@ -60,7 +61,7 @@
         android:layout_alignParentStart="true"
         android:layout_marginStart="152dp"
         android:layout_marginTop="20dp"
-        android:text="Guidelines"
+        android:text="@string/guidelines_video_resume"
         android:textColor="#e94b81"
         android:textSize="12sp" />
 

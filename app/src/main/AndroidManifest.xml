@@ -16,6 +16,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        android:configChanges="layoutDirection|locale"
         android:theme="@style/AppTheme">
         <!--
                Set to true if your app is Standalone, that is, it does not require the handheld
