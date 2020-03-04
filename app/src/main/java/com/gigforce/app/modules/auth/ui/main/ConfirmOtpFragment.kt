@@ -53,7 +53,7 @@ class ConfirmOtpFragment : Fragment() {
             findNavController().navigate(R.id.OBSlidesFragment) }
         requireActivity().onBackPressedDispatcher.addCallback {
             // todo: experience need to improve.
-            findNavController().popBackStack(R.id.introSlidesFragment,false);
+            //findNavController().popBackStack(R.id.introSlidesFragment,false);
         }
     }
 

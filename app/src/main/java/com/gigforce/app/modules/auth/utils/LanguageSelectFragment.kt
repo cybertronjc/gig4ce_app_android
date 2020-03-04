@@ -96,7 +96,8 @@ class LanguageSelectFragment : Fragment(){
                     LocaleChanger.setLocale(Locale("hi","IN",""))
                     updateResources(radioButton.text.toString())
                     Toast.makeText(this.context,radioButton.text,Toast.LENGTH_SHORT).show()
-                    findNavController().navigate(R.id.loginFragment)
+                    // TODO findNavController().navigate(R.id.loginFragment)
+                    findNavController().navigate(R.id.videoResumeFragment)
                     Toast.makeText(this.context,">>>>"+LocaleChanger.getLocale().language.toString(),Toast.LENGTH_SHORT).show()
                 }
             }

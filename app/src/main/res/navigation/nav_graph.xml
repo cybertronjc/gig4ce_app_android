@@ -148,5 +148,14 @@
     <fragment
         android:id="@+id/languageSelectFragment"
         android:name="com.gigforce.app.modules.auth.utils.LanguageSelectFragment"
-        android:label="LanguageSelectFragment" />
+        android:label="LanguageSelectFragment" >
+        <action
+            android:id="@+id/action_languageSelectFragment_to_videoResumeFragment"
+            app:destination="@id/videoResumeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/videoResumeFragment"
+        android:name="com.gigforce.app.modules.onboarding.VideoResumeFragment"
+        android:label="fragment_video_resume"
+        tools:layout="@layout/fragment_video_resume" />
 </navigation>
