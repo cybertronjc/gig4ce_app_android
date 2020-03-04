@@ -99,7 +99,7 @@ class LanguageSelectFragment : Fragment(){
                     val radioButton = radioGroup.findViewById<View>(selectedId) as RadioButton
                     //LocaleChanger.setLocale(Locale("en", "", ""))
                     //LocaleChanger.setLocale(Locale(radioButton.text.toString(),"india",""))
-                    LocaleChanger.setLocale(Locale("hi","IN",""))
+                    LocaleChanger.setLocale(Locale("fr","FR",""))
                     updateResources(radioButton.text.toString())
                     Toast.makeText(this.context,radioButton.text,Toast.LENGTH_SHORT).show()
                     // TODO findNavController().navigate(R.id.loginFragment)
