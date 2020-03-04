@@ -15,8 +15,7 @@
         android:id="@+id/dots_presenter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="150dp"
-        />
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="131dp" />
 </RelativeLayout>
