@@ -3,10 +3,7 @@ package com.gigforce.app.modules.auth.utils
 //import com.franmontiel.localechanger.sample.SampleApplication.SUPPORTED_LOCALES
 
 import android.os.Bundle
-import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.Spinner
@@ -15,7 +12,6 @@ import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import butterknife.ButterKnife
-import butterknife.OnClick
 import butterknife.Unbinder
 import com.franmontiel.localechanger.LocaleChanger
 import com.gigforce.app.R
@@ -64,6 +60,16 @@ class LanguageSelectFragment : Fragment(){
             inflater: LayoutInflater, container: ViewGroup?,
             savedInstanceState: Bundle?
         ): View? {
+            val window: Window = activity!!.window
+            // clear FLAG_TRANSLUCENT_STATUS flag:
+            // clear FLAG_TRANSLUCENT_STATUS flag:
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+            // add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
+            // add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+            // finally change the color
+            // finally change the color
+            window.setStatusBarColor(activity!!.resources.getColor(R.color.colorAccent))
             //val view: View = inflater.inflate(R.layout.fragment_select_language, container, false)
             LocaleChanger.initialize(this.context, SUPPORTED_LOCALES)
             layout = inflater.inflate(R.layout.fragment_select_language, container, false)
