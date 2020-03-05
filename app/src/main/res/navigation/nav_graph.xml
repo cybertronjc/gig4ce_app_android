@@ -55,6 +55,9 @@
         <action
             android:id="@+id/action_profileFragment_to_experienceExpandedFragment2"
             app:destination="@id/experienceExpandedFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_addTagBottomSheet"
+            app:destination="@id/addTagBottomSheet" />
     </fragment>
     <fragment
         android:id="@+id/chatsHomeFragment"
@@ -138,4 +141,8 @@
         android:name="com.gigforce.app.modules.profile.ExperienceExpandedFragment"
         android:label="ExperienceExpandedFragment"
         tools:layout="@layout/fragment_profile_experience_expanded"/>
+    <fragment
+        android:id="@+id/addTagBottomSheet"
+        android:name="com.gigforce.app.modules.profile.AddTagBottomSheet"
+        android:label="AddTagBottomSheet" />
 </navigation>

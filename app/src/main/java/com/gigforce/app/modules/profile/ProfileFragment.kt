@@ -89,6 +89,10 @@ class ProfileFragment : Fragment() {
             Log.d("ProfileFragment", profile.rating.toString())
         })
 
+        layout.add_tags_button.setOnClickListener{
+            this.findNavController().navigate(R.id.addTagBottomSheet)
+        }
+
         layout.about_card_view_more_button.setOnClickListener{
             this.findNavController().navigate(R.id.aboutExpandedFragment)
         }
