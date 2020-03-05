@@ -10,14 +10,14 @@ data class ProfileData(
     var bio: String = "",
     var isVerified: Boolean = false,
     var Education: ArrayList<Education>? = null,
-    var Skill: ArrayList<Skill>? = null,
+    var Skill: ArrayList<String>? = null,
     var Achievement: ArrayList<Achievement>? = null,
     var Language: ArrayList<Language>? = null,
     var Contact: ArrayList<Contact>? = null,
     var Experience: ArrayList<Experience>? = null,
     var Tags: ArrayList<String>? = null,
     var connections: Int = 0,
-    var rating: Float = 0.0F,
+    var rating: Rating? = null,
     var tasksDone: Int = 0
 ) {
 

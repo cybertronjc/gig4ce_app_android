@@ -68,7 +68,8 @@ class AddAchievementBottomSheetFragment: BottomSheetDialogFragment() {
                 title = layout.add_achievement_title.text.toString(),
                 issuingAuthority = layout.add_achievement_authority.text.toString(),
                 location = layout.add_achievement_location.text.toString(),
-                year = SimpleDateFormat("dd/MM/yyyy").parse(layout.add_achievement_year.text.toString())
+                //year = SimpleDateFormat("dd/MM/yyyy").parse(layout.add_achievement_year.text.toString())
+                year = layout.add_achievement_year.text.toString()
             )
         )
     }

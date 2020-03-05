@@ -57,8 +57,9 @@ class EducationExpandedFragment: Fragment() {
 
             var skillString: String = ""
             for (skill in profile.Skill!!) {
-                skillString += skill.category + "\n"
-                skillString += skill.nameOfSkill + "\n\n"
+//                skillString += skill.category + "\n"
+//                skillString += skill.nameOfSkill + "\n\n"
+                skillString += skill + "\n\n"
             }
             layout.education_exp_skill_content.text = skillString
 
