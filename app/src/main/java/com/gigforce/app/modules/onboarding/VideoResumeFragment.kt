@@ -89,16 +89,14 @@ class VideoResumeFragment:Fragment() {
                          val onVideoResumeCompleted: OnVideoResumeCompleted): RecyclerView.ViewHolder(view) {
 
             var mainArtImageView: ImageView
-            var titleTextView: TextView
-            var subTitleTextView: TextView
+
             var nextButton: Button
 
             var currentPosition:Int = -1
 
             init {
                 mainArtImageView = this.itemView.findViewById<ImageView>(R.id.iv_main_art)
-                titleTextView = this.itemView.findViewById<TextView>(R.id.tv_title)
-                subTitleTextView = this.itemView.findViewById<TextView>(R.id.tv_subtitle)
+
                 nextButton = this.itemView.findViewById<Button>(R.id.btn_next)
 
                 nextButton.setOnClickListener {
@@ -119,8 +117,6 @@ class VideoResumeFragment:Fragment() {
                         .load(R.drawable.ic_intro_slides1_mainart)
                         .into(mainArtImageView)
 
-                    titleTextView.setText(R.string.intro_slide1_title)
-                    subTitleTextView.setText(R.string.intro_slide1_subtitle)
                     nextButton.setText("next")
 
                 }else if(position == 1){
@@ -128,8 +124,7 @@ class VideoResumeFragment:Fragment() {
                         .load(R.drawable.ic_intro_slides2_mainart)
                         .into(mainArtImageView)
 
-                    titleTextView.setText(R.string.intro_slide2_title)
-                    subTitleTextView.setText(R.string.intro_slide2_subtitle)
+
                     nextButton.setText("next")
 
                 }else if(position == 2) {
@@ -137,8 +132,8 @@ class VideoResumeFragment:Fragment() {
                         .load(R.drawable.ic_intro_slides3_mainart)
                         .into(mainArtImageView)
 
-                    titleTextView.setText(R.string.intro_slide3_title)
-                    subTitleTextView.setText(R.string.intro_slide3_subtitle)
+                    //titleTextView.setText(R.string.intro_slide3_title)
+                    //subTitleTextView.setText(R.string.intro_slide3_subtitle)
                     nextButton.setText("Get Started")
                 }
             }
@@ -146,7 +141,7 @@ class VideoResumeFragment:Fragment() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
             val view: View = LayoutInflater.from(parent.context)
-                .inflate(R.layout.layout_intro_slide, parent, false)
+                .inflate(R.layout.layout_video_resume_slide, parent, false)
             return ViewHolder(view, viewpager, onVideoResumeCompleted)
         }
 
