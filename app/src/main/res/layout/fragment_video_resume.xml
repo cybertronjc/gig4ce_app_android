@@ -49,7 +49,7 @@
         android:layout_marginTop="46dp"
         android:layout_marginEnd="42dp"
         android:background="@drawable/button_video_rounded"
-        android:text="UPLOAD VIDEO"
+        android:text="@string/button_upload_video"
         android:textColor="@color/cardview_light_background"
         android:textSize="14sp" />
 
@@ -72,7 +72,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginStart="28dp"
         android:layout_marginTop="136dp"
-        android:text="why video resume is imp?"
+        android:text="@string/why_video_resume"
         android:textSize="18sp" />
 
     <TextView
@@ -81,7 +81,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="56dp"
         android:layout_marginTop="25dp"
-        android:text="Video Resume"
+        android:text="@string/title_video_resume"
         android:textSize="17sp" />
 
     <TextView
@@ -91,7 +91,7 @@
         android:layout_below="@+id/textView14"
         android:layout_marginStart="39dp"
         android:layout_marginTop="15dp"
-        android:text="let us know more about you"
+        android:text="@string/desc1_video_resume"
         android:textSize="18sp" />
 
     <TextView
@@ -101,7 +101,7 @@
         android:layout_below="@+id/textView16"
         android:layout_marginStart="39dp"
         android:layout_marginTop="2dp"
-        android:text="no resume and no interview"
+        android:text="@string/desc2_video_resume"
         android:textColor="#e94b81"
         android:textSize="12sp" />
 </RelativeLayout>

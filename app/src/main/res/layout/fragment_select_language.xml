@@ -75,6 +75,24 @@
             android:textSize="14sp" />
 
         <RadioButton
+            android:id="@+id/gu"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:autoText="false"
+            android:hint="gu"
+            android:text=" ગુજરતી"
+            android:textSize="14sp" />
+
+        <RadioButton
+            android:id="@+id/pu"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:autoText="false"
+            android:hint="pa"
+            android:text="પંજાબી"
+            android:textSize="14sp" />
+
+        <RadioButton
             android:id="@+id/fr"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"

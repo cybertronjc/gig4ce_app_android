@@ -105,4 +105,9 @@
 
     <!--video resume-->
     <string name="guidelines_video_resume">Guidelines</string>
+    <string name="button_upload_video">UPLOAD</string>
+    <string name="title_video_resume">Video Resume</string>
+    <string name="why_video_resume">why video resume is imp?</string>
+    <string name="desc1_video_resume">let us know more about you</string>
+    <string name="desc2_video_resume">no resume and no interview</string>
 </resources>

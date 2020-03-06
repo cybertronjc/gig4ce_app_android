@@ -12,7 +12,6 @@ import android.widget.TextView
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
-import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import com.gigforce.app.R
 import com.gigforce.app.modules.onboarding.utils.DepthPageTransformer
 import com.gigforce.app.utils.GlideApp
@@ -100,7 +99,7 @@ class OBSlidesViewPagerAdapter(val viewpager:ViewPager2,
         var currentPosition:Int = -1
 
         init {
-            mainArtImageView = this.itemView.findViewById<ImageView>(R.id.iv_main_art)
+            mainArtImageView = this.itemView.findViewById<ImageView>(R.id.iv_main_art_video)
             titleTextView = this.itemView.findViewById<TextView>(R.id.tv_title)
             subTitleTextView = this.itemView.findViewById<TextView>(R.id.tv_subtitle)
             nextButton = this.itemView.findViewById<Button>(R.id.btn_next)

@@ -1,23 +1,26 @@
 package com.gigforce.app.modules.onboarding
 
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.view.*
-import androidx.fragment.app.Fragment
-import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.TextView
+import android.widget.VideoView
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
-import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import com.gigforce.app.R
 import com.gigforce.app.modules.onboarding.utils.DepthPageTransformer
 import com.gigforce.app.utils.GlideApp
 import com.gigforce.app.utils.dp
 import kotlinx.android.synthetic.main.fragment_video_resume.*
 
+
 class VideoResumeFragment:Fragment() {
+
+    private val videoView: VideoView? = null
+    private val mediaPlayer: MediaPlayer? = null
 
         override fun onCreate(savedInstanceState: Bundle?) {
             super.onCreate(savedInstanceState)
@@ -79,7 +82,7 @@ class VideoResumeFragment:Fragment() {
                 image.setImageResource(R.drawable.dottab_indicator_default)
             return image
         }
-    }
+}
 
     class VideoResumeViewPagerAdapter(val viewpager: ViewPager2,
                                       val onVideoResumeCompleted: OnVideoResumeCompleted): RecyclerView.Adapter<VideoResumeViewPagerAdapter.ViewHolder>(){
@@ -89,24 +92,26 @@ class VideoResumeFragment:Fragment() {
                          val onVideoResumeCompleted: OnVideoResumeCompleted): RecyclerView.ViewHolder(view) {
 
             var mainArtImageView: ImageView
+            //var mainArtVideoView: VideoView
 
-            var nextButton: Button
+            //var nextButton: Button
 
             var currentPosition:Int = -1
 
             init {
-                mainArtImageView = this.itemView.findViewById<ImageView>(R.id.iv_main_art)
+                mainArtImageView = this.itemView.findViewById<ImageView>(R.id.iv_main_art_video)
+                //mainArtVideoView = this.itemView.findViewById<VideoView>(R.id.iv_main_art_video)
 
-                nextButton = this.itemView.findViewById<Button>(R.id.btn_next)
+                //nextButton = this.itemView.findViewById<Button>(R.id.btn_next)
 
-                nextButton.setOnClickListener {
+
                     if(currentPosition < 2)
                         viewpager.setCurrentItem(currentPosition+1, true)
                     else if (currentPosition == 2) {
                         // on Final CA Executed
                         onVideoResumeCompleted.invoke()
                     }
-                }
+
             }
 
             fun Bind(position: Int){
@@ -117,7 +122,7 @@ class VideoResumeFragment:Fragment() {
                         .load(R.drawable.ic_intro_slides1_mainart)
                         .into(mainArtImageView)
 
-                    nextButton.setText("next")
+                    //nextButton.setText("next")
 
                 }else if(position == 1){
                     GlideApp.with(itemView)
@@ -125,16 +130,18 @@ class VideoResumeFragment:Fragment() {
                         .into(mainArtImageView)
 
 
-                    nextButton.setText("next")
+                    //nextButton.setText("next")
 
                 }else if(position == 2) {
                     GlideApp.with(itemView)
                         .load(R.drawable.ic_intro_slides3_mainart)
                         .into(mainArtImageView)
+                        //.load(R.raw.hello)
+                        //.into(mainArtVideoView)
 
                     //titleTextView.setText(R.string.intro_slide3_title)
                     //subTitleTextView.setText(R.string.intro_slide3_subtitle)
-                    nextButton.setText("Get Started")
+                    //nextButton.setText("Get Started")
                 }
             }
         }

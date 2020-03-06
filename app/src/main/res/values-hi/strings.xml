@@ -101,4 +101,13 @@
     <string name="mobile_login">अपना मोबाइल नंबर दर्ज करें</string>
     <string name="confirm_login">पुष्टि करें</string>
 
+
+    <!--video resume-->
+    <string name="guidelines_video_resume">दिशा-निर्देश</string>
+    <string name="button_upload_video">डालना</string>
+    <string name="title_video_resume">वीडियो फिर से शुरू</string>
+    <string name="why_video_resume">वीडियो फिर से शुरू छोटा सा भूत क्यों है?</string>
+    <string name="desc1_video_resume">हमें आपके बारे में अधिक जानकारी दें</string>
+    <string name="desc2_video_resume">कोई फिर से शुरू और कोई साक्षात्कार नहीं</string>
+
     </resources>
