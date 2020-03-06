@@ -68,7 +68,8 @@ class EducationExpandedFragment: Fragment() {
                 achievementString += achievement.title + "\n"
                 achievementString += achievement.issuingAuthority + "\n"
                 achievementString += achievement.location + "\n"
-                achievementString += format.format(achievement.year!!) + "\n\n"
+                //achievementString += format.format(achievement.year!!) + "\n\n"
+                achievementString += achievement.year + "\n\n"
             }
             layout.education_exp_achievement_content.text = achievementString
 
