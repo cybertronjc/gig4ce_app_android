@@ -52,7 +52,7 @@ class ExperienceExpandedFragment: Fragment() {
         })
 
         layout.add_experience_button.setOnClickListener {
-            //findNavController().navigate(R.id.addExperienceBottomSheet)
+            findNavController().navigate(R.id.addExperienceBottomSheet)
         }
 
         layout.profile_nav_to_about.setOnClickListener{

@@ -140,9 +140,17 @@
         android:id="@+id/experienceExpandedFragment"
         android:name="com.gigforce.app.modules.profile.ExperienceExpandedFragment"
         android:label="ExperienceExpandedFragment"
-        tools:layout="@layout/fragment_profile_experience_expanded"/>
+        tools:layout="@layout/fragment_profile_experience_expanded">
+        <action
+            android:id="@+id/action_experienceExpandedFragment_to_addExperienceBottomSheet"
+            app:destination="@id/addExperienceBottomSheet" />
+    </fragment>
     <fragment
         android:id="@+id/addTagBottomSheet"
         android:name="com.gigforce.app.modules.profile.AddTagBottomSheet"
         android:label="AddTagBottomSheet" />
+    <dialog
+        android:id="@+id/addExperienceBottomSheet"
+        android:name="com.gigforce.app.modules.profile.AddExperienceBottomSheet"
+        android:label="AddExperienceBottomSheet" />
 </navigation>
