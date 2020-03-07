@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/textView24"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/add_experience_new_experience"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/add_experience_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:ems="10"
+        android:hint="@string/add_experience_title"
+        android:inputType="textPersonName"
+        app:layout_constraintStart_toStartOf="@+id/textView24"
+        app:layout_constraintTop_toBottomOf="@+id/textView24" />
+
+    <EditText
+        android:id="@+id/editText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:hint="@string/add_experience_employment_type"
+        android:inputType="textPersonName"
+        app:layout_constraintStart_toStartOf="@+id/add_experience_title"
+        app:layout_constraintTop_toBottomOf="@+id/add_experience_title" />
+
+    <EditText
+        android:id="@+id/add_experience_location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:hint="@string/add_experience_location"
+        android:inputType="textPersonName"
+        app:layout_constraintStart_toStartOf="@+id/editText"
+        app:layout_constraintTop_toBottomOf="@+id/editText" />
+
+    <EditText
+        android:id="@+id/add_experience_start_date"
+        android:layout_width="145dp"
+        android:layout_height="57dp"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:hint="@string/add_experience_start_date"
+        android:inputType="date"
+        app:layout_constraintStart_toStartOf="@+id/add_experience_location"
+        app:layout_constraintTop_toBottomOf="@+id/add_experience_location" />
+
+    <EditText
+        android:id="@+id/add_experience_end_date"
+        android:layout_width="156dp"
+        android:layout_height="56dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:hint="@string/add_experience_end_date"
+        android:inputType="date"
+        app:layout_constraintStart_toEndOf="@+id/add_experience_start_date"
+        app:layout_constraintTop_toBottomOf="@+id/add_experience_location" />
+
+    <CheckedTextView
+        android:id="@+id/add_experience_current_work"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="test"
+        app:layout_constraintStart_toStartOf="@+id/add_experience_end_date"
+        app:layout_constraintTop_toBottomOf="@+id/add_experience_end_date" />
+
+    <TextView
+        android:id="@+id/add_experience_add_more"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/add_more_text"
+        app:layout_constraintStart_toStartOf="@+id/add_experience_start_date"
+        app:layout_constraintTop_toBottomOf="@+id/add_experience_current_work" />
+
+    <Button
+        android:id="@+id/add_experience_cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/cancel_text"
+        app:layout_constraintStart_toStartOf="@+id/add_experience_add_more"
+        app:layout_constraintTop_toBottomOf="@+id/add_experience_add_more" />
+
+    <Button
+        android:id="@+id/add_experience_save"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/save_text"
+        app:layout_constraintStart_toEndOf="@+id/add_experience_cancel"
+        app:layout_constraintTop_toBottomOf="@+id/add_experience_add_more" />
+</androidx.constraintlayout.widget.ConstraintLayout>
