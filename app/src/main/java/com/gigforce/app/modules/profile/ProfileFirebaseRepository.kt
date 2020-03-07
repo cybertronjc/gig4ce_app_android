@@ -58,4 +58,11 @@ class ProfileFirebaseRepository {
                 .document(uid).update("Language", FieldValue.arrayUnion(lang))
         }
     }
+
+    fun setProfileExperience(experiences: ArrayList<Experience>) {
+        for (exp in experiences) {
+            firebaseDB.collection(profileCollectionName)
+                .document(uid).update("Experience", FieldValue.arrayUnion(exp))
+        }
+    }
 }

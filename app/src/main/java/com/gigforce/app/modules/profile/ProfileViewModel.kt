@@ -54,6 +54,10 @@ class ProfileViewModel: ViewModel() {
         profileFirebaseRepository.setProfileLanguage(languages)
     }
 
+    fun setProfileExperience(experiences: ArrayList<Experience>) {
+        profileFirebaseRepository.setProfileExperience(experiences)
+    }
+
     init {
         uid = FirebaseAuth.getInstance().currentUser?.uid!!
         //uid = "UeXaZV3KctuZ8xXLCKGF" // Test user

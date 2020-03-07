@@ -44,8 +44,9 @@ class ExperienceExpandedFragment: Fragment() {
             var experienceString = ""
             var format = SimpleDateFormat("dd/MM/yyyy", Locale.US)
             for (exp in profile.Experience!!) {
-                experienceString += exp.company + "\n"
-                experienceString += exp.position + "\n"
+                experienceString += exp.title + "\n"
+                experienceString += exp.employmentType + "\n"
+                experienceString += exp.location + "\n"
                 experienceString += format.format(exp.startDate!!) + "-" + format.format(exp.endDate!!) + "\n\n"
             }
             layout.experience_exp_experience_content.text = experienceString

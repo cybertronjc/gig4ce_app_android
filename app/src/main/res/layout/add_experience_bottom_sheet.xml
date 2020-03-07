@@ -28,7 +28,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView24" />
 
     <EditText
-        android:id="@+id/editText"
+        android:id="@+id/add_experience_employment_type"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -46,8 +46,8 @@
         android:ems="10"
         android:hint="@string/add_experience_location"
         android:inputType="textPersonName"
-        app:layout_constraintStart_toStartOf="@+id/editText"
-        app:layout_constraintTop_toBottomOf="@+id/editText" />
+        app:layout_constraintStart_toStartOf="@+id/add_experience_employment_type"
+        app:layout_constraintTop_toBottomOf="@+id/add_experience_employment_type" />
 
     <EditText
         android:id="@+id/add_experience_start_date"
