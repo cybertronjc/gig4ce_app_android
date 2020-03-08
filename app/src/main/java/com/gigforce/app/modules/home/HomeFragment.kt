@@ -1,6 +1,7 @@
 package com.gigforce.app.modules.home
 
 import android.content.Context
+import android.content.Intent
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.util.Log
@@ -9,14 +10,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.appcompat.widget.AppCompatButton
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.gigforce.app.R
 import com.gigforce.app.modules.auth.ui.main.LoginViewModel
 import com.gigforce.app.modules.chat.ChatsHomeFragment
+import com.gigforce.app.modules.photoCrop.ui.main.PhotoCrop
 import com.gigforce.app.modules.roaster.RoasterFragment
 import com.gigforce.app.utils.GlideApp
 import com.gigforce.app.utils.reduceDragSensitivity
@@ -28,8 +32,10 @@ class HomeFragment: Fragment() {
 
     private val loginViewModel: LoginViewModel by activityViewModels<LoginViewModel>()
 
+
     companion object {
         fun newInstance() = HomeFragment()
+
     }
 
     private lateinit var viewModel: HomeViewModel
@@ -44,6 +50,8 @@ class HomeFragment: Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(HomeViewModel::class.java)
+
+
 
         FirebaseAuth.getInstance().addAuthStateListener {
             Toast.makeText(context, "Auth state changed to ${if(it.currentUser==null) "SignedOut" else "Signed In"}",
@@ -61,6 +69,7 @@ class HomeFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
 
         this.pager_home.reduceDragSensitivity()
 

@@ -24,7 +24,9 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
-        />
+        >
+
+    </LinearLayout>
 
     <include layout="@layout/bottom_home" />
 

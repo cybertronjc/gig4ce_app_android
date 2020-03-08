@@ -1,6 +1,7 @@
 package com.gigforce.app.modules.roaster
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -8,9 +9,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.ImageView
+import androidx.appcompat.widget.AppCompatButton
 import androidx.fragment.app.Fragment
 import com.gigforce.app.R
 import com.gigforce.app.modules.home.HomeFragment
+import com.gigforce.app.modules.photoCrop.ui.main.PhotoCrop
 import com.gigforce.app.utils.GlideApp
 import kotlinx.android.synthetic.main.bottom_home.*
 
@@ -29,6 +32,15 @@ class RoasterFragment(): Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+//         get reference to button
+         val cta = view.findViewById(R.id.cta) as AppCompatButton
+        // set on-click listener
+        cta.setOnClickListener {
+            // your code to perform when the user clicks on the button
+//            Toast.makeText(this@MainActivity, "You clicked me.", Toast.LENGTH_SHORT).show()
+            val intent_pc = Intent(context, PhotoCrop::class.java)
+            getActivity()?.startActivity(intent_pc)
+        }
         this.gridview_actions.adapter = GridActionItemsAdapter(context!!)
     }
 

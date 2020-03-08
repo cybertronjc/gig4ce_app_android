@@ -26,6 +26,14 @@
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
         ></LinearLayout>
 
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/cta"
+        android:text="CLICK HERE"
+        android:gravity="center"
+        android:layout_marginTop="100dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
     <include layout="@layout/bottom_home" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
