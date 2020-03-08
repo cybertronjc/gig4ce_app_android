@@ -8,7 +8,11 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.request.RequestOptions
 import com.gigforce.app.R
+import com.gigforce.app.utils.GlideApp
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import kotlinx.android.synthetic.main.fragment_profile_about_expanded.view.*
 import kotlinx.android.synthetic.main.fragment_profile_education_expanded.view.*
 import kotlinx.android.synthetic.main.fragment_profile_education_expanded.view.profile_nav_to_education
@@ -23,6 +27,7 @@ class ExperienceExpandedFragment: Fragment() {
         fun newInstance() = ExperienceExpandedFragment()
     }
 
+    lateinit var storage: FirebaseStorage
     lateinit var viewModel: ProfileViewModel
     lateinit var layout: View
 
@@ -31,12 +36,15 @@ class ExperienceExpandedFragment: Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        storage = FirebaseStorage.getInstance()
         layout = inflater.inflate(R.layout.fragment_profile_experience_expanded, container, false)
         return layout
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        loadImage("ysharma.jpg")
 
         viewModel = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
 
@@ -67,5 +75,13 @@ class ExperienceExpandedFragment: Fragment() {
         layout.experience_expanded_back_button.setOnClickListener {
             findNavController().navigate(R.id.profileFragment)
         }
+    }
+
+    private fun loadImage(Path: String) {
+        val profilePicRef: StorageReference = storage.reference.child("profile_pics").child(Path)
+        GlideApp.with(this.context!!)
+            .load(profilePicRef)
+            .apply(RequestOptions().circleCrop())
+            .into(layout.experience_profile_avatar)
     }
 }
