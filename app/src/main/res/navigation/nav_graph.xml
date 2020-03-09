@@ -139,10 +139,6 @@
             app:destination="@id/goToOBIntroFragment" />
     </fragment>
     <fragment
-        android:id="@+id/settingsFragment"
-        android:name="com.gigforce.app.modules.preferences.SettingsFragment"
-        android:label="SettingsFragment" />
-    <fragment
         android:id="@+id/educationExpandedFragment"
         android:name="com.gigforce.app.modules.profile.EducationExpandedFragment"
         android:label="EducationExpandedFragment"

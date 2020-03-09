@@ -1,6 +1,7 @@
 package com.gigforce.app.modules.auth.ui.main
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -32,8 +33,12 @@ class MobileInput: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        viewModel.activity = this.activity!!
+
         layout.send_otp_button.setOnClickListener{
-            viewModel.sendVerificationCode(layout.otp_mobile_number.toString())
+            Log.d("LoginDebug", layout.otp_mobile_number.text.toString())
+            viewModel.sendVerificationCode(layout.otp_mobile_number.text.toString())
         }
 
         viewModel.liveState.observeForever {
