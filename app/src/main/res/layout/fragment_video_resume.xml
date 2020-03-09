@@ -5,7 +5,7 @@
     android:id="@+id/rel_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".modules.onboarding.VideoResumeFragment">
+    tools:context=".modules.video_resume.VideoResumeFragment">
 
     <FrameLayout
         android:id="@+id/frame_video"
@@ -105,21 +105,35 @@
         android:text="@string/desc2_video_resume"
         android:textColor="#e94b81"
         android:textSize="12sp" />
-<!--
-    <VideoView
-        android:id="@+id/videoView"
+
+    <Button
+        android:id="@+id/play_video"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/guidelines"
-        android:layout_marginTop="5dp" />
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="167dp"
+        android:layout_marginTop="44dp"
+        android:layout_marginEnd="156dp"
+        android:layout_marginBottom="102dp"
+        android:text="Play" />
+    <!--
+        <VideoView
+            android:id="@+id/videoView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/guidelines"
+            android:layout_marginTop="5dp" />
 
-    <Button
-        android:id="@+id/play_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/button_video"
-        android:layout_marginTop="3dp"
-        android:text="Play VIDEO"
-        android:textSize="20sp" />
--->
+        <Button
+            android:id="@+id/play_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/button_video"
+            android:layout_marginTop="3dp"
+            android:text="Play VIDEO"
+            android:textSize="20sp" />
+    -->
 </RelativeLayout>

@@ -155,7 +155,7 @@
     </fragment>
     <fragment
         android:id="@+id/videoResumeFragment"
-        android:name="com.gigforce.app.modules.onboarding.VideoResumeFragment"
+        android:name="com.gigforce.app.modules.video_resume.VideoResumeFragment"
         android:label="fragment_video_resume"
         tools:layout="@layout/fragment_video_resume" />
 </navigation>

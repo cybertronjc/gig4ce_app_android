@@ -1,4 +1,4 @@
-package com.gigforce.app.modules.onboarding
+package com.gigforce.app.modules.video_resume
 
 import com.gigforce.app.R
 
