@@ -135,6 +135,7 @@
     <string name="otp_hint">Enter OTP here</string>
     <string name="otp_verify">Verify</string>
     <string name="otp_reenter_mobile">Re-enter mobile number</string>
+    <string name="otp_send_otp">Send OTP</string>
 
     <!-- Generic strings -->
     <string name="cancel_text">Cancel</string>

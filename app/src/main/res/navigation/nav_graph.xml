@@ -208,10 +208,25 @@
         <action
             android:id="@+id/action_languageSelectFragment_to_videoResumeFragment"
             app:destination="@id/videoResumeFragment" />
+        <action
+            android:id="@+id/action_languageSelectFragment_to_mobileInput"
+            app:destination="@id/mobileInput" />
     </fragment>
     <fragment
         android:id="@+id/videoResumeFragment"
         android:name="com.gigforce.app.modules.video_resume.VideoResumeFragment"
         android:label="fragment_video_resume"
         tools:layout="@layout/fragment_video_resume" />
+    <fragment
+        android:id="@+id/mobileInput"
+        android:name="com.gigforce.app.modules.auth.ui.main.MobileInput"
+        android:label="MobileInput" >
+        <action
+            android:id="@+id/action_mobileInput_to_verifyOTP"
+            app:destination="@id/verifyOTP" />
+    </fragment>
+    <fragment
+        android:id="@+id/verifyOTP"
+        android:name="com.gigforce.app.modules.auth.ui.main.VerifyOTP"
+        android:label="VerifyOTP" />
 </navigation>

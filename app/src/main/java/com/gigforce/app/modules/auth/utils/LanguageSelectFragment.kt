@@ -84,7 +84,7 @@ class LanguageSelectFragment : Fragment(){
                     //Toast.makeText(this.context, "2>>>>>>>>>>$selectedId",Toast.LENGTH_SHORT).show()
                     // TODO findNavController().navigate(R.id.loginFragment)
                     //findNavController().navigate(R.id.videoResumeFragment)
-                    findNavController().navigate(R.id.profileFragment)
+                    findNavController().navigate(R.id.mobileInput)
                     //Toast.makeText(this.context,">>>>"+LocaleChanger.getLocale().language.toString(),Toast.LENGTH_SHORT).show()
                 }
             }
