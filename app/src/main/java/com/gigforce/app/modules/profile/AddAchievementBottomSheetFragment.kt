@@ -46,6 +46,7 @@ class AddAchievementBottomSheetFragment: BottomSheetDialogFragment() {
 
         layout.add_achievement_add_more_button.setOnClickListener{
             addNewAchievement()
+
             layout.add_achievement_title.setText("")
             layout.add_achievement_authority.setText("")
             layout.add_achievement_location.setText("")
@@ -54,6 +55,7 @@ class AddAchievementBottomSheetFragment: BottomSheetDialogFragment() {
 
         layout.add_achievement_save_button.setOnClickListener{
             addNewAchievement()
+
             viewModel.setProfileAchievement(updates)
             Toast.makeText(this.context, "Updated Achievement Section", Toast.LENGTH_LONG)
             this.findNavController().navigate(R.id.educationExpandedFragment)
@@ -66,7 +68,8 @@ class AddAchievementBottomSheetFragment: BottomSheetDialogFragment() {
                 title = layout.add_achievement_title.text.toString(),
                 issuingAuthority = layout.add_achievement_authority.text.toString(),
                 location = layout.add_achievement_location.text.toString(),
-                year = SimpleDateFormat("dd/MM/yyyy").parse(layout.add_achievement_year.text.toString())
+                //year = SimpleDateFormat("dd/MM/yyyy").parse(layout.add_achievement_year.text.toString())
+                year = layout.add_achievement_year.text.toString()
             )
         )
     }

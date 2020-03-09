@@ -37,7 +37,9 @@ class ProfileFragment : Fragment() {
         storage = FirebaseStorage.getInstance()
         Log.d("DEBUG", "ENTERED PROFILE VIEW")
         layout = inflater.inflate(R.layout.fragment_profile_main_expanded, container, false)
+
         loadImage("ysharma.jpg")
+
         return layout
     }
 
@@ -48,7 +50,7 @@ class ProfileFragment : Fragment() {
 
         // load user data
         viewModel.userProfileData.observe(this, Observer { profile ->
-            layout.gigger_rating.text = profile.rating.toString()
+            layout.gigger_rating.text = profile.rating!!.getTotal().toString()
             layout.task_done.text = profile.tasksDone.toString()
             layout.connection_count.text = profile.connections.toString()
             layout.main_expanded_user_name.text = profile.name.toString()
@@ -63,7 +65,7 @@ class ProfileFragment : Fragment() {
             for (tag in profile.Tags!!) {
                 tagsString += "$tag  "
             }
-            layout.main_tags.text = tagsString
+            //layout.main_tags.text = tagsString
 
             var educationString = ""
             var format = SimpleDateFormat("dd/MM/yyyy", Locale.US)
@@ -74,13 +76,31 @@ class ProfileFragment : Fragment() {
             }
             Log.d("ProfileFragment", educationString)
             layout.education_content.text = educationString
+
+            var experienceString = ""
+            for (exp in profile.Experience!!) {
+                experienceString += exp.company + "\n"
+                experienceString += exp.position + "\n"
+                experienceString += format.format(exp.startDate!!) + "-" + format.format(exp.endDate!!) + "\n\n"
+            }
+            layout.experience_content.text = experienceString
+
+            layout.about_card_content.text = profile.bio.toString()
             Log.d("ProfileFragment", profile.rating.toString())
         })
+
+        layout.about_card_view_more_button.setOnClickListener{
+            this.findNavController().navigate(R.id.aboutExpandedFragment)
+        }
 
         layout.education_view_more.setOnClickListener {
             Log.d("CLICK_STATUS", "CLICK HEARD")
             Toast.makeText(this.context, "View More Clicked", Toast.LENGTH_LONG).show()
             this.findNavController().navigate(R.id.educationExpandedFragment)
+        }
+
+        layout.experience_card_view_more.setOnClickListener {
+            this.findNavController().navigate(R.id.experienceExpandedFragment)
         }
 
         // back page navigation

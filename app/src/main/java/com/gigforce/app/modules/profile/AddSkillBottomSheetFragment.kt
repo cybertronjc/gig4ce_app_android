@@ -63,8 +63,8 @@ class AddSkillBottomSheetFragment: BottomSheetDialogFragment() {
     private fun addNewSkill() {
         updates.add(
             Skill(
-                category = layout.add_skill_category.text.toString(),
-                nameOfSkill = layout.add_skill_name.text.toString()
+                //category = layout.add_skill_category.text.toString(),
+                //nameOfSkill = layout.add_skill_name.text.toString()
             )
         )
     }

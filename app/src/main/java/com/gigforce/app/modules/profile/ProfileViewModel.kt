@@ -3,10 +3,8 @@ package com.gigforce.app.modules.profile
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.gigforce.app.modules.profile.models.Achievement
-import com.gigforce.app.modules.profile.models.Education
-import com.gigforce.app.modules.profile.models.ProfileData
-import com.gigforce.app.modules.profile.models.Skill
+import com.gigforce.app.modules.profile.models.*
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.EventListener
 
@@ -14,6 +12,7 @@ class ProfileViewModel: ViewModel() {
 
     var profileFirebaseRepository = ProfileFirebaseRepository()
     var userProfileData: MutableLiveData<ProfileData> = MutableLiveData<ProfileData>()
+    val uid: String
 
     fun getProfileData(): MutableLiveData<ProfileData> {
         profileFirebaseRepository.getProfile().addSnapshotListener(EventListener<DocumentSnapshot> {
@@ -47,9 +46,17 @@ class ProfileViewModel: ViewModel() {
         profileFirebaseRepository.setProfileAchievement(achievements)
     }
 
+    fun setProfileContact(contacts: ArrayList<Contact>) {
+        profileFirebaseRepository.setProfileContact(contacts)
+    }
+
+    fun setProfileLanguage(languages: ArrayList<Language>) {
+        profileFirebaseRepository.setProfileLanguage(languages)
+    }
+
     init {
-        //uid = FirebaseAuth.getInstance().currentUser?.uid!!
-        var uid = "UeXaZV3KctuZ8xXLCKGF" // Test user
+        uid = FirebaseAuth.getInstance().currentUser?.uid!!
+        //uid = "UeXaZV3KctuZ8xXLCKGF" // Test user
         getProfileData()
     }
 

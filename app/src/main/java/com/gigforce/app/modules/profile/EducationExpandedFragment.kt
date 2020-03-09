@@ -57,8 +57,9 @@ class EducationExpandedFragment: Fragment() {
 
             var skillString: String = ""
             for (skill in profile.Skill!!) {
-                skillString += skill.category + "\n"
-                skillString += skill.nameOfSkill + "\n\n"
+//                skillString += skill.category + "\n"
+//                skillString += skill.nameOfSkill + "\n\n"
+                skillString += skill + "\n\n"
             }
             layout.education_exp_skill_content.text = skillString
 
@@ -88,6 +89,10 @@ class EducationExpandedFragment: Fragment() {
         }
         layout.add_education_button.setOnClickListener{
             this.findNavController().navigate(R.id.addEducationBottomSheetFragment)
+        }
+
+        layout.profile_nav_to_about_me.setOnClickListener{
+            this.findNavController().navigate(R.id.aboutExpandedFragment)
         }
     }
 
