@@ -79,7 +79,7 @@ class PhotoCrop : AppCompatActivity() {
         uCrop.withAspectRatio(16F, 9F)
         uCrop.withMaxResultSize(450, 450)
         uCrop.withOptions(getCropOptions())
-        uCrop.start(this as AppCompatActivity)
+        uCrop.start(this as AppCompatActivity, Activity.RESULT_OK)
         upload(Uri.fromFile(File(cacheDir, destinationFileName)))
     }
 
