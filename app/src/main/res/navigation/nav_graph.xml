@@ -6,36 +6,6 @@
     app:startDestination="@id/introSlidesFragment">
 
     <fragment
-        android:id="@+id/educationExpandedFragment2"
-        android:name="com.gigforce.app.modules.profile.EducationExpandedFragment"
-        android:label="EducationExpandedFragment"
-        tools:layout="@layout/fragment_profile_education_expanded">
-        <action
-            android:id="@+id/action_educationExpandedFragment_to_addAchievementBottomSheetFragment"
-            app:destination="@id/addAchievementBottomSheetFragment" />
-        <action
-            android:id="@+id/action_educationExpandedFragment_to_addEducationBottomSheetFragment"
-            app:destination="@id/addEducationBottomSheetFragment" />
-        <action
-            android:id="@+id/action_educationExpandedFragment_to_addSkillBottomSheetFragment"
-            app:destination="@id/addSkillBottomSheetFragment" />
-    </fragment>
-    <dialog
-        android:id="@+id/addSkillBottomSheetFragment2"
-        android:name="com.gigforce.app.modules.profile.AddSkillBottomSheetFragment"
-        android:label="AddSkillBottomSheetFragment"
-        tools:layout="@layout/add_skill_bottom_sheet" />
-    <dialog
-        android:id="@+id/addAchievementBottomSheetFragment2"
-        android:name="com.gigforce.app.modules.profile.AddAchievementBottomSheetFragment"
-        android:label="AddAchievementBottomSheetFragment"
-        tools:layout="@layout/add_achievement_bottom_sheet" />
-    <dialog
-        android:id="@+id/addEducationBottomSheetFragment2"
-        android:name="com.gigforce.app.modules.profile.AddEducationBottomSheetFragment"
-        android:label="AddEducationBottomSheetFragment"
-        tools:layout="@layout/add_education_bottom_sheet" />
-    <fragment
         android:id="@+id/aboutExpandedFragment"
         android:name="com.gigforce.app.modules.profile.AboutExpandedFragment"
         android:label="AboutExpandedFragment"
@@ -67,14 +37,8 @@
         android:label="home"
         tools:layout="@layout/fragment_home">
         <action
-            android:id="@+id/action_homeFragment_to_loginFragment"
-            app:destination="@id/loginFragment" />
-        <action
             android:id="@+id/action_homeFragment_to_profileFragment"
             app:destination="@id/profileFragment" />
-        <action
-            android:id="@+id/action_homeFragment_to_chatsHomeFragment"
-            app:destination="@id/chatsHomeFragment" />
         <action
             android:id="@+id/action_homeFragment_to_languageSelectFragment"
             app:destination="@id/languageSelectFragment" />
@@ -98,8 +62,8 @@
         android:label="fragment_confirm_otp"
         tools:layout="@layout/fragment_confirm_otp" >
         <action
-            android:id="@+id/action_confirmOtpFragment_to_OBSlidesFragment"
-            app:destination="@id/OBSlidesFragment" />
+            android:id="@+id/action_confirmOtpFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
@@ -109,6 +73,12 @@
         <action
             android:id="@+id/action_profileFragment_to_educationExpandedFragment"
             app:destination="@id/educationExpandedFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_aboutExpandedFragment"
+            app:destination="@id/aboutExpandedFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_experienceExpandedFragment"
+            app:destination="@id/experienceExpandedFragment" />
     </fragment>
     <fragment
         android:id="@+id/chatsHomeFragment"
@@ -128,9 +98,6 @@
         android:id="@+id/roasterFragment"
         android:name="com.gigforce.app.modules.roaster.RoasterFragment"
         android:label="RoasterFragment" >
-        <action
-            android:id="@+id/action_roasterFragment_to_profileFragment"
-            app:destination="@id/profileFragment" />
         <action
             android:id="@+id/action_roasterFragment_to_goToOB"
             app:destination="@id/gotoOB" />
@@ -190,8 +157,8 @@
         android:label="fragment_intro_slides"
         tools:layout="@layout/fragment_intro_slides" >
         <action
-            android:id="@+id/action_introSlidesFragment_to_chatsHomeFragment"
-            app:destination="@id/chatsHomeFragment" />
+            android:id="@+id/action_introSlidesFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
     </fragment>
     <fragment
         android:id="@+id/OBSlidesFragment"
@@ -206,8 +173,8 @@
         android:name="com.gigforce.app.modules.auth.utils.LanguageSelectFragment"
         android:label="LanguageSelectFragment" >
         <action
-            android:id="@+id/action_languageSelectFragment_to_videoResumeFragment"
-            app:destination="@id/videoResumeFragment" />
+            android:id="@+id/action_languageSelectFragment_to_introSlidesFragment"
+            app:destination="@id/introSlidesFragment" />
     </fragment>
     <fragment
         android:id="@+id/videoResumeFragment"

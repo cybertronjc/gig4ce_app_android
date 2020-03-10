@@ -50,10 +50,11 @@ class ConfirmOtpFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this.activity!!).get(LoginViewModel::class.java)
         btn_confirm.setOnClickListener { onConfirmClicked();Log.d("Login sucess!!!!!!!!!","asdfasdfas");
-            findNavController().navigate(R.id.OBSlidesFragment) }
+            //findNavController().navigate(R.id.OBSlidesFragment) }
+            findNavController().navigate(R.id.profileFragment) }
         requireActivity().onBackPressedDispatcher.addCallback {
             // todo: experience need to improve.
-            //findNavController().popBackStack(R.id.introSlidesFragment,false);
+            findNavController().popBackStack(R.id.loginFragment,false);
         }
     }
 

@@ -21,18 +21,31 @@
         android:theme="@style/AppTheme">
         <!--
                Set to true if your app is Standalone, that is, it does not require the handheld
+            <category android:name="android.intent.category.DEFAULT" />
+        </intent-filter>
+    </activity>
+
+    <meta-data
+        android:name="preloaded_fonts"
+        android:resource="@array/preloaded_fonts" />
+
+    <meta-data
+        android:name="preloaded_fonts"
                app to run.
         -->
-        <activity android:name=".MainActivity">
+        <activity android:name=".SplashScreen" android:theme="@style/SplashTheme">>
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <meta-data
-            android:name="preloaded_fonts"
+        <activity android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
             android:resource="@array/preloaded_fonts" />
+            </intent-filter>
+        </activity>
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"

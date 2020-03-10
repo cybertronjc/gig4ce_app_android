@@ -60,7 +60,7 @@ class HomeFragment: Fragment(), View.OnClickListener {
             if(it.currentUser == null) {
                 initAuth()
             }else {
-
+                //this.findNavController().navigate(R.id.UserHomeScreen)
             }
 
         }
@@ -85,7 +85,7 @@ class HomeFragment: Fragment(), View.OnClickListener {
     }
 
     fun initAuth() {
-        this.findNavController().navigate(R.id.loginFragment)
+        this.findNavController().navigate(R.id.languageSelectFragment)
     }
 
     class HomeViewsAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {

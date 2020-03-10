@@ -9,7 +9,6 @@
     android:textAlignment="center">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/aboutExpandedFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#D1D1D1">

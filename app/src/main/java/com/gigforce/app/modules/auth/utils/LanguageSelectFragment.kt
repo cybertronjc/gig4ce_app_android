@@ -83,7 +83,7 @@ class LanguageSelectFragment : Fragment(){
                     updateResources(radioButton.hint.toString())
                     //Toast.makeText(this.context, "2>>>>>>>>>>$selectedId",Toast.LENGTH_SHORT).show()
                     // TODO findNavController().navigate(R.id.loginFragment)
-                    findNavController().navigate(R.id.videoResumeFragment)
+                    findNavController().navigate(R.id.introSlidesFragment)
                     //Toast.makeText(this.context,">>>>"+LocaleChanger.getLocale().language.toString(),Toast.LENGTH_SHORT).show()
                 }
             }
@@ -93,7 +93,7 @@ class LanguageSelectFragment : Fragment(){
                 // Do Nothing on back!
                 // todo: experience need to improve.
                 LocaleChanger.resetLocale()
-                findNavController().popBackStack(R.id.introSlidesFragment,false);
+//                findNavController().popBackStack(R.id.introSlidesFragment,false);
             }
         }
 
