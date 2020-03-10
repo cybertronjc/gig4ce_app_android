@@ -7,9 +7,13 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.gigforce.app.R
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.UploadTask
+import com.google.firebase.storage.UploadTask.*
 import com.yalantis.ucrop.UCrop
 import java.io.File
 
@@ -18,8 +22,8 @@ class PhotoCrop : AppCompatActivity() {
     private var img: ImageView? = null
     private val CODE_IMG_GALLERY: Int = 1
     private val SAMPLE_CROPPED_IMG_NAME: String = "SampleCropImg"
-    lateinit var uri : Uri
-    lateinit var mStorage : StorageReference
+    //lateinit var uri : Uri
+    var mStorage: FirebaseStorage = FirebaseStorage.getInstance()
 
 
     override fun onCreate(savedInstanceState: Bundle?): Unit {
@@ -72,11 +76,11 @@ class PhotoCrop : AppCompatActivity() {
             Uri.fromFile(File(cacheDir, destinationFileName))
         )
         uCrop.withAspectRatio(1F, 1F)
-        uCrop.withAspectRatio(1F, 1F)
         uCrop.withAspectRatio(16F, 9F)
         uCrop.withMaxResultSize(450, 450)
         uCrop.withOptions(getCropOptions())
         uCrop.start(this as AppCompatActivity)
+        upload(Uri.fromFile(File(cacheDir, destinationFileName)))
     }
 
     open fun getCropOptions(): UCrop.Options {
@@ -91,14 +95,15 @@ class PhotoCrop : AppCompatActivity() {
         return options
     }
 
-    private fun upload() {
-        var mReference = mStorage.child(uri.lastPathSegment)
+    private fun upload(uri:Uri) {
+        var mReference = mStorage.reference.child("profile_pics").child(uri.lastPathSegment!!)
         try {
-            mReference.putFile(uri).addOnSuccessListener {
-                    taskSnapshot: UploadTask.TaskSnapshot? -> var url = taskSnapshot!!.downloadUrl
-                val dwnTxt = findViewById<View>(R.id.dwnTxt) as TextView
-                dwnTxt.text = url.toString()
+            mReference.putFile(uri).addOnSuccessListener { taskSnapshot: TaskSnapshot->
+                val url:String = taskSnapshot.metadata?.reference?.downloadUrl.toString()
+//                val dwnTxt = findViewById<View>(R.id.dwnTxt) as TextView
+//                dwnTxt.text = url.toString()
                 Toast.makeText(this, "Successfully Uploaded :)", Toast.LENGTH_LONG).show()
+                print(url)
             }
         }catch (e: Exception) {
             Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show()
