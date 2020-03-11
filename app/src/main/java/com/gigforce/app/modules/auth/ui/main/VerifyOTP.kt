@@ -14,22 +14,12 @@ import kotlinx.android.synthetic.main.fragment_confirm_otp.*
 import kotlinx.android.synthetic.main.otp_verification.view.*
 
 class VerifyOTP: Fragment() {
-    private var ARG_PARAM1 = "verificationId"
-    private var ARG_PARAM2 = "param2"
 
     companion object {
         fun newInstance() = VerifyOTP()
-        fun newInstance(param1: String, param2: String) =
-            VerifyOTP().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
     }
 
     private var verificationId: String = ""
-    private var param2: String = ""
     lateinit var layout: View
     lateinit var viewModel: LoginViewModel
 
@@ -59,7 +49,7 @@ class VerifyOTP: Fragment() {
             Log.d("Debug", layout.otp_string.text.toString())
             viewModel.verifyPhoneNumberWithCode(layout.otp_string.text.toString())
             Log.d("Status","Login Success");
-            findNavController().navigate(R.id.profileFragment)
+            //findNavController().navigate(R.id.homeFragment)
         }
     }
 }

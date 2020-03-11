@@ -97,5 +97,11 @@ class LoginViewModel() : ViewModel() {
                     liveState.value = STATE_SIGNIN_FAILED
                 }
             }
+            .addOnSuccessListener {
+                Log.d("status", "Signed in successfully")
+            }
+            .addOnFailureListener{
+                Log.d("status", "Signed in failed")
+            }
     }
 }

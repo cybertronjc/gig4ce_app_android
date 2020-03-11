@@ -60,7 +60,8 @@ class HomeFragment: Fragment(), View.OnClickListener {
             if(it.currentUser == null) {
                 initAuth()
             }else {
-                //this.findNavController().navigate(R.id.UserHomeScreen)
+                Log.d("STATUS", "logged in hai")
+                this.findNavController().navigate(R.id.profileFragment)
             }
 
         }
@@ -69,12 +70,12 @@ class HomeFragment: Fragment(), View.OnClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        this.pager_home.reduceDragSensitivity()
-
-
-        val stateAdapter: HomeViewsAdapter = HomeViewsAdapter(this)
-        this.pager_home.adapter = stateAdapter
-        this.pager_home.setCurrentItem(1, false)
+//        this.pager_home.reduceDragSensitivity()
+//
+//
+//        val stateAdapter: HomeViewsAdapter = HomeViewsAdapter(this)
+//        this.pager_home.adapter = stateAdapter
+//        this.pager_home.setCurrentItem(1, false)
 
 
     /*
