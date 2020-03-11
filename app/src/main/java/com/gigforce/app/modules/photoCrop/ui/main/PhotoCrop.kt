@@ -5,6 +5,7 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
@@ -19,35 +20,20 @@ import java.io.File
 
 class PhotoCrop : AppCompatActivity() {
 
-    private var img: ImageView? = null
     private val CODE_IMG_GALLERY: Int = 1
-    private val SAMPLE_CROPPED_IMG_NAME: String = "SampleCropImg"
+    private val SAMPLE_CROPPED_IMG_NAME: String = "SampleCropImg2"
     //lateinit var uri : Uri
     var mStorage: FirebaseStorage = FirebaseStorage.getInstance()
 
 
     override fun onCreate(savedInstanceState: Bundle?): Unit {
         super.onCreate(savedInstanceState)
-        //        setContentView(R.layout.activity_main)
-//        init()
-//        img.setOnClickListener(object : View.OnClickListener {
-//            open fun onClick(v: View): Unit {
-//                startActivityForResult(
-//                    Intent().setAction(Intent.ACTION_GET_CONTENT)
-//                        .setType("image/*"), CODE_IMG_GALLERY
-//                )
-//            }
-//        })
+
         startActivityForResult(
             Intent().setAction(Intent.ACTION_GET_CONTENT)
                 .setType("image/*"), CODE_IMG_GALLERY
         )
     }
-
-
-//    open fun init(): Unit {
-//        var img = findViewById<ImageView>(R.id.imageView)
-//    }
 
     override fun onActivityResult(
         requestCode: Int,
@@ -55,15 +41,22 @@ class PhotoCrop : AppCompatActivity() {
         data: Intent?
     ): Unit {
         super.onActivityResult(requestCode, resultCode, data)
+        Log.v("MAYANK", requestCode.toString()+" RESULT:_"+resultCode.toString()+" UCrop.REQUEST_CROP "+UCrop.REQUEST_CROP.toString())
         if (requestCode == CODE_IMG_GALLERY && resultCode == Activity.RESULT_OK) {
             val imageUri: Uri? = data?.data
+            Log.v("COME IMG GALLERY", requestCode.toString())
             if (imageUri != null) {
                 startCrop(imageUri)
             }
         } else if (requestCode == UCrop.REQUEST_CROP && resultCode == Activity.RESULT_OK) {
             val imageUriResultCrop: Uri? = UCrop.getOutput((data!!))
+            print(requestCode)
             if (imageUriResultCrop != null) {
-                img?.setImageURI(imageUriResultCrop)
+                Log.v("REQUEST CROP", requestCode.toString())
+            }
+            if (imageUriResultCrop != null) {
+                upload(imageUriResultCrop)
+                super.finish()
             }
         }
     }
@@ -79,8 +72,8 @@ class PhotoCrop : AppCompatActivity() {
         uCrop.withAspectRatio(16F, 9F)
         uCrop.withMaxResultSize(450, 450)
         uCrop.withOptions(getCropOptions())
-        uCrop.start(this as AppCompatActivity, Activity.RESULT_OK)
-        upload(Uri.fromFile(File(cacheDir, destinationFileName)))
+        uCrop.start(this as AppCompatActivity)
+
     }
 
     open fun getCropOptions(): UCrop.Options {
@@ -100,8 +93,6 @@ class PhotoCrop : AppCompatActivity() {
         try {
             mReference.putFile(uri).addOnSuccessListener { taskSnapshot: TaskSnapshot->
                 val url:String = taskSnapshot.metadata?.reference?.downloadUrl.toString()
-//                val dwnTxt = findViewById<View>(R.id.dwnTxt) as TextView
-//                dwnTxt.text = url.toString()
                 Toast.makeText(this, "Successfully Uploaded :)", Toast.LENGTH_LONG).show()
                 print(url)
             }
