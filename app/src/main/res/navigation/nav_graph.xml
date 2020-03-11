@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/introSlidesFragment">
+    app:startDestination="@id/homeFragment">
 
     <fragment
         android:id="@+id/aboutExpandedFragment"
@@ -37,11 +37,11 @@
         android:label="home"
         tools:layout="@layout/fragment_home">
         <action
-            android:id="@+id/action_homeFragment_to_profileFragment"
-            app:destination="@id/profileFragment" />
-        <action
             android:id="@+id/action_homeFragment_to_languageSelectFragment"
             app:destination="@id/languageSelectFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
@@ -91,17 +91,6 @@
         android:label="chat_fragment"
         tools:layout="@layout/fragment_chat" />
     <fragment
-        android:id="@+id/roasterFragment"
-        android:name="com.gigforce.app.modules.roaster.RoasterFragment"
-        android:label="RoasterFragment" >
-        <action
-            android:id="@+id/action_roasterFragment_to_goToOB"
-            app:destination="@id/gotoOB" />
-        <action
-            android:id="@+id/action_roasterFragment_to_goToOBIntroFragment"
-            app:destination="@id/goToOBIntroFragment" />
-    </fragment>
-    <fragment
         android:id="@+id/educationExpandedFragment"
         android:name="com.gigforce.app.modules.profile.EducationExpandedFragment"
         android:label="EducationExpandedFragment"
@@ -131,14 +120,7 @@
         android:name="com.gigforce.app.modules.profile.AddEducationBottomSheetFragment"
         android:label="AddEducationBottomSheetFragment"
         tools:layout="@layout/add_education_bottom_sheet" />
-    <fragment
-        android:id="@+id/gotoOB"
-        android:name="com.gigforce.app.modules.onboarding.UserInfoFragment"
-        android:label="GoToOB" />
-    <fragment
-        android:id="@+id/goToOBIntroFragment"
-        android:name="com.gigforce.app.modules.onboarding.GoToOBIntroFragment"
-        android:label="GoToOBIntroFragment" />
+
     <fragment
         android:id="@+id/createInitProfile"
         android:name="com.gigforce.app.modules.onboarding.CreateInitProfile"
@@ -189,6 +171,10 @@
         android:id="@+id/verifyOTP"
         android:name="com.gigforce.app.modules.auth.ui.main.VerifyOTP"
         android:label="VerifyOTP" >
+        <argument
+            android:name="verificationId"
+            app:argType="string"
+            android:defaultValue='""' />
         <action
             android:id="@+id/action_verifyOTP_to_profileFragment"
             app:destination="@id/profileFragment" />

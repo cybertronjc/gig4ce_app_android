@@ -9,8 +9,6 @@ abstract class OnIntroSlidesCompleted {
         // calling language fragment first
         //return R.id.action_homeFragment_to_languageSelectFragment // why this is not working?
         return R.id.mobileInput
-        //return R.id.loginFragment
-
     }
 
     abstract fun invoke()

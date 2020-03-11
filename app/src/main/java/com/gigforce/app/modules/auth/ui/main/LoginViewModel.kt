@@ -25,7 +25,7 @@ class LoginViewModel() : ViewModel() {
     }
 
     val liveState:MutableLiveData<Int> = MutableLiveData<Int>(STATE_INITIALIZED)
-    var verificationId:String? = null
+    var verificationId: String? = null
     var token: PhoneAuthProvider.ForceResendingToken? = null
     var activity: Activity? = null
 
@@ -52,6 +52,7 @@ class LoginViewModel() : ViewModel() {
             verificationId = _verificationId
             token = _token
             Log.d(TAG, "Code Sent Successfully")
+            Log.d("LoginViewModel", "intialize verificationId -> " + verificationId.toString())
             liveState.postValue(STATE_CODE_SENT)
         }
     }
@@ -66,6 +67,8 @@ class LoginViewModel() : ViewModel() {
 
     fun verifyPhoneNumberWithCode(code: String) {
         // [START verify_with_code]
+        Log.d("LoginViewModel", "code ->" + code.toString())
+        Log.d("LoginViewModel", "verificationId ->" + verificationId.toString())
         val credential = PhoneAuthProvider.getCredential(verificationId!!, code)
         // [END verify_with_code]
         signInWithPhoneAuthCredential(credential)
@@ -93,6 +96,12 @@ class LoginViewModel() : ViewModel() {
                     Log.w(TAG, "signInWithCredential:failure", it.exception)
                     liveState.value = STATE_SIGNIN_FAILED
                 }
+            }
+            .addOnSuccessListener {
+                Log.d("status", "Signed in successfully")
+            }
+            .addOnFailureListener{
+                Log.d("status", "Signed in failed")
             }
     }
 }
