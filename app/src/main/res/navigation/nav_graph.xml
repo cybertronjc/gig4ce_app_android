@@ -40,8 +40,8 @@
             android:id="@+id/action_homeFragment_to_languageSelectFragment"
             app:destination="@id/languageSelectFragment" />
         <action
-            android:id="@+id/action_homeFragment_to_profileFragment"
-            app:destination="@id/profileFragment" />
+            android:id="@+id/action_homeFragment_to_homeScreenFragment"
+            app:destination="@id/homeScreenFragment" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
@@ -176,7 +176,15 @@
             app:argType="string"
             android:defaultValue='""' />
         <action
-            android:id="@+id/action_verifyOTP_to_profileFragment"
+            android:id="@+id/action_verifyOTP_to_homeScreenFragment"
+            app:destination="@id/homeScreenFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/homeScreenFragment"
+        android:name="com.gigforce.app.modules.homescreen.HomeScreenFragment"
+        android:label="HomeScreenFragment" >
+        <action
+            android:id="@+id/action_homeScreenFragment_to_profileFragment"
             app:destination="@id/profileFragment" />
     </fragment>
 </navigation>

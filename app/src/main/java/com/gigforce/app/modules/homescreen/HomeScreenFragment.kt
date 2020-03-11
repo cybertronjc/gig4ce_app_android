@@ -1,29 +1,39 @@
-package com.gigforce.app.modules.roaster
+package com.gigforce.app.modules.homescreen
 
 //import com.gigforce.app.modules.onboarding.CustomAdapter
 //import com.gigforce.app.modules.onboarding.models.MessageModel
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.ImageView
+import androidx.core.view.get
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.NavHostFragment.findNavController
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
 import com.gigforce.app.utils.GlideApp
 import kotlinx.android.synthetic.main.bottom_home.*
+import kotlinx.android.synthetic.main.bottom_home.view.*
 import kotlinx.android.synthetic.main.fragment_roaster.*
-import kotlinx.android.synthetic.main.fragment_roaster.buttonCP
+import kotlinx.android.synthetic.main.item_grid_action.*
+import kotlinx.android.synthetic.main.item_grid_action.view.*
 
-class RoasterFragment() : Fragment() {
+//import kotlinx.android.synthetic.main.fragment_roaster.buttonCP
+
+class HomeScreenFragment() : Fragment() {
+
+    private lateinit var layout: View
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_roaster, container, false)
+        layout =  inflater.inflate(R.layout.fragment_roaster, container, false)
+        return layout
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -33,6 +43,24 @@ class RoasterFragment() : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         this.gridview_actions.adapter = GridActionItemsAdapter(context!!)
+
+        button_tmp.setOnClickListener{
+            findNavController().navigate(R.id.profileFragment)
+        }
+        //this.gridview_actions.adapter.getView(1,layout, layout.parent as ViewGroup?).img_icon.setOnClickListener { findNavController().navigate(R.id.profileFragment) }
+        //layout.gridview_actions[1]?.findViewById<ImageView>(R.id.img_icon).setOnClickListener { findNavController().navigate(R.id.profileFragment) }
+//        Log.d(">>>>>>>>>>",this.gridview_actions[0].toString())
+        //layout?.gridview_actions[0]?.img_icon.setOnClickListener { findNavController().navigate(R.id.profileFragment) }
+        //Log.d(">>>>>>>>>>",this.gridview_actions.adapter.getItemId(1).toString());
+
+
+//            view!!.findViewById<ImageView>(R.id.img_icon).setOnClickListener {findNavController().navigate(R.id.profileFragment)}
+
+//        this.gridview_actions.adapter.getView(1,this.view, this.view?.parent as ViewGroup?).setOnClickListener {
+//            findNavController().navigate(R.id.profileFragment)
+//        }
+            //.setOnClickListener { findNavController().navigate(R.id.profileFragment) }
+
 
         // Populate dummy messages in List, you can implement your code here
         // Populate dummy messages in List, you can implement your code here
@@ -54,29 +82,28 @@ class RoasterFragment() : Fragment() {
         */
 
 
-
-        buttonCP?.setOnClickListener {
-            //findNavController().navigate(R.id.gotoOB)
-            findNavController().navigate(R.id.createInitProfile)
-//            Toast.makeText(activity,"captured click",Toast.LENGTH_SHORT).show();
-//            childFragmentManager.beginTransaction().apply {
-//                add(R.id.content_home, UserInfoFragment())
-//                addToBackStack(null).commit()
-//            }
-        }
-
-        sliderAdaptorButton?.setOnClickListener {
-            findNavController().navigate(R.id.goToOBIntroFragment)
-//            Toast.makeText(activity,"captured click",Toast.LENGTH_SHORT).show();
-//            childFragmentManager.beginTransaction().apply {
-//                add(R.id.content_home, UserInfoFragment())
-//                addToBackStack(null).commit()
-//            }
-        }
+//
+//        buttonCP?.setOnClickListener {
+//            //findNavController().navigate(R.id.gotoOB)
+//            findNavController().navigate(R.id.createInitProfile)
+////            Toast.makeText(activity,"captured click",Toast.LENGTH_SHORT).show();
+////            childFragmentManager.beginTransaction().apply {
+////                add(R.id.content_home, UserInfoFragment())
+////                addToBackStack(null).commit()
+////            }
+//        }
+//
+//        sliderAdaptorButton?.setOnClickListener {
+//            //findNavController().navigate(R.id.goToOBIntroFragment)
+////            Toast.makeText(activity,"captured click",Toast.LENGTH_SHORT).show();
+////            childFragmentManager.beginTransaction().apply {
+////                add(R.id.content_home, UserInfoFragment())
+////                addToBackStack(null).commit()
+////            }
+//        }
     }
 
     class GridActionItemsAdapter(val context: Context) : BaseAdapter() {
-
         override fun getCount(): Int {
             return 10
         }

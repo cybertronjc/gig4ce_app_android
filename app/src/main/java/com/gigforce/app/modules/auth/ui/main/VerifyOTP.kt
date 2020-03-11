@@ -35,8 +35,6 @@ class VerifyOTP: Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        Log.d("VerifyOTP", "a " + verificationId.toString())
-        Log.d("RANDOM", "yogesh")
         viewModel = ViewModelProviders.of(this.activity!!).get(LoginViewModel::class.java)
         viewModel.verificationId = verificationId.toString()
         layout = inflater.inflate(R.layout.otp_verification, container, false)
@@ -46,9 +44,7 @@ class VerifyOTP: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         layout.verify_otp_button.setOnClickListener {
-            Log.d("Debug", layout.otp_string.text.toString())
             viewModel.verifyPhoneNumberWithCode(layout.otp_string.text.toString())
-            Log.d("Status","Login Success");
             //findNavController().navigate(R.id.homeFragment)
         }
     }
