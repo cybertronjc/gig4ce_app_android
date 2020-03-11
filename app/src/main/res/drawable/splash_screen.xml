@@ -1,9 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <bitmap
+            android:gravity="top"
+            android:src="@drawable/splash_top"/>
+    </item>
     <item android:drawable="@color/cardview_light_background"/>
     <item>
         <bitmap
             android:gravity="center"
             android:src="@drawable/logo_gig_force_v_2"/>
+    </item>
+    <item>
+        <bitmap
+            android:gravity="bottom"
+            android:src="@drawable/splash_bottom"/>
     </item>
 </layer-list>

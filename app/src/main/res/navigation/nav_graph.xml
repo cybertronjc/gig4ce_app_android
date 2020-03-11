@@ -60,11 +60,7 @@
         android:id="@+id/confirmOtpFragment"
         android:name="com.gigforce.app.modules.auth.ui.main.ConfirmOtpFragment"
         android:label="fragment_confirm_otp"
-        tools:layout="@layout/fragment_confirm_otp" >
-        <action
-            android:id="@+id/action_confirmOtpFragment_to_profileFragment"
-            app:destination="@id/profileFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_confirm_otp" />
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.gigforce.app.modules.profile.ProfileFragment"
@@ -153,8 +149,8 @@
         android:label="fragment_intro_slides"
         tools:layout="@layout/fragment_intro_slides" >
         <action
-            android:id="@+id/action_introSlidesFragment_to_loginFragment"
-            app:destination="@id/loginFragment" />
+            android:id="@+id/action_introSlidesFragment_to_mobileInput"
+            app:destination="@id/mobileInput" />
     </fragment>
     <fragment
         android:id="@+id/OBSlidesFragment"
@@ -175,9 +171,6 @@
             android:id="@+id/action_languageSelectFragment_to_videoResumeFragment"
             app:destination="@id/videoResumeFragment" />
 -->
-        <action
-            android:id="@+id/action_languageSelectFragment_to_mobileInput"
-            app:destination="@id/mobileInput" />
     </fragment>
     <fragment
         android:id="@+id/videoResumeFragment"
@@ -195,5 +188,9 @@
     <fragment
         android:id="@+id/verifyOTP"
         android:name="com.gigforce.app.modules.auth.ui.main.VerifyOTP"
-        android:label="VerifyOTP" />
+        android:label="VerifyOTP" >
+        <action
+            android:id="@+id/action_verifyOTP_to_profileFragment"
+            app:destination="@id/profileFragment" />
+    </fragment>
 </navigation>
