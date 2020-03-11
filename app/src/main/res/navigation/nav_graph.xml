@@ -195,5 +195,10 @@
     <fragment
         android:id="@+id/verifyOTP"
         android:name="com.gigforce.app.modules.auth.ui.main.VerifyOTP"
-        android:label="VerifyOTP" />
+        android:label="VerifyOTP" >
+        <argument
+            android:name="verificationId"
+            app:argType="string"
+            android:defaultValue='""' />
+    </fragment>
 </navigation>

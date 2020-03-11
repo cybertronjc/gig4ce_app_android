@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.gigforce.app.R
 import kotlinx.android.synthetic.main.fragment_confirm_otp.*
 import kotlinx.android.synthetic.main.otp_verification.view.*
@@ -27,16 +28,15 @@ class VerifyOTP: Fragment() {
             }
     }
 
-    private var verificationId: String? = null
-    private var param2: String? = null
+    private var verificationId: String = ""
+    private var param2: String = ""
     lateinit var layout: View
     lateinit var viewModel: LoginViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            verificationId = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+            verificationId = it.getString("verificationId")!!
         }
     }
 
@@ -45,7 +45,10 @@ class VerifyOTP: Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        Log.d("VerifyOTP", "a " + verificationId.toString())
+        Log.d("RANDOM", "yogesh")
         viewModel = ViewModelProviders.of(this.activity!!).get(LoginViewModel::class.java)
+        viewModel.verificationId = verificationId.toString()
         layout = inflater.inflate(R.layout.otp_verification, container, false)
         return layout
     }

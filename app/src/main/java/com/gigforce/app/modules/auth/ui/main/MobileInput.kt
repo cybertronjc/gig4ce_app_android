@@ -43,7 +43,7 @@ class MobileInput: Fragment() {
 
         viewModel.liveState.observeForever {
             when(it){
-                LoginViewModel.STATE_CODE_SENT -> findNavController().navigate(R.id.verifyOTP)
+                LoginViewModel.STATE_CODE_SENT -> findNavController().navigate(MobileInputDirections.actionMobileInputToVerifyOTP(viewModel.verificationId!!))
                 LoginViewModel.STATE_SIGNIN_SUCCESS -> findNavController().popBackStack()
                 else -> {
 
