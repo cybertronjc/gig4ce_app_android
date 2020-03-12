@@ -33,7 +33,7 @@
         android:name="preloaded_fonts"
                app to run.
         -->
-        <activity android:name=".SplashScreen" android:theme="@style/SplashTheme">>
+        <activity android:name=".SplashScreen" android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
