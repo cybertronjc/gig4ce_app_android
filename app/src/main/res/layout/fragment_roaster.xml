@@ -23,25 +23,10 @@
         android:layout_marginTop="100dp"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
-        <Button
-            android:id="@+id/button_tmp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="100dp"
-            android:backgroundTint="@color/colorAccent"
-            android:outlineAmbientShadowColor="@color/colorAccent"
-            android:outlineSpotShadowColor="@color/colorAccent"
-            android:shadowColor="@color/colorAccent"
-            android:text="my profile"
-            android:textColor="@color/cardview_light_background"
-            android:textColorHighlight="@color/colorAccent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="87dp"
+            app:layout_constraintBottom_toTopOf="@+id/cardView16"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -51,6 +36,41 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="kyc is not done. click here to complete." />
+        </androidx.cardview.widget.CardView>
+
+        <Button
+            android:id="@+id/button_tmp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="244dp"
+            android:backgroundTint="@color/colorAccent"
+            android:outlineAmbientShadowColor="@color/colorAccent"
+            android:outlineSpotShadowColor="@color/colorAccent"
+            android:shadowColor="@color/colorAccent"
+            android:text="my profile"
+            android:textColor="@color/cardview_light_background"
+            android:textColorHighlight="@color/colorAccent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.469"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardView16"
+            android:layout_width="match_parent"
+            android:layout_height="95dp"
+            app:layout_constraintBottom_toTopOf="@+id/button_tmp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.701">
+
+            <TextView
+                android:id="@+id/text_kyc_video"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Complete your video resume" />
         </androidx.cardview.widget.CardView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
