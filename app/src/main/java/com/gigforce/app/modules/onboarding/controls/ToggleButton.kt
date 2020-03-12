@@ -34,7 +34,7 @@ class OBToggleButtonItem(context: Context,
         attrs?.let {
             val styledAttributes = context.obtainStyledAttributes(it, R.styleable.OBToggleButtonItem, 0, 0)
 
-            val text = styledAttributes.getText(R.styleable.OBToggleButtonItem_text)
+//            val text = styledAttributes.getText(R.styleable.OBToggleButtonItem_text)
 
         }
     }

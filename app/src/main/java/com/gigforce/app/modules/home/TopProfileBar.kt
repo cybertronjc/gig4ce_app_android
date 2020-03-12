@@ -28,7 +28,7 @@ class TopProfileBar(context: Context, attrs: AttributeSet? = null)
 //                TopProfileBar@this.findNavController()
 //                    .navigate(R.id.profileFragment)
 
-                TopProfileBar@this.findNavController().navigate(R.id.languageSelectFragment)
+                this.findNavController().navigate(R.id.languageSelectFragment)
             }
         }
     }

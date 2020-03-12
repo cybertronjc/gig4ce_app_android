@@ -50,11 +50,11 @@ class ProfileFragment : Fragment() {
 
         // load user data
         viewModel.userProfileData.observe(this, Observer { profile ->
-            layout?.gigger_rating.text = profile.rating!!.getTotal().toString()
-            layout?.task_done.text = profile.tasksDone.toString()
-            layout?.connection_count.text = profile.connections.toString()
-            layout?.main_expanded_user_name.text = profile.name
-            layout?.user_about_me.text = profile.aboutMe
+            layout.gigger_rating.text = profile.rating!!.getTotal().toString()
+            layout.task_done.text = profile.tasksDone.toString()
+            layout.connection_count.text = profile.connections.toString()
+            layout.main_expanded_user_name.text = profile.name
+            layout.user_about_me.text = profile.aboutMe
 
             Log.d("ProfileFragment", profile.isVerified.toString())
             if (profile.isVerified) {

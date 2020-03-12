@@ -11,7 +11,7 @@ object DateProvider {
             .format(Date(A_DATE))
     }
 
-    fun provideLocaleFormattedDate(locale: Locale?): String {
+    fun provideLocaleFormattedDate(locale: Locale): String {
         return SimpleDateFormat.getDateInstance(DateFormat.LONG, locale)
             .format(Date(A_DATE))
     }

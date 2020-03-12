@@ -102,8 +102,6 @@ class LanguageSelectFragment : Fragment(){
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        val navController = findNavController()
-
         requireActivity().onBackPressedDispatcher.addCallback {
             // todo: experience need to improve.
             LocaleChanger.resetLocale()

@@ -213,18 +213,16 @@ class CreateInitProfileRVAdapter: RecyclerView.Adapter<CreateInitProfileRVAdapte
         fun bind(item:ObChatLogItem) {
             view.findViewById<TextView>(R.id.txt).setText(item.text)
             // chanage profile_icon based in item.profile_icon_path
-            val imageView = view?.findViewById<ImageView>(R.id.imageView)
+            val imageView = view.findViewById<ImageView>(R.id.imageView)
             setChatUserImage(imageView)
         }
 
         fun setChatUserImage(imageView: ImageView){
-            view?.context?.let {
-                if (imageView != null) {
-                    GlideApp.with(it)
-                        .load("")
-                        .placeholder(R.drawable.placeholder_user)
-                        .into(imageView)
-                }
+            view.context?.let {
+                GlideApp.with(it)
+                    .load("")
+                    .placeholder(R.drawable.placeholder_user)
+                    .into(imageView!!)
             }
         }
     }

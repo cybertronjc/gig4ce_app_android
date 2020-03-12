@@ -30,7 +30,7 @@ class OnboardingController(val userid:String,
         FirebaseFirestore.getInstance()
             .collection("OnboardingChatLogs")
             .whereEqualTo("userid", userid)
-            .addSnapshotListener { snapshot, exception ->
+            .addSnapshotListener { snapshot, _ ->
                 _logs.postValue(snapshot?.documents?.map { item -> item.toObject(OnboardingChatLog::class.java)}?.toList())
                 setActiveQuestionAtFirst()
             }
@@ -48,8 +48,8 @@ class OnboardingController(val userid:String,
 //        ))
     }
 
-    fun processResponse(response: Any) {
-
+    //fun processResponse(response: Any) {
+    fun processResponse() {
         //todo: process response here, and update profile here
 
         // after the response is processed, next question should be created
@@ -61,18 +61,18 @@ class OnboardingController(val userid:String,
 
         //todo: complete this
         if(!profile.hasName()) {
-            addNewQuestionInLog(
-                OnboardingChatLog(
-                "autoid",
-                "in","Can I know your name please?", "text", "name",
-                    userid, "giger"
-            ))
+//            addNewQuestionInLog(
+//                OnboardingChatLog(
+//                "autoid",
+//                "in","Can I know your name please?", "text", "name",
+//                    userid, "giger"
+//            ))
         }else{
 
         }
     }
 
-    private fun addNewQuestionInLog(log: OnboardingChatLog){
-        //todo: insert log into Firestore
-    }
+//    private fun addNewQuestionInLog(log: OnboardingChatLog){
+//        //todo: insert log into Firestore
+//    }
 }

@@ -50,7 +50,6 @@ class LoginFragment : Fragment() {
         viewModel = this.activityViewModels<LoginViewModel>().value
         viewModel.activity = this.activity!!
 
-        val navController = findNavController()
 
         requireActivity().onBackPressedDispatcher.addCallback {
             // navController.popBackStack(R.id.homeFragment, false)

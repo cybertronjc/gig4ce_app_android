@@ -147,8 +147,8 @@ class VideoResumeFragment:Fragment() {
         if (requestCode == VIDEO_CAPTURE) {
             if (resultCode == RESULT_OK) {
                 if (data != null) {
-                    Toast.makeText(this.context, "Video saved to:\n" +data?.data, Toast.LENGTH_LONG).show()
-                    val videoUri: Uri? = data?.data
+                    Toast.makeText(this.context, "Video saved to:\n" + data.data, Toast.LENGTH_LONG).show()
+                    val videoUri: Uri? = data.data
                     videoView?.setVideoURI(videoUri)
                 };
             } else if (resultCode == RESULT_CANCELED) {
