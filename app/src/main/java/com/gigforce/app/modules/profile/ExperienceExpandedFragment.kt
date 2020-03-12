@@ -8,7 +8,11 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.request.RequestOptions
 import com.gigforce.app.R
+import com.gigforce.app.utils.GlideApp
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import kotlinx.android.synthetic.main.fragment_profile_about_expanded.view.*
 import kotlinx.android.synthetic.main.fragment_profile_education_expanded.view.*
 import kotlinx.android.synthetic.main.fragment_profile_education_expanded.view.profile_nav_to_education
@@ -23,6 +27,7 @@ class ExperienceExpandedFragment: Fragment() {
         fun newInstance() = ExperienceExpandedFragment()
     }
 
+    lateinit var storage: FirebaseStorage
     lateinit var viewModel: ProfileViewModel
     lateinit var layout: View
 
@@ -31,6 +36,7 @@ class ExperienceExpandedFragment: Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        storage = FirebaseStorage.getInstance()
         layout = inflater.inflate(R.layout.fragment_profile_experience_expanded, container, false)
         return layout
     }
@@ -38,21 +44,24 @@ class ExperienceExpandedFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        loadImage("ysharma.jpg")
+
         viewModel = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
 
         viewModel.userProfileData.observe(this, Observer { profile ->
             var experienceString = ""
             var format = SimpleDateFormat("dd/MM/yyyy", Locale.US)
             for (exp in profile.Experience!!) {
-                experienceString += exp.company + "\n"
-                experienceString += exp.position + "\n"
+                experienceString += exp.title + "\n"
+                experienceString += exp.employmentType + "\n"
+                experienceString += exp.location + "\n"
                 experienceString += format.format(exp.startDate!!) + "-" + format.format(exp.endDate!!) + "\n\n"
             }
             layout.experience_exp_experience_content.text = experienceString
         })
 
         layout.add_experience_button.setOnClickListener {
-            //findNavController().navigate(R.id.addExperienceBottomSheet)
+            findNavController().navigate(R.id.addExperienceBottomSheet)
         }
 
         layout.profile_nav_to_about.setOnClickListener{
@@ -66,5 +75,13 @@ class ExperienceExpandedFragment: Fragment() {
         layout.experience_expanded_back_button.setOnClickListener {
             findNavController().navigate(R.id.profileFragment)
         }
+    }
+
+    private fun loadImage(Path: String) {
+        val profilePicRef: StorageReference = storage.reference.child("profile_pics").child(Path)
+        GlideApp.with(this.context!!)
+            .load(profilePicRef)
+            .apply(RequestOptions().circleCrop())
+            .into(layout.experience_profile_avatar)
     }
 }

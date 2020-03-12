@@ -108,7 +108,6 @@
     <string name="add_language_speaking_level">Speaking level</string>
     <string name="add_language_writing_level">Writing level</string>
 
-
     <!--language select-->
     <string name="title_lang">Select Language</string>
 
@@ -136,6 +135,15 @@
     <string name="otp_verify">Verify</string>
     <string name="otp_reenter_mobile">Re-enter mobile number</string>
     <string name="otp_send_otp">Send OTP</string>
+
+    <!-- Add New Experience Bottom Sheet -->
+    <string name="add_experience_new_experience">New Experience</string>
+    <string name="add_experience_title">Title</string>
+    <string name="add_experience_employment_type">Employment Type</string>
+    <string name="add_experience_location">Location</string>
+    <string name="add_experience_start_date">Start Date</string>
+    <string name="add_experience_end_date">End Date</string>
+    <string name="add_experience_currently_working">Currently Working Here</string>
 
     <!-- Generic strings -->
     <string name="cancel_text">Cancel</string>

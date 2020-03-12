@@ -79,6 +79,13 @@
         <action
             android:id="@+id/action_profileFragment_to_experienceExpandedFragment"
             app:destination="@id/experienceExpandedFragment" />
+
+        <action
+            android:id="@+id/action_profileFragment_to_experienceExpandedFragment2"
+            app:destination="@id/experienceExpandedFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_addTagBottomSheet"
+            app:destination="@id/addTagBottomSheet" />
     </fragment>
     <fragment
         android:id="@+id/chatsHomeFragment"
@@ -100,14 +107,14 @@
         android:label="EducationExpandedFragment"
         tools:layout="@layout/fragment_profile_education_expanded">
         <action
-            android:id="@+id/action_educationExpandedFragment_to_addSkillBottomSheetFragment"
-            app:destination="@id/addSkillBottomSheetFragment" />
-        <action
             android:id="@+id/action_educationExpandedFragment_to_addAchievementBottomSheetFragment"
             app:destination="@id/addAchievementBottomSheetFragment" />
         <action
             android:id="@+id/action_educationExpandedFragment_to_addEducationBottomSheetFragment"
             app:destination="@id/addEducationBottomSheetFragment" />
+        <action
+            android:id="@+id/action_educationExpandedFragment_to_addSkillBottomSheetFragment"
+            app:destination="@id/addSkillBottomSheetFragment" />
     </fragment>
     <dialog
         android:id="@+id/addSkillBottomSheetFragment"
@@ -193,4 +200,12 @@
             android:id="@+id/action_verifyOTP_to_profileFragment"
             app:destination="@id/profileFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/addTagBottomSheet"
+        android:name="com.gigforce.app.modules.profile.AddTagBottomSheet"
+        android:label="AddTagBottomSheet" />
+    <dialog
+        android:id="@+id/addExperienceBottomSheet"
+        android:name="com.gigforce.app.modules.profile.AddExperienceBottomSheet"
+        android:label="AddExperienceBottomSheet" />
 </navigation>

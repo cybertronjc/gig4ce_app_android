@@ -3,14 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_exp_white_rect">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cardView6"
-        android:layout_width="360dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:background="#FFFFFF"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/bg_card_exp"
         android:elevation="5dp"
         android:minHeight="100dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -22,7 +25,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="16dp"
             android:text="@string/experience_card_experience_text"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -43,11 +46,10 @@
             android:id="@+id/divider2"
             android:layout_width="358dp"
             android:layout_height="1dp"
-            android:layout_marginBottom="32dp"
+            android:layout_marginBottom="42dp"
             android:background="?android:attr/listDivider"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/education_exp_education_content" />
 
@@ -55,19 +57,21 @@
             android:id="@+id/add_experience_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
             android:text="@string/experience_expanded_add_experience_text"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/divider2" />
+            app:layout_constraintTop_toBottomOf="@+id/divider2"
+            app:layout_constraintVertical_bias="0.0" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cardView"
         android:layout_width="fill_parent"
         android:layout_height="138dp"
-        android:background="#e42c64"
-        app:cardBackgroundColor="#e42c64"
+        android:background="@drawable/bg_top_card"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.49"
         app:layout_constraintStart_toStartOf="parent"
@@ -148,9 +152,10 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        android:background="#FFFFFF"
+        android:background="@drawable/bg_nav"
         android:minHeight="50dp"
         android:text="@string/nav_about_text"
+        android:textAlignment="center"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cardView" />
 
@@ -160,7 +165,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="8dp"
-        android:background="#FFFFFF"
+        android:background="@drawable/bg_nav"
         android:minHeight="50dp"
         android:text="@string/nav_education_text"
         app:layout_constraintStart_toEndOf="@+id/profile_nav_to_about"
@@ -172,7 +177,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="8dp"
-        android:background="#e42c64"
+        android:background="@drawable/bg_nav_color"
         android:minHeight="50dp"
         android:text="@string/nav_experience_text"
         app:layout_constraintStart_toEndOf="@+id/experience_exp_nav_education"
@@ -184,7 +189,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="8dp"
-        android:background="#FFFFFF"
+        android:background="@drawable/bg_nav"
         android:minHeight="50dp"
         android:text="@string/nav_gigs_text"
         app:layout_constraintStart_toEndOf="@+id/profile_nav_to_experience"
