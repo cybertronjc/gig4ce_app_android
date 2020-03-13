@@ -1,26 +1,35 @@
 package com.gigforce.app.modules.photoCrop.ui.main
 
+import android.Manifest
+import android.R.attr
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
-import android.view.View
-import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.gigforce.app.R
 import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.UploadTask
-import com.google.firebase.storage.UploadTask.*
+import com.google.firebase.storage.UploadTask.TaskSnapshot
 import com.yalantis.ucrop.UCrop
 import java.io.File
+import java.io.FileNotFoundException
+import java.io.InputStream
+import java.util.*
+
 
 class PhotoCrop : AppCompatActivity() {
 
     private val CODE_IMG_GALLERY: Int = 1
+    private val MY_PERMISSIONS_REQUEST_CAMERA: Int =1
+    private val REQUEST_IMAGE_CAPTURE: Int = 1888
     private val SAMPLE_CROPPED_IMG_NAME: String = "SampleCropImg2"
     //lateinit var uri : Uri
     var mStorage: FirebaseStorage = FirebaseStorage.getInstance()
@@ -29,10 +38,47 @@ class PhotoCrop : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?): Unit {
         super.onCreate(savedInstanceState)
 
-        startActivityForResult(
-            Intent().setAction(Intent.ACTION_GET_CONTENT)
-                .setType("image/*"), CODE_IMG_GALLERY
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+            //do your stuff
+        }else {
+            Log.d("Camera Perission","got here")
+            ActivityCompat.requestPermissions(this,
+                arrayOf({Manifest.permission.CAMERA}.toString()),
+                MY_PERMISSIONS_REQUEST_CAMERA)
+        }
+
+
+
+//        startActivityForResult(
+////            Intent().setAction(Intent.ACTION_GET_CONTENT)
+////                .setType("image/*"), CODE_IMG_GALLERY
+
+//
+////    }
+//    )
+
+        val pickIntent = Intent()
+        pickIntent.type = "image/*"
+        pickIntent.action = Intent.ACTION_GET_CONTENT
+
+        val takePhotoIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+
+        val pickTitle = "Select or take a new Picture"
+        val chooserIntent = Intent.createChooser(pickIntent, pickTitle)
+        chooserIntent.putExtra(
+            Intent.EXTRA_INITIAL_INTENTS, arrayOf(takePhotoIntent)
         )
+
+        startActivityForResult(chooserIntent, REQUEST_IMAGE_CAPTURE)
+
+//        startActivityForResult(getPickImageChooserIntent(this,"title",true,true), CODE_IMG_GALLERY)
+
+//        Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
+//            takePictureIntent.resolveActivity(packageManager)?.also {
+//    startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)}
+//            startActivityForResult(Intent().setAction(takePictureIntent.REQUEST_IMAGE_CAPTURE).setType("image/*"), CODE_IMG_GALLERY)}
+//
     }
 
     override fun onActivityResult(
@@ -41,6 +87,26 @@ class PhotoCrop : AppCompatActivity() {
         data: Intent?
     ): Unit {
         super.onActivityResult(requestCode, resultCode, data)
+
+        if (resultCode === Activity.RESULT_OK) {
+            if (requestCode === REQUEST_IMAGE_CAPTURE) {
+                if (attr.data != null) {
+                    val inputStream: InputStream?
+                    var bitmap: Bitmap? = null
+                    try {
+                        if (attr.data != null) {
+                            inputStream = contentResolver.openInputStream(data)
+                            bitmap = BitmapFactory.decodeStream(inputStream)
+                        } else {
+                            bitmap = data.extras
+                        }
+                    } catch (e: FileNotFoundException) {
+                        e.printStackTrace()
+                    }
+                }
+            }
+        }
+
         Log.v("MAYANK", requestCode.toString()+" RESULT:_"+resultCode.toString()+" UCrop.REQUEST_CROP "+UCrop.REQUEST_CROP.toString())
         if (requestCode == CODE_IMG_GALLERY && resultCode == Activity.RESULT_OK) {
             val imageUri: Uri? = data?.data
@@ -100,6 +166,23 @@ class PhotoCrop : AppCompatActivity() {
             Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show()
         }
 
+    }
+
+    @Throws(IOException::class)
+    private fun createImageFile(): File? {
+        val timeStamp: String = SimpleDateFormat(
+            "yyyyMMdd_HHmmss",
+            Locale.getDefault()
+        ).format(Date())
+        val imageFileName = "IMG_" + timeStamp + "_"
+        val storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        val image = File.createTempFile(
+            imageFileName,  /* prefix */
+            ".jpg",  /* suffix */
+            storageDir /* directory */
+        )
+        imageFilePath = image.absolutePath
+        return image
     }
 
 }
