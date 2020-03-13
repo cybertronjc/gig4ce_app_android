@@ -93,8 +93,12 @@ class EducationExpandedFragment: Fragment() {
             this.findNavController().navigate(R.id.addEducationBottomSheetFragment)
         }
 
-        layout.profile_nav_to_about_me.setOnClickListener{
+        layout.education_nav_to_about.setOnClickListener{
             this.findNavController().navigate(R.id.aboutExpandedFragment)
+        }
+
+        layout.education_nav_to_experience.setOnClickListener{
+            this.findNavController().navigate(R.id.experienceExpandedFragment)
         }
     }
 

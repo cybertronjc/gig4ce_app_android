@@ -13,11 +13,7 @@ import com.gigforce.app.R
 import com.gigforce.app.utils.GlideApp
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
-import kotlinx.android.synthetic.main.fragment_profile_about_expanded.view.*
-import kotlinx.android.synthetic.main.fragment_profile_education_expanded.view.*
-import kotlinx.android.synthetic.main.fragment_profile_education_expanded.view.profile_nav_to_education
 import kotlinx.android.synthetic.main.fragment_profile_experience_expanded.view.*
-import kotlinx.android.synthetic.main.fragment_profile_main_expanded.view.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -64,11 +60,11 @@ class ExperienceExpandedFragment: Fragment() {
             findNavController().navigate(R.id.addExperienceBottomSheet)
         }
 
-        layout.profile_nav_to_about.setOnClickListener{
+        layout.experience_nav_to_about.setOnClickListener{
             findNavController().navigate(R.id.aboutExpandedFragment)
         }
 
-        layout.experience_exp_nav_education.setOnClickListener{
+        layout.experience_nav_to_education.setOnClickListener{
             findNavController().navigate(R.id.educationExpandedFragment)
         }
 

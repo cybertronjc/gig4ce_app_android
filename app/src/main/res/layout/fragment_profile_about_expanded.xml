@@ -211,7 +211,7 @@
             app:layout_constraintTop_toBottomOf="@+id/cardView">
 
             <TextView
-                android:id="@+id/textView14"
+                android:id="@+id/profile_nav_to_experience"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_nav"

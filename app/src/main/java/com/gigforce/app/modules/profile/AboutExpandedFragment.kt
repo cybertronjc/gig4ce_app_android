@@ -81,6 +81,10 @@ class AboutExpandedFragment: Fragment() {
             this.findNavController().navigate(R.id.educationExpandedFragment)
         }
 
+        layout.profile_nav_to_experience.setOnClickListener{
+            this.findNavController().navigate(R.id.experienceExpandedFragment)
+        }
+
     }
 
     private fun loadImage(Path: String) {
