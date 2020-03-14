@@ -54,30 +54,21 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:ems="10"
-        android:hint="Enter Mobile Number"
-        android:inputType="phone"
+        android:hint="@string/otp_enter_mobile_num"
+        android:inputType="textAutoComplete|phone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView25" />
-
-    <View
-        android:id="@+id/divider10"
-        android:layout_width="286dp"
-        android:layout_height="5dp"
-        android:background="@drawable/bg_line"
-        app:layout_constraintEnd_toEndOf="@+id/otp_mobile_number"
-        app:layout_constraintStart_toStartOf="@+id/otp_mobile_number"
-        app:layout_constraintTop_toBottomOf="@+id/otp_mobile_number" />
 
     <Button
         android:id="@+id/send_otp_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="32dp"
         android:background="@drawable/bg_button"
         android:text="@string/otp_send_otp"
         android:textColor="@android:color/white"
         app:layout_constraintEnd_toEndOf="@+id/otp_mobile_number"
         app:layout_constraintStart_toStartOf="@+id/otp_mobile_number"
-        app:layout_constraintTop_toBottomOf="@+id/divider10" />
+        app:layout_constraintTop_toBottomOf="@+id/otp_mobile_number" />
 </androidx.constraintlayout.widget.ConstraintLayout>

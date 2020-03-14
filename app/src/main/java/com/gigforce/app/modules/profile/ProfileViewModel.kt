@@ -38,7 +38,7 @@ class ProfileViewModel: ViewModel() {
         profileFirebaseRepository.setProfileEducation(education)
     }
 
-    fun setProfileSkill(skills: ArrayList<Skill>) {
+    fun setProfileSkill(skills: ArrayList<String>) {
         profileFirebaseRepository.setProfileSkill(skills)
     }
 
@@ -52,6 +52,10 @@ class ProfileViewModel: ViewModel() {
 
     fun setProfileLanguage(languages: ArrayList<Language>) {
         profileFirebaseRepository.setProfileLanguage(languages)
+    }
+
+    fun setProfileExperience(experiences: ArrayList<Experience>) {
+        profileFirebaseRepository.setProfileExperience(experiences)
     }
 
     init {

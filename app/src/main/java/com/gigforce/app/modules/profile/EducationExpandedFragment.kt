@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.request.RequestOptions
 import com.gigforce.app.R
 import com.gigforce.app.utils.GlideApp
 import com.google.firebase.storage.FirebaseStorage
@@ -68,7 +69,8 @@ class EducationExpandedFragment: Fragment() {
                 achievementString += achievement.title + "\n"
                 achievementString += achievement.issuingAuthority + "\n"
                 achievementString += achievement.location + "\n"
-                achievementString += format.format(achievement.year) + "\n\n"
+                //achievementString += format.format(achievement.year!!) + "\n\n"
+                achievementString += achievement.year + "\n\n"
             }
             layout.education_exp_achievement_content.text = achievementString
 
@@ -91,8 +93,12 @@ class EducationExpandedFragment: Fragment() {
             this.findNavController().navigate(R.id.addEducationBottomSheetFragment)
         }
 
-        layout.profile_nav_to_about_me.setOnClickListener{
+        layout.education_nav_to_about.setOnClickListener{
             this.findNavController().navigate(R.id.aboutExpandedFragment)
+        }
+
+        layout.education_nav_to_experience.setOnClickListener{
+            this.findNavController().navigate(R.id.experienceExpandedFragment)
         }
     }
 
@@ -100,6 +106,7 @@ class EducationExpandedFragment: Fragment() {
         val profilePicRef: StorageReference = storage.reference.child("profile_pics").child(Path)
         GlideApp.with(this.context!!)
             .load(profilePicRef)
+            .apply(RequestOptions().circleCrop())
             .into(layout.education_profile_avatar)
     }
 }

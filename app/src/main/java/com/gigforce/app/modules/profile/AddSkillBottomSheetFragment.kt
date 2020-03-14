@@ -23,7 +23,7 @@ class AddSkillBottomSheetFragment: BottomSheetDialogFragment() {
     }
 
     lateinit var layout: View
-    var updates: ArrayList<Skill> = ArrayList()
+    var updates: ArrayList<String> = ArrayList()
     lateinit var viewModel: ProfileViewModel
 
     override fun onCreateView(
@@ -62,10 +62,7 @@ class AddSkillBottomSheetFragment: BottomSheetDialogFragment() {
 
     private fun addNewSkill() {
         updates.add(
-            Skill(
-                //category = layout.add_skill_category.text.toString(),
-                //nameOfSkill = layout.add_skill_name.text.toString()
-            )
+            layout.add_skill_name.text.toString()
         )
     }
 }

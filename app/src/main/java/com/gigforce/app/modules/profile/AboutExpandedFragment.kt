@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.request.RequestOptions
 import com.gigforce.app.R
 import com.gigforce.app.utils.GlideApp
 import com.google.firebase.storage.FirebaseStorage
@@ -80,12 +81,17 @@ class AboutExpandedFragment: Fragment() {
             this.findNavController().navigate(R.id.educationExpandedFragment)
         }
 
+        layout.profile_nav_to_experience.setOnClickListener{
+            this.findNavController().navigate(R.id.experienceExpandedFragment)
+        }
+
     }
 
     private fun loadImage(Path: String) {
         val profilePicRef: StorageReference = storage.reference.child("profile_pics").child(Path)
         GlideApp.with(this.context!!)
             .load(profilePicRef)
+            .apply(RequestOptions().circleCrop())
             .into(layout.education_profile_avatar)
     }
 
