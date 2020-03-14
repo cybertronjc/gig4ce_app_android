@@ -63,7 +63,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/cardView"
+        android:id="@+id/cardviewvideo"
         android:layout_width="fill_parent"
         android:layout_height="138dp"
         android:background="#e42c64"
@@ -152,7 +152,7 @@
         android:minHeight="50dp"
         android:text="@string/nav_about_text"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardView" />
+        app:layout_constraintTop_toBottomOf="@+id/cardviewvideo" />
 
     <TextView
         android:id="@+id/experience_exp_nav_education"
@@ -164,7 +164,7 @@
         android:minHeight="50dp"
         android:text="@string/nav_education_text"
         app:layout_constraintStart_toEndOf="@+id/profile_nav_to_about"
-        app:layout_constraintTop_toBottomOf="@+id/cardView" />
+        app:layout_constraintTop_toBottomOf="@+id/cardviewvideo" />
 
     <TextView
         android:id="@+id/profile_nav_to_experience"
@@ -176,7 +176,7 @@
         android:minHeight="50dp"
         android:text="@string/nav_experience_text"
         app:layout_constraintStart_toEndOf="@+id/experience_exp_nav_education"
-        app:layout_constraintTop_toBottomOf="@+id/cardView" />
+        app:layout_constraintTop_toBottomOf="@+id/cardviewvideo" />
 
     <TextView
         android:id="@+id/textView27"
@@ -188,6 +188,6 @@
         android:minHeight="50dp"
         android:text="@string/nav_gigs_text"
         app:layout_constraintStart_toEndOf="@+id/profile_nav_to_experience"
-        app:layout_constraintTop_toBottomOf="@+id/cardView" />
+        app:layout_constraintTop_toBottomOf="@+id/cardviewvideo" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

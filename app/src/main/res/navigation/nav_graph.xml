@@ -40,8 +40,8 @@
             android:id="@+id/action_homeFragment_to_languageSelectFragment"
             app:destination="@id/languageSelectFragment" />
         <action
-            android:id="@+id/action_homeFragment_to_homeScreenFragment"
-            app:destination="@id/homeScreenFragment" />
+            android:id="@+id/action_homeFragment_to_homeScreenIcons"
+            app:destination="@id/homeScreenIcons" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
@@ -176,8 +176,8 @@
             app:argType="string"
             android:defaultValue='""' />
         <action
-            android:id="@+id/action_verifyOTP_to_homeScreenFragment"
-            app:destination="@id/homeScreenFragment" />
+            android:id="@+id/action_verifyOTP_to_homeScreenIcons"
+            app:destination="@id/homeScreenIcons" />
     </fragment>
     <fragment
         android:id="@+id/homeScreenFragment"
@@ -185,6 +185,14 @@
         android:label="HomeScreenFragment" >
         <action
             android:id="@+id/action_homeScreenFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/homeScreenIcons"
+        android:name="com.gigforce.app.modules.homescreen.HomeScreenIcons"
+        android:label="HomeScreenIcons" >
+        <action
+            android:id="@+id/action_homeScreenIcons_to_profileFragment"
             app:destination="@id/profileFragment" />
     </fragment>
 </navigation>

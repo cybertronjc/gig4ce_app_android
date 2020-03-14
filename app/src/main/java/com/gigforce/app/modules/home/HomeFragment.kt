@@ -52,7 +52,8 @@ class HomeFragment: Fragment(), View.OnClickListener {
                 initAuth()
             }else {
                 Log.d("STATUS", "logged in hai")
-                this.findNavController().navigate(R.id.homeScreenFragment)
+                //this.findNavController().navigate(R.id.homeScreenFragment)
+                this.findNavController().navigate(R.id.homeScreenIcons)
             }
 
         }

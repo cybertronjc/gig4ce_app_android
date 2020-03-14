@@ -135,8 +135,8 @@
             android:background="#FFFFFF"
             android:elevation="5dp"
             android:minHeight="100dp"
-            app:layout_constraintEnd_toEndOf="@+id/cardView"
-            app:layout_constraintStart_toStartOf="@+id/cardView"
+            app:layout_constraintEnd_toEndOf="@+id/cardviewvideo"
+            app:layout_constraintStart_toStartOf="@+id/cardviewvideo"
             app:layout_constraintTop_toBottomOf="@+id/cardView4">
 
             <TextView
@@ -171,9 +171,9 @@
             android:layout_marginTop="8dp"
             app:cardCornerRadius="30dp"
             app:layout_constraintCircleRadius="30dp"
-            app:layout_constraintEnd_toEndOf="@+id/cardView"
+            app:layout_constraintEnd_toEndOf="@+id/cardviewvideo"
             app:layout_constraintStart_toEndOf="@+id/cardView5"
-            app:layout_constraintTop_toBottomOf="@+id/cardView"
+            app:layout_constraintTop_toBottomOf="@+id/cardviewvideo"
             tools:ignore="MissingPrefix">
 
             <TextView
@@ -196,7 +196,7 @@
             android:layout_marginTop="8dp"
             app:cardCornerRadius="30dp"
             app:layout_constraintStart_toEndOf="@+id/cardView4"
-            app:layout_constraintTop_toBottomOf="@+id/cardView"
+            app:layout_constraintTop_toBottomOf="@+id/cardviewvideo"
             tools:ignore="MissingPrefix">
 
             <TextView
@@ -219,7 +219,7 @@
             android:layout_marginTop="8dp"
             app:cardCornerRadius="30dp"
             app:layout_constraintStart_toEndOf="@+id/cardView3"
-            app:layout_constraintTop_toBottomOf="@+id/cardView"
+            app:layout_constraintTop_toBottomOf="@+id/cardviewvideo"
             tools:ignore="MissingPrefix">
 
             <TextView
@@ -242,7 +242,7 @@
             android:layout_marginTop="8dp"
             app:cardCornerRadius="30dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cardView"
+            app:layout_constraintTop_toBottomOf="@+id/cardviewvideo"
             tools:ignore="MissingPrefix">
 
             <TextView
@@ -260,7 +260,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cardView"
+            android:id="@+id/cardviewvideo"
             android:layout_width="fill_parent"
             android:layout_height="138dp"
             android:background="#e42c64"
