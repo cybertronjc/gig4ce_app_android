@@ -1,34 +1,41 @@
 package com.gigforce.app.modules.video_resume
 
+import android.Manifest
 import android.app.Activity.RESULT_CANCELED
 import android.app.Activity.RESULT_OK
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
+import android.os.SystemClock
 import android.provider.MediaStore
+import android.util.Log
 import android.view.*
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.Toast
+import android.widget.*
 import android.widget.VideoView
 import androidx.activity.OnBackPressedCallback
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.gigforce.app.BuildConfig
+import com.gigforce.app.R
 import com.gigforce.app.R.*
 import com.gigforce.app.modules.onboarding.utils.DepthPageTransformer
 import com.gigforce.app.utils.GlideApp
 import com.gigforce.app.utils.dp
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageMetadata
+import com.google.firebase.storage.StorageReference
 import kotlinx.android.synthetic.main.fragment_video_resume.*
 import kotlinx.android.synthetic.main.fragment_video_resume.view.*
 import java.io.File
 import java.util.*
-
 
 /*
 To do:
@@ -44,11 +51,72 @@ class VideoResumeFragment:Fragment() {
 
     private val videoView: VideoView? = null
     private val mediaPlayer: MediaPlayer? = null
+    private lateinit var storage: FirebaseStorage
+
+    private var mChronometer: Chronometer? = null
+
+    private val TAG = "PermissionDemo"
+    private val RECORD_REQUEST_CODE = 101
+
+    private fun makeRequest(req:String) {
+        this.activity?.let {
+            ActivityCompat.requestPermissions(
+                it,
+                arrayOf(req),
+                RECORD_REQUEST_CODE)
+        }
+    }
+
+    private fun setupPermissions(req: String) {
+        val permission = this.context?.let {
+            ContextCompat.checkSelfPermission(
+                it,
+                req)
+        }
+
+        if (permission != PackageManager.PERMISSION_GRANTED) {
+            Log.d(TAG, "Permission to record denied")
+            makeRequest(req)
+
+            mChronometer?.setBase(SystemClock.elapsedRealtime());
+            mChronometer?.setVisibility(View.VISIBLE);
+            mChronometer?.start();
+        }
+    }
+
+    fun uploadVideotoFB(videoRef: StorageReference, localPath:Uri) {
+        // File or Blob
+        //var file = Uri.fromFile(File(localPath))
+
+        // Create the file metadata
+        var metadata: StorageMetadata? = null;
+//            StorageMetadata() {
+//            contentType = "video/mp4"
+//        }
+
+        // Upload file and metadata to the path 'images/mountains.jpg'
+        val uploadTask = metadata?.let { videoRef.putFile(localPath, it) }
+
+        // Listen for state changes, errors, and completion of the upload.
+        uploadTask?.addOnProgressListener { taskSnapshot ->
+            val progress = (100.0 * taskSnapshot.bytesTransferred) / taskSnapshot.totalByteCount
+            println("Upload is $progress% done")
+        }?.addOnPausedListener {
+            println("Upload is paused")
+        }?.addOnFailureListener {
+            // Handle unsuccessful uploads
+        }?.addOnSuccessListener {
+            // Handle successful uploads on complete
+            // ...
+        }
+    }
 
         override fun onCreate(savedInstanceState: Bundle?) {
             super.onCreate(savedInstanceState)
             arguments?.let {
-
+                //setupPermissions(Manifest.permission.CAMERA)
+                //setupPermissions(Manifest.permission.RECORD_AUDIO)
+                //setupPermissions(Manifest.permission)
             }
         }
 
@@ -56,6 +124,11 @@ class VideoResumeFragment:Fragment() {
             inflater: LayoutInflater, container: ViewGroup?,
             savedInstanceState: Bundle?
         ): View? {
+            storage = FirebaseStorage.getInstance()
+            mChronometer = view?.findViewById(R.id.chronometer);
+            setupPermissions(Manifest.permission.CAMERA)
+            setupPermissions(Manifest.permission.RECORD_AUDIO)
+            setupPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE)
             val window: Window = activity!!.window
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
@@ -69,13 +142,11 @@ class VideoResumeFragment:Fragment() {
                     }
                 }
             requireActivity().onBackPressedDispatcher.addCallback(this, callback)
-
             return inflater.inflate(layout.fragment_video_resume, container, false)
         }
 
         override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
             super.onViewCreated(view, savedInstanceState)
-
 //            if(viewpager.currentItem <=2 )
 //            {
 //                Toast.makeText(context, "counter:>>>>>>>>>>>>>> "+viewpager.currentItem.toString(), Toast.LENGTH_SHORT).show()
@@ -113,7 +184,6 @@ class VideoResumeFragment:Fragment() {
                 onActivityResult(VIDEO_CAPTURE, RESULT_OK, intent )
             }
 
-
             button_video.setOnClickListener (object : View.OnClickListener {
                 val REQUEST_TAKE_GALLERY_VIDEO = 1;
                 var mediaFile: File = File(
@@ -121,14 +191,44 @@ class VideoResumeFragment:Fragment() {
                 )
                     override fun onClick(v: View?) {
                         val intent = Intent()
+//
+//                        if (ActivityCompat.checkSelfPermission(
+//                                context!!,
+//                                Manifest.permission.ACCESS_MEDIA_LOCATION
+//                            ) != PackageManager.PERMISSION_GRANTED &&
+//                            ActivityCompat.checkSelfPermission(
+//                                context!!,
+//                                Manifest.permission.CAMERA
+//                            ) != PackageManager.PERMISSION_GRANTED
+//                        ) {
+//                            requestPermissions(
+//                                activity!!, arrayOf(
+//                                    Manifest.permission.ACCESS_MEDIA_LOCATION,
+//                                    Manifest.permission.CAMERA
+//                                ),
+//                                REQUEST_VIDEO_CAPTURE
+//                            )
+//                        } else {
+//                            Log.d("DB", "PERMISSION GRANTED")
+//                        }
                         //intent.type = "camera"
                         intent.action = MediaStore.ACTION_VIDEO_CAPTURE
                         val videoUri: Uri = FileProvider.getUriForFile(Objects.requireNonNull(v?.context!!),
                             BuildConfig.APPLICATION_ID + ".provider", mediaFile);
+
                         // ref: https://stackoverflow.com/questions/56598480/couldnt-find-meta-data-for-provider-with-authority
                         //val videoUri: Uri =  FileProvider.getUriForFile(v?.context!!,"com.gigforce.app.modules.onboarding",mediaFile)//Uri.fromFile(mediaFile)
+
+//                        val previewVideoUrl = Uri.parse(videoUri)
+//                        val builder = PreviewProgram.Builder()
+//                        builder.setChannelId(channelId)
+//                            // ...
+//                            .setPreviewVideoUri(previewVideoUrl)
+
                         intent.putExtra(MediaStore.EXTRA_OUTPUT, videoUri)
                         startActivityForResult(intent, VIDEO_CAPTURE);
+
+                        uploadVideotoFB(storage.reference.child("myvideo.mp4"), videoUri)
 //                        intent.type = "video/*"
 //                        intent.action = Intent.ACTION_GET_CONTENT
 //                        startActivityForResult(

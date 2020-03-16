@@ -119,6 +119,17 @@
         android:layout_marginEnd="156dp"
         android:layout_marginBottom="102dp"
         android:text="Play" />
+
+    <Chronometer
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/chronometer"
+        android:visibility="invisible"
+        android:textColor="#ff0000"
+        android:textSize="25dp"
+        android:layout_above="@+id/button_video"
+        android:layout_alignStart="@+id/play_video"  />
+
     <!--
         <VideoView
             android:id="@+id/videoView"

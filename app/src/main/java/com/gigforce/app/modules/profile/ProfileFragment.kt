@@ -1,6 +1,7 @@
 package com.gigforce.app.modules.profile
 
 import android.graphics.Color
+import android.net.Uri
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.util.Log
@@ -14,9 +15,11 @@ import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
 import com.gigforce.app.utils.GlideApp
 import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageMetadata
 import com.google.firebase.storage.StorageReference
 import kotlinx.android.synthetic.main.fragment_profile_education_expanded.view.*
 import kotlinx.android.synthetic.main.fragment_profile_main_expanded.view.*
+import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 

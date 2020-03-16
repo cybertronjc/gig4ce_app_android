@@ -45,6 +45,8 @@ internal class HomeScreenAdapter internal constructor(context: Context, private 
                 holder.name!!.text = "Support"}
             6 -> {holder.icon!!.setImageResource(R.drawable.ic_homescreen_control)
                 holder.name!!.text = "Preferences"}
+            7 -> {holder.icon!!.setImageResource(R.drawable.gig4ce_logo)
+                holder.name!!.text = "Video Resume"}
             else -> { // Note the block
                 holder.icon!!.setImageResource(R.drawable.gig4ce_logo)
                 holder.name!!.text = "More"
