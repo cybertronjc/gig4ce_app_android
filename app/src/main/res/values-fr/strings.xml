@@ -1,73 +1,156 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Gigforce</string>
-    <string name="hello_blank_fragment">Bonjour fragment vierge </string>
-    <string name="title_activity_profile">  ProfileActivity </string>
-    <string name="intro_slide1_title">  Bienvenue chez Gigforce </string>
-    <string name="intro_slide1_subtitle">   Apprendre. Gagner. Prendre plaisir. </string>
-    <string name="intro_slide2_title">  Le travail arrive   </string>
-    <string name="intro_slide2_subtitle">   Soyez averti lorsque le travail se produit  </string>
-    <string name="intro_slide3_title">  Tâche et affectation</string>
-    <string name="intro_slide3_subtitle">   Tâchez-les et affectez-les à des collègues! </string>
-    <string name="ob_slide1_title"> Intégration </string>
-    <string name="ob_slide1_subtitle">  Comment - 1 </string>
-    <string name="ob_slide2_title"> Intégration </string>
-    <string name="ob_slide2_subtitle">  Comment - 2 </string>
-    <string name="ob_slide3_title"> Intégration </string>
-    <string name="ob_slide3_subtitle">  Comment - 3 </string>
-    <string name="hello_world"> Bonjour Square World!   </string>
-    <string name="messages_header"> messages</string>
-    <string name="sync_header"> Sync</string>
-    <string name="signature_title"> Votre signature </string>
-    <string name="reply_title"> Action de réponse par défaut</string>
-    <string name="sync_title">  Synchroniser régulièrement les e-mails  </string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Bonjour fragment vierge</string>
+    <string name="title_activity_profile">ProfileActivity</string>
+
+    <string name="intro_slide1_title">Bienvenue chez Gigforce</string>
+    <string name="intro_slide1_subtitle">Apprendre. Gagner. Prendre plaisir.</string>
+
+    <string name="intro_slide2_title">Le travail arrive</string>
+    <string name="intro_slide2_subtitle">Soyez averti lorsque le travail se produit</string>
+
+    <string name="intro_slide3_title">Tâche et affectation</string>
+    <string name="intro_slide3_subtitle">Tâchez-les et affectez-les à des collègues!</string>
+
+    <string name="ob_slide1_title">Intégration</string>
+    <string name="ob_slide1_subtitle">Comment - 1</string>
+
+    <string name="ob_slide2_title">Intégration</string>
+    <string name="ob_slide2_subtitle">Comment - 2</string>
+
+    <string name="ob_slide3_title">Intégration</string>
+    <string name="ob_slide3_subtitle">Comment - 3</string>
+    <!--
+    This string is used for square devices and overridden by hello_world in
+    values-round/strings.xml for round devices.
+    -->
+    <string name="hello_world">Bonjour Square World!</string>
+    <!-- Preference Titles -->
+    <string name="messages_header">messages</string>
+    <string name="sync_header">Sync</string>
+
+    <!-- Messages Preferences -->
+    <string name="signature_title">Votre signature</string>
+    <string name="reply_title">Action de réponse par défaut</string>
+
+    <!-- Sync Preferences -->
+    <string name="sync_title">Synchroniser régulièrement les e-mails</string>
     <string name="attachment_title">Télécharger les pièces jointes entrantes</string>
-    <string name="attachment_summary_on">   Télécharger automatiquement les pièces jointes pour les e-mails entrants</string>
-    <string name="attachment_summary_off">  Télécharger les pièces jointes uniquement sur demande manuelle  </string>
-    <string name="rating_text"> Évaluation  </string>
-    <string name="tasks_done_text"> Tâches accomplies   </string>
-    <string name="connections_text">Connexions  </string>
-    <string name="default_location_text">   Emplacement \ n220KM de distance</string>
-    <string name="education_card_education_text">   Éducation   </string>
-    <string name="education_card_content_placeholder">  Contenu éducatif à mettre ici   </string>
-    <string name="view_more_text">  Voir plus   </string>
-    <string name="empty_dash_string">   -   </string>
-    <string name="education_expanded_Education_text">   Éducation   </string>
-    <string name="education_expanded_to_be_filled_from_profile_data">   À remplir à partir des données de profil</string>
-    <string name="education_expanded_skills_text">  Compétences </string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails
+</string>
+    <string name="attachment_summary_off">Télécharger les pièces jointes uniquement sur demande manuelle</string>
+
+    <!-- Profile main expanded page -->
+    <string name="rating_text">Évaluation</string>
+    <string name="tasks_done_text">Tâches accomplies</string>
+    <string name="connections_text">Connexions</string>
+    <string name="default_location_text">Emplacement \ n220KM de distance</string>
+    <string name="education_card_education_text">Éducation</string>
+    <string name="education_card_content_placeholder">Contenu éducatif à mettre ici</string>
+    <string name="view_more_text">Voir plus</string>
+    <string name="empty_dash_string">-</string>
+    <string name="about_card_about_text">À propos de moi</string>
+    <string name="about_card_content_placeholder">À propos de moi contenu à mettre ici</string>
+    <string name="experience_card_experience_text">Expérience</string>
+
+    <!-- Profile experience expanded page -->
+    <string name="experience_expanded_add_experience_text">Ajouter de l\'expérience</string>
+
+    <!-- Profile education expanded page -->
+    <string name="education_expanded_Education_text">Éducation</string>
+    <string name="education_expanded_skills_text">Compétences</string>
     <string name="education_expanded_achievements_text">Réalisations</string>
-    <string name="education_expanded_add_education_text">   #ERROR! </string>
-    <string name="education_expanded_add_skill_text">   #ERROR! </string>
-    <string name="education_expanded_add_achievement_text"> #ERROR! </string>
-    <string name="education_expanded_user_name">Nom d\'utilisateur   </string>
-    <string name="nav_education_text">  Éducation   </string>
-    <string name="nav_about_text">  À propos de moi </string>
-    <string name="nav_gigs_text">   Concerts</string>
-    <string name="nav_experience_text"> Expérience  </string>
-    <string name="add_skill_sheet_new_skill">   Nouvelle compétence </string>
-    <string name="add_skill_sheet_category">Catégorie   </string>
-    <string name="add_skill_sheet_skill_name">  Nom de la compétence</string>
-    <string name="add_achievement_sheet_new_achievement">   Nouvelle réalisation</string>
-    <string name="add_achievement_sheet_title"> Titre   </string>
-    <string name="add_achievement_sheet_issuing_authority"> Autorité de délivrance  </string>
-    <string name="add_achievement_sheet_location">  Emplacement </string>
-    <string name="add_achievement_sheet_year">  Année * </string>
-    <string name="add_education_sheet_new_education">   Nouvelle éducation  </string>
-    <string name="add_education_sheet_institution"> Institution </string>
-    <string name="add_education_sheet_course">  Cours   </string>
-    <string name="add_education_sheet_degree">  Degré   </string>
-    <string name="add_education_sheet_start_year">  Année de début *</string>
-    <string name="add_education_sheet_end_year">Fin d\'année *   </string>
-    <string name="cancel_text"> Annuler </string>
-    <string name="save_text">   sauvegarder </string>
-    <string name="add_more_text">Ajouter plus   </string>
-    <string name="verified_text">   Vérifié </string>
-    <string name="tags_text">   Tags de l\'utilisateur   </string>
-    <string name="about_me_text">   À propos de moi de l\'utilisateur</string>
-    <string name="title_lang">  Choisir la langue   </string>
-    <string name="title_login"> Veuillez vous connecter </string>
-    <string name="mobile_login">Entrez votre numéro de mobile   </string>
-    <string name="confirm_login">   Confirmer   </string>
+    <string name="education_expanded_add_education_text">Ajouter une éducation</string>
+    <string name="education_expanded_add_skill_text">Ajouter une compétence</string>
+    <string name="education_expanded_add_achievement_text">Ajouter une réalisation</string>
+    <string name="education_expanded_user_name">Nom d\'utilisateur</string>
+    <string name="nav_education_text">Éducation</string>
+    <string name="nav_about_text">À propos de moi</string>
+    <string name="nav_gigs_text">Concerts</string>
+    <string name="nav_experience_text">Expérience</string>
+
+    <!-- Add New Skill Bottom Sheet -->
+    <string name="add_skill_sheet_new_skill">Nouvelle compétence</string>
+    <string name="add_skill_sheet_category">Catégorie</string>
+    <string name="add_skill_sheet_skill_name">Nom de la compétence</string>
+
+    <!-- Add New Achievement Bottom Sheet -->
+    <string name="add_achievement_sheet_new_achievement">Nouvelle réalisation</string>
+    <string name="add_achievement_sheet_title">Titre</string>
+    <string name="add_achievement_sheet_issuing_authority">Autorité de délivrance</string>
+    <string name="add_achievement_sheet_location">Emplacement</string>
+    <string name="add_achievement_sheet_year">Année *</string>
+
+    <!-- Add New Education Bottom Sheet -->
+    <string name="add_education_sheet_new_education">Nouvelle éducation</string>
+    <string name="add_education_sheet_institution">Institution</string>
+    <string name="add_education_sheet_course">Cours</string>
+    <string name="add_education_sheet_degree">Degré</string>
+    <string name="add_education_sheet_start_year">Année de début *</string>
+    <string name="add_education_sheet_end_year">Fin d\'année *</string>
+
+    <!-- Add New Contact Bottom Sheet -->
+    <string name="add_contact_new_contact">Nouveau contact</string>
+    <string name="add_contact_phone">Téléphone</string>
+    <string name="add_contact_email">Email</string>
+
+    <!-- About expanded page -->
+    <string name="about_expanded_bio_text">Bio</string>
+    <string name="about_expanded_language_text">Langue connue</string>
+    <string name="about_expanded_add_language_text">Ajouter une langue</string>
+    <string name="about_expanded_contact_text">Détails du contact</string>
+    <string name="about_expanded_add_contact_text">Ajouter le contact</string>
+
+    <!-- Add New Language Bottom Sheet -->
+    <string name="add_language_new_language">Nouveau langage</string>
+    <string name="add_language_name">Nom</string>
+    <string name="add_language_speaking_level">Niveau oral</string>
+    <string name="add_language_writing_level">Niveau d\'écriture</string>
+
+    <!--language select-->
+    <string name="title_lang">Choisir la langue</string>
+
+
+    <!--login fragment-->
+    <string name="title_login">Veuillez vous connecter</string>
+    <string name="mobile_login">Entrez votre numéro de mobile</string>
+    <string name="confirm_login">Confirmer</string>
+
     <!--video resume-->
-    <string name="guidelines_video_resume">Consignes</string>
+    <string name="guidelines_video_resume">Des lignes directrices</string>
+    <string name="button_upload_video">TÉLÉCHARGER</string>
+    <string name="title_video_resume">CV vidéo</string>
+    <string name="why_video_resume">pourquoi reprendre la vidéo est imp?</string>
+    <string name="desc1_video_resume">laissez-nous en savoir plus sur vous</string>
+    <string name="desc2_video_resume">pas de CV et pas d\'interview</string>
+
+    <!-- mobile otp -->
+    <string name="otp_sign_in_up">Vous connecter vous inscrire</string>
+    <string name="otp_enter_mobile_num">Entrez votre numéro de mobile</string>
+    <string name="otp_will_send_otp">Nous vous enverrons un mot de passe unique (OTP)</string>
+    <string name="otp_verify_account">vérifier le compte</string>
+    <string name="otp_sent_otp_account">Nous avons envoyé l\'OTP à votre numéro \ n Veuillez saisir l\'OTP</string>
+    <string name="otp_hint">Entrez OTP ici</string>
+    <string name="otp_verify">Vérifier</string>
+    <string name="otp_reenter_mobile">Entrez à nouveau le numéro de mobile</string>
+    <string name="otp_send_otp">Envoyer OTP</string>
+
+    <!-- Add New Experience Bottom Sheet -->
+    <string name="add_experience_new_experience">Nouvelle expérience</string>
+    <string name="add_experience_title">Titre</string>
+    <string name="add_experience_employment_type">Type d\'emploi</string>
+    <string name="add_experience_location">Emplacement</string>
+    <string name="add_experience_start_date">Date de début</string>
+    <string name="add_experience_end_date">Date de fin</string>
+    <string name="add_experience_currently_working">Travaille actuellement ici</string>
+
+    <!-- Generic strings -->
+    <string name="cancel_text">Annuler</string>
+    <string name="save_text">sauvegarder</string>
+    <string name="add_more_text">Ajouter plus</string>
+    <string name="verified_text">Vérifié</string>
+    <string name="tags_text">Tags de l\'utilisateur</string>
+    <string name="about_me_text">À propos de moi de l\'utilisateur</string>
+    <string name="to_be_filled_from_profile_data">À remplir à partir des données de profil</string>
 </resources>

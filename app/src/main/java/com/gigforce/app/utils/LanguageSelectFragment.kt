@@ -1,4 +1,4 @@
-package com.gigforce.app.modules.auth.utils
+package com.gigforce.app.utils
 
 //import com.franmontiel.localechanger.sample.SampleApplication.SUPPORTED_LOCALES
 

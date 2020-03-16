@@ -1,29 +1,47 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">ਗਿਗਫੋਰਸ</string>
+    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">ਹੈਲੋ ਖਾਲੀ ਭਾਗ</string>
     <string name="title_activity_profile">ਪਰੋਫਾਈਲ ਕਿਰਿਆ</string>
+
     <string name="intro_slide1_title">ਗਿਗਫੋਰਸ ਵਿੱਚ ਤੁਹਾਡਾ ਸਵਾਗਤ ਹੈ</string>
     <string name="intro_slide1_subtitle">ਸਿੱਖੋ. ਕਮਾਓ. ਅਨੰਦ ਲਓ.</string>
+
     <string name="intro_slide2_title">ਕੰਮ ਹੁੰਦਾ ਹੈ</string>
     <string name="intro_slide2_subtitle">ਜਦੋਂ ਕੰਮ ਹੁੰਦਾ ਹੈ ਤਾਂ ਸੂਚਿਤ ਕਰੋ</string>
+
     <string name="intro_slide3_title">ਕਾਰਜ ਅਤੇ ਨਿਰਧਾਰਤ ਕਰੋ</string>
     <string name="intro_slide3_subtitle">ਕੰਮ ਕਰੋ ਅਤੇ ਉਹਨਾਂ ਨੂੰ ਕਾਲਜੀਆਂ ਨੂੰ ਦਿਓ!</string>
+
     <string name="ob_slide1_title">ਬੋਰਡਿੰਗ</string>
     <string name="ob_slide1_subtitle">ਕਿਵੇਂ - 1</string>
+
     <string name="ob_slide2_title">ਬੋਰਡਿੰਗ</string>
     <string name="ob_slide2_subtitle">ਕਿਵੇਂ - 2</string>
+
     <string name="ob_slide3_title">ਬੋਰਡਿੰਗ</string>
     <string name="ob_slide3_subtitle">ਕਿਵੇਂ - 3</string>
+    <!--
+    This string is used for square devices and overridden by hello_world in
+    values-round/strings.xml for round devices.
+    -->
     <string name="hello_world">ਹੈਲੋ ਵਰਗ ਵਰਲਡ!</string>
+    <!-- Preference Titles -->
     <string name="messages_header">ਸੁਨੇਹੇ</string>
     <string name="sync_header">ਸਿੰਕ</string>
+
+    <!-- Messages Preferences -->
     <string name="signature_title">ਤੁਹਾਡੇ ਦਸਤਖਤ</string>
     <string name="reply_title">ਮੂਲ ਜਵਾਬ ਕਾਰਵਾਈ</string>
+
+    <!-- Sync Preferences -->
     <string name="sync_title">ਸਮੇਂ ਸਮੇਂ ਤੇ ਈਮੇਲ ਸਿੰਕ ਕਰੋ</string>
     <string name="attachment_title">ਆਉਣ ਵਾਲੇ ਨੱਥੀ ਡਾ Downloadਨਲੋਡ ਕਰੋ</string>
-    <string name="attachment_summary_on">ਆਉਣ ਵਾਲੀਆਂ ਈਮੇਲਾਂ ਲਈ ਅਟੈਚਮੈਂਟ ਆਟੋਮੈਟਿਕਲੀ ਡਾਉਨਲੋਡ ਕਰੋ</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails
+</string>
     <string name="attachment_summary_off">ਸਿਰਫ ਅਟੈਚਮੈਂਟਾਂ ਨੂੰ ਡਾਉਨਲੋਡ ਕਰੋ ਜਦੋਂ ਹੱਥੀਂ ਬੇਨਤੀ ਕੀਤੀ ਜਾਵੇ</string>
+
+    <!-- Profile main expanded page -->
     <string name="rating_text">ਰੇਟਿੰਗ</string>
     <string name="tasks_done_text">ਕੰਮ ਪੂਰਾ</string>
     <string name="connections_text">ਕੁਨੈਕਸ਼ਨ</string>
@@ -32,46 +50,107 @@
     <string name="education_card_content_placeholder">ਵਿਦਿਆ ਦੀ ਸਮਗਰੀ ਇਥੇ ਰੱਖੀ ਜਾਏਗੀ</string>
     <string name="view_more_text">ਹੋਰ ਵੇਖੋ</string>
     <string name="empty_dash_string">-</string>
+    <string name="about_card_about_text">ਮੇਰੇ ਬਾਰੇ ਵਿੱਚ</string>
+    <string name="about_card_content_placeholder">ਮੇਰੇ ਬਾਰੇ ਸਮਗਰੀ ਇੱਥੇ ਰੱਖੀ ਜਾਏਗੀ</string>
+    <string name="experience_card_experience_text">ਤਜਰਬਾ</string>
+
+    <!-- Profile experience expanded page -->
+    <string name="experience_expanded_add_experience_text">ਤਜਰਬਾ ਸ਼ਾਮਲ ਕਰੋ</string>
+
+    <!-- Profile education expanded page -->
     <string name="education_expanded_Education_text">ਸਿੱਖਿਆ</string>
-    <string name="education_expanded_to_be_filled_from_profile_data">ਪ੍ਰੋਫਾਈਲ ਡੇਟਾ ਤੋਂ ਭਰਿਆ ਜਾਏ</string>
     <string name="education_expanded_skills_text">ਹੁਨਰ</string>
     <string name="education_expanded_achievements_text">ਪ੍ਰਾਪਤੀਆਂ</string>
-    <string name="education_expanded_add_education_text">#ERROR!</string>
-    <string name="education_expanded_add_skill_text">#ERROR!</string>
-    <string name="education_expanded_add_achievement_text">#ERROR!</string>
+    <string name="education_expanded_add_education_text">ਸਿੱਖਿਆ ਸ਼ਾਮਲ ਕਰੋ</string>
+    <string name="education_expanded_add_skill_text">ਹੁਨਰ ਸ਼ਾਮਲ ਕਰੋ</string>
+    <string name="education_expanded_add_achievement_text">ਪ੍ਰਾਪਤੀ ਸ਼ਾਮਲ ਕਰੋ</string>
     <string name="education_expanded_user_name">ਉਪਭੋਗਤਾ ਨਾਮ</string>
     <string name="nav_education_text">ਸਿੱਖਿਆ</string>
     <string name="nav_about_text">ਮੇਰੇ ਬਾਰੇ ਵਿੱਚ</string>
     <string name="nav_gigs_text">Gigs</string>
     <string name="nav_experience_text">ਤਜਰਬਾ</string>
+
+    <!-- Add New Skill Bottom Sheet -->
     <string name="add_skill_sheet_new_skill">ਨਵਾਂ ਹੁਨਰ</string>
     <string name="add_skill_sheet_category">ਸ਼੍ਰੇਣੀ</string>
     <string name="add_skill_sheet_skill_name">ਹੁਨਰ ਦਾ ਨਾਮ</string>
+
+    <!-- Add New Achievement Bottom Sheet -->
     <string name="add_achievement_sheet_new_achievement">ਨਵੀਂ ਪ੍ਰਾਪਤੀ</string>
     <string name="add_achievement_sheet_title">ਸਿਰਲੇਖ</string>
     <string name="add_achievement_sheet_issuing_authority">ਅਧਿਕਾਰ ਪੱਤਰ ਜਾਰੀ ਕਰਨਾ</string>
     <string name="add_achievement_sheet_location">ਟਿਕਾਣਾ</string>
     <string name="add_achievement_sheet_year">ਸਾਲ *</string>
+
+    <!-- Add New Education Bottom Sheet -->
     <string name="add_education_sheet_new_education">ਨਵੀਂ ਸਿੱਖਿਆ</string>
     <string name="add_education_sheet_institution">ਸੰਸਥਾ</string>
     <string name="add_education_sheet_course">ਕੋਰਸ</string>
     <string name="add_education_sheet_degree">ਡਿਗਰੀ</string>
     <string name="add_education_sheet_start_year">ਸ਼ੁਰੂਆਤ ਦਾ ਸਾਲ *</string>
     <string name="add_education_sheet_end_year">ਅੰਤ ਦਾ ਸਾਲ *</string>
-    <string name="cancel_text">ਰੱਦ ਕਰੋ</string>
-    <string name="save_text">ਸੇਵ</string>
-    <string name="add_more_text">#ERROR!</string>
-    <string name="verified_text">ਪ੍ਰਮਾਣਿਤ</string>
-    <string name="tags_text">ਯੂਜ਼ਰ ਦੀਆਂ ਟੈਗਸ</string>
-    <string name="about_me_text">ਮੇਰੇ ਬਾਰੇ</string>
+
+    <!-- Add New Contact Bottom Sheet -->
+    <string name="add_contact_new_contact">ਨਵਾਂ ਸੰਪਰਕ</string>
+    <string name="add_contact_phone">ਫੋਨ</string>
+    <string name="add_contact_email">ਈ - ਮੇਲ</string>
+
+    <!-- About expanded page -->
+    <string name="about_expanded_bio_text">ਬਾਇਓ</string>
+    <string name="about_expanded_language_text">ਭਾਸ਼ਾ ਜਾਣੀ ਜਾਂਦੀ ਹੈ</string>
+    <string name="about_expanded_add_language_text">ਭਾਸ਼ਾ ਸ਼ਾਮਲ ਕਰੋ</string>
+    <string name="about_expanded_contact_text">ਸੰਪਰਕ ਵੇਰਵੇ</string>
+    <string name="about_expanded_add_contact_text">ਸੰਪਰਕ ਸ਼ਾਮਲ ਕਰੋ</string>
+
+    <!-- Add New Language Bottom Sheet -->
+    <string name="add_language_new_language">ਨਵੀਂ ਭਾਸ਼ਾ</string>
+    <string name="add_language_name">ਨਾਮ</string>
+    <string name="add_language_speaking_level">ਬੋਲਣ ਦਾ ਪੱਧਰ</string>
+    <string name="add_language_writing_level">ਲਿਖਣ ਦਾ ਪੱਧਰ</string>
+
+    <!--language select-->
     <string name="title_lang">ਭਾਸ਼ਾ ਚੁਣੋ</string>
+
+
+    <!--login fragment-->
     <string name="title_login">ਕਿਰਪਾ ਕਰਕੇ ਲੌਗਇਨ ਕਰੋ</string>
     <string name="mobile_login">ਆਪਣਾ ਮੋਬਾਈਲ ਨੰਬਰ ਦਰਜ ਕਰੋ</string>
     <string name="confirm_login">ਪੁਸ਼ਟੀ ਕਰੋ</string>
+
+    <!--video resume-->
     <string name="guidelines_video_resume">ਦਿਸ਼ਾ ਨਿਰਦੇਸ਼</string>
     <string name="button_upload_video">ਅਪਲੋਡ</string>
     <string name="title_video_resume">ਵੀਡੀਓ ਮੁੜ ਚਾਲੂ</string>
     <string name="why_video_resume">ਵੀਡੀਓ ਰੈਜ਼ਿ ?ਮੇ ਇੰਪ ਕਿਉਂ ਹੈ?</string>
     <string name="desc1_video_resume">ਆਓ ਤੁਹਾਡੇ ਬਾਰੇ ਹੋਰ ਜਾਣੀਏ</string>
     <string name="desc2_video_resume">ਕੋਈ ਰੈਜ਼ਿ .ਮੇ ਅਤੇ ਕੋਈ ਇੰਟਰਵਿ. ਨਹੀਂ</string>
+
+    <!-- mobile otp -->
+    <string name="otp_sign_in_up">ਸਾਈਨਇਨ / ਸਾਈਨਅਪ</string>
+    <string name="otp_enter_mobile_num">ਆਪਣਾ ਮੋਬਾਈਲ ਨੰਬਰ ਦਰਜ ਕਰੋ</string>
+    <string name="otp_will_send_otp">ਅਸੀਂ ਤੁਹਾਨੂੰ ਇਕ ਟਾਈਮ ਪਾਸਵਰਡ (ਓਟੀਪੀ) ਭੇਜਾਂਗੇ</string>
+    <string name="otp_verify_account">ਖਾਤਾ ਪ੍ਰਮਾਣਿਤ ਕਰੋ</string>
+    <string name="otp_sent_otp_account">ਅਸੀਂ ਤੁਹਾਡੇ ਨੰਬਰ \'ਤੇ ਓਟੀਪੀ ਭੇਜਿਆ ਹੈ Please n ਕਿਰਪਾ ਕਰਕੇ ਓਟੀਪੀ ਦਾਖਲ ਕਰੋ</string>
+    <string name="otp_hint">ਇੱਥੇ ਓਟੀਪੀ ਦਰਜ ਕਰੋ</string>
+    <string name="otp_verify">ਪੜਤਾਲ ਕਰੋ</string>
+    <string name="otp_reenter_mobile">ਮੋਬਾਈਲ ਨੰਬਰ ਦੁਬਾਰਾ ਦਰਜ ਕਰੋ</string>
+    <string name="otp_send_otp">OTP ਭੇਜੋ</string>
+
+    <!-- Add New Experience Bottom Sheet -->
+    <string name="add_experience_new_experience">ਨਵਾਂ ਤਜਰਬਾ</string>
+    <string name="add_experience_title">ਸਿਰਲੇਖ</string>
+    <string name="add_experience_employment_type">ਰੁਜ਼ਗਾਰ ਦੀ ਕਿਸਮ</string>
+    <string name="add_experience_location">ਟਿਕਾਣਾ</string>
+    <string name="add_experience_start_date">ਤਾਰੀਖ ਸ਼ੁਰੂ</string>
+    <string name="add_experience_end_date">ਅੰਤ ਦੀ ਮਿਤੀ</string>
+    <string name="add_experience_currently_working">ਵਰਤਮਾਨ ਵਿੱਚ ਇੱਥੇ ਕੰਮ ਕਰ ਰਿਹਾ ਹੈ</string>
+
+    <!-- Generic strings -->
+    <string name="cancel_text">ਰੱਦ ਕਰੋ</string>
+    <string name="save_text">ਸੇਵ</string>
+    <string name="add_more_text">ਹੋਰ ਸ਼ਾਮਲ ਕਰੋ</string>
+    <string name="verified_text">ਪ੍ਰਮਾਣਿਤ</string>
+    <string name="tags_text">ਯੂਜ਼ਰ ਦੀਆਂ ਟੈਗਸ</string>
+    <string name="about_me_text">ਮੇਰੇ ਬਾਰੇ</string>
+    <string name="to_be_filled_from_profile_data">ਪ੍ਰੋਫਾਈਲ ਡੇਟਾ ਤੋਂ ਭਰਿਆ ਜਾਏ</string>
 </resources>
