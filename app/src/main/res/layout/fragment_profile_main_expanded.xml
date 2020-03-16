@@ -291,15 +291,21 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
+            <com.google.android.material.chip.ChipGroup
                 android:id="@+id/main_tags"
-                android:layout_width="347dp"
-                android:layout_height="21dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:text="@string/tags_text"
+                android:layout_marginTop="12dp"
+                android:minWidth="347dp"
+                android:minHeight="21dp"
+                app:layout_constraintEnd_toStartOf="@+id/add_tags_button"
+                app:layout_constraintHorizontal_bias="0.031"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/main_expanded_user_name"></TextView>
+                app:layout_constraintTop_toBottomOf="@+id/main_expanded_user_name">
+
+            </com.google.android.material.chip.ChipGroup>
+
             <TextView
                 android:id="@+id/user_about_me"
                 android:layout_width="match_parent"
@@ -317,9 +323,9 @@
                 android:layout_width="32dp"
                 android:layout_height="21dp"
                 android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
                 android:background="@android:color/white"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/main_tags"
                 app:layout_constraintTop_toBottomOf="@+id/main_expanded_user_name"
                 app:srcCompat="@drawable/ic_edit" />
 

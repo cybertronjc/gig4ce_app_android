@@ -13,6 +13,7 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
 import com.gigforce.app.utils.GlideApp
+import com.google.android.material.chip.Chip
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import kotlinx.android.synthetic.main.fragment_profile_education_expanded.view.*
@@ -63,7 +64,10 @@ class ProfileFragment : Fragment() {
 
             var tagsString = ""
             for (tag in profile.Tags!!) {
-                tagsString += "$tag  "
+                var chip = Chip(this.context)
+                chip.text = " $tag "
+                chip.isClickable = false
+                layout.main_tags.addView(chip)
             }
             //layout.main_tags.text = tagsString
 
