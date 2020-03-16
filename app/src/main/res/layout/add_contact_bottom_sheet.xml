@@ -25,7 +25,8 @@
         android:hint="@string/add_contact_phone"
         android:inputType="phone"
         app:layout_constraintStart_toStartOf="@+id/textView22"
-        app:layout_constraintTop_toBottomOf="@+id/textView22" />
+        app:layout_constraintTop_toBottomOf="@+id/textView22"
+        android:importantForAutofill="no" />
 
     <EditText
         android:id="@+id/add_contact_email"
@@ -36,7 +37,8 @@
         android:hint="@string/add_contact_email"
         android:inputType="textEmailAddress"
         app:layout_constraintStart_toStartOf="@+id/add_contact_phone"
-        app:layout_constraintTop_toBottomOf="@+id/add_contact_phone" />
+        app:layout_constraintTop_toBottomOf="@+id/add_contact_phone"
+        android:importantForAutofill="no" />
 
     <TextView
         android:id="@+id/add_contact_add_more"
