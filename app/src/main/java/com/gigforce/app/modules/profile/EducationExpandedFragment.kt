@@ -15,6 +15,7 @@ import com.gigforce.app.R
 import com.gigforce.app.utils.GlideApp
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import kotlinx.android.synthetic.main.fragment_profile_about_expanded.view.*
 import kotlinx.android.synthetic.main.fragment_profile_education_expanded.view.*
 import kotlinx.android.synthetic.main.fragment_profile_main_expanded.view.*
 import java.text.SimpleDateFormat
@@ -42,7 +43,6 @@ class EducationExpandedFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         storage = FirebaseStorage.getInstance()
-        loadImage("ysharma.jpg")
 
         viewModel = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
 
@@ -74,13 +74,16 @@ class EducationExpandedFragment: Fragment() {
             }
             layout.education_exp_achievement_content.text = achievementString
 
+            layout.education_top_profile.userName = profile.name
+            layout.education_top_profile.imageName = "ysharma.jpg"
+
             Log.d("ProfileFragment", profile.rating.toString())
         })
 
         // back page navigation
-        layout.education_expanded_back_button.setOnClickListener{
-            this.findNavController().navigate(R.id.profileFragment)
-        }
+//        layout.education_expanded_back_button.setOnClickListener{
+//            this.findNavController().navigate(R.id.profileFragment)
+//        }
 
         // Navigate to bottom sheets
         layout.add_skill_button.setOnClickListener{
@@ -100,13 +103,5 @@ class EducationExpandedFragment: Fragment() {
         layout.education_nav_to_experience.setOnClickListener{
             this.findNavController().navigate(R.id.experienceExpandedFragment)
         }
-    }
-
-    private fun loadImage(Path: String) {
-        val profilePicRef: StorageReference = storage.reference.child("profile_pics").child(Path)
-        GlideApp.with(this.context!!)
-            .load(profilePicRef)
-            .apply(RequestOptions().circleCrop())
-            .into(layout.education_profile_avatar)
     }
 }

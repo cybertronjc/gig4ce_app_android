@@ -14,7 +14,6 @@ import com.gigforce.app.utils.GlideApp
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import kotlinx.android.synthetic.main.fragment_profile_about_expanded.view.*
-import kotlinx.android.synthetic.main.fragment_profile_about_expanded.view.education_profile_avatar
 import kotlinx.android.synthetic.main.fragment_profile_about_expanded.view.profile_nav_to_education
 import kotlinx.android.synthetic.main.fragment_profile_education_expanded.view.*
 import kotlinx.android.synthetic.main.fragment_profile_main_expanded.view.*
@@ -44,7 +43,6 @@ class AboutExpandedFragment: Fragment() {
         storage = FirebaseStorage.getInstance()
         viewModel = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
 
-        loadImage("ysharma.jpg")
 
         viewModel.userProfileData.observe(this, Observer { profile ->
             layout.about_exp_about_content.text = profile.bio
@@ -63,6 +61,9 @@ class AboutExpandedFragment: Fragment() {
                 contactString += "email: " + contact.email + "\n\n"
             }
             layout.about_expanded_contact_text.text = contactString
+
+            layout.about_top_profile.userName = profile.name
+            layout.about_top_profile.imageName = "ysharma.jpg"
         })
 
         layout.add_language_button.setOnClickListener{
@@ -73,9 +74,9 @@ class AboutExpandedFragment: Fragment() {
             this.findNavController().navigate(R.id.addContactBottomSheetFragment)
         }
 
-        layout.about_expanded_back_button.setOnClickListener{
-            this.findNavController().navigate(R.id.profileFragment)
-        }
+//        layout.about_expanded_back_button.setOnClickListener{
+//            this.findNavController().navigate(R.id.profileFragment)
+//        }
 
         layout.profile_nav_to_education.setOnClickListener{
             this.findNavController().navigate(R.id.educationExpandedFragment)
@@ -85,14 +86,7 @@ class AboutExpandedFragment: Fragment() {
             this.findNavController().navigate(R.id.experienceExpandedFragment)
         }
 
-    }
 
-    private fun loadImage(Path: String) {
-        val profilePicRef: StorageReference = storage.reference.child("profile_pics").child(Path)
-        GlideApp.with(this.context!!)
-            .load(profilePicRef)
-            .apply(RequestOptions().circleCrop())
-            .into(layout.education_profile_avatar)
     }
 
 }

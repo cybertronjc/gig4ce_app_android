@@ -40,8 +40,6 @@ class ExperienceExpandedFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        loadImage("ysharma.jpg")
-
         viewModel = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
 
         viewModel.userProfileData.observe(this, Observer { profile ->
@@ -54,6 +52,9 @@ class ExperienceExpandedFragment: Fragment() {
                 experienceString += format.format(exp.startDate!!) + "-" + format.format(exp.endDate!!) + "\n\n"
             }
             layout.experience_exp_experience_content.text = experienceString
+
+            layout.experience_top_profile.imageName = "ysharma.jpg"
+            layout.experience_top_profile.userName = profile.name
         })
 
         layout.add_experience_button.setOnClickListener {
@@ -68,16 +69,9 @@ class ExperienceExpandedFragment: Fragment() {
             findNavController().navigate(R.id.educationExpandedFragment)
         }
 
-        layout.experience_expanded_back_button.setOnClickListener {
-            findNavController().navigate(R.id.profileFragment)
-        }
+//        layout.experience_expanded_back_button.setOnClickListener {
+//            findNavController().navigate(R.id.profileFragment)
+//        }
     }
 
-    private fun loadImage(Path: String) {
-        val profilePicRef: StorageReference = storage.reference.child("profile_pics").child(Path)
-        GlideApp.with(this.context!!)
-            .load(profilePicRef)
-            .apply(RequestOptions().circleCrop())
-            .into(layout.experience_profile_avatar)
-    }
 }
