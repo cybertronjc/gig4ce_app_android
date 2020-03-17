@@ -44,24 +44,6 @@
             app:destination="@id/homeScreenIcons" />
     </fragment>
     <fragment
-        android:id="@+id/loginFragment"
-        android:name="com.gigforce.app.modules.auth.ui.main.LoginFragment"
-        android:label="LoginFragment" >
-        <action
-            android:id="@+id/action_loginFragment_to_confirmOtpFragment"
-            app:destination="@id/confirmOtpFragment"
-            app:enterAnim="@android:anim/slide_in_left"
-            app:exitAnim="@android:anim/slide_out_right"
-            app:popEnterAnim="@android:anim/slide_in_left"
-            app:popExitAnim="@android:anim/slide_out_right"
-            app:popUpTo="@id/loginFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/confirmOtpFragment"
-        android:name="com.gigforce.app.modules.auth.ui.main.ConfirmOtpFragment"
-        android:label="fragment_confirm_otp"
-        tools:layout="@layout/fragment_confirm_otp" />
-    <fragment
         android:id="@+id/profileFragment"
         android:name="com.gigforce.app.modules.profile.ProfileFragment"
         android:label="profile_fragment"

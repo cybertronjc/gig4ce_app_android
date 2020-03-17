@@ -7,10 +7,20 @@
     android:layout_height="match_parent">
 
     <TextView
+        android:id="@+id/textView28"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="49dp"
+        android:text="@string/mobile_verified"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView26" />
+
+    <TextView
         android:id="@+id/textView26"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="33dp"
         android:text="@string/otp_verify_account"
         android:textSize="24sp"
         android:textStyle="bold"
@@ -22,17 +32,17 @@
         android:id="@+id/textView29"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="67dp"
         android:text="@string/otp_sent_otp_account"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView26" />
+        app:layout_constraintTop_toBottomOf="@+id/textView28" />
 
     <EditText
         android:id="@+id/otp_string"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="61dp"
         android:ems="10"
         android:hint="@string/otp_hint"
         android:inputType="number"
@@ -42,9 +52,9 @@
 
     <Button
         android:id="@+id/verify_otp_button"
-        android:layout_width="95dp"
-        android:layout_height="35dp"
-        android:layout_marginTop="24dp"
+        android:layout_width="256dp"
+        android:layout_height="36dp"
+        android:layout_marginTop="48dp"
         android:background="@drawable/bg_button"
         android:text="@string/otp_verify"
         android:textColor="@android:color/white"
@@ -53,12 +63,46 @@
         app:layout_constraintTop_toBottomOf="@+id/otp_string" />
 
     <TextView
+        android:id="@+id/otpnotcorrect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/verify_otp_button"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="196dp"
+        android:text="@string/otp_notcorrect"
+        android:textSize="12sp"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/otp_string" />
+
+    <TextView
+        android:id="@+id/otptimertv"
+        android:layout_width="wrap_content"
+        android:layout_height="15dp"
+        android:layout_above="@id/otp_string"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="270dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="50dp"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/otp_string" />
+
+    <TextView
         android:id="@+id/reenter_mobile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
+        android:layout_marginTop="187dp"
+        android:layout_marginBottom="49dp"
         android:text="@string/otp_reenter_mobile"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/verify_otp_button" />
 </androidx.constraintlayout.widget.ConstraintLayout>

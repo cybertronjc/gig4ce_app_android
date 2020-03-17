@@ -1,16 +1,18 @@
 package com.gigforce.app.modules.auth.ui.main
 
 import android.os.Bundle
-import android.util.Log
+import android.os.CountDownTimer
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import com.gigforce.app.R
-import kotlinx.android.synthetic.main.fragment_confirm_otp.*
+import com.gigforce.app.modules.auth.ui.main.LoginViewModel.Companion.STATE_SIGNIN_FAILED
+import com.google.firebase.auth.PhoneAuthProvider
 import kotlinx.android.synthetic.main.otp_verification.view.*
 
 class VerifyOTP: Fragment() {
@@ -22,11 +24,32 @@ class VerifyOTP: Fragment() {
     private var verificationId: String = ""
     lateinit var layout: View
     lateinit var viewModel: LoginViewModel
+    //private lateinit var mTimerTextView: View
+    var otpresentcounter=0;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             verificationId = it.getString("verificationId")!!
+      //      mTimerTextView = TextView(view?.context);
+            //object : CountDownTimer(30000, 1000) {
+            object : CountDownTimer(5000, 1000) {
+                override fun onTick(millisUntilFinished: Long) {
+                    layout.otptimertv.text = (millisUntilFinished / 1000).toString() + " s"
+                }
+                override fun onFinish() {
+                    layout.otptimertv.text = "resend"
+                    if(otpresentcounter>=2){
+                        layout.otptimertv.text = "try later!"
+                        Toast.makeText(layout.context, "Too many invalid attempts, Try again later!", Toast.LENGTH_SHORT).show()
+                    }
+                    layout.otptimertv.setOnClickListener{
+                        otpresentcounter++;
+                        Toast.makeText(layout.context, "OTP resent", Toast.LENGTH_SHORT).show()
+                        viewModel.phoneNo?.let { it1 -> viewModel.sendVerificationCode(it1) }
+                    }
+                }
+            }.start()
         }
     }
 
@@ -45,7 +68,12 @@ class VerifyOTP: Fragment() {
         super.onViewCreated(view, savedInstanceState)
         layout.verify_otp_button.setOnClickListener {
             viewModel.verifyPhoneNumberWithCode(layout.otp_string.text.toString())
+            if(viewModel.liveState.value?.equals(STATE_SIGNIN_FAILED)!!){
+                layout.otpnotcorrect.visibility=View.VISIBLE
+                layout.otpnotcorrect.text = "Wrong Password !!";
+            }
             //findNavController().navigate(R.id.homeFragment)
         }
+        layout.reenter_mobile.setOnClickListener { findNavController().navigate(R.id.mobileInput)}
     }
 }

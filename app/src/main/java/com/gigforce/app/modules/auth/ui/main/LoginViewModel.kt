@@ -1,8 +1,10 @@
 package com.gigforce.app.modules.auth.ui.main
 
 import android.app.Activity
+import android.telephony.PhoneNumberUtils
 import android.text.TextUtils
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.FirebaseException
@@ -28,6 +30,7 @@ class LoginViewModel() : ViewModel() {
     var verificationId: String? = null
     var token: PhoneAuthProvider.ForceResendingToken? = null
     var activity: Activity? = null
+    var phoneNo: String? = null
 
     init {
         FirebaseAuth.getInstance().currentUser .let {
@@ -57,14 +60,6 @@ class LoginViewModel() : ViewModel() {
         }
     }
 
-    fun validatePhoneNumber(phoneNumber:String): Boolean {
-        if (TextUtils.isEmpty(phoneNumber)) {
-            // fieldPhoneNumber.error = "Invalid phone number."
-            return false
-        }
-        return true
-    }
-
     fun verifyPhoneNumberWithCode(code: String) {
         // [START verify_with_code]
         Log.d("LoginViewModel", "code ->" + code.toString())
@@ -75,7 +70,7 @@ class LoginViewModel() : ViewModel() {
     }
 
     fun sendVerificationCode(phoneNumber: String) {
-        Log.d(TAG, "Sending phone number for verification")
+        Log.d(TAG, "Sending phone number for verification>>>$phoneNumber")
         PhoneAuthProvider.getInstance().verifyPhoneNumber(
             phoneNumber, // Phone number to verify
             60, // Timeout duration
