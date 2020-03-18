@@ -48,9 +48,9 @@ class ChatsAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             setProfileImage()
         }
 
-        fun bind(data:Any) {
-
-        }
+//        fun bind(data:Any) {
+//
+//        }
 
         fun setProfileImage(){
             val imageView = view.findViewById<ImageView>(R.id.img_obprofile)

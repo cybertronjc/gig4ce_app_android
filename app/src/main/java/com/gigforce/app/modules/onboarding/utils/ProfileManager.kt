@@ -18,11 +18,10 @@ class ProfileManager(val id: String) {
     val profileDoc:LiveData<Profile>
         get() = _profileDoc
 
-    private lateinit var profileDocRef: DocumentReference
+    private var profileDocRef: DocumentReference =
+        FirebaseFirestore.getInstance().collection("Profiles").document(id)
 
     init {
-        profileDocRef = FirebaseFirestore.getInstance().collection("Profiles").document(id)
-
         profileDocRef
             .addSnapshotListener { snapshot, exception ->
                 if(exception == null) {
@@ -34,11 +33,11 @@ class ProfileManager(val id: String) {
     }
 
     // update value
-    fun updateValue(key:String, value:Any) {
-        //TODO: update value to firestore
-    }
+//    fun updateValue(key:String, value:Any) {
+//        //TODO: update value to firestore
+//    }
 
     fun updateName(value:String) {
-        updateValue("name", value)
+//        updateValue("name", value)
     }
 }

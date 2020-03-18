@@ -126,12 +126,14 @@
     <string name="desc2_video_resume">no resume and no interview</string>
 
     <!-- mobile otp -->
-    <string name="otp_sign_in_up">SignIn/SignUp</string>
-    <string name="otp_enter_mobile_num">Enter Your Mobile Number</string>
+    <string name="otp_sign_in_up">Login</string>
+    <string name="otp_enter_mobile_num">Enter Mobile Number</string>
     <string name="otp_will_send_otp">We will send you One Time Password (OTP)</string>
     <string name="otp_verify_account">Verify Account</string>
-    <string name="otp_sent_otp_account">We have send the OTP to your number \n Please enter the OTP</string>
-    <string name="otp_hint">Enter OTP here</string>
+    <string name="mobile_verified">Mobile verification success!</string>
+    <string name="otp_notcorrect">Wrong Password !!</string>
+    <string name="otp_sent_otp_account">We have sent the OTP to your number \nPlease enter the OTP</string>
+    <string name="otp_hint">_ _ _ _</string>
     <string name="otp_verify">Verify</string>
     <string name="otp_reenter_mobile">Re-enter mobile number</string>
     <string name="otp_send_otp">Send OTP</string>

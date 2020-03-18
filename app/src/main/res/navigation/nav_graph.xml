@@ -40,30 +40,8 @@
             android:id="@+id/action_homeFragment_to_languageSelectFragment"
             app:destination="@id/languageSelectFragment" />
         <action
-            android:id="@+id/action_homeFragment_to_profileFragment"
-            app:destination="@id/profileFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/loginFragment"
-        android:name="com.gigforce.app.modules.auth.ui.main.LoginFragment"
-        android:label="LoginFragment" >
-        <action
-            android:id="@+id/action_loginFragment_to_confirmOtpFragment"
-            app:destination="@id/confirmOtpFragment"
-            app:enterAnim="@android:anim/slide_in_left"
-            app:exitAnim="@android:anim/slide_out_right"
-            app:popEnterAnim="@android:anim/slide_in_left"
-            app:popExitAnim="@android:anim/slide_out_right"
-            app:popUpTo="@id/loginFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/confirmOtpFragment"
-        android:name="com.gigforce.app.modules.auth.ui.main.ConfirmOtpFragment"
-        android:label="fragment_confirm_otp"
-        tools:layout="@layout/fragment_confirm_otp" >
-        <action
-            android:id="@+id/action_confirmOtpFragment_to_profileFragment"
-            app:destination="@id/profileFragment" />
+            android:id="@+id/action_homeFragment_to_homeScreenIcons"
+            app:destination="@id/homeScreenIcons" />
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
@@ -131,14 +109,7 @@
         android:name="com.gigforce.app.modules.profile.AddEducationBottomSheetFragment"
         android:label="AddEducationBottomSheetFragment"
         tools:layout="@layout/add_education_bottom_sheet" />
-    <fragment
-        android:id="@+id/gotoOB"
-        android:name="com.gigforce.app.modules.onboarding.UserInfoFragment"
-        android:label="GoToOB" />
-    <fragment
-        android:id="@+id/goToOBIntroFragment"
-        android:name="com.gigforce.app.modules.onboarding.GoToOBIntroFragment"
-        android:label="GoToOBIntroFragment" />
+
     <fragment
         android:id="@+id/createInitProfile"
         android:name="com.gigforce.app.modules.onboarding.CreateInitProfile"
@@ -149,8 +120,8 @@
         android:label="fragment_intro_slides"
         tools:layout="@layout/fragment_intro_slides" >
         <action
-            android:id="@+id/action_introSlidesFragment_to_loginFragment"
-            app:destination="@id/loginFragment" />
+            android:id="@+id/action_introSlidesFragment_to_mobileInput"
+            app:destination="@id/mobileInput" />
     </fragment>
     <fragment
         android:id="@+id/OBSlidesFragment"
@@ -162,7 +133,7 @@
     </fragment>
     <fragment
         android:id="@+id/languageSelectFragment"
-        android:name="com.gigforce.app.modules.auth.utils.LanguageSelectFragment"
+        android:name="com.gigforce.app.utils.LanguageSelectFragment"
         android:label="LanguageSelectFragment" >
         <action
             android:id="@+id/action_languageSelectFragment_to_introSlidesFragment"
@@ -171,9 +142,6 @@
             android:id="@+id/action_languageSelectFragment_to_videoResumeFragment"
             app:destination="@id/videoResumeFragment" />
 -->
-        <action
-            android:id="@+id/action_languageSelectFragment_to_mobileInput"
-            app:destination="@id/mobileInput" />
     </fragment>
     <fragment
         android:id="@+id/videoResumeFragment"
@@ -197,7 +165,23 @@
             app:argType="string"
             android:defaultValue='""' />
         <action
-            android:id="@+id/action_verifyOTP_to_profileFragment"
+            android:id="@+id/action_verifyOTP_to_homeScreenIcons"
+            app:destination="@id/homeScreenIcons" />
+    </fragment>
+    <fragment
+        android:id="@+id/homeScreenFragment"
+        android:name="com.gigforce.app.modules.homescreen.HomeScreenFragment"
+        android:label="HomeScreenFragment" >
+        <action
+            android:id="@+id/action_homeScreenFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/homeScreenIcons"
+        android:name="com.gigforce.app.modules.homescreen.HomeScreenIcons"
+        android:label="HomeScreenIcons" >
+        <action
+            android:id="@+id/action_homeScreenIcons_to_profileFragment"
             app:destination="@id/profileFragment" />
     </fragment>
     <fragment

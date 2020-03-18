@@ -11,7 +11,7 @@ private const val SWIPE_VELOCITY_THRESHOLD = 100
 class OnSwipeTouchListener(val context:Context, val swipeListner:SimpleSwipeGestureListener)
     :View.OnTouchListener
 {
-    lateinit final var gestureDetector: GestureDetector
+    final var gestureDetector: GestureDetector
 
     init {
         gestureDetector = GestureDetector(context, GestureListener(swipeListner));

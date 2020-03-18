@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/content_home"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="5dp"
+    android:fitsSystemWindows="true"
+    android:textAlignment="viewEnd">
+
+    <com.gigforce.app.modules.home.TopProfileBar
+        android:id="@+id/topbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="5dp"
+        app:subtitle="4 stars"
+        app:title="Giger"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="60dp"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+
+    <androidx.cardview.widget.CardView
+            android:id="@+id/cardviewkyc"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginTop="90dp"
+            android:textAlignment="viewEnd"
+            app:layout_constraintBottom_toTopOf="@id/cardviewvideo"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/text_kyc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="kyc is not done. click here to complete." />
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardviewvideo"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginTop="6dp"
+            app:layout_constraintBottom_toTopOf="@id/gridview"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cardviewkyc"
+            app:layout_constraintVertical_bias="0.701">
+
+            <TextView
+                android:id="@+id/text_kyc_video"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Complete your video resume" />
+        </androidx.cardview.widget.CardView>
+
+        <GridView
+            android:id="@+id/gridview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="5dp"
+            android:gravity="center"
+            android:horizontalSpacing="@dimen/padding_default"
+            android:numColumns="auto_fit"
+            android:padding="@dimen/padding_default"
+            android:verticalSpacing="@dimen/padding_default"
+            app:layout_constraintBottom_toTopOf="@id/pendingPlaceholder"
+            app:layout_constraintTop_toBottomOf="@id/cardviewvideo" />
+
+        <FrameLayout
+            android:id="@+id/pendingPlaceholder"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/gridview">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardviewpending"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginTop="5dp"
+                android:textAlignment="viewEnd"
+                app:layout_constraintBottom_toTopOf="@id/gridview"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:id="@+id/text_pending"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Learning pending" />
+            </androidx.cardview.widget.CardView>
+
+        </FrameLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
