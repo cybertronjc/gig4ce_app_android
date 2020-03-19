@@ -14,7 +14,6 @@ import com.gigforce.app.utils.GlideApp
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import kotlinx.android.synthetic.main.fragment_profile_about_expanded.view.*
-import kotlinx.android.synthetic.main.fragment_profile_about_expanded.view.profile_nav_to_education
 import kotlinx.android.synthetic.main.fragment_profile_education_expanded.view.*
 import kotlinx.android.synthetic.main.fragment_profile_main_expanded.view.*
 import kotlinx.android.synthetic.main.profile_card_background.view.*
@@ -83,15 +82,6 @@ class AboutExpandedFragment: Fragment() {
 //        layout.about_expanded_back_button.setOnClickListener{
 //            this.findNavController().navigate(R.id.profileFragment)
 //        }
-
-        layout.profile_nav_to_education.setOnClickListener{
-            this.findNavController().navigate(R.id.educationExpandedFragment)
-        }
-
-        layout.profile_nav_to_experience.setOnClickListener{
-            this.findNavController().navigate(R.id.experienceExpandedFragment)
-        }
-
 
     }
 

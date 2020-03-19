@@ -15,7 +15,7 @@
         android:layout_marginEnd="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/experience_nav_to_education" />
+        app:layout_constraintTop_toBottomOf="@+id/nav_bar" />
 
     <com.gigforce.app.modules.profile.TopProfileBar
         android:id="@+id/experience_top_profile"
@@ -26,54 +26,15 @@
         app:layout_constraintTop_toTopOf="parent">
     </com.gigforce.app.modules.profile.TopProfileBar>
 
-    <TextView
-        android:id="@+id/experience_nav_to_about"
-        android:layout_width="82dp"
+    <com.gigforce.app.modules.profile.ProfileNavBar
+        android:id="@+id/nav_bar"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/bg_nav"
-        android:minHeight="50dp"
-        android:text="@string/nav_about_text"
-        android:textAlignment="center"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/experience_top_profile" />
-
-    <TextView
-        android:id="@+id/experience_nav_to_education"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/bg_nav"
-        android:minHeight="50dp"
-        android:text="@string/nav_education_text"
-        app:layout_constraintStart_toEndOf="@+id/experience_nav_to_about"
-        app:layout_constraintTop_toBottomOf="@+id/experience_top_profile" />
-
-
-    <TextView
-        android:id="@+id/profile_nav_to_experience"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/bg_nav_color"
-        android:minHeight="50dp"
-        android:text="@string/nav_experience_text"
-        app:layout_constraintStart_toEndOf="@+id/experience_nav_to_education"
-        app:layout_constraintTop_toBottomOf="@+id/experience_top_profile" />
-
-    <TextView
-        android:id="@+id/textView27"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/bg_nav"
-        android:minHeight="50dp"
-        android:text="@string/nav_gigs_text"
-        app:layout_constraintStart_toEndOf="@+id/profile_nav_to_experience"
-        app:layout_constraintTop_toBottomOf="@+id/experience_top_profile" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/experience_top_profile" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

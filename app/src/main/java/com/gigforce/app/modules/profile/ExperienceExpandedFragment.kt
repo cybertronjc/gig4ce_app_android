@@ -64,14 +64,6 @@ class ExperienceExpandedFragment: Fragment() {
             findNavController().navigate(R.id.addExperienceBottomSheet)
         }
 
-        layout.experience_nav_to_about.setOnClickListener{
-            findNavController().navigate(R.id.aboutExpandedFragment)
-        }
-
-        layout.experience_nav_to_education.setOnClickListener{
-            findNavController().navigate(R.id.educationExpandedFragment)
-        }
-
 //        layout.experience_expanded_back_button.setOnClickListener {
 //            findNavController().navigate(R.id.profileFragment)
 //        }
