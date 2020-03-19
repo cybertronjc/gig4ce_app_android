@@ -56,6 +56,14 @@ class MobileInput: Fragment() {
         return true
     }
 
+    private fun doActionOnClick(){
+        var phoneNumber: String = "+91" + layout.otp_mobile_number.text.toString();
+        Log.d("LoginDebug", phoneNumber)
+        validatePhoneNumber(phoneNumber)
+        viewModel.phoneNo = phoneNumber;
+        viewModel.sendVerificationCode(phoneNumber)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -64,14 +72,14 @@ class MobileInput: Fragment() {
         layout.otp_mobile_number.setOnKeyListener(View.OnKeyListener { _, keyCode, event ->
             if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP) {
                 //Perform Code
-                var phoneNumber: String = "+91" + layout.otp_mobile_number.text.toString();
-                Log.d("LoginDebug", phoneNumber)
-                validatePhoneNumber(phoneNumber)
-                viewModel.phoneNo = phoneNumber;
-                viewModel.sendVerificationCode(phoneNumber)
+                doActionOnClick()
             }
             false
         })
+
+        layout.login_button.setOnClickListener{
+            doActionOnClick()
+        }
 
 //        layout.otp_mobile_number.setOnKeyListener(View.OnKeyListener { _, keyCode, event ->
 //            if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP) {
@@ -85,7 +93,7 @@ class MobileInput: Fragment() {
 //        }
 //        )
 
-        layout.send_otp_button.setOnClickListener{
+        layout.login_button.setOnClickListener{
             validatePhoneNumber("+91" + layout.otp_mobile_number.text.toString())
             viewModel.phoneNo = "+91" + layout.otp_mobile_number.text.toString()
             viewModel.sendVerificationCode("+91" +layout.otp_mobile_number.text.toString())

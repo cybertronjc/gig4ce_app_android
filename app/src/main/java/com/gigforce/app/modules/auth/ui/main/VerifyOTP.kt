@@ -15,6 +15,8 @@ import com.gigforce.app.R
 import com.gigforce.app.modules.auth.ui.main.LoginViewModel.Companion.STATE_SIGNIN_FAILED
 import com.google.firebase.auth.PhoneAuthProvider
 import kotlinx.android.synthetic.main.otp_verification.view.*
+import java.util.regex.Matcher
+import java.util.regex.Pattern
 
 class VerifyOTP: Fragment() {
 
@@ -27,6 +29,9 @@ class VerifyOTP: Fragment() {
     lateinit var viewModel: LoginViewModel
     //private lateinit var mTimerTextView: View
     var otpresentcounter=0;
+    private val OTP_NUMBER =
+        Pattern.compile("[0-9]{6}\$")
+    lateinit var match: Matcher;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,7 +44,7 @@ class VerifyOTP: Fragment() {
     }
 
     private fun counterStart(){
-        object : CountDownTimer(5000, 1000) {
+        object : CountDownTimer(30000, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 layout.otptimertv.text = (millisUntilFinished / 1000).toString() + " s"
             }
@@ -67,9 +72,16 @@ class VerifyOTP: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         layout.verify_otp_button.setOnClickListener {
-            viewModel.verifyPhoneNumberWithCode(layout.otp_string.text.toString())
-            if(viewModel.liveState.value?.equals(STATE_SIGNIN_FAILED)!!){
-                layout.otpnotcorrect.visibility=View.VISIBLE
+            val otpIn = layout.otp_string.text;
+            match = OTP_NUMBER.matcher(otpIn)
+            if(match.matches()){
+                viewModel.verifyPhoneNumberWithCode(otpIn.toString())
+            if (viewModel.liveState.value?.equals(STATE_SIGNIN_FAILED)!!) {
+                layout.otpnotcorrect.visibility = View.VISIBLE
+                layout.otpnotcorrect.text = "Wrong Password !!";
+            }}
+            else {
+                layout.otpnotcorrect.visibility = View.VISIBLE
                 layout.otpnotcorrect.text = "Wrong Password !!";
             }
             //findNavController().navigate(R.id.homeFragment)

@@ -7,24 +7,11 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/textView28"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="49dp"
-        android:text="@string/mobile_verified"
-        android:textColor="#3a3936"
-        android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView26" />
-
-    <TextView
         android:id="@+id/textView26"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="33dp"
         android:text="@string/otp_verify_account"
-        android:textColor="#3a3936"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -35,39 +22,40 @@
         android:id="@+id/textView29"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="67dp"
+        android:layout_marginTop="116dp"
         android:text="@string/otp_sent_otp_account"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView28" />
+        app:layout_constraintTop_toBottomOf="@+id/textView26" />
 
     <EditText
         android:id="@+id/otp_string"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="61dp"
+        android:layout_marginTop="96dp"
         android:backgroundTint="@color/colorAccent"
         android:fallbackLineSpacing="true"
         android:hint="@string/otp_hint"
         android:inputType="number"
         android:textAlignment="center"
-        android:textSize="20sp"
+        android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView29" />
 
     <Button
         android:id="@+id/verify_otp_button"
-        android:layout_width="256dp"
-        android:layout_height="36dp"
-        android:layout_marginTop="48dp"
-        android:background="@drawable/bg_button"
-        android:text="@string/otp_verify"
+        android:layout_width="45dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="1dp"
+        android:layout_marginTop="102dp"
+        android:background="@drawable/next_button"
         android:textColor="@android:color/white"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/otp_string" />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/otp_string"
+        app:layout_constraintTop_toBottomOf="@+id/textView29" />
 
     <TextView
         android:id="@+id/otpnotcorrect"
@@ -97,7 +85,7 @@
         android:layout_marginTop="20dp"
         android:layout_marginEnd="50dp"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="#e02020"
+        android:textColor="#4D4DCD"
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -107,10 +95,11 @@
         android:id="@+id/reenter_mobile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="60dp"
+        android:backgroundTint="@android:color/background_dark"
         android:shadowColor="@color/colorAccent"
         android:text="@string/otp_reenter_mobile"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/verify_otp_button" />
+        app:layout_constraintTop_toBottomOf="@+id/otp_string" />
 </androidx.constraintlayout.widget.ConstraintLayout>
