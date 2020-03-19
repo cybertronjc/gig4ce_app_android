@@ -37,69 +37,6 @@
             app:layout_constraintStart_toStartOf="@+id/education_card"
             app:layout_constraintTop_toBottomOf="@+id/education_card" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cardView15"
-            android:layout_width="80dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            app:layout_constraintEnd_toEndOf="@+id/cardView"
-            app:layout_constraintStart_toEndOf="@+id/cardView5"
-            app:layout_constraintTop_toBottomOf="@+id/education_top_profile">
-
-            <Button
-                android:id="@+id/button5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bg_nav"
-                android:text="@string/nav_gigs_text"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintCircleRadius="30dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cardView5"
-            android:layout_width="85dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            app:layout_constraintStart_toEndOf="@+id/cardView4"
-            app:layout_constraintTop_toBottomOf="@+id/education_top_profile">
-
-            <Button
-                android:id="@+id/education_nav_to_experience"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bg_nav"
-                android:text="@string/nav_experience_text"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cardView4"
-            android:layout_width="80dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="8dp"
-            app:layout_constraintStart_toEndOf="@+id/cardView3"
-            app:layout_constraintTop_toBottomOf="@+id/education_top_profile">
-
-            <Button
-                android:id="@+id/profile_nav_to_education"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bg_nav_color"
-                android:text="@string/nav_education_text"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
         <com.gigforce.app.modules.profile.TopProfileBar
             android:id="@+id/education_top_profile"
             android:layout_height="138dp"
@@ -109,27 +46,16 @@
             app:layout_constraintTop_toTopOf="parent">
         </com.gigforce.app.modules.profile.TopProfileBar>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cardView3"
-            android:layout_width="80dp"
+        <com.gigforce.app.modules.profile.ProfileNavBar
+            android:id="@+id/nav_bar"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
             android:layout_marginTop="8dp"
-            app:layout_constraintStart_toStartOf="@+id/cardView"
-            app:layout_constraintTop_toBottomOf="@+id/education_top_profile">
-
-            <Button
-                android:id="@+id/education_nav_to_about"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:background="@drawable/bg_nav"
-                android:text="@string/nav_about_text"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/education_top_profile" />
 
         <com.gigforce.app.modules.profile.ProfileCardBackground
             android:id = "@+id/education_card"
@@ -141,6 +67,6 @@
             android:minHeight="100dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cardView4" />
+            app:layout_constraintTop_toBottomOf="@+id/nav_bar" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>
