@@ -17,6 +17,7 @@ import kotlinx.android.synthetic.main.fragment_profile_about_expanded.view.*
 import kotlinx.android.synthetic.main.fragment_profile_about_expanded.view.profile_nav_to_education
 import kotlinx.android.synthetic.main.fragment_profile_education_expanded.view.*
 import kotlinx.android.synthetic.main.fragment_profile_main_expanded.view.*
+import kotlinx.android.synthetic.main.profile_card_background.view.*
 
 class AboutExpandedFragment: Fragment() {
     companion object {
@@ -45,7 +46,8 @@ class AboutExpandedFragment: Fragment() {
 
 
         viewModel.userProfileData.observe(this, Observer { profile ->
-            layout.about_exp_about_content.text = profile.bio
+            layout.bio_card.cardTitle = "Bio"
+            layout.bio_card.cardContent = profile.bio
 
             var languageString = ""
             for (lang in profile.Language!!) {
@@ -53,24 +55,28 @@ class AboutExpandedFragment: Fragment() {
                 languageString += "Speaking " + lang.speakingSkill + "\n"
                 languageString += "Writing " + lang.writingSkill + "\n\n"
             }
-            layout.about_exp_language_content.text = languageString
+            layout.language_card.cardTitle = "Language"
+            layout.language_card.cardContent = languageString
+            layout.language_card.cardBottom = "+ Add Language"
 
             var contactString = ""
             for (contact in profile.Contact!!) {
                 contactString += "phone: " + contact.phone + "\n"
                 contactString += "email: " + contact.email + "\n\n"
             }
-            layout.about_expanded_contact_text.text = contactString
+            layout.contact_card.cardTitle = "Contact"
+            layout.contact_card.cardContent = contactString
+            layout.contact_card.cardBottom = "+ Add Contact"
 
             layout.about_top_profile.userName = profile.name
             layout.about_top_profile.imageName = "ysharma.jpg"
         })
 
-        layout.add_language_button.setOnClickListener{
+        layout.language_card.card_bottom.setOnClickListener{
             this.findNavController().navigate(R.id.addLanguageBottomSheetFragment)
         }
 
-        layout.add_contact_button.setOnClickListener{
+        layout.contact_card.card_bottom.setOnClickListener{
             this.findNavController().navigate(R.id.addContactBottomSheetFragment)
         }
 

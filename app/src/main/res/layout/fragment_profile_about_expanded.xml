@@ -14,170 +14,38 @@
 
         android:background="@drawable/bg_exp_white_rect">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cardView12"
+        <com.gigforce.app.modules.profile.ProfileCardBackground
+            android:id="@+id/contact_card"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="24dp"
             android:layout_marginEnd="8dp"
-            android:background="@drawable/bg_white_rect"
-            android:elevation="5dp"
-            android:minHeight="100dp"
-            android:paddingStart="5dp"
-            android:paddingRight="20dp"
-            android:paddingBottom="30dp"
-            app:layout_constraintEnd_toEndOf="@+id/cardView7"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/cardView7"
-            app:layout_constraintTop_toBottomOf="@+id/cardView7">
+            app:layout_constraintStart_toStartOf="@id/language_card"
+            app:layout_constraintEnd_toEndOf="@id/language_card"
+            app:layout_constraintTop_toBottomOf="@id/language_card" />
 
-            <TextView
-                android:id="@+id/textView15"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="16dp"
-                android:text="@string/about_expanded_contact_text"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/about_expanded_contact_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginEnd="8dp"
-                android:text="@string/to_be_filled_from_profile_data"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/textView15"
-                app:layout_constraintTop_toBottomOf="@+id/textView15" />
-
-            <View
-                android:id="@+id/divider4"
-                android:layout_width="358dp"
-                android:layout_height="1dp"
-                android:layout_marginTop="2dp"
-                android:background="@drawable/bg_line"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.551"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/about_expanded_contact_text" />
-
-            <TextView
-                android:id="@+id/add_contact_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="5dp"
-                android:text="@string/about_expanded_add_contact_text"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/divider4" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cardView7"
+        <com.gigforce.app.modules.profile.ProfileCardBackground
+            android:id="@+id/language_card"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="24dp"
             android:layout_marginEnd="8dp"
-            android:background="@drawable/bg_white_rect"
-            android:elevation="5dp"
-            android:minHeight="100dp"
-            android:paddingStart="5dp"
-            android:paddingRight="10dp"
-            android:paddingBottom="30dp"
-            app:layout_constraintEnd_toEndOf="@+id/cardView6"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/cardView6"
-            app:layout_constraintTop_toBottomOf="@+id/cardView6">
+            app:layout_constraintStart_toStartOf="@id/bio_card"
+            app:layout_constraintEnd_toEndOf="@id/bio_card"
+            app:layout_constraintTop_toBottomOf="@id/bio_card" />
 
-            <TextView
-                android:id="@+id/textView12"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="16dp"
-                android:text="@string/about_expanded_language_text"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/about_exp_language_content"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginEnd="8dp"
-                android:text="@string/to_be_filled_from_profile_data"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/textView12"
-                app:layout_constraintTop_toBottomOf="@+id/textView12" />
-
-            <View
-                android:id="@+id/divider3"
-                android:layout_width="358dp"
-                android:layout_height="1dp"
-                android:layout_marginTop="2dp"
-                android:background="@drawable/bg_line"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/about_exp_language_content" />
-
-            <TextView
-                android:id="@+id/add_language_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="5dp"
-                android:text="@string/about_expanded_add_language_text"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/divider3" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cardView6"
+        <com.gigforce.app.modules.profile.ProfileCardBackground
+            android:id="@+id/bio_card"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="24dp"
             android:layout_marginEnd="8dp"
-            android:background="@drawable/bg_white_rect"
-            android:elevation="5dp"
-            android:minHeight="100dp"
-            android:paddingStart="5dp"
-            android:paddingRight="10dp"
-            android:paddingBottom="10dp"
-            app:layout_constraintEnd_toEndOf="@+id/cardView"
-            app:layout_constraintStart_toStartOf="@+id/cardView"
-            app:layout_constraintTop_toBottomOf="@+id/cardView4"
-            tools:ignore="NotSibling">
-
-            <TextView
-                android:id="@+id/textView9"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="16dp"
-                android:text="@string/about_expanded_bio_text"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/about_exp_about_content"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginEnd="8dp"
-                android:text="@string/to_be_filled_from_profile_data"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/textView9"
-                app:layout_constraintTop_toBottomOf="@+id/textView9" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cardView4" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cardView15"
