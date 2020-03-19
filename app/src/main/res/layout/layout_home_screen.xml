@@ -9,15 +9,15 @@
     android:fitsSystemWindows="true"
     android:textAlignment="viewEnd">
 
-    <com.gigforce.app.modules.home.TopProfileBar
-        android:id="@+id/topbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="5dp"
-        app:subtitle="4 stars"
-        app:title="Giger"/>
+<!--    <com.gigforce.app.modules.home.TopProfileBar-->
+<!--        android:id="@+id/topbar"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginStart="5dp"-->
+<!--        android:layout_marginTop="10dp"-->
+<!--        android:layout_marginEnd="5dp"-->
+<!--        app:subtitle="4 stars"-->
+<!--        app:title="Giger"/>-->
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

@@ -7,6 +7,12 @@
         <attr name="image_name" format="string"/>
     </declare-styleable>
 
+    <declare-styleable name="ProfileCardBackground">
+        <attr name="card_title" format="string" />
+        <attr name="card_content" format="string" />
+        <attr name="card_bottom" format="string" />
+    </declare-styleable>
+
     <declare-styleable name="OBToggleButtonItem">
         <attr name="text" format="string" />
     </declare-styleable>

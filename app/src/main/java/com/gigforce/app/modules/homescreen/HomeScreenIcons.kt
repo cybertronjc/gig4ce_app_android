@@ -55,7 +55,7 @@ class HomeScreenIcons : Fragment() {
         val adapter = this.context?.let { HomeScreenAdapter(it, R.layout.item_gridhomescreen, itemList) }
         gridview.adapter = adapter
 
-        topbar.setOnClickListener { findNavController().navigate(R.id.profileFragment) }
+        //topbar.setOnClickListener { findNavController().navigate(R.id.profileFragment) }
         cardviewkyc.setOnClickListener { Toast.makeText(context, "TODO CTA: jump to kyc docs upload page", Toast.LENGTH_SHORT).show() }
         cardviewvideo.setOnClickListener { Toast.makeText(context, "TODO CTA: jump to video resume upload page", Toast.LENGTH_SHORT).show() }
 

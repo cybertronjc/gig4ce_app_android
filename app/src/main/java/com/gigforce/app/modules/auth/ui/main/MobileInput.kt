@@ -85,6 +85,12 @@ class MobileInput: Fragment() {
 //        }
 //        )
 
+        layout.send_otp_button.setOnClickListener{
+            validatePhoneNumber("+91" + layout.otp_mobile_number.text.toString())
+            viewModel.phoneNo = "+91" + layout.otp_mobile_number.text.toString()
+            viewModel.sendVerificationCode("+91" +layout.otp_mobile_number.text.toString())
+        }
+
         viewModel.liveState.observeForever {
             when(it){
                 LoginViewModel.STATE_CODE_SENT -> findNavController().navigate(MobileInputDirections.actionMobileInputToVerifyOTP(viewModel.verificationId!!))

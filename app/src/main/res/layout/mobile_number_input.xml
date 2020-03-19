@@ -58,19 +58,18 @@
         app:layout_constraintTop_toBottomOf="@+id/textView24" />
 
     <ImageView
-        android:id="@+id/imageView7"
+        android:id="@+id/send_otp_button"
         android:layout_width="59dp"
         android:layout_height="53dp"
         android:layout_marginStart="1dp"
         android:layout_marginTop="36dp"
-        android:layout_marginEnd="33dp"
         android:layout_marginBottom="280dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.695"
-        app:layout_constraintStart_toEndOf="@+id/otp_mobile_number"
+        app:layout_constraintHorizontal_bias="0.905"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView24"
-        app:layout_constraintVertical_bias="0.394"
+        app:layout_constraintVertical_bias="0.536"
         app:srcCompat="@drawable/next_button" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

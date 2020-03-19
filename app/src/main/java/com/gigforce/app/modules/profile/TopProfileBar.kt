@@ -33,13 +33,13 @@ class TopProfileBar: CardView {
     }
 
     // Getters and setter
-    var imageName: String? = null
+    var imageName: String = ""
         set(value) {
             field = value
             displayImage()
         }
 
-    var userName: String? = null
+    var userName: String = ""
         set(value) {
             field = value
             user_name.text = userName

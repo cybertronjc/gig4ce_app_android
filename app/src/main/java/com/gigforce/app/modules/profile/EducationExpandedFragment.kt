@@ -18,6 +18,7 @@ import com.google.firebase.storage.StorageReference
 import kotlinx.android.synthetic.main.fragment_profile_about_expanded.view.*
 import kotlinx.android.synthetic.main.fragment_profile_education_expanded.view.*
 import kotlinx.android.synthetic.main.fragment_profile_main_expanded.view.*
+import kotlinx.android.synthetic.main.profile_card_background.view.*
 import java.text.SimpleDateFormat
 
 class EducationExpandedFragment: Fragment() {
@@ -54,7 +55,9 @@ class EducationExpandedFragment: Fragment() {
                 educationString += education.degree + " - " + education.course + "\n"
                 educationString += format.format(education.startYear!!) + " - " + format.format(education.endYear!!) + "\n\n"
             }
-            layout.education_exp_education_content.text = educationString
+            layout.education_card.cardTitle = "Education"
+            layout.education_card.cardContent = educationString
+            layout.education_card.cardBottom = "+ Add Education"
 
             var skillString: String = ""
             for (skill in profile.Skill!!) {
@@ -62,7 +65,9 @@ class EducationExpandedFragment: Fragment() {
 //                skillString += skill.nameOfSkill + "\n\n"
                 skillString += skill + "\n\n"
             }
-            layout.education_exp_skill_content.text = skillString
+            layout.skill_card.cardTitle = "Skills"
+            layout.skill_card.cardContent = skillString
+            layout.skill_card.cardBottom = "+ Add Skill"
 
             var achievementString: String = ""
             for (achievement in profile.Achievement!!) {
@@ -72,7 +77,9 @@ class EducationExpandedFragment: Fragment() {
                 //achievementString += format.format(achievement.year!!) + "\n\n"
                 achievementString += achievement.year + "\n\n"
             }
-            layout.education_exp_achievement_content.text = achievementString
+            layout.achievement_card.cardTitle = "Achievement"
+            layout.achievement_card.cardContent = achievementString
+            layout.achievement_card.cardBottom = "+ Add Achievement"
 
             layout.education_top_profile.userName = profile.name
             layout.education_top_profile.imageName = "ysharma.jpg"
@@ -86,13 +93,13 @@ class EducationExpandedFragment: Fragment() {
 //        }
 
         // Navigate to bottom sheets
-        layout.add_skill_button.setOnClickListener{
+        layout.skill_card.card_bottom.setOnClickListener{
             this.findNavController().navigate(R.id.addSkillBottomSheetFragment)
         }
-        layout.add_achievement_button.setOnClickListener{
+        layout.achievement_card.card_bottom.setOnClickListener{
             this.findNavController().navigate(R.id.addAchievementBottomSheetFragment)
         }
-        layout.add_education_button.setOnClickListener{
+        layout.education_card.card_bottom.setOnClickListener{
             this.findNavController().navigate(R.id.addEducationBottomSheetFragment)
         }
 

@@ -15,129 +15,151 @@
         android:background="@drawable/bg_exp_white_rect"
         android:isScrollContainer="true">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cardView12"
+        <com.gigforce.app.modules.profile.ProfileCardBackground
+            android:id="@+id/achievement_card"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="24dp"
             android:layout_marginEnd="8dp"
-            android:background="@drawable/bg_white_rect"
-            android:elevation="5dp"
-            android:minHeight="100dp"
-            app:layout_constraintEnd_toEndOf="@+id/cardView7"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/cardView7"
-            app:layout_constraintTop_toBottomOf="@+id/cardView7">
+            app:layout_constraintStart_toStartOf="@id/skill_card"
+            app:layout_constraintEnd_toEndOf="@id/skill_card"
+            app:layout_constraintTop_toBottomOf="@id/skill_card" />
 
-            <TextView
-                android:id="@+id/textView15"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="8dp"
-                android:text="@string/education_expanded_achievements_text"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+<!--        <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--            android:id="@+id/cardView12"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginStart="16dp"-->
+<!--            android:layout_marginTop="24dp"-->
+<!--            android:layout_marginEnd="8dp"-->
+<!--            android:background="@drawable/bg_white_rect"-->
+<!--            android:elevation="5dp"-->
+<!--            android:minHeight="100dp"-->
+<!--            app:layout_constraintEnd_toEndOf="@+id/cardView7"-->
+<!--            app:layout_constraintHorizontal_bias="0.0"-->
+<!--            app:layout_constraintStart_toStartOf="@+id/cardView7"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/cardView7">-->
 
-            <TextView
-                android:id="@+id/education_exp_achievement_content"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginEnd="8dp"
-                android:text="@string/to_be_filled_from_profile_data"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/textView15"
-                app:layout_constraintTop_toBottomOf="@+id/textView15" />
+<!--            <TextView-->
+<!--                android:id="@+id/textView15"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginStart="10dp"-->
+<!--                android:layout_marginTop="8dp"-->
+<!--                android:text="@string/education_expanded_achievements_text"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toTopOf="parent" />-->
 
-            <View
-                android:id="@+id/divider4"
-                android:layout_width="358dp"
-                android:layout_height="1dp"
-                android:layout_marginBottom="42dp"
-                android:background="?android:attr/listDivider"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/education_exp_achievement_content"
-                app:layout_constraintVertical_bias="0.285" />
+<!--            <TextView-->
+<!--                android:id="@+id/education_exp_achievement_content"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginStart="8dp"-->
+<!--                android:layout_marginTop="5dp"-->
+<!--                android:layout_marginEnd="8dp"-->
+<!--                android:text="@string/to_be_filled_from_profile_data"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="@+id/textView15"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/textView15" />-->
 
-            <TextView
-                android:id="@+id/add_achievement_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="8dp"
-                android:text="@string/education_expanded_add_achievement_text"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/divider4" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+<!--            <View-->
+<!--                android:id="@+id/divider4"-->
+<!--                android:layout_width="358dp"-->
+<!--                android:layout_height="1dp"-->
+<!--                android:layout_marginBottom="42dp"-->
+<!--                android:background="?android:attr/listDivider"-->
+<!--                app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/education_exp_achievement_content"-->
+<!--                app:layout_constraintVertical_bias="0.285" />-->
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cardView7"
+<!--            <TextView-->
+<!--                android:id="@+id/add_achievement_button"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginStart="10dp"-->
+<!--                android:layout_marginTop="5dp"-->
+<!--                android:layout_marginBottom="8dp"-->
+<!--                android:text="@string/education_expanded_add_achievement_text"-->
+<!--                app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/divider4" />-->
+<!--        </androidx.constraintlayout.widget.ConstraintLayout>-->
+
+        <com.gigforce.app.modules.profile.ProfileCardBackground
+            android:id="@+id/skill_card"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="24dp"
             android:layout_marginEnd="8dp"
-            android:background="@drawable/bg_white_rect"
-            android:elevation="5dp"
-            android:minHeight="100dp"
-            android:paddingTop="10dp"
-            android:paddingRight="20dp"
-            android:paddingBottom="30dp"
-            app:layout_constraintEnd_toEndOf="@+id/cardView6"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/cardView6"
-            app:layout_constraintTop_toBottomOf="@+id/cardView6"
-            tools:ignore="NotSibling">
+            app:layout_constraintEnd_toEndOf="@+id/education_card"
+            app:layout_constraintStart_toStartOf="@+id/education_card"
+            app:layout_constraintTop_toBottomOf="@+id/education_card" />
 
-            <TextView
-                android:id="@+id/textView12"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="8dp"
-                android:text="@string/education_expanded_skills_text"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+<!--        <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--            android:id="@+id/cardView7"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginStart="16dp"-->
+<!--            android:layout_marginTop="24dp"-->
+<!--            android:layout_marginEnd="8dp"-->
+<!--            android:background="@drawable/bg_white_rect"-->
+<!--            android:elevation="5dp"-->
+<!--            android:minHeight="100dp"-->
+<!--            android:paddingTop="10dp"-->
+<!--            android:paddingRight="20dp"-->
+<!--            android:paddingBottom="30dp"-->
+<!--            app:layout_constraintEnd_toEndOf="@+id/cardView6"-->
+<!--            app:layout_constraintHorizontal_bias="0.0"-->
+<!--            app:layout_constraintStart_toStartOf="@+id/cardView6"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/cardView6"-->
+<!--            tools:ignore="NotSibling">-->
 
-            <TextView
-                android:id="@+id/education_exp_skill_content"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginEnd="8dp"
-                android:text="@string/to_be_filled_from_profile_data"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/textView12"
-                app:layout_constraintTop_toBottomOf="@+id/textView12" />
+<!--            <TextView-->
+<!--                android:id="@+id/textView12"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginStart="10dp"-->
+<!--                android:layout_marginTop="8dp"-->
+<!--                android:text="@string/education_expanded_skills_text"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toTopOf="parent" />-->
 
-            <View
-                android:id="@+id/divider3"
-                android:layout_width="358dp"
-                android:layout_height="1dp"
-                android:layout_marginTop="2dp"
-                android:background="@drawable/bg_line"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/education_exp_skill_content" />
+<!--            <TextView-->
+<!--                android:id="@+id/education_exp_skill_content"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginStart="8dp"-->
+<!--                android:layout_marginTop="5dp"-->
+<!--                android:layout_marginEnd="8dp"-->
+<!--                android:text="@string/to_be_filled_from_profile_data"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="@+id/textView12"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/textView12" />-->
 
-            <TextView
-                android:id="@+id/add_skill_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="5dp"
-                android:text="@string/education_expanded_add_skill_text"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/divider3" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+<!--            <View-->
+<!--                android:id="@+id/divider3"-->
+<!--                android:layout_width="358dp"-->
+<!--                android:layout_height="1dp"-->
+<!--                android:layout_marginTop="2dp"-->
+<!--                android:background="@drawable/bg_line"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/education_exp_skill_content" />-->
+
+<!--            <TextView-->
+<!--                android:id="@+id/add_skill_button"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginStart="10dp"-->
+<!--                android:layout_marginTop="5dp"-->
+<!--                android:text="@string/education_expanded_add_skill_text"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/divider3" />-->
+<!--        </androidx.constraintlayout.widget.ConstraintLayout>-->
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cardView15"
@@ -233,65 +255,77 @@
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cardView6"
+        <com.gigforce.app.modules.profile.ProfileCardBackground
+            android:id = "@+id/education_card"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="28dp"
             android:layout_marginEnd="8dp"
-            android:background="@drawable/bg_white_rect"
-            android:elevation="5dp"
             android:minHeight="100dp"
-            android:paddingTop="10dp"
-            android:paddingRight="20dp"
-            android:paddingBottom="30dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cardView4">
+            app:layout_constraintTop_toBottomOf="@+id/cardView4" />
 
-            <TextView
-                android:id="@+id/textView9"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="8dp"
-                android:text="@string/education_card_education_text"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+<!--        <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--            android:id="@+id/cardView6"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginStart="16dp"-->
+<!--            android:layout_marginTop="28dp"-->
+<!--            android:layout_marginEnd="8dp"-->
+<!--            android:background="@drawable/bg_white_rect"-->
+<!--            android:elevation="5dp"-->
+<!--            android:minHeight="100dp"-->
+<!--            android:paddingTop="10dp"-->
+<!--            android:paddingRight="20dp"-->
+<!--            android:paddingBottom="30dp"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/cardView4">-->
 
-            <TextView
-                android:id="@+id/education_exp_education_content"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginEnd="8dp"
-                android:text="@string/to_be_filled_from_profile_data"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/textView9"
-                app:layout_constraintTop_toBottomOf="@+id/textView9" />
+<!--            <TextView-->
+<!--                android:id="@+id/textView9"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginStart="10dp"-->
+<!--                android:layout_marginTop="8dp"-->
+<!--                android:text="@string/education_card_education_text"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toTopOf="parent" />-->
 
-            <View
-                android:id="@+id/divider2"
-                android:layout_width="358dp"
-                android:layout_height="1dp"
-                android:layout_marginTop="2dp"
-                android:background="@drawable/bg_line"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.482"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/education_exp_education_content" />
+<!--            <TextView-->
+<!--                android:id="@+id/education_exp_education_content"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginStart="8dp"-->
+<!--                android:layout_marginTop="5dp"-->
+<!--                android:layout_marginEnd="8dp"-->
+<!--                android:text="@string/to_be_filled_from_profile_data"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="@+id/textView9"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/textView9" />-->
 
-            <TextView
-                android:id="@+id/add_education_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="5dp"
-                android:text="@string/education_expanded_add_education_text"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/divider2" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+<!--            <View-->
+<!--                android:id="@+id/divider2"-->
+<!--                android:layout_width="358dp"-->
+<!--                android:layout_height="1dp"-->
+<!--                android:layout_marginTop="2dp"-->
+<!--                android:background="@drawable/bg_line"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintHorizontal_bias="0.482"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/education_exp_education_content" />-->
+
+<!--            <TextView-->
+<!--                android:id="@+id/add_education_button"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginStart="10dp"-->
+<!--                android:layout_marginTop="5dp"-->
+<!--                android:text="@string/education_expanded_add_education_text"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/divider2" />-->
+<!--        </androidx.constraintlayout.widget.ConstraintLayout>-->
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>
