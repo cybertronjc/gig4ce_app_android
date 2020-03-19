@@ -14,6 +14,7 @@ import com.gigforce.app.utils.GlideApp
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import kotlinx.android.synthetic.main.fragment_profile_experience_expanded.view.*
+import kotlinx.android.synthetic.main.profile_card_background.view.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -51,13 +52,15 @@ class ExperienceExpandedFragment: Fragment() {
                 experienceString += exp.location + "\n"
                 experienceString += format.format(exp.startDate!!) + "-" + format.format(exp.endDate!!) + "\n\n"
             }
-            layout.experience_exp_experience_content.text = experienceString
+            layout.experience_card.cardTitle = "Experience"
+            layout.experience_card.cardContent = experienceString
+            layout.experience_card.cardBottom = "+ Add Experience"
 
             layout.experience_top_profile.imageName = "ysharma.jpg"
             layout.experience_top_profile.userName = profile.name
         })
 
-        layout.add_experience_button.setOnClickListener {
+        layout.experience_card.card_bottom.setOnClickListener {
             findNavController().navigate(R.id.addExperienceBottomSheet)
         }
 
