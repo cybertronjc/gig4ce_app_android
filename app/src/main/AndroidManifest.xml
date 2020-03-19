@@ -45,7 +45,8 @@
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"
-                        android:resource="@array/preloaded_fonts" />
+                        android:resource="@array/preloaded_fonts"
+                        android:screenOrientation="portrait"/>
             </intent-filter>
         </activity>
         <meta-data
