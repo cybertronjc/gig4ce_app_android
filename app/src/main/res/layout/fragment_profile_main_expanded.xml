@@ -194,7 +194,7 @@
                 app:layout_constraintBottom_toTopOf="@+id/education_view_more"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/education_exp_education_content" />
+                app:layout_constraintTop_toBottomOf="@+id/education_content" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <ImageView

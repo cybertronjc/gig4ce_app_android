@@ -3,9 +3,9 @@ package com.gigforce.app.modules.profile
 import android.util.Log
 import com.gigforce.app.modules.profile.models.*
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.DocumentReference
-import com.google.firebase.firestore.FieldValue
-import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.*
+import com.google.firebase.firestore.model.Document
+import javax.security.auth.callback.Callback
 
 class ProfileFirebaseRepository {
 
@@ -13,7 +13,13 @@ class ProfileFirebaseRepository {
     var uid = FirebaseAuth.getInstance().currentUser?.uid!!
 
     var profileCollectionName = "Profiles"
+    var tagsCollectionName = "Tags"
     //var uid = "UeXaZV3KctuZ8xXLCKGF" // Test user
+
+    fun setNewTag(tag: String) {
+        firebaseDB.collection(tagsCollectionName)
+            .document("all_tags").update("tagNme", FieldValue.arrayUnion(tag))
+    }
 
     fun getProfile(): DocumentReference {
         return firebaseDB.collection(profileCollectionName).document(uid)
@@ -65,5 +71,10 @@ class ProfileFirebaseRepository {
             firebaseDB.collection(profileCollectionName)
                 .document(uid).update("Experience", FieldValue.arrayUnion(exp))
         }
+    }
+
+    fun setProfileTags(tag: String) {
+            firebaseDB.collection(profileCollectionName)
+                .document(uid).update("Tags", FieldValue.arrayUnion(tag))
     }
 }
