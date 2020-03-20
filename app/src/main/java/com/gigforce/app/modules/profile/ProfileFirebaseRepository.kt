@@ -16,9 +16,9 @@ class ProfileFirebaseRepository {
     var tagsCollectionName = "Tags"
     //var uid = "UeXaZV3KctuZ8xXLCKGF" // Test user
 
-    fun setNewTag(tag: String) {
+    fun addNewTag(tag: String) {
         firebaseDB.collection(tagsCollectionName)
-            .document("all_tags").update("tagNme", FieldValue.arrayUnion(tag))
+            .document("all_tags").update("tagName", FieldValue.arrayUnion(tag))
     }
 
     fun getProfile(): DocumentReference {

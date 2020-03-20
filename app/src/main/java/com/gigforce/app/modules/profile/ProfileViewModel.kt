@@ -53,6 +53,10 @@ class ProfileViewModel: ViewModel() {
             }
     }
 
+    fun addNewTag(tag:String) {
+        profileFirebaseRepository.addNewTag(tag)
+    }
+
     fun setProfileTag(tag: String) {
         profileFirebaseRepository.setProfileTags(tag)
     }

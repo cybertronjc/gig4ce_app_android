@@ -59,6 +59,9 @@ class AddTagBottomSheet: BottomSheetDialogFragment() {
 
         layout.add_tag_button.setOnClickListener {
             setProfileTag(layout.add_tag_new_tag.text.toString())
+            if(!tags.contains(layout.add_tag_new_tag.text.toString())) {
+                addNewTag(layout.add_tag_new_tag.text.toString())
+            }
             layout.add_tag_new_tag.setText("")
         }
 
@@ -69,5 +72,9 @@ class AddTagBottomSheet: BottomSheetDialogFragment() {
 
     fun setProfileTag(tag: String) {
         viewModel.setProfileTag(tag)
+    }
+
+    fun addNewTag(tag: String) {
+        viewModel.addNewTag(tag)
     }
 }
