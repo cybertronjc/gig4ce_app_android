@@ -5,6 +5,8 @@ import android.app.Activity.RESULT_CANCELED
 import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
@@ -250,6 +252,11 @@ class VideoResumeFragment:Fragment() {
                     Toast.makeText(this.context, "Video saved to:\n" + data.data, Toast.LENGTH_LONG).show()
                     val videoUri: Uri? = data.data
                     videoView?.setVideoURI(videoUri)
+//                    Bitmap thumbnail = ThumbnailUtils.createVideoThumbnail(videoUri,MediaStore.Images.Thumbnails.MINI_KIND);
+//                    //VideoView video = (VideoView) findViewById(R.id.videoview1);
+//                    BitmapDrawable bitmapDrawable = new BitmapDrawable(thumbnail);
+//                    videoView.setBackgroundDrawable(bitmapDrawable);
+                    //ref:https://stackoverflow.com/questions/7037630/how-to-create-a-video-preview-in-android
                 };
             } else if (resultCode == RESULT_CANCELED) {
                 Toast.makeText(this.context, "Video recording cancelled.", Toast.LENGTH_LONG).show();
@@ -364,7 +371,6 @@ class VideoResumeFragment:Fragment() {
                     //viewpager.button_video?.visibility=View.INVISIBLE
                     viewpager.rootView.button_video?.visibility=View.INVISIBLE;
                     //nextButton.setText("next")
-
                 }else if(position == 1){
                     GlideApp.with(itemView)
                         .load(drawable.ic_intro_slides2_mainart)

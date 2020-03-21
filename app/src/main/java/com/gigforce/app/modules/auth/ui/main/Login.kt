@@ -1,7 +1,6 @@
 package com.gigforce.app.modules.auth.ui.main
 
 import android.os.Bundle
-import android.telephony.PhoneNumberUtils
 import android.util.Log
 import android.view.KeyEvent
 import android.view.LayoutInflater
@@ -16,9 +15,9 @@ import kotlinx.android.synthetic.main.mobile_number_input.view.*
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
-class MobileInput: Fragment() {
+class Login: Fragment() {
     companion object {
-        fun newInstance() = MobileInput()
+        fun newInstance() = Login()
     }
 
     lateinit var layout: View
@@ -101,7 +100,7 @@ class MobileInput: Fragment() {
 
         viewModel.liveState.observeForever {
             when(it){
-                LoginViewModel.STATE_CODE_SENT -> findNavController().navigate(MobileInputDirections.actionMobileInputToVerifyOTP(viewModel.verificationId!!))
+                LoginViewModel.STATE_CODE_SENT -> findNavController().navigate(LoginDirections.actionMobileInputToVerifyOTP(viewModel.verificationId!!))
                 LoginViewModel.STATE_SIGNIN_SUCCESS -> findNavController().popBackStack()
                 else -> {
 

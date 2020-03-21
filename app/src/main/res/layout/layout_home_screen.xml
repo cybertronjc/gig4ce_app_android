@@ -9,15 +9,51 @@
     android:fitsSystemWindows="true"
     android:textAlignment="viewEnd">
 
-<!--    <com.gigforce.app.modules.home.TopProfileBar-->
-<!--        android:id="@+id/topbar"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginStart="5dp"-->
-<!--        android:layout_marginTop="10dp"-->
-<!--        android:layout_marginEnd="5dp"-->
-<!--        app:subtitle="4 stars"-->
-<!--        app:title="Giger"/>-->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/topbar"
+        android:layout_width="match_parent"
+        android:layout_height="51dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="61dp"
+        android:textAlignment="viewStart">
+
+        <TextView
+            android:id="@+id/text_titlehomescreen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="54dp"
+            android:layout_marginTop="5dp"
+            android:text="Giger Name"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/text_subtitlehomescreen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="54dp"
+            android:layout_marginTop="27dp"
+            android:text="4 stars"
+            android:textSize="12sp" />
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/topbar2"
+        android:layout_width="57dp"
+        android:layout_height="51dp"
+        android:layout_marginStart="302dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="7dp"
+        android:backgroundTint="#d8d8d8"
+        android:textAlignment="viewStart" >
+
+        <Button
+            android:id="@+id/button_signout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="SignOut"
+            android:textSize="8sp" />
+    </androidx.cardview.widget.CardView>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -25,15 +61,15 @@
         android:layout_marginTop="60dp"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
-    <androidx.cardview.widget.CardView
+        <androidx.cardview.widget.CardView
             android:id="@+id/cardviewkyc"
             android:layout_width="match_parent"
             android:layout_height="30dp"
             android:layout_marginStart="5dp"
-            android:layout_marginEnd="5dp"
             android:layout_marginTop="90dp"
-            android:textAlignment="viewEnd"
-            app:layout_constraintBottom_toTopOf="@id/cardviewvideo"
+            android:backgroundTint="#d8d8d8"
+            android:textAlignment="viewStart"
+            app:layout_constraintBottom_toTopOf="@id/cardviewvideoresume"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -45,12 +81,12 @@
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/cardviewvideo"
+            android:id="@+id/cardviewvideoresume"
             android:layout_width="match_parent"
             android:layout_height="30dp"
             android:layout_marginStart="5dp"
-            android:layout_marginEnd="5dp"
             android:layout_marginTop="6dp"
+            android:backgroundTint="#d8d8d8"
             app:layout_constraintBottom_toTopOf="@id/gridview"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/cardviewkyc"
@@ -75,7 +111,7 @@
             android:padding="@dimen/padding_default"
             android:verticalSpacing="@dimen/padding_default"
             app:layout_constraintBottom_toTopOf="@id/pendingPlaceholder"
-            app:layout_constraintTop_toBottomOf="@id/cardviewvideo" />
+            app:layout_constraintTop_toBottomOf="@id/cardviewvideoresume" />
 
         <FrameLayout
             android:id="@+id/pendingPlaceholder"

@@ -150,7 +150,7 @@
         tools:layout="@layout/fragment_video_resume" />
     <fragment
         android:id="@+id/mobileInput"
-        android:name="com.gigforce.app.modules.auth.ui.main.MobileInput"
+        android:name="com.gigforce.app.modules.auth.ui.main.Login"
         android:label="MobileInput" >
         <action
             android:id="@+id/action_mobileInput_to_verifyOTP"

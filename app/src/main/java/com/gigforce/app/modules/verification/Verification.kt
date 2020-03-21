@@ -8,12 +8,11 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.gigforce.app.R
 import com.gigforce.app.modules.auth.ui.main.LoginViewModel
-import com.gigforce.app.modules.auth.ui.main.MobileInput
-import kotlinx.android.synthetic.main.mobile_number_input.view.*
+import com.gigforce.app.modules.auth.ui.main.Login
 
 class Verification: Fragment() {
     companion object {
-        fun newInstance() = MobileInput()
+        fun newInstance() = Login()
     }
 
     lateinit var layout: View
@@ -25,7 +24,7 @@ class Verification: Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         viewModel = ViewModelProviders.of(this).get(LoginViewModel::class.java)
-        layout = inflater.inflate(R.layout.mobile_number_input, container, false)
+        layout = inflater.inflate(R.layout.layout_verification, container, false)
         return layout
     }
 

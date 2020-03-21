@@ -32,7 +32,7 @@ class HomeScreenFragment() : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        layout =  inflater.inflate(R.layout.fragment_roaster, container, false)
+        layout =  inflater.inflate(R.layout.layout_home_screen, container, false)
         return layout
     }
 

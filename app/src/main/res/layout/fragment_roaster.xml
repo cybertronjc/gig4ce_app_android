@@ -26,7 +26,7 @@
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="87dp"
-            app:layout_constraintBottom_toTopOf="@+id/cardviewvideo"
+            app:layout_constraintBottom_toTopOf="@+id/cardviewvideoresume"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -56,7 +56,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/cardviewvideo"
+            android:id="@+id/cardviewvideoresume"
             android:layout_width="match_parent"
             android:layout_height="95dp"
             app:layout_constraintBottom_toTopOf="@+id/button_tmp"
