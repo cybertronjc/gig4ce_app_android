@@ -7,11 +7,15 @@ import com.gigforce.app.modules.profile.models.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.EventListener
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.QuerySnapshot
+import com.google.firebase.storage.FirebaseStorage
 
 class ProfileViewModel: ViewModel() {
 
     var profileFirebaseRepository = ProfileFirebaseRepository()
     var userProfileData: MutableLiveData<ProfileData> = MutableLiveData<ProfileData>()
+    var Tags: MutableLiveData<TagData> = MutableLiveData<TagData>()
     val uid: String
 
     fun getProfileData(): MutableLiveData<ProfileData> {
@@ -32,6 +36,29 @@ class ProfileViewModel: ViewModel() {
             Log.d("ProfileViewModel", userProfileData.toString())
         })
         return userProfileData
+    }
+
+    fun getAllTags() {
+        lateinit var tags:Array<String>
+        FirebaseFirestore.getInstance().collection("Tags").limit(1).get()
+            .addOnSuccessListener {
+                if (it.isEmpty) {
+
+                }
+                else {
+                    Tags.postValue(
+                        it.documents[0].toObject(TagData::class.java)
+                    )
+                }
+            }
+    }
+
+    fun addNewTag(tag:String) {
+        profileFirebaseRepository.addNewTag(tag)
+    }
+
+    fun setProfileTag(tag: String) {
+        profileFirebaseRepository.setProfileTags(tag)
     }
 
     fun setProfileEducation(education: ArrayList<Education>) {
