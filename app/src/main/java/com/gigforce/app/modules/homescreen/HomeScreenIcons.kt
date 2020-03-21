@@ -14,6 +14,7 @@ import com.gigforce.app.modules.profile.models.ProfileData
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.EventListener
+import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.layout_home_screen.*
@@ -38,23 +39,11 @@ class HomeScreenIcons : Fragment() {
         super.onCreate(savedInstanceState)
         arguments?.let {
 
-            Log.d(">>>>>>>>>>>",uid);
-
-            firebaseDB.collection("Verification").document(uid).addSnapshotListener(EventListener<DocumentSnapshot> {
-                value, e ->
-                if (e != null) {
-                    Log.w("ProfileViewModel", "Listen failed", e)
-                    return@EventListener
-                }
-                Log.d("ProfileViewModel", value.toString())
-                /*
-                check the kyc flag and video resume flag and accordingly set the card views visibility
-                 */
-
-            })
-
+            /*
+                          check the kyc flag and video resume flag and accordingly set the card views visibility
+                           */
         //layout.cardviewkyc.visibility
-        layout.text_kyc.visibility
+            //layout.text_kyc.visibility=View.VISIBLE
         }
     }
 
@@ -78,7 +67,6 @@ class HomeScreenIcons : Fragment() {
         return layout
     }
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val gridview = layout.findViewById<GridView>(R.id.gridview)
 
@@ -86,8 +74,13 @@ class HomeScreenIcons : Fragment() {
         gridview.adapter = adapter
 
         //topbar.setOnClickListener { findNavController().navigate(R.id.profileFragment) }
-        cardviewkyc.setOnClickListener { Toast.makeText(context, "TODO CTA: jump to kyc docs upload page", Toast.LENGTH_SHORT).show() }
-        cardviewvideoresume.setOnClickListener { Toast.makeText(context, "TODO CTA: jump to video resume upload page", Toast.LENGTH_SHORT).show() }
+        cardviewkyc.text_kyc.setOnClickListener {
+            findNavController().navigate(R.id.verification)
+        //    Toast.makeText(context, "TODO CTA: jump to kyc docs upload page", Toast.LENGTH_SHORT).show()
+        }
+        cardviewvideoresume.text_kyc_video.setOnClickListener {
+            Toast.makeText(context, "TODO CTA: jump to video resume upload page", Toast.LENGTH_SHORT).show()
+        }
 
         gridview.onItemClickListener = AdapterView.OnItemClickListener { parent, v, position, id ->
             // Write code to perform action when item is clicked.
@@ -117,5 +110,45 @@ class HomeScreenIcons : Fragment() {
         }
 
         layout.button_signout.setOnClickListener { FirebaseAuth.getInstance().signOut() }
+        Log.d(">>>>>>>>>>>",uid);
+        uid = "GigerId1";
+
+
+//        firebaseDB.collection("Verification").whereEqualTo(FieldPath.documentId(),"GigerId1").whereEqualTo()
+
+        firebaseDB.collection("Verification").document(uid).addSnapshotListener(EventListener<DocumentSnapshot> {
+                value, e ->
+            if (e != null) {
+                Log.w("HomeScreenIcons", "Listen failed", e)
+                return@EventListener
+            }
+
+            Log.d("HomeScreenIcons", value.toString())
+//
+//            Toast.makeText(context,
+//                "TODO CTA:"+value?.data?.keys.toString(), Toast.LENGTH_SHORT).show()
+
+            value?.data?.entries?.forEach { (k,v)->if(k == "bio_kyc_verified"){
+//                Toast.makeText(context,"TODO CTA: $v", Toast.LENGTH_SHORT).show()
+            }}
+
+//            value?.data?.keys?.forEach { k-> if(k.equals("bio_kyc_verified")){
+//
+//                value?.data?.values?.forEach()
+//                Toast.makeText(context,
+//                    "TODO CTA:"+k[0].toString(), Toast.LENGTH_SHORT).show()
+//            } }
+
+//            value?.data?.entries?.forEach { (key, value) -> if(key.equals("bio_kyc_verified")){
+//
+//                Toast.makeText(context,
+//                "TODO CTA: $key = $value", Toast.LENGTH_SHORT).show()
+//            }}
+
+
+
+
+        })
     }
 }
+

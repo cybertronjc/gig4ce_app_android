@@ -118,11 +118,7 @@
         android:id="@+id/introSlidesFragment"
         android:name="com.gigforce.app.modules.onboarding.IntroSlidesFragment"
         android:label="fragment_intro_slides"
-        tools:layout="@layout/fragment_intro_slides" >
-        <action
-            android:id="@+id/action_introSlidesFragment_to_mobileInput"
-            app:destination="@id/mobileInput" />
-    </fragment>
+        tools:layout="@layout/fragment_intro_slides" />
     <fragment
         android:id="@+id/OBSlidesFragment"
         android:name="com.gigforce.app.modules.onboarding.OBSlidesFragment"
@@ -148,14 +144,6 @@
         android:name="com.gigforce.app.modules.video_resume.VideoResumeFragment"
         android:label="fragment_video_resume"
         tools:layout="@layout/fragment_video_resume" />
-    <fragment
-        android:id="@+id/mobileInput"
-        android:name="com.gigforce.app.modules.auth.ui.main.Login"
-        android:label="MobileInput" >
-        <action
-            android:id="@+id/action_mobileInput_to_verifyOTP"
-            app:destination="@id/verifyOTP" />
-    </fragment>
     <fragment
         android:id="@+id/verifyOTP"
         android:name="com.gigforce.app.modules.auth.ui.main.VerifyOTP"
@@ -183,6 +171,9 @@
         <action
             android:id="@+id/action_homeScreenIcons_to_profileFragment"
             app:destination="@id/profileFragment" />
+        <action
+            android:id="@+id/action_homeScreenIcons_to_verification"
+            app:destination="@id/verification" />
     </fragment>
     <fragment
         android:id="@+id/addTagBottomSheet"
@@ -192,4 +183,16 @@
         android:id="@+id/addExperienceBottomSheet"
         android:name="com.gigforce.app.modules.profile.AddExperienceBottomSheet"
         android:label="AddExperienceBottomSheet" />
+    <fragment
+        android:id="@+id/verification"
+        android:name="com.gigforce.app.modules.verification.Verification"
+        android:label="Verification" >
+        <action
+            android:id="@+id/action_verification_to_addVerificationContact"
+            app:destination="@id/addVerificationContact" />
+    </fragment>
+    <fragment
+        android:id="@+id/addVerificationContact"
+        android:name="com.gigforce.app.modules.verification.AddVerificationContact"
+        android:label="AddVerificationContact" />
 </navigation>

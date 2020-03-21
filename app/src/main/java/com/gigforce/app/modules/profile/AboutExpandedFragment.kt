@@ -33,7 +33,6 @@ class AboutExpandedFragment: Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         layout = inflater.inflate(R.layout.fragment_profile_about_expanded, container, false)
         return layout
     }
