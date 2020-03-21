@@ -44,19 +44,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView29" />
 
-    <Button
-        android:id="@+id/verify_otp_button"
-        android:layout_width="45dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="1dp"
-        android:layout_marginTop="102dp"
-        android:background="@drawable/next_button"
-        android:textColor="@android:color/white"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/otp_string"
-        app:layout_constraintTop_toBottomOf="@+id/textView29" />
-
     <TextView
         android:id="@+id/otpnotcorrect"
         android:layout_width="wrap_content"
@@ -102,4 +89,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/otp_string" />
+
+    <ImageView
+        android:id="@+id/verify_otp_button"
+        android:layout_width="45dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="1dp"
+        android:layout_marginTop="96dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.11"
+        app:layout_constraintStart_toEndOf="@+id/otp_string"
+        app:layout_constraintTop_toBottomOf="@+id/textView29"
+        app:srcCompat="@drawable/next_button" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
