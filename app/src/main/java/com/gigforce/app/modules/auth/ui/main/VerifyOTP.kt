@@ -103,6 +103,6 @@ class VerifyOTP: Fragment() {
             Toast.makeText(layout.context, "Too many invalid attempts, Try again later!", Toast.LENGTH_SHORT).show()
         }
         
-        layout.reenter_mobile.setOnClickListener { findNavController().navigate(R.id.mobileInput)}
+        layout.reenter_mobile.setOnClickListener { findNavController().navigate(R.id.Login)}
     }
 }

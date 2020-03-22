@@ -28,7 +28,7 @@ class AddVerificationContact : BottomSheetDialogFragment() {
             container: ViewGroup?,
             savedInstanceState: Bundle?
         ): View? {
-            layout = inflater.inflate(R.layout.add_contact_bottom_sheet, container, false)
+            layout = inflater.inflate(R.layout.layout_verification_contact, container, false)
             return layout
         }
 
@@ -37,17 +37,17 @@ class AddVerificationContact : BottomSheetDialogFragment() {
 
             viewModel = ViewModelProviders.of(this).get(VerificationViewModel::class.java)
 
-            layout.add_contact_add_more.setOnClickListener{
+            layout.add_veri_contact_address.setOnClickListener{
                 addNewContact()
                 resetLayout()
             }
-            layout.add_contact_cancel.setOnClickListener{
-                findNavController().navigate(R.id.homeScreenIcons)
+            layout.add_veri_contact_cancel.setOnClickListener{
+                findNavController().navigate(R.id.verification)
             }
-            layout.add_contact_save.setOnClickListener{
+            layout.add_veri_contact_save.setOnClickListener{
                 addNewContact()
                 saveNewContacts()
-                findNavController().navigate(R.id.homeScreenIcons)
+                findNavController().navigate(R.id.verification)
             }
         }
 
@@ -63,8 +63,8 @@ class AddVerificationContact : BottomSheetDialogFragment() {
 
         private fun resetLayout() {
             layout.add_veri_contact_address.setText("")
-            layout.add_contact_phone.setText("")
-            layout.add_contact_email.setText("")
+            layout.add_veri_contact_phone.setText("")
+            layout.add_veri_contact_email.setText("")
         }
 
         private fun saveNewContacts() {

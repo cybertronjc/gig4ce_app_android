@@ -60,7 +60,7 @@ class HomeScreenIcons : Fragment() {
         val window: Window = activity!!.window
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-        window.setStatusBarColor(activity!!.resources.getColor(R.color.colorAccent))
+        window.statusBarColor = activity!!.resources.getColor(R.color.colorAccent)
 
         layout = inflater.inflate(R.layout.layout_home_screen, container, false)
 
@@ -151,4 +151,3 @@ class HomeScreenIcons : Fragment() {
         })
     }
 }
-

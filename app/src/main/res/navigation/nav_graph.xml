@@ -118,7 +118,11 @@
         android:id="@+id/introSlidesFragment"
         android:name="com.gigforce.app.modules.onboarding.IntroSlidesFragment"
         android:label="fragment_intro_slides"
-        tools:layout="@layout/fragment_intro_slides" />
+        tools:layout="@layout/fragment_intro_slides" >
+        <action
+            android:id="@+id/action_introSlidesFragment_to_login2"
+            app:destination="@id/Login" />
+    </fragment>
     <fragment
         android:id="@+id/OBSlidesFragment"
         android:name="com.gigforce.app.modules.onboarding.OBSlidesFragment"
@@ -189,10 +193,18 @@
         android:label="Verification" >
         <action
             android:id="@+id/action_verification_to_addVerificationContact"
-            app:destination="@id/addVerificationContact" />
+            app:destination="@id/verificationcontact" />
     </fragment>
     <fragment
-        android:id="@+id/addVerificationContact"
+        android:id="@+id/verificationcontact"
         android:name="com.gigforce.app.modules.verification.AddVerificationContact"
         android:label="AddVerificationContact" />
+    <fragment
+        android:id="@+id/Login"
+        android:name="com.gigforce.app.modules.auth.ui.main.Login"
+        android:label="Login" >
+        <action
+            android:id="@+id/action_login2_to_verifyOTP"
+            app:destination="@id/verifyOTP" />
+    </fragment>
 </navigation>

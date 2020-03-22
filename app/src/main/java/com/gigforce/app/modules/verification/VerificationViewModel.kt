@@ -15,10 +15,10 @@ import com.google.firebase.storage.FirebaseStorage
 class VerificationViewModel: ViewModel() {
 
     var veriFirebaseRepository = VeriFirebaseRepository()
-    var veriData: MutableLiveData<VerificationData> = MutableLiveData<VerificationData>()
+    var veriData: MutableLiveData<Contact_Verification> = MutableLiveData<Contact_Verification>()
     val uid: String
 
-    fun getVerificationData(): MutableLiveData<VerificationData> {
+    fun getVerificationData(): MutableLiveData<Contact_Verification> {
         veriFirebaseRepository.getProfile().addSnapshotListener(EventListener<DocumentSnapshot> {
                 value, e ->
 
@@ -30,7 +30,7 @@ class VerificationViewModel: ViewModel() {
             Log.d("VerificationViewModel", value.toString())
 
             veriData.postValue(
-                value!!.toObject(VerificationData::class.java)
+                value!!.toObject(Contact_Verification::class.java)
             )
 
             Log.d("VerificationViewModel", veriData.toString())

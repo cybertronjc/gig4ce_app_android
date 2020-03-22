@@ -138,14 +138,16 @@ class VideoResumeFragment:Fragment() {
             // Inflate the layout for this fragment
             // This callback will only be called when MyFragment is at least Started.
             // This callback will only be called when MyFragment is at least Started.
-            val callback: OnBackPressedCallback =
-                object : OnBackPressedCallback(true /* enabled by default */) {
-                    override fun handleOnBackPressed() { // Handle the back button event
-                    }
-                }
             requireActivity().onBackPressedDispatcher.addCallback(this, callback)
             return inflater.inflate(layout.fragment_video_resume, container, false)
         }
+
+        val callback: OnBackPressedCallback =
+            object : OnBackPressedCallback(true /* enabled by default */) {
+                override fun handleOnBackPressed() { // Handle the back button event
+                    onBackPressed()
+                }
+            }
 
         override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
             super.onViewCreated(view, savedInstanceState)
@@ -359,10 +361,7 @@ class VideoResumeFragment:Fragment() {
 
                 //currentPosition = position
 
-
                 //Toast.makeText(holder.viewpager.rootView.context, "counter:>>>>>>>>>>>>>> "+viewpager.currentItem.toString(), Toast.LENGTH_SHORT).show()
-
-
 
                 if(position == 0) {
                     GlideApp.with(itemView)
