@@ -6,43 +6,65 @@
     app:startDestination="@id/homeFragment">
 
     <fragment
+        android:id="@+id/aboutExpandedFragment"
+        android:name="com.gigforce.app.modules.profile.AboutExpandedFragment"
+        android:label="AboutExpandedFragment"
+        tools:layout="@layout/fragment_profile_about_expanded">
+        <action
+            android:id="@+id/action_aboutExpandedFragment_to_addContactBottomSheetFragment"
+            app:destination="@id/addContactBottomSheetFragment" />
+        <action
+            android:id="@+id/action_aboutExpandedFragment_to_addLanguageBottomSheetFragment"
+            app:destination="@id/addLanguageBottomSheetFragment" />
+    </fragment>
+    <dialog
+        android:id="@+id/addContactBottomSheetFragment"
+        android:name="com.gigforce.app.modules.profile.AddContactBottomSheetFragment"
+        android:label="AddContactBottomSheetFragment"
+        tools:layout="@layout/add_contact_bottom_sheet" />
+    <dialog
+        android:id="@+id/addLanguageBottomSheetFragment"
+        android:name="com.gigforce.app.modules.profile.AddLanguageBottomSheetFragment"
+        android:label="AddLanguageBottomSheetFragment" />
+    <fragment
+        android:id="@+id/experienceExpandedFragment"
+        android:name="com.gigforce.app.modules.profile.ExperienceExpandedFragment"
+        android:label="ExperienceExpandedFragment"
+        tools:layout="@layout/fragment_profile_experience_expanded" />
+    <fragment
         android:id="@+id/homeFragment"
         android:name="com.gigforce.app.modules.home.HomeFragment"
         android:label="home"
         tools:layout="@layout/fragment_home">
         <action
-            android:id="@+id/action_homeFragment_to_loginFragment"
-            app:destination="@id/loginFragment" />
+            android:id="@+id/action_homeFragment_to_languageSelectFragment"
+            app:destination="@id/languageSelectFragment" />
         <action
-            android:id="@+id/action_homeFragment_to_profileFragment"
-            app:destination="@id/profileFragment" />
-        <action
-            android:id="@+id/action_homeFragment_to_chatsHomeFragment"
-            app:destination="@id/chatsHomeFragment" />
+            android:id="@+id/action_homeFragment_to_homeScreenIcons"
+            app:destination="@id/homeScreenIcons" />
     </fragment>
-    <fragment
-        android:id="@+id/loginFragment"
-        android:name="com.gigforce.app.modules.auth.ui.main.LoginFragment"
-        android:label="LoginFragment" >
-        <action
-            android:id="@+id/action_loginFragment_to_confirmOtpFragment"
-            app:destination="@id/confirmOtpFragment"
-            app:enterAnim="@android:anim/slide_in_left"
-            app:exitAnim="@android:anim/slide_out_right"
-            app:popEnterAnim="@android:anim/slide_in_left"
-            app:popExitAnim="@android:anim/slide_out_right"
-            app:popUpTo="@id/loginFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/confirmOtpFragment"
-        android:name="com.gigforce.app.modules.auth.ui.main.ConfirmOtpFragment"
-        android:label="fragment_confirm_otp"
-        tools:layout="@layout/fragment_confirm_otp" />
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.gigforce.app.modules.profile.ProfileFragment"
         android:label="profile_fragment"
-        tools:layout="@layout/fragment_profile" />
+        tools:layout="@layout/fragment_profile_main_expanded">
+        <action
+            android:id="@+id/action_profileFragment_to_educationExpandedFragment"
+            app:destination="@id/educationExpandedFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_aboutExpandedFragment"
+            app:destination="@id/aboutExpandedFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_experienceExpandedFragment"
+            app:destination="@id/experienceExpandedFragment" />
+
+        <action
+            android:id="@+id/action_profileFragment_to_experienceExpandedFragment2"
+            app:destination="@id/experienceExpandedFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_addTagBottomSheet"
+            app:destination="@id/addTagBottomSheet" />
+    </fragment>
     <fragment
         android:id="@+id/chatsHomeFragment"
         android:name="com.gigforce.app.modules.chat.ChatsHomeFragment"
@@ -58,15 +80,131 @@
         android:label="chat_fragment"
         tools:layout="@layout/fragment_chat" />
     <fragment
-        android:id="@+id/roasterFragment"
-        android:name="com.gigforce.app.modules.roaster.RoasterFragment"
-        android:label="RoasterFragment" >
+        android:id="@+id/educationExpandedFragment"
+        android:name="com.gigforce.app.modules.profile.EducationExpandedFragment"
+        android:label="EducationExpandedFragment"
+        tools:layout="@layout/fragment_profile_education_expanded">
         <action
-            android:id="@+id/action_roasterFragment_to_profileFragment"
+            android:id="@+id/action_educationExpandedFragment_to_addAchievementBottomSheetFragment"
+            app:destination="@id/addAchievementBottomSheetFragment" />
+        <action
+            android:id="@+id/action_educationExpandedFragment_to_addEducationBottomSheetFragment"
+            app:destination="@id/addEducationBottomSheetFragment" />
+        <action
+            android:id="@+id/action_educationExpandedFragment_to_addSkillBottomSheetFragment"
+            app:destination="@id/addSkillBottomSheetFragment" />
+    </fragment>
+    <dialog
+        android:id="@+id/addSkillBottomSheetFragment"
+        android:name="com.gigforce.app.modules.profile.AddSkillBottomSheetFragment"
+        android:label="AddSkillBottomSheetFragment"
+        tools:layout="@layout/add_skill_bottom_sheet" />
+    <dialog
+        android:id="@+id/addAchievementBottomSheetFragment"
+        android:name="com.gigforce.app.modules.profile.AddAchievementBottomSheetFragment"
+        android:label="AddAchievementBottomSheetFragment"
+        tools:layout="@layout/add_achievement_bottom_sheet" />
+    <dialog
+        android:id="@+id/addEducationBottomSheetFragment"
+        android:name="com.gigforce.app.modules.profile.AddEducationBottomSheetFragment"
+        android:label="AddEducationBottomSheetFragment"
+        tools:layout="@layout/add_education_bottom_sheet" />
+
+    <fragment
+        android:id="@+id/createInitProfile"
+        android:name="com.gigforce.app.modules.onboarding.CreateInitProfile"
+        android:label="CreateInitProfile" />
+    <fragment
+        android:id="@+id/introSlidesFragment"
+        android:name="com.gigforce.app.modules.onboarding.IntroSlidesFragment"
+        android:label="fragment_intro_slides"
+        tools:layout="@layout/fragment_intro_slides" >
+        <action
+            android:id="@+id/action_introSlidesFragment_to_login2"
+            app:destination="@id/Login" />
+    </fragment>
+    <fragment
+        android:id="@+id/OBSlidesFragment"
+        android:name="com.gigforce.app.modules.onboarding.OBSlidesFragment"
+        android:label="OBSlidesFragment" >
+        <action
+            android:id="@+id/action_OBSlidesFragment_to_createInitProfile"
+            app:destination="@id/createInitProfile" />
+    </fragment>
+    <fragment
+        android:id="@+id/languageSelectFragment"
+        android:name="com.gigforce.app.utils.LanguageSelectFragment"
+        android:label="LanguageSelectFragment" >
+        <action
+            android:id="@+id/action_languageSelectFragment_to_introSlidesFragment"
+            app:destination="@id/introSlidesFragment" />
+<!--
+            android:id="@+id/action_languageSelectFragment_to_videoResumeFragment"
+            app:destination="@id/videoResumeFragment" />
+-->
+    </fragment>
+    <fragment
+        android:id="@+id/videoResumeFragment"
+        android:name="com.gigforce.app.modules.video_resume.VideoResumeFragment"
+        android:label="fragment_video_resume"
+        tools:layout="@layout/fragment_video_resume" />
+    <fragment
+        android:id="@+id/verifyOTP"
+        android:name="com.gigforce.app.modules.auth.ui.main.VerifyOTP"
+        android:label="VerifyOTP" >
+        <argument
+            android:name="verificationId"
+            app:argType="string"
+            android:defaultValue='""' />
+        <action
+            android:id="@+id/action_verifyOTP_to_homeScreenIcons"
+            app:destination="@id/homeScreenIcons" />
+    </fragment>
+    <fragment
+        android:id="@+id/homeScreenFragment"
+        android:name="com.gigforce.app.modules.homescreen.HomeScreenFragment"
+        android:label="HomeScreenFragment" >
+        <action
+            android:id="@+id/action_homeScreenFragment_to_profileFragment"
             app:destination="@id/profileFragment" />
     </fragment>
     <fragment
-        android:id="@+id/settingsFragment"
-        android:name="com.gigforce.app.modules.preferences.SettingsFragment"
-        android:label="SettingsFragment" />
+        android:id="@+id/homeScreenIcons"
+        android:name="com.gigforce.app.modules.homescreen.HomeScreenIcons"
+        android:label="HomeScreenIcons" >
+        <action
+            android:id="@+id/action_homeScreenIcons_to_profileFragment"
+            app:destination="@id/profileFragment" />
+        <action
+            android:id="@+id/action_homeScreenIcons_to_verification"
+            app:destination="@id/verification" />
+    </fragment>
+    <fragment
+        android:id="@+id/addTagBottomSheet"
+        android:name="com.gigforce.app.modules.profile.AddTagBottomSheet"
+        android:label="AddTagBottomSheet" />
+    <dialog
+        android:id="@+id/addExperienceBottomSheet"
+        android:name="com.gigforce.app.modules.profile.AddExperienceBottomSheet"
+        android:label="AddExperienceBottomSheet" />
+    <fragment
+        android:id="@+id/verification"
+        android:name="com.gigforce.app.modules.verification.Verification"
+        android:label="Verification" >
+        <action
+            android:id="@+id/action_verification_to_addVerificationContact"
+            app:destination="@id/verificationcontact" />
+    </fragment>
+    <fragment
+        android:id="@+id/verificationcontact"
+        android:name="com.gigforce.app.modules.verification.AddVerificationContact"
+        android:label="AddVerificationContact" />
+    <fragment
+        android:id="@+id/Login"
+        android:name="com.gigforce.app.modules.auth.ui.main.Login"
+        android:label="Login" >
+        <action
+            android:id="@+id/action_login2_to_verifyOTP"
+            app:destination="@id/verifyOTP" />
+    </fragment>
 </navigation>

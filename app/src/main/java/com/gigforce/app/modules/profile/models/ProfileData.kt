@@ -1,22 +1,24 @@
 package com.gigforce.app.modules.profile.models
 
-import java.util.*
 import kotlin.collections.ArrayList
 
 data class ProfileData(
-    val id: String?,
-    val name: String? = null,
-    val gender: String? = null,
-    val email: String? = null,
-    val max_education: String? = null,
-    val current_edu: String? = null,
-    val current_work: String? = null,
-    val tags: ArrayList<String> = ArrayList(),
-    val dob: Date? = null
+    val id: String? = null,
+    var name: String = "",
+    var aboutMe: String = "",
+    var email: String = "",
+    var bio: String = "",
+    var isVerified: Boolean = false,
+    var Education: ArrayList<Education>? = null,
+    var Skill: ArrayList<String>? = null,
+    var Achievement: ArrayList<Achievement>? = null,
+    var Language: ArrayList<Language>? = null,
+    var Contact: ArrayList<Contact>? = null,
+    var Experience: ArrayList<Experience>? = null,
+    var Tags: ArrayList<String>? = null,
+    var connections: Int = 0,
+    var rating: Rating? = null,
+    var tasksDone: Int = 0
 ) {
-
-    fun GetAge(): String {
-        return "-"
-    }
 
 }

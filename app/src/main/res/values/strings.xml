@@ -1,8 +1,26 @@
 <resources>
-    <string name="app_name">Gigforce1</string>
+    <string name="app_name">Gigforce</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_profile">ProfileActivity</string>
+
+    <string name="intro_slide1_title">Welcome to Gigforce</string>
+    <string name="intro_slide1_subtitle">Learn. Earn. Enjoy.</string>
+
+    <string name="intro_slide2_title">Work Happens</string>
+    <string name="intro_slide2_subtitle">Get Notified when work happens</string>
+
+    <string name="intro_slide3_title">Task and Assign</string>
+    <string name="intro_slide3_subtitle">Task and assign them to collegues!</string>
+
+    <string name="ob_slide1_title">Onboarding</string>
+    <string name="ob_slide1_subtitle">How to - 1</string>
+
+    <string name="ob_slide2_title">Onboarding</string>
+    <string name="ob_slide2_subtitle">How to - 2</string>
+
+    <string name="ob_slide3_title">Onboarding</string>
+    <string name="ob_slide3_subtitle">How to - 3</string>
     <!--
     This string is used for square devices and overridden by hello_world in
     values-round/strings.xml for round devices.
@@ -22,4 +40,119 @@
     <string name="attachment_summary_on">Automatically download attachments for incoming emails
     </string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
+
+    <!-- Profile main expanded page -->
+    <string name="rating_text">Rating</string>
+    <string name="tasks_done_text">Tasks Done</string>
+    <string name="connections_text">Connections</string>
+    <string name="default_location_text">Location\n220KM away</string>
+    <string name="education_card_education_text">Education</string>
+    <string name="education_card_content_placeholder">Education content to be put here</string>
+    <string name="view_more_text">View more</string>
+    <string name="empty_dash_string">-</string>
+    <string name="about_card_about_text">About Me</string>
+    <string name="about_card_content_placeholder">About me content to be put here</string>
+    <string name="experience_card_experience_text">Experience</string>
+
+    <!-- Profile experience expanded page -->
+    <string name="experience_expanded_add_experience_text">+ Add Experience</string>
+
+    <!-- Profile education expanded page -->
+    <string name="education_expanded_Education_text">Education</string>
+    <string name="education_expanded_skills_text">Skills</string>
+    <string name="education_expanded_achievements_text">Achievements</string>
+    <string name="education_expanded_add_education_text">+ Add Education</string>
+    <string name="education_expanded_add_skill_text">+ Add Skill</string>
+    <string name="education_expanded_add_achievement_text">+ Add Achievement</string>
+    <string name="education_expanded_user_name">User Name</string>
+    <string name="nav_education_text">Education</string>
+    <string name="nav_about_text">About me</string>
+    <string name="nav_gigs_text">Gigs</string>
+    <string name="nav_experience_text">Experience</string>
+
+    <!-- Add New Skill Bottom Sheet -->
+    <string name="add_skill_sheet_new_skill">New Skill</string>
+    <string name="add_skill_sheet_category">Category</string>
+    <string name="add_skill_sheet_skill_name">Name of Skill</string>
+
+    <!-- Add New Achievement Bottom Sheet -->
+    <string name="add_achievement_sheet_new_achievement">New Achievement</string>
+    <string name="add_achievement_sheet_title">Title</string>
+    <string name="add_achievement_sheet_issuing_authority">Issuing Authority</string>
+    <string name="add_achievement_sheet_location">Location</string>
+    <string name="add_achievement_sheet_year">Year *</string>
+
+    <!-- Add New Education Bottom Sheet -->
+    <string name="add_education_sheet_new_education">New Education</string>
+    <string name="add_education_sheet_institution">Institution</string>
+    <string name="add_education_sheet_course">Course</string>
+    <string name="add_education_sheet_degree">Degree</string>
+    <string name="add_education_sheet_start_year">Start Year *</string>
+    <string name="add_education_sheet_end_year">End Year *</string>
+
+    <!-- Add New Contact Bottom Sheet -->
+    <string name="add_contact_new_contact">New Contact</string>
+    <string name="add_contact_phone">Phone</string>
+    <string name="add_contact_email">Email</string>
+
+    <!-- About expanded page -->
+    <string name="about_expanded_bio_text">Bio</string>
+    <string name="about_expanded_language_text">Language Known</string>
+    <string name="about_expanded_add_language_text">+ Add Language</string>
+    <string name="about_expanded_contact_text">Contact Details </string>
+    <string name="about_expanded_add_contact_text">+ Add Contact</string>
+
+    <!-- Add New Language Bottom Sheet -->
+    <string name="add_language_new_language">New Language</string>
+    <string name="add_language_name">Name</string>
+    <string name="add_language_speaking_level">Speaking level</string>
+    <string name="add_language_writing_level">Writing level</string>
+
+    <!--language select-->
+    <string name="title_lang">Select Language</string>
+
+
+    <!--login fragment-->
+    <string name="title_login">Please Login</string>
+    <string name="mobile_login">Enter Your Mobile No.</string>
+    <string name="confirm_login">Confirm</string>
+
+    <!--video resume-->
+    <string name="guidelines_video_resume">Guidelines</string>
+    <string name="button_upload_video">UPLOAD</string>
+    <string name="title_video_resume">Video Resume</string>
+    <string name="why_video_resume">why video resume is imp?</string>
+    <string name="desc1_video_resume">let us know more about you</string>
+    <string name="desc2_video_resume">no resume and no interview</string>
+
+    <!-- mobile otp -->
+    <string name="otp_sign_in_up">Login</string>
+    <string name="otp_enter_mobile_num">Enter your mobile number\nfor OTP verification</string>
+    <string name="otp_will_send_otp">We will send you One Time Password (OTP)</string>
+    <string name="otp_verify_account">Verify Account</string>
+    <string name="mobile_verified">Mobile verification success!</string>
+    <string name="otp_notcorrect">Wrong Password !!</string>
+    <string name="otp_sent_otp_account">We have sent the OTP to your number \nPlease enter the OTP</string>
+    <string name="otp_hint">_ _ _ _ _ _</string>
+    <string name="otp_verify">Verify</string>
+    <string name="otp_reenter_mobile">Re-enter mobile number</string>
+    <string name="otp_send_otp">Send OTP</string>
+
+    <!-- Add New Experience Bottom Sheet -->
+    <string name="add_experience_new_experience">New Experience</string>
+    <string name="add_experience_title">Title</string>
+    <string name="add_experience_employment_type">Employment Type</string>
+    <string name="add_experience_location">Location</string>
+    <string name="add_experience_start_date">Start Date</string>
+    <string name="add_experience_end_date">End Date</string>
+    <string name="add_experience_currently_working">Currently Working Here</string>
+
+    <!-- Generic strings -->
+    <string name="cancel_text">Cancel</string>
+    <string name="save_text">Save</string>
+    <string name="add_more_text">+ Add more</string>
+    <string name="verified_text">Verified</string>
+    <string name="tags_text">Tags of User</string>
+    <string name="about_me_text">About me of user</string>
+    <string name="to_be_filled_from_profile_data">To Be Filled From Profile Data</string>
 </resources>

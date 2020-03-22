@@ -1,8 +1,10 @@
 package com.gigforce.app.modules.auth.ui.main
 
 import android.app.Activity
+import android.telephony.PhoneNumberUtils
 import android.text.TextUtils
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.FirebaseException
@@ -25,9 +27,10 @@ class LoginViewModel() : ViewModel() {
     }
 
     val liveState:MutableLiveData<Int> = MutableLiveData<Int>(STATE_INITIALIZED)
-    var verificationId:String? = null
+    var verificationId: String? = null
     var token: PhoneAuthProvider.ForceResendingToken? = null
     var activity: Activity? = null
+    var phoneNo: String? = null
 
     init {
         FirebaseAuth.getInstance().currentUser .let {
@@ -52,27 +55,22 @@ class LoginViewModel() : ViewModel() {
             verificationId = _verificationId
             token = _token
             Log.d(TAG, "Code Sent Successfully")
+            Log.d("LoginViewModel", "intialize verificationId -> " + verificationId.toString())
             liveState.postValue(STATE_CODE_SENT)
         }
     }
 
-    fun validatePhoneNumber(phoneNumber:String): Boolean {
-        if (TextUtils.isEmpty(phoneNumber)) {
-            // fieldPhoneNumber.error = "Invalid phone number."
-            return false
-        }
-        return true
-    }
-
     fun verifyPhoneNumberWithCode(code: String) {
         // [START verify_with_code]
+        Log.d("LoginViewModel", "code ->" + code.toString())
+        Log.d("LoginViewModel", "verificationId ->" + verificationId.toString())
         val credential = PhoneAuthProvider.getCredential(verificationId!!, code)
         // [END verify_with_code]
         signInWithPhoneAuthCredential(credential)
     }
 
     fun sendVerificationCode(phoneNumber: String) {
-        Log.d(TAG, "Sending phone number for verification")
+        Log.d(TAG, "Sending phone number for verification>>>$phoneNumber")
         PhoneAuthProvider.getInstance().verifyPhoneNumber(
             phoneNumber, // Phone number to verify
             60, // Timeout duration
@@ -93,6 +91,12 @@ class LoginViewModel() : ViewModel() {
                     Log.w(TAG, "signInWithCredential:failure", it.exception)
                     liveState.value = STATE_SIGNIN_FAILED
                 }
+            }
+            .addOnSuccessListener {
+                Log.d("status", "Signed in successfully")
+            }
+            .addOnFailureListener{
+                Log.d("status", "Signed in failed")
             }
     }
 }

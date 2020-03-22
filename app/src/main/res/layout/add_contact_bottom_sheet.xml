@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/textView22"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/add_contact_new_contact"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/add_contact_phone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:hint="@string/add_contact_phone"
+        android:inputType="phone"
+        app:layout_constraintStart_toStartOf="@+id/textView22"
+        app:layout_constraintTop_toBottomOf="@+id/textView22"
+        android:importantForAutofill="no" />
+
+    <EditText
+        android:id="@+id/add_contact_email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:hint="@string/add_contact_email"
+        android:inputType="textEmailAddress"
+        app:layout_constraintStart_toStartOf="@+id/add_contact_phone"
+        app:layout_constraintTop_toBottomOf="@+id/add_contact_phone"
+        android:importantForAutofill="no" />
+
+    <TextView
+        android:id="@+id/add_contact_add_more"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/add_more_text"
+        app:layout_constraintStart_toStartOf="@+id/add_contact_email"
+        app:layout_constraintTop_toBottomOf="@+id/add_contact_email" />
+
+    <Button
+        android:id="@+id/add_contact_cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/cancel_text"
+        app:layout_constraintStart_toStartOf="@+id/add_contact_add_more"
+        app:layout_constraintTop_toBottomOf="@+id/add_contact_add_more" />
+
+    <Button
+        android:id="@+id/add_contact_save"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/save_text"
+        app:layout_constraintStart_toEndOf="@+id/add_contact_cancel"
+        app:layout_constraintTop_toBottomOf="@+id/add_contact_add_more" />
+</androidx.constraintlayout.widget.ConstraintLayout>

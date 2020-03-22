@@ -1,0 +1,106 @@
+package com.gigforce.app.modules.profile
+
+import android.os.Bundle
+import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.Toast
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.request.RequestOptions
+import com.gigforce.app.R
+import com.gigforce.app.utils.GlideApp
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
+import kotlinx.android.synthetic.main.fragment_profile_about_expanded.view.*
+import kotlinx.android.synthetic.main.fragment_profile_education_expanded.view.*
+import kotlinx.android.synthetic.main.fragment_profile_main_expanded.view.*
+import kotlinx.android.synthetic.main.profile_card_background.view.*
+import java.text.SimpleDateFormat
+
+class EducationExpandedFragment: Fragment() {
+
+    companion object {
+        fun newInstance() = EducationExpandedFragment()
+    }
+
+    private lateinit var storage: FirebaseStorage
+    lateinit var viewModel: ProfileViewModel
+
+    private lateinit var layout: View
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        Log.d("DEBUG", "ENTERED Profile Education Expanded VIEW")
+        layout = inflater.inflate(R.layout.fragment_profile_education_expanded, container, false)
+        return layout
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        storage = FirebaseStorage.getInstance()
+
+        viewModel = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
+
+        viewModel.userProfileData.observe(this, Observer { profile ->
+            var educationString: String = ""
+            var format = SimpleDateFormat("dd/MM/yyyy")
+            for (education in profile.Education!!) {
+                educationString += education.institution + "\n"
+                educationString += education.degree + " - " + education.course + "\n"
+                educationString += format.format(education.startYear!!) + " - " + format.format(education.endYear!!) + "\n\n"
+            }
+            layout.education_card.cardTitle = "Education"
+            layout.education_card.cardContent = educationString
+            layout.education_card.cardBottom = "+ Add Education"
+
+            var skillString: String = ""
+            for (skill in profile.Skill!!) {
+//                skillString += skill.category + "\n"
+//                skillString += skill.nameOfSkill + "\n\n"
+                skillString += skill + "\n\n"
+            }
+            layout.skill_card.cardTitle = "Skills"
+            layout.skill_card.cardContent = skillString
+            layout.skill_card.cardBottom = "+ Add Skill"
+
+            var achievementString: String = ""
+            for (achievement in profile.Achievement!!) {
+                achievementString += achievement.title + "\n"
+                achievementString += achievement.issuingAuthority + "\n"
+                achievementString += achievement.location + "\n"
+                //achievementString += format.format(achievement.year!!) + "\n\n"
+                achievementString += achievement.year + "\n\n"
+            }
+            layout.achievement_card.cardTitle = "Achievement"
+            layout.achievement_card.cardContent = achievementString
+            layout.achievement_card.cardBottom = "+ Add Achievement"
+
+            layout.education_top_profile.userName = profile.name
+            layout.education_top_profile.imageName = "ysharma.jpg"
+
+            Log.d("ProfileFragment", profile.rating.toString())
+        })
+
+        // back page navigation
+//        layout.education_expanded_back_button.setOnClickListener{
+//            this.findNavController().navigate(R.id.profileFragment)
+//        }
+
+        // Navigate to bottom sheets
+        layout.skill_card.card_bottom.setOnClickListener{
+            this.findNavController().navigate(R.id.addSkillBottomSheetFragment)
+        }
+        layout.achievement_card.card_bottom.setOnClickListener{
+            this.findNavController().navigate(R.id.addAchievementBottomSheetFragment)
+        }
+        layout.education_card.card_bottom.setOnClickListener{
+            this.findNavController().navigate(R.id.addEducationBottomSheetFragment)
+        }
+    }
+}

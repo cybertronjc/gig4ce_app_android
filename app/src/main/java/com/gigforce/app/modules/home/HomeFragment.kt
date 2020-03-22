@@ -1,7 +1,9 @@
 package com.gigforce.app.modules.home
 
+
 import android.content.Context
 import android.content.Intent
+
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.util.Log
@@ -9,9 +11,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.BaseAdapter
-import android.widget.Button
-import android.widget.ImageView
+
 import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
 import androidx.fragment.app.activityViewModels
@@ -20,15 +20,10 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.gigforce.app.R
 import com.gigforce.app.modules.auth.ui.main.LoginViewModel
 import com.gigforce.app.modules.chat.ChatsHomeFragment
-import com.gigforce.app.modules.photoCrop.ui.main.PhotoCrop
-import com.gigforce.app.modules.roaster.RoasterFragment
-import com.gigforce.app.utils.GlideApp
-import com.gigforce.app.utils.reduceDragSensitivity
+import com.gigforce.app.modules.homescreen.HomeScreenFragment
 import com.google.firebase.auth.FirebaseAuth
-import kotlinx.android.synthetic.main.bottom_home.*
-import kotlinx.android.synthetic.main.fragment_home.*
 
-class HomeFragment: Fragment() {
+class HomeFragment: Fragment(), View.OnClickListener {
 
     private val loginViewModel: LoginViewModel by activityViewModels<LoginViewModel>()
 
@@ -44,7 +39,12 @@ class HomeFragment: Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_home, container, false)
+        val view: View = inflater.inflate(R.layout.fragment_home, container, false);
+        /*val btn: Button = view.findViewById(R.id.buttonCP) as Button
+        btn.setOnClickListener() {
+            findNavController().navigate(R.id.sampleOB)
+        }*/
+        return  view
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -61,7 +61,9 @@ class HomeFragment: Fragment() {
             if(it.currentUser == null) {
                 initAuth()
             }else {
-
+                Log.d("STATUS", "logged in hai")
+                //this.findNavController().navigate(R.id.homeScreenFragment)
+                this.findNavController().navigate(R.id.homeScreenIcons)
             }
 
         }
@@ -71,22 +73,25 @@ class HomeFragment: Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
 
-        this.pager_home.reduceDragSensitivity()
+//        this.pager_home.reduceDragSensitivity()
+//
+//
+//        val stateAdapter: HomeViewsAdapter = HomeViewsAdapter(this)
+//        this.pager_home.adapter = stateAdapter
+//        this.pager_home.setCurrentItem(1, false)
 
-        val stateAdapter: HomeViewsAdapter = HomeViewsAdapter(this)
-        this.pager_home.adapter = stateAdapter
-        this.pager_home.setCurrentItem(1, false)
 
-
-        /*
-        btn_signout.setOnClickListener {
-            Toast.makeText(context, "Signing out", Toast.LENGTH_SHORT).show()
-            FirebaseAuth.getInstance().signOut()
-        }*/
+    /*
+    btn_signout.setOnClickListener {
+        Toast.makeText(context, "Signing out", Toast.LENGTH_SHORT).show()
+        FirebaseAuth.getInstance().signOut()
+    }*/
     }
 
     fun initAuth() {
-        this.findNavController().navigate(R.id.loginFragxment)
+
+        this.findNavController().navigate(R.id.languageSelectFragment)
+\
     }
 
     class HomeViewsAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
@@ -94,19 +99,30 @@ class HomeFragment: Fragment() {
         override fun getItemCount(): Int = 2
 
         var fragment_chats:ChatsHomeFragment? = null
-        var fragment_roaster: RoasterFragment? = null
+        var fragment_homeScreen: HomeScreenFragment? = null
 
         override fun createFragment(position: Int): Fragment {
             if(position == 0) {
                 fragment_chats ?: let { fragment_chats = ChatsHomeFragment() }
                 return fragment_chats!!
             }else{
-                fragment_roaster ?: let { fragment_roaster =
-                    RoasterFragment()
+                fragment_homeScreen ?: let { fragment_homeScreen =
+                    HomeScreenFragment()
                 }
-                return fragment_roaster!!
+                return fragment_homeScreen!!
             }
         }
 
+    }
+
+    override fun onClick(v: View?) {
+        //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        when (v?.id) {
+            R.id.buttonCP -> {
+                //findNavController().navigate(R.id.gotoOB)
+            }
+            else -> {
+            }
+        }
     }
 }
