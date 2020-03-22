@@ -86,7 +86,7 @@ class HomeFragment: Fragment() {
     }
 
     fun initAuth() {
-        this.findNavController().navigate(R.id.loginFragment)
+        this.findNavController().navigate(R.id.loginFragxment)
     }
 
     class HomeViewsAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
