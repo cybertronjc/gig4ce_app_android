@@ -91,7 +91,7 @@ class HomeFragment: Fragment(), View.OnClickListener {
     fun initAuth() {
 
         this.findNavController().navigate(R.id.languageSelectFragment)
-\
+
     }
 
     class HomeViewsAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {

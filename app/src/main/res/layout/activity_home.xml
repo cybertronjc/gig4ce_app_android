@@ -21,13 +21,6 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-<<<<<<< HEAD
-        android:orientation="vertical"
-        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
-        >
-
-    </LinearLayout>
-=======
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
         <Button
@@ -52,7 +45,6 @@
             app:layout_constraintVertical_bias="0.616" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
->>>>>>> ccd2184a57eab75420f8c46a472e33cba5a9f515
 
     <include layout="@layout/bottom_home" />
 
