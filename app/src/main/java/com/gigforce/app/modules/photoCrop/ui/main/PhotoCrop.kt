@@ -180,7 +180,7 @@ class PhotoCrop : AppCompatActivity() {
                 ))
         )
         uCrop.withAspectRatio(1F, 1F)
-        uCrop.withAspectRatio(16F, 9F)
+        uCrop.withAspectRatio(3F, 4F)
         uCrop.withMaxResultSize(450, 450)
         uCrop.withOptions(getCropOptions())
         uCrop.start(this as AppCompatActivity)
