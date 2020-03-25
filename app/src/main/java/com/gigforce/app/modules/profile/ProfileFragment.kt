@@ -1,5 +1,7 @@
 package com.gigforce.app.modules.profile
 
+import android.app.Activity
+import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
 import androidx.lifecycle.ViewModelProviders
@@ -9,15 +11,18 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
+import com.gigforce.app.modules.photoCrop.ui.main.PhotoCrop
 import com.gigforce.app.utils.GlideApp
 import com.google.android.material.chip.Chip
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageMetadata
 import com.google.firebase.storage.StorageReference
+import kotlinx.android.synthetic.main.fragment_profile.*
 import kotlinx.android.synthetic.main.fragment_profile_education_expanded.view.*
 import kotlinx.android.synthetic.main.fragment_profile_main_expanded.view.*
 import kotlinx.android.synthetic.main.profile_card_background.view.*
@@ -38,6 +43,8 @@ class ProfileFragment : Fragment() {
     private lateinit var viewModel: ProfileViewModel
     private lateinit var storage: FirebaseStorage
     private lateinit var layout: View
+    private lateinit var profileAvatar: ImageView
+    private var PHOTO_CROP: Int = 45
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -56,6 +63,14 @@ class ProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
+
+        // add onClick to profile picture
+        profileAvatar = layout.findViewById(R.id.profile_avatar)
+        profileAvatar.setOnClickListener{
+            val photoCropIntent = Intent(context, PhotoCrop::class.java)
+            startActivityForResult(photoCropIntent,PHOTO_CROP)
+
+        }
 
         // load user data
         viewModel.userProfileData.observe(this, Observer { profile ->
@@ -129,4 +144,22 @@ class ProfileFragment : Fragment() {
             .load(profilePicRef)
             .into(layout.profile_avatar)
     }
+
+    override fun onActivityResult(
+        requestCode: Int,
+        resultCode: Int,
+        data: Intent?
+    ): Unit {
+
+        super.onActivityResult(requestCode, resultCode, data)
+        if(requestCode == PHOTO_CROP && resultCode == Activity.RESULT_OK){
+            var imageName: String? = data?.getStringExtra("filename")
+            Log.v("PROFILE_FRAG_OAR","filename is:"+imageName)
+            if(null!=imageName){
+                loadImage(imageName)
+            }
+
+        }
+    }
+
 }
