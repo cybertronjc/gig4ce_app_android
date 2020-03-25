@@ -1,33 +1,26 @@
 package com.gigforce.app.modules.photoCrop.ui.main
 
-import android.Manifest
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
+import android.provider.MediaStore.Images
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import com.gigforce.app.BuildConfig
 import com.gigforce.app.R
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.UploadTask.TaskSnapshot
-import com.theartofdev.edmodo.cropper.CropImage.getPickImageChooserIntent
 import com.yalantis.ucrop.UCrop
-import io.grpc.ManagedChannelProvider.provider
-import io.grpc.ServerProvider.provider
+import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.IOException
-import java.nio.channels.spi.AsynchronousChannelProvider.provider
-import java.nio.channels.spi.SelectorProvider.provider
-import java.security.cert.Extension
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -54,43 +47,28 @@ class PhotoCrop : AppCompatActivity() {
     }
 
 
-
     override fun onActivityResult(
-            requestCode: Int,
-            resultCode: Int,
-            data: Intent?
+        requestCode: Int,
+        resultCode: Int,
+        data: Intent?
     ): Unit {
         super.onActivityResult(requestCode, resultCode, data)
 
-//        if (resultCode === Activity.RESULT_OK) {
-//            if (requestCode === REQUEST_IMAGE_CAPTURE) {
-////                if(pictureIntent.resolveActivity(getPackageManager()) != null){
-//                //Create a file to store the image
-//                var photoFile: File? = null
-//                try {
-//                    photoFile = createImageFile()
-//                    if(photoFile != null) Log.v("AFTER CREATE IMAGE FILE", "photoFILE " + photoFile.toString())
-//
-//                    if (photoFile != null) {
-//                        var photoUri: Uri =
-//                            FileProvider.getUriForFile(this, "${BuildConfig.APPLICATION_ID}.provider", photoFile)
-//                        Log.v("AFTER FILE URI", "photoUri " + photoUri.toString())
-//                        startCrop(photoUri)
-//                    }
-//
-//                } catch (ex: IOException) {
-//                    // Error occurred while creating the File
-//                }
-//
-//            }
-//        }
-
-
         Log.v(
-                "MAYANK",
-                requestCode.toString() + " RESULT:_" + resultCode.toString() + " UCrop.REQUEST_CROP " + UCrop.REQUEST_CROP.toString()+" data= "+data.toString()
+            "MAYANK",
+            requestCode.toString() + " RESULT:_" + resultCode.toString() + " UCrop.REQUEST_CROP " + UCrop.REQUEST_CROP.toString() + " data= " + data?.extras.toString()
         )
+        var bundle = data?.extras
+        if (null != bundle) {
+            for (key in bundle.keySet()!!) {
+                Log.e(
+                    "PHOTO_CROP_EXTRAS",
+                    key + " : " + if (bundle.get(key) != null) bundle.get(key) else "NULL"
+                )
+            }
+        }
         if (requestCode == CODE_IMG_GALLERY && resultCode == Activity.RESULT_OK) {
+//            val imageUri: Uri? = getImageUri(this, data?.data)
             val imageUri: Uri? = data?.data
             Log.v("COME IMG GALLERY", requestCode.toString())
             if (imageUri != null) {
@@ -108,6 +86,14 @@ class PhotoCrop : AppCompatActivity() {
             }
         }
     }
+//
+//    fun getImageUri(inContext: Context, inImage: Uri?): Uri {
+//        val bytes = ByteArrayOutputStream()
+//        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
+//        val path =
+//            Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null)
+//        return Uri.parse(path)
+//    }
 
     open fun startCrop(uri: Uri): Unit {
 
@@ -118,16 +104,16 @@ class PhotoCrop : AppCompatActivity() {
         //can use this for a new name every time
 
         val timeStamp = SimpleDateFormat(
-                "yyyyMMdd_HHmmss",
-                Locale.getDefault()
+            "yyyyMMdd_HHmmss",
+            Locale.getDefault()
         ).format(Date())
         val imageFileName = "IMG_" + timeStamp + "_"
         val storageDir =
-                getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+            getExternalFilesDir(Environment.DIRECTORY_PICTURES)
 
         val uCrop: UCrop = UCrop.of(
-                uri,
-            Uri.fromFile(File(cacheDir, imageFileName+EXTENSION))
+            uri,
+            Uri.fromFile(File(cacheDir, imageFileName + EXTENSION))
 
             //will need for random name
 //                Uri.fromFile(File.createTempFile(
@@ -136,7 +122,7 @@ class PhotoCrop : AppCompatActivity() {
 //                        storageDir /* directory */
 //                ))
         )
-        resultIntent.putExtra("filename",imageFileName+EXTENSION)
+        resultIntent.putExtra("filename", imageFileName + EXTENSION)
         uCrop.withAspectRatio(1F, 1F)
         uCrop.withMaxResultSize(450, 450)
         uCrop.withOptions(getCropOptions())
@@ -160,7 +146,7 @@ class PhotoCrop : AppCompatActivity() {
 
         Log.v("Upload Image", "started")
         var mReference =
-                mStorage.reference.child("profile_pics").child(uri.lastPathSegment!!)
+            mStorage.reference.child("profile_pics").child(uri.lastPathSegment!!)
 
         var uploadTask = mReference.putFile(uri)
 
@@ -169,16 +155,16 @@ class PhotoCrop : AppCompatActivity() {
                 val progress = (100.0 * taskSnapshot.bytesTransferred) / taskSnapshot.totalByteCount
                 println("Upload is $progress% done")
             }
-        }catch (e: Exception) {
-                Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show()
-            }
+        } catch (e: Exception) {
+            Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show()
+        }
 
         try {
             uploadTask.addOnSuccessListener { taskSnapshot: TaskSnapshot ->
                 val url: String = taskSnapshot.metadata?.reference?.downloadUrl.toString()
                 Toast.makeText(this, "Successfully Uploaded :)", Toast.LENGTH_LONG).show()
-                Log.v("Upload Image",url)
-                setResult(Activity.RESULT_OK,resultIntent)
+                Log.v("Upload Image", url)
+                setResult(Activity.RESULT_OK, resultIntent)
                 super.finish()
             }
         } catch (e: Exception) {
@@ -192,16 +178,16 @@ class PhotoCrop : AppCompatActivity() {
     @Throws(IOException::class)
     open fun createImageFile(): File? {
         val timeStamp = SimpleDateFormat(
-                "yyyyMMdd_HHmmss",
-                Locale.getDefault()
+            "yyyyMMdd_HHmmss",
+            Locale.getDefault()
         ).format(Date())
         val imageFileName = "IMG_" + timeStamp + "_"
         val storageDir =
-                getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+            getExternalFilesDir(Environment.DIRECTORY_PICTURES)
         val image = File.createTempFile(
-                imageFileName,  /* prefix */
-                ".jpg",  /* suffix */
-                storageDir /* directory */
+            imageFileName,  /* prefix */
+            ".jpg",  /* suffix */
+            storageDir /* directory */
         )
         imageFilePath = image.absolutePath
         Log.v("CREATE IMAGE FILE", "saved to " + imageFilePath)
@@ -240,13 +226,13 @@ class PhotoCrop : AppCompatActivity() {
                         "${BuildConfig.APPLICATION_ID}.provider",
                         it
                     )
-                    Log.v("DISPATCH_FUNC","after getting photoURI= "+photoURI.toString())
+                    Log.v("DISPATCH_FUNC", "after getting photoURI= " + photoURI.toString())
                     // add intents for files and camera
                     val pickIntent = Intent()
                     pickIntent.type = "image/*"
                     pickIntent.action = Intent.ACTION_GET_CONTENT
 
-                    val takePhotoIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE,photoURI)
+                    val takePhotoIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE, photoURI)
                     val pickTitle = "Select or take a new Picture"
 //                    val chooserIntent = Intent.createChooser(pickIntent, pickTitle)
                     takePictureIntent.putExtra(
