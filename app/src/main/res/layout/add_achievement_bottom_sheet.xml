@@ -38,24 +38,22 @@
         app:layout_constraintStart_toStartOf="@+id/add_achievement_title"
         app:layout_constraintTop_toBottomOf="@+id/add_achievement_title" />
 
-    <EditText
+    <Spinner
         android:id="@+id/add_achievement_location"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:ems="10"
-        android:hint="@string/add_achievement_sheet_location"
         android:inputType="textPersonName"
         app:layout_constraintStart_toStartOf="@+id/add_achievement_authority"
         app:layout_constraintTop_toBottomOf="@+id/add_achievement_authority" />
 
-    <EditText
+    <Spinner
         android:id="@+id/add_achievement_year"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:ems="10"
-        android:hint="@string/add_achievement_sheet_year"
         android:inputType="date"
         app:layout_constraintStart_toStartOf="@+id/add_achievement_location"
         app:layout_constraintTop_toBottomOf="@+id/add_achievement_location" />
@@ -87,4 +85,5 @@
         android:text="@string/save_text"
         app:layout_constraintStart_toEndOf="@+id/add_achievement_cancel_button"
         app:layout_constraintTop_toBottomOf="@+id/add_achievement_add_more_button" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
