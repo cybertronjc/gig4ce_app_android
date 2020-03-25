@@ -6,6 +6,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.DatePicker
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProviders
@@ -13,6 +15,7 @@ import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
 import com.gigforce.app.modules.profile.models.Education
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import kotlinx.android.synthetic.main.add_achievement_bottom_sheet.view.*
 import kotlinx.android.synthetic.main.add_education_bottom_sheet.*
 import kotlinx.android.synthetic.main.add_education_bottom_sheet.view.*
 import kotlinx.android.synthetic.main.add_education_bottom_sheet.view.end_date
@@ -32,6 +35,8 @@ class AddEducationBottomSheetFragment: BottomSheetDialogFragment() {
     var updates: ArrayList<Education> = ArrayList()
     var selectedEndDate: String = ""
     var selectedStartDate: String = ""
+    var degrees: ArrayList<String> = ArrayList()
+    var selectedDegree: String = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -55,7 +60,7 @@ class AddEducationBottomSheetFragment: BottomSheetDialogFragment() {
             addNewEducation()
             layout.institution_name.setText("")
             layout.course_name.setText("")
-            layout.degree_name.setText("")
+            layout.degree_name.setSelection(0)
             layout.start_date.setText("")
             layout.end_date.setText("")
         }
@@ -84,6 +89,27 @@ class AddEducationBottomSheetFragment: BottomSheetDialogFragment() {
             dialog.show()
         }
 
+        degrees.addAll(listOf("--degree--", "Btech", "BA", "MA", "MS", "polytech"))
+        val degreeAdapter = ArrayAdapter(this.context!!, R.layout.simple_spinner_dropdown_item, degrees)
+        val degreeSpinner = layout.degree_name
+        degreeSpinner.adapter = degreeAdapter
+        degreeSpinner.onItemSelectedListener = object:
+            AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                selectedDegree = degrees[position]
+                Log.d("Spinner", "selected " + degrees[position])
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                //TODO("Not yet implemented")
+            }
+        }
+
         layout.save_button.setOnClickListener{
             addNewEducation()
             viewModel.setProfileEducation(updates)
@@ -96,7 +122,7 @@ class AddEducationBottomSheetFragment: BottomSheetDialogFragment() {
         updates.add(Education(
             institution = layout.institution_name.text.toString(),
             course = layout.course_name.text.toString(),
-            degree = layout.degree_name.text.toString(),
+            degree = selectedDegree,
             startYear = SimpleDateFormat("dd/MM/yyyy").parse(selectedStartDate.toString()),
             endYear = SimpleDateFormat("dd/MM/yyyy").parse(selectedEndDate.toString())
         ))

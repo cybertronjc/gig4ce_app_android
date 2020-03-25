@@ -87,8 +87,8 @@
     <string name="add_education_sheet_institution">Institution</string>
     <string name="add_education_sheet_course">Course</string>
     <string name="add_education_sheet_degree">Degree</string>
-    <string name="add_education_sheet_start_year">Start Year *</string>
-    <string name="add_education_sheet_end_year">End Year *</string>
+    <string name="add_education_sheet_start_year">Start Date *</string>
+    <string name="add_education_sheet_end_year">End Date *</string>
 
     <!-- Add New Contact Bottom Sheet -->
     <string name="add_contact_new_contact">New Contact</string>

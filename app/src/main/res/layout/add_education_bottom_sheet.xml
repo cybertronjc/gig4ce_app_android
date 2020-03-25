@@ -38,7 +38,7 @@
         app:layout_constraintStart_toStartOf="@+id/institution_name"
         app:layout_constraintTop_toBottomOf="@+id/institution_name" />
 
-    <EditText
+    <Spinner
         android:id="@+id/degree_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
