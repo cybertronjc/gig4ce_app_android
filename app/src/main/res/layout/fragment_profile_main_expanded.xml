@@ -107,10 +107,21 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <LinearLayout
+            android:id="@+id/tag_card"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@id/user_info_card"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
             <com.google.android.material.chip.ChipGroup
                 android:id="@+id/main_tags"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="12dp"
                 android:layout_marginEnd="16dp"
@@ -124,16 +135,18 @@
 
             <ImageButton
                 android:id="@+id/add_tags_button"
+                android:maxWidth="32dp"
                 android:layout_width="32dp"
                 android:layout_height="21dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
+                android:layout_weight="0"
                 android:background="@android:color/white"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/main_expanded_user_name"
                 app:srcCompat="@drawable/ic_edit" />
+        </LinearLayout>
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/location_card"
@@ -141,10 +154,10 @@
             android:layout_height="wrap_content"
             android:background="#FFFFFF"
             android:minHeight="50dp"
-            app:layout_constraintEnd_toEndOf="@+id/user_info_card"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="@+id/user_info_card"
-            app:layout_constraintTop_toBottomOf="@+id/user_info_card">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tag_card">
 
             <TextView
                 android:id="@+id/location"
