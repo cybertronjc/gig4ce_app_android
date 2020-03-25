@@ -81,7 +81,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#FFFFFF"
-            android:minHeight="100dp"
             app:layout_constraintEnd_toEndOf="@+id/profile_avatar"
             app:layout_constraintHorizontal_bias="0.484"
             app:layout_constraintStart_toStartOf="@+id/profile_avatar"
@@ -116,7 +115,8 @@
             android:orientation="horizontal"
             app:layout_constraintTop_toBottomOf="@id/user_info_card"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+            app:layout_constraintEnd_toEndOf="parent"
+            android:background="#FFFFFF">
             <com.google.android.material.chip.ChipGroup
                 android:id="@+id/main_tags"
                 android:layout_width="wrap_content"
