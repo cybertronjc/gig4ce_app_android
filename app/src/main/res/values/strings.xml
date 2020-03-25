@@ -155,4 +155,5 @@
     <string name="tags_text">Tags of User</string>
     <string name="about_me_text">About me of user</string>
     <string name="to_be_filled_from_profile_data">To Be Filled From Profile Data</string>
+    <string name="placeholder_image_view">Image to be loaded</string>
 </resources>
