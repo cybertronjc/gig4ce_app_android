@@ -7,6 +7,7 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
+import android.provider.ContactsContract
 import android.provider.MediaStore
 import android.provider.MediaStore.Images
 import android.util.Log
@@ -16,11 +17,13 @@ import androidx.core.content.FileProvider
 import com.gigforce.app.BuildConfig
 import com.gigforce.app.R
 import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.UploadTask
 import com.google.firebase.storage.UploadTask.TaskSnapshot
 import com.yalantis.ucrop.UCrop
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.IOException
+import java.security.AccessController.getContext
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -46,6 +49,12 @@ class PhotoCrop : AppCompatActivity() {
 //        startActivityForResult(getPickImageChooserIntent(this,"title",true,true), CODE_IMG_GALLERY)
     }
 
+    fun getImageUriFromBitmap(context: Context, bitmap: Bitmap): Uri{
+        val bytes = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
+        val path = MediaStore.Images.Media.insertImage(context.contentResolver, bitmap, "Title", null)
+        return Uri.parse(path.toString())
+    }
 
     override fun onActivityResult(
         requestCode: Int,
@@ -56,7 +65,7 @@ class PhotoCrop : AppCompatActivity() {
 
         Log.v(
             "MAYANK",
-            requestCode.toString() + " RESULT:_" + resultCode.toString() + " UCrop.REQUEST_CROP " + UCrop.REQUEST_CROP.toString() + " data= " + data?.extras.toString()
+            requestCode.toString() + " RESULT:_" + resultCode.toString() + " UCrop.REQUEST_CROP " + UCrop.REQUEST_CROP.toString() + " data= " + data.toString()
         )
         var bundle = data?.extras
         if (null != bundle) {
@@ -69,22 +78,35 @@ class PhotoCrop : AppCompatActivity() {
         }
         if (requestCode == CODE_IMG_GALLERY && resultCode == Activity.RESULT_OK) {
 //            val imageUri: Uri? = getImageUri(this, data?.data)
-            val imageUri: Uri? = data?.data
+            var imageUri: Uri? = data?.data
+            if (imageUri == null) {
+                imageUri = getImageUriFromBitmap(this.applicationContext, data?.extras!!.get("data") as Bitmap)
+            }
             Log.v("COME IMG GALLERY", requestCode.toString())
+            Log.v("ImURI", imageUri.toString())
             if (imageUri != null) {
                 startCrop(imageUri)
             }
         } else if ((requestCode == UCrop.REQUEST_CROP || requestCode == REQUEST_TAKE_PHOTO) && resultCode == Activity.RESULT_OK) {
             val imageUriResultCrop: Uri? = UCrop.getOutput((data!!))
+            Log.d("ImageUri", imageUriResultCrop.toString())
             print(requestCode)
             if (imageUriResultCrop != null) {
                 Log.v("REQUEST CROP", requestCode.toString())
             }
-            if (imageUriResultCrop != null) {
-                upload(imageUriResultCrop)
-//                super.finish()
+            var baos = ByteArrayOutputStream()
+            if (imageUriResultCrop == null) {
+                var bitmap = data?.data as Bitmap
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
             }
+            upload(imageUriResultCrop, baos.toByteArray())
+//            if (imageUriResultCrop != null) {
+//                upload(imageUriResultCrop)
+////                super.finish()
+//            }
         }
+
+        Log.d("CStatus", "completed result on activity")
     }
 //
 //    fun getImageUri(inContext: Context, inImage: Uri?): Uri {
@@ -142,13 +164,22 @@ class PhotoCrop : AppCompatActivity() {
         return options
     }
 
-    private fun upload(uri: Uri) {
+    private fun upload(uri: Uri?, data: ByteArray) {
 
         Log.v("Upload Image", "started")
         var mReference =
-            mStorage.reference.child("profile_pics").child(uri.lastPathSegment!!)
+            mStorage.reference.child("profile_pics").child(uri!!.lastPathSegment!!)
 
-        var uploadTask = mReference.putFile(uri)
+        lateinit var uploadTask: UploadTask
+        if (uri != null) {
+            Log.d("UPLOAD", "uploading files")
+            uploadTask = mReference.putFile(uri)
+        }
+        else {
+            Log.d("UPLOAD", "uploading bytes")
+            uploadTask = mReference.putBytes(data)
+        }
+
 
         try {
             uploadTask.addOnProgressListener { taskSnapshot ->
@@ -200,10 +231,12 @@ class PhotoCrop : AppCompatActivity() {
         pickIntent.action = Intent.ACTION_GET_CONTENT
         val takePhotoIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         val pickTitle = "Select or take a new Picture"
+        var outpuFileUri: Uri? = Uri.fromFile(File.createTempFile("mysaplefile", ".jpg"))
         val chooserIntent = Intent.createChooser(pickIntent, pickTitle)
         chooserIntent.putExtra(
             Intent.EXTRA_INITIAL_INTENTS, arrayOf(takePhotoIntent)
         )
+        chooserIntent.putExtra(MediaStore.EXTRA_OUTPUT, outpuFileUri)
         startActivityForResult(chooserIntent, CODE_IMG_GALLERY)
     }
 
