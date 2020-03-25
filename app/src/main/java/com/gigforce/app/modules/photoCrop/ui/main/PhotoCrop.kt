@@ -43,6 +43,7 @@ class PhotoCrop : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         getImageFromPhone()
+//        dispatchTakePictureIntent()
 //        startActivityForResult(getPickImageChooserIntent(this,"title",true,true), CODE_IMG_GALLERY)
     }
 
@@ -54,9 +55,9 @@ class PhotoCrop : AppCompatActivity() {
     ): Unit {
         super.onActivityResult(requestCode, resultCode, data)
 
-        Log.v(
-            "MAYANK",
-            requestCode.toString() + " RESULT:_" + resultCode.toString() + " UCrop.REQUEST_CROP " + UCrop.REQUEST_CROP.toString() + " data= " + data?.extras.toString()
+        Log.e(
+            "DATA_FOR_ALL",
+            requestCode.toString() + " RESULT:_" + resultCode.toString() + " UCrop.REQUEST_CROP " + UCrop.REQUEST_CROP.toString() + " data= " + data
         )
         var bundle = data?.extras
         if (null != bundle) {
@@ -68,9 +69,9 @@ class PhotoCrop : AppCompatActivity() {
             }
         }
         if (requestCode == CODE_IMG_GALLERY && resultCode == Activity.RESULT_OK) {
-//            val imageUri: Uri? = getImageUri(this, data?.data)
+//            val imageUri: Uri? = getImageUriFromBitmap(this, data?.data)
             val imageUri: Uri? = data?.data
-            Log.v("COME IMG GALLERY", requestCode.toString())
+            Log.v("COME IMG GALLERY", requestCode.toString()+" imaeURI= "+imageUri.toString())
             if (imageUri != null) {
                 startCrop(imageUri)
             }
@@ -85,6 +86,13 @@ class PhotoCrop : AppCompatActivity() {
 //                super.finish()
             }
         }
+    }
+
+    fun getImageUriFromBitmap(context: Context, bitmap: Bitmap): Uri{
+        val bytes = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
+        val path = MediaStore.Images.Media.insertImage(context.contentResolver, bitmap, "Title", null)
+        return Uri.parse(path.toString())
     }
 //
 //    fun getImageUri(inContext: Context, inImage: Uri?): Uri {
