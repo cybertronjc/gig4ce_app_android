@@ -37,9 +37,6 @@
         android:label="home"
         tools:layout="@layout/fragment_home">
         <action
-            android:id="@+id/action_homeFragment_to_languageSelectFragment"
-            app:destination="@id/languageSelectFragment" />
-        <action
             android:id="@+id/action_homeFragment_to_homeScreenIcons"
             app:destination="@id/homeScreenIcons" />
     </fragment>
@@ -118,11 +115,7 @@
         android:id="@+id/introSlidesFragment"
         android:name="com.gigforce.app.modules.onboarding.IntroSlidesFragment"
         android:label="fragment_intro_slides"
-        tools:layout="@layout/fragment_intro_slides" >
-        <action
-            android:id="@+id/action_introSlidesFragment_to_login2"
-            app:destination="@id/Login" />
-    </fragment>
+        tools:layout="@layout/fragment_intro_slides" />
     <fragment
         android:id="@+id/OBSlidesFragment"
         android:name="com.gigforce.app.modules.onboarding.OBSlidesFragment"
@@ -134,15 +127,7 @@
     <fragment
         android:id="@+id/languageSelectFragment"
         android:name="com.gigforce.app.utils.LanguageSelectFragment"
-        android:label="LanguageSelectFragment" >
-        <action
-            android:id="@+id/action_languageSelectFragment_to_introSlidesFragment"
-            app:destination="@id/introSlidesFragment" />
-<!--
-            android:id="@+id/action_languageSelectFragment_to_videoResumeFragment"
-            app:destination="@id/videoResumeFragment" />
--->
-    </fragment>
+        android:label="LanguageSelectFragment" />
     <fragment
         android:id="@+id/videoResumeFragment"
         android:name="com.gigforce.app.modules.video_resume.VideoResumeFragment"
