@@ -65,7 +65,7 @@ class VerifyOTP: Fragment() {
         viewModel.verificationId = verificationId.toString()
         layout = inflater.inflate(R.layout.otp_verification, container, false)
         //TODO
-        layout.textView29.text = "We have sent the OTP to your "+viewModel?.phoneNo?.toString()+"\nPlease enter the OTP";
+        layout.textView29.text = "We have sent the OTP to your " + viewModel.phoneNo?.toString()+"\nPlease enter the OTP";
         return layout
     }
 
