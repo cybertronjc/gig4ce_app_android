@@ -1,5 +1,6 @@
 package com.gigforce.app
 
+import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
@@ -11,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavOptions
 import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.findNavController
+import com.google.firebase.auth.FirebaseAuth
 import com.jaeger.library.StatusBarUtil
 
 
@@ -26,17 +28,31 @@ class MainActivity : AppCompatActivity() {
             .setPopUpTo(R.id.homeFragment, true)
             .build()
 
-        // Select Language by Default
-        this.findNavController(R.id.nav_fragment).navigate(R.id.languageSelectFragment, null, navOptionsPopToHome);
+        val sp:SharedPreferences = getSharedPreferences("appsettings", 0)
+        val lang = sp.getString("app_lang", null)
+        val introComplete = sp.getBoolean("intro_complete", false)
+        val loggedIn = FirebaseAuth.getInstance().currentUser != null
 
-    /*
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-        val w: Window = window
-        w.setFlags(
-            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
-        )
-    }*/
+        // Select Language by Default
+        if(lang == null) {
+            this.findNavController(R.id.nav_fragment)
+                .navigate(R.id.languageSelectFragment, null, navOptionsPopToHome)
+        }else if (introComplete) {
+            this.findNavController(R.id.nav_fragment)
+                .navigate(R.id.introSlidesFragment, null, navOptionsPopToHome)
+        }else if (!loggedIn) {
+            this.findNavController(R.id.nav_fragment)
+                .navigate(R.id.Login, null, navOptionsPopToHome)
+        }
+
+        /*
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            val w: Window = window
+            w.setFlags(
+                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+            )
+        }*/
     }
 
 

@@ -52,7 +52,7 @@ class IntroSlidesFragment : Fragment() {
                 this@IntroSlidesFragment.findNavController().navigate(getResourceToNavigateTo())
             }
         })
-        this.viewpager.setPageTransformer(DepthPageTransformer())
+        // this.viewpager.setPageTransformer(DepthPageTransformer())
         this.viewpager.registerOnPageChangeCallback(object:ViewPager2.OnPageChangeCallback(){
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)

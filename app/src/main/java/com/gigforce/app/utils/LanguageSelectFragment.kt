@@ -10,12 +10,14 @@ import android.widget.RadioGroup
 import android.widget.Spinner
 import android.widget.Toast
 import androidx.activity.addCallback
+import androidx.core.content.edit
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import butterknife.ButterKnife
 import butterknife.Unbinder
 import com.franmontiel.localechanger.LocaleChanger
 import com.gigforce.app.R
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_select_language.view.*
 import java.util.*
 
@@ -44,71 +46,65 @@ class LanguageSelectFragment : Fragment(){
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-        lateinit var layout:View;
-        ///@BindView(com.gigforce.app.R.id.localeSpinner)
-        lateinit var localeSpinner: Spinner;// = layout.findViewById(R.id.localeSpinner)
-        lateinit var radioGroup:RadioGroup;
-        /*
-        @BindView(com.gigforce.app.R.id.currentLocale)
-        var currentLocale: TextView? = null
-        @BindView(com.gigforce.app.R.id.date)
-        var date: TextView? = null
+    lateinit var layout:View;
+    ///@BindView(com.gigforce.app.R.id.localeSpinner)
+    lateinit var localeSpinner: Spinner;// = layout.findViewById(R.id.localeSpinner)
+    lateinit var radioGroup:RadioGroup;
+    /*
+    @BindView(com.gigforce.app.R.id.currentLocale)
+    var currentLocale: TextView? = null
+    @BindView(com.gigforce.app.R.id.date)
+    var date: TextView? = null
 
-         */
-        private var unbinder: Unbinder? = null
+     */
+    private var unbinder: Unbinder? = null
 
-        override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
-        ): View? {
-            val window: Window = activity!!.window
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-            window.setStatusBarColor(activity!!.resources.getColor(R.color.colorAccent))
-            LocaleChanger.initialize(this.context, SUPPORTED_LOCALES)
-            layout = inflater.inflate(R.layout.fragment_select_language, container, false)
-            radioGroup = layout.findViewById(R.id.groupradio);
-            radioGroup.clearCheck();
-            unbinder = ButterKnife.bind(this, layout)
-            return layout
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        this.setDarkStatusBarTheme()
+        LocaleChanger.initialize(this.context, SUPPORTED_LOCALES)
+        layout = inflater.inflate(R.layout.fragment_select_language, container, false)
+        radioGroup = layout.findViewById(R.id.groupradio)
+        radioGroup.clearCheck()
+        unbinder = ButterKnife.bind(this, layout)
+        return layout
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        setDefaultLanguage()
+        layout.nextbuttonLang.setOnClickListener(){
+            onNextButtonClicked()
         }
+    }
 
-        override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-            layout.nextbuttonLang.setOnClickListener(){
-                val selectedId = radioGroup.checkedRadioButtonId
-                if (selectedId == -1) {
-                    Toast.makeText(this.context,"No answer has been selected",Toast.LENGTH_SHORT).show()
-                } else {
-                    val radioButton = radioGroup.findViewById<View>(selectedId) as RadioButton
-                    updateResources(radioButton.hint.toString())
-                    //Toast.makeText(this.context, "2>>>>>>>>>>$selectedId",Toast.LENGTH_SHORT).show()
-                    // TODO findNavController().navigate(R.id.loginFragment)
-                    //findNavController().navigate(R.id.introSlidesFragment)
-                    //findNavController().navigate(R.id.videoResumeFragment)
-                    findNavController().navigate(R.id.Login)
-                    //Toast.makeText(this.context,">>>>"+LocaleChanger.getLocale().language.toString(),Toast.LENGTH_SHORT).show()
+    private fun setDefaultLanguage() {
+        radioGroup.findViewById<RadioButton>(R.id.en).isChecked = true
+    }
+
+    private fun onNextButtonClicked(){
+        val selectedId = radioGroup.checkedRadioButtonId
+        if (selectedId == -1) {
+            Snackbar.make(layout,"Please Select a Language!",Snackbar.LENGTH_SHORT).show()
+        } else {
+            val radioButton = radioGroup.findViewById<RadioButton>(selectedId)
+            val lang = radioButton.hint.toString()
+            updateResources(lang)
+
+            activity?.getSharedPreferences("appsettings", 0).let {
+                it?.edit {
+                    this.putString("app_lang", lang)
                 }
             }
 
-            requireActivity().onBackPressedDispatcher.addCallback {
-                // navController.popBackStack(R.id.homeFragment, false)
-                // Do Nothing on back!
-                // todo: experience need to improve.
-                LocaleChanger.resetLocale()
-//                findNavController().popBackStack(R.id.introSlidesFragment,false);
-            }
+            // TODO findNavController().navigate(R.id.loginFragment)
+            navNext()
         }
+    }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
-        requireActivity().onBackPressedDispatcher.addCallback {
-            // todo: experience need to improve.
-            LocaleChanger.resetLocale()
-            findNavController().popBackStack(R.id.introSlidesFragment,false);
-        }
-
-
+    private fun navNext(){
+        findNavController().navigate(R.id.introSlidesFragment)
     }
 
     private fun updateResources(language: String)   {
