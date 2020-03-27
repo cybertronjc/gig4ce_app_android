@@ -14,10 +14,10 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.gigforce.app.R
 import com.gigforce.app.modules.auth.ui.main.LoginViewModel
 import com.gigforce.app.modules.chat.ChatsHomeFragment
-import com.gigforce.app.modules.roaster.RoasterFragment
 import com.gigforce.app.utils.reduceDragSensitivity
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.fragment_home.*
+import com.gigforce.app.modules.homescreen.HomeScreenFragment
 
 class HomeFragment: Fragment(), View.OnClickListener {
 
@@ -54,7 +54,9 @@ class HomeFragment: Fragment(), View.OnClickListener {
             if(it.currentUser == null) {
                 initAuth()
             }else {
-
+                Log.d("STATUS", "logged in hai")
+                //this.findNavController().navigate(R.id.homeScreenFragment)
+                this.findNavController().navigate(R.id.homeScreenIcons)
             }
 
         }
@@ -63,11 +65,12 @@ class HomeFragment: Fragment(), View.OnClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        this.pager_home.reduceDragSensitivity()
-
-        val stateAdapter: HomeViewsAdapter = HomeViewsAdapter(this)
-        this.pager_home.adapter = stateAdapter
-        this.pager_home.setCurrentItem(1, false)
+//        this.pager_home.reduceDragSensitivity()
+//
+//
+//        val stateAdapter: HomeViewsAdapter = HomeViewsAdapter(this)
+//        this.pager_home.adapter = stateAdapter
+//        this.pager_home.setCurrentItem(1, false)
 
 
     /*
@@ -78,7 +81,7 @@ class HomeFragment: Fragment(), View.OnClickListener {
     }
 
     fun initAuth() {
-        this.findNavController().navigate(R.id.loginFragment)
+        this.findNavController().navigate(R.id.languageSelectFragment)
     }
 
     class HomeViewsAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
@@ -86,17 +89,17 @@ class HomeFragment: Fragment(), View.OnClickListener {
         override fun getItemCount(): Int = 2
 
         var fragment_chats:ChatsHomeFragment? = null
-        var fragment_roaster: RoasterFragment? = null
+        var fragment_homeScreen: HomeScreenFragment? = null
 
         override fun createFragment(position: Int): Fragment {
             if(position == 0) {
                 fragment_chats ?: let { fragment_chats = ChatsHomeFragment() }
                 return fragment_chats!!
             }else{
-                fragment_roaster ?: let { fragment_roaster =
-                    RoasterFragment()
+                fragment_homeScreen ?: let { fragment_homeScreen =
+                    HomeScreenFragment()
                 }
-                return fragment_roaster!!
+                return fragment_homeScreen!!
             }
         }
 
@@ -106,7 +109,7 @@ class HomeFragment: Fragment(), View.OnClickListener {
         //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
         when (v?.id) {
             R.id.buttonCP -> {
-                findNavController().navigate(R.id.gotoOB)
+                //findNavController().navigate(R.id.gotoOB)
             }
             else -> {
             }

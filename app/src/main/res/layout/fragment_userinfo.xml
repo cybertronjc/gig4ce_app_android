@@ -13,7 +13,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:cardBackgroundColor="#E42D2D" />
+        app:cardBackgroundColor="#E42D2D" >
+
+        <ImageView
+            android:id="@+id/img_obprofile"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:contentDescription="obProfileImage"
+            tools:ignore="MissingConstraints" />
+    </androidx.cardview.widget.CardView>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recviewUserInfo"
@@ -22,7 +30,9 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/card"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/linearLayout1"/>
+        app:layout_constraintBottom_toTopOf="@id/linearLayout1">
+
+    </androidx.recyclerview.widget.RecyclerView>
 
         <LinearLayout
             android:id="@+id/linearLayout1"
