@@ -13,6 +13,11 @@
         <attr name="card_bottom" format="string" />
     </declare-styleable>
 
+    <declare-styleable name="CardRow">
+        <attr name="content" format="string" />
+        <attr name="location" format="string"/>
+    </declare-styleable>
+
     <declare-styleable name="OBToggleButtonItem">
         <attr name="text" format="string" />
     </declare-styleable>

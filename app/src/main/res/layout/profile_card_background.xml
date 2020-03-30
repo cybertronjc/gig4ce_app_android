@@ -31,17 +31,30 @@
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp" />
 
-        <TextView
+        <LinearLayout
             android:id="@+id/card_content"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:minHeight="50dp"
             app:layout_constraintTop_toBottomOf="@+id/card_title"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginTop="5dp"
             android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp" />
+            android:layout_marginEnd="8dp"
+            android:orientation="vertical" >
+<!--            <TextView-->
+<!--                android:id="@+id/card_content"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:minHeight="50dp"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/card_title"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                android:layout_marginTop="5dp"-->
+<!--                android:layout_marginStart="8dp"-->
+<!--                android:layout_marginEnd="8dp" />-->
+        </LinearLayout>
 
         <TextView
             android:id="@+id/card_bottom"

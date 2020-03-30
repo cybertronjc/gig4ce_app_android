@@ -26,8 +26,8 @@ import kotlinx.android.synthetic.main.fragment_profile.*
 import kotlinx.android.synthetic.main.fragment_profile_education_expanded.view.*
 import kotlinx.android.synthetic.main.fragment_profile_main_expanded.view.*
 import kotlinx.android.synthetic.main.profile_card_background.view.*
-import kotlinx.android.synthetic.main.profile_card_background.view.card_content
-import kotlinx.android.synthetic.main.profile_card_background.view.card_title
+import kotlinx.android.synthetic.main.profile_main_card_background.view.card_content
+import kotlinx.android.synthetic.main.profile_main_card_background.view.card_title
 import kotlinx.android.synthetic.main.profile_main_card_background.view.*
 import kotlinx.android.synthetic.main.profile_nav_bar.view.*
 import java.io.File
@@ -158,8 +158,6 @@ class ProfileFragment : Fragment() {
             if(null!=imageName){
                 loadImage(imageName)
             }
-
         }
     }
-
 }
