@@ -41,11 +41,11 @@
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.MaterialComponents.Light.NoActionBar"/>
+            android:theme="@style/PhotoCrop"/>
         <activity
             android:name="com.gigforce.app.modules.photoCrop.ui.main.PhotoCrop"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.MaterialComponents.Light.NoActionBar"/>
+            android:theme="@style/PhotoCrop"/>
 
 
         <activity android:name=".SplashScreen" android:theme="@style/SplashTheme">

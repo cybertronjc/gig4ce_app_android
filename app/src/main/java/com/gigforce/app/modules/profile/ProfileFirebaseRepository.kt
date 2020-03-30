@@ -77,4 +77,16 @@ class ProfileFirebaseRepository {
             firebaseDB.collection(profileCollectionName)
                 .document(uid).update("Tags", FieldValue.arrayUnion(tag))
     }
+
+    fun setProfileAvatarName(profileAvatarName: String) {
+        firebaseDB.collection(profileCollectionName)
+            .document(uid).update("profileAvatarName",profileAvatarName)
+    }
+
+
+//    fun getProfileAvatarName() {
+//        firebaseDB.collection(profileCollectionName)
+//            .document(uid).update("profileAvatarName", profileAvatarName)
+//    }
+
 }

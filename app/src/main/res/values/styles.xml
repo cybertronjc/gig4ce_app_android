@@ -118,5 +118,9 @@
         <item name="colorPrimaryDark">@color/colorAccent</item>
     </style>
 
+    <style name="PhotoCrop" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimaryDark">@color/topBarDark</item>
+    </style>
+
 
 </resources>
