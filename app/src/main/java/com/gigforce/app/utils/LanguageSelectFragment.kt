@@ -64,7 +64,11 @@ class LanguageSelectFragment : Fragment(){
         savedInstanceState: Bundle?
     ): View? {
         this.setDarkStatusBarTheme()
-        LocaleChanger.initialize(this.context, SUPPORTED_LOCALES)
+        try {
+            LocaleChanger.initialize(this.context, SUPPORTED_LOCALES)
+        }catch (e:Exception){
+            
+        }
         layout = inflater.inflate(R.layout.fragment_select_language, container, false)
         radioGroup = layout.findViewById(R.id.groupradio)
         radioGroup.clearCheck()

@@ -101,9 +101,8 @@ class Login: Fragment() {
         viewModel.liveState.observeForever {
             when(it){
                 LoginViewModel.STATE_CODE_SENT -> findNavController().navigate(LoginDirections.actionLogin2ToVerifyOTP(viewModel.verificationId!!))
-                LoginViewModel.STATE_SIGNIN_SUCCESS -> findNavController().popBackStack()
                 else -> {
-
+                    // Doing Nothing
                 }
             }
         }

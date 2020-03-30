@@ -5,6 +5,7 @@ import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.gigforce.app.R
@@ -33,5 +34,12 @@ fun Fragment.setDarkStatusBarTheme(isDark:Boolean = true) {
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
         window.setStatusBarColor(activity!!.resources.getColor(R.color.colorAccent))
         window.decorView.systemUiVisibility = 0
+    }
+}
+
+fun NavController.popAllBackStates(){
+    var hasBackStack = true;
+    while (hasBackStack) {
+        hasBackStack = this.popBackStack()
     }
 }
