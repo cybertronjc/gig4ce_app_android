@@ -14,7 +14,7 @@
     </declare-styleable>
 
     <declare-styleable name="CardRow">
-        <attr name="content" format="string" />
+        <attr name="row_content" format="string" />
         <attr name="location" format="string"/>
     </declare-styleable>
 

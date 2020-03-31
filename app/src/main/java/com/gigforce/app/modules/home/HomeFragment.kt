@@ -55,7 +55,7 @@ class HomeFragment: Fragment(), View.OnClickListener {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(HomeViewModel::class.java)
 
-        FirebaseAuth.getInstance().addAuthStateListener {
+        //FirebaseAuth.getInstance().addAuthStateListener {
         /*FirebaseAuth.getInstance().addAuthStateListener {
             *//*
             Toast.makeText(context, "Auth state changed to ${if(it.currentUser==null) "SignedOut" else "Signed In"}",

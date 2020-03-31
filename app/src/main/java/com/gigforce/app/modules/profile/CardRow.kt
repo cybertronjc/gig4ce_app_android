@@ -18,7 +18,7 @@ class CardRow: LinearLayout {
     var rowContent: String = ""
         set(value) {
             field = value
-            content.text = value
+            row_content.text = value
         }
 
     var rowLocation: String = ""

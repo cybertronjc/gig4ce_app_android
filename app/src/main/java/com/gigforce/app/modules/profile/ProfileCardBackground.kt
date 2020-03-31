@@ -30,19 +30,17 @@ class ProfileCardBackground: CardView {
     var cardContent: String = ""
         set(value) {
             field=value
-//            card_content.text = value
             var location = 0
             val viewgroup = card_content
             for (item in value.split("\n\n")) {
-//                var widget = TextView(this.context!!)
-//                widget.text = item
-//                viewgroup.addView(widget)
+                if (item.toString() != "") {
 
-                val widget = CardRow(this.context!!)
-                widget.rowContent = item
-                widget.rowLocation = location.toString()
+                    val widget = CardRow(this.context!!)
+                    widget.rowContent = item
+                    widget.rowLocation = location.toString()
 
-                viewgroup.addView(widget)
+                    viewgroup.addView(widget)
+                }
             }
         }
 
