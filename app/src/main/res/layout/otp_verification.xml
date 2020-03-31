@@ -10,9 +10,9 @@
         android:id="@+id/textView26"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="33dp"
+        android:layout_marginTop="64dp"
         android:text="@string/otp_verify_account"
-        android:textSize="16sp"
+        android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -29,17 +29,13 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView26" />
 
-    <EditText
-        android:id="@+id/otp_string"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="96dp"
-        android:backgroundTint="@color/colorAccent"
-        android:fallbackLineSpacing="true"
-        android:hint="@string/otp_hint"
+    <com.gigforce.app.modules.auth.ui.main.OtpEditText
+        android:id="@+id/txt_otp"
+        android:layout_width="353dp"
+        android:layout_height="64dp"
+        android:layout_marginTop="64dp"
+        android:digits="0123456789"
         android:inputType="number"
-        android:textAlignment="center"
-        android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView29" />
@@ -51,7 +47,7 @@
         android:layout_above="@+id/verify_otp_button"
         android:layout_centerHorizontal="true"
         android:layout_marginStart="50dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="32dp"
         android:layout_marginRight="196dp"
         android:text="@string/otp_notcorrect"
         android:textColor="#e02020"
@@ -60,46 +56,42 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/otp_string" />
+        app:layout_constraintTop_toBottomOf="@+id/txt_otp" />
 
     <TextView
         android:id="@+id/otptimertv"
         android:layout_width="wrap_content"
         android:layout_height="15dp"
-        android:layout_above="@id/otp_string"
+        android:layout_above="@id/txt_otp"
         android:layout_centerHorizontal="true"
         android:layout_marginStart="270dp"
-        android:layout_marginTop="20dp"
         android:layout_marginEnd="50dp"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="#4D4DCD"
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/otp_string" />
+        app:layout_constraintTop_toBottomOf="@+id/txt_otp" />
 
     <TextView
         android:id="@+id/reenter_mobile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="32dp"
         android:backgroundTint="@android:color/background_dark"
         android:shadowColor="@color/colorAccent"
         android:text="@string/otp_reenter_mobile"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/otp_string" />
+        app:layout_constraintTop_toBottomOf="@+id/otpnotcorrect" />
 
     <ImageView
         android:id="@+id/verify_otp_button"
         android:layout_width="45dp"
         android:layout_height="50dp"
-        android:layout_marginStart="1dp"
-        android:layout_marginTop="96dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.11"
-        app:layout_constraintStart_toEndOf="@+id/otp_string"
-        app:layout_constraintTop_toBottomOf="@+id/textView29"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="@+id/txt_otp"
+        app:layout_constraintTop_toBottomOf="@+id/txt_otp"
         app:srcCompat="@drawable/next_button" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
