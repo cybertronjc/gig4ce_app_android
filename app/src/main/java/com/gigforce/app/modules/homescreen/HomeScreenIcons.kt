@@ -11,6 +11,7 @@ import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
 import com.gigforce.app.modules.auth.utils.SignoutTask
 import com.gigforce.app.modules.profile.models.ProfileData
+import com.gigforce.app.utils.setDarkStatusBarTheme
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.EventListener
@@ -55,19 +56,13 @@ class HomeScreenIcons : Fragment() {
 
         // get instance of the firebase storage
         storage = FirebaseStorage.getInstance()
-
-        //status bar color set
-        val window: Window = activity!!.window
-        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-        window.statusBarColor = activity!!.resources.getColor(R.color.colorAccent)
-
         layout = inflater.inflate(R.layout.layout_home_screen, container, false)
 
         return layout
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        this.setDarkStatusBarTheme(false)
         val gridview = layout.findViewById<GridView>(R.id.gridview)
 
         val adapter = this.context?.let { HomeScreenAdapter(it, R.layout.item_gridhomescreen, itemList) }

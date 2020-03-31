@@ -19,7 +19,7 @@ class OtpEditText(context: Context, attrs: AttributeSet): AppCompatEditText(cont
     private var mLineStroke:Float = 2f
 
     private lateinit var mLinesPaint: Paint
-    private lateinit var mClickListener:OnClickListener
+    private var mClickListener:OnClickListener? = null
 
     init {
         val multi = context.resources.displayMetrics.density
@@ -35,15 +35,17 @@ class OtpEditText(context: Context, attrs: AttributeSet): AppCompatEditText(cont
         mNumChars = mMaxLength
 
         super.setOnClickListener(OnClickListener {
+            val view = it
             setSelection(text!!.length)
-            mClickListener.onClick(it)
+            mClickListener ?.let {
+                it.onClick(view)
+            }
         })
     }
 
     override fun setOnClickListener(l: OnClickListener?) {
-        l?.let {
-            mClickListener = l
-        }
+        super.setOnClickListener(l)
+        mClickListener = l
     }
 
     override fun setCustomInsertionActionModeCallback(actionModeCallback: ActionMode.Callback?) {
