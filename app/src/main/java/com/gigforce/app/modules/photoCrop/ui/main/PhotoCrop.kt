@@ -12,6 +12,9 @@ import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.gigforce.app.R
+import com.google.firebase.ml.vision.FirebaseVision
+import com.google.firebase.ml.vision.common.FirebaseVisionImage
+import com.google.firebase.ml.vision.face.FirebaseVisionFaceDetectorOptions
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.UploadTask
 import com.google.firebase.storage.UploadTask.TaskSnapshot
@@ -31,6 +34,17 @@ class PhotoCrop : AppCompatActivity() {
 
     var mStorage: FirebaseStorage = FirebaseStorage.getInstance()
 
+    val options = with(FirebaseVisionFaceDetectorOptions.Builder()) {
+        setModeType(FirebaseVisionFaceDetectorOptions.ACCURATE_MODE)
+        setLandmarkType(FirebaseVisionFaceDetectorOptions.ALL_LANDMARKS)
+        setClassificationType(FirebaseVisionFaceDetectorOptions.ALL_CLASSIFICATIONS)
+        setMinFaceSize(0.15f)
+        setTrackingEnabled(true)
+        build()
+    }
+
+    val detector = FirebaseVision.getInstance()
+        .getVisionFaceDetector(options)
 
     override fun onCreate(savedInstanceState: Bundle?): Unit {
         super.onCreate(savedInstanceState)
@@ -77,118 +91,138 @@ class PhotoCrop : AppCompatActivity() {
                 var bitmap = data?.data as Bitmap
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
             }
-            upload(imageUriResultCrop, baos.toByteArray())
+            var fvImage = imageUriResultCrop?.let { FirebaseVisionImage.fromFilePath(this, it) }
+
+
+
+            //synchronous
+            //val task = detector?.detectInImage(fvImage!!)
+//            if (task?.isComplete!! && task.isSuccessful) {
+//                    Toast.makeText(this, "Face detected "+task.result, Toast.LENGTH_LONG).show()
+//                    upload(imageUriResultCrop, baos.toByteArray())
+//            }
+
+            //asynchronous
+            detector?.detectInImage(fvImage!!)
+                ?.addOnSuccessListener {firebaseVisionFace ->
+                    /*Implement Logic here*/
+                    Toast.makeText(this, "Face detected, successfully updated your profile pic", Toast.LENGTH_LONG).show()
+                        upload(imageUriResultCrop, baos.toByteArray())
+                }
+                ?.addOnFailureListener {exception ->
+                    /*Implement Logic here*/
+                    Toast.makeText(this, "No Face detected, please re-upload another image!", Toast.LENGTH_LONG).show()
+                }
 //            if (imageUriResultCrop != null) {
 //                upload(imageUriResultCrop)
 //            }
+    }
+    Log.d("CStatus", "completed result on activity")
+}
+
+open fun getImageUriFromBitmap(context: Context, bitmap: Bitmap): Uri {
+    val bytes = ByteArrayOutputStream()
+    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
+    val path = MediaStore.Images.Media.insertImage(context.contentResolver, bitmap, "Title", null)
+    return Uri.parse(path.toString())
+}
+
+open fun startCrop(uri: Uri): Unit {
+    Log.v("Start Crop", "started")
+    //can use this for a new name every time
+    val timeStamp = SimpleDateFormat(
+            "yyyyMMdd_HHmmss",
+            Locale.getDefault()
+    ).format(Date())
+    val imageFileName = "IMG_" + timeStamp + "_"
+    val storageDir =
+            getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+
+    val uCrop: UCrop = UCrop.of(
+            uri,
+            Uri.fromFile(File(cacheDir, imageFileName + EXTENSION))
+    )
+    resultIntent.putExtra("filename", imageFileName + EXTENSION)
+    uCrop.withAspectRatio(1F, 1F)
+    uCrop.withMaxResultSize(450, 450)
+    uCrop.withOptions(getCropOptions())
+    uCrop.start(this as AppCompatActivity)
+
+}
+
+private fun getCropOptions(): UCrop.Options {
+    val options: UCrop.Options = UCrop.Options()
+    options.setCompressionQuality(70)
+    options.setCompressionFormat(Bitmap.CompressFormat.JPEG)
+    options.setHideBottomControls((false))
+    options.setFreeStyleCropEnabled(false)
+    options.setStatusBarColor(resources.getColor(R.color.topBarDark))
+    options.setToolbarColor(resources.getColor(R.color.topBarDark))
+    options.setToolbarTitle("Crop and Rotate")
+    return options
+}
+
+private fun upload(uri: Uri?, data: ByteArray) {
+
+    Log.v("Upload Image", "started")
+    var mReference =
+            mStorage.reference.child("profile_pics").child(uri!!.lastPathSegment!!)
+
+    lateinit var uploadTask: UploadTask
+    if (uri != null) {
+        Log.d("UPLOAD", "uploading files")
+        uploadTask = mReference.putFile(uri)
+    } else {
+        Log.d("UPLOAD", "uploading bytes")
+        uploadTask = mReference.putBytes(data)
+    }
+
+
+    try {
+        uploadTask.addOnProgressListener { taskSnapshot ->
+            val progress = (100.0 * taskSnapshot.bytesTransferred) / taskSnapshot.totalByteCount
+            println("Uploading in progress :$progress% done")
         }
-
-        Log.d("CStatus", "completed result on activity")
+    } catch (e: Exception) {
+        Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show()
     }
 
-    open fun getImageUriFromBitmap(context: Context, bitmap: Bitmap): Uri {
-        val bytes = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
-        val path = MediaStore.Images.Media.insertImage(context.contentResolver, bitmap, "Title", null)
-        return Uri.parse(path.toString())
+    try {
+        uploadTask.addOnSuccessListener { taskSnapshot: TaskSnapshot ->
+            val url: String = taskSnapshot.metadata?.reference?.downloadUrl.toString()
+            Toast.makeText(this, "Successfully Uploaded :)", Toast.LENGTH_LONG).show()
+            Log.v("Upload Image", url)
+            setResult(Activity.RESULT_OK, resultIntent)
+            super.finish()
+        }
+    } catch (e: Exception) {
+        Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show()
     }
+}
 
-    open fun startCrop(uri: Uri): Unit {
-        Log.v("Start Crop", "started")
-        //can use this for a new name every time
-        val timeStamp = SimpleDateFormat(
-                "yyyyMMdd_HHmmss",
-                Locale.getDefault()
-        ).format(Date())
-        val imageFileName = "IMG_" + timeStamp + "_"
-        val storageDir =
-                getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+private fun getImageFromPhone() {
+    val pickIntent = Intent()
+    pickIntent.type = "image/*"
+    pickIntent.action = Intent.ACTION_GET_CONTENT
+    val takePhotoIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+    val pickTitle = "Select or take a new Picture"
+    var outputFileUri: Uri? = Uri.fromFile(File.createTempFile("profilePicture", ".jpg"))
+    val chooserIntent = Intent.createChooser(pickIntent, pickTitle)
+    chooserIntent.putExtra(
+            Intent.EXTRA_INITIAL_INTENTS, arrayOf(takePhotoIntent)
+    )
+    chooserIntent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri)
+    startActivityForResult(chooserIntent, CODE_IMG_GALLERY)
+}
 
-        val uCrop: UCrop = UCrop.of(
-                uri,
-                Uri.fromFile(File(cacheDir, imageFileName + EXTENSION))
+private fun logBundle(bundle: Bundle) {
+    for (key in bundle.keySet()!!) {
+        Log.e(
+                "PHOTO_CROP_EXTRAS",
+                key + " : " + if (bundle.get(key) != null) bundle.get(key) else "NULL"
         )
-        resultIntent.putExtra("filename", imageFileName + EXTENSION)
-        uCrop.withAspectRatio(1F, 1F)
-        uCrop.withMaxResultSize(450, 450)
-        uCrop.withOptions(getCropOptions())
-        uCrop.start(this as AppCompatActivity)
-
     }
-
-    private fun getCropOptions(): UCrop.Options {
-        val options: UCrop.Options = UCrop.Options()
-        options.setCompressionQuality(70)
-        options.setCompressionFormat(Bitmap.CompressFormat.JPEG)
-        options.setHideBottomControls((false))
-        options.setFreeStyleCropEnabled(false)
-        options.setStatusBarColor(resources.getColor(R.color.topBarDark))
-        options.setToolbarColor(resources.getColor(R.color.topBarDark))
-        options.setToolbarTitle("Crop and Rotate")
-        return options
-    }
-
-    private fun upload(uri: Uri?, data: ByteArray) {
-
-        Log.v("Upload Image", "started")
-        var mReference =
-                mStorage.reference.child("profile_pics").child(uri!!.lastPathSegment!!)
-
-        lateinit var uploadTask: UploadTask
-        if (uri != null) {
-            Log.d("UPLOAD", "uploading files")
-            uploadTask = mReference.putFile(uri)
-        } else {
-            Log.d("UPLOAD", "uploading bytes")
-            uploadTask = mReference.putBytes(data)
-        }
-
-
-        try {
-            uploadTask.addOnProgressListener { taskSnapshot ->
-                val progress = (100.0 * taskSnapshot.bytesTransferred) / taskSnapshot.totalByteCount
-                println("Uploading in progress :$progress% done")
-            }
-        } catch (e: Exception) {
-            Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show()
-        }
-
-        try {
-            uploadTask.addOnSuccessListener { taskSnapshot: TaskSnapshot ->
-                val url: String = taskSnapshot.metadata?.reference?.downloadUrl.toString()
-                Toast.makeText(this, "Successfully Uploaded :)", Toast.LENGTH_LONG).show()
-                Log.v("Upload Image", url)
-                setResult(Activity.RESULT_OK, resultIntent)
-                super.finish()
-            }
-        } catch (e: Exception) {
-            Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show()
-        }
-    }
-
-    private fun getImageFromPhone() {
-        val pickIntent = Intent()
-        pickIntent.type = "image/*"
-        pickIntent.action = Intent.ACTION_GET_CONTENT
-        val takePhotoIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        val pickTitle = "Select or take a new Picture"
-        var outputFileUri: Uri? = Uri.fromFile(File.createTempFile("profilePicture", ".jpg"))
-        val chooserIntent = Intent.createChooser(pickIntent, pickTitle)
-        chooserIntent.putExtra(
-                Intent.EXTRA_INITIAL_INTENTS, arrayOf(takePhotoIntent)
-        )
-        chooserIntent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri)
-        startActivityForResult(chooserIntent, CODE_IMG_GALLERY)
-    }
-
-    private fun logBundle(bundle: Bundle) {
-        for (key in bundle.keySet()!!) {
-            Log.e(
-                    "PHOTO_CROP_EXTRAS",
-                    key + " : " + if (bundle.get(key) != null) bundle.get(key) else "NULL"
-            )
-        }
-    }
+}
 
 }
 
