@@ -32,6 +32,10 @@ class ProfileFirebaseRepository {
         }
     }
 
+    fun removeProfileEducation(education: Education) {
+        firebaseDB.collection(profileCollectionName).document(uid).update("Education", FieldValue.arrayRemove(education))
+    }
+
     fun setProfileSkill(skills: ArrayList<String>) {
         for(sk in skills) {
             firebaseDB.collection(profileCollectionName)

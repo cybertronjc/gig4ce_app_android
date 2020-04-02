@@ -156,4 +156,10 @@
     <string name="about_me_text">About me of user</string>
     <string name="to_be_filled_from_profile_data">To Be Filled From Profile Data</string>
     <string name="placeholder_image_view">Image to be loaded</string>
+    <string name="institution">Institution</string>
+    <string name="course_name">Course</string>
+    <string name="degree">Degree</string>
+    <string name="start_date">Start Date</string>
+    <string name="end_date">End Date</string>
+    <string name="delete">delete</string>
 </resources>

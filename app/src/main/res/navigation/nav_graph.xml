@@ -90,6 +90,9 @@
         <action
             android:id="@+id/action_educationExpandedFragment_to_addSkillBottomSheetFragment"
             app:destination="@id/addSkillBottomSheetFragment" />
+        <action
+            android:id="@+id/action_educationExpandedFragment_to_editEducationBottomSheet"
+            app:destination="@id/editEducationBottomSheet" />
     </fragment>
     <dialog
         android:id="@+id/addSkillBottomSheetFragment"
@@ -191,5 +194,13 @@
         <action
             android:id="@+id/action_login2_to_verifyOTP"
             app:destination="@id/verifyOTP" />
+    </fragment>
+    <fragment
+        android:id="@+id/editEducationBottomSheet"
+        android:name="com.gigforce.app.modules.profile.EditEducationBottomSheet"
+        android:label="EditEducationBottomSheet" >
+        <argument
+            android:name="array_location"
+            app:argType="string" />
     </fragment>
 </navigation>

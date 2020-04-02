@@ -27,7 +27,7 @@ import kotlin.collections.ArrayList
 
 class AddEducationBottomSheetFragment: BottomSheetDialogFragment() {
     companion object {
-        fun newInstance() = AddSkillBottomSheetFragment()
+        fun newInstance() = AddEducationBottomSheetFragment()
     }
 
     lateinit var layout: View

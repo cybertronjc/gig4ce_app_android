@@ -50,11 +50,13 @@ class EducationExpandedFragment: Fragment() {
         viewModel.userProfileData.observe(this, Observer { profile ->
             var educationString: String = ""
             var format = SimpleDateFormat("dd/MM/yyyy")
+
             for (education in profile.Education!!) {
                 educationString += education.institution + "\n"
                 educationString += education.degree + " - " + education.course + "\n"
                 educationString += format.format(education.startYear!!) + " - " + format.format(education.endYear!!) + "\n\n"
             }
+            layout.education_card.nextDestination = R.id.editEducationBottomSheet
             layout.education_card.cardTitle = "Education"
             layout.education_card.cardContent = educationString
             layout.education_card.cardBottom = "+ Add Education"
