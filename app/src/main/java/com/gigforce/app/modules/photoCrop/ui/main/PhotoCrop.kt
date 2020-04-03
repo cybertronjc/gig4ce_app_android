@@ -13,6 +13,7 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.gigforce.app.R
+import com.gigforce.app.modules.photoCrop.ui.main.ProfilePictureOptionsBottomSheetFragment.BottomSheetListener
 import com.gigforce.app.utils.GlideApp
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
@@ -25,7 +26,11 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-class PhotoCrop : AppCompatActivity() {
+class PhotoCrop : AppCompatActivity(), BottomSheetListener {
+
+    companion object {
+        fun newInstance() = PhotoCrop()
+    }
 
     private val CODE_IMG_GALLERY: Int = 1
     private val REQUEST_TAKE_PHOTO: Int = 1
@@ -35,6 +40,7 @@ class PhotoCrop : AppCompatActivity() {
     private lateinit var CLOUD_PICTURE_FOLDER: String
     private lateinit var incomingFile:String
     private lateinit var imageView: ImageView
+    private val DEFAULT_PICTURE: String = "avatar.jpg"
 
 
     var mStorage: FirebaseStorage = FirebaseStorage.getInstance()
@@ -47,8 +53,7 @@ class PhotoCrop : AppCompatActivity() {
         incomingFile = intent.getStringExtra("file")
         storage = FirebaseStorage.getInstance()
         imageView = this.findViewById(R.id.profile_avatar_photo_crop)
-
-//        getImageFromPhone()
+        showBottomSheet()
     }
 
     private fun loadImage(Path: String) {
@@ -197,7 +202,8 @@ class PhotoCrop : AppCompatActivity() {
     /*
     Creates the intent to use files and camera that will be cropped
      */
-    private fun getImageFromPhone() {
+
+    open fun getImageFromPhone() {
         val pickIntent = Intent()
         pickIntent.type = "image/*"
         pickIntent.action = Intent.ACTION_GET_CONTENT
@@ -221,39 +227,23 @@ class PhotoCrop : AppCompatActivity() {
         }
     }
 
-    sheetBehavior = BottomSheetBehavior.from(layoutBottomSheet);
+    open fun showBottomSheet(){
+        var profilePictureOptionsBottomSheetFragment:ProfilePictureOptionsBottomSheetFragment=ProfilePictureOptionsBottomSheetFragment()
+        profilePictureOptionsBottomSheetFragment.show(supportFragmentManager,"profilePictureOptionBottomSheet")
+    }
 
-    /**
-     * bottom sheet state change listener
-     * we are changing button text when sheet changed state
-     * */
-    sheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
-        @Override
-        public void onStateChanged(@NonNull View bottomSheet, int newState) {
-            switch (newState) {
-                case BottomSheetBehavior.STATE_HIDDEN:
-                break;
-                case BottomSheetBehavior.STATE_EXPANDED: {
-                    btnBottomSheet.setText("Close Sheet");
-                }
-                break;
-                case BottomSheetBehavior.STATE_COLLAPSED: {
-                    btnBottomSheet.setText("Expand Sheet");
-                }
-                break;
-                case BottomSheetBehavior.STATE_DRAGGING:
-                break;
-                case BottomSheetBehavior.STATE_SETTLING:
-                break;
-            }
+    override fun onButtonClicked(id: Int) {
+        when(id){
+            R.id.selectProfilePicture -> getImageFromPhone()
+            R.id.removeProfilePicture -> defaultProfilePicture()
         }
+    }
 
-        @Override
-        public void onSlide(@NonNull View bottomSheet, float slideOffset) {
-
-        }
-    });
-
+    fun defaultProfilePicture() {
+        resultIntent.putExtra("filename", DEFAULT_PICTURE)
+        setResult(Activity.RESULT_OK, resultIntent)
+        super.finish()
+    }
 
 }
 
