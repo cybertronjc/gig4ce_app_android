@@ -36,6 +36,7 @@ class ProfileFragment : Fragment() {
     private lateinit var profileAvatar: ImageView
     private lateinit var profileAvatarName: String
     private var PHOTO_CROP: Int = 45
+    private var PROFILE_PICTURE_FOLDER: String = "profile_pics"
 
 
     override fun onCreateView(
@@ -54,12 +55,7 @@ class ProfileFragment : Fragment() {
 
         viewModel = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
 
-        // add onClick to profile picture
-        profileAvatar = layout.findViewById(R.id.profile_avatar)
-        profileAvatar.setOnClickListener {
-            val photoCropIntent = Intent(context, PhotoCrop::class.java)
-            startActivityForResult(photoCropIntent, PHOTO_CROP)
-        }
+
 
         // load user data
         viewModel.userProfileData.observe(this, Observer { profile ->
@@ -114,6 +110,16 @@ class ProfileFragment : Fragment() {
         })
 
 
+        /*
+        Clicking on profile picture opens Photo Crop Activity
+         */
+        layout.profile_avatar.setOnClickListener {
+            val photoCropIntent = Intent(context, PhotoCrop::class.java)
+            photoCropIntent.putExtra("folder", PROFILE_PICTURE_FOLDER)
+            photoCropIntent.putExtra("file", profileAvatarName)
+            startActivityForResult(photoCropIntent, PHOTO_CROP)
+        }
+
 
         layout.add_tags_button.setOnClickListener {
             this.findNavController().navigate(R.id.addTagBottomSheet)
@@ -143,7 +149,7 @@ class ProfileFragment : Fragment() {
     }
 
     private fun loadImage(Path: String) {
-        var profilePicRef: StorageReference = storage.reference.child("profile_pics").child(Path)
+        var profilePicRef: StorageReference =storage.reference.child(PROFILE_PICTURE_FOLDER).child(Path)
         GlideApp.with(this.context!!)
             .load(profilePicRef)
             .into(layout.profile_avatar)

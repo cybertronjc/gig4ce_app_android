@@ -147,6 +147,12 @@
     <string name="add_experience_end_date">End Date</string>
     <string name="add_experience_currently_working">Currently Working Here</string>
 
+    <!--    Profile Picture Bottom Sheet-->
+    <string name="select_profile_picture">Select Profile Picture</string>
+    <string name="update_profile_picture">Update Profile Picture</string>
+    <string name="remove_profile_picture">Remove Profile Picture</string>
+    <string name="profile_picture">Profile Picture</string>
+
     <!-- Generic strings -->
     <string name="cancel_text">Cancel</string>
     <string name="save_text">Save</string>

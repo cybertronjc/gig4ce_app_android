@@ -5,7 +5,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-<!--        <item name="android:backgroundTint">@android:color/white</item>-->
+        <!--        <item name="android:backgroundTint">@android:color/white</item>-->
         <!--<item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowTranslucentNavigation">true</item> -->
         <item name="android:windowLightStatusBar">true</item>
@@ -120,6 +120,14 @@
 
     <style name="PhotoCrop" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimaryDark">@color/topBarDark</item>
+        <!--        windowbackground is loaded first, then colorBackground takes over. Both are needed to avoid flickering-->
+        <item name="android:windowBackground">@color/black</item>
+        <item name="android:colorBackground">@color/black</item>
+    </style>
+
+    <style name="PlainButton" parent="Widget.AppCompat.Button.Colored">
+        <item name="colorButtonNormal">@color/white</item>
+        <item name="android:textColor">@color/colorText</item>
     </style>
 
 

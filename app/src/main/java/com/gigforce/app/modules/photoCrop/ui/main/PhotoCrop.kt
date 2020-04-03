@@ -9,10 +9,13 @@ import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.gigforce.app.R
+import com.gigforce.app.utils.GlideApp
 import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
 import com.google.firebase.storage.UploadTask.TaskSnapshot
 import com.yalantis.ucrop.UCrop
@@ -28,13 +31,36 @@ class PhotoCrop : AppCompatActivity() {
     private val REQUEST_TAKE_PHOTO: Int = 1
     private val EXTENSION: String = ".jpg"
     private val resultIntent: Intent = Intent()
+    private lateinit var storage: FirebaseStorage
+    private lateinit var CLOUD_PICTURE_FOLDER: String
+    private lateinit var incomingFile:String
+    private lateinit var imageView: ImageView
+
 
     var mStorage: FirebaseStorage = FirebaseStorage.getInstance()
 
 
-    override fun onCreate(savedInstanceState: Bundle?): Unit {
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        getImageFromPhone()
+        this.setContentView(R.layout.activity_photo_crop)
+        CLOUD_PICTURE_FOLDER = intent.getStringExtra("folder")
+        incomingFile = intent.getStringExtra("file")
+        storage = FirebaseStorage.getInstance()
+        imageView = this.findViewById(R.id.profile_avatar_photo_crop)
+
+//        getImageFromPhone()
+    }
+
+    private fun loadImage(Path: String) {
+        var profilePicRef: StorageReference =storage.reference.child(CLOUD_PICTURE_FOLDER).child(Path)
+        GlideApp.with(this)
+            .load(profilePicRef)
+            .into(imageView)
+    }
+
+    override fun onStart(){
+        super.onStart()
+        loadImage(incomingFile)
     }
 
     override fun onActivityResult(
@@ -47,15 +73,16 @@ class PhotoCrop : AppCompatActivity() {
         Log.e(
                 "DATA_FOR_ALL",
                 requestCode.toString() + " RESULT:_" + resultCode.toString() + " UCrop.REQUEST_CROP " + UCrop.REQUEST_CROP.toString() + " data= " + data
-
         )
         var bundle = data?.extras
         if (null != bundle) {
             logBundle(bundle)
         }
-        if (requestCode == CODE_IMG_GALLERY && resultCode == Activity.RESULT_OK) {
 
-//            val imageUri: Uri? = getImageUri(this, data?.data)
+        /*
+        Handles when the image is chosen from gallery or returned from camera
+         */
+        if (requestCode == CODE_IMG_GALLERY && resultCode == Activity.RESULT_OK) {
             var imageUri: Uri? = data?.data
             if (imageUri == null) {
                 imageUri = getImageUriFromBitmap(this.applicationContext, data?.extras!!.get("data") as Bitmap)
@@ -65,10 +92,14 @@ class PhotoCrop : AppCompatActivity() {
             if (imageUri != null) {
                 startCrop(imageUri)
             }
-        } else if ((requestCode == UCrop.REQUEST_CROP || requestCode == REQUEST_TAKE_PHOTO) && resultCode == Activity.RESULT_OK) {
+        }
+
+        /*
+        Handles cropping the selected image
+         */
+        else if ((requestCode == UCrop.REQUEST_CROP || requestCode == REQUEST_TAKE_PHOTO) && resultCode == Activity.RESULT_OK) {
             val imageUriResultCrop: Uri? = UCrop.getOutput((data!!))
             Log.d("ImageUri", imageUriResultCrop.toString())
-            print(requestCode)
             if (imageUriResultCrop != null) {
                 Log.v("REQUEST CROP", requestCode.toString())
             }
@@ -78,9 +109,6 @@ class PhotoCrop : AppCompatActivity() {
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
             }
             upload(imageUriResultCrop, baos.toByteArray())
-//            if (imageUriResultCrop != null) {
-//                upload(imageUriResultCrop)
-//            }
         }
 
         Log.d("CStatus", "completed result on activity")
@@ -130,9 +158,9 @@ class PhotoCrop : AppCompatActivity() {
 
     private fun upload(uri: Uri?, data: ByteArray) {
 
-        Log.v("Upload Image", "started")
+        Log.v("UPLOAD", "started")
         var mReference =
-                mStorage.reference.child("profile_pics").child(uri!!.lastPathSegment!!)
+                storage.reference.child("profile_pics").child(uri!!.lastPathSegment!!)
 
         lateinit var uploadTask: UploadTask
         if (uri != null) {
@@ -166,6 +194,9 @@ class PhotoCrop : AppCompatActivity() {
         }
     }
 
+    /*
+    Creates the intent to use files and camera that will be cropped
+     */
     private fun getImageFromPhone() {
         val pickIntent = Intent()
         pickIntent.type = "image/*"
@@ -189,6 +220,40 @@ class PhotoCrop : AppCompatActivity() {
             )
         }
     }
+
+    sheetBehavior = BottomSheetBehavior.from(layoutBottomSheet);
+
+    /**
+     * bottom sheet state change listener
+     * we are changing button text when sheet changed state
+     * */
+    sheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+        @Override
+        public void onStateChanged(@NonNull View bottomSheet, int newState) {
+            switch (newState) {
+                case BottomSheetBehavior.STATE_HIDDEN:
+                break;
+                case BottomSheetBehavior.STATE_EXPANDED: {
+                    btnBottomSheet.setText("Close Sheet");
+                }
+                break;
+                case BottomSheetBehavior.STATE_COLLAPSED: {
+                    btnBottomSheet.setText("Expand Sheet");
+                }
+                break;
+                case BottomSheetBehavior.STATE_DRAGGING:
+                break;
+                case BottomSheetBehavior.STATE_SETTLING:
+                break;
+            }
+        }
+
+        @Override
+        public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+
+        }
+    });
+
 
 }
 
