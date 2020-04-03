@@ -79,6 +79,7 @@ class EducationExpandedFragment: Fragment() {
                 //achievementString += format.format(achievement.year!!) + "\n\n"
                 achievementString += achievement.year + "\n\n"
             }
+            layout.achievement_card.nextDestination = R.id.editAchievementBottomSheet
             layout.achievement_card.cardTitle = "Achievement"
             layout.achievement_card.cardContent = achievementString
             layout.achievement_card.cardBottom = "+ Add Achievement"

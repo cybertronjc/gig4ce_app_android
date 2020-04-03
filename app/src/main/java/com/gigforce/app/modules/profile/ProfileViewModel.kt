@@ -77,6 +77,10 @@ class ProfileViewModel: ViewModel() {
         profileFirebaseRepository.setProfileAchievement(achievements)
     }
 
+    fun removeProfileAchievement(achievement: Achievement) {
+        profileFirebaseRepository.removeProfileAchievement(achievement)
+    }
+
     fun setProfileContact(contacts: ArrayList<Contact>) {
         profileFirebaseRepository.setProfileContact(contacts)
     }

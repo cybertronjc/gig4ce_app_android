@@ -51,24 +51,6 @@ class EditEducationBottomSheet: BottomSheetDialogFragment() {
         viewModel = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
 
         degrees.addAll(listOf("--degree--", "Btech", "BA", "MA", "MS", "polytech"))
-        return layout
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val format = SimpleDateFormat("dd/MM/yyyy")
-        lateinit var education: Education
-        viewModel.userProfileData.observe(this, Observer { profile ->
-            if (profile!!.Education!!.size >= 0) {
-                education = profile!!.Education!![arrayLocation!!.toInt()]
-                layout.institution.setText(education.institution)
-                layout.course.setText(education.course)
-                selectedDegree = education.degree
-                layout.degree.setSelection(degrees.indexOf(education.degree))
-                layout.start_date.setText(format.format(education.startYear!!))
-                layout.end_date.setText(format.format(education.endYear!!))
-            }
-        })
-
         val degreeAdapter = ArrayAdapter(this.context!!, R.layout.simple_spinner_dropdown_item, degrees)
         val degreeSpinner = layout.degree
         degreeSpinner.adapter = degreeAdapter
@@ -89,9 +71,27 @@ class EditEducationBottomSheet: BottomSheetDialogFragment() {
             }
         }
 
+        return layout
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val format = SimpleDateFormat("dd/MM/yyyy")
+        lateinit var education: Education
+        viewModel.userProfileData.observe(this, Observer { profile ->
+            if (profile!!.Education!!.size >= 0) {
+                education = profile!!.Education!![arrayLocation!!.toInt()]
+                layout.institution.setText(education.institution)
+                layout.course.setText(education.course)
+                selectedDegree = education.degree
+                layout.degree.setSelection(degrees.indexOf(education.degree))
+                layout.start_date.setText(format.format(education.startYear!!))
+                layout.end_date.setText(format.format(education.endYear!!))
+            }
+        })
+
         layout.delete.setOnClickListener {
             Log.d("EditEducation", "VOILA!")
-            viewModel.removeProfileEducation(education)
+            viewModel.removeProfileEducation(education!!)
             findNavController().navigate(R.id.educationExpandedFragment)
         }
 

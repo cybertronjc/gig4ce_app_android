@@ -50,6 +50,10 @@ class ProfileFirebaseRepository {
         }
     }
 
+    fun removeProfileAchievement(achievement: Achievement) {
+        firebaseDB.collection(profileCollectionName).document(uid).update("Achievement", FieldValue.arrayRemove(achievement))
+    }
+
     fun setProfileContact(contacts: ArrayList<Contact>) {
         for (contact in contacts) {
             firebaseDB.collection(profileCollectionName)

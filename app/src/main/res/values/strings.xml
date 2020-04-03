@@ -162,4 +162,10 @@
     <string name="start_date">Start Date</string>
     <string name="end_date">End Date</string>
     <string name="delete">delete</string>
+    <string name="edit_achievement">Edit Achievement</string>
+    <string name="title">title</string>
+    <string name="authority">authority</string>
+    <string name="location">Location</string>
+    <string name="year" />
+    <string name="year_text">Year</string>
 </resources>
