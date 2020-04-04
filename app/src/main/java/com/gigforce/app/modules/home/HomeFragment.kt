@@ -1,5 +1,9 @@
 package com.gigforce.app.modules.home
 
+
+import android.content.Context
+import android.content.Intent
+
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.util.Log
@@ -7,7 +11,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+
 import android.widget.Toast
+import androidx.appcompat.widget.AppCompatButton
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.adapter.FragmentStateAdapter
@@ -24,8 +30,10 @@ class HomeFragment: Fragment(), View.OnClickListener {
 
     private val loginViewModel: LoginViewModel by activityViewModels<LoginViewModel>()
 
+
     companion object {
         fun newInstance() = HomeFragment()
+
     }
 
     private lateinit var viewModel: HomeViewModel
@@ -47,6 +55,7 @@ class HomeFragment: Fragment(), View.OnClickListener {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(HomeViewModel::class.java)
 
+        //FirebaseAuth.getInstance().addAuthStateListener {
         /*FirebaseAuth.getInstance().addAuthStateListener {
             *//*
             Toast.makeText(context, "Auth state changed to ${if(it.currentUser==null) "SignedOut" else "Signed In"}",
@@ -65,6 +74,7 @@ class HomeFragment: Fragment(), View.OnClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
 
 //        this.pager_home.reduceDragSensitivity()
 //

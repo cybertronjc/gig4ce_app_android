@@ -65,12 +65,20 @@ class ProfileViewModel: ViewModel() {
         profileFirebaseRepository.setProfileEducation(education)
     }
 
+    fun removeProfileEducation(education: Education) {
+        profileFirebaseRepository.removeProfileEducation(education)
+    }
+
     fun setProfileSkill(skills: ArrayList<String>) {
         profileFirebaseRepository.setProfileSkill(skills)
     }
 
     fun setProfileAchievement(achievements: ArrayList<Achievement>) {
         profileFirebaseRepository.setProfileAchievement(achievements)
+    }
+
+    fun removeProfileAchievement(achievement: Achievement) {
+        profileFirebaseRepository.removeProfileAchievement(achievement)
     }
 
     fun setProfileContact(contacts: ArrayList<Contact>) {

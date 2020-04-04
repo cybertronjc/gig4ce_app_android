@@ -1,5 +1,7 @@
 package com.gigforce.app.modules.profile
 
+import android.app.Activity
+import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
 import androidx.lifecycle.ViewModelProviders
@@ -9,17 +11,25 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
+import com.gigforce.app.modules.photoCrop.ui.main.PhotoCrop
 import com.gigforce.app.utils.GlideApp
 import com.google.android.material.chip.Chip
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageMetadata
 import com.google.firebase.storage.StorageReference
+import kotlinx.android.synthetic.main.fragment_profile.*
 import kotlinx.android.synthetic.main.fragment_profile_education_expanded.view.*
 import kotlinx.android.synthetic.main.fragment_profile_main_expanded.view.*
+import kotlinx.android.synthetic.main.profile_card_background.view.*
+import kotlinx.android.synthetic.main.profile_main_card_background.view.card_content
+import kotlinx.android.synthetic.main.profile_main_card_background.view.card_title
+import kotlinx.android.synthetic.main.profile_main_card_background.view.*
+import kotlinx.android.synthetic.main.profile_nav_bar.view.*
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
@@ -33,6 +43,8 @@ class ProfileFragment : Fragment() {
     private lateinit var viewModel: ProfileViewModel
     private lateinit var storage: FirebaseStorage
     private lateinit var layout: View
+    private lateinit var profileAvatar: ImageView
+    private var PHOTO_CROP: Int = 45
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -52,13 +64,20 @@ class ProfileFragment : Fragment() {
 
         viewModel = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
 
+        // add onClick to profile picture
+        profileAvatar = layout.findViewById(R.id.profile_avatar)
+        profileAvatar.setOnClickListener{
+            val photoCropIntent = Intent(context, PhotoCrop::class.java)
+            startActivityForResult(photoCropIntent,PHOTO_CROP)
+
+        }
+
         // load user data
         viewModel.userProfileData.observe(this, Observer { profile ->
             layout.gigger_rating.text = profile.rating!!.getTotal().toString()
             layout.task_done.text = profile.tasksDone.toString()
             layout.connection_count.text = profile.connections.toString()
             layout.main_expanded_user_name.text = profile.name
-            layout.user_about_me.text = profile.aboutMe
 
             Log.d("ProfileFragment", profile.isVerified.toString())
             if (profile.isVerified) {
@@ -82,7 +101,11 @@ class ProfileFragment : Fragment() {
                 educationString += format.format(education.startYear!!) + " - " + format.format(education.endYear!!) + "\n\n"
             }
             Log.d("ProfileFragment", educationString)
-            layout.education_content.text = educationString
+            layout.main_education_card.card_title.text = "Education"
+            layout.main_education_card.card_content.text = educationString
+            layout.main_education_card.card_view_more.setOnClickListener {
+                findNavController().navigate(R.id.educationExpandedFragment)
+            }
 
             var experienceString = ""
             for (exp in profile.Experience!!) {
@@ -91,28 +114,22 @@ class ProfileFragment : Fragment() {
                 experienceString += exp.location + "\n"
                 experienceString += format.format(exp.startDate!!) + "-" + format.format(exp.endDate!!) + "\n\n"
             }
-            layout.experience_content.text = experienceString
+            layout.main_experience_card.card_title.text = "Experience"
+            layout.main_experience_card.card_content.text = experienceString
+            layout.main_experience_card.card_view_more.setOnClickListener {
+                findNavController().navigate(R.id.experienceExpandedFragment)
+            }
 
-            layout.about_card_content.text = profile.bio.toString()
+            layout.main_about_card.card_title.text = "About me"
+            layout.main_about_card.card_content.text = profile.bio.toString()
+            layout.main_about_card.card_view_more.setOnClickListener {
+                findNavController().navigate(R.id.aboutExpandedFragment)
+            }
             Log.d("ProfileFragment", profile.rating.toString())
         })
 
         layout.add_tags_button.setOnClickListener{
             this.findNavController().navigate(R.id.addTagBottomSheet)
-        }
-
-        layout.about_card_view_more_button.setOnClickListener{
-            this.findNavController().navigate(R.id.aboutExpandedFragment)
-        }
-
-        layout.education_view_more.setOnClickListener {
-            Log.d("CLICK_STATUS", "CLICK HEARD")
-            Toast.makeText(this.context, "View More Clicked", Toast.LENGTH_LONG).show()
-            this.findNavController().navigate(R.id.educationExpandedFragment)
-        }
-
-        layout.experience_card_view_more.setOnClickListener {
-            this.findNavController().navigate(R.id.experienceExpandedFragment)
         }
 
         // back page navigation
@@ -122,9 +139,25 @@ class ProfileFragment : Fragment() {
     }
 
     private fun loadImage(Path: String) {
-        var profilePicRef: StorageReference = storage.reference.child("profile_pics").child(Path)
+        val profilePicRef: StorageReference = storage.reference.child("profile_pics").child(Path)
         GlideApp.with(this.context!!)
             .load(profilePicRef)
             .into(layout.profile_avatar)
+    }
+
+    override fun onActivityResult(
+        requestCode: Int,
+        resultCode: Int,
+        data: Intent?
+    ): Unit {
+
+        super.onActivityResult(requestCode, resultCode, data)
+        if(requestCode == PHOTO_CROP && resultCode == Activity.RESULT_OK){
+            var imageName: String? = data?.getStringExtra("filename")
+            Log.v("PROFILE_FRAG_OAR","filename is:"+imageName)
+            if(null!=imageName){
+                loadImage(imageName)
+            }
+        }
     }
 }

@@ -87,8 +87,8 @@
     <string name="add_education_sheet_institution">Institution</string>
     <string name="add_education_sheet_course">Course</string>
     <string name="add_education_sheet_degree">Degree</string>
-    <string name="add_education_sheet_start_year">Start Year *</string>
-    <string name="add_education_sheet_end_year">End Year *</string>
+    <string name="add_education_sheet_start_year">Start Date *</string>
+    <string name="add_education_sheet_end_year">End Date *</string>
 
     <!-- Add New Contact Bottom Sheet -->
     <string name="add_contact_new_contact">New Contact</string>
@@ -155,4 +155,17 @@
     <string name="tags_text">Tags of User</string>
     <string name="about_me_text">About me of user</string>
     <string name="to_be_filled_from_profile_data">To Be Filled From Profile Data</string>
+    <string name="placeholder_image_view">Image to be loaded</string>
+    <string name="institution">Institution</string>
+    <string name="course_name">Course</string>
+    <string name="degree">Degree</string>
+    <string name="start_date">Start Date</string>
+    <string name="end_date">End Date</string>
+    <string name="delete">delete</string>
+    <string name="edit_achievement">Edit Achievement</string>
+    <string name="title">title</string>
+    <string name="authority">authority</string>
+    <string name="location">Location</string>
+    <string name="year" />
+    <string name="year_text">Year</string>
 </resources>

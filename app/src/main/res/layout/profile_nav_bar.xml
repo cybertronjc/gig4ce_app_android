@@ -17,7 +17,7 @@
             android:layout_width="0dp"
             android:layout_height="1dp"
             android:layout_weight="1"
-            android:background="@color/fui_transparent"></Space>
+            android:background="@color/fui_transparent"/>
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/about_me"

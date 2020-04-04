@@ -7,6 +7,7 @@ buildscript {
 
     }
     dependencies {
+
         classpath 'com.android.tools.build:gradle:4.0.0-beta03'  //4.0.0-alpha08
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
 
@@ -28,7 +29,9 @@ allprojects {
         google()
         jcenter()
         maven { url "https://jitpack.io" }
+
         //maven { url "https://mymavenrepo.com/repo/jeYsRLYFzkhy617P4O1I/" }
+
     }
 }
 
