@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:behavior_hideable="true"
+    app:behavior_peekHeight="260dp"
+    android:padding="8dp"
+    app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
+
+    <TextView
+        android:id="@+id/profilePictureTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="18dp"
+        android:textSize="20sp"
+        android:text="@string/profile_picture"
+        />
+
+
+    <TextView
+
+        android:id="@+id/updateProfilePicture"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="10dp"
+        android:textSize="17sp"
+        android:text="@string/update_profile_picture"
+         />
+
+    <TextView
+
+        android:id="@+id/removeProfilePicture"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="10dp"
+        android:textSize="17sp"
+        android:layout_marginBottom="30dp"
+        android:text="@string/remove_profile_picture"
+         />
+
+
+
+</LinearLayout>

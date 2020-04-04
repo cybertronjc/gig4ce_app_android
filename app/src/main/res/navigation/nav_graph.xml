@@ -207,4 +207,10 @@
             android:id="@+id/action_login2_to_verifyOTP"
             app:destination="@id/verifyOTP" />
     </fragment>
+    <activity
+        android:id="@+id/photoCrop"
+        android:name="com.gigforce.app.modules.photoCrop.ui.main.PhotoCrop"
+        android:label="PhotoCrop" />
+
+
 </navigation>
