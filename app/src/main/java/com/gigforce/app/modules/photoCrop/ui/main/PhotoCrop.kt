@@ -56,6 +56,11 @@ class PhotoCrop : AppCompatActivity(), BottomSheetListener {
         showBottomSheet()
     }
 
+    override fun onRestart() {
+        super.onRestart()
+        showBottomSheet()
+    }
+
     private fun loadImage(Path: String) {
         var profilePicRef: StorageReference =storage.reference.child(CLOUD_PICTURE_FOLDER).child(Path)
         GlideApp.with(this)
