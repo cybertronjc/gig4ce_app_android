@@ -115,6 +115,8 @@ class ProfileFragment : Fragment() {
          */
         layout.profile_avatar.setOnClickListener {
             val photoCropIntent = Intent(context, PhotoCrop::class.java)
+            photoCropIntent.putExtra("fbDir", "/profile_pics/")
+            photoCropIntent.putExtra("detectFace",1)
             photoCropIntent.putExtra("folder", PROFILE_PICTURE_FOLDER)
             photoCropIntent.putExtra("file", profileAvatarName)
             startActivityForResult(photoCropIntent, PHOTO_CROP)
