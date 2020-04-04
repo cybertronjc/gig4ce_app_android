@@ -28,7 +28,8 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-class PhotoCrop : AppCompatActivity() {
+class PhotoCrop : AppCompatActivity(),
+    ProfilePictureOptionsBottomSheetFragment.BottomSheetListener {
 
     private val CODE_IMG_GALLERY: Int = 1
     private val REQUEST_TAKE_PHOTO: Int = 1
@@ -271,7 +272,7 @@ class PhotoCrop : AppCompatActivity() {
         )
     }
 
-    fun onButtonClicked(id: Int) {
+    override fun onButtonClicked(id: Int) {
         when (id) {
             R.id.updateProfilePicture -> getImageFromPhone()
             R.id.removeProfilePicture -> defaultProfilePicture()

@@ -55,8 +55,6 @@ class ProfileFragment : Fragment() {
 
         viewModel = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
 
-
-
         // load user data
         viewModel.userProfileData.observe(this, Observer { profile ->
             layout.gigger_rating.text = profile.rating!!.getTotal().toString()
