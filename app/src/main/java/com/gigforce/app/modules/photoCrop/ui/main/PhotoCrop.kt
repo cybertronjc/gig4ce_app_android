@@ -38,7 +38,7 @@ class PhotoCrop : AppCompatActivity(), BottomSheetListener {
     private val resultIntent: Intent = Intent()
     private lateinit var storage: FirebaseStorage
     private lateinit var CLOUD_PICTURE_FOLDER: String
-    private lateinit var incomingFile:String
+    private lateinit var incomingFile: String
     private lateinit var imageView: ImageView
     private val DEFAULT_PICTURE: String = "avatar.jpg"
 
@@ -62,27 +62,28 @@ class PhotoCrop : AppCompatActivity(), BottomSheetListener {
     }
 
     private fun loadImage(Path: String) {
-        var profilePicRef: StorageReference =storage.reference.child(CLOUD_PICTURE_FOLDER).child(Path)
+        var profilePicRef: StorageReference =
+            storage.reference.child(CLOUD_PICTURE_FOLDER).child(Path)
         GlideApp.with(this)
             .load(profilePicRef)
             .into(imageView)
     }
 
-    override fun onStart(){
+    override fun onStart() {
         super.onStart()
         loadImage(incomingFile)
     }
 
     override fun onActivityResult(
-            requestCode: Int,
-            resultCode: Int,
-            data: Intent?
+        requestCode: Int,
+        resultCode: Int,
+        data: Intent?
     ): Unit {
         super.onActivityResult(requestCode, resultCode, data)
 
         Log.e(
-                "DATA_FOR_ALL",
-                requestCode.toString() + " RESULT:_" + resultCode.toString() + " UCrop.REQUEST_CROP " + UCrop.REQUEST_CROP.toString() + " data= " + data
+            "DATA_FOR_ALL",
+            requestCode.toString() + " RESULT:_" + resultCode.toString() + " UCrop.REQUEST_CROP " + UCrop.REQUEST_CROP.toString() + " data= " + data
         )
         var bundle = data?.extras
         if (null != bundle) {
@@ -95,7 +96,10 @@ class PhotoCrop : AppCompatActivity(), BottomSheetListener {
         if (requestCode == CODE_IMG_GALLERY && resultCode == Activity.RESULT_OK) {
             var imageUri: Uri? = data?.data
             if (imageUri == null) {
-                imageUri = getImageUriFromBitmap(this.applicationContext, data?.extras!!.get("data") as Bitmap)
+                imageUri = getImageUriFromBitmap(
+                    this.applicationContext,
+                    data?.extras!!.get("data") as Bitmap
+                )
             }
             Log.v("COME IMG GALLERY", requestCode.toString())
             Log.v("ImURI", imageUri.toString())
@@ -127,7 +131,8 @@ class PhotoCrop : AppCompatActivity(), BottomSheetListener {
     open fun getImageUriFromBitmap(context: Context, bitmap: Bitmap): Uri {
         val bytes = ByteArrayOutputStream()
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
-        val path = MediaStore.Images.Media.insertImage(context.contentResolver, bitmap, "Title", null)
+        val path =
+            MediaStore.Images.Media.insertImage(context.contentResolver, bitmap, "Title", null)
         return Uri.parse(path.toString())
     }
 
@@ -135,16 +140,16 @@ class PhotoCrop : AppCompatActivity(), BottomSheetListener {
         Log.v("Start Crop", "started")
         //can use this for a new name every time
         val timeStamp = SimpleDateFormat(
-                "yyyyMMdd_HHmmss",
-                Locale.getDefault()
+            "yyyyMMdd_HHmmss",
+            Locale.getDefault()
         ).format(Date())
         val imageFileName = "IMG_" + timeStamp + "_"
         val storageDir =
-                getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+            getExternalFilesDir(Environment.DIRECTORY_PICTURES)
 
         val uCrop: UCrop = UCrop.of(
-                uri,
-                Uri.fromFile(File(cacheDir, imageFileName + EXTENSION))
+            uri,
+            Uri.fromFile(File(cacheDir, imageFileName + EXTENSION))
         )
         resultIntent.putExtra("filename", imageFileName + EXTENSION)
         uCrop.withAspectRatio(1F, 1F)
@@ -170,7 +175,7 @@ class PhotoCrop : AppCompatActivity(), BottomSheetListener {
 
         Log.v("UPLOAD", "started")
         var mReference =
-                storage.reference.child("profile_pics").child(uri!!.lastPathSegment!!)
+            storage.reference.child("profile_pics").child(uri!!.lastPathSegment!!)
 
         lateinit var uploadTask: UploadTask
         if (uri != null) {
@@ -217,7 +222,7 @@ class PhotoCrop : AppCompatActivity(), BottomSheetListener {
         var outputFileUri: Uri? = Uri.fromFile(File.createTempFile("profilePicture", ".jpg"))
         val chooserIntent = Intent.createChooser(pickIntent, pickTitle)
         chooserIntent.putExtra(
-                Intent.EXTRA_INITIAL_INTENTS, arrayOf(takePhotoIntent)
+            Intent.EXTRA_INITIAL_INTENTS, arrayOf(takePhotoIntent)
         )
         chooserIntent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri)
         startActivityForResult(chooserIntent, CODE_IMG_GALLERY)
@@ -226,20 +231,24 @@ class PhotoCrop : AppCompatActivity(), BottomSheetListener {
     private fun logBundle(bundle: Bundle) {
         for (key in bundle.keySet()!!) {
             Log.e(
-                    "PHOTO_CROP_EXTRAS",
-                    key + " : " + if (bundle.get(key) != null) bundle.get(key) else "NULL"
+                "PHOTO_CROP_EXTRAS",
+                key + " : " + if (bundle.get(key) != null) bundle.get(key) else "NULL"
             )
         }
     }
 
-    open fun showBottomSheet(){
-        var profilePictureOptionsBottomSheetFragment:ProfilePictureOptionsBottomSheetFragment=ProfilePictureOptionsBottomSheetFragment()
-        profilePictureOptionsBottomSheetFragment.show(supportFragmentManager,"profilePictureOptionBottomSheet")
+    open fun showBottomSheet() {
+        var profilePictureOptionsBottomSheetFragment: ProfilePictureOptionsBottomSheetFragment =
+            ProfilePictureOptionsBottomSheetFragment()
+        profilePictureOptionsBottomSheetFragment.show(
+            supportFragmentManager,
+            "profilePictureOptionBottomSheet"
+        )
     }
 
     override fun onButtonClicked(id: Int) {
-        when(id){
-            R.id.selectProfilePicture -> getImageFromPhone()
+        when (id) {
+            R.id.updateProfilePicture -> getImageFromPhone()
             R.id.removeProfilePicture -> defaultProfilePicture()
         }
     }

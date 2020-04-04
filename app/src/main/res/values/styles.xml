@@ -11,6 +11,7 @@
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:textViewStyle">@style/AppTheme.TextStyle</item>
+
     </style>
 
     <style name="AppTheme.TextStyle" parent="android:Widget.TextView">
@@ -123,11 +124,17 @@
         <!--        windowbackground is loaded first, then colorBackground takes over. Both are needed to avoid flickering-->
         <item name="android:windowBackground">@color/black</item>
         <item name="android:colorBackground">@color/black</item>
+        <item name="bottomSheetDialogTheme">@style/AppBottomSheetDialogTheme</item>
     </style>
 
-    <style name="PlainButton" parent="Widget.AppCompat.Button.Colored">
-        <item name="colorButtonNormal">@color/white</item>
-        <item name="android:textColor">@color/colorText</item>
+    <style name="AppBottomSheetDialogTheme"
+        parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/AppModalStyle</item>
+    </style>
+
+    <style name="AppModalStyle"
+        parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@drawable/rounded_bottomsheet</item>
     </style>
 
 

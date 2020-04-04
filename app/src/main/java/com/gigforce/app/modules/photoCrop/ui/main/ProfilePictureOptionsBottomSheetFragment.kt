@@ -6,16 +6,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
-import com.gigforce.app.modules.profile.AddSkillBottomSheetFragment
-import com.gigforce.app.modules.profile.models.Education
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import kotlinx.android.synthetic.main.add_education_bottom_sheet.view.*
 import kotlinx.android.synthetic.main.profile_photo_bottom_sheet.view.*
-import java.text.SimpleDateFormat
-import kotlin.collections.ArrayList
 
 class ProfilePictureOptionsBottomSheetFragment : BottomSheetDialogFragment() {
     companion object {
@@ -24,7 +17,7 @@ class ProfilePictureOptionsBottomSheetFragment : BottomSheetDialogFragment() {
     }
 
     lateinit var layout: View
-    private lateinit var mListener:BottomSheetListener
+    private lateinit var mListener: BottomSheetListener
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,34 +30,32 @@ class ProfilePictureOptionsBottomSheetFragment : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.d("ProfileOptionBS","view created")
+        Log.d("ProfileOptionBS", "view created")
 
-        layout.selectProfilePicture.setOnClickListener {
-            Log.d("ProfileOptionBS","select Profiel clicked")
-            mListener.onButtonClicked(R.id.selectProfilePicture)
+        layout.updateProfilePicture.setOnClickListener {
+            Log.d("ProfileOptionBS", "select Profile clicked")
+            mListener.onButtonClicked(R.id.updateProfilePicture)
             dismiss()
-//            this.findNavController().navigate(R.id.photoCrop)
         }
 
         layout.removeProfilePicture.setOnClickListener {
-            Log.d("ProfileOptionBS","remove Profiel clicked")
+            Log.d("ProfileOptionBS", "remove Profile clicked")
             mListener.onButtonClicked(R.id.removeProfilePicture)
             dismiss()
-//            this.findNavController().navigate(R.id.photoCrop)
         }
 
     }
 
-    public interface BottomSheetListener{
-        fun onButtonClicked(id:Int)
+    public interface BottomSheetListener {
+        fun onButtonClicked(id: Int)
     }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
         try {
-            mListener=context as BottomSheetListener
-        } catch (e:Exception){
-            throw ClassCastException(context.toString()+" must implement Bottom Sheet Listener")
+            mListener = context as BottomSheetListener
+        } catch (e: Exception) {
+            throw ClassCastException(context.toString() + " must implement Bottom Sheet Listener")
         }
     }
 }
