@@ -4,22 +4,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
-import com.gigforce.app.modules.auth.ui.main.LoginViewModel
 import com.gigforce.app.modules.auth.ui.main.Login
-import com.gigforce.app.modules.profile.ProfileViewModel
-import com.gigforce.app.modules.verification.models.Contact_Verification
-import com.gigforce.app.modules.verification.models.VerificationData
-import kotlinx.android.synthetic.main.fragment_profile_about_expanded.view.*
-import kotlinx.android.synthetic.main.fragment_video_resume.*
+import com.gigforce.app.modules.verification.models.Address
 import kotlinx.android.synthetic.main.layout_verification.view.*
-import kotlinx.android.synthetic.main.layout_verification_contact.*
-import kotlinx.android.synthetic.main.layout_verification_contact.view.*
 
 class Verification: Fragment() {
     companion object {
@@ -28,6 +21,7 @@ class Verification: Fragment() {
 
     lateinit var layout: View
     lateinit var viewModel: VerificationViewModel
+    var updates: ArrayList<Address> = ArrayList()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -65,7 +59,52 @@ class Verification: Fragment() {
 //            //layout.add_veri_contact_address.text = contact.address
 //        })
 
-        layout.textView32.setOnClickListener { findNavController().navigate(R.id.verificationcontact) }
+        layout.button_veri_address_cancel.setOnClickListener {
+            findNavController().navigate(R.id.homeScreenIcons);
+        }
 
+        layout.button_veri_address_save.setOnClickListener {
+                /*
+                if fields on empty - validate fields (check for email regex and phone regex)
+                and toast the missing fields before proceeding
+                 */
+            if(layout.add_veri_address_line1.equals("") || layout.add_veri_address_line2.equals("") || layout.add_veri_address_city.equals("") || layout.add_veri_address_state.equals("") || layout.add_veri_address_pin.equals(""))
+            {
+                Toast.makeText(
+                    this.context,
+                    "Please fill up all the missing fields",
+                    Toast.LENGTH_LONG).show()
+            }
+            else{
+                findNavController().navigate(R.id.panUpload)
+            }
+        }
+
+        //layout.textView31.setOnClickListener { findNavController().navigate(R.id.panUpload) }
+        //layout.textView32.setOnClickListener { findNavController().navigate(R.id.verificationcontact) }
+
+    }
+
+    private fun addNewContact() {
+        updates.add(
+            Address(
+                address = layout.add_veri_address_line1.text.toString()+" "+layout.add_veri_address_line2.text.toString(),
+                city = layout.add_veri_address_city.text.toString(),
+                state = layout.add_veri_address_state.text.toString(),
+                pincode = layout.add_veri_address_pin.text.toString()
+            )
+        )
+    }
+
+    private fun resetLayout() {
+        layout.add_veri_address_line1.setText("")
+        layout.add_veri_address_line2.setText("")
+        layout.add_veri_address_city.setText("")
+        layout.add_veri_address_state.setText("")
+        layout.add_veri_address_pin.setText("")
+    }
+
+    private fun saveNewContacts() {
+        viewModel.setVerificationContact(updates)
     }
 }

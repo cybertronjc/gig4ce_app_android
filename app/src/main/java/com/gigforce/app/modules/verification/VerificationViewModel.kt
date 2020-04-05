@@ -1,6 +1,5 @@
 package com.gigforce.app.modules.verification
 
-import com.gigforce.app.modules.verification.VeriFirebaseRepository
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,18 +7,19 @@ import com.gigforce.app.modules.verification.models.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.EventListener
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.QuerySnapshot
-import com.google.firebase.storage.FirebaseStorage
 
 class VerificationViewModel: ViewModel() {
 
     var veriFirebaseRepository = VeriFirebaseRepository()
-    var veriData: MutableLiveData<Contact_Verification> = MutableLiveData<Contact_Verification>()
+    var veriData: MutableLiveData<Address> = MutableLiveData<Address>()
     val uid: String
 
-    fun getVerificationData(): MutableLiveData<Contact_Verification> {
-        veriFirebaseRepository.getProfile().addSnapshotListener(EventListener<DocumentSnapshot> {
+    fun setCardAvatarName(cardAvatarName: String) {
+        veriFirebaseRepository.setCardAvatar(cardAvatarName)
+    }
+
+    fun getVerificationData(): MutableLiveData<Address> {
+        veriFirebaseRepository.getVerificationData().addSnapshotListener(EventListener<DocumentSnapshot> {
                 value, e ->
 
             if (e != null) {
@@ -30,7 +30,7 @@ class VerificationViewModel: ViewModel() {
             Log.d("VerificationViewModel", value.toString())
 
             veriData.postValue(
-                value!!.toObject(Contact_Verification::class.java)
+                value!!.toObject(Address::class.java)
             )
 
             Log.d("VerificationViewModel", veriData.toString())
@@ -38,8 +38,12 @@ class VerificationViewModel: ViewModel() {
         return veriData
     }
 
-    fun setVerificationContact(contacts: ArrayList<Contact_Verification>) {
+    fun setVerificationContact(contacts: ArrayList<Address>) {
         veriFirebaseRepository.setVeriContact(contacts)
+    }
+
+    fun setBank(banks: ArrayList<Bank>) {
+        veriFirebaseRepository.setBank(banks)
     }
 
     init {

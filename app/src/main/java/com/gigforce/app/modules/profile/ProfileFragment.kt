@@ -15,9 +15,9 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
 import com.gigforce.app.R
-import com.gigforce.app.modules.photoCrop.ui.main.PhotoCrop
-import com.gigforce.app.utils.GlideApp
+import com.gigforce.app.modules.photocrop.*
 import com.google.android.material.chip.Chip
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageMetadata
@@ -140,7 +140,7 @@ class ProfileFragment : Fragment() {
 
     private fun loadImage(Path: String) {
         val profilePicRef: StorageReference = storage.reference.child("profile_pics").child(Path)
-        GlideApp.with(this.context!!)
+        Glide.with(this.context!!)
             .load(profilePicRef)
             .into(layout.profile_avatar)
     }

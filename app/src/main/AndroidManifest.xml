@@ -13,7 +13,6 @@
 
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
-
     <uses-feature android:name="android.hardware.camera" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
 
@@ -25,28 +24,29 @@
         android:supportsRtl="true"
         android:configChanges="layoutDirection|locale"
         android:theme="@style/AppTheme">
+        <!--
+               Set to true if your app is Standalone, that is, it does not require the handheld
+            <category android:name="android.intent.category.DEFAULT" />
+        </intent-filter>
+    </activity>
 
+    <meta-data
+        android:name="preloaded_fonts"
+        android:resource="@array/preloaded_fonts" />
 
-<!--        <provider-->
-<!--            android:name="androidx.core.content.FileProvider"-->
-<!--            android:authorities="${applicationId}.provider"-->
-<!--            android:exported="false"-->
-<!--            android:grantUriPermissions="true">-->
-<!--            <meta-data-->
-<!--                android:name="android.support.FILE_PROVIDER_PATHS"-->
-<!--                android:resource="@xml/file_paths">-->
-<!--            </meta-data>-->
-<!--        </provider>-->
+    <meta-data
+        android:name="preloaded_fonts"
+               app to run.
+        -->
 
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.MaterialComponents.Light.NoActionBar"/>
+            android:theme="@style/PhotoCrop"/>
         <activity
             android:name="com.gigforce.app.modules.photoCrop.ui.main.PhotoCrop"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.MaterialComponents.Light.NoActionBar"/>
-
+            android:theme="@style/PhotoCrop"/>
 
         <activity android:name=".SplashScreen" android:theme="@style/SplashTheme">
             <intent-filter>
@@ -55,7 +55,6 @@
             </intent-filter>
         </activity>
 
-
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"
@@ -63,11 +62,9 @@
                         android:screenOrientation="portrait"/>
             </intent-filter>
         </activity>
-
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
-
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"
@@ -79,11 +76,11 @@
                 android:resource="@xml/provider_paths" />
         </provider>
 
-<!--        <service android:name="com.gigforce.app.modules.notifications.Notification">-->
-<!--            <intent-filter>-->
-<!--                <action android:name="com.google.firebase.MESSAGING_EVENT" />-->
-<!--            </intent-filter>-->
-<!--        </service>-->
+        <service android:name="com.gigforce.app.modules.notifications.Notification">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

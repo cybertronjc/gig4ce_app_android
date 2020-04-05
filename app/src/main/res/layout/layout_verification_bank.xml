@@ -7,13 +7,13 @@
     android:textAlignment="center">
 
     <TextView
-        android:id="@+id/veriScreenTitle"
+        android:id="@+id/textView30"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="11dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="163dp"
-        android:text="@string/veriScreenTitle"
+        android:text="Hello Chris!"
         android:textSize="35sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -28,12 +28,12 @@
         android:layout_marginEnd="30dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.166"
-        app:layout_constraintStart_toEndOf="@+id/veriScreenTitle"
+        app:layout_constraintStart_toEndOf="@+id/textView30"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_user_icon" />
 
     <ProgressBar
-        android:id="@+id/pbAddress"
+        android:id="@+id/pbBarBank"
         style="@android:style/Widget.ProgressBar.Horizontal"
         android:layout_width="match_parent"
         android:layout_height="21dp"
@@ -45,115 +45,115 @@
         android:progressTint="@color/colorAccent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/veriScreenTitle" />
+        app:layout_constraintTop_toBottomOf="@+id/textView30" />
 
     <TextView
-        android:id="@+id/tvVeriAddressTitle"
+        android:id="@+id/tvVeriBankTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="21dp"
-        android:text="@string/veri_address_title"
+        android:text="@string/veri_bank_title"
         android:textColor="@android:color/black"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/pbAddress" />
+        app:layout_constraintTop_toBottomOf="@+id/pbBarBank" />
 
     <TextView
-        android:id="@+id/textViewaddress"
+        android:id="@+id/textViewbank"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="23.5dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="36dp"
-        android:text="@string/veri_add_address"
+        android:text="@string/veri_add_bank"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvVeriAddressTitle" />
+        app:layout_constraintTop_toBottomOf="@+id/tvVeriBankTitle" />
 
     <EditText
-        android:id="@+id/add_veri_address_line1"
+        android:id="@+id/add_veri_bank_acname"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="23.5dp"
         android:layout_marginTop="25dp"
         android:layout_marginEnd="26.5dp"
         android:ems="10"
-        android:hint="@string/veri_hint_address_line1"
+        android:hint="@string/veri_hint_account_name"
         android:importantForAutofill="no"
         android:inputType="text"
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewaddress" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewbank" />
 
     <EditText
-        android:id="@+id/add_veri_address_line2"
+        android:id="@+id/add_veri_bank_acnum"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="23.5dp"
         android:layout_marginTop="25dp"
         android:layout_marginEnd="26.5dp"
         android:ems="10"
-        android:hint="@string/veri_hint_address_line2"
-        android:importantForAutofill="no"
-        android:inputType="phone"
-        android:textSize="12sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/add_veri_address_line1"
-        app:layout_constraintTop_toBottomOf="@+id/add_veri_address_line1" />
-
-    <EditText
-        android:id="@+id/add_veri_address_city"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="23.5dp"
-        android:layout_marginTop="25dp"
-        android:layout_marginEnd="26.5dp"
-        android:ems="10"
-        android:hint="@string/veri_hint_city"
-        android:importantForAutofill="no"
-        android:inputType="text"
-        android:textSize="12sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/add_veri_address_line2"
-        app:layout_constraintTop_toBottomOf="@+id/add_veri_address_line2" />
-
-    <EditText
-        android:id="@+id/add_veri_address_state"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="23.5dp"
-        android:layout_marginTop="25dp"
-        android:layout_marginEnd="26.5dp"
-        android:ems="10"
-        android:hint="@string/veri_hint_state"
-        android:importantForAutofill="no"
-        android:inputType="text"
-        android:textSize="12sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/add_veri_address_city"
-        app:layout_constraintTop_toBottomOf="@+id/add_veri_address_city" />
-
-
-    <EditText
-        android:id="@+id/add_veri_address_pin"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="23.5dp"
-        android:layout_marginTop="25dp"
-        android:layout_marginEnd="26.5dp"
-        android:ems="10"
-        android:hint="@string/veri_hint_pin"
+        android:hint="@string/veri_hint_account_no"
         android:importantForAutofill="no"
         android:inputType="number"
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/add_veri_address_state"
-        app:layout_constraintTop_toBottomOf="@+id/add_veri_address_state" />
+        app:layout_constraintStart_toStartOf="@+id/add_veri_bank_acname"
+        app:layout_constraintTop_toBottomOf="@+id/add_veri_bank_acname" />
+
+    <EditText
+        android:id="@+id/add_veri_bank_acnum_re"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="23.5dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginEnd="26.5dp"
+        android:ems="10"
+        android:hint="@string/veri_hint_re_account_no"
+        android:importantForAutofill="no"
+        android:inputType="number"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/add_veri_bank_acnum"
+        app:layout_constraintTop_toBottomOf="@+id/add_veri_bank_acnum" />
+
+    <EditText
+        android:id="@+id/add_veri_bank_ifsc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="23.5dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginEnd="26.5dp"
+        android:ems="10"
+        android:hint="@string/veri_hint_ifsc"
+        android:importantForAutofill="no"
+        android:inputType="text"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/add_veri_bank_acnum_re"
+        app:layout_constraintTop_toBottomOf="@+id/add_veri_bank_acnum_re" />
+
+
+    <EditText
+        android:id="@+id/add_veri_bank_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="23.5dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginEnd="26.5dp"
+        android:ems="10"
+        android:hint="@string/veri_hint_bank_name"
+        android:importantForAutofill="no"
+        android:inputType="text"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/add_veri_bank_ifsc"
+        app:layout_constraintTop_toBottomOf="@+id/add_veri_bank_ifsc" />
 
     <Button
-        android:id="@+id/button_veri_address_save"
+        android:id="@+id/button_veri_bank_save"
         android:layout_width="156dp"
         android:layout_height="48dp"
         android:layout_marginStart="16dp"
@@ -164,11 +164,11 @@
         android:textAlignment="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/button_veri_address_cancel"
-        app:layout_constraintTop_toBottomOf="@+id/add_veri_address_pin" />
+        app:layout_constraintStart_toEndOf="@+id/button_veri_bank_cancel"
+        app:layout_constraintTop_toBottomOf="@+id/add_veri_bank_name" />
 
     <Button
-        android:id="@+id/button_veri_address_cancel"
+        android:id="@+id/button_veri_bank_cancel"
         android:layout_width="156dp"
         android:layout_height="48dp"
         android:layout_marginStart="16dp"
@@ -180,5 +180,5 @@
         android:textColor="@color/colorAccent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/add_veri_address_pin" />
+        app:layout_constraintTop_toBottomOf="@+id/add_veri_bank_name" />
 </androidx.constraintlayout.widget.ConstraintLayout>

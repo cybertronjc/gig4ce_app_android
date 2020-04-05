@@ -185,10 +185,16 @@
         <action
             android:id="@+id/action_verification_to_addVerificationContact"
             app:destination="@id/verificationcontact" />
+        <action
+            android:id="@+id/action_verification_to_panUpload"
+            app:destination="@id/panUpload" />
+        <action
+            android:id="@+id/action_verification_to_aadhaarUpload"
+            app:destination="@id/aadhaarUpload" />
     </fragment>
     <fragment
         android:id="@+id/verificationcontact"
-        android:name="com.gigforce.app.modules.verification.AddVerificationContact"
+        android:name="com.gigforce.app.modules.verification.AddressUpload"
         android:label="AddVerificationContact" />
     <fragment
         android:id="@+id/Login"
@@ -199,6 +205,18 @@
             app:destination="@id/verifyOTP" />
     </fragment>
     <fragment
+        android:id="@+id/panUpload"
+        android:name="com.gigforce.app.modules.verification.PanUpload"
+        android:label="PanUpload" >
+        <action
+            android:id="@+id/action_panUpload_to_aadhaarUpload"
+            app:destination="@id/aadhaarUpload" />
+    </fragment>
+    <fragment
+        android:id="@+id/aadhaarUpload"
+        android:name="com.gigforce.app.modules.verification.AadhaarUpload"
+        android:label="AadhaarUpload" />
+<fragment
         android:id="@+id/editEducationBottomSheet"
         android:name="com.gigforce.app.modules.profile.EditEducationBottomSheet"
         android:label="EditEducationBottomSheet" >
