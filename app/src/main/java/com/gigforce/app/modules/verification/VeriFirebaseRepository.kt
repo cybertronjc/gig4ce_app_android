@@ -12,7 +12,7 @@ class VeriFirebaseRepository {
     var firebaseDB = FirebaseFirestore.getInstance()
     var uid = FirebaseAuth.getInstance().currentUser?.uid!!
 
-    var collection = "verification"
+    var collection = "Verification"
 
     fun setCardAvatar(cardAvatarName: String) {
         firebaseDB.collection(collection)
@@ -47,24 +47,5 @@ class VeriFirebaseRepository {
                     Log.d("Repository", exception.toString())
                 }
         }
-    }
-
-    fun setProfileLanguage(languages: ArrayList<Language>) {
-        for (lang in languages) {
-            firebaseDB.collection(collection)
-                .document(uid).update("Language", FieldValue.arrayUnion(lang))
-        }
-    }
-
-    fun setProfileExperience(experiences: ArrayList<Experience>) {
-        for (exp in experiences) {
-            firebaseDB.collection(collection)
-                .document(uid).update("Experience", FieldValue.arrayUnion(exp))
-        }
-    }
-
-    fun setProfileTags(tag: String) {
-        firebaseDB.collection(collection)
-            .document(uid).update("Tags", FieldValue.arrayUnion(tag))
     }
 }

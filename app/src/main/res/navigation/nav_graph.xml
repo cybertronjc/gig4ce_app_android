@@ -215,7 +215,11 @@
     <fragment
         android:id="@+id/aadhaarUpload"
         android:name="com.gigforce.app.modules.verification.AadhaarUpload"
-        android:label="AadhaarUpload" />
+        android:label="AadhaarUpload" >
+        <action
+            android:id="@+id/action_aadhaarUpload_to_DLUpload"
+            app:destination="@id/DLUpload" />
+    </fragment>
 <fragment
         android:id="@+id/editEducationBottomSheet"
         android:name="com.gigforce.app.modules.profile.EditEducationBottomSheet"
@@ -231,5 +235,25 @@
         <argument
             android:name="array_location"
             app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/DLUpload"
+        android:name="com.gigforce.app.modules.verification.DLUpload"
+        android:label="DLUpload" >
+        <action
+            android:id="@+id/action_DLUpload_to_bankUpload2"
+            app:destination="@id/bankUpload2" />
+    </fragment>
+    <fragment
+        android:id="@+id/verificationDone"
+        android:name="com.gigforce.app.modules.verification.VerificationDone"
+        android:label="VerificationDone" />
+    <fragment
+        android:id="@+id/bankUpload2"
+        android:name="com.gigforce.app.modules.verification.BankUpload"
+        android:label="BankUpload" >
+        <action
+            android:id="@+id/action_bankUpload2_to_verificationDone"
+            app:destination="@id/verificationDone" />
     </fragment>
 </navigation>

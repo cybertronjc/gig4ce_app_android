@@ -65,11 +65,11 @@ class PhotoCrop : AppCompatActivity(),ProfilePictureOptionsBottomSheetFragment.B
         if (bundle != null) {
             storageDirPath = bundle.get("fbDir").toString()
             detectFace = bundle.get("detectFace") as Int
+            CLOUD_PICTURE_FOLDER = bundle.get("folder").toString()
+            incomingFile = bundle.get("file").toString()
         }
         //getImageFromPhone()
         this.setContentView(R.layout.activity_photo_crop)
-        CLOUD_PICTURE_FOLDER = intent.getStringExtra("folder")
-        incomingFile = intent.getStringExtra("file")
         storage = FirebaseStorage.getInstance()
         imageView = this.findViewById(R.id.profile_avatar_photo_crop)
         showBottomSheet()

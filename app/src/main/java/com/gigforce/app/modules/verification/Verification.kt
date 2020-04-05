@@ -1,11 +1,14 @@
 package com.gigforce.app.modules.verification
 
+import android.os.Build
 import android.os.Bundle
+import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
@@ -16,13 +19,19 @@ import kotlinx.android.synthetic.main.layout_verification.view.*
 
 class Verification: Fragment() {
     companion object {
-        fun newInstance() = Login()
+        fun newInstance() = Verification()
     }
 
     lateinit var layout: View
     lateinit var viewModel: VerificationViewModel
     var updates: ArrayList<Address> = ArrayList()
+    lateinit var address1:String;
+    lateinit var address2:String;
+    private lateinit var city:String;
+    lateinit var state:String;
+    private lateinit var pincode:String;
 
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -31,6 +40,7 @@ class Verification: Fragment() {
         viewModel = ViewModelProviders.of(this).get(VerificationViewModel::class.java)
         layout = inflater.inflate(R.layout.layout_verification, container, false)
         requireActivity().onBackPressedDispatcher.addCallback(this, callback)
+        layout.pbAddress.setProgress(1,true)
         return layout
     }
 
@@ -40,7 +50,6 @@ class Verification: Fragment() {
                 onBackPressed()
             }
         }
-
     fun onBackPressed() {
             findNavController().popBackStack()
     }
@@ -60,6 +69,7 @@ class Verification: Fragment() {
 //        })
 
         layout.button_veri_address_cancel.setOnClickListener {
+            resetLayout();
             findNavController().navigate(R.id.homeScreenIcons);
         }
 
@@ -68,7 +78,14 @@ class Verification: Fragment() {
                 if fields on empty - validate fields (check for email regex and phone regex)
                 and toast the missing fields before proceeding
                  */
-            if(layout.add_veri_address_line1.equals("") || layout.add_veri_address_line2.equals("") || layout.add_veri_address_city.equals("") || layout.add_veri_address_state.equals("") || layout.add_veri_address_pin.equals(""))
+
+            address1 = layout.add_veri_address_line1.text.toString();
+            address2 = layout.add_veri_address_line2.text.toString();
+            city = layout.add_veri_address_city.text.toString();
+            state = layout.add_veri_address_state.text.toString();
+            pincode = layout.add_veri_address_pin.text.toString();
+
+            if(TextUtils.isEmpty(address1) || TextUtils.isEmpty(address2) || TextUtils.isEmpty(city) || TextUtils.isEmpty(state) || TextUtils.isEmpty(pincode))
             {
                 Toast.makeText(
                     this.context,
@@ -76,6 +93,9 @@ class Verification: Fragment() {
                     Toast.LENGTH_LONG).show()
             }
             else{
+                addNewContact()
+                saveNewContacts()
+                resetLayout()
                 findNavController().navigate(R.id.panUpload)
             }
         }
@@ -88,10 +108,10 @@ class Verification: Fragment() {
     private fun addNewContact() {
         updates.add(
             Address(
-                address = layout.add_veri_address_line1.text.toString()+" "+layout.add_veri_address_line2.text.toString(),
-                city = layout.add_veri_address_city.text.toString(),
-                state = layout.add_veri_address_state.text.toString(),
-                pincode = layout.add_veri_address_pin.text.toString()
+                address = "$address1 $address2",
+                city = city,
+                state = state,
+                pincode = pincode
             )
         )
     }

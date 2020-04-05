@@ -34,7 +34,7 @@
         <Button
             android:id="@+id/buttonVeriDone"
             android:layout_width="137dp"
-            android:layout_height="36dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="81dp"
             android:layout_marginTop="375dp"
             android:backgroundTint="@android:color/white"

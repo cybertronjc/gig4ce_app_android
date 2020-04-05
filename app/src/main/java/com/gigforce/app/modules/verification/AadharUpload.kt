@@ -2,6 +2,7 @@ package com.gigforce.app.modules.verification
 
 import android.app.Activity
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -10,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -23,6 +25,7 @@ import com.gigforce.app.modules.verification.models.VerificationData
 import com.gigforce.app.utils.GlideApp
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import kotlinx.android.synthetic.main.layout_verification.view.*
 import kotlinx.android.synthetic.main.layout_verification_aadhaar.*
 import kotlinx.android.synthetic.main.layout_verification_aadhaar.view.*
 import kotlinx.android.synthetic.main.layout_verification_pancard.view.*
@@ -41,6 +44,7 @@ class AadhaarUpload: Fragment() {
     private var frontNotDone = 1;
     private var docUploaded = 0;
 
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -50,6 +54,7 @@ class AadhaarUpload: Fragment() {
         viewModel = ViewModelProviders.of(this).get(VerificationViewModel::class.java)
         layout = inflater.inflate(R.layout.layout_verification_aadhaar, container, false)
         requireActivity().onBackPressedDispatcher.addCallback(this, callback)
+        layout.pbAadhaar.setProgress(40,true)
         return layout
     }
 
@@ -70,12 +75,15 @@ class AadhaarUpload: Fragment() {
         AadhaarFront = layout.findViewById(R.id.Aadhaar_front)
         AadhaarBack = layout.findViewById(R.id.Aadhaar_back)
         val photoCropIntent = Intent(context, PhotoCrop::class.java)
-        photoCropIntent.putExtra("fbDir", "/verification/Aadhaar/")
+        photoCropIntent.putExtra("fbDir", "/verification/aadhaar/")
+        photoCropIntent.putExtra("folder", "/verification/aadhaar/")
         photoCropIntent.putExtra("detectFace",0)
         AadhaarFront.setOnClickListener {
+            photoCropIntent.putExtra("file", "adfront.jpg")
             startActivityForResult(photoCropIntent, PHOTO_CROP)
         }
         AadhaarBack.setOnClickListener {
+            photoCropIntent.putExtra("file", "adback.jpg")
             startActivityForResult(photoCropIntent, PHOTO_CROP)
         }
 
@@ -84,9 +92,10 @@ class AadhaarUpload: Fragment() {
         }
 
         buttonAadhaar1.setOnClickListener {
+
             if(docUploaded==1)
             {
-                findNavController().navigate(R.id.homeScreenIcons)
+                findNavController().navigate(R.id.DLUpload)
             }
             else {
                 Toast.makeText(
