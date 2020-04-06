@@ -92,7 +92,6 @@ class AadhaarUpload: Fragment() {
         }
 
         buttonAadhaar1.setOnClickListener {
-
             if(docUploaded==1)
             {
                 findNavController().navigate(R.id.DLUpload)

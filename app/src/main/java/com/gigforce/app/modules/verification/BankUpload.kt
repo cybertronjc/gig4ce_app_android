@@ -48,12 +48,6 @@ class BankUpload : Fragment() {
 
             viewModel = ViewModelProviders.of(this).get(VerificationViewModel::class.java)
 
-            bankAcName = layout.add_veri_bank_acname.text.toString()
-            bankName = layout.add_veri_bank_name.text.toString()
-            bankAcNo = layout.add_veri_bank_acnum.text.toString()
-            bankAcNoRe = layout.add_veri_bank_acnum_re.text.toString()
-            bankIfsc = layout.add_veri_bank_ifsc.text.toString()
-
             layout.button_veri_bank_cancel.setOnClickListener {
                 resetLayout()
                 findNavController().navigate(R.id.DLUpload)
@@ -64,6 +58,11 @@ class BankUpload : Fragment() {
                 if fields on empty - validate fields (check for email regex and phone regex)
                 and toast the missing fields before proceeding
                  */
+                bankAcName = layout.add_veri_bank_acname.text.toString()
+                bankName = layout.add_veri_bank_name.text.toString()
+                bankAcNo = layout.add_veri_bank_acnum.text.toString()
+                bankAcNoRe = layout.add_veri_bank_acnum_re.text.toString()
+                bankIfsc = layout.add_veri_bank_ifsc.text.toString()
 
                 if(TextUtils.isEmpty(bankAcName) || TextUtils.isEmpty(bankName) || TextUtils.isEmpty(bankAcNo) || TextUtils.isEmpty(bankAcNoRe) || TextUtils.isEmpty(bankIfsc))
                 {
@@ -76,7 +75,7 @@ class BankUpload : Fragment() {
                     addNewBankAccount()
                     saveNewBanks()
                     resetLayout()
-                    layout.pbAddress.setProgress(100,true)
+                    layout.pbBarBank.setProgress(100,true)
                     findNavController().navigate(R.id.verificationDone)
                 }
             }
