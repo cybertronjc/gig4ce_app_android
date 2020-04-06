@@ -85,6 +85,10 @@ class ProfileFirebaseRepository {
         }
     }
 
+    fun removeProfileExperience(experience: Experience) {
+        firebaseDB.collection(profileCollectionName).document(uid).update("Experience", FieldValue.arrayRemove(experience))
+    }
+
     fun setProfileTags(tag: String) {
             firebaseDB.collection(profileCollectionName)
                 .document(uid).update("Tags", FieldValue.arrayUnion(tag))

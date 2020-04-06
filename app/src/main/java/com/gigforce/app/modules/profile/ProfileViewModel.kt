@@ -97,6 +97,10 @@ class ProfileViewModel: ViewModel() {
         profileFirebaseRepository.setProfileExperience(experiences)
     }
 
+    fun removeProfileExperience(experience: Experience) {
+        profileFirebaseRepository.removeProfileExperience(experience)
+    }
+
     init {
         uid = FirebaseAuth.getInstance().currentUser?.uid!!
         //uid = "UeXaZV3KctuZ8xXLCKGF" // Test user

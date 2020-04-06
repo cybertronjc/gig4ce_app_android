@@ -30,7 +30,14 @@
         android:id="@+id/experienceExpandedFragment"
         android:name="com.gigforce.app.modules.profile.ExperienceExpandedFragment"
         android:label="ExperienceExpandedFragment"
-        tools:layout="@layout/fragment_profile_experience_expanded" />
+        tools:layout="@layout/fragment_profile_experience_expanded" >
+        <action
+            android:id="@+id/action_experienceExpandedFragment_to_editExperienceBottomSheet"
+            app:destination="@id/editExperienceBottomSheet" />
+        <action
+            android:id="@+id/action_experienceExpandedFragment_to_addExperienceBottomSheet"
+            app:destination="@id/addExperienceBottomSheet" />
+    </fragment>
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.gigforce.app.modules.home.HomeFragment"
@@ -220,5 +227,17 @@
     <fragment
         android:id="@+id/editSkillBottomSheet"
         android:name="com.gigforce.app.modules.profile.EditSkillBottomSheet"
-        android:label="EditSkillBottomSheet" />
+        android:label="EditSkillBottomSheet" >
+        <argument
+            android:name="array_location"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/editExperienceBottomSheet"
+        android:name="com.gigforce.app.modules.profile.EditExperienceBottomSheet"
+        android:label="EditExperienceBottomSheet" >
+        <argument
+            android:name="array_location"
+            app:argType="string" />
+    </fragment>
 </navigation>

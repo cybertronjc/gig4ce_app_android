@@ -169,4 +169,7 @@
     <string name="year" />
     <string name="year_text">Year</string>
     <string name="edit_skill">Edit Skill</string>
+    <string name="edit_experience">Edit Experience</string>
+    <string name="employment_title">Employment Title</string>
+    <string name="employment_type">Employment Type</string>
 </resources>
