@@ -67,6 +67,7 @@ class EducationExpandedFragment: Fragment() {
 //                skillString += skill.nameOfSkill + "\n\n"
                 skillString += skill + "\n\n"
             }
+            layout.skill_card.nextDestination = R.id.editSkillBottomSheet
             layout.skill_card.cardTitle = "Skills"
             layout.skill_card.cardContent = skillString
             layout.skill_card.cardBottom = "+ Add Skill"

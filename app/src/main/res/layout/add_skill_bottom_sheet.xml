@@ -29,15 +29,17 @@
         app:layout_constraintStart_toStartOf="@+id/textView18"
         app:layout_constraintTop_toBottomOf="@+id/textView18" />
 
-    <EditText
+    <Spinner
         android:id="@+id/add_skill_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="36dp"
         android:ems="10"
         android:hint="@string/add_skill_sheet_skill_name"
         android:inputType="textPersonName"
+        android:minWidth="150dp"
         app:layout_constraintEnd_toEndOf="@+id/add_skill_category"
+        app:layout_constraintHorizontal_bias="0.048"
         app:layout_constraintStart_toStartOf="@+id/add_skill_category"
         app:layout_constraintTop_toBottomOf="@+id/add_skill_category" />
 

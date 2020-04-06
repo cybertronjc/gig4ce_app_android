@@ -73,6 +73,10 @@ class ProfileViewModel: ViewModel() {
         profileFirebaseRepository.setProfileSkill(skills)
     }
 
+    fun removeProfileSkill(skill: String) {
+        profileFirebaseRepository.removeProfileSkill(skill)
+    }
+
     fun setProfileAchievement(achievements: ArrayList<Achievement>) {
         profileFirebaseRepository.setProfileAchievement(achievements)
     }

@@ -43,6 +43,10 @@ class ProfileFirebaseRepository {
         }
     }
 
+    fun removeProfileSkill(skill: String) {
+        firebaseDB.collection(profileCollectionName).document(uid).update("Skill", FieldValue.arrayRemove(skill))
+    }
+
     fun setProfileAchievement(achievements: ArrayList<Achievement>) {
         for (ach in achievements) {
             firebaseDB.collection(profileCollectionName)

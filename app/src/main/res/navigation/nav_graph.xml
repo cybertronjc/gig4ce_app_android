@@ -96,6 +96,9 @@
         <action
             android:id="@+id/action_educationExpandedFragment_to_editAchievementBottomSheet"
             app:destination="@id/editAchievementBottomSheet" />
+        <action
+            android:id="@+id/action_educationExpandedFragment_to_editSkillBottomSheet"
+            app:destination="@id/editSkillBottomSheet" />
     </fragment>
     <dialog
         android:id="@+id/addSkillBottomSheetFragment"
@@ -214,4 +217,8 @@
             android:name="array_location"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/editSkillBottomSheet"
+        android:name="com.gigforce.app.modules.profile.EditSkillBottomSheet"
+        android:label="EditSkillBottomSheet" />
 </navigation>
