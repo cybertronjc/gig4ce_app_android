@@ -18,6 +18,9 @@ import com.gigforce.app.R
 import com.gigforce.app.modules.photoCrop.ui.main.ProfilePictureOptionsBottomSheetFragment.BottomSheetListener
 import com.gigforce.app.modules.profile.ProfileViewModel
 import com.gigforce.app.utils.GlideApp
+import com.google.firebase.ml.vision.FirebaseVision
+import com.google.firebase.ml.vision.common.FirebaseVisionImage
+import com.google.firebase.ml.vision.face.FirebaseVisionFaceDetectorOptions
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
@@ -29,11 +32,8 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-class PhotoCrop : AppCompatActivity(), BottomSheetListener {
-
-    companion object {
-        fun newInstance() = PhotoCrop()
-    }
+class PhotoCrop : AppCompatActivity(),
+    ProfilePictureOptionsBottomSheetFragment.BottomSheetListener {
 
     private val CODE_IMG_GALLERY: Int = 1
     private val REQUEST_TAKE_PHOTO: Int = 1
@@ -43,15 +43,40 @@ class PhotoCrop : AppCompatActivity(), BottomSheetListener {
     private var cropY: Float = 1F
     private val resultIntent: Intent = Intent()
     private var PREFIX:String="IMG"
+    private var detectFace:Int = 1;
     private lateinit var storage: FirebaseStorage
+    private lateinit var storageDirPath:String
     private lateinit var CLOUD_PICTURE_FOLDER: String
     private lateinit var incomingFile: String
     private lateinit var imageView: ImageView
     private lateinit var backButton: ImageButton
     private lateinit var viewModel: ProfileViewModel
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+    var mStorage: FirebaseStorage = FirebaseStorage.getInstance()
+
+    val options = with(FirebaseVisionFaceDetectorOptions.Builder()) {
+        setModeType(FirebaseVisionFaceDetectorOptions.ACCURATE_MODE)
+        setLandmarkType(FirebaseVisionFaceDetectorOptions.ALL_LANDMARKS)
+        setClassificationType(FirebaseVisionFaceDetectorOptions.ALL_CLASSIFICATIONS)
+        setMinFaceSize(0.15f)
+        setTrackingEnabled(true)
+        build()
+    }
+
+    val detector = FirebaseVision.getInstance()
+        .getVisionFaceDetector(options)
+
+
+    override fun onCreate(savedInstanceState: Bundle?): Unit {
         super.onCreate(savedInstanceState)
+
+        val bundle = intent.extras
+
+        if (bundle != null) {
+            storageDirPath = bundle.get("fbDir").toString()
+            detectFace = bundle.get("detectFace") as Int
+        }
+        //getImageFromPhone()
         this.setContentView(R.layout.activity_photo_crop)
         storage = FirebaseStorage.getInstance()
         imageView = this.findViewById(R.id.profile_avatar_photo_crop)
@@ -71,6 +96,7 @@ class PhotoCrop : AppCompatActivity(), BottomSheetListener {
         loadImage(incomingFile)
         showBottomSheet()
     }
+
 
     override fun onStart() {
         super.onStart()
@@ -106,31 +132,22 @@ class PhotoCrop : AppCompatActivity(), BottomSheetListener {
         if (null != bundle) {
             logBundle(bundle)
         }
-
-        /*
-        Handles when the image is chosen from gallery or returned from camera
-         */
         if (requestCode == CODE_IMG_GALLERY && resultCode == Activity.RESULT_OK) {
+
+//            val imageUri: Uri? = getImageUri(this, data?.data)
             var imageUri: Uri? = data?.data
             if (imageUri == null) {
-                imageUri = getImageUriFromBitmap(
-                    this.applicationContext,
-                    data?.extras!!.get("data") as Bitmap
-                )
+                imageUri = getImageUriFromBitmap(this.applicationContext, data?.extras!!.get("data") as Bitmap)
             }
             Log.v("COME IMG GALLERY", requestCode.toString())
             Log.v("ImURI", imageUri.toString())
             if (imageUri != null) {
                 startCrop(imageUri)
             }
-        }
-
-        /*
-        Handles cropping the selected image
-         */
-        else if ((requestCode == UCrop.REQUEST_CROP || requestCode == REQUEST_TAKE_PHOTO) && resultCode == Activity.RESULT_OK) {
+        } else if ((requestCode == UCrop.REQUEST_CROP || requestCode == REQUEST_TAKE_PHOTO) && resultCode == Activity.RESULT_OK) {
             val imageUriResultCrop: Uri? = UCrop.getOutput((data!!))
             Log.d("ImageUri", imageUriResultCrop.toString())
+            print(requestCode)
             if (imageUriResultCrop != null) {
                 Log.v("REQUEST CROP", requestCode.toString())
             }
@@ -139,17 +156,45 @@ class PhotoCrop : AppCompatActivity(), BottomSheetListener {
                 var bitmap = data?.data as Bitmap
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
             }
-            upload(imageUriResultCrop, baos.toByteArray())
-        }
+            var fvImage = imageUriResultCrop?.let { FirebaseVisionImage.fromFilePath(this, it) }
 
+            //  Face detect - Check if face is present in the cropped image or not.
+            if(detectFace===1) {
+                val result = detector.detectInImage(fvImage!!)
+                    .addOnSuccessListener { faces ->
+                        // Task completed successfully
+                        if (faces.size > 0) {
+                            Toast.makeText(
+                                this,
+                                "Face detected, successfully updated your profile pic" + faces[0].boundingBox.toString(),
+                                Toast.LENGTH_LONG
+                            ).show();
+                            upload(imageUriResultCrop, baos.toByteArray());
+                        } else {
+                            Toast.makeText(
+                                this,"No face detected, please re-upload another pic containing face",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                    }
+                    .addOnFailureListener { e ->
+                        // Task failed with an exception
+                        Log.d("CStatus", "Face detection failed! still uploading the image")
+                        upload(imageUriResultCrop, baos.toByteArray())
+                    }
+            }
+            else{
+                //just upload wihtout face detection eg for pan, aadhar, other docs.
+                upload(imageUriResultCrop, baos.toByteArray());
+            }
+        }
         Log.d("CStatus", "completed result on activity")
     }
 
     open fun getImageUriFromBitmap(context: Context, bitmap: Bitmap): Uri {
         val bytes = ByteArrayOutputStream()
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
-        val path =
-            MediaStore.Images.Media.insertImage(context.contentResolver, bitmap, "Title", null)
+        val path = MediaStore.Images.Media.insertImage(context.contentResolver, bitmap, "Title", null)
         return Uri.parse(path.toString())
     }
 
@@ -190,9 +235,9 @@ class PhotoCrop : AppCompatActivity(), BottomSheetListener {
 
     private fun upload(uri: Uri?, data: ByteArray) {
 
-        Log.v("UPLOAD", "started")
+        Log.v("Upload Image", "started")
         var mReference =
-            storage.reference.child("profile_pics").child(uri!!.lastPathSegment!!)
+            mStorage.reference.child(storageDirPath).child(uri!!.lastPathSegment!!)
 
         lateinit var uploadTask: UploadTask
         uploadTask = if (uri != null) {
@@ -263,6 +308,7 @@ class PhotoCrop : AppCompatActivity(), BottomSheetListener {
         startActivityForResult(chooserIntent, CODE_IMG_GALLERY)
     }
 
+
     private fun logBundle(bundle: Bundle) {
         for (key in bundle.keySet()!!) {
             Log.e(
@@ -282,6 +328,4 @@ class PhotoCrop : AppCompatActivity(), BottomSheetListener {
     }
 
 
-
 }
-

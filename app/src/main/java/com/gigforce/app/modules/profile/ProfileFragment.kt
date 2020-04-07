@@ -54,7 +54,6 @@ class ProfileFragment : Fragment() {
 
         viewModel = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
 
-
         // load user data
         viewModel.userProfileData.observe(this, Observer { profile ->
             layout.gigger_rating.text = profile.rating!!.getTotal().toString()
@@ -115,6 +114,8 @@ class ProfileFragment : Fragment() {
             val photoCropIntent = Intent(context, PhotoCrop::class.java)
             photoCropIntent.putExtra("purpose","profilePictureCrop")
             photoCropIntent.putExtra("uid",viewModel.uid)
+            photoCropIntent.putExtra("fbDir", "/profile_pics/")
+            photoCropIntent.putExtra("detectFace",1)
             photoCropIntent.putExtra("folder", PROFILE_PICTURE_FOLDER)
             photoCropIntent.putExtra("file", profileAvatarName)
             startActivityForResult(photoCropIntent, PHOTO_CROP)
