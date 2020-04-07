@@ -16,6 +16,7 @@
         android:layout_marginStart="5dp"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="18dp"
+        android:textColor="@color/black"
         android:textSize="20sp"
         android:text="@string/profile_picture"
         />
@@ -28,9 +29,13 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
         android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
         android:textSize="17sp"
+        android:textColor="@color/text_color"
         android:text="@string/update_profile_picture"
          />
+
+    <View style="@style/Divider"/>
 
     <TextView
 
@@ -41,9 +46,8 @@
         android:layout_marginTop="10dp"
         android:textSize="17sp"
         android:layout_marginBottom="30dp"
+        android:textColor="@color/text_color"
         android:text="@string/remove_profile_picture"
          />
-
-
 
 </LinearLayout>

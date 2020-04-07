@@ -33,7 +33,6 @@ class ProfileFragment : Fragment() {
     private lateinit var viewModel: ProfileViewModel
     private lateinit var storage: FirebaseStorage
     private lateinit var layout: View
-    private lateinit var profileAvatar: ImageView
     private lateinit var profileAvatarName: String
     private var PHOTO_CROP: Int = 45
     private var PROFILE_PICTURE_FOLDER: String = "profile_pics"
@@ -54,7 +53,6 @@ class ProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
-
 
 
         // load user data
@@ -115,6 +113,8 @@ class ProfileFragment : Fragment() {
          */
         layout.profile_avatar.setOnClickListener {
             val photoCropIntent = Intent(context, PhotoCrop::class.java)
+            photoCropIntent.putExtra("purpose","profilePictureCrop")
+            photoCropIntent.putExtra("uid",viewModel.uid)
             photoCropIntent.putExtra("folder", PROFILE_PICTURE_FOLDER)
             photoCropIntent.putExtra("file", profileAvatarName)
             startActivityForResult(photoCropIntent, PHOTO_CROP)
@@ -172,7 +172,6 @@ class ProfileFragment : Fragment() {
             var imageName: String? = data?.getStringExtra("filename")
             Log.v("PROFILE_FRAG_OAR", "filename is:" + imageName)
             if (null != imageName) {
-                viewModel.setProfileAvatarName(imageName.toString())
                 loadImage(imageName)
             }
         }

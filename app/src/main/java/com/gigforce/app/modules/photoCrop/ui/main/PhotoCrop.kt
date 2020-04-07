@@ -9,11 +9,14 @@ import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProviders
 import com.gigforce.app.R
 import com.gigforce.app.modules.photoCrop.ui.main.ProfilePictureOptionsBottomSheetFragment.BottomSheetListener
+import com.gigforce.app.modules.profile.ProfileViewModel
 import com.gigforce.app.utils.GlideApp
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
@@ -35,25 +38,50 @@ class PhotoCrop : AppCompatActivity(), BottomSheetListener {
     private val CODE_IMG_GALLERY: Int = 1
     private val REQUEST_TAKE_PHOTO: Int = 1
     private val EXTENSION: String = ".jpg"
+    private val DEFAULT_PICTURE: String = "avatar.jpg"
+    private var cropX: Float = 1F
+    private var cropY: Float = 1F
     private val resultIntent: Intent = Intent()
+    private var PREFIX:String="IMG"
     private lateinit var storage: FirebaseStorage
     private lateinit var CLOUD_PICTURE_FOLDER: String
     private lateinit var incomingFile: String
     private lateinit var imageView: ImageView
-    private val DEFAULT_PICTURE: String = "avatar.jpg"
-
-
-    var mStorage: FirebaseStorage = FirebaseStorage.getInstance()
-
+    private lateinit var backButton: ImageButton
+    private lateinit var viewModel: ProfileViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         this.setContentView(R.layout.activity_photo_crop)
-        CLOUD_PICTURE_FOLDER = intent.getStringExtra("folder")
-        incomingFile = intent.getStringExtra("file")
         storage = FirebaseStorage.getInstance()
         imageView = this.findViewById(R.id.profile_avatar_photo_crop)
+        backButton = this.findViewById(R.id.back_button_photo_crop)
+        var purpose:String = intent.getStringExtra("purpose")
+        Log.e("PHOTO_CROP","purpose = "+purpose+" comparing with: profilePictureCrop")
+        if(purpose == "profilePictureCrop") profilePictureOptions()
+    }
+
+    private fun profilePictureOptions(){
+        Log.e("PHOTO_CROP","profile picture options started")
+        CLOUD_PICTURE_FOLDER = intent.getStringExtra("folder")
+        incomingFile = intent.getStringExtra("file")
+        cropX=1F
+        cropY=1F
+        PREFIX=intent.getStringExtra("uid")
+        loadImage(incomingFile)
         showBottomSheet()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        viewModel = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
+        backButton.setOnClickListener {
+            super.finish()}
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        super.finish()
     }
 
     override fun onRestart() {
@@ -61,17 +89,11 @@ class PhotoCrop : AppCompatActivity(), BottomSheetListener {
         showBottomSheet()
     }
 
-    private fun loadImage(Path: String) {
-        var profilePicRef: StorageReference =
-            storage.reference.child(CLOUD_PICTURE_FOLDER).child(Path)
-        GlideApp.with(this)
-            .load(profilePicRef)
-            .into(imageView)
-    }
-
-    override fun onStart() {
-        super.onStart()
-        loadImage(incomingFile)
+    override fun onButtonClicked(id: Int) {
+        when (id) {
+            R.id.updateProfilePicture -> getImageFromPhone()
+            R.id.removeProfilePicture -> defaultProfilePicture()
+        }
     }
 
     override fun onActivityResult(
@@ -80,11 +102,6 @@ class PhotoCrop : AppCompatActivity(), BottomSheetListener {
         data: Intent?
     ): Unit {
         super.onActivityResult(requestCode, resultCode, data)
-
-        Log.e(
-            "DATA_FOR_ALL",
-            requestCode.toString() + " RESULT:_" + resultCode.toString() + " UCrop.REQUEST_CROP " + UCrop.REQUEST_CROP.toString() + " data= " + data
-        )
         var bundle = data?.extras
         if (null != bundle) {
             logBundle(bundle)
@@ -143,7 +160,7 @@ class PhotoCrop : AppCompatActivity(), BottomSheetListener {
             "yyyyMMdd_HHmmss",
             Locale.getDefault()
         ).format(Date())
-        val imageFileName = "IMG_" + timeStamp + "_"
+        val imageFileName = PREFIX+"_" + timeStamp + "_"
         val storageDir =
             getExternalFilesDir(Environment.DIRECTORY_PICTURES)
 
@@ -152,7 +169,7 @@ class PhotoCrop : AppCompatActivity(), BottomSheetListener {
             Uri.fromFile(File(cacheDir, imageFileName + EXTENSION))
         )
         resultIntent.putExtra("filename", imageFileName + EXTENSION)
-        uCrop.withAspectRatio(1F, 1F)
+        uCrop.withAspectRatio(cropX, cropY)
         uCrop.withMaxResultSize(450, 450)
         uCrop.withOptions(getCropOptions())
         uCrop.start(this as AppCompatActivity)
@@ -178,12 +195,12 @@ class PhotoCrop : AppCompatActivity(), BottomSheetListener {
             storage.reference.child("profile_pics").child(uri!!.lastPathSegment!!)
 
         lateinit var uploadTask: UploadTask
-        if (uri != null) {
+        uploadTask = if (uri != null) {
             Log.d("UPLOAD", "uploading files")
-            uploadTask = mReference.putFile(uri)
+            mReference.putFile(uri)
         } else {
             Log.d("UPLOAD", "uploading bytes")
-            uploadTask = mReference.putBytes(data)
+            mReference.putBytes(data)
         }
 
 
@@ -198,15 +215,33 @@ class PhotoCrop : AppCompatActivity(), BottomSheetListener {
 
         try {
             uploadTask.addOnSuccessListener { taskSnapshot: TaskSnapshot ->
-                val url: String = taskSnapshot.metadata?.reference?.downloadUrl.toString()
+                val name: String = taskSnapshot.metadata?.reference?.name.toString()
+                viewModel.setProfileAvatarName(name)
+                loadImage(name)
                 Toast.makeText(this, "Successfully Uploaded :)", Toast.LENGTH_LONG).show()
-                Log.v("Upload Image", url)
+                Log.v("Upload Image", name)
                 setResult(Activity.RESULT_OK, resultIntent)
-                super.finish()
+//                super.finish()
             }
         } catch (e: Exception) {
             Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show()
         }
+    }
+
+    private fun defaultProfilePicture() {
+        viewModel.setProfileAvatarName(DEFAULT_PICTURE)
+        loadImage(DEFAULT_PICTURE)
+        resultIntent.putExtra("filename", DEFAULT_PICTURE)
+        setResult(Activity.RESULT_OK, resultIntent)
+    }
+
+    private fun loadImage(Path: String) {
+        Log.d("PHOTO_CROP","loading - "+Path)
+        var profilePicRef: StorageReference =
+            storage.reference.child(CLOUD_PICTURE_FOLDER).child(Path)
+        GlideApp.with(this)
+            .load(profilePicRef)
+            .into(imageView)
     }
 
     /*
@@ -237,7 +272,7 @@ class PhotoCrop : AppCompatActivity(), BottomSheetListener {
         }
     }
 
-    open fun showBottomSheet() {
+    private fun showBottomSheet() {
         var profilePictureOptionsBottomSheetFragment: ProfilePictureOptionsBottomSheetFragment =
             ProfilePictureOptionsBottomSheetFragment()
         profilePictureOptionsBottomSheetFragment.show(
@@ -246,18 +281,7 @@ class PhotoCrop : AppCompatActivity(), BottomSheetListener {
         )
     }
 
-    override fun onButtonClicked(id: Int) {
-        when (id) {
-            R.id.updateProfilePicture -> getImageFromPhone()
-            R.id.removeProfilePicture -> defaultProfilePicture()
-        }
-    }
 
-    fun defaultProfilePicture() {
-        resultIntent.putExtra("filename", DEFAULT_PICTURE)
-        setResult(Activity.RESULT_OK, resultIntent)
-        super.finish()
-    }
 
 }
 
