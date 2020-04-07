@@ -33,7 +33,7 @@ import java.util.*
 
 
 class PhotoCrop : AppCompatActivity(),
-    ProfilePictureOptionsBottomSheetFragment.BottomSheetListener {
+    BottomSheetListener {
 
     private val CODE_IMG_GALLERY: Int = 1
     private val REQUEST_TAKE_PHOTO: Int = 1
