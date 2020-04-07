@@ -87,8 +87,12 @@ class ProfileFragment : Fragment() {
             var tagsString = ""
             for (tag in profile.Tags!!) {
                 var chip = Chip(this.context)
-                chip.text = " $tag "
+                chip.text = " #$tag "
                 chip.isClickable = false
+                chip.setTextAppearanceResource(R.style.chipTextDefaultColor)
+                chip.setChipStrokeColorResource(R.color.colorPrimary)
+                chip.setChipStrokeWidthResource(R.dimen.border_width)
+                chip.setChipBackgroundColorResource(R.color.fui_transparent)
                 layout.main_tags.addView(chip)
             }
             //layout.main_tags.text = tagsString
