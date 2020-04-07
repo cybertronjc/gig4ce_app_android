@@ -1,6 +1,7 @@
 package com.gigforce.app.modules.profile
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
@@ -84,18 +85,9 @@ class ProfileFragment : Fragment() {
                 layout.main_expanded_is_verified.setBackgroundColor(Color.parseColor("#00FF00"))
             }
 
-            var tagsString = ""
             for (tag in profile.Tags!!) {
-                var chip = Chip(this.context)
-                chip.text = " #$tag "
-                chip.isClickable = false
-                chip.setTextAppearanceResource(R.style.chipTextDefaultColor)
-                chip.setChipStrokeColorResource(R.color.colorPrimary)
-                chip.setChipStrokeWidthResource(R.dimen.border_width)
-                chip.setChipBackgroundColorResource(R.color.fui_transparent)
-                layout.main_tags.addView(chip)
+                layout.main_tags.addView(addChip(this.context!!, tag))
             }
-            //layout.main_tags.text = tagsString
 
             var educationString = ""
             var format = SimpleDateFormat("dd/MM/yyyy", Locale.US)
@@ -147,6 +139,17 @@ class ProfileFragment : Fragment() {
         GlideApp.with(this.context!!)
             .load(profilePicRef)
             .into(layout.profile_avatar)
+    }
+
+    private fun addChip(context: Context, name: String): Chip {
+        var chip = Chip(context)
+        chip.text = " #$name "
+        chip.isClickable = false
+        chip.setTextAppearanceResource(R.style.chipTextDefaultColor)
+        chip.setChipStrokeColorResource(R.color.colorPrimary)
+        chip.setChipStrokeWidthResource(R.dimen.border_width)
+        chip.setChipBackgroundColorResource(R.color.fui_transparent)
+        return chip
     }
 
     override fun onActivityResult(
