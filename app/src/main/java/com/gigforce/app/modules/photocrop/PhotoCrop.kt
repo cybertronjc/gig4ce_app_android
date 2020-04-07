@@ -195,7 +195,6 @@ class PhotoCrop : AppCompatActivity(),ProfilePictureOptionsBottomSheetFragment.B
         uCrop.withMaxResultSize(450, 450)
         uCrop.withOptions(getCropOptions())
         uCrop.start(this as AppCompatActivity)
-
     }
 
     private fun getCropOptions(): UCrop.Options {

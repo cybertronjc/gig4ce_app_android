@@ -2,8 +2,12 @@ package com.gigforce.app.modules.verification
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.provider.MediaStore
+import android.util.Base64
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -21,7 +25,7 @@ import com.gigforce.app.modules.auth.ui.main.Login
 import com.gigforce.app.modules.photocrop.*
 import com.gigforce.app.modules.verification.Verification
 import com.gigforce.app.modules.verification.VerificationViewModel
-import com.gigforce.app.modules.verification.models.VerificationData
+//import com.gigforce.app.modules.verification.models.VerificationData
 import com.gigforce.app.utils.GlideApp
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
@@ -29,6 +33,7 @@ import kotlinx.android.synthetic.main.layout_verification.view.*
 import kotlinx.android.synthetic.main.layout_verification_aadhaar.*
 import kotlinx.android.synthetic.main.layout_verification_aadhaar.view.*
 import kotlinx.android.synthetic.main.layout_verification_pancard.view.*
+import java.io.ByteArrayOutputStream
 
 class AadhaarUpload: Fragment() {
     companion object {
@@ -103,6 +108,14 @@ class AadhaarUpload: Fragment() {
                     Toast.LENGTH_LONG).show()
             }
         }
+    }
+
+    private fun encodeImageToBase64(uri: Uri):String{
+        val baos = ByteArrayOutputStream()
+        val bitmap =  MediaStore.Images.Media.getBitmap(context?.contentResolver, uri);//BitmapFactory.decodeResource(resources, uri)
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+        val imageBytes: ByteArray = baos.toByteArray()
+        return Base64.encodeToString(imageBytes, Base64.DEFAULT);
     }
 
     override fun onActivityResult(

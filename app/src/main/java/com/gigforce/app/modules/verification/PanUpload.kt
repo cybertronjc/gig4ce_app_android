@@ -1,9 +1,14 @@
 package com.gigforce.app.modules.verification
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.provider.MediaStore
+import android.util.Base64
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -20,12 +25,20 @@ import com.gigforce.app.R
 import com.gigforce.app.modules.auth.ui.main.Login
 import com.gigforce.app.modules.photocrop.*
 import com.gigforce.app.modules.verification.models.Address
+import com.gigforce.app.modules.verification.models.Idfydata
+import com.gigforce.app.modules.verification.models.OCRDocData
+import com.gigforce.app.modules.verification.models.PostDataOCR
+import com.gigforce.app.modules.verification.service.RetrofitFactory
 import com.gigforce.app.utils.GlideApp
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.android.schedulers.AndroidSchedulers.*
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.layout_verification.view.*
 import kotlinx.android.synthetic.main.layout_verification_pancard.*
 import kotlinx.android.synthetic.main.layout_verification_pancard.view.*
+import java.io.ByteArrayOutputStream
 
 class PanUpload: Fragment() {
     companion object {
@@ -100,6 +113,34 @@ class PanUpload: Fragment() {
                     "Please upload the Pan before proceeding",
                     Toast.LENGTH_LONG).show()
             }
+        }
+    }
+
+
+    @SuppressLint("CheckResult")
+    private fun idfyApiCall(postData: OCRDocData){
+        if(this.context?.let { UtilMethods.isConnectedToInternet(it) }!!){
+            this.context?.let { UtilMethods.showLoading(it) }
+            val observable = RetrofitFactory.idfyApiCall().postOCR(postData)
+            observable.subscribeOn(Schedulers.io())
+                .observeOn(mainThread())
+                .subscribe({ response ->
+                    UtilMethods.hideLoading()
+                    //here we can load all the data required
+                    Toast.makeText(
+                        this.context,
+                        ">>"+response!!.result!!.extraction_output!!.gender!!.toString(),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    /** response is response data class*/
+
+                }, { error ->
+                    UtilMethods.hideLoading()
+                    UtilMethods.showLongToast(this.context!!, error.message.toString())
+                }
+                )
+        }else{
+            UtilMethods.showLongToast(this.context!!, "No Internet Connection!")
         }
     }
 
