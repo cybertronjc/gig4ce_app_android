@@ -93,4 +93,9 @@ class ProfileFirebaseRepository {
             firebaseDB.collection(profileCollectionName)
                 .document(uid).update("Tags", FieldValue.arrayUnion(tag))
     }
+
+    fun removeProfileTag(tag: String) {
+        firebaseDB.collection(profileCollectionName)
+            .document(uid).update("Tags", FieldValue.arrayRemove(tag))
+    }
 }

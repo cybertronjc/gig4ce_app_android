@@ -183,7 +183,8 @@
     <fragment
         android:id="@+id/addTagBottomSheet"
         android:name="com.gigforce.app.modules.profile.AddTagBottomSheet"
-        android:label="AddTagBottomSheet" />
+        android:label="AddTagBottomSheet"
+        tools:layout="@layout/add_tag_bottom_sheet"/>
     <dialog
         android:id="@+id/addExperienceBottomSheet"
         android:name="com.gigforce.app.modules.profile.AddExperienceBottomSheet"

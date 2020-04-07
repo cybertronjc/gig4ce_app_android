@@ -57,6 +57,10 @@ class ProfileViewModel: ViewModel() {
         profileFirebaseRepository.addNewTag(tag)
     }
 
+    fun removeProfileTag(tag: String) {
+        profileFirebaseRepository.removeProfileTag(tag)
+    }
+
     fun setProfileTag(tag: String) {
         profileFirebaseRepository.setProfileTags(tag)
     }
