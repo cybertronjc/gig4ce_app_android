@@ -35,7 +35,9 @@
         android:text="@string/update_profile_picture"
          />
 
-    <View style="@style/Divider"/>
+    <View style="@style/Divider"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp"/>
 
     <TextView
 
