@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <item>
-        <bitmap
-            android:gravity="top"
-            android:src="@drawable/splash_top"/>
-    </item>
-    <item android:drawable="@color/cardview_light_background"/>
+<layer-list
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:drawable="@color/cardview_light_background"/>
     <item>
         <bitmap
             android:gravity="center"
@@ -13,7 +10,9 @@
     </item>
     <item>
         <bitmap
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:gravity="bottom"
-            android:src="@drawable/splash_bottom"/>
+            android:src="@drawable/splash_bottom" />
     </item>
 </layer-list>

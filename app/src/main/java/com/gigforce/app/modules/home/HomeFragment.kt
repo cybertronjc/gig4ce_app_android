@@ -20,8 +20,11 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.gigforce.app.R
 import com.gigforce.app.modules.auth.ui.main.LoginViewModel
 import com.gigforce.app.modules.chat.ChatsHomeFragment
-import com.gigforce.app.modules.homescreen.HomeScreenFragment
+import com.gigforce.app.utils.reduceDragSensitivity
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.android.synthetic.main.fragment_home.*
+import com.gigforce.app.modules.homescreen.HomeScreenFragment
+import com.gigforce.app.utils.popAllBackStates
 
 class HomeFragment: Fragment(), View.OnClickListener {
 
@@ -48,16 +51,17 @@ class HomeFragment: Fragment(), View.OnClickListener {
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
+
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(HomeViewModel::class.java)
 
-
-
-        FirebaseAuth.getInstance().addAuthStateListener {
+        //FirebaseAuth.getInstance().addAuthStateListener {
+        /*FirebaseAuth.getInstance().addAuthStateListener {
+            *//*
             Toast.makeText(context, "Auth state changed to ${if(it.currentUser==null) "SignedOut" else "Signed In"}",
                     Toast.LENGTH_SHORT).show()
             Log.e("home/firebase", "Auth state changed to ${if(it.currentUser==null) "SignedOut" else "Signed In"}")
-
+            *//*
             if(it.currentUser == null) {
                 initAuth()
             }else {
@@ -65,8 +69,7 @@ class HomeFragment: Fragment(), View.OnClickListener {
                 //this.findNavController().navigate(R.id.homeScreenFragment)
                 this.findNavController().navigate(R.id.homeScreenIcons)
             }
-
-        }
+        }*/
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -89,9 +92,8 @@ class HomeFragment: Fragment(), View.OnClickListener {
     }
 
     fun initAuth() {
-
-        this.findNavController().navigate(R.id.languageSelectFragment)
-
+        findNavController().popAllBackStates()
+        this.findNavController().navigate(R.id.Login)
     }
 
     class HomeViewsAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {

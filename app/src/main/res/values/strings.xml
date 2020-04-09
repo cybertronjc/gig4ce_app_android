@@ -25,7 +25,8 @@
     This string is used for square devices and overridden by hello_world in
     values-round/strings.xml for round devices.
     -->
-    <string name="hello_world">Hello Square World!</string>
+    <string name="hello_world">Hello World!</string>
+
     <!-- Preference Titles -->
     <string name="messages_header">Messages</string>
     <string name="sync_header">Sync</string>
@@ -37,8 +38,7 @@
     <!-- Sync Preferences -->
     <string name="sync_title">Sync email periodically</string>
     <string name="attachment_title">Download incoming attachments</string>
-    <string name="attachment_summary_on">Automatically download attachments for incoming emails
-    </string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails</string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
 
     <!-- Profile main expanded page -->
@@ -87,8 +87,8 @@
     <string name="add_education_sheet_institution">Institution</string>
     <string name="add_education_sheet_course">Course</string>
     <string name="add_education_sheet_degree">Degree</string>
-    <string name="add_education_sheet_start_year">Start Year *</string>
-    <string name="add_education_sheet_end_year">End Year *</string>
+    <string name="add_education_sheet_start_year">Start Date *</string>
+    <string name="add_education_sheet_end_year">End Date *</string>
 
     <!-- Add New Contact Bottom Sheet -->
     <string name="add_contact_new_contact">New Contact</string>
@@ -147,18 +147,59 @@
     <string name="add_experience_end_date">End Date</string>
     <string name="add_experience_currently_working">Currently Working Here</string>
 
-    <!--    Profile Picture Bottom Sheet-->
-    <string name="select_profile_picture">Select Profile Picture</string>
-    <string name="update_profile_picture">Update Profile Picture</string>
-    <string name="remove_profile_picture">Remove Profile Picture</string>
-    <string name="profile_picture">Profile Picture</string>
-
     <!-- Generic strings -->
     <string name="cancel_text">Cancel</string>
     <string name="save_text">Save</string>
+    <string name="back_text">Back</string>
+    <string name="okay_text">Okay</string>
+    <string name="okay_text_cap">OKAY</string>
     <string name="add_more_text">+ Add more</string>
     <string name="verified_text">Verified</string>
     <string name="tags_text">Tags of User</string>
     <string name="about_me_text">About me of user</string>
     <string name="to_be_filled_from_profile_data">To Be Filled From Profile Data</string>
+    <string name="placeholder_image_view">Image to be loaded</string>
+    <string name="institution">Institution</string>
+    <string name="course_name">Course</string>
+    <string name="degree">Degree</string>
+    <string name="start_date">Start Date</string>
+    <string name="end_date">End Date</string>
+    <string name="delete">delete</string>
+    <string name="edit_achievement">Edit Achievement</string>
+    <string name="title">title</string>
+    <string name="authority">authority</string>
+    <string name="location">Location</string>
+    <string name="year" />
+    <string name="year_text">Year</string>
+
+    <!-- Verification -->
+    <string name="veriScreenTitle">Hello Giger!</string>
+    <string name="veri_address_title">"Step 1 : Please add your Aadhaar Address"</string>
+    <string name="veri_add_address">"Address"</string>
+
+    <string name="veri_add_doc_front">"Front Side"</string>
+    <string name="veri_add_doc_back">"Back Side"</string>
+    <string name="veri_pan_title">"Step 2 : Upload your Pan"</string>
+    <string name="veri_aadhaar_title">"Step 3 : Upload your Aadhaar"</string>
+    <string name="veri_dl_title">"Step 4 : Upload your Driving License"</string>
+    <string name="veri_bank_title">"Step 5 : Please add your Bank Details"</string>
+    <string name="veri_add_bank">"Add Bank Details"</string>
+    <string name="veri_done">Hurray!!!\nKYC Documents submitted.\nWe will let you know once Verified.</string>
+    <!-- Verification hint texts -->
+    <string name="veri_hint_address_line1">"Address Line1"</string>
+    <string name="veri_hint_address_line2">"Address Line2"</string>
+    <string name="veri_hint_city">City</string>
+    <string name="veri_hint_state">State</string>
+    <string name="veri_hint_pin">Pincode</string>
+    <string name="veri_hint_account_name">Name of the Account Holder</string>
+    <string name="veri_hint_account_no">Account Number</string>
+    <string name="veri_hint_re_account_no">Re-enter Account Number</string>
+    <string name="veri_hint_ifsc">IFSC code</string>
+    <string name="veri_hint_bank_name">Name of the Bank</string>
+
+    <!--    Profile Picture Bottom Sheet-->
+    <string name="select_profile_picture">Select Profile Picture</string>
+    <string name="update_profile_picture">Update Profile Picture</string>
+    <string name="remove_profile_picture">Remove Profile Picture</string>
+    <string name="profile_picture">Profile Picture</string>
 </resources>

@@ -1,4 +1,4 @@
-package com.gigforce.app.modules.photoCrop.ui.main
+package com.gigforce.app.modules.photocrop
 
 import android.app.Activity
 import android.content.Context
@@ -33,7 +33,6 @@ import java.util.*
 
 class PhotoCrop : AppCompatActivity(),
     BottomSheetListener {
-
     private val CODE_IMG_GALLERY: Int = 1
     private val EXTENSION: String = ".jpg"
     private val DEFAULT_PICTURE: String = "avatar.jpg"
@@ -49,7 +48,6 @@ class PhotoCrop : AppCompatActivity(),
     private lateinit var imageView: ImageView
     private lateinit var backButton: ImageButton
     private lateinit var viewModel: ProfileViewModel
-
     var mStorage: FirebaseStorage = FirebaseStorage.getInstance()
 
     val options = with(FirebaseVisionFaceDetectorOptions.Builder()) {
@@ -110,11 +108,13 @@ class PhotoCrop : AppCompatActivity(),
     override fun onBackPressed() {
         super.onBackPressed()
         super.finish()
+
     }
 
     override fun onRestart() {
         super.onRestart()
         showBottomSheet()
+
     }
 
     /**
@@ -125,6 +125,7 @@ class PhotoCrop : AppCompatActivity(),
             R.id.updateProfilePicture -> getImageFromPhone()
             R.id.removeProfilePicture -> defaultProfilePicture()
         }
+
     }
 
     override fun onActivityResult(
@@ -179,6 +180,7 @@ class PhotoCrop : AppCompatActivity(),
                                 Toast.LENGTH_LONG
                             ).show()
                             upload(imageUriResultCrop, baos.toByteArray())
+
                         } else {
                             Toast.makeText(
                                 this,
@@ -195,6 +197,7 @@ class PhotoCrop : AppCompatActivity(),
             } else {
                 //just upload wihtout face detection eg for pan, aadhar, other docs.
                 upload(imageUriResultCrop, baos.toByteArray())
+
             }
         }
         Log.d("CStatus", "completed result on activity")
@@ -338,7 +341,6 @@ class PhotoCrop : AppCompatActivity(),
         startActivityForResult(chooserIntent, CODE_IMG_GALLERY)
     }
 
-
     private fun logBundle(bundle: Bundle) {
         for (key in bundle.keySet()!!) {
             Log.e(
@@ -359,6 +361,5 @@ class PhotoCrop : AppCompatActivity(),
             "profilePictureOptionBottomSheet"
         )
     }
-
 
 }

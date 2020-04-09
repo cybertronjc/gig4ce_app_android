@@ -11,10 +11,10 @@ import android.widget.BaseAdapter
 import android.widget.ImageView
 import androidx.appcompat.widget.AppCompatButton
 import androidx.fragment.app.Fragment
+import com.bumptech.glide.Glide
 import com.gigforce.app.R
 import com.gigforce.app.modules.home.HomeFragment
-import com.gigforce.app.modules.photoCrop.ui.main.PhotoCrop
-import com.gigforce.app.utils.GlideApp
+import com.gigforce.app.modules.photocrop.*
 import kotlinx.android.synthetic.main.bottom_home.*
 
 class RoasterFragment(): Fragment() {
@@ -57,7 +57,7 @@ class RoasterFragment(): Fragment() {
                     .inflate(R.layout.item_grid_action, parent, false)
             }
 
-            GlideApp.with(context)
+            Glide.with(context)
                 .load("")
                 .placeholder(R.drawable.placeholder_user)
                 .into(view!!.findViewById<ImageView>(R.id.img_icon))

@@ -5,6 +5,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
@@ -25,6 +27,10 @@ class AddAchievementBottomSheetFragment: BottomSheetDialogFragment() {
     lateinit var layout: View
     var updates: ArrayList<Achievement> = ArrayList()
     lateinit var viewModel: ProfileViewModel
+    var locations: ArrayList<String> = ArrayList()
+    var selectedLocation: String = ""
+    var years: ArrayList<String> = ArrayList()
+    var selectedYear: String = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,8 +55,52 @@ class AddAchievementBottomSheetFragment: BottomSheetDialogFragment() {
 
             layout.add_achievement_title.setText("")
             layout.add_achievement_authority.setText("")
-            layout.add_achievement_location.setText("")
-            layout.add_achievement_year.setText("")
+            layout.add_achievement_location.setSelection(0)
+            layout.add_achievement_year.setSelection(0)
+        }
+
+        locations.add("--location--")
+        locations.add("Hyderabad")
+        locations.add("Bangalore")
+        val locationAdapter = ArrayAdapter(this.context!!, R.layout.simple_spinner_dropdown_item, locations)
+        val locationSpinner = layout.add_achievement_location
+        locationSpinner.adapter = locationAdapter
+        locationSpinner.onItemSelectedListener = object:
+            AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    selectedLocation = locations[position]
+                    Log.d("Spinner", "selected " + locations[position])
+                }
+
+                override fun onNothingSelected(parent: AdapterView<*>?) {
+                    //TODO("Not yet implemented")
+                }
+        }
+
+        years.addAll(listOf("--year--", "2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020"))
+        val yearAdapter = ArrayAdapter(this.context!!, R.layout.simple_spinner_dropdown_item, years)
+        val yearSpinner = layout.add_achievement_year
+        yearSpinner.adapter = yearAdapter
+        yearSpinner.onItemSelectedListener = object:
+            AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                selectedYear = years[position]
+                Log.d("Spinner", "selected " + years[position])
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                //TODO("Not yet implemented")
+            }
         }
 
         layout.add_achievement_save_button.setOnClickListener{
@@ -67,9 +117,8 @@ class AddAchievementBottomSheetFragment: BottomSheetDialogFragment() {
             Achievement(
                 title = layout.add_achievement_title.text.toString(),
                 issuingAuthority = layout.add_achievement_authority.text.toString(),
-                location = layout.add_achievement_location.text.toString(),
-                //year = SimpleDateFormat("dd/MM/yyyy").parse(layout.add_achievement_year.text.toString())
-                year = layout.add_achievement_year.text.toString()
+                location = selectedLocation,
+                year = selectedYear
             )
         )
     }

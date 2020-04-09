@@ -39,8 +39,8 @@ class ProfileFragment : Fragment() {
 
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         storage = FirebaseStorage.getInstance()
         Log.d("DEBUG", "ENTERED PROFILE VIEW")
@@ -82,7 +82,7 @@ class ProfileFragment : Fragment() {
                 educationString += education.institution + "\n"
                 educationString += education.degree + " - " + education.course + "\n"
                 educationString += format.format(education.startYear!!) + " - " + format.format(
-                    education.endYear!!
+                        education.endYear!!
                 ) + "\n\n"
             }
             Log.d("ProfileFragment_Edu", educationString)
@@ -152,14 +152,14 @@ class ProfileFragment : Fragment() {
     private fun loadImage(Path: String) {
         var profilePicRef: StorageReference =storage.reference.child(PROFILE_PICTURE_FOLDER).child(Path)
         GlideApp.with(this.context!!)
-            .load(profilePicRef)
-            .into(layout.profile_avatar)
+                .load(profilePicRef)
+                .into(layout.profile_avatar)
     }
 
     override fun onActivityResult(
-        requestCode: Int,
-        resultCode: Int,
-        data: Intent?
+            requestCode: Int,
+            resultCode: Int,
+            data: Intent?
     ): Unit {
 
         super.onActivityResult(requestCode, resultCode, data)

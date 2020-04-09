@@ -32,6 +32,10 @@ class ProfileFirebaseRepository {
         }
     }
 
+    fun removeProfileEducation(education: Education) {
+        firebaseDB.collection(profileCollectionName).document(uid).update("Education", FieldValue.arrayRemove(education))
+    }
+
     fun setProfileSkill(skills: ArrayList<String>) {
         for(sk in skills) {
             firebaseDB.collection(profileCollectionName)
@@ -44,6 +48,10 @@ class ProfileFirebaseRepository {
             firebaseDB.collection(profileCollectionName)
                 .document(uid).update("Achievement", FieldValue.arrayUnion(ach))
         }
+    }
+
+    fun removeProfileAchievement(achievement: Achievement) {
+        firebaseDB.collection(profileCollectionName).document(uid).update("Achievement", FieldValue.arrayRemove(achievement))
     }
 
     fun setProfileContact(contacts: ArrayList<Contact>) {

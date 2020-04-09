@@ -65,14 +65,15 @@ class VerifyOTP: Fragment() {
         viewModel.verificationId = verificationId.toString()
         layout = inflater.inflate(R.layout.otp_verification, container, false)
         //TODO
-        layout.textView29.text = "We have sent the OTP to your "+viewModel?.phoneNo?.toString()+"\nPlease enter the OTP";
+        layout.textView29.text = "We have sent the OTP to your " + viewModel.phoneNo?.toString()+"\nPlease enter the OTP";
         return layout
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         layout.verify_otp_button.setOnClickListener {
-            val otpIn = layout.otp_string.text;
+            //val otpIn = layout.otp_string.text;
+            val otpIn = layout.txt_otp.text
             match = OTP_NUMBER.matcher(otpIn)
             if(match.matches()){
                 viewModel.verifyPhoneNumberWithCode(otpIn.toString())
@@ -103,6 +104,8 @@ class VerifyOTP: Fragment() {
             Toast.makeText(layout.context, "Too many invalid attempts, Try again later!", Toast.LENGTH_SHORT).show()
         }
         
-        layout.reenter_mobile.setOnClickListener { findNavController().navigate(R.id.Login)}
+        layout.reenter_mobile.setOnClickListener {
+            findNavController().navigate(R.id.Login)
+        }
     }
 }

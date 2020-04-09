@@ -17,5 +17,6 @@
     <dimen name="img_height">50dp</dimen>
     <dimen name="txv_padding">16dp</dimen>
     <dimen name="padding_default">10dp</dimen>
+    <dimen name="height_select_lang_item">56dp</dimen>
 
 </resources>
