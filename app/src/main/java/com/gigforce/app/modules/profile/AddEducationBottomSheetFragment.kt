@@ -57,12 +57,14 @@ class AddEducationBottomSheetFragment: BottomSheetDialogFragment() {
         }
 
         layout.add_more_button.setOnClickListener{
-            addNewEducation()
-            layout.institution_name.setText("")
-            layout.course_name.setText("")
-            layout.degree_name.setSelection(0)
-            layout.start_date.setText("")
-            layout.end_date.setText("")
+            if (validateEducation()) {
+                addNewEducation()
+                layout.institution_name.setText("")
+                layout.course_name.setText("")
+                layout.degree_name.setSelection(0)
+                layout.start_date.setText("")
+                layout.end_date.setText("")
+            }
         }
 
         layout.end_date.setOnClickListener {
@@ -111,10 +113,12 @@ class AddEducationBottomSheetFragment: BottomSheetDialogFragment() {
         }
 
         layout.save_button.setOnClickListener{
-            addNewEducation()
-            viewModel.setProfileEducation(updates)
-            Toast.makeText(this.context, "Updated Education Section", Toast.LENGTH_LONG)
-            this.findNavController().navigate(R.id.educationExpandedFragment)
+            if(validateEducation()) {
+                addNewEducation()
+                viewModel.setProfileEducation(updates)
+                Toast.makeText(this.context, "Updated Education Section", Toast.LENGTH_LONG)
+                this.findNavController().navigate(R.id.educationExpandedFragment)
+            }
         }
     }
 
@@ -126,5 +130,13 @@ class AddEducationBottomSheetFragment: BottomSheetDialogFragment() {
             startYear = SimpleDateFormat("dd/MM/yyyy").parse(selectedStartDate.toString()),
             endYear = SimpleDateFormat("dd/MM/yyyy").parse(selectedEndDate.toString())
         ))
+    }
+
+    private fun validateEducation(): Boolean {
+        if (layout.start_date.text.toString() == "")
+            return false
+        if (layout.institution_name.text.toString() == "")
+            return false
+        return true
     }
 }

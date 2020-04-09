@@ -202,4 +202,5 @@
     <string name="update_profile_picture">Update Profile Picture</string>
     <string name="remove_profile_picture">Remove Profile Picture</string>
     <string name="profile_picture">Profile Picture</string>
+    <string name="edit_education">Edit Education</string>
 </resources>
