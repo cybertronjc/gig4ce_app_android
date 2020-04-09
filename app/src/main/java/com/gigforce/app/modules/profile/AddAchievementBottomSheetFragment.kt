@@ -17,6 +17,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.android.synthetic.main.add_achievement_bottom_sheet.view.*
 import kotlinx.android.synthetic.main.add_education_bottom_sheet.view.*
 import kotlinx.android.synthetic.main.add_skill_bottom_sheet.view.*
+import kotlinx.android.synthetic.main.edit_achievement_bottom_sheet.view.*
 import java.text.SimpleDateFormat
 
 class AddAchievementBottomSheetFragment: BottomSheetDialogFragment() {
@@ -51,12 +52,14 @@ class AddAchievementBottomSheetFragment: BottomSheetDialogFragment() {
         }
 
         layout.add_achievement_add_more_button.setOnClickListener{
-            addNewAchievement()
+            if (validateAchievement()) {
+                addNewAchievement()
 
-            layout.add_achievement_title.setText("")
-            layout.add_achievement_authority.setText("")
-            layout.add_achievement_location.setSelection(0)
-            layout.add_achievement_year.setSelection(0)
+                layout.add_achievement_title.setText("")
+                layout.add_achievement_authority.setText("")
+                layout.add_achievement_location.setSelection(0)
+                layout.add_achievement_year.setSelection(0)
+            }
         }
 
         locations.add("--location--")
@@ -104,11 +107,13 @@ class AddAchievementBottomSheetFragment: BottomSheetDialogFragment() {
         }
 
         layout.add_achievement_save_button.setOnClickListener{
-            addNewAchievement()
+            if (validateAchievement()) {
+                addNewAchievement()
 
-            viewModel.setProfileAchievement(updates)
-            Toast.makeText(this.context, "Updated Achievement Section", Toast.LENGTH_LONG)
-            this.findNavController().navigate(R.id.educationExpandedFragment)
+                viewModel.setProfileAchievement(updates)
+                Toast.makeText(this.context, "Updated Achievement Section", Toast.LENGTH_LONG)
+                this.findNavController().navigate(R.id.educationExpandedFragment)
+            }
         }
     }
 
@@ -121,5 +126,18 @@ class AddAchievementBottomSheetFragment: BottomSheetDialogFragment() {
                 year = selectedYear
             )
         )
+    }
+
+    private fun validateAchievement(): Boolean {
+        if (layout.add_achievement_title.text.toString() == "") {
+            return false
+        }
+        if (layout.add_achievement_authority.text.toString() == "") {
+            return false
+        }
+        if (layout.add_achievement_year.toString() == "") {
+            return false
+        }
+        return true
     }
 }
