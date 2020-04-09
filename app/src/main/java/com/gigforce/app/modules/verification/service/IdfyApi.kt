@@ -15,5 +15,5 @@ interface IdfyApi {
             "api-key:1bc58043-00fb-4799-bea3-93a012d174bb")
     fun postOCR(
             //@Query("Authorization") authorizationKey: String, // authentication header
-            @Body postData: OCRDocData): Observable<IdfyResponse> // body data
+            @Body postData: PostDataOCR): Observable<IdfyResponse> // body data
 }

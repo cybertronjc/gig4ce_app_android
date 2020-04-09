@@ -10,10 +10,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.Toast
+import android.widget.*
 import androidx.activity.OnBackPressedCallback
-import androidx.annotation.NonNull
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
@@ -30,12 +28,11 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import io.reactivex.android.schedulers.AndroidSchedulers.mainThread
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.item_ob_chat_in.*
-import kotlinx.android.synthetic.main.layout_verification_pancard.*
-import kotlinx.android.synthetic.main.layout_verification_pancard.view.*
+import kotlinx.android.synthetic.main.layout_verification_dropdown.*
+import kotlinx.android.synthetic.main.layout_verification_dropdown.view.*
 
 
-class PanUpload: Fragment() {
+class UploadDropDown: Fragment() {
     companion object {
         fun newInstance() = PanUpload()
     }
@@ -49,6 +46,10 @@ class PanUpload: Fragment() {
     private var frontNotDone = 1;
     private var docUploaded = 0;
 
+    private var spinner: Spinner? = null
+    private val paths =
+        arrayOf("DrivingLicense", "VoterId", "Passport")
+
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -57,9 +58,17 @@ class PanUpload: Fragment() {
     ): View? {
         storage = FirebaseStorage.getInstance()
         viewModel = ViewModelProviders.of(this).get(VerificationViewModel::class.java)
-        layout = inflater.inflate(R.layout.layout_verification_pancard, container, false)
+        layout = inflater.inflate(R.layout.layout_verification_dropdown, container, false)
         requireActivity().onBackPressedDispatcher.addCallback(this, callback)
-        layout.pbPan.setProgress(20,true)
+        layout.pbVeriDD.setProgress(20,true)
+
+        spinner = layout.spinnerVeri
+        val adapter: ArrayAdapter<String> = ArrayAdapter<String>(context!!, android.R.layout.simple_spinner_item, paths)
+
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinner?.adapter = adapter
+
+        //spinner?.setOnItemSelectedListener(this)
         return layout
     }
 
@@ -77,26 +86,57 @@ class PanUpload: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(VerificationViewModel::class.java)
-        panFront = layout.findViewById(R.id.Pan_front)
-        panBack = layout.findViewById(R.id.Pan_back)
-        val photoCropIntent = Intent(context, PhotoCrop::class.java)
-        photoCropIntent.putExtra("folder", "/verification/pan/")
-        photoCropIntent.putExtra("fbDir", "/verification/pan/")
-        photoCropIntent.putExtra("detectFace",0)
-        panFront.setOnClickListener {
-            photoCropIntent.putExtra("file", "panfront.jpg")
-            startActivityForResult(photoCropIntent, PHOTO_CROP)
-        }
-        panBack.setOnClickListener {
-            photoCropIntent.putExtra("file", "panback.jpg")
-            startActivityForResult(photoCropIntent, PHOTO_CROP)
+
+        spinner?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+
+                when (parent.getItemAtPosition(position).toString()) {
+                    "DrivingLicense" -> {
+                        Toast.makeText(
+                            context,
+                            "Upload DL",
+                            Toast.LENGTH_LONG).show()
+                    }
+                    "Passport" -> {
+                        Toast.makeText(
+                            context,
+                            "Upload Passport",
+                            Toast.LENGTH_LONG).show()
+                    }
+                    "VoterId" -> {
+                        Toast.makeText(
+                            context,
+                            "Upload VoterID",
+                            Toast.LENGTH_LONG).show()
+                    }
+                }
+            } // to close the onItemSelected
+
+            override fun onNothingSelected(parent: AdapterView<*>) {
+
+            }
         }
 
-        buttonPan1.setOnClickListener {
+//        panFront = layout.findViewById(R.id.Pan_front)
+//        panBack = layout.findViewById(R.id.Pan_back)
+//        val photoCropIntent = Intent(context, PhotoCrop::class.java)
+//        photoCropIntent.putExtra("folder", "/verification/pan/")
+//        photoCropIntent.putExtra("fbDir", "/verification/pan/")
+//        photoCropIntent.putExtra("detectFace",0)
+//        panFront.setOnClickListener {
+//            photoCropIntent.putExtra("file", "panfront.jpg")
+//            startActivityForResult(photoCropIntent, PHOTO_CROP)
+//        }
+//        panBack.setOnClickListener {
+//            photoCropIntent.putExtra("file", "panback.jpg")
+//            startActivityForResult(photoCropIntent, PHOTO_CROP)
+//        }
+
+        buttonVeriDD1.setOnClickListener {
             findNavController().navigate(R.id.verification);
         }
 
-        buttonPan1.setOnClickListener {
+        buttonVeriDD2.setOnClickListener {
             //if() docs are not uploaded
             if(docUploaded==1)
             {
@@ -152,36 +192,61 @@ class PanUpload: Fragment() {
         */
         if (requestCode == PHOTO_CROP && resultCode == Activity.RESULT_OK) {
             var imageName: String? = data?.getStringExtra("filename")
-            Log.v("PAN UPLOAD", "filename is:" + imageName)
+            Log.v("PROFILE_FRAG_OAR", "filename is:" + imageName)
             if (null != imageName) {
                 viewModel.setCardAvatarName(imageName.toString())
                 var filepath = "/pan/"+imageName;
-                if(frontNotDone==1){                    ////
-                    //var picRef: StorageReference = storage.reference.child("verification").child(filepath)
-//here
-                    //var uri = data!!.getStringExtra("url");
-                    //var uri: Uri? = data?.getParcelableExtra("uri");
-                    //var imgb64 = UtilMethods.encodeImageToBase64(context!!,uri!!)
-                    var postdata =
-                        data?.getStringExtra("imagebase64str")?.let { OCRDocData(it,"yes") }
-                    val taskid:String = "74f4c926-250c-43ca-9c53-453e87ceacd2";
-                    val groupid:String = "8e16424a-58fc-4ba4-ab20-5bc8e7c3c41f";
-                    var postData = PostDataOCR(taskid,groupid,postdata!!)
-                    idfyApiCall(postData)
+                if(frontNotDone==1){
+                    ////
+                    var picRef: StorageReference = storage.reference.child("verification").child(filepath)
+
+                    picRef.downloadUrl.addOnSuccessListener(OnSuccessListener<Uri>() {
+                        @Override
+                        fun onSuccess(uri:Uri) {
+                            Toast.makeText(
+                                this.context,
+                                ">>>OnSuccess!",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            var imgb64 = UtilMethods.encodeImageToBase64(context!!,uri)
+                            var loginPostData = OCRDocData(imgb64,"yes")
+                            val taskid:String = "74f4c926-250c-43ca-9c53-453e87ceacd2";
+                            val groupid:String = "8e16424a-58fc-4ba4-ab20-5bc8e7c3c41f";
+                            var postData = PostDataOCR(taskid,groupid,loginPostData)
+                            idfyApiCall(postData)
+                        }
+                    }).addOnFailureListener(OnFailureListener() {
+                        @Override
+                        fun onFailure(exception:Exception) {
+                            // Handle any errors
+                            //Toast.makeTextthis, "image not dowloaded", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+//                    picRef.downloadUrl
+//                        .addOnSuccessListener(OnSuccessListener<Uri> { uri -> // getting image uri and converting into string
+//                            var imgb64 = UtilMethods.encodeImageToBase64(context!!,uri)
+//                            var loginPostData = OCRDocData(imgb64,"yes")
+//                            val taskid:String = "74f4c926-250c-43ca-9c53-453e87ceacd2";
+//                            val groupid:String = "8e16424a-58fc-4ba4-ab20-5bc8e7c3c41f";
+//                            var postData = PostDataOCR(taskid,groupid,loginPostData)
+//                            idfyApiCall(postData)
+//                        })
+
 
                     //RetrofitFactory.idfyApiCall()
                     ////
-                    loadImage("verification",filepath, layout.Pan_front)
+                    loadImage("verification",filepath, layout.VeriDD_front)
                     frontNotDone = 0;
                 }
                 else{
-                    loadImage("verification",filepath, layout.Pan_back)
+                    loadImage("verification",filepath, layout.VeriDD_back)
                     docUploaded = 1;
                 }
             }
         }
     }
-    
+
     private fun loadImage(collection: String, filepath: String, layoutid: ImageView ) {
         var picRef: StorageReference = storage.reference.child(collection).child(filepath)
         GlideApp.with(this.context!!)

@@ -3,6 +3,7 @@ package com.gigforce.app.modules.verification
 import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,6 +16,8 @@ import com.gigforce.app.R
 import com.gigforce.app.modules.verification.models.Bank
 import kotlinx.android.synthetic.main.layout_verification.view.*
 import kotlinx.android.synthetic.main.layout_verification_bank.view.*
+import java.util.regex.Matcher
+import java.util.regex.Pattern
 
 class BankUpload : Fragment() {
         companion object {
@@ -31,6 +34,15 @@ class BankUpload : Fragment() {
         lateinit var bankName:String;
         lateinit var bankIfsc:String;
 
+        private val BANKAC =
+            Pattern.compile("^\\d{9,18}\$")
+        private val IFSC =
+            Pattern.compile("^[A-Za-z]{4}0[A-Z0-9a-z]{6}\$")
+        private val NAME =
+            Pattern.compile("^\\pL+[\\pL\\pZ\\pP]{0,}\$")
+
+        lateinit var match: Matcher;
+
         @RequiresApi(Build.VERSION_CODES.N)
         override fun onCreateView(
             inflater: LayoutInflater,
@@ -41,6 +53,84 @@ class BankUpload : Fragment() {
             layout.pbBarBank.setProgress(80,true)
             return layout
         }
+
+    private fun validateFields(bankAcName:String, bankName:String, bankAcNo:String, bankAcNoRe:String, bankIfsc:String):Boolean {
+        //TODO Instead of toast msg we can put text msg on top of missing edit text or turn the edit text box to red!
+        if (bankAcName.isEmpty())
+        {
+            Toast.makeText(this.context, "Please enter Bank Ac Name", Toast.LENGTH_SHORT).show()
+            return false
+        }
+        else{
+            match = NAME.matcher(bankAcName);
+            if(!match.matches()) {
+                Toast.makeText(this.context, "Please enter valid Bank Ac Name", Toast.LENGTH_SHORT).show()
+                Log.d("Verification: ", bankAcName)
+                return false
+            }
+        }
+        if(bankName.isEmpty())
+        {
+            Toast.makeText(this.context, "Please enter Bank name", Toast.LENGTH_SHORT).show()
+            return false
+        }
+        else
+        {
+            match = NAME.matcher(bankName);
+            if(!match.matches()) {
+                Toast.makeText(this.context, "Please enter valid Bank Name", Toast.LENGTH_SHORT).show()
+                Log.d("Verification: ", bankName)
+                return false
+            }
+        }
+
+        if(bankAcNo.isEmpty())
+        {
+            Toast.makeText(this.context, "Please enter Bank Ac No", Toast.LENGTH_SHORT).show()
+            return false
+        }
+        else
+        {
+            match = BANKAC.matcher(bankAcNo);
+            if(!match.matches()) {
+                Toast.makeText(this.context, "Please enter valid Bank Ac No", Toast.LENGTH_SHORT).show()
+                Log.d("Verification: ", bankAcNo)
+                return false
+            }
+        }
+
+        if(bankAcNoRe.isEmpty())
+        {
+            Toast.makeText(this.context, "Please enter Bank Ac No", Toast.LENGTH_SHORT).show()
+            return false
+        }
+        else
+        {
+            match = BANKAC.matcher(bankAcNoRe);
+            if(!match.matches()) {
+                Toast.makeText(this.context, "Please enter valid Bank Ac No", Toast.LENGTH_SHORT).show()
+                Log.d("Verification: ", bankAcNoRe)
+                return false
+            }
+        }
+
+        if(bankIfsc.isEmpty())
+        {
+            Toast.makeText(this.context, "Please enter Bank IFSC", Toast.LENGTH_SHORT).show()
+            return false
+        }
+        else
+        {
+            match = IFSC.matcher(bankIfsc);
+            if(!match.matches()) {
+                Toast.makeText(this.context, "Please enter valid Bank IFSC", Toast.LENGTH_SHORT).show()
+                Log.d("Verification: ", bankIfsc)
+                return false
+            }
+        }
+
+        return true;
+    }
 
         @RequiresApi(Build.VERSION_CODES.N)
         override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -64,7 +154,10 @@ class BankUpload : Fragment() {
                 bankAcNoRe = layout.add_veri_bank_acnum_re.text.toString()
                 bankIfsc = layout.add_veri_bank_ifsc.text.toString()
 
-                if(TextUtils.isEmpty(bankAcName) || TextUtils.isEmpty(bankName) || TextUtils.isEmpty(bankAcNo) || TextUtils.isEmpty(bankAcNoRe) || TextUtils.isEmpty(bankIfsc))
+                var areValid = validateFields(bankAcName, bankName, bankAcNo, bankAcNoRe, bankIfsc);
+
+                //if(TextUtils.isEmpty(bankAcName) || TextUtils.isEmpty(bankName) || TextUtils.isEmpty(bankAcNo) || TextUtils.isEmpty(bankAcNoRe) || TextUtils.isEmpty(bankIfsc))
+                if(!areValid)
                 {
                     Toast.makeText(
                         this.context,

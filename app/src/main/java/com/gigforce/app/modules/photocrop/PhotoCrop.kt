@@ -8,13 +8,15 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
+import android.util.Base64
 import android.util.Log
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.gigforce.app.R
-import com.gigforce.app.modules.photocrop.ProfilePictureOptionsBottomSheetFragment
 import com.gigforce.app.utils.GlideApp
+import com.google.android.gms.tasks.OnSuccessListener
+import com.google.android.gms.tasks.Task
 import com.google.firebase.ml.vision.FirebaseVision
 import com.google.firebase.ml.vision.common.FirebaseVisionImage
 import com.google.firebase.ml.vision.face.FirebaseVisionFaceDetectorOptions
@@ -175,6 +177,14 @@ class PhotoCrop : AppCompatActivity(),ProfilePictureOptionsBottomSheetFragment.B
         return Uri.parse(path.toString())
     }
 
+    open fun encodeImageToBase64(mContext:Context, uri: Uri):String{
+        val baos = ByteArrayOutputStream()
+        val bitmap =  MediaStore.Images.Media.getBitmap(mContext?.contentResolver, uri);//BitmapFactory.decodeResource(resources, uri)
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+        val imageBytes: ByteArray = baos.toByteArray()
+        return Base64.encodeToString(imageBytes, Base64.DEFAULT);
+    }
+
     open fun startCrop(uri: Uri): Unit {
         Log.v("Start Crop", "started")
         //can use this for a new name every time
@@ -190,6 +200,10 @@ class PhotoCrop : AppCompatActivity(),ProfilePictureOptionsBottomSheetFragment.B
             uri,
             Uri.fromFile(File(cacheDir, imageFileName + EXTENSION))
         )
+
+        var str=encodeImageToBase64(this, uri);
+        Log.v("PAN BAS64???>>>>>", "filename is:" + str)
+        resultIntent.putExtra("imagebase64str", str);
         resultIntent.putExtra("filename", imageFileName + EXTENSION)
         uCrop.withAspectRatio(1F, 1F)
         uCrop.withMaxResultSize(450, 450)

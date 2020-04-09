@@ -71,6 +71,7 @@ class HomeScreenIcons : Fragment() {
         //topbar.setOnClickListener { findNavController().navigate(R.id.profileFragment) }
         cardviewkyc.text_kyc.setOnClickListener {
             findNavController().navigate(R.id.verification)
+            //findNavController().navigate(R.id.uploadDropDown)
         //    Toast.makeText(context, "TODO CTA: jump to kyc docs upload page", Toast.LENGTH_SHORT).show()
         }
         cardviewvideoresume.text_kyc_video.setOnClickListener {

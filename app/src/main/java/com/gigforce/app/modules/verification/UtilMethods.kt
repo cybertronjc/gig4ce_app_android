@@ -3,6 +3,7 @@ package com.gigforce.app.modules.verification
 import android.app.AlertDialog
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
 import android.net.Uri
@@ -12,11 +13,9 @@ import android.util.Base64
 import android.util.Log
 import android.widget.Toast
 import com.gigforce.app.R
+import com.gigforce.app.utils.GlideRequest
 import java.io.ByteArrayOutputStream
 
-/**
- * Created by imran on 27/Dec/2017.
- */
 object UtilMethods {
 
     private lateinit var progressDialogBuilder: AlertDialog.Builder

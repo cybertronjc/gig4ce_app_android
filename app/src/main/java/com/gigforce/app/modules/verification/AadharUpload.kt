@@ -93,13 +93,13 @@ class AadhaarUpload: Fragment() {
         }
 
         buttonAadhaar2.setOnClickListener {
-            findNavController().navigate(R.id.panUpload)
+            findNavController().navigate(R.id.verification)
         }
 
         buttonAadhaar1.setOnClickListener {
             if(docUploaded==1)
             {
-                findNavController().navigate(R.id.DLUpload)
+                findNavController().navigate(R.id.uploadDropDown)
             }
             else {
                 Toast.makeText(

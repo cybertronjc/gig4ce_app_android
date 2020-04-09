@@ -191,6 +191,9 @@
         <action
             android:id="@+id/action_verification_to_aadhaarUpload"
             app:destination="@id/aadhaarUpload" />
+        <action
+            android:id="@+id/action_verification_to_uploadDropDown"
+            app:destination="@id/uploadDropDown" />
     </fragment>
     <fragment
         android:id="@+id/verificationcontact"
@@ -209,16 +212,19 @@
         android:name="com.gigforce.app.modules.verification.PanUpload"
         android:label="PanUpload" >
         <action
-            android:id="@+id/action_panUpload_to_aadhaarUpload"
-            app:destination="@id/aadhaarUpload" />
+            android:id="@+id/action_panUpload_to_bankUpload2"
+            app:destination="@id/bankUpload2" />
     </fragment>
     <fragment
         android:id="@+id/aadhaarUpload"
         android:name="com.gigforce.app.modules.verification.AadhaarUpload"
         android:label="AadhaarUpload" >
         <action
-            android:id="@+id/action_aadhaarUpload_to_DLUpload"
-            app:destination="@id/DLUpload" />
+            android:id="@+id/action_aadhaarUpload_to_panUpload"
+            app:destination="@id/panUpload" />
+        <action
+            android:id="@+id/action_aadhaarUpload_to_uploadDropDown"
+            app:destination="@id/uploadDropDown" />
     </fragment>
 <fragment
         android:id="@+id/editEducationBottomSheet"
@@ -239,11 +245,7 @@
     <fragment
         android:id="@+id/DLUpload"
         android:name="com.gigforce.app.modules.verification.DLUpload"
-        android:label="DLUpload" >
-        <action
-            android:id="@+id/action_DLUpload_to_bankUpload2"
-            app:destination="@id/bankUpload2" />
-    </fragment>
+        android:label="DLUpload" />
     <fragment
         android:id="@+id/verificationDone"
         android:name="com.gigforce.app.modules.verification.VerificationDone"
@@ -251,9 +253,9 @@
     <fragment
         android:id="@+id/bankUpload2"
         android:name="com.gigforce.app.modules.verification.BankUpload"
-        android:label="BankUpload" >
-        <action
-            android:id="@+id/action_bankUpload2_to_verificationDone"
-            app:destination="@id/verificationDone" />
-    </fragment>
+        android:label="BankUpload" />
+    <fragment
+        android:id="@+id/uploadDropDown"
+        android:name="com.gigforce.app.modules.verification.UploadDropDown"
+        android:label="UploadDropDown" />
 </navigation>

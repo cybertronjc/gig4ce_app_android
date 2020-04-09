@@ -9,4 +9,5 @@ object ApiFactory{
 
     val idfyApi : IdfyApi = RetrofitFactory.retrofit(AppConstants.IDFY_BASE_URL)
         .create(IdfyApi::class.java)
+
 }
