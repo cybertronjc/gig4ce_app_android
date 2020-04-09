@@ -14,7 +14,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProviders
 import com.gigforce.app.R
-import com.gigforce.app.modules.photoCrop.ui.main.ProfilePictureOptionsBottomSheetFragment.BottomSheetListener
+import com.gigforce.app.modules.photocrop.ProfilePictureOptionsBottomSheetFragment.BottomSheetListener
 import com.gigforce.app.modules.profile.ProfileViewModel
 import com.gigforce.app.utils.GlideApp
 import com.google.firebase.ml.vision.FirebaseVision
@@ -148,10 +148,11 @@ class PhotoCrop : AppCompatActivity(),
                     data?.extras!!.get("data") as Bitmap
                 )
             }
-            Log.v("IMAGE_CAPTURE", "request code="+requestCode.toString()+"  ImURI: "+imageUri.toString())
-            if (imageUri != null) {
-                startCrop(imageUri)
-            }
+            Log.v(
+                "IMAGE_CAPTURE",
+                "request code=" + requestCode.toString() + "  ImURI: " + imageUri.toString()
+            )
+            startCrop(imageUri)
         }
 
         /**

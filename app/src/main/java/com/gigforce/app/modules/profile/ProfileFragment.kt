@@ -8,19 +8,20 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
-import com.gigforce.app.modules.photoCrop.ui.main.PhotoCrop
+import com.gigforce.app.modules.photocrop.PhotoCrop
 import com.gigforce.app.utils.GlideApp
 import com.google.android.material.chip.Chip
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import kotlinx.android.synthetic.main.fragment_profile_education_expanded.view.*
 import kotlinx.android.synthetic.main.fragment_profile_main_expanded.view.*
+import kotlinx.android.synthetic.main.profile_main_card_background.view.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -60,13 +61,12 @@ class ProfileFragment : Fragment() {
             layout.task_done.text = profile.tasksDone.toString()
             layout.connection_count.text = profile.connections.toString()
             layout.main_expanded_user_name.text = profile.name
-            layout.user_about_me.text = profile.aboutMe
-
 
             Log.d("ProfileFragment", profile.isVerified.toString())
             if (profile.isVerified) {
                 layout.main_expanded_is_verified.setBackgroundColor(Color.parseColor("#00FF00"))
             }
+
             var tagsString = ""
             for (tag in profile.Tags!!) {
                 var chip = Chip(this.context)
@@ -81,12 +81,14 @@ class ProfileFragment : Fragment() {
             for (education in profile.Education!!) {
                 educationString += education.institution + "\n"
                 educationString += education.degree + " - " + education.course + "\n"
-                educationString += format.format(education.startYear!!) + " - " + format.format(
-                        education.endYear!!
-                ) + "\n\n"
+                educationString += format.format(education.startYear!!) + " - " + format.format(education.endYear!!) + "\n\n"
             }
-            Log.d("ProfileFragment_Edu", educationString)
-            layout.education_content.text = educationString
+            Log.d("ProfileFragment", educationString)
+            layout.main_education_card.card_title.text = "Education"
+            layout.main_education_card.card_content.text = educationString
+            layout.main_education_card.card_view_more.setOnClickListener {
+                findNavController().navigate(R.id.educationExpandedFragment)
+            }
 
             var experienceString = ""
             for (exp in profile.Experience!!) {
@@ -95,10 +97,18 @@ class ProfileFragment : Fragment() {
                 experienceString += exp.location + "\n"
                 experienceString += format.format(exp.startDate!!) + "-" + format.format(exp.endDate!!) + "\n\n"
             }
-            layout.experience_content.text = experienceString
+            layout.main_experience_card.card_title.text = "Experience"
+            layout.main_experience_card.card_content.text = experienceString
+            layout.main_experience_card.card_view_more.setOnClickListener {
+                findNavController().navigate(R.id.experienceExpandedFragment)
+            }
 
-            layout.about_card_content.text = profile.bio
-            Log.d("ProfileFragment_Rating", profile.rating.toString())
+            layout.main_about_card.card_title.text = "About me"
+            layout.main_about_card.card_content.text = profile.bio.toString()
+            layout.main_about_card.card_view_more.setOnClickListener {
+                findNavController().navigate(R.id.aboutExpandedFragment)
+            }
+            Log.d("ProfileFragment", profile.rating.toString())
 
             profileAvatarName = profile.profileAvatarName
             Log.e("PROFILE AVATAR", profileAvatarName)
@@ -120,33 +130,14 @@ class ProfileFragment : Fragment() {
             photoCropIntent.putExtra("file", profileAvatarName)
             startActivityForResult(photoCropIntent, PHOTO_CROP)
         }
-
-
-        layout.add_tags_button.setOnClickListener {
+        layout.add_tags_button.setOnClickListener{
             this.findNavController().navigate(R.id.addTagBottomSheet)
         }
 
-        layout.about_card_view_more_button.setOnClickListener {
-            this.findNavController().navigate(R.id.aboutExpandedFragment)
-        }
-
-        layout.education_view_more.setOnClickListener {
-            Log.d("CLICK_STATUS", "CLICK HEARD")
-            Toast.makeText(this.context, "View More Clicked", Toast.LENGTH_LONG).show()
-            this.findNavController().navigate(R.id.educationExpandedFragment)
-        }
-
-        layout.experience_card_view_more.setOnClickListener {
-            this.findNavController().navigate(R.id.experienceExpandedFragment)
-        }
-
         // back page navigation
-        layout.profile_main_expanded_back_button.setOnClickListener {
+        layout.profile_main_expanded_back_button.setOnClickListener{
             this.findNavController().navigate(R.id.homeFragment)
         }
-
-        Log.e("LAST FUNCTION", "called")
-//        loadImage(profileAvatarName)
     }
 
     private fun loadImage(Path: String) {
