@@ -91,10 +91,4 @@ class ProfileFirebaseRepository {
             .document(uid).update("profileAvatarName",profileAvatarName)
     }
 
-
-//    fun getProfileAvatarName() {
-//        firebaseDB.collection(profileCollectionName)
-//            .document(uid).update("profileAvatarName", profileAvatarName)
-//    }
-
 }
