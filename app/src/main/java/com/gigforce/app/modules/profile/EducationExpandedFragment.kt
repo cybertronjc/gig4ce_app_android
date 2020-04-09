@@ -68,11 +68,11 @@ class EducationExpandedFragment: Fragment() {
             layout.skill_card.cardBottom = "+ Add Skill"
 
             var achievementString: String = ""
+            var achievements = profile.Achievement!!.sortedWith(compareBy {it.year})
             for (achievement in profile.Achievement!!) {
                 achievementString += achievement.title + "\n"
                 achievementString += achievement.issuingAuthority + "\n"
                 achievementString += achievement.location + "\n"
-                //achievementString += format.format(achievement.year!!) + "\n\n"
                 achievementString += achievement.year + "\n\n"
             }
             layout.achievement_card.nextDestination = R.id.editAchievementBottomSheet
