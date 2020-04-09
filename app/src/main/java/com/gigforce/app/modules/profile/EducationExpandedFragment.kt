@@ -10,14 +10,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
-import com.bumptech.glide.request.RequestOptions
 import com.gigforce.app.R
-import com.gigforce.app.utils.GlideApp
 import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.StorageReference
-import kotlinx.android.synthetic.main.fragment_profile_about_expanded.view.*
 import kotlinx.android.synthetic.main.fragment_profile_education_expanded.view.*
-import kotlinx.android.synthetic.main.fragment_profile_main_expanded.view.*
 import kotlinx.android.synthetic.main.profile_card_background.view.*
 import java.text.SimpleDateFormat
 
@@ -51,7 +46,8 @@ class EducationExpandedFragment: Fragment() {
             var educationString: String = ""
             var format = SimpleDateFormat("dd/MM/yyyy")
 
-            for (education in profile.Education!!) {
+            var educations = profile.Education!!.sortedWith(compareBy {it.startYear!!})
+            for (education in educations) {
                 educationString += education.institution + "\n"
                 educationString += education.degree + " - " + education.course + "\n"
                 educationString += format.format(education.startYear!!) + " - " + format.format(education.endYear!!) + "\n\n"
