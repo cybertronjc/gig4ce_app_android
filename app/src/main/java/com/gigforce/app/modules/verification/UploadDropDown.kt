@@ -27,6 +27,8 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import io.reactivex.android.schedulers.AndroidSchedulers.mainThread
 import io.reactivex.schedulers.Schedulers
+import kotlinx.android.synthetic.main.layout_verification_aadhaar.view.*
+import kotlinx.android.synthetic.main.layout_verification_dl.view.*
 import kotlinx.android.synthetic.main.layout_verification_dropdown.*
 import kotlinx.android.synthetic.main.layout_verification_dropdown.view.*
 
@@ -38,8 +40,8 @@ class UploadDropDown: Fragment() {
 
     private lateinit var storage: FirebaseStorage
     lateinit var layout: View
-    private lateinit var panFront: ImageView
-    private lateinit var panBack: ImageView
+    private lateinit var ddFront: ImageView
+    private lateinit var ddBack: ImageView
     lateinit var viewModel: VerificationViewModel
     private var PHOTO_CROP: Int = 45
     private var frontNotDone = 1;
@@ -77,6 +79,9 @@ class UploadDropDown: Fragment() {
     private var spinner: Spinner? = null
     private val paths =
         arrayOf("DrivingLicense", "VoterId", "Passport")
+    private lateinit var filepathappender:String;
+    private  lateinit  var uriFront: Uri
+    private  lateinit  var uriBack: Uri
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreateView(
@@ -114,24 +119,38 @@ class UploadDropDown: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(VerificationViewModel::class.java)
+        ddFront = layout.findViewById(R.id.VeriDD_front)
+        ddBack = layout.findViewById(R.id.VeriDD_back)
+        val photoCropIntent = Intent(context, PhotoCrop::class.java)
+
+        photoCropIntent.putExtra("detectFace",0)
 
         spinner?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
 
                 when (parent.getItemAtPosition(position).toString()) {
                     "DrivingLicense" -> {
+                        filepathappender="/dl/"
+                        photoCropIntent.putExtra("fbDir", "/verification/dl/")
+                        photoCropIntent.putExtra("folder", "/verification/dl/")
                         Toast.makeText(
                             context,
                             "Upload DL",
                             Toast.LENGTH_LONG).show()
                     }
                     "Passport" -> {
+                        filepathappender="/passport/"
+                        photoCropIntent.putExtra("fbDir", "/verification/passport/")
+                        photoCropIntent.putExtra("folder", "/verification/passport/")
                         Toast.makeText(
                             context,
                             "Upload Passport",
                             Toast.LENGTH_LONG).show()
                     }
                     "VoterId" -> {
+                        filepathappender="/voterid/"
+                        photoCropIntent.putExtra("fbDir", "/verification/voterid/")
+                        photoCropIntent.putExtra("folder", "/verification/voterid/")
                         Toast.makeText(
                             context,
                             "Upload VoterID",
@@ -143,6 +162,15 @@ class UploadDropDown: Fragment() {
             override fun onNothingSelected(parent: AdapterView<*>) {
 
             }
+        }
+
+        ddFront.setOnClickListener {
+            photoCropIntent.putExtra("file", "adfront.jpg")
+            startActivityForResult(photoCropIntent, PHOTO_CROP)
+        }
+        ddBack.setOnClickListener {
+            photoCropIntent.putExtra("file", "adback.jpg")
+            startActivityForResult(photoCropIntent, PHOTO_CROP)
         }
 
 //        panFront = layout.findViewById(R.id.Pan_front)
@@ -160,20 +188,20 @@ class UploadDropDown: Fragment() {
 //            startActivityForResult(photoCropIntent, PHOTO_CROP)
 //        }
 
-        buttonVeriDD1.setOnClickListener {
+        buttonVeriDD2.setOnClickListener {
             findNavController().navigate(R.id.verification);
         }
 
-        buttonVeriDD2.setOnClickListener {
+        buttonVeriDD1.setOnClickListener {
             //if() docs are not uploaded
             if(docUploaded==1)
             {
-                findNavController().navigate(R.id.aadhaarUpload)
+                findNavController().navigate(R.id.bankUpload2)
             }
             else {
                 Toast.makeText(
                     this.context,
-                    "Please upload the Pan before proceeding",
+                    "Please upload the doc before proceeding",
                     Toast.LENGTH_LONG).show()
             }
         }
@@ -223,51 +251,25 @@ class UploadDropDown: Fragment() {
             Log.v("PROFILE_FRAG_OAR", "filename is:" + imageName)
             if (null != imageName) {
                 viewModel.setCardAvatarName(imageName.toString())
-                var filepath = "/pan/"+imageName;
+                var filepath = filepathappender+imageName;
                 if(frontNotDone==1){
-                    ////
-                    var picRef: StorageReference = storage.reference.child("verification").child(filepath)
-
-                    picRef.downloadUrl.addOnSuccessListener(OnSuccessListener<Uri>() {
-                        @Override
-                        fun onSuccess(uri:Uri) {
-                            Toast.makeText(
-                                this.context,
-                                ">>>OnSuccess!",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                            var imgb64 = UtilMethods.encodeImageToBase64(context!!,uri)
-                            var loginPostData = OCRDocData(imgb64,"yes")
-                            val taskid:String = "74f4c926-250c-43ca-9c53-453e87ceacd2";
-                            val groupid:String = "8e16424a-58fc-4ba4-ab20-5bc8e7c3c41f";
-                            var postData = PostDataOCR(taskid,groupid,loginPostData)
-                            idfyApiCall(postData)
-                        }
-                    }).addOnFailureListener(OnFailureListener() {
-                        @Override
-                        fun onFailure(exception:Exception) {
-                            // Handle any errors
-                            //Toast.makeTextthis, "image not dowloaded", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-
-//                    picRef.downloadUrl
-//                        .addOnSuccessListener(OnSuccessListener<Uri> { uri -> // getting image uri and converting into string
-//                            var imgb64 = UtilMethods.encodeImageToBase64(context!!,uri)
-//                            var loginPostData = OCRDocData(imgb64,"yes")
-//                            val taskid:String = "74f4c926-250c-43ca-9c53-453e87ceacd2";
-//                            val groupid:String = "8e16424a-58fc-4ba4-ab20-5bc8e7c3c41f";
-//                            var postData = PostDataOCR(taskid,groupid,loginPostData)
-//                            idfyApiCall(postData)
-//                        })
-
-
-                    //RetrofitFactory.idfyApiCall()
-                    ////
+                    uriFront = data?.getParcelableExtra("uri")!!;
                     loadImage("verification",filepath, layout.VeriDD_front)
                     frontNotDone = 0;
                 }
                 else{
+                    uriBack = data?.getParcelableExtra("uri")!!;
+                    Toast.makeText(
+                        this.context,
+                        "front: $uriFront"+"<<<back: $uriBack",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    var imgb64 = UtilMethods.encodeImagesToBase64(context!!, uriFront, uriBack);
+                    var ocrdata = OCRDocData(imgb64,"yes")
+                    val taskid:String = "74f4c926-250c-43ca-9c53-453e87ceacd2";
+                    val groupid:String = "8e16424a-58fc-4ba4-ab20-5bc8e7c3c41f";
+                    var postData = PostDataOCR(taskid,groupid,ocrdata!!)
+                    idfyApiCall(postData)
                     loadImage("verification",filepath, layout.VeriDD_back)
                     docUploaded = 1;
                 }

@@ -3,7 +3,7 @@ package com.gigforce.app.modules.verification
 import android.app.AlertDialog
 import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.drawable.Drawable
+import android.graphics.Canvas
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
 import android.net.Uri
@@ -13,7 +13,6 @@ import android.util.Base64
 import android.util.Log
 import android.widget.Toast
 import com.gigforce.app.R
-import com.gigforce.app.utils.GlideRequest
 import java.io.ByteArrayOutputStream
 
 object UtilMethods {
@@ -103,6 +102,61 @@ object UtilMethods {
             }
         }
         return false
+    }
+
+    /**
+     * @param context
+     * @param uri
+     * @action return the base64 encoded string of an image given as uri
+     */
+    fun encodeImagesToBase64(mContext:Context, uriFront: Uri, uriBack:Uri):String{
+        val baos = ByteArrayOutputStream()
+        val bitmapFront =  MediaStore.Images.Media.getBitmap(mContext?.contentResolver, uriFront);
+        val bitmapBack =  MediaStore.Images.Media.getBitmap(mContext?.contentResolver, uriBack);
+        val bitmap = combineImages(bitmapFront, bitmapBack);
+        bitmap?.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+        val imageBytes: ByteArray = baos.toByteArray()
+        return Base64.encodeToString(imageBytes, Base64.DEFAULT);
+    }
+
+    /**
+     * @param c
+     * @param s
+     * @return return c+s
+     * @brief concatenating two bitmaps side by side
+     */
+    fun combineImages(
+        c: Bitmap,
+        s: Bitmap
+    ): Bitmap? { // can add a 3rd parameter 'String loc' if you want to save the new image - left some code to do that at the bottom
+        var cs: Bitmap? = null
+        val width: Int
+        var height = 0
+        if (c.width > s.width) {
+            width = c.width + s.width
+            height = c.height
+        } else {
+            width = s.width + s.width
+            height = c.height
+        }
+
+        cs = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+
+//        val comboImage = Canvas(cs)
+//        comboImage.drawBitmap(c, 0f, 0f, null)
+//        comboImage.drawBitmap(s, c.width, 0f, null)
+
+        // this is an extra bit I added, just incase you want to save the new image somewhere and then return the location
+        /*String tmpImg = String.valueOf(System.currentTimeMillis()) + ".png";
+
+    OutputStream os = null;
+    try {
+      os = new FileOutputStream(loc + tmpImg);
+      cs.compress(CompressFormat.PNG, 100, os);
+    } catch(IOException e) {
+      Log.e("combineImages", "problem combining images", e);
+    }*/
+        return cs
     }
 
 }

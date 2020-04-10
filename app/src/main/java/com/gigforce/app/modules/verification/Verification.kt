@@ -170,8 +170,8 @@ class Verification: Fragment() {
                 addNewContact()
                 saveNewContacts()
                 resetLayout()
-                //findNavController().navigate(R.id.aadhaarUpload)
-                findNavController().navigate(R.id.panUpload)
+                findNavController().navigate(R.id.aadhaarUpload)
+                //findNavController().navigate(R.id.panUpload)
             }
         }
 
