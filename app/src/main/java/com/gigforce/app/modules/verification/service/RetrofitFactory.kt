@@ -67,5 +67,5 @@ object RetrofitFactory{
             .addConverterFactory(gsonConverter)
             .client(client)
             .build()
-            .create(idfyApi::class.java)!!
+            .create(IdfyApi::class.java)!!
 }

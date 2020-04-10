@@ -181,6 +181,7 @@
     <string name="veri_add_doc_back">"Back Side"</string>
     <string name="veri_pan_title">"Step 2 : Upload your Pan"</string>
     <string name="veri_aadhaar_title">"Step 3 : Upload your Aadhaar"</string>
+    <string name="veri_no_aadhaar">"No Aadhaar! Skip>>"</string>
     <string name="veri_dl_title">"Step 4 : Upload your Driving License"</string>
     <string name="veri_bank_title">"Step 5 : Please add your Bank Details"</string>
     <string name="veri_add_bank">"Add Bank Details"</string>

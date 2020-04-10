@@ -38,8 +38,10 @@ class BankUpload : Fragment() {
             Pattern.compile("^\\d{9,18}\$")
         private val IFSC =
             Pattern.compile("^[A-Za-z]{4}0[A-Z0-9a-z]{6}\$")
+        private val NAME_bk =
+            Pattern.compile("^[\\\\p{L} .'-]+\$")
         private val NAME =
-            Pattern.compile("^\\pL+[\\pL\\pZ\\pP]{0,}\$")
+            Pattern.compile("^[A-Za-z ,.'-]+\$")
 
         lateinit var match: Matcher;
 
@@ -140,7 +142,7 @@ class BankUpload : Fragment() {
 
             layout.button_veri_bank_cancel.setOnClickListener {
                 resetLayout()
-                findNavController().navigate(R.id.DLUpload)
+                findNavController().navigate(R.id.panUpload)
             }
 
             layout.button_veri_bank_save.setOnClickListener {
