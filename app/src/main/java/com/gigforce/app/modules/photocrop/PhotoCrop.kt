@@ -45,6 +45,7 @@ class PhotoCrop : AppCompatActivity(),ProfilePictureOptionsBottomSheetFragment.B
     private lateinit var CLOUD_PICTURE_FOLDER: String
     private lateinit var incomingFile: String
     private lateinit var imageView: ImageView
+    private lateinit var b64OfImg:String;
 
     var mStorage: FirebaseStorage = FirebaseStorage.getInstance()
 
@@ -202,9 +203,8 @@ class PhotoCrop : AppCompatActivity(),ProfilePictureOptionsBottomSheetFragment.B
             Uri.fromFile(File(cacheDir, imageFileName + EXTENSION))
         )
 
-        //var str=encodeImageToBase64(this, uri);
-        //Log.v("PAN BAS64???>>>>>", "filename is:" + str)
-        resultIntent.putExtra("imagebase64str", "");
+        b64OfImg=encodeImageToBase64(this, uri);
+        Log.v("PAN BAS64???>>>>>", "filename is:" + b64OfImg)
         resultIntent.putExtra("filename", imageFileName + EXTENSION)
         uCrop.withAspectRatio(1F, 1F)
         uCrop.withMaxResultSize(450, 450)
@@ -254,6 +254,7 @@ class PhotoCrop : AppCompatActivity(),ProfilePictureOptionsBottomSheetFragment.B
                 val url: String = taskSnapshot.metadata?.reference?.downloadUrl.toString()
                 Toast.makeText(this, "Successfully Uploaded :)", Toast.LENGTH_LONG).show()
                 Log.v("Upload Image", url)
+                resultIntent.putExtra("imagebase64str", b64OfImg);
                 setResult(Activity.RESULT_OK, resultIntent)
                 super.finish()
             }

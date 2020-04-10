@@ -82,22 +82,22 @@ class HomeScreenIcons : Fragment() {
                     if address and aadhaar are true, bank is false - go to bankUpload
                     if address and aadhaar are true, bank is true - go to UploadPan
              */
-            docref = firebaseDB.collection("Verification").document(uid);
-            docref.get()
-                .addOnSuccessListener { document ->
-                    if (document != null) {
-                        val items = document["kycVerified"] as HashMap<*, *>
-                        items.forEach { (k, v) ->
-                            Log.d(">>",">>$k = $v");
-                            // Apply the above algorithm here!
-                        }
-                    } else {
-                        Log.d(">>","null doc")
-                    }
-                }
-                .addOnFailureListener { exception ->
-                    Log.d("TAG", "get failed with ", exception)
-                }
+//            docref = firebaseDB.collection("Verification").document(uid);
+//            docref.get()
+//                .addOnSuccessListener { document ->
+//                    if (document != null) {
+//                        val items = document["kycVerified"] as HashMap<*, *>
+//                        items.forEach { (k, v) ->
+//                            Log.d(">>",">>$k = $v");
+//                            // Apply the above algorithm here!
+//                        }
+//                    } else {
+//                        Log.d(">>","null doc")
+//                    }
+//                }
+//                .addOnFailureListener { exception ->
+//                    Log.d("TAG", "get failed with ", exception)
+//                }
             findNavController().navigate(R.id.verification)
             //findNavController().navigate(R.id.uploadDropDown)
         //    Toast.makeText(context, "TODO CTA: jump to kyc docs upload page", Toast.LENGTH_SHORT).show()

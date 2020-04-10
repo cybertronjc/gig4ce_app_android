@@ -35,9 +35,9 @@ class Verification: Fragment() {
     private lateinit var pincode:String;
 
     private val ADDRESS =
-        Pattern.compile("^([A-Za-z]{6}+\\w+\\s*[\\#\\-\\,\\/\\.\\(\\)\\&]*)+")
+        Pattern.compile("^(\\w+\\s*[\\#\\-\\,\\/\\.\\(\\)\\&]*)+")
     private val CITY_STATE =
-        Pattern.compile("^([A-Za-z]{5}\\w+\\s*\\w*)+")
+        Pattern.compile("^(\\w+\\s*\\w*)+")
     private val PINCODE =
         Pattern.compile("^([0-9]{6}|[0-9]{3}\\s*[0-9]{3})")
 

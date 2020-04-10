@@ -57,6 +57,19 @@ object UtilMethods {
         Toast.makeText(context, message, Toast.LENGTH_LONG).show()
     }
 
+
+    /**
+     * @param context
+     * @param img
+     * @action return the base64 encoded string of an image given as uri
+     */
+    fun encodeImageToBase64(mContext:Context, img: Bitmap):String{
+        val baos = ByteArrayOutputStream()
+        img.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+        val imageBytes: ByteArray = baos.toByteArray()
+        return Base64.encodeToString(imageBytes, Base64.DEFAULT);
+    }
+
     /**
      * @param context
      * @param uri
