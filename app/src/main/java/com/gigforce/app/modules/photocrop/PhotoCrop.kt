@@ -129,6 +129,7 @@ class PhotoCrop : AppCompatActivity(),ProfilePictureOptionsBottomSheetFragment.B
             Log.d("ImageUri", imageUriResultCrop.toString())
             print(requestCode)
             if (imageUriResultCrop != null) {
+                resultIntent.putExtra("uri",imageUriResultCrop);
                 Log.v("REQUEST CROP", requestCode.toString())
             }
             var baos = ByteArrayOutputStream()
@@ -204,7 +205,6 @@ class PhotoCrop : AppCompatActivity(),ProfilePictureOptionsBottomSheetFragment.B
         )
 
         b64OfImg=encodeImageToBase64(this, uri);
-        Log.v("PAN BAS64???>>>>>", "filename is:" + b64OfImg)
         resultIntent.putExtra("filename", imageFileName + EXTENSION)
         uCrop.withAspectRatio(1F, 1F)
         uCrop.withMaxResultSize(450, 450)
@@ -254,7 +254,8 @@ class PhotoCrop : AppCompatActivity(),ProfilePictureOptionsBottomSheetFragment.B
                 val url: String = taskSnapshot.metadata?.reference?.downloadUrl.toString()
                 Toast.makeText(this, "Successfully Uploaded :)", Toast.LENGTH_LONG).show()
                 Log.v("Upload Image", url)
-                resultIntent.putExtra("imagebase64str", b64OfImg);
+                //Log.v("PAN BAS64???>>>>>", "filename is:" + b64OfImg)
+                //resultIntent.putExtra("imagebase64str", b64OfImg);
                 setResult(Activity.RESULT_OK, resultIntent)
                 super.finish()
             }

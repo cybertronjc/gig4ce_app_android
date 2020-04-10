@@ -3,6 +3,7 @@ package com.gigforce.app.modules.verification.service
 import android.provider.SyncStateContract
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.gigforce.app.modules.verification.AppConstants
+import com.gigforce.app.modules.verification.service.ApiFactory.idfyApi
 import com.google.gson.GsonBuilder
 
 import okhttp3.Interceptor
@@ -66,5 +67,5 @@ object RetrofitFactory{
             .addConverterFactory(gsonConverter)
             .client(client)
             .build()
-            .create(ApiFactory.idfyApi::class.java)!!
+            .create(idfyApi::class.java)!!
 }
