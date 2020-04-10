@@ -18,8 +18,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
 import com.gigforce.app.modules.photocrop.PhotoCrop
-import com.gigforce.app.modules.verification.models.OCRDocData
-import com.gigforce.app.modules.verification.models.PostDataOCR
+import com.gigforce.app.modules.verification.models.*
 import com.gigforce.app.modules.verification.service.RetrofitFactory
 import com.gigforce.app.utils.GlideApp
 import com.google.android.gms.tasks.OnFailureListener
@@ -45,6 +44,35 @@ class UploadDropDown: Fragment() {
     private var PHOTO_CROP: Int = 45
     private var frontNotDone = 1;
     private var docUploaded = 0;
+
+    var updatesDL: ArrayList<DL> = ArrayList()
+    private lateinit var     id_number :String;
+    private lateinit var     name_on_card :String;
+    private lateinit var     fathers_name :String;
+    private lateinit var     date_of_birth :String;
+    private lateinit var     date_of_validity :String;
+    private lateinit var     address :String;
+    private lateinit var     district :String;
+    private lateinit var     pincode :String;
+    private lateinit var     state :String;
+    private lateinit var     street_address :String;
+
+    var updatesVoterID: ArrayList<VoterID> = ArrayList()
+    private lateinit var     house_number :String;
+    private lateinit var     age :String;
+    private lateinit var     year_of_birth :String;
+
+    var updatesPassport: ArrayList<Passport> = ArrayList();
+    private lateinit var     first_name :String;
+    private lateinit var     last_name :String;
+    private lateinit var     mothers_name :String;
+    private lateinit var     nationality :String;
+    private lateinit var     place_of_birth :String;
+    private lateinit var     date_of_issue :String;
+    private lateinit var     date_of_expiry :String;
+    private lateinit var     place_of_issue :String;
+    private lateinit var     gender :String;
+    private lateinit var     name_of_spouse :String;
 
     private var spinner: Spinner? = null
     private val paths =
@@ -252,5 +280,76 @@ class UploadDropDown: Fragment() {
         GlideApp.with(this.context!!)
             .load(picRef)
             .into(layoutid)
+    }
+
+    private fun addDLData() {
+        updatesDL.add(
+            DL(
+                id_number = id_number,
+                name_on_card = name_on_card,
+                fathers_name = fathers_name,
+                date_of_birth = date_of_birth,
+                date_of_validity = date_of_validity,
+                address = address,
+                district = district,
+                pincode = pincode,
+                state = state,
+                street_address = street_address
+            )
+        )
+    }
+
+    private fun addVoterIDData() {
+        updatesVoterID.add(
+            VoterID(
+                id_number = id_number,
+                name_on_card = name_on_card,
+                fathers_name = fathers_name,
+                date_of_birth = date_of_birth,
+                address = address,
+                state = state,
+                district = district,
+                street_address = street_address,
+                house_number = house_number,
+                pincode = pincode,
+                gender = gender,
+                age = age,
+                year_of_birth = year_of_birth
+            )
+        )
+    }
+
+    private fun addPassportData() {
+        updatesPassport.add(
+            Passport(
+                id_number = id_number,
+                first_name = first_name,
+                last_name = last_name,
+                name_on_card = name_on_card,
+                fathers_name = fathers_name,
+                mothers_name = mothers_name,
+                nationality = nationality,
+                date_of_birth = date_of_birth,
+                place_of_birth = place_of_birth,
+                date_of_issue = date_of_issue,
+                date_of_expiry = date_of_expiry,
+                place_of_issue = place_of_issue,
+                address = address,
+                gender = gender,
+                name_of_spouse = name_of_spouse
+            )
+        )
+    }
+
+    private fun saveNewDL() {
+        viewModel.setVerificationDL(updatesDL)
+    }
+
+    private fun saveNewVoterID() {
+        viewModel.setVerificationVoterID(updatesVoterID)
+    }
+
+    private fun saveNewPassport() {
+        viewModel.setVerificationPassport(updatesPassport)
     }
 }

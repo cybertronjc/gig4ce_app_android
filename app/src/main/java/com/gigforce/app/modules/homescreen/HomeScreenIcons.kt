@@ -1,22 +1,22 @@
 package com.gigforce.app.modules.homescreen
 
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.AdapterView
 import android.widget.GridView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
 import com.gigforce.app.modules.auth.utils.SignoutTask
 import com.gigforce.app.modules.profile.models.ProfileData
+import com.gigforce.app.modules.verification.VeriFirebaseRepository
 import com.gigforce.app.utils.setDarkStatusBarTheme
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.EventListener
-import com.google.firebase.firestore.FieldPath
-import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.*
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.layout_home_screen.*
 import kotlinx.android.synthetic.main.layout_home_screen.view.*
@@ -30,6 +30,7 @@ class HomeScreenIcons : Fragment() {
     var uid = FirebaseAuth.getInstance().currentUser?.uid!! //ynLyPDjsBrYgiFT3OWX8Tn8OLjI2 or GigerId1
     private lateinit var layout: View
 
+    private lateinit var docref: DocumentReference;
     private val itemList: Array<String>
         get() = arrayOf("Profile", "Item 2", "Item 3", "Item 4", "Item 5", "Item 6", "Item 7", "Item 8", "Item 9", "Item 10", "Item 11", "Item 12")
 
@@ -61,6 +62,7 @@ class HomeScreenIcons : Fragment() {
         return layout
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         this.setDarkStatusBarTheme(false)
         val gridview = layout.findViewById<GridView>(R.id.gridview)
@@ -70,6 +72,32 @@ class HomeScreenIcons : Fragment() {
 
         //topbar.setOnClickListener { findNavController().navigate(R.id.profileFragment) }
         cardviewkyc.text_kyc.setOnClickListener {
+
+            /** Algo:
+                    Check the KYC flag of Giger Profile from Profiles collection
+                    check which flag is true or false
+                    if address is false - go to verification
+                    if address is true, aadhaar is false and  all of (dl,voterid,passport) are false - go to aadhaarUpload
+                    if address is true, aadhaar is false and any of (dl,voterid,passport) is true - go to bankUpload
+                    if address and aadhaar are true, bank is false - go to bankUpload
+                    if address and aadhaar are true, bank is true - go to UploadPan
+             */
+            docref = firebaseDB.collection("Verification").document(uid);
+            docref.get()
+                .addOnSuccessListener { document ->
+                    if (document != null) {
+                        val items = document["kycVerified"] as HashMap<*, *>
+                        items.forEach { (k, v) ->
+                            Log.d(">>",">>$k = $v");
+                            // Apply the above algorithm here!
+                        }
+                    } else {
+                        Log.d(">>","null doc")
+                    }
+                }
+                .addOnFailureListener { exception ->
+                    Log.d("TAG", "get failed with ", exception)
+                }
             findNavController().navigate(R.id.verification)
             //findNavController().navigate(R.id.uploadDropDown)
         //    Toast.makeText(context, "TODO CTA: jump to kyc docs upload page", Toast.LENGTH_SHORT).show()

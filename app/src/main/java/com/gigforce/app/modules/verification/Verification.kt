@@ -35,9 +35,9 @@ class Verification: Fragment() {
     private lateinit var pincode:String;
 
     private val ADDRESS =
-        Pattern.compile("^(\\w+\\s*[\\#\\-\\,\\/\\.\\(\\)\\&]*)+")
+        Pattern.compile("^([A-Za-z]{6}+\\w+\\s*[\\#\\-\\,\\/\\.\\(\\)\\&]*)+")
     private val CITY_STATE =
-        Pattern.compile("^(\\w+\\s*\\w*)+")
+        Pattern.compile("^([A-Za-z]{5}\\w+\\s*\\w*)+")
     private val PINCODE =
         Pattern.compile("^([0-9]{6}|[0-9]{3}\\s*[0-9]{3})")
 
@@ -138,16 +138,6 @@ class Verification: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(VerificationViewModel::class.java)
-
-//        viewModel.veriData.observe(this, Observer { contact ->
-//            var contactString = ""
-//            //for (contact in contacts!!) {
-//                contactString += "address: "+contact.address +"\n"
-//                contactString += "phone: " + contact.phone + "\n"
-//                contactString += "email: " + contact.email + "\n\n"
-//            //}
-//            //layout.add_veri_contact_address.text = contact.address
-//        })
 
         layout.button_veri_address_cancel.setOnClickListener {
             resetLayout();

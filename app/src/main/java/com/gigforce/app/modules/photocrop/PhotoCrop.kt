@@ -1,5 +1,6 @@
 package com.gigforce.app.modules.photocrop
 
+import android.Manifest
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -201,9 +202,9 @@ class PhotoCrop : AppCompatActivity(),ProfilePictureOptionsBottomSheetFragment.B
             Uri.fromFile(File(cacheDir, imageFileName + EXTENSION))
         )
 
-        var str=encodeImageToBase64(this, uri);
-        Log.v("PAN BAS64???>>>>>", "filename is:" + str)
-        resultIntent.putExtra("imagebase64str", str);
+        //var str=encodeImageToBase64(this, uri);
+        //Log.v("PAN BAS64???>>>>>", "filename is:" + str)
+        resultIntent.putExtra("imagebase64str", "");
         resultIntent.putExtra("filename", imageFileName + EXTENSION)
         uCrop.withAspectRatio(1F, 1F)
         uCrop.withMaxResultSize(450, 450)
