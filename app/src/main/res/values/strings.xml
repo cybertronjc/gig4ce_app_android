@@ -48,7 +48,7 @@
     <string name="default_location_text">Location\n220KM away</string>
     <string name="education_card_education_text">Education</string>
     <string name="education_card_content_placeholder">Education content to be put here</string>
-    <string name="view_more_text">View more</string>
+    <string name="view_more_text"><u>View more</u></string>
     <string name="empty_dash_string">-</string>
     <string name="about_card_about_text">About Me</string>
     <string name="about_card_content_placeholder">About me content to be put here</string>

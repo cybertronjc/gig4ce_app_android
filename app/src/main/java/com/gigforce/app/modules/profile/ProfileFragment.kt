@@ -17,6 +17,7 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
 import com.gigforce.app.modules.photocrop.*
+import com.gigforce.app.modules.profile.models.Achievement
 import com.gigforce.app.utils.GlideApp
 import com.google.android.material.chip.Chip
 import com.google.firebase.storage.FirebaseStorage
@@ -33,6 +34,7 @@ import kotlinx.android.synthetic.main.profile_nav_bar.view.*
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
 class ProfileFragment : Fragment() {
 
@@ -78,47 +80,70 @@ class ProfileFragment : Fragment() {
                 layout.main_expanded_is_verified.setBackgroundColor(Color.parseColor("#00FF00"))
             }
 
-            var tagsString = ""
             for (tag in profile.Tags!!) {
                 var chip = Chip(this.context)
                 chip.text = " $tag "
                 chip.isClickable = false
                 layout.main_tags.addView(chip)
             }
-            //layout.main_tags.text = tagsString
 
-            var educationString = ""
-            var format = SimpleDateFormat("dd/MM/yyyy", Locale.US)
-            for (education in profile.Education!!) {
-                educationString += education.institution + "\n"
-                educationString += education.degree + " - " + education.course + "\n"
-                educationString += format.format(education.startYear!!) + " - " + format.format(education.endYear!!) + "\n\n"
+            var mainAboutString = ""
+            mainAboutString += profile.bio.toString() + "\n\n"
+            mainAboutString += "Language knows: "
+            if (profile.Language!!.size > 0) {
+                var languages = profile.Language!!.sortedWith(compareBy { it.writingSkill })
+                mainAboutString += languages[0].name + "\n"
             }
-            Log.d("ProfileFragment", educationString)
+
+            layout.main_about_card.card_title.text = "About me"
+            layout.main_about_card.card_content.text = mainAboutString
+            layout.main_about_card.card_view_more.setOnClickListener {
+                findNavController().navigate(R.id.aboutExpandedFragment)
+            }
+
+            var mainEducationString = ""
+            var format = SimpleDateFormat("dd/MM/yyyy", Locale.US)
+            if (profile.Education!!.size > 0) {
+                var educations = profile.Education!!.sortedByDescending { it.startYear }
+                mainEducationString += educations[0].institution + "\n"
+                mainEducationString += educations[0].degree + " - " + educations[0].course + "\n"
+                mainEducationString += format.format(educations[0].startYear!!) + " - " + format.format(
+                    educations[0].endYear!!
+                ) + "\n"
+            }
+
+            mainEducationString += "Skills: "
+            if (profile.Skill!!.size > 0) {
+                mainEducationString += profile.Skill!![0] + "\n\n"
+            }
+
+            mainEducationString += "Achievement: "
+            if (profile.Achievement!!.size > 0) {
+                var achievements = profile.Achievement!!.sortedByDescending { it.year }
+                mainEducationString += achievements[0].title + "\n\n"
+            }
+
+            Log.d("ProfileFragment", mainEducationString)
             layout.main_education_card.card_title.text = "Education"
-            layout.main_education_card.card_content.text = educationString
+            layout.main_education_card.card_content.text = mainEducationString
             layout.main_education_card.card_view_more.setOnClickListener {
                 findNavController().navigate(R.id.educationExpandedFragment)
             }
 
-            var experienceString = ""
-            for (exp in profile.Experience!!) {
-                experienceString += exp.title + "\n"
-                experienceString += exp.employmentType + "\n"
-                experienceString += exp.location + "\n"
-                experienceString += format.format(exp.startDate!!) + "-" + format.format(exp.endDate!!) + "\n\n"
+            var mainExperienceString = ""
+            if (profile.Experience!!.size > 0) {
+                var experiences = profile.Experience!!.sortedByDescending { it.startDate }
+                mainExperienceString += experiences[0].title + "\n"
+                mainExperienceString += experiences[0].employmentType + "\n"
+                mainExperienceString += experiences[0].location + "\n"
+                mainExperienceString += format.format(experiences[0].startDate!!) + "-" + format.format(experiences[0].endDate!!) + "\n"
             }
             layout.main_experience_card.card_title.text = "Experience"
-            layout.main_experience_card.card_content.text = experienceString
+            layout.main_experience_card.card_content.text = mainExperienceString
             layout.main_experience_card.card_view_more.setOnClickListener {
                 findNavController().navigate(R.id.experienceExpandedFragment)
             }
 
-            layout.main_about_card.card_title.text = "About me"
-            layout.main_about_card.card_content.text = profile.bio.toString()
-            layout.main_about_card.card_view_more.setOnClickListener {
-                findNavController().navigate(R.id.aboutExpandedFragment)
-            }
             Log.d("ProfileFragment", profile.rating.toString())
 
             profileAvatarName = profile.profileAvatarName
