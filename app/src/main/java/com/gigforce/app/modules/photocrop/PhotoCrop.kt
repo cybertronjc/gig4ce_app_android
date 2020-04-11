@@ -245,20 +245,6 @@ class PhotoCrop : AppCompatActivity(),
         return Uri.parse(path.toString())
     }
 
-
-    /**
-     * Generate a unique name of the file to be uploaded using time stamp
-     * Initiates Crop activity
-     */
-
-    open fun encodeImageToBase64(mContext:Context, uri: Uri):String{
-        val baos = ByteArrayOutputStream()
-        val bitmap =  MediaStore.Images.Media.getBitmap(mContext?.contentResolver, uri);//BitmapFactory.decodeResource(resources, uri)
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
-        val imageBytes: ByteArray = baos.toByteArray()
-        return Base64.encodeToString(imageBytes, Base64.DEFAULT);
-    }
-
     private fun startCrop(uri: Uri): Unit {
         Log.v("Start Crop", "started")
         //can use this for a new name every time
@@ -272,7 +258,6 @@ class PhotoCrop : AppCompatActivity(),
             Uri.fromFile(File(cacheDir, imageFileName + EXTENSION))
         )
 
-        b64OfImg=encodeImageToBase64(this, uri);
         resultIntent.putExtra("filename", imageFileName + EXTENSION)
         uCrop.withAspectRatio(cropX, cropY)
         uCrop.withMaxResultSize(450, 450)

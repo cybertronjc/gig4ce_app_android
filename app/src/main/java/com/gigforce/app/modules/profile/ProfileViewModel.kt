@@ -57,6 +57,10 @@ class ProfileViewModel: ViewModel() {
         profileFirebaseRepository.addNewTag(tag)
     }
 
+    fun setProfileAvatarName(profileAvatarName: String) {
+        profileFirebaseRepository.setProfileAvatarName(profileAvatarName)
+    }
+
     fun setProfileTag(tag: String) {
         profileFirebaseRepository.setProfileTags(tag)
     }
