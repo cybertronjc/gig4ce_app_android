@@ -217,7 +217,7 @@
             android:name="array_location"
             app:argType="string" />
     </fragment>
-    <fragment
+    <dialog
         android:id="@+id/editSkillBottomSheet"
         android:name="com.gigforce.app.modules.profile.EditSkillBottomSheet"
         android:label="EditSkillBottomSheet" />

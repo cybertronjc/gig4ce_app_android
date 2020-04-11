@@ -73,7 +73,6 @@ class AddSkillBottomSheetFragment: BottomSheetDialogFragment() {
 
         layout.add_skill_add_more_button.setOnClickListener {
             addNewSkill()
-            layout.add_skill_category.setText("")
             layout.add_skill_name.setSelection(0)
 
         }
