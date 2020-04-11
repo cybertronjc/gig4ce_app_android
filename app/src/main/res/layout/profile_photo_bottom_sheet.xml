@@ -16,24 +16,26 @@
         android:layout_marginStart="5dp"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="18dp"
-        android:textSize="20sp"
+        android:textSize="22sp"
         android:text="@string/profile_picture"
-        />
-
+        android:textColor="@color/black"/>
 
     <TextView
-
         android:id="@+id/updateProfilePicture"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
         android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
         android:textSize="17sp"
-        android:text="@string/update_profile_picture"
-         />
+        android:textColor="@color/text_color"
+        android:text="@string/update_profile_picture" />
+
+    <View style="@style/Divider"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp"/>
 
     <TextView
-
         android:id="@+id/removeProfilePicture"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -41,9 +43,7 @@
         android:layout_marginTop="10dp"
         android:textSize="17sp"
         android:layout_marginBottom="30dp"
-        android:text="@string/remove_profile_picture"
-         />
-
-
+        android:textColor="@color/text_color"
+        android:text="@string/remove_profile_picture" />
 
 </LinearLayout>

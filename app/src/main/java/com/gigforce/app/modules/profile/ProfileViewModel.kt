@@ -101,12 +101,18 @@ class ProfileViewModel: ViewModel() {
         profileFirebaseRepository.setProfileExperience(experiences)
     }
 
+    fun setProfileAvatarName(profileAvatarName: String) {
+        profileFirebaseRepository.setProfileAvatarName(profileAvatarName)
+    }
+
+
     fun removeProfileExperience(experience: Experience) {
         profileFirebaseRepository.removeProfileExperience(experience)
     }
 
     init {
         uid = FirebaseAuth.getInstance().currentUser?.uid!!
+        Log.d("ProfileViewModel", uid)
         //uid = "UeXaZV3KctuZ8xXLCKGF" // Test user
         getProfileData()
     }

@@ -30,7 +30,7 @@
         android:id="@+id/experienceExpandedFragment"
         android:name="com.gigforce.app.modules.profile.ExperienceExpandedFragment"
         android:label="ExperienceExpandedFragment"
-        tools:layout="@layout/fragment_profile_experience_expanded" >
+        tools:layout="@layout/fragment_profile_experience_expanded">
         <action
             android:id="@+id/action_experienceExpandedFragment_to_editExperienceBottomSheet"
             app:destination="@id/editExperienceBottomSheet" />
@@ -73,7 +73,7 @@
         android:id="@+id/chatsHomeFragment"
         android:name="com.gigforce.app.modules.chat.ChatsHomeFragment"
         android:label="chats_home_fragment"
-        tools:layout="@layout/fragment_chats_home" >
+        tools:layout="@layout/fragment_chats_home">
         <action
             android:id="@+id/action_chatsHomeFragment_to_chatFragment"
             app:destination="@id/chatFragment" />
@@ -135,7 +135,7 @@
     <fragment
         android:id="@+id/OBSlidesFragment"
         android:name="com.gigforce.app.modules.onboarding.OBSlidesFragment"
-        android:label="OBSlidesFragment" >
+        android:label="OBSlidesFragment">
         <action
             android:id="@+id/action_OBSlidesFragment_to_createInitProfile"
             app:destination="@id/createInitProfile" />
@@ -152,11 +152,11 @@
     <fragment
         android:id="@+id/verifyOTP"
         android:name="com.gigforce.app.modules.auth.ui.main.VerifyOTP"
-        android:label="VerifyOTP" >
+        android:label="VerifyOTP">
         <argument
             android:name="verificationId"
-            app:argType="string"
-            android:defaultValue='""' />
+            android:defaultValue='""'
+            app:argType="string" />
         <action
             android:id="@+id/action_verifyOTP_to_homeScreenIcons"
             app:destination="@id/homeScreenIcons" />
@@ -164,7 +164,7 @@
     <fragment
         android:id="@+id/homeScreenFragment"
         android:name="com.gigforce.app.modules.homescreen.HomeScreenFragment"
-        android:label="HomeScreenFragment" >
+        android:label="HomeScreenFragment">
         <action
             android:id="@+id/action_homeScreenFragment_to_profileFragment"
             app:destination="@id/profileFragment" />
@@ -172,7 +172,7 @@
     <fragment
         android:id="@+id/homeScreenIcons"
         android:name="com.gigforce.app.modules.homescreen.HomeScreenIcons"
-        android:label="HomeScreenIcons" >
+        android:label="HomeScreenIcons">
         <action
             android:id="@+id/action_homeScreenIcons_to_profileFragment"
             app:destination="@id/profileFragment" />
@@ -184,7 +184,7 @@
         android:id="@+id/addTagBottomSheet"
         android:name="com.gigforce.app.modules.profile.AddTagBottomSheet"
         android:label="AddTagBottomSheet"
-        tools:layout="@layout/add_tag_bottom_sheet"/>
+        tools:layout="@layout/add_tag_bottom_sheet" />
     <dialog
         android:id="@+id/addExperienceBottomSheet"
         android:name="com.gigforce.app.modules.profile.AddExperienceBottomSheet"
@@ -192,7 +192,7 @@
     <fragment
         android:id="@+id/verification"
         android:name="com.gigforce.app.modules.verification.Verification"
-        android:label="Verification" >
+        android:label="Verification">
         <action
             android:id="@+id/action_verification_to_aadhaarUpload"
             app:destination="@id/aadhaarUpload" />
@@ -203,15 +203,16 @@
     <fragment
         android:id="@+id/Login"
         android:name="com.gigforce.app.modules.auth.ui.main.Login"
-        android:label="Login" >
+        android:label="Login">
         <action
             android:id="@+id/action_login2_to_verifyOTP"
             app:destination="@id/verifyOTP" />
     </fragment>
+
     <fragment
         android:id="@+id/panUpload"
         android:name="com.gigforce.app.modules.verification.PanUpload"
-        android:label="PanUpload" >
+        android:label="PanUpload">
         <action
             android:id="@+id/action_panUpload_to_verificationDone"
             app:destination="@id/verificationDone" />
@@ -219,15 +220,16 @@
     <fragment
         android:id="@+id/aadhaarUpload"
         android:name="com.gigforce.app.modules.verification.AadhaarUpload"
-        android:label="AadhaarUpload" >
+        android:label="AadhaarUpload">
         <action
             android:id="@+id/action_aadhaarUpload_to_uploadDropDown"
             app:destination="@id/uploadDropDown" />
     </fragment>
+
     <dialog
         android:id="@+id/editEducationBottomSheet"
         android:name="com.gigforce.app.modules.profile.EditEducationBottomSheet"
-        android:label="EditEducationBottomSheet" >
+        android:label="EditEducationBottomSheet">
         <argument
             android:name="array_location"
             app:argType="string" />
@@ -235,7 +237,7 @@
     <dialog
         android:id="@+id/editAchievementBottomSheet"
         android:name="com.gigforce.app.modules.profile.EditAchievementBottomSheet"
-        android:label="EditAchievementBottomSheet" >
+        android:label="EditAchievementBottomSheet">
         <argument
             android:name="array_location"
             app:argType="string" />
@@ -243,7 +245,7 @@
     <fragment
         android:id="@+id/DLUpload"
         android:name="com.gigforce.app.modules.verification.DLUpload"
-        android:label="DLUpload" >
+        android:label="DLUpload">
         <action
             android:id="@+id/action_DLUpload_to_bankUpload2"
             app:destination="@id/bankUpload2" />
@@ -251,7 +253,7 @@
     <dialog
         android:id="@+id/editSkillBottomSheet"
         android:name="com.gigforce.app.modules.profile.EditSkillBottomSheet"
-        android:label="EditSkillBottomSheet" >
+        android:label="EditSkillBottomSheet">
         <argument
             android:name="array_location"
             app:argType="string" />
@@ -259,7 +261,7 @@
     <dialog
         android:id="@+id/editExperienceBottomSheet"
         android:name="com.gigforce.app.modules.profile.EditExperienceBottomSheet"
-        android:label="EditExperienceBottomSheet" >
+        android:label="EditExperienceBottomSheet">
         <argument
             android:name="array_location"
             app:argType="string" />
@@ -271,7 +273,7 @@
     <fragment
         android:id="@+id/bankUpload2"
         android:name="com.gigforce.app.modules.verification.BankUpload"
-        android:label="BankUpload" >
+        android:label="BankUpload">
         <action
             android:id="@+id/action_bankUpload2_to_panUpload"
             app:destination="@id/panUpload" />
@@ -279,9 +281,10 @@
     <fragment
         android:id="@+id/uploadDropDown"
         android:name="com.gigforce.app.modules.verification.UploadDropDown"
-        android:label="UploadDropDown" >
+        android:label="UploadDropDown">
         <action
             android:id="@+id/action_uploadDropDown_to_bankUpload2"
             app:destination="@id/bankUpload2" />
     </fragment>
 </navigation>
+
