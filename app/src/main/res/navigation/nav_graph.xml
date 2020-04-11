@@ -193,13 +193,12 @@
         android:name="com.gigforce.app.modules.verification.Verification"
         android:label="Verification" >
         <action
-            android:id="@+id/action_verification_to_addVerificationContact"
-            app:destination="@id/verificationcontact" />
+            android:id="@+id/action_verification_to_aadhaarUpload"
+            app:destination="@id/aadhaarUpload" />
+        <action
+            android:id="@+id/action_verification_to_uploadDropDown"
+            app:destination="@id/uploadDropDown" />
     </fragment>
-    <fragment
-        android:id="@+id/verificationcontact"
-        android:name="com.gigforce.app.modules.verification.AddVerificationContact"
-        android:label="AddVerificationContact" />
     <fragment
         android:id="@+id/Login"
         android:name="com.gigforce.app.modules.auth.ui.main.Login"
@@ -209,6 +208,22 @@
             app:destination="@id/verifyOTP" />
     </fragment>
     <fragment
+        android:id="@+id/panUpload"
+        android:name="com.gigforce.app.modules.verification.PanUpload"
+        android:label="PanUpload" >
+        <action
+            android:id="@+id/action_panUpload_to_verificationDone"
+            app:destination="@id/verificationDone" />
+    </fragment>
+    <fragment
+        android:id="@+id/aadhaarUpload"
+        android:name="com.gigforce.app.modules.verification.AadhaarUpload"
+        android:label="AadhaarUpload" >
+        <action
+            android:id="@+id/action_aadhaarUpload_to_uploadDropDown"
+            app:destination="@id/uploadDropDown" />
+    </fragment>
+<fragment
         android:id="@+id/editEducationBottomSheet"
         android:name="com.gigforce.app.modules.profile.EditEducationBottomSheet"
         android:label="EditEducationBottomSheet" >
@@ -224,14 +239,14 @@
             android:name="array_location"
             app:argType="string" />
     </fragment>
-    <fragment
+    <dialog
         android:id="@+id/editSkillBottomSheet"
         android:name="com.gigforce.app.modules.profile.EditSkillBottomSheet"
         android:label="EditSkillBottomSheet" >
         <argument
             android:name="array_location"
             app:argType="string" />
-    </fragment>
+    </dialog>
     <dialog
         android:id="@+id/editExperienceBottomSheet"
         android:name="com.gigforce.app.modules.profile.EditExperienceBottomSheet"
@@ -240,4 +255,24 @@
             android:name="array_location"
             app:argType="string" />
     </dialog>
+    <fragment
+        android:id="@+id/verificationDone"
+        android:name="com.gigforce.app.modules.verification.VerificationDone"
+        android:label="VerificationDone" />
+    <fragment
+        android:id="@+id/bankUpload2"
+        android:name="com.gigforce.app.modules.verification.BankUpload"
+        android:label="BankUpload" >
+        <action
+            android:id="@+id/action_bankUpload2_to_panUpload"
+            app:destination="@id/panUpload" />
+    </fragment>
+    <fragment
+        android:id="@+id/uploadDropDown"
+        android:name="com.gigforce.app.modules.verification.UploadDropDown"
+        android:label="UploadDropDown" >
+        <action
+            android:id="@+id/action_uploadDropDown_to_bankUpload2"
+            app:destination="@id/bankUpload2" />
+    </fragment>
 </navigation>
