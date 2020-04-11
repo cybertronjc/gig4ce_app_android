@@ -18,16 +18,19 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:text="TextView"
+            style="@style/LatoWhiteHeading"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <View
             android:id="@+id/divider2"
-            android:layout_width="409dp"
+            android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="15dp"
-            android:background="?android:attr/listDivider"
+            android:layout_marginStart="8dp"
+            app:layout_goneMarginEnd="8dp"
+            android:background="#ffffff"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/card_title" />
@@ -52,6 +55,7 @@
             android:layout_marginEnd="16dp"
             android:minHeight="100dp"
             android:text="TextView"
+            style="@style/LatoWhiteRegular"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/divider2" />
@@ -64,6 +68,7 @@
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="8dp"
             android:text="@string/view_more_text"
+            style="@style/LatoWhiteBottom"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/card_content" />

@@ -3,12 +3,13 @@ package com.gigforce.app.modules.profile
 import android.content.Context
 import android.util.AttributeSet
 import android.view.View
+import android.widget.LinearLayout
 import androidx.cardview.widget.CardView
 import androidx.navigation.findNavController
 import com.gigforce.app.R
 import kotlinx.android.synthetic.main.profile_nav_bar.view.*
 
-class ProfileNavBar: CardView {
+class ProfileNavBar: LinearLayout {
     constructor(context: Context): super(context)
     constructor(context: Context, attrs: AttributeSet): super(context, attrs)
 

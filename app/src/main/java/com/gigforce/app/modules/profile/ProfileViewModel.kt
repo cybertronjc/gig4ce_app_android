@@ -57,8 +57,13 @@ class ProfileViewModel: ViewModel() {
         profileFirebaseRepository.addNewTag(tag)
     }
 
+<<<<<<< HEAD
     fun setProfileAvatarName(profileAvatarName: String) {
         profileFirebaseRepository.setProfileAvatarName(profileAvatarName)
+=======
+    fun removeProfileTag(tag: String) {
+        profileFirebaseRepository.removeProfileTag(tag)
+>>>>>>> week2april20
     }
 
     fun setProfileTag(tag: String) {
@@ -75,6 +80,10 @@ class ProfileViewModel: ViewModel() {
 
     fun setProfileSkill(skills: ArrayList<String>) {
         profileFirebaseRepository.setProfileSkill(skills)
+    }
+
+    fun removeProfileSkill(skill: String) {
+        profileFirebaseRepository.removeProfileSkill(skill)
     }
 
     fun setProfileAchievement(achievements: ArrayList<Achievement>) {
@@ -97,8 +106,18 @@ class ProfileViewModel: ViewModel() {
         profileFirebaseRepository.setProfileExperience(experiences)
     }
 
+    fun setProfileAvatarName(profileAvatarName: String) {
+        profileFirebaseRepository.setProfileAvatarName(profileAvatarName)
+    }
+
+
+    fun removeProfileExperience(experience: Experience) {
+        profileFirebaseRepository.removeProfileExperience(experience)
+    }
+
     init {
         uid = FirebaseAuth.getInstance().currentUser?.uid!!
+        Log.d("ProfileViewModel", uid)
         //uid = "UeXaZV3KctuZ8xXLCKGF" // Test user
         getProfileData()
     }

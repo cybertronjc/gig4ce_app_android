@@ -10,14 +10,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
-import com.bumptech.glide.request.RequestOptions
 import com.gigforce.app.R
-import com.gigforce.app.utils.GlideApp
 import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.StorageReference
-import kotlinx.android.synthetic.main.fragment_profile_about_expanded.view.*
 import kotlinx.android.synthetic.main.fragment_profile_education_expanded.view.*
-import kotlinx.android.synthetic.main.fragment_profile_main_expanded.view.*
 import kotlinx.android.synthetic.main.profile_card_background.view.*
 import java.text.SimpleDateFormat
 
@@ -51,7 +46,8 @@ class EducationExpandedFragment: Fragment() {
             var educationString: String = ""
             var format = SimpleDateFormat("dd/MM/yyyy")
 
-            for (education in profile.Education!!) {
+            var educations = profile.Education!!.sortedWith(compareBy {it.startYear!!})
+            for (education in educations) {
                 educationString += education.institution + "\n"
                 educationString += education.degree + " - " + education.course + "\n"
                 educationString += format.format(education.startYear!!) + " - " + format.format(education.endYear!!) + "\n\n"
@@ -67,16 +63,17 @@ class EducationExpandedFragment: Fragment() {
 //                skillString += skill.nameOfSkill + "\n\n"
                 skillString += skill + "\n\n"
             }
+            layout.skill_card.nextDestination = R.id.editSkillBottomSheet
             layout.skill_card.cardTitle = "Skills"
             layout.skill_card.cardContent = skillString
             layout.skill_card.cardBottom = "+ Add Skill"
 
             var achievementString: String = ""
+            var achievements = profile.Achievement!!.sortedWith(compareBy {it.year})
             for (achievement in profile.Achievement!!) {
                 achievementString += achievement.title + "\n"
                 achievementString += achievement.issuingAuthority + "\n"
                 achievementString += achievement.location + "\n"
-                //achievementString += format.format(achievement.year!!) + "\n\n"
                 achievementString += achievement.year + "\n\n"
             }
             layout.achievement_card.nextDestination = R.id.editAchievementBottomSheet

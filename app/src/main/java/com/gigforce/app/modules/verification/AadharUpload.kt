@@ -26,10 +26,10 @@ import com.gigforce.app.modules.auth.ui.main.Login
 import com.gigforce.app.modules.photocrop.*
 import com.gigforce.app.modules.verification.Verification
 import com.gigforce.app.modules.verification.VerificationViewModel
+
 import com.gigforce.app.modules.verification.models.OCRDocData
 import com.gigforce.app.modules.verification.models.PostDataOCR
 import com.gigforce.app.modules.verification.service.RetrofitFactory
-//import com.gigforce.app.modules.verification.models.VerificationData
 import com.gigforce.app.utils.GlideApp
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
