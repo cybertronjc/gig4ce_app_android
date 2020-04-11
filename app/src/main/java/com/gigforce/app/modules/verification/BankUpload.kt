@@ -2,7 +2,6 @@ package com.gigforce.app.modules.verification
 
 import android.os.Build
 import android.os.Bundle
-import android.text.TextUtils
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -14,7 +13,6 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
 import com.gigforce.app.modules.verification.models.Bank
-import kotlinx.android.synthetic.main.layout_verification.view.*
 import kotlinx.android.synthetic.main.layout_verification_bank.view.*
 import java.util.regex.Matcher
 import java.util.regex.Pattern
@@ -140,9 +138,9 @@ class BankUpload : Fragment() {
 
             viewModel = ViewModelProviders.of(this).get(VerificationViewModel::class.java)
 
-            layout.button_veri_bank_cancel.setOnClickListener {
+            layout.button_veri_bank_back.setOnClickListener {
                 resetLayout()
-                findNavController().navigate(R.id.panUpload)
+                findNavController().navigate(R.id.uploadDropDown)
             }
 
             layout.button_veri_bank_save.setOnClickListener {
@@ -171,7 +169,7 @@ class BankUpload : Fragment() {
                     saveNewBanks()
                     resetLayout()
                     layout.pbBarBank.setProgress(100,true)
-                    findNavController().navigate(R.id.verificationDone)
+                    findNavController().navigate(R.id.panUpload)
                 }
             }
 

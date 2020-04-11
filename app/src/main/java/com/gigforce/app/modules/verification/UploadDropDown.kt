@@ -122,7 +122,8 @@ class UploadDropDown: Fragment() {
         ddFront = layout.findViewById(R.id.VeriDD_front)
         ddBack = layout.findViewById(R.id.VeriDD_back)
         val photoCropIntent = Intent(context, PhotoCrop::class.java)
-
+        photoCropIntent.putExtra("purpose","verification")
+        photoCropIntent.putExtra("uid",viewModel.uid)
         photoCropIntent.putExtra("detectFace",0)
 
         spinner?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -189,7 +190,7 @@ class UploadDropDown: Fragment() {
 //        }
 
         buttonVeriDD2.setOnClickListener {
-            findNavController().navigate(R.id.verification);
+            findNavController().navigate(R.id.aadhaarUpload);
         }
 
         buttonVeriDD1.setOnClickListener {

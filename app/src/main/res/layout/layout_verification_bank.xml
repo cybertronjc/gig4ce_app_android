@@ -164,11 +164,11 @@
         android:textAlignment="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/button_veri_bank_cancel"
+        app:layout_constraintStart_toEndOf="@+id/button_veri_bank_back"
         app:layout_constraintTop_toBottomOf="@+id/add_veri_bank_name" />
 
     <Button
-        android:id="@+id/button_veri_bank_cancel"
+        android:id="@+id/button_veri_bank_back"
         android:layout_width="156dp"
         android:layout_height="48dp"
         android:layout_marginStart="16dp"

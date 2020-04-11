@@ -16,7 +16,7 @@ class ProfileViewModel: ViewModel() {
     var profileFirebaseRepository = ProfileFirebaseRepository()
     var userProfileData: MutableLiveData<ProfileData> = MutableLiveData<ProfileData>()
     var Tags: MutableLiveData<TagData> = MutableLiveData<TagData>()
-    val uid: String
+    lateinit var uid: String
 
     fun getProfileData(): MutableLiveData<ProfileData> {
         profileFirebaseRepository.getProfile().addSnapshotListener(EventListener<DocumentSnapshot> {
@@ -104,7 +104,6 @@ class ProfileViewModel: ViewModel() {
     fun setProfileAvatarName(profileAvatarName: String) {
         profileFirebaseRepository.setProfileAvatarName(profileAvatarName)
     }
-
 
     fun removeProfileExperience(experience: Experience) {
         profileFirebaseRepository.removeProfileExperience(experience)
