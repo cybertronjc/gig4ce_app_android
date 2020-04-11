@@ -1,5 +1,6 @@
 package com.gigforce.app.modules.profile
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,7 +14,6 @@ import com.gigforce.app.R
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.chip.Chip
 import kotlinx.android.synthetic.main.add_tag_bottom_sheet.view.*
-import kotlinx.android.synthetic.main.fragment_profile_main_expanded.view.*
 
 class AddTagBottomSheet: BottomSheetDialogFragment() {
     companion object {
@@ -50,24 +50,42 @@ class AddTagBottomSheet: BottomSheetDialogFragment() {
         viewModel.userProfileData.observe (this, Observer {profile ->
             layout.all_tags.removeAllViews()
             for (tag in profile.Tags!!) {
-                val chip = Chip(this.context)
-                chip.text = " $tag "
-                chip.isClickable = false
+                val chip = addChip(this.context!!, tag)
+                chip.setCloseIconResource(R.drawable.ic_close)
+                chip.isCloseIconVisible = true
+
+                chip.setOnCloseIconClickListener{
+                    viewModel.removeProfileTag(tag)
+                }
+
                 layout.all_tags.addView(chip)
             }
         })
 
         layout.add_tag_button.setOnClickListener {
-            setProfileTag(layout.add_tag_new_tag.text.toString())
-            if(!tags.contains(layout.add_tag_new_tag.text.toString())) {
-                addNewTag(layout.add_tag_new_tag.text.toString())
+            if (layout.add_tag_new_tag.text.toString() != "") {
+                setProfileTag(layout.add_tag_new_tag.text.toString())
+                if (!tags.contains(layout.add_tag_new_tag.text.toString())) {
+                    addNewTag(layout.add_tag_new_tag.text.toString())
+                }
+                layout.add_tag_new_tag.setText("")
             }
-            layout.add_tag_new_tag.setText("")
         }
 
         layout.add_tag_back_button.setOnClickListener {
             findNavController().navigate(R.id.profileFragment)
         }
+    }
+
+    private fun addChip(context: Context, name: String): Chip {
+        var chip = Chip(context)
+        chip.text = " #$name "
+        chip.isClickable = false
+        chip.setTextAppearanceResource(R.style.chipTextDefaultColor)
+        chip.setChipStrokeColorResource(R.color.colorPrimary)
+        chip.setChipStrokeWidthResource(R.dimen.border_width)
+        chip.setChipBackgroundColorResource(R.color.fui_transparent)
+        return chip
     }
 
     fun setProfileTag(tag: String) {

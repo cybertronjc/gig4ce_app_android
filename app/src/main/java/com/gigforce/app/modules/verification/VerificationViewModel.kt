@@ -42,6 +42,18 @@ class VerificationViewModel: ViewModel() {
         veriFirebaseRepository.setVeriContact(contacts)
     }
 
+    fun setVerificationDL(dls: ArrayList<DL>) {
+        veriFirebaseRepository.setVeriDL(dls)
+    }
+
+    fun setVerificationVoterID(voterids: ArrayList<VoterID>) {
+        veriFirebaseRepository.setVeriVoterID(voterids)
+    }
+
+    fun setVerificationPassport(passports: ArrayList<Passport>) {
+        veriFirebaseRepository.setVeriPassport(passports)
+    }
+
     fun setBank(banks: ArrayList<Bank>) {
         veriFirebaseRepository.setBank(banks)
     }

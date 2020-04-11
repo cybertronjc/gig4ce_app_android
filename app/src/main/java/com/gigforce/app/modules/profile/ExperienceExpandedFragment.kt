@@ -53,6 +53,7 @@ class ExperienceExpandedFragment: Fragment() {
                 experienceString += exp.location + "\n"
                 experienceString += format.format(exp.startDate!!) + "-" + format.format(exp.endDate!!) + "\n\n"
             }
+            layout.experience_card.nextDestination = R.id.editExperienceBottomSheet
             layout.experience_card.cardTitle = "Experience"
             layout.experience_card.cardContent = experienceString
             layout.experience_card.cardBottom = "+ Add Experience"

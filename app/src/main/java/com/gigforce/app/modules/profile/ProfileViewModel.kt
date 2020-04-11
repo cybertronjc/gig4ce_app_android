@@ -57,6 +57,10 @@ class ProfileViewModel: ViewModel() {
         profileFirebaseRepository.addNewTag(tag)
     }
 
+    fun removeProfileTag(tag: String) {
+        profileFirebaseRepository.removeProfileTag(tag)
+    }
+
     fun setProfileTag(tag: String) {
         profileFirebaseRepository.setProfileTags(tag)
     }
@@ -71,6 +75,10 @@ class ProfileViewModel: ViewModel() {
 
     fun setProfileSkill(skills: ArrayList<String>) {
         profileFirebaseRepository.setProfileSkill(skills)
+    }
+
+    fun removeProfileSkill(skill: String) {
+        profileFirebaseRepository.removeProfileSkill(skill)
     }
 
     fun setProfileAchievement(achievements: ArrayList<Achievement>) {
@@ -91,6 +99,10 @@ class ProfileViewModel: ViewModel() {
 
     fun setProfileExperience(experiences: ArrayList<Experience>) {
         profileFirebaseRepository.setProfileExperience(experiences)
+    }
+
+    fun removeProfileExperience(experience: Experience) {
+        profileFirebaseRepository.removeProfileExperience(experience)
     }
 
     init {
