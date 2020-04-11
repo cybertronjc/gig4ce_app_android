@@ -90,6 +90,7 @@
 //        val imageBytes: ByteArray = baos.toByteArray()
 //        return Base64.encodeToString(imageBytes, Base64.DEFAULT);
 //    }
+
 //    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
 //        if (resultCode == Activity.RESULT_OK && requestCode == IMAGE_PICK_CODE) {
 //            val uri = data?.data
