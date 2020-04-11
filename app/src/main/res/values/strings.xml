@@ -150,6 +150,9 @@
     <!-- Generic strings -->
     <string name="cancel_text">Cancel</string>
     <string name="save_text">Save</string>
+    <string name="back_text">Back</string>
+    <string name="okay_text">Okay</string>
+    <string name="okay_text_cap">OKAY</string>
     <string name="add_more_text">+ Add more</string>
     <string name="verified_text">Verified</string>
     <string name="tags_text">Tags of User</string>
@@ -169,4 +172,36 @@
     <string name="year" />
     <string name="year_text">Year</string>
     <string name="edit_skill">Edit Skill</string>
+
+    <!-- Verification -->
+    <string name="veriScreenTitle">Hello Giger!</string>
+    <string name="veri_address_title">"Step 1 : Please add your Aadhaar Address"</string>
+    <string name="veri_add_address">"Address"</string>
+
+    <string name="veri_add_doc_front">"Front Side"</string>
+    <string name="veri_add_doc_back">"Back Side"</string>
+    <string name="veri_pan_title">"Step 2 : Upload your Pan"</string>
+    <string name="veri_aadhaar_title">"Step 3 : Upload your Aadhaar"</string>
+    <string name="veri_no_aadhaar">"No Aadhaar! Skip>>"</string>
+    <string name="veri_dl_title">"Step 4 : Upload your Driving License"</string>
+    <string name="veri_bank_title">"Step 5 : Please add your Bank Details"</string>
+    <string name="veri_add_bank">"Add Bank Details"</string>
+    <string name="veri_done">Hurray!!!\nKYC Documents submitted.\nWe will let you know once Verified.</string>
+    <!-- Verification hint texts -->
+    <string name="veri_hint_address_line1">"Address Line1"</string>
+    <string name="veri_hint_address_line2">"Address Line2"</string>
+    <string name="veri_hint_city">City</string>
+    <string name="veri_hint_state">State</string>
+    <string name="veri_hint_pin">Pincode</string>
+    <string name="veri_hint_account_name">Name of the Account Holder</string>
+    <string name="veri_hint_account_no">Account Number</string>
+    <string name="veri_hint_re_account_no">Re-enter Account Number</string>
+    <string name="veri_hint_ifsc">IFSC code</string>
+    <string name="veri_hint_bank_name">Name of the Bank</string>
+
+    <!--    Profile Picture Bottom Sheet-->
+    <string name="select_profile_picture">Select Profile Picture</string>
+    <string name="update_profile_picture">Update Profile Picture</string>
+    <string name="remove_profile_picture">Remove Profile Picture</string>
+    <string name="profile_picture">Profile Picture</string>
 </resources>

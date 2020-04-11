@@ -2,48 +2,29 @@ package com.gigforce.app.modules.verification
 
 import android.util.Log
 import com.gigforce.app.modules.profile.models.*
-import com.gigforce.app.modules.verification.models.Contact_Verification
-import com.gigforce.app.modules.verification.models.VerificationData
+import com.gigforce.app.modules.verification.models.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.*
-import com.google.firebase.firestore.model.Document
-import javax.security.auth.callback.Callback
 
 class VeriFirebaseRepository {
 
     var firebaseDB = FirebaseFirestore.getInstance()
     var uid = FirebaseAuth.getInstance().currentUser?.uid!!
 
-    var verificationCollectionName = "Verification"
+    var collection = "Verification"
 
-    fun getProfile(): DocumentReference {
-        return firebaseDB.collection(verificationCollectionName).document(uid)
+    fun setCardAvatar(cardAvatarName: String) {
+        firebaseDB.collection(collection)
+            .document(uid).update("cardAvatarName",cardAvatarName)
     }
 
-    fun setProfileEducation(education: ArrayList<Education>) {
-        for(ed in education) {
-            firebaseDB.collection(verificationCollectionName)
-                .document(uid).update("Education", FieldValue.arrayUnion(ed))
-        }
+    fun getVerificationData(): DocumentReference {
+        return firebaseDB.collection(collection).document(uid)
     }
 
-    fun setProfileSkill(skills: ArrayList<String>) {
-        for(sk in skills) {
-            firebaseDB.collection(verificationCollectionName)
-                .document(uid).update("Skill", FieldValue.arrayUnion(sk))
-        }
-    }
-
-    fun setProfileAchievement(achievements: ArrayList<Achievement>) {
-        for (ach in achievements) {
-            firebaseDB.collection(verificationCollectionName)
-                .document(uid).update("Achievement", FieldValue.arrayUnion(ach))
-        }
-    }
-
-    fun setVeriContact(contacts: ArrayList<Contact_Verification>) {
+    fun setVeriContact(contacts: ArrayList<Address>) {
         for (contact in contacts) {
-            firebaseDB.collection(verificationCollectionName)
+            firebaseDB.collection(collection)
                 .document(uid).update("Contact", FieldValue.arrayUnion(contact))
                 .addOnSuccessListener {
                     Log.d("REPOSITORY", "contact added successfully!")
@@ -54,22 +35,55 @@ class VeriFirebaseRepository {
         }
     }
 
-    fun setProfileLanguage(languages: ArrayList<Language>) {
-        for (lang in languages) {
-            firebaseDB.collection(verificationCollectionName)
-                .document(uid).update("Language", FieldValue.arrayUnion(lang))
+    fun setVeriDL(dls: ArrayList<DL>) {
+        for (dl in dls) {
+            firebaseDB.collection(collection)
+                .document(uid).update("Contact", FieldValue.arrayUnion(dl))
+                .addOnSuccessListener {
+                    Log.d("REPOSITORY", "contact added successfully!")
+                }
+                .addOnFailureListener{
+                        exception ->  Log.d("Repository", exception.toString())
+                }
         }
     }
 
-    fun setProfileExperience(experiences: ArrayList<Experience>) {
-        for (exp in experiences) {
-            firebaseDB.collection(verificationCollectionName)
-                .document(uid).update("Experience", FieldValue.arrayUnion(exp))
+    fun setVeriVoterID(voterids: ArrayList<VoterID>) {
+        for (voterid in voterids) {
+            firebaseDB.collection(collection)
+                .document(uid).update("Contact", FieldValue.arrayUnion(voterid))
+                .addOnSuccessListener {
+                    Log.d("REPOSITORY", "contact added successfully!")
+                }
+                .addOnFailureListener{
+                        exception ->  Log.d("Repository", exception.toString())
+                }
         }
     }
 
-    fun setProfileTags(tag: String) {
-        firebaseDB.collection(verificationCollectionName)
-            .document(uid).update("Tags", FieldValue.arrayUnion(tag))
+    fun setVeriPassport(passports: ArrayList<Passport>) {
+        for (passport in passports) {
+            firebaseDB.collection(collection)
+                .document(uid).update("Contact", FieldValue.arrayUnion(passport))
+                .addOnSuccessListener {
+                    Log.d("REPOSITORY", "contact added successfully!")
+                }
+                .addOnFailureListener{
+                        exception ->  Log.d("Repository", exception.toString())
+                }
+        }
+    }
+
+    fun setBank(banks: ArrayList<Bank>) {
+        for (bank in banks) {
+            firebaseDB.collection(collection)
+                .document(uid).update("Bank", FieldValue.arrayUnion(bank))
+                .addOnSuccessListener {
+                    Log.d("REPOSITORY", "contact added successfully!")
+                }
+                .addOnFailureListener { exception ->
+                    Log.d("Repository", exception.toString())
+                }
+        }
     }
 }

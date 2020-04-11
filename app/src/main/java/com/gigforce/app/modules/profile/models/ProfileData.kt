@@ -8,6 +8,7 @@ data class ProfileData(
     var aboutMe: String = "",
     var email: String = "",
     var bio: String = "",
+    var profileAvatarName: String = "",
     var isVerified: Boolean = false,
     var Education: ArrayList<Education>? = null,
     var Skill: ArrayList<String>? = null,
@@ -19,6 +20,7 @@ data class ProfileData(
     var connections: Int = 0,
     var rating: Rating? = null,
     var tasksDone: Int = 0
+
 ) {
 
 }
