@@ -232,12 +232,12 @@
             android:name="array_location"
             app:argType="string" />
     </fragment>
-    <fragment
+    <dialog
         android:id="@+id/editExperienceBottomSheet"
         android:name="com.gigforce.app.modules.profile.EditExperienceBottomSheet"
         android:label="EditExperienceBottomSheet" >
         <argument
             android:name="array_location"
             app:argType="string" />
-    </fragment>
+    </dialog>
 </navigation>
