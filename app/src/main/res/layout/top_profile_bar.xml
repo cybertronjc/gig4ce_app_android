@@ -11,15 +11,17 @@
         android:layout_height="match_parent"
         android:background="@drawable/bg_top_card">
 
-        <Button
+        <com.google.android.material.chip.Chip
             android:id="@+id/button2"
-            style="@style/Widget.MaterialComponents.Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
             android:layout_marginEnd="16dp"
-            android:background="@drawable/bg_nav"
+            android:background="#ffffff"
+            android:textColor="#00ff00"
             android:text="Verified"
+            app:chipStrokeColor="#00ff00"
+            app:chipStrokeWidth="1dp"
             app:layout_constraintEnd_toStartOf="@+id/profile_image"
             app:layout_constraintTop_toBottomOf="@+id/user_name" />
 
@@ -53,6 +55,7 @@
             android:layout_marginTop="32dp"
             android:layout_marginEnd="16dp"
             android:text="MOCK NAME"
+            style="@style/LatoWhiteHeading"
             app:layout_constraintEnd_toStartOf="@+id/profile_image"
             app:layout_constraintTop_toTopOf="@+id/profile_image" />
 

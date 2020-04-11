@@ -16,30 +16,21 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
-        android:id="@+id/add_skill_category"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:ems="10"
-        android:hint="@string/add_skill_sheet_category"
-        android:inputType="textPersonName"
-        app:layout_constraintEnd_toEndOf="@+id/textView18"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/textView18"
-        app:layout_constraintTop_toBottomOf="@+id/textView18" />
-
-    <EditText
+    <Spinner
         android:id="@+id/add_skill_name"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="36dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
         android:ems="10"
         android:hint="@string/add_skill_sheet_skill_name"
         android:inputType="textPersonName"
-        app:layout_constraintEnd_toEndOf="@+id/add_skill_category"
-        app:layout_constraintStart_toStartOf="@+id/add_skill_category"
-        app:layout_constraintTop_toBottomOf="@+id/add_skill_category" />
+        android:minWidth="150dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.048"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textView18" />
 
     <TextView
         android:id="@+id/add_skill_add_more_button"
@@ -50,22 +41,29 @@
         app:layout_constraintStart_toStartOf="@+id/add_skill_name"
         app:layout_constraintTop_toBottomOf="@+id/add_skill_name" />
 
-    <Button
-        android:id="@+id/add_skill_cancel_button"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="@string/cancel_text"
-        app:layout_constraintStart_toStartOf="@+id/add_skill_add_more_button"
-        app:layout_constraintTop_toBottomOf="@+id/add_skill_add_more_button" />
+        app:layout_constraintTop_toBottomOf="@id/add_skill_add_more_button"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/add_skill_cancel_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_weight="1"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:text="@string/cancel_text" />
 
-    <Button
-        android:id="@+id/add_skill_save_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:text="@string/save_text"
-        app:layout_constraintStart_toEndOf="@+id/add_skill_cancel_button"
-        app:layout_constraintTop_toBottomOf="@+id/add_skill_add_more_button" />
+        <Button
+            android:id="@+id/add_skill_save_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/save_text"
+            android:layout_weight="1"/>
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

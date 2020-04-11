@@ -116,18 +116,35 @@ class EditAchievementBottomSheet: BottomSheetDialogFragment() {
         }
 
         layout.save.setOnClickListener {
-            Log.d("EditAchievement", "Editing Achievement")
-            viewModel.removeProfileAchievement(achievement!!)
-            var newAchievement: ArrayList<Achievement> = ArrayList()
-            newAchievement.add(Achievement(
-                title = layout.title.text.toString(),
-                issuingAuthority = layout.authority.text.toString(),
-                location = selectedLocation,
-                year = selectedYear
-            ))
-            viewModel.setProfileAchievement(newAchievement)
-            findNavController().navigate(R.id.educationExpandedFragment)
+            if (validateAchievement()) {
+                Log.d("EditAchievement", "Editing Achievement")
+                viewModel.removeProfileAchievement(achievement!!)
+                var newAchievement: ArrayList<Achievement> = ArrayList()
+                newAchievement.add(
+                    Achievement(
+                        title = layout.title.text.toString(),
+                        issuingAuthority = layout.authority.text.toString(),
+                        location = selectedLocation,
+                        year = selectedYear
+                    )
+                )
+                viewModel.setProfileAchievement(newAchievement)
+                findNavController().navigate(R.id.educationExpandedFragment)
+            }
         }
 
+    }
+
+    private fun validateAchievement(): Boolean {
+        if (layout.title.text.toString() == "") {
+            return false
+        }
+        if (layout.authority.text.toString() == "") {
+            return false
+        }
+        if (layout.year.toString() == "") {
+            return false
+        }
+        return true
     }
 }

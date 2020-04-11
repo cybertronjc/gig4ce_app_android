@@ -1,139 +1,131 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#f2f2f2"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    app:cardBackgroundColor="@android:color/transparent"
-    app:cardElevation="0dp"
-    app:cardMaxElevation="0dp">
+    android:layout_height="wrap_content">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@android:color/transparent"
-        android:elevation="0dp">
+    <Space
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_weight="1"
+        android:background="@color/fui_transparent" />
 
-        <Space
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_weight="1"
-            android:background="@color/fui_transparent"/>
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/about_me"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        app:cardBackgroundColor="@android:color/transparent"
+        app:cardCornerRadius="3dp"
+        app:cardElevation="0dp"
+        app:cardMaxElevation="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/about_me"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/bg_nav"
+            android:gravity="center|center_vertical"
+            android:text="about me"
             android:textAlignment="center"
-            app:cardBackgroundColor="@android:color/transparent"
-            app:cardCornerRadius="3dp"
-            app:cardElevation="0dp"
-            app:cardMaxElevation="0dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:textIsSelectable="false" />
+    </com.google.android.material.card.MaterialCardView>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/bg_nav"
-                android:gravity="center|center_vertical"
-                android:text="about me"
-                android:textAlignment="center"
-                android:textIsSelectable="false" />
-        </com.google.android.material.card.MaterialCardView>
+    <Space
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_weight="1"
+        android:background="@color/fui_transparent"></Space>
 
-        <Space
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_weight="1"
-            android:background="@color/fui_transparent"></Space>
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/education"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:textAlignment="center"
+        app:cardBackgroundColor="@android:color/transparent"
+        app:cardCornerRadius="3dp"
+        app:cardElevation="0dp"
+        app:cardMaxElevation="0dp"
+        app:layout_constraintStart_toEndOf="@id/about_me"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/education"
+        <TextView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/bg_nav"
+            android:gravity="center|center_vertical"
+            android:text="education"
             android:textAlignment="center"
-            app:cardBackgroundColor="@android:color/transparent"
-            app:cardCornerRadius="3dp"
-            app:cardElevation="0dp"
-            app:cardMaxElevation="0dp"
-            app:layout_constraintStart_toEndOf="@id/about_me"
-            app:layout_constraintTop_toTopOf="parent">
+            android:textIsSelectable="false" />
+    </com.google.android.material.card.MaterialCardView>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:background="@drawable/bg_nav"
-                android:gravity="center|center_vertical"
-                android:text="education"
-                android:textAlignment="center"
-                android:textIsSelectable="false" />
-        </com.google.android.material.card.MaterialCardView>
+    <Space
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_weight="1"
+        android:background="@color/fui_transparent"></Space>
 
-        <Space
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_weight="1"
-            android:background="@color/fui_transparent"></Space>
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/experience"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:textAlignment="center"
+        app:cardBackgroundColor="@android:color/transparent"
+        app:cardCornerRadius="3dp"
+        app:cardElevation="0dp"
+        app:cardMaxElevation="0dp"
+        app:layout_constraintStart_toEndOf="@id/education"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/experience"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/bg_nav"
+            android:gravity="center|center_vertical"
+            android:text="experience"
             android:textAlignment="center"
-            app:cardBackgroundColor="@android:color/transparent"
-            app:cardCornerRadius="3dp"
-            app:cardElevation="0dp"
-            app:cardMaxElevation="0dp"
-            app:layout_constraintStart_toEndOf="@id/education"
-            app:layout_constraintTop_toTopOf="parent">
+            android:textIsSelectable="false" />
+    </com.google.android.material.card.MaterialCardView>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/bg_nav"
-                android:gravity="center|center_vertical"
-                android:text="experience"
-                android:textAlignment="center"
-                android:textIsSelectable="false" />
-        </com.google.android.material.card.MaterialCardView>
+    <Space
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_weight="1"
+        android:background="@color/fui_transparent"></Space>
 
-        <Space
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_weight="1"
-            android:background="@color/fui_transparent"></Space>
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/gigs"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:textAlignment="center"
+        app:cardBackgroundColor="@android:color/transparent"
+        app:cardCornerRadius="3dp"
+        app:cardElevation="0dp"
+        app:cardMaxElevation="0dp"
+        app:layout_constraintStart_toEndOf="@id/experience"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/gigs"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/bg_nav"
+            android:gravity="center|center_vertical"
+            android:text="gigs"
             android:textAlignment="center"
-            app:cardBackgroundColor="@android:color/transparent"
-            app:cardCornerRadius="3dp"
-            app:cardElevation="0dp"
-            app:cardMaxElevation="0dp"
-            app:layout_constraintStart_toEndOf="@id/experience"
-            app:layout_constraintTop_toTopOf="parent">
+            android:textIsSelectable="false" />
+    </com.google.android.material.card.MaterialCardView>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/bg_nav"
-                android:gravity="center|center_vertical"
-                android:text="gigs"
-                android:textAlignment="center"
-                android:textIsSelectable="false" />
-        </com.google.android.material.card.MaterialCardView>
+    <Space
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_weight="1"
+        android:background="@color/fui_transparent"></Space>
 
-        <Space
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_weight="1"
-            android:background="@color/fui_transparent"></Space>
-
-    </LinearLayout>
-
-</com.google.android.material.card.MaterialCardView>
+</LinearLayout>

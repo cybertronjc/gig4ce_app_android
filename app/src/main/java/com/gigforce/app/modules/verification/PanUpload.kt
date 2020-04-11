@@ -1,7 +1,10 @@
 package com.gigforce.app.modules.verification
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -13,19 +16,23 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.request.target.Target.SIZE_ORIGINAL
 import com.gigforce.app.R
-import com.gigforce.app.modules.auth.ui.main.Login
-import com.gigforce.app.modules.photocrop.*
-import com.gigforce.app.modules.verification.models.Address
+import com.gigforce.app.modules.photocrop.PhotoCrop
+import com.gigforce.app.modules.verification.UtilMethods.encodeImagesToBase64
+import com.gigforce.app.modules.verification.models.OCRDocData
+import com.gigforce.app.modules.verification.models.PostDataOCR
+import com.gigforce.app.modules.verification.service.RetrofitFactory
 import com.gigforce.app.utils.GlideApp
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
-import kotlinx.android.synthetic.main.layout_verification.view.*
+import io.reactivex.android.schedulers.AndroidSchedulers.mainThread
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.layout_verification_pancard.*
 import kotlinx.android.synthetic.main.layout_verification_pancard.view.*
+
 
 class PanUpload: Fragment() {
     companion object {
@@ -40,6 +47,9 @@ class PanUpload: Fragment() {
     private var PHOTO_CROP: Int = 45
     private var frontNotDone = 1;
     private var docUploaded = 0;
+
+    private  lateinit  var uriFront: Uri
+    private  lateinit  var uriBack: Uri
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreateView(
@@ -92,7 +102,7 @@ class PanUpload: Fragment() {
             //if() docs are not uploaded
             if(docUploaded==1)
             {
-                findNavController().navigate(R.id.aadhaarUpload)
+                findNavController().navigate(R.id.verificationDone)
             }
             else {
                 Toast.makeText(
@@ -103,30 +113,79 @@ class PanUpload: Fragment() {
         }
     }
 
+
+    @SuppressLint("CheckResult")
+    private fun idfyApiCall(postData: PostDataOCR){
+        if(this.context?.let { UtilMethods.isConnectedToInternet(it) }!!){
+            this.context?.let { UtilMethods.showLoading(it) }
+            val observable = RetrofitFactory.idfyApiCall().postOCR(postData)
+            observable.subscribeOn(Schedulers.io())
+                .observeOn(mainThread())
+                .subscribe({ response ->
+                    UtilMethods.hideLoading()
+                    //here we can load all the data required
+                    Toast.makeText(
+                        this.context,
+                        ">>>"+response!!.result!!.extraction_output!!.gender!!.toString(),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    /** response is response data class*/
+                }, { error ->
+                    UtilMethods.hideLoading()
+                    UtilMethods.showLongToast(this.context!!, error.message.toString())
+                }
+                )
+        }else{
+            UtilMethods.showLongToast(this.context!!, "No Internet Connection!")
+        }
+    }
+
     override fun onActivityResult(
         requestCode: Int,
         resultCode: Int,
         data: Intent?
     ): Unit {
-
         super.onActivityResult(requestCode, resultCode, data)
-
         /*
         For photo crop. The activity returns the the filename with which the cropped photo
         is saved on firestore. The name is updated in profile information and the new
         photo is loaded in the view
+
+        // can we combine or concatenate both front and back images into one and do one idfy call instead of two?
+        https://stackoverflow.com/questions/2738834/combining-two-png-files-in-android
         */
         if (requestCode == PHOTO_CROP && resultCode == Activity.RESULT_OK) {
             var imageName: String? = data?.getStringExtra("filename")
-            Log.v("PROFILE_FRAG_OAR", "filename is:" + imageName)
+            Log.v("PAN UPLOAD", "filename is:" + imageName)
             if (null != imageName) {
                 viewModel.setCardAvatarName(imageName.toString())
                 var filepath = "/pan/"+imageName;
                 if(frontNotDone==1){
+                    uriFront = data?.getParcelableExtra("uri")!!;
+//                    var imgb64 = UtilMethods.encodeImageToBase64(context!!,uriFront!!)
+//                    Log.d(">>>>>>>>>>>>>>BAS64N",imgb64!!);
+//                    var ocrdata = OCRDocData(imgb64,"yes")
+//                    val taskid:String = "74f4c926-250c-43ca-9c53-453e87ceacd2";
+//                    val groupid:String = "8e16424a-58fc-4ba4-ab20-5bc8e7c3c41f";
+//                    var postData = PostDataOCR(taskid,groupid,ocrdata!!)
+//                    idfyApiCall(postData)
+                    ////
                     loadImage("verification",filepath, layout.Pan_front)
                     frontNotDone = 0;
                 }
                 else{
+                    uriBack = data?.getParcelableExtra("uri")!!;
+                    Toast.makeText(
+                        this.context,
+                        "front: $uriFront"+"<<<back: $uriBack",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    var imgb64 = encodeImagesToBase64(context!!,uriFront,uriBack);
+                    var ocrdata = OCRDocData(imgb64,"yes")
+                    val taskid:String = "74f4c926-250c-43ca-9c53-453e87ceacd2";
+                    val groupid:String = "8e16424a-58fc-4ba4-ab20-5bc8e7c3c41f";
+                    var postData = PostDataOCR(taskid,groupid,ocrdata!!)
+                    idfyApiCall(postData)
                     loadImage("verification",filepath, layout.Pan_back)
                     docUploaded = 1;
                 }

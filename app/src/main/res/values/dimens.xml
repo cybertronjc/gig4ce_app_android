@@ -18,5 +18,6 @@
     <dimen name="txv_padding">16dp</dimen>
     <dimen name="padding_default">10dp</dimen>
     <dimen name="height_select_lang_item">56dp</dimen>
+    <dimen name="border_width">1dp</dimen>
 
 </resources>

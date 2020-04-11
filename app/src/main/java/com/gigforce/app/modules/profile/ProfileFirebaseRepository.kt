@@ -43,6 +43,10 @@ class ProfileFirebaseRepository {
         }
     }
 
+    fun removeProfileSkill(skill: String) {
+        firebaseDB.collection(profileCollectionName).document(uid).update("Skill", FieldValue.arrayRemove(skill))
+    }
+
     fun setProfileAchievement(achievements: ArrayList<Achievement>) {
         for (ach in achievements) {
             firebaseDB.collection(profileCollectionName)
@@ -81,6 +85,10 @@ class ProfileFirebaseRepository {
         }
     }
 
+    fun removeProfileExperience(experience: Experience) {
+        firebaseDB.collection(profileCollectionName).document(uid).update("Experience", FieldValue.arrayRemove(experience))
+    }
+
     fun setProfileTags(tag: String) {
             firebaseDB.collection(profileCollectionName)
                 .document(uid).update("Tags", FieldValue.arrayUnion(tag))
@@ -91,4 +99,8 @@ class ProfileFirebaseRepository {
             .document(uid).update("profileAvatarName",profileAvatarName)
     }
 
+    fun removeProfileTag(tag: String) {
+        firebaseDB.collection(profileCollectionName)
+            .document(uid).update("Tags", FieldValue.arrayRemove(tag))
+    }
 }

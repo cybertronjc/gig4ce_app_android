@@ -1,6 +1,7 @@
 package com.gigforce.app.modules.profile
 
 import android.os.Bundle
+import android.provider.ContactsContract
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -8,47 +9,51 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
-import com.gigforce.app.modules.profile.models.Education
-import com.gigforce.app.modules.profile.models.Skill
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import kotlinx.android.synthetic.main.add_education_bottom_sheet.view.*
-import kotlinx.android.synthetic.main.add_skill_bottom_sheet.view.*
 import kotlinx.android.synthetic.main.edit_skill_bottom_sheet.view.*
-import kotlinx.android.synthetic.main.fragment_profile_education_expanded.view.*
-import java.text.SimpleDateFormat
 
-class AddSkillBottomSheetFragment: BottomSheetDialogFragment() {
+class EditSkillBottomSheet: BottomSheetDialogFragment() {
     companion object {
-        fun newInstance() = AddSkillBottomSheetFragment()
+        fun newInstance() = EditSkillBottomSheet()
     }
 
-    lateinit var layout: View
-    var updates: ArrayList<String> = ArrayList()
-    lateinit var viewModel: ProfileViewModel
+    var arrayLocation: String = ""
     var skills: ArrayList<String> = ArrayList()
     var selectedSkill: String = ""
+    lateinit var layout: View
+    lateinit var viewModel: ProfileViewModel
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            arrayLocation = it.getString("array_location")!!
+        }
+    }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        Log.d("DEBUG", "ENTERED Profile Education Expanded VIEW")
-        layout = inflater.inflate(R.layout.add_skill_bottom_sheet, container, false)
+        layout = inflater.inflate(R.layout.edit_skill_bottom_sheet, container, false)
+
+        viewModel = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
 
         skills.addAll(listOf("--skill--", "skill1", "skill2", "skill3", "skill4", "skill5", "skill6", "skill7", "skill8"))
+
         return layout
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
 
-        viewModel = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
-
+        lateinit var skill: String
         val skillAdapter = ArrayAdapter(this.context!!, R.layout.simple_spinner_dropdown_item, skills)
-        val skillSpinner = layout.add_skill_name
+        val skillSpinner = layout.skill
         skillSpinner.adapter = skillAdapter
         skillSpinner.onItemSelectedListener = object:
             AdapterView.OnItemSelectedListener {
@@ -67,28 +72,24 @@ class AddSkillBottomSheetFragment: BottomSheetDialogFragment() {
             }
         }
 
-        layout.add_skill_cancel_button.setOnClickListener{
-            this.findNavController().navigate(R.id.educationExpandedFragment)
+        viewModel.userProfileData.observe(this, Observer { profile ->
+            skill = profile.Skill!![arrayLocation.toInt()]
+            layout.skill.setSelection(skills.indexOf(skill))
+        })
+
+        layout.delete.setOnClickListener {
+            viewModel.removeProfileSkill(skill)
+            Log.d("EditSkill", "Skill deleted" + skill)
+            findNavController().navigate(R.id.educationExpandedFragment)
         }
 
-        layout.add_skill_add_more_button.setOnClickListener {
-            addNewSkill()
-            layout.add_skill_name.setSelection(0)
-
-        }
-
-        layout.add_skill_save_button.setOnClickListener{
-            addNewSkill()
-
-            viewModel.setProfileSkill(updates)
-            Toast.makeText(this.context, "Updated Skills Section", Toast.LENGTH_LONG)
-            this.findNavController().navigate(R.id.educationExpandedFragment)
+        layout.save.setOnClickListener {
+            viewModel.removeProfileSkill(skill)
+            var skills: ArrayList<String> = ArrayList()
+            skills.add(selectedSkill)
+            viewModel.setProfileSkill(skills)
+            findNavController().navigate(R.id.educationExpandedFragment)
         }
     }
 
-    private fun addNewSkill() {
-        updates.add(
-            selectedSkill
-        )
-    }
 }

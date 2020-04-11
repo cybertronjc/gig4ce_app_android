@@ -1,30 +1,19 @@
 package com.gigforce.app.modules.verification.service
 
-import com.gigforce.app.modules.verification.models.Idfydata
-import com.gigforce.app.modules.verification.models.IdfydataResponse
-import com.squareup.moshi.Json
-import kotlinx.coroutines.Deferred
-import org.json.JSONArray
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.http.*
+import com.gigforce.app.modules.verification.models.*
+import retrofit2.http.Body
+import retrofit2.http.Headers
+import retrofit2.http.POST
+import io.reactivex.Observable
 
-interface IdfyApi{
-//
-//    {"task_id": "74f4c926-250c-43ca-9c53-453e87ceacd2","group_id": "8e16424a-58fc-4ba4-ab20-5bc8e7c3c41f",
-//         "data": {"document1": "'+encoded_string1.decode('utf-8')+'",
-//        "document2": "'+encoded_string2.decode('utf-8')+'","consent": "yes","details": {}}}
-
-    @FormUrlEncoded
-    @POST("async/extract/ind_aadhaar")
-    fun postAadhar(
-    @Field("task_id") task_id:String,
-    @Field("group_id") group_id:String,
-    @Field("data") data: String): Call<IdfydataResponse>;
+interface IdfyApi {
 
     @POST("sync/extract/ind_aadhaar")
-    fun postAadhar(
-        @Body data: String
-    ): Call<Idfydata>;
+    @Headers("Content-Type:text/plain",
+            "Content-Type: application/json;charset=UTF-8",
+            "account-id:fd5931df2bde/f8451777-05d8-4e0f-b859-ad5dfa895bd4",
+            "api-key:1bc58043-00fb-4799-bea3-93a012d174bb")
+    fun postOCR(
+            //@Query("Authorization") authorizationKey: String, // authentication header
+            @Body postData: PostDataOCR): Observable<IdfyResponse> // body data
 }

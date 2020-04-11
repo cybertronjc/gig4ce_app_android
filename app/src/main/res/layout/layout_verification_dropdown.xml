@@ -20,7 +20,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/ivAadhaar1"
+        android:id="@+id/ivVeriDD1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="105dp"
@@ -33,7 +33,7 @@
         app:srcCompat="@drawable/ic_user_icon" />
 
     <ProgressBar
-        android:id="@+id/pbAadhaar"
+        android:id="@+id/pbVeriDD"
         style="@android:style/Widget.ProgressBar.Horizontal"
         android:layout_width="match_parent"
         android:layout_height="21dp"
@@ -47,36 +47,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/veriScreenTitle" />
 
-    <TextView
-        android:id="@+id/tvAadhaar3"
-        android:layout_width="wrap_content"
+    <Spinner
+        android:id="@+id/spinnerVeri"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="21dp"
-        android:text="@string/veri_aadhaar_title"
-        android:textColor="@android:color/black"
+        android:background="@android:drawable/btn_dropdown"
+        android:spinnerMode="dropdown"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/pbAadhaar" />
+        app:layout_constraintTop_toBottomOf="@+id/pbVeriDD"/>
 
     <TextView
-        android:id="@+id/tvAadhaarNo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="180dp"
-        android:layout_marginTop="16dp"
-        android:text="@string/veri_no_aadhaar"
-        android:textColor="@android:color/holo_red_dark"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvAadhaar3" />
-
-    <TextView
-        android:id="@+id/tvAadhaar5"
+        android:id="@+id/tvVeriDD5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="36dp"
@@ -86,24 +70,23 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.157"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvAadhaar3" />
+        app:layout_constraintTop_toBottomOf="@+id/spinnerVeri" />
 
     <ImageView
-        android:id="@+id/Aadhaar_front"
+        android:id="@+id/VeriDD_front"
         android:layout_width="313dp"
         android:layout_height="180dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="10dp"
-        android:backgroundTint="#C3BFBF"
         android:scaleType="fitXY"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.402"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvAadhaar5"
+        app:layout_constraintTop_toBottomOf="@+id/tvVeriDD5"
         tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
-        android:id="@+id/tvAadhaar6"
+        android:id="@+id/tvVeriDD6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="36dp"
@@ -113,26 +96,25 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.157"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Aadhaar_front" />
+        app:layout_constraintTop_toBottomOf="@+id/VeriDD_front" />
 
     <ImageView
-        android:id="@+id/Aadhaar_back"
+        android:id="@+id/VeriDD_back"
         android:layout_width="313dp"
         android:layout_height="180dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="6dp"
         android:layout_marginBottom="108dp"
-        android:backgroundTint="#C3BFBF"
         android:scaleType="fitXY"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.402"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvAadhaar6"
+        app:layout_constraintTop_toBottomOf="@+id/tvVeriDD6"
         tools:srcCompat="@tools:sample/avatars" />
 
     <Button
-        android:id="@+id/buttonAadhaar1"
+        android:id="@+id/buttonVeriDD1"
         android:layout_width="156dp"
         android:layout_height="48dp"
         android:layout_marginStart="16dp"
@@ -143,11 +125,11 @@
         android:textAlignment="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/buttonAadhaar2"
-        app:layout_constraintTop_toBottomOf="@+id/Aadhaar_back" />
+        app:layout_constraintStart_toEndOf="@+id/buttonVeriDD2"
+        app:layout_constraintTop_toBottomOf="@+id/VeriDD_back" />
 
     <Button
-        android:id="@+id/buttonAadhaar2"
+        android:id="@+id/buttonVeriDD2"
         android:layout_width="156dp"
         android:layout_height="48dp"
         android:layout_marginStart="16dp"
@@ -159,6 +141,6 @@
         android:textColor="@color/colorAccent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Aadhaar_back" />
+        app:layout_constraintTop_toBottomOf="@+id/VeriDD_back" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,7 +1,5 @@
 package com.gigforce.app.modules.verification
 
-import com.gigforce.app.BuildConfig
-
 object AppConstants{
     const val JSON_PLACEHOLDER_BASE_URL = "https://jsonplaceholder.typicode.com"
     const val IDFY_BASE_URL = "https://eve.idfy.com/v3/tasks/"

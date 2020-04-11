@@ -1,9 +1,14 @@
 package com.gigforce.app.modules.verification
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.provider.MediaStore
+import android.util.Base64
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -21,14 +26,20 @@ import com.gigforce.app.modules.auth.ui.main.Login
 import com.gigforce.app.modules.photocrop.*
 import com.gigforce.app.modules.verification.Verification
 import com.gigforce.app.modules.verification.VerificationViewModel
-//import com.gigforce.app.modules.verification.models.VerificationData
+
+import com.gigforce.app.modules.verification.models.OCRDocData
+import com.gigforce.app.modules.verification.models.PostDataOCR
+import com.gigforce.app.modules.verification.service.RetrofitFactory
 import com.gigforce.app.utils.GlideApp
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.layout_verification.view.*
 import kotlinx.android.synthetic.main.layout_verification_aadhaar.*
 import kotlinx.android.synthetic.main.layout_verification_aadhaar.view.*
 import kotlinx.android.synthetic.main.layout_verification_pancard.view.*
+import java.io.ByteArrayOutputStream
 
 class AadhaarUpload: Fragment() {
     companion object {
@@ -43,6 +54,9 @@ class AadhaarUpload: Fragment() {
     private var PHOTO_CROP: Int = 45
     private var frontNotDone = 1;
     private var docUploaded = 0;
+
+    private  lateinit  var uriFront: Uri
+    private  lateinit  var uriBack: Uri
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreateView(
@@ -71,6 +85,7 @@ class AadhaarUpload: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        tvAadhaarNo.setOnClickListener { findNavController().navigate(R.id.uploadDropDown) }
         viewModel = ViewModelProviders.of(this).get(VerificationViewModel::class.java)
         AadhaarFront = layout.findViewById(R.id.Aadhaar_front)
         AadhaarBack = layout.findViewById(R.id.Aadhaar_back)
@@ -88,13 +103,13 @@ class AadhaarUpload: Fragment() {
         }
 
         buttonAadhaar2.setOnClickListener {
-            findNavController().navigate(R.id.panUpload)
+            findNavController().navigate(R.id.verification)
         }
 
         buttonAadhaar1.setOnClickListener {
             if(docUploaded==1)
             {
-                findNavController().navigate(R.id.DLUpload)
+                findNavController().navigate(R.id.uploadDropDown)
             }
             else {
                 Toast.makeText(
@@ -102,6 +117,40 @@ class AadhaarUpload: Fragment() {
                     "Please upload the Aadhaar before proceeding",
                     Toast.LENGTH_LONG).show()
             }
+        }
+    }
+
+    private fun encodeImageToBase64(uri: Uri):String{
+        val baos = ByteArrayOutputStream()
+        val bitmap =  MediaStore.Images.Media.getBitmap(context?.contentResolver, uri);//BitmapFactory.decodeResource(resources, uri)
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+        val imageBytes: ByteArray = baos.toByteArray()
+        return Base64.encodeToString(imageBytes, Base64.DEFAULT);
+    }
+
+    @SuppressLint("CheckResult")
+    private fun idfyApiCall(postData: PostDataOCR){
+        if(this.context?.let { UtilMethods.isConnectedToInternet(it) }!!){
+            this.context?.let { UtilMethods.showLoading(it) }
+            val observable = RetrofitFactory.idfyApiCall().postOCR(postData)
+            observable.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ response ->
+                    UtilMethods.hideLoading()
+                    //here we can load all the data required
+                    Toast.makeText(
+                        this.context,
+                        ">>>"+response!!.result!!.extraction_output!!.gender!!.toString(),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    /** response is response data class*/
+                }, { error ->
+                    UtilMethods.hideLoading()
+                    UtilMethods.showLongToast(this.context!!, error.message.toString())
+                }
+                )
+        }else{
+            UtilMethods.showLongToast(this.context!!, "No Internet Connection!")
         }
     }
 
@@ -125,10 +174,23 @@ class AadhaarUpload: Fragment() {
                 viewModel.setCardAvatarName(imageName.toString())
                 var filepath = "/Aadhaar/"+imageName;
                 if(frontNotDone==1){
+                    uriFront = data?.getParcelableExtra("uri")!!;
                     loadImage("verification",filepath, layout.Aadhaar_front)
                     frontNotDone = 0;
                 }
                 else{
+                    uriBack = data?.getParcelableExtra("uri")!!;
+                    Toast.makeText(
+                        this.context,
+                        "front: $uriFront"+"<<<back: $uriBack",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    var imgb64 = UtilMethods.encodeImagesToBase64(context!!, uriFront, uriBack);
+                    var ocrdata = OCRDocData(imgb64,"yes")
+                    val taskid:String = "74f4c926-250c-43ca-9c53-453e87ceacd2";
+                    val groupid:String = "8e16424a-58fc-4ba4-ab20-5bc8e7c3c41f";
+                    var postData = PostDataOCR(taskid,groupid,ocrdata!!)
+                    idfyApiCall(postData)
                     loadImage("verification",filepath, layout.Aadhaar_back)
                     docUploaded = 1;
                 }

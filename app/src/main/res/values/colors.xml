@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#e42c64</color>
+    <color name="colorPrimary">#d72467</color>
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="calendar_disabled_bg">#efefef</color>
     <color name="colorAccent">#990077</color>
