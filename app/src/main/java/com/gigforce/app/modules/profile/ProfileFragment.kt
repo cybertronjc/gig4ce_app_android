@@ -17,7 +17,7 @@ import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
-import com.gigforce.app.modules.photoCrop.ui.main.PhotoCrop
+import com.gigforce.app.modules.photocrop.*
 import com.gigforce.app.utils.GlideApp
 import com.google.android.material.chip.Chip
 import com.google.firebase.storage.FirebaseStorage
@@ -45,7 +45,9 @@ class ProfileFragment : Fragment() {
     private lateinit var storage: FirebaseStorage
     private lateinit var layout: View
     private lateinit var profileAvatar: ImageView
+    private lateinit var profileAvatarName: String
     private var PHOTO_CROP: Int = 45
+    private var PROFILE_PICTURE_FOLDER: String = "profile_pics"
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -64,14 +66,6 @@ class ProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
-
-        // add onClick to profile picture
-        profileAvatar = layout.findViewById(R.id.profile_avatar)
-        profileAvatar.setOnClickListener{
-            val photoCropIntent = Intent(context, PhotoCrop::class.java)
-            startActivityForResult(photoCropIntent,PHOTO_CROP)
-
-        }
 
         // load user data
         viewModel.userProfileData.observe(this, Observer { profile ->
@@ -122,7 +116,24 @@ class ProfileFragment : Fragment() {
                 findNavController().navigate(R.id.aboutExpandedFragment)
             }
             Log.d("ProfileFragment", profile.rating.toString())
+
+            profileAvatarName = profile.profileAvatarName
+            Log.e("PROFILE AVATAR", profileAvatarName)
+            if (profileAvatarName != null)
+                loadImage(profileAvatarName)
         })
+
+        /*
+        Clicking on profile picture opens Photo Crop Activity
+         */
+        layout.profile_avatar.setOnClickListener {
+            val photoCropIntent = Intent(context, PhotoCrop::class.java)
+            photoCropIntent.putExtra("fbDir", "/profile_pics/")
+            photoCropIntent.putExtra("detectFace",1)
+            photoCropIntent.putExtra("folder", PROFILE_PICTURE_FOLDER)
+            photoCropIntent.putExtra("file", profileAvatarName)
+            startActivityForResult(photoCropIntent, PHOTO_CROP)
+        }
 
         layout.add_tags_button.setOnClickListener{
             this.findNavController().navigate(R.id.addTagBottomSheet)

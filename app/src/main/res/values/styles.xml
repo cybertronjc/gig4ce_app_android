@@ -123,4 +123,8 @@
         <item name="android:colorPrimaryDark">@color/colorAccent</item>
         <item name="android:windowFullscreen">true</item>
     </style>
+
+    <style name="PhotoCrop" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimaryDark">@color/topBarDark</item>
+    </style>
 </resources>
