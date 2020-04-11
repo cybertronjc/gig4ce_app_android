@@ -171,7 +171,13 @@
     <string name="location">Location</string>
     <string name="year" />
     <string name="year_text">Year</string>
-
+    <string name="edit_skill">Edit Skill</string>
+    <string name="edit_experience">Edit Experience</string>
+    <string name="employment_title">Employment Title</string>
+    <string name="employment_type">Employment Type</string>
+    <string name="new_tag_hint">New Tag</string>
+    <string name="go_back">Go Back</string>
+    <string name="add">Add</string>
     <!-- Verification -->
     <string name="veriScreenTitle">Hello Giger!</string>
     <string name="veri_address_title">"Step 1 : Please add your Aadhaar Address"</string>
@@ -181,6 +187,7 @@
     <string name="veri_add_doc_back">"Back Side"</string>
     <string name="veri_pan_title">"Step 2 : Upload your Pan"</string>
     <string name="veri_aadhaar_title">"Step 3 : Upload your Aadhaar"</string>
+    <string name="veri_no_aadhaar">"No Aadhaar! Skip>>"</string>
     <string name="veri_dl_title">"Step 4 : Upload your Driving License"</string>
     <string name="veri_bank_title">"Step 5 : Please add your Bank Details"</string>
     <string name="veri_add_bank">"Add Bank Details"</string>

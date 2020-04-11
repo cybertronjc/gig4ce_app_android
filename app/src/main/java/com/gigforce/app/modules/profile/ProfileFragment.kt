@@ -1,6 +1,7 @@
 package com.gigforce.app.modules.profile
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
@@ -81,10 +82,7 @@ class ProfileFragment : Fragment() {
             }
 
             for (tag in profile.Tags!!) {
-                var chip = Chip(this.context)
-                chip.text = " $tag "
-                chip.isClickable = false
-                layout.main_tags.addView(chip)
+                layout.main_tags.addView(addChip(this.context!!, tag))
             }
 
             var mainAboutString = ""
@@ -109,7 +107,7 @@ class ProfileFragment : Fragment() {
                 mainEducationString += educations[0].degree + " - " + educations[0].course + "\n"
                 mainEducationString += format.format(educations[0].startYear!!) + " - " + format.format(
                     educations[0].endYear!!
-                ) + "\n"
+                ) + "\n\n"
             }
 
             mainEducationString += "Skills: "
@@ -179,6 +177,17 @@ class ProfileFragment : Fragment() {
         GlideApp.with(this.context!!)
             .load(profilePicRef)
             .into(layout.profile_avatar)
+    }
+
+    private fun addChip(context: Context, name: String): Chip {
+        var chip = Chip(context)
+        chip.text = " #$name "
+        chip.isClickable = false
+        chip.setTextAppearanceResource(R.style.chipTextDefaultColor)
+        chip.setChipStrokeColorResource(R.color.colorPrimary)
+        chip.setChipStrokeWidthResource(R.dimen.border_width)
+        chip.setChipBackgroundColorResource(R.color.fui_transparent)
+        return chip
     }
 
     override fun onActivityResult(
