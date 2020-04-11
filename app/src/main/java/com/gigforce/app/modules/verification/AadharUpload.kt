@@ -90,6 +90,8 @@ class AadhaarUpload: Fragment() {
         AadhaarFront = layout.findViewById(R.id.Aadhaar_front)
         AadhaarBack = layout.findViewById(R.id.Aadhaar_back)
         val photoCropIntent = Intent(context, PhotoCrop::class.java)
+        photoCropIntent.putExtra("purpose","verification")
+        photoCropIntent.putExtra("uid",viewModel.uid)
         photoCropIntent.putExtra("fbDir", "/verification/aadhaar/")
         photoCropIntent.putExtra("folder", "/verification/aadhaar/")
         photoCropIntent.putExtra("detectFace",0)

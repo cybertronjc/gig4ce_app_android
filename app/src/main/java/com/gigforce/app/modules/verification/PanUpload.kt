@@ -82,6 +82,8 @@ class PanUpload: Fragment() {
         panFront = layout.findViewById(R.id.Pan_front)
         panBack = layout.findViewById(R.id.Pan_back)
         val photoCropIntent = Intent(context, PhotoCrop::class.java)
+        photoCropIntent.putExtra("purpose","verification")
+        photoCropIntent.putExtra("uid",viewModel.uid)
         photoCropIntent.putExtra("folder", "/verification/pan/")
         photoCropIntent.putExtra("fbDir", "/verification/pan/")
         photoCropIntent.putExtra("detectFace",0)
@@ -94,8 +96,8 @@ class PanUpload: Fragment() {
             startActivityForResult(photoCropIntent, PHOTO_CROP)
         }
 
-        buttonPan1.setOnClickListener {
-            findNavController().navigate(R.id.verification);
+        buttonPan2.setOnClickListener {
+            findNavController().navigate(R.id.bankUpload2);
         }
 
         buttonPan1.setOnClickListener {

@@ -80,6 +80,8 @@ class DLUpload: Fragment() {
         DLFront = layout.findViewById(R.id.DL_front)
         DLBack = layout.findViewById(R.id.DL_back)
         val photoCropIntent = Intent(context, PhotoCrop::class.java)
+        photoCropIntent.putExtra("purpose","verification")
+        photoCropIntent.putExtra("uid",viewModel.uid)
         photoCropIntent.putExtra("fbDir", "/verification/dl/")
         photoCropIntent.putExtra("folder", "/verification/dl/")
         photoCropIntent.putExtra("detectFace",0)

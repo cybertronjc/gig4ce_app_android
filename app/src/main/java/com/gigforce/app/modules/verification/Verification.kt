@@ -156,23 +156,28 @@ class Verification: Fragment() {
             state = layout.add_veri_address_state.text.toString();
             pincode = layout.add_veri_address_pin.text.toString();
 
-            var areValid = validateFields(address1, address2, city, state, pincode);
+            addNewContact()
+            saveNewContacts()
+            resetLayout()
+            findNavController().navigate(R.id.aadhaarUpload)
+
+            //var areValid = validateFields(address1, address2, city, state, pincode);
             //if(TextUtils.isEmpty(address1) || TextUtils.isEmpty(address2) || TextUtils.isEmpty(city) || TextUtils.isEmpty(state) || TextUtils.isEmpty(pincode))
             // TODO Is this check needed?
-            if(!areValid)
-            {
-                Toast.makeText(
-                    this.context,
-                    "Please fill up all the missing fields",
-                    Toast.LENGTH_LONG).show()
-            }
-            else{
-                addNewContact()
-                saveNewContacts()
-                resetLayout()
-                findNavController().navigate(R.id.aadhaarUpload)
-                //findNavController().navigate(R.id.panUpload)
-            }
+//            if(!areValid)
+//            {
+//                Toast.makeText(
+//                    this.context,
+//                    "Please fill up all the missing fields",
+//                    Toast.LENGTH_LONG).show()
+//            }
+//            else{
+//                addNewContact()
+//                saveNewContacts()
+//                resetLayout()
+//                findNavController().navigate(R.id.aadhaarUpload)
+//                //findNavController().navigate(R.id.panUpload)
+//            }
         }
 
         //layout.textView31.setOnClickListener { findNavController().navigate(R.id.panUpload) }

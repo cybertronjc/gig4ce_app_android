@@ -85,14 +85,8 @@ class ProfileFirebaseRepository {
         }
     }
 
-<<<<<<< HEAD
-    fun setProfileAvatarName(profileAvatarName: String) {
-        firebaseDB.collection(profileCollectionName)
-            .document(uid).update("profileAvatarName",profileAvatarName)
-=======
     fun removeProfileExperience(experience: Experience) {
         firebaseDB.collection(profileCollectionName).document(uid).update("Experience", FieldValue.arrayRemove(experience))
->>>>>>> week2april20
     }
 
     fun setProfileTags(tag: String) {

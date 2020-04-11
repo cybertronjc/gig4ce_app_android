@@ -1,11 +1,13 @@
 package com.gigforce.app.modules.photocrop
 
+import android.Manifest
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
 import android.provider.MediaStore
 import android.util.Base64
 import android.util.Log
@@ -18,6 +20,8 @@ import com.gigforce.app.R
 import com.gigforce.app.modules.photocrop.ProfilePictureOptionsBottomSheetFragment.BottomSheetListener
 import com.gigforce.app.modules.profile.ProfileViewModel
 import com.gigforce.app.utils.GlideApp
+import com.google.android.gms.tasks.OnSuccessListener
+import com.google.android.gms.tasks.Task
 import com.google.firebase.ml.vision.FirebaseVision
 import com.google.firebase.ml.vision.common.FirebaseVisionImage
 import com.google.firebase.ml.vision.face.FirebaseVisionFaceDetectorOptions
@@ -35,19 +39,16 @@ import java.util.*
 class PhotoCrop : AppCompatActivity(),
     BottomSheetListener {
     private val CODE_IMG_GALLERY: Int = 1
+    private val REQUEST_TAKE_PHOTO: Int = 1
     private val EXTENSION: String = ".jpg"
-    private val DEFAULT_PICTURE: String = "avatar.jpg"
     private var cropX: Float = 1F
     private var cropY: Float = 1F
     private val resultIntent: Intent = Intent()
     private var PREFIX: String = "IMG"
-    private var detectFace: Int = 1;
     private lateinit var storage: FirebaseStorage
-<<<<<<< HEAD
     private lateinit var storageDirPath:String;
-=======
-    private lateinit var storageDirPath: String
->>>>>>> week2april20
+    private var detectFace:Int = 1;
+    private val DEFAULT_PICTURE: String = "avatar.jpg"
     private lateinit var CLOUD_PICTURE_FOLDER: String
     private lateinit var incomingFile: String
     private lateinit var imageView: ImageView
@@ -78,28 +79,14 @@ class PhotoCrop : AppCompatActivity(),
     override fun onCreate(savedInstanceState: Bundle?): Unit {
         super.onCreate(savedInstanceState)
 
-        this.setContentView(R.layout.activity_photo_crop)
-        storage = FirebaseStorage.getInstance()
-        imageView = this.findViewById(R.id.profile_avatar_photo_crop)
-        backButton = this.findViewById(R.id.back_button_photo_crop)
-        var purpose: String = intent.getStringExtra("purpose")
-        Log.e("PHOTO_CROP", "purpose = " + purpose + " comparing with: profilePictureCrop")
-        if (purpose == "profilePictureCrop") profilePictureOptions()
-    }
-
-    private fun profilePictureOptions() {
-        Log.e("PHOTO_CROP", "profile picture options started")
-        CLOUD_PICTURE_FOLDER = intent.getStringExtra("folder")
-        incomingFile = intent.getStringExtra("file")
-        cropX = 1F
-        cropY = 1F
-        PREFIX = intent.getStringExtra("uid")
         val bundle = intent.extras
+
         if (bundle != null) {
             storageDirPath = bundle.get("fbDir").toString()
             detectFace = bundle.get("detectFace") as Int
+            CLOUD_PICTURE_FOLDER = bundle.get("folder").toString()
+            incomingFile = bundle.get("file").toString()
         }
-<<<<<<< HEAD
 
         this.setContentView(R.layout.activity_photo_crop)
         storage = FirebaseStorage.getInstance()
@@ -108,6 +95,7 @@ class PhotoCrop : AppCompatActivity(),
         var purpose: String = intent.getStringExtra("purpose")
         Log.e("PHOTO_CROP", "purpose = " + purpose + " comparing with: profilePictureCrop")
         if (purpose == "profilePictureCrop") profilePictureOptions()
+        if (purpose == "verification") verificationOptions()
     }
 
     private fun profilePictureOptions() {
@@ -124,23 +112,27 @@ class PhotoCrop : AppCompatActivity(),
             CLOUD_PICTURE_FOLDER = bundle.get("folder").toString()
             incomingFile = bundle.get("file").toString()
         }
-=======
->>>>>>> week2april20
         loadImage(incomingFile)
         showBottomSheet()
     }
 
-<<<<<<< HEAD
-    private fun loadImage(Path: String) {
-        Log.d("PHOTO_CROP", "loading - " + Path)
-        var profilePicRef: StorageReference =
-            storage.reference.child(CLOUD_PICTURE_FOLDER).child(Path)
-        GlideApp.with(this)
-            .load(profilePicRef)
-            .into(imageView)
+    private fun verificationOptions() {
+        Log.e("PHOTO_CROP", "profile picture options started")
+        CLOUD_PICTURE_FOLDER = intent.getStringExtra("folder")
+        incomingFile = intent.getStringExtra("file")
+        cropX = 7F
+        cropY = 5F
+        PREFIX = intent.getStringExtra("uid")
+        val bundle = intent.extras
+        if (bundle != null) {
+            storageDirPath = bundle.get("fbDir").toString()
+            detectFace = bundle.get("detectFace") as Int
+            CLOUD_PICTURE_FOLDER = bundle.get("folder").toString()
+            incomingFile = bundle.get("file").toString()
+        }
+        loadImage(incomingFile)
+        showBottomSheet()
     }
-=======
->>>>>>> week2april20
 
     override fun onStart() {
         super.onStart()
@@ -206,14 +198,10 @@ class PhotoCrop : AppCompatActivity(),
         else if (requestCode == UCrop.REQUEST_CROP && resultCode == Activity.RESULT_OK) {
             val imageUriResultCrop: Uri? = UCrop.getOutput((data!!))
             Log.d("ImageUri", imageUriResultCrop.toString())
-<<<<<<< HEAD
             if (imageUriResultCrop != null) {
                 resultIntent.putExtra("uri",imageUriResultCrop);
                 Log.v("REQUEST CROP", requestCode.toString())
             }
-=======
-
->>>>>>> week2april20
             var baos = ByteArrayOutputStream()
             if (imageUriResultCrop == null) {
                 var bitmap = data?.data as Bitmap
@@ -247,10 +235,10 @@ class PhotoCrop : AppCompatActivity(),
                         Log.d("CStatus", "Face detection failed! still uploading the image")
                         upload(imageUriResultCrop, baos.toByteArray())
                     }
-            } else {
+            }
+            else{
                 //just upload wihtout face detection eg for pan, aadhar, other docs.
-                upload(imageUriResultCrop, baos.toByteArray())
-
+                upload(imageUriResultCrop, baos.toByteArray());
             }
         }
         Log.d("CStatus", "completed result on activity")
@@ -267,23 +255,6 @@ class PhotoCrop : AppCompatActivity(),
         return Uri.parse(path.toString())
     }
 
-<<<<<<< HEAD
-=======
-
-    /**
-     * Generate a unique name of the file to be uploaded using time stamp
-     * Initiates Crop activity
-     */
-
-    open fun encodeImageToBase64(mContext:Context, uri: Uri):String{
-        val baos = ByteArrayOutputStream()
-        val bitmap =  MediaStore.Images.Media.getBitmap(mContext?.contentResolver, uri);//BitmapFactory.decodeResource(resources, uri)
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
-        val imageBytes: ByteArray = baos.toByteArray()
-        return Base64.encodeToString(imageBytes, Base64.DEFAULT);
-    }
-
->>>>>>> week2april20
     private fun startCrop(uri: Uri): Unit {
         Log.v("Start Crop", "started")
         //can use this for a new name every time
@@ -296,7 +267,6 @@ class PhotoCrop : AppCompatActivity(),
             uri,
             Uri.fromFile(File(cacheDir, imageFileName + EXTENSION))
         )
-
         resultIntent.putExtra("filename", imageFileName + EXTENSION)
         uCrop.withAspectRatio(cropX, cropY)
         uCrop.withMaxResultSize(450, 450)
@@ -361,6 +331,7 @@ class PhotoCrop : AppCompatActivity(),
                 Toast.makeText(this, "Successfully Uploaded :)", Toast.LENGTH_LONG).show()
                 Log.v("Upload Image", name)
                 setResult(Activity.RESULT_OK, resultIntent)
+                super.finish()
             }
         } catch (e: Exception) {
             Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show()
@@ -379,8 +350,6 @@ class PhotoCrop : AppCompatActivity(),
         setResult(Activity.RESULT_OK, resultIntent)
     }
 
-<<<<<<< HEAD
-=======
     private fun loadImage(Path: String) {
         Log.d("PHOTO_CROP", "loading - " + Path)
         var profilePicRef: StorageReference =
@@ -390,7 +359,6 @@ class PhotoCrop : AppCompatActivity(),
             .into(imageView)
     }
 
->>>>>>> week2april20
     /**
      * Creates the intent to use files and camera that will be cropped.
      * Chosen files are saven as temporary file with the name profilePicture.jpg
@@ -431,8 +399,4 @@ class PhotoCrop : AppCompatActivity(),
         )
     }
 
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> week2april20
