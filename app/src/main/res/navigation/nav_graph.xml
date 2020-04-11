@@ -30,7 +30,14 @@
         android:id="@+id/experienceExpandedFragment"
         android:name="com.gigforce.app.modules.profile.ExperienceExpandedFragment"
         android:label="ExperienceExpandedFragment"
-        tools:layout="@layout/fragment_profile_experience_expanded" />
+        tools:layout="@layout/fragment_profile_experience_expanded" >
+        <action
+            android:id="@+id/action_experienceExpandedFragment_to_editExperienceBottomSheet"
+            app:destination="@id/editExperienceBottomSheet" />
+        <action
+            android:id="@+id/action_experienceExpandedFragment_to_addExperienceBottomSheet"
+            app:destination="@id/addExperienceBottomSheet" />
+    </fragment>
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.gigforce.app.modules.home.HomeFragment"
@@ -96,6 +103,9 @@
         <action
             android:id="@+id/action_educationExpandedFragment_to_editAchievementBottomSheet"
             app:destination="@id/editAchievementBottomSheet" />
+        <action
+            android:id="@+id/action_educationExpandedFragment_to_editSkillBottomSheet"
+            app:destination="@id/editSkillBottomSheet" />
     </fragment>
     <dialog
         android:id="@+id/addSkillBottomSheetFragment"
@@ -170,10 +180,11 @@
             android:id="@+id/action_homeScreenIcons_to_verification"
             app:destination="@id/verification" />
     </fragment>
-    <fragment
+    <dialog
         android:id="@+id/addTagBottomSheet"
         android:name="com.gigforce.app.modules.profile.AddTagBottomSheet"
-        android:label="AddTagBottomSheet" />
+        android:label="AddTagBottomSheet"
+        tools:layout="@layout/add_tag_bottom_sheet"/>
     <dialog
         android:id="@+id/addExperienceBottomSheet"
         android:name="com.gigforce.app.modules.profile.AddExperienceBottomSheet"
@@ -183,19 +194,12 @@
         android:name="com.gigforce.app.modules.verification.Verification"
         android:label="Verification" >
         <action
-            android:id="@+id/action_verification_to_addVerificationContact"
-            app:destination="@id/verificationcontact" />
-        <action
-            android:id="@+id/action_verification_to_panUpload"
-            app:destination="@id/panUpload" />
-        <action
             android:id="@+id/action_verification_to_aadhaarUpload"
             app:destination="@id/aadhaarUpload" />
+        <action
+            android:id="@+id/action_verification_to_uploadDropDown"
+            app:destination="@id/uploadDropDown" />
     </fragment>
-    <fragment
-        android:id="@+id/verificationcontact"
-        android:name="com.gigforce.app.modules.verification.AddressUpload"
-        android:label="AddVerificationContact" />
     <fragment
         android:id="@+id/Login"
         android:name="com.gigforce.app.modules.auth.ui.main.Login"
@@ -209,16 +213,16 @@
         android:name="com.gigforce.app.modules.verification.PanUpload"
         android:label="PanUpload" >
         <action
-            android:id="@+id/action_panUpload_to_aadhaarUpload"
-            app:destination="@id/aadhaarUpload" />
+            android:id="@+id/action_panUpload_to_verificationDone"
+            app:destination="@id/verificationDone" />
     </fragment>
     <fragment
         android:id="@+id/aadhaarUpload"
         android:name="com.gigforce.app.modules.verification.AadhaarUpload"
         android:label="AadhaarUpload" >
         <action
-            android:id="@+id/action_aadhaarUpload_to_DLUpload"
-            app:destination="@id/DLUpload" />
+            android:id="@+id/action_aadhaarUpload_to_uploadDropDown"
+            app:destination="@id/uploadDropDown" />
     </fragment>
 <fragment
         android:id="@+id/editEducationBottomSheet"
@@ -236,14 +240,22 @@
             android:name="array_location"
             app:argType="string" />
     </fragment>
-    <fragment
-        android:id="@+id/DLUpload"
-        android:name="com.gigforce.app.modules.verification.DLUpload"
-        android:label="DLUpload" >
-        <action
-            android:id="@+id/action_DLUpload_to_bankUpload2"
-            app:destination="@id/bankUpload2" />
-    </fragment>
+    <dialog
+        android:id="@+id/editSkillBottomSheet"
+        android:name="com.gigforce.app.modules.profile.EditSkillBottomSheet"
+        android:label="EditSkillBottomSheet" >
+        <argument
+            android:name="array_location"
+            app:argType="string" />
+    </dialog>
+    <dialog
+        android:id="@+id/editExperienceBottomSheet"
+        android:name="com.gigforce.app.modules.profile.EditExperienceBottomSheet"
+        android:label="EditExperienceBottomSheet" >
+        <argument
+            android:name="array_location"
+            app:argType="string" />
+    </dialog>
     <fragment
         android:id="@+id/verificationDone"
         android:name="com.gigforce.app.modules.verification.VerificationDone"
@@ -253,7 +265,15 @@
         android:name="com.gigforce.app.modules.verification.BankUpload"
         android:label="BankUpload" >
         <action
-            android:id="@+id/action_bankUpload2_to_verificationDone"
-            app:destination="@id/verificationDone" />
+            android:id="@+id/action_bankUpload2_to_panUpload"
+            app:destination="@id/panUpload" />
+    </fragment>
+    <fragment
+        android:id="@+id/uploadDropDown"
+        android:name="com.gigforce.app.modules.verification.UploadDropDown"
+        android:label="UploadDropDown" >
+        <action
+            android:id="@+id/action_uploadDropDown_to_bankUpload2"
+            app:destination="@id/bankUpload2" />
     </fragment>
 </navigation>

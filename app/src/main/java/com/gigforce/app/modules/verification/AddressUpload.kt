@@ -44,7 +44,8 @@ class AddressUpload : BottomSheetDialogFragment() {
             layout.button_veri_address_save.setOnClickListener{
                 addNewContact()
                 saveNewContacts()
-                findNavController().navigate(R.id.verification)
+                //findNavController().navigate(R.id.verification)
+                //findNavController().navigate(R.id.uploadDropDown)
             }
         }
 
