@@ -63,11 +63,13 @@ class AddTagBottomSheet: BottomSheetDialogFragment() {
         })
 
         layout.add_tag_button.setOnClickListener {
-            setProfileTag(layout.add_tag_new_tag.text.toString())
-            if(!tags.contains(layout.add_tag_new_tag.text.toString())) {
-                addNewTag(layout.add_tag_new_tag.text.toString())
+            if (layout.add_tag_new_tag.text.toString() != "") {
+                setProfileTag(layout.add_tag_new_tag.text.toString())
+                if (!tags.contains(layout.add_tag_new_tag.text.toString())) {
+                    addNewTag(layout.add_tag_new_tag.text.toString())
+                }
+                layout.add_tag_new_tag.setText("")
             }
-            layout.add_tag_new_tag.setText("")
         }
 
         layout.add_tag_back_button.setOnClickListener {

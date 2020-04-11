@@ -180,7 +180,7 @@
             android:id="@+id/action_homeScreenIcons_to_verification"
             app:destination="@id/verification" />
     </fragment>
-    <fragment
+    <dialog
         android:id="@+id/addTagBottomSheet"
         android:name="com.gigforce.app.modules.profile.AddTagBottomSheet"
         android:label="AddTagBottomSheet"
