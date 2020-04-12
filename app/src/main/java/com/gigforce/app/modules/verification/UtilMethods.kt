@@ -79,7 +79,7 @@ object UtilMethods {
         val bitmap =  MediaStore.Images.Media.getBitmap(mContext?.contentResolver, uri);//BitmapFactory.decodeResource(resources, uri)
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
         val imageBytes: ByteArray = baos.toByteArray()
-        return Base64.encodeToString(imageBytes, Base64.DEFAULT);
+        return Base64.encodeToString(imageBytes, Base64.NO_WRAP);
     }
 
     /**
@@ -116,7 +116,7 @@ object UtilMethods {
         val bitmap = combineImages(bitmapFront, bitmapBack);
         bitmap?.compress(Bitmap.CompressFormat.JPEG, 100, baos)
         val imageBytes: ByteArray = baos.toByteArray()
-        return Base64.encodeToString(imageBytes, Base64.DEFAULT);
+        return Base64.encodeToString(imageBytes, Base64.NO_WRAP);
     }
 
     /**

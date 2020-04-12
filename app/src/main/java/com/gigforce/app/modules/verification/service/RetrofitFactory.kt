@@ -61,11 +61,27 @@ object RetrofitFactory{
             .build()
 
     // Since its a factory, we can have several api calls as one of them below:
-    fun idfyApiCall() = Retrofit.Builder()
+    fun idfyApiCallAD() = Retrofit.Builder()
             .baseUrl(AppConstants.IDFY_BASE_URL)
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .addConverterFactory(gsonConverter)
             .client(client)
             .build()
-            .create(IdfyApi::class.java)!!
+            .create(IdfyApiAadhaar::class.java)!!
+
+    fun idfyApiCallDL() = Retrofit.Builder()
+        .baseUrl(AppConstants.IDFY_BASE_URL)
+        .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+        .addConverterFactory(gsonConverter)
+        .client(client)
+        .build()
+        .create(IdfyApiDL::class.java)!!
+
+    fun idfyApiCallPAN() = Retrofit.Builder()
+        .baseUrl(AppConstants.IDFY_BASE_URL)
+        .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+        .addConverterFactory(gsonConverter)
+        .client(client)
+        .build()
+        .create(IdfyApiPAN::class.java)!!
 }

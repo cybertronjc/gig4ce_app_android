@@ -52,7 +52,7 @@ class Verification: Fragment() {
         viewModel = ViewModelProviders.of(this).get(VerificationViewModel::class.java)
         layout = inflater.inflate(R.layout.layout_verification, container, false)
         requireActivity().onBackPressedDispatcher.addCallback(this, callback)
-        layout.pbAddress.setProgress(1,true)
+        layout.pbAddress.setProgress(3,true)
         return layout
     }
 

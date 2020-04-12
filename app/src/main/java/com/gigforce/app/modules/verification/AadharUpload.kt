@@ -28,9 +28,14 @@ import com.gigforce.app.modules.verification.Verification
 import com.gigforce.app.modules.verification.VerificationViewModel
 
 import com.gigforce.app.modules.verification.models.OCRDocData
+import com.gigforce.app.modules.verification.models.OCRDocsData
 import com.gigforce.app.modules.verification.models.PostDataOCR
+import com.gigforce.app.modules.verification.models.PostDataOCRs
 import com.gigforce.app.modules.verification.service.RetrofitFactory
 import com.gigforce.app.utils.GlideApp
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -47,6 +52,8 @@ class AadhaarUpload: Fragment() {
     }
 
     private lateinit var storage: FirebaseStorage
+    var firebaseDB = FirebaseFirestore.getInstance()
+    var uid = FirebaseAuth.getInstance().currentUser?.uid!!
     lateinit var layout: View
     private lateinit var AadhaarFront: ImageView
     private lateinit var AadhaarBack: ImageView
@@ -68,7 +75,7 @@ class AadhaarUpload: Fragment() {
         viewModel = ViewModelProviders.of(this).get(VerificationViewModel::class.java)
         layout = inflater.inflate(R.layout.layout_verification_aadhaar, container, false)
         requireActivity().onBackPressedDispatcher.addCallback(this, callback)
-        layout.pbAadhaar.setProgress(40,true)
+        layout.pbAadhaar.setProgress(20,true)
         return layout
     }
 
@@ -134,15 +141,26 @@ class AadhaarUpload: Fragment() {
     private fun idfyApiCall(postData: PostDataOCR){
         if(this.context?.let { UtilMethods.isConnectedToInternet(it) }!!){
             this.context?.let { UtilMethods.showLoading(it) }
-            val observable = RetrofitFactory.idfyApiCall().postOCR(postData)
+            val observable = RetrofitFactory.idfyApiCallAD().postOCR(postData)
             observable.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ response ->
                     UtilMethods.hideLoading()
                     //here we can load all the data required
+                    var extractionOutput = response!!.result!!.extraction_output!!
+
+                    firebaseDB.collection("Verification")
+                        .document(uid).update("Aadhaar", FieldValue.arrayUnion(extractionOutput))
+                        .addOnSuccessListener {
+                            Log.d("REPOSITORY", "contact added successfully!")
+                        }
+                        .addOnFailureListener{
+                                exception ->  Log.d("Repository", exception.toString())
+                        }
                     Toast.makeText(
                         this.context,
-                        ">>>"+response!!.result!!.extraction_output!!.gender!!.toString(),
+                        //">>>"+response!!.result!!.extraction_output!!.gender!!.toString(),
+                        "Document Successfully uploaded!",
                         Toast.LENGTH_SHORT
                     ).show()
                     /** response is response data class*/
@@ -177,7 +195,8 @@ class AadhaarUpload: Fragment() {
                 var filepath = "/Aadhaar/"+imageName;
                 if(frontNotDone==1){
                     uriFront = data?.getParcelableExtra("uri")!!;
-                    loadImage("verification",filepath, layout.Aadhaar_front)
+                    //loadImage("verification",filepath, layout.Aadhaar_front)
+                    layout.Aadhaar_front.setImageURI(uriFront);
                     frontNotDone = 0;
                 }
                 else{
@@ -187,13 +206,16 @@ class AadhaarUpload: Fragment() {
                         "front: $uriFront"+"<<<back: $uriBack",
                         Toast.LENGTH_SHORT
                     ).show()
-                    var imgb64 = UtilMethods.encodeImagesToBase64(context!!, uriFront, uriBack);
+                    //var imgb64 = UtilMethods.encodeImagesToBase64(context!!, uriFront, uriBack);
+                    var imgb64 = UtilMethods.encodeImageToBase64(context!!, uriFront);
                     var ocrdata = OCRDocData(imgb64,"yes")
+                    //var ocrdata = OCRDocsData(imgb64,imgb64,"yes")
                     val taskid:String = "74f4c926-250c-43ca-9c53-453e87ceacd2";
                     val groupid:String = "8e16424a-58fc-4ba4-ab20-5bc8e7c3c41f";
                     var postData = PostDataOCR(taskid,groupid,ocrdata!!)
                     idfyApiCall(postData)
-                    loadImage("verification",filepath, layout.Aadhaar_back)
+                    //loadImage("verification",filepath, layout.Aadhaar_back)
+                    layout.Aadhaar_back.setImageURI(uriBack);
                     docUploaded = 1;
                 }
             }
