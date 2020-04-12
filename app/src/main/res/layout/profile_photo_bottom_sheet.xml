@@ -17,7 +17,7 @@
         android:layout_marginTop="20dp"
         android:layout_marginBottom="18dp"
         android:textSize="22sp"
-        android:text="@string/profile_picture"
+        android:text="@string/document_picture"
         android:textColor="@color/black"/>
 
     <TextView
@@ -29,7 +29,7 @@
         android:layout_marginBottom="10dp"
         android:textSize="17sp"
         android:textColor="@color/text_color"
-        android:text="@string/update_profile_picture" />
+        android:text="@string/update_document_picture" />
 
     <View style="@style/Divider"
         android:layout_marginRight="20dp"
@@ -44,6 +44,6 @@
         android:textSize="17sp"
         android:layout_marginBottom="30dp"
         android:textColor="@color/text_color"
-        android:text="@string/remove_profile_picture" />
+        android:text="@string/remove_document_picture" />
 
 </LinearLayout>

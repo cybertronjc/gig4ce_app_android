@@ -22,6 +22,7 @@ import com.gigforce.app.modules.profile.ProfileViewModel
 import com.gigforce.app.utils.GlideApp
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.gms.tasks.Task
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.firebase.ml.vision.FirebaseVision
 import com.google.firebase.ml.vision.common.FirebaseVisionImage
 import com.google.firebase.ml.vision.face.FirebaseVisionFaceDetectorOptions
@@ -151,7 +152,6 @@ class PhotoCrop : AppCompatActivity(),
     override fun onRestart() {
         super.onRestart()
         showBottomSheet()
-
     }
 
     /**

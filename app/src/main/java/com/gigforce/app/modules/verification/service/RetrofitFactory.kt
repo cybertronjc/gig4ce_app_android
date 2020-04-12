@@ -68,4 +68,12 @@ object RetrofitFactory{
             .client(client)
             .build()
             .create(IdfyApi::class.java)!!
+
+    fun idfyApiCall2() = Retrofit.Builder()
+        .baseUrl(AppConstants.IDFY_BASE_URL)
+        .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+        .addConverterFactory(gsonConverter)
+        .client(client)
+        .build()
+        .create(IdfyApi2::class.java)!!
 }

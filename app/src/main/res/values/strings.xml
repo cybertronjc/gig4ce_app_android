@@ -204,10 +204,10 @@
     <string name="veri_hint_ifsc">IFSC code</string>
     <string name="veri_hint_bank_name">Name of the Bank</string>
 
-    <!--    Profile Picture Bottom Sheet-->
-    <string name="select_profile_picture">Select Profile Picture</string>
-    <string name="update_profile_picture">Update Profile Picture</string>
-    <string name="remove_profile_picture">Remove Profile Picture</string>
-    <string name="profile_picture">Profile Picture</string>
+    <!--    Photo Crop Bottom Sheet-->
+    <string name="select_document_picture">Select Option</string>
+    <string name="update_document_picture">Update Picture</string>
+    <string name="remove_document_picture">Remove Picture</string>
+    <string name="document_picture">Image Option</string>
     <string name="edit_education">Edit Education</string>
 </resources>
