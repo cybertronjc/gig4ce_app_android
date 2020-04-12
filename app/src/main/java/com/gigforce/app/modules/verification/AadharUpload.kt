@@ -75,7 +75,7 @@ class AadhaarUpload: Fragment() {
         viewModel = ViewModelProviders.of(this).get(VerificationViewModel::class.java)
         layout = inflater.inflate(R.layout.layout_verification_aadhaar, container, false)
         requireActivity().onBackPressedDispatcher.addCallback(this, callback)
-        layout.pbAadhaar.setProgress(40,true)
+        layout.pbAadhaar.setProgress(20,true)
         return layout
     }
 
@@ -141,27 +141,26 @@ class AadhaarUpload: Fragment() {
     private fun idfyApiCall(postData: PostDataOCR){
         if(this.context?.let { UtilMethods.isConnectedToInternet(it) }!!){
             this.context?.let { UtilMethods.showLoading(it) }
-            val observable = RetrofitFactory.idfyApiCall().postOCR(postData)
+            val observable = RetrofitFactory.idfyApiCallAD().postOCR(postData)
             observable.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ response ->
                     UtilMethods.hideLoading()
                     //here we can load all the data required
-
                     var extractionOutput = response!!.result!!.extraction_output!!
 
                     firebaseDB.collection("Verification")
-                        .document(uid).update("Aadhar", FieldValue.arrayUnion(extractionOutput))
+                        .document(uid).update("Aadhaar", FieldValue.arrayUnion(extractionOutput))
                         .addOnSuccessListener {
                             Log.d("REPOSITORY", "contact added successfully!")
                         }
                         .addOnFailureListener{
                                 exception ->  Log.d("Repository", exception.toString())
                         }
-
                     Toast.makeText(
                         this.context,
-                        ">>>"+response!!.result!!.extraction_output!!.gender!!.toString(),
+                        //">>>"+response!!.result!!.extraction_output!!.gender!!.toString(),
+                        "Document Successfully uploaded!",
                         Toast.LENGTH_SHORT
                     ).show()
                     /** response is response data class*/

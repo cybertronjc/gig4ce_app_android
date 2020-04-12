@@ -35,7 +35,7 @@ import kotlinx.android.synthetic.main.layout_verification_dropdown.view.*
 
 class UploadDropDown: Fragment() {
     companion object {
-        fun newInstance() = PanUpload()
+        fun newInstance() = UploadDropDown()
     }
 
     private lateinit var storage: FirebaseStorage
@@ -93,7 +93,7 @@ class UploadDropDown: Fragment() {
         viewModel = ViewModelProviders.of(this).get(VerificationViewModel::class.java)
         layout = inflater.inflate(R.layout.layout_verification_dropdown, container, false)
         requireActivity().onBackPressedDispatcher.addCallback(this, callback)
-        layout.pbVeriDD.setProgress(20,true)
+        layout.pbVeriDD.setProgress(40,true)
 
         spinner = layout.spinnerVeri
         val adapter: ArrayAdapter<String> = ArrayAdapter<String>(context!!, android.R.layout.simple_spinner_item, paths)
@@ -161,7 +161,10 @@ class UploadDropDown: Fragment() {
             } // to close the onItemSelected
 
             override fun onNothingSelected(parent: AdapterView<*>) {
-
+                Toast.makeText(
+                    context,
+                    "Please select which doc to be uploaded",
+                    Toast.LENGTH_LONG).show()
             }
         }
 
@@ -208,12 +211,12 @@ class UploadDropDown: Fragment() {
         }
     }
 
-
     @SuppressLint("CheckResult")
     private fun idfyApiCall(postData: PostDataOCR){
         if(this.context?.let { UtilMethods.isConnectedToInternet(it) }!!){
             this.context?.let { UtilMethods.showLoading(it) }
-            val observable = RetrofitFactory.idfyApiCall().postOCR(postData)
+            //TODO Here based on the selection call the api instance - DL, VoterID, Passport
+            val observable = RetrofitFactory.idfyApiCallAD().postOCR(postData)
             observable.subscribeOn(Schedulers.io())
                 .observeOn(mainThread())
                 .subscribe({ response ->
@@ -253,7 +256,7 @@ class UploadDropDown: Fragment() {
             if (null != imageName) {
                 viewModel.setCardAvatarName(imageName.toString())
                 var filepath = filepathappender+imageName;
-                if(frontNotDone==1){
+                if(frontNotDone==1) {
                     uriFront = data?.getParcelableExtra("uri")!!;
                     loadImage("verification",filepath, layout.VeriDD_front)
                     frontNotDone = 0;

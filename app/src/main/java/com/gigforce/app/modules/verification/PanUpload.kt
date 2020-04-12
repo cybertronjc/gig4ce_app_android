@@ -23,7 +23,9 @@ import com.gigforce.app.R
 import com.gigforce.app.modules.photocrop.PhotoCrop
 import com.gigforce.app.modules.verification.UtilMethods.encodeImagesToBase64
 import com.gigforce.app.modules.verification.models.OCRDocData
+import com.gigforce.app.modules.verification.models.PANDocData
 import com.gigforce.app.modules.verification.models.PostDataOCR
+import com.gigforce.app.modules.verification.models.PostDataPAN
 import com.gigforce.app.modules.verification.service.RetrofitFactory
 import com.gigforce.app.utils.GlideApp
 import com.google.firebase.storage.FirebaseStorage
@@ -61,7 +63,7 @@ class PanUpload: Fragment() {
         viewModel = ViewModelProviders.of(this).get(VerificationViewModel::class.java)
         layout = inflater.inflate(R.layout.layout_verification_pancard, container, false)
         requireActivity().onBackPressedDispatcher.addCallback(this, callback)
-        layout.pbPan.setProgress(20,true)
+        layout.pbPan.setProgress(80,true)
         return layout
     }
 
@@ -117,10 +119,10 @@ class PanUpload: Fragment() {
 
 
     @SuppressLint("CheckResult")
-    private fun idfyApiCall(postData: PostDataOCR){
+    private fun idfyApiCall(postData: PostDataPAN){
         if(this.context?.let { UtilMethods.isConnectedToInternet(it) }!!){
             this.context?.let { UtilMethods.showLoading(it) }
-            val observable = RetrofitFactory.idfyApiCall().postOCR(postData)
+            val observable = RetrofitFactory.idfyApiCallPAN().postPAN(postData)
             observable.subscribeOn(Schedulers.io())
                 .observeOn(mainThread())
                 .subscribe({ response ->
@@ -142,6 +144,7 @@ class PanUpload: Fragment() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onActivityResult(
         requestCode: Int,
         resultCode: Int,
@@ -162,7 +165,7 @@ class PanUpload: Fragment() {
             if (null != imageName) {
                 viewModel.setCardAvatarName(imageName.toString())
                 var filepath = "/pan/"+imageName;
-                if(frontNotDone==1){
+                if(frontNotDone == 1) {
                     uriFront = data?.getParcelableExtra("uri")!!;
 //                    var imgb64 = UtilMethods.encodeImageToBase64(context!!,uriFront!!)
 //                    Log.d(">>>>>>>>>>>>>>BAS64N",imgb64!!);
@@ -183,12 +186,13 @@ class PanUpload: Fragment() {
                         Toast.LENGTH_SHORT
                     ).show()
                     var imgb64 = encodeImagesToBase64(context!!,uriFront,uriBack);
-                    var ocrdata = OCRDocData(imgb64,"yes")
+                    var ocrdata = PANDocData(imgb64,"yes")
                     val taskid:String = "74f4c926-250c-43ca-9c53-453e87ceacd2";
                     val groupid:String = "8e16424a-58fc-4ba4-ab20-5bc8e7c3c41f";
-                    var postData = PostDataOCR(taskid,groupid,ocrdata!!)
+                    var postData = PostDataPAN(taskid,groupid,ocrdata!!)
                     idfyApiCall(postData)
                     loadImage("verification",filepath, layout.Pan_back)
+                    layout.pbPan.setProgress(80,true)
                     docUploaded = 1;
                 }
             }

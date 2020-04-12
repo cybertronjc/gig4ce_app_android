@@ -156,21 +156,26 @@ class BankUpload : Fragment() {
 
                 var areValid = validateFields(bankAcName, bankName, bankAcNo, bankAcNoRe, bankIfsc);
 
-                //if(TextUtils.isEmpty(bankAcName) || TextUtils.isEmpty(bankName) || TextUtils.isEmpty(bankAcNo) || TextUtils.isEmpty(bankAcNoRe) || TextUtils.isEmpty(bankIfsc))
-                if(!areValid)
-                {
-                    Toast.makeText(
-                        this.context,
-                        "Please fill up all the missing fields",
-                        Toast.LENGTH_LONG).show()
-                }
-                else{
-                    addNewBankAccount()
-                    saveNewBanks()
-                    resetLayout()
-                    layout.pbBarBank.setProgress(100,true)
-                    findNavController().navigate(R.id.panUpload)
-                }
+                addNewBankAccount()
+                saveNewBanks()
+                resetLayout()
+                layout.pbBarBank.setProgress(60,true)
+                findNavController().navigate(R.id.panUpload)
+
+//                if(!areValid)
+//                {
+//                    Toast.makeText(
+//                        this.context,
+//                        "Please fill up all the missing fields",
+//                        Toast.LENGTH_LONG).show()
+//                }
+//                else{
+//                    addNewBankAccount()
+//                    saveNewBanks()
+//                    resetLayout()
+//                    layout.pbBarBank.setProgress(100,true)
+//                    findNavController().navigate(R.id.panUpload)
+//                }
             }
 
 
