@@ -26,72 +26,84 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
-            <TextView
-                android:id="@+id/gigger_rating"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/empty_dash_string"
-                android:layout_marginTop="5dp"
-                android:textAlignment="center"
-                app:layout_constraintEnd_toEndOf="@id/rating_text"
-                app:layout_constraintStart_toStartOf="@id/rating_text"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/rating_text"
-                android:layout_width="75dp"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:text="@string/rating_text"
-                android:textAlignment="center"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/gigger_rating" />
+                app:layout_constraintEnd_toEndOf="parent">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/gigger_rating"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/empty_dash_string"
+                        android:textAlignment="center"
+                        style="@style/NumberBoldText" />
 
-            <TextView
-                android:id="@+id/task_done"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/empty_dash_string"
-                android:layout_marginTop="5dp"
-                android:textAlignment="center"
-                app:layout_constraintEnd_toEndOf="@id/tasks_done_text"
-                app:layout_constraintStart_toStartOf="@id/tasks_done_text"
-                app:layout_constraintTop_toTopOf="parent" />
+                    <TextView
+                        android:id="@+id/rating_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:text="@string/rating_text"
+                        android:textAlignment="center"
+                        style="@style/LargeRegularText" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/task_done"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/empty_dash_string"
+                        android:textAlignment="center"
+                        style="@style/NumberBoldText" />
 
-            <TextView
-                android:id="@+id/tasks_done_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:text="@string/tasks_done_text"
-                android:textAlignment="center"
-                app:layout_constraintStart_toEndOf="@id/rating_text"
-                app:layout_constraintTop_toBottomOf="@+id/task_done"
-                app:layout_constraintBottom_toBottomOf="parent"/>
+                    <TextView
+                        android:id="@+id/tasks_done_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:text="@string/tasks_done_text"
+                        android:textAlignment="center"
+                        style="@style/LargeRegularText" />
 
-            <TextView
-                android:id="@+id/connection_count"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/empty_dash_string"
-                android:textAlignment="center"
-                android:layout_marginTop="5dp"
-                app:layout_constraintEnd_toEndOf="@id/connections_text"
-                app:layout_constraintStart_toStartOf="@id/connections_text"
-                app:layout_constraintTop_toTopOf="parent" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/connection_count"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/empty_dash_string"
+                        android:textAlignment="center"
+                        style="@style/NumberBoldText" />
 
-            <TextView
-                android:id="@+id/connections_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:text="@string/connections_text"
-                android:textAlignment="center"
-                app:layout_constraintStart_toEndOf="@id/tasks_done_text"
-                app:layout_constraintTop_toBottomOf="@+id/connection_count"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                    <TextView
+                        android:id="@+id/connections_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:text="@string/connections_text"
+                        android:textAlignment="center"
+                        style="@style/LargeRegularText"/>
+
+                </LinearLayout>
+            </LinearLayout>
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView

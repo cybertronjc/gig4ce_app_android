@@ -137,6 +137,21 @@
         <item name="android:letterSpacing">0.05</item>
     </style>
 
+    <style name="NumberBoldText">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">#444444</item>
+        <item name="android:letterSpacing">0.04</item>
+        <item name="android:lineSpacingExtra">22.9sp</item>
+    </style>
+
+    <style name="LargeRegularText">
+        <item name="android:textSize">8.6sp </item>
+        <item name="android:textColor">#222222</item>
+        <item name="android:letterSpacing">0.15</item>
+        <item name="android:lineSpacingExtra">32.2sp</item>
+    </style>
+
+
     <!--<style name="AppTheme.BaseButtonStyle" parent="android:Widget.Holo.Button">
         <item name="android:fontFamily">@font/lato_bold</item>
         <item name="android:textSize">14sp</item>
