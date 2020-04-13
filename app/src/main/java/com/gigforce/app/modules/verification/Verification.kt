@@ -11,11 +11,13 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
 import com.gigforce.app.modules.auth.ui.main.Login
 import com.gigforce.app.modules.verification.models.Address
+import kotlinx.android.synthetic.main.edit_achievement_bottom_sheet.view.*
 import kotlinx.android.synthetic.main.layout_verification.view.*
 import java.util.regex.Matcher
 import java.util.regex.Pattern
@@ -51,20 +53,20 @@ class Verification: Fragment() {
     ): View? {
         viewModel = ViewModelProviders.of(this).get(VerificationViewModel::class.java)
         layout = inflater.inflate(R.layout.layout_verification, container, false)
-        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
+        //requireActivity().onBackPressedDispatcher.addCallback(this, callback)
         layout.pbAddress.setProgress(3,true)
         return layout
     }
 
-    val callback: OnBackPressedCallback =
-        object : OnBackPressedCallback(true /* enabled by default */) {
-            override fun handleOnBackPressed() { // Handle the back button event
-                onBackPressed()
-            }
-        }
-    fun onBackPressed() {
-            findNavController().popBackStack()
-    }
+//    val callback: OnBackPressedCallback =
+//        object : OnBackPressedCallback(true /* enabled by default */) {
+//            override fun handleOnBackPressed() { // Handle the back button event
+//                onBackPressed()
+//            }
+//        }
+//    fun onBackPressed() {
+//            findNavController().popBackStack()
+//    }
 
     private fun validateFields(address1:String, address2:String, city:String, state:String, pincode:String):Boolean {
         //TODO Instead of toast msg we can put text msg on top of missing edit text or turn the edit text box to red!
@@ -139,8 +141,19 @@ class Verification: Fragment() {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(VerificationViewModel::class.java)
 
+        viewModel.veriData.observe(this, Observer { verification ->
+            //if (verification!!.address!!.isNotEmpty()) {
+                layout.add_veri_address_line1.setText(verification.address)
+                layout.add_veri_address_line1.setText(verification.address)
+                layout.add_veri_address_state.setText(verification.state)
+                layout.add_veri_address_city.setText(verification.city)
+                layout.add_veri_address_pin.setText(verification.pincode)
+            //}
+        })
+
         layout.button_veri_address_cancel.setOnClickListener {
-            resetLayout();
+            // CHECK to reset or not?
+            //resetLayout();
             findNavController().navigate(R.id.homeScreenIcons);
         }
 
@@ -156,28 +169,29 @@ class Verification: Fragment() {
             state = layout.add_veri_address_state.text.toString();
             pincode = layout.add_veri_address_pin.text.toString();
 
-            addNewContact()
-            saveNewContacts()
-            resetLayout()
-            findNavController().navigate(R.id.aadhaarUpload)
+//            addNewContact()
+//            saveNewContacts()
+//            //CHEK to reset or not?
+//            //resetLayout()
+//            findNavController().navigate(R.id.aadhaarUpload)
 
             //var areValid = validateFields(address1, address2, city, state, pincode);
-            //if(TextUtils.isEmpty(address1) || TextUtils.isEmpty(address2) || TextUtils.isEmpty(city) || TextUtils.isEmpty(state) || TextUtils.isEmpty(pincode))
-            // TODO Is this check needed?
-//            if(!areValid)
-//            {
-//                Toast.makeText(
-//                    this.context,
-//                    "Please fill up all the missing fields",
-//                    Toast.LENGTH_LONG).show()
-//            }
-//            else{
-//                addNewContact()
-//                saveNewContacts()
-//                resetLayout()
-//                findNavController().navigate(R.id.aadhaarUpload)
-//                //findNavController().navigate(R.id.panUpload)
-//            }
+            if(TextUtils.isEmpty(address1) || TextUtils.isEmpty(address2) || TextUtils.isEmpty(city) || TextUtils.isEmpty(state) || TextUtils.isEmpty(pincode))
+             //TODO Is this check needed?
+            //if(!areValid)
+            {
+                Toast.makeText(
+                    this.context,
+                    "Please fill up all the missing fields",
+                    Toast.LENGTH_LONG).show()
+            }
+            else{
+                addNewContact()
+                saveNewContacts()
+                resetLayout()
+                findNavController().navigate(R.id.aadhaarUpload)
+                //findNavController().navigate(R.id.panUpload)
+            }
         }
 
         //layout.textView31.setOnClickListener { findNavController().navigate(R.id.panUpload) }

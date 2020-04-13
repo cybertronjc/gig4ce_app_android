@@ -74,21 +74,21 @@ class AadhaarUpload: Fragment() {
         storage = FirebaseStorage.getInstance()
         viewModel = ViewModelProviders.of(this).get(VerificationViewModel::class.java)
         layout = inflater.inflate(R.layout.layout_verification_aadhaar, container, false)
-        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
+        //requireActivity().onBackPressedDispatcher.addCallback(this, callback)
         layout.pbAadhaar.setProgress(20,true)
         return layout
     }
 
-    val callback: OnBackPressedCallback =
-        object : OnBackPressedCallback(true /* enabled by default */) {
-            override fun handleOnBackPressed() { // Handle the back button event
-                onBackPressed()
-            }
-        }
-
-    fun onBackPressed() {
-        findNavController().popBackStack()
-    }
+//    val callback: OnBackPressedCallback =
+//        object : OnBackPressedCallback(true /* enabled by default */) {
+//            override fun handleOnBackPressed() { // Handle the back button event
+//                onBackPressed()
+//            }
+//        }
+//
+//    fun onBackPressed() {
+//        findNavController().popBackStack()
+//    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -102,13 +102,22 @@ class AadhaarUpload: Fragment() {
         photoCropIntent.putExtra("fbDir", "/verification/aadhaar/")
         photoCropIntent.putExtra("folder", "/verification/aadhaar/")
         photoCropIntent.putExtra("detectFace",0)
+
         AadhaarFront.setOnClickListener {
             photoCropIntent.putExtra("file", "adfront.jpg")
             startActivityForResult(photoCropIntent, PHOTO_CROP)
         }
         AadhaarBack.setOnClickListener {
-            photoCropIntent.putExtra("file", "adback.jpg")
-            startActivityForResult(photoCropIntent, PHOTO_CROP)
+            if(AadhaarFront.drawable==null) {
+                Toast.makeText(
+                    this.context,
+                    "Please upload the front side first!",
+                    Toast.LENGTH_LONG).show()
+            }
+            else {
+                photoCropIntent.putExtra("file", "adback.jpg")
+                startActivityForResult(photoCropIntent, PHOTO_CROP)
+            }
         }
 
         buttonAadhaar2.setOnClickListener {
@@ -138,7 +147,7 @@ class AadhaarUpload: Fragment() {
     }
 
     @SuppressLint("CheckResult")
-    private fun idfyApiCall(postData: PostDataOCR){
+    private fun idfyApiCall(postData: PostDataOCRs){
         if(this.context?.let { UtilMethods.isConnectedToInternet(it) }!!){
             this.context?.let { UtilMethods.showLoading(it) }
             val observable = RetrofitFactory.idfyApiCallAD().postOCR(postData)
@@ -152,17 +161,23 @@ class AadhaarUpload: Fragment() {
                     firebaseDB.collection("Verification")
                         .document(uid).update("Aadhaar", FieldValue.arrayUnion(extractionOutput))
                         .addOnSuccessListener {
-                            Log.d("REPOSITORY", "contact added successfully!")
+                            Toast.makeText(
+                                this.context,
+                                //">>>"+response!!.result!!.extraction_output!!.gender!!.toString(),
+                                "Document successfully uploaded!",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            Log.d("REPOSITORY", "Aadhaar added successfully!")
                         }
                         .addOnFailureListener{
                                 exception ->  Log.d("Repository", exception.toString())
+                            Toast.makeText(
+                                this.context,
+                                //">>>"+response!!.result!!.extraction_output!!.gender!!.toString(),
+                                "Some failure, please retry!",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
-                    Toast.makeText(
-                        this.context,
-                        //">>>"+response!!.result!!.extraction_output!!.gender!!.toString(),
-                        "Document Successfully uploaded!",
-                        Toast.LENGTH_SHORT
-                    ).show()
                     /** response is response data class*/
                 }, { error ->
                     UtilMethods.hideLoading()
@@ -201,18 +216,14 @@ class AadhaarUpload: Fragment() {
                 }
                 else{
                     uriBack = data?.getParcelableExtra("uri")!!;
-                    Toast.makeText(
-                        this.context,
-                        "front: $uriFront"+"<<<back: $uriBack",
-                        Toast.LENGTH_SHORT
-                    ).show()
                     //var imgb64 = UtilMethods.encodeImagesToBase64(context!!, uriFront, uriBack);
-                    var imgb64 = UtilMethods.encodeImageToBase64(context!!, uriFront);
-                    var ocrdata = OCRDocData(imgb64,"yes")
+                    var imgb641 = UtilMethods.encodeImageToBase64(context!!, uriFront);
+                    var imgb642 = UtilMethods.encodeImageToBase64(context!!, uriBack);
+                    var ocrdata = OCRDocsData(imgb641,imgb642,"yes")
                     //var ocrdata = OCRDocsData(imgb64,imgb64,"yes")
                     val taskid:String = "74f4c926-250c-43ca-9c53-453e87ceacd2";
                     val groupid:String = "8e16424a-58fc-4ba4-ab20-5bc8e7c3c41f";
-                    var postData = PostDataOCR(taskid,groupid,ocrdata!!)
+                    var postData = PostDataOCRs(taskid,groupid,ocrdata!!)
                     idfyApiCall(postData)
                     //loadImage("verification",filepath, layout.Aadhaar_back)
                     layout.Aadhaar_back.setImageURI(uriBack);

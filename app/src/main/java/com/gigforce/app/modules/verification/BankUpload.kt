@@ -139,7 +139,7 @@ class BankUpload : Fragment() {
             viewModel = ViewModelProviders.of(this).get(VerificationViewModel::class.java)
 
             layout.button_veri_bank_back.setOnClickListener {
-                resetLayout()
+                //resetLayout() //CHECK
                 findNavController().navigate(R.id.uploadDropDown)
             }
 
@@ -156,26 +156,27 @@ class BankUpload : Fragment() {
 
                 var areValid = validateFields(bankAcName, bankName, bankAcNo, bankAcNoRe, bankIfsc);
 
-                addNewBankAccount()
-                saveNewBanks()
-                resetLayout()
-                layout.pbBarBank.setProgress(60,true)
-                findNavController().navigate(R.id.panUpload)
+//                addNewBankAccount()
+//                saveNewBanks()
+//                resetLayout()
+//                layout.pbBarBank.setProgress(60,true)
+//                findNavController().navigate(R.id.panUpload)
 
-//                if(!areValid)
-//                {
-//                    Toast.makeText(
-//                        this.context,
-//                        "Please fill up all the missing fields",
-//                        Toast.LENGTH_LONG).show()
-//                }
-//                else{
-//                    addNewBankAccount()
-//                    saveNewBanks()
-//                    resetLayout()
-//                    layout.pbBarBank.setProgress(100,true)
-//                    findNavController().navigate(R.id.panUpload)
-//                }
+                //if(!areValid)
+                if(bankAcName.isEmpty() || bankName.isEmpty() || bankAcNo.isEmpty() || bankAcNoRe.isEmpty() || bankIfsc.isEmpty())
+                {
+                    Toast.makeText(
+                        this.context,
+                        "Please fill up all the missing fields",
+                        Toast.LENGTH_LONG).show()
+                }
+                else{
+                    addNewBankAccount()
+                    saveNewBanks()
+                    //resetLayout() //CHECK
+                    layout.pbBarBank.setProgress(60,true)
+                    findNavController().navigate(R.id.panUpload)
+                }
             }
 
 

@@ -22,7 +22,7 @@ data class OCRDocData(
 
 data class OCRDocsData(
         @SerializedName("document1") var document1: String,
-        @SerializedName("document1") var document2: String,
+        @SerializedName("document2") var document2: String,
         @SerializedName("consent") var consent: String
 )
 
@@ -46,5 +46,6 @@ data class PostDataPAN(
 
 data class PANDocData(
         @SerializedName("document1") var document1: String,
+        @SerializedName("document2") var document2: String,
         @SerializedName("consent") var consent: String
 )
