@@ -210,4 +210,6 @@
     <string name="remove_document_picture">Remove Picture</string>
     <string name="document_picture">Image Option</string>
     <string name="edit_education">Edit Education</string>
+    <string name="add_mother_tongue_text">Add as my mother tongue</string>
+    <string name="edit_language">Edit Language</string>
 </resources>
