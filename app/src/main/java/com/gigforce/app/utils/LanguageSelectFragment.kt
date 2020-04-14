@@ -82,7 +82,7 @@ class LanguageSelectFragment : BaseFragment() {
             val radioButton = groupradio.findViewById<RadioButton>(selectedId)
             val lang = radioButton.hint.toString()
             updateResources(lang)
-            savePreferences(AppConstants.APP_LANGUAGE, lang)
+            saveSharedData(AppConstants.APP_LANGUAGE, lang)
             navNext()
         }
     }

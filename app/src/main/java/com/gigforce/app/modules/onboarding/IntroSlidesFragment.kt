@@ -44,7 +44,7 @@ class IntroSlidesFragment : BaseFragment() {
         this.viewpager.adapter = IntroSlidesViewPagerAdapter(this.viewpager, object: OnIntroSlidesCompleted(){
 
             override fun invoke() {
-                savePreferences(AppConstants.INTRO_COMPLETE, "true")
+                saveSharedData(AppConstants.INTRO_COMPLETE, "true")
                 navigateWithAllPopupStack(R.id.authFlowFragment)
             }
         })

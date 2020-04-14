@@ -29,8 +29,8 @@ class AuthFlowFragment : BaseFragment() {
         val navOptionsPopToHome: NavOptions = NavOptions.Builder()
             .setPopUpTo(R.id.homeFragment, true)
             .build()
-        val lang = getSharedPreference(AppConstants.APP_LANGUAGE,null)
-        val introComplete = getSharedPreference(AppConstants.INTRO_COMPLETE,null)
+        val lang = getSharedData(AppConstants.APP_LANGUAGE,null)
+        val introComplete = getSharedData(AppConstants.INTRO_COMPLETE,null)
 
         // Select Language by Default
         if(lang == null) {

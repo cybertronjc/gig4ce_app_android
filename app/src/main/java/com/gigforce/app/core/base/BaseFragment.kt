@@ -51,7 +51,7 @@ abstract class BaseFragment : Fragment() {
     fun getFragmentView():View{
         return mView!!
     }
-    open fun savePreferences(Key: String?, Value: String?): Boolean {
+    open fun saveSharedData(Key: String?, Value: String?): Boolean {
         return try {
             editor?.putString(Key, Value)
             editor?.commit()
@@ -65,7 +65,7 @@ abstract class BaseFragment : Fragment() {
     // for delete
 
 
-    open fun getSharedPreference(key: String?, defValue: String?): String? {
+    open fun getSharedData(key: String?, defValue: String?): String? {
         return SP.getString(key, defValue)
     }
 
@@ -90,7 +90,7 @@ abstract class BaseFragment : Fragment() {
         navOptions: NavOptions?
     ) {
         navController
-            ?.navigate(resId, null, navOptions)
+            .navigate(resId, null, navOptions)
     }
     fun navigate(@IdRes resId: Int){
         navController.navigate(resId)
