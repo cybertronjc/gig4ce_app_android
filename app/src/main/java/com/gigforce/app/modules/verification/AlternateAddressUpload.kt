@@ -21,8 +21,6 @@ import com.gigforce.app.modules.photocrop.PhotoCrop
 import com.gigforce.app.modules.verification.models.*
 import com.gigforce.app.modules.verification.service.RetrofitFactory
 import com.gigforce.app.utils.GlideApp
-import com.google.android.gms.tasks.OnFailureListener
-import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
@@ -30,15 +28,13 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import io.reactivex.android.schedulers.AndroidSchedulers.mainThread
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.layout_verification_aadhaar.view.*
-import kotlinx.android.synthetic.main.layout_verification_dl.view.*
 import kotlinx.android.synthetic.main.layout_verification_dropdown.*
 import kotlinx.android.synthetic.main.layout_verification_dropdown.view.*
 
 
-class UploadDropDown: Fragment() {
+class AlternateAddressUpload: Fragment() {
     companion object {
-        fun newInstance() = UploadDropDown()
+        fun newInstance() = AlternateAddressUpload()
     }
 
     private lateinit var storage: FirebaseStorage

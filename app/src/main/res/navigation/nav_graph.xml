@@ -288,7 +288,7 @@
     </fragment>
     <fragment
         android:id="@+id/uploadDropDown"
-        android:name="com.gigforce.app.modules.verification.UploadDropDown"
+        android:name="com.gigforce.app.modules.verification.AlternateAddressUpload"
         android:label="UploadDropDown">
         <action
             android:id="@+id/action_uploadDropDown_to_bankUpload2"
