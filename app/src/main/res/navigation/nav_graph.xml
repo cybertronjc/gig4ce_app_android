@@ -298,6 +298,6 @@
         android:id="@+id/homeScreenNew"
         android:name="com.gigforce.app.modules.homescreen.HomeScreenNew"
         android:label="home_screen_new_fragment"
-        tools:layout="@layout/home_screen_new_fragment" />
+        tools:layout="@layout/item_homescreen1" />
 </navigation>
 

@@ -57,7 +57,7 @@ class HomeScreenNew : BaseFragment() {
 
                         })!!
         recyclerGenericAdapter.setList(datalist)
-        recyclerGenericAdapter.setLayout(R.layout.home_screen_new_fragment)
+        recyclerGenericAdapter.setLayout(R.layout.item_homescreen1)
         rv_.layoutManager = LinearLayoutManager(
                 activity?.applicationContext,
                 LinearLayoutManager.VERTICAL,
