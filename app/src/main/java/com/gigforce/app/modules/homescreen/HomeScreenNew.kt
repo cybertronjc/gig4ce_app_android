@@ -1,5 +1,6 @@
 package com.gigforce.app.modules.homescreen
 
+import android.icu.text.CaseMap
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -39,11 +40,11 @@ class HomeScreenNew : BaseFragment() {
         // TODO: Use the ViewModel
     }
     class DataItem{
-        lateinit var title:String;
-        lateinit var subTitle:String;
-        lateinit var date:String;
-        lateinit var comment:String;
-        lateinit var month:String;
+        var title:String = "Title";
+        var subTitle:String = "Sub Title";
+        var date:String = "15";
+        var comment:String = "below comments";
+        var month:String = "April";
 
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -53,21 +54,21 @@ class HomeScreenNew : BaseFragment() {
 
         val recyclerGenericAdapter: RecyclerGenericAdapter<DataItem> =
             RecyclerGenericAdapter<DataItem>(
-                activity.applicationContext,
+                activity?.applicationContext,
                 OnViewHolderClick<Any?> { view, position, item -> showToast("")},
                 ItemInterface<DataItem?> { obj, viewHolder ->
 
                 })
         recyclerGenericAdapter.setList(datalist)
         recyclerGenericAdapter.setLayout(R.layout.home_screen_new_fragment)
-        rvHS1.setLayoutManager(
+        rv_.setLayoutManager(
             LinearLayoutManager(
-                this,
+                activity?.applicationContext,
                 LinearLayoutManager.VERTICAL,
                 false
             )
         )
-        rvHS1.setAdapter(recyclerGenericAdapter)
+        rv_.adapter = recyclerGenericAdapter
     }
 
 }

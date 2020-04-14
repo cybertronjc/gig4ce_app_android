@@ -1,18 +1,31 @@
-        RecyclerGenericAdapter<BarMapNameAndValues> recyclerGenericAdapter = new RecyclerGenericAdapter<BarMapNameAndValues>(CurrentActivity.this, new PFRecyclerViewAdapter.OnViewHolderClick<BarMapNameAndValues>() {
-            @Override
-            public void onClick(View view, int position, BarMapNameAndValues item) {
-                openNewFragment(position);
-            }
-        }, new RecyclerGenericAdapter.ItemInterface<BarMapNameAndValues>() {
-            @Override
-            public void setItem(BarMapNameAndValues obj, PFRecyclerViewAdapter.ViewHolder viewHolder) {
-                ((TextView) viewHolder.getView(R.id.header_data)).setText(getHeaderTitleData(obj.Key) + " : " + obj.Key);
-                ((TextView) viewHolder.getView(R.id.value_data)).setText(obj.Value);
-                if(colorfulColors.length==listItemPosition)
-                listItemPosition=0;
-            }
-        });
-        recyclerGenericAdapter.setList(barMapNameAndValues);
-        recyclerGenericAdapter.setLayout(R.layout.chart_deatil_item);
-        detailDataLv.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        detailDataLv.setAdapter(recyclerGenericAdapter);
+class DataItem{
+        var title:String = "Title";
+        var subTitle:String = "Sub Title";
+        var date:String = "15";
+        var comment:String = "below comments";
+        var month:String = "April";
+
+    }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        var datalist: ArrayList<DataItem> = ArrayList<DataItem>()
+        datalist.add(DataItem())
+
+        val recyclerGenericAdapter: RecyclerGenericAdapter<DataItem> =
+            RecyclerGenericAdapter<DataItem>(
+                activity?.applicationContext,
+                OnViewHolderClick<Any?> { view, position, item -> showToast("")},
+                ItemInterface<DataItem?> { obj, viewHolder ->
+
+                })
+        recyclerGenericAdapter.setList(datalist)
+        recyclerGenericAdapter.setLayout(R.layout.home_screen_new_fragment)
+        rv_.setLayoutManager(
+            LinearLayoutManager(
+                activity?.applicationContext,
+                LinearLayoutManager.VERTICAL,
+                false
+            )
+        )
+        rv_.adapter = recyclerGenericAdapter
+    }
