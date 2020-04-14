@@ -25,4 +25,12 @@
     <declare-styleable name="OBTextViewItem">
         <attr name="textview" format="string" />
     </declare-styleable>
+
+    <declare-styleable name="ExtendedBottomSheetBehavior">
+        <attr name="hideable" format="boolean"/>
+        <attr name="peekHeight" format="dimension"/>
+        <attr name="skipCollapsed" format="boolean"/>
+        <attr name="halfOffset" format="dimension"/>
+        <attr name="allowDragging" format="boolean"/>
+    </declare-styleable>
 </resources>

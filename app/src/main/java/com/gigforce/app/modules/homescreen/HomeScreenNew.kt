@@ -32,13 +32,6 @@ class HomeScreenNew : BaseFragment() {
         return inflateView(R.layout.homescreen_1, inflater, container)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(HomeScreenNewViewModel::class.java)
-
-
-        // TODO: Use the ViewModel
-    }
     class DataItem{
         var title:String = "Title";
         var subTitle:String = "Sub Title";
@@ -49,7 +42,11 @@ class HomeScreenNew : BaseFragment() {
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel = ViewModelProviders.of(this).get(HomeScreenNewViewModel::class.java)
         var datalist: ArrayList<DataItem> = ArrayList<DataItem>()
+        datalist.add(DataItem())
+        datalist.add(DataItem())
+        datalist.add(DataItem())
         datalist.add(DataItem())
 
         val recyclerGenericAdapter: RecyclerGenericAdapter<DataItem> =
