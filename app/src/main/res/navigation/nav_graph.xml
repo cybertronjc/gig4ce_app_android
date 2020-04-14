@@ -184,6 +184,9 @@
         <action
             android:id="@+id/action_homeScreenIcons_to_verification"
             app:destination="@id/verification" />
+        <action
+            android:id="@+id/action_homeScreenIcons_to_homeScreenNew"
+            app:destination="@id/homeScreenNew" />
     </fragment>
     <dialog
         android:id="@+id/addTagBottomSheet"
@@ -291,5 +294,10 @@
             android:id="@+id/action_uploadDropDown_to_bankUpload2"
             app:destination="@id/bankUpload2" />
     </fragment>
+    <fragment
+        android:id="@+id/homeScreenNew"
+        android:name="com.gigforce.app.modules.homescreen.HomeScreenNew"
+        android:label="home_screen_new_fragment"
+        tools:layout="@layout/home_screen_new_fragment" />
 </navigation>
 

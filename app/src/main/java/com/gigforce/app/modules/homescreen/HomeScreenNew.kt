@@ -53,20 +53,18 @@ class HomeScreenNew : BaseFragment() {
         datalist.add(DataItem())
 
         val recyclerGenericAdapter: RecyclerGenericAdapter<DataItem> =
-            RecyclerGenericAdapter<DataItem>(
-                activity?.applicationContext,
-                OnViewHolderClick<Any?> { view, position, item -> showToast("")},
-                ItemInterface<DataItem?> { obj, viewHolder ->
+                RecyclerGenericAdapter<DataItem>(
+                        activity?.applicationContext,
+                        OnViewHolderClick<Any?> { view, position, item -> showToast("")},
+                        ItemInterface<DataItem?> { obj, viewHolder ->
 
-                })
+                        })!!
         recyclerGenericAdapter.setList(datalist)
         recyclerGenericAdapter.setLayout(R.layout.home_screen_new_fragment)
-        rv_.setLayoutManager(
-            LinearLayoutManager(
+        rv_.layoutManager = LinearLayoutManager(
                 activity?.applicationContext,
                 LinearLayoutManager.VERTICAL,
                 false
-            )
         )
         rv_.adapter = recyclerGenericAdapter
     }

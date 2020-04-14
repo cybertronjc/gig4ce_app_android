@@ -112,8 +112,8 @@ class HomeScreenIcons : Fragment() {
             when (position) {
                 0 -> {findNavController().navigate(R.id.profileFragment)}
                 1 -> {
-                //    findNavController().navigate(R.id.profileFragment)
-                    Toast.makeText(context, "TODO CTA: $position", Toast.LENGTH_SHORT).show()
+                    findNavController().navigate(R.id.homeScreenNew)
+                    //Toast.makeText(context, "TODO CTA: $position", Toast.LENGTH_SHORT).show()
                 }
                 2 -> {
                     //findNavController().navigate(R.id.profileFragment)

@@ -66,11 +66,12 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv2HS1"
-        tools:layout_editor_absoluteX="0dp">
-    </androidx.recyclerview.widget.RecyclerView>
+        app:layout_constraintVertical_weight="1"></androidx.recyclerview.widget.RecyclerView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
