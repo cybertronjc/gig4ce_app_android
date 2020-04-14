@@ -26,6 +26,11 @@
         android:id="@+id/addLanguageBottomSheetFragment"
         android:name="com.gigforce.app.modules.profile.AddLanguageBottomSheetFragment"
         android:label="AddLanguageBottomSheetFragment" />
+
+    <fragment android:id="@+id/authFlowFragment"
+        android:name="com.gigforce.app.modules.auth.AuthFlowFragment"
+        tools:layout="@layout/fragment_auth_flow"/>
+
     <fragment
         android:id="@+id/experienceExpandedFragment"
         android:name="com.gigforce.app.modules.profile.ExperienceExpandedFragment"
