@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
+import com.afollestad.materialdialogs.MaterialDialog
 import com.gigforce.app.R
 import com.gigforce.app.modules.profile.models.Achievement
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -111,8 +112,17 @@ class EditAchievementBottomSheet: BottomSheetDialogFragment() {
 
         layout.delete.setOnClickListener {
             Log.d("EditAchievement", "Deleting Achievement")
-            viewModel.removeProfileAchievement(achievement!!)
-            findNavController().navigate(R.id.educationExpandedFragment)
+            MaterialDialog(this.context!!).show {
+                title(text = "Confirm Delete")
+                message(text = "Are you sure to Delete this item?")
+                positiveButton(R.string.delete) {
+                    viewModel.removeProfileAchievement(achievement)
+                    findNavController().navigate(R.id.educationExpandedFragment)
+                }
+                negativeButton(R.string.cancel_text) {
+
+                }
+            }
         }
 
         layout.save.setOnClickListener {
