@@ -1,15 +1,12 @@
 package com.gigforce.app.modules.photocrop
 
-import android.Manifest
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
-import android.os.Environment
 import android.provider.MediaStore
-import android.util.Base64
 import android.util.Log
 import android.widget.ImageButton
 import android.widget.ImageView
@@ -20,9 +17,6 @@ import com.gigforce.app.R
 import com.gigforce.app.modules.photocrop.ProfilePictureOptionsBottomSheetFragment.BottomSheetListener
 import com.gigforce.app.modules.profile.ProfileViewModel
 import com.gigforce.app.utils.GlideApp
-import com.google.android.gms.tasks.OnSuccessListener
-import com.google.android.gms.tasks.Task
-import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.firebase.ml.vision.FirebaseVision
 import com.google.firebase.ml.vision.common.FirebaseVisionImage
 import com.google.firebase.ml.vision.face.FirebaseVisionFaceDetectorOptions
@@ -40,22 +34,23 @@ import java.util.*
 class PhotoCrop : AppCompatActivity(),
     BottomSheetListener {
     private val CODE_IMG_GALLERY: Int = 1
-    private val REQUEST_TAKE_PHOTO: Int = 1
     private val EXTENSION: String = ".jpg"
     private var cropX: Float = 1F
     private var cropY: Float = 1F
     private val resultIntent: Intent = Intent()
     private var PREFIX: String = "IMG"
     private lateinit var storage: FirebaseStorage
-    private lateinit var storageDirPath:String;
-    private var detectFace:Int = 1;
+    private lateinit var CLOUD_INPUT_FOLDER: String;
+    private var detectFace: Int = 1;
     private val DEFAULT_PICTURE: String = "avatar.jpg"
-    private lateinit var CLOUD_PICTURE_FOLDER: String
+    private val profilePictureCrop: String = "profilePictureCrop"
+    private val verification: String = "verification"
+    private lateinit var CLOUD_OUTPUT_FOLDER: String
     private lateinit var incomingFile: String
     private lateinit var imageView: ImageView
     private lateinit var backButton: ImageButton
     private lateinit var viewModel: ProfileViewModel
-    private lateinit var b64OfImg:String;
+    private lateinit var purpose: String
 
     var mStorage: FirebaseStorage = FirebaseStorage.getInstance()
 
@@ -80,58 +75,53 @@ class PhotoCrop : AppCompatActivity(),
     override fun onCreate(savedInstanceState: Bundle?): Unit {
         super.onCreate(savedInstanceState)
 
-        val bundle = intent.extras
-
-        if (bundle != null) {
-            storageDirPath = bundle.get("fbDir").toString()
-            detectFace = bundle.get("detectFace") as Int
-            CLOUD_PICTURE_FOLDER = bundle.get("folder").toString()
-            incomingFile = bundle.get("file").toString()
-        }
-
         this.setContentView(R.layout.activity_photo_crop)
         storage = FirebaseStorage.getInstance()
         imageView = this.findViewById(R.id.profile_avatar_photo_crop)
         backButton = this.findViewById(R.id.back_button_photo_crop)
-        var purpose: String = intent.getStringExtra("purpose")
+        purpose = intent.getStringExtra("purpose")
         Log.e("PHOTO_CROP", "purpose = " + purpose + " comparing with: profilePictureCrop")
-        if (purpose == "profilePictureCrop") profilePictureOptions()
-        if (purpose == "verification") verificationOptions()
+        /**
+         * Add new purpose call here.
+         */
+        when (purpose) {
+            profilePictureCrop -> profilePictureOptions()
+            verification -> verificationOptions()
+        }
     }
 
     private fun profilePictureOptions() {
         Log.e("PHOTO_CROP", "profile picture options started")
-        CLOUD_PICTURE_FOLDER = intent.getStringExtra("folder")
+        CLOUD_OUTPUT_FOLDER = intent.getStringExtra("folder")
         incomingFile = intent.getStringExtra("file")
         cropX = 1F
         cropY = 1F
-        PREFIX = intent.getStringExtra("uid")
+        PREFIX = "profile_" + intent.getStringExtra("uid")
         val bundle = intent.extras
         if (bundle != null) {
-            storageDirPath = bundle.get("fbDir").toString()
+            CLOUD_INPUT_FOLDER = bundle.get("fbDir").toString()
             detectFace = bundle.get("detectFace") as Int
-            CLOUD_PICTURE_FOLDER = bundle.get("folder").toString()
             incomingFile = bundle.get("file").toString()
         }
-        loadImage(incomingFile)
+        loadImage(CLOUD_INPUT_FOLDER,incomingFile)
         showBottomSheet()
     }
 
     private fun verificationOptions() {
-        Log.e("PHOTO_CROP", "profile picture options started")
-        CLOUD_PICTURE_FOLDER = intent.getStringExtra("folder")
-        incomingFile = intent.getStringExtra("file")
+        Log.e("PHOTO_CROP", "verification options started")
+        CLOUD_OUTPUT_FOLDER = intent.getStringExtra("folder")
+        incomingFile = "verification_" + intent.getStringExtra("file")
         cropX = 7F
         cropY = 5F
         PREFIX = intent.getStringExtra("uid")
         val bundle = intent.extras
         if (bundle != null) {
-            storageDirPath = bundle.get("fbDir").toString()
+            CLOUD_INPUT_FOLDER = bundle.get("fbDir").toString()
             detectFace = bundle.get("detectFace") as Int
-            CLOUD_PICTURE_FOLDER = bundle.get("folder").toString()
+            CLOUD_OUTPUT_FOLDER = bundle.get("folder").toString()
             incomingFile = bundle.get("file").toString()
         }
-        loadImage(incomingFile)
+        loadImage(CLOUD_INPUT_FOLDER,incomingFile)
         showBottomSheet()
     }
 
@@ -199,7 +189,7 @@ class PhotoCrop : AppCompatActivity(),
             val imageUriResultCrop: Uri? = UCrop.getOutput((data!!))
             Log.d("ImageUri", imageUriResultCrop.toString())
             if (imageUriResultCrop != null) {
-                resultIntent.putExtra("uri",imageUriResultCrop);
+                resultIntent.putExtra("uri", imageUriResultCrop);
                 Log.v("REQUEST CROP", requestCode.toString())
             }
             var baos = ByteArrayOutputStream()
@@ -220,7 +210,7 @@ class PhotoCrop : AppCompatActivity(),
                                 "Face detected, successfully updated your profile pic" + faces[0].boundingBox.toString(),
                                 Toast.LENGTH_LONG
                             ).show()
-                            upload(imageUriResultCrop, baos.toByteArray())
+                            upload(imageUriResultCrop, baos.toByteArray(),CLOUD_OUTPUT_FOLDER)
 
                         } else {
                             Toast.makeText(
@@ -233,12 +223,11 @@ class PhotoCrop : AppCompatActivity(),
                     .addOnFailureListener { e ->
                         // Task failed with an exception
                         Log.d("CStatus", "Face detection failed! still uploading the image")
-                        upload(imageUriResultCrop, baos.toByteArray())
+                        upload(imageUriResultCrop, baos.toByteArray(),CLOUD_OUTPUT_FOLDER)
                     }
-            }
-            else{
+            } else {
                 //just upload wihtout face detection eg for pan, aadhar, other docs.
-                upload(imageUriResultCrop, baos.toByteArray());
+                upload(imageUriResultCrop, baos.toByteArray(),CLOUD_OUTPUT_FOLDER);
             }
         }
         Log.d("CStatus", "completed result on activity")
@@ -289,10 +278,10 @@ class PhotoCrop : AppCompatActivity(),
         return options
     }
 
-    private fun upload(uri: Uri?, data: ByteArray) {
+    private fun upload(uri: Uri?, data: ByteArray, folder: String) {
         Log.v("Upload Image", "started")
         var mReference =
-            mStorage.reference.child(storageDirPath).child(uri!!.lastPathSegment!!)
+            mStorage.reference.child(folder).child(uri!!.lastPathSegment!!)
 
         /**
          * Uploading task created and initiated here.
@@ -325,13 +314,16 @@ class PhotoCrop : AppCompatActivity(),
          */
         try {
             uploadTask.addOnSuccessListener { taskSnapshot: TaskSnapshot ->
-                val name: String = taskSnapshot.metadata?.reference?.name.toString()
-                viewModel.setProfileAvatarName(name)
-                loadImage(name)
+                val fname: String = taskSnapshot.metadata?.reference?.name.toString()
+                if (purpose == profilePictureCrop)
+                    viewModel.setProfileAvatarName(fname)
+                loadImage(folder,fname)
                 Toast.makeText(this, "Successfully Uploaded :)", Toast.LENGTH_LONG).show()
-                Log.v("Upload Image", name)
+                Log.v(
+                    "PHOTO_CROP",
+                    "uploaded file in foldername" + CLOUD_OUTPUT_FOLDER + " file: " + fname
+                )
                 setResult(Activity.RESULT_OK, resultIntent)
-                super.finish()
             }
         } catch (e: Exception) {
             Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show()
@@ -344,16 +336,21 @@ class PhotoCrop : AppCompatActivity(),
      * Reloads the Image preview
      */
     private fun defaultProfilePicture() {
-        viewModel.setProfileAvatarName(DEFAULT_PICTURE)
-        loadImage(DEFAULT_PICTURE)
-        resultIntent.putExtra("filename", DEFAULT_PICTURE)
-        setResult(Activity.RESULT_OK, resultIntent)
+        if (purpose == profilePictureCrop) {
+            viewModel.setProfileAvatarName(DEFAULT_PICTURE)
+            loadImage(CLOUD_INPUT_FOLDER,DEFAULT_PICTURE)
+            resultIntent.putExtra("filename", DEFAULT_PICTURE)
+            setResult(Activity.RESULT_OK, resultIntent)
+        }
     }
 
-    private fun loadImage(Path: String) {
-        Log.d("PHOTO_CROP", "loading - " + Path)
+    /**
+     *
+     */
+    private fun loadImage(folder:String,path: String) {
+        Log.d("PHOTO_CROP", "loading - " + path)
         var profilePicRef: StorageReference =
-            storage.reference.child(CLOUD_PICTURE_FOLDER).child(Path)
+            storage.reference.child(folder).child(path)
         GlideApp.with(this)
             .load(profilePicRef)
             .into(imageView)
