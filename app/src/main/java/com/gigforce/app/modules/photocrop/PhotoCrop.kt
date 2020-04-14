@@ -315,8 +315,7 @@ class PhotoCrop : AppCompatActivity(),
         try {
             uploadTask.addOnSuccessListener { taskSnapshot: TaskSnapshot ->
                 val fname: String = taskSnapshot.metadata?.reference?.name.toString()
-                if (purpose == profilePictureCrop)
-                    viewModel.setProfileAvatarName(fname)
+                updateViewModel(purpose,fname)
                 loadImage(folder,fname)
                 Toast.makeText(this, "Successfully Uploaded :)", Toast.LENGTH_LONG).show()
                 Log.v(
@@ -327,6 +326,18 @@ class PhotoCrop : AppCompatActivity(),
             }
         } catch (e: Exception) {
             Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show()
+        }
+    }
+
+    /**
+     * Contains any changes that need to be done to view model on successful upload
+     *
+     * @param purpose - to define the logic that should be followed in update
+     * @param name - required for updating profile picture value ( alternate constructors can be made for different arguments )
+     */
+    private  fun updateViewModel(purpose: String, name:String){
+        when (purpose){
+            profilePictureCrop -> viewModel.setProfileAvatarName(name)
         }
     }
 
