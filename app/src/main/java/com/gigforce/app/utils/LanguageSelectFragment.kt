@@ -1,28 +1,18 @@
 package com.gigforce.app.utils
 
-//import com.franmontiel.localechanger.sample.SampleApplication.SUPPORTED_LOCALES
-
 import android.content.res.Configuration
 import android.os.Bundle
 import android.view.*
 import android.widget.RadioButton
-import android.widget.RadioGroup
-import android.widget.Spinner
-import android.widget.Toast
-import androidx.activity.addCallback
-import androidx.core.content.edit
-import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
-import butterknife.ButterKnife
-import butterknife.Unbinder
 import com.franmontiel.localechanger.LocaleChanger
 import com.gigforce.app.R
+import com.gigforce.app.core.base.BaseFragment
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.fragment_select_language.view.*
+import kotlinx.android.synthetic.main.fragment_select_language.*
 import java.util.*
 
 
-class LanguageSelectFragment : Fragment(){
+class LanguageSelectFragment : BaseFragment() {
 
     val SUPPORTED_LOCALES =
         Arrays.asList(
@@ -46,18 +36,6 @@ class LanguageSelectFragment : Fragment(){
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-    lateinit var layout:View;
-    ///@BindView(com.gigforce.app.R.id.localeSpinner)
-    lateinit var localeSpinner: Spinner;// = layout.findViewById(R.id.localeSpinner)
-    lateinit var radioGroup:RadioGroup;
-    /*
-    @BindView(com.gigforce.app.R.id.currentLocale)
-    var currentLocale: TextView? = null
-    @BindView(com.gigforce.app.R.id.date)
-    var date: TextView? = null
-
-     */
-    private var unbinder: Unbinder? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -66,52 +44,54 @@ class LanguageSelectFragment : Fragment(){
         this.setDarkStatusBarTheme()
         try {
             LocaleChanger.initialize(this.context, SUPPORTED_LOCALES)
-        }catch (e:Exception){
-            
+        } catch (e: Exception) {
+
         }
-        layout = inflater.inflate(R.layout.fragment_select_language, container, false)
-        radioGroup = layout.findViewById(R.id.groupradio)
-        radioGroup.clearCheck()
-        unbinder = ButterKnife.bind(this, layout)
-        return layout
+        return inflateView(R.layout.fragment_select_language, inflater, container)
     }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        initializer()
         setDefaultLanguage()
-        layout.nextbuttonLang.setOnClickListener(){
+        listener()
+    }
+
+    private fun initializer() {
+        groupradio.clearCheck()
+    }
+
+    private fun listener() {
+        nextbuttonLang.setOnClickListener() {
             onNextButtonClicked()
         }
+
     }
+
 
     private fun setDefaultLanguage() {
-        radioGroup.findViewById<RadioButton>(R.id.en).isChecked = true
+        groupradio.findViewById<RadioButton>(R.id.en).isChecked = true
     }
 
-    private fun onNextButtonClicked(){
-        val selectedId = radioGroup.checkedRadioButtonId
+    private fun onNextButtonClicked() {
+        val selectedId = groupradio.checkedRadioButtonId
         if (selectedId == -1) {
-            Snackbar.make(layout,"Please Select a Language!",Snackbar.LENGTH_SHORT).show()
+            Snackbar.make(getFragmentView(), "Please Select a Language!", Snackbar.LENGTH_SHORT)
+                .show()
         } else {
-            val radioButton = radioGroup.findViewById<RadioButton>(selectedId)
+            val radioButton = groupradio.findViewById<RadioButton>(selectedId)
             val lang = radioButton.hint.toString()
             updateResources(lang)
-
-            activity?.getSharedPreferences("appsettings", 0).let {
-                it?.edit {
-                    this.putString("app_lang", lang)
-                }
-            }
-
-            // TODO findNavController().navigate(R.id.loginFragment)
+            savePreferences(AppConstants.APP_LANGUAGE, lang)
             navNext()
         }
     }
 
-    private fun navNext(){
-        findNavController().navigate(R.id.introSlidesFragment)
+    private fun navNext() {
+        navigateWithAllPopupStack(R.id.authFlowFragment)
     }
 
-    private fun updateResources(language: String)   {
+    private fun updateResources(language: String) {
         val locale = Locale(language)
         val config2 = Configuration()
         config2.locale = locale
@@ -120,17 +100,8 @@ class LanguageSelectFragment : Fragment(){
         Locale.setDefault(locale)
     }
 
-/*
-    override fun onResume() {
-            super.onResume()
-            currentLocale?.text = Locale.getDefault().toString()
-            date?.setText(DateProvider.provideSystemLocaleFormattedDate())
-        }
-*/
-
-        override fun onDestroyView() {
-            unbinder?.unbind()
-            LocaleChanger.resetLocale()
-            super.onDestroyView()
-        }
+    override fun onDestroyView() {
+        LocaleChanger.resetLocale()
+        super.onDestroyView()
     }
+}

@@ -13,7 +13,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.gigforce.app.R
+import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.modules.onboarding.utils.DepthPageTransformer
+import com.gigforce.app.utils.AppConstants
 import com.gigforce.app.utils.GlideApp
 import com.gigforce.app.utils.dp
 import kotlinx.android.synthetic.main.fragment_intro_slides.*
@@ -23,33 +25,27 @@ import kotlinx.android.synthetic.main.fragment_intro_slides.*
  * Use the [IntroSlidesFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class IntroSlidesFragment : Fragment() {
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-
-        }
-    }
+class IntroSlidesFragment : BaseFragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_intro_slides, container, false)
+        return inflateView(R.layout.fragment_intro_slides, inflater, container)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        this.setupViewPager()
+        setupViewPager()
     }
 
     fun setupViewPager(){
         this.viewpager.adapter = IntroSlidesViewPagerAdapter(this.viewpager, object: OnIntroSlidesCompleted(){
 
             override fun invoke() {
-                this@IntroSlidesFragment.findNavController().navigate(getResourceToNavigateTo())
+                savePreferences(AppConstants.INTRO_COMPLETE, "true")
+                navigateWithAllPopupStack(R.id.authFlowFragment)
             }
         })
         // this.viewpager.setPageTransformer(DepthPageTransformer())
