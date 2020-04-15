@@ -79,6 +79,7 @@ class HomeScreenIcons : BaseFragment() {
         dialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog?.setCancelable(false)
         dialog?.setContentView(R.layout.signout_custom_alert)
+        //title already mentioned in xml
         val body = dialog?.findViewById(R.id.title) as TextView
         val yesBtn = dialog?.findViewById(R.id.yes) as TextView
         val noBtn = dialog?.findViewById(R.id.cancel) as TextView
