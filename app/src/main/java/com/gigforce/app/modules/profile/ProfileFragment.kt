@@ -6,29 +6,24 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.Toast
+import android.view.*
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
-
 import com.gigforce.app.modules.photocrop.PhotoCrop
-import com.gigforce.app.modules.photocrop.*
-import com.gigforce.app.modules.profile.models.Achievement
 import com.gigforce.app.utils.GlideApp
+import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.chip.Chip
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
-import kotlinx.android.synthetic.main.fragment_profile_education_expanded.view.*
 import kotlinx.android.synthetic.main.fragment_profile_main_expanded.view.*
 import kotlinx.android.synthetic.main.profile_main_card_background.view.*
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
+
 
 class ProfileFragment : Fragment() {
 
@@ -40,6 +35,7 @@ class ProfileFragment : Fragment() {
     private lateinit var storage: FirebaseStorage
     private lateinit var layout: View
     private lateinit var profileAvatarName: String
+    private lateinit var dWidth: Display
     private var PHOTO_CROP: Int = 45
     private var PROFILE_PICTURE_FOLDER: String = "profile_pics"
 
@@ -50,9 +46,30 @@ class ProfileFragment : Fragment() {
     ): View? {
         storage = FirebaseStorage.getInstance()
         Log.d("DEBUG", "ENTERED PROFILE VIEW")
+        val wm = context!!.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+        dWidth = wm.defaultDisplay
         layout = inflater.inflate(R.layout.fragment_profile_main_expanded, container, false)
-
+        layout.appbar.post(Runnable {
+            val heightPx: Int = dWidth.width * 1 / 3
+            setAppBarOffset(heightPx)
+        })
+        layout.profile_avatar.layoutParams.height = dWidth.width
         return layout
+    }
+
+    private fun setAppBarOffset(offsetPx: Int) {
+        val params =  layout.appbar.layoutParams as CoordinatorLayout.LayoutParams
+        val behavior = params.behavior as AppBarLayout.Behavior?
+
+        behavior!!.onNestedPreScroll(
+            layout.coordinator,
+            layout.appbar,
+            this!!.view!!,
+            0,
+            offsetPx,
+            intArrayOf(0, 0),
+            0
+        )
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -159,7 +176,9 @@ class ProfileFragment : Fragment() {
             this.findNavController().navigate(R.id.addTagBottomSheet)
         }
 
-        // back page navigation
+        /**
+         * back page navigation
+          */
         layout.profile_main_expanded_back_button.setOnClickListener{
             this.findNavController().navigate(R.id.homeFragment)
         }
