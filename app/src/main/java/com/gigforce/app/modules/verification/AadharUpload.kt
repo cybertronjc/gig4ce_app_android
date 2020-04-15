@@ -22,6 +22,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
+import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.modules.auth.ui.main.Login
 import com.gigforce.app.modules.photocrop.*
 import com.gigforce.app.modules.verification.Verification
@@ -46,7 +47,7 @@ import kotlinx.android.synthetic.main.layout_verification_aadhaar.view.*
 import kotlinx.android.synthetic.main.layout_verification_pancard.view.*
 import java.io.ByteArrayOutputStream
 
-class AadhaarUpload: Fragment() {
+class AadhaarUpload: BaseFragment() {
     companion object {
         fun newInstance() = Login()
     }
