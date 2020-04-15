@@ -210,4 +210,8 @@
     <string name="remove_document_picture">Remove Picture</string>
     <string name="document_picture">Image Option</string>
     <string name="edit_education">Edit Education</string>
+
+    <!-- home screen new -->
+    <string name="homescreenRV">Dunzo Deliveries\n+2 more </string>
+    homescreenRV
 </resources>

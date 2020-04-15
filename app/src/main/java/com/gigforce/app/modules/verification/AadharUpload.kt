@@ -14,23 +14,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.Toast
-import androidx.activity.OnBackPressedCallback
 import androidx.annotation.RequiresApi
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.modules.auth.ui.main.Login
 import com.gigforce.app.modules.photocrop.*
-import com.gigforce.app.modules.verification.Verification
-import com.gigforce.app.modules.verification.VerificationViewModel
 
-import com.gigforce.app.modules.verification.models.OCRDocData
 import com.gigforce.app.modules.verification.models.OCRDocsData
-import com.gigforce.app.modules.verification.models.PostDataOCR
 import com.gigforce.app.modules.verification.models.PostDataOCRs
 import com.gigforce.app.modules.verification.service.RetrofitFactory
 import com.gigforce.app.utils.GlideApp
@@ -41,10 +33,8 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.layout_verification.view.*
 import kotlinx.android.synthetic.main.layout_verification_aadhaar.*
 import kotlinx.android.synthetic.main.layout_verification_aadhaar.view.*
-import kotlinx.android.synthetic.main.layout_verification_pancard.view.*
 import java.io.ByteArrayOutputStream
 
 class AadhaarUpload: BaseFragment() {
@@ -55,7 +45,7 @@ class AadhaarUpload: BaseFragment() {
     private lateinit var storage: FirebaseStorage
     var firebaseDB = FirebaseFirestore.getInstance()
     var uid = FirebaseAuth.getInstance().currentUser?.uid!!
-    lateinit var layout: View
+    private var layout: View? = null
     private lateinit var AadhaarFront: ImageView
     private lateinit var AadhaarBack: ImageView
     lateinit var viewModel: VerificationViewModel
@@ -66,6 +56,7 @@ class AadhaarUpload: BaseFragment() {
     private  lateinit  var uriFront: Uri
     private  lateinit  var uriBack: Uri
 
+
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -74,9 +65,9 @@ class AadhaarUpload: BaseFragment() {
     ): View? {
         storage = FirebaseStorage.getInstance()
         viewModel = ViewModelProviders.of(this).get(VerificationViewModel::class.java)
-        layout = inflater.inflate(R.layout.layout_verification_aadhaar, container, false)
+        layout =  inflateView(R.layout.layout_verification_aadhaar, inflater, container)
         //requireActivity().onBackPressedDispatcher.addCallback(this, callback)
-        layout.pbAadhaar.setProgress(20,true)
+        layout?.pbAadhaar?.setProgress(20,true)
         return layout
     }
 
@@ -95,8 +86,8 @@ class AadhaarUpload: BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         tvAadhaarNo.setOnClickListener { findNavController().navigate(R.id.uploadDropDown) }
         viewModel = ViewModelProviders.of(this).get(VerificationViewModel::class.java)
-        AadhaarFront = layout.findViewById(R.id.Aadhaar_front)
-        AadhaarBack = layout.findViewById(R.id.Aadhaar_back)
+        AadhaarFront = layout?.findViewById(R.id.Aadhaar_front)!!
+        AadhaarBack = layout?.findViewById(R.id.Aadhaar_back)!!
         val photoCropIntent = Intent(context, PhotoCrop::class.java)
         photoCropIntent.putExtra("purpose","verification")
         photoCropIntent.putExtra("uid",viewModel.uid)
@@ -110,10 +101,7 @@ class AadhaarUpload: BaseFragment() {
         }
         AadhaarBack.setOnClickListener {
             if(AadhaarFront.drawable==null) {
-                Toast.makeText(
-                    this.context,
-                    "Please upload the front side first!",
-                    Toast.LENGTH_LONG).show()
+                showToast("Please upload the front side first!")
             }
             else {
                 photoCropIntent.putExtra("file", "adback.jpg")
@@ -131,10 +119,7 @@ class AadhaarUpload: BaseFragment() {
                 findNavController().navigate(R.id.uploadDropDown)
             }
             else {
-                Toast.makeText(
-                    this.context,
-                    "Please upload the Aadhaar before proceeding",
-                    Toast.LENGTH_LONG).show()
+                showToast("Please upload the Aadhaar before proceeding")
             }
         }
     }
@@ -162,22 +147,12 @@ class AadhaarUpload: BaseFragment() {
                     firebaseDB.collection("Verification")
                         .document(uid).update("Aadhaar", FieldValue.arrayUnion(extractionOutput))
                         .addOnSuccessListener {
-                            Toast.makeText(
-                                this.context,
-                                //">>>"+response!!.result!!.extraction_output!!.gender!!.toString(),
-                                "Document successfully uploaded!",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                            Log.d("REPOSITORY", "Aadhaar added successfully!")
+                                showToast("Document successfully uploaded!")
+                                Log.d("REPOSITORY", "Aadhaar added successfully!")
                         }
                         .addOnFailureListener{
                                 exception ->  Log.d("Repository", exception.toString())
-                            Toast.makeText(
-                                this.context,
-                                //">>>"+response!!.result!!.extraction_output!!.gender!!.toString(),
-                                "Some failure, please retry!",
-                                Toast.LENGTH_SHORT
-                            ).show()
+                                showToast("Some failure, please retry!")
                         }
                     /** response is response data class*/
                 }, { error ->
@@ -211,8 +186,8 @@ class AadhaarUpload: BaseFragment() {
                 var filepath = "/Aadhaar/"+imageName;
                 if(frontNotDone==1){
                     uriFront = data?.getParcelableExtra("uri")!!;
-                    //loadImage("verification",filepath, layout.Aadhaar_front)
-                    layout.Aadhaar_front.setImageURI(uriFront);
+                    //loadImage("verification",filepath, layout?.Aadhaar_front)
+                    layout?.Aadhaar_front?.setImageURI(uriFront);
                     frontNotDone = 0;
                 }
                 else{
@@ -226,8 +201,8 @@ class AadhaarUpload: BaseFragment() {
                     val groupid:String = "8e16424a-58fc-4ba4-ab20-5bc8e7c3c41f";
                     var postData = PostDataOCRs(taskid,groupid,ocrdata!!)
                     idfyApiCall(postData)
-                    //loadImage("verification",filepath, layout.Aadhaar_back)
-                    layout.Aadhaar_back.setImageURI(uriBack);
+                    //loadImage("verification",filepath, layout?.Aadhaar_back)
+                    layout?.Aadhaar_back?.setImageURI(uriBack);
                     docUploaded = 1;
                 }
             }

@@ -2,53 +2,99 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout
 xmlns:android="http://schemas.android.com/apk/res/android"
 xmlns:app="http://schemas.android.com/apk/res-auto"
-android:layout_width="match_parent"
-android:layout_height="wrap_content">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+android:layout_height="match_parent">
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/tv1HS1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="18dp"
+            android:layout_marginTop="39dp"
+            android:letterSpacing="0.01"
+            android:text="Good morning!"
+            android:textColor="#cd000000"
+            android:textSize="22sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv2HS1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="23dp"
+            android:layout_marginTop="29dp"
+            android:gravity="center_horizontal"
+            android:textColor="#333333"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv1HS1"
+            tools:text="April 2020" />
+
+        <ImageView
+            android:id="@+id/iv1HS1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="94dp"
+            android:layout_marginTop="39dp"
+            app:layout_constraintStart_toEndOf="@+id/tv1HS1"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@android:drawable/ic_search_category_default" />
+
+        <ImageView
+            android:id="@+id/iv2HS1"
+            android:layout_width="93dp"
+            android:layout_height="61dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="24dp"
+            app:layout_constraintStart_toEndOf="@+id/iv1HS1"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_user_icon" />
+
+        <ImageView
+            android:id="@+id/iv3HS1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="32dp"
+            app:layout_constraintStart_toEndOf="@+id/tv2HS1"
+            app:layout_constraintTop_toBottomOf="@+id/tv1HS1"
+            app:srcCompat="@drawable/homescreen_month_dropdown" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@+id/nsv"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv2HS1"
+            app:layout_constraintVertical_weight="1"
+            tools:ignore="NotSibling"></androidx.recyclerview.widget.RecyclerView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+<!--<include layout="@layout/homescreen_1" />-->
+<!--        <LinearLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:orientation="vertical">-->
+<!--            -->
+<!--        </LinearLayout>-->
 
-            <Button
-                android:id="@+id/btnHide"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Hide" />
-
-            <Button
-                android:id="@+id/btnCollapse"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Collapse" />
-
-            <Button
-                android:id="@+id/btnHalf"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Half" />
-
-            <Button
-                android:id="@+id/btnExpand"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Expand" />
-
-            <Button
-                android:id="@+id/btnDragging"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Disable dragging" />
-
-        </LinearLayout>
-
-        <NestedScrollView
+        <androidx.core.widget.NestedScrollView
             android:id="@+id/nsv"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@android:color/holo_green_light"
-            android:clipToPadding="true"          >
+            app:allowDragging="true"
+            app:halfOffset="172dp"
+            app:hideable="true"
+            app:layout_behavior="com.riningan.widget.ExtendedBottomSheetBehavior"
+            app:peekHeight="128dp">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -61,7 +107,7 @@ android:layout_height="wrap_content">
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-        </NestedScrollView>
+        </androidx.core.widget.NestedScrollView>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 <!--    app:allowDragging="true"-->

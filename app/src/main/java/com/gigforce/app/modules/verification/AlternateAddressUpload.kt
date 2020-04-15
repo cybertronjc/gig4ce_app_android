@@ -13,10 +13,10 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.activity.OnBackPressedCallback
 import androidx.annotation.RequiresApi
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
+import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.modules.photocrop.PhotoCrop
 import com.gigforce.app.modules.verification.models.*
 import com.gigforce.app.modules.verification.service.RetrofitFactory
@@ -32,7 +32,7 @@ import kotlinx.android.synthetic.main.layout_verification_dropdown.*
 import kotlinx.android.synthetic.main.layout_verification_dropdown.view.*
 
 
-class AlternateAddressUpload: Fragment() {
+class AlternateAddressUpload: BaseFragment() {
     companion object {
         fun newInstance() = AlternateAddressUpload()
     }
