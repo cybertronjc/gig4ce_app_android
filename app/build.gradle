@@ -141,6 +141,8 @@ dependencies {
     // https://github.com/ReactiveX/RxAndroid
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
     implementation 'io.reactivex.rxjava2:rxjava:2.2.0'
+
+    implementation 'com.github.robsonldo:firestore-orm:0.0.5-beta'
 }
 
 apply plugin: 'com.google.gms.google-services'

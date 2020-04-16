@@ -10,19 +10,20 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import br.com.robsonldo.library.interfaces.OnCompletion
+import br.com.robsonldo.library.interfaces.OnCompletionAll
 import com.gigforce.app.R
-import com.gigforce.app.modules.auth.utils.SignoutTask
-import com.gigforce.app.modules.profile.models.ProfileData
-import com.gigforce.app.modules.verification.VeriFirebaseRepository
+import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.utils.setDarkStatusBarTheme
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.*
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.layout_home_screen.*
 import kotlinx.android.synthetic.main.layout_home_screen.view.*
+import com.google.firebase.firestore.DocumentSnapshot as DocumentSnapshot1
 
 
-class HomeScreenIcons : Fragment() {
+class HomeScreenIcons : BaseFragment() {
 
     //todo
     private lateinit var storage: FirebaseStorage
@@ -66,10 +67,40 @@ class HomeScreenIcons : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         this.setDarkStatusBarTheme(false)
         val gridview = layout.findViewById<GridView>(R.id.gridview)
-
         val adapter = this.context?.let { HomeScreenAdapter(it, R.layout.item_gridhomescreen, itemList) }
         gridview.adapter = adapter
+//        val newTest = NewTest()
+//        newTest.apply { name = "will"
+//        }
+//        newTest.save(onCompletion = object : OnCompletion<NewTest> {
+//            override fun onSuccess(obj: NewTest) {
+//                showToast("working "+obj.name)
+//            }
+//
+//            override fun onError(e: Exception) {
+//
+//            }
+//        })
+//        newTest.all(object : OnCompletionAll<NewTest> {
+//            override fun onSuccess(objs: MutableList<NewTest>) {
+//            }
+//
+//            override fun onError(e: Exception) {
+//            }
+//        })
+        Verification().all(object : OnCompletionAll<Verification> {
+            override fun onSuccess(objs: MutableList<Verification>) {
+                var addharCards = objs.get(1).aadhaarCards
+                if (addharCards != null) {
+                    for(adhaar in addharCards){
+                        showToast(adhaar.address!!)
+                    }
+                }
+            }
 
+            override fun onError(e: Exception) {
+            }
+        })
         //topbar.setOnClickListener { findNavController().navigate(R.id.profileFragment) }
         cardviewkyc.text_kyc.setOnClickListener {
 
@@ -140,7 +171,7 @@ class HomeScreenIcons : Fragment() {
 
 //        firebaseDB.collection("Verification").whereEqualTo(FieldPath.documentId(),"GigerId1").whereEqualTo()
 
-        firebaseDB.collection("Verification").document(uid).addSnapshotListener(EventListener<DocumentSnapshot> {
+        firebaseDB.collection("Verification").document(uid).addSnapshotListener(EventListener<DocumentSnapshot1> {
                 value, e ->
             if (e != null) {
                 Log.w("HomeScreenIcons", "Listen failed", e)
