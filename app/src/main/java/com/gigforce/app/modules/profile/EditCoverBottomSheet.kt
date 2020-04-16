@@ -7,11 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
-import kotlinx.android.synthetic.main.add_tag_bottom_sheet.view.*
 import kotlinx.android.synthetic.main.edit_cover_bottom_sheet.*
 
 class EditCoverBottomSheet(): ProfileBaseBottomSheetFragment() {
@@ -23,6 +23,7 @@ class EditCoverBottomSheet(): ProfileBaseBottomSheetFragment() {
     var tagsToRemove: ArrayList<String> = ArrayList()
     var tagsToAdd: ArrayList<String> = ArrayList()
     var allTags: ArrayList<String> = ArrayList()
+    var userTags: ArrayList<String> = ArrayList()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -54,6 +55,8 @@ class EditCoverBottomSheet(): ProfileBaseBottomSheetFragment() {
         profileViewModel!!.userProfileData.observe(this, Observer { profile ->
             bio.setText(profile.bio)
 
+            userTags = profile.Tags!!
+
             for (tag in profile.Tags!!) {
                 var chip = addCrossableChip(this.context!!, tag)
                 tags.addView(chip)
@@ -72,16 +75,17 @@ class EditCoverBottomSheet(): ProfileBaseBottomSheetFragment() {
         }
 
         save_button.setOnClickListener {
-            for (tag in tagsToAdd) {
-                profileViewModel!!.setProfileTag(tag)
-            }
+            profileViewModel!!.setProfileTag(tagsToAdd)
 
-            for (tag in tagsToRemove) {
-                profileViewModel!!.removeProfileTag(tag)
-            }
+            profileViewModel!!.removeProfileTag(tagsToRemove)
 
             if (bio_text.text.toString() != "") {
-                profileViewModel!!.setProfileBio(bio.text.toString())
+                if (bio_text.text.toString().length <= 150) {
+                    profileViewModel!!.setProfileBio(bio.text.toString())
+                }
+                else {
+                    Toast.makeText(this.context, "Bio text should be less than 150 characters", Toast.LENGTH_LONG).show()
+                }
             }
 
             findNavController().navigate(R.id.profileFragment)
@@ -92,13 +96,15 @@ class EditCoverBottomSheet(): ProfileBaseBottomSheetFragment() {
             if (!allTags.contains(tag)) {
                 profileViewModel!!.addNewTag(tag)
             }
-            tagsToAdd.add(tag)
-            var chip = addCrossableChip(this.context!!, tag)
-            tags.addView(chip)
-            chip.setOnCloseIconClickListener {
-                Log.d("STATUS", "Deleting tag")
-                tagsToRemove.add(tag)
-                tags.removeView(it)
+            if (!userTags.contains(tag) && !tagsToAdd.contains(tag)) {
+                tagsToAdd.add(tag)
+                var chip = addCrossableChip(this.context!!, tag)
+                tags.addView(chip)
+                chip.setOnCloseIconClickListener {
+                    Log.d("STATUS", "Deleting tag")
+                    tagsToRemove.add(tag)
+                    tags.removeView(it)
+                }
             }
             add_tag_new_tag.setText("")
         }
