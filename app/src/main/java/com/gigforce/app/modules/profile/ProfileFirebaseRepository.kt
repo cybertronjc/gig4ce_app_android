@@ -103,4 +103,9 @@ class ProfileFirebaseRepository {
         firebaseDB.collection(profileCollectionName)
             .document(uid).update("Tags", FieldValue.arrayRemove(tag))
     }
+
+    fun setProfileBio(bio: String) {
+        firebaseDB.collection(profileCollectionName)
+            .document(uid).update("bio", bio)
+    }
 }

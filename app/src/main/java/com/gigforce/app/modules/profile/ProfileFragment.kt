@@ -72,12 +72,14 @@ class ProfileFragment : Fragment() {
                 layout.main_expanded_is_verified.setBackgroundColor(Color.parseColor("#00FF00"))
             }
 
+            layout.bio.text = profile.bio
+
             for (tag in profile.Tags!!) {
                 layout.main_tags.addView(addChip(this.context!!, tag))
             }
 
             var mainAboutString = ""
-            mainAboutString += profile.bio.toString() + "\n\n"
+            mainAboutString += profile.aboutMe.toString() + "\n\n"
             mainAboutString += "Language knows: "
             if (profile.Language!!.size > 0) {
                 var languages = profile.Language!!.sortedWith(compareBy { it.writingSkill })
@@ -155,8 +157,8 @@ class ProfileFragment : Fragment() {
             photoCropIntent.putExtra("file", profileAvatarName)
             startActivityForResult(photoCropIntent, PHOTO_CROP)
         }
-        layout.add_tags_button.setOnClickListener{
-            this.findNavController().navigate(R.id.addTagBottomSheet)
+        layout.edit_cover.setOnClickListener{
+            this.findNavController().navigate(R.id.editCoverBottomSheet)
         }
 
         // back page navigation

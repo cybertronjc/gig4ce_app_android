@@ -71,8 +71,8 @@
             android:id="@+id/action_profileFragment_to_experienceExpandedFragment2"
             app:destination="@id/experienceExpandedFragment" />
         <action
-            android:id="@+id/action_profileFragment_to_addTagBottomSheet"
-            app:destination="@id/addTagBottomSheet" />
+            android:id="@+id/action_profileFragment_to_editCoverBottomSheet"
+            app:destination="@id/editCoverBottomSheet" />
     </fragment>
     <fragment
         android:id="@+id/chatsHomeFragment"
@@ -186,11 +186,6 @@
             app:destination="@id/verification" />
     </fragment>
     <dialog
-        android:id="@+id/addTagBottomSheet"
-        android:name="com.gigforce.app.modules.profile.AddTagBottomSheet"
-        android:label="AddTagBottomSheet"
-        tools:layout="@layout/add_tag_bottom_sheet" />
-    <dialog
         android:id="@+id/addExperienceBottomSheet"
         android:name="com.gigforce.app.modules.profile.AddExperienceBottomSheet"
         android:label="AddExperienceBottomSheet" />
@@ -291,5 +286,9 @@
             android:id="@+id/action_uploadDropDown_to_bankUpload2"
             app:destination="@id/bankUpload2" />
     </fragment>
+    <fragment
+        android:id="@+id/editCoverBottomSheet"
+        android:name="com.gigforce.app.modules.profile.EditCoverBottomSheet"
+        android:label="EditCoverBottomSheet" />
 </navigation>
 

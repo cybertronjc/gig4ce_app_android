@@ -183,14 +183,14 @@
                     android:layout_marginEnd="16dp"
                     android:minWidth="200dp"
                     android:minHeight="21dp"
-                    app:layout_constraintEnd_toStartOf="@+id/add_tags_button"
+                    app:layout_constraintEnd_toStartOf="@+id/edit_cover"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/main_expanded_user_name">
 
                 </com.google.android.material.chip.ChipGroup>
 
                 <ImageButton
-                    android:id="@+id/add_tags_button"
+                    android:id="@+id/edit_cover"
                     android:maxWidth="32dp"
                     android:layout_width="32dp"
                     android:layout_height="21dp"
@@ -202,8 +202,14 @@
                     app:layout_constraintTop_toBottomOf="@+id/main_expanded_user_name"
                     app:srcCompat="@drawable/ic_edit" />
             </LinearLayout>
-
-
+            <TextView
+                android:id="@+id/bio"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="32dp"
+                android:minHeight="20dp"
+                style="@style/LatoRegularCardText12" />
             <LinearLayout
                 android:id="@+id/location_card"
                 android:layout_width="match_parent"

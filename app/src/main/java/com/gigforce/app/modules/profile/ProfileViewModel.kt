@@ -109,6 +109,10 @@ class ProfileViewModel: ViewModel() {
         profileFirebaseRepository.removeProfileExperience(experience)
     }
 
+    fun setProfileBio(bio: String) {
+        profileFirebaseRepository.setProfileBio(bio)
+    }
+
     init {
         uid = FirebaseAuth.getInstance().currentUser?.uid!!
         Log.d("ProfileViewModel", uid)

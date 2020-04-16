@@ -210,4 +210,7 @@
     <string name="remove_document_picture">Remove Picture</string>
     <string name="document_picture">Image Option</string>
     <string name="edit_education">Edit Education</string>
+    <string name="bio_name">Headline</string>
+    <string name="bio_hint_text">This Text will be shown in bio.</string>
+    <string name="add_tags">Add Tags</string>
 </resources>
