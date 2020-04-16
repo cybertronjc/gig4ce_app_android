@@ -42,7 +42,9 @@ android:layout_height="match_parent">
             android:layout_height="wrap_content"
             android:layout_marginStart="94dp"
             android:layout_marginTop="39dp"
+            android:layout_marginEnd="16dp"
             app:layout_constraintStart_toEndOf="@+id/tv1HS1"
+            app:layout_constraintEnd_toStartOf="@+id/iv2HS1"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@android:drawable/ic_search_category_default" />
 
@@ -52,6 +54,8 @@ android:layout_height="match_parent">
             android:layout_height="61dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="24dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/iv1HS1"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_user_icon" />
@@ -76,6 +80,7 @@ android:layout_height="match_parent">
             app:layout_constraintTop_toBottomOf="@+id/tv2HS1"
             app:layout_constraintVertical_weight="1"
             tools:ignore="NotSibling"></androidx.recyclerview.widget.RecyclerView>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 <!--<include layout="@layout/homescreen_1" />-->
 <!--        <LinearLayout-->
@@ -85,29 +90,67 @@ android:layout_height="match_parent">
 <!--            -->
 <!--        </LinearLayout>-->
 
-        <androidx.core.widget.NestedScrollView
-            android:id="@+id/nsv"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@android:color/holo_green_light"
-            app:allowDragging="true"
-            app:halfOffset="172dp"
-            app:hideable="true"
-            app:layout_behavior="com.riningan.widget.ExtendedBottomSheetBehavior"
-            app:peekHeight="128dp">
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/nsv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="-198dp"
+        android:background="@android:color/white"
+        app:allowDragging="true"
+        app:halfOffset="172dp"
+        app:hideable="true"
+        app:layout_behavior="com.riningan.widget.ExtendedBottomSheetBehavior"
+        app:peekHeight="128dp">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <View
+                android:layout_width="64dp"
+                android:layout_height="2dp"
+                android:layout_marginTop="14.3dp"
+                android:layout_marginStart="146.8dp"
+                android:background="@android:color/darker_gray" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="29dp"
+                android:layout_marginStart="15dp"
+                android:background="@drawable/rect_border"
                 android:padding="16dp"
-                android:text="bottom sheet lasdlsdfk"
-                android:textSize="20sp"
+                android:text="@string/homescreen_bs_alert"
+                android:textSize="13sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-        </androidx.core.widget.NestedScrollView>
+            <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="29dp"
+            android:padding="16dp"
+            android:text="@string/homescreen_bs_features"
+            android:textColor="@color/black"
+            android:textSize="18sp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv2_hs"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@+id/nsv"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv2HS1"
+            app:layout_constraintVertical_weight="1"
+            tools:ignore="NotSibling"></androidx.recyclerview.widget.RecyclerView>
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 <!--    app:allowDragging="true"-->

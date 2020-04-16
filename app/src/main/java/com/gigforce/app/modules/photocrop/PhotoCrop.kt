@@ -225,7 +225,7 @@ class PhotoCrop : AppCompatActivity(),
                         } else {
                             Toast.makeText(
                                 this,
-                                "No face detected, please re-upload another pic containing face",
+                                "No face detected. Please re-upload your selfie.",
                                 Toast.LENGTH_LONG
                             ).show()
                         }

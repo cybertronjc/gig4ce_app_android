@@ -212,6 +212,7 @@
     <string name="edit_education">Edit Education</string>
 
     <!-- home screen new -->
-    <string name="homescreenRV">Dunzo Deliveries\n+2 more </string>
-    homescreenRV
+    <string name="homescreen_rv">Dunzo Deliveries\n+2 more </string>
+    <string name="homescreen_bs_alert">Kyc Verification is not done , Click here to complete.</string>
+    <string name="homescreen_bs_features">Features</string>
 </resources>

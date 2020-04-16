@@ -274,12 +274,12 @@ class AlternateAddressUpload: BaseFragment() {
         super.onActivityResult(requestCode, resultCode, data)
         /*
         For photo crop. The activity returns the the filename with which the cropped photo
-        is saved on firestore. The name is updated in profile information and the new
+        is saved on firestore. The name is updated in verification information and the new
         photo is loaded in the view
         */
         if (requestCode == PHOTO_CROP && resultCode == Activity.RESULT_OK) {
             var imageName: String? = data?.getStringExtra("filename")
-            Log.v("PROFILE_FRAG_OAR", "filename is:" + imageName)
+            Log.v("verification_FRAG_OAR", "filename is:" + imageName)
             if (null != imageName) {
                 viewModel.setCardAvatarName(imageName.toString())
                 var filepath = filepathappender+imageName;

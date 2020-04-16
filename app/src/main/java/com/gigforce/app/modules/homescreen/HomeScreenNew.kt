@@ -56,14 +56,14 @@ class HomeScreenNew : BaseFragment() {
         return inflateView(R.layout.homescreen_1nsvbs, inflater, container)
     }
 
-    class DataItem{
+    class DataItem {
         var title:String = "Title";
         var subTitle:String = "Sub Title";
         var date:String = "15";
         var comment:String = "below comments";
         var month:String = "April";
-
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mExtendedBottomSheetBehavior = ExtendedBottomSheetBehavior.from(nsv)
@@ -75,7 +75,12 @@ class HomeScreenNew : BaseFragment() {
 
         viewModel = ViewModelProviders.of(this).get(HomeScreenNewViewModel::class.java)
         var datalist: ArrayList<DataItem> = ArrayList<DataItem>()
-        datalist.add(DataItem())
+        var di = DataItem();
+        di.title = "Swiggy Deliveries"
+        di.subTitle = "+3 More"
+        di.comment = "Last gig complete 20 min ago"
+
+        datalist.add(di)
         datalist.add(DataItem())
         datalist.add(DataItem())
         datalist.add(DataItem())

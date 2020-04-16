@@ -182,7 +182,7 @@ class PanUpload: Fragment() {
         super.onActivityResult(requestCode, resultCode, data)
         /*
         For photo crop. The activity returns the the filename with which the cropped photo
-        is saved on firestore. The name is updated in profile information and the new
+        is saved on firestore. The name is updated in verification information and the new
         photo is loaded in the view
 
         // can we combine or concatenate both front and back images into one and do one id  fy call instead of two?
