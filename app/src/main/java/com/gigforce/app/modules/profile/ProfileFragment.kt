@@ -37,12 +37,14 @@ class ProfileFragment : Fragment() {
     private lateinit var profileAvatarName: String
     private lateinit var dWidth: Display
     private var PHOTO_CROP: Int = 45
+    private var isShow: Boolean = true
+    private var scrollRange: Int = -1
     private var PROFILE_PICTURE_FOLDER: String = "profile_pics"
 
 
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         storage = FirebaseStorage.getInstance()
         Log.d("DEBUG", "ENTERED PROFILE VIEW")
@@ -58,7 +60,7 @@ class ProfileFragment : Fragment() {
     }
 
     private fun setAppBarOffset(offsetPx: Int) {
-        val params =  layout.appbar.layoutParams as CoordinatorLayout.LayoutParams
+        val params = layout.appbar.layoutParams as CoordinatorLayout.LayoutParams
         val behavior = params.behavior as AppBarLayout.Behavior?
 
         behavior!!.onNestedPreScroll(
@@ -142,7 +144,9 @@ class ProfileFragment : Fragment() {
                 mainExperienceString += experiences[0].title + "\n"
                 mainExperienceString += experiences[0].employmentType + "\n"
                 mainExperienceString += experiences[0].location + "\n"
-                mainExperienceString += format.format(experiences[0].startDate!!) + "-" + format.format(experiences[0].endDate!!) + "\n"
+                mainExperienceString += format.format(experiences[0].startDate!!) + "-" + format.format(
+                    experiences[0].endDate!!
+                ) + "\n"
             }
             layout.main_experience_card.card_title.text = "Experience"
             layout.main_experience_card.card_content.text = mainExperienceString
@@ -150,45 +154,59 @@ class ProfileFragment : Fragment() {
                 findNavController().navigate(R.id.experienceExpandedFragment)
             }
 
-            Log.d("ProfileFragment", profile.rating.toString())
+            layout.appbar.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { barLayout, verticalOffset ->
+                if (scrollRange == -1) {
+                    scrollRange = barLayout?.totalScrollRange!!
+                }
+                if (scrollRange + verticalOffset == 0) {
+                    layout.collapse_toolbar.title = profile.name
+                    layout.collapse_toolbar.isTitleEnabled = true
+                    isShow = true
+                } else if (isShow) {
+//                    layout.collapse_toolbar.title = " " //careful there should a space between double quote otherwise it wont work
+                    layout.collapse_toolbar.isTitleEnabled = false
+                    isShow = false
+                }
+            })
 
             profileAvatarName = profile.profileAvatarName
             Log.e("PROFILE AVATAR", profileAvatarName)
-            if (profileAvatarName != null)
-                loadImage(profileAvatarName)
+            loadImage(profileAvatarName)
         })
-
 
         /*
         Clicking on profile picture opens Photo Crop Activity
          */
         layout.profile_avatar.setOnClickListener {
             val photoCropIntent = Intent(context, PhotoCrop::class.java)
-            photoCropIntent.putExtra("purpose","profilePictureCrop")
-            photoCropIntent.putExtra("uid",viewModel.uid)
+            photoCropIntent.putExtra("purpose", "profilePictureCrop")
+            photoCropIntent.putExtra("uid", viewModel.uid)
             photoCropIntent.putExtra("fbDir", "/profile_pics/")
-            photoCropIntent.putExtra("detectFace",1)
+            photoCropIntent.putExtra("detectFace", 1)
             photoCropIntent.putExtra("folder", PROFILE_PICTURE_FOLDER)
             photoCropIntent.putExtra("file", profileAvatarName)
             startActivityForResult(photoCropIntent, PHOTO_CROP)
         }
-        layout.add_tags_button.setOnClickListener{
+        layout.add_tags_button.setOnClickListener {
             this.findNavController().navigate(R.id.addTagBottomSheet)
         }
 
         /**
          * back page navigation
-          */
-        layout.profile_main_expanded_back_button.setOnClickListener{
+         */
+        layout.profile_main_expanded_back_button.setOnClickListener {
             this.findNavController().navigate(R.id.homeScreenIcons)
         }
+
+
     }
 
     private fun loadImage(Path: String) {
-        var profilePicRef: StorageReference =storage.reference.child(PROFILE_PICTURE_FOLDER).child(Path)
+        var profilePicRef: StorageReference =
+            storage.reference.child(PROFILE_PICTURE_FOLDER).child(Path)
         GlideApp.with(this.context!!)
-                .load(profilePicRef)
-                .into(layout.profile_avatar)
+            .load(profilePicRef)
+            .into(layout.profile_avatar)
     }
 
     private fun addChip(context: Context, name: String): Chip {
@@ -203,9 +221,9 @@ class ProfileFragment : Fragment() {
     }
 
     override fun onActivityResult(
-            requestCode: Int,
-            resultCode: Int,
-            data: Intent?
+        requestCode: Int,
+        resultCode: Int,
+        data: Intent?
     ): Unit {
 
         super.onActivityResult(requestCode, resultCode, data)
