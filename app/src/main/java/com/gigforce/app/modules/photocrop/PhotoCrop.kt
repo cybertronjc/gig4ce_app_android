@@ -47,15 +47,15 @@ class PhotoCrop : AppCompatActivity(),
     private val resultIntent: Intent = Intent()
     private var PREFIX: String = "IMG"
     private lateinit var storage: FirebaseStorage
-    private lateinit var storageDirPath:String;
-    private var detectFace:Int = 1;
+    private lateinit var storageDirPath: String;
+    private var detectFace: Int = 1;
     private val DEFAULT_PICTURE: String = "avatar.jpg"
     private lateinit var CLOUD_PICTURE_FOLDER: String
     private lateinit var incomingFile: String
     private lateinit var imageView: ImageView
     private lateinit var backButton: ImageButton
     private lateinit var viewModel: ProfileViewModel
-    private lateinit var b64OfImg:String;
+    private lateinit var b64OfImg: String;
 
     var mStorage: FirebaseStorage = FirebaseStorage.getInstance()
 
@@ -97,6 +97,8 @@ class PhotoCrop : AppCompatActivity(),
         Log.e("PHOTO_CROP", "purpose = " + purpose + " comparing with: profilePictureCrop")
         if (purpose == "profilePictureCrop") profilePictureOptions()
         if (purpose == "verification") verificationOptions()
+
+        imageView.setOnClickListener { showBottomSheet() }
     }
 
     private fun profilePictureOptions() {
@@ -199,7 +201,7 @@ class PhotoCrop : AppCompatActivity(),
             val imageUriResultCrop: Uri? = UCrop.getOutput((data!!))
             Log.d("ImageUri", imageUriResultCrop.toString())
             if (imageUriResultCrop != null) {
-                resultIntent.putExtra("uri",imageUriResultCrop);
+                resultIntent.putExtra("uri", imageUriResultCrop);
                 Log.v("REQUEST CROP", requestCode.toString())
             }
             var baos = ByteArrayOutputStream()
@@ -235,8 +237,7 @@ class PhotoCrop : AppCompatActivity(),
                         Log.d("CStatus", "Face detection failed! still uploading the image")
                         upload(imageUriResultCrop, baos.toByteArray())
                     }
-            }
-            else{
+            } else {
                 //just upload wihtout face detection eg for pan, aadhar, other docs.
                 upload(imageUriResultCrop, baos.toByteArray());
             }
@@ -393,10 +394,11 @@ class PhotoCrop : AppCompatActivity(),
     private fun showBottomSheet() {
         var profilePictureOptionsBottomSheetFragment: ProfilePictureOptionsBottomSheetFragment =
             ProfilePictureOptionsBottomSheetFragment()
-        profilePictureOptionsBottomSheetFragment.show(
-            supportFragmentManager,
-            "profilePictureOptionBottomSheet"
-        )
+        if (!profilePictureOptionsBottomSheetFragment.isShowing)
+            profilePictureOptionsBottomSheetFragment.show(
+                supportFragmentManager,
+                "profilePictureOptionBottomSheet"
+            )
     }
 
 }
