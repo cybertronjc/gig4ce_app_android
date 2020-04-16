@@ -210,4 +210,5 @@
     <string name="remove_document_picture">Remove Picture</string>
     <string name="document_picture">Image Option</string>
     <string name="edit_education">Edit Education</string>
+    <string name="select_skill">Select Skill</string>
 </resources>

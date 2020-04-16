@@ -6,129 +6,109 @@
     android:layout_height="match_parent"
     android:background="@drawable/bg_bottom_sheet">
 
-    <TextView
-        android:id="@+id/textView17"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="32dp"
-        android:text="@string/add_education_sheet_new_education"
-        style="@style/BsHeadingBold12"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <EditText
-        android:id="@+id/institution_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="32dp"
-        android:ems="10"
-        android:hint="@string/add_education_sheet_institution"
-        android:inputType="textPersonName"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/textView17"
-        app:layout_constraintTop_toBottomOf="@+id/textView17" />
-
-    <EditText
-        android:id="@+id/course_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="32dp"
-        android:ems="10"
-        android:hint="@string/add_education_sheet_course"
-        android:inputType="textPersonName"
-        app:layout_constraintEnd_toEndOf="@+id/institution_name"
-        app:layout_constraintStart_toStartOf="@+id/institution_name"
-        app:layout_constraintTop_toBottomOf="@+id/institution_name" />
-
-    <Spinner
-        android:id="@+id/degree_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="32dp"
-        android:ems="10"
-        android:hint="@string/add_education_sheet_degree"
-        android:inputType="textPersonName"
-        app:layout_constraintEnd_toEndOf="@+id/course_name"
-        app:layout_constraintStart_toStartOf="@+id/course_name"
-        app:layout_constraintTop_toBottomOf="@+id/course_name" />
-
-    <EditText
-        android:id="@+id/end_date"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="32dp"
-        android:ems="10"
-        android:focusable="false"
-        android:hint="@string/add_education_sheet_end_year"
-        android:inputType="date"
-        app:layout_constraintEnd_toEndOf="@+id/start_date"
-        app:layout_constraintStart_toStartOf="@+id/start_date"
-        app:layout_constraintTop_toBottomOf="@+id/start_date" />
-
-    <TextView
-        android:id="@+id/add_more_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="32dp"
-        android:text="@string/add_more_text"
-        style="@style/LipstickCardBottom"
-        app:layout_constraintEnd_toEndOf="@+id/end_date"
-        app:layout_constraintStart_toStartOf="@+id/end_date"
-        app:layout_constraintTop_toBottomOf="@+id/end_date" />
-
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:isScrollContainer="true"
         android:layout_marginStart="32dp"
         android:layout_marginEnd="32dp"
-        android:orientation="horizontal"
-        app:layout_constraintStart_toStartOf="@id/add_more_button"
-        app:layout_constraintEnd_toEndOf="@id/add_more_button"
-        app:layout_constraintTop_toBottomOf="@id/add_more_button">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+        <TextView
+            android:id="@+id/textView17"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/add_education_sheet_new_education"
+            style="@style/BsHeadingBold12" />
 
-        <Button
-            android:id="@+id/cancel_button"
-            android:layout_width="wrap_content"
+        <EditText
+            android:id="@+id/institution_name"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:layout_weight="1"
-            android:text="@string/cancel_text"/>
+            android:ems="10"
+            android:hint="@string/add_education_sheet_institution"
+            android:inputType="textPersonName" />
 
-        <Button
-            android:id="@+id/save_button"
-            android:layout_width="wrap_content"
+        <EditText
+            android:id="@+id/course_name"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
             android:layout_marginTop="16dp"
-            android:layout_weight="1"
-            android:text="@string/save_text" />
+            android:ems="10"
+            android:hint="@string/add_education_sheet_course"
+            android:inputType="textPersonName" />
+
+        <Spinner
+            android:id="@+id/degree_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:ems="10"
+            android:hint="@string/add_education_sheet_degree"
+            android:inputType="textPersonName" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:orientation="horizontal">
+            <EditText
+                android:id="@+id/start_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:focusable="false"
+                android:layout_weight="1"
+                android:hint="@string/add_education_sheet_start_year"
+                android:inputType="date" />
+
+            <EditText
+                android:id="@+id/end_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:focusable="false"
+                android:hint="@string/add_education_sheet_end_year"
+                android:inputType="date" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/add_more_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/add_more_text"
+            style="@style/LipstickCardBottom" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="16dp">
+
+            <Button
+                android:id="@+id/cancel_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/cancel_text"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"/>
+
+            <Button
+                android:id="@+id/save_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/save_text"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"/>
+        </LinearLayout>
     </LinearLayout>
 
-    <EditText
-        android:id="@+id/start_date"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="32dp"
-        android:ems="10"
-        android:focusable="false"
-        android:hint="@string/add_education_sheet_start_year"
-        android:inputType="date"
-        app:layout_constraintEnd_toEndOf="@+id/degree_name"
-        app:layout_constraintStart_toStartOf="@+id/degree_name"
-        app:layout_constraintTop_toBottomOf="@+id/degree_name" />
 </androidx.constraintlayout.widget.ConstraintLayout>
