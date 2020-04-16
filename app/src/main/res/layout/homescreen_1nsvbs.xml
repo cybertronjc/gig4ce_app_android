@@ -34,6 +34,7 @@ android:layout_height="match_parent">
             android:textSize="14sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv1HS1"
+            app:layout_constraintEnd_toStartOf="@+id/iv3HS1"
             tools:text="April 2020" />
 
         <ImageView
@@ -79,7 +80,7 @@ android:layout_height="match_parent">
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv2HS1"
             app:layout_constraintVertical_weight="1"
-            tools:ignore="NotSibling"></androidx.recyclerview.widget.RecyclerView>
+            tools:ignore="NotSibling" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 <!--<include layout="@layout/homescreen_1" />-->
@@ -102,53 +103,95 @@ android:layout_height="match_parent">
         app:layout_behavior="com.riningan.widget.ExtendedBottomSheetBehavior"
         app:peekHeight="128dp">
 
-        <LinearLayout
-            android:layout_width="wrap_content"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
             <View
+                android:id="@+id/v_hs1bs_partition"
                 android:layout_width="64dp"
-                android:layout_height="2dp"
+                android:layout_height="3dp"
+                android:layout_marginStart="148dp"
                 android:layout_marginTop="14.3dp"
-                android:layout_marginStart="146.8dp"
-                android:background="@android:color/darker_gray" />
+                android:background="@android:color/darker_gray"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/nsv"
+                tools:ignore="NotSibling" />
 
             <TextView
+                android:id="@+id/tv_hs1bs_alert"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
                 android:layout_marginTop="29dp"
-                android:layout_marginStart="15dp"
                 android:background="@drawable/rect_border"
                 android:padding="16dp"
                 android:text="@string/homescreen_bs_alert"
                 android:textSize="13sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintStart_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/v_hs1bs_partition"/>
 
             <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="29dp"
-            android:padding="16dp"
-            android:text="@string/homescreen_bs_features"
-            android:textColor="@color/black"
-            android:textSize="18sp" />
+                android:id="@+id/tv_hs1bs_features"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="29dp"
+                android:padding="16dp"
+                android:text="@string/homescreen_bs_features"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                app:layout_constraintStart_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/tv_hs1bs_alert"/>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv2_hs"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            app:layout_constraintBottom_toTopOf="@+id/nsv"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv2HS1"
-            app:layout_constraintVertical_weight="1"
-            tools:ignore="NotSibling"></androidx.recyclerview.widget.RecyclerView>
 
-        </LinearLayout>
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_hs1bs_features">
+
+                <FrameLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="match_parent">
+
+                    <LinearLayout
+                        android:id="@+id/linearLayout_gridtableLayout"
+                        android:layout_width="900dp"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <GridView
+                            android:id="@+id/gridView_hs1"
+                            android:layout_width="fill_parent"
+                            android:layout_height="fill_parent"
+                            android:layout_margin="4dp"
+                            android:columnWidth="100dp"
+                            android:gravity="center"
+                            android:numColumns="9"
+                            android:horizontalSpacing="1dp"
+                            android:scrollbarAlwaysDrawHorizontalTrack="true"
+                            android:scrollbarAlwaysDrawVerticalTrack="true"
+                            android:scrollbars="horizontal"
+                            android:stretchMode="none"
+                            android:verticalSpacing="1dp">
+                        </GridView>
+                    </LinearLayout>
+                </FrameLayout>
+            </HorizontalScrollView>
+
+<!--            <androidx.recyclerview.widget.RecyclerView-->
+<!--                android:id="@+id/rv2_hs"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="0dp"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/tv_hs1bs_features"-->
+<!--                app:layout_constraintVertical_weight="1"-->
+<!--                tools:ignore="NotSibling" />-->
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

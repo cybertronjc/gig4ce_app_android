@@ -112,8 +112,7 @@ class HomeScreenIcons : Fragment() {
             when (position) {
                 0 -> {findNavController().navigate(R.id.profileFragment)}
                 1 -> {
-                    findNavController().navigate(R.id.homeScreenNew)
-                    //Toast.makeText(context, "TODO CTA: $position", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "TODO CTA: $position", Toast.LENGTH_SHORT).show()
                 }
                 2 -> {
                     //findNavController().navigate(R.id.profileFragment)
@@ -122,6 +121,9 @@ class HomeScreenIcons : Fragment() {
                 7 -> {
                     findNavController().navigate(R.id.videoResumeFragment)
                     //Toast.makeText(context, "TODO CTA: $position", Toast.LENGTH_SHORT).show()
+                }
+                8 -> {
+                    findNavController().navigate(R.id.homeScreenNew)
                 }
                 else -> {
                     Toast.makeText(context, "TODO CTA: $position", Toast.LENGTH_SHORT).show()

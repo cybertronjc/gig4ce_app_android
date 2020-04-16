@@ -212,7 +212,11 @@
     <string name="edit_education">Edit Education</string>
 
     <!-- home screen new -->
-    <string name="homescreen_rv">Dunzo Deliveries\n+2 more </string>
+    <string name="hs_rv_title">Dunzo Deliveries </string>
+    <string name="hs_rv_subtitle">+2 more </string>
+    <string name="hs_rv_date">11</string>
+    <string name="hs_rv_month">April</string>
+    <string name="hs_rv_comment">Last delivery was 20 min ago</string>
     <string name="homescreen_bs_alert">Kyc Verification is not done , Click here to complete.</string>
     <string name="homescreen_bs_features">Features</string>
 </resources>
