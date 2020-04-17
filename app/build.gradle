@@ -150,6 +150,7 @@ dependencies {
     implementation 'io.reactivex.rxjava2:rxjava:2.2.0'
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     // Drag bottomsheet
     implementation 'com.github.andrefrsousa:SuperBottomSheet:1.5.0'
 
@@ -158,6 +159,10 @@ dependencies {
     // material dialogs
     implementation 'com.afollestad.material-dialogs:core:3.3.0'
 >>>>>>> remotes/origin/GFAPP-213
+=======
+    // material dialogs
+    implementation 'com.afollestad.material-dialogs:bottomsheets:3.2.1'
+>>>>>>> remotes/origin/GFAPP-121
 }
 
 apply plugin: 'com.google.gms.google-services'
