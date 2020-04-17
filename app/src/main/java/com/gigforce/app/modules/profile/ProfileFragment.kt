@@ -80,6 +80,7 @@ class ProfileFragment : Fragment() {
             mainAboutString += profile.bio.toString() + "\n\n"
             if (profile.Language!!.size > 0) {
                 var languages = profile.Language!!.sortedWith(compareBy { it.writingSkill })
+                // TODO: Add a generic way for string formatting.
                 for ((index, language) in languages.withIndex()) {
                     mainAboutString += if (index == 0)
                                             "Language known: " + language.name + " (" +
