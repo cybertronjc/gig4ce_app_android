@@ -34,6 +34,21 @@
         android:name="com.gigforce.app.modules.auth.AuthFlowFragment"
         tools:layout="@layout/fragment_auth_flow"/>
 
+    <fragment android:id="@+id/settingFragment"
+        android:name="com.gigforce.app.modules.preferences.PreferencesFragment"
+        tools:layout="@layout/fragment_auth_flow"/>
+    <fragment android:id="@+id/dayTimeFragment"
+        android:name="com.gigforce.app.modules.preferences.datetime.DayTimeFragment"
+        tools:layout="@layout/date_time_fragment"/>
+
+    <fragment android:id="@+id/weekEndFragment"
+        android:name="com.gigforce.app.modules.preferences.datetime.weekend.WeekEndFragment"
+        tools:layout="@layout/week_end_fragment"/>
+
+    <fragment android:id="@+id/weekDayFragment"
+        android:name="com.gigforce.app.modules.preferences.datetime.weekday.WeekDayFragment"
+        tools:layout="@layout/week_day_fragment"/>
+
     <fragment
         android:id="@+id/experienceExpandedFragment"
         android:name="com.gigforce.app.modules.profile.ExperienceExpandedFragment"
@@ -74,8 +89,8 @@
             android:id="@+id/action_profileFragment_to_experienceExpandedFragment2"
             app:destination="@id/experienceExpandedFragment" />
         <action
-            android:id="@+id/action_profileFragment_to_addTagBottomSheet"
-            app:destination="@id/addTagBottomSheet" />
+            android:id="@+id/action_profileFragment_to_editCoverBottomSheet"
+            app:destination="@id/editCoverBottomSheet" />
     </fragment>
     <fragment
         android:id="@+id/chatsHomeFragment"
@@ -187,12 +202,10 @@
         <action
             android:id="@+id/action_homeScreenIcons_to_verification"
             app:destination="@id/verification" />
+        <action
+            android:id="@+id/action_homeScreenIcons_to_homeScreenNew"
+            app:destination="@id/homeScreenNew" />
     </fragment>
-    <dialog
-        android:id="@+id/addTagBottomSheet"
-        android:name="com.gigforce.app.modules.profile.AddTagBottomSheet"
-        android:label="AddTagBottomSheet"
-        tools:layout="@layout/add_tag_bottom_sheet" />
     <dialog
         android:id="@+id/addExperienceBottomSheet"
         android:name="com.gigforce.app.modules.profile.AddExperienceBottomSheet"
@@ -250,14 +263,6 @@
             android:name="array_location"
             app:argType="string" />
     </dialog>
-    <fragment
-        android:id="@+id/DLUpload"
-        android:name="com.gigforce.app.modules.verification.DLUpload"
-        android:label="DLUpload">
-        <action
-            android:id="@+id/action_DLUpload_to_bankUpload2"
-            app:destination="@id/bankUpload2" />
-    </fragment>
     <dialog
         android:id="@+id/editSkillBottomSheet"
         android:name="com.gigforce.app.modules.profile.EditSkillBottomSheet"
@@ -288,12 +293,21 @@
     </fragment>
     <fragment
         android:id="@+id/uploadDropDown"
-        android:name="com.gigforce.app.modules.verification.UploadDropDown"
+        android:name="com.gigforce.app.modules.verification.AlternateAddressUpload"
         android:label="UploadDropDown">
         <action
             android:id="@+id/action_uploadDropDown_to_bankUpload2"
             app:destination="@id/bankUpload2" />
     </fragment>
+    <dialog
+        android:id="@+id/editCoverBottomSheet"
+        android:name="com.gigforce.app.modules.profile.EditCoverBottomSheet"
+        android:label="EditCoverBottomSheet" />
+    <fragment
+        android:id="@+id/homeScreenNew"
+        android:name="com.gigforce.app.modules.homescreen.HomeScreenNew"
+        android:label="home_screen_new_fragment"
+        tools:layout="@layout/item_homescreen1" />
     <dialog
         android:id="@+id/editLanguageBottomSheet"
         android:name="com.gigforce.app.modules.profile.EditLanguageBottomSheet"

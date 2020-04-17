@@ -1,5 +1,6 @@
 package com.gigforce.app
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
@@ -12,6 +13,14 @@ class MainActivity : AppCompatActivity() {
     private lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        if (!isTaskRoot
+            && intent.hasCategory(Intent.CATEGORY_LAUNCHER)
+            && intent.action != null
+            && intent.action.equals(Intent.ACTION_MAIN)) {
+
+            finish();
+            return;
+        }
         super.onCreate(savedInstanceState)
         this.setContentView(R.layout.activity_main)
         navController = this.findNavController(R.id.nav_fragment)

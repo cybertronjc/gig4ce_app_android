@@ -114,10 +114,10 @@ class HomeScreenIcons : BaseFragment() {
         gridItems.add(HSGridItemDataModel("Search",R.drawable.ic_homescreen_explore,0))
         gridItems.add(HSGridItemDataModel("Chat",R.drawable.ic_homescreen_chat,0))
         gridItems.add(HSGridItemDataModel("Support",R.drawable.ic_homescreen_pref,0))
-        gridItems.add(HSGridItemDataModel("Preferences",R.drawable.ic_homescreen_control,0))
+        gridItems.add(HSGridItemDataModel("Settings",R.drawable.ic_homescreen_control,0))
         gridItems.add(HSGridItemDataModel("Video Resume",R.drawable.gig4ce_logo,R.id.videoResumeFragment))
-        gridItems.add(HSGridItemDataModel("More",R.drawable.gig4ce_logo,0))
-        gridItems.add(HSGridItemDataModel("More",R.drawable.gig4ce_logo,0))
+	    gridItems.add(HSGridItemDataModel("New HomeScreen",R.drawable.gig4ce_logo,R.id.homeScreenNew))
+        gridItems.add(HSGridItemDataModel("Preferences",R.drawable.ic_homescreen_pref,R.id.settingFragment))
         gridItems.add(HSGridItemDataModel("More",R.drawable.gig4ce_logo,0))
         return gridItems
     }

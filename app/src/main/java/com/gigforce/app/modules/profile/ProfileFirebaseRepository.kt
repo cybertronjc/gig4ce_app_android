@@ -93,9 +93,11 @@ class ProfileFirebaseRepository {
         firebaseDB.collection(profileCollectionName).document(uid).update("Experience", FieldValue.arrayRemove(experience))
     }
 
-    fun setProfileTags(tag: String) {
+    fun setProfileTags(tags: ArrayList<String>) {
+        for (tag in tags) {
             firebaseDB.collection(profileCollectionName)
                 .document(uid).update("Tags", FieldValue.arrayUnion(tag))
+        }
     }
 
     fun setProfileAvatarName(profileAvatarName: String) {
@@ -103,8 +105,15 @@ class ProfileFirebaseRepository {
             .document(uid).update("profileAvatarName",profileAvatarName)
     }
 
-    fun removeProfileTag(tag: String) {
+    fun removeProfileTag(tags: ArrayList<String>) {
+        for (tag in tags) {
+            firebaseDB.collection(profileCollectionName)
+                .document(uid).update("Tags", FieldValue.arrayRemove(tag))
+        }
+    }
+
+    fun setProfileBio(bio: String) {
         firebaseDB.collection(profileCollectionName)
-            .document(uid).update("Tags", FieldValue.arrayRemove(tag))
+            .document(uid).update("bio", bio)
     }
 }

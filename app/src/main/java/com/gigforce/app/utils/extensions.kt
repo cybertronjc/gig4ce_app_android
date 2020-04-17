@@ -32,7 +32,7 @@ fun Fragment.setDarkStatusBarTheme(isDark:Boolean = true) {
     window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
     if(isDark) {
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-        window.setStatusBarColor(activity!!.resources.getColor(R.color.colorAccent))
+        window.statusBarColor = activity!!.resources.getColor(R.color.colorAccent)
         window.decorView.systemUiVisibility = 0
     }
 }

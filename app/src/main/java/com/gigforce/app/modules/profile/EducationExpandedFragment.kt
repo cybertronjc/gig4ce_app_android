@@ -83,7 +83,7 @@ class EducationExpandedFragment: Fragment() {
             layout.achievement_card.cardBottom = "+ Add Achievement"
 
             layout.education_top_profile.userName = profile.name
-            layout.education_top_profile.imageName = "ysharma.jpg"
+            layout.education_top_profile.imageName = profile.profileAvatarName
 
             Log.d("ProfileFragment", profile.rating.toString())
         })
