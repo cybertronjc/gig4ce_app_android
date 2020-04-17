@@ -4,10 +4,21 @@
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="calendar_disabled_bg">#efefef</color>
     <color name="colorAccent">#990077</color>
+    <color name="colorLightAccent">#e42c64</color>
     <color name="topBarDark">#d72467</color>
     <color name="black">#000000</color>
     <color name="white">#ffffff</color>
     <color name="colorText">#313131</color>
     <color name="colorLigthSeparater">#e4e4e4</color>
     <color name="colorImportantText">#Df2966</color>
+    <color name="red">#FF0000</color>
+
+    <color name="setting_bg">#f7f7f7</color>
+    <color name="gray_color">#6d7278</color>
+    <color name="shadow_color">#c8c7cc</color>
+
+
+
+
+
 </resources>

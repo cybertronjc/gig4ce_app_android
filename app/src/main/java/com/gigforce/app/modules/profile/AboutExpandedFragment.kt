@@ -51,9 +51,10 @@ class AboutExpandedFragment: Fragment() {
             var languageString = ""
             for (lang in profile.Language!!) {
                 languageString += lang.name + "\n"
-                languageString += "Speaking " + lang.speakingSkill + "\n"
-                languageString += "Writing " + lang.writingSkill + "\n\n"
+                languageString += "Speaking " + getLanguageLevel(lang.speakingSkill.toInt()) + "\n"
+                languageString += "Writing " + getLanguageLevel(lang.writingSkill.toInt()) + "\n\n"
             }
+            layout.language_card.nextDestination = R.id.editLanguageBottomSheet
             layout.language_card.cardTitle = "Language"
             layout.language_card.cardContent = languageString
             layout.language_card.cardBottom = "+ Add Language"
@@ -83,6 +84,18 @@ class AboutExpandedFragment: Fragment() {
 //            this.findNavController().navigate(R.id.profileFragment)
 //        }
 
+    }
+
+    private fun getLanguageLevel(level: Int): String {
+        if (level <= 25) {
+            return "beginner"
+        }
+        else if (level <= 75) {
+            return "moderate"
+        }
+        else {
+            return "advanced"
+        }
     }
 
 }

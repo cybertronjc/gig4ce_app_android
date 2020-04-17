@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_aboutExpandedFragment_to_addLanguageBottomSheetFragment"
             app:destination="@id/addLanguageBottomSheetFragment" />
+        <action
+            android:id="@+id/action_aboutExpandedFragment_to_editLanguageBottomSheet"
+            app:destination="@id/editLanguageBottomSheet" />
     </fragment>
     <dialog
         android:id="@+id/addContactBottomSheetFragment"
@@ -32,7 +35,7 @@
         tools:layout="@layout/fragment_auth_flow"/>
 
     <fragment android:id="@+id/settingFragment"
-        android:name="com.gigforce.app.modules.preferences.SettingFragment"
+        android:name="com.gigforce.app.modules.preferences.PreferencesFragment"
         tools:layout="@layout/fragment_auth_flow"/>
     <fragment android:id="@+id/dayTimeFragment"
         android:name="com.gigforce.app.modules.preferences.datetime.DayTimeFragment"
@@ -314,5 +317,13 @@
         android:name="com.gigforce.app.modules.homescreen.HomeScreenNew"
         android:label="home_screen_new_fragment"
         tools:layout="@layout/item_homescreen1" />
+    <dialog
+        android:id="@+id/editLanguageBottomSheet"
+        android:name="com.gigforce.app.modules.profile.EditLanguageBottomSheet"
+        android:label="EditLanguageBottomSheet">
+        <argument
+            android:name="array_location"
+            app:argType="string" />
+    </dialog>
 </navigation>
 

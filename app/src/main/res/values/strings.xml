@@ -219,4 +219,7 @@
     <string name="hs_rv_comment">Last delivery was 20 min ago</string>
     <string name="homescreen_bs_alert">Kyc Verification is not done , Click here to complete.</string>
     <string name="homescreen_bs_features">Features</string>
+
+    <string name="add_mother_tongue_text">Add as my mother tongue</string>
+    <string name="edit_language">Edit Language</string>
 </resources>

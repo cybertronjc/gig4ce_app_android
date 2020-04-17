@@ -149,10 +149,15 @@ dependencies {
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
     implementation 'io.reactivex.rxjava2:rxjava:2.2.0'
 
+<<<<<<< HEAD
     // Drag bottomsheet
     implementation 'com.github.andrefrsousa:SuperBottomSheet:1.5.0'
 
     implementation 'com.riningan.widget:extendedbottomsheetbehavior:1.2'
+=======
+    implementation 'pub.devrel:easypermissions:3.0.0'
+
+>>>>>>> 186736881a92e13d416b38e816fa5daa8a0ab77f
 }
 
 apply plugin: 'com.google.gms.google-services'

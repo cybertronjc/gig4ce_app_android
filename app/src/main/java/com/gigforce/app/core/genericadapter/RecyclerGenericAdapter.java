@@ -17,7 +17,7 @@ public class RecyclerGenericAdapter<T> extends PFRecyclerViewAdapter<T> {
     RecyclerView recylerView;
 
     public interface ItemInterface<T>{
-        public void setItem(T obj, PFRecyclerViewAdapter.ViewHolder viewHolder);
+        public void setItem(T obj, PFRecyclerViewAdapter.ViewHolder viewHolder,int position);
     }
     public RecyclerGenericAdapter(Context context, OnViewHolderClick listener, ItemInterface<T> item) {
         super(context, listener);
@@ -42,9 +42,9 @@ public class RecyclerGenericAdapter<T> extends PFRecyclerViewAdapter<T> {
     }
 
     @Override
-    protected void bindView(T item, PFRecyclerViewAdapter.ViewHolder viewHolder) {
+    protected void bindView(T item, PFRecyclerViewAdapter.ViewHolder viewHolder,int position) {
         if (item != null) {
-            obj.setItem(item,viewHolder);
+            obj.setItem(item,viewHolder,position);
         }
     }
 }
