@@ -1,15 +1,14 @@
 package com.gigforce.app.modules.photocrop
 
-import android.Manifest
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.pm.ResolveInfo
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
-import android.os.Environment
+import android.os.Parcelable
 import android.provider.MediaStore
-import android.util.Base64
 import android.util.Log
 import android.widget.ImageButton
 import android.widget.ImageView
@@ -20,9 +19,6 @@ import com.gigforce.app.R
 import com.gigforce.app.modules.photocrop.ProfilePictureOptionsBottomSheetFragment.BottomSheetListener
 import com.gigforce.app.modules.profile.ProfileViewModel
 import com.gigforce.app.utils.GlideApp
-import com.google.android.gms.tasks.OnSuccessListener
-import com.google.android.gms.tasks.Task
-import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.firebase.ml.vision.FirebaseVision
 import com.google.firebase.ml.vision.common.FirebaseVisionImage
 import com.google.firebase.ml.vision.face.FirebaseVisionFaceDetectorOptions
@@ -56,6 +52,7 @@ class PhotoCrop : AppCompatActivity(),
     private lateinit var backButton: ImageButton
     private lateinit var viewModel: ProfileViewModel
     private lateinit var b64OfImg: String;
+    private val TEMP_FILE: String = "profile_picture.jpg"
 
     var mStorage: FirebaseStorage = FirebaseStorage.getInstance()
 
@@ -368,16 +365,21 @@ class PhotoCrop : AppCompatActivity(),
         val pickIntent = Intent()
         pickIntent.type = "image/*"
         pickIntent.action = Intent.ACTION_GET_CONTENT
+
         val takePhotoIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        val galleryIntent = Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        galleryIntent.setType("image/gallery");
+
         val pickTitle = "Select or take a new Picture"
         var outputFileUri: Uri? = Uri.fromFile(File.createTempFile("profilePicture", ".jpg"))
-        val chooserIntent = Intent.createChooser(pickIntent, pickTitle)
-        chooserIntent.putExtra(
-            Intent.EXTRA_INITIAL_INTENTS, arrayOf(takePhotoIntent)
-        )
+        var chooserIntent = Intent.createChooser(pickIntent, pickTitle)
+        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, arrayOf(takePhotoIntent,galleryIntent))
         chooserIntent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri)
+
+
         startActivityForResult(chooserIntent, CODE_IMG_GALLERY)
     }
+
 
     private fun logBundle(bundle: Bundle) {
         for (key in bundle.keySet()!!) {
