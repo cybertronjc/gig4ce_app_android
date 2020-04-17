@@ -1,5 +1,6 @@
 package com.gigforce.app.modules.photocrop
 
+import android.Manifest
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -25,11 +26,11 @@ import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
 import com.google.firebase.storage.UploadTask.TaskSnapshot
 import com.yalantis.ucrop.UCrop
+import pub.devrel.easypermissions.EasyPermissions
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
-
 
 class PhotoCrop : AppCompatActivity(),
     BottomSheetListener {
@@ -88,6 +89,8 @@ class PhotoCrop : AppCompatActivity(),
             profilePictureCrop -> profilePictureOptions()
             verification -> verificationOptions()
         }
+        checkPermissions()
+        imageView.setOnClickListener { showBottomSheet() }
     }
 
     private fun profilePictureOptions() {
@@ -375,16 +378,21 @@ class PhotoCrop : AppCompatActivity(),
         val pickIntent = Intent()
         pickIntent.type = "image/*"
         pickIntent.action = Intent.ACTION_GET_CONTENT
+
         val takePhotoIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        val galleryIntent = Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        galleryIntent.setType("image/gallery");
+
         val pickTitle = "Select or take a new Picture"
         var outputFileUri: Uri? = Uri.fromFile(File.createTempFile("profilePicture", ".jpg"))
-        val chooserIntent = Intent.createChooser(pickIntent, pickTitle)
-        chooserIntent.putExtra(
-            Intent.EXTRA_INITIAL_INTENTS, arrayOf(takePhotoIntent)
-        )
+        var chooserIntent = Intent.createChooser(pickIntent, pickTitle)
+        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, arrayOf(takePhotoIntent,galleryIntent))
         chooserIntent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri)
+
+
         startActivityForResult(chooserIntent, CODE_IMG_GALLERY)
     }
+
 
     private fun logBundle(bundle: Bundle) {
         for (key in bundle.keySet()!!) {
@@ -401,10 +409,33 @@ class PhotoCrop : AppCompatActivity(),
     private fun showBottomSheet() {
         var profilePictureOptionsBottomSheetFragment: ProfilePictureOptionsBottomSheetFragment =
             ProfilePictureOptionsBottomSheetFragment()
-        profilePictureOptionsBottomSheetFragment.show(
-            supportFragmentManager,
-            "profilePictureOptionBottomSheet"
-        )
+        if (!profilePictureOptionsBottomSheetFragment.isShowing)
+            profilePictureOptionsBottomSheetFragment.show(
+                supportFragmentManager,
+                "profilePictureOptionBottomSheet"
+            )
+    }
+
+    private fun hasCameraPermission():Boolean {
+        return EasyPermissions.hasPermissions(this, Manifest.permission.CAMERA)
+    }
+
+    private fun hasGalleryPermission():Boolean {
+        return EasyPermissions.hasPermissions(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+    }
+
+    private fun askPermissions(rationale: String,requestCode: Int,perm: String){
+        EasyPermissions.requestPermissions(
+                this,
+                rationale,
+                requestCode,
+                perm)
+    }
+
+    private fun checkPermissions(){
+        if(!hasCameraPermission()) askPermissions("Camera Permission",101,Manifest.permission.CAMERA)
+        if(!hasGalleryPermission()) askPermissions("Select Image",102,Manifest.permission.READ_EXTERNAL_STORAGE)
+
     }
 
 }
