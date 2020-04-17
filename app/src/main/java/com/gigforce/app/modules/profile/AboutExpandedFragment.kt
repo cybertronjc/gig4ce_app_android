@@ -95,14 +95,18 @@ class AboutExpandedFragment: Fragment() {
     fun showAddContactDialog() {
         MaterialDialog(this.context!!).show {
             title(text = "Update Contact Details")
-            message(text = "To update these details the giger will need to re-upload their" +
-                    " Aadhar card images and undergo the KYC verification process again. " +
-                    "We recommend that you do not change the name or address details unless " +
-                    "necessary")
+            message(
+                text = "To update these details the giger will need to re-upload their" +
+                        " Aadhar card images and undergo the KYC verification process again. " +
+                        "We recommend that you do not change the name or address details unless " +
+                        "necessary"
+            )
             positiveButton(text = "Proceed") {
                 Toast.makeText(this.context!!, "Not Implemented", Toast.LENGTH_SHORT).show()
             }
-            negativeButton (text = "Cancel") { }
+            negativeButton(text = "Cancel") { }
+        }
+    }
 
     private fun getLanguageLevel(level: Int): String {
         return when (level) {

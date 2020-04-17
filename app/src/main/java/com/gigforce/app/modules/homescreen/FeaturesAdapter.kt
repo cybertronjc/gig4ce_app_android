@@ -9,7 +9,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.gigforce.app.R
 
-internal class FeaturesAdapter internal constructor(context: Context, private val resource: Int, private val itemList: Array<String>?) : ArrayAdapter<HomeScreenAdapter.ItemHolder>(context, resource) {
+internal class FeaturesAdapter internal constructor(context: Context, private val resource: Int, private val itemList: Array<String>?) : ArrayAdapter<FeaturesAdapter.ItemHolder>(context, resource) {
 
     override fun getCount(): Int {
         return if (this.itemList != null) this.itemList.size else 0
