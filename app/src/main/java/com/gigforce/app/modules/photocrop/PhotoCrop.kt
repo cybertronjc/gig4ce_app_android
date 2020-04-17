@@ -1,13 +1,12 @@
 package com.gigforce.app.modules.photocrop
 
+import android.Manifest
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.content.pm.ResolveInfo
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
-import android.os.Parcelable
 import android.provider.MediaStore
 import android.util.Log
 import android.widget.ImageButton
@@ -27,11 +26,11 @@ import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
 import com.google.firebase.storage.UploadTask.TaskSnapshot
 import com.yalantis.ucrop.UCrop
+import pub.devrel.easypermissions.EasyPermissions
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
-
 
 class PhotoCrop : AppCompatActivity(),
     BottomSheetListener {
@@ -52,7 +51,6 @@ class PhotoCrop : AppCompatActivity(),
     private lateinit var backButton: ImageButton
     private lateinit var viewModel: ProfileViewModel
     private lateinit var b64OfImg: String;
-    private val TEMP_FILE: String = "profile_picture.jpg"
 
     var mStorage: FirebaseStorage = FirebaseStorage.getInstance()
 
@@ -92,6 +90,7 @@ class PhotoCrop : AppCompatActivity(),
         backButton = this.findViewById(R.id.back_button_photo_crop)
         var purpose: String = intent.getStringExtra("purpose")
         Log.e("PHOTO_CROP", "purpose = " + purpose + " comparing with: profilePictureCrop")
+        checkPermissions()
         if (purpose == "profilePictureCrop") profilePictureOptions()
         if (purpose == "verification") verificationOptions()
 
@@ -401,6 +400,28 @@ class PhotoCrop : AppCompatActivity(),
                 supportFragmentManager,
                 "profilePictureOptionBottomSheet"
             )
+    }
+
+    private fun hasCameraPermission():Boolean {
+        return EasyPermissions.hasPermissions(this, Manifest.permission.CAMERA)
+    }
+
+    private fun hasGalleryPermission():Boolean {
+        return EasyPermissions.hasPermissions(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+    }
+
+    private fun askPermissions(rationale: String,requestCode: Int,perm: String){
+        EasyPermissions.requestPermissions(
+                this,
+                rationale,
+                requestCode,
+                perm)
+    }
+
+    private fun checkPermissions(){
+        if(!hasCameraPermission()) askPermissions("Camera Permission",101,Manifest.permission.CAMERA)
+        if(!hasGalleryPermission()) askPermissions("Select Image",102,Manifest.permission.READ_EXTERNAL_STORAGE)
+
     }
 
 }
