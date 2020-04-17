@@ -141,6 +141,9 @@ dependencies {
     // https://github.com/ReactiveX/RxAndroid
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
     implementation 'io.reactivex.rxjava2:rxjava:2.2.0'
+
+    implementation 'pub.devrel:easypermissions:3.0.0'
+
 }
 
 apply plugin: 'com.google.gms.google-services'
