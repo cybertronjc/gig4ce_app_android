@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import com.gigforce.app.R
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.android.synthetic.main.profile_photo_bottom_sheet.view.*
+import kotlin.properties.Delegates
 
 class ProfilePictureOptionsBottomSheetFragment : BottomSheetDialogFragment() {
     companion object {
@@ -18,6 +19,7 @@ class ProfilePictureOptionsBottomSheetFragment : BottomSheetDialogFragment() {
 
     lateinit var layout: View
     private lateinit var mListener: BottomSheetListener
+    var isShowing: Boolean = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -54,8 +56,14 @@ class ProfilePictureOptionsBottomSheetFragment : BottomSheetDialogFragment() {
         super.onAttach(context)
         try {
             mListener = context as BottomSheetListener
+            isShowing=true
         } catch (e: Exception) {
             throw ClassCastException(context.toString() + " must implement Bottom Sheet Listener")
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        isShowing=true
     }
 }
