@@ -4,15 +4,18 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
+import com.afollestad.materialdialogs.MaterialDialog
 import com.bumptech.glide.request.RequestOptions
 import com.gigforce.app.R
 import com.gigforce.app.utils.GlideApp
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import kotlinx.android.synthetic.main.card_row.view.*
 import kotlinx.android.synthetic.main.fragment_profile_about_expanded.view.*
 import kotlinx.android.synthetic.main.fragment_profile_education_expanded.view.*
 import kotlinx.android.synthetic.main.fragment_profile_main_expanded.view.*
@@ -67,6 +70,9 @@ class AboutExpandedFragment: Fragment() {
             layout.contact_card.cardTitle = "Contact"
             layout.contact_card.cardContent = contactString
             layout.contact_card.cardBottom = "+ Add Contact"
+            layout.contact_card.edit_button.setOnClickListener {
+                showAddContactDialog()
+            }
 
             layout.about_top_profile.userName = profile.name
             layout.about_top_profile.imageName = profile.profileAvatarName
@@ -77,7 +83,7 @@ class AboutExpandedFragment: Fragment() {
         }
 
         layout.contact_card.card_bottom.setOnClickListener{
-            this.findNavController().navigate(R.id.addContactBottomSheetFragment)
+            showAddContactDialog()
         }
 
 //        layout.about_expanded_back_button.setOnClickListener{
@@ -86,15 +92,23 @@ class AboutExpandedFragment: Fragment() {
 
     }
 
+    fun showAddContactDialog() {
+        MaterialDialog(this.context!!).show {
+            title(text = "Update Contact Details")
+            message(text = "To update these details the giger will need to re-upload their" +
+                    " Aadhar card images and undergo the KYC verification process again. " +
+                    "We recommend that you do not change the name or address details unless " +
+                    "necessary")
+            positiveButton(text = "Proceed") {
+                Toast.makeText(this.context!!, "Not Implemented", Toast.LENGTH_SHORT).show()
+            }
+            negativeButton (text = "Cancel") { }
+
     private fun getLanguageLevel(level: Int): String {
-        if (level <= 25) {
-            return "beginner"
-        }
-        else if (level <= 75) {
-            return "moderate"
-        }
-        else {
-            return "advanced"
+        return when (level) {
+            in 0..25 -> "beginner"
+            in 26..75 -> "moderate"
+            else -> "advanced"
         }
     }
 

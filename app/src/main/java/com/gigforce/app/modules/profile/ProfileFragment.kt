@@ -14,11 +14,15 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
 import com.gigforce.app.modules.photocrop.PhotoCrop
+import com.gigforce.app.modules.photocrop.*
+import com.gigforce.app.modules.profile.models.Achievement
 import com.gigforce.app.utils.GlideApp
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.chip.Chip
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import kotlinx.android.synthetic.main.edit_skill_bottom_sheet.*
+import kotlinx.android.synthetic.main.fragment_profile_education_expanded.view.*
 import kotlinx.android.synthetic.main.fragment_profile_main_expanded.view.*
 import kotlinx.android.synthetic.main.profile_main_card_background.view.*
 import java.text.SimpleDateFormat
@@ -97,10 +101,17 @@ class ProfileFragment : Fragment() {
 
             var mainAboutString = ""
             mainAboutString += profile.bio.toString() + "\n\n"
-            mainAboutString += "Language knows: "
             if (profile.Language!!.size > 0) {
                 var languages = profile.Language!!.sortedWith(compareBy { it.writingSkill })
-                mainAboutString += languages[0].name + "\n"
+                // TODO: Add a generic way for string formatting.
+                for ((index, language) in languages.withIndex()) {
+                    mainAboutString += if (index == 0)
+                                            "Language known: " + language.name + " (" +
+                                                    getLanguageLevel(language.speakingSkill.toInt()) + ")\n"
+                                        else
+                                            "\t\t\t\t\t\t\t\t\t\t\t\t\t\t" + language.name + " (" +
+                                                    getLanguageLevel(language.speakingSkill.toInt()) + ")\n"
+                }
             }
 
             layout.main_about_card.card_title.text = "About me"
@@ -120,10 +131,19 @@ class ProfileFragment : Fragment() {
                 ) + "\n\n"
             }
 
-            mainEducationString += "Skills: "
+            // TODO: Add a generic way for string formatting
             if (profile.Skill!!.size > 0) {
-                mainEducationString += profile.Skill!![0] + "\n\n"
+                var skills = profile.Skill!!
+                for ((index, value) in skills.withIndex()) {
+                    if (index < 5) {
+                        mainEducationString += if (index == 0)
+                                                    "Skills: " + value + "\n"
+                                               else
+                                                    "\t\t\t\t\t" + value + "\n"
+                    }
+                }
             }
+            mainEducationString += "\n"
 
             mainEducationString += "Achievement: "
             if (profile.Achievement!!.size > 0) {
@@ -218,6 +238,14 @@ class ProfileFragment : Fragment() {
         chip.setChipStrokeWidthResource(R.dimen.border_width)
         chip.setChipBackgroundColorResource(R.color.fui_transparent)
         return chip
+    }
+
+    private fun getLanguageLevel(level: Int): String {
+        return when (level) {
+            in 0..25 -> "beginner"
+            in 26..75 -> "moderate"
+            else -> "advanced"
+        }
     }
 
     override fun onActivityResult(
