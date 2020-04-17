@@ -21,6 +21,7 @@ import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.chip.Chip
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import kotlinx.android.synthetic.main.edit_skill_bottom_sheet.*
 import kotlinx.android.synthetic.main.fragment_profile_education_expanded.view.*
 import kotlinx.android.synthetic.main.fragment_profile_main_expanded.view.*
 import kotlinx.android.synthetic.main.profile_main_card_background.view.*
@@ -130,10 +131,19 @@ class ProfileFragment : Fragment() {
                 ) + "\n\n"
             }
 
-            mainEducationString += "Skills: "
+            // TODO: Add a generic way for string formatting
             if (profile.Skill!!.size > 0) {
-                mainEducationString += profile.Skill!![0] + "\n\n"
+                var skills = profile.Skill!!
+                for ((index, value) in skills.withIndex()) {
+                    if (index < 5) {
+                        mainEducationString += if (index == 0)
+                                                    "Skills: " + value + "\n"
+                                               else
+                                                    "\t\t\t\t\t" + value + "\n"
+                    }
+                }
             }
+            mainEducationString += "\n"
 
             mainEducationString += "Achievement: "
             if (profile.Achievement!!.size > 0) {
