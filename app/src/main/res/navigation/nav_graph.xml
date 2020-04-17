@@ -35,7 +35,7 @@
         tools:layout="@layout/fragment_auth_flow"/>
 
     <fragment android:id="@+id/settingFragment"
-        android:name="com.gigforce.app.modules.preferences.SettingFragment"
+        android:name="com.gigforce.app.modules.preferences.PreferencesFragment"
         tools:layout="@layout/fragment_auth_flow"/>
     <fragment android:id="@+id/dayTimeFragment"
         android:name="com.gigforce.app.modules.preferences.datetime.DayTimeFragment"
@@ -318,3 +318,4 @@
             app:argType="string" />
     </dialog>
 </navigation>
+

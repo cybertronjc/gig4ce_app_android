@@ -1,13 +1,12 @@
 package com.gigforce.app.modules.photocrop
 
+import android.Manifest
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.content.pm.ResolveInfo
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
-import android.os.Parcelable
 import android.provider.MediaStore
 import android.util.Log
 import android.widget.ImageButton
@@ -27,16 +26,15 @@ import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
 import com.google.firebase.storage.UploadTask.TaskSnapshot
 import com.yalantis.ucrop.UCrop
+import pub.devrel.easypermissions.EasyPermissions
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 
-
 class PhotoCrop : AppCompatActivity(),
     BottomSheetListener {
     private val CODE_IMG_GALLERY: Int = 1
-    private val REQUEST_TAKE_PHOTO: Int = 1
     private val EXTENSION: String = ".jpg"
     private var cropX: Float = 1F
     private var cropY: Float = 1F
@@ -53,8 +51,11 @@ class PhotoCrop : AppCompatActivity(),
     private lateinit var imageView: ImageView
     private lateinit var backButton: ImageButton
     private lateinit var viewModel: ProfileViewModel
+<<<<<<< HEAD
     private lateinit var b64OfImg: String;
     private val TEMP_FILE: String = "profile_picture.jpg"
+=======
+>>>>>>> 186736881a92e13d416b38e816fa5daa8a0ab77f
     private lateinit var purpose: String
 
     var mStorage: FirebaseStorage = FirebaseStorage.getInstance()
@@ -80,15 +81,6 @@ class PhotoCrop : AppCompatActivity(),
     override fun onCreate(savedInstanceState: Bundle?): Unit {
         super.onCreate(savedInstanceState)
 
-        val bundle = intent.extras
-
-        if (bundle != null) {
-            storageDirPath = bundle.get("fbDir").toString()
-            detectFace = bundle.get("detectFace") as Int
-            CLOUD_PICTURE_FOLDER = bundle.get("folder").toString()
-            incomingFile = bundle.get("file").toString()
-        }
-
         this.setContentView(R.layout.activity_photo_crop)
         storage = FirebaseStorage.getInstance()
         imageView = this.findViewById(R.id.profile_avatar_photo_crop)
@@ -102,6 +94,8 @@ class PhotoCrop : AppCompatActivity(),
             profilePictureCrop -> profilePictureOptions()
             verification -> verificationOptions()
         }
+        checkPermissions()
+        imageView.setOnClickListener { showBottomSheet() }
     }
 
     private fun profilePictureOptions() {
@@ -421,6 +415,28 @@ class PhotoCrop : AppCompatActivity(),
             supportFragmentManager,
             "profilePictureOptionBottomSheet"
         )
+    }
+
+    private fun hasCameraPermission():Boolean {
+        return EasyPermissions.hasPermissions(this, Manifest.permission.CAMERA)
+    }
+
+    private fun hasGalleryPermission():Boolean {
+        return EasyPermissions.hasPermissions(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+    }
+
+    private fun askPermissions(rationale: String,requestCode: Int,perm: String){
+        EasyPermissions.requestPermissions(
+                this,
+                rationale,
+                requestCode,
+                perm)
+    }
+
+    private fun checkPermissions(){
+        if(!hasCameraPermission()) askPermissions("Camera Permission",101,Manifest.permission.CAMERA)
+        if(!hasGalleryPermission()) askPermissions("Select Image",102,Manifest.permission.READ_EXTERNAL_STORAGE)
+
     }
 
 }

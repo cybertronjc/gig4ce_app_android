@@ -7,6 +7,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.IdRes
 import androidx.fragment.app.Fragment
@@ -15,6 +17,7 @@ import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
 import com.gigforce.app.R
 import com.gigforce.app.core.CoreConstants
+import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.app.utils.popAllBackStates
 
 // TODO: Rename parameter arguments, choose names that match
@@ -107,6 +110,30 @@ abstract class BaseFragment : Fragment() {
 
     fun findViewById(id: Int): View? {
         return this.mView!!.findViewById(id)
+    }
+
+    fun getTextView(view : PFRecyclerViewAdapter<Any?>.ViewHolder, id:Int):TextView{
+        return view.getView(id) as TextView
+    }
+
+    fun getTextView(view : View, id:Int):TextView{
+        return view.findViewById(id) as TextView
+    }
+
+    fun getImageView(view : PFRecyclerViewAdapter<Any?>.ViewHolder, id:Int):ImageView{
+        return view.getView(id) as ImageView
+    }
+
+    fun getImageView(view : View, id:Int):ImageView{
+        return view.findViewById(id) as ImageView
+    }
+
+    fun getView(view : View, id:Int):View{
+        return view.findViewById(id)
+    }
+
+    open fun getView(view : PFRecyclerViewAdapter<Any?>.ViewHolder, id:Int):View{
+        return view.getView(id)
     }
 
 }

@@ -151,6 +151,8 @@ dependencies {
     implementation 'com.github.andrefrsousa:SuperBottomSheet:1.5.0'
 
     implementation 'com.riningan.widget:extendedbottomsheetbehavior:1.2'
+    implementation 'pub.devrel:easypermissions:3.0.0'
+
     // material dialogs
     implementation 'com.afollestad.material-dialogs:core:3.3.0'
     // material dialogs
