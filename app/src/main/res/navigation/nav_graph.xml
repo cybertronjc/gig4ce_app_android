@@ -286,7 +286,7 @@
             android:id="@+id/action_uploadDropDown_to_bankUpload2"
             app:destination="@id/bankUpload2" />
     </fragment>
-    <fragment
+    <dialog
         android:id="@+id/editCoverBottomSheet"
         android:name="com.gigforce.app.modules.profile.EditCoverBottomSheet"
         android:label="EditCoverBottomSheet" />
