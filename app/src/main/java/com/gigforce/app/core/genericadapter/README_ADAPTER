@@ -17,7 +17,7 @@
                 RecyclerGenericAdapter<DataItem>(
                         activity?.applicationContext,
                         OnViewHolderClick<Any?> { view, position, item -> showToast("")},
-                        ItemInterface<DataItem?> { obj, viewHolder ->
+                        ItemInterface<DataItem?> { obj, viewHolder, position ->
                             getView(viewHolder,R.id.constraintLayout)
                             getTextView(viewHolder,R.id.item_title)
                             getImageView(viewHolder,R.id.item_icon)
@@ -38,7 +38,7 @@
     val recyclerGenericAdapter : RecyclerGenericAdapter<DataItem> = RecyclerGenericAdapter<DataItem>(
         activity?.applicationContext,
         PFRecyclerViewAdapter.OnViewHolderClick <DataItem?> { view, position, item -> showToast("")},
-        RecyclerGenericAdapter.ItemInterface<DataItem?> { obj, viewHolder ->
+        RecyclerGenericAdapter.ItemInterface<DataItem?> { obj, viewHolder, position ->
             val title:TextView = viewHolder.getView(R.id.hs1_title) as TextView
             title.text = obj?.title
             val subtitle:TextView = viewHolder.getView(R.id.hs1_subtitle) as TextView
