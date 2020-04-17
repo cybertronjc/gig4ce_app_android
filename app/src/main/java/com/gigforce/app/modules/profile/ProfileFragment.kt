@@ -78,10 +78,16 @@ class ProfileFragment : Fragment() {
 
             var mainAboutString = ""
             mainAboutString += profile.bio.toString() + "\n\n"
-            mainAboutString += "Language knows: "
             if (profile.Language!!.size > 0) {
                 var languages = profile.Language!!.sortedWith(compareBy { it.writingSkill })
-                mainAboutString += languages[0].name + "\n"
+                for ((index, language) in languages.withIndex()) {
+                    mainAboutString += if (index == 0)
+                                            "Language known: " + language.name + " (" +
+                                                    getLanguageLevel(language.speakingSkill.toInt()) + ")\n"
+                                        else
+                                            "\t\t\t\t\t\t\t\t\t\t\t\t\t\t" + language.name + " (" +
+                                                    getLanguageLevel(language.speakingSkill.toInt()) + ")\n"
+                }
             }
 
             layout.main_about_card.card_title.text = "About me"
@@ -181,6 +187,14 @@ class ProfileFragment : Fragment() {
         chip.setChipStrokeWidthResource(R.dimen.border_width)
         chip.setChipBackgroundColorResource(R.color.fui_transparent)
         return chip
+    }
+
+    private fun getLanguageLevel(level: Int): String {
+        return when (level) {
+            in 0..25 -> "beginner"
+            in 26..75 -> "moderate"
+            else -> "advanced"
+        }
     }
 
     override fun onActivityResult(

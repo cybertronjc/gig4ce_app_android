@@ -87,14 +87,10 @@ class AboutExpandedFragment: Fragment() {
     }
 
     private fun getLanguageLevel(level: Int): String {
-        if (level <= 25) {
-            return "beginner"
-        }
-        else if (level <= 75) {
-            return "moderate"
-        }
-        else {
-            return "advanced"
+        return when (level) {
+            in 0..25 -> "beginner"
+            in 26..75 -> "moderate"
+            else -> "advanced"
         }
     }
 
