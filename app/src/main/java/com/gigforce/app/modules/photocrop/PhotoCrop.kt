@@ -43,16 +43,19 @@ class PhotoCrop : AppCompatActivity(),
     private val resultIntent: Intent = Intent()
     private var PREFIX: String = "IMG"
     private lateinit var storage: FirebaseStorage
-    private lateinit var storageDirPath: String;
+    private lateinit var CLOUD_INPUT_FOLDER: String;
     private var detectFace: Int = 1;
     private val DEFAULT_PICTURE: String = "avatar.jpg"
-    private lateinit var CLOUD_PICTURE_FOLDER: String
+    private val profilePictureCrop: String = "profilePictureCrop"
+    private val verification: String = "verification"
+    private lateinit var CLOUD_OUTPUT_FOLDER: String
     private lateinit var incomingFile: String
     private lateinit var imageView: ImageView
     private lateinit var backButton: ImageButton
     private lateinit var viewModel: ProfileViewModel
     private lateinit var b64OfImg: String;
     private val TEMP_FILE: String = "profile_picture.jpg"
+    private lateinit var purpose: String
 
     var mStorage: FirebaseStorage = FirebaseStorage.getInstance()
 
@@ -90,47 +93,49 @@ class PhotoCrop : AppCompatActivity(),
         storage = FirebaseStorage.getInstance()
         imageView = this.findViewById(R.id.profile_avatar_photo_crop)
         backButton = this.findViewById(R.id.back_button_photo_crop)
-        var purpose: String = intent.getStringExtra("purpose")
+        purpose = intent.getStringExtra("purpose")
         Log.e("PHOTO_CROP", "purpose = " + purpose + " comparing with: profilePictureCrop")
-        if (purpose == "profilePictureCrop") profilePictureOptions()
-        if (purpose == "verification") verificationOptions()
-
-        imageView.setOnClickListener { showBottomSheet() }
+        /**
+         * Add new purpose call here.
+         */
+        when (purpose) {
+            profilePictureCrop -> profilePictureOptions()
+            verification -> verificationOptions()
+        }
     }
 
     private fun profilePictureOptions() {
         Log.e("PHOTO_CROP", "profile picture options started")
-        CLOUD_PICTURE_FOLDER = intent.getStringExtra("folder")
+        CLOUD_OUTPUT_FOLDER = intent.getStringExtra("folder")
         incomingFile = intent.getStringExtra("file")
         cropX = 1F
         cropY = 1F
-        PREFIX = intent.getStringExtra("uid")
+        PREFIX = "profile_" + intent.getStringExtra("uid")
         val bundle = intent.extras
         if (bundle != null) {
-            storageDirPath = bundle.get("fbDir").toString()
+            CLOUD_INPUT_FOLDER = bundle.get("fbDir").toString()
             detectFace = bundle.get("detectFace") as Int
-            CLOUD_PICTURE_FOLDER = bundle.get("folder").toString()
             incomingFile = bundle.get("file").toString()
         }
-        loadImage(incomingFile)
+        loadImage(CLOUD_INPUT_FOLDER,incomingFile)
         showBottomSheet()
     }
 
     private fun verificationOptions() {
-        Log.e("PHOTO_CROP", "profile picture options started")
-        CLOUD_PICTURE_FOLDER = intent.getStringExtra("folder")
-        incomingFile = intent.getStringExtra("file")
+        Log.e("PHOTO_CROP", "verification options started")
+        CLOUD_OUTPUT_FOLDER = intent.getStringExtra("folder")
+        incomingFile = "verification_" + intent.getStringExtra("file")
         cropX = 7F
         cropY = 5F
         PREFIX = intent.getStringExtra("uid")
         val bundle = intent.extras
         if (bundle != null) {
-            storageDirPath = bundle.get("fbDir").toString()
+            CLOUD_INPUT_FOLDER = bundle.get("fbDir").toString()
             detectFace = bundle.get("detectFace") as Int
-            CLOUD_PICTURE_FOLDER = bundle.get("folder").toString()
+            CLOUD_OUTPUT_FOLDER = bundle.get("folder").toString()
             incomingFile = bundle.get("file").toString()
         }
-        loadImage(incomingFile)
+        loadImage(CLOUD_INPUT_FOLDER,incomingFile)
         showBottomSheet()
     }
 
@@ -219,7 +224,7 @@ class PhotoCrop : AppCompatActivity(),
                                 "Face detected, successfully updated your profile pic" + faces[0].boundingBox.toString(),
                                 Toast.LENGTH_LONG
                             ).show()
-                            upload(imageUriResultCrop, baos.toByteArray())
+                            upload(imageUriResultCrop, baos.toByteArray(),CLOUD_OUTPUT_FOLDER)
 
                         } else {
                             Toast.makeText(
@@ -232,11 +237,11 @@ class PhotoCrop : AppCompatActivity(),
                     .addOnFailureListener { e ->
                         // Task failed with an exception
                         Log.d("CStatus", "Face detection failed! still uploading the image")
-                        upload(imageUriResultCrop, baos.toByteArray())
+                        upload(imageUriResultCrop, baos.toByteArray(),CLOUD_OUTPUT_FOLDER)
                     }
             } else {
                 //just upload wihtout face detection eg for pan, aadhar, other docs.
-                upload(imageUriResultCrop, baos.toByteArray());
+                upload(imageUriResultCrop, baos.toByteArray(),CLOUD_OUTPUT_FOLDER);
             }
         }
         Log.d("CStatus", "completed result on activity")
@@ -287,10 +292,10 @@ class PhotoCrop : AppCompatActivity(),
         return options
     }
 
-    private fun upload(uri: Uri?, data: ByteArray) {
+    private fun upload(uri: Uri?, data: ByteArray, folder: String) {
         Log.v("Upload Image", "started")
         var mReference =
-            mStorage.reference.child(storageDirPath).child(uri!!.lastPathSegment!!)
+            mStorage.reference.child(folder).child(uri!!.lastPathSegment!!)
 
         /**
          * Uploading task created and initiated here.
@@ -323,16 +328,30 @@ class PhotoCrop : AppCompatActivity(),
          */
         try {
             uploadTask.addOnSuccessListener { taskSnapshot: TaskSnapshot ->
-                val name: String = taskSnapshot.metadata?.reference?.name.toString()
-                viewModel.setProfileAvatarName(name)
-                loadImage(name)
-                Toast.makeText(this, "Successfully Uploaded!", Toast.LENGTH_LONG).show()
-                Log.v("Upload Image", name)
+                val fname: String = taskSnapshot.metadata?.reference?.name.toString()
+                updateViewModel(purpose,fname)
+                loadImage(folder,fname)
+                Toast.makeText(this, "Successfully Uploaded :)", Toast.LENGTH_LONG).show()
+                Log.v(
+                    "PHOTO_CROP",
+                    "uploaded file in foldername" + CLOUD_OUTPUT_FOLDER + " file: " + fname
+                )
                 setResult(Activity.RESULT_OK, resultIntent)
-                super.finish()
             }
         } catch (e: Exception) {
             Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show()
+        }
+    }
+
+    /**
+     * Contains any changes that need to be done to view model on successful upload
+     *
+     * @param purpose - to define the logic that should be followed in update
+     * @param name - required for updating profile picture value ( alternate constructors can be made for different arguments )
+     */
+    private  fun updateViewModel(purpose: String, name:String){
+        when (purpose){
+            profilePictureCrop -> viewModel.setProfileAvatarName(name)
         }
     }
 
@@ -342,16 +361,21 @@ class PhotoCrop : AppCompatActivity(),
      * Reloads the Image preview
      */
     private fun defaultProfilePicture() {
-        viewModel.setProfileAvatarName(DEFAULT_PICTURE)
-        loadImage(DEFAULT_PICTURE)
-        resultIntent.putExtra("filename", DEFAULT_PICTURE)
-        setResult(Activity.RESULT_OK, resultIntent)
+        if (purpose == profilePictureCrop) {
+            viewModel.setProfileAvatarName(DEFAULT_PICTURE)
+            loadImage(CLOUD_INPUT_FOLDER,DEFAULT_PICTURE)
+            resultIntent.putExtra("filename", DEFAULT_PICTURE)
+            setResult(Activity.RESULT_OK, resultIntent)
+        }
     }
 
-    private fun loadImage(Path: String) {
-        Log.d("PHOTO_CROP", "loading - " + Path)
+    /**
+     *
+     */
+    private fun loadImage(folder:String,path: String) {
+        Log.d("PHOTO_CROP", "loading - " + path)
         var profilePicRef: StorageReference =
-            storage.reference.child(CLOUD_PICTURE_FOLDER).child(Path)
+            storage.reference.child(folder).child(path)
         GlideApp.with(this)
             .load(profilePicRef)
             .into(imageView)
@@ -365,21 +389,18 @@ class PhotoCrop : AppCompatActivity(),
         val pickIntent = Intent()
         pickIntent.type = "image/*"
         pickIntent.action = Intent.ACTION_GET_CONTENT
-
         val takePhotoIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         val galleryIntent = Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
         galleryIntent.setType("image/gallery");
-
         val pickTitle = "Select or take a new Picture"
         var outputFileUri: Uri? = Uri.fromFile(File.createTempFile("profilePicture", ".jpg"))
-        var chooserIntent = Intent.createChooser(pickIntent, pickTitle)
-        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, arrayOf(takePhotoIntent,galleryIntent))
+        val chooserIntent = Intent.createChooser(pickIntent, pickTitle)
+        chooserIntent.putExtra(
+            Intent.EXTRA_INITIAL_INTENTS, arrayOf(takePhotoIntent)
+        )
         chooserIntent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri)
-
-
         startActivityForResult(chooserIntent, CODE_IMG_GALLERY)
     }
-
 
     private fun logBundle(bundle: Bundle) {
         for (key in bundle.keySet()!!) {
@@ -396,11 +417,10 @@ class PhotoCrop : AppCompatActivity(),
     private fun showBottomSheet() {
         var profilePictureOptionsBottomSheetFragment: ProfilePictureOptionsBottomSheetFragment =
             ProfilePictureOptionsBottomSheetFragment()
-        if (!profilePictureOptionsBottomSheetFragment.isShowing)
-            profilePictureOptionsBottomSheetFragment.show(
-                supportFragmentManager,
-                "profilePictureOptionBottomSheet"
-            )
+        profilePictureOptionsBottomSheetFragment.show(
+            supportFragmentManager,
+            "profilePictureOptionBottomSheet"
+        )
     }
 
 }
