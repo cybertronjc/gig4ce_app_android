@@ -102,7 +102,7 @@ class HomeScreenNew : BaseFragment() {
         val recyclerGenericAdapter : RecyclerGenericAdapter<DataItem> = RecyclerGenericAdapter<DataItem>(
             activity?.applicationContext,
             PFRecyclerViewAdapter.OnViewHolderClick <DataItem?> { view, position, item -> showToast("")},
-            RecyclerGenericAdapter.ItemInterface<DataItem?> { obj, viewHolder ->
+            RecyclerGenericAdapter.ItemInterface<DataItem?> { obj, viewHolder, position ->
                 val title:TextView = viewHolder.getView(R.id.hs1_title) as TextView
                 title.text = obj?.title
                 val subtitle:TextView = viewHolder.getView(R.id.hs1_subtitle) as TextView
