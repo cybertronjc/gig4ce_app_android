@@ -40,6 +40,7 @@ android {
 
 dependencies {
 
+    implementation 'androidx.coordinatorlayout:coordinatorlayout:1.1.0'
     def moshiVersion="1.8.0"
     def retrofit2_version = "2.5.0"
     def okhttp3_version = "3.12.0"
@@ -141,6 +142,11 @@ dependencies {
     // https://github.com/ReactiveX/RxAndroid
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
     implementation 'io.reactivex.rxjava2:rxjava:2.2.0'
+
+    // Drag bottomsheet
+    implementation 'com.github.andrefrsousa:SuperBottomSheet:1.5.0'
+
+    implementation 'com.riningan.widget:extendedbottomsheetbehavior:1.2'
 }
 
 apply plugin: 'com.google.gms.google-services'

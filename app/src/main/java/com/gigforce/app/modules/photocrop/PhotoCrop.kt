@@ -225,7 +225,7 @@ class PhotoCrop : AppCompatActivity(),
                         } else {
                             Toast.makeText(
                                 this,
-                                "No face detected, please re-upload another pic containing face",
+                                "No face detected. Please re-upload your selfie.",
                                 Toast.LENGTH_LONG
                             ).show()
                         }
@@ -328,7 +328,7 @@ class PhotoCrop : AppCompatActivity(),
                 val name: String = taskSnapshot.metadata?.reference?.name.toString()
                 viewModel.setProfileAvatarName(name)
                 loadImage(name)
-                Toast.makeText(this, "Successfully Uploaded :)", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "Successfully Uploaded!", Toast.LENGTH_LONG).show()
                 Log.v("Upload Image", name)
                 setResult(Activity.RESULT_OK, resultIntent)
                 super.finish()

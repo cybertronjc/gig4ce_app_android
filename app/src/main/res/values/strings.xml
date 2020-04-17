@@ -185,11 +185,11 @@
 
     <string name="veri_add_doc_front">"Front Side"</string>
     <string name="veri_add_doc_back">"Back Side"</string>
-    <string name="veri_pan_title">"Step 2 : Upload your Pan"</string>
-    <string name="veri_aadhaar_title">"Step 3 : Upload your Aadhaar"</string>
+    <string name="veri_pan_title">"Step 5 : Upload your Pan"</string>
+    <string name="veri_aadhaar_title">"Step 2 : Upload your Aadhaar"</string>
     <string name="veri_no_aadhaar">"No Aadhaar! Skip>>"</string>
-    <string name="veri_dl_title">"Step 4 : Upload your Driving License"</string>
-    <string name="veri_bank_title">"Step 5 : Please add your Bank Details"</string>
+    <string name="veri_dl_title">"Step 3 : Upload your Driving License"</string>
+    <string name="veri_bank_title">"Step 4 : Please add your Bank Details"</string>
     <string name="veri_add_bank">"Add Bank Details"</string>
     <string name="veri_done">Hurray!!!\nKYC Documents submitted.\nWe will let you know once Verified.</string>
     <!-- Verification hint texts -->
@@ -210,4 +210,13 @@
     <string name="remove_document_picture">Remove Picture</string>
     <string name="document_picture">Image Option</string>
     <string name="edit_education">Edit Education</string>
+
+    <!-- home screen new -->
+    <string name="hs_rv_title">Dunzo Deliveries </string>
+    <string name="hs_rv_subtitle">+2 more </string>
+    <string name="hs_rv_date">11</string>
+    <string name="hs_rv_month">April</string>
+    <string name="hs_rv_comment">Last delivery was 20 min ago</string>
+    <string name="homescreen_bs_alert">Kyc Verification is not done , Click here to complete.</string>
+    <string name="homescreen_bs_features">Features</string>
 </resources>
