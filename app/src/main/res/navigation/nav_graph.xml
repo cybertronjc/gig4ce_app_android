@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_aboutExpandedFragment_to_addLanguageBottomSheetFragment"
             app:destination="@id/addLanguageBottomSheetFragment" />
+        <action
+            android:id="@+id/action_aboutExpandedFragment_to_editLanguageBottomSheet"
+            app:destination="@id/editLanguageBottomSheet" />
     </fragment>
     <dialog
         android:id="@+id/addContactBottomSheetFragment"
@@ -291,5 +294,13 @@
             android:id="@+id/action_uploadDropDown_to_bankUpload2"
             app:destination="@id/bankUpload2" />
     </fragment>
+    <dialog
+        android:id="@+id/editLanguageBottomSheet"
+        android:name="com.gigforce.app.modules.profile.EditLanguageBottomSheet"
+        android:label="EditLanguageBottomSheet">
+        <argument
+            android:name="array_location"
+            app:argType="string" />
+    </dialog>
 </navigation>
 

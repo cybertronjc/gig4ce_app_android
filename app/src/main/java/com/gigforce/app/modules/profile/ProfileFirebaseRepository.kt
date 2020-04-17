@@ -78,6 +78,10 @@ class ProfileFirebaseRepository {
         }
     }
 
+    fun removeProfileLanguage(language: Language) {
+        firebaseDB.collection(profileCollectionName).document(uid).update("Language", FieldValue.arrayRemove(language))
+    }
+
     fun setProfileExperience(experiences: ArrayList<Experience>) {
         for (exp in experiences) {
             firebaseDB.collection(profileCollectionName)
