@@ -12,6 +12,7 @@ import android.widget.DatePicker
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
+import com.afollestad.materialdialogs.MaterialDialog
 import com.gigforce.app.R
 import com.gigforce.app.modules.profile.models.Experience
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -141,8 +142,17 @@ class EditExperienceBottomSheet: BottomSheetDialogFragment() {
 
         layout.delete_button.setOnClickListener {
             Log.d("EditExperience", "Deleting Experience")
-            viewModel.removeProfileExperience(experience!!)
-            findNavController().navigate(R.id.experienceExpandedFragment)
+            MaterialDialog(this.context!!).show {
+                title(text = "Confirm Delete")
+                message(text = "Are you sure to Delete this item?")
+                positiveButton(R.string.delete) {
+                    viewModel.removeProfileExperience(experience!!)
+                    findNavController().navigate(R.id.experienceExpandedFragment)
+                }
+                negativeButton(R.string.cancel_text) {
+
+                }
+            }
         }
 
         layout.save_button.setOnClickListener {
