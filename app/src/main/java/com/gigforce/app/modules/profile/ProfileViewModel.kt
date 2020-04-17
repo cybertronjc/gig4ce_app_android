@@ -97,6 +97,10 @@ class ProfileViewModel: ViewModel() {
         profileFirebaseRepository.setProfileLanguage(languages)
     }
 
+    fun removeProfileLanguage(language: Language) {
+        profileFirebaseRepository.removeProfileLanguage(language)
+    }
+
     fun setProfileExperience(experiences: ArrayList<Experience>) {
         profileFirebaseRepository.setProfileExperience(experiences)
     }

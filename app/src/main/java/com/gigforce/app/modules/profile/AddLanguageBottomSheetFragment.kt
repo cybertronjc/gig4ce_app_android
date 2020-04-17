@@ -61,7 +61,8 @@ class AddLanguageBottomSheetFragment: BottomSheetDialogFragment() {
             Language(
                 name = layout.add_language_name.text.toString(),
                 speakingSkill = layout.add_language_speaking_level.progress.toString(),
-                writingSkill = layout.add_language_writing_level.progress.toString()
+                writingSkill = layout.add_language_writing_level.progress.toString(),
+                isMotherLanguage = layout.mother_language.isChecked.toString()
             )
         )
     }

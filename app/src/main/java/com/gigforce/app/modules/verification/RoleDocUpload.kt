@@ -21,24 +21,26 @@ import com.gigforce.app.modules.photocrop.PhotoCrop
 import com.gigforce.app.modules.verification.models.*
 import com.gigforce.app.modules.verification.service.RetrofitFactory
 import com.gigforce.app.utils.GlideApp
-import com.google.android.gms.tasks.OnFailureListener
-import com.google.android.gms.tasks.OnSuccessListener
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import io.reactivex.android.schedulers.AndroidSchedulers.mainThread
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.layout_verification_aadhaar.view.*
-import kotlinx.android.synthetic.main.layout_verification_dl.view.*
 import kotlinx.android.synthetic.main.layout_verification_dropdown.*
 import kotlinx.android.synthetic.main.layout_verification_dropdown.view.*
 
-
-class UploadDropDown: Fragment() {
+// CHECK here role based docs have to be added - DL is for driver, for other roles we can replace voterid and passposrt in this class to required.
+class RoleDocUpload: Fragment() {
     companion object {
-        fun newInstance() = UploadDropDown()
+        fun newInstance() = AlternateAddressUpload()
     }
 
     private lateinit var storage: FirebaseStorage
+    var firebaseDB = FirebaseFirestore.getInstance()
+    var uid = FirebaseAuth.getInstance().currentUser?.uid!!
+    lateinit var fieldVerification:String;
     lateinit var layout: View
     private lateinit var ddFront: ImageView
     private lateinit var ddBack: ImageView
@@ -131,6 +133,7 @@ class UploadDropDown: Fragment() {
 
                 when (parent.getItemAtPosition(position).toString()) {
                     "DrivingLicense" -> {
+                        fieldVerification = "DL";
                         filepathappender="/dl/"
                         photoCropIntent.putExtra("fbDir", "/verification/dl/")
                         photoCropIntent.putExtra("folder", "/verification/dl/")
@@ -140,6 +143,7 @@ class UploadDropDown: Fragment() {
                             Toast.LENGTH_LONG).show()
                     }
                     "Passport" -> {
+                        fieldVerification = "Passport";
                         filepathappender="/passport/"
                         photoCropIntent.putExtra("fbDir", "/verification/passport/")
                         photoCropIntent.putExtra("folder", "/verification/passport/")
@@ -149,6 +153,7 @@ class UploadDropDown: Fragment() {
                             Toast.LENGTH_LONG).show()
                     }
                     "VoterId" -> {
+                        fieldVerification = "VoterID";
                         filepathappender="/voterid/"
                         photoCropIntent.putExtra("fbDir", "/verification/voterid/")
                         photoCropIntent.putExtra("folder", "/verification/voterid/")
@@ -173,8 +178,16 @@ class UploadDropDown: Fragment() {
             startActivityForResult(photoCropIntent, PHOTO_CROP)
         }
         ddBack.setOnClickListener {
-            photoCropIntent.putExtra("file", "adback.jpg")
-            startActivityForResult(photoCropIntent, PHOTO_CROP)
+            if(ddFront.drawable==null) {
+                Toast.makeText(
+                    this.context,
+                    "Please upload the front side first!",
+                    Toast.LENGTH_LONG).show()
+            }
+            else {
+                photoCropIntent.putExtra("file", "adback.jpg")
+                startActivityForResult(photoCropIntent, PHOTO_CROP)
+            }
         }
 
 //        panFront = layout.findViewById(R.id.Pan_front)
@@ -212,7 +225,7 @@ class UploadDropDown: Fragment() {
     }
 
     @SuppressLint("CheckResult")
-    private fun idfyApiCall(postData: PostDataOCR){
+    private fun idfyApiCall(postData: PostDataOCRs){
         if(this.context?.let { UtilMethods.isConnectedToInternet(it) }!!){
             this.context?.let { UtilMethods.showLoading(it) }
             //TODO Here based on the selection call the api instance - DL, VoterID, Passport
@@ -222,11 +235,25 @@ class UploadDropDown: Fragment() {
                 .subscribe({ response ->
                     UtilMethods.hideLoading()
                     //here we can load all the data required
-                    Toast.makeText(
-                        this.context,
-                        ">>>"+response!!.result!!.extraction_output!!.gender!!.toString(),
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    var extractionOutput = response!!.result!!.extraction_output!!
+                    firebaseDB.collection("Verification")
+                        .document(uid).update(fieldVerification, FieldValue.arrayUnion(extractionOutput))
+                        .addOnSuccessListener {
+                            Toast.makeText(
+                                this.context,
+                                "Document successfully uploaded!",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            Log.d("REPOSITORY", "Aadhaar added successfully!")
+                        }
+                        .addOnFailureListener{
+                                exception ->  Log.d("Repository", exception.toString())
+                            Toast.makeText(
+                                this.context,
+                                "Some failure, please retry!",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
                     /** response is response data class*/
 
                 }, { error ->
@@ -247,34 +274,33 @@ class UploadDropDown: Fragment() {
         super.onActivityResult(requestCode, resultCode, data)
         /*
         For photo crop. The activity returns the the filename with which the cropped photo
-        is saved on firestore. The name is updated in profile information and the new
+        is saved on firestore. The name is updated in verification information and the new
         photo is loaded in the view
         */
         if (requestCode == PHOTO_CROP && resultCode == Activity.RESULT_OK) {
             var imageName: String? = data?.getStringExtra("filename")
-            Log.v("PROFILE_FRAG_OAR", "filename is:" + imageName)
+            Log.v("verification_FRAG_OAR", "filename is:" + imageName)
             if (null != imageName) {
                 viewModel.setCardAvatarName(imageName.toString())
                 var filepath = filepathappender+imageName;
                 if(frontNotDone==1) {
                     uriFront = data?.getParcelableExtra("uri")!!;
-                    loadImage("verification",filepath, layout.VeriDD_front)
+                    //loadImage("verification",filepath, layout.VeriDD_front)
+                    layout.VeriDD_front.setImageURI(uriFront);
                     frontNotDone = 0;
                 }
                 else{
                     uriBack = data?.getParcelableExtra("uri")!!;
-                    Toast.makeText(
-                        this.context,
-                        "front: $uriFront"+"<<<back: $uriBack",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    var imgb64 = UtilMethods.encodeImagesToBase64(context!!, uriFront, uriBack);
-                    var ocrdata = OCRDocData(imgb64,"yes")
+                    var imgb641 = UtilMethods.encodeImageToBase64(context!!, uriFront);
+                    var imgb642 = UtilMethods.encodeImageToBase64(context!!, uriBack);
+                    var ocrdata = OCRDocsData(imgb641,imgb642,"yes")
+                    //var ocrdata = OCRDocsData(imgb64,imgb64,"yes")
                     val taskid:String = "74f4c926-250c-43ca-9c53-453e87ceacd2";
                     val groupid:String = "8e16424a-58fc-4ba4-ab20-5bc8e7c3c41f";
-                    var postData = PostDataOCR(taskid,groupid,ocrdata!!)
+                    var postData = PostDataOCRs(taskid,groupid,ocrdata!!)
                     idfyApiCall(postData)
-                    loadImage("verification",filepath, layout.VeriDD_back)
+                    //loadImage("verification",filepath, layout.VeriDD_back)
+                    layout.VeriDD_back.setImageURI(uriBack);
                     docUploaded = 1;
                 }
             }

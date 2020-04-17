@@ -11,7 +11,23 @@
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:textViewStyle">@style/AppTheme.TextStyle</item>
+        <item name="bottomSheetDialogTheme">@style/CustomBottomSheetDialog</item>
+    </style>
 
+    <style name="CustomBottomSheetDialog" parent="@style/ThemeOverlay.MaterialComponents.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/CustomBottomSheet</item>
+    </style>
+
+    <style name="CustomBottomSheet" parent="Widget.MaterialComponents.BottomSheet">
+        <item name="shapeAppearanceOverlay">@style/CustomShapeAppearanceBottomSheetDialog</item>
+    </style>
+
+    <style name="CustomShapeAppearanceBottomSheetDialog" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopRight">16dp</item>
+        <item name="cornerSizeTopLeft">16dp</item>
+        <item name="cornerSizeBottomRight">0dp</item>
+        <item name="cornerSizeBottomLeft">0dp</item>
     </style>
 
     <style name="chipTextDefaultColor">
@@ -139,10 +155,25 @@
     </style>
 
     <style name="LipstickCardBottom">
-        <item name="android:textSize">14sp</item>
+        <item name="android:textSize">18sp</item>
         <item name="android:textColor">#e42c64</item>
         <item name="android:letterSpacing">0.05</item>
     </style>
+
+    <style name="NumberBoldText">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">#444444</item>
+        <item name="android:letterSpacing">0.04</item>
+        <item name="android:lineSpacingExtra">22.9sp</item>
+    </style>
+
+    <style name="LargeRegularText">
+        <item name="android:textSize">8.6sp </item>
+        <item name="android:textColor">#222222</item>
+        <item name="android:letterSpacing">0.15</item>
+        <item name="android:lineSpacingExtra">32.2sp</item>
+    </style>
+
 
     <!--<style name="AppTheme.BaseButtonStyle" parent="android:Widget.Holo.Button">
         <item name="android:fontFamily">@font/lato_bold</item>
