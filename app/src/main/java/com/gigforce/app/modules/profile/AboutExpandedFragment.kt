@@ -54,9 +54,10 @@ class AboutExpandedFragment: Fragment() {
             var languageString = ""
             for (lang in profile.Language!!) {
                 languageString += lang.name + "\n"
-                languageString += "Speaking " + lang.speakingSkill + "\n"
-                languageString += "Writing " + lang.writingSkill + "\n\n"
+                languageString += "Speaking " + getLanguageLevel(lang.speakingSkill.toInt()) + "\n"
+                languageString += "Writing " + getLanguageLevel(lang.writingSkill.toInt()) + "\n\n"
             }
+            layout.language_card.nextDestination = R.id.editLanguageBottomSheet
             layout.language_card.cardTitle = "Language"
             layout.language_card.cardContent = languageString
             layout.language_card.cardBottom = "+ Add Language"
@@ -102,6 +103,12 @@ class AboutExpandedFragment: Fragment() {
                 Toast.makeText(this.context!!, "Not Implemented", Toast.LENGTH_SHORT).show()
             }
             negativeButton (text = "Cancel") { }
+
+    private fun getLanguageLevel(level: Int): String {
+        return when (level) {
+            in 0..25 -> "beginner"
+            in 26..75 -> "moderate"
+            else -> "advanced"
         }
     }
 

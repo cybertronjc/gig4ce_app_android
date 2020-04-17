@@ -223,4 +223,6 @@
 
     <string name="select_skill">Select Skill</string>
 
+    <string name="add_mother_tongue_text">Add as my mother tongue</string>
+    <string name="edit_language">Edit Language</string>
 </resources>

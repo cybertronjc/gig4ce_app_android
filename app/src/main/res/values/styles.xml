@@ -148,7 +148,7 @@
     </style>
 
     <style name="LipstickCardBottom">
-        <item name="android:textSize">14sp</item>
+        <item name="android:textSize">18sp</item>
         <item name="android:textColor">#e42c64</item>
         <item name="android:letterSpacing">0.05</item>
     </style>
