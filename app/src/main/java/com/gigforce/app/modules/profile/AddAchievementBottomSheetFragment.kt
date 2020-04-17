@@ -60,6 +60,9 @@ class AddAchievementBottomSheetFragment: BottomSheetDialogFragment() {
                 layout.add_achievement_location.setSelection(0)
                 layout.add_achievement_year.setSelection(0)
             }
+            else {
+                Toast.makeText(this.context, "Invalid Entry", Toast.LENGTH_LONG)
+            }
         }
 
         locations.add("--location--")
@@ -76,8 +79,7 @@ class AddAchievementBottomSheetFragment: BottomSheetDialogFragment() {
                     position: Int,
                     id: Long
                 ) {
-                    selectedLocation = locations[position]
-                    Log.d("Spinner", "selected " + locations[position])
+                    selectedLocation = if (position != 0) locations[position] else ""
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -97,8 +99,7 @@ class AddAchievementBottomSheetFragment: BottomSheetDialogFragment() {
                 position: Int,
                 id: Long
             ) {
-                selectedYear = years[position]
-                Log.d("Spinner", "selected " + years[position])
+                selectedYear = if (position != 0) years[position] else ""
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -113,6 +114,9 @@ class AddAchievementBottomSheetFragment: BottomSheetDialogFragment() {
                 viewModel.setProfileAchievement(updates)
                 Toast.makeText(this.context, "Updated Achievement Section", Toast.LENGTH_LONG)
                 this.findNavController().navigate(R.id.educationExpandedFragment)
+            }
+            else {
+                Toast.makeText(this.context, "Invalid Entry", Toast.LENGTH_LONG)
             }
         }
     }
@@ -135,7 +139,10 @@ class AddAchievementBottomSheetFragment: BottomSheetDialogFragment() {
         if (layout.add_achievement_authority.text.toString() == "") {
             return false
         }
-        if (layout.add_achievement_year.toString() == "") {
+        if (selectedYear == "") {
+            return false
+        }
+        if (selectedLocation == "") {
             return false
         }
         return true

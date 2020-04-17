@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
@@ -68,8 +69,7 @@ class EditAchievementBottomSheet: BottomSheetDialogFragment() {
                 position: Int,
                 id: Long
             ) {
-                selectedYear = years[position]
-                Log.d("Spinner", "selected " + years[position])
+                selectedYear = if (position != 0) years[position] else ""
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -88,7 +88,7 @@ class EditAchievementBottomSheet: BottomSheetDialogFragment() {
                 position: Int,
                 id: Long
             ) {
-                selectedLocation = locations[position]
+                selectedLocation = if (position != 0) locations[position] else ""
                 Log.d("Spinner", "selected " + locations[position])
             }
 
@@ -131,6 +131,9 @@ class EditAchievementBottomSheet: BottomSheetDialogFragment() {
                 viewModel.setProfileAchievement(newAchievement)
                 findNavController().navigate(R.id.educationExpandedFragment)
             }
+            else {
+                Toast.makeText(this.context, "Invalid Entry", Toast.LENGTH_LONG)
+            }
         }
 
     }
@@ -142,7 +145,10 @@ class EditAchievementBottomSheet: BottomSheetDialogFragment() {
         if (layout.authority.text.toString() == "") {
             return false
         }
-        if (layout.year.toString() == "") {
+        if (selectedYear == "") {
+            return false
+        }
+        if (selectedLocation == "") {
             return false
         }
         return true

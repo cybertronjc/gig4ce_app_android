@@ -73,7 +73,8 @@ class EducationExpandedFragment: Fragment() {
             for (achievement in profile.Achievement!!) {
                 achievementString += achievement.title + "\n"
                 achievementString += achievement.issuingAuthority + "\n"
-                achievementString += achievement.location + "\n"
+                if (achievement.location != "")
+                    achievementString += achievement.location + "\n"
                 achievementString += achievement.year + "\n\n"
             }
             layout.achievement_card.nextDestination = R.id.editAchievementBottomSheet
