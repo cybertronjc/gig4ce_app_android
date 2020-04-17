@@ -21,16 +21,16 @@ import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.setting_fragment.*
 
 
-class SettingFragment : BaseFragment() {
+class PreferencesFragment : BaseFragment() {
     companion object {
         fun newInstance() =
-            SettingFragment()
+            PreferencesFragment()
         const val DAY_TIME = 2;
         const val TITLE_OTHER = 5;
         const val TITLE_SIGNOUT = 8;
     }
 
-    private lateinit var viewModel: SettingViewModel
+    private lateinit var viewModel: PreferencesViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -57,13 +57,13 @@ class SettingFragment : BaseFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         this.setDarkStatusBarTheme(false)
-        viewModel = ViewModelProviders.of(this).get(SettingViewModel::class.java)
+        viewModel = ViewModelProviders.of(this).get(PreferencesViewModel::class.java)
         val arrPrefrancesList = viewModel.getPrefrencesData()
-        val recyclerGenericAdapter: RecyclerGenericAdapter<PrefrencesItem> =
-            RecyclerGenericAdapter<PrefrencesItem>(
+        val recyclerGenericAdapter: RecyclerGenericAdapter<PreferencesItem> =
+            RecyclerGenericAdapter<PreferencesItem>(
                 activity?.applicationContext,
-                PFRecyclerViewAdapter.OnViewHolderClick<PrefrencesItem> { view, position, item -> prefrencesItemSelect(position) },
-                RecyclerGenericAdapter.ItemInterface <PrefrencesItem?> { obj, viewHolder,position ->
+                PFRecyclerViewAdapter.OnViewHolderClick<PreferencesItem> { view, position, item -> prefrencesItemSelect(position) },
+                RecyclerGenericAdapter.ItemInterface <PreferencesItem?> { obj, viewHolder, position ->
                     setPreferencesItems(obj,viewHolder,position)
                 })!!
         recyclerGenericAdapter.setList(arrPrefrancesList)
@@ -77,7 +77,7 @@ class SettingFragment : BaseFragment() {
     }
 
     private fun setPreferencesItems(
-        obj: PrefrencesItem?,
+        obj: PreferencesItem?,
         viewHolder: PFRecyclerViewAdapter<Any?>.ViewHolder,
         position: Int
     ) {
@@ -101,7 +101,7 @@ class SettingFragment : BaseFragment() {
         }
     }
 
-    private fun setItems(imageView:ImageView,title: TextView, subTitle: TextView, obj: PrefrencesItem?) {
+    private fun setItems(imageView:ImageView,title: TextView, subTitle: TextView, obj: PreferencesItem?) {
         title.text = obj?.title
         subTitle.text = obj?.subtitle
         imageView.setImageResource(obj!!.icon)
@@ -111,13 +111,13 @@ class SettingFragment : BaseFragment() {
         constraintView.visibility = if(isVisible) View.VISIBLE else View.INVISIBLE
         otherAndSignout.visibility = if(!isVisible) View.VISIBLE else View.INVISIBLE
     }
-    private fun setItemAsSignOut(otherAndSignout: TextView,obj: PrefrencesItem?) {
+    private fun setItemAsSignOut(otherAndSignout: TextView,obj: PreferencesItem?) {
         val spannableString1 = SpannableString(obj?.title)
         spannableString1.setSpan(UnderlineSpan(),0,obj?.title!!.length,0)
         otherAndSignout.text = spannableString1
     }
 
-    private fun setItemAsOther(otherAndSignout: TextView,obj: PrefrencesItem?) {
+    private fun setItemAsOther(otherAndSignout: TextView,obj: PreferencesItem?) {
         otherAndSignout.text = obj?.title
     }
 
