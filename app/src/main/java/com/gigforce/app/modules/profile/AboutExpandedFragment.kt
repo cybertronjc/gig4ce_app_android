@@ -68,7 +68,7 @@ class AboutExpandedFragment: Fragment() {
             layout.contact_card.cardBottom = "+ Add Contact"
 
             layout.about_top_profile.userName = profile.name
-            layout.about_top_profile.imageName = "ysharma.jpg"
+            layout.about_top_profile.imageName = profile.profileAvatarName
         })
 
         layout.language_card.card_bottom.setOnClickListener{
