@@ -51,11 +51,8 @@ class PhotoCrop : AppCompatActivity(),
     private lateinit var imageView: ImageView
     private lateinit var backButton: ImageButton
     private lateinit var viewModel: ProfileViewModel
-<<<<<<< HEAD
     private lateinit var b64OfImg: String;
     private val TEMP_FILE: String = "profile_picture.jpg"
-=======
->>>>>>> 186736881a92e13d416b38e816fa5daa8a0ab77f
     private lateinit var purpose: String
 
     var mStorage: FirebaseStorage = FirebaseStorage.getInstance()
