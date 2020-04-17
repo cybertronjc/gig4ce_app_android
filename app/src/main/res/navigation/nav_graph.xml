@@ -31,6 +31,21 @@
         android:name="com.gigforce.app.modules.auth.AuthFlowFragment"
         tools:layout="@layout/fragment_auth_flow"/>
 
+    <fragment android:id="@+id/settingFragment"
+        android:name="com.gigforce.app.modules.preferences.SettingFragment"
+        tools:layout="@layout/fragment_auth_flow"/>
+    <fragment android:id="@+id/dayTimeFragment"
+        android:name="com.gigforce.app.modules.preferences.datetime.DayTimeFragment"
+        tools:layout="@layout/date_time_fragment"/>
+
+    <fragment android:id="@+id/weekEndFragment"
+        android:name="com.gigforce.app.modules.preferences.datetime.weekend.WeekEndFragment"
+        tools:layout="@layout/week_end_fragment"/>
+
+    <fragment android:id="@+id/weekDayFragment"
+        android:name="com.gigforce.app.modules.preferences.datetime.weekday.WeekDayFragment"
+        tools:layout="@layout/week_day_fragment"/>
+
     <fragment
         android:id="@+id/experienceExpandedFragment"
         android:name="com.gigforce.app.modules.profile.ExperienceExpandedFragment"

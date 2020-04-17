@@ -73,7 +73,7 @@ public abstract class PFRecyclerViewAdapter<T> extends RecyclerView.Adapter<PFRe
 
     protected abstract View createView(Context context, ViewGroup viewGroup, int viewType);
 
-    protected abstract void bindView(T item, PFRecyclerViewAdapter.ViewHolder viewHolder);
+    protected abstract void bindView(T item, PFRecyclerViewAdapter.ViewHolder viewHolder,int position);
 
     public PFRecyclerViewAdapter(Context context) {
         this(context, null);
@@ -93,7 +93,7 @@ public abstract class PFRecyclerViewAdapter<T> extends RecyclerView.Adapter<PFRe
 
     @Override
     public void onBindViewHolder(PFRecyclerViewAdapter.ViewHolder holder, int position) {
-        bindView(getItem(position), holder);
+        bindView(getItem(position), holder,position);
     }
 
     @Override

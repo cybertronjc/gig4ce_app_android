@@ -117,8 +117,7 @@ class HomeScreenIcons : BaseFragment() {
         gridItems.add(HSGridItemDataModel("Preferences",R.drawable.ic_homescreen_control,0))
         gridItems.add(HSGridItemDataModel("Video Resume",R.drawable.gig4ce_logo,R.id.videoResumeFragment))
         gridItems.add(HSGridItemDataModel("More",R.drawable.gig4ce_logo,0))
-        gridItems.add(HSGridItemDataModel("More",R.drawable.gig4ce_logo,0))
-        gridItems.add(HSGridItemDataModel("More",R.drawable.gig4ce_logo,0))
+        gridItems.add(HSGridItemDataModel("Prefrences",R.drawable.ic_homescreen_pref,R.id.settingFragment))
         return gridItems
     }
 }

@@ -16,7 +16,9 @@
                         activity?.applicationContext,
                         OnViewHolderClick<Any?> { view, position, item -> showToast("")},
                         ItemInterface<DataItem?> { obj, viewHolder ->
-
+                            getView(viewHolder,R.id.constraintLayout)
+                            getTextView(viewHolder,R.id.item_title)
+                            getImageView(viewHolder,R.id.item_icon)
                         })!!
         recyclerGenericAdapter.setList(datalist)
         recyclerGenericAdapter.setLayout(R.layout.home_screen_new_fragment)
