@@ -52,7 +52,7 @@ class EditExperienceBottomSheet: BottomSheetDialogFragment() {
         layout = inflater.inflate(R.layout.edit_experience, container, false)
         viewModel = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
 
-        employments.addAll(listOf("--employment type--", "full time", "intern"))
+        employments.addAll(listOf("--employment type--", "Full time", "internship", "Part time"))
         locations.addAll(listOf("--location--", "Hyderabad", "Bangalore"))
 
         return layout

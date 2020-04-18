@@ -65,7 +65,7 @@ class AddExperienceBottomSheet: BottomSheetDialogFragment() {
             layout.add_experience_end_date.setText("")
         }
 
-        employments.addAll(listOf("--employment type--", "full time", "intern"))
+        employments.addAll(listOf("--employment type--", "Full time", "internship", "Part time"))
         val employmentAdapter = ArrayAdapter(this.context!!, R.layout.simple_spinner_dropdown_item, employments)
         val employmentSpinner = layout.add_experience_employment_type
         employmentSpinner.adapter = employmentAdapter
