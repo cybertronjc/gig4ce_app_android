@@ -55,6 +55,7 @@ class AddExperienceBottomSheet: BottomSheetDialogFragment() {
             if (validateExperience()) {
                 addNewExperience()
                 layout.add_experience_title.setText("")
+                layout.add_experience_company.setText("")
                 layout.add_experience_employment_type.setSelection(0)
                 layout.add_experience_location.setText("")
                 layout.add_experience_start_date.setText("")
@@ -77,7 +78,7 @@ class AddExperienceBottomSheet: BottomSheetDialogFragment() {
                 position: Int,
                 id: Long
             ) {
-                selectedEmployment = employments[position]
+                selectedEmployment = if (position != 0) employments[position] else ""
                 Log.d("Spinner", "selected " + employments[position])
             }
 
@@ -129,6 +130,7 @@ class AddExperienceBottomSheet: BottomSheetDialogFragment() {
         updates.add(
             Experience(
                 title = layout.add_experience_title.text.toString(),
+                company = layout.add_experience_company.text.toString(),
                 employmentType = selectedEmployment,
                 location = layout.add_experience_location.text.toString(),
                 startDate = SimpleDateFormat("dd/MM/yyyy").parse(selectedStartDate),
@@ -140,6 +142,8 @@ class AddExperienceBottomSheet: BottomSheetDialogFragment() {
 
     private fun validateExperience(): Boolean {
         if (layout.add_experience_title.text.toString() == "")
+            return false
+        if (layout.add_experience_company.text.toString() == "")
             return false
         if (selectedEmployment == "")
             return false

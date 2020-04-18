@@ -18,6 +18,7 @@ import com.gigforce.app.R
 import com.gigforce.app.modules.profile.models.Experience
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.android.synthetic.main.edit_experience.view.*
+import kotlinx.android.synthetic.main.fragment_profile_experience_expanded.*
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -68,7 +69,7 @@ class EditExperienceBottomSheet: BottomSheetDialogFragment() {
                 position: Int,
                 id: Long
             ) {
-                selectedEmployment = employments[position]
+                selectedEmployment = if (position != 0) employments[position] else ""
                 Log.d("Spinner", "selected " + employments[position])
             }
 
@@ -106,6 +107,7 @@ class EditExperienceBottomSheet: BottomSheetDialogFragment() {
             if (profile!!.Experience!!.size >= 0) {
                 experience = profile.Experience!![arrayLocation.toInt()]
                 layout.title.setText(experience.title)
+                layout.company.setText(experience.company)
                 layout.employment_type.setSelection(employments.indexOf(experience.employmentType))
                 layout.location.setText(experience.location)
                 selectedStartDate = format.format(experience.startDate!!)
@@ -139,6 +141,7 @@ class EditExperienceBottomSheet: BottomSheetDialogFragment() {
                 newExperience.add(
                     Experience(
                         title = layout.title.text.toString(),
+                        company = layout.company.text.toString(),
                         employmentType = selectedEmployment,
                         location = layout.location.text.toString(),
                         startDate = SimpleDateFormat("dd/MM/yyyy").parse(selectedStartDate),
@@ -155,6 +158,8 @@ class EditExperienceBottomSheet: BottomSheetDialogFragment() {
 
     private fun validateExperience(): Boolean {
         if (layout.title.text.toString() == "")
+            return false
+        if (layout.company.text.toString() == "")
             return false
         if (selectedEmployment == "")
             return false
