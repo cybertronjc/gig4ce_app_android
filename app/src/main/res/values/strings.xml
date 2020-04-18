@@ -80,7 +80,7 @@
     <string name="add_achievement_sheet_title">Title</string>
     <string name="add_achievement_sheet_issuing_authority">Issuing Authority</string>
     <string name="add_achievement_sheet_location">Location</string>
-    <string name="add_achievement_sheet_year">Year *</string>
+    <string name="add_achievement_sheet_year">Year * (eg. 2011)</string>
 
     <!-- Add New Education Bottom Sheet -->
     <string name="add_education_sheet_new_education">New Education</string>
