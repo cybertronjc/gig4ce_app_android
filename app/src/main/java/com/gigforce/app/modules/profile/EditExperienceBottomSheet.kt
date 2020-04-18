@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.DatePicker
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
@@ -31,8 +32,6 @@ class EditExperienceBottomSheet: BottomSheetDialogFragment() {
     var arrayLocation: String = ""
     var employments: ArrayList<String> = ArrayList()
     var selectedEmployment: String = ""
-    var locations: ArrayList<String> = ArrayList()
-    var selectedLocation: String = ""
     lateinit var experience: Experience
     var selectedStartDate: String = ""
     var selectedEndDate: String = ""
@@ -53,31 +52,11 @@ class EditExperienceBottomSheet: BottomSheetDialogFragment() {
         viewModel = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
 
         employments.addAll(listOf("--employment type--", "full time", "intern"))
-        locations.addAll(listOf("--location--", "Hyderabad", "Bangalore"))
 
         return layout
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val locationAdapter = ArrayAdapter(this.context!!, R.layout.simple_spinner_dropdown_item, locations)
-        val locationSpinner = layout.location
-        locationSpinner.adapter = locationAdapter
-        locationSpinner.onItemSelectedListener = object:
-            AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                selectedLocation = locations[position]
-                Log.d("Spinner", "selected " + locations[position])
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-                //TODO("Not yet implemented")
-            }
-        }
 
         val employmentAdapter = ArrayAdapter(this.context!!, R.layout.simple_spinner_dropdown_item, employments)
         val employmentSpinner = layout.employment_type
@@ -130,10 +109,9 @@ class EditExperienceBottomSheet: BottomSheetDialogFragment() {
                 experience = profile.Experience!![arrayLocation.toInt()]
                 layout.title.setText(experience.title)
                 layout.employment_type.setSelection(employments.indexOf(experience.employmentType))
-                layout.location.setSelection(locations.indexOf(experience.location))
+                layout.location.setText(experience.location)
                 selectedStartDate = format.format(experience.startDate!!)
                 selectedEndDate = format.format(experience.endDate!!)
-                selectedLocation = experience.location
                 selectedEmployment = experience.employmentType
                 layout.start_date.setText(format.format(experience.startDate!!))
                 layout.end_date.setText(format.format(experience.endDate!!))
@@ -156,20 +134,40 @@ class EditExperienceBottomSheet: BottomSheetDialogFragment() {
         }
 
         layout.save_button.setOnClickListener {
-            Log.d("EditExperience", "Editing Experience")
-            viewModel.removeProfileExperience(experience!!)
-            val newExperience: ArrayList<Experience> = ArrayList()
-            newExperience.add(
-                Experience(
-                    title = layout.title.text.toString(),
-                    employmentType = selectedEmployment,
-                    location = selectedLocation,
-                    startDate = SimpleDateFormat("dd/MM/yyyy").parse(selectedStartDate),
-                    endDate = SimpleDateFormat("dd/MM/yyyy").parse(selectedEndDate)
+            if (validateExperience()) {
+                Log.d("EditExperience", "Editing Experience")
+                viewModel.removeProfileExperience(experience!!)
+                val newExperience: ArrayList<Experience> = ArrayList()
+                newExperience.add(
+                    Experience(
+                        title = layout.title.text.toString(),
+                        employmentType = selectedEmployment,
+                        location = layout.location.text.toString(),
+                        startDate = SimpleDateFormat("dd/MM/yyyy").parse(selectedStartDate),
+                        endDate = SimpleDateFormat("dd/MM/yyyy").parse(selectedEndDate)
+                    )
                 )
-            )
-            viewModel.setProfileExperience(newExperience)
-            findNavController().navigate(R.id.experienceExpandedFragment)
+                viewModel.setProfileExperience(newExperience)
+                findNavController().navigate(R.id.experienceExpandedFragment)
+            } else {
+                Toast.makeText(this.context, "Invalid Entry", Toast.LENGTH_LONG).show()
+            }
         }
+    }
+
+    private fun validateExperience(): Boolean {
+        if (layout.title.text.toString() == "")
+            return false
+        if (selectedEmployment == "")
+            return false
+        if (layout.location.text.toString() == "")
+            return false
+        if (selectedStartDate == "")
+            return false
+        if (selectedEndDate == "")
+            return false
+        if (selectedEmployment == "")
+            return false
+        return true
     }
 }
