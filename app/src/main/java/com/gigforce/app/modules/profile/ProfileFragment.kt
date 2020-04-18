@@ -122,6 +122,9 @@ class ProfileFragment : Fragment() {
             layout.main_about_card.card_view_more.setOnClickListener {
                 findNavController().navigate(R.id.aboutExpandedFragment)
             }
+            layout.main_about_card.setOnClickListener {
+                findNavController().navigate(R.id.aboutExpandedFragment)
+            }
 
             var mainEducationString = ""
             var format = SimpleDateFormat("dd/MM/yyyy", Locale.US)
@@ -160,6 +163,9 @@ class ProfileFragment : Fragment() {
             layout.main_education_card.card_view_more.setOnClickListener {
                 findNavController().navigate(R.id.educationExpandedFragment)
             }
+            layout.main_education_card.setOnClickListener {
+                findNavController().navigate(R.id.educationExpandedFragment)
+            }
 
             var mainExperienceString = ""
             if (profile.Experience!!.size > 0) {
@@ -174,6 +180,9 @@ class ProfileFragment : Fragment() {
             layout.main_experience_card.card_title.text = "Experience"
             layout.main_experience_card.card_content.text = mainExperienceString
             layout.main_experience_card.card_view_more.setOnClickListener {
+                findNavController().navigate(R.id.experienceExpandedFragment)
+            }
+            layout.main_experience_card.setOnClickListener {
                 findNavController().navigate(R.id.experienceExpandedFragment)
             }
 
