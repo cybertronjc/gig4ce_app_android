@@ -30,8 +30,6 @@ class AddAchievementBottomSheetFragment: BottomSheetDialogFragment() {
     lateinit var viewModel: ProfileViewModel
     var locations: ArrayList<String> = ArrayList()
     var selectedLocation: String = ""
-    var years: ArrayList<String> = ArrayList()
-    var selectedYear: String = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -58,10 +56,10 @@ class AddAchievementBottomSheetFragment: BottomSheetDialogFragment() {
                 layout.add_achievement_title.setText("")
                 layout.add_achievement_authority.setText("")
                 layout.add_achievement_location.setSelection(0)
-                layout.add_achievement_year.setSelection(0)
+                layout.add_achievement_year.setText("")
             }
             else {
-                Toast.makeText(this.context, "Invalid Entry", Toast.LENGTH_LONG)
+                Toast.makeText(this.context, "Invalid Entry", Toast.LENGTH_LONG).show()
             }
         }
 
@@ -87,36 +85,16 @@ class AddAchievementBottomSheetFragment: BottomSheetDialogFragment() {
                 }
         }
 
-        years.addAll(listOf("--year--", "2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020"))
-        val yearAdapter = ArrayAdapter(this.context!!, R.layout.simple_spinner_dropdown_item, years)
-        val yearSpinner = layout.add_achievement_year
-        yearSpinner.adapter = yearAdapter
-        yearSpinner.onItemSelectedListener = object:
-            AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                selectedYear = if (position != 0) years[position] else ""
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-                //TODO("Not yet implemented")
-            }
-        }
-
         layout.add_achievement_save_button.setOnClickListener{
             if (validateAchievement()) {
                 addNewAchievement()
 
                 viewModel.setProfileAchievement(updates)
-                Toast.makeText(this.context, "Updated Achievement Section", Toast.LENGTH_LONG)
+                Toast.makeText(this.context, "Updated Achievement Section", Toast.LENGTH_LONG).show()
                 this.findNavController().navigate(R.id.educationExpandedFragment)
             }
             else {
-                Toast.makeText(this.context, "Invalid Entry", Toast.LENGTH_LONG)
+                Toast.makeText(this.context, "Invalid Entry", Toast.LENGTH_LONG).show()
             }
         }
     }
@@ -127,7 +105,7 @@ class AddAchievementBottomSheetFragment: BottomSheetDialogFragment() {
                 title = layout.add_achievement_title.text.toString(),
                 issuingAuthority = layout.add_achievement_authority.text.toString(),
                 location = selectedLocation,
-                year = selectedYear
+                year = layout.add_achievement_year.text.toString()
             )
         )
     }
@@ -139,7 +117,8 @@ class AddAchievementBottomSheetFragment: BottomSheetDialogFragment() {
         if (layout.add_achievement_authority.text.toString() == "") {
             return false
         }
-        if (selectedYear == "") {
+        if (layout.add_achievement_year.text.toString() == "" ||
+                layout.add_achievement_year.text.toString().length != 4) {
             return false
         }
         if (selectedLocation == "") {

@@ -53,13 +53,13 @@
             style="@style/LatoRegularCardText12"
             android:inputType="textPersonName"/>
 
-        <Spinner
+        <EditText
             android:id="@+id/add_achievement_year"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            style="@style/LatoRegularCardText12"
             android:ems="10"
+            android:hint="@string/add_achievement_sheet_year"
             android:inputType="date" />
 
         <TextView

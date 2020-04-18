@@ -77,11 +77,13 @@
                 android:layout_marginTop="16dp"
                 android:text="@string/year_text" />
 
-            <Spinner
-                android:id="@+id/year"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"/>
+        <EditText
+            android:id="@+id/year"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="date"
+            android:layout_marginTop="8dp"/>
 
         <LinearLayout
             android:layout_width="match_parent"
