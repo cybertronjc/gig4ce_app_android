@@ -44,13 +44,13 @@
             android:hint="@string/add_achievement_sheet_issuing_authority"
             android:inputType="textPersonName" />
 
-        <Spinner
+        <EditText
             android:id="@+id/add_achievement_location"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:ems="10"
-            style="@style/LatoRegularCardText12"
+            android:hint="@string/location"
             android:inputType="textPersonName"/>
 
         <EditText

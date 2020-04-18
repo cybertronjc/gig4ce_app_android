@@ -54,7 +54,6 @@
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:inputType="textPersonName"
-                android:text="Name"
                 android:layout_marginTop="8dp"/>
 
             <TextView
@@ -64,11 +63,13 @@
                 android:layout_marginTop="16dp"
                 android:text="@string/location" />
 
-            <Spinner
+            <EditText
                 android:id="@+id/location"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp" />
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:layout_marginTop="8dp"/>
 
             <TextView
                 android:id="@+id/textView37"
