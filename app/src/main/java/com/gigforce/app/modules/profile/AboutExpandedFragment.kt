@@ -10,17 +10,14 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.afollestad.materialdialogs.MaterialDialog
-import com.bumptech.glide.request.RequestOptions
 import com.gigforce.app.R
-import com.gigforce.app.utils.GlideApp
 import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.StorageReference
 import kotlinx.android.synthetic.main.card_row.view.*
 import kotlinx.android.synthetic.main.fragment_profile_about_expanded.view.*
-import kotlinx.android.synthetic.main.fragment_profile_education_expanded.view.*
-import kotlinx.android.synthetic.main.fragment_profile_main_expanded.view.*
+import kotlinx.android.synthetic.main.fragment_profile_about_expanded.view.nav_bar
+import kotlinx.android.synthetic.main.fragment_profile_experience_expanded.view.*
 import kotlinx.android.synthetic.main.profile_card_background.view.*
-import kotlinx.android.synthetic.main.top_profile_bar.view.*
+import kotlinx.android.synthetic.main.profile_nav_bar.view.*
 
 class AboutExpandedFragment: Fragment() {
     companion object {
@@ -37,6 +34,9 @@ class AboutExpandedFragment: Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         layout = inflater.inflate(R.layout.fragment_profile_about_expanded, container, false)
+
+        layout.nav_bar.about_me.setChipStrokeColorResource(R.color.colorPrimary)
+        layout.nav_bar.about_me.setChipStrokeWidthResource(R.dimen.border_width)
         return layout
     }
 
@@ -49,7 +49,10 @@ class AboutExpandedFragment: Fragment() {
 
         viewModel.userProfileData.observe(this, Observer { profile ->
             layout.bio_card.cardTitle = "Bio"
-            layout.bio_card.cardContent = profile.bio
+            layout.bio_card.cardContent = profile.aboutMe
+            layout.bio_card.edit_button.setOnClickListener {
+                Toast.makeText(this.context, "Not Implemented", Toast.LENGTH_LONG).show()
+            }
 
             var languageString = ""
             for (lang in profile.Language!!) {

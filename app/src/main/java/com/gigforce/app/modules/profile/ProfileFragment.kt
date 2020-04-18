@@ -97,6 +97,7 @@ class ProfileFragment : Fragment() {
 
             layout.bio.text = profile.bio
 
+            layout.main_tags.removeAllViews()
             for (tag in profile.Tags!!) {
                 layout.main_tags.addView(addChip(this.context!!, tag))
             }

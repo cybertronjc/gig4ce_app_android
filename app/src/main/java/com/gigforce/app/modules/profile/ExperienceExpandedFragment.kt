@@ -8,13 +8,11 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
-import com.bumptech.glide.request.RequestOptions
 import com.gigforce.app.R
-import com.gigforce.app.utils.GlideApp
 import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.StorageReference
 import kotlinx.android.synthetic.main.fragment_profile_experience_expanded.view.*
 import kotlinx.android.synthetic.main.profile_card_background.view.*
+import kotlinx.android.synthetic.main.profile_nav_bar.view.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -35,6 +33,9 @@ class ExperienceExpandedFragment: Fragment() {
     ): View? {
         storage = FirebaseStorage.getInstance()
         layout = inflater.inflate(R.layout.fragment_profile_experience_expanded, container, false)
+
+        layout.nav_bar.experience.setChipStrokeColorResource(R.color.colorPrimary)
+        layout.nav_bar.experience.setChipStrokeWidthResource(R.dimen.border_width)
         return layout
     }
 
