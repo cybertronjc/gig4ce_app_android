@@ -58,7 +58,7 @@ class AddSkillBottomSheetFragment: BottomSheetDialogFragment() {
                 position: Int,
                 id: Long
             ) {
-                selectedSkill = skills[position]
+                selectedSkill = if (position != 0) skills[position] else ""
                 Log.d("Spinner", "selected " + skills[position])
             }
 
@@ -72,17 +72,27 @@ class AddSkillBottomSheetFragment: BottomSheetDialogFragment() {
         }
 
         layout.add_skill_add_more_button.setOnClickListener {
-            addNewSkill()
-            layout.add_skill_name.setSelection(0)
+            if (validateSkill()) {
+                addNewSkill()
+                layout.add_skill_name.setSelection(0)
+            }
+            else {
+                Toast.makeText(this.context, "Invalid Choice", Toast.LENGTH_LONG).show()
+            }
 
         }
 
         layout.add_skill_save_button.setOnClickListener{
-            addNewSkill()
+            if (validateSkill()) {
+                addNewSkill()
 
-            viewModel.setProfileSkill(updates)
-            Toast.makeText(this.context, "Updated Skills Section", Toast.LENGTH_LONG)
-            this.findNavController().navigate(R.id.educationExpandedFragment)
+                viewModel.setProfileSkill(updates)
+                Toast.makeText(this.context, "Updated Skills Section", Toast.LENGTH_LONG).show()
+                this.findNavController().navigate(R.id.educationExpandedFragment)
+            }
+            else {
+                Toast.makeText(this.context, "Invalid Choice", Toast.LENGTH_LONG).show()
+            }
         }
     }
 
@@ -90,5 +100,11 @@ class AddSkillBottomSheetFragment: BottomSheetDialogFragment() {
         updates.add(
             selectedSkill
         )
+    }
+
+    private fun validateSkill(): Boolean {
+        if (selectedSkill == "")
+            return false
+        return true
     }
 }
