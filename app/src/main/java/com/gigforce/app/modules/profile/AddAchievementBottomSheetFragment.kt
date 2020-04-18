@@ -28,8 +28,6 @@ class AddAchievementBottomSheetFragment: BottomSheetDialogFragment() {
     lateinit var layout: View
     var updates: ArrayList<Achievement> = ArrayList()
     lateinit var viewModel: ProfileViewModel
-    var locations: ArrayList<String> = ArrayList()
-    var selectedLocation: String = ""
     var years: ArrayList<String> = ArrayList()
     var selectedYear: String = ""
 
@@ -63,28 +61,6 @@ class AddAchievementBottomSheetFragment: BottomSheetDialogFragment() {
             else {
                 Toast.makeText(this.context, "Invalid Entry", Toast.LENGTH_LONG)
             }
-        }
-
-        locations.add("--location--")
-        locations.add("Hyderabad")
-        locations.add("Bangalore")
-        val locationAdapter = ArrayAdapter(this.context!!, R.layout.simple_spinner_dropdown_item, locations)
-        val locationSpinner = layout.add_achievement_location
-        locationSpinner.adapter = locationAdapter
-        locationSpinner.onItemSelectedListener = object:
-            AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(
-                    parent: AdapterView<*>?,
-                    view: View?,
-                    position: Int,
-                    id: Long
-                ) {
-                    selectedLocation = if (position != 0) locations[position] else ""
-                }
-
-                override fun onNothingSelected(parent: AdapterView<*>?) {
-                    //TODO("Not yet implemented")
-                }
         }
 
         years.addAll(listOf("--year--", "2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020"))
@@ -126,7 +102,7 @@ class AddAchievementBottomSheetFragment: BottomSheetDialogFragment() {
             Achievement(
                 title = layout.add_achievement_title.text.toString(),
                 issuingAuthority = layout.add_achievement_authority.text.toString(),
-                location = selectedLocation,
+                location = layout.add_achievement_location.text.toString(),
                 year = selectedYear
             )
         )
@@ -142,7 +118,7 @@ class AddAchievementBottomSheetFragment: BottomSheetDialogFragment() {
         if (selectedYear == "") {
             return false
         }
-        if (selectedLocation == "") {
+        if (layout.add_achievement_location.text.toString() == "") {
             return false
         }
         return true

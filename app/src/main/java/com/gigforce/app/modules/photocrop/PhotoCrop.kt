@@ -13,6 +13,7 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.ViewModelProviders
 import com.gigforce.app.R
 import com.gigforce.app.modules.photocrop.ProfilePictureOptionsBottomSheetFragment.BottomSheetListener
@@ -51,8 +52,7 @@ class PhotoCrop : AppCompatActivity(),
     private lateinit var imageView: ImageView
     private lateinit var backButton: ImageButton
     private lateinit var viewModel: ProfileViewModel
-    private lateinit var b64OfImg: String;
-    private val TEMP_FILE: String = "profile_picture.jpg"
+    private val TEMP_FILE: String = "profile_picture"
     private lateinit var purpose: String
 
     var mStorage: FirebaseStorage = FirebaseStorage.getInstance()
@@ -82,6 +82,7 @@ class PhotoCrop : AppCompatActivity(),
         storage = FirebaseStorage.getInstance()
         imageView = this.findViewById(R.id.profile_avatar_photo_crop)
         backButton = this.findViewById(R.id.back_button_photo_crop)
+        var constLayout:ConstraintLayout = this.findViewById(R.id.constraintLayout)
         purpose = intent.getStringExtra("purpose")
         Log.e("PHOTO_CROP", "purpose = " + purpose + " comparing with: profilePictureCrop")
         /**
@@ -93,6 +94,7 @@ class PhotoCrop : AppCompatActivity(),
         }
         checkPermissions()
         imageView.setOnClickListener { showBottomSheet() }
+        constLayout.setOnClickListener { showBottomSheet() }
     }
 
     private fun profilePictureOptions() {
@@ -384,10 +386,10 @@ class PhotoCrop : AppCompatActivity(),
         val galleryIntent = Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
         galleryIntent.setType("image/gallery");
         val pickTitle = "Select or take a new Picture"
-        var outputFileUri: Uri? = Uri.fromFile(File.createTempFile("profilePicture", ".jpg"))
+        var outputFileUri: Uri? = Uri.fromFile(File.createTempFile(TEMP_FILE, EXTENSION))
         val chooserIntent = Intent.createChooser(pickIntent, pickTitle)
         chooserIntent.putExtra(
-            Intent.EXTRA_INITIAL_INTENTS, arrayOf(takePhotoIntent)
+            Intent.EXTRA_INITIAL_INTENTS, arrayOf(takePhotoIntent,galleryIntent)
         )
         chooserIntent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri)
         startActivityForResult(chooserIntent, CODE_IMG_GALLERY)

@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
+import com.afollestad.materialdialogs.MaterialDialog
 import com.gigforce.app.R
 import com.gigforce.app.modules.profile.models.Language
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -58,9 +59,17 @@ class EditLanguageBottomSheet: BottomSheetDialogFragment() {
         })
 
         layout.delete.setOnClickListener {
-            Log.d("EditLanguage", "Deleting Language")
-            viewModel.removeProfileLanguage(language!!)
-            findNavController().navigate(R.id.aboutExpandedFragment)
+            MaterialDialog(this.context!!).show {
+                title(text = "Confirm Delete")
+                message(text = "Are you sure to Delete this item?")
+                positiveButton(R.string.delete) {
+                    viewModel.removeProfileLanguage(language)
+                    findNavController().navigate(R.id.aboutExpandedFragment)
+                }
+                negativeButton(R.string.cancel_text) {
+
+                }
+            }
         }
 
         layout.save.setOnClickListener {
