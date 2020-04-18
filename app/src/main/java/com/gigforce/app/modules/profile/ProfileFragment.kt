@@ -103,7 +103,6 @@ class ProfileFragment : Fragment() {
 
             var mainAboutString = ""
             mainAboutString += profile.aboutMe.toString() + "\n\n"
-            mainAboutString += "Language knows: "
             if (profile.Language!!.size > 0) {
                 var languages = profile.Language!!.sortedWith(compareBy { it.writingSkill })
                 // TODO: Add a generic way for string formatting.
@@ -148,10 +147,13 @@ class ProfileFragment : Fragment() {
             }
             mainEducationString += "\n"
 
-            mainEducationString += "Achievement: "
             if (profile.Achievement!!.size > 0) {
                 var achievements = profile.Achievement!!.sortedByDescending { it.year }
-                mainEducationString += achievements[0].title + "\n\n"
+                for ((index, value) in achievements.withIndex()) {
+                    mainEducationString += if (index == 0) "Achievements: " + value.title + "\n"
+                                           else "\t\t\t\t\t\t\t\t\t\t\t\t" + value.title + "\n"
+
+                }
             }
 
             Log.d("ProfileFragment", mainEducationString)
