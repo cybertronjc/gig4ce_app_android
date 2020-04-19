@@ -1,11 +1,10 @@
-package com.gigforce.app.utils.dbrepository.test
+package com.gigforce.app.core.base.basefirestore.example
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.gigforce.app.core.base.basefirestore.example.model.*
 import com.gigforce.app.modules.profile.models.*
-import com.gigforce.app.utils.dbrepository.test.model.*
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.EventListener
 
@@ -21,7 +20,8 @@ class TestViewModel: ViewModel() {
         var CONTACT = "Contact"
     }
 
-    var profileFirebaseRepository = TestFirebaseRepository()
+    var profileFirebaseRepository =
+        TestFirebaseRepository()
     var userProfileData: MutableLiveData<ProfileData> = MutableLiveData<ProfileData>()
 
     fun getProfileData(): MutableLiveData<ProfileData> {
@@ -52,11 +52,11 @@ class TestViewModel: ViewModel() {
         profileFirebaseRepository.setData(PROFILETAGS,tag)
     }
 
-    fun setProfileEducation(education: ArrayList<EducationDataModel>) {
+    fun setProfileEducation(education: ArrayList<EducationFirestoreDataModel>) {
         profileFirebaseRepository.setData(education)
     }
 
-    fun removeProfileEducation(education: EducationDataModel) {
+    fun removeProfileEducation(education: EducationFirestoreDataModel) {
         profileFirebaseRepository.setData(education)
     }
 
@@ -68,25 +68,25 @@ class TestViewModel: ViewModel() {
         profileFirebaseRepository.removeData(SKILL,skill)
     }
 
-    fun setProfileAchievement(achievements: ArrayList<AchievementDataModel>) {
+    fun setProfileAchievement(achievements: ArrayList<AchievementFirestoreDataModel>) {
         profileFirebaseRepository.setData(achievements)
     }
 
 
 
-    fun removeProfileAchievement(achievement: AchievementDataModel) {
+    fun removeProfileAchievement(achievement: AchievementFirestoreDataModel) {
         profileFirebaseRepository.setData(achievement)
     }
 
-    fun setProfileContact(contacts: ArrayList<ContactDataModel>) {
+    fun setProfileContact(contacts: ArrayList<ContactFirestoreDataModel>) {
         profileFirebaseRepository.setData(contacts)
     }
 
-    fun setProfileLanguage(languages: ArrayList<LanguageDataModel>) {
+    fun setProfileLanguage(languages: ArrayList<LanguageFirestoreDataModel>) {
         profileFirebaseRepository.setData(languages)
     }
 
-    fun setProfileExperience(experiences: ArrayList<ExperienceDataModel>) {
+    fun setProfileExperience(experiences: ArrayList<ExperienceFirestoreDataModel>) {
         profileFirebaseRepository.setData(experiences)
     }
 
@@ -94,7 +94,7 @@ class TestViewModel: ViewModel() {
         profileFirebaseRepository.setData(PROFILEAVATARNAME,profileAvatarName)
     }
 
-    fun removeProfileExperience(experience: ExperienceDataModel) {
+    fun removeProfileExperience(experience: ExperienceFirestoreDataModel) {
         profileFirebaseRepository.removeData(experience)
     }
 

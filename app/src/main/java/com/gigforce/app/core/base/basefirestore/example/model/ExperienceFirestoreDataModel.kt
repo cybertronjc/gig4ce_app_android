@@ -1,9 +1,10 @@
-package com.gigforce.app.utils.dbrepository.test.model
+package com.gigforce.app.core.base.basefirestore.example.model
 
-import com.gigforce.app.utils.dbrepository.BaseDataModel
+import com.gigforce.app.core.base.basefirestore.BaseFirestoreDataModel
 import java.util.*
 
-class ExperienceDataModel:BaseDataModel{
+class ExperienceFirestoreDataModel:
+    BaseFirestoreDataModel {
     constructor(
         title: String = "",
         employmentType: String = "",

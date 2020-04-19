@@ -1,4 +1,4 @@
-package com.gigforce.app.utils.dbrepository
+package com.gigforce.app.core.base.basefirestore
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentReference
@@ -14,12 +14,12 @@ abstract public class BaseFirestoreDBRepository{
 
     // for set DB data
     //set data object
-    public fun <M:BaseDataModel>setData(arrData: ArrayList<M>) {
+    public fun <M: BaseFirestoreDataModel>setData(arrData: ArrayList<M>) {
         for(obj in arrData) {
             setData(obj)
         }
     }
-    public fun <M:BaseDataModel>setData(obj:M){
+    public fun <M: BaseFirestoreDataModel>setData(obj:M){
         getDBCollection().update(obj.tableName, FieldValue.arrayUnion(obj))
     }
     // set data object end
@@ -52,12 +52,12 @@ abstract public class BaseFirestoreDBRepository{
     // for set DB data--------end
 
     //for remove data
-    fun <M:BaseDataModel>removeData(arrData: ArrayList<M>) {
+    fun <M: BaseFirestoreDataModel>removeData(arrData: ArrayList<M>) {
         for(obj in arrData) {
             removeData(obj)
         }
     }
-    fun <M:BaseDataModel>removeData(obj: M) {
+    fun <M: BaseFirestoreDataModel>removeData(obj: M) {
         getDBCollection().update(obj.tableName, FieldValue.arrayRemove(obj))
     }
 
