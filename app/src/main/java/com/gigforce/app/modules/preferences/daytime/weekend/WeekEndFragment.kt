@@ -1,4 +1,4 @@
-package com.gigforce.app.modules.preferences.datetime.weekend
+package com.gigforce.app.modules.preferences.daytime.weekend
 
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
