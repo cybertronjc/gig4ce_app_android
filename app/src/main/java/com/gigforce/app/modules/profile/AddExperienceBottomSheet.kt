@@ -13,11 +13,8 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
-import com.gigforce.app.modules.profile.models.Education
 import com.gigforce.app.modules.profile.models.Experience
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import kotlinx.android.synthetic.main.add_achievement_bottom_sheet.view.*
-import kotlinx.android.synthetic.main.add_education_bottom_sheet.view.*
 import kotlinx.android.synthetic.main.add_experience_bottom_sheet.view.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -33,8 +30,6 @@ class AddExperienceBottomSheet: BottomSheetDialogFragment() {
     var updates: ArrayList<Experience> = ArrayList()
     var employments: ArrayList<String> = ArrayList()
     var selectedEmployment: String = ""
-    var locations: ArrayList<String> = ArrayList()
-    var selectedLocation: String = ""
     var selectedStartDate: String = ""
     var selectedEndDate: String = ""
 
@@ -57,15 +52,21 @@ class AddExperienceBottomSheet: BottomSheetDialogFragment() {
         }
 
         layout.add_experience_add_more.setOnClickListener{
-            addNewExperience()
-            layout.add_experience_title.setText("")
-            layout.add_experience_employment_type.setSelection(0)
-            layout.add_experience_location.setSelection(0)
-            layout.add_experience_start_date.setText("")
-            layout.add_experience_end_date.setText("")
+            if (validateExperience()) {
+                addNewExperience()
+                layout.add_experience_title.setText("")
+                layout.add_experience_company.setText("")
+                layout.add_experience_employment_type.setSelection(0)
+                layout.add_experience_location.setText("")
+                layout.add_experience_start_date.setText("")
+                layout.add_experience_end_date.setText("")
+            }
+            else {
+                Toast.makeText(this.context, "Invalid Entry", Toast.LENGTH_LONG).show()
+            }
         }
 
-        employments.addAll(listOf("--employment type--", "full time", "intern"))
+        employments.addAll(listOf("--employment type--", "Full time", "internship", "Part time"))
         val employmentAdapter = ArrayAdapter(this.context!!, R.layout.simple_spinner_dropdown_item, employments)
         val employmentSpinner = layout.add_experience_employment_type
         employmentSpinner.adapter = employmentAdapter
@@ -77,7 +78,7 @@ class AddExperienceBottomSheet: BottomSheetDialogFragment() {
                 position: Int,
                 id: Long
             ) {
-                selectedEmployment = employments[position]
+                selectedEmployment = if (position != 0) employments[position] else ""
                 Log.d("Spinner", "selected " + employments[position])
             }
 
@@ -86,26 +87,6 @@ class AddExperienceBottomSheet: BottomSheetDialogFragment() {
             }
         }
 
-        locations.addAll(listOf("--location--", "Hyderabad", "Bangalore"))
-        val locationAdapter = ArrayAdapter(this.context!!, R.layout.simple_spinner_dropdown_item, locations)
-        val locationSpinner = layout.add_experience_location
-        locationSpinner.adapter = locationAdapter
-        locationSpinner.onItemSelectedListener = object:
-            AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                selectedLocation = locations[position]
-                Log.d("Spinner", "selected " + locations[position])
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-                //TODO("Not yet implemented")
-            }
-        }
 
         layout.add_experience_end_date.setOnClickListener {
             var calendar = Calendar.getInstance(TimeZone.getDefault())
@@ -132,10 +113,15 @@ class AddExperienceBottomSheet: BottomSheetDialogFragment() {
         }
 
         layout.add_experience_save.setOnClickListener{
-            addNewExperience()
+            if (validateExperience()) {
+                addNewExperience()
 
-            viewModel.setProfileExperience(updates)
-            this.findNavController().navigate(R.id.experienceExpandedFragment)
+                viewModel.setProfileExperience(updates)
+                this.findNavController().navigate(R.id.experienceExpandedFragment)
+            }
+            else {
+                Toast.makeText(this.context, "Invalid Entry", Toast.LENGTH_LONG).show()
+            }
         }
 
     }
@@ -144,12 +130,30 @@ class AddExperienceBottomSheet: BottomSheetDialogFragment() {
         updates.add(
             Experience(
                 title = layout.add_experience_title.text.toString(),
+                company = layout.add_experience_company.text.toString(),
                 employmentType = selectedEmployment,
-                location = selectedLocation,
+                location = layout.add_experience_location.text.toString(),
                 startDate = SimpleDateFormat("dd/MM/yyyy").parse(selectedStartDate),
                 endDate = SimpleDateFormat("dd/MM/yyyy").parse(selectedEndDate)
             )
 
         )
+    }
+
+    private fun validateExperience(): Boolean {
+        if (layout.add_experience_title.text.toString() == "")
+            return false
+        if (layout.add_experience_company.text.toString() == "")
+            return false
+        if (selectedEmployment == "")
+            return false
+        if (layout.add_experience_location.text.toString() == "")
+            return false
+        if (selectedStartDate == "")
+            return false
+        if (selectedEndDate == "")
+        if (selectedEmployment == "")
+            return false
+        return true
     }
 }

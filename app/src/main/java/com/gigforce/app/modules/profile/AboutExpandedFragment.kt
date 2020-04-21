@@ -4,20 +4,20 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
-import com.bumptech.glide.request.RequestOptions
+import com.afollestad.materialdialogs.MaterialDialog
 import com.gigforce.app.R
-import com.gigforce.app.utils.GlideApp
 import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.StorageReference
+import kotlinx.android.synthetic.main.card_row.view.*
 import kotlinx.android.synthetic.main.fragment_profile_about_expanded.view.*
-import kotlinx.android.synthetic.main.fragment_profile_education_expanded.view.*
-import kotlinx.android.synthetic.main.fragment_profile_main_expanded.view.*
+import kotlinx.android.synthetic.main.fragment_profile_about_expanded.view.nav_bar
+import kotlinx.android.synthetic.main.fragment_profile_experience_expanded.view.*
 import kotlinx.android.synthetic.main.profile_card_background.view.*
-import kotlinx.android.synthetic.main.top_profile_bar.view.*
+import kotlinx.android.synthetic.main.profile_nav_bar.view.*
 
 class AboutExpandedFragment: Fragment() {
     companion object {
@@ -34,6 +34,9 @@ class AboutExpandedFragment: Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         layout = inflater.inflate(R.layout.fragment_profile_about_expanded, container, false)
+
+        layout.nav_bar.about_me.setChipStrokeColorResource(R.color.colorPrimary)
+        layout.nav_bar.about_me.setChipStrokeWidthResource(R.dimen.border_width)
         return layout
     }
 
@@ -46,14 +49,18 @@ class AboutExpandedFragment: Fragment() {
 
         viewModel.userProfileData.observe(this, Observer { profile ->
             layout.bio_card.cardTitle = "Bio"
-            layout.bio_card.cardContent = profile.bio
+            layout.bio_card.cardContent = profile.aboutMe
+            layout.bio_card.edit_button.setOnClickListener {
+                Toast.makeText(this.context, "Not Implemented", Toast.LENGTH_LONG).show()
+            }
 
             var languageString = ""
             for (lang in profile.Language!!) {
                 languageString += lang.name + "\n"
-                languageString += "Speaking " + lang.speakingSkill + "\n"
-                languageString += "Writing " + lang.writingSkill + "\n\n"
+                languageString += "Speaking " + getLanguageLevel(lang.speakingSkill.toInt()) + "\n"
+                languageString += "Writing " + getLanguageLevel(lang.writingSkill.toInt()) + "\n\n"
             }
+            layout.language_card.nextDestination = R.id.editLanguageBottomSheet
             layout.language_card.cardTitle = "Language"
             layout.language_card.cardContent = languageString
             layout.language_card.cardBottom = "+ Add Language"
@@ -66,9 +73,12 @@ class AboutExpandedFragment: Fragment() {
             layout.contact_card.cardTitle = "Contact"
             layout.contact_card.cardContent = contactString
             layout.contact_card.cardBottom = "+ Add Contact"
+            layout.contact_card.edit_button.setOnClickListener {
+                showAddContactDialog()
+            }
 
             layout.about_top_profile.userName = profile.name
-            layout.about_top_profile.imageName = "ysharma.jpg"
+            layout.about_top_profile.imageName = profile.profileAvatarName
         })
 
         layout.language_card.card_bottom.setOnClickListener{
@@ -76,13 +86,37 @@ class AboutExpandedFragment: Fragment() {
         }
 
         layout.contact_card.card_bottom.setOnClickListener{
-            this.findNavController().navigate(R.id.addContactBottomSheetFragment)
+            showAddContactDialog()
         }
 
 //        layout.about_expanded_back_button.setOnClickListener{
 //            this.findNavController().navigate(R.id.profileFragment)
 //        }
 
+    }
+
+    fun showAddContactDialog() {
+        MaterialDialog(this.context!!).show {
+            title(text = "Update Contact Details")
+            message(
+                text = "To update these details the giger will need to re-upload their" +
+                        " Aadhar card images and undergo the KYC verification process again. " +
+                        "We recommend that you do not change the name or address details unless " +
+                        "necessary"
+            )
+            positiveButton(text = "Proceed") {
+                Toast.makeText(this.context!!, "Not Implemented", Toast.LENGTH_SHORT).show()
+            }
+            negativeButton(text = "Cancel") { }
+        }
+    }
+
+    private fun getLanguageLevel(level: Int): String {
+        return when (level) {
+            in 0..25 -> "beginner"
+            in 26..75 -> "moderate"
+            else -> "advanced"
+        }
     }
 
 }

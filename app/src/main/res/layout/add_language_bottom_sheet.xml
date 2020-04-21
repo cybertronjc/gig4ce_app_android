@@ -6,93 +6,93 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/textView20"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:text="@string/add_language_new_language"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <SeekBar
-        android:id="@+id/add_language_speaking_level"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="25dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/textView10"
-        app:layout_constraintTop_toBottomOf="@+id/textView10" />
+        android:layout_height="match_parent"
+        android:isScrollContainer="true"
+        android:orientation="vertical"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp">
+        <TextView
+            android:id="@+id/textView20"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/add_language_new_language"
+            style="@style/BsHeadingBold12" />
 
-    <EditText
-        android:id="@+id/add_language_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:ems="10"
-        android:hint="@string/add_language_name"
-        android:inputType="textPersonName"
-        app:layout_constraintStart_toStartOf="@+id/textView20"
-        app:layout_constraintTop_toBottomOf="@+id/textView20" />
+        <EditText
+            android:id="@+id/add_language_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:hint="@string/add_language_name"
+            android:inputType="textPersonName" />
 
-    <TextView
-        android:id="@+id/textView10"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="@string/add_language_speaking_level"
-        app:layout_constraintStart_toStartOf="@+id/add_language_name"
-        app:layout_constraintTop_toBottomOf="@+id/add_language_name" />
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/mother_language"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/add_mother_tongue_text"
+            style="@style/LatoRegularCardText12" />
 
-    <TextView
-        android:id="@+id/textView13"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="@string/add_language_writing_level"
-        app:layout_constraintStart_toStartOf="@+id/add_language_speaking_level"
-        app:layout_constraintTop_toBottomOf="@+id/add_language_speaking_level" />
+        <TextView
+            android:id="@+id/textView10"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            style="@style/LatoRegularCardText12"
+            android:text="@string/add_language_speaking_level" />
 
-    <SeekBar
-        android:id="@+id/add_language_writing_level"
-        android:layout_width="match_parent"
-        android:layout_height="25dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/textView13"
-        app:layout_constraintTop_toBottomOf="@+id/textView13" />
+        <SeekBar
+            android:id="@+id/add_language_speaking_level"
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
+            android:layout_marginTop="8dp" />
 
-    <TextView
-        android:id="@+id/add_language_add_more"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="@string/add_more_text"
-        app:layout_constraintStart_toStartOf="@+id/add_language_writing_level"
-        app:layout_constraintTop_toBottomOf="@+id/add_language_writing_level" />
+        <TextView
+            android:id="@+id/textView13"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/add_language_writing_level" />
 
-    <Button
-        android:id="@+id/add_language_cancel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="@string/cancel_text"
-        app:layout_constraintStart_toStartOf="@+id/add_language_add_more"
-        app:layout_constraintTop_toBottomOf="@+id/add_language_add_more" />
+        <SeekBar
+            android:id="@+id/add_language_writing_level"
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
+            android:layout_marginTop="8dp" />
 
-    <Button
-        android:id="@+id/add_language_save"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="16dp"
-        android:text="@string/save_text"
-        app:layout_constraintStart_toEndOf="@+id/add_language_cancel"
-        app:layout_constraintTop_toBottomOf="@+id/add_language_add_more" />
+        <TextView
+            android:id="@+id/add_language_add_more"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            style="@style/LipstickCardBottom"
+            android:text="@string/add_more_text" />
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="16dp">
+            <Button
+                android:id="@+id/add_language_cancel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/cancel_text"
+                android:layout_weight="1"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"/>
+
+            <Button
+                android:id="@+id/add_language_save"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:text="@string/save_text"
+                android:layout_weight="1" />
+        </LinearLayout>
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -111,7 +111,7 @@
             android:padding="@dimen/padding_default"
             android:verticalSpacing="@dimen/padding_default"
             app:layout_constraintBottom_toTopOf="@id/pendingPlaceholder"
-            app:layout_constraintTop_toBottomOf="@id/cardviewvideoresume" />
+            app:layout_constraintTop_toBottomOf="@id/cardviewvideoresume"/>
 
         <FrameLayout
             android:id="@+id/pendingPlaceholder"

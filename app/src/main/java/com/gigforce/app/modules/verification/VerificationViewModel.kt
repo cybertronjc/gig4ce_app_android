@@ -66,6 +66,6 @@ class VerificationViewModel: ViewModel() {
 
     override fun onCleared() {
         super.onCleared()
-        Log.d("VerificationViewModel", "Profile View model destroying")
+        Log.d("VerificationViewModel", "verification View model destroying")
     }
 }

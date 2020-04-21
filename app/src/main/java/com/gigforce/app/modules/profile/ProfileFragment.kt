@@ -6,29 +6,28 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.Toast
+import android.view.*
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
-
 import com.gigforce.app.modules.photocrop.PhotoCrop
 import com.gigforce.app.modules.photocrop.*
 import com.gigforce.app.modules.profile.models.Achievement
 import com.gigforce.app.utils.GlideApp
+import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.chip.Chip
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import kotlinx.android.synthetic.main.edit_skill_bottom_sheet.*
 import kotlinx.android.synthetic.main.fragment_profile_education_expanded.view.*
 import kotlinx.android.synthetic.main.fragment_profile_main_expanded.view.*
 import kotlinx.android.synthetic.main.profile_main_card_background.view.*
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
+
 
 class ProfileFragment : Fragment() {
 
@@ -40,19 +39,43 @@ class ProfileFragment : Fragment() {
     private lateinit var storage: FirebaseStorage
     private lateinit var layout: View
     private lateinit var profileAvatarName: String
+    private lateinit var dWidth: Display
     private var PHOTO_CROP: Int = 45
+    private var isShow: Boolean = true
+    private var scrollRange: Int = -1
     private var PROFILE_PICTURE_FOLDER: String = "profile_pics"
 
 
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         storage = FirebaseStorage.getInstance()
         Log.d("DEBUG", "ENTERED PROFILE VIEW")
+        val wm = context!!.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+        dWidth = wm.defaultDisplay
         layout = inflater.inflate(R.layout.fragment_profile_main_expanded, container, false)
-
+        layout.appbar.post(Runnable {
+            val heightPx: Int = dWidth.width * 1 / 3
+            setAppBarOffset(heightPx)
+        })
+        layout.profile_avatar.layoutParams.height = dWidth.width
         return layout
+    }
+
+    private fun setAppBarOffset(offsetPx: Int) {
+        val params = layout.appbar.layoutParams as CoordinatorLayout.LayoutParams
+        val behavior = params.behavior as AppBarLayout.Behavior?
+
+        behavior!!.onNestedPreScroll(
+            layout.coordinator,
+            layout.appbar,
+            this!!.view!!,
+            0,
+            offsetPx,
+            intArrayOf(0, 0),
+            0
+        )
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -72,21 +95,34 @@ class ProfileFragment : Fragment() {
                 layout.main_expanded_is_verified.setBackgroundColor(Color.parseColor("#00FF00"))
             }
 
+            layout.bio.text = profile.bio
+
+            layout.main_tags.removeAllViews()
             for (tag in profile.Tags!!) {
                 layout.main_tags.addView(addChip(this.context!!, tag))
             }
 
             var mainAboutString = ""
-            mainAboutString += profile.bio.toString() + "\n\n"
-            mainAboutString += "Language knows: "
+            mainAboutString += profile.aboutMe.toString() + "\n\n"
             if (profile.Language!!.size > 0) {
                 var languages = profile.Language!!.sortedWith(compareBy { it.writingSkill })
-                mainAboutString += languages[0].name + "\n"
+                // TODO: Add a generic way for string formatting.
+                for ((index, language) in languages.withIndex()) {
+                    mainAboutString += if (index == 0)
+                                            "Language known: " + language.name + " (" +
+                                                    getLanguageLevel(language.speakingSkill.toInt()) + ")\n"
+                                        else
+                                            "\t\t\t\t\t\t\t\t\t\t\t\t\t\t" + language.name + " (" +
+                                                    getLanguageLevel(language.speakingSkill.toInt()) + ")\n"
+                }
             }
 
             layout.main_about_card.card_title.text = "About me"
             layout.main_about_card.card_content.text = mainAboutString
             layout.main_about_card.card_view_more.setOnClickListener {
+                findNavController().navigate(R.id.aboutExpandedFragment)
+            }
+            layout.main_about_card.setOnClickListener {
                 findNavController().navigate(R.id.aboutExpandedFragment)
             }
 
@@ -101,21 +137,36 @@ class ProfileFragment : Fragment() {
                 ) + "\n\n"
             }
 
-            mainEducationString += "Skills: "
+            // TODO: Add a generic way for string formatting
             if (profile.Skill!!.size > 0) {
-                mainEducationString += profile.Skill!![0] + "\n\n"
+                var skills = profile.Skill!!
+                for ((index, value) in skills.withIndex()) {
+                    if (index < 5) {
+                        mainEducationString += if (index == 0)
+                                                    "Skills: " + value + "\n"
+                                               else
+                                                    "\t\t\t\t\t" + value + "\n"
+                    }
+                }
             }
+            mainEducationString += "\n"
 
-            mainEducationString += "Achievement: "
             if (profile.Achievement!!.size > 0) {
                 var achievements = profile.Achievement!!.sortedByDescending { it.year }
-                mainEducationString += achievements[0].title + "\n\n"
+                for ((index, value) in achievements.withIndex()) {
+                    mainEducationString += if (index == 0) "Achievements: " + value.title + "\n"
+                                           else "\t\t\t\t\t\t\t\t\t\t\t\t" + value.title + "\n"
+
+                }
             }
 
             Log.d("ProfileFragment", mainEducationString)
             layout.main_education_card.card_title.text = "Education"
             layout.main_education_card.card_content.text = mainEducationString
             layout.main_education_card.card_view_more.setOnClickListener {
+                findNavController().navigate(R.id.educationExpandedFragment)
+            }
+            layout.main_education_card.setOnClickListener {
                 findNavController().navigate(R.id.educationExpandedFragment)
             }
 
@@ -125,51 +176,72 @@ class ProfileFragment : Fragment() {
                 mainExperienceString += experiences[0].title + "\n"
                 mainExperienceString += experiences[0].employmentType + "\n"
                 mainExperienceString += experiences[0].location + "\n"
-                mainExperienceString += format.format(experiences[0].startDate!!) + "-" + format.format(experiences[0].endDate!!) + "\n"
+                mainExperienceString += format.format(experiences[0].startDate!!) + "-" + format.format(
+                    experiences[0].endDate!!
+                ) + "\n"
             }
             layout.main_experience_card.card_title.text = "Experience"
             layout.main_experience_card.card_content.text = mainExperienceString
             layout.main_experience_card.card_view_more.setOnClickListener {
                 findNavController().navigate(R.id.experienceExpandedFragment)
             }
+            layout.main_experience_card.setOnClickListener {
+                findNavController().navigate(R.id.experienceExpandedFragment)
+            }
 
-            Log.d("ProfileFragment", profile.rating.toString())
+            layout.appbar.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { barLayout, verticalOffset ->
+                if (scrollRange == -1) {
+                    scrollRange = barLayout?.totalScrollRange!!
+                }
+                if (scrollRange + verticalOffset == 0) {
+                    layout.collapse_toolbar.title = profile.name
+                    layout.collapse_toolbar.isTitleEnabled = true
+                    isShow = true
+                } else if (isShow) {
+//                    layout.collapse_toolbar.title = " " //careful there should a space between double quote otherwise it wont work
+                    layout.collapse_toolbar.isTitleEnabled = false
+                    isShow = false
+                }
+            })
 
             profileAvatarName = profile.profileAvatarName
             Log.e("PROFILE AVATAR", profileAvatarName)
-            if (profileAvatarName != null)
-                loadImage(profileAvatarName)
+            loadImage(profileAvatarName)
         })
-
 
         /*
         Clicking on profile picture opens Photo Crop Activity
          */
         layout.profile_avatar.setOnClickListener {
             val photoCropIntent = Intent(context, PhotoCrop::class.java)
-            photoCropIntent.putExtra("purpose","profilePictureCrop")
-            photoCropIntent.putExtra("uid",viewModel.uid)
+            photoCropIntent.putExtra("purpose", "profilePictureCrop")
+            photoCropIntent.putExtra("uid", viewModel.uid)
             photoCropIntent.putExtra("fbDir", "/profile_pics/")
-            photoCropIntent.putExtra("detectFace",1)
+            photoCropIntent.putExtra("detectFace", 1)
             photoCropIntent.putExtra("folder", PROFILE_PICTURE_FOLDER)
             photoCropIntent.putExtra("file", profileAvatarName)
             startActivityForResult(photoCropIntent, PHOTO_CROP)
         }
-        layout.add_tags_button.setOnClickListener{
-            this.findNavController().navigate(R.id.addTagBottomSheet)
+        layout.edit_cover.setOnClickListener{
+            this.findNavController().navigate(R.id.editCoverBottomSheet)
         }
 
-        // back page navigation
-        layout.profile_main_expanded_back_button.setOnClickListener{
-            this.findNavController().navigate(R.id.homeFragment)
+        /**
+         * back page navigation
+         */
+        layout.profile_main_expanded_back_button.setOnClickListener {
+            this.findNavController().navigate(R.id.homeScreenIcons)
         }
+
+
     }
 
     private fun loadImage(Path: String) {
-        var profilePicRef: StorageReference =storage.reference.child(PROFILE_PICTURE_FOLDER).child(Path)
+        var profilePicRef: StorageReference =
+            storage.reference.child(PROFILE_PICTURE_FOLDER).child(Path)
         GlideApp.with(this.context!!)
-                .load(profilePicRef)
-                .into(layout.profile_avatar)
+            .load(profilePicRef)
+            .into(layout.profile_avatar)
     }
 
     private fun addChip(context: Context, name: String): Chip {
@@ -183,10 +255,18 @@ class ProfileFragment : Fragment() {
         return chip
     }
 
+    private fun getLanguageLevel(level: Int): String {
+        return when (level) {
+            in 0..25 -> "beginner"
+            in 26..75 -> "moderate"
+            else -> "advanced"
+        }
+    }
+
     override fun onActivityResult(
-            requestCode: Int,
-            resultCode: Int,
-            data: Intent?
+        requestCode: Int,
+        resultCode: Int,
+        data: Intent?
     ): Unit {
 
         super.onActivityResult(requestCode, resultCode, data)

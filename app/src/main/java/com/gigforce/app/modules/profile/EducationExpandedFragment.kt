@@ -5,7 +5,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -13,7 +12,10 @@ import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.fragment_profile_education_expanded.view.*
+import kotlinx.android.synthetic.main.fragment_profile_education_expanded.view.nav_bar
+import kotlinx.android.synthetic.main.fragment_profile_experience_expanded.view.*
 import kotlinx.android.synthetic.main.profile_card_background.view.*
+import kotlinx.android.synthetic.main.profile_nav_bar.view.*
 import java.text.SimpleDateFormat
 
 class EducationExpandedFragment: Fragment() {
@@ -33,6 +35,9 @@ class EducationExpandedFragment: Fragment() {
     ): View? {
         Log.d("DEBUG", "ENTERED Profile Education Expanded VIEW")
         layout = inflater.inflate(R.layout.fragment_profile_education_expanded, container, false)
+
+        layout.nav_bar.education.setChipStrokeColorResource(R.color.colorPrimary)
+        layout.nav_bar.education.setChipStrokeWidthResource(R.dimen.border_width)
         return layout
     }
 
@@ -70,10 +75,11 @@ class EducationExpandedFragment: Fragment() {
 
             var achievementString: String = ""
             var achievements = profile.Achievement!!.sortedWith(compareBy {it.year})
-            for (achievement in profile.Achievement!!) {
+            for (achievement in achievements) {
                 achievementString += achievement.title + "\n"
                 achievementString += achievement.issuingAuthority + "\n"
-                achievementString += achievement.location + "\n"
+                if (achievement.location != "")
+                    achievementString += achievement.location + "\n"
                 achievementString += achievement.year + "\n\n"
             }
             layout.achievement_card.nextDestination = R.id.editAchievementBottomSheet
@@ -82,7 +88,7 @@ class EducationExpandedFragment: Fragment() {
             layout.achievement_card.cardBottom = "+ Add Achievement"
 
             layout.education_top_profile.userName = profile.name
-            layout.education_top_profile.imageName = "ysharma.jpg"
+            layout.education_top_profile.imageName = profile.profileAvatarName
 
             Log.d("ProfileFragment", profile.rating.toString())
         })

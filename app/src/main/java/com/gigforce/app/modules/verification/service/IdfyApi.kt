@@ -15,7 +15,7 @@ interface IdfyApiAadhaar {
         "api-key:1bc58043-00fb-4799-bea3-93a012d174bb"
     )
     fun postOCR(
-        @Body postData: PostDataOCR
+        @Body postData: PostDataOCRs
     ): Observable<IdfyResponse> // body data
 }
 

@@ -5,6 +5,7 @@ import java.util.*
 data class Language(
     var name: String = "",
     var speakingSkill: String = "",
-    var writingSkill: String = ""
+    var writingSkill: String = "",
+    var isMotherLanguage: String = ""
 ){
 }

@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
+import com.afollestad.materialdialogs.MaterialDialog
 import com.gigforce.app.R
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.android.synthetic.main.edit_skill_bottom_sheet.view.*
@@ -63,7 +64,7 @@ class EditSkillBottomSheet: BottomSheetDialogFragment() {
                 position: Int,
                 id: Long
             ) {
-                selectedSkill = skills[position]
+                selectedSkill = if (position != 0) skills[position] else ""
                 Log.d("Spinner", "selected " + skills[position])
             }
 
@@ -78,18 +79,36 @@ class EditSkillBottomSheet: BottomSheetDialogFragment() {
         })
 
         layout.delete.setOnClickListener {
-            viewModel.removeProfileSkill(skill)
+            MaterialDialog(this.context!!).show {
+                title(text = "Confirm Delete")
+                message(text = "Are you sure to Delete this item?")
+                positiveButton(R.string.delete) {
+                    viewModel.removeProfileSkill(skill)
+                    findNavController().navigate(R.id.educationExpandedFragment)
+                }
+                negativeButton(R.string.cancel_text) {
+
+                }
+            }
             Log.d("EditSkill", "Skill deleted" + skill)
-            findNavController().navigate(R.id.educationExpandedFragment)
         }
 
         layout.save.setOnClickListener {
-            viewModel.removeProfileSkill(skill)
-            var skills: ArrayList<String> = ArrayList()
-            skills.add(selectedSkill)
-            viewModel.setProfileSkill(skills)
-            findNavController().navigate(R.id.educationExpandedFragment)
+            if (validateSkill()) {
+                viewModel.removeProfileSkill(skill)
+                var skills: ArrayList<String> = ArrayList()
+                skills.add(selectedSkill)
+                viewModel.setProfileSkill(skills)
+                findNavController().navigate(R.id.educationExpandedFragment)
+            } else {
+                Toast.makeText(this.context, "Invalid Choice", Toast.LENGTH_LONG).show()
+            }
         }
     }
 
+    private fun validateSkill(): Boolean {
+        if (selectedSkill == "")
+            return false
+        return true
+    }
 }

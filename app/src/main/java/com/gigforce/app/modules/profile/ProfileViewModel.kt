@@ -57,12 +57,12 @@ class ProfileViewModel: ViewModel() {
         profileFirebaseRepository.addNewTag(tag)
     }
 
-    fun removeProfileTag(tag: String) {
-        profileFirebaseRepository.removeProfileTag(tag)
+    fun removeProfileTag(tags: ArrayList<String>) {
+        profileFirebaseRepository.removeProfileTag(tags)
     }
 
-    fun setProfileTag(tag: String) {
-        profileFirebaseRepository.setProfileTags(tag)
+    fun setProfileTag(tags: ArrayList<String>) {
+        profileFirebaseRepository.setProfileTags(tags)
     }
 
     fun setProfileEducation(education: ArrayList<Education>) {
@@ -97,6 +97,10 @@ class ProfileViewModel: ViewModel() {
         profileFirebaseRepository.setProfileLanguage(languages)
     }
 
+    fun removeProfileLanguage(language: Language) {
+        profileFirebaseRepository.removeProfileLanguage(language)
+    }
+
     fun setProfileExperience(experiences: ArrayList<Experience>) {
         profileFirebaseRepository.setProfileExperience(experiences)
     }
@@ -107,6 +111,10 @@ class ProfileViewModel: ViewModel() {
 
     fun removeProfileExperience(experience: Experience) {
         profileFirebaseRepository.removeProfileExperience(experience)
+    }
+
+    fun setProfileBio(bio: String) {
+        profileFirebaseRepository.setProfileBio(bio)
     }
 
     init {

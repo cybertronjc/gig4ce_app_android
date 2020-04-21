@@ -12,6 +12,7 @@
         android:layout_marginStart="32dp"
         android:layout_marginEnd="32dp"
         android:orientation="vertical"
+        android:isScrollContainer="true"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -43,20 +44,22 @@
             android:hint="@string/add_achievement_sheet_issuing_authority"
             android:inputType="textPersonName" />
 
-        <Spinner
+        <EditText
             android:id="@+id/add_achievement_location"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:ems="10"
+            android:hint="@string/location"
             android:inputType="textPersonName"/>
 
-        <Spinner
+        <EditText
             android:id="@+id/add_achievement_year"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:ems="10"
+            android:hint="@string/add_achievement_sheet_year"
             android:inputType="date" />
 
         <TextView
