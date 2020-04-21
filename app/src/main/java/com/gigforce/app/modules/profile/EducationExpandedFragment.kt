@@ -49,10 +49,10 @@ class EducationExpandedFragment: Fragment() {
 
         viewModel.userProfileData.observe(this, Observer { profile ->
             var educationString: String = ""
-            var format = SimpleDateFormat("dd/MM/yyyy")
+            val format = SimpleDateFormat("dd/MM/yyyy")
 
-            if (profile.Education != null) {
-                var educations = profile.Education!!.sortedWith(compareBy { it.startYear!! })
+            profile.Education?.let {
+                val educations = it.sortedByDescending { education -> education.startYear!! }
                 for (education in educations) {
                     educationString += education.institution + "\n"
                     educationString += education.degree + " - " + education.course + "\n"
@@ -67,10 +67,8 @@ class EducationExpandedFragment: Fragment() {
             layout.education_card.cardBottom = "+ Add Education"
 
             var skillString: String = ""
-            if (profile.Skill != null) {
-                for (skill in profile.Skill!!) {
-                    //                skillString += skill.category + "\n"
-                    //                skillString += skill.nameOfSkill + "\n\n"
+            profile.Skill?.let {
+                for (skill in it) {
                     skillString += skill + "\n\n"
                 }
             }
@@ -80,8 +78,8 @@ class EducationExpandedFragment: Fragment() {
             layout.skill_card.cardBottom = "+ Add Skill"
 
             var achievementString: String = ""
-            if (profile.Achievement != null) {
-                var achievements = profile.Achievement!!.sortedWith(compareBy { it.year })
+            profile.Achievement?.let {
+                val achievements = it.sortedByDescending { achievement -> achievement.year }
                 for (achievement in achievements) {
                     achievementString += achievement.title + "\n"
                     achievementString += achievement.issuingAuthority + "\n"
@@ -101,10 +99,6 @@ class EducationExpandedFragment: Fragment() {
             Log.d("ProfileFragment", profile.rating.toString())
         })
 
-        // back page navigation
-//        layout.education_expanded_back_button.setOnClickListener{
-//            this.findNavController().navigate(R.id.profileFragment)
-//        }
 
         // Navigate to bottom sheets
         layout.skill_card.card_bottom.setOnClickListener{

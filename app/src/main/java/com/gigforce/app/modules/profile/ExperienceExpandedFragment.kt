@@ -46,9 +46,10 @@ class ExperienceExpandedFragment: Fragment() {
 
         viewModel.userProfileData.observe(this, Observer { profile ->
             var experienceString = ""
-            var format = SimpleDateFormat("dd/MM/yyyy", Locale.US)
-            if (profile.Experience != null) {
-                for (exp in profile.Experience!!) {
+            val format = SimpleDateFormat("dd/MM/yyyy", Locale.US)
+            profile.Experience?.let {
+                val experiences = it.sortedByDescending { experience -> experience.startDate  }
+                for (exp in experiences) {
                     experienceString += exp.title + "\n"
                     experienceString += exp.company + "\n"
                     experienceString += exp.employmentType + "\n"
@@ -69,9 +70,6 @@ class ExperienceExpandedFragment: Fragment() {
             findNavController().navigate(R.id.addExperienceBottomSheet)
         }
 
-//        layout.experience_expanded_back_button.setOnClickListener {
-//            findNavController().navigate(R.id.profileFragment)
-//        }
     }
 
 }

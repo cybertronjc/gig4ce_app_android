@@ -57,8 +57,9 @@ class AboutExpandedFragment: Fragment() {
                                          else "+ Add Bio"
 
             var languageString = ""
-            if (profile.Language != null) {
-                for (lang in profile.Language!!) {
+            profile.Language?.let {
+                val languages = it.sortedByDescending { language -> language.speakingSkill }
+                for (lang in languages) {
                     languageString += lang.name + "\n"
                     languageString += "Speaking " + getLanguageLevel(lang.speakingSkill.toInt()) + "\n"
                     languageString += "Writing " + getLanguageLevel(lang.writingSkill.toInt()) + "\n\n"
@@ -70,8 +71,8 @@ class AboutExpandedFragment: Fragment() {
             layout.language_card.cardBottom = "+ Add Language"
 
             var contactString = ""
-            if (profile.Contact != null) {
-                for (contact in profile.Contact!!) {
+            profile.Contact?.let {
+                for (contact in it) {
                     contactString += "phone: " + contact.phone + "\n"
                     contactString += "email: " + contact.email + "\n\n"
                 }
@@ -101,11 +102,6 @@ class AboutExpandedFragment: Fragment() {
         layout.contact_card.card_bottom.setOnClickListener{
             showAddContactDialog()
         }
-
-//        layout.about_expanded_back_button.setOnClickListener{
-//            this.findNavController().navigate(R.id.profileFragment)
-//        }
-
     }
 
     fun showAddContactDialog() {

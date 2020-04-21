@@ -21,8 +21,6 @@ import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.chip.Chip
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
-import kotlinx.android.synthetic.main.edit_skill_bottom_sheet.*
-import kotlinx.android.synthetic.main.fragment_profile_education_expanded.view.*
 import kotlinx.android.synthetic.main.fragment_profile_main_expanded.view.*
 import kotlinx.android.synthetic.main.profile_main_card_background.view.*
 import java.text.SimpleDateFormat
@@ -99,16 +97,18 @@ class ProfileFragment : Fragment() {
             layout.bio.text = profile.bio
 
             layout.main_tags.removeAllViews()
-            if (profile.Tags != null) {
+            profile.Tags?.let {
                 for (tag in profile.Tags!!) {
                     layout.main_tags.addView(addChip(this.context!!, tag))
                 }
             }
 
             var mainAboutString = ""
-            mainAboutString += profile.aboutMe.toString() + "\n\n"
-            if (profile.Language != null && profile.Language!!.size > 0) {
-                var languages = profile.Language!!.sortedWith(compareBy { it.writingSkill })
+            mainAboutString += profile.aboutMe + "\n\n"
+            profile.Language?.let {
+                val languages = it.sortedByDescending { language ->
+                     language.speakingSkill
+                }
                 // TODO: Add a generic way for string formatting.
                 for ((index, language) in languages.withIndex()) {
                     mainAboutString += if (index == 0)
@@ -129,36 +129,40 @@ class ProfileFragment : Fragment() {
                 findNavController().navigate(R.id.aboutExpandedFragment)
             }
 
+            val format = SimpleDateFormat("dd/MM/yyyy", Locale.US)
             var mainEducationString = ""
-            var format = SimpleDateFormat("dd/MM/yyyy", Locale.US)
-            if (profile.Education != null && profile.Education!!.size > 0) {
-                var educations = profile.Education!!.sortedByDescending { it.startYear }
-                mainEducationString += educations[0].institution + "\n"
-                mainEducationString += educations[0].degree + " - " + educations[0].course + "\n"
-                mainEducationString += format.format(educations[0].startYear!!) + " - " + format.format(
-                    educations[0].endYear!!
-                ) + "\n\n"
+            profile.Education?.let {
+                val educations = it.sortedByDescending {
+                        education -> education.startYear
+                }
+                if (educations.isNotEmpty()) {
+                    mainEducationString += educations[0].institution + "\n"
+                    mainEducationString += educations[0].degree + " - " + educations[0].course + "\n"
+                    mainEducationString += format.format(educations[0].startYear!!) + " - " + format.format(
+                        educations[0].endYear!!
+                    ) + "\n\n"
+                }
             }
 
             // TODO: Add a generic way for string formatting
-            if (profile.Skill != null && profile.Skill!!.size > 0) {
-                var skills = profile.Skill!!
+            profile.Skill?.let {
+                val skills = it
                 for ((index, value) in skills.withIndex()) {
                     if (index < 5) {
                         mainEducationString += if (index == 0)
-                                                    "Skills: " + value + "\n"
-                                               else
-                                                    "\t\t\t\t\t" + value + "\n"
+                            "Skills: " + value + "\n"
+                        else
+                            "\t\t\t\t\t" + value + "\n"
                     }
                 }
+                mainEducationString += "\n"
             }
-            mainEducationString += "\n"
 
-            if (profile.Achievement != null && profile.Achievement!!.size > 0) {
-                var achievements = profile.Achievement!!.sortedByDescending { it.year }
+            profile.Achievement?.let {
+                val achievements = it.sortedByDescending { achievement -> achievement.year }
                 for ((index, value) in achievements.withIndex()) {
                     mainEducationString += if (index == 0) "Achievements: " + value.title + "\n"
-                                           else "\t\t\t\t\t\t\t\t\t\t\t\t" + value.title + "\n"
+                    else "\t\t\t\t\t\t\t\t\t\t\t\t" + value.title + "\n"
                 }
             }
 
@@ -173,15 +177,18 @@ class ProfileFragment : Fragment() {
             }
 
             var mainExperienceString = ""
-            if (profile.Experience != null && profile.Experience!!.size > 0) {
-                var experiences = profile.Experience!!.sortedByDescending { it.startDate }
-                mainExperienceString += experiences[0].title + "\n"
-                mainExperienceString += experiences[0].employmentType + "\n"
-                mainExperienceString += experiences[0].location + "\n"
-                mainExperienceString += format.format(experiences[0].startDate!!) + "-" + format.format(
-                    experiences[0].endDate!!
-                ) + "\n"
+            profile.Experience?.let {
+                val experiences = it.sortedByDescending { experience -> experience.startDate }
+                if (experiences.isNotEmpty()) {
+                    mainExperienceString += experiences[0].title + "\n"
+                    mainExperienceString += experiences[0].employmentType + "\n"
+                    mainExperienceString += experiences[0].location + "\n"
+                    mainExperienceString += format.format(experiences[0].startDate!!) + "-" + format.format(
+                        experiences[0].endDate!!
+                    ) + "\n"
+                }
             }
+
             layout.main_experience_card.card_title.text = "Experience"
             layout.main_experience_card.card_content.text = mainExperienceString
             layout.main_experience_card.card_view_more.setOnClickListener {
@@ -210,7 +217,7 @@ class ProfileFragment : Fragment() {
             Log.e("PROFILE AVATAR", profileAvatarName)
             if (profileAvatarName != "")
                 loadImage(profileAvatarName)
-        })
+            })
 
         /*
         Clicking on profile picture opens Photo Crop Activity
@@ -225,6 +232,7 @@ class ProfileFragment : Fragment() {
             photoCropIntent.putExtra("file", profileAvatarName)
             startActivityForResult(photoCropIntent, PHOTO_CROP)
         }
+
         layout.edit_cover.setOnClickListener{
             this.findNavController().navigate(R.id.editCoverBottomSheet)
         }
@@ -235,8 +243,6 @@ class ProfileFragment : Fragment() {
         layout.profile_main_expanded_back_button.setOnClickListener {
             this.findNavController().navigate(R.id.homeScreenIcons)
         }
-
-
     }
 
     private fun loadImage(Path: String) {
