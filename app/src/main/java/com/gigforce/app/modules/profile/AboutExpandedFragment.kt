@@ -57,10 +57,12 @@ class AboutExpandedFragment: Fragment() {
                                          else "+ Add Bio"
 
             var languageString = ""
-            for (lang in profile.Language!!) {
-                languageString += lang.name + "\n"
-                languageString += "Speaking " + getLanguageLevel(lang.speakingSkill.toInt()) + "\n"
-                languageString += "Writing " + getLanguageLevel(lang.writingSkill.toInt()) + "\n\n"
+            if (profile.Language != null) {
+                for (lang in profile.Language!!) {
+                    languageString += lang.name + "\n"
+                    languageString += "Speaking " + getLanguageLevel(lang.speakingSkill.toInt()) + "\n"
+                    languageString += "Writing " + getLanguageLevel(lang.writingSkill.toInt()) + "\n\n"
+                }
             }
             layout.language_card.nextDestination = R.id.editLanguageBottomSheet
             layout.language_card.cardTitle = "Language"
@@ -68,15 +70,20 @@ class AboutExpandedFragment: Fragment() {
             layout.language_card.cardBottom = "+ Add Language"
 
             var contactString = ""
-            for (contact in profile.Contact!!) {
-                contactString += "phone: " + contact.phone + "\n"
-                contactString += "email: " + contact.email + "\n\n"
+            if (profile.Contact != null) {
+                for (contact in profile.Contact!!) {
+                    contactString += "phone: " + contact.phone + "\n"
+                    contactString += "email: " + contact.email + "\n\n"
+                }
             }
             layout.contact_card.cardTitle = "Contact"
             layout.contact_card.cardContent = contactString
             layout.contact_card.cardBottom = "+ Add Contact"
-            layout.contact_card.edit_button.setOnClickListener {
-                showAddContactDialog()
+
+            if (layout.contact_card.edit_button != null) {
+                layout.contact_card.edit_button.setOnClickListener {
+                    showAddContactDialog()
+                }
             }
 
             layout.about_top_profile.userName = profile.name

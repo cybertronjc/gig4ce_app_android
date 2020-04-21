@@ -85,7 +85,8 @@ class ProfileFragment : Fragment() {
 
         // load user data
         viewModel.userProfileData.observe(this, Observer { profile ->
-            layout.gigger_rating.text = profile.rating!!.getTotal().toString()
+            layout.gigger_rating.text = if (profile.rating != null) profile.rating!!.getTotal().toString()
+                                        else "-"
             layout.task_done.text = profile.tasksDone.toString()
             layout.connection_count.text = profile.connections.toString()
             layout.main_expanded_user_name.text = profile.name
@@ -98,13 +99,15 @@ class ProfileFragment : Fragment() {
             layout.bio.text = profile.bio
 
             layout.main_tags.removeAllViews()
-            for (tag in profile.Tags!!) {
-                layout.main_tags.addView(addChip(this.context!!, tag))
+            if (profile.Tags != null) {
+                for (tag in profile.Tags!!) {
+                    layout.main_tags.addView(addChip(this.context!!, tag))
+                }
             }
 
             var mainAboutString = ""
             mainAboutString += profile.aboutMe.toString() + "\n\n"
-            if (profile.Language!!.size > 0) {
+            if (profile.Language != null && profile.Language!!.size > 0) {
                 var languages = profile.Language!!.sortedWith(compareBy { it.writingSkill })
                 // TODO: Add a generic way for string formatting.
                 for ((index, language) in languages.withIndex()) {
@@ -128,7 +131,7 @@ class ProfileFragment : Fragment() {
 
             var mainEducationString = ""
             var format = SimpleDateFormat("dd/MM/yyyy", Locale.US)
-            if (profile.Education!!.size > 0) {
+            if (profile.Education != null && profile.Education!!.size > 0) {
                 var educations = profile.Education!!.sortedByDescending { it.startYear }
                 mainEducationString += educations[0].institution + "\n"
                 mainEducationString += educations[0].degree + " - " + educations[0].course + "\n"
@@ -138,7 +141,7 @@ class ProfileFragment : Fragment() {
             }
 
             // TODO: Add a generic way for string formatting
-            if (profile.Skill!!.size > 0) {
+            if (profile.Skill != null && profile.Skill!!.size > 0) {
                 var skills = profile.Skill!!
                 for ((index, value) in skills.withIndex()) {
                     if (index < 5) {
@@ -151,12 +154,11 @@ class ProfileFragment : Fragment() {
             }
             mainEducationString += "\n"
 
-            if (profile.Achievement!!.size > 0) {
+            if (profile.Achievement != null && profile.Achievement!!.size > 0) {
                 var achievements = profile.Achievement!!.sortedByDescending { it.year }
                 for ((index, value) in achievements.withIndex()) {
                     mainEducationString += if (index == 0) "Achievements: " + value.title + "\n"
                                            else "\t\t\t\t\t\t\t\t\t\t\t\t" + value.title + "\n"
-
                 }
             }
 
@@ -171,7 +173,7 @@ class ProfileFragment : Fragment() {
             }
 
             var mainExperienceString = ""
-            if (profile.Experience!!.size > 0) {
+            if (profile.Experience != null && profile.Experience!!.size > 0) {
                 var experiences = profile.Experience!!.sortedByDescending { it.startDate }
                 mainExperienceString += experiences[0].title + "\n"
                 mainExperienceString += experiences[0].employmentType + "\n"
@@ -206,7 +208,8 @@ class ProfileFragment : Fragment() {
 
             profileAvatarName = profile.profileAvatarName
             Log.e("PROFILE AVATAR", profileAvatarName)
-            loadImage(profileAvatarName)
+            if (profileAvatarName != "")
+                loadImage(profileAvatarName)
         })
 
         /*

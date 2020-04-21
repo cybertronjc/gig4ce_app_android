@@ -47,12 +47,14 @@ class ExperienceExpandedFragment: Fragment() {
         viewModel.userProfileData.observe(this, Observer { profile ->
             var experienceString = ""
             var format = SimpleDateFormat("dd/MM/yyyy", Locale.US)
-            for (exp in profile.Experience!!) {
-                experienceString += exp.title + "\n"
-                experienceString += exp.company + "\n"
-                experienceString += exp.employmentType + "\n"
-                experienceString += exp.location + "\n"
-                experienceString += format.format(exp.startDate!!) + "-" + format.format(exp.endDate!!) + "\n\n"
+            if (profile.Experience != null) {
+                for (exp in profile.Experience!!) {
+                    experienceString += exp.title + "\n"
+                    experienceString += exp.company + "\n"
+                    experienceString += exp.employmentType + "\n"
+                    experienceString += exp.location + "\n"
+                    experienceString += format.format(exp.startDate!!) + "-" + format.format(exp.endDate!!) + "\n\n"
+                }
             }
             layout.experience_card.nextDestination = R.id.editExperienceBottomSheet
             layout.experience_card.cardTitle = "Experience"
