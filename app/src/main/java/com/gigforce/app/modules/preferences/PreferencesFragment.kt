@@ -12,6 +12,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
@@ -19,7 +20,7 @@ import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.app.core.genericadapter.RecyclerGenericAdapter
 import com.gigforce.app.utils.setDarkStatusBarTheme
 import com.google.firebase.auth.FirebaseAuth
-import kotlinx.android.synthetic.main.setting_fragment.*
+import kotlinx.android.synthetic.main.preferences_fragment.*
 
 
 class PreferencesFragment : BaseFragment() {
@@ -32,41 +33,40 @@ class PreferencesFragment : BaseFragment() {
     }
 
     private lateinit var viewModel: SharedPreferenceViewModel
-
+    lateinit var recyclerGenericAdapter: RecyclerGenericAdapter<PreferencesScreenItem>
+    val arrPrefrancesList : ArrayList<PreferencesScreenItem> = ArrayList<PreferencesScreenItem> ()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflateView(R.layout.setting_fragment, inflater, container)
+        return inflateView(R.layout.preferences_fragment, inflater, container)
     }
-    private fun showConfirmationDialog() {
-        val dialog = activity?.let { Dialog(it) }
-        dialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog?.setCancelable(false)
-        dialog?.setContentView(R.layout.signout_custom_alert)
-        val titleDialog = dialog?.findViewById(R.id.title) as TextView
-        titleDialog.text = "Do you really want to sign out?"
-        val yesBtn = dialog?.findViewById(R.id.yes) as TextView
-        val noBtn = dialog?.findViewById(R.id.cancel) as TextView
-        yesBtn.setOnClickListener {
-            FirebaseAuth.getInstance().signOut()
-            dialog?.dismiss()
-        }
-        noBtn.setOnClickListener { dialog .dismiss() }
-        dialog?.show()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
     }
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         this.setDarkStatusBarTheme(false)
         viewModel = ViewModelProviders.of(this).get(SharedPreferenceViewModel::class.java)
+        initializeViews()
+        listener()
         observePreferenceData()
-        setPreferenecesList()
-
     }
 
-    private fun setPreferenecesList() {
-        val arrPrefrancesList = viewModel.getPrefrencesData()
-        val recyclerGenericAdapter: RecyclerGenericAdapter<PreferencesScreenItem> =
+    private fun listener() {
+        imageView8.setOnClickListener(View.OnClickListener { activity?.onBackPressed() })
+        imageView9.setOnClickListener(View.OnClickListener { navigate(R.id.profileFragment) })
+    }
+
+    private fun initializeViews() {
+        initializeRecyclerView()
+        setPreferenecesList()
+    }
+
+    private fun initializeRecyclerView() {
+        recyclerGenericAdapter =
             RecyclerGenericAdapter<PreferencesScreenItem>(
                 activity?.applicationContext,
                 PFRecyclerViewAdapter.OnViewHolderClick<PreferencesScreenItem> { view, position, item -> prefrencesItemSelect(position) },
@@ -75,19 +75,31 @@ class PreferencesFragment : BaseFragment() {
                 })!!
         recyclerGenericAdapter.setList(arrPrefrancesList)
         recyclerGenericAdapter.setLayout(R.layout.prefrences_item)
+
         prefrences_rv.layoutManager = LinearLayoutManager(
             activity?.applicationContext,
             LinearLayoutManager.VERTICAL,
             false
         )
+        prefrences_rv.hasFixedSize()
+        prefrences_rv.itemAnimator = DefaultItemAnimator()
         prefrences_rv.adapter = recyclerGenericAdapter
     }
 
+    private fun setPreferenecesList() {
+        arrPrefrancesList.clear()
+        arrPrefrancesList.addAll(viewModel.getPrefrencesData())
+        recyclerGenericAdapter.notifyDataSetChanged()
+
+    }
     private fun observePreferenceData() {
-        viewModel.preferenceDataModel.observe(this, Observer { preferenceData ->
+        viewModel.preferenceDataModel.observe(viewLifecycleOwner, Observer { preferenceData ->
         viewModel.setPreferenceDataModel(preferenceData)
+            setPreferenecesList()
         })
     }
+
+
 
     private fun setPreferencesItems(
         obj: PreferencesScreenItem?,
@@ -136,7 +148,24 @@ class PreferencesFragment : BaseFragment() {
 
     private fun prefrencesItemSelect(position: Int) {
         if(position== DAY_TIME) navigate(R.id.dayTimeFragment)
-        if(position== TITLE_SIGNOUT){showConfirmationDialog()}
+        if(position== TITLE_SIGNOUT){logoutConfirmationDialog()}
+    }
+
+    private fun logoutConfirmationDialog() {
+        val dialog = activity?.let { Dialog(it) }
+        dialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog?.setCancelable(false)
+        dialog?.setContentView(R.layout.signout_custom_alert)
+        val titleDialog = dialog?.findViewById(R.id.title) as TextView
+        titleDialog.text = "Do you really want to sign out?"
+        val yesBtn = dialog?.findViewById(R.id.yes) as TextView
+        val noBtn = dialog?.findViewById(R.id.cancel) as TextView
+        yesBtn.setOnClickListener {
+            FirebaseAuth.getInstance().signOut()
+            dialog?.dismiss()
+        }
+        noBtn.setOnClickListener { dialog .dismiss() }
+        dialog?.show()
     }
 
 }

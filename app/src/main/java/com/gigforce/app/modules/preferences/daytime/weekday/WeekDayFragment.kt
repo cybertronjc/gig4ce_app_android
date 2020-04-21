@@ -12,9 +12,11 @@ import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.modules.preferences.SharedPreferenceViewModel
 import com.gigforce.app.modules.preferences.prefdatamodel.PreferencesDataModel
+import kotlinx.android.synthetic.main.date_time_fragment.*
 import kotlinx.android.synthetic.main.week_day_fragment.*
 import java.util.*
 import kotlin.collections.ArrayList
+import androidx.lifecycle.Observer
 
 
 class WeekDayFragment : BaseFragment() {
@@ -35,16 +37,31 @@ class WeekDayFragment : BaseFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(SharedPreferenceViewModel::class.java)
-        viewDataModel = viewModel.getPreferenceDataModel()
-        initializer()
+        initializeViews()
         listener()
-
+        observePreferenceData()
     }
-
-    private fun initializer() {
+    private fun observePreferenceData() {
+        viewModel.preferenceDataModel.observe(this, Observer { preferenceData ->
+            viewModel.setPreferenceDataModel(preferenceData)
+            initializeViews()
+        })
+    }
+    private fun initializeViews() {
+        viewDataModel = viewModel.getPreferenceDataModel()
+        imageView16.setOnClickListener(View.OnClickListener { activity?.onBackPressed()})
         switch3.setChecked(viewDataModel.isweekdaysenabled)
         textView62.text = getArrayToString(viewDataModel.selecteddays)
         textView66.text = getArrayToString(viewDataModel.selectedslots)
+        if(viewDataModel.isweekdaysenabled) {
+            setTextViewColor(textView61, R.color.black)
+            setTextViewColor(textView65, R.color.black)
+        }
+        else {
+            setTextViewColor(textView61, R.color.gray_color)
+            setTextViewColor(textView65, R.color.gray_color)
+
+        }
     }
 
     private fun getArrayToString(selectedStrings : ArrayList<String>): String {
@@ -63,39 +80,89 @@ class WeekDayFragment : BaseFragment() {
         }
     }
 
+//    fun choiceDaysAlert() {
+//        val items = arrayOf("All", "Monday", "Tuesday", "Wednesday","Thrusday","Friday")
+//        val selectedList = ArrayList<Int>()
+//        val builder = AlertDialog.Builder(activity)
+//        builder.setTitle("Days")
+//        builder.setMultiChoiceItems(items, null
+//        ) { dialog, which, isChecked ->
+//            if (isChecked) {
+//                selectedList.add(which)
+//            } else if (selectedList.contains(which)) {
+//                selectedList.remove(Integer.valueOf(which))
+//            }
+//        }
+//
+//        builder.setPositiveButton("DONE") { dialogInterface, i ->
+//            val selectedWorkingDays = ArrayList<String>()
+//
+//            for (j in selectedList.indices) {
+//                selectedWorkingDays.add(items[selectedList[j]])
+//            }
+//            viewModel.setWorkingDays(selectedWorkingDays)
+//            textView62.text = getArrayToString(selectedWorkingDays)
+//        }
+//
+//        builder.show()
+//
+//    }
+
     fun choiceDaysAlert() {
-        val items = arrayOf("All", "Monday", "Tuesday", "Wednesday","Thrusday","Friday")
+        val items = arrayOf("All", "Monday", "Tuesday", "Wednesday", "Thrusday", "Friday")
+        val indexItem = arrayOf(0, 1, 2, 3, 4, 5)
         val selectedList = ArrayList<Int>()
         val builder = AlertDialog.Builder(activity)
         builder.setTitle("Days")
-        builder.setMultiChoiceItems(items, null
+        builder.setMultiChoiceItems(
+            items, null
         ) { dialog, which, isChecked ->
-            if (isChecked) {
+            if (which == 0) {
+                val dialog = dialog as AlertDialog
+                val v: ListView = dialog.listView
+                var i = 1
+                while (i < items.size) {
+                    v.setItemChecked(i, isChecked)
+                    i++
+                }
+                selectedList.addAll(indexItem)
+
+            } else if (isChecked) {
                 selectedList.add(which)
+                if (selectedList.size == 6) {
+                    selectedList.add(0)
+                    val dialog = dialog as AlertDialog
+                    val v: ListView = dialog.listView
+                    v.setItemChecked(0, true)
+                }
             } else if (selectedList.contains(which)) {
                 selectedList.remove(Integer.valueOf(which))
+                if (selectedList.contains(0))
+                    selectedList.remove(Integer.valueOf(0))
+                val dialog = dialog as AlertDialog
+                val v: ListView = dialog.listView
+                v.setItemChecked(0, false)
             }
+            selectedList.sort()
+            removeDuplicates(selectedList)
         }
-
         builder.setPositiveButton("DONE") { dialogInterface, i ->
-            val selectedWorkingDays = ArrayList<String>()
+            val selectedStrings = ArrayList<String>()
 
             for (j in selectedList.indices) {
-                selectedWorkingDays.add(items[selectedList[j]])
+                selectedStrings.add(items[selectedList[j]])
             }
-            viewModel.setWorkingDays(selectedWorkingDays)
-            textView62.text = getArrayToString(selectedWorkingDays)
+            viewModel.setWorkingDays(selectedStrings)
+            textView62.text = getArrayToString(selectedStrings)
         }
 
         builder.show()
-
     }
     fun choiceSlotsAlert() {
         val items = arrayOf("All", "06:00 am-10:00 am", "10:00am- 12:00pm", "12:00pm-06:00pm","06:00pm-09:00pm","09:00pm-12:00pm","12:00 am-03:00 am")
         val indexItem = arrayOf(0,1,2,3,4,5,6)
         val selectedList = ArrayList<Int>()
         val builder = AlertDialog.Builder(activity)
-
         builder.setTitle("Slots")
         builder.setMultiChoiceItems(items, null
         ) { dialog, which, isChecked ->

@@ -61,7 +61,7 @@
         <View
             android:id="@+id/textView48"
             android:layout_width="wrap_content"
-            android:layout_height="1dp"
+            android:layout_height="0.5dp"
             android:layout_marginTop="12dp"
             android:background="@color/gray_color"
             app:layout_constraintBottom_toBottomOf="parent"
