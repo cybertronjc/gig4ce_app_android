@@ -37,6 +37,12 @@ class ProfileCardBackground: CardView {
             var location = 0
             val viewgroup = card_content
             for (item in value.split("\n\n")) {
+                if (item.toString() == "Please add something about yourself") {
+                    val widget = TextView(this.context!!)
+                    widget.text = item
+                    viewgroup.addView(widget)
+                    break
+                }
                 if (item.toString() != "") {
                     val widget = CardRow(this.context!!)
                     widget.rowContent = item
@@ -63,5 +69,14 @@ class ProfileCardBackground: CardView {
     var nextDestination: Int = 0
         set(value) {
             field = value
+        }
+
+    var isBottomRemoved: Boolean = false
+        set(value) {
+            field = value
+            if (value) {
+                this.removeView(this.findViewById(R.id.card_bottom))
+                this.removeView(this.findViewById(R.id.bottom_divider))
+            }
         }
 }
