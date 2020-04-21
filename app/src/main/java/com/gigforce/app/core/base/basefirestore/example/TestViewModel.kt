@@ -57,7 +57,7 @@ class TestViewModel: ViewModel() {
     }
 
     fun removeProfileEducation(education: EducationFirestoreDataModel) {
-        profileFirebaseRepository.setData(education)
+        profileFirebaseRepository.removeData(education)
     }
 
     fun setProfileSkill(skills: ArrayList<String>) {
