@@ -37,7 +37,7 @@ class ProfileCardBackground: CardView {
             var location = 0
             val viewgroup = card_content
             for (item in value.split("\n\n")) {
-                if (item.toString() == "Please add something about yourself") {
+                if (item.toString() == this.context!!.getString(R.string.empty_about_me_text)) {
                     val widget = TextView(this.context!!)
                     widget.text = item
                     viewgroup.addView(widget)

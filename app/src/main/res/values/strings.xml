@@ -226,7 +226,7 @@
 
     <string name="add_mother_tongue_text">Add as my mother tongue</string>
     <string name="edit_language">Edit Language</string>
-    <string name="edit_aboutme_text">Edit Bio</string>
+    <string name="edit_aboutme_text">Bio</string>
 
-    <string name="empty_about_me_text">Please tell us about yourself</string>
+    <string name="empty_about_me_text">Tell us about yourself…</string>
 </resources>

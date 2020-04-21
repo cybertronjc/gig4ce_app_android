@@ -52,7 +52,7 @@ class AboutExpandedFragment: Fragment() {
             layout.bio_card.nextDestination = R.id.addAboutMeBottomSheet
             layout.bio_card.cardTitle = "Bio"
             layout.bio_card.cardContent = if (profile.aboutMe != "") profile.aboutMe
-                                          else "Please add something about yourself"
+                                          else this.context!!.getString(R.string.empty_about_me_text)
             layout.bio_card.cardBottom = if (profile.aboutMe != "") ""
                                          else "+ Add Bio"
 
