@@ -1,4 +1,4 @@
-package com.gigforce.app.modules.preferences.datetime.weekday
+package com.gigforce.app.modules.preferences.daytime.weekday
 
 import android.app.AlertDialog
 import android.os.Bundle
@@ -6,9 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ListView
+import android.widget.Switch
 import androidx.lifecycle.ViewModelProviders
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
+import com.gigforce.app.modules.preferences.SharedPreferenceViewModel
+import com.gigforce.app.modules.preferences.prefdatamodel.PreferencesDataModel
 import kotlinx.android.synthetic.main.week_day_fragment.*
 import java.util.*
 import kotlin.collections.ArrayList
@@ -20,8 +23,8 @@ class WeekDayFragment : BaseFragment() {
         fun newInstance() = WeekDayFragment()
     }
 
-    private lateinit var viewModel: WeekDayViewModel
-
+    private lateinit var viewModel: SharedPreferenceViewModel
+    private lateinit var viewDataModel : PreferencesDataModel
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -31,20 +34,39 @@ class WeekDayFragment : BaseFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(WeekDayViewModel::class.java)
+        viewModel = ViewModelProviders.of(this).get(SharedPreferenceViewModel::class.java)
+        viewDataModel = viewModel.getPreferenceDataModel()
+        initializer()
         listener()
+
+    }
+
+    private fun initializer() {
+        switch3.setChecked(viewDataModel.isweekdaysenabled)
+        textView62.text = getArrayToString(viewDataModel.selecteddays)
+        textView66.text = getArrayToString(viewDataModel.selectedslots)
+    }
+
+    private fun getArrayToString(selectedStrings : ArrayList<String>): String {
+        if(selectedStrings==null || selectedStrings.size==0)return ""
+        var selectedStr = Arrays.toString(selectedStrings.toTypedArray())
+        selectedStr = selectedStr.substring(1,selectedStr.length-1)
+       return selectedStr
     }
 
     private fun listener() {
-        textView60.setOnClickListener(View.OnClickListener { choiceDaysAlert() })
-        textView64.setOnClickListener(View.OnClickListener { choiceSlotsAlert() })
+        textView60.setOnClickListener(View.OnClickListener { if(viewDataModel.isweekdaysenabled)choiceDaysAlert()else showToast("Please enable weekdays first!!") })
+        textView64.setOnClickListener(View.OnClickListener { if(viewDataModel.isweekdaysenabled)choiceSlotsAlert()else showToast("Please enable weekdays first!!") })
+        switch3.setOnClickListener{view->
+            var isChecked = (view as Switch).isChecked
+            viewModel.setIsWeekdays(isChecked)
+        }
     }
 
     fun choiceDaysAlert() {
         val items = arrayOf("All", "Monday", "Tuesday", "Wednesday","Thrusday","Friday")
         val selectedList = ArrayList<Int>()
         val builder = AlertDialog.Builder(activity)
-
         builder.setTitle("Days")
         builder.setMultiChoiceItems(items, null
         ) { dialog, which, isChecked ->
@@ -56,12 +78,13 @@ class WeekDayFragment : BaseFragment() {
         }
 
         builder.setPositiveButton("DONE") { dialogInterface, i ->
-            val selectedStrings = ArrayList<String>()
+            val selectedWorkingDays = ArrayList<String>()
 
             for (j in selectedList.indices) {
-                selectedStrings.add(items[selectedList[j]])
+                selectedWorkingDays.add(items[selectedList[j]])
             }
-            textView62.text = Arrays.toString(selectedStrings.toTypedArray())
+            viewModel.setWorkingDays(selectedWorkingDays)
+            textView62.text = getArrayToString(selectedWorkingDays)
         }
 
         builder.show()
@@ -112,9 +135,8 @@ class WeekDayFragment : BaseFragment() {
             for (j in selectedList.indices) {
                 selectedStrings.add(items[selectedList[j]])
             }
-            var selectedStr = Arrays.toString(selectedStrings.toTypedArray())
-            selectedStr = selectedStr.substring(1,selectedStr.length-1)
-            textView66.text = selectedStr
+                viewModel.setWorkingSlots(selectedStrings)
+                textView66.text = getArrayToString(selectedStrings)
         }
 
         builder.show()
@@ -128,7 +150,7 @@ class WeekDayFragment : BaseFragment() {
         // Clear the list
         list.clear()
         // add the elements of set
-// with no duplicates to the list
+        // with no duplicates to the list
         list.addAll(set)
         // return the list
         return list

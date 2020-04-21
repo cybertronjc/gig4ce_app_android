@@ -38,15 +38,15 @@
         android:name="com.gigforce.app.modules.preferences.PreferencesFragment"
         tools:layout="@layout/fragment_auth_flow"/>
     <fragment android:id="@+id/dayTimeFragment"
-        android:name="com.gigforce.app.modules.preferences.datetime.DayTimeFragment"
+        android:name="com.gigforce.app.modules.preferences.daytime.DayTimeFragment"
         tools:layout="@layout/date_time_fragment"/>
 
     <fragment android:id="@+id/weekEndFragment"
-        android:name="com.gigforce.app.modules.preferences.datetime.weekend.WeekEndFragment"
+        android:name="com.gigforce.app.modules.preferences.daytime.weekend.WeekEndFragment"
         tools:layout="@layout/week_end_fragment"/>
 
     <fragment android:id="@+id/weekDayFragment"
-        android:name="com.gigforce.app.modules.preferences.datetime.weekday.WeekDayFragment"
+        android:name="com.gigforce.app.modules.preferences.daytime.weekday.WeekDayFragment"
         tools:layout="@layout/week_day_fragment"/>
 
     <fragment
