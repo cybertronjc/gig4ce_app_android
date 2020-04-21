@@ -38,6 +38,7 @@
             android:layout_height="match_parent"
             android:minHeight="50dp"
             style="@style/LatoRegularCardText12"
+            android:hint="Please add something about yourself"
             app:layout_constraintTop_toBottomOf="@+id/card_title"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -57,11 +58,11 @@
             android:minWidth="30dp"
             android:minHeight="30dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/divider"
+            app:layout_constraintTop_toBottomOf="@id/bottom_divider"
             tools:layout_editor_absoluteY="91dp" />
 
         <View
-            android:id="@+id/divider"
+            android:id="@+id/bottom_divider"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginLeft="16dp"
