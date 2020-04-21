@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.view.Window
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gigforce.app.R
@@ -30,7 +31,7 @@ class PreferencesFragment : BaseFragment() {
         const val TITLE_SIGNOUT = 8;
     }
 
-    private lateinit var viewModel: PreferencesViewModel
+    private lateinit var viewModel: SharedPreferenceViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -57,13 +58,19 @@ class PreferencesFragment : BaseFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         this.setDarkStatusBarTheme(false)
-        viewModel = ViewModelProviders.of(this).get(PreferencesViewModel::class.java)
+        viewModel = ViewModelProviders.of(this).get(SharedPreferenceViewModel::class.java)
+        observePreferenceData()
+        setPreferenecesList()
+
+    }
+
+    private fun setPreferenecesList() {
         val arrPrefrancesList = viewModel.getPrefrencesData()
-        val recyclerGenericAdapter: RecyclerGenericAdapter<PreferencesItem> =
-            RecyclerGenericAdapter<PreferencesItem>(
+        val recyclerGenericAdapter: RecyclerGenericAdapter<PreferencesScreenItem> =
+            RecyclerGenericAdapter<PreferencesScreenItem>(
                 activity?.applicationContext,
-                PFRecyclerViewAdapter.OnViewHolderClick<PreferencesItem> { view, position, item -> prefrencesItemSelect(position) },
-                RecyclerGenericAdapter.ItemInterface <PreferencesItem?> { obj, viewHolder, position ->
+                PFRecyclerViewAdapter.OnViewHolderClick<PreferencesScreenItem> { view, position, item -> prefrencesItemSelect(position) },
+                RecyclerGenericAdapter.ItemInterface <PreferencesScreenItem?> { obj, viewHolder, position ->
                     setPreferencesItems(obj,viewHolder,position)
                 })!!
         recyclerGenericAdapter.setList(arrPrefrancesList)
@@ -76,8 +83,14 @@ class PreferencesFragment : BaseFragment() {
         prefrences_rv.adapter = recyclerGenericAdapter
     }
 
+    private fun observePreferenceData() {
+        viewModel.preferenceDataModel.observe(this, Observer { preferenceData ->
+        viewModel.setPreferenceDataModel(preferenceData)
+        })
+    }
+
     private fun setPreferencesItems(
-        obj: PreferencesItem?,
+        obj: PreferencesScreenItem?,
         viewHolder: PFRecyclerViewAdapter<Any?>.ViewHolder,
         position: Int
     ) {
@@ -101,7 +114,7 @@ class PreferencesFragment : BaseFragment() {
         }
     }
 
-    private fun setItems(imageView:ImageView,title: TextView, subTitle: TextView, obj: PreferencesItem?) {
+    private fun setItems(imageView:ImageView,title: TextView, subTitle: TextView, obj: PreferencesScreenItem?) {
         title.text = obj?.title
         subTitle.text = obj?.subtitle
         imageView.setImageResource(obj!!.icon)
@@ -111,13 +124,13 @@ class PreferencesFragment : BaseFragment() {
         constraintView.visibility = if(isVisible) View.VISIBLE else View.INVISIBLE
         otherAndSignout.visibility = if(!isVisible) View.VISIBLE else View.INVISIBLE
     }
-    private fun setItemAsSignOut(otherAndSignout: TextView,obj: PreferencesItem?) {
+    private fun setItemAsSignOut(otherAndSignout: TextView,obj: PreferencesScreenItem?) {
         val spannableString1 = SpannableString(obj?.title)
         spannableString1.setSpan(UnderlineSpan(),0,obj?.title!!.length,0)
         otherAndSignout.text = spannableString1
     }
 
-    private fun setItemAsOther(otherAndSignout: TextView,obj: PreferencesItem?) {
+    private fun setItemAsOther(otherAndSignout: TextView,obj: PreferencesScreenItem?) {
         otherAndSignout.text = obj?.title
     }
 

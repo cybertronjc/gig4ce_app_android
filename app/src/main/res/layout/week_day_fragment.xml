@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/setting_bg"
-    tools:context=".modules.preferences.datetime.weekday.WeekDayFragment">
+    tools:context=".modules.preferences.daytime.weekday.WeekDayFragment">
 
 
     <ImageView
@@ -77,7 +77,6 @@
         android:id="@+id/textView62"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Mon, Tues, Wed, Thus, Fri"
         android:textColor="@color/gray_color"
         android:textSize="10sp"
         android:layout_marginLeft="67dp"
@@ -125,7 +124,7 @@
         android:id="@+id/textView66"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="10:00 am"
+        android:text=""
         android:textColor="@color/gray_color"
         android:textSize="10sp"
         android:layout_marginTop="4dp"

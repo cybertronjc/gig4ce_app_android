@@ -42,6 +42,21 @@
             android:text="Name" />
 
         <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Company Name"
+            android:layout_marginTop="8dp"/>
+
+        <EditText
+            android:id="@+id/company"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:layout_marginTop="8dp" />
+
+        <TextView
             android:id="@+id/textView41"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -61,11 +76,13 @@
             android:text="@string/location"
             android:layout_marginTop="16dp"/>
 
-        <Spinner
+        <EditText
             android:id="@+id/location"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"/>
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:layout_marginTop="8dp" />
 
         <LinearLayout
             android:layout_width="match_parent"

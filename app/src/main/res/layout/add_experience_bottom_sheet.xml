@@ -29,6 +29,15 @@
             android:hint="@string/add_experience_title"
             android:inputType="textPersonName"/>
 
+        <EditText
+            android:id="@+id/add_experience_company"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:ems="10"
+            android:hint="Company Name"
+            android:inputType="textPersonName" />
+
         <Spinner
             android:id="@+id/add_experience_employment_type"
             android:layout_width="match_parent"
@@ -39,15 +48,14 @@
             android:hint="@string/add_experience_employment_type"
             android:inputType="textPersonName" />
 
-        <Spinner
+        <EditText
             android:id="@+id/add_experience_location"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:ems="10"
             android:hint="@string/add_experience_location"
-            android:inputType="textPersonName"
-            android:minWidth="150dp" />
+            android:inputType="textPersonName"/>
 
         <LinearLayout
             android:layout_width="match_parent"

@@ -64,7 +64,7 @@ class EditSkillBottomSheet: BottomSheetDialogFragment() {
                 position: Int,
                 id: Long
             ) {
-                selectedSkill = skills[position]
+                selectedSkill = if (position != 0) skills[position] else ""
                 Log.d("Spinner", "selected " + skills[position])
             }
 
@@ -94,12 +94,21 @@ class EditSkillBottomSheet: BottomSheetDialogFragment() {
         }
 
         layout.save.setOnClickListener {
-            viewModel.removeProfileSkill(skill)
-            var skills: ArrayList<String> = ArrayList()
-            skills.add(selectedSkill)
-            viewModel.setProfileSkill(skills)
-            findNavController().navigate(R.id.educationExpandedFragment)
+            if (validateSkill()) {
+                viewModel.removeProfileSkill(skill)
+                var skills: ArrayList<String> = ArrayList()
+                skills.add(selectedSkill)
+                viewModel.setProfileSkill(skills)
+                findNavController().navigate(R.id.educationExpandedFragment)
+            } else {
+                Toast.makeText(this.context, "Invalid Choice", Toast.LENGTH_LONG).show()
+            }
         }
     }
 
+    private fun validateSkill(): Boolean {
+        if (selectedSkill == "")
+            return false
+        return true
+    }
 }

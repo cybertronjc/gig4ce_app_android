@@ -97,13 +97,13 @@ class ProfileFragment : Fragment() {
 
             layout.bio.text = profile.bio
 
+            layout.main_tags.removeAllViews()
             for (tag in profile.Tags!!) {
                 layout.main_tags.addView(addChip(this.context!!, tag))
             }
 
             var mainAboutString = ""
             mainAboutString += profile.aboutMe.toString() + "\n\n"
-            mainAboutString += "Language knows: "
             if (profile.Language!!.size > 0) {
                 var languages = profile.Language!!.sortedWith(compareBy { it.writingSkill })
                 // TODO: Add a generic way for string formatting.
@@ -120,6 +120,9 @@ class ProfileFragment : Fragment() {
             layout.main_about_card.card_title.text = "About me"
             layout.main_about_card.card_content.text = mainAboutString
             layout.main_about_card.card_view_more.setOnClickListener {
+                findNavController().navigate(R.id.aboutExpandedFragment)
+            }
+            layout.main_about_card.setOnClickListener {
                 findNavController().navigate(R.id.aboutExpandedFragment)
             }
 
@@ -148,16 +151,22 @@ class ProfileFragment : Fragment() {
             }
             mainEducationString += "\n"
 
-            mainEducationString += "Achievement: "
             if (profile.Achievement!!.size > 0) {
                 var achievements = profile.Achievement!!.sortedByDescending { it.year }
-                mainEducationString += achievements[0].title + "\n\n"
+                for ((index, value) in achievements.withIndex()) {
+                    mainEducationString += if (index == 0) "Achievements: " + value.title + "\n"
+                                           else "\t\t\t\t\t\t\t\t\t\t\t\t" + value.title + "\n"
+
+                }
             }
 
             Log.d("ProfileFragment", mainEducationString)
             layout.main_education_card.card_title.text = "Education"
             layout.main_education_card.card_content.text = mainEducationString
             layout.main_education_card.card_view_more.setOnClickListener {
+                findNavController().navigate(R.id.educationExpandedFragment)
+            }
+            layout.main_education_card.setOnClickListener {
                 findNavController().navigate(R.id.educationExpandedFragment)
             }
 
@@ -174,6 +183,9 @@ class ProfileFragment : Fragment() {
             layout.main_experience_card.card_title.text = "Experience"
             layout.main_experience_card.card_content.text = mainExperienceString
             layout.main_experience_card.card_view_more.setOnClickListener {
+                findNavController().navigate(R.id.experienceExpandedFragment)
+            }
+            layout.main_experience_card.setOnClickListener {
                 findNavController().navigate(R.id.experienceExpandedFragment)
             }
 

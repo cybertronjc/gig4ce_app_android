@@ -58,7 +58,7 @@ class EditEducationBottomSheet: BottomSheetDialogFragment() {
         layout = inflater.inflate(R.layout.edit_education_bottom_sheet, container, false)
         viewModel = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
 
-        degrees.addAll(listOf("--degree--", "Btech", "BA", "MA", "MS", "polytech"))
+        degrees.addAll(listOf("--degree--", "<10th", "10th", "12th", "Certificate", "Diploma", "Bachelor", "Masters", "PhD"))
         val degreeAdapter = ArrayAdapter(this.context!!, R.layout.simple_spinner_dropdown_item, degrees)
         val degreeSpinner = layout.degree
         degreeSpinner.adapter = degreeAdapter
