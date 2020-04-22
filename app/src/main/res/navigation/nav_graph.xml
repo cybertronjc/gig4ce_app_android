@@ -305,7 +305,7 @@
         android:label="EditCoverBottomSheet" />
     <fragment
         android:id="@+id/homeScreenNew"
-        android:name="com.gigforce.app.modules.homescreen.HomeScreenNew"
+        android:name="com.gigforce.app.modules.homescreen.mainhome.MainHomeScreen"
         android:label="home_screen_new_fragment"
         tools:layout="@layout/item_homescreen1" />
     <dialog
