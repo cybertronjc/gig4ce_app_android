@@ -194,12 +194,10 @@ class MainHomeScreen : BaseFragment() {
                             getTextView(viewHolder, R.id.date),
                             R.color.gray_color_calendar
                         )
-
                         setViewBackgroundColor(
                             getView(viewHolder, R.id.daydatecard),
                             R.color.vertical_calendar_today_20
                         )
-
                         setTextViewSize(getTextView(viewHolder, R.id.title), 12F)
                         setTextViewSize(getTextView(viewHolder, R.id.day), 12F)
                         setTextViewSize(getTextView(viewHolder, R.id.date), 12F)
