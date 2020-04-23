@@ -1,19 +1,28 @@
 package com.gigforce.app.modules.profile
 
 import android.util.Log
+import com.gigforce.app.core.base.basefirestore.BaseFirestoreDBRepository
 import com.gigforce.app.modules.profile.models.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.*
 import com.google.firebase.firestore.model.Document
 import javax.security.auth.callback.Callback
 
-class ProfileFirebaseRepository {
+class ProfileFirebaseRepository: BaseFirestoreDBRepository() {
 
     var firebaseDB = FirebaseFirestore.getInstance()
     var uid = FirebaseAuth.getInstance().currentUser?.uid!!
-
     var profileCollectionName = "Profiles"
     var tagsCollectionName = "Tags"
+
+    var COLLECTION_NAME = "Profiles"
+    var ADDRESS = "address"
+
+    override fun getCollectionName(): String {
+        return COLLECTION_NAME
+    }
+
+
     //var uid = "UeXaZV3KctuZ8xXLCKGF" // Test user
 
     fun addNewTag(tag: String) {
@@ -121,4 +130,5 @@ class ProfileFirebaseRepository {
         firebaseDB.collection(profileCollectionName)
             .document(uid).update("aboutMe", aboutMe)
     }
+
 }

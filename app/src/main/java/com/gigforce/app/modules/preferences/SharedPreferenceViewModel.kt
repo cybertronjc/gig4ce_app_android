@@ -3,16 +3,23 @@ package com.gigforce.app.modules.preferences
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.gigforce.app.R
+import com.gigforce.app.modules.profile.models.AddressModel
 import com.gigforce.app.modules.preferences.prefdatamodel.PreferencesDataModel
+import com.gigforce.app.modules.profile.ProfileFirebaseRepository
+import com.gigforce.app.modules.profile.models.ProfileData
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.EventListener
 
 class SharedPreferenceViewModel : ViewModel() {
     companion object {
         var preferencesDataModelObj: PreferencesDataModel = PreferencesDataModel()
+        var profileDataModelObj: ProfileData = ProfileData()
+        var addressModelObj: AddressModel = AddressModel()
     }
     var preferencesRepository:PreferencesRepository = PreferencesRepository()
+    var profileRepository:ProfileFirebaseRepository = ProfileFirebaseRepository()
     var preferenceDataModel: MutableLiveData<PreferencesDataModel> = MutableLiveData<PreferencesDataModel>()
+    var profileDataModel: MutableLiveData<ProfileData> = MutableLiveData<ProfileData>()
 
     fun getPreferenceDataModel():PreferencesDataModel{
         return preferencesDataModelObj
@@ -20,6 +27,15 @@ class SharedPreferenceViewModel : ViewModel() {
     fun setPreferenceDataModel(preferencesDataModel: PreferencesDataModel){
         preferencesDataModelObj = preferencesDataModel
     }
+
+    fun getProfileDataModel(): ProfileData{
+        return profileDataModelObj
+    }
+
+    fun setProfileDataModel(profileDataModel: ProfileData){
+        profileDataModelObj = profileDataModel
+    }
+
 
     init {
         getAllData()
@@ -35,6 +51,17 @@ class SharedPreferenceViewModel : ViewModel() {
                 value!!.toObject(PreferencesDataModel::class.java)
             )
         })
+
+        profileRepository.getDBCollection().addSnapshotListener(EventListener<DocumentSnapshot> {
+                value, e ->
+            if (e != null) {
+                return@EventListener
+            }
+            profileDataModel.postValue(
+                value!!.toObject(ProfileData::class.java)
+            )
+        })
+
     }
     fun setIsWeekdays(checked: Boolean) {
         preferencesRepository.setData(preferencesRepository.WEEKDAYS,checked)
@@ -71,5 +98,17 @@ class SharedPreferenceViewModel : ViewModel() {
         else if(preferencesDataModelObj.selecteddays.size==1)
             subtitle = preferencesDataModelObj.selecteddays.size.toString()+" day"
         return subtitle
+    }
+
+    fun getCurrentAddress(): AddressModel? {
+        return profileDataModelObj.address[addressModelObj.currentAddress]
+    }
+
+    fun getPermanentAddress(): AddressModel? {
+        return profileDataModelObj.address[addressModelObj.permanentAddress]
+    }
+
+    fun setCurrentAddress(address: AddressModel){
+        profileRepository.setData(profileRepository.ADDRESS,address)
     }
 }

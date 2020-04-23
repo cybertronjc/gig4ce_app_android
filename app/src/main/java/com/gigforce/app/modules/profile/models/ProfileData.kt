@@ -19,7 +19,8 @@ data class ProfileData(
     var Tags: ArrayList<String>? = null,
     var connections: Int = 0,
     var rating: Rating? = null,
-    var tasksDone: Int = 0
+    var tasksDone: Int = 0,
+    var address: Map<String,AddressModel> = mapOf(AddressModel().currentAddress to AddressModel(),AddressModel().permanentAddress to AddressModel())
 
 ) {
 
