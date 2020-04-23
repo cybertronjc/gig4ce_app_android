@@ -108,7 +108,10 @@ class SharedPreferenceViewModel : ViewModel() {
         return profileDataModelObj.address[addressModelObj.permanentAddress]
     }
 
+
     fun setCurrentAddress(address: AddressModel){
-        profileRepository.setData(profileRepository.ADDRESS,address)
+        var addressMap= profileDataModelObj.address.toMutableMap()
+        addressMap[addressModelObj.currentAddress]=address
+        profileRepository.setData(profileRepository.ADDRESS,addressMap)
     }
 }
