@@ -22,20 +22,20 @@
         android:id="@+id/textView46"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="63dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginLeft="19dp"
+        android:fontFamily="@font/lato_bold"
         android:text="Day and Time"
         android:textColor="@color/black"
-        android:fontFamily="@font/lato_bold"
         android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/imageView10"
         app:layout_constraintTop_toTopOf="parent" />
 
     <View
         android:id="@+id/textView47"
         android:layout_width="wrap_content"
         android:layout_height="1dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="28dp"
         android:background="@color/shadow_color"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -57,7 +57,7 @@
         android:layout_marginTop="16dp"
         app:layout_constraintStart_toStartOf="@+id/textView49"
         app:layout_constraintTop_toTopOf="@+id/textView49"
-        android:src="@drawable/ic_user_icon" />
+        android:src="@drawable/ic_calendar_" />
 
     <TextView
         android:id="@+id/textView50"
@@ -105,11 +105,11 @@
         app:layout_constraintEnd_toStartOf="@+id/switch1"
         app:layout_constraintTop_toBottomOf="@+id/textView47" />
 
-    <TextView
+    <View
         android:id="@+id/textView54"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/gray_color"
+        android:background="@color/shadow_color"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView49" />
@@ -128,7 +128,7 @@
         android:layout_height="21dp"
         android:layout_marginLeft="24dp"
         android:layout_marginTop="16dp"
-        android:src="@drawable/ic_user_icon"
+        android:src="@drawable/ic_calendar_"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/textView55" />
 

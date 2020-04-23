@@ -19,6 +19,9 @@
         <action
             android:id="@+id/action_aboutExpandedFragment_to_editLanguageBottomSheet"
             app:destination="@id/editLanguageBottomSheet" />
+        <action
+            android:id="@+id/action_aboutExpandedFragment_to_addAboutMeBottomSheet"
+            app:destination="@id/addAboutMeBottomSheet" />
     </fragment>
     <dialog
         android:id="@+id/addContactBottomSheetFragment"
@@ -316,5 +319,9 @@
             android:name="array_location"
             app:argType="string" />
     </dialog>
+    <dialog
+        android:id="@+id/addAboutMeBottomSheet"
+        android:name="com.gigforce.app.modules.profile.AddAboutMeBottomSheet"
+        android:label="AddAboutMeBottomSheet" />
 </navigation>
 

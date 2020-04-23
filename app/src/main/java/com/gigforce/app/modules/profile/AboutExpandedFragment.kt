@@ -48,11 +48,13 @@ class AboutExpandedFragment: Fragment() {
 
 
         viewModel.userProfileData.observe(this, Observer { profile ->
+            layout.bio_card.isBottomRemoved = profile.aboutMe != ""
+            layout.bio_card.nextDestination = R.id.addAboutMeBottomSheet
             layout.bio_card.cardTitle = "Bio"
-            layout.bio_card.cardContent = profile.aboutMe
-            layout.bio_card.edit_button.setOnClickListener {
-                Toast.makeText(this.context, "Not Implemented", Toast.LENGTH_LONG).show()
-            }
+            layout.bio_card.cardContent = if (profile.aboutMe != "") profile.aboutMe
+                                          else this.context!!.getString(R.string.empty_about_me_text)
+            layout.bio_card.cardBottom = if (profile.aboutMe != "") ""
+                                         else "+ Add Bio"
 
             var languageString = ""
             for (lang in profile.Language!!) {
@@ -80,6 +82,10 @@ class AboutExpandedFragment: Fragment() {
             layout.about_top_profile.userName = profile.name
             layout.about_top_profile.imageName = profile.profileAvatarName
         })
+
+        layout.bio_card.card_bottom.setOnClickListener {
+            this.findNavController().navigate(R.id.addAboutMeBottomSheet)
+        }
 
         layout.language_card.card_bottom.setOnClickListener{
             this.findNavController().navigate(R.id.addLanguageBottomSheetFragment)

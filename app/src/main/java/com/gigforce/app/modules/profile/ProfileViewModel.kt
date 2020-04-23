@@ -117,6 +117,10 @@ class   ProfileViewModel: ViewModel() {
         profileFirebaseRepository.setProfileBio(bio)
     }
 
+    fun setProfileAboutMe(aboutMe: String) {
+        profileFirebaseRepository.setProfileAboutMe(aboutMe)
+    }
+
     init {
         uid = FirebaseAuth.getInstance().currentUser?.uid!!
         Log.d("ProfileViewModel", uid)

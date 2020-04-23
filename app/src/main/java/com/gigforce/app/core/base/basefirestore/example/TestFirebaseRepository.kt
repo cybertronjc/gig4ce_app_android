@@ -9,7 +9,5 @@ class TestFirebaseRepository : BaseFirestoreDBRepository() {
     override fun getCollectionName(): String {
         return PROFILE_COLLECTION_NAME
     }
-
-
-
+    
 }

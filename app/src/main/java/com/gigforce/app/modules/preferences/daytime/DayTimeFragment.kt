@@ -1,11 +1,14 @@
 package com.gigforce.app.modules.preferences.daytime
 
+import android.graphics.Color
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Switch
+import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
@@ -47,10 +50,28 @@ class DayTimeFragment : BaseFragment() {
 
     private fun initializeViews() {
         preferencesDataModel = viewModel.getPreferenceDataModel()
+        imageView10.setOnClickListener(View.OnClickListener { activity?.onBackPressed() })
         switch1.setChecked(preferencesDataModel.isweekdaysenabled)
         switch2.setChecked(preferencesDataModel.isweekendenabled)
         textView57.text = getYesNoforWeekend()
+        var daysStr  = "day"
+        if(preferencesDataModel.selecteddays.size>1){
+            daysStr = "days"
+        }
+        textView51.text = preferencesDataModel.selecteddays.size.toString() + daysStr
+
+        if(preferencesDataModel.isweekdaysenabled)
+        setTextViewColor(textView50,R.color.black)
+        else
+            setTextViewColor(textView50,R.color.gray_color)
+
+
+        if(preferencesDataModel.isweekendenabled)
+            setTextViewColor(textView56,R.color.black)
+        else
+            setTextViewColor(textView56,R.color.gray_color)
     }
+
 
     private fun getYesNoforWeekend(): String {
         if(preferencesDataModel.isweekendenabled){

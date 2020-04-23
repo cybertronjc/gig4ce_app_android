@@ -116,4 +116,9 @@ class ProfileFirebaseRepository {
         firebaseDB.collection(profileCollectionName)
             .document(uid).update("bio", bio)
     }
+
+    fun setProfileAboutMe(aboutMe: String) {
+        firebaseDB.collection(profileCollectionName)
+            .document(uid).update("aboutMe", aboutMe)
+    }
 }
