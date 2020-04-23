@@ -27,13 +27,19 @@ class ProfileViewModel: ViewModel() {
                 return@EventListener
             }
 
-            Log.d("ProfileViewModel", value.toString())
+            if (value!!.data == null) {
+                profileFirebaseRepository.createEmptyProfile()
+            }
+            else {
 
-            userProfileData.postValue(
-                value!!.toObject(ProfileData::class.java)
-            )
+                Log.d("ProfileViewModel", value!!.data.toString())
 
-            Log.d("ProfileViewModel", userProfileData.toString())
+                userProfileData.postValue(
+                    value!!.toObject(ProfileData::class.java)
+                )
+
+                Log.d("ProfileViewModel", userProfileData.toString())
+            }
         })
         return userProfileData
     }
@@ -124,6 +130,7 @@ class ProfileViewModel: ViewModel() {
     init {
         uid = FirebaseAuth.getInstance().currentUser?.uid!!
         Log.d("ProfileViewModel", uid)
+
         //uid = "UeXaZV3KctuZ8xXLCKGF" // Test user
         getProfileData()
     }
