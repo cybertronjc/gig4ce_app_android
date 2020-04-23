@@ -1,7 +1,12 @@
 package com.gigforce.app.modules.verification.models
 
 import java.util.*
+import kotlin.collections.ArrayList
 
+class KYCdata{
+    var Contact:ArrayList<Address> = ArrayList<Address>();
+    var Bank:ArrayList<Bank> = ArrayList<Bank>();
+}
 data class Address(
     var address: String = "",
     var city: String = "",

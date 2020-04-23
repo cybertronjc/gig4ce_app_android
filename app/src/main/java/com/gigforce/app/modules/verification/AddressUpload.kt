@@ -34,18 +34,12 @@ class AddressUpload : BottomSheetDialogFragment() {
 
             viewModel = ViewModelProviders.of(this).get(VerificationViewModel::class.java)
 
-//            layout.add_veri_contact_address.setOnClickListener{
-//                addNewContact()
-//                resetLayout()
-//            }
             layout.button_veri_address_cancel.setOnClickListener{
                 findNavController().navigate(R.id.verification)
             }
             layout.button_veri_address_save.setOnClickListener{
                 addNewContact()
                 saveNewContacts()
-                //findNavController().navigate(R.id.verification)
-                //findNavController().navigate(R.id.uploadDropDown)
             }
         }
 
