@@ -4,39 +4,18 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.GridView
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.app.core.genericadapter.RecyclerGenericAdapter
+import com.gigforce.app.modules.homescreen.mainhome.verticalcalendar.VerticalCalendarDataItemModel
 import com.riningan.widget.ExtendedBottomSheetBehavior
 import com.riningan.widget.ExtendedBottomSheetBehavior.STATE_COLLAPSED
 import kotlinx.android.synthetic.main.homescreen_1nsvbs.*
-import kotlinx.android.synthetic.main.vertical_calendar_item.view.*
 
-
-// UNused below can be removed
-//class DemoBottomSheetFragment : SuperBottomSheetFragment() {
-//
-//    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-//        super.onCreateView(inflater, container, savedInstanceState)
-//        return inflater.inflate(R.layout.homescreen1_bs1, container, false)
-//    }
-//    //override fun getCornerRadius() = "16dp" //context!!.resources.getDimension(R.dimen.demo_sheet_rounded_corner)
-//    override fun getStatusBarColor() = Color.RED
-//}
-//
-//class ExtBottomSheetFragment : BaseFragment() {
-//
-//    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-//        super.onCreateView(inflater, container, savedInstanceState)
-//        return inflater.inflate(R.layout.homescreen_1nsvbs, container, false)
-//    }
-//    //override fun getCornerRadius() = "16dp" //context!!.resources.getDimension(R.dimen.demo_sheet_rounded_corner)
-//    //override fun getStatusBarColor() = Color.RED
-//}
 
 class MainHomeScreen : BaseFragment() {
 
@@ -95,28 +74,29 @@ class MainHomeScreen : BaseFragment() {
         }
         gridView_hs1.adapter = adapter
     }
-
+    private val visibleThreshold = 5
     private fun initializeVerticalCalendarRV() {
-        val recyclerGenericAdapter: RecyclerGenericAdapter<DataItem> =
-            RecyclerGenericAdapter<DataItem>(
+        val recyclerGenericAdapter: RecyclerGenericAdapter<VerticalCalendarDataItemModel> =
+            RecyclerGenericAdapter<VerticalCalendarDataItemModel>(
                 activity?.applicationContext,
-                PFRecyclerViewAdapter.OnViewHolderClick<DataItem?> { view, position, item ->
+                PFRecyclerViewAdapter.OnViewHolderClick<VerticalCalendarDataItemModel?> { view, position, item ->
                     showToast(
                         ""
                     )
                 },
-                RecyclerGenericAdapter.ItemInterface<DataItem?> { obj, viewHolder, position ->
+                RecyclerGenericAdapter.ItemInterface<VerticalCalendarDataItemModel?> { obj, viewHolder, position ->
 
                     if (obj!!.isMonth) {
                         getView(viewHolder, R.id.calendar_month_cl).visibility = View.VISIBLE
                         getView(viewHolder, R.id.calendar_detail_item_cl).visibility = View.GONE
+                        getTextView(viewHolder,R.id.month_year).text = obj.monthStr+" "+obj.year
                     } else if (obj!!.isPreviousDate) {
                         getView(viewHolder, R.id.calendar_month_cl).visibility = View.GONE
                         getView(viewHolder, R.id.calendar_detail_item_cl).visibility = View.VISIBLE
                         getTextView(viewHolder, R.id.title).text = obj?.title
                         getTextView(viewHolder, R.id.subtitle).visibility = View.GONE
                         getTextView(viewHolder, R.id.day).text = obj?.day
-                        getTextView(viewHolder, R.id.date).text = obj?.date
+                        getTextView(viewHolder, R.id.date).text = obj?.date.toString()
                         setTextViewColor(
                             getTextView(viewHolder, R.id.title),
                             R.color.gray_color_calendar
@@ -143,15 +123,15 @@ class MainHomeScreen : BaseFragment() {
                         getView(viewHolder, R.id.calendar_detail_item_cl).visibility = View.VISIBLE
                         getTextView(viewHolder, R.id.title).text = obj?.title
                         getTextView(viewHolder, R.id.subtitle).text = obj?.subTitle
-                        getTextView(viewHolder, R.id.day).text = obj?.day
-                        getTextView(viewHolder, R.id.date).text = obj?.date
+                        getTextView(viewHolder, R.id.day).text = obj?.day.toString()
+                        getTextView(viewHolder, R.id.date).text = obj?.date.toString()
                     } else if (obj!!.isGigAssign) {
                         getView(viewHolder, R.id.calendar_month_cl).visibility = View.GONE
                         getView(viewHolder, R.id.calendar_detail_item_cl).visibility = View.VISIBLE
                         getTextView(viewHolder, R.id.title).text = obj?.title
                         getTextView(viewHolder, R.id.subtitle).text = obj?.subTitle
                         getTextView(viewHolder, R.id.day).text = obj?.day
-                        getTextView(viewHolder, R.id.date).text = obj?.date
+                        getTextView(viewHolder, R.id.date).text = obj?.date.toString()
                         setTextViewColor(
                             getTextView(viewHolder, R.id.title),
                             R.color.black
@@ -181,7 +161,7 @@ class MainHomeScreen : BaseFragment() {
                         getTextView(viewHolder, R.id.title).text = obj?.title
                         getTextView(viewHolder, R.id.subtitle).visibility = View.GONE
                         getTextView(viewHolder, R.id.day).text = obj?.day
-                        getTextView(viewHolder, R.id.date).text = obj?.date
+                        getTextView(viewHolder, R.id.date).text = obj?.date.toString()
                         setTextViewColor(
                             getTextView(viewHolder, R.id.title),
                             R.color.gray_color_calendar
@@ -207,11 +187,13 @@ class MainHomeScreen : BaseFragment() {
                         getTextView(viewHolder, R.id.title).text = obj?.title
                         getTextView(viewHolder, R.id.subtitle).text = obj?.subTitle
                         getTextView(viewHolder, R.id.day).text = obj?.day
-                        getTextView(viewHolder, R.id.date).text = obj?.date
+                        getTextView(viewHolder, R.id.date).text = obj?.date.toString()
                     }
                 })!!
 
-        recyclerGenericAdapter.list = getVerticalCalendarData()
+//        val recyclerAdapter = VerticalCalendarAdapter(this,viewModel.getVerticalCalendarData())
+
+        recyclerGenericAdapter.list = viewModel.getVerticalCalendarData(null)
         recyclerGenericAdapter.setLayout(R.layout.vertical_calendar_item)
         rv_.layoutManager = LinearLayoutManager(
             activity?.applicationContext,
@@ -219,127 +201,78 @@ class MainHomeScreen : BaseFragment() {
             false
         )
         rv_.adapter = recyclerGenericAdapter
+        var scrollListener = object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                val totalItemCount = recyclerView!!.layoutManager?.itemCount
+                var layoutManager: LinearLayoutManager? = null
+                if (layoutManager == null) {
+                    layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                }
+                val first = layoutManager!!.findFirstVisibleItemPosition()
+                val lastVisibleItem = layoutManager!!.findLastVisibleItemPosition()
+                if (totalItemCount!! <= (lastVisibleItem + visibleThreshold)) {
+                    recyclerGenericAdapter.list.addAll(viewModel.getVerticalCalendarData(
+                        recyclerGenericAdapter.list.get(recyclerGenericAdapter.list.size-1)
+                    ))
+                    recyclerGenericAdapter.notifyDataSetChanged()
+                }
+
+                }
+            }
+        rv_.addOnScrollListener(scrollListener)
+//            rv_.addOnScrollListener(OnScrollListener() {
+//                @Override
+//                public void onScrolled( recyclerView:RecyclerView,  dx:Int,  dy:Int) {
+//                    if (!noMoreItem) {
+//                        LinearLayoutManager linearLayoutManager = LinearLayoutManager.class.cast(recyclerView.getLayoutManager());
+//                        int totalItemCount = linearLayoutManager.getItemCount();
+//                        int lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
+//                        if (!isLoading && totalItemCount <= (lastVisibleItem + visibleThreshold)) {
+//                            VisitVlsModel mediaFilesModel = new VisitVlsModel();
+//                            mediaFilesModel.setFile_type("loading");
+//                            arrayListViewVls.add(mediaFilesModel);
+//                            vlsViewFragmentAdapter.customNotifyItemInserted(arrayListViewVls.size() - 1);
+//                            isLoading = true;
+//                            isScrolledDataRequested = true;
+//                            requestNextPage();
+//                            if (MainActivity.Current.isNetworkAvailable())
+//                                webCallForGetAllVlsData(false);
+//                        }
+//                    }
+//                }
+//            });
     }
 
-    fun getVerticalCalendarData(): ArrayList<DataItem> {
-        var datalist: ArrayList<DataItem> = ArrayList<DataItem>()
-        datalist.add(DataItem("No gigs Assigned", "", "21", "Tues", false, true, false, false))
-        datalist.add(
-            DataItem(
-                "Swiggy Deliveries",
-                "+3 More",
-                "22",
-                "Tues",
-                true,
-                false,
-                true,
-                false
-            )
-        )
-        datalist.add(
-            DataItem(
-                "Dunzo Deliveries",
-                "+2 More",
-                "23",
-                "Wed",
-                false,
-                false,
-                true,
-                false
-            )
-        )
-        datalist.add(
-            DataItem(
-                "No gigs Assigned",
-                "+3 More",
-                "24",
-                "Thus",
-                false,
-                false,
-                false,
-                false
-            )
-        )
-        datalist.add(
-            DataItem(
-                "Dunzo Deliveries",
-                "+2 More",
-                "25",
-                "Fri",
-                false,
-                false,
-                true,
-                false
-            )
-        )
-        datalist.add(
-            DataItem(
-                "Swiggy Deliveries",
-                "+3 More",
-                "26",
-                "Sat",
-                false,
-                false,
-                false,
-                true
-            )
-        )
-        datalist.add(
-            DataItem(
-                "No gigs Assigned",
-                "+3 More",
-                "27",
-                "Sun",
-                false,
-                false,
-                false,
-                false
-            )
-        )
-        datalist.add(
-            DataItem(
-                "Dunzo Deliveries",
-                "+2 More",
-                "28",
-                "Mon",
-                false,
-                false,
-                true,
-                false
-            )
-        )
-        datalist.add(
-            DataItem(
-                "Swiggy Deliveries",
-                "+3 More",
-                "29",
-                "Tues",
-                false,
-                false,
-                false,
-                false
-            )
-        )
-        return datalist
-    }
 
-    class DataItem(
-        val title: String,
-        val subTitle: String,
-        val date: String,
-        val day: String,
-        val isToday: Boolean,
-        val isPreviousDate: Boolean,
-        val isGigAssign: Boolean,
-        val isMonth: Boolean
-    ) {
-//        title:String = "Swiggy Deliveries";
-//        var subTitle:String = "+3 More";
-//        var date:String = "16";
-//        var comment:String = "Last gig complete 20 min ago";
-//        var day:String = "Sun";
-//        var isToday:Boolean = true;
-
-    }
 
 }
+
+
+
+
+
+
+
+
+
+// UNused below can be removed
+//class DemoBottomSheetFragment : SuperBottomSheetFragment() {
+//
+//    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+//        super.onCreateView(inflater, container, savedInstanceState)
+//        return inflater.inflate(R.layout.homescreen1_bs1, container, false)
+//    }
+//    //override fun getCornerRadius() = "16dp" //context!!.resources.getDimension(R.dimen.demo_sheet_rounded_corner)
+//    override fun getStatusBarColor() = Color.RED
+//}
+//
+//class ExtBottomSheetFragment : BaseFragment() {
+//
+//    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+//        super.onCreateView(inflater, container, savedInstanceState)
+//        return inflater.inflate(R.layout.homescreen_1nsvbs, container, false)
+//    }
+//    //override fun getCornerRadius() = "16dp" //context!!.resources.getDimension(R.dimen.demo_sheet_rounded_corner)
+//    //override fun getStatusBarColor() = Color.RED
+//}
