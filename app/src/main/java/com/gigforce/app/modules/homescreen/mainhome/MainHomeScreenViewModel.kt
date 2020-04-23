@@ -8,6 +8,8 @@ import kotlin.collections.ArrayList
 class MainHomeScreenViewModel : ViewModel() {
     // TODO: Implement the ViewModel
 
+
+    //data will link to DB
     fun getVerticalCalendarData(dataItem: VerticalCalendarDataItemModel?): ArrayList<VerticalCalendarDataItemModel> {
         var datalist: ArrayList<VerticalCalendarDataItemModel> = ArrayList<VerticalCalendarDataItemModel>()
 
@@ -19,7 +21,7 @@ class MainHomeScreenViewModel : ViewModel() {
         }
         var temp:Int = calendar.get(Calendar.MONTH)
         for (x in 0..30){
-            if((calendar.get(Calendar.MONTH)-temp)>0 || (calendar.get(Calendar.MONTH)-temp)<0){
+            if((calendar.get(Calendar.MONTH)-temp)!=0){
                 datalist.add(
                     VerticalCalendarDataItemModel(
                         "Swiggy Deliveries",
