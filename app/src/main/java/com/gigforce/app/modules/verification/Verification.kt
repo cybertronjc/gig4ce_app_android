@@ -7,27 +7,23 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.activity.OnBackPressedCallback
 import androidx.annotation.RequiresApi
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
-import com.gigforce.app.modules.auth.ui.main.Login
+import com.gigforce.app.core.base.BaseFragment
+import com.gigforce.app.core.validation.Regexes
 import com.gigforce.app.modules.verification.models.Address
-import kotlinx.android.synthetic.main.edit_achievement_bottom_sheet.view.*
 import kotlinx.android.synthetic.main.layout_verification.view.*
 import java.util.regex.Matcher
-import java.util.regex.Pattern
 
-class Verification: Fragment() {
+
+class Verification: BaseFragment() {
     companion object {
         fun newInstance() = Verification()
     }
 
-    lateinit var layout: View
+    var layout: View? = null
     lateinit var viewModel: VerificationViewModel
     var updates: ArrayList<Address> = ArrayList()
     lateinit var address1:String;
@@ -35,13 +31,6 @@ class Verification: Fragment() {
     private lateinit var city:String;
     lateinit var state:String;
     private lateinit var pincode:String;
-
-    private val ADDRESS =
-        Pattern.compile("^(\\w+\\s*[\\#\\-\\,\\/\\.\\(\\)\\&]*)+")
-    private val CITY_STATE =
-        Pattern.compile("^(\\w+\\s*\\w*)+")
-    private val PINCODE =
-        Pattern.compile("^([0-9]{6}|[0-9]{3}\\s*[0-9]{3})")
 
     lateinit var match: Matcher;
 
@@ -52,53 +41,56 @@ class Verification: Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         viewModel = ViewModelProviders.of(this).get(VerificationViewModel::class.java)
-        layout = inflater.inflate(R.layout.layout_verification, container, false)
+        layout = inflateView(R.layout.layout_verification, inflater,container);
         //requireActivity().onBackPressedDispatcher.addCallback(this, callback)
-        layout.pbAddress.setProgress(3,true)
+        layout?.pbAddress?.setProgress(3,true)
         return layout
     }
 
-//    val callback: OnBackPressedCallback =
-//        object : OnBackPressedCallback(true /* enabled by default */) {
-//            override fun handleOnBackPressed() { // Handle the back button event
-//                onBackPressed()
-//            }
-//        }
-//    fun onBackPressed() {
-//            findNavController().popBackStack()
-//    }
+    private fun observeVerficationData() {
+        viewModel.veriData.observe(this, Observer { verification ->
+            //if (verification!!.address!!.isNotEmpty()) {
+            var lastSavedAddress = verification.Contact.get(verification.Contact.size-1)
+            layout?.add_veri_address_line1?.setText(lastSavedAddress?.address)
+            layout?.add_veri_address_line2?.setText(lastSavedAddress?.address)
+            layout?.add_veri_address_state?.setText(lastSavedAddress?.state)
+            layout?.add_veri_address_city?.setText(lastSavedAddress?.city)
+            layout?.add_veri_address_pin?.setText(lastSavedAddress?.pincode)
+            //}
+        })
+    }
 
     private fun validateFields(address1:String, address2:String, city:String, state:String, pincode:String):Boolean {
         //TODO Instead of toast msg we can put text msg on top of missing edit text or turn the edit text box to red!
         if (address1.isEmpty())
         {
-            Toast.makeText(this.context, "Please enter address1", Toast.LENGTH_SHORT).show()
-            layout.add_veri_address_line1.highlightColor = resources.getColor(R.color.colorAccent)
+            showToast("Please enter address1")
+            layout?.add_veri_address_line1?.highlightColor = resources.getColor(R.color.colorAccent)
             return false
         }
         else if (address2.isEmpty())
         {
-            Toast.makeText(this.context, "Please enter address2", Toast.LENGTH_SHORT).show()
+            showToast("Please enter address2")
             return false
         }
         else{
-            match = ADDRESS.matcher("$address1 $address2");
+            match = Regexes.ADDRESS.matcher("$address1 $address2");
             if(!match.matches()) {
-                Toast.makeText(this.context, "Please enter valid address1 and address2", Toast.LENGTH_SHORT).show()
+                showToast("Please enter valid address1 and address2")
                 Log.d("Verification: ", "$address1 $address2")
                 return false
             }
         }
         if(city.isEmpty())
         {
-            Toast.makeText(this.context, "Please enter city", Toast.LENGTH_SHORT).show()
+            showToast("Please enter city")
             return false
         }
         else
         {
-            match = CITY_STATE.matcher(city);
+            match = Regexes.CITY_STATE.matcher(city);
             if(!match.matches()) {
-                Toast.makeText(this.context, "Please enter valid city", Toast.LENGTH_SHORT).show()
+                showToast("Please enter valid city")
                 Log.d("Verification: ", city)
                 return false
             }
@@ -106,14 +98,14 @@ class Verification: Fragment() {
 
         if(state.isEmpty())
         {
-            Toast.makeText(this.context, "Please enter state", Toast.LENGTH_SHORT).show()
+            showToast("Please enter state")
             return false
         }
         else
         {
-            match = CITY_STATE.matcher(state);
+            match = Regexes.CITY_STATE.matcher(state);
             if(!match.matches()) {
-                Toast.makeText(this.context, "Please enter valid state", Toast.LENGTH_SHORT).show()
+                showToast("Please enter valid state")
                 Log.d("Verification: ", state)
                 return false
             }
@@ -121,14 +113,14 @@ class Verification: Fragment() {
 
         if(pincode.isEmpty())
         {
-            Toast.makeText(this.context, "Please enter pincode", Toast.LENGTH_SHORT).show()
+            showToast("Please enter pincode")
             return false
         }
         else
         {
-            match = PINCODE.matcher(pincode);
+            match = Regexes.PINCODE.matcher(pincode);
             if(!match.matches()) {
-                Toast.makeText(this.context, "Please enter valid pincode", Toast.LENGTH_SHORT).show()
+                showToast("Please enter valid pincode")
                 Log.d("Verification: ", pincode)
                 return false
             }
@@ -141,62 +133,41 @@ class Verification: Fragment() {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(VerificationViewModel::class.java)
 
-        viewModel.veriData.observe(this, Observer { verification ->
-            //if (verification!!.address!!.isNotEmpty()) {
-                layout.add_veri_address_line1.setText(verification.address)
-                layout.add_veri_address_line1.setText(verification.address)
-                layout.add_veri_address_state.setText(verification.state)
-                layout.add_veri_address_city.setText(verification.city)
-                layout.add_veri_address_pin.setText(verification.pincode)
-            //}
-        })
+        observeVerficationData();
 
-        layout.button_veri_address_cancel.setOnClickListener {
+        layout?.button_veri_address_cancel?.setOnClickListener {
             // CHECK to reset or not?
             //resetLayout();
-            findNavController().navigate(R.id.homeScreenIcons);
+            navigate(R.id.homeScreenIcons);
         }
 
-        layout.button_veri_address_save.setOnClickListener {
-                /*
-                if fields on empty - validate fields (check for email regex and phone regex)
-                and toast the missing fields before proceeding
-                 */
+        layout?.button_veri_address_save?.setOnClickListener {
+            /*
+            if fields on empty - validate fields (check for email regex and phone regex)
+            and toast the missing fields before proceeding
+             */
 
-            address1 = layout.add_veri_address_line1.text.toString();
-            address2 = layout.add_veri_address_line2.text.toString();
-            city = layout.add_veri_address_city.text.toString();
-            state = layout.add_veri_address_state.text.toString();
-            pincode = layout.add_veri_address_pin.text.toString();
-
-//            addNewContact()
-//            saveNewContacts()
-//            //CHEK to reset or not?
-//            //resetLayout()
-//            findNavController().navigate(R.id.aadhaarUpload)
+            address1 = layout?.add_veri_address_line1?.text.toString();
+            address2 = layout?.add_veri_address_line2?.text.toString();
+            city = layout?.add_veri_address_city?.text.toString();
+            state = layout?.add_veri_address_state?.text.toString();
+            pincode = layout?.add_veri_address_pin?.text.toString();
 
             //var areValid = validateFields(address1, address2, city, state, pincode);
             if(TextUtils.isEmpty(address1) || TextUtils.isEmpty(address2) || TextUtils.isEmpty(city) || TextUtils.isEmpty(state) || TextUtils.isEmpty(pincode))
-             //TODO Is this check needed?
+            //TODO Is this check needed?
             //if(!areValid)
             {
-                Toast.makeText(
-                    this.context,
-                    "Please fill up all the missing fields",
-                    Toast.LENGTH_LONG).show()
+                    showToast("Please fill up all the missing fields");
             }
             else{
                 addNewContact()
                 saveNewContacts()
                 resetLayout()
-                findNavController().navigate(R.id.aadhaarUpload)
+                navigate(R.id.aadhaarUpload)
                 //findNavController().navigate(R.id.panUpload)
             }
         }
-
-        //layout.textView31.setOnClickListener { findNavController().navigate(R.id.panUpload) }
-        //layout.textView32.setOnClickListener { findNavController().navigate(R.id.verificationcontact) }
-
     }
 
     private fun addNewContact() {
@@ -211,11 +182,11 @@ class Verification: Fragment() {
     }
 
     private fun resetLayout() {
-        layout.add_veri_address_line1.setText("")
-        layout.add_veri_address_line2.setText("")
-        layout.add_veri_address_city.setText("")
-        layout.add_veri_address_state.setText("")
-        layout.add_veri_address_pin.setText("")
+        layout?.add_veri_address_line1?.setText("")
+        layout?.add_veri_address_line2?.setText("")
+        layout?.add_veri_address_city?.setText("")
+        layout?.add_veri_address_state?.setText("")
+        layout?.add_veri_address_pin?.setText("")
     }
 
     private fun saveNewContacts() {
