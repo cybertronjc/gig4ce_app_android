@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -56,9 +57,15 @@ class MainHomeScreen : BaseFragment() {
         mExtendedBottomSheetBehavior?.state = STATE_COLLAPSED
         mExtendedBottomSheetBehavior?.isAllowUserDragging = true;
         viewModel = ViewModelProviders.of(this).get(MainHomeScreenViewModel::class.java)
-        initializeViews()
+//        initializeViews()
+        observePreferenceData()
     }
-
+    private fun observePreferenceData() {
+        viewModel.mainHomeLiveDataModel.observe(viewLifecycleOwner, Observer { homeDataModel ->
+            viewModel.setDataModel(homeDataModel.all_gigs)
+            initializeViews()
+        })
+    }
     private fun initializeViews() {
         initializeVerticalCalendarRV()
         initializeBSGridView()
@@ -74,7 +81,8 @@ class MainHomeScreen : BaseFragment() {
         }
         gridView_hs1.adapter = adapter
     }
-    private val visibleThreshold = 5
+    private val visibleThreshold = 10
+    var isLoading:Boolean = false
     private fun initializeVerticalCalendarRV() {
         val recyclerGenericAdapter: RecyclerGenericAdapter<VerticalCalendarDataItemModel> =
             RecyclerGenericAdapter<VerticalCalendarDataItemModel>(
@@ -150,7 +158,7 @@ class MainHomeScreen : BaseFragment() {
                         )
                         setViewBackgroundColor(
                             getView(viewHolder, R.id.daydatecard),
-                            R.color.vertical_calendar_today_50
+                            R.color.vertical_calendar_today_70
                         )
                         setTextViewSize(getTextView(viewHolder, R.id.title), 12F)
                         setTextViewSize(getTextView(viewHolder, R.id.day), 12F)
@@ -176,7 +184,7 @@ class MainHomeScreen : BaseFragment() {
                         )
                         setViewBackgroundColor(
                             getView(viewHolder, R.id.daydatecard),
-                            R.color.vertical_calendar_today_20
+                            R.color.vertical_calendar_today_40
                         )
                         setTextViewSize(getTextView(viewHolder, R.id.title), 12F)
                         setTextViewSize(getTextView(viewHolder, R.id.day), 12F)
@@ -191,9 +199,7 @@ class MainHomeScreen : BaseFragment() {
                     }
                 })!!
 
-//        val recyclerAdapter = VerticalCalendarAdapter(this,viewModel.getVerticalCalendarData())
-
-        recyclerGenericAdapter.list = viewModel.getVerticalCalendarData(null)
+        recyclerGenericAdapter.list = viewModel.getAllCalendarData()
         recyclerGenericAdapter.setLayout(R.layout.vertical_calendar_item)
         rv_.layoutManager = LinearLayoutManager(
             activity?.applicationContext,
@@ -201,6 +207,8 @@ class MainHomeScreen : BaseFragment() {
             false
         )
         rv_.adapter = recyclerGenericAdapter
+        rv_.scrollToPosition((recyclerGenericAdapter.list.size/2)-2)
+
         var scrollListener = object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
@@ -209,15 +217,24 @@ class MainHomeScreen : BaseFragment() {
                 if (layoutManager == null) {
                     layoutManager = recyclerView.layoutManager as LinearLayoutManager
                 }
-                val first = layoutManager!!.findFirstVisibleItemPosition()
+                val firstVisibleItem = layoutManager!!.findFirstVisibleItemPosition()
                 val lastVisibleItem = layoutManager!!.findLastVisibleItemPosition()
-                if (totalItemCount!! <= (lastVisibleItem + visibleThreshold)) {
+                if (!isLoading && totalItemCount!! <= (lastVisibleItem + visibleThreshold)) {
+                    isLoading = true;
                     recyclerGenericAdapter.list.addAll(viewModel.getVerticalCalendarData(
-                        recyclerGenericAdapter.list.get(recyclerGenericAdapter.list.size-1)
+                        recyclerGenericAdapter.list.get(recyclerGenericAdapter.list.size-1),false
                     ))
                     recyclerGenericAdapter.notifyDataSetChanged()
+                    isLoading = false
                 }
-
+//                if (!isLoading && (firstVisibleItem - visibleThreshold)<=0) {
+//                    isLoading = true;
+//                    recyclerGenericAdapter.list.addAll(0,viewModel.getVerticalCalendarData(
+//                        recyclerGenericAdapter.list.get(0),true
+//                    ))
+//                    recyclerGenericAdapter.notifyDataSetChanged()
+//                    isLoading = false
+//                }
                 }
             }
         rv_.addOnScrollListener(scrollListener)
