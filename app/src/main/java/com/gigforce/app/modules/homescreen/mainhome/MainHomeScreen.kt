@@ -240,7 +240,4 @@ class MainHomeScreen : BaseFragment() {
         rv_.addOnScrollListener(scrollListener)
 
     }
-
-
-
 }
