@@ -19,5 +19,6 @@
     <dimen name="padding_default">10dp</dimen>
     <dimen name="height_select_lang_item">56dp</dimen>
     <dimen name="border_width">1dp</dimen>
+    <dimen name="calendar_gig">12sp</dimen>
 
 </resources>

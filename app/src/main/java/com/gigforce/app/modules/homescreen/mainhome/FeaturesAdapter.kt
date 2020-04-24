@@ -1,4 +1,4 @@
-package com.gigforce.app.modules.homescreen
+package com.gigforce.app.modules.homescreen.mainhome
 
 import android.content.Context
 import android.view.View
@@ -21,7 +21,8 @@ internal class FeaturesAdapter internal constructor(context: Context, private va
         val holder: ItemHolder
         if (convertView == null) {
             convertView = LayoutInflater.from(context).inflate(resource, null)
-            holder = ItemHolder()
+            holder =
+                ItemHolder()
             holder.name = convertView!!.findViewById(R.id.txt_title_hs1)
             holder.icon = convertView.findViewById(R.id.img_icon_hs1)
             convertView.tag = holder
