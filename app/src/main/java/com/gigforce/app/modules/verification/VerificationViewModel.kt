@@ -11,14 +11,14 @@ import com.google.firebase.firestore.EventListener
 class VerificationViewModel: ViewModel() {
 
     var veriFirebaseRepository = VeriFirebaseRepository()
-    var veriData: MutableLiveData<Address> = MutableLiveData<Address>()
+    var veriData: MutableLiveData<KYCdata> = MutableLiveData<KYCdata>()
     val uid: String
 
     fun setCardAvatarName(cardAvatarName: String) {
         veriFirebaseRepository.setCardAvatar(cardAvatarName)
     }
 
-    fun getVerificationData(): MutableLiveData<Address> {
+    fun getVerificationData(): MutableLiveData<KYCdata> {
         veriFirebaseRepository.getVerificationData().addSnapshotListener(EventListener<DocumentSnapshot> {
                 value, e ->
 
@@ -30,7 +30,7 @@ class VerificationViewModel: ViewModel() {
             Log.d("VerificationViewModel", value.toString())
 
             veriData.postValue(
-                value!!.toObject(Address::class.java)
+                value!!.toObject(KYCdata::class.java)
             )
 
             Log.d("VerificationViewModel", veriData.toString())

@@ -48,17 +48,22 @@ class AboutExpandedFragment: Fragment() {
 
 
         viewModel.userProfileData.observe(this, Observer { profile ->
+            layout.bio_card.isBottomRemoved = profile.aboutMe != ""
+            layout.bio_card.nextDestination = R.id.addAboutMeBottomSheet
             layout.bio_card.cardTitle = "Bio"
-            layout.bio_card.cardContent = profile.aboutMe
-            layout.bio_card.edit_button.setOnClickListener {
-                Toast.makeText(this.context, "Not Implemented", Toast.LENGTH_LONG).show()
-            }
+            layout.bio_card.cardContent = if (profile.aboutMe != "") profile.aboutMe
+                                          else this.context!!.getString(R.string.empty_about_me_text)
+            layout.bio_card.cardBottom = if (profile.aboutMe != "") ""
+                                         else "+ Add Bio"
 
             var languageString = ""
-            for (lang in profile.Language!!) {
-                languageString += lang.name + "\n"
-                languageString += "Speaking " + getLanguageLevel(lang.speakingSkill.toInt()) + "\n"
-                languageString += "Writing " + getLanguageLevel(lang.writingSkill.toInt()) + "\n\n"
+            profile.Language?.let {
+                val languages = it.sortedByDescending { language -> language.speakingSkill }
+                for (lang in languages) {
+                    languageString += lang.name + "\n"
+                    languageString += "Speaking " + getLanguageLevel(lang.speakingSkill.toInt()) + "\n"
+                    languageString += "Writing " + getLanguageLevel(lang.writingSkill.toInt()) + "\n\n"
+                }
             }
             layout.language_card.nextDestination = R.id.editLanguageBottomSheet
             layout.language_card.cardTitle = "Language"
@@ -66,20 +71,29 @@ class AboutExpandedFragment: Fragment() {
             layout.language_card.cardBottom = "+ Add Language"
 
             var contactString = ""
-            for (contact in profile.Contact!!) {
-                contactString += "phone: " + contact.phone + "\n"
-                contactString += "email: " + contact.email + "\n\n"
+            profile.Contact?.let {
+                for (contact in it) {
+                    contactString += "phone: " + contact.phone + "\n"
+                    contactString += "email: " + contact.email + "\n\n"
+                }
             }
             layout.contact_card.cardTitle = "Contact"
             layout.contact_card.cardContent = contactString
             layout.contact_card.cardBottom = "+ Add Contact"
-            layout.contact_card.edit_button.setOnClickListener {
-                showAddContactDialog()
+
+            if (layout.contact_card.edit_button != null) {
+                layout.contact_card.edit_button.setOnClickListener {
+                    showAddContactDialog()
+                }
             }
 
             layout.about_top_profile.userName = profile.name
             layout.about_top_profile.imageName = profile.profileAvatarName
         })
+
+        layout.bio_card.card_bottom.setOnClickListener {
+            this.findNavController().navigate(R.id.addAboutMeBottomSheet)
+        }
 
         layout.language_card.card_bottom.setOnClickListener{
             this.findNavController().navigate(R.id.addLanguageBottomSheetFragment)
@@ -88,11 +102,6 @@ class AboutExpandedFragment: Fragment() {
         layout.contact_card.card_bottom.setOnClickListener{
             showAddContactDialog()
         }
-
-//        layout.about_expanded_back_button.setOnClickListener{
-//            this.findNavController().navigate(R.id.profileFragment)
-//        }
-
     }
 
     fun showAddContactDialog() {

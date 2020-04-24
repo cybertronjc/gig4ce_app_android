@@ -25,6 +25,10 @@ class ProfileFirebaseRepository {
         return firebaseDB.collection(profileCollectionName).document(uid)
     }
 
+    fun createEmptyProfile() {
+        firebaseDB.collection(profileCollectionName).document(uid).set(ProfileData())
+    }
+
     fun setProfileEducation(education: ArrayList<Education>) {
         for(ed in education) {
             firebaseDB.collection(profileCollectionName)
@@ -115,5 +119,10 @@ class ProfileFirebaseRepository {
     fun setProfileBio(bio: String) {
         firebaseDB.collection(profileCollectionName)
             .document(uid).update("bio", bio)
+    }
+
+    fun setProfileAboutMe(aboutMe: String) {
+        firebaseDB.collection(profileCollectionName)
+            .document(uid).update("aboutMe", aboutMe)
     }
 }
