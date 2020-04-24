@@ -238,58 +238,9 @@ class MainHomeScreen : BaseFragment() {
                 }
             }
         rv_.addOnScrollListener(scrollListener)
-//            rv_.addOnScrollListener(OnScrollListener() {
-//                @Override
-//                public void onScrolled( recyclerView:RecyclerView,  dx:Int,  dy:Int) {
-//                    if (!noMoreItem) {
-//                        LinearLayoutManager linearLayoutManager = LinearLayoutManager.class.cast(recyclerView.getLayoutManager());
-//                        int totalItemCount = linearLayoutManager.getItemCount();
-//                        int lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
-//                        if (!isLoading && totalItemCount <= (lastVisibleItem + visibleThreshold)) {
-//                            VisitVlsModel mediaFilesModel = new VisitVlsModel();
-//                            mediaFilesModel.setFile_type("loading");
-//                            arrayListViewVls.add(mediaFilesModel);
-//                            vlsViewFragmentAdapter.customNotifyItemInserted(arrayListViewVls.size() - 1);
-//                            isLoading = true;
-//                            isScrolledDataRequested = true;
-//                            requestNextPage();
-//                            if (MainActivity.Current.isNetworkAvailable())
-//                                webCallForGetAllVlsData(false);
-//                        }
-//                    }
-//                }
-//            });
+
     }
 
 
 
 }
-
-
-
-
-
-
-
-
-
-// UNused below can be removed
-//class DemoBottomSheetFragment : SuperBottomSheetFragment() {
-//
-//    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-//        super.onCreateView(inflater, container, savedInstanceState)
-//        return inflater.inflate(R.layout.homescreen1_bs1, container, false)
-//    }
-//    //override fun getCornerRadius() = "16dp" //context!!.resources.getDimension(R.dimen.demo_sheet_rounded_corner)
-//    override fun getStatusBarColor() = Color.RED
-//}
-//
-//class ExtBottomSheetFragment : BaseFragment() {
-//
-//    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-//        super.onCreateView(inflater, container, savedInstanceState)
-//        return inflater.inflate(R.layout.homescreen_1nsvbs, container, false)
-//    }
-//    //override fun getCornerRadius() = "16dp" //context!!.resources.getDimension(R.dimen.demo_sheet_rounded_corner)
-//    //override fun getStatusBarColor() = Color.RED
-//}
