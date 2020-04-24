@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:paddingBottom="32dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#19eeeeee">
+
+    <com.gigforce.app.modules.roster.RosterTopBar
+        android:id="@+id/top_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/day_times"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#19eeeeee"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/top_bar">
+
+    </androidx.recyclerview.widget.RecyclerView>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
