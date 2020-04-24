@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:minHeight="100dp"
+    android:id="@+id/upcoming_card"
+    app:cardBackgroundColor="#e94b81"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/gig_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Gig Title"
+            style="@style/BsHeadingBold22"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="16dp" />
+
+        <TextView
+            android:id="@+id/gig_timing"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Gig Timings"
+            android:layout_marginStart="32dp" />
+
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

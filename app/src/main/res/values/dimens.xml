@@ -20,4 +20,6 @@
     <dimen name="height_select_lang_item">56dp</dimen>
     <dimen name="border_width">1dp</dimen>
 
+    <dimen name="roster_item_height">48dp</dimen>
+
 </resources>

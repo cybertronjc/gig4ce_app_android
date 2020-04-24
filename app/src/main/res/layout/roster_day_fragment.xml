@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_tag"
     android:paddingBottom="32dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -15,17 +16,26 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/day_times"
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/nested_scroll_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#19eeeeee"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/top_bar">
+        <FrameLayout
+            android:id="@+id/temp_trial"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:id="@+id/day_times"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#19eeeeee"
+                android:orientation="vertical"
+                android:isScrollContainer="true">
+            </LinearLayout>
+        </FrameLayout>
 
-    </androidx.recyclerview.widget.RecyclerView>
-
-
-
+    </androidx.core.widget.NestedScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

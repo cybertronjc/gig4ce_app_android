@@ -10,6 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
         android:background="@color/white"
         android:orientation="vertical">
 
@@ -36,6 +37,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:minWidth="100dp"
+                style="@style/BsHeadingBold12"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@id/back_button"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -45,6 +47,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
+                style="@style/BsHeadingBold12"
                 android:text="Available"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/available_toggle"
@@ -83,6 +86,7 @@
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="8dp"
                 android:text="Day"
+                style="@style/LipstickCardBottom"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -91,6 +95,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Date"
+                style="@style/LipstickCardBottom"
                 app:layout_constraintEnd_toEndOf="@id/day_text"
                 app:layout_constraintStart_toStartOf="@id/day_text"
                 app:layout_constraintTop_toBottomOf="@id/day_text" />
