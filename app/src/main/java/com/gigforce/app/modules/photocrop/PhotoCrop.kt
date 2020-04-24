@@ -214,7 +214,7 @@ class PhotoCrop : AppCompatActivity(),
                         if (faces.size > 0) {
                             Toast.makeText(
                                 this,
-                                "Face detected, successfully updated your profile pic" + faces[0].boundingBox.toString(),
+                                "Successfully uploaded the selfie" + faces[0].boundingBox.toString(),
                                 Toast.LENGTH_LONG
                             ).show()
                             upload(imageUriResultCrop, baos.toByteArray(),CLOUD_OUTPUT_FOLDER)
@@ -222,7 +222,7 @@ class PhotoCrop : AppCompatActivity(),
                         } else {
                             Toast.makeText(
                                 this,
-                                "No face detected. Please re-upload your selfie.",
+                                "Something seems off. Please take a smart selfie with good lights.",
                                 Toast.LENGTH_LONG
                             ).show()
                         }
