@@ -7,7 +7,7 @@ class AddressModel(
     var secondLine:String="",
     var state:String=""
 ) {
-    var currentAddress:String = "current"
+    var currentAddress = "current"
     var permanentAddress:String = "home"
     fun isEmpty():Boolean{
         return city=="" && firstLine=="" && pincode=="" && secondLine=="" && state==""

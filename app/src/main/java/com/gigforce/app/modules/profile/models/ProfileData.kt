@@ -20,7 +20,7 @@ data class ProfileData(
     var connections: Int = 0,
     var rating: Rating? = null,
     var tasksDone: Int = 0,
-    var address: Map<String,AddressModel> = mapOf(AddressModel().currentAddress to AddressModel(),AddressModel().permanentAddress to AddressModel())
+    var address:AddressFirestoreModel = AddressFirestoreModel()
 
 ) {
 

@@ -1,11 +1,14 @@
 package com.gigforce.app.modules.preferences
 
+import android.location.Location
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.gigforce.app.R
+import com.gigforce.app.modules.preferences.location.models.LocationPreferenceModel
 import com.gigforce.app.modules.profile.models.AddressModel
 import com.gigforce.app.modules.preferences.prefdatamodel.PreferencesDataModel
 import com.gigforce.app.modules.profile.ProfileFirebaseRepository
+import com.gigforce.app.modules.profile.models.AddressFirestoreModel
 import com.gigforce.app.modules.profile.models.ProfileData
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.EventListener
@@ -52,15 +55,7 @@ class SharedPreferenceViewModel : ViewModel() {
             )
         })
 
-        profileRepository.getDBCollection().addSnapshotListener(EventListener<DocumentSnapshot> {
-                value, e ->
-            if (e != null) {
-                return@EventListener
-            }
-            profileDataModel.postValue(
-                value!!.toObject(ProfileData::class.java)
-            )
-        })
+
 
     }
     fun setIsWeekdays(checked: Boolean) {
@@ -101,17 +96,35 @@ class SharedPreferenceViewModel : ViewModel() {
     }
 
     fun getCurrentAddress(): AddressModel? {
-        return profileDataModelObj.address[addressModelObj.currentAddress]
+        return profileDataModelObj.address.current
     }
 
     fun getPermanentAddress(): AddressModel? {
-        return profileDataModelObj.address[addressModelObj.permanentAddress]
+        return profileDataModelObj.address.home
     }
 
 
     fun setCurrentAddress(address: AddressModel){
-        var addressMap= profileDataModelObj.address.toMutableMap()
-        addressMap[addressModelObj.currentAddress]=address
-        profileRepository.setData(profileRepository.ADDRESS,addressMap)
+        var addressMap:AddressFirestoreModel= profileDataModelObj.address
+        addressMap.current=address
+        profileRepository.setData(addressMap)
+    }
+
+    fun setPermanentAddress(address: AddressModel){
+        var addressMap:AddressFirestoreModel= profileDataModelObj.address
+        addressMap.home=address
+        profileRepository.setData(addressMap)
+    }
+
+//    fun getLocations(): LocationPreferenceModel {
+//        return preferencesDataModelObj.locations
+//    }
+
+    fun setLocations(locations: LocationPreferenceModel){
+        preferencesRepository.setData(locations)
+    }
+
+    fun setWorkFromHome(boolean: Boolean){
+        preferencesRepository.setData("workFromHome",boolean)
     }
 }

@@ -16,7 +16,6 @@ class ProfileFirebaseRepository: BaseFirestoreDBRepository() {
     var tagsCollectionName = "Tags"
 
     var COLLECTION_NAME = "Profiles"
-    var ADDRESS = "address"
 
     override fun getCollectionName(): String {
         return COLLECTION_NAME
