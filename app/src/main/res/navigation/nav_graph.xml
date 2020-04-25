@@ -323,5 +323,30 @@
         android:id="@+id/addAboutMeBottomSheet"
         android:name="com.gigforce.app.modules.profile.AddAboutMeBottomSheet"
         android:label="AddAboutMeBottomSheet" />
+    <fragment
+        android:id="@+id/locationFragment"
+        android:name="com.gigforce.app.modules.preferences.location.LocationFragment"
+        android:label="LocationFragment" />
+    <fragment
+        android:id="@+id/preferredLocationFragment"
+        android:name="com.gigforce.app.modules.preferences.location.PreferredLocationFragment"
+        android:label="PreferredLocationFragment" />
+    <fragment
+        android:id="@+id/currentAddressEditFragment"
+        android:name="com.gigforce.app.modules.preferences.location.CurrentAddressEditFragment"
+        android:label="CurrentAddressEditFragment" />
+    <fragment
+        android:id="@+id/permanentAddressEditFragment"
+        android:name="com.gigforce.app.modules.preferences.location.PermanentAddressEditFragment"
+        android:label="PermanentAddressEditFragment" />
+    <fragment
+        android:id="@+id/currentAddressViewFragment"
+        android:name="com.gigforce.app.modules.preferences.location.CurrentAddressViewFragment"
+        android:label="CurrentAddressViewFragment" />
+    <fragment
+        android:id="@+id/permanentAddressViewFragment"
+        android:name="com.gigforce.app.modules.preferences.location.PermanentAddressViewFragment"
+        android:label="PermanentAddressViewFragment" />
+
 </navigation>
 

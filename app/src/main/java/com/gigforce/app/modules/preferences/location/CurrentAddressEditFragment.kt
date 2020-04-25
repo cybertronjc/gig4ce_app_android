@@ -67,7 +67,7 @@ class CurrentAddressEditFragment : BaseFragment() {
         switch1.isChecked = currentAddress!!.isSame(viewModel.getPermanentAddress()!!)
     }
 
-    private fun populateAddress(address: AddressModel){
+    private fun populateAddress(address: AddressModel) {
         editText1.setText(address.firstLine)
         editText2.setText(address.secondLine)
         editText3.setText(address.area)
@@ -78,7 +78,7 @@ class CurrentAddressEditFragment : BaseFragment() {
     }
 
     private fun convertAddressToString(address: AddressModel?): String {
-        Log.e("ADDRESS",address!!.firstLine)
+        Log.e("ADDRESS", address!!.firstLine)
         return if (address!!.isEmpty() || address == null)
             getString(R.string.add_address)
         else
@@ -86,17 +86,28 @@ class CurrentAddressEditFragment : BaseFragment() {
     }
 
     private fun listener() {
-        if(switch1.isEnabled) {
-            switch1.setOnClickListener { view ->
-                var isChecked = (view as Switch).isChecked
-                if (isChecked) viewModel.getPermanentAddress()?.let { populateAddress(it) }
-                else viewModel.getCurrentAddress()?.let { populateAddress(it) }
-            }
+        switch1.setOnClickListener { view ->
+            showToastLong("Edit Address to do this", 2)
         }
-        else {
-            switch1.setOnClickListener { view ->
-                showToast("Please add Permanent Address first")
-            }
+
+        button1.setOnClickListener {
+            showToastLong("Cancel", 2)
+            activity?.onBackPressed()
+        }
+
+        button2.setOnClickListener {
+            showToastLong("Saving", 2)
+            var editedAddress = AddressModel(
+                editText1.text.toString(),
+                editText2.text.toString(),
+                editText3.text.toString(),
+                editText4.text.toString(),
+                editText5.text.toString(),
+                editText6.text.toString()
+            )
+            Log.e("EDIT CURRENT", convertAddressToString(editedAddress))
+            viewModel.setCurrentAddress(editedAddress)
+            activity?.onBackPressed()
         }
     }
 }

@@ -88,10 +88,12 @@ class LocationFragment : BaseFragment() {
             else navigate(R.id.preferredLocationFragment)
         })
         textView49.setOnClickListener(View.OnClickListener {
-           navigate(R.id.permanentAddressEditFragment)
+            if (profileDataModel.address.home.isEmpty()) navigate(R.id.permanentAddressEditFragment)
+            else navigate(R.id.permanentAddressViewFragment)
         })
         textView55.setOnClickListener(View.OnClickListener {
-            navigate(R.id.currentAddressEditFragment)
+            if(profileDataModel.address.current.isEmpty()) navigate(R.id.currentAddressEditFragment)
+            else navigate(R.id.currentAddressViewFragment)
         })
         switch1.setOnClickListener { view ->
             var isChecked = (view as Switch).isChecked
