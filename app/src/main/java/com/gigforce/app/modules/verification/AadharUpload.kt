@@ -71,17 +71,6 @@ class AadhaarUpload: BaseFragment() {
         return layout
     }
 
-//    val callback: OnBackPressedCallback =
-//        object : OnBackPressedCallback(true /* enabled by default */) {
-//            override fun handleOnBackPressed() { // Handle the back button event
-//                onBackPressed()
-//            }
-//        }
-//
-//    fun onBackPressed() {
-//        findNavController().popBackStack()
-//    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         tvAadhaarNo.setOnClickListener { findNavController().navigate(R.id.uploadDropDown) }

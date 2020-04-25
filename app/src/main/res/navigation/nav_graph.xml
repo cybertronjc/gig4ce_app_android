@@ -194,6 +194,9 @@
         <action
             android:id="@+id/action_homeScreenFragment_to_profileFragment"
             app:destination="@id/profileFragment" />
+        <action
+            android:id="@+id/action_homeScreenFragment_to_rosterDayFragment"
+            app:destination="@id/rosterDayFragment" />
     </fragment>
     <fragment
         android:id="@+id/homeScreenIcons"
@@ -308,7 +311,7 @@
         android:label="EditCoverBottomSheet" />
     <fragment
         android:id="@+id/homeScreenNew"
-        android:name="com.gigforce.app.modules.homescreen.HomeScreenNew"
+        android:name="com.gigforce.app.modules.homescreen.mainhome.MainHomeScreen"
         android:label="home_screen_new_fragment"
         tools:layout="@layout/item_homescreen1" />
     <dialog
@@ -323,6 +326,10 @@
         android:id="@+id/addAboutMeBottomSheet"
         android:name="com.gigforce.app.modules.profile.AddAboutMeBottomSheet"
         android:label="AddAboutMeBottomSheet" />
+    <fragment
+        android:id="@+id/rosterDayFragment"
+        android:name="com.gigforce.app.modules.roster.RosterDayFragment"
+        android:label="RosterDayFragment" />
     <fragment
         android:id="@+id/locationFragment"
         android:name="com.gigforce.app.modules.preferences.location.LocationFragment"
@@ -347,6 +354,5 @@
         android:id="@+id/permanentAddressViewFragment"
         android:name="com.gigforce.app.modules.preferences.location.PermanentAddressViewFragment"
         android:label="PermanentAddressViewFragment" />
-
 </navigation>
 

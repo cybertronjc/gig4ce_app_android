@@ -75,6 +75,10 @@ class HomeScreenIcons : BaseFragment() {
             showConfirmationDialog()
 
         }
+        day_debug_button.setOnClickListener {
+            Toast.makeText(this.context, "CLICKED ON DAY DEBUG", Toast.LENGTH_LONG).show()
+            findNavController().navigate(R.id.rosterDayFragment)
+        }
     }
 
     private fun showConfirmationDialog() {

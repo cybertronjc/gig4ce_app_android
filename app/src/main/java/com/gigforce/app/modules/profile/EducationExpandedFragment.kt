@@ -49,13 +49,17 @@ class EducationExpandedFragment: Fragment() {
 
         viewModel.userProfileData.observe(this, Observer { profile ->
             var educationString: String = ""
-            var format = SimpleDateFormat("dd/MM/yyyy")
+            val format = SimpleDateFormat("dd/MM/yyyy")
 
-            var educations = profile.Education!!.sortedWith(compareBy {it.startYear!!})
-            for (education in educations) {
-                educationString += education.institution + "\n"
-                educationString += education.degree + " - " + education.course + "\n"
-                educationString += format.format(education.startYear!!) + " - " + format.format(education.endYear!!) + "\n\n"
+            profile.Education?.let {
+                val educations = it.sortedByDescending { education -> education.startYear!! }
+                for (education in educations) {
+                    educationString += education.institution + "\n"
+                    educationString += education.degree + " - " + education.course + "\n"
+                    educationString += format.format(education.startYear!!) + " - " + format.format(
+                        education.endYear!!
+                    ) + "\n\n"
+                }
             }
             layout.education_card.nextDestination = R.id.editEducationBottomSheet
             layout.education_card.cardTitle = "Education"
@@ -63,10 +67,10 @@ class EducationExpandedFragment: Fragment() {
             layout.education_card.cardBottom = "+ Add Education"
 
             var skillString: String = ""
-            for (skill in profile.Skill!!) {
-//                skillString += skill.category + "\n"
-//                skillString += skill.nameOfSkill + "\n\n"
-                skillString += skill + "\n\n"
+            profile.Skill?.let {
+                for (skill in it) {
+                    skillString += skill + "\n\n"
+                }
             }
             layout.skill_card.nextDestination = R.id.editSkillBottomSheet
             layout.skill_card.cardTitle = "Skills"
@@ -74,13 +78,15 @@ class EducationExpandedFragment: Fragment() {
             layout.skill_card.cardBottom = "+ Add Skill"
 
             var achievementString: String = ""
-            var achievements = profile.Achievement!!.sortedWith(compareBy {it.year})
-            for (achievement in achievements) {
-                achievementString += achievement.title + "\n"
-                achievementString += achievement.issuingAuthority + "\n"
-                if (achievement.location != "")
-                    achievementString += achievement.location + "\n"
-                achievementString += achievement.year + "\n\n"
+            profile.Achievement?.let {
+                val achievements = it.sortedByDescending { achievement -> achievement.year }
+                for (achievement in achievements) {
+                    achievementString += achievement.title + "\n"
+                    achievementString += achievement.issuingAuthority + "\n"
+                    if (achievement.location != "")
+                        achievementString += achievement.location + "\n"
+                    achievementString += achievement.year + "\n\n"
+                }
             }
             layout.achievement_card.nextDestination = R.id.editAchievementBottomSheet
             layout.achievement_card.cardTitle = "Achievement"
@@ -93,10 +99,6 @@ class EducationExpandedFragment: Fragment() {
             Log.d("ProfileFragment", profile.rating.toString())
         })
 
-        // back page navigation
-//        layout.education_expanded_back_button.setOnClickListener{
-//            this.findNavController().navigate(R.id.profileFragment)
-//        }
 
         // Navigate to bottom sheets
         layout.skill_card.card_bottom.setOnClickListener{

@@ -4,6 +4,7 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -141,4 +142,11 @@ abstract class BaseFragment : Fragment() {
         textView.setTextColor(ContextCompat.getColor(activity!!.applicationContext, color))
     }
 
+    fun setTextViewSize(textView:TextView,size:Float){
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP,size)
+    }
+
+    fun setViewBackgroundColor(view:View,color:Int){
+        view.setBackgroundColor(ContextCompat.getColor(activity!!.applicationContext, color))
+    }
 }

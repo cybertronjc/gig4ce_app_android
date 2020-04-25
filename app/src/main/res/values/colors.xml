@@ -16,7 +16,22 @@
     <color name="setting_bg">#f7f7f7</color>
     <color name="gray_color">#6d7278</color>
     <color name="shadow_color">#c8c7cc</color>
+
     <color name="lightGrey">#c7c7cc</color>
+
+    <color name="vertical_calendar_today">#a30674</color>
+
+    <color name="vertical_calendar_today_50">#50e94b81</color>
+    <color name="vertical_calendar_today_70">#70e94b81</color>
+
+    <color name="vertical_calendar_today_20">#20e94b81</color>
+    <color name="vertical_calendar_today_40">#40e94b81</color>
+
+    <color name="gray_color_calendar">#979797</color>
+    <color name="gray_color_calendar_previous_date_50">#50e9e9e9</color>
+
+
+
 
 
 
