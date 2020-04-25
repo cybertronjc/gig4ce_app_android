@@ -33,7 +33,7 @@ class RosterDayFragment: RosterBaseFragment() {
         var times = ArrayList<String>()
         times.addAll(listOf("00:00", "01:00", "02:00", "03:00", "04:00", "05:00", "06:00", "07:00", "08:00", "09:00",
             "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00",
-            "21:00", "22:00", "23:00", "24:00", "25:00"))
+            "21:00", "22:00", "23:00", "24:00"))
 
         var datetime = LocalDateTime.now()
         Log.d("DAY", datetime.toString() + " " + datetime.hour + " " + datetime.minute)
@@ -44,7 +44,11 @@ class RosterDayFragment: RosterBaseFragment() {
             widget.hour = index
             widget.time = time
 
-            if (index == datetime.hour) {
+            if (index == datetime.hour && datetime.minute < 30) {
+                widget.minute = datetime.minute
+                widget.isCurrentTime = true
+            }
+            if (index == datetime.hour + 1 && datetime.minute >= 30) {
                 widget.minute = datetime.minute
                 widget.isCurrentTime = true
             }

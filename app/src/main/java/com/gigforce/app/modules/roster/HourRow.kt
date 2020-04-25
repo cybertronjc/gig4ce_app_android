@@ -39,7 +39,12 @@ class HourRow: MaterialCardView {
             if (value) {
                 current_time_divider.visibility = View.VISIBLE
                 var p = current_time_divider.layoutParams as ViewGroup.MarginLayoutParams
-                p.setMargins(85.px, ((minute/60.0) * 48).toInt().px, 0, 0)
+                if (minute < 30) {
+                    p.setMargins(85.px, (0.5*70 + (minute / 60.0) * 70).toInt().px, 0, 0)
+                }
+                else if (minute >= 30) {
+                    p.setMargins(85.px, ((minute / 60.0) * 70).toInt().px, 0, 0)
+                }
                 current_time_divider.requestLayout()
             }
         }
