@@ -55,6 +55,15 @@ class SharedPreferenceViewModel : ViewModel() {
             )
         })
 
+        profileRepository.getDBCollection().addSnapshotListener(EventListener<DocumentSnapshot> {
+                value, e ->
+            if (e != null) {
+                return@EventListener
+            }
+            profileDataModel.postValue(
+                value!!.toObject(ProfileData::class.java)
+            )
+        })
 
 
     }

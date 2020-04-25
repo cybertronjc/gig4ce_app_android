@@ -21,7 +21,7 @@ class PermanentAddressEditFragment : BaseFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflateView(R.layout.location_settings_fragment, inflater, container)
+        return inflateView(R.layout.permanent_address_edit_fragment, inflater, container)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

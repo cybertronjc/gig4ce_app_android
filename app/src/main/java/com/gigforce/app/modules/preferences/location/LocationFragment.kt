@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Switch
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
@@ -14,8 +15,6 @@ import com.gigforce.app.modules.preferences.prefdatamodel.PreferencesDataModel
 import com.gigforce.app.modules.profile.models.AddressModel
 import com.gigforce.app.modules.profile.models.ProfileData
 import kotlinx.android.synthetic.main.location_settings_fragment.*
-import java.util.*
-import kotlin.collections.ArrayList
 
 class LocationFragment : BaseFragment() {
     companion object {
@@ -38,12 +37,21 @@ class LocationFragment : BaseFragment() {
         viewModel = ViewModelProviders.of(this).get(SharedPreferenceViewModel::class.java)
         initializeViews()
         listener()
-//        observePreferenceData()
+        observePreferenceData()
+        observeProfileData()
     }
 
     private fun observePreferenceData() {
         viewModel.preferenceDataModel.observe(this, Observer { preferenceData ->
             viewModel.setPreferenceDataModel(preferenceData)
+            initializeViews()
+        })
+
+    }
+
+    private fun observeProfileData() {
+        viewModel.profileDataModel.observe(this, Observer { profileData ->
+            viewModel.setProfileDataModel(profileData)
             initializeViews()
         })
 
@@ -73,13 +81,6 @@ class LocationFragment : BaseFragment() {
             address.firstLine + "," + address.secondLine + "," + address.city + "," + address.state + ". " + address.pincode
     }
 
-    private fun getArrayToString(selectedStrings: ArrayList<String>): String {
-        if (selectedStrings == null || selectedStrings.size == 0) return ""
-        var selectedStr = Arrays.toString(selectedStrings.toTypedArray())
-        selectedStr = selectedStr.substring(1, selectedStr.length - 1)
-        return selectedStr
-    }
-
     private fun listener() {
         addloc.setOnClickListener(View.OnClickListener {
             if (viewModel.getCurrentAddress()!!.isEmpty())
@@ -88,6 +89,9 @@ class LocationFragment : BaseFragment() {
         })
         textView49.setOnClickListener(View.OnClickListener {
            navigate(R.id.permanentAddressEditFragment)
+        })
+        textView55.setOnClickListener(View.OnClickListener {
+            navigate(R.id.currentAddressEditFragment)
         })
         switch1.setOnClickListener { view ->
             var isChecked = (view as Switch).isChecked
