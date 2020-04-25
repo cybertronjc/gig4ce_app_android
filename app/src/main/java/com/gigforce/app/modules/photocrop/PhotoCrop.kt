@@ -214,7 +214,7 @@ class PhotoCrop : AppCompatActivity(),
                         if (faces.size > 0) {
                             Toast.makeText(
                                 this,
-                                "Successfully uploaded the selfie" + faces[0].boundingBox.toString(),
+                                "Successfully uploaded the selfie",
                                 Toast.LENGTH_LONG
                             ).show()
                             upload(imageUriResultCrop, baos.toByteArray(),CLOUD_OUTPUT_FOLDER)
