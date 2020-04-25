@@ -86,28 +86,31 @@ class CurrentAddressEditFragment : BaseFragment() {
     }
 
     private fun listener() {
-        switch1.setOnClickListener { view ->
-            showToastLong("Edit Address to do this", 2)
-        }
+        if (switch1.isEnabled) {
+            switch1.setOnClickListener { view ->
+                var isChecked = (view as Switch).isChecked
+                if (isChecked) populateAddress(profileDataModel.address.home)
+                else populateAddress(profileDataModel.address.current)
+            }
 
-        button1.setOnClickListener {
-            showToastLong("Cancel", 2)
-            activity?.onBackPressed()
-        }
+            button1.setOnClickListener {
+                showToastLong("Cancel", 2)
+                activity?.onBackPressed()
+            }
 
-        button2.setOnClickListener {
-            showToastLong("Saving", 2)
-            var editedAddress = AddressModel(
-                editText1.text.toString(),
-                editText2.text.toString(),
-                editText3.text.toString(),
-                editText4.text.toString(),
-                editText5.text.toString(),
-                editText6.text.toString()
-            )
-            Log.e("EDIT CURRENT", convertAddressToString(editedAddress))
-            viewModel.setCurrentAddress(editedAddress)
-            activity?.onBackPressed()
+            button2.setOnClickListener {
+                showToastLong("Saving", 2)
+                var editedAddress = AddressModel(
+                    editText1.text.toString(),
+                    editText2.text.toString(),
+                    editText3.text.toString(),
+                    editText4.text.toString(),
+                    editText5.text.toString(),
+                    editText6.text.toString()
+                )
+                Log.e("EDIT CURRENT", convertAddressToString(editedAddress))
+                viewModel.setCurrentAddress(editedAddress)
+                activity?.onBackPressed()
+            }
         }
     }
-}
