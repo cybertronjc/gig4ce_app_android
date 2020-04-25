@@ -2,7 +2,6 @@
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/main_card"
-    android:elevation="2dp"
     app:cardBackgroundColor="#66e9e9e9"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -10,15 +9,13 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginEnd="8dp"
             android:layout_marginBottom="32dp"
             android:orientation="vertical"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent">
-            <LinearLayout
+            <RelativeLayout
                 android:id="@+id/gig_status_bar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -26,10 +23,41 @@
                 android:layout_marginBottom="8dp"
                 android:orientation="horizontal">
                 <ImageView
+                    android:id="@+id/gig_success_icon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_star" />
-            </LinearLayout>
+                    android:src="@drawable/ic_gig_success_icon"
+                    android:layout_alignParentStart="true" />
+                <ImageView
+                    android:id="@+id/star_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_star"
+                    android:layout_toEndOf="@id/gig_success_icon"
+                    android:layout_marginStart="16dp"/>
+                <TextView
+                    android:id="@+id/gig_rating"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="4.3"
+                    android:layout_toEndOf="@id/star_icon"
+                    android:layout_marginStart="8dp"/>
+                <ImageView
+                    android:id="@+id/rupee_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_rupee_symbol"
+                    android:background="@drawable/ic_pay_success_background"
+                    android:layout_toEndOf="@id/gig_rating"
+                    android:layout_marginStart="16dp" />
+                <TextView
+                    android:id="@+id/rupee_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1200"
+                    android:layout_toEndOf="@id/rupee_icon"
+                    android:layout_marginStart="8dp" />
+            </RelativeLayout>
 
             <View
                 android:id="@+id/divider3"
@@ -41,6 +69,7 @@
                 android:id="@+id/gig_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
                 style="@style/BsHeadingBold22"
                 android:text="GIG TITLE" />
 
@@ -48,6 +77,7 @@
                 android:id="@+id/gig_timing"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
                 android:text="gig timings" />
         </LinearLayout>
 

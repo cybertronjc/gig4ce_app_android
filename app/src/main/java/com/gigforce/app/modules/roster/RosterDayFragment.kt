@@ -63,7 +63,7 @@ class RosterDayFragment: RosterBaseFragment() {
         completedGigCard.id = View.generateViewId()
         temp_trial.addView(completedGigCard)
         var layoutparams = completedGigCard.layoutParams as FrameLayout.LayoutParams
-        layoutparams.setMargins(85.px, (completedGigCard.gigStartHour * itemHeight).px, 0, 0)
+        layoutparams.setMargins(85.px, (0.5*itemHeight + completedGigCard.gigStartHour * itemHeight).toInt().px, 0, 0)
         layoutparams.height = completedGigCard.cardHeight
         completedGigCard.layoutParams = layoutparams
 
@@ -77,7 +77,7 @@ class RosterDayFragment: RosterBaseFragment() {
         unavailableCard.id = View.generateViewId()
         temp_trial.addView(unavailableCard)
         layoutparams = unavailableCard.layoutParams as FrameLayout.LayoutParams
-        layoutparams.setMargins(85.px, (unavailableCard.unavailableStartHour * itemHeight).px, 0, 0)
+        layoutparams.setMargins(85.px, (0.5*itemHeight + unavailableCard.unavailableStartHour * itemHeight).toInt().px, 0, 0)
         layoutparams.height = unavailableCard.cardHeight
         unavailableCard.layoutParams = layoutparams
 
@@ -89,7 +89,7 @@ class RosterDayFragment: RosterBaseFragment() {
         upcomingCard.cardHeight = (itemHeight*(3.0F)).toInt().px
         temp_trial.addView(upcomingCard)
         layoutparams = upcomingCard.layoutParams as FrameLayout.LayoutParams
-        layoutparams.setMargins(85.px, (upcomingCard.startHour * itemHeight).px, 0, 0)
+        layoutparams.setMargins(85.px, (0.5*itemHeight + upcomingCard.startHour * itemHeight).toInt().px, 0, 0)
         layoutparams.height = upcomingCard.cardHeight
         upcomingCard.layoutParams = layoutparams
     }

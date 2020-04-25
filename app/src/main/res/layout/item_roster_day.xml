@@ -14,12 +14,12 @@
         <View
             android:id="@+id/current_time_divider"
             android:layout_width="match_parent"
-            android:layout_height="2dp"
+            android:layout_height="8dp"
             android:elevation="1dp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:background="@color/colorPrimary"
+            android:background="@drawable/bg_current_time"
             android:visibility="invisible"/>
 
         <LinearLayout
