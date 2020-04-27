@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.NavHostFragment.findNavController
@@ -21,6 +22,7 @@ import kotlinx.android.synthetic.main.bottom_home.view.*
 import kotlinx.android.synthetic.main.fragment_roaster.*
 import kotlinx.android.synthetic.main.item_grid_action.*
 import kotlinx.android.synthetic.main.item_grid_action.view.*
+import kotlinx.android.synthetic.main.layout_home_screen.*
 
 //import kotlinx.android.synthetic.main.fragment_roaster.buttonCP
 
@@ -47,6 +49,7 @@ class HomeScreenFragment() : Fragment() {
         button_tmp.setOnClickListener{
             findNavController().navigate(R.id.profileFragment)
         }
+
         //this.gridview_actions.adapter.getView(1,layout, layout.parent as ViewGroup?).img_icon.setOnClickListener { findNavController().navigate(R.id.profileFragment) }
         //layout.gridview_actions[1]?.findViewById<ImageView>(R.id.img_icon).setOnClickListener { findNavController().navigate(R.id.profileFragment) }
 //        Log.d(">>>>>>>>>>",this.gridview_actions[0].toString())
