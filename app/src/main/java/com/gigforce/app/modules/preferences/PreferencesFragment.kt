@@ -94,8 +94,10 @@ class PreferencesFragment : BaseFragment() {
     }
     private fun observePreferenceData() {
         viewModel.preferenceDataModel.observe(viewLifecycleOwner, Observer { preferenceData ->
-        viewModel.setPreferenceDataModel(preferenceData)
-            setPreferenecesList()
+            if(preferenceData!=null) {
+                viewModel.setPreferenceDataModel(preferenceData)
+                setPreferenecesList()
+            }
         })
     }
 

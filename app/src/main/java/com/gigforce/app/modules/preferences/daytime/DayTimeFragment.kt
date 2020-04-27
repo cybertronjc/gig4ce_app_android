@@ -54,18 +54,23 @@ class DayTimeFragment : BaseFragment() {
         switch1.setChecked(preferencesDataModel.isweekdaysenabled)
         switch2.setChecked(preferencesDataModel.isweekendenabled)
         textView57.text = getYesNoforWeekend()
+        var subTitle = ""
         var daysStr  = "day"
-        if(preferencesDataModel.selecteddays.size>1){
-            daysStr = "days"
+        if(preferencesDataModel.selecteddays.size==0){
+            subTitle = "None"
+        }else if(preferencesDataModel.selecteddays.size>1){
+            subTitle = preferencesDataModel.selecteddays.size.toString()+" days"
         }
-        textView51.text = preferencesDataModel.selecteddays.size.toString() + daysStr
+        else if(preferencesDataModel.selecteddays.size==1){
+            subTitle = preferencesDataModel.selecteddays.size.toString()+" day"
+
+        }
+        textView51.text = subTitle
 
         if(preferencesDataModel.isweekdaysenabled)
         setTextViewColor(textView50,R.color.black)
         else
             setTextViewColor(textView50,R.color.gray_color)
-
-
         if(preferencesDataModel.isweekendenabled)
             setTextViewColor(textView56,R.color.black)
         else
@@ -88,6 +93,10 @@ class DayTimeFragment : BaseFragment() {
         // weekday listener
         switch1.setOnClickListener{view->
             var isChecked = (view as Switch).isChecked
+            if(isChecked && preferencesDataModel.selecteddays.size == 0){
+                navigate(R.id.weekDayFragment)
+            }
+            else
             viewModel.setIsWeekdays(isChecked)
         }
         //weekend listener
