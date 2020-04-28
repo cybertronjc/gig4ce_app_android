@@ -6,19 +6,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cvloginwrong"
-        android:layout_width="match_parent"
-        android:layout_height="88dp"
-        app:cardBackgroundColor="#76e02020"
-        app:cardCornerRadius="15dp"
-        app:layout_constraintBottom_toBottomOf="@+id/textView23"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:visibility="invisible">
-        <androidx.constraintlayout.widget.ConstraintLayout android:layout_height="88dp"
-            android:layout_width="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cvloginwrong"
+            android:layout_height="wrap_content"
+            android:background="#76e02020"
+            android:layout_width="match_parent"
+            app:layout_constraintBottom_toBottomOf="@+id/textView23"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            >
 
             <ImageView
                 android:id="@+id/ivwronglogin"
@@ -42,9 +40,9 @@
                 app:layout_constraintHorizontal_bias="0.191"
                 app:layout_constraintStart_toEndOf="@+id/ivwronglogin"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:text="Invalid Mobile Number.Please re-enter valid Mobile Number." />
+                android:text="Invalid Mobile Number.Please re-enter valid Mobile Number." />
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.cardview.widget.CardView>
+
 
     <TextView
         android:id="@+id/textView23"

@@ -74,8 +74,11 @@ class Login: BaseFragment() {
             cvloginwrong.visibility = INVISIBLE
             textView23.visibility = VISIBLE
         }
+
         otp_mobile_number.setOnKeyListener(View.OnKeyListener { _, keyCode, event ->
-            if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP) {
+                cvloginwrong.visibility = INVISIBLE
+                textView23.visibility = VISIBLE
+            if (keyCode == KeyEvent.KEYCODE_ENTER){// && event.action == KeyEvent.ACTION_UP) {
                 login_button.isEnabled = false;
                 doActionOnClick()
             }
