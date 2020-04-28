@@ -2,6 +2,7 @@ package com.gigforce.app.modules.profile
 
 import android.util.Log
 import com.gigforce.app.core.base.basefirestore.BaseFirestoreDBRepository
+import com.gigforce.app.modules.preferences.SharedPreferenceViewModel
 import com.gigforce.app.modules.profile.models.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.*
@@ -134,4 +135,10 @@ class ProfileFirebaseRepository: BaseFirestoreDBRepository() {
             .document(uid).update("aboutMe", aboutMe)
     }
 
+    /**
+     * Don't delete while refactoring. Base Repo doesn't cover this function
+     */
+    fun setAddress(address: AddressFirestoreModel){
+        firebaseDB.collection(profileCollectionName).document(uid).update("address",address)
+    }
 }

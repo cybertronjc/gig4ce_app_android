@@ -78,7 +78,7 @@ class CurrentAddressEditFragment : BaseFragment() {
     }
 
     private fun convertAddressToString(address: AddressModel?): String {
-        Log.e("ADDRESS", address!!.firstLine)
+        Log.e("CURRENT ADDRESS", address!!.firstLine)
         return if (address!!.isEmpty() || address == null)
             getString(R.string.add_address)
         else
@@ -114,3 +114,4 @@ class CurrentAddressEditFragment : BaseFragment() {
             }
         }
     }
+}

@@ -4,12 +4,14 @@ import android.location.Location
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.gigforce.app.R
+import com.gigforce.app.modules.preferences.location.CitiesRepository
 import com.gigforce.app.modules.preferences.location.models.LocationPreferenceModel
 import com.gigforce.app.modules.profile.models.AddressModel
 import com.gigforce.app.modules.preferences.prefdatamodel.PreferencesDataModel
 import com.gigforce.app.modules.profile.ProfileFirebaseRepository
 import com.gigforce.app.modules.profile.models.AddressFirestoreModel
 import com.gigforce.app.modules.profile.models.ProfileData
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.EventListener
 
@@ -21,6 +23,7 @@ class SharedPreferenceViewModel : ViewModel() {
     }
     var preferencesRepository:PreferencesRepository = PreferencesRepository()
     var profileRepository:ProfileFirebaseRepository = ProfileFirebaseRepository()
+    var citiesRepository:CitiesRepository = CitiesRepository()
     var preferenceDataModel: MutableLiveData<PreferencesDataModel> = MutableLiveData<PreferencesDataModel>()
     var profileDataModel: MutableLiveData<ProfileData> = MutableLiveData<ProfileData>()
 
@@ -116,18 +119,18 @@ class SharedPreferenceViewModel : ViewModel() {
     fun setCurrentAddress(address: AddressModel){
         var addressMap:AddressFirestoreModel= profileDataModelObj.address
         addressMap.current=address
-        profileRepository.setData(addressMap)
+        profileRepository.setAddress(addressMap)
     }
 
     fun setPermanentAddress(address: AddressModel){
         var addressMap:AddressFirestoreModel= profileDataModelObj.address
         addressMap.home=address
-        profileRepository.setData(addressMap)
+        profileRepository.setAddress(addressMap)
     }
 
-//    fun getLocations(): LocationPreferenceModel {
-//        return preferencesDataModelObj.locations
-//    }
+    fun getLocations(): ArrayList<DocumentReference> {
+        return preferencesDataModelObj.locations
+    }
 
     fun setLocations(locations: LocationPreferenceModel){
         preferencesRepository.setData(locations)
@@ -135,5 +138,9 @@ class SharedPreferenceViewModel : ViewModel() {
 
     fun setWorkFromHome(boolean: Boolean){
         preferencesRepository.setData("workFromHome",boolean)
+    }
+
+    fun getCities(): ArrayList<String>{
+        return citiesRepository.getCities()
     }
 }

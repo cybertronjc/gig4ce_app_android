@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
@@ -61,8 +62,6 @@ class PermanentAddressEditFragment : BaseFragment() {
         var currentAddress = viewModel.getCurrentAddress()
         var permanentAddress = viewModel.getPermanentAddress()
         populateAddress(currentAddress!!)
-        switch1.isEnabled = !permanentAddress!!.isEmpty()
-        switch1.isChecked = currentAddress!!.isSame(viewModel.getPermanentAddress()!!)
     }
 
     private fun populateAddress(address: AddressModel) {
@@ -84,9 +83,6 @@ class PermanentAddressEditFragment : BaseFragment() {
     }
 
     private fun listener() {
-        switch1.setOnClickListener { view ->
-            showToastLong("Edit Address to do this", 2)
-        }
 
         button1.setOnClickListener {
             showToastLong("Cancel", 2)
@@ -104,7 +100,7 @@ class PermanentAddressEditFragment : BaseFragment() {
                 editText6.text.toString()
             )
             Log.e("EDIT CURRENT", convertAddressToString(editedAddress))
-            viewModel.setCurrentAddress(editedAddress)
+            viewModel.setPermanentAddress(editedAddress)
             activity?.onBackPressed()
         }
     }
