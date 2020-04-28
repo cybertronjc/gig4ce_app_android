@@ -5,13 +5,18 @@ import android.util.Log
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.INVISIBLE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
+import com.gigforce.app.core.validation.Regexes
+import com.gigforce.app.utils.setDarkStatusBarTheme
 import kotlinx.android.synthetic.main.mobile_number_input.*
 import kotlinx.android.synthetic.main.mobile_number_input.view.*
 import java.util.regex.Matcher
@@ -23,35 +28,23 @@ class Login: BaseFragment() {
     }
 
     lateinit var viewModel: LoginViewModel
+    lateinit var match: Matcher;
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        this.setDarkStatusBarTheme(false);
         viewModel = ViewModelProviders.of(this).get(LoginViewModel::class.java)
-//        layout = inflateView(R.layout.mobile_number_input, inflater, container)
-//        return layout
         return inflateView(R.layout.mobile_number_input, inflater, container)
     }
 
-    private val INDIAN_MOBILE_NUMBER =
-        Pattern.compile("^[+][0-9]{12}\$")
-
-    lateinit var match: Matcher;
-
     private fun validatePhoneNumber(phoneNumber:String): Boolean {
-        match = INDIAN_MOBILE_NUMBER.matcher(phoneNumber)
-        if (phoneNumber.isEmpty()) {
-            //PhoneNumberUtils.isGlobalPhoneNumber(phoneNumber)
-            // fieldPhoneNumber.error = "Invalid phone number."
+        match = Regexes.INDIAN_MOBILE_NUMBER.matcher(phoneNumber)
+        if (phoneNumber.isEmpty() || !match.matches() || !(android.util.Patterns.PHONE.matcher(phoneNumber).matches())) {
             showToast("Please enter valid phone number")
-            Log.d("LoginDebug>>>1>", phoneNumber)
-            return false
-        }
-        if(!match.matches()) {
-            Toast.makeText(this.context, "Please enter valid phone number", Toast.LENGTH_SHORT).show()
-            Log.d("LoginDebug>>2>>", phoneNumber)
+            Log.d("Login Mobile No: ", phoneNumber)
             return false
         }
         return true
@@ -60,9 +53,16 @@ class Login: BaseFragment() {
     private fun doActionOnClick(){
         var phoneNumber: String = "+91" + otp_mobile_number.text.toString();
         Log.d("LoginDebug", phoneNumber)
-        validatePhoneNumber(phoneNumber)
-        viewModel.phoneNo = phoneNumber;
-        viewModel.sendVerificationCode(phoneNumber)
+        if(!validatePhoneNumber(phoneNumber)){
+            // TODO make the error bar visible
+            cvloginwrong.visibility = VISIBLE
+            textView23.visibility = INVISIBLE
+            login_button.isEnabled = true;
+        }
+        else{
+            viewModel.phoneNo = phoneNumber;
+            viewModel.sendVerificationCode(phoneNumber)
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -70,34 +70,20 @@ class Login: BaseFragment() {
 
         viewModel.activity = this.activity!!
 
+        otp_mobile_number.setOnClickListener {
+            cvloginwrong.visibility = INVISIBLE
+            textView23.visibility = VISIBLE
+        }
         otp_mobile_number.setOnKeyListener(View.OnKeyListener { _, keyCode, event ->
             if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP) {
-                //Perform Code
+                login_button.isEnabled = false;
                 doActionOnClick()
             }
             false
         })
 
-        login_button.setOnClickListener{
+        login_button.setOnClickListener {
             doActionOnClick()
-        }
-
-//        layout.otp_mobile_number.setOnKeyListener(View.OnKeyListener { _, keyCode, event ->
-//            if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP) {
-//                //Perform Code
-//                var phoneNumber: String = "+91" + layout.otp_mobile_number.text.toString();
-//                Log.d("LoginDebug", phoneNumber)
-//                validatePhoneNumber(phoneNumber)
-//                viewModel.phoneNo = phoneNumber;
-//                viewModel.sendVerificationCode(phoneNumber)
-//            }
-//        }
-//        )
-
-        login_button.setOnClickListener{
-            validatePhoneNumber("+91" + otp_mobile_number.text.toString())
-            viewModel.phoneNo = "+91" + otp_mobile_number.text.toString()
-            viewModel.sendVerificationCode("+91" +otp_mobile_number.text.toString())
         }
 
         viewModel.liveState.observeForever {

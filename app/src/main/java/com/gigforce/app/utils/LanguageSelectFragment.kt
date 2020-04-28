@@ -88,7 +88,7 @@ class LanguageSelectFragment : BaseFragment() {
     }
 
     private fun navNext() {
-        navigateWithAllPopupStack(R.id.authFlowFragment)
+        navigateWithAllPopupStack(R.id.introSlidesFragment)
     }
 
     private fun updateResources(language: String) {

@@ -5,6 +5,45 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cvloginwrong"
+        android:layout_width="match_parent"
+        android:layout_height="88dp"
+        app:cardBackgroundColor="#76e02020"
+        app:cardCornerRadius="15dp"
+        app:layout_constraintBottom_toBottomOf="@+id/textView23"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="invisible">
+        <androidx.constraintlayout.widget.ConstraintLayout android:layout_height="88dp"
+            android:layout_width="match_parent">
+
+            <ImageView
+                android:id="@+id/ivwronglogin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="60dp"
+                android:layout_marginTop="30dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_warning" />
+
+            <TextView
+                android:id="@+id/tvwronglogin"
+                android:layout_width="251dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="26dp"
+                android:textColor="#e02020"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.191"
+                app:layout_constraintStart_toEndOf="@+id/ivwronglogin"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Invalid Mobile Number.Please re-enter valid Mobile Number." />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
 
     <TextView
         android:id="@+id/textView26"
