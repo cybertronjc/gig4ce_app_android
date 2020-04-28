@@ -8,7 +8,8 @@ abstract class OnIntroSlidesCompleted {
         //return R.id.loginFragment
         // calling language fragment first
         //return R.id.action_homeFragment_to_languageSelectFragment // why this is not working?
-        return R.id.homeFragment
+        //return R.id.homeFragment
+        return R.id.Login
     }
 
     abstract fun invoke()

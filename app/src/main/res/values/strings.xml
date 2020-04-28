@@ -127,8 +127,7 @@
 
     <!-- mobile otp -->
     <string name="otp_sign_in_up">Login</string>
-    <string name="otp_enter_mobile_num">Enter your mobile number\nfor OTP verification</string>
-    <string name="otp_will_send_otp">We will send you One Time Password (OTP)</string>
+    <string name="otp_enter_mobile_num">Enter your mobile number for\n     OTP verification</string>
     <string name="otp_verify_account">Verify Account</string>
     <string name="mobile_verified">Mobile verification success!</string>
     <string name="otp_notcorrect">Wrong Password !!</string>

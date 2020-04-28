@@ -32,6 +32,7 @@ class AuthFlowFragment : BaseFragment() {
         val lang = getSharedData(AppConstants.APP_LANGUAGE,null)
         val introComplete = getSharedData(AppConstants.INTRO_COMPLETE,null)
 
+
         // Select Language by Default
         if(lang == null) {
             navigate(R.id.languageSelectFragment, null, navOptionsPopToHome)
