@@ -50,10 +50,30 @@ class DayTimeFragment : BaseFragment() {
 
     private fun initializeViews() {
         preferencesDataModel = viewModel.getPreferenceDataModel()
-        imageView10.setOnClickListener(View.OnClickListener { activity?.onBackPressed() })
         switch1.setChecked(preferencesDataModel.isweekdaysenabled)
         switch2.setChecked(preferencesDataModel.isweekendenabled)
+        reflectForWeekdays()
+        reflectForWeekends()
+    }
+
+    private fun reflectForWeekends() {
         textView57.text = getYesNoforWeekend()
+        if(preferencesDataModel.isweekendenabled)
+            setTextViewColor(textView56,R.color.black)
+        else
+            setTextViewColor(textView56,R.color.gray_color)
+    }
+
+    private fun reflectForWeekdays() {
+        setWeekDaysText()
+        if(preferencesDataModel.isweekdaysenabled)
+            setTextViewColor(textView50,R.color.black)
+        else
+            setTextViewColor(textView50,R.color.gray_color)
+    }
+
+
+    private fun setWeekDaysText() {
         var subTitle = ""
         var daysStr  = "day"
         if(preferencesDataModel.selecteddays.size==0){
@@ -63,18 +83,8 @@ class DayTimeFragment : BaseFragment() {
         }
         else if(preferencesDataModel.selecteddays.size==1){
             subTitle = preferencesDataModel.selecteddays.size.toString()+" day"
-
         }
         textView51.text = subTitle
-
-        if(preferencesDataModel.isweekdaysenabled)
-        setTextViewColor(textView50,R.color.black)
-        else
-            setTextViewColor(textView50,R.color.gray_color)
-        if(preferencesDataModel.isweekendenabled)
-            setTextViewColor(textView56,R.color.black)
-        else
-            setTextViewColor(textView56,R.color.gray_color)
     }
 
 
@@ -90,11 +100,13 @@ class DayTimeFragment : BaseFragment() {
     private fun listener() {
         textView49.setOnClickListener(View.OnClickListener { navigate(R.id.weekDayFragment) })
         textView55.setOnClickListener(View.OnClickListener {  })
+        imageView10.setOnClickListener(View.OnClickListener { activity?.onBackPressed() })
         // weekday listener
         switch1.setOnClickListener{view->
             var isChecked = (view as Switch).isChecked
             if(isChecked && preferencesDataModel.selecteddays.size == 0){
                 navigate(R.id.weekDayFragment)
+                switch1.setChecked(false)
             }
             else
             viewModel.setIsWeekdays(isChecked)
@@ -104,9 +116,9 @@ class DayTimeFragment : BaseFragment() {
             var isChecked = (view as Switch).isChecked
             viewModel.setIsWeekend(isChecked)
         }
-        switch2.setOnCheckedChangeListener{ buttonView, isChecked ->
-            viewModel.setIsWeekend(isChecked)
-        }
+//        switch2.setOnCheckedChangeListener{ buttonView, isChecked ->
+//            viewModel.setIsWeekend(isChecked)
+//        }
     }
 
 }
