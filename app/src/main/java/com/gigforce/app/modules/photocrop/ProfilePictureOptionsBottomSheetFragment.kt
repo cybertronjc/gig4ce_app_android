@@ -62,6 +62,11 @@ class ProfilePictureOptionsBottomSheetFragment : BottomSheetDialogFragment() {
         }
     }
 
+    override fun onDetach() {
+        super.onDetach()
+
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         isShowing=true
