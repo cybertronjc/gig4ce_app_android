@@ -11,9 +11,14 @@ import com.google.android.material.chip.Chip
 
 abstract class ProfileBaseBottomSheetFragment: BottomSheetDialogFragment() {
     var mView: View? = null
+    var validation: ProfileValidation? = null
     var profileViewModel: ProfileViewModel? = null
     fun setViewModel(viewModel: ProfileViewModel) {
         profileViewModel = viewModel
+    }
+
+    init {
+        validation = ProfileValidation()
     }
 
     fun getViewModel(): ViewModel? {

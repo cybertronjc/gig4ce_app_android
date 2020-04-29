@@ -91,7 +91,7 @@ class ProfileFragment : Fragment() {
 
             Log.d("ProfileFragment", profile.isVerified.toString())
             if (profile.isVerified) {
-                layout.main_expanded_is_verified.setBackgroundColor(Color.parseColor("#00FF00"))
+                //layout.main_expanded_is_verified.setBackgroundColor(Color.parseColor("#00FF00"))
             }
 
             layout.bio.text = profile.bio

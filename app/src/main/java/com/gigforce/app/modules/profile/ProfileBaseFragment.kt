@@ -10,6 +10,11 @@ import com.google.android.material.chip.Chip
 abstract class ProfileBaseFragment: BaseFragment() {
 
     var profileViewModel: ProfileViewModel? = null
+    var validation: ProfileValidation? = null
+
+    init {
+        validation = ProfileValidation()
+    }
 
     fun setViewModel(viewModel: ProfileViewModel) {
         profileViewModel = viewModel
