@@ -69,6 +69,6 @@ class ProfilePictureOptionsBottomSheetFragment : BottomSheetDialogFragment() {
 
     override fun onDestroy() {
         super.onDestroy()
-        isShowing=true
+        isShowing=false
     }
 }

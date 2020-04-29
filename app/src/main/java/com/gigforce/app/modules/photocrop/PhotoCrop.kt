@@ -40,6 +40,7 @@ class PhotoCrop : AppCompatActivity(),
         var profilePictureOptionsBottomSheetFragment: ProfilePictureOptionsBottomSheetFragment =
             ProfilePictureOptionsBottomSheetFragment()
     }
+
     private val CODE_IMG_GALLERY: Int = 1
     private val EXTENSION: String = ".jpg"
     private var cropX: Float = 1F
@@ -416,7 +417,6 @@ class PhotoCrop : AppCompatActivity(),
      * Needs to be called whenever the bottom sheet needs to be recreated.
      */
     private fun showBottomSheet() {
-
         if (!profilePictureOptionsBottomSheetFragment.isShowing) {
             profilePictureOptionsBottomSheetFragment.show(
                 supportFragmentManager,
