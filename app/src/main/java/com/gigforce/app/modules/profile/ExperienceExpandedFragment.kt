@@ -34,8 +34,7 @@ class ExperienceExpandedFragment: Fragment() {
         storage = FirebaseStorage.getInstance()
         layout = inflater.inflate(R.layout.fragment_profile_experience_expanded, container, false)
 
-        layout.nav_bar.experience.setChipStrokeColorResource(R.color.colorPrimary)
-        layout.nav_bar.experience.setChipStrokeWidthResource(R.dimen.border_width)
+        layout.nav_bar.experience_active = true
         return layout
     }
 

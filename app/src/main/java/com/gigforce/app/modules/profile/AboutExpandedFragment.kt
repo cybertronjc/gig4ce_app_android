@@ -34,9 +34,7 @@ class AboutExpandedFragment: Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         layout = inflater.inflate(R.layout.fragment_profile_about_expanded, container, false)
-
-        layout.nav_bar.about_me.setChipStrokeColorResource(R.color.colorPrimary)
-        layout.nav_bar.about_me.setChipStrokeWidthResource(R.dimen.border_width)
+        layout.nav_bar.about_me_active = true
         return layout
     }
 

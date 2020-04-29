@@ -4,10 +4,10 @@
     android:height="209dp"
     android:viewportWidth="375"
     android:viewportHeight="209">
-  <path
-      android:pathData="M0,-4H375V203H0z"
-      android:fillColor="#000"
-      android:fillType="evenOdd"/>
+<!--  <path-->
+<!--      android:pathData="M0,-4H375V203H0z"-->
+<!--      android:fillColor="#FFF"-->
+<!--      android:fillType="evenOdd"/>-->
   <path
       android:pathData="M0,-4H375V203H0z"
       android:fillType="evenOdd">
@@ -15,7 +15,7 @@
       <gradient 
           android:startY="133.76057"
           android:startX="-19.11375"
-          android:endY="67.96355"
+          android:endY="87.96355"
           android:endX="411.31125"
           android:type="linear">
         <item android:offset="0" android:color="#FFE42C64"/>

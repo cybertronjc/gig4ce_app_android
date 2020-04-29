@@ -36,8 +36,7 @@ class EducationExpandedFragment: Fragment() {
         Log.d("DEBUG", "ENTERED Profile Education Expanded VIEW")
         layout = inflater.inflate(R.layout.fragment_profile_education_expanded, container, false)
 
-        layout.nav_bar.education.setChipStrokeColorResource(R.color.colorPrimary)
-        layout.nav_bar.education.setChipStrokeWidthResource(R.dimen.border_width)
+        layout.nav_bar.education_active = true
         return layout
     }
 
