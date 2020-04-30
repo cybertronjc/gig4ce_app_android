@@ -70,6 +70,8 @@ class Login: BaseFragment() {
 
         viewModel.activity = this.activity!!
 
+        cvloginwrong.visibility = INVISIBLE
+
         otp_mobile_number.setOnClickListener {
             cvloginwrong.visibility = INVISIBLE
             textView23.visibility = VISIBLE
