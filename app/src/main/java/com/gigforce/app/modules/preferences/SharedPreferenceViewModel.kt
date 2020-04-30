@@ -1,9 +1,12 @@
 package com.gigforce.app.modules.preferences
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.gigforce.app.R
 import com.gigforce.app.modules.preferences.prefdatamodel.PreferencesDataModel
+import com.gigforce.app.modules.profile.ProfileFirebaseRepository
+import com.gigforce.app.modules.profile.models.ProfileData
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.EventListener
 
@@ -11,6 +14,8 @@ class SharedPreferenceViewModel : ViewModel() {
     companion object {
         var preferencesDataModelObj: PreferencesDataModel = PreferencesDataModel()
     }
+    var profileFirebaseRepository = ProfileFirebaseRepository()
+    var userProfileData: MutableLiveData<ProfileData> = MutableLiveData<ProfileData>()
     var preferencesRepository:PreferencesRepository = PreferencesRepository()
     var preferenceDataModel: MutableLiveData<PreferencesDataModel> = MutableLiveData<PreferencesDataModel>()
 
@@ -39,10 +44,27 @@ class SharedPreferenceViewModel : ViewModel() {
                 )
             }
         })
+
+        profileFirebaseRepository.getProfile().addSnapshotListener(EventListener<DocumentSnapshot> {
+                value, e ->
+            if (e != null) {
+                return@EventListener
+            }
+            if (value!!.data == null) {
+                profileFirebaseRepository.createEmptyProfile()
+            }
+            else {
+                userProfileData.postValue(
+                    value!!.toObject(ProfileData::class.java)
+                )
+            }
+        })
     }
+
     fun setIsWeekdays(checked: Boolean) {
         preferencesRepository.setData(preferencesRepository.WEEKDAYS,checked)
     }
+
     fun setIsWeekend(checked: Boolean){
         preferencesRepository.setData(preferencesRepository.WEEKEND,checked)
     }
@@ -68,6 +90,7 @@ class SharedPreferenceViewModel : ViewModel() {
         prefrencesItems.add(PreferencesScreenItem(R.drawable.ic_products,"Sign out",""))
         return prefrencesItems;
     }
+
     fun getDateTimeSubtitle():String{
         var subTitle = ""
         var daysStr  = "day"

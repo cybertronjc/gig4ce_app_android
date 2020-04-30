@@ -59,25 +59,26 @@ class PreferencesFragment : BaseFragment() {
         initializeViews()
         listener()
         observePreferenceData()
-        displayImage()
+        observeProfileData()
     }
 
-    private fun displayImage() {
-        if (imageName != null) {
+    private fun observeProfileData() {
+        viewModel.userProfileData.observe(this, Observer { profile ->
+            displayImage(profile.profileAvatarName)
+        })
+
+    }
+
+    private fun displayImage(profileImg:String) {
+        if(profileImg!=null && !profileImg.equals("")) {
             val profilePicRef: StorageReference =
-                storage.reference.child("profile_pics").child("profile_WtYyBGat7betMO9pbJkIuKRPZuc2_20200429_190639_.jpg")
+                storage.reference.child("profile_pics").child(profileImg)
             GlideApp.with(this.context!!)
                 .load(profilePicRef)
                 .apply(RequestOptions().circleCrop())
                 .into(profile_image)
         }
     }
-
-    var imageName: String = ""
-        set(value) {
-            field = value
-            displayImage()
-        }
 
     private fun listener() {
         imageView8.setOnClickListener(View.OnClickListener { activity?.onBackPressed() })
