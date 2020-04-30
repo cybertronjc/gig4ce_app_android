@@ -211,7 +211,7 @@
     <string name="document_picture">Image Option</string>
     <string name="edit_education">Edit Education</string>
     <string name="bio_name">Headline</string>
-    <string name="bio_hint_text">This Text will be shown in bio.</string>
+    <string name="bio_hint_text">Describe yourself in a line</string>
     <string name="add_tags">Add Tags</string>
     <!-- home screen new -->
     <string name="hs_rv_title">Dunzo Deliveries </string>
