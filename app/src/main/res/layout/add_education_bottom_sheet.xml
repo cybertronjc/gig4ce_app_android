@@ -63,6 +63,7 @@
                 android:ems="10"
                 android:focusable="false"
                 android:layout_weight="1"
+                android:drawableEnd="@drawable/ic_calendar"
                 android:hint="@string/add_education_sheet_start_year"
                 android:inputType="date" />
 
@@ -73,6 +74,7 @@
                 android:layout_weight="1"
                 android:ems="10"
                 android:focusable="false"
+                android:drawableEnd="@drawable/ic_calendar"
                 android:hint="@string/add_education_sheet_end_year"
                 android:inputType="date" />
         </LinearLayout>

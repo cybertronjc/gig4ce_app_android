@@ -28,20 +28,37 @@ class ProfileCardBackground: CardView {
             card_title.text = value
         }
 
+    var hasContentTitles: Boolean = true
+        set(value) {
+            field = value
+        }
+
     var cardContent: String = ""
         set(value) {
             field=value
             val viewgroup = card_content
             for ((location, item) in value.split("\n\n").withIndex()) {
-                if (item.toString() == this.context!!.getString(R.string.empty_about_me_text)) {
+                if (item == this.context!!.getString(R.string.empty_about_me_text)) {
                     val widget = TextView(this.context!!)
                     widget.text = item
                     viewgroup.addView(widget)
                     break
                 }
-                if (item.toString() != "") {
+                if (item != "") {
                     val widget = CardRow(this.context!!)
-                    widget.rowContent = item
+                    if (hasContentTitles) {
+                        widget.rowContent = ""
+                        for ((idx, it) in item.split('\n').withIndex()) {
+                            if (idx == 0)
+                                widget.rowTitle = it
+                            else
+                                widget.rowContent += it + "\n"
+                        }
+                    }
+                    else {
+                        widget.rowContent = item
+                    }
+
                     widget.rowLocation = location.toString()
 
                     var bundle = Bundle()

@@ -15,6 +15,12 @@ class CardRow: LinearLayout {
         View.inflate(context, R.layout.card_row, this)
     }
 
+    var rowTitle: String = ""
+        set(value) {
+            field = value
+            row_title.text = value
+        }
+
     var rowContent: String = ""
         set(value) {
             field = value

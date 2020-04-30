@@ -47,6 +47,7 @@ class AboutExpandedFragment: Fragment() {
 
         viewModel.userProfileData.observe(this, Observer { profile ->
             layout.bio_card.isBottomRemoved = profile.aboutMe.isNotEmpty()
+            layout.bio_card.hasContentTitles = false
             layout.bio_card.nextDestination = R.id.addAboutMeBottomSheet
             layout.bio_card.cardTitle = "Bio"
             layout.bio_card.cardContent = if (profile.aboutMe != "") profile.aboutMe
@@ -75,6 +76,7 @@ class AboutExpandedFragment: Fragment() {
                     contactString += "email: " + contact.email + "\n\n"
                 }
             }
+            layout.contact_card.hasContentTitles = false
             layout.contact_card.cardTitle = "Contact"
             layout.contact_card.cardContent = contactString
             layout.contact_card.cardBottom = "Add Contact"
