@@ -5,20 +5,15 @@ import android.os.CountDownTimer
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import android.widget.Toast
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.modules.auth.ui.main.LoginViewModel.Companion.STATE_SIGNIN_FAILED
 import com.gigforce.app.modules.auth.ui.main.LoginViewModel.Companion.STATE_SIGNIN_SUCCESS
-import com.google.firebase.auth.PhoneAuthProvider
 import kotlinx.android.synthetic.main.otp_verification.*
 import kotlinx.android.synthetic.main.otp_verification.view.*
-import kotlinx.android.synthetic.main.otp_verification.view.cvloginwrong
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
@@ -75,31 +70,37 @@ class VerifyOTP: BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        layout?.cvotpwrong?.visibility = View.INVISIBLE;
         txt_otp.setOnClickListener{
-            cvloginwrong.visibility = View.INVISIBLE
+            cvotpwrong.visibility = View.INVISIBLE
             textView26.visibility = View.VISIBLE
         }
         layout?.verify_otp_button?.setOnClickListener {
             //val otpIn = layout?.otp_string.text;
             val otpIn = layout?.txt_otp?.text
             match = OTP_NUMBER.matcher(otpIn)
+            textView26.visibility = View.VISIBLE
+            layout?.cvotpwrong?.visibility = View.INVISIBLE;
             if(match.matches()){
                 viewModel.verifyPhoneNumberWithCode(otpIn.toString())
                 // wrong otp entered
             if (viewModel.liveState.value?.equals(STATE_SIGNIN_FAILED)!!) {
                 //layout?.otpnotcorrect.visibility = View.VISIBLE
-                cvloginwrong.visibility = View.VISIBLE
+                cvotpwrong.visibility = View.VISIBLE
                 textView26.visibility = View.INVISIBLE
-                layout?.otpnotcorrect?.text = "Wrong Password !!";
+                //layout?.otpnotcorrect?.text = "Wrong Password !!";
+                layout?.cvotpwrong?.visibility = View.VISIBLE;
             }
                 // correct otp entered
             if (viewModel.liveState.value?.equals(STATE_SIGNIN_SUCCESS)!!) {
-                findNavController().navigate(R.id.onOTPSuccess)
+                navigate(R.id.onOTPSuccess)
             }
             }
             else {
-                layout?.otpnotcorrect?.visibility = View.VISIBLE
-                layout?.otpnotcorrect?.text = "Wrong Password !!";
+                //layout?.otpnotcorrect?.visibility = View.VISIBLE
+                //layout?.otpnotcorrect?.text = "Wrong Password !!";
+                textView26.visibility = View.INVISIBLE
+                layout?.cvotpwrong?.visibility = View.VISIBLE;
             }
             //findNavController().navigate(R.id.homeFragment)
         }
