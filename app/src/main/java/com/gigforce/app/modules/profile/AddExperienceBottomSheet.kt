@@ -14,61 +14,42 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
 import com.gigforce.app.modules.profile.models.Experience
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import kotlinx.android.synthetic.main.add_experience_bottom_sheet.view.*
+import kotlinx.android.synthetic.main.add_experience_bottom_sheet.*
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-class AddExperienceBottomSheet: BottomSheetDialogFragment() {
+class AddExperienceBottomSheet: ProfileBaseBottomSheetFragment() {
     companion object {
         fun newInstance() = AddExperienceBottomSheet()
     }
 
-    private lateinit var viewModel: ProfileViewModel
-    private lateinit var layout: View
     var updates: ArrayList<Experience> = ArrayList()
     var employments: ArrayList<String> = ArrayList()
     var selectedEmployment: String = ""
     var selectedStartDate: String = ""
     var selectedEndDate: String = ""
+    var currentlyWorkHere: Boolean = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        layout = inflater.inflate(R.layout.add_experience_bottom_sheet, container, false)
-        return layout
+        inflateView(R.layout.add_experience_bottom_sheet, inflater, container)
+        profileViewModel = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
+        return getFragmentView()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setListeners()
+    }
 
-        viewModel = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
-
-        layout.add_experience_cancel.setOnClickListener{
-            this.findNavController().navigate(R.id.experienceExpandedFragment)
-        }
-
-        layout.add_experience_add_more.setOnClickListener{
-            if (validateExperience()) {
-                addNewExperience()
-                layout.add_experience_title.setText("")
-                layout.add_experience_company.setText("")
-                layout.add_experience_employment_type.setSelection(0)
-                layout.add_experience_location.setText("")
-                layout.add_experience_start_date.setText("")
-                layout.add_experience_end_date.setText("")
-            }
-            else {
-                Toast.makeText(this.context, "Invalid Entry", Toast.LENGTH_LONG).show()
-            }
-        }
-
+    private fun setListeners() {
         employments.addAll(listOf("--employment type--", "Full time", "internship", "Part time"))
         val employmentAdapter = ArrayAdapter(this.context!!, R.layout.simple_spinner_dropdown_item, employments)
-        val employmentSpinner = layout.add_experience_employment_type
+        val employmentSpinner = employment_type
         employmentSpinner.adapter = employmentAdapter
         employmentSpinner.onItemSelectedListener = object:
             AdapterView.OnItemSelectedListener {
@@ -87,40 +68,64 @@ class AddExperienceBottomSheet: BottomSheetDialogFragment() {
             }
         }
 
-
-        layout.add_experience_end_date.setOnClickListener {
-            var calendar = Calendar.getInstance(TimeZone.getDefault())
-
-            var dialog = DatePickerDialog(this.context!!, DatePickerDialog.OnDateSetListener{
+        var calendar = Calendar.getInstance(TimeZone.getDefault())
+        end_date.setOnClickListener {
+            DatePickerDialog(this.context!!, DatePickerDialog.OnDateSetListener{
                     datePicker: DatePicker, i: Int, i1: Int, i2: Int ->
                 Log.d("TEMP", "tmp date")
                 selectedEndDate = "$i2/${i1+1}/$i"
-                layout.add_experience_end_date.setText(selectedEndDate)
-            }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH))
-            dialog.show()
+                end_date.setText(selectedEndDate)
+            }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show()
         }
 
-        layout.add_experience_start_date.setOnClickListener {
-            var calendar = Calendar.getInstance(TimeZone.getDefault())
-
-            var dialog = DatePickerDialog(this.context!!, DatePickerDialog.OnDateSetListener{
+        start_date.setOnClickListener {
+            DatePickerDialog(this.context!!, DatePickerDialog.OnDateSetListener{
                     datePicker: DatePicker, i: Int, i1: Int, i2: Int ->
                 Log.d("TEMP", "tmp date")
                 selectedStartDate = "$i2/${i1+1}/$i"
-                layout.add_experience_start_date.setText(selectedStartDate)
-            }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH))
-            dialog.show()
+                start_date.setText(selectedStartDate)
+            }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show()
         }
 
-        layout.add_experience_save.setOnClickListener{
-            if (validateExperience()) {
-                addNewExperience()
-
-                viewModel.setProfileExperience(updates)
-                this.findNavController().navigate(R.id.experienceExpandedFragment)
+        currently_work_here.setOnCheckedChangeListener { currently_work_here, isChecked ->
+            Toast.makeText(context, "CHECKED", Toast.LENGTH_LONG).show()
+            currentlyWorkHere = isChecked
+            if (isChecked) {
+                end_date.setText("")
+                selectedEndDate = ""
+                end_date.isEnabled = false
             }
             else {
-                Toast.makeText(this.context, "Invalid Entry", Toast.LENGTH_LONG).show()
+                end_date.isEnabled = true
+            }
+        }
+
+        add_more.setOnClickListener{
+            if (validateExperience()) {
+                addNewExperience()
+                title.setText("")
+                company.setText("")
+                employment_type.setSelection(0)
+                location.setText("")
+                start_date.setText("")
+                end_date.setText("")
+                currently_work_here.isChecked = false
+                selectedStartDate = ""
+                selectedEndDate = ""
+                selectedEmployment = ""
+                currentlyWorkHere = false
+            }
+        }
+
+        cancel_button.setOnClickListener{
+            this.findNavController().navigate(R.id.experienceExpandedFragment)
+        }
+
+        save_button.setOnClickListener{
+            if (validateExperience()) {
+                addNewExperience()
+                profileViewModel!!.setProfileExperience(updates)
+                this.findNavController().navigate(R.id.experienceExpandedFragment)
             }
         }
 
@@ -129,31 +134,33 @@ class AddExperienceBottomSheet: BottomSheetDialogFragment() {
     private fun addNewExperience() {
         updates.add(
             Experience(
-                title = layout.add_experience_title.text.toString(),
-                company = layout.add_experience_company.text.toString(),
+                title = title.text.toString(),
+                company = company.text.toString(),
                 employmentType = selectedEmployment,
-                location = layout.add_experience_location.text.toString(),
+                location = location.text.toString(),
                 startDate = SimpleDateFormat("dd/MM/yyyy").parse(selectedStartDate),
-                endDate = SimpleDateFormat("dd/MM/yyyy").parse(selectedEndDate)
+                endDate = if (selectedEndDate.isNotEmpty()) SimpleDateFormat("dd/MM/yyyy").parse(selectedEndDate) else null,
+                currentExperience = currentlyWorkHere
             )
-
         )
+        Log.d("STATUS", "Add Experience to List Successful")
     }
 
     private fun validateExperience(): Boolean {
-        if (layout.add_experience_title.text.toString() == "")
+        if (validation!!.isValidExperience(
+                title,
+                company,
+                selectedEmployment,
+                location,
+                selectedStartDate,
+                selectedEndDate,
+                currentlyWorkHere
+            )) {
+            return true
+        }
+        else {
+            Toast.makeText(this.context, "Invalid Entry", Toast.LENGTH_LONG).show()
             return false
-        if (layout.add_experience_company.text.toString() == "")
-            return false
-        if (selectedEmployment == "")
-            return false
-        if (layout.add_experience_location.text.toString() == "")
-            return false
-        if (selectedStartDate == "")
-            return false
-        if (selectedEndDate == "")
-        if (selectedEmployment == "")
-            return false
-        return true
+        }
     }
 }

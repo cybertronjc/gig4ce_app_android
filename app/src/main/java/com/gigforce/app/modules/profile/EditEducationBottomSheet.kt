@@ -88,8 +88,9 @@ class EditEducationBottomSheet: ProfileBaseBottomSheetFragment() {
         }
 
         profileViewModel!!.userProfileData.observe(this, Observer { profile ->
-            if (profile!!.Education!!.size >= 0) {
-                education = profile!!.Education!![arrayLocation!!.toInt()]
+            profile.Education?.let {
+                val educations = it.sortedByDescending { education -> education.startYear!! }
+                education = educations[arrayLocation!!.toInt()]
                 institution.setText(education.institution)
                 course.setText(education.course)
                 selectedDegree = education.degree

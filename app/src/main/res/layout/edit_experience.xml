@@ -127,6 +127,26 @@
                     android:focusable="false" />
             </LinearLayout>
         </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1" />
+
+            <com.google.android.material.checkbox.MaterialCheckBox
+                android:id="@+id/currently_work_here"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:text="@string/add_experience_currently_working"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1" />
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"

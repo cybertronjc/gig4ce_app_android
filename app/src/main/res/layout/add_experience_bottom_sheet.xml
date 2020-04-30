@@ -18,10 +18,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="@string/add_experience_new_experience" />
+            android:text="@string/add_experience_new_experience"
+            style="@style/BsHeadingBold12"/>
 
         <EditText
-            android:id="@+id/add_experience_title"
+            android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -30,16 +31,16 @@
             android:inputType="textPersonName"/>
 
         <EditText
-            android:id="@+id/add_experience_company"
+            android:id="@+id/company"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:ems="10"
-            android:hint="Company Name"
+            android:hint="Company Name *"
             android:inputType="textPersonName" />
 
         <Spinner
-            android:id="@+id/add_experience_employment_type"
+            android:id="@+id/employment_type"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -49,7 +50,7 @@
             android:inputType="textPersonName" />
 
         <EditText
-            android:id="@+id/add_experience_location"
+            android:id="@+id/location"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -63,7 +64,7 @@
             android:layout_marginTop="16dp"
             android:orientation="horizontal">
             <EditText
-                android:id="@+id/add_experience_start_date"
+                android:id="@+id/start_date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
@@ -74,7 +75,7 @@
                 android:layout_weight="1" />
 
             <EditText
-                android:id="@+id/add_experience_end_date"
+                android:id="@+id/end_date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
@@ -84,9 +85,29 @@
                 android:layout_marginStart="8dp"
                 android:layout_weight="1" />
         </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1" />
+
+            <com.google.android.material.checkbox.MaterialCheckBox
+                android:id="@+id/currently_work_here"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:text="@string/add_experience_currently_working"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1" />
+        </LinearLayout>
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/add_experience_add_more"
+            android:id="@+id/add_more"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -101,7 +122,7 @@
             android:layout_marginTop="16dp"
             android:orientation="horizontal">
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/add_experience_cancel"
+                android:id="@+id/cancel_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -112,7 +133,7 @@
                 style="?attr/materialButtonOutlinedStyle"/>
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/add_experience_save"
+                android:id="@+id/save_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"

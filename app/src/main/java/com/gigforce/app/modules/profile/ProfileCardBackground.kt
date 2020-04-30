@@ -31,9 +31,8 @@ class ProfileCardBackground: CardView {
     var cardContent: String = ""
         set(value) {
             field=value
-            var location = 0
             val viewgroup = card_content
-            for (item in value.split("\n\n")) {
+            for ((location, item) in value.split("\n\n").withIndex()) {
                 if (item.toString() == this.context!!.getString(R.string.empty_about_me_text)) {
                     val widget = TextView(this.context!!)
                     widget.text = item
@@ -52,7 +51,6 @@ class ProfileCardBackground: CardView {
                         findNavController().navigate(nextDestination, bundle)
                     }
                     viewgroup.addView(widget)
-                    location += 1
                 }
             }
         }

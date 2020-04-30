@@ -1,6 +1,7 @@
 package com.gigforce.app.modules.profile
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -53,9 +54,12 @@ class ExperienceExpandedFragment: Fragment() {
                     experienceString += exp.company + "\n"
                     experienceString += exp.employmentType + "\n"
                     experienceString += exp.location + "\n"
-                    experienceString += format.format(exp.startDate!!) + "-" + format.format(exp.endDate!!) + "\n\n"
+                    experienceString += format.format(exp.startDate!!) + "-"
+                    experienceString += if(exp.endDate != null) format.format(exp.endDate!!) + "\n\n"
+                                        else "current" + "\n\n"
                 }
             }
+            Log.d("STATUS", "EXPERIENCE_EXPANDED")
             layout.experience_card.nextDestination = R.id.editExperienceBottomSheet
             layout.experience_card.cardTitle = "Experience"
             layout.experience_card.cardContent = experienceString
