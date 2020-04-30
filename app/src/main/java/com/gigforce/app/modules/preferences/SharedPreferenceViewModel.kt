@@ -31,9 +31,13 @@ class SharedPreferenceViewModel : ViewModel() {
             if (e != null) {
                 return@EventListener
             }
-            preferenceDataModel.postValue(
-                value!!.toObject(PreferencesDataModel::class.java)
-            )
+            if(value?.data==null){
+             preferencesRepository.setDefaultData(PreferencesDataModel())
+            }else {
+                preferenceDataModel.postValue(
+                    value!!.toObject(PreferencesDataModel::class.java)
+                )
+            }
         })
     }
     fun setIsWeekdays(checked: Boolean) {
