@@ -59,7 +59,7 @@ class ExperienceExpandedFragment: Fragment() {
             layout.experience_card.nextDestination = R.id.editExperienceBottomSheet
             layout.experience_card.cardTitle = "Experience"
             layout.experience_card.cardContent = experienceString
-            layout.experience_card.cardBottom = "+ Add Experience"
+            layout.experience_card.cardBottom = "Add Experience"
 
             layout.experience_top_profile.imageName = profile.profileAvatarName
             layout.experience_top_profile.userName = profile.name

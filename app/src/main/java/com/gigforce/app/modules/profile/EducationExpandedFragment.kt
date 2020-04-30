@@ -63,7 +63,7 @@ class EducationExpandedFragment: Fragment() {
             layout.education_card.nextDestination = R.id.editEducationBottomSheet
             layout.education_card.cardTitle = "Education"
             layout.education_card.cardContent = educationString
-            layout.education_card.cardBottom = "+ Add Education"
+            layout.education_card.cardBottom = "Add Education"
 
             var skillString: String = ""
             profile.Skill?.let {
@@ -74,7 +74,7 @@ class EducationExpandedFragment: Fragment() {
             layout.skill_card.nextDestination = R.id.editSkillBottomSheet
             layout.skill_card.cardTitle = "Skills"
             layout.skill_card.cardContent = skillString
-            layout.skill_card.cardBottom = "+ Add Skill"
+            layout.skill_card.cardBottom = "Add Skill"
 
             var achievementString: String = ""
             profile.Achievement?.let {
@@ -90,7 +90,7 @@ class EducationExpandedFragment: Fragment() {
             layout.achievement_card.nextDestination = R.id.editAchievementBottomSheet
             layout.achievement_card.cardTitle = "Achievement"
             layout.achievement_card.cardContent = achievementString
-            layout.achievement_card.cardBottom = "+ Add Achievement"
+            layout.achievement_card.cardBottom = "Add Achievement"
 
             layout.education_top_profile.userName = profile.name
             layout.education_top_profile.imageName = profile.profileAvatarName

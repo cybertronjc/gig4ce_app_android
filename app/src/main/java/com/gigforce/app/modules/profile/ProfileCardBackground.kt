@@ -1,19 +1,16 @@
 package com.gigforce.app.modules.profile
 
 import android.content.Context
-import android.graphics.Color
 import android.os.Bundle
 import android.util.AttributeSet
 import android.util.Log
 import android.view.View
-import android.widget.ImageButton
-import android.widget.LinearLayout
+import android.view.ViewGroup
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.navigation.findNavController
 import com.gigforce.app.R
 import kotlinx.android.synthetic.main.card_row.view.*
-import kotlinx.android.synthetic.main.fragment_profile_main_expanded.view.*
 import kotlinx.android.synthetic.main.profile_card_background.view.*
 
 class ProfileCardBackground: CardView {
@@ -75,8 +72,8 @@ class ProfileCardBackground: CardView {
         set(value) {
             field = value
             if (value) {
-                this.removeView(this.findViewById(R.id.card_bottom))
-                this.removeView(this.findViewById(R.id.bottom_divider))
+                (card_bottom.parent as ViewGroup).removeView(card_bottom)
+                (bottom_divider.parent as ViewGroup).removeView(bottom_divider)
             }
         }
 }

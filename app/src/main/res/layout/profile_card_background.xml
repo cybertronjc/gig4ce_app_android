@@ -48,15 +48,15 @@
             android:orientation="vertical" >
         </LinearLayout>
 
-        <TextView
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/card_bottom"
-            style="@style/LipstickCardBottom"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="14dp"
-            android:layout_marginTop="14dp"
             android:minWidth="30dp"
             android:minHeight="30dp"
+            android:textAlignment="textStart"
+            app:icon="@drawable/ic_add"
+            style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/bottom_divider"
             app:layout_constraintEnd_toEndOf="parent" />

@@ -46,13 +46,13 @@ class AboutExpandedFragment: Fragment() {
 
 
         viewModel.userProfileData.observe(this, Observer { profile ->
-            layout.bio_card.isBottomRemoved = profile.aboutMe != ""
+            layout.bio_card.isBottomRemoved = profile.aboutMe.isNotEmpty()
             layout.bio_card.nextDestination = R.id.addAboutMeBottomSheet
             layout.bio_card.cardTitle = "Bio"
             layout.bio_card.cardContent = if (profile.aboutMe != "") profile.aboutMe
                                           else this.context!!.getString(R.string.empty_about_me_text)
             layout.bio_card.cardBottom = if (profile.aboutMe != "") ""
-                                         else "+ Add Bio"
+                                         else "Add Bio"
 
             var languageString = ""
             profile.Language?.let {
@@ -66,7 +66,7 @@ class AboutExpandedFragment: Fragment() {
             layout.language_card.nextDestination = R.id.editLanguageBottomSheet
             layout.language_card.cardTitle = "Language"
             layout.language_card.cardContent = languageString
-            layout.language_card.cardBottom = "+ Add Language"
+            layout.language_card.cardBottom = "Add Language"
 
             var contactString = ""
             profile.Contact?.let {
@@ -77,7 +77,7 @@ class AboutExpandedFragment: Fragment() {
             }
             layout.contact_card.cardTitle = "Contact"
             layout.contact_card.cardContent = contactString
-            layout.contact_card.cardBottom = "+ Add Contact"
+            layout.contact_card.cardBottom = "Add Contact"
 
             if (layout.contact_card.edit_button != null) {
                 layout.contact_card.edit_button.setOnClickListener {
