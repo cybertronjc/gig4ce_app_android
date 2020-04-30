@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -13,7 +14,6 @@ import com.gigforce.app.R
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.fragment_profile_education_expanded.view.*
 import kotlinx.android.synthetic.main.fragment_profile_education_expanded.view.nav_bar
-import kotlinx.android.synthetic.main.fragment_profile_experience_expanded.view.*
 import kotlinx.android.synthetic.main.profile_card_background.view.*
 import kotlinx.android.synthetic.main.profile_nav_bar.view.*
 import java.text.SimpleDateFormat
@@ -28,6 +28,14 @@ class EducationExpandedFragment: Fragment() {
     lateinit var viewModel: ProfileViewModel
 
     private lateinit var layout: View
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        requireActivity().onBackPressedDispatcher.addCallback(this) {
+            findNavController().navigate(R.id.profileFragment)
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
