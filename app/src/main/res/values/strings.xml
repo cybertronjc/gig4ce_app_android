@@ -229,4 +229,5 @@
     <string name="edit_aboutme_text">Bio</string>
 
     <string name="empty_about_me_text">Tell us about yourself…</string>
+    <string name="about_me_hint">Tell us about yourself in detail</string>
 </resources>
