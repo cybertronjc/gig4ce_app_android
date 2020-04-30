@@ -78,7 +78,7 @@ class EditEducationBottomSheet: ProfileBaseBottomSheetFragment() {
                 position: Int,
                 id: Long
             ) {
-                selectedDegree = degrees[position]
+                selectedDegree = if(position == 0) "" else degrees[position]
                 Log.d("Spinner", "selected " + degrees[position])
             }
 
