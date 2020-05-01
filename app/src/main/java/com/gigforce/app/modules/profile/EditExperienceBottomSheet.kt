@@ -62,7 +62,7 @@ class EditExperienceBottomSheet: ProfileBaseBottomSheetFragment() {
     private fun initialize() {
         val format = SimpleDateFormat("dd/MM/yyyy", Locale.US)
         profileViewModel!!.userProfileData.observe(this, Observer { profile ->
-            profile.Experience?.let {
+            profile.experiences?.let {
                 val experiences = it.sortedByDescending { experience -> experience.startDate  }
                 experience = experiences[arrayLocation.toInt()]
                 title.setText(experience.title)
@@ -200,10 +200,10 @@ class EditExperienceBottomSheet: ProfileBaseBottomSheetFragment() {
             return true
         } else {
             if (currentlyWorkHere) {
-                showError(form_error, title, company, employment_type, location, start_date)
+                showError(form_error, title, company, location, start_date)
             }
             else {
-                showError(form_error, title, company, employment_type, location, start_date, end_date)
+                showError(form_error, title, company, location, start_date, end_date)
             }
             return false
         }

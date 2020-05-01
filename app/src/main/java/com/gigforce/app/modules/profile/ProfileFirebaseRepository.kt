@@ -26,46 +26,50 @@ class ProfileFirebaseRepository {
     }
 
     fun createEmptyProfile() {
-        firebaseDB.collection(profileCollectionName).document(uid).set(ProfileData())
+        firebaseDB.collection(profileCollectionName).document(uid).set(ProfileData(
+            contact = ArrayList(listOf(
+                Contact(phone = FirebaseAuth.getInstance().currentUser?.phoneNumber.toString(),
+                        email = "")))
+        ))
     }
 
     fun setProfileEducation(education: ArrayList<Education>) {
         for(ed in education) {
             firebaseDB.collection(profileCollectionName)
-                .document(uid).update("Education", FieldValue.arrayUnion(ed))
+                .document(uid).update("educations", FieldValue.arrayUnion(ed))
         }
     }
 
     fun removeProfileEducation(education: Education) {
-        firebaseDB.collection(profileCollectionName).document(uid).update("Education", FieldValue.arrayRemove(education))
+        firebaseDB.collection(profileCollectionName).document(uid).update("educations", FieldValue.arrayRemove(education))
     }
 
     fun setProfileSkill(skills: ArrayList<String>) {
         for(sk in skills) {
             firebaseDB.collection(profileCollectionName)
-                .document(uid).update("Skill", FieldValue.arrayUnion(sk))
+                .document(uid).update("skills", FieldValue.arrayUnion(sk))
         }
     }
 
     fun removeProfileSkill(skill: String) {
-        firebaseDB.collection(profileCollectionName).document(uid).update("Skill", FieldValue.arrayRemove(skill))
+        firebaseDB.collection(profileCollectionName).document(uid).update("skills", FieldValue.arrayRemove(skill))
     }
 
     fun setProfileAchievement(achievements: ArrayList<Achievement>) {
         for (ach in achievements) {
             firebaseDB.collection(profileCollectionName)
-                .document(uid).update("Achievement", FieldValue.arrayUnion(ach))
+                .document(uid).update("achievements", FieldValue.arrayUnion(ach))
         }
     }
 
     fun removeProfileAchievement(achievement: Achievement) {
-        firebaseDB.collection(profileCollectionName).document(uid).update("Achievement", FieldValue.arrayRemove(achievement))
+        firebaseDB.collection(profileCollectionName).document(uid).update("achievements", FieldValue.arrayRemove(achievement))
     }
 
     fun setProfileContact(contacts: ArrayList<Contact>) {
         for (contact in contacts) {
             firebaseDB.collection(profileCollectionName)
-                .document(uid).update("Contact", FieldValue.arrayUnion(contact))
+                .document(uid).update("contact", FieldValue.arrayUnion(contact))
                 .addOnSuccessListener {
                     Log.d("REPOSITORY", "contact added successfully!")
                 }
@@ -78,29 +82,29 @@ class ProfileFirebaseRepository {
     fun setProfileLanguage(languages: ArrayList<Language>) {
         for (lang in languages) {
             firebaseDB.collection(profileCollectionName)
-                .document(uid).update("Language", FieldValue.arrayUnion(lang))
+                .document(uid).update("languages", FieldValue.arrayUnion(lang))
         }
     }
 
     fun removeProfileLanguage(language: Language) {
-        firebaseDB.collection(profileCollectionName).document(uid).update("Language", FieldValue.arrayRemove(language))
+        firebaseDB.collection(profileCollectionName).document(uid).update("languages", FieldValue.arrayRemove(language))
     }
 
     fun setProfileExperience(experiences: ArrayList<Experience>) {
         for (exp in experiences) {
             firebaseDB.collection(profileCollectionName)
-                .document(uid).update("Experience", FieldValue.arrayUnion(exp))
+                .document(uid).update("experiences", FieldValue.arrayUnion(exp))
         }
     }
 
     fun removeProfileExperience(experience: Experience) {
-        firebaseDB.collection(profileCollectionName).document(uid).update("Experience", FieldValue.arrayRemove(experience))
+        firebaseDB.collection(profileCollectionName).document(uid).update("experiences", FieldValue.arrayRemove(experience))
     }
 
     fun setProfileTags(tags: ArrayList<String>) {
         for (tag in tags) {
             firebaseDB.collection(profileCollectionName)
-                .document(uid).update("Tags", FieldValue.arrayUnion(tag))
+                .document(uid).update("tags", FieldValue.arrayUnion(tag))
         }
     }
 
@@ -112,7 +116,7 @@ class ProfileFirebaseRepository {
     fun removeProfileTag(tags: ArrayList<String>) {
         for (tag in tags) {
             firebaseDB.collection(profileCollectionName)
-                .document(uid).update("Tags", FieldValue.arrayRemove(tag))
+                .document(uid).update("tags", FieldValue.arrayRemove(tag))
         }
     }
 

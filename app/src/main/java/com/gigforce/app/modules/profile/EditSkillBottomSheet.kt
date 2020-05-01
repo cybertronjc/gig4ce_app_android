@@ -77,7 +77,7 @@ class EditSkillBottomSheet: ProfileBaseBottomSheetFragment() {
         }
 
         profileViewModel!!.userProfileData.observe(this, Observer { profile ->
-            currentSkill = profile.Skill!![arrayLocation.toInt()]
+            currentSkill = profile.skills!![arrayLocation.toInt()]
             skill.setSelection(skills.indexOf(currentSkill))
         })
     }

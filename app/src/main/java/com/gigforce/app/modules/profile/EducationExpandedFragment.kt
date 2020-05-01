@@ -50,7 +50,7 @@ class EducationExpandedFragment: Fragment() {
             var educationString: String = ""
             val format = SimpleDateFormat("dd/MM/yyyy")
 
-            profile.Education?.let {
+            profile.educations?.let {
                 val educations = it.sortedByDescending { education -> education.startYear!! }
                 for (education in educations) {
                     educationString += education.institution + "\n"
@@ -66,7 +66,7 @@ class EducationExpandedFragment: Fragment() {
             layout.education_card.cardBottom = "Add Education"
 
             var skillString: String = ""
-            profile.Skill?.let {
+            profile.skills?.let {
                 for (skill in it) {
                     skillString += skill + "\n\n"
                 }
@@ -78,7 +78,7 @@ class EducationExpandedFragment: Fragment() {
             layout.skill_card.cardBottom = "Add Skill"
 
             var achievementString: String = ""
-            profile.Achievement?.let {
+            profile.achievements?.let {
                 val achievements = it.sortedByDescending { achievement -> achievement.year }
                 for (achievement in achievements) {
                     achievementString += achievement.title + "\n"

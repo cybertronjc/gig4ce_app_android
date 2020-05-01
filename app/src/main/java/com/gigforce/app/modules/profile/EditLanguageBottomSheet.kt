@@ -47,7 +47,7 @@ class EditLanguageBottomSheet: ProfileBaseBottomSheetFragment() {
 
     private fun initialize() {
         profileViewModel!!.userProfileData.observe(this, Observer { profile ->
-            profile.Language?.let {
+            profile.languages?.let {
                 val languages = it.sortedByDescending { language -> language.speakingSkill }
                 language = languages[arrayLocation.toInt()]
                 language_name.setText(language.name)

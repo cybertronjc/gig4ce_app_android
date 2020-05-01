@@ -97,15 +97,15 @@ class ProfileFragment : Fragment() {
             layout.bio.text = profile.bio
 
             layout.main_tags.removeAllViews()
-            profile.Tags?.let {
-                for (tag in profile.Tags!!) {
+            profile.tags?.let {
+                for (tag in it) {
                     layout.main_tags.addView(addChip(this.context!!, tag))
                 }
             }
 
             var mainAboutString = ""
             mainAboutString += profile.aboutMe + "\n\n"
-            profile.Language?.let {
+            profile.languages?.let {
                 val languages = it.sortedByDescending { language ->
                      language.speakingSkill
                 }
@@ -131,7 +131,7 @@ class ProfileFragment : Fragment() {
 
             val format = SimpleDateFormat("dd/MM/yyyy", Locale.US)
             var mainEducationString = ""
-            profile.Education?.let {
+            profile.educations?.let {
                 val educations = it.sortedByDescending {
                         education -> education.startYear
                 }
@@ -145,7 +145,7 @@ class ProfileFragment : Fragment() {
             }
 
             // TODO: Add a generic way for string formatting
-            profile.Skill?.let {
+            profile.skills?.let {
                 val skills = it
                 for ((index, value) in skills.withIndex()) {
                     if (index < 5) {
@@ -158,7 +158,7 @@ class ProfileFragment : Fragment() {
                 mainEducationString += "\n"
             }
 
-            profile.Achievement?.let {
+            profile.achievements?.let {
                 val achievements = it.sortedByDescending { achievement -> achievement.year }
                 for ((index, value) in achievements.withIndex()) {
                     mainEducationString += if (index == 0) "Achievements: " + value.title + "\n"
@@ -177,7 +177,7 @@ class ProfileFragment : Fragment() {
             }
 
             var mainExperienceString = ""
-            profile.Experience?.let {
+            profile.experiences?.let {
                 val experiences = it.sortedByDescending { experience -> experience.startDate }
                 if (experiences.isNotEmpty()) {
                     mainExperienceString += experiences[0].title + "\n"

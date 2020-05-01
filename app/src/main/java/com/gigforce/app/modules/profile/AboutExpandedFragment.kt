@@ -56,7 +56,7 @@ class AboutExpandedFragment: Fragment() {
                                          else "Add Bio"
 
             var languageString = ""
-            profile.Language?.let {
+            profile.languages?.let {
                 val languages = it.sortedByDescending { language -> language.speakingSkill }
                 for (lang in languages) {
                     languageString += lang.name + "\n"
@@ -70,7 +70,7 @@ class AboutExpandedFragment: Fragment() {
             layout.language_card.cardBottom = "Add Language"
 
             var contactString = ""
-            profile.Contact?.let {
+            profile.contact?.let {
                 for (contact in it) {
                     contactString += "phone: " + contact.phone + "\n"
                     contactString += "email: " + contact.email + "\n\n"

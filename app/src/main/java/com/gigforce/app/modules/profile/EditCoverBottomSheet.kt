@@ -54,9 +54,9 @@ class EditCoverBottomSheet(): ProfileBaseBottomSheetFragment() {
         profileViewModel!!.userProfileData.observe(this, Observer { profile ->
             bio.setText(profile.bio)
 
-            userTags = profile.Tags!!
+            userTags = profile.tags!!
 
-            for (tag in profile.Tags!!) {
+            for (tag in profile.tags!!) {
                 var chip = addCrossableChip(this.context!!, tag)
                 tags.addView(chip)
                 chip.setOnCloseIconClickListener {

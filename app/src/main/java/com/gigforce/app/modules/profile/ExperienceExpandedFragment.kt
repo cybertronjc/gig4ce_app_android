@@ -47,7 +47,7 @@ class ExperienceExpandedFragment: Fragment() {
         viewModel.userProfileData.observe(this, Observer { profile ->
             var experienceString = ""
             val format = SimpleDateFormat("dd/MM/yyyy", Locale.US)
-            profile.Experience?.let {
+            profile.experiences?.let {
                 val experiences = it.sortedByDescending { experience -> experience.startDate  }
                 for (exp in experiences) {
                     experienceString += exp.title + "\n"
