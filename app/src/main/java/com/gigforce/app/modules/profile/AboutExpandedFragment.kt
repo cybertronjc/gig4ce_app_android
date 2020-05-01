@@ -5,12 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.afollestad.materialdialogs.MaterialDialog
 import com.gigforce.app.R
-import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.card_row.view.*
 import kotlinx.android.synthetic.main.fragment_profile_about_expanded.*
 import kotlinx.android.synthetic.main.fragment_profile_about_expanded.view.*
@@ -21,7 +21,13 @@ class AboutExpandedFragment: ProfileBaseFragment() {
         fun newInstance() = AboutExpandedFragment()
     }
 
-    lateinit var storage: FirebaseStorage
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        requireActivity().onBackPressedDispatcher.addCallback(this) {
+            findNavController().navigate(R.id.profileFragment)
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,

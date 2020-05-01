@@ -5,12 +5,14 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.addCallback
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
 import kotlinx.android.synthetic.main.fragment_profile_education_expanded.*
 import kotlinx.android.synthetic.main.fragment_profile_education_expanded.view.*
+import kotlinx.android.synthetic.main.fragment_profile_education_expanded.view.nav_bar
 import kotlinx.android.synthetic.main.profile_card_background.view.*
 import java.text.SimpleDateFormat
 
@@ -18,6 +20,14 @@ class EducationExpandedFragment: ProfileBaseFragment() {
 
     companion object {
         fun newInstance() = EducationExpandedFragment()
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        requireActivity().onBackPressedDispatcher.addCallback(this) {
+            findNavController().navigate(R.id.profileFragment)
+        }
     }
 
     override fun onCreateView(

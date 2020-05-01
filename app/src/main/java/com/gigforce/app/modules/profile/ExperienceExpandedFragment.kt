@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.addCallback
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
@@ -18,6 +19,14 @@ class ExperienceExpandedFragment: ProfileBaseFragment() {
 
     companion object {
         fun newInstance() = ExperienceExpandedFragment()
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        requireActivity().onBackPressedDispatcher.addCallback(this) {
+            findNavController().navigate(R.id.profileFragment)
+        }
     }
 
     override fun onCreateView(
