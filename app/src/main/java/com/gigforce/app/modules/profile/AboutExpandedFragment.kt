@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -27,6 +28,14 @@ class AboutExpandedFragment: Fragment() {
     lateinit var storage: FirebaseStorage
     lateinit var layout: View
     lateinit var viewModel: ProfileViewModel
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        requireActivity().onBackPressedDispatcher.addCallback(this) {
+            findNavController().navigate(R.id.profileFragment)
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,

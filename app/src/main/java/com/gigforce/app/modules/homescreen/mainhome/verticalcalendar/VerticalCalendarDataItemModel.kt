@@ -88,6 +88,10 @@ class VerticalCalendarDataItemModel (
             calendar: Calendar,
         isPreviousDate: Boolean,
             isToday: Boolean): VerticalCalendarDataItemModel {
+            var isPreviousDateFound:Boolean = isPreviousDate
+            if(isToday){
+                isPreviousDateFound = false
+            }
             return VerticalCalendarDataItemModel(
                 subTitle,
                 countGigs,
@@ -97,7 +101,7 @@ class VerticalCalendarDataItemModel (
                     )
                 ),
                 isToday,
-                isPreviousDate,
+                isPreviousDateFound,
                 true,
                 false,
                 calendar.get(Calendar.YEAR),

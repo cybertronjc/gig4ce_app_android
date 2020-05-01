@@ -97,6 +97,7 @@ class MainHomeScreenViewModel : ViewModel() {
                             }
                         }
                         isGigFound = true
+                        break;
                     }
                 }
                 if (!isGigFound) {
