@@ -120,8 +120,9 @@ class MainHomeScreen : BaseFragment() {
 
                         setViewBackgroundColor(
                             getView(viewHolder, R.id.daydatecard),
-                            R.color.gray_color_calendar_previous_date_50
+                            R.color.gray_color_calendar_previous_date
                         )
+                        getView(viewHolder, R.id.daydatecard).alpha = 1.0F
                         getView(viewHolder, R.id.daydatecard).alpha = 0.5F
                         setTextViewSize(getTextView(viewHolder, R.id.title), 12F)
                         setTextViewSize(getTextView(viewHolder, R.id.day), 12F)
@@ -129,15 +130,42 @@ class MainHomeScreen : BaseFragment() {
                     } else if (obj!!.isToday) {
                         getView(viewHolder, R.id.calendar_month_cl).visibility = View.GONE
                         getView(viewHolder, R.id.calendar_detail_item_cl).visibility = View.VISIBLE
+                        getTextView(viewHolder, R.id.subtitle).visibility = View.VISIBLE
                         getTextView(viewHolder, R.id.title).text = obj?.title
                         getTextView(viewHolder, R.id.subtitle).text = obj?.subTitle
                         getTextView(viewHolder, R.id.day).text = obj?.day.toString()
                         getTextView(viewHolder, R.id.date).text = obj?.date.toString()
+                        setViewBackgroundColor(
+                            getView(viewHolder, R.id.daydatecard),
+                            R.color.vertical_calendar_today
+                        )
+                        setTextViewColor(
+                            getTextView(viewHolder, R.id.title),
+                            R.color.vertical_calendar_today
+                        )
+                        setTextViewColor(
+                            getTextView(viewHolder, R.id.subtitle),
+                            R.color.vertical_calendar_today
+                        )
+                        setTextViewColor(
+                            getTextView(viewHolder, R.id.day),
+                            R.color.white
+                        )
+                        setTextViewColor(
+                            getTextView(viewHolder, R.id.date),
+                            R.color.white
+                        )
+                        getView(viewHolder, R.id.daydatecard).alpha = 1.0F
+                        setTextViewSize(getTextView(viewHolder, R.id.title), 14F)
+                        setTextViewSize(getTextView(viewHolder, R.id.subtitle), 10F)
+                        setTextViewSize(getTextView(viewHolder, R.id.day), 12F)
+                        setTextViewSize(getTextView(viewHolder, R.id.date), 14F)
                     } else if (obj!!.isGigAssign) {
                         getView(viewHolder, R.id.calendar_month_cl).visibility = View.GONE
                         getView(viewHolder, R.id.calendar_detail_item_cl).visibility = View.VISIBLE
                         getTextView(viewHolder, R.id.title).text = obj?.title
                         getTextView(viewHolder, R.id.subtitle).text = obj?.subTitle
+                        getTextView(viewHolder, R.id.subtitle).visibility = View.VISIBLE
                         getTextView(viewHolder, R.id.day).text = obj?.day
                         getTextView(viewHolder, R.id.date).text = obj?.date.toString()
                         setTextViewColor(
@@ -158,8 +186,11 @@ class MainHomeScreen : BaseFragment() {
                         )
                         setViewBackgroundColor(
                             getView(viewHolder, R.id.daydatecard),
-                            R.color.vertical_calendar_today_70
+                            R.color.vertical_calendar_today1
                         )
+                        getView(viewHolder, R.id.daydatecard).alpha = 1.0F
+                        getView(viewHolder, R.id.daydatecard).alpha = 0.7F
+
                         setTextViewSize(getTextView(viewHolder, R.id.title), 12F)
                         setTextViewSize(getTextView(viewHolder, R.id.day), 12F)
                         setTextViewSize(getTextView(viewHolder, R.id.date), 12F)
@@ -184,8 +215,10 @@ class MainHomeScreen : BaseFragment() {
                         )
                         setViewBackgroundColor(
                             getView(viewHolder, R.id.daydatecard),
-                            R.color.vertical_calendar_today_40
+                            R.color.vertical_calendar_today1
                         )
+                        getView(viewHolder, R.id.daydatecard).alpha = 1.0F
+                        getView(viewHolder, R.id.daydatecard).alpha = 0.4F
                         setTextViewSize(getTextView(viewHolder, R.id.title), 12F)
                         setTextViewSize(getTextView(viewHolder, R.id.day), 12F)
                         setTextViewSize(getTextView(viewHolder, R.id.date), 12F)

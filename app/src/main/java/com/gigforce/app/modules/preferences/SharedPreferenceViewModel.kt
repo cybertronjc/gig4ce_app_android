@@ -58,18 +58,24 @@ class SharedPreferenceViewModel : ViewModel() {
         prefrencesItems.add(PreferencesScreenItem(R.drawable.ic_referal,"Day and Time",getDateTimeSubtitle()))
         prefrencesItems.add(PreferencesScreenItem(R.drawable.ic_settings,"Location","Work from home,Bangalore"))
         prefrencesItems.add(PreferencesScreenItem(R.drawable.ic_settings,"Earning","2000-2200rs"))
-        prefrencesItems.add(PreferencesScreenItem(0,"Others",""))
+        prefrencesItems.add(PreferencesScreenItem(0,"OTHERS",""))
         prefrencesItems.add(PreferencesScreenItem(R.drawable.ic_link_broken,"App Language","English"))
         prefrencesItems.add(PreferencesScreenItem(R.drawable.ic_broadcast,"Notification",""))
         prefrencesItems.add(PreferencesScreenItem(R.drawable.ic_products,"Sign out",""))
         return prefrencesItems;
     }
     fun getDateTimeSubtitle():String{
-        var subtitle = ""
-        if(preferencesDataModelObj.selecteddays.size>1)
-            subtitle = preferencesDataModelObj.selecteddays.size.toString()+" days"
-        else if(preferencesDataModelObj.selecteddays.size==1)
-            subtitle = preferencesDataModelObj.selecteddays.size.toString()+" day"
-        return subtitle
+        var subTitle = ""
+        var daysStr  = "day"
+        if(preferencesDataModelObj.selecteddays.size==0){
+            subTitle = "None"
+        }else if(preferencesDataModelObj.selecteddays.size>1){
+            subTitle = preferencesDataModelObj.selecteddays.size.toString()+" days"
+        }
+        else if(preferencesDataModelObj.selecteddays.size==1){
+            subTitle = preferencesDataModelObj.selecteddays.size.toString()+" day"
+
+        }
+        return subTitle
     }
 }
