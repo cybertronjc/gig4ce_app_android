@@ -69,7 +69,7 @@ class AddLanguageBottomSheetFragment: ProfileBaseBottomSheetFragment() {
                 name = add_language_name.text.toString(),
                 speakingSkill = add_language_speaking_level.progress.toString(),
                 writingSkill = add_language_writing_level.progress.toString(),
-                isMotherLanguage = mother_language.isChecked
+                isMotherLanguage = if(mother_language.isChecked) "true" else "false"
             )
         )
     }

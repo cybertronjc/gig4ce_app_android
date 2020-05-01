@@ -200,10 +200,10 @@ class EditExperienceBottomSheet: ProfileBaseBottomSheetFragment() {
             return true
         } else {
             if (currentlyWorkHere) {
-                showError(form_error, title, company, employment_type, location, start_date)
+                showError(form_error, title, company, location, start_date)
             }
             else {
-                showError(form_error, title, company, employment_type, location, start_date, end_date)
+                showError(form_error, title, company, location, start_date, end_date)
             }
             return false
         }

@@ -171,7 +171,7 @@ class EditEducationBottomSheet: ProfileBaseBottomSheetFragment() {
                 selectedEndDate))
             return true
         else {
-            showError(form_error, institution, course, degree, start_date, end_date)
+            showError(form_error, institution, course, start_date, end_date)
             return false
         }
     }
