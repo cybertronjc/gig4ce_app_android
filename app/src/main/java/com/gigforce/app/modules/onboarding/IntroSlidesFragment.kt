@@ -77,6 +77,7 @@ class IntroSlidesFragment : BaseFragment() {
             image.setImageResource(R.drawable.dottab_indicator_default)
         return image
     }
+
 }
 
 class IntroSlidesViewPagerAdapter(val viewpager:ViewPager2,
@@ -89,15 +90,16 @@ class IntroSlidesViewPagerAdapter(val viewpager:ViewPager2,
         var mainArtImageView:ImageView
         var titleTextView:TextView
         var subTitleTextView:TextView
-        var nextButton:Button
-
+        var nextButton:TextView
+        var right_arrow:ImageView
         var currentPosition:Int = -1
 
         init {
             mainArtImageView = this.itemView.findViewById<ImageView>(R.id.iv_main_art_video)
             titleTextView = this.itemView.findViewById<TextView>(R.id.tv_title)
             subTitleTextView = this.itemView.findViewById<TextView>(R.id.tv_subtitle)
-            nextButton = this.itemView.findViewById<Button>(R.id.btn_next)
+            nextButton = this.itemView.findViewById<TextView>(R.id.btn_next)
+            right_arrow = this.itemView.findViewById<ImageView>(R.id.right_arrow)
 
             nextButton.setOnClickListener {
                 if(currentPosition < 2)
@@ -120,7 +122,8 @@ class IntroSlidesViewPagerAdapter(val viewpager:ViewPager2,
                 titleTextView.setText(R.string.intro_slide1_title)
                 subTitleTextView.setText(R.string.intro_slide1_subtitle)
                 nextButton.setText("next")
-
+                nextButton.visibility = View.GONE
+                right_arrow.visibility = View.GONE
             }else if(position == 1){
                 GlideApp.with(itemView)
                     .load(R.drawable.ic_intro_slides2_mainart)
@@ -129,6 +132,9 @@ class IntroSlidesViewPagerAdapter(val viewpager:ViewPager2,
                 titleTextView.setText(R.string.intro_slide2_title)
                 subTitleTextView.setText(R.string.intro_slide2_subtitle)
                 nextButton.setText("next")
+                nextButton.visibility = View.GONE
+                right_arrow.visibility = View.GONE
+
 
             }else if(position == 2) {
                 GlideApp.with(itemView)
@@ -138,6 +144,9 @@ class IntroSlidesViewPagerAdapter(val viewpager:ViewPager2,
                 titleTextView.setText(R.string.intro_slide3_title)
                 subTitleTextView.setText(R.string.intro_slide3_subtitle)
                 nextButton.setText("Get Started")
+                nextButton.visibility = View.VISIBLE
+                right_arrow.visibility = View.VISIBLE
+
             }
         }
     }

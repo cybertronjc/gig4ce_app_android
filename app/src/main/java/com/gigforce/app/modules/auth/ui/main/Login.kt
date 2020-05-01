@@ -3,6 +3,7 @@ package com.gigforce.app.modules.auth.ui.main
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.os.Handler
 import android.telephony.SubscriptionInfo
 import android.telephony.SubscriptionManager
 import android.view.KeyEvent
@@ -13,9 +14,7 @@ import android.widget.ArrayAdapter
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
-import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
-import com.gigforce.app.core.permission.PermissionUtils
 import kotlinx.android.synthetic.main.login_frament.*
 import java.util.regex.Matcher
 import java.util.regex.Pattern
@@ -29,6 +28,7 @@ class Login: BaseFragment() {
             Manifest.permission.READ_PHONE_STATE,
             Manifest.permission.READ_PHONE_NUMBERS
         )
+        var MOBILENO_INPUT_CHANGED = false
     }
     lateinit var viewModel: LoginViewModel
     private val INDIAN_MOBILE_NUMBER =
@@ -73,8 +73,16 @@ class Login: BaseFragment() {
         })
 
         login_button.setOnClickListener{
+            login_button.setEnabled(false)
+
+            Handler().postDelayed(Runnable {
+                // This method will be executed once the timer is over
+                login_button.setEnabled(true)
+            }, 3000) // se
+
             doActionOnClick()
         }
+
     }
 
     private fun doActionOnClick(){
@@ -104,14 +112,16 @@ class Login: BaseFragment() {
             var deviceMobileNos  = ArrayList<String>()
 
             for (subscriptionInfo in subInfoList) {
-                deviceMobileNos.add(subscriptionInfo.number)
+                if(subscriptionInfo.number!=null) {
+                    var numbStr = subscriptionInfo.number
+                    if(subscriptionInfo.number.contains("+91"))
+                        numbStr = subscriptionInfo.number.substringAfter("+91")
+                    deviceMobileNos.add(numbStr)
+                }
             }
-            val adapter = ArrayAdapter<String>(
-                this.context!!, // Context
-                android.R.layout.simple_dropdown_item_1line, // Layout
-                deviceMobileNos // Array
-            )
-            otp_mobile_number.setAdapter(adapter)
+            otp_mobile_number.threshold = 0
+            otp_mobile_number.setAdapter(ArrayAdapter(activity!!, com.gigforce.app.R.layout.support_simple_spinner_dropdown_item, deviceMobileNos))
+
         }
         else{
             checkForAllPermissions()
@@ -119,7 +129,7 @@ class Login: BaseFragment() {
     }
 
     private fun checkForAllPermissions() {
-        PermissionUtils.checkForPermission(activity, PERMISSION_REQ_CODE, *permissionsRequired)
+        requestPermissions(permissionsRequired, PERMISSION_REQ_CODE)
     }
 
     override fun onRequestPermissionsResult(
@@ -128,11 +138,20 @@ class Login: BaseFragment() {
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == PERMISSION_REQ_CODE && PermissionUtils.permissionsGrantedCheck(grantResults)) {
+        if (requestCode == PERMISSION_REQ_CODE && isAllPermissionGranted(grantResults)) {
+            requestForDeviceMobileNumber()
             showToast("Permissions Granted")
         } else {
             checkForAllPermissions()
         }
+    }
+    fun isAllPermissionGranted(grantResults: IntArray):Boolean{
+        for(result in grantResults){
+            if(result != PackageManager.PERMISSION_GRANTED){
+                return false
+            }
+        }
+        return true
     }
 
 }

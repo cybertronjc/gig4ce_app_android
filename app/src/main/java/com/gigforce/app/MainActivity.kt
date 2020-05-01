@@ -5,7 +5,9 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
+import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.utils.popAllBackStates
+import sun.jvm.hotspot.utilities.IntArray
 
 
 class MainActivity : AppCompatActivity() {
@@ -29,5 +31,25 @@ class MainActivity : AppCompatActivity() {
     private fun checkForAllAuthentication() {
         navController.popAllBackStates()
         navController.navigate(R.id.authFlowFragment)
+    }
+
+    override fun onBackPressed() {
+        val fragmentList: List<*> = supportFragmentManager.fragments
+
+        var handled = false
+        for (f in fragmentList) {
+            if (f is BaseFragment) {
+                handled = f.onBackPressed()
+                if (handled) {
+                    break
+                }
+            }
+        }
+
+        if (!handled) {
+            super.onBackPressed()
+        }
+        super.onBackPressed()
+
     }
 }

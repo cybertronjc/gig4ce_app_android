@@ -46,7 +46,6 @@ class LoginViewModel() : ViewModel() {
 
         override fun onVerificationFailed(e: FirebaseException) {
             liveState.value = STATE_VERIFY_FAILED
-            Log.e(TAG, e.message, e)
         }
 
         override fun onCodeSent(
@@ -56,8 +55,6 @@ class LoginViewModel() : ViewModel() {
             super.onCodeSent(_verificationId, _token)
             verificationId = _verificationId
             token = _token
-            Log.d(TAG, "Code Sent Successfully")
-            Log.d("LoginViewModel", "intialize verificationId -> " + verificationId.toString())
             liveState.postValue(STATE_CODE_SENT)
         }
     }
@@ -65,7 +62,6 @@ class LoginViewModel() : ViewModel() {
 
 
     fun sendVerificationCode(phoneNumber: String) {
-        Log.d(TAG, "Sending phone number for verification>>>$phoneNumber")
         PhoneAuthProvider.getInstance().verifyPhoneNumber(
             phoneNumber, // Phone number to verify
             60, // Timeout duration
@@ -77,11 +73,7 @@ class LoginViewModel() : ViewModel() {
 
 
     fun verifyPhoneNumberWithCode(code: String) {
-        // [START verify_with_code]
-        Log.d("LoginViewModel", "code ->" + code.toString())
-        Log.d("LoginViewModel", "verificationId ->" + verificationId.toString())
         val credential = PhoneAuthProvider.getCredential(verificationId!!, code)
-        // [END verify_with_code]
         signInWithPhoneAuthCredential(credential)
     }
     private fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential) {
