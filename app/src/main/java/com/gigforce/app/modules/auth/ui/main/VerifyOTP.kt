@@ -27,7 +27,6 @@ class VerifyOTP: Fragment() {
     private var verificationId: String = ""
     lateinit var layout: View
     lateinit var viewModel: LoginViewModel
-    //private lateinit var mTimerTextView: View
     var otpresentcounter=0;
     private val OTP_NUMBER =
         Pattern.compile("[0-9]{6}\$")
@@ -37,21 +36,8 @@ class VerifyOTP: Fragment() {
         super.onCreate(savedInstanceState)
         arguments?.let {
             verificationId = it.getString("verificationId")!!
-      //      mTimerTextView = TextView(view?.context);
-            //object : CountDownTimer(30000, 1000) {
             counterStart();
         }
-    }
-
-    private fun counterStart(){
-        object : CountDownTimer(30000, 1000) {
-            override fun onTick(millisUntilFinished: Long) {
-                layout.otptimertv.text = (millisUntilFinished / 1000).toString() + " s"
-            }
-            override fun onFinish() {
-                layout.otptimertv.text = "Resend"
-            }
-        }.start()
     }
 
     override fun onCreateView(
@@ -65,7 +51,7 @@ class VerifyOTP: Fragment() {
         viewModel.verificationId = verificationId.toString()
         layout = inflater.inflate(R.layout.otp_verification, container, false)
         //TODO
-        layout.textView29.text = "We have sent the OTP to your " + viewModel.phoneNo?.toString()+"\nPlease enter the OTP";
+        layout.textView29.text = "We have sent the OTP to your " +". Please enter the OTP";
         return layout
     }
 
@@ -77,10 +63,12 @@ class VerifyOTP: Fragment() {
             match = OTP_NUMBER.matcher(otpIn)
             if(match.matches()){
                 viewModel.verifyPhoneNumberWithCode(otpIn.toString())
+
             if (viewModel.liveState.value?.equals(STATE_SIGNIN_FAILED)!!) {
                 layout.otpnotcorrect.visibility = View.VISIBLE
                 layout.otpnotcorrect.text = "Wrong Password !!";
-            }}
+            }
+            }
             else {
                 layout.otpnotcorrect.visibility = View.VISIBLE
                 layout.otpnotcorrect.text = "Wrong Password !!";
@@ -91,7 +79,6 @@ class VerifyOTP: Fragment() {
             if(layout.otptimertv.text == "Resend") {
                 otpresentcounter++;
                 Toast.makeText(layout.context, "OTP resent", Toast.LENGTH_SHORT).show()
-                viewModel.phoneNo?.let { it1 -> viewModel.sendVerificationCode(it1) }
                 counterStart();
             }
             else{
@@ -107,5 +94,16 @@ class VerifyOTP: Fragment() {
         layout.reenter_mobile.setOnClickListener {
             findNavController().navigate(R.id.Login)
         }
+    }
+
+    private fun counterStart(){
+        object : CountDownTimer(30000, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                layout.otptimertv.text = (millisUntilFinished / 1000).toString() + " s"
+            }
+            override fun onFinish() {
+                layout.otptimertv.text = "Resend"
+            }
+        }.start()
     }
 }

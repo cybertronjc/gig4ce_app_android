@@ -1,6 +1,7 @@
 package com.gigforce.app.core.base
 
 import android.content.SharedPreferences
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
@@ -40,8 +41,12 @@ abstract class BaseFragment : Fragment() {
         container: ViewGroup?
     ): View? {
         mView = inflater.inflate(resource, container, false)
+        getActivity()?.setRequestedOrientation(
+            ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         init()
+
         activate(mView)
+
         return mView
     }
     lateinit var SP: SharedPreferences
