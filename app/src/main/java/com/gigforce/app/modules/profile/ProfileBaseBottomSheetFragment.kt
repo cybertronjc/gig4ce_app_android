@@ -4,6 +4,8 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
+import android.widget.TextView
 import androidx.lifecycle.ViewModel
 import com.gigforce.app.R
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -57,5 +59,19 @@ abstract class ProfileBaseBottomSheetFragment: BottomSheetDialogFragment() {
         chip.setChipStrokeWidthResource(R.dimen.border_width)
         chip.setChipBackgroundColorResource(R.color.fui_transparent)
         return chip
+    }
+
+    fun showError(formError: TextView, vararg views: View?) {
+        formError.visibility = View.VISIBLE
+        for (view in views) {
+            (view as EditText).setHintTextColor(resources.getColor(R.color.colorError))
+        }
+    }
+
+    fun hideError(formError: TextView, vararg views: View?) {
+        formError.visibility = View.GONE
+        for (view in views) {
+            (view as EditText).setHintTextColor(resources.getColor(R.color.colorHint))
+        }
     }
 }

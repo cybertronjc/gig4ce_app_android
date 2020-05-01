@@ -145,6 +145,7 @@ class EditEducationBottomSheet: ProfileBaseBottomSheetFragment() {
             Log.d("EditEducation", "updating")
             if (validateEducation()) {
                 profileViewModel!!.removeProfileEducation(education)
+                profileViewModel!!.removeProfileEducation(education)
                 var newEducation = ArrayList<Education>()
                 newEducation.add(
                     Education(
@@ -170,7 +171,7 @@ class EditEducationBottomSheet: ProfileBaseBottomSheetFragment() {
                 selectedEndDate))
             return true
         else {
-            Toast.makeText(this.context, "Invalid Entry", Toast.LENGTH_SHORT).show()
+            showError(form_error, institution, course, degree, start_date, end_date)
             return false
         }
     }

@@ -40,7 +40,6 @@ class EditCoverBottomSheet(): ProfileBaseBottomSheetFragment() {
     }
 
     private fun initialize() {
-        var layout: View? = getFragmentView()
 
         profileViewModel!!.getAllTags()
         val autotextview: AutoCompleteTextView = add_tag_new_tag

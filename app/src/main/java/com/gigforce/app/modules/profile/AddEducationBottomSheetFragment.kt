@@ -6,22 +6,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.DatePicker
-import android.widget.Toast
+import android.widget.*
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
 import com.gigforce.app.modules.profile.models.Education
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import kotlinx.android.synthetic.main.add_achievement_bottom_sheet.view.*
 import kotlinx.android.synthetic.main.add_education_bottom_sheet.*
-import kotlinx.android.synthetic.main.add_education_bottom_sheet.view.*
-import kotlinx.android.synthetic.main.add_education_bottom_sheet.view.end_date
 import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -97,6 +88,7 @@ class AddEducationBottomSheetFragment: ProfileBaseBottomSheetFragment() {
 
         add_more_button.setOnClickListener{
             if (validateEducation()) {
+                hideError(form_error, institution_name, course_name, start_date, end_date)
                 addNewEducation()
                 institution_name.setText("")
                 course_name.setText("")
@@ -122,6 +114,7 @@ class AddEducationBottomSheetFragment: ProfileBaseBottomSheetFragment() {
     }
 
     private fun addNewEducation() {
+        hideError(form_error, institution_name, course_name, start_date, end_date)
         updates.add(Education(
             institution = institution_name.text.toString(),
             course = course_name.text.toString(),
@@ -140,7 +133,7 @@ class AddEducationBottomSheetFragment: ProfileBaseBottomSheetFragment() {
                 selectedEndDate))
             return true
         else {
-            Toast.makeText(this.context, "Invalid Entry", Toast.LENGTH_SHORT).show()
+            showError(form_error, institution_name, course_name, start_date, end_date)
             return false
         }
     }

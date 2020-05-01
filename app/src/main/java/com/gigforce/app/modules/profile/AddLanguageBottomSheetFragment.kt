@@ -10,15 +10,15 @@ import com.gigforce.app.R
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.android.synthetic.main.add_language_bottom_sheet.view.*
 import com.gigforce.app.modules.profile.models.Language
+import kotlinx.android.synthetic.main.add_language_bottom_sheet.*
+import kotlinx.android.synthetic.main.add_language_bottom_sheet.view.add_language_cancel
 
-class AddLanguageBottomSheetFragment: BottomSheetDialogFragment() {
+class AddLanguageBottomSheetFragment: ProfileBaseBottomSheetFragment() {
 
     companion object {
         fun newInstance() = AddLanguageBottomSheetFragment()
     }
 
-    lateinit var viewModel: ProfileViewModel
-    lateinit var layout: View
     var updates: ArrayList<Language> = ArrayList()
 
     override fun onCreateView(
@@ -26,44 +26,60 @@ class AddLanguageBottomSheetFragment: BottomSheetDialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        layout = inflater.inflate(R.layout.add_language_bottom_sheet, container, false)
-        return layout
+        inflateView(R.layout.add_language_bottom_sheet, inflater, container)
+        profileViewModel = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
+        return getFragmentView()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setListeners()
+    }
 
-        viewModel = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
-
-        layout.add_language_add_more.setOnClickListener{
+    private fun setListeners() {
+        add_language_add_more.setOnClickListener{
             addNewLanguage()
 
-            layout.add_language_name.setText("")
-            layout.add_language_speaking_level.progress = 0
-            layout.add_language_writing_level.progress = 0
+            add_language_name.setText("")
+            add_language_speaking_level.progress = 0
+            add_language_writing_level.progress = 0
         }
 
-        layout.add_language_save.setOnClickListener{
-            addNewLanguage()
+        mother_language.setOnCheckedChangeListener { mother_language, isChecked ->
+        }
 
-            viewModel.setProfileLanguage(updates)
+        add_language_cancel.setOnClickListener{
             findNavController().navigate(R.id.aboutExpandedFragment)
         }
 
-        layout.add_language_cancel.setOnClickListener{
-            findNavController().navigate(R.id.aboutExpandedFragment)
-        }
+        add_language_save.setOnClickListener{
+            if (validateLanguage()) {
+                addNewLanguage()
 
+                profileViewModel!!.setProfileLanguage(updates)
+                findNavController().navigate(R.id.aboutExpandedFragment)
+            }
+        }
     }
 
     private fun addNewLanguage() {
+        hideError(form_error, add_language_name)
         updates.add(
             Language(
-                name = layout.add_language_name.text.toString(),
-                speakingSkill = layout.add_language_speaking_level.progress.toString(),
-                writingSkill = layout.add_language_writing_level.progress.toString(),
-                isMotherLanguage = layout.mother_language.isChecked.toString()
+                name = add_language_name.text.toString(),
+                speakingSkill = add_language_speaking_level.progress.toString(),
+                writingSkill = add_language_writing_level.progress.toString(),
+                isMotherLanguage = mother_language.isChecked
             )
         )
+    }
+
+    private fun validateLanguage(): Boolean {
+        if (validation!!.isValidLanguage(add_language_name))
+            return true
+        else {
+            showError(form_error, add_language_name)
+            return false
+        }
     }
 }

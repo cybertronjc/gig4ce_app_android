@@ -77,8 +77,8 @@
 
     <!-- Add New Achievement Bottom Sheet -->
     <string name="add_achievement_sheet_new_achievement">New Achievement</string>
-    <string name="add_achievement_sheet_title">Title</string>
-    <string name="add_achievement_sheet_issuing_authority">Issuing Authority</string>
+    <string name="add_achievement_sheet_title">Title *</string>
+    <string name="add_achievement_sheet_issuing_authority">Issuing Authority *</string>
     <string name="add_achievement_sheet_location">Location</string>
     <string name="add_achievement_sheet_year">Year * (eg. 2011)</string>
 
@@ -104,7 +104,7 @@
 
     <!-- Add New Language Bottom Sheet -->
     <string name="add_language_new_language">New Language</string>
-    <string name="add_language_name">Name</string>
+    <string name="add_language_name">Name *</string>
     <string name="add_language_speaking_level">Speaking level</string>
     <string name="add_language_writing_level">Writing level</string>
 
@@ -229,4 +229,5 @@
     <string name="edit_aboutme_text">Bio</string>
 
     <string name="empty_about_me_text">Tell us about yourself…</string>
+    <string name="error_empty_mandatory_fields">* Please fill mandatory fields</string>
 </resources>

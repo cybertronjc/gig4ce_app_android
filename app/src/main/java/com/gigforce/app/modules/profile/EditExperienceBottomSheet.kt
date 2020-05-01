@@ -199,7 +199,12 @@ class EditExperienceBottomSheet: ProfileBaseBottomSheetFragment() {
         ) {
             return true
         } else {
-            Toast.makeText(this.context, "Invalid Entry", Toast.LENGTH_LONG).show()
+            if (currentlyWorkHere) {
+                showError(form_error, title, company, employment_type, location, start_date)
+            }
+            else {
+                showError(form_error, title, company, employment_type, location, start_date, end_date)
+            }
             return false
         }
     }
