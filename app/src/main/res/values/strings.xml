@@ -84,9 +84,9 @@
 
     <!-- Add New Education Bottom Sheet -->
     <string name="add_education_sheet_new_education">New Education</string>
-    <string name="add_education_sheet_institution">Institution</string>
-    <string name="add_education_sheet_course">Course</string>
-    <string name="add_education_sheet_degree">Degree</string>
+    <string name="add_education_sheet_institution">Institution *</string>
+    <string name="add_education_sheet_course">Course *</string>
+    <string name="add_education_sheet_degree">Degree *</string>
     <string name="add_education_sheet_start_year">Start Date *</string>
     <string name="add_education_sheet_end_year">End Date *</string>
 
@@ -139,12 +139,12 @@
 
     <!-- Add New Experience Bottom Sheet -->
     <string name="add_experience_new_experience">New Experience</string>
-    <string name="add_experience_title">Title</string>
-    <string name="add_experience_employment_type">Employment Type</string>
-    <string name="add_experience_location">Location</string>
-    <string name="add_experience_start_date">Start Date</string>
-    <string name="add_experience_end_date">End Date</string>
-    <string name="add_experience_currently_working">Currently Working Here</string>
+    <string name="add_experience_title">Role *</string>
+    <string name="add_experience_employment_type">Employment Type *</string>
+    <string name="add_experience_location">Location *</string>
+    <string name="add_experience_start_date">Start Date *</string>
+    <string name="add_experience_end_date">End Date *</string>
+    <string name="add_experience_currently_working">Currently Work Here</string>
 
     <!-- Generic strings -->
     <string name="cancel_text">Cancel</string>
@@ -152,7 +152,7 @@
     <string name="back_text">Back</string>
     <string name="okay_text">Okay</string>
     <string name="okay_text_cap">OKAY</string>
-    <string name="add_more_text">+ Add more</string>
+    <string name="add_more_text">Add more</string>
     <string name="verified_text">Verified</string>
     <string name="tags_text">Tags of User</string>
     <string name="about_me_text">About me of user</string>

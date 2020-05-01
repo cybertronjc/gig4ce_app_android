@@ -63,36 +63,42 @@
             android:layout_height="25dp"
             android:layout_marginTop="8dp" />
 
-        <TextView
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/add_language_add_more"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            style="@style/LipstickCardBottom"
-            android:text="@string/add_more_text" />
+            android:text="@string/add_more_text"
+            android:textAlignment="textStart"
+            app:icon="@drawable/ic_add"
+            style="@style/Widget.MaterialComponents.Button.TextButton.Icon" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_marginTop="16dp">
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/add_language_cancel"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/cancel_text"
                 android:layout_weight="1"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"/>
-
-            <Button
-                android:id="@+id/add_language_save"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:text="@string/cancel_text"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
+                android:textColor="@color/gray_color"
+                style="?attr/materialButtonOutlinedStyle"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/add_language_save"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:text="@string/save_text"
-                android:layout_weight="1" />
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                app:strokeColor="@color/colorPrimary"
+                style="?attr/materialButtonOutlinedStyle"  />
         </LinearLayout>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

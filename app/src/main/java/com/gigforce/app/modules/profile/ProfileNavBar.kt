@@ -26,4 +26,37 @@ class ProfileNavBar: LinearLayout {
             findNavController().navigate(R.id.experienceExpandedFragment)
         }
     }
+
+    var about_me_active: Boolean = false
+        set(value) {
+            field = value
+            if (value) {
+                about_me.setChipBackgroundColorResource(R.color.active_nav_bg)
+                about_me.setChipStrokeWidthResource(R.dimen.border_width)
+                about_me.setChipStrokeColorResource(R.color.colorAccent)
+                about_me.setTextColor(resources.getColor(R.color.colorAccent))
+            }
+        }
+
+    var education_active: Boolean = false
+        set(value) {
+            field = value
+            if (value) {
+                education.setChipBackgroundColorResource(R.color.active_nav_bg)
+                education.setChipStrokeWidthResource(R.dimen.border_width)
+                education.setChipStrokeColorResource(R.color.colorAccent)
+                education.setTextColor(resources.getColor(R.color.colorAccent))
+            }
+        }
+
+    var experience_active: Boolean = false
+        set(value) {
+            field = value
+            if (value) {
+                experience.setChipBackgroundColorResource(R.color.active_nav_bg)
+                experience.setChipStrokeWidthResource(R.dimen.border_width)
+                experience.setChipStrokeColorResource(R.color.colorAccent)
+                experience.setTextColor(resources.getColor(R.color.colorAccent))
+            }
+        }
 }

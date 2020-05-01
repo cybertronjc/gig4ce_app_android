@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -28,15 +29,21 @@ class AboutExpandedFragment: Fragment() {
     lateinit var layout: View
     lateinit var viewModel: ProfileViewModel
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        requireActivity().onBackPressedDispatcher.addCallback(this) {
+            findNavController().navigate(R.id.profileFragment)
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         layout = inflater.inflate(R.layout.fragment_profile_about_expanded, container, false)
-
-        layout.nav_bar.about_me.setChipStrokeColorResource(R.color.colorPrimary)
-        layout.nav_bar.about_me.setChipStrokeWidthResource(R.dimen.border_width)
+        layout.nav_bar.about_me_active = true
         return layout
     }
 
@@ -48,13 +55,14 @@ class AboutExpandedFragment: Fragment() {
 
 
         viewModel.userProfileData.observe(this, Observer { profile ->
-            layout.bio_card.isBottomRemoved = profile.aboutMe != ""
+            layout.bio_card.isBottomRemoved = profile.aboutMe.isNotEmpty()
+            layout.bio_card.hasContentTitles = false
             layout.bio_card.nextDestination = R.id.addAboutMeBottomSheet
             layout.bio_card.cardTitle = "Bio"
             layout.bio_card.cardContent = if (profile.aboutMe != "") profile.aboutMe
                                           else this.context!!.getString(R.string.empty_about_me_text)
             layout.bio_card.cardBottom = if (profile.aboutMe != "") ""
-                                         else "+ Add Bio"
+                                         else "Add Bio"
 
             var languageString = ""
             profile.Language?.let {
@@ -68,7 +76,7 @@ class AboutExpandedFragment: Fragment() {
             layout.language_card.nextDestination = R.id.editLanguageBottomSheet
             layout.language_card.cardTitle = "Language"
             layout.language_card.cardContent = languageString
-            layout.language_card.cardBottom = "+ Add Language"
+            layout.language_card.cardBottom = "Add Language"
 
             var contactString = ""
             profile.Contact?.let {
@@ -77,9 +85,10 @@ class AboutExpandedFragment: Fragment() {
                     contactString += "email: " + contact.email + "\n\n"
                 }
             }
+            layout.contact_card.hasContentTitles = false
             layout.contact_card.cardTitle = "Contact"
             layout.contact_card.cardContent = contactString
-            layout.contact_card.cardBottom = "+ Add Contact"
+            layout.contact_card.cardBottom = "Add Contact"
 
             if (layout.contact_card.edit_button != null) {
                 layout.contact_card.edit_button.setOnClickListener {

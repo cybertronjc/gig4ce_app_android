@@ -14,6 +14,7 @@
             android:layout_width="match_parent"
             android:layout_height="3dp"
             android:layout_marginEnd="170dp"
+            android:layout_marginStart="10dp"
             android:background="@drawable/bg_line"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -28,7 +29,7 @@
             app:layout_constraintTop_toBottomOf="@+id/divider10"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="12dp"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp" />
 
@@ -38,7 +39,6 @@
             android:layout_height="match_parent"
             android:minHeight="50dp"
             style="@style/LatoRegularCardText12"
-            android:hint="Please add something about yourself"
             app:layout_constraintTop_toBottomOf="@+id/card_title"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -48,18 +48,18 @@
             android:orientation="vertical" >
         </LinearLayout>
 
-        <TextView
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/card_bottom"
-            style="@style/LipstickCardBottom"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="12dp"
             android:minWidth="30dp"
             android:minHeight="30dp"
+            android:textAlignment="textStart"
+            app:icon="@drawable/ic_add"
+            style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/bottom_divider"
-            tools:layout_editor_absoluteY="91dp" />
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <View
             android:id="@+id/bottom_divider"

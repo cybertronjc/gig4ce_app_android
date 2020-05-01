@@ -1,9 +1,11 @@
 package com.gigforce.app.modules.profile
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -26,6 +28,14 @@ class ExperienceExpandedFragment: Fragment() {
     lateinit var viewModel: ProfileViewModel
     lateinit var layout: View
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        requireActivity().onBackPressedDispatcher.addCallback(this) {
+            findNavController().navigate(R.id.profileFragment)
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -34,8 +44,7 @@ class ExperienceExpandedFragment: Fragment() {
         storage = FirebaseStorage.getInstance()
         layout = inflater.inflate(R.layout.fragment_profile_experience_expanded, container, false)
 
-        layout.nav_bar.experience.setChipStrokeColorResource(R.color.colorPrimary)
-        layout.nav_bar.experience.setChipStrokeWidthResource(R.dimen.border_width)
+        layout.nav_bar.experience_active = true
         return layout
     }
 
@@ -54,13 +63,16 @@ class ExperienceExpandedFragment: Fragment() {
                     experienceString += exp.company + "\n"
                     experienceString += exp.employmentType + "\n"
                     experienceString += exp.location + "\n"
-                    experienceString += format.format(exp.startDate!!) + "-" + format.format(exp.endDate!!) + "\n\n"
+                    experienceString += format.format(exp.startDate!!) + "-"
+                    experienceString += if(exp.endDate != null) format.format(exp.endDate!!) + "\n\n"
+                                        else "current" + "\n\n"
                 }
             }
+            Log.d("STATUS", "EXPERIENCE_EXPANDED")
             layout.experience_card.nextDestination = R.id.editExperienceBottomSheet
             layout.experience_card.cardTitle = "Experience"
             layout.experience_card.cardContent = experienceString
-            layout.experience_card.cardBottom = "+ Add Experience"
+            layout.experience_card.cardBottom = "Add Experience"
 
             layout.experience_top_profile.imageName = profile.profileAvatarName
             layout.experience_top_profile.userName = profile.name

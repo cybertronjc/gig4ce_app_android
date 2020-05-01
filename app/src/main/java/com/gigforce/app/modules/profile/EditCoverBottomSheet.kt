@@ -75,20 +75,18 @@ class EditCoverBottomSheet(): ProfileBaseBottomSheetFragment() {
         }
 
         save_button.setOnClickListener {
-            profileViewModel!!.setProfileTag(tagsToAdd)
 
-            profileViewModel!!.removeProfileTag(tagsToRemove)
-
-            if (bio_text.text.toString() != "") {
-                if (bio_text.text.toString().length <= 150) {
+            if (bio.text.toString() != "") {
+                if (bio.text.toString().length <= 150) {
                     profileViewModel!!.setProfileBio(bio.text.toString())
+                    profileViewModel!!.setProfileTag(tagsToAdd)
+                    profileViewModel!!.removeProfileTag(tagsToRemove)
+                    findNavController().navigate(R.id.profileFragment)
                 }
                 else {
                     Toast.makeText(this.context, "Bio text should be less than 150 characters", Toast.LENGTH_LONG).show()
                 }
             }
-
-            findNavController().navigate(R.id.profileFragment)
         }
 
         add_button.setOnClickListener {

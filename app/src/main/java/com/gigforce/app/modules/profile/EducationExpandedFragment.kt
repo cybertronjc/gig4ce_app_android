@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -13,7 +14,6 @@ import com.gigforce.app.R
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.fragment_profile_education_expanded.view.*
 import kotlinx.android.synthetic.main.fragment_profile_education_expanded.view.nav_bar
-import kotlinx.android.synthetic.main.fragment_profile_experience_expanded.view.*
 import kotlinx.android.synthetic.main.profile_card_background.view.*
 import kotlinx.android.synthetic.main.profile_nav_bar.view.*
 import java.text.SimpleDateFormat
@@ -29,6 +29,14 @@ class EducationExpandedFragment: Fragment() {
 
     private lateinit var layout: View
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        requireActivity().onBackPressedDispatcher.addCallback(this) {
+            findNavController().navigate(R.id.profileFragment)
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -36,8 +44,7 @@ class EducationExpandedFragment: Fragment() {
         Log.d("DEBUG", "ENTERED Profile Education Expanded VIEW")
         layout = inflater.inflate(R.layout.fragment_profile_education_expanded, container, false)
 
-        layout.nav_bar.education.setChipStrokeColorResource(R.color.colorPrimary)
-        layout.nav_bar.education.setChipStrokeWidthResource(R.dimen.border_width)
+        layout.nav_bar.education_active = true
         return layout
     }
 
@@ -64,7 +71,7 @@ class EducationExpandedFragment: Fragment() {
             layout.education_card.nextDestination = R.id.editEducationBottomSheet
             layout.education_card.cardTitle = "Education"
             layout.education_card.cardContent = educationString
-            layout.education_card.cardBottom = "+ Add Education"
+            layout.education_card.cardBottom = "Add Education"
 
             var skillString: String = ""
             profile.Skill?.let {
@@ -73,9 +80,10 @@ class EducationExpandedFragment: Fragment() {
                 }
             }
             layout.skill_card.nextDestination = R.id.editSkillBottomSheet
+            layout.skill_card.hasContentTitles = false
             layout.skill_card.cardTitle = "Skills"
             layout.skill_card.cardContent = skillString
-            layout.skill_card.cardBottom = "+ Add Skill"
+            layout.skill_card.cardBottom = "Add Skill"
 
             var achievementString: String = ""
             profile.Achievement?.let {
@@ -91,7 +99,7 @@ class EducationExpandedFragment: Fragment() {
             layout.achievement_card.nextDestination = R.id.editAchievementBottomSheet
             layout.achievement_card.cardTitle = "Achievement"
             layout.achievement_card.cardContent = achievementString
-            layout.achievement_card.cardBottom = "+ Add Achievement"
+            layout.achievement_card.cardBottom = "Add Achievement"
 
             layout.education_top_profile.userName = profile.name
             layout.education_top_profile.imageName = profile.profileAvatarName

@@ -54,8 +54,9 @@ class EditAchievementBottomSheet: BottomSheetDialogFragment() {
         lateinit var achievement: Achievement
 
         viewModel.userProfileData.observe(this, Observer { profile ->
-            if (profile!!.Education!!.size >= 0) {
-                achievement = profile!!.Achievement!![arrayLocation!!.toInt()]
+            profile.Achievement?.let {
+                val achievements = it.sortedByDescending { achievement -> achievement.year }
+                achievement = achievements[arrayLocation!!.toInt()]
                 layout.title.setText(achievement.title)
                 layout.authority.setText(achievement.issuingAuthority)
                 layout.year.setText(achievement.year)
