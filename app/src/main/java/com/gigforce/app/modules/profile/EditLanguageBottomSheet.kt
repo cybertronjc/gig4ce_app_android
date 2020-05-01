@@ -47,8 +47,9 @@ class EditLanguageBottomSheet: BottomSheetDialogFragment() {
         var isMotherLanguage = "false"
 
         viewModel.userProfileData.observe(this, Observer { profile ->
-            if (profile!!.Language!!.size >= 0) {
-                language = profile!!.Language!![arrayLocation.toInt()]
+            profile.Language?.let {
+                val languages = it.sortedByDescending { language -> language.speakingSkill }
+                language = languages[arrayLocation.toInt()]
                 layout.language_name.setText(language.name)
                 if (language.isMotherLanguage.toString() == "true") {
                     layout.mother_language.isChecked = true

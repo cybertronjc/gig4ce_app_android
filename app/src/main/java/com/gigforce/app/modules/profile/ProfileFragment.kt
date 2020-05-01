@@ -91,7 +91,7 @@ class ProfileFragment : Fragment() {
 
             Log.d("ProfileFragment", profile.isVerified.toString())
             if (profile.isVerified) {
-                layout.main_expanded_is_verified.setBackgroundColor(Color.parseColor("#00FF00"))
+                //layout.main_expanded_is_verified.setBackgroundColor(Color.parseColor("#00FF00"))
             }
 
             layout.bio.text = profile.bio
@@ -183,9 +183,9 @@ class ProfileFragment : Fragment() {
                     mainExperienceString += experiences[0].title + "\n"
                     mainExperienceString += experiences[0].employmentType + "\n"
                     mainExperienceString += experiences[0].location + "\n"
-                    mainExperienceString += format.format(experiences[0].startDate!!) + "-" + format.format(
-                        experiences[0].endDate!!
-                    ) + "\n"
+                    mainExperienceString += format.format(experiences[0].startDate!!) + "-"
+                    mainExperienceString += if(experiences[0].endDate != null) format.format(experiences[0].endDate!!) + "\n"
+                                            else "current" + "\n"
                 }
             }
 

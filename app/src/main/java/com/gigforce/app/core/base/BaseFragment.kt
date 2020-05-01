@@ -154,4 +154,7 @@ abstract class BaseFragment : Fragment() {
     fun setViewBackgroundColor(view:View,color:Int){
         view.setBackgroundColor(ContextCompat.getColor(activity!!.applicationContext, color))
     }
+    fun onBackPressed():Boolean{
+        return false
+    }
 }

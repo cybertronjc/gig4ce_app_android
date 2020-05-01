@@ -5,9 +5,9 @@
     android:viewportHeight="24"
     android:tint="@color/white"
     android:alpha="1">
-  <group android:scaleX="0.90909094"
+  <group android:scaleX="1"
       android:scaleY="0.90909094"
-      android:translateX="1.0909091"
+      android:translateX="1"
       android:translateY="1.0909091">
       <path
           android:fillColor="@android:color/white"

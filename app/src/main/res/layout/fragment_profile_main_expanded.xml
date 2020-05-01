@@ -165,26 +165,35 @@
                     style="@style/ProfileName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
+                    android:layout_marginStart="26dp"
                     android:layout_marginTop="16dp"
                     android:layout_weight="1"
                     android:text="@string/education_expanded_user_name"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/main_expanded_is_verified"
+                <com.gigforce.app.modules.profile.VerifiedButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:layout_marginEnd="24dp"
-                    android:text="@string/verified_text"
-                    android:textAlignment="center"
-                    app:chipBackgroundColor="#ffffff"
-                    app:chipStrokeColor="#00FF00"
-                    app:chipStrokeWidth="1dp"
+                    app:cardCornerRadius="14.5dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
+
+<!--                <com.google.android.material.chip.Chip-->
+<!--                    android:id="@+id/main_expanded_is_verified"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginTop="16dp"-->
+<!--                    android:layout_marginEnd="24dp"-->
+<!--                    android:text="@string/verified_text"-->
+<!--                    android:textAlignment="center"-->
+<!--                    app:chipBackgroundColor="#ffffff"-->
+<!--                    app:chipStrokeColor="#00FF00"-->
+<!--                    app:chipStrokeWidth="1dp"-->
+<!--                    app:layout_constraintEnd_toEndOf="parent"-->
+<!--                    app:layout_constraintTop_toTopOf="parent" />-->
             </LinearLayout>
 
             <LinearLayout
@@ -201,7 +210,7 @@
                     android:id="@+id/main_tags"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
+                    android:layout_marginStart="24dp"
                     android:layout_marginTop="12dp"
                     android:layout_marginEnd="16dp"
                     android:layout_weight="1"
@@ -231,7 +240,7 @@
                 android:id="@+id/bio"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
+                android:layout_marginStart="26dp"
                 android:layout_marginEnd="32dp"
                 android:minHeight="20dp"
                 style="@style/LatoRegularCardText12" />

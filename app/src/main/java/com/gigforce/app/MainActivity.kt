@@ -7,7 +7,6 @@ import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.utils.popAllBackStates
-import sun.jvm.hotspot.utilities.IntArray
 
 
 class MainActivity : AppCompatActivity() {
@@ -49,7 +48,5 @@ class MainActivity : AppCompatActivity() {
         if (!handled) {
             super.onBackPressed()
         }
-        super.onBackPressed()
-
     }
 }

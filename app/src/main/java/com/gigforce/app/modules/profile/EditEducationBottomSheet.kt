@@ -9,31 +9,26 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.DatePicker
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.afollestad.materialdialogs.MaterialDialog
 import com.gigforce.app.R
 import com.gigforce.app.modules.profile.models.Education
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import kotlinx.android.synthetic.main.add_education_bottom_sheet.view.*
 import kotlinx.android.synthetic.main.edit_education_bottom_sheet.*
-import kotlinx.android.synthetic.main.edit_education_bottom_sheet.view.*
-import kotlinx.android.synthetic.main.edit_education_bottom_sheet.view.end_date
-import kotlinx.android.synthetic.main.edit_education_bottom_sheet.view.start_date
+import kotlinx.android.synthetic.main.edit_education_bottom_sheet.end_date
+import kotlinx.android.synthetic.main.edit_education_bottom_sheet.start_date
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-class EditEducationBottomSheet: BottomSheetDialogFragment() {
+class EditEducationBottomSheet: ProfileBaseBottomSheetFragment() {
     companion object {
         fun newInstance() = EditEducationBottomSheet()
     }
 
-    lateinit var layout: View
-    lateinit var viewModel: ProfileViewModel
-
-    var education: Education? = null
+    lateinit var education: Education
     var arrayLocation: String? = ""
 
     var degrees: ArrayList<String> = ArrayList()
@@ -55,12 +50,25 @@ class EditEducationBottomSheet: BottomSheetDialogFragment() {
         savedInstanceState: Bundle?
     ): View? {
         Log.d("LOCATION", "MYLOC" + arrayLocation.toString())
-        layout = inflater.inflate(R.layout.edit_education_bottom_sheet, container, false)
-        viewModel = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
+        inflateView(R.layout.edit_education_bottom_sheet, inflater, container)
+        profileViewModel = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
+
+        return getFragmentView()
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        initialize()
+        setListeners()
+    }
+
+    private fun initialize() {
+        val format = SimpleDateFormat("dd/MM/yyyy")
 
         degrees.addAll(listOf("--degree--", "<10th", "10th", "12th", "Certificate", "Diploma", "Bachelor", "Masters", "PhD"))
         val degreeAdapter = ArrayAdapter(this.context!!, R.layout.simple_spinner_dropdown_item, degrees)
-        val degreeSpinner = layout.degree
+        val degreeSpinner = degree
         degreeSpinner.adapter = degreeAdapter
         degreeSpinner.onItemSelectedListener = object:
             AdapterView.OnItemSelectedListener {
@@ -70,7 +78,7 @@ class EditEducationBottomSheet: BottomSheetDialogFragment() {
                 position: Int,
                 id: Long
             ) {
-                selectedDegree = degrees[position]
+                selectedDegree = if(position == 0) "" else degrees[position]
                 Log.d("Spinner", "selected " + degrees[position])
             }
 
@@ -79,58 +87,52 @@ class EditEducationBottomSheet: BottomSheetDialogFragment() {
             }
         }
 
-        return layout
+        profileViewModel!!.userProfileData.observe(this, Observer { profile ->
+            profile.Education?.let {
+                val educations = it.sortedByDescending { education -> education.startYear!! }
+                education = educations[arrayLocation!!.toInt()]
+                institution.setText(education.institution)
+                course.setText(education.course)
+                selectedDegree = education.degree
+                degree.setSelection(degrees.indexOf(education.degree))
+                selectedStartDate = format.format(education.startYear!!)
+                selectedEndDate = format.format(education.endYear!!)
+                start_date.setText(format.format(education.startYear!!))
+                end_date.setText(format.format(education.endYear!!))
+            }
+        })
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val format = SimpleDateFormat("dd/MM/yyyy")
-        lateinit var education: Education
+    private fun setListeners() {
+        var calendar = Calendar.getInstance(TimeZone.getDefault())
 
-        layout.end_date.setOnClickListener {
-            var calendar = Calendar.getInstance(TimeZone.getDefault())
-
-            var dialog = DatePickerDialog(this.context!!, DatePickerDialog.OnDateSetListener{
+        end_date.setOnClickListener {
+            DatePickerDialog(this.context!!, DatePickerDialog.OnDateSetListener{
                     datePicker: DatePicker, i: Int, i1: Int, i2: Int ->
                 Log.d("TEMP", "tmp date")
                 selectedEndDate = "$i2/${i1+1}/$i"
-                layout.end_date.setText(selectedEndDate)
-            }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH))
-            dialog.show()
+                end_date.setText(selectedEndDate)
+            }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show()
         }
 
-        layout.start_date.setOnClickListener {
-            var calendar = Calendar.getInstance(TimeZone.getDefault())
-
-            var dialog = DatePickerDialog(this.context!!, DatePickerDialog.OnDateSetListener{
+        start_date.setOnClickListener {
+            DatePickerDialog(this.context!!, DatePickerDialog.OnDateSetListener{
                     datePicker: DatePicker, i: Int, i1: Int, i2: Int ->
                 Log.d("TEMP", "tmp date")
                 selectedStartDate = "$i2/${i1+1}/$i"
-                layout.start_date.setText(selectedStartDate)
-            }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH))
-            dialog.show()
+                start_date.setText(selectedStartDate)
+            }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show()
         }
 
-        viewModel.userProfileData.observe(this, Observer { profile ->
-            if (profile!!.Education!!.size >= 0) {
-                education = profile!!.Education!![arrayLocation!!.toInt()]
-                layout.institution.setText(education.institution)
-                layout.course.setText(education.course)
-                selectedDegree = education.degree
-                layout.degree.setSelection(degrees.indexOf(education.degree))
-                selectedStartDate = format.format(education.startYear!!)
-                selectedEndDate = format.format(education.endYear!!)
-                layout.start_date.setText(format.format(education.startYear!!))
-                layout.end_date.setText(format.format(education.endYear!!))
-            }
-        })
 
-        layout.delete.setOnClickListener {
+
+        delete.setOnClickListener {
             Log.d("EditEducation", "VOILA!")
             MaterialDialog(this.context!!).show {
                 title(text = "Confirm Delete")
                 message(text = "Are you sure to Delete this item?")
                 positiveButton(R.string.delete) {
-                    viewModel.removeProfileEducation(education!!)
+                    profileViewModel!!.removeProfileEducation(education!!)
                     findNavController().navigate(R.id.educationExpandedFragment)
                 }
                 negativeButton(R.string.cancel_text) {
@@ -139,19 +141,37 @@ class EditEducationBottomSheet: BottomSheetDialogFragment() {
             }
         }
 
-        layout.save.setOnClickListener {
+        save.setOnClickListener {
             Log.d("EditEducation", "updating")
-            viewModel.removeProfileEducation(education)
-            var newEducation = ArrayList<Education>()
-            newEducation.add(Education(
-                institution = layout.institution.text.toString(),
-                course = layout.course.text.toString(),
-                degree = selectedDegree.toString(),
-                startYear = SimpleDateFormat("dd/MM/yyyy").parse(selectedStartDate.toString()),
-                endYear = SimpleDateFormat("dd/MM/yyyy").parse(selectedEndDate.toString())
-            ))
-            viewModel.setProfileEducation(newEducation)
-            findNavController().navigate(R.id.educationExpandedFragment)
+            if (validateEducation()) {
+                profileViewModel!!.removeProfileEducation(education)
+                var newEducation = ArrayList<Education>()
+                newEducation.add(
+                    Education(
+                        institution = institution.text.toString(),
+                        course = course.text.toString(),
+                        degree = selectedDegree.toString(),
+                        startYear = SimpleDateFormat("dd/MM/yyyy").parse(selectedStartDate.toString()),
+                        endYear = SimpleDateFormat("dd/MM/yyyy").parse(selectedEndDate.toString())
+                    )
+                )
+                profileViewModel!!.setProfileEducation(newEducation)
+                findNavController().navigate(R.id.educationExpandedFragment)
+            }
+        }
+    }
+
+    private fun validateEducation(): Boolean {
+        if (validation!!.isValidEducation(
+                institution,
+                course,
+                selectedDegree,
+                selectedStartDate,
+                selectedEndDate))
+            return true
+        else {
+            Toast.makeText(this.context, "Invalid Entry", Toast.LENGTH_SHORT).show()
+            return false
         }
     }
 }
