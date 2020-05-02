@@ -40,15 +40,25 @@
         android:scaleType="fitXY"
         app:srcCompat="@drawable/bottomwave" />
 
-    <Button
+    <TextView
         android:id="@+id/btn_next"
-        style="@style/Widget.AppCompat.Button.Colored"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        android:text="next"
+        android:layout_marginEnd="54dp"
+        android:layout_marginBottom="35dp"
+        android:text="Get Started"
+        android:textSize="18sp"
         android:textColor="@android:color/white" />
+
+    <ImageView
+        android:id="@+id/right_arrow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="28dp"
+        android:layout_marginBottom="35dp"
+        android:src="@drawable/ic_baseline_arrow_forward_24_white" />
 </RelativeLayout>
