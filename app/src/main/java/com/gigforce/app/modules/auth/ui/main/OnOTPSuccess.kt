@@ -12,8 +12,6 @@ import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.utils.setDarkStatusBarTheme
-import kotlinx.android.synthetic.main.mobile_number_input.*
-import kotlinx.android.synthetic.main.mobile_number_input.view.*
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 

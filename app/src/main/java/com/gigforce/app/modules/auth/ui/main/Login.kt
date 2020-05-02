@@ -43,7 +43,7 @@ class Login: BaseFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        this.setDarkStatusBarTheme(false);
+        //this.setDarkStatusBarTheme(false);
         viewModel = ViewModelProviders.of(this).get(LoginViewModel::class.java)
         return inflateView(com.gigforce.app.R.layout.login_frament, inflater, container)
     }

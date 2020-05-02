@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
@@ -48,7 +49,7 @@ class VerifyOTP: BaseFragment() {
         viewModel.verificationId = verificationId.toString()
         layout = inflateView(R.layout.otp_verification, inflater, container)
         //TODO
-        layout.textView29.text = "We have sent the OTP to your " +". Please enter the OTP";
+        layout?.textView29?.text = "We have sent the OTP to your " +". Please enter the OTP";
         return layout
     }
 
@@ -73,10 +74,10 @@ class VerifyOTP: BaseFragment() {
     }
 
     private fun listeners() {
-        verify_otp_button.setOnClickListener {
-            val otpIn = layout.txt_otp.text
+        verify_otp_button?.setOnClickListener {
+            val otpIn = layout?.txt_otp?.text
             match = OTP_NUMBER.matcher(otpIn)
-            textView26.visibility = View.VISIBLE
+            textView26?.visibility = View.VISIBLE
             layout?.cvotpwrong?.visibility = View.INVISIBLE;
             if(match.matches()){
                 viewModel.verifyPhoneNumberWithCode(otpIn.toString())
@@ -84,19 +85,19 @@ class VerifyOTP: BaseFragment() {
             else {
                 //layout?.otpnotcorrect?.visibility = View.VISIBLE
                 //layout?.otpnotcorrect?.text = "Wrong Password !!";
-                textView26.visibility = View.INVISIBLE
+                textView26?.visibility = View.INVISIBLE
                 layout?.cvotpwrong?.visibility = View.VISIBLE;
             }
             //findNavController().navigate(R.id.homeFragment)
         }
-        otptimertv.setOnClickListener {
-            if(layout.otptimertv.text == "Resend") {
+        otptimertv?.setOnClickListener {
+            if(layout?.otptimertv?.text == "Resend") {
                 otpresentcounter++;
-                Toast.makeText(layout.context, "OTP resent", Toast.LENGTH_SHORT).show()
+                Toast.makeText(layout?.context!!, "OTP resent", Toast.LENGTH_SHORT).show()
                 counterStart();
             }
             else{
-                Toast.makeText(layout?.context, "Click on Reenter mobile number as it could be wrong!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(layout?.context!!, "Click on Reenter mobile number as it could be wrong!", Toast.LENGTH_SHORT).show()
             }
         }
         reenter_mobile.setOnClickListener {
@@ -107,10 +108,10 @@ class VerifyOTP: BaseFragment() {
     private fun counterStart(){
         object : CountDownTimer(30000, 1000) {
             override fun onTick(millisUntilFinished: Long) {
-                layout.otptimertv.text = (millisUntilFinished / 1000).toString() + " s"
+                layout?.otptimertv?.text = (millisUntilFinished / 1000).toString() + " s"
             }
             override fun onFinish() {
-                layout.otptimertv.text = "Resend"
+                layout?.otptimertv?.text = "Resend"
             }
         }.start()
     }
