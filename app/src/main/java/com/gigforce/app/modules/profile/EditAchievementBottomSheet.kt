@@ -5,23 +5,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.afollestad.materialdialogs.MaterialDialog
 import com.gigforce.app.R
 import com.gigforce.app.modules.profile.models.Achievement
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.android.synthetic.main.edit_achievement_bottom_sheet.*
-import kotlinx.android.synthetic.main.edit_achievement_bottom_sheet.view.*
-import kotlinx.android.synthetic.main.edit_achievement_bottom_sheet.view.delete
-import kotlinx.android.synthetic.main.edit_achievement_bottom_sheet.view.save
-import kotlinx.android.synthetic.main.edit_achievement_bottom_sheet.view.title
-import kotlinx.android.synthetic.main.fragment_select_language.view.*
-import java.text.SimpleDateFormat
 
 class EditAchievementBottomSheet: ProfileBaseBottomSheetFragment() {
 
@@ -45,8 +35,6 @@ class EditAchievementBottomSheet: ProfileBaseBottomSheetFragment() {
         savedInstanceState: Bundle?
     ): View? {
        inflateView(R.layout.edit_achievement_bottom_sheet, inflater, container)
-
-        profileViewModel = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
 
         return getFragmentView()
     }

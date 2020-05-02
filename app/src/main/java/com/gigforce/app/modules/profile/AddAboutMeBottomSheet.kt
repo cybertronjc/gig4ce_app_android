@@ -21,7 +21,6 @@ class AddAboutMeBottomSheet: ProfileBaseBottomSheetFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        profileViewModel = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
 
         return inflateView(R.layout.add_about_bottom_sheet, inflater, container)
     }

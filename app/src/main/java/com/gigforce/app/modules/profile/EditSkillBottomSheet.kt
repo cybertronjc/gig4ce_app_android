@@ -42,9 +42,6 @@ class EditSkillBottomSheet: ProfileBaseBottomSheetFragment() {
         savedInstanceState: Bundle?
     ): View? {
         inflateView(R.layout.edit_skill_bottom_sheet, inflater, container)
-
-        profileViewModel = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
-
         skills.addAll(listOf("--skill--", "skill1", "skill2", "skill3", "skill4", "skill5", "skill6", "skill7", "skill8"))
 
         return getFragmentView()

@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.TextView
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModel
 import com.gigforce.app.R
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -14,17 +15,10 @@ import com.google.android.material.chip.Chip
 abstract class ProfileBaseBottomSheetFragment: BottomSheetDialogFragment() {
     var mView: View? = null
     var validation: ProfileValidation? = null
-    var profileViewModel: ProfileViewModel? = null
-    fun setViewModel(viewModel: ProfileViewModel) {
-        profileViewModel = viewModel
-    }
+    val profileViewModel: ProfileViewModel by activityViewModels<ProfileViewModel>()
 
     init {
         validation = ProfileValidation()
-    }
-
-    fun getViewModel(): ViewModel? {
-        return profileViewModel
     }
 
     open fun activate(view:View?){}

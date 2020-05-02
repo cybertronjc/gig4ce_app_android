@@ -7,8 +7,8 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.afollestad.materialdialogs.MaterialDialog
 import com.gigforce.app.R
@@ -16,7 +16,6 @@ import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.card_row.view.*
 import kotlinx.android.synthetic.main.fragment_profile_about_expanded.view.*
 import kotlinx.android.synthetic.main.fragment_profile_about_expanded.view.nav_bar
-import kotlinx.android.synthetic.main.fragment_profile_experience_expanded.view.*
 import kotlinx.android.synthetic.main.profile_card_background.view.*
 import kotlinx.android.synthetic.main.profile_nav_bar.view.*
 
@@ -27,7 +26,6 @@ class AboutExpandedFragment: Fragment() {
 
     lateinit var storage: FirebaseStorage
     lateinit var layout: View
-    lateinit var viewModel: ProfileViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,16 +49,16 @@ class AboutExpandedFragment: Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         storage = FirebaseStorage.getInstance()
-        viewModel = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
 
+        val viewModel: ProfileViewModel by activityViewModels<ProfileViewModel>()
 
-        viewModel.userProfileData.observe(this, Observer { profile ->
+        viewModel.userProfileData.observe(viewLifecycleOwner, Observer { profile ->
             layout.bio_card.isBottomRemoved = profile.aboutMe.isNotEmpty()
             layout.bio_card.hasContentTitles = false
             layout.bio_card.nextDestination = R.id.addAboutMeBottomSheet
             layout.bio_card.cardTitle = "Bio"
             layout.bio_card.cardContent = if (profile.aboutMe != "") profile.aboutMe
-                                          else this.context!!.getString(R.string.empty_about_me_text)
+                                          else this.requireContext().getString(R.string.empty_about_me_text)
             layout.bio_card.cardBottom = if (profile.aboutMe != "") ""
                                          else "Add Bio"
 
@@ -114,7 +112,7 @@ class AboutExpandedFragment: Fragment() {
     }
 
     fun showAddContactDialog() {
-        MaterialDialog(this.context!!).show {
+        MaterialDialog(this.requireContext()).show {
             title(text = "Update Contact Details")
             message(
                 text = "To update these details the giger will need to re-upload their" +
@@ -123,7 +121,7 @@ class AboutExpandedFragment: Fragment() {
                         "necessary"
             )
             positiveButton(text = "Proceed") {
-                Toast.makeText(this.context!!, "Not Implemented", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this.context, "Not Implemented", Toast.LENGTH_SHORT).show()
             }
             negativeButton(text = "Cancel") { }
         }

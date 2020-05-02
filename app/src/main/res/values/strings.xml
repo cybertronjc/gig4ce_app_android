@@ -45,7 +45,8 @@
     <string name="rating_text">Rating</string>
     <string name="tasks_done_text">Tasks Done</string>
     <string name="connections_text">Connections</string>
-    <string name="default_location_text">Location\n220KM away</string>
+    <string name="default_location_text">Location</string>
+    <string name="default_distance_text">220KM away</string>
     <string name="education_card_education_text">Education</string>
     <string name="education_card_content_placeholder">Education content to be put here</string>
     <string name="view_more_text"><u>View more</u></string>

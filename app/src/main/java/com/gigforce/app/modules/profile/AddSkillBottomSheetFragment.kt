@@ -11,16 +11,7 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
-import com.gigforce.app.modules.profile.models.Education
-import com.gigforce.app.modules.profile.models.Skill
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import kotlinx.android.synthetic.main.add_education_bottom_sheet.view.*
 import kotlinx.android.synthetic.main.add_skill_bottom_sheet.*
-import kotlinx.android.synthetic.main.add_skill_bottom_sheet.view.*
-import kotlinx.android.synthetic.main.add_skill_bottom_sheet.view.add_skill_name
-import kotlinx.android.synthetic.main.edit_skill_bottom_sheet.view.*
-import kotlinx.android.synthetic.main.fragment_profile_education_expanded.view.*
-import java.text.SimpleDateFormat
 
 class AddSkillBottomSheetFragment: ProfileBaseBottomSheetFragment() {
     companion object {
@@ -39,7 +30,6 @@ class AddSkillBottomSheetFragment: ProfileBaseBottomSheetFragment() {
         inflateView(R.layout.add_skill_bottom_sheet, inflater, container)
 
         skills.addAll(listOf("--skill--", "skill1", "skill2", "skill3", "skill4", "skill5", "skill6", "skill7", "skill8"))
-        profileViewModel = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
         return getFragmentView()
     }
 

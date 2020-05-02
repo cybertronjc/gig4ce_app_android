@@ -37,6 +37,12 @@ class ProfileCardBackground: CardView {
         set(value) {
             field=value
             val viewgroup = card_content
+
+            // TODO: Think if there is a better way such that only non
+            //      duplicate elements can be loaded
+            // re-initialize the content
+            viewgroup.removeAllViews()
+
             for ((location, item) in value.split("\n\n").withIndex()) {
                 if (item == this.context!!.getString(R.string.empty_about_me_text)) {
                     val widget = TextView(this.context!!)
@@ -87,8 +93,11 @@ class ProfileCardBackground: CardView {
         set(value) {
             field = value
             if (value) {
-                (card_bottom.parent as ViewGroup).removeView(card_bottom)
-                (bottom_divider.parent as ViewGroup).removeView(bottom_divider)
+                card_bottom.visibility = View.GONE
+                bottom_divider.visibility = View.GONE
+            } else {
+                card_bottom.visibility = View.VISIBLE
+                bottom_divider.visibility = View.VISIBLE
             }
         }
 }

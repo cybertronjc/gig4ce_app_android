@@ -10,6 +10,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.DatePicker
 import android.widget.Toast
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
@@ -51,7 +52,6 @@ class EditEducationBottomSheet: ProfileBaseBottomSheetFragment() {
     ): View? {
         Log.d("LOCATION", "MYLOC" + arrayLocation.toString())
         inflateView(R.layout.edit_education_bottom_sheet, inflater, container)
-        profileViewModel = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
 
         return getFragmentView()
     }

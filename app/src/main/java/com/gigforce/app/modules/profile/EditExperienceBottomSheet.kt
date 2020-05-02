@@ -47,7 +47,6 @@ class EditExperienceBottomSheet: ProfileBaseBottomSheetFragment() {
         savedInstanceState: Bundle?
     ): View? {
         inflateView(R.layout.edit_experience, inflater, container)
-        profileViewModel = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
         employments.addAll(listOf("--employment type--", "Full time", "internship", "Part time"))
 
         return getFragmentView()

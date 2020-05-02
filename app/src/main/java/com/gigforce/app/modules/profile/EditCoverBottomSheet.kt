@@ -30,7 +30,6 @@ class EditCoverBottomSheet(): ProfileBaseBottomSheetFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        profileViewModel = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
         return inflateView(R.layout.edit_cover_bottom_sheet, inflater, container)
     }
 

@@ -37,7 +37,6 @@ class AddExperienceBottomSheet: ProfileBaseBottomSheetFragment() {
         savedInstanceState: Bundle?
     ): View? {
         inflateView(R.layout.add_experience_bottom_sheet, inflater, container)
-        profileViewModel = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
         return getFragmentView()
     }
 

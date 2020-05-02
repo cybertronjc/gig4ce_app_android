@@ -5,6 +5,7 @@ import com.gigforce.app.modules.profile.models.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.*
 import com.google.firebase.firestore.model.Document
+import kotlinx.coroutines.tasks.await
 import javax.security.auth.callback.Callback
 
 class ProfileFirebaseRepository {

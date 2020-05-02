@@ -35,7 +35,6 @@ class EditLanguageBottomSheet: ProfileBaseBottomSheetFragment() {
         savedInstanceState: Bundle?
     ): View? {
         inflateView(R.layout.edit_language_bottom_sheet, inflater, container)
-        profileViewModel = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
 
         return getFragmentView()
     }

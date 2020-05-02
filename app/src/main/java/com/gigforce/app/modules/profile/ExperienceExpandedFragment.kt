@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
@@ -25,7 +26,6 @@ class ExperienceExpandedFragment: Fragment() {
     }
 
     lateinit var storage: FirebaseStorage
-    lateinit var viewModel: ProfileViewModel
     lateinit var layout: View
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,9 +51,9 @@ class ExperienceExpandedFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
+        val viewModel: ProfileViewModel by activityViewModels<ProfileViewModel>()
 
-        viewModel.userProfileData.observe(this, Observer { profile ->
+        viewModel.userProfileData.observe(viewLifecycleOwner, Observer { profile ->
             var experienceString = ""
             val format = SimpleDateFormat("dd/MM/yyyy", Locale.US)
             profile.experiences?.let {

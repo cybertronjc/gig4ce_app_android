@@ -25,7 +25,6 @@ class AddAchievementBottomSheetFragment: ProfileBaseBottomSheetFragment() {
     ): View? {
         Log.d("DEBUG", "ENTERED Profile Education Expanded VIEW")
         inflateView(R.layout.add_achievement_bottom_sheet, inflater, container)
-        profileViewModel = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
         return getFragmentView()
     }
 

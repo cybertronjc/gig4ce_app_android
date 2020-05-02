@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
@@ -25,7 +26,6 @@ class EducationExpandedFragment: Fragment() {
     }
 
     private lateinit var storage: FirebaseStorage
-    lateinit var viewModel: ProfileViewModel
 
     private lateinit var layout: View
 
@@ -52,9 +52,9 @@ class EducationExpandedFragment: Fragment() {
         super.onViewCreated(view, savedInstanceState)
         storage = FirebaseStorage.getInstance()
 
-        viewModel = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
+        val viewModel: ProfileViewModel by activityViewModels<ProfileViewModel>()
 
-        viewModel.userProfileData.observe(this, Observer { profile ->
+        viewModel.userProfileData.observe(viewLifecycleOwner, Observer { profile ->
             var educationString: String = ""
             val format = SimpleDateFormat("dd/MM/yyyy")
 
