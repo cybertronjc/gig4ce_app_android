@@ -12,6 +12,7 @@ import android.util.Log
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.ViewModelProviders
@@ -27,6 +28,7 @@ import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
 import com.google.firebase.storage.UploadTask.TaskSnapshot
 import com.yalantis.ucrop.UCrop
+import kotlinx.android.synthetic.main.fragment_video_resume.*
 import kotlinx.android.synthetic.main.profile_photo_bottom_sheet.view.*
 import pub.devrel.easypermissions.EasyPermissions
 import java.io.ByteArrayOutputStream
@@ -164,7 +166,7 @@ class PhotoCrop : AppCompatActivity(),
     override fun onButtonClicked(id: Int) {
         when (id) {
             R.id.updateProfilePicture -> getImageFromPhone()
-            R.id.removeProfilePicture -> defaultProfilePicture()
+            R.id.removeProfilePicture -> confirmRemoval()
         }
 
     }
@@ -364,7 +366,6 @@ class PhotoCrop : AppCompatActivity(),
         if (purpose == profilePictureCrop) {
             viewModel.setProfileAvatarName(DEFAULT_PICTURE)
             loadImage(CLOUD_INPUT_FOLDER, DEFAULT_PICTURE)
-            disableRemovePhoto()
             resultIntent.putExtra("filename", DEFAULT_PICTURE)
             setResult(Activity.RESULT_OK, resultIntent)
         }
@@ -419,7 +420,6 @@ class PhotoCrop : AppCompatActivity(),
      * Needs to be called whenever the bottom sheet needs to be recreated.
      */
     private fun showBottomSheet() {
-        if(purpose==profilePictureCrop && incomingFile==DEFAULT_PICTURE) disableRemovePhoto()
         if (!profilePictureOptionsBottomSheetFragment.isShowing) {
             profilePictureOptionsBottomSheetFragment.show(
                 supportFragmentManager,
@@ -465,6 +465,20 @@ class PhotoCrop : AppCompatActivity(),
             Toast.makeText(this, "No Picture to Remove", Toast.LENGTH_LONG).show()
         }
 
+    }
+
+    private fun confirmRemoval(){
+        val builder: AlertDialog.Builder = AlertDialog.Builder(this)
+        builder.setTitle(R.string.app_name)
+        builder.setMessage("Remove profile picture?")
+        builder.setIcon(R.drawable.ic_user_icon)
+        builder.setPositiveButton("Yes") { dialog, id ->
+            dialog.dismiss()
+            defaultProfilePicture()
+        }
+        builder.setNegativeButton("No") { dialog, id -> dialog.dismiss() }
+        val alert: AlertDialog = builder.create()
+        alert.show()
     }
 
 }
