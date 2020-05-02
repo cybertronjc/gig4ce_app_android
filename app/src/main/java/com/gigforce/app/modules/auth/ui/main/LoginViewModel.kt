@@ -19,21 +19,20 @@ class LoginViewModel() : ViewModel() {
         private const val TAG = "login/viewmodel"
         public const val KEY_VERIFY_IN_PROGRESS = "key_verify_in_progress"
         public const val STATE_INITIALIZED = 1
+        public const val STATE_CODE_SENT = 2
         public const val STATE_VERIFY_FAILED = 3
         public const val STATE_VERIFY_SUCCESS = 4
-        public const val STATE_CODE_SENT = 2
         public const val STATE_SIGNIN_FAILED = 5
         public const val STATE_SIGNIN_SUCCESS = 6
     }
 
-    val liveState:MutableLiveData<Int> = MutableLiveData<Int>(STATE_INITIALIZED)
+    val liveState: MutableLiveData<Int> = MutableLiveData<Int>(STATE_INITIALIZED)
     var verificationId: String? = null
     var token: PhoneAuthProvider.ForceResendingToken? = null
     var activity: Activity? = null
-    var phoneNo: String? = null
 
     init {
-        FirebaseAuth.getInstance().currentUser .let {
+        FirebaseAuth.getInstance().currentUser.let {
             // this.liveState.postValue(STATE_SIGNIN_SUCCESS)
         }
     }
@@ -47,47 +46,44 @@ class LoginViewModel() : ViewModel() {
 
         override fun onVerificationFailed(e: FirebaseException) {
             liveState.value = STATE_VERIFY_FAILED
-            Log.e(TAG, e.message, e)
         }
 
-        override fun onCodeSent(_verificationId: String, _token: PhoneAuthProvider.ForceResendingToken) {
+        override fun onCodeSent(
+            _verificationId: String,
+            _token: PhoneAuthProvider.ForceResendingToken
+        ) {
             super.onCodeSent(_verificationId, _token)
             verificationId = _verificationId
             token = _token
-            Log.d(TAG, "Code Sent Successfully")
-            Log.d("LoginViewModel", "intialize verificationId -> " + verificationId.toString())
             liveState.postValue(STATE_CODE_SENT)
         }
     }
 
-    fun verifyPhoneNumberWithCode(code: String) {
-        // [START verify_with_code]
-        Log.d("LoginViewModel", "code ->" + code.toString())
-        Log.d("LoginViewModel", "verificationId ->" + verificationId.toString())
-        val credential = PhoneAuthProvider.getCredential(verificationId!!, code)
-        // [END verify_with_code]
-        signInWithPhoneAuthCredential(credential)
-    }
+
 
     fun sendVerificationCode(phoneNumber: String) {
-        Log.d(TAG, "Sending phone number for verification>>>$phoneNumber")
         PhoneAuthProvider.getInstance().verifyPhoneNumber(
             phoneNumber, // Phone number to verify
             60, // Timeout duration
             TimeUnit.SECONDS, // Unit of timeout
             activity!!, // Activity (for callback binding)
             callbacks // OnVerificationStateChangedCallbacks
-            ) // ForceResendingToken from callbacks
+        ) // ForceResendingToken from callbacks
     }
 
-        private fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential) {
+
+    fun verifyPhoneNumberWithCode(code: String) {
+        val credential = PhoneAuthProvider.getCredential(verificationId!!, code)
+        signInWithPhoneAuthCredential(credential)
+    }
+    private fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential) {
         FirebaseAuth.getInstance()
             .signInWithCredential(credential)
             .addOnCompleteListener {
-                if(it.isSuccessful) {
+                if (it.isSuccessful) {
                     Log.d(TAG, "signInWithCredential:success")
                     liveState.postValue(STATE_SIGNIN_SUCCESS)
-                }else{
+                } else {
                     Log.w(TAG, "signInWithCredential:failure", it.exception)
                     liveState.value = STATE_SIGNIN_FAILED
                 }
@@ -95,7 +91,7 @@ class LoginViewModel() : ViewModel() {
             .addOnSuccessListener {
                 Log.d("status", "Signed in successfully")
             }
-            .addOnFailureListener{
+            .addOnFailureListener {
                 Log.d("status", "Signed in failed")
             }
     }

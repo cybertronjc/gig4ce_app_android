@@ -83,14 +83,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView3" />
 
-    <EditText
+    <AutoCompleteTextView
         android:id="@+id/otp_mobile_number"
         android:layout_width="256dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="47dp"
+        android:layout_marginTop="64dp"
+        android:maxLength="10"
         android:ems="10"
-        android:hint="@string/mobile_login"
-        android:inputType="textAutoComplete|phone"
+        android:inputType="phone"
+        android:digits="0123456789"
         android:textAlignment="center"
         android:textSize="18sp"
         app:backgroundTint="#af2b81"

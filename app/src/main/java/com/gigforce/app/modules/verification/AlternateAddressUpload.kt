@@ -114,8 +114,9 @@ class AlternateAddressUpload: BaseFragment() {
             }
         }
 
-    fun onBackPressed() {
+    override fun onBackPressed() :Boolean{
         findNavController().popBackStack()
+        return true
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
