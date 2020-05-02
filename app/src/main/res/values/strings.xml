@@ -212,7 +212,7 @@
     <string name="document_picture">Image Option</string>
     <string name="edit_education">Edit Education</string>
     <string name="bio_name">Headline</string>
-    <string name="bio_hint_text">This Text will be shown in bio.</string>
+    <string name="bio_hint_text">Describe yourself in a line</string>
     <string name="add_tags">Add Tags</string>
     <!-- home screen new -->
     <string name="hs_rv_title">Dunzo Deliveries </string>
@@ -231,4 +231,5 @@
 
     <string name="empty_about_me_text">Tell us about yourself…</string>
     <string name="error_empty_mandatory_fields">* Please fill mandatory fields</string>
+    <string name="about_me_hint">Tell us about yourself in detail</string>
 </resources>
