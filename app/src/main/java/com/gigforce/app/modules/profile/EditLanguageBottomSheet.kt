@@ -50,7 +50,7 @@ class EditLanguageBottomSheet: ProfileBaseBottomSheetFragment() {
                 val languages = it.sortedByDescending { language -> language.speakingSkill }
                 language = languages[arrayLocation.toInt()]
                 language_name.setText(language.name)
-                mother_language.isChecked = language.isMotherLanguage
+                mother_language.isChecked = language.isMotherLanguage == "true"
                 language_speaking_level.progress = language.speakingSkill.toInt()
                 language_writing_level.progress = language.writingSkill.toInt()
             }
@@ -82,7 +82,7 @@ class EditLanguageBottomSheet: ProfileBaseBottomSheetFragment() {
                         name = language_name.text.toString(),
                         speakingSkill = language_speaking_level.progress.toString(),
                         writingSkill = language_writing_level.progress.toString(),
-                        isMotherLanguage = mother_language.isChecked
+                        isMotherLanguage = if(mother_language.isChecked) "true" else "false"
                     )
                 )
                 profileViewModel!!.setProfileLanguage(newLanguage)

@@ -6,28 +6,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.addCallback
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
-import com.google.firebase.storage.FirebaseStorage
+import kotlinx.android.synthetic.main.fragment_profile_education_expanded.*
 import kotlinx.android.synthetic.main.fragment_profile_education_expanded.view.*
 import kotlinx.android.synthetic.main.fragment_profile_education_expanded.view.nav_bar
 import kotlinx.android.synthetic.main.profile_card_background.view.*
-import kotlinx.android.synthetic.main.profile_nav_bar.view.*
 import java.text.SimpleDateFormat
 
-class EducationExpandedFragment: Fragment() {
+class EducationExpandedFragment: ProfileBaseFragment() {
 
     companion object {
         fun newInstance() = EducationExpandedFragment()
     }
-
-    private lateinit var storage: FirebaseStorage
-
-    private lateinit var layout: View
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,19 +34,20 @@ class EducationExpandedFragment: Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         Log.d("DEBUG", "ENTERED Profile Education Expanded VIEW")
-        layout = inflater.inflate(R.layout.fragment_profile_education_expanded, container, false)
-
-        layout.nav_bar.education_active = true
-        return layout
+        inflateView(R.layout.fragment_profile_education_expanded, inflater, container)
+        getFragmentView().nav_bar.education_active = true
+        return getFragmentView()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        storage = FirebaseStorage.getInstance()
 
-        val viewModel: ProfileViewModel by activityViewModels<ProfileViewModel>()
+        initialize()
+        setListeners()
+    }
 
-        viewModel.userProfileData.observe(viewLifecycleOwner, Observer { profile ->
+    private fun initialize() {
+        profileViewModel.userProfileData.observe(viewLifecycleOwner, Observer { profile ->
             var educationString: String = ""
             val format = SimpleDateFormat("dd/MM/yyyy")
 
@@ -68,10 +61,10 @@ class EducationExpandedFragment: Fragment() {
                     ) + "\n\n"
                 }
             }
-            layout.education_card.nextDestination = R.id.editEducationBottomSheet
-            layout.education_card.cardTitle = "Education"
-            layout.education_card.cardContent = educationString
-            layout.education_card.cardBottom = "Add Education"
+            education_card.nextDestination = R.id.editEducationBottomSheet
+            education_card.cardTitle = "Education"
+            education_card.cardContent = educationString
+            education_card.cardBottom = "Add Education"
 
             var skillString: String = ""
             profile.skills?.let {
@@ -79,11 +72,11 @@ class EducationExpandedFragment: Fragment() {
                     skillString += skill + "\n\n"
                 }
             }
-            layout.skill_card.nextDestination = R.id.editSkillBottomSheet
-            layout.skill_card.hasContentTitles = false
-            layout.skill_card.cardTitle = "Skills"
-            layout.skill_card.cardContent = skillString
-            layout.skill_card.cardBottom = "Add Skill"
+            skill_card.nextDestination = R.id.editSkillBottomSheet
+            skill_card.hasContentTitles = false
+            skill_card.cardTitle = "Skills"
+            skill_card.cardContent = skillString
+            skill_card.cardBottom = "Add Skill"
 
             var achievementString: String = ""
             profile.achievements?.let {
@@ -96,26 +89,26 @@ class EducationExpandedFragment: Fragment() {
                     achievementString += achievement.year + "\n\n"
                 }
             }
-            layout.achievement_card.nextDestination = R.id.editAchievementBottomSheet
-            layout.achievement_card.cardTitle = "Achievement"
-            layout.achievement_card.cardContent = achievementString
-            layout.achievement_card.cardBottom = "Add Achievement"
+            achievement_card.nextDestination = R.id.editAchievementBottomSheet
+            achievement_card.cardTitle = "Achievement"
+            achievement_card.cardContent = achievementString
+            achievement_card.cardBottom = "Add Achievement"
 
-            layout.education_top_profile.userName = profile.name
-            layout.education_top_profile.imageName = profile.profileAvatarName
-
-            Log.d("ProfileFragment", profile.rating.toString())
+            education_top_profile.userName = profile.name
+            education_top_profile.imageName = profile.profileAvatarName
         })
 
+    }
 
+    private fun setListeners() {
         // Navigate to bottom sheets
-        layout.skill_card.card_bottom.setOnClickListener{
+        skill_card.card_bottom.setOnClickListener{
             this.findNavController().navigate(R.id.addSkillBottomSheetFragment)
         }
-        layout.achievement_card.card_bottom.setOnClickListener{
+        achievement_card.card_bottom.setOnClickListener{
             this.findNavController().navigate(R.id.addAchievementBottomSheetFragment)
         }
-        layout.education_card.card_bottom.setOnClickListener{
+        education_card.card_bottom.setOnClickListener{
             this.findNavController().navigate(R.id.addEducationBottomSheetFragment)
         }
     }

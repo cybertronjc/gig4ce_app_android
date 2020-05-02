@@ -1,6 +1,7 @@
 package com.gigforce.app.modules.profile
 
 import android.content.Context
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProviders
 import com.gigforce.app.R
@@ -9,19 +10,11 @@ import com.google.android.material.chip.Chip
 
 abstract class ProfileBaseFragment: BaseFragment() {
 
-    var profileViewModel: ProfileViewModel? = null
+    val profileViewModel: ProfileViewModel by activityViewModels<ProfileViewModel>()
     var validation: ProfileValidation? = null
 
     init {
         validation = ProfileValidation()
-    }
-
-    fun setViewModel(viewModel: ProfileViewModel) {
-        profileViewModel = viewModel
-    }
-
-    fun getViewModel(): ViewModel? {
-        return profileViewModel
     }
 
     open fun addChip(context: Context, name: String): Chip {
