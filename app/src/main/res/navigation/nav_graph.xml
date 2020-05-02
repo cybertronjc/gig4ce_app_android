@@ -33,24 +33,29 @@
         android:name="com.gigforce.app.modules.profile.AddLanguageBottomSheetFragment"
         android:label="AddLanguageBottomSheetFragment" />
 
-    <fragment android:id="@+id/authFlowFragment"
+    <fragment
+        android:id="@+id/authFlowFragment"
         android:name="com.gigforce.app.modules.auth.AuthFlowFragment"
-        tools:layout="@layout/fragment_auth_flow"/>
+        tools:layout="@layout/fragment_auth_flow" />
 
-    <fragment android:id="@+id/settingFragment"
+    <fragment
+        android:id="@+id/settingFragment"
         android:name="com.gigforce.app.modules.preferences.PreferencesFragment"
-        tools:layout="@layout/fragment_auth_flow"/>
-    <fragment android:id="@+id/dayTimeFragment"
+        tools:layout="@layout/fragment_auth_flow" />
+    <fragment
+        android:id="@+id/dayTimeFragment"
         android:name="com.gigforce.app.modules.preferences.daytime.DayTimeFragment"
-        tools:layout="@layout/date_time_fragment"/>
+        tools:layout="@layout/date_time_fragment" />
 
-    <fragment android:id="@+id/weekEndFragment"
+    <fragment
+        android:id="@+id/weekEndFragment"
         android:name="com.gigforce.app.modules.preferences.daytime.weekend.WeekEndFragment"
-        tools:layout="@layout/week_end_fragment"/>
+        tools:layout="@layout/week_end_fragment" />
 
-    <fragment android:id="@+id/weekDayFragment"
+    <fragment
+        android:id="@+id/weekDayFragment"
         android:name="com.gigforce.app.modules.preferences.daytime.weekday.WeekDayFragment"
-        tools:layout="@layout/week_day_fragment"/>
+        tools:layout="@layout/week_day_fragment" />
 
     <fragment
         android:id="@+id/experienceExpandedFragment"
@@ -157,7 +162,11 @@
         android:id="@+id/introSlidesFragment"
         android:name="com.gigforce.app.modules.onboarding.IntroSlidesFragment"
         android:label="fragment_intro_slides"
-        tools:layout="@layout/fragment_intro_slides" />
+        tools:layout="@layout/fragment_intro_slides">
+        <action
+            android:id="@+id/action_introSlidesFragment_to_Login"
+            app:destination="@id/Login" />
+    </fragment>
     <fragment
         android:id="@+id/OBSlidesFragment"
         android:name="com.gigforce.app.modules.onboarding.OBSlidesFragment"
@@ -169,7 +178,11 @@
     <fragment
         android:id="@+id/languageSelectFragment"
         android:name="com.gigforce.app.utils.LanguageSelectFragment"
-        android:label="LanguageSelectFragment" />
+        android:label="LanguageSelectFragment">
+        <action
+            android:id="@+id/action_languageSelectFragment_to_introSlidesFragment"
+            app:destination="@id/introSlidesFragment" />
+    </fragment>
     <fragment
         android:id="@+id/videoResumeFragment"
         android:name="com.gigforce.app.modules.video_resume.VideoResumeFragment"
@@ -184,8 +197,8 @@
             android:defaultValue='""'
             app:argType="string" />
         <action
-            android:id="@+id/action_verifyOTP_to_homeScreenIcons"
-            app:destination="@id/homeScreenIcons" />
+            android:id="@+id/action_verifyOTP_to_onOTPSuccess"
+            app:destination="@id/onOTPSuccess" />
     </fragment>
     <fragment
         android:id="@+id/homeScreenFragment"
@@ -330,6 +343,14 @@
         android:id="@+id/rosterDayFragment"
         android:name="com.gigforce.app.modules.roster.RosterDayFragment"
         android:label="RosterDayFragment" />
+    <fragment
+        android:id="@+id/onOTPSuccess"
+        android:name="com.gigforce.app.modules.auth.ui.main.OnOTPSuccess"
+        android:label="OnOTPSuccess">
+        <action
+            android:id="@+id/action_onOTPSuccess_to_homeScreenIcons"
+            app:destination="@id/homeScreenIcons" />
+    </fragment>
     <fragment
         android:id="@+id/locationFragment"
         android:name="com.gigforce.app.modules.preferences.location.LocationFragment"

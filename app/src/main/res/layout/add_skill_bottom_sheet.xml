@@ -17,6 +17,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
         <TextView
+            android:id="@+id/form_error"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:textColor="#d4e02020"
+            android:letterSpacing="0.05"
+            android:visibility="gone"
+            android:text="@string/error_empty_mandatory_fields" />
+        <TextView
             android:id="@+id/textView18"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -39,36 +48,42 @@
             android:hint="@string/add_skill_sheet_skill_name"
             android:inputType="textPersonName" />
 
-        <TextView
-            android:id="@+id/add_skill_add_more_button"
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/add_more_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="@string/add_more_text"
-            style = "@style/LipstickCardBottom"/>
+            android:textAlignment="textStart"
+            app:icon="@drawable/ic_add"
+            style="@style/Widget.MaterialComponents.Button.TextButton.Icon" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_marginTop="16dp">
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/add_skill_cancel_button"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:text="@string/cancel_text"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
-                android:text="@string/cancel_text" />
+                android:textColor="@color/gray_color"
+                style="?attr/materialButtonOutlinedStyle"/>
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/add_skill_save_button"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:text="@string/save_text"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
-                android:layout_weight="1"/>
+                app:strokeColor="@color/colorPrimary"
+                style="?attr/materialButtonOutlinedStyle"  />
         </LinearLayout>
 
     </LinearLayout>

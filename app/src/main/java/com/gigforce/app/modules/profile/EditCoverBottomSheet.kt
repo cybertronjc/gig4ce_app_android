@@ -30,7 +30,6 @@ class EditCoverBottomSheet(): ProfileBaseBottomSheetFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        profileViewModel = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
         return inflateView(R.layout.edit_cover_bottom_sheet, inflater, container)
     }
 
@@ -40,7 +39,6 @@ class EditCoverBottomSheet(): ProfileBaseBottomSheetFragment() {
     }
 
     private fun initialize() {
-        var layout: View? = getFragmentView()
 
         profileViewModel!!.getAllTags()
         val autotextview: AutoCompleteTextView = add_tag_new_tag
@@ -55,9 +53,9 @@ class EditCoverBottomSheet(): ProfileBaseBottomSheetFragment() {
         profileViewModel!!.userProfileData.observe(this, Observer { profile ->
             bio.setText(profile.bio)
 
-            userTags = profile.Tags!!
+            userTags = profile.tags!!
 
-            for (tag in profile.Tags!!) {
+            for (tag in profile.tags!!) {
                 var chip = addCrossableChip(this.context!!, tag)
                 tags.addView(chip)
                 chip.setOnCloseIconClickListener {
@@ -75,20 +73,18 @@ class EditCoverBottomSheet(): ProfileBaseBottomSheetFragment() {
         }
 
         save_button.setOnClickListener {
-            profileViewModel!!.setProfileTag(tagsToAdd)
 
-            profileViewModel!!.removeProfileTag(tagsToRemove)
-
-            if (bio_text.text.toString() != "") {
-                if (bio_text.text.toString().length <= 150) {
+            if (bio.text.toString() != "") {
+                if (bio.text.toString().length <= 150) {
                     profileViewModel!!.setProfileBio(bio.text.toString())
+                    profileViewModel!!.setProfileTag(tagsToAdd)
+                    profileViewModel!!.removeProfileTag(tagsToRemove)
+                    findNavController().navigate(R.id.profileFragment)
                 }
                 else {
                     Toast.makeText(this.context, "Bio text should be less than 150 characters", Toast.LENGTH_LONG).show()
                 }
             }
-
-            findNavController().navigate(R.id.profileFragment)
         }
 
         add_button.setOnClickListener {

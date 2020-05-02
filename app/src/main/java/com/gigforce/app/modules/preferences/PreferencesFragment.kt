@@ -14,12 +14,16 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.request.RequestOptions
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.app.core.genericadapter.RecyclerGenericAdapter
+import com.gigforce.app.utils.GlideApp
 import com.gigforce.app.utils.setDarkStatusBarTheme
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import kotlinx.android.synthetic.main.preferences_fragment.*
 
 
@@ -31,6 +35,8 @@ class PreferencesFragment : BaseFragment() {
         const val LOCATION = 3;
         const val TITLE_OTHER = 5;
         const val TITLE_SIGNOUT = 8;
+        var storage = FirebaseStorage.getInstance()
+
     }
 
     private lateinit var viewModel: SharedPreferenceViewModel
@@ -54,6 +60,25 @@ class PreferencesFragment : BaseFragment() {
         initializeViews()
         listener()
         observePreferenceData()
+        observeProfileData()
+    }
+
+    private fun observeProfileData() {
+        viewModel.userProfileData.observe(this, Observer { profile ->
+            displayImage(profile.profileAvatarName)
+        })
+
+    }
+
+    private fun displayImage(profileImg:String) {
+        if(profileImg!=null && !profileImg.equals("")) {
+            val profilePicRef: StorageReference =
+                storage.reference.child("profile_pics").child(profileImg)
+            GlideApp.with(this.context!!)
+                .load(profilePicRef)
+                .apply(RequestOptions().circleCrop())
+                .into(profile_image)
+        }
     }
 
     private fun listener() {
@@ -95,8 +120,10 @@ class PreferencesFragment : BaseFragment() {
     }
     private fun observePreferenceData() {
         viewModel.preferenceDataModel.observe(viewLifecycleOwner, Observer { preferenceData ->
-        viewModel.setPreferenceDataModel(preferenceData)
-            setPreferenecesList()
+            if(preferenceData!=null) {
+                viewModel.setPreferenceDataModel(preferenceData)
+                setPreferenecesList()
+            }
         })
     }
 

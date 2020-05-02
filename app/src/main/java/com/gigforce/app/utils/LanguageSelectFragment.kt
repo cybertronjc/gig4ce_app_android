@@ -41,7 +41,7 @@ class LanguageSelectFragment : BaseFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        this.setDarkStatusBarTheme()
+        this.setDarkStatusBarTheme(false)
         try {
             LocaleChanger.initialize(this.context, SUPPORTED_LOCALES)
         } catch (e: Exception) {
@@ -88,7 +88,7 @@ class LanguageSelectFragment : BaseFragment() {
     }
 
     private fun navNext() {
-        navigateWithAllPopupStack(R.id.authFlowFragment)
+        navigate(R.id.authFlowFragment)
     }
 
     private fun updateResources(language: String) {

@@ -4,6 +4,9 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
+import android.widget.TextView
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModel
 import com.gigforce.app.R
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -11,13 +14,11 @@ import com.google.android.material.chip.Chip
 
 abstract class ProfileBaseBottomSheetFragment: BottomSheetDialogFragment() {
     var mView: View? = null
-    var profileViewModel: ProfileViewModel? = null
-    fun setViewModel(viewModel: ProfileViewModel) {
-        profileViewModel = viewModel
-    }
+    var validation: ProfileValidation? = null
+    val profileViewModel: ProfileViewModel by activityViewModels<ProfileViewModel>()
 
-    fun getViewModel(): ViewModel? {
-        return profileViewModel
+    init {
+        validation = ProfileValidation()
     }
 
     open fun activate(view:View?){}
@@ -52,5 +53,19 @@ abstract class ProfileBaseBottomSheetFragment: BottomSheetDialogFragment() {
         chip.setChipStrokeWidthResource(R.dimen.border_width)
         chip.setChipBackgroundColorResource(R.color.fui_transparent)
         return chip
+    }
+
+    fun showError(formError: TextView, vararg views: View?) {
+        formError.visibility = View.VISIBLE
+        for (view in views) {
+            (view as EditText).setHintTextColor(resources.getColor(R.color.colorError))
+        }
+    }
+
+    fun hideError(formError: TextView, vararg views: View?) {
+        formError.visibility = View.GONE
+        for (view in views) {
+            (view as EditText).setHintTextColor(resources.getColor(R.color.colorHint))
+        }
     }
 }

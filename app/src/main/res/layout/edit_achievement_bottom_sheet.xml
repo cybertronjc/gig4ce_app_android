@@ -18,6 +18,16 @@
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/form_error"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:textColor="#d4e02020"
+            android:letterSpacing="0.05"
+            android:visibility="gone"
+            android:text="@string/error_empty_mandatory_fields" />
+
+        <TextView
             android:id="@+id/textView28"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -38,6 +48,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:ems="10"
+            android:hint="@string/add_achievement_sheet_title"
             android:inputType="textPersonName" />
 
 
@@ -53,6 +64,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
+                android:hint="@string/add_achievement_sheet_issuing_authority"
                 android:inputType="textPersonName"
                 android:layout_marginTop="8dp"/>
 
@@ -68,6 +80,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
+                android:hint="@string/location"
                 android:inputType="textPersonName"
                 android:layout_marginTop="8dp"/>
 
@@ -82,6 +95,7 @@
             android:id="@+id/year"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:hint="@string/add_achievement_sheet_year"
             android:ems="10"
             android:inputType="date"
             android:layout_marginTop="8dp"/>
@@ -91,23 +105,30 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:orientation="horizontal">
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/delete"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/delete"
                 android:layout_weight="1"
                 android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp" />
+                android:layout_marginEnd="8dp"
+                android:textColor="@color/gray_color"
+                app:iconTint="@color/gray_color"
+                app:icon="@drawable/ic_delete"
+                app:strokeColor="@color/gray_color"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"/>
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/save"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:text="@string/save_text"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
-                android:text="@string/save_text" />
+                app:strokeColor="@color/colorPrimary"
+                style="?attr/materialButtonOutlinedStyle"  />
         </LinearLayout>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

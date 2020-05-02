@@ -125,6 +125,7 @@
     <style name="LatoWhiteHeading">
         <item name="android:textSize">22sp</item>
         <item name="android:textColor">#ffffff</item>
+        <item name="android:textStyle">bold</item>
         <item name="android:letterSpacing">0.05</item>
     </style>
 
@@ -155,8 +156,8 @@
     </style>
 
     <style name="LipstickCardBottom">
-        <item name="android:textSize">18sp</item>
-        <item name="android:textColor">#e42c64</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">#d72467</item>
         <item name="android:letterSpacing">0.05</item>
     </style>
 
@@ -230,6 +231,18 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">1dp</item>
         <item name="android:background">@color/colorLigthSeparater</item>
+    </style>
+
+    <style name="LatoRegular16Black">
+        <item name="android:textSize">16sp</item>
+        <item name="android:letterSpacing">0.04</item>
+        <item name="android:lineSpacingExtra">19.1sp</item>
+        <item name="android:textColor">#222222</item>
+    </style>
+    <style name="LatoRegular8">
+        <item name="android:textSize">10sp</item>
+        <item name="android:letterSpacing">0.14</item>
+        <item name="android:textColor">#222222</item>
     </style>
 
 

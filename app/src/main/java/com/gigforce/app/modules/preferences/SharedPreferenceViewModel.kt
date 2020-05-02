@@ -1,6 +1,8 @@
 package com.gigforce.app.modules.preferences
 
+
 import android.location.Location
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.gigforce.app.R
@@ -9,6 +11,7 @@ import com.gigforce.app.modules.preferences.location.models.LocationPreferenceMo
 import com.gigforce.app.modules.profile.models.AddressModel
 import com.gigforce.app.modules.preferences.prefdatamodel.PreferencesDataModel
 import com.gigforce.app.modules.profile.ProfileFirebaseRepository
+
 import com.gigforce.app.modules.profile.models.AddressFirestoreModel
 import com.gigforce.app.modules.profile.models.ProfileData
 import com.google.firebase.firestore.DocumentReference
@@ -21,6 +24,8 @@ class SharedPreferenceViewModel : ViewModel() {
         var profileDataModelObj: ProfileData = ProfileData()
         var addressModelObj: AddressModel = AddressModel()
     }
+    var profileFirebaseRepository = ProfileFirebaseRepository()
+    var userProfileData: MutableLiveData<ProfileData> = MutableLiveData<ProfileData>()
     var preferencesRepository:PreferencesRepository = PreferencesRepository()
     var profileRepository:ProfileFirebaseRepository = ProfileFirebaseRepository()
     var citiesRepository:CitiesRepository = CitiesRepository()
@@ -53,9 +58,28 @@ class SharedPreferenceViewModel : ViewModel() {
             if (e != null) {
                 return@EventListener
             }
-            preferenceDataModel.postValue(
-                value!!.toObject(PreferencesDataModel::class.java)
-            )
+            if(value?.data==null){
+             preferencesRepository.setDefaultData(PreferencesDataModel())
+            }else {
+                preferenceDataModel.postValue(
+                    value!!.toObject(PreferencesDataModel::class.java)
+                )
+            }
+        })
+
+        profileFirebaseRepository.getProfile().addSnapshotListener(EventListener<DocumentSnapshot> {
+                value, e ->
+            if (e != null) {
+                return@EventListener
+            }
+            if (value!!.data == null) {
+                profileFirebaseRepository.createEmptyProfile()
+            }
+            else {
+                userProfileData.postValue(
+                    value!!.toObject(ProfileData::class.java)
+                )
+            }
         })
 
         profileRepository.getDBCollection().addSnapshotListener(EventListener<DocumentSnapshot> {
@@ -70,9 +94,11 @@ class SharedPreferenceViewModel : ViewModel() {
 
 
     }
+
     fun setIsWeekdays(checked: Boolean) {
         preferencesRepository.setData(preferencesRepository.WEEKDAYS,checked)
     }
+
     fun setIsWeekend(checked: Boolean){
         preferencesRepository.setData(preferencesRepository.WEEKEND,checked)
     }
@@ -92,19 +118,26 @@ class SharedPreferenceViewModel : ViewModel() {
         prefrencesItems.add(PreferencesScreenItem(R.drawable.ic_referal,"Day and Time",getDateTimeSubtitle()))
         prefrencesItems.add(PreferencesScreenItem(R.drawable.ic_settings,"Location","Work from home,Bangalore"))
         prefrencesItems.add(PreferencesScreenItem(R.drawable.ic_settings,"Earning","2000-2200rs"))
-        prefrencesItems.add(PreferencesScreenItem(0,"Others",""))
+        prefrencesItems.add(PreferencesScreenItem(0,"OTHERS",""))
         prefrencesItems.add(PreferencesScreenItem(R.drawable.ic_link_broken,"App Language","English"))
         prefrencesItems.add(PreferencesScreenItem(R.drawable.ic_broadcast,"Notification",""))
         prefrencesItems.add(PreferencesScreenItem(R.drawable.ic_products,"Sign out",""))
         return prefrencesItems;
     }
+
     fun getDateTimeSubtitle():String{
-        var subtitle = ""
-        if(preferencesDataModelObj.selecteddays.size>1)
-            subtitle = preferencesDataModelObj.selecteddays.size.toString()+" days"
-        else if(preferencesDataModelObj.selecteddays.size==1)
-            subtitle = preferencesDataModelObj.selecteddays.size.toString()+" day"
-        return subtitle
+        var subTitle = ""
+        var daysStr  = "day"
+        if(preferencesDataModelObj.selecteddays.size==0){
+            subTitle = "None"
+        }else if(preferencesDataModelObj.selecteddays.size>1){
+            subTitle = preferencesDataModelObj.selecteddays.size.toString()+" days"
+        }
+        else if(preferencesDataModelObj.selecteddays.size==1){
+            subTitle = preferencesDataModelObj.selecteddays.size.toString()+" day"
+
+        }
+        return subTitle
     }
 
     fun getCurrentAddress(): AddressModel? {

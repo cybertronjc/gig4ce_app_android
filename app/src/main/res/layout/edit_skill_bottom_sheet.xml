@@ -17,6 +17,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
         <TextView
+            android:id="@+id/form_error"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:textColor="#d4e02020"
+            android:letterSpacing="0.05"
+            android:visibility="gone"
+            android:text="@string/error_empty_mandatory_fields" />
+        <TextView
             android:id="@+id/textView18"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -44,23 +53,30 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_marginTop="16dp">
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/delete"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:text="@string/delete"
                 android:layout_weight="1"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
-                android:text="@string/delete" />
+                android:textColor="@color/gray_color"
+                app:iconTint="@color/gray_color"
+                app:icon="@drawable/ic_delete"
+                app:strokeColor="@color/gray_color"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"/>
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/save"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:text="@string/save_text"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
-                android:layout_weight="1"/>
+                app:strokeColor="@color/colorPrimary"
+                style="?attr/materialButtonOutlinedStyle"  />
         </LinearLayout>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
