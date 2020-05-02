@@ -9,7 +9,7 @@ import android.telephony.SubscriptionManager
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.INVISIBLE
+import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
@@ -68,8 +68,19 @@ class Login: BaseFragment() {
     }
 
     private fun listeners() {
+
+        cvloginwrong.visibility = GONE
+
+        otp_mobile_number.setOnClickListener {
+            cvloginwrong.visibility = GONE
+            textView23.visibility = VISIBLE
+        }
+
         otp_mobile_number.setOnKeyListener(View.OnKeyListener { _, keyCode, event ->
+            cvloginwrong.visibility = GONE
+            textView23.visibility = VISIBLE
             if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP) {
+                login_button.isEnabled = false;
                 doActionOnClick()
             }
             false
