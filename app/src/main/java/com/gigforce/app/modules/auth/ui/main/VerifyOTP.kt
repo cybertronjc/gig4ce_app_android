@@ -76,23 +76,23 @@ class VerifyOTP: BaseFragment() {
 
     private fun listeners() {
 
-        layout?.cvotpwrong?.visibility = View.GONE;
+        layout?.cvotpwrong?.visibility = View.INVISIBLE;
         txt_otp.setOnClickListener{
-            cvotpwrong.visibility = View.GONE
+            cvotpwrong.visibility = View.INVISIBLE
             textView26.visibility = View.VISIBLE
         }
         verify_otp_button?.setOnClickListener {
             val otpIn = layout?.txt_otp?.text
             match = OTP_NUMBER.matcher(otpIn)
             textView26?.visibility = View.VISIBLE
-            layout?.cvotpwrong?.visibility = View.GONE;
+            layout?.cvotpwrong?.visibility = View.INVISIBLE;
             if(match.matches()){
                 viewModel.verifyPhoneNumberWithCode(otpIn.toString())
                 // wrong otp entered
                 if (viewModel.liveState.value?.equals(STATE_SIGNIN_FAILED)!!) {
                     //layout?.otpnotcorrect.visibility = View.VISIBLE
                     cvotpwrong.visibility = View.VISIBLE
-                    textView26.visibility = View.GONE
+                    textView26.visibility = View.INVISIBLE
                     //layout?.otpnotcorrect?.text = "Wrong Password !!";
                     layout?.cvotpwrong?.visibility = View.VISIBLE;
                 }
@@ -104,7 +104,7 @@ class VerifyOTP: BaseFragment() {
             else {
                 //layout?.otpnotcorrect?.visibility = View.VISIBLE
                 //layout?.otpnotcorrect?.text = "Wrong Password !!";
-                textView26?.visibility = View.GONE
+                textView26?.visibility = View.INVISIBLE
                 layout?.cvotpwrong?.visibility = View.VISIBLE;
             }
             //findNavController().navigate(R.id.homeFragment)

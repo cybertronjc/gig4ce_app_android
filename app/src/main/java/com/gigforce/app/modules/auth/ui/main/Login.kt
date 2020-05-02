@@ -9,7 +9,7 @@ import android.telephony.SubscriptionManager
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.GONE
+import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
@@ -69,15 +69,15 @@ class Login: BaseFragment() {
 
     private fun listeners() {
 
-        cvloginwrong.visibility = GONE
+        cvloginwrong.visibility = INVISIBLE
 
         otp_mobile_number.setOnClickListener {
-            cvloginwrong.visibility = GONE
+            cvloginwrong.visibility = INVISIBLE
             textView23.visibility = VISIBLE
         }
 
         otp_mobile_number.setOnKeyListener(View.OnKeyListener { _, keyCode, event ->
-            cvloginwrong.visibility = GONE
+            cvloginwrong.visibility = INVISIBLE
             textView23.visibility = VISIBLE
             if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP) {
                 login_button.isEnabled = false;
@@ -102,10 +102,17 @@ class Login: BaseFragment() {
 
     private fun doActionOnClick(){
         var phoneNumber: String = "+91" + otp_mobile_number.text.toString();
-        if(validatePhoneNumber(phoneNumber)) {
+        if(!validatePhoneNumber(phoneNumber)){
+            // TODO make the error bar visible
+            cvloginwrong.visibility = VISIBLE
+            textView23.visibility = INVISIBLE
+            login_button.isEnabled = true;
+        }
+        else{
             viewModel.sendVerificationCode(phoneNumber)
         }
     }
+
     private fun validatePhoneNumber(phoneNumber:String): Boolean {
         match = INDIAN_MOBILE_NUMBER.matcher(phoneNumber)
         if (phoneNumber.isEmpty()) {
