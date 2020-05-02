@@ -115,6 +115,10 @@ abstract class BaseFragment : Fragment() {
     navController.popAllBackStates()
     }
 
+    fun popBackState(){
+        navController.popBackStack()
+    }
+
     fun findViewById(id: Int): View? {
         return this.mView!!.findViewById(id)
     }
@@ -154,7 +158,7 @@ abstract class BaseFragment : Fragment() {
     fun setViewBackgroundColor(view:View,color:Int){
         view.setBackgroundColor(ContextCompat.getColor(activity!!.applicationContext, color))
     }
-    fun onBackPressed():Boolean{
+    open fun onBackPressed():Boolean{
         return false
     }
 }

@@ -78,6 +78,15 @@ class IntroSlidesFragment : BaseFragment() {
         return image
     }
 
+    override fun onBackPressed(): Boolean {
+        if(this.viewpager.currentItem==0){
+            return false
+        }
+        else{
+        this.viewpager.setCurrentItem(this.viewpager.currentItem-1,true)
+        return true
+        }
+    }
 }
 
 class IntroSlidesViewPagerAdapter(val viewpager:ViewPager2,
