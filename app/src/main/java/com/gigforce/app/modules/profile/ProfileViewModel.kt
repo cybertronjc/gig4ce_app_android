@@ -12,7 +12,7 @@ import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.tasks.await
 
-class   ProfileViewModel: ViewModel() {
+class ProfileViewModel: ViewModel() {
 
     companion object {
         fun newInstance() = ProfileViewModel()

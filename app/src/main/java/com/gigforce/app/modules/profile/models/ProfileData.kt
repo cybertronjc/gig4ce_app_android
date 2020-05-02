@@ -18,7 +18,7 @@ data class ProfileData(
     var experiences: ArrayList<Experience>? = ArrayList<Experience>(),
     var tags: ArrayList<String>? = ArrayList<String>(),
     var connections: Int = 0,
-    var rating: Rating? = null,
+    var rating: Rating? = Rating(),
     var tasksDone: Int = 0,
     var address:AddressFirestoreModel = AddressFirestoreModel()
 
