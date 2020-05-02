@@ -32,21 +32,21 @@ class MainActivity : AppCompatActivity() {
         navController.navigate(R.id.authFlowFragment)
     }
 
-    override fun onBackPressed() {
-        val fragmentList: List<*> = supportFragmentManager.fragments
-
-        var handled = false
-        for (f in fragmentList) {
-            if (f is BaseFragment) {
-                handled = f.onBackPressed()
-                if (handled) {
-                    break
-                }
-            }
-        }
-
-        if (!handled) {
-            super.onBackPressed()
-        }
-    }
+//    override fun onBackPressed() {
+//        val fragmentList: List<*> = supportFragmentManager.fragments
+//
+//        var handled = false
+//        for (f in fragmentList) {
+//            if (f is BaseFragment) {
+//                handled = f.onBackPressed()
+//                if (handled) {
+//                    break
+//                }
+//            }
+//        }
+//
+//        if (!handled) {
+//            super.onBackPressed()
+//        }
+//    }
 }
