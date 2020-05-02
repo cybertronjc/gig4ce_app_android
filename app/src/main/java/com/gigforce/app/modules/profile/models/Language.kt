@@ -6,6 +6,6 @@ data class Language(
     var name: String = "",
     var speakingSkill: String = "",
     var writingSkill: String = "",
-    var isMotherLanguage: String = "false"
+    var isMotherLanguage: Boolean = false
 ){
 }
