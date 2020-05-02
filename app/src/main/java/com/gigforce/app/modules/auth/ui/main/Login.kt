@@ -80,6 +80,7 @@ class Login: BaseFragment() {
 
             Handler().postDelayed(Runnable {
                 // This method will be executed once the timer is over
+                if(login_button!=null)
                 login_button.setEnabled(true)
             }, 3000) // se
 
