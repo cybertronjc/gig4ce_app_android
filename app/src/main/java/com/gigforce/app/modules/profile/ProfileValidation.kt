@@ -13,6 +13,15 @@ class ProfileValidation() {
         return false
     }
 
+    private fun isFixedLengthEditText(view: EditText?, length: Int): Boolean {
+        view?.let {
+            if (view.text.toString().length == length) {
+                return true
+            }
+        }
+        return false
+    }
+
     private fun isNotEmptyString(value: String?): Boolean {
         value?.let {
             if (value.isNotEmpty())
@@ -58,5 +67,25 @@ class ProfileValidation() {
             return true
         }
         return false
+    }
+
+    fun isValidAchievement(
+        title: EditText?,
+        authority: EditText?,
+        year: EditText?
+    ): Boolean {
+        if (isNotEmptyEditText(title) && isNotEmptyEditText(authority) && isNotEmptyEditText(year) &&
+                    isFixedLengthEditText(year, 4)) {
+            return true
+        }
+        return false
+    }
+
+    fun isValidSkill(skill: String?): Boolean {
+        return isNotEmptyString(skill)
+    }
+
+    fun isValidLanguage(language: EditText?): Boolean {
+        return isNotEmptyEditText(language)
     }
 }

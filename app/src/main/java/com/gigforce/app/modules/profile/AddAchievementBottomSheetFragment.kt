@@ -5,101 +5,83 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
 import com.gigforce.app.modules.profile.models.Achievement
-import com.gigforce.app.modules.profile.models.Skill
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import kotlinx.android.synthetic.main.add_achievement_bottom_sheet.view.*
-import kotlinx.android.synthetic.main.add_education_bottom_sheet.view.*
-import kotlinx.android.synthetic.main.add_skill_bottom_sheet.view.*
-import kotlinx.android.synthetic.main.edit_achievement_bottom_sheet.view.*
-import java.text.SimpleDateFormat
+import kotlinx.android.synthetic.main.add_achievement_bottom_sheet.*
 
-class AddAchievementBottomSheetFragment: BottomSheetDialogFragment() {
+class AddAchievementBottomSheetFragment: ProfileBaseBottomSheetFragment() {
     companion object {
         fun newInstance() = AddAchievementBottomSheetFragment()
     }
 
-    lateinit var layout: View
     var updates: ArrayList<Achievement> = ArrayList()
-    lateinit var viewModel: ProfileViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         Log.d("DEBUG", "ENTERED Profile Education Expanded VIEW")
-        layout = inflater.inflate(R.layout.add_achievement_bottom_sheet, container, false)
-        return layout
+        inflateView(R.layout.add_achievement_bottom_sheet, inflater, container)
+        return getFragmentView()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setListeners()
+    }
 
-        viewModel = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
+    private fun setListeners() {
+        add_more_button.setOnClickListener{
+            if (validateAchievement()) {
+                addNewAchievement()
+                title.setText("")
+                authority.setText("")
+                location.setSelection(0)
+                year.setText("")
+            }
+        }
 
-        layout.add_achievement_cancel_button.setOnClickListener{
+        cancel_button.setOnClickListener{
             this.findNavController().navigate(R.id.educationExpandedFragment)
         }
 
-        layout.add_achievement_add_more_button.setOnClickListener{
+        save_button.setOnClickListener{
             if (validateAchievement()) {
                 addNewAchievement()
 
-                layout.add_achievement_title.setText("")
-                layout.add_achievement_authority.setText("")
-                layout.add_achievement_location.setSelection(0)
-                layout.add_achievement_year.setText("")
-            }
-            else {
-                Toast.makeText(this.context, "Invalid Entry", Toast.LENGTH_LONG).show()
-            }
-        }
-
-        layout.add_achievement_save_button.setOnClickListener{
-            if (validateAchievement()) {
-                addNewAchievement()
-
-                viewModel.setProfileAchievement(updates)
+                profileViewModel!!.setProfileAchievement(updates)
                 Toast.makeText(this.context, "Updated Achievement Section", Toast.LENGTH_LONG).show()
                 this.findNavController().navigate(R.id.educationExpandedFragment)
-            }
-            else {
-                Toast.makeText(this.context, "Invalid Entry", Toast.LENGTH_LONG).show()
             }
         }
     }
 
     private fun addNewAchievement() {
+        hideError(form_error, title, authority, year)
         updates.add(
             Achievement(
-                title = layout.add_achievement_title.text.toString(),
-                issuingAuthority = layout.add_achievement_authority.text.toString(),
-                location = layout.add_achievement_location.text.toString(),
-                year = layout.add_achievement_year.text.toString()
+                title = title.text.toString(),
+                issuingAuthority = authority.text.toString(),
+                location = location.text.toString(),
+                year = year.text.toString()
             )
         )
     }
 
     private fun validateAchievement(): Boolean {
-        if (layout.add_achievement_title.text.toString() == "") {
+        if (validation!!.isValidAchievement(
+                title,
+                authority,
+                year
+            )) {
+            return true
+        }
+        else {
+            showError(form_error, title, authority, year)
             return false
         }
-        if (layout.add_achievement_authority.text.toString() == "") {
-            return false
-        }
-        if (layout.add_achievement_year.text.toString() == "" ||
-                layout.add_achievement_year.text.toString().length != 4) {
-            return false
-        }
-        if (layout.add_achievement_location.text.toString() == "") {
-            return false
-        }
-        return true
     }
 }

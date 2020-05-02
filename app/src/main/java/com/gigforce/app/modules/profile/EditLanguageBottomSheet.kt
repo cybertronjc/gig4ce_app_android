@@ -11,19 +11,17 @@ import androidx.navigation.fragment.findNavController
 import com.afollestad.materialdialogs.MaterialDialog
 import com.gigforce.app.R
 import com.gigforce.app.modules.profile.models.Language
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import kotlinx.android.synthetic.main.edit_language_bottom_sheet.view.*
-import kotlinx.android.synthetic.main.edit_language_bottom_sheet.view.delete
-import kotlinx.android.synthetic.main.edit_language_bottom_sheet.view.save
+import kotlinx.android.synthetic.main.edit_language_bottom_sheet.*
 
-class EditLanguageBottomSheet: BottomSheetDialogFragment() {
+class EditLanguageBottomSheet: ProfileBaseBottomSheetFragment() {
     companion object {
         fun newInstance() = EditLanguageBottomSheet()
     }
 
-    lateinit var layout: View
     var arrayLocation: String = ""
-    lateinit var viewModel: ProfileViewModel
+    lateinit var language: Language
+    var isMotherLanguage = "false"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -36,35 +34,36 @@ class EditLanguageBottomSheet: BottomSheetDialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        layout = inflater.inflate(R.layout.edit_language_bottom_sheet, container, false)
-        viewModel = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
+        inflateView(R.layout.edit_language_bottom_sheet, inflater, container)
 
-        return layout
+        return getFragmentView()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        lateinit var language: Language
-        var isMotherLanguage = "false"
+        initialize()
+        setListeners()
+    }
 
-        viewModel.userProfileData.observe(this, Observer { profile ->
-            profile.Language?.let {
+    private fun initialize() {
+        profileViewModel!!.userProfileData.observe(this, Observer { profile ->
+            profile.languages?.let {
                 val languages = it.sortedByDescending { language -> language.speakingSkill }
                 language = languages[arrayLocation.toInt()]
-                layout.language_name.setText(language.name)
-                if (language.isMotherLanguage.toString() == "true") {
-                    layout.mother_language.isChecked = true
-                }
-                layout.language_speaking_level.progress = language.speakingSkill.toInt()
-                layout.language_writing_level.progress = language.writingSkill.toInt()
+                language_name.setText(language.name)
+                mother_language.isChecked = language.isMotherLanguage
+                language_speaking_level.progress = language.speakingSkill.toInt()
+                language_writing_level.progress = language.writingSkill.toInt()
             }
         })
+    }
 
-        layout.delete.setOnClickListener {
+    private fun setListeners() {
+        delete.setOnClickListener {
             MaterialDialog(this.context!!).show {
                 title(text = "Confirm Delete")
                 message(text = "Are you sure to Delete this item?")
                 positiveButton(R.string.delete) {
-                    viewModel.removeProfileLanguage(language)
+                    profileViewModel!!.removeProfileLanguage(language)
                     findNavController().navigate(R.id.aboutExpandedFragment)
                 }
                 negativeButton(R.string.cancel_text) {
@@ -73,28 +72,32 @@ class EditLanguageBottomSheet: BottomSheetDialogFragment() {
             }
         }
 
-        layout.save.setOnClickListener {
+        save.setOnClickListener {
             if (validateLanguage()) {
                 Log.d("EditLanguage", "Editing Language")
-                viewModel.removeProfileLanguage(language!!)
+                profileViewModel!!.removeProfileLanguage(language!!)
                 var newLanguage: ArrayList<Language> = ArrayList()
                 newLanguage.add(
                     Language(
-                        name = layout.language_name.text.toString(),
-                        speakingSkill = layout.language_speaking_level.progress.toString(),
-                        writingSkill = layout.language_writing_level.progress.toString(),
-                        isMotherLanguage = layout.mother_language.isChecked.toString()
+                        name = language_name.text.toString(),
+                        speakingSkill = language_speaking_level.progress.toString(),
+                        writingSkill = language_writing_level.progress.toString(),
+                        isMotherLanguage = mother_language.isChecked
                     )
                 )
-                viewModel.setProfileLanguage(newLanguage)
+                profileViewModel!!.setProfileLanguage(newLanguage)
                 findNavController().navigate(R.id.aboutExpandedFragment)
             }
         }
+
     }
 
     private fun validateLanguage(): Boolean {
-        if (layout.language_name.text.toString() == "")
+        if (validation!!.isValidLanguage(language_name))
+            return true
+        else {
+            showError(form_error, language_name)
             return false
-        return true
+        }
     }
 }

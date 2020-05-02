@@ -37,7 +37,6 @@ class AddExperienceBottomSheet: ProfileBaseBottomSheetFragment() {
         savedInstanceState: Bundle?
     ): View? {
         inflateView(R.layout.add_experience_bottom_sheet, inflater, container)
-        profileViewModel = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
         return getFragmentView()
     }
 
@@ -132,6 +131,7 @@ class AddExperienceBottomSheet: ProfileBaseBottomSheetFragment() {
     }
 
     private fun addNewExperience() {
+        hideError(form_error, title, company, location, start_date, end_date)
         updates.add(
             Experience(
                 title = title.text.toString(),
@@ -159,7 +159,12 @@ class AddExperienceBottomSheet: ProfileBaseBottomSheetFragment() {
             return true
         }
         else {
-            Toast.makeText(this.context, "Invalid Entry", Toast.LENGTH_LONG).show()
+            if (currentlyWorkHere) {
+                showError(form_error, title, company, location, start_date)
+            }
+            else {
+                showError(form_error, title, company, location, start_date, end_date)
+            }
             return false
         }
     }

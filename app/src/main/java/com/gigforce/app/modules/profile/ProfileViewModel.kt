@@ -10,8 +10,13 @@ import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.storage.FirebaseStorage
+import kotlinx.coroutines.tasks.await
 
 class ProfileViewModel: ViewModel() {
+
+    companion object {
+        fun newInstance() = ProfileViewModel()
+    }
 
     var profileFirebaseRepository = ProfileFirebaseRepository()
     var userProfileData: MutableLiveData<ProfileData> = MutableLiveData<ProfileData>()
@@ -130,13 +135,9 @@ class ProfileViewModel: ViewModel() {
     init {
         uid = FirebaseAuth.getInstance().currentUser?.uid!!
         Log.d("ProfileViewModel", uid)
-
-        //uid = "UeXaZV3KctuZ8xXLCKGF" // Test user
-        getProfileData()
     }
 
     override fun onCleared() {
         super.onCleared()
-        Log.d("ProfileViewModel", "Profile View model destroying")
     }
 }

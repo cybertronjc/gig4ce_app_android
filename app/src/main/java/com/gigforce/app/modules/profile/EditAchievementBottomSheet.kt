@@ -5,31 +5,22 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.afollestad.materialdialogs.MaterialDialog
 import com.gigforce.app.R
 import com.gigforce.app.modules.profile.models.Achievement
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import kotlinx.android.synthetic.main.edit_achievement_bottom_sheet.view.*
-import kotlinx.android.synthetic.main.edit_achievement_bottom_sheet.view.delete
-import kotlinx.android.synthetic.main.edit_achievement_bottom_sheet.view.save
-import kotlinx.android.synthetic.main.fragment_select_language.view.*
-import java.text.SimpleDateFormat
+import kotlinx.android.synthetic.main.edit_achievement_bottom_sheet.*
 
-class EditAchievementBottomSheet: BottomSheetDialogFragment() {
+class EditAchievementBottomSheet: ProfileBaseBottomSheetFragment() {
 
     companion object {
         fun newInstance() = EditAchievementBottomSheet()
     }
 
-    lateinit var layout: View
     var arrayLocation: String = ""
-    lateinit var viewModel: ProfileViewModel
+    lateinit var achievement: Achievement
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,34 +34,39 @@ class EditAchievementBottomSheet: BottomSheetDialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        layout = inflater.inflate(R.layout.edit_achievement_bottom_sheet, container, false)
+       inflateView(R.layout.edit_achievement_bottom_sheet, inflater, container)
 
-        viewModel = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
-
-        return layout
+        return getFragmentView()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        lateinit var achievement: Achievement
+        super.onViewCreated(view, savedInstanceState)
+        initialize()
+        setListeners()
+    }
 
-        viewModel.userProfileData.observe(this, Observer { profile ->
-            profile.Achievement?.let {
+    private fun initialize() {
+        profileViewModel!!.userProfileData.observe(this, Observer { profile ->
+            profile.achievements?.let {
                 val achievements = it.sortedByDescending { achievement -> achievement.year }
                 achievement = achievements[arrayLocation!!.toInt()]
-                layout.title.setText(achievement.title)
-                layout.authority.setText(achievement.issuingAuthority)
-                layout.year.setText(achievement.year)
-                layout.location.setText(achievement.location)
+                title.setText(achievement.title)
+                authority.setText(achievement.issuingAuthority)
+                year.setText(achievement.year)
+                location.setText(achievement.location)
             }
         })
+    }
 
-        layout.delete.setOnClickListener {
+    private fun setListeners() {
+
+        delete.setOnClickListener {
             Log.d("EditAchievement", "Deleting Achievement")
             MaterialDialog(this.context!!).show {
                 title(text = "Confirm Delete")
                 message(text = "Are you sure to Delete this item?")
                 positiveButton(R.string.delete) {
-                    viewModel.removeProfileAchievement(achievement)
+                    profileViewModel!!.removeProfileAchievement(achievement)
                     findNavController().navigate(R.id.educationExpandedFragment)
                 }
                 negativeButton(R.string.cancel_text) {
@@ -79,43 +75,37 @@ class EditAchievementBottomSheet: BottomSheetDialogFragment() {
             }
         }
 
-        layout.save.setOnClickListener {
+        save.setOnClickListener {
             if (validateAchievement()) {
                 Log.d("EditAchievement", "Editing Achievement")
-                viewModel.removeProfileAchievement(achievement!!)
+                profileViewModel!!.removeProfileAchievement(achievement!!)
                 var newAchievement: ArrayList<Achievement> = ArrayList()
                 newAchievement.add(
                     Achievement(
-                        title = layout.title.text.toString(),
-                        issuingAuthority = layout.authority.text.toString(),
-                        year = layout.year.text.toString(),
-                        location = layout.location.text.toString()
+                        title = title.text.toString(),
+                        issuingAuthority = authority.text.toString(),
+                        year = year.text.toString(),
+                        location = location.text.toString()
                     )
                 )
-                viewModel.setProfileAchievement(newAchievement)
+                profileViewModel!!.setProfileAchievement(newAchievement)
                 findNavController().navigate(R.id.educationExpandedFragment)
-            }
-            else {
-                Toast.makeText(this.context, "Invalid Entry", Toast.LENGTH_LONG).show()
             }
         }
 
     }
 
     private fun validateAchievement(): Boolean {
-        if (layout.title.text.toString() == "") {
+        if (validation!!.isValidAchievement(
+                title,
+                authority,
+                year
+            )
+        ) {
+            return true
+        } else {
+            showError(form_error, title, authority, year)
             return false
         }
-        if (layout.authority.text.toString() == "") {
-            return false
-        }
-        if (layout.year.text.toString() == "" ||
-            layout.year.text.toString().length != 4) {
-            return false
-        }
-        if (layout.location.text.toString() == "") {
-            return false
-        }
-        return true
     }
 }

@@ -10,6 +10,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.DatePicker
 import android.widget.Toast
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
@@ -51,7 +52,6 @@ class EditEducationBottomSheet: ProfileBaseBottomSheetFragment() {
     ): View? {
         Log.d("LOCATION", "MYLOC" + arrayLocation.toString())
         inflateView(R.layout.edit_education_bottom_sheet, inflater, container)
-        profileViewModel = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
 
         return getFragmentView()
     }
@@ -88,7 +88,7 @@ class EditEducationBottomSheet: ProfileBaseBottomSheetFragment() {
         }
 
         profileViewModel!!.userProfileData.observe(this, Observer { profile ->
-            profile.Education?.let {
+            profile.educations?.let {
                 val educations = it.sortedByDescending { education -> education.startYear!! }
                 education = educations[arrayLocation!!.toInt()]
                 institution.setText(education.institution)
@@ -145,6 +145,7 @@ class EditEducationBottomSheet: ProfileBaseBottomSheetFragment() {
             Log.d("EditEducation", "updating")
             if (validateEducation()) {
                 profileViewModel!!.removeProfileEducation(education)
+                profileViewModel!!.removeProfileEducation(education)
                 var newEducation = ArrayList<Education>()
                 newEducation.add(
                     Education(
@@ -170,7 +171,7 @@ class EditEducationBottomSheet: ProfileBaseBottomSheetFragment() {
                 selectedEndDate))
             return true
         else {
-            Toast.makeText(this.context, "Invalid Entry", Toast.LENGTH_SHORT).show()
+            showError(form_error, institution, course, start_date, end_date)
             return false
         }
     }

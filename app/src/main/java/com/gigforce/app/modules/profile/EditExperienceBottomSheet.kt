@@ -47,7 +47,6 @@ class EditExperienceBottomSheet: ProfileBaseBottomSheetFragment() {
         savedInstanceState: Bundle?
     ): View? {
         inflateView(R.layout.edit_experience, inflater, container)
-        profileViewModel = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
         employments.addAll(listOf("--employment type--", "Full time", "internship", "Part time"))
 
         return getFragmentView()
@@ -62,7 +61,7 @@ class EditExperienceBottomSheet: ProfileBaseBottomSheetFragment() {
     private fun initialize() {
         val format = SimpleDateFormat("dd/MM/yyyy", Locale.US)
         profileViewModel!!.userProfileData.observe(this, Observer { profile ->
-            profile.Experience?.let {
+            profile.experiences?.let {
                 val experiences = it.sortedByDescending { experience -> experience.startDate  }
                 experience = experiences[arrayLocation.toInt()]
                 title.setText(experience.title)
@@ -199,7 +198,12 @@ class EditExperienceBottomSheet: ProfileBaseBottomSheetFragment() {
         ) {
             return true
         } else {
-            Toast.makeText(this.context, "Invalid Entry", Toast.LENGTH_LONG).show()
+            if (currentlyWorkHere) {
+                showError(form_error, title, company, location, start_date)
+            }
+            else {
+                showError(form_error, title, company, location, start_date, end_date)
+            }
             return false
         }
     }

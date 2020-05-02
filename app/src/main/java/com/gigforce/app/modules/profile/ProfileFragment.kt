@@ -9,8 +9,10 @@ import android.util.Log
 import android.view.*
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
 import com.gigforce.app.modules.photocrop.PhotoCrop
@@ -23,6 +25,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import kotlinx.android.synthetic.main.fragment_profile_main_expanded.view.*
 import kotlinx.android.synthetic.main.profile_main_card_background.view.*
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -33,7 +36,6 @@ class ProfileFragment : Fragment() {
         fun newInstance() = ProfileFragment()
     }
 
-    private lateinit var viewModel: ProfileViewModel
     private lateinit var storage: FirebaseStorage
     private lateinit var layout: View
     private lateinit var profileAvatarName: String
@@ -50,7 +52,7 @@ class ProfileFragment : Fragment() {
     ): View? {
         storage = FirebaseStorage.getInstance()
         Log.d("DEBUG", "ENTERED PROFILE VIEW")
-        val wm = context!!.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+        val wm = requireContext().getSystemService(Context.WINDOW_SERVICE) as WindowManager
         dWidth = wm.defaultDisplay
         layout = inflater.inflate(R.layout.fragment_profile_main_expanded, container, false)
         layout.appbar.post(Runnable {
@@ -68,7 +70,7 @@ class ProfileFragment : Fragment() {
         behavior!!.onNestedPreScroll(
             layout.coordinator,
             layout.appbar,
-            this!!.view!!,
+            this.requireView(),
             0,
             offsetPx,
             intArrayOf(0, 0),
@@ -79,10 +81,10 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
+        val viewModel: ProfileViewModel by activityViewModels<ProfileViewModel>()
 
         // load user data
-        viewModel.userProfileData.observe(this, Observer { profile ->
+        viewModel.getProfileData().observe(viewLifecycleOwner, Observer { profile ->
             layout.gigger_rating.text = if (profile.rating != null) profile.rating!!.getTotal().toString()
                                         else "-"
             layout.task_done.text = profile.tasksDone.toString()
@@ -97,15 +99,18 @@ class ProfileFragment : Fragment() {
             layout.bio.text = profile.bio
 
             layout.main_tags.removeAllViews()
-            profile.Tags?.let {
-                for (tag in profile.Tags!!) {
-                    layout.main_tags.addView(addChip(this.context!!, tag))
+            profile.tags?.let {
+                for (tag in it) {
+                    layout.main_tags.addView(addChip(this.requireContext(), tag))
+                }
+                if (it.size == 0) {
+                    layout.main_tags.addView(addChip(this.requireContext(), "giger"))
                 }
             }
 
             var mainAboutString = ""
             mainAboutString += profile.aboutMe + "\n\n"
-            profile.Language?.let {
+            profile.languages?.let {
                 val languages = it.sortedByDescending { language ->
                      language.speakingSkill
                 }
@@ -121,7 +126,9 @@ class ProfileFragment : Fragment() {
             }
 
             layout.main_about_card.card_title.text = "About me"
+            layout.main_about_card.optional_title_text.text = "bio"
             layout.main_about_card.card_content.text = mainAboutString
+            layout.main_about_card.card_icon.setImageResource(R.drawable.ic_about_me)
             layout.main_about_card.card_view_more.setOnClickListener {
                 findNavController().navigate(R.id.aboutExpandedFragment)
             }
@@ -131,7 +138,7 @@ class ProfileFragment : Fragment() {
 
             val format = SimpleDateFormat("dd/MM/yyyy", Locale.US)
             var mainEducationString = ""
-            profile.Education?.let {
+            profile.educations?.let {
                 val educations = it.sortedByDescending {
                         education -> education.startYear
                 }
@@ -145,7 +152,7 @@ class ProfileFragment : Fragment() {
             }
 
             // TODO: Add a generic way for string formatting
-            profile.Skill?.let {
+            profile.skills?.let {
                 val skills = it
                 for ((index, value) in skills.withIndex()) {
                     if (index < 5) {
@@ -158,7 +165,7 @@ class ProfileFragment : Fragment() {
                 mainEducationString += "\n"
             }
 
-            profile.Achievement?.let {
+            profile.achievements?.let {
                 val achievements = it.sortedByDescending { achievement -> achievement.year }
                 for ((index, value) in achievements.withIndex()) {
                     mainEducationString += if (index == 0) "Achievements: " + value.title + "\n"
@@ -169,6 +176,7 @@ class ProfileFragment : Fragment() {
             Log.d("ProfileFragment", mainEducationString)
             layout.main_education_card.card_title.text = "Education"
             layout.main_education_card.card_content.text = mainEducationString
+            layout.main_education_card.card_icon.setImageResource(R.drawable.ic_education)
             layout.main_education_card.card_view_more.setOnClickListener {
                 findNavController().navigate(R.id.educationExpandedFragment)
             }
@@ -177,7 +185,7 @@ class ProfileFragment : Fragment() {
             }
 
             var mainExperienceString = ""
-            profile.Experience?.let {
+            profile.experiences?.let {
                 val experiences = it.sortedByDescending { experience -> experience.startDate }
                 if (experiences.isNotEmpty()) {
                     mainExperienceString += experiences[0].title + "\n"
@@ -191,6 +199,7 @@ class ProfileFragment : Fragment() {
 
             layout.main_experience_card.card_title.text = "Experience"
             layout.main_experience_card.card_content.text = mainExperienceString
+            layout.main_experience_card.card_icon.setImageResource(R.drawable.ic_experience)
             layout.main_experience_card.card_view_more.setOnClickListener {
                 findNavController().navigate(R.id.experienceExpandedFragment)
             }
@@ -217,7 +226,8 @@ class ProfileFragment : Fragment() {
             Log.e("PROFILE AVATAR", profileAvatarName)
             if (profileAvatarName != "")
                 loadImage(profileAvatarName)
-            })
+            layout.loader_progress.visibility = View.GONE
+        })
 
         /*
         Clicking on profile picture opens Photo Crop Activity
@@ -245,10 +255,11 @@ class ProfileFragment : Fragment() {
         }
     }
 
+
     private fun loadImage(Path: String) {
         var profilePicRef: StorageReference =
             storage.reference.child(PROFILE_PICTURE_FOLDER).child(Path)
-        GlideApp.with(this.context!!)
+        GlideApp.with(this.requireContext())
             .load(profilePicRef)
             .into(layout.profile_avatar)
     }

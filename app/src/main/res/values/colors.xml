@@ -9,6 +9,8 @@
     <color name="black">#000000</color>
     <color name="white">#ffffff</color>
     <color name="colorText">#313131</color>
+    <color name="colorError">#d4e02020</color>
+    <color name="colorHint">#6d7278</color>
     <color name="colorLigthSeparater">#e4e4e4</color>
     <color name="colorImportantText">#Df2966</color>
     <color name="red">#FF0000</color>

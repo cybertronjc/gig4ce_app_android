@@ -30,7 +30,6 @@ class EditCoverBottomSheet(): ProfileBaseBottomSheetFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        profileViewModel = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
         return inflateView(R.layout.edit_cover_bottom_sheet, inflater, container)
     }
 
@@ -40,7 +39,6 @@ class EditCoverBottomSheet(): ProfileBaseBottomSheetFragment() {
     }
 
     private fun initialize() {
-        var layout: View? = getFragmentView()
 
         profileViewModel!!.getAllTags()
         val autotextview: AutoCompleteTextView = add_tag_new_tag
@@ -55,9 +53,9 @@ class EditCoverBottomSheet(): ProfileBaseBottomSheetFragment() {
         profileViewModel!!.userProfileData.observe(this, Observer { profile ->
             bio.setText(profile.bio)
 
-            userTags = profile.Tags!!
+            userTags = profile.tags!!
 
-            for (tag in profile.Tags!!) {
+            for (tag in profile.tags!!) {
                 var chip = addCrossableChip(this.context!!, tag)
                 tags.addView(chip)
                 chip.setOnCloseIconClickListener {

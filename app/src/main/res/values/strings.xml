@@ -45,7 +45,8 @@
     <string name="rating_text">Rating</string>
     <string name="tasks_done_text">Tasks Done</string>
     <string name="connections_text">Connections</string>
-    <string name="default_location_text">Location\n220KM away</string>
+    <string name="default_location_text">Location</string>
+    <string name="default_distance_text">220KM away</string>
     <string name="education_card_education_text">Education</string>
     <string name="education_card_content_placeholder">Education content to be put here</string>
     <string name="view_more_text"><u>View more</u></string>
@@ -77,8 +78,8 @@
 
     <!-- Add New Achievement Bottom Sheet -->
     <string name="add_achievement_sheet_new_achievement">New Achievement</string>
-    <string name="add_achievement_sheet_title">Title</string>
-    <string name="add_achievement_sheet_issuing_authority">Issuing Authority</string>
+    <string name="add_achievement_sheet_title">Title *</string>
+    <string name="add_achievement_sheet_issuing_authority">Issuing Authority *</string>
     <string name="add_achievement_sheet_location">Location</string>
     <string name="add_achievement_sheet_year">Year * (eg. 2011)</string>
 
@@ -104,7 +105,7 @@
 
     <!-- Add New Language Bottom Sheet -->
     <string name="add_language_new_language">New Language</string>
-    <string name="add_language_name">Name</string>
+    <string name="add_language_name">Name *</string>
     <string name="add_language_speaking_level">Speaking level</string>
     <string name="add_language_writing_level">Writing level</string>
 
@@ -210,7 +211,7 @@
     <string name="document_picture">Image Option</string>
     <string name="edit_education">Edit Education</string>
     <string name="bio_name">Headline</string>
-    <string name="bio_hint_text">This Text will be shown in bio.</string>
+    <string name="bio_hint_text">Describe yourself in a line</string>
     <string name="add_tags">Add Tags</string>
     <!-- home screen new -->
     <string name="hs_rv_title">Dunzo Deliveries </string>
@@ -227,5 +228,7 @@
     <string name="edit_language">Edit Language</string>
     <string name="edit_aboutme_text">Bio</string>
 
-    <string name="empty_about_me_text">Tell us about yourself…</string>
+    <string name="empty_about_me_text">Please tell us about yourself</string>
+    <string name="error_empty_mandatory_fields">* Please fill mandatory fields</string>
+    <string name="about_me_hint">Tell us about yourself in detail</string>
 </resources>
