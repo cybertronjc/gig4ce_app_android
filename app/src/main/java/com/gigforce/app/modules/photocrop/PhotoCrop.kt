@@ -27,6 +27,7 @@ import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
 import com.google.firebase.storage.UploadTask.TaskSnapshot
 import com.yalantis.ucrop.UCrop
+import kotlinx.android.synthetic.main.profile_photo_bottom_sheet.view.*
 import pub.devrel.easypermissions.EasyPermissions
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -36,7 +37,7 @@ import java.util.*
 class PhotoCrop : AppCompatActivity(),
     BottomSheetListener {
 
-    companion object{
+    companion object {
         var profilePictureOptionsBottomSheetFragment: ProfilePictureOptionsBottomSheetFragment =
             ProfilePictureOptionsBottomSheetFragment()
     }
@@ -116,8 +117,8 @@ class PhotoCrop : AppCompatActivity(),
             detectFace = bundle.get("detectFace") as Int
             incomingFile = bundle.get("file").toString()
         }
-        loadImage(CLOUD_INPUT_FOLDER, incomingFile)
         showBottomSheet()
+        loadImage(CLOUD_INPUT_FOLDER, incomingFile)
     }
 
     private fun verificationOptions() {
@@ -134,8 +135,8 @@ class PhotoCrop : AppCompatActivity(),
             CLOUD_OUTPUT_FOLDER = bundle.get("folder").toString()
             incomingFile = bundle.get("file").toString()
         }
-        loadImage(CLOUD_INPUT_FOLDER, incomingFile)
         showBottomSheet()
+        loadImage(CLOUD_INPUT_FOLDER, incomingFile)
     }
 
     override fun onStart() {
@@ -220,7 +221,7 @@ class PhotoCrop : AppCompatActivity(),
                         if (faces.size > 0) {
                             Toast.makeText(
                                 this,
-                                "Successfully uploaded the selfie",
+                                "Face Detected. Uploading..",
                                 Toast.LENGTH_LONG
                             ).show()
                             upload(imageUriResultCrop, baos.toByteArray(), CLOUD_OUTPUT_FOLDER)
@@ -363,6 +364,7 @@ class PhotoCrop : AppCompatActivity(),
         if (purpose == profilePictureCrop) {
             viewModel.setProfileAvatarName(DEFAULT_PICTURE)
             loadImage(CLOUD_INPUT_FOLDER, DEFAULT_PICTURE)
+            disableRemovePhoto()
             resultIntent.putExtra("filename", DEFAULT_PICTURE)
             setResult(Activity.RESULT_OK, resultIntent)
         }
@@ -417,6 +419,7 @@ class PhotoCrop : AppCompatActivity(),
      * Needs to be called whenever the bottom sheet needs to be recreated.
      */
     private fun showBottomSheet() {
+        if(purpose==profilePictureCrop && incomingFile==DEFAULT_PICTURE) disableRemovePhoto()
         if (!profilePictureOptionsBottomSheetFragment.isShowing) {
             profilePictureOptionsBottomSheetFragment.show(
                 supportFragmentManager,
@@ -453,6 +456,14 @@ class PhotoCrop : AppCompatActivity(),
             102,
             Manifest.permission.READ_EXTERNAL_STORAGE
         )
+
+    }
+
+    private fun disableRemovePhoto() {
+        profilePictureOptionsBottomSheetFragment.disableRemoveProfilePicture()
+        profilePictureOptionsBottomSheetFragment.layout.removeProfilePicture.setOnClickListener {
+            Toast.makeText(this, "No Picture to Remove", Toast.LENGTH_LONG).show()
+        }
 
     }
 
