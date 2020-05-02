@@ -6,7 +6,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.gigforce.app.R
+import com.gigforce.app.core.base.BaseFragment
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.android.synthetic.main.profile_photo_bottom_sheet.view.*
 import kotlin.properties.Delegates
@@ -30,6 +32,7 @@ class ProfilePictureOptionsBottomSheetFragment : BottomSheetDialogFragment() {
         return layout
     }
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Log.d("ProfileOptionBS", "view created")
@@ -48,6 +51,17 @@ class ProfilePictureOptionsBottomSheetFragment : BottomSheetDialogFragment() {
 
     }
 
+    fun enableRemoveProfilePicture(){
+        layout.removeProfilePicture.isClickable=true
+        layout.removeProfilePicture.setTextColor(resources.getColor(R.color.text_color))
+
+    }
+
+    fun disableRemoveProfilePicture(){
+        layout.removeProfilePicture.isClickable=false
+        layout.removeProfilePicture.setTextColor(resources.getColor(R.color.lightGrey))
+    }
+
     public interface BottomSheetListener {
         fun onButtonClicked(id: Int)
     }
@@ -62,8 +76,13 @@ class ProfilePictureOptionsBottomSheetFragment : BottomSheetDialogFragment() {
         }
     }
 
+    override fun onDetach() {
+        super.onDetach()
+
+    }
+
     override fun onDestroy() {
         super.onDestroy()
-        isShowing=true
+        isShowing=false
     }
 }

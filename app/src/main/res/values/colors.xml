@@ -18,6 +18,9 @@
     <color name="setting_bg">#f7f7f7</color>
     <color name="gray_color">#6d7278</color>
     <color name="shadow_color">#c8c7cc</color>
+
+    <color name="lightGrey">#c7c7cc</color>
+
     <color name="vertical_calendar_today">#a30674</color>
     <color name="vertical_calendar_today1">#e94b81</color>
     <color name="vertical_calendar_today_50">#50e94b81</color>

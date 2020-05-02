@@ -1,6 +1,8 @@
 package com.gigforce.app.modules.profile
 
 import android.util.Log
+import com.gigforce.app.core.base.basefirestore.BaseFirestoreDBRepository
+import com.gigforce.app.modules.preferences.SharedPreferenceViewModel
 import com.gigforce.app.modules.profile.models.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.*
@@ -8,13 +10,20 @@ import com.google.firebase.firestore.model.Document
 import kotlinx.coroutines.tasks.await
 import javax.security.auth.callback.Callback
 
-class ProfileFirebaseRepository {
+class ProfileFirebaseRepository: BaseFirestoreDBRepository() {
 
     var firebaseDB = FirebaseFirestore.getInstance()
     var uid = FirebaseAuth.getInstance().currentUser?.uid!!
-
     var profileCollectionName = "Profiles"
     var tagsCollectionName = "Tags"
+
+    var COLLECTION_NAME = "Profiles"
+
+    override fun getCollectionName(): String {
+        return COLLECTION_NAME
+    }
+
+
     //var uid = "UeXaZV3KctuZ8xXLCKGF" // Test user
 
     fun addNewTag(tag: String) {
@@ -129,5 +138,12 @@ class ProfileFirebaseRepository {
     fun setProfileAboutMe(aboutMe: String) {
         firebaseDB.collection(profileCollectionName)
             .document(uid).update("aboutMe", aboutMe)
+    }
+
+    /**
+     * Don't delete while refactoring. Base Repo doesn't cover this function
+     */
+    fun setAddress(address: AddressFirestoreModel){
+        firebaseDB.collection(profileCollectionName).document(uid).update("address",address)
     }
 }

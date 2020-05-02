@@ -228,7 +228,32 @@
     <string name="edit_language">Edit Language</string>
     <string name="edit_aboutme_text">Bio</string>
 
+
+
+    <string name="add_address">Add Address</string>
+    <string name="add_current_address">Add Current Address</string>
+    <string name="around_current_address">20 Km Around the Current Address</string>
+    <string name="same_as_permanent_address">Same as Permanent Address</string>
+    <string name="address_proof">ADDRESS PROOF</string>
+    <string name="current_address">Current Address</string>
+    <string name="first_line">First Line</string>
+    <string name="second_line">Second Line</string>
+    <string name="state">State</string>
+    <string name="city">City</string>
+    <string name="pincode">Pincode</string>
+
+
+    <string name="area">Area</string>
+    <string name="permanent_address">Permanent Address</string>
+    <string name="address_proof_smalls">Address Proof</string>
+    <string name="document_under_verification">Document Under Verification</string>
+    <string name="cancel">CANCEL</string>
+    <string name="save">SAVE</string>
+    <string name="preferred_locations">Preferred Locations</string>
+    <string name="select_area">Select Area</string>
+
     <string name="empty_about_me_text">Please tell us about yourself</string>
     <string name="error_empty_mandatory_fields">* Please fill mandatory fields</string>
     <string name="about_me_hint">Tell us about yourself in detail</string>
+ayyy
 </resources>

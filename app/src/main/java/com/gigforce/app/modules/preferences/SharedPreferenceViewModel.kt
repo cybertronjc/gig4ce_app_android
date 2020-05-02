@@ -1,23 +1,36 @@
 package com.gigforce.app.modules.preferences
 
+
+import android.location.Location
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.gigforce.app.R
+import com.gigforce.app.modules.preferences.location.CitiesRepository
+import com.gigforce.app.modules.preferences.location.models.LocationPreferenceModel
+import com.gigforce.app.modules.profile.models.AddressModel
 import com.gigforce.app.modules.preferences.prefdatamodel.PreferencesDataModel
 import com.gigforce.app.modules.profile.ProfileFirebaseRepository
+
+import com.gigforce.app.modules.profile.models.AddressFirestoreModel
 import com.gigforce.app.modules.profile.models.ProfileData
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.EventListener
 
 class SharedPreferenceViewModel : ViewModel() {
     companion object {
         var preferencesDataModelObj: PreferencesDataModel = PreferencesDataModel()
+        var profileDataModelObj: ProfileData = ProfileData()
+        var addressModelObj: AddressModel = AddressModel()
     }
     var profileFirebaseRepository = ProfileFirebaseRepository()
     var userProfileData: MutableLiveData<ProfileData> = MutableLiveData<ProfileData>()
     var preferencesRepository:PreferencesRepository = PreferencesRepository()
+    var profileRepository:ProfileFirebaseRepository = ProfileFirebaseRepository()
+    var citiesRepository:CitiesRepository = CitiesRepository()
     var preferenceDataModel: MutableLiveData<PreferencesDataModel> = MutableLiveData<PreferencesDataModel>()
+    var profileDataModel: MutableLiveData<ProfileData> = MutableLiveData<ProfileData>()
 
     fun getPreferenceDataModel():PreferencesDataModel{
         return preferencesDataModelObj
@@ -25,6 +38,15 @@ class SharedPreferenceViewModel : ViewModel() {
     fun setPreferenceDataModel(preferencesDataModel: PreferencesDataModel){
         preferencesDataModelObj = preferencesDataModel
     }
+
+    fun getProfileDataModel(): ProfileData{
+        return profileDataModelObj
+    }
+
+    fun setProfileDataModel(profileDataModel: ProfileData){
+        profileDataModelObj = profileDataModel
+    }
+
 
     init {
         getAllData()
@@ -59,6 +81,18 @@ class SharedPreferenceViewModel : ViewModel() {
                 )
             }
         })
+
+        profileRepository.getDBCollection().addSnapshotListener(EventListener<DocumentSnapshot> {
+                value, e ->
+            if (e != null) {
+                return@EventListener
+            }
+            profileDataModel.postValue(
+                value!!.toObject(ProfileData::class.java)
+            )
+        })
+
+
     }
 
     fun setIsWeekdays(checked: Boolean) {
@@ -104,5 +138,42 @@ class SharedPreferenceViewModel : ViewModel() {
 
         }
         return subTitle
+    }
+
+    fun getCurrentAddress(): AddressModel? {
+        return profileDataModelObj.address.current
+    }
+
+    fun getPermanentAddress(): AddressModel? {
+        return profileDataModelObj.address.home
+    }
+
+
+    fun setCurrentAddress(address: AddressModel){
+        var addressMap:AddressFirestoreModel= profileDataModelObj.address
+        addressMap.current=address
+        profileRepository.setAddress(addressMap)
+    }
+
+    fun setPermanentAddress(address: AddressModel){
+        var addressMap:AddressFirestoreModel= profileDataModelObj.address
+        addressMap.home=address
+        profileRepository.setAddress(addressMap)
+    }
+
+    fun getLocations(): ArrayList<DocumentReference> {
+        return preferencesDataModelObj.locations
+    }
+
+    fun setLocations(locations: LocationPreferenceModel){
+        preferencesRepository.setData(locations)
+    }
+
+    fun setWorkFromHome(boolean: Boolean){
+        preferencesRepository.setData("workFromHome",boolean)
+    }
+
+    fun getCities(): ArrayList<String>{
+        return citiesRepository.getCities()
     }
 }

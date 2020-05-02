@@ -12,6 +12,7 @@ import android.util.Log
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.ViewModelProviders
@@ -27,6 +28,8 @@ import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
 import com.google.firebase.storage.UploadTask.TaskSnapshot
 import com.yalantis.ucrop.UCrop
+import kotlinx.android.synthetic.main.fragment_video_resume.*
+import kotlinx.android.synthetic.main.profile_photo_bottom_sheet.view.*
 import pub.devrel.easypermissions.EasyPermissions
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -35,6 +38,12 @@ import java.util.*
 
 class PhotoCrop : AppCompatActivity(),
     BottomSheetListener {
+
+    companion object {
+        var profilePictureOptionsBottomSheetFragment: ProfilePictureOptionsBottomSheetFragment =
+            ProfilePictureOptionsBottomSheetFragment()
+    }
+
     private val CODE_IMG_GALLERY: Int = 1
     private val EXTENSION: String = ".jpg"
     private var cropX: Float = 1F
@@ -82,7 +91,7 @@ class PhotoCrop : AppCompatActivity(),
         storage = FirebaseStorage.getInstance()
         imageView = this.findViewById(R.id.profile_avatar_photo_crop)
         backButton = this.findViewById(R.id.back_button_photo_crop)
-        var constLayout:ConstraintLayout = this.findViewById(R.id.constraintLayout)
+        var constLayout: ConstraintLayout = this.findViewById(R.id.constraintLayout)
         purpose = intent.getStringExtra("purpose")
         Log.e("PHOTO_CROP", "purpose = " + purpose + " comparing with: profilePictureCrop")
         /**
@@ -110,8 +119,8 @@ class PhotoCrop : AppCompatActivity(),
             detectFace = bundle.get("detectFace") as Int
             incomingFile = bundle.get("file").toString()
         }
-        loadImage(CLOUD_INPUT_FOLDER,incomingFile)
         showBottomSheet()
+        loadImage(CLOUD_INPUT_FOLDER, incomingFile)
     }
 
     private fun verificationOptions() {
@@ -128,8 +137,8 @@ class PhotoCrop : AppCompatActivity(),
             CLOUD_OUTPUT_FOLDER = bundle.get("folder").toString()
             incomingFile = bundle.get("file").toString()
         }
-        loadImage(CLOUD_INPUT_FOLDER,incomingFile)
         showBottomSheet()
+        loadImage(CLOUD_INPUT_FOLDER, incomingFile)
     }
 
     override fun onStart() {
@@ -157,7 +166,7 @@ class PhotoCrop : AppCompatActivity(),
     override fun onButtonClicked(id: Int) {
         when (id) {
             R.id.updateProfilePicture -> getImageFromPhone()
-            R.id.removeProfilePicture -> defaultProfilePicture()
+            R.id.removeProfilePicture -> confirmRemoval()
         }
 
     }
@@ -214,10 +223,10 @@ class PhotoCrop : AppCompatActivity(),
                         if (faces.size > 0) {
                             Toast.makeText(
                                 this,
-                                "Successfully uploaded the selfie",
+                                "Face Detected. Uploading..",
                                 Toast.LENGTH_LONG
                             ).show()
-                            upload(imageUriResultCrop, baos.toByteArray(),CLOUD_OUTPUT_FOLDER)
+                            upload(imageUriResultCrop, baos.toByteArray(), CLOUD_OUTPUT_FOLDER)
 
                         } else {
                             Toast.makeText(
@@ -230,11 +239,11 @@ class PhotoCrop : AppCompatActivity(),
                     .addOnFailureListener { e ->
                         // Task failed with an exception
                         Log.d("CStatus", "Face detection failed! still uploading the image")
-                        upload(imageUriResultCrop, baos.toByteArray(),CLOUD_OUTPUT_FOLDER)
+                        upload(imageUriResultCrop, baos.toByteArray(), CLOUD_OUTPUT_FOLDER)
                     }
             } else {
                 //just upload wihtout face detection eg for pan, aadhar, other docs.
-                upload(imageUriResultCrop, baos.toByteArray(),CLOUD_OUTPUT_FOLDER);
+                upload(imageUriResultCrop, baos.toByteArray(), CLOUD_OUTPUT_FOLDER);
             }
         }
         Log.d("CStatus", "completed result on activity")
@@ -322,8 +331,8 @@ class PhotoCrop : AppCompatActivity(),
         try {
             uploadTask.addOnSuccessListener { taskSnapshot: TaskSnapshot ->
                 val fname: String = taskSnapshot.metadata?.reference?.name.toString()
-                updateViewModel(purpose,fname)
-                loadImage(folder,fname)
+                updateViewModel(purpose, fname)
+                loadImage(folder, fname)
                 Toast.makeText(this, "Successfully Uploaded :)", Toast.LENGTH_LONG).show()
                 Log.v(
                     "PHOTO_CROP",
@@ -342,8 +351,8 @@ class PhotoCrop : AppCompatActivity(),
      * @param purpose - to define the logic that should be followed in update
      * @param name - required for updating profile picture value ( alternate constructors can be made for different arguments )
      */
-    private  fun updateViewModel(purpose: String, name:String){
-        when (purpose){
+    private fun updateViewModel(purpose: String, name: String) {
+        when (purpose) {
             profilePictureCrop -> viewModel.setProfileAvatarName(name)
         }
     }
@@ -356,7 +365,7 @@ class PhotoCrop : AppCompatActivity(),
     private fun defaultProfilePicture() {
         if (purpose == profilePictureCrop) {
             viewModel.setProfileAvatarName(DEFAULT_PICTURE)
-            loadImage(CLOUD_INPUT_FOLDER,DEFAULT_PICTURE)
+            loadImage(CLOUD_INPUT_FOLDER, DEFAULT_PICTURE)
             resultIntent.putExtra("filename", DEFAULT_PICTURE)
             setResult(Activity.RESULT_OK, resultIntent)
         }
@@ -365,7 +374,7 @@ class PhotoCrop : AppCompatActivity(),
     /**
      *
      */
-    private fun loadImage(folder:String,path: String) {
+    private fun loadImage(folder: String, path: String) {
         Log.d("PHOTO_CROP", "loading - " + path)
         var profilePicRef: StorageReference =
             storage.reference.child(folder).child(path)
@@ -383,13 +392,16 @@ class PhotoCrop : AppCompatActivity(),
         pickIntent.type = "image/*"
         pickIntent.action = Intent.ACTION_GET_CONTENT
         val takePhotoIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        val galleryIntent = Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        val galleryIntent = Intent(
+            Intent.ACTION_PICK,
+            android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+        )
         galleryIntent.setType("image/gallery");
         val pickTitle = "Select or take a new Picture"
         var outputFileUri: Uri? = Uri.fromFile(File.createTempFile(TEMP_FILE, EXTENSION))
         val chooserIntent = Intent.createChooser(pickIntent, pickTitle)
         chooserIntent.putExtra(
-            Intent.EXTRA_INITIAL_INTENTS, arrayOf(takePhotoIntent,galleryIntent)
+            Intent.EXTRA_INITIAL_INTENTS, arrayOf(takePhotoIntent, galleryIntent)
         )
         chooserIntent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri)
         startActivityForResult(chooserIntent, CODE_IMG_GALLERY)
@@ -408,34 +420,65 @@ class PhotoCrop : AppCompatActivity(),
      * Needs to be called whenever the bottom sheet needs to be recreated.
      */
     private fun showBottomSheet() {
-        var profilePictureOptionsBottomSheetFragment: ProfilePictureOptionsBottomSheetFragment =
-            ProfilePictureOptionsBottomSheetFragment()
-        profilePictureOptionsBottomSheetFragment.show(
-            supportFragmentManager,
-            "profilePictureOptionBottomSheet"
-        )
+        if (!profilePictureOptionsBottomSheetFragment.isShowing) {
+            profilePictureOptionsBottomSheetFragment.show(
+                supportFragmentManager,
+                "profilePictureOptionBottomSheet"
+            )
+        }
     }
 
-    private fun hasCameraPermission():Boolean {
+    private fun hasCameraPermission(): Boolean {
         return EasyPermissions.hasPermissions(this, Manifest.permission.CAMERA)
     }
 
-    private fun hasGalleryPermission():Boolean {
+    private fun hasGalleryPermission(): Boolean {
         return EasyPermissions.hasPermissions(this, Manifest.permission.READ_EXTERNAL_STORAGE)
     }
 
-    private fun askPermissions(rationale: String,requestCode: Int,perm: String){
+    private fun askPermissions(rationale: String, requestCode: Int, perm: String) {
         EasyPermissions.requestPermissions(
-                this,
-                rationale,
-                requestCode,
-                perm)
+            this,
+            rationale,
+            requestCode,
+            perm
+        )
     }
 
-    private fun checkPermissions(){
-        if(!hasCameraPermission()) askPermissions("Camera Permission",101,Manifest.permission.CAMERA)
-        if(!hasGalleryPermission()) askPermissions("Select Image",102,Manifest.permission.READ_EXTERNAL_STORAGE)
+    private fun checkPermissions() {
+        if (!hasCameraPermission()) askPermissions(
+            "Camera Permission",
+            101,
+            Manifest.permission.CAMERA
+        )
+        if (!hasGalleryPermission()) askPermissions(
+            "Select Image",
+            102,
+            Manifest.permission.READ_EXTERNAL_STORAGE
+        )
 
+    }
+
+    private fun disableRemovePhoto() {
+        profilePictureOptionsBottomSheetFragment.disableRemoveProfilePicture()
+        profilePictureOptionsBottomSheetFragment.layout.removeProfilePicture.setOnClickListener {
+            Toast.makeText(this, "No Picture to Remove", Toast.LENGTH_LONG).show()
+        }
+
+    }
+
+    private fun confirmRemoval(){
+        val builder: AlertDialog.Builder = AlertDialog.Builder(this)
+        builder.setTitle(R.string.app_name)
+        builder.setMessage("Remove profile picture?")
+        builder.setIcon(R.drawable.ic_user_icon)
+        builder.setPositiveButton("Yes") { dialog, id ->
+            dialog.dismiss()
+            defaultProfilePicture()
+        }
+        builder.setNegativeButton("No") { dialog, id -> dialog.dismiss() }
+        val alert: AlertDialog = builder.create()
+        alert.show()
     }
 
 }
