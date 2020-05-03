@@ -27,7 +27,7 @@ class LanguageSelectFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        this.setDarkStatusBarTheme(true)
+//        this.setDarkStatusBarTheme(true)
         try {
             LocaleChanger.initialize(this.context, SUPPORTED_LOCALES)
         } catch (e: Exception) {

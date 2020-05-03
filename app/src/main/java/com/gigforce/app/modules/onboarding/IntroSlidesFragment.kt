@@ -151,13 +151,11 @@ class IntroSlidesViewPagerAdapter(val viewpager:ViewPager2,
                 GlideApp.with(itemView)
                     .load(R.drawable.ic_intro_slides3_mainart)
                     .into(mainArtImageView)
-
                 titleTextView.setText(R.string.intro_slide3_title)
                 subTitleTextView.setText(R.string.intro_slide3_subtitle)
                 nextButton.setText("Get Started")
                 nextButton.visibility = View.VISIBLE
                 right_arrow.visibility = View.VISIBLE
-
             }
         }
     }

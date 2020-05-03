@@ -9,8 +9,8 @@
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar_lang_opt"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:background="@color/colorAccent"
+        android:layout_height="79dp"
+        android:background="@drawable/rect_lang_screen"
         tools:ignore="PrivateResource">
         <androidx.appcompat.widget.Toolbar
             android:layout_width="match_parent"
@@ -22,6 +22,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/title_lang"
                 android:textAlignment="center"
+                android:fontFamily="@font/lato"
                 android:textColor="@color/cardview_light_background"
                 android:textSize="20sp" />
         </androidx.appcompat.widget.Toolbar>
