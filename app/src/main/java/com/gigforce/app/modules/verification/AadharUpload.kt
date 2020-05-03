@@ -121,9 +121,9 @@ class AadhaarUpload: BaseFragment() {
         return Base64.encodeToString(imageBytes, Base64.DEFAULT);
     }
 
-    @SuppressLint("CheckResult")
+    @SuppressLint("CheckResult", "UseRequireInsteadOfGet")
     private fun idfyApiCall(postData: PostDataOCRs){
-        if(this.context?.let { UtilMethods.isConnectedToInternet(it) }!!){
+        if(this.context?.let { UtilMethods.isConnectedToInternet(it)}!!){
             this.context?.let { UtilMethods.showLoading(it) }
             val observable = RetrofitFactory.idfyApiCallAD().postOCR(postData)
             observable.subscribeOn(Schedulers.io())
@@ -182,8 +182,8 @@ class AadhaarUpload: BaseFragment() {
                 else{
                     uriBack = data?.getParcelableExtra("uri")!!;
                     //var imgb64 = UtilMethods.encodeImagesToBase64(context!!, uriFront, uriBack);
-                    var imgb641 = UtilMethods.encodeImageToBase64(context!!, uriFront);
-                    var imgb642 = UtilMethods.encodeImageToBase64(context!!, uriBack);
+                    var imgb641 = UtilMethods.encodeImageToBase64(requireContext(), uriFront);
+                    var imgb642 = UtilMethods.encodeImageToBase64(requireContext(), uriBack);
                     var ocrdata = OCRDocsData(imgb641,imgb642,"yes")
                     //var ocrdata = OCRDocsData(imgb64,imgb64,"yes")
                     val taskid:String = "74f4c926-250c-43ca-9c53-453e87ceacd2";
@@ -200,7 +200,7 @@ class AadhaarUpload: BaseFragment() {
 
     private fun loadImage(collection: String, filepath: String, layoutid: ImageView ) {
         var picRef: StorageReference = storage.reference.child(collection).child(filepath)
-        GlideApp.with(this.context!!)
+        GlideApp.with(this.requireContext())
             .load(picRef)
             .into(layoutid)
     }
