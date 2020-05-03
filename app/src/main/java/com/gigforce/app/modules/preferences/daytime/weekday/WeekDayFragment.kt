@@ -85,37 +85,31 @@ class WeekDayFragment : BaseFragment() {
         })
         switch3.setOnClickListener { view ->
             var isChecked = (view as Switch).isChecked
-            if(isChecked){
-                if(ifWeekdaysNotSelected()){
+            if (isChecked) {
+                if (ifWeekdaysNotSelected()) {
                     showDaysAlert()
-                }
-                else if(ifSlotsNotSelected()){
-                showSlotsAlert()
-                }
-                else
+                } else if (ifSlotsNotSelected()) {
+                    showSlotsAlert()
+                } else
                     viewModel.setIsWeekdays(isChecked)
 
-            }
-            else
-            viewModel.setIsWeekdays(isChecked)
+            } else
+                viewModel.setIsWeekdays(isChecked)
         }
         imageView16.setOnClickListener(View.OnClickListener { activity?.onBackPressed() })
     }
 
-    private fun ifSlotsNotSelected():Boolean{
-        if(getArrayToString(viewDataModel.selectedslots).equals("None")){
+    private fun ifSlotsNotSelected(): Boolean {
+        if (getArrayToString(viewDataModel.selectedslots).equals("None")) {
             return true
-        }
-        else
+        } else
             return false
     }
 
     private fun ifWeekdaysNotSelected(): Boolean {
-        if(getArrayToString(viewDataModel.selecteddays).equals("None"))
-        {
+        if (getArrayToString(viewDataModel.selecteddays).equals("None")) {
             return true
-        }
-        else {
+        } else {
             return false
         }
     }
@@ -123,87 +117,89 @@ class WeekDayFragment : BaseFragment() {
     fun showDaysAlert() {
         val items = arrayOf("All", "Monday", "Tuesday", "Wednesday", "Thrusday", "Friday")
         val indexItem = arrayOf(0, 1, 2, 3, 4, 5)
-        val isSectionSelected = BooleanArray(items.size)
-        val selectedList = ArrayList<Int>()
+        var isSectionSelected = BooleanArray(items.size)
+        var selectedList = ArrayList<Int>()
         val builder = AlertDialog.Builder(activity)
         builder.setTitle("Days")
-
-        for (i in 0..items.size-1) {
+        for (i in 0..items.size - 1) {
             var isfound = false
             for (day in viewDataModel.selecteddays) {
-                if(items[i].equals(day)){
+                if (items[i].equals(day)) {
                     isSectionSelected[i] = true
                     isfound = true
                     selectedList.add(i)
                     break
                 }
             }
-            if(!isfound){
+            if (!isfound) {
                 isSectionSelected[i] = false
             }
         }
         builder.setMultiChoiceItems(
             items, isSectionSelected
         ) { dialog, which, isChecked ->
+            val dialog = dialog as AlertDialog
+            val v: ListView = dialog.listView
             if (which == 0) {
-                val dialog = dialog as AlertDialog
-                val v: ListView = dialog.listView
+                if (isChecked)
+                    selectedList.addAll(indexItem)
+                else {
+                    selectedList.clear()
+                    for(i in 0..isSectionSelected.size-1){
+                        isSectionSelected[i]=false
+                    }
+                }
                 var i = 1
                 while (i < items.size) {
                     v.setItemChecked(i, isChecked)
                     i++
                 }
-                selectedList.addAll(indexItem)
 
             } else if (isChecked) {
                 selectedList.add(which)
                 if (selectedList.size == 5) {
                     selectedList.add(0)
-                    val dialog = dialog as AlertDialog
-                    val v: ListView = dialog.listView
                     v.setItemChecked(0, true)
                 }
             } else if (selectedList.contains(which)) {
                 selectedList.remove(Integer.valueOf(which))
-                if (selectedList.contains(0))
+                isSectionSelected[which] = false
+                if (selectedList.contains(0)) {
                     selectedList.remove(Integer.valueOf(0))
-                val dialog = dialog as AlertDialog
-                val v: ListView = dialog.listView
-                v.setItemChecked(0, false)
+                    v.setItemChecked(0, false)
+                    isSectionSelected[0] = false
+                }
             }
             selectedList.sort()
             removeDuplicates(selectedList)
         }
         builder.setPositiveButton("DONE") { dialogInterface, i ->
             val selectedStrings = ArrayList<String>()
-
             for (j in selectedList.indices) {
                 selectedStrings.add(items[selectedList[j]])
             }
             var selectedStr = getArrayToString(selectedStrings)
-                viewModel.setWorkingDays(selectedStrings)
-            if(!selectedStr.equals("None")) {
-                if(ifSlotsNotSelected()){
+            viewModel.setWorkingDays(selectedStrings)
+            if (!selectedStr.equals("None")) {
+                if (ifSlotsNotSelected()) {
                     showSlotsAlert()
-                }
-                else{
+                } else {
                     viewModel.setIsWeekdays(true)
                 }
-            }
-            else{
+            } else {
                 viewModel.setIsWeekdays(false)
             }
 
             textView62.text = selectedStr
         }
-        builder.setOnDismissListener { dialog ->initializeViews()  }
+        builder.setOnDismissListener { dialog -> initializeViews() }
 
         builder.show()
     }
 
-    private fun setAllDaysEnabled( v: ListView, size:Int ) {
-        for(i in 0..size-1){
-            v.setItemChecked(i,true)
+    private fun setAllDaysEnabled(v: ListView, size: Int) {
+        for (i in 0..size - 1) {
+            v.setItemChecked(i, true)
         }
     }
 
@@ -222,48 +218,56 @@ class WeekDayFragment : BaseFragment() {
         val selectedList = ArrayList<Int>()
         val builder = AlertDialog.Builder(activity)
         builder.setTitle("Slots")
-        for (i in 0..items.size-1) {
+
+        for (i in 0..items.size - 1) {
             var isfound = false
             for (day in viewDataModel.selectedslots) {
-                if(items[i].equals(day)){
+                if (items[i].equals(day)) {
                     isSectionSelected[i] = true
                     isfound = true
                     selectedList.add(i)
                     break
                 }
             }
-            if(!isfound){
+            if (!isfound) {
                 isSectionSelected[i] = false
             }
         }
         builder.setMultiChoiceItems(
             items, isSectionSelected
         ) { dialog, which, isChecked ->
-            if (which == 0) {
                 val dialog = dialog as AlertDialog
                 val v: ListView = dialog.listView
+            if (which == 0) {
+                if (isChecked)
+                    selectedList.addAll(indexItem)
+                else {
+                    selectedList.clear()
+                    for(i in 0..isSectionSelected.size-1){
+                        isSectionSelected[i]=false
+                    }
+                }
                 var i = 1
                 while (i < items.size) {
                     v.setItemChecked(i, isChecked)
                     i++
                 }
-                selectedList.addAll(indexItem)
 
             } else if (isChecked) {
                 selectedList.add(which)
                 if (selectedList.size == 6) {
                     selectedList.add(0)
-                    val dialog = dialog as AlertDialog
-                    val v: ListView = dialog.listView
                     v.setItemChecked(0, true)
                 }
             } else if (selectedList.contains(which)) {
+
                 selectedList.remove(Integer.valueOf(which))
-                if (selectedList.contains(0))
+                isSectionSelected[which] = false
+                if (selectedList.contains(0)) {
                     selectedList.remove(Integer.valueOf(0))
-                val dialog = dialog as AlertDialog
-                val v: ListView = dialog.listView
-                v.setItemChecked(0, false)
+                    v.setItemChecked(0, false)
+                    isSectionSelected[0] = false
+                }
             }
             selectedList.sort()
             removeDuplicates(selectedList)
@@ -277,16 +281,15 @@ class WeekDayFragment : BaseFragment() {
             }
 
             var selectedStr = getArrayToString(selectedStrings)
-                viewModel.setWorkingSlots(selectedStrings) //selectedString is array for DB
-            if(!selectedStr.equals("None")) {
+            viewModel.setWorkingSlots(selectedStrings) //selectedString is array for DB
+            if (!selectedStr.equals("None")) {
                 viewModel.setIsWeekdays(true)
-            }
-            else{
+            } else {
                 viewModel.setIsWeekdays(false)
             }
             textView66.text = selectedStr
         }
-        builder.setOnDismissListener { dialog ->initializeViews()  }
+        builder.setOnDismissListener { dialog -> initializeViews() }
         builder.show()
 
     }

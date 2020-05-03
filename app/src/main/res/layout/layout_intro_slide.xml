@@ -38,7 +38,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:scaleType="fitXY"
-        app:srcCompat="@drawable/bottomwave" />
+        app:srcCompat="@drawable/ic_combined_shape_copy_2" />
 
     <TextView
         android:id="@+id/btn_next"

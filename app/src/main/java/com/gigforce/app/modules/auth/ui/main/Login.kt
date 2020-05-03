@@ -14,6 +14,7 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.core.app.ActivityCompat
+import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.core.base.BaseFragment
@@ -58,24 +59,27 @@ class Login: BaseFragment() {
 
     private fun observer() {
         viewModel.liveState.observeForever {
-            when(it){
-                LoginViewModel.STATE_CODE_SENT -> findNavController().navigate(LoginDirections.actionLogin2ToVerifyOTP(viewModel.verificationId!!))
-                else -> {
-                    // Doing Nothing
-                }
+            when(it.stateResponse){
+                LoginViewModel.STATE_CODE_SENT -> navigateToOTPVarificationScreen()
+                LoginViewModel.STATE_VERIFY_FAILED -> showToast(it.msg)
+                LoginViewModel.STATE_VERIFY_SUCCESS -> navigateToOTPVarificationScreen()
             }
         }
+    }
+
+    fun navigateToOTPVarificationScreen(){
+        findNavController().navigate(LoginDirections.actionLogin2ToVerifyOTP(viewModel.verificationId!!))
     }
 
     private fun listeners() {
 
         cvloginwrong.visibility = INVISIBLE
 
-        otp_mobile_number.setOnClickListener {
-            cvloginwrong.visibility = INVISIBLE
-            textView23.visibility = VISIBLE
-        }
-
+//        otp_mobile_number.setOnClickListener {
+//            cvloginwrong.visibility = INVISIBLE
+//            textView23.visibility = VISIBLE
+//        }
+        otp_mobile_number.doAfterTextChanged { showWrongMobileNoLayout(false) }
         otp_mobile_number.setOnKeyListener(View.OnKeyListener { _, keyCode, event ->
             cvloginwrong.visibility = INVISIBLE
             textView23.visibility = VISIBLE
@@ -100,6 +104,17 @@ class Login: BaseFragment() {
 
     }
 
+    private fun showWrongMobileNoLayout(show: Boolean) {
+        if(show) {
+            cvloginwrong.visibility = VISIBLE
+            textView23.visibility = INVISIBLE
+        }else{
+            cvloginwrong.visibility = INVISIBLE
+            textView23.visibility = VISIBLE
+
+        }
+    }
+
     private fun doActionOnClick(){
         var phoneNumber: String = "+91" + otp_mobile_number.text.toString();
         if(!validatePhoneNumber(phoneNumber)){
@@ -116,11 +131,9 @@ class Login: BaseFragment() {
     private fun validatePhoneNumber(phoneNumber:String): Boolean {
         match = INDIAN_MOBILE_NUMBER.matcher(phoneNumber)
         if (phoneNumber.isEmpty()) {
-            showToast("Please enter valid phone number")
             return false
         }
         if(!match.matches()) {
-            showToast("Please enter valid phone number")
             return false
         }
         return true

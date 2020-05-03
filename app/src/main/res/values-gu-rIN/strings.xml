@@ -5,13 +5,13 @@
     <string name="title_activity_profile">પ્રોફાઇલ પ્રવૃત્તિ</string>
 
     <string name="intro_slide1_title">ગિગફોર્સમાં આપનું સ્વાગત છે</string>
-    <string name="intro_slide1_subtitle">શીખો. કમાવો. આનંદ કરો.</string>
+    <string name="intro_slide1_subtitle">કાલે શું થવાનું છે?</string>
 
-    <string name="intro_slide2_title">કાર્ય થાય છે</string>
-    <string name="intro_slide2_subtitle">કામ થાય ત્યારે સૂચિત થવું</string>
+    <string name="intro_slide2_title">કામ થાય છે</string>
+    <string name="intro_slide2_subtitle">કામ થાય ત્યારે સૂચિત થવું.</string>
 
     <string name="intro_slide3_title">કાર્ય અને સોંપો</string>
-    <string name="intro_slide3_subtitle">કાર્ય કરો અને તેમને કોલેજોને સોંપો!</string>
+    <string name="intro_slide3_subtitle">કાર્ય અને તેમને સાથીદારોને સોંપો.</string>
 
     <string name="ob_slide1_title">ઓનબોર્ડિંગ</string>
     <string name="ob_slide1_subtitle">કેવી રીતે - 1</string>

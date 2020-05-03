@@ -98,7 +98,7 @@ class RoleDocUpload: Fragment() {
         layout.pbVeriDD.setProgress(40,true)
 
         spinner = layout.spinnerVeri
-        val adapter: ArrayAdapter<String> = ArrayAdapter<String>(context!!, android.R.layout.simple_spinner_item, paths)
+        val adapter: ArrayAdapter<String> = ArrayAdapter<String>(requireContext(), android.R.layout.simple_spinner_item, paths)
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinner?.adapter = adapter
@@ -224,7 +224,7 @@ class RoleDocUpload: Fragment() {
         }
     }
 
-    @SuppressLint("CheckResult")
+    @SuppressLint("CheckResult", "UseRequireInsteadOfGet")
     private fun idfyApiCall(postData: PostDataOCRs){
         if(this.context?.let { UtilMethods.isConnectedToInternet(it) }!!){
             this.context?.let { UtilMethods.showLoading(it) }
@@ -291,8 +291,8 @@ class RoleDocUpload: Fragment() {
                 }
                 else{
                     uriBack = data?.getParcelableExtra("uri")!!;
-                    var imgb641 = UtilMethods.encodeImageToBase64(context!!, uriFront);
-                    var imgb642 = UtilMethods.encodeImageToBase64(context!!, uriBack);
+                    var imgb641 = UtilMethods.encodeImageToBase64(requireContext(), uriFront);
+                    var imgb642 = UtilMethods.encodeImageToBase64(requireContext(), uriBack);
                     var ocrdata = OCRDocsData(imgb641,imgb642,"yes")
                     //var ocrdata = OCRDocsData(imgb64,imgb64,"yes")
                     val taskid:String = "74f4c926-250c-43ca-9c53-453e87ceacd2";
@@ -309,7 +309,7 @@ class RoleDocUpload: Fragment() {
 
     private fun loadImage(collection: String, filepath: String, layoutid: ImageView ) {
         var picRef: StorageReference = storage.reference.child(collection).child(filepath)
-        GlideApp.with(this.context!!)
+        GlideApp.with(this.requireContext())
             .load(picRef)
             .into(layoutid)
     }

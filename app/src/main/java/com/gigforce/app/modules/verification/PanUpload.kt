@@ -68,7 +68,7 @@ class PanUpload: Fragment() {
         storage = FirebaseStorage.getInstance()
         viewModel = ViewModelProviders.of(this).get(VerificationViewModel::class.java)
         layout = inflater.inflate(R.layout.layout_verification_pancard, container, false)
-        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
         layout.pbPan.setProgress(80,true)
         return layout
     }
@@ -132,7 +132,7 @@ class PanUpload: Fragment() {
     }
 
 
-    @SuppressLint("CheckResult")
+    @SuppressLint("CheckResult", "UseRequireInsteadOfGet")
     private fun idfyApiCall(postData: PostDataPAN){
         if(this.context?.let { UtilMethods.isConnectedToInternet(it) }!!){
             this.context?.let { UtilMethods.showLoading(it) }
@@ -201,8 +201,8 @@ class PanUpload: Fragment() {
                 }
                 else{
                     uriBack = data?.getParcelableExtra("uri")!!;
-                    var imgb641 = encodeImageToBase64(context!!,uriFront);
-                    var imgb642 = encodeImageToBase64(context!!,uriBack);
+                    var imgb641 = encodeImageToBase64(requireContext(),uriFront);
+                    var imgb642 = encodeImageToBase64(requireContext(),uriBack);
                     var ocrdata = PANDocData(imgb641,imgb642,"yes")
                     val taskid:String = "74f4c926-250c-43ca-9c53-453e87ceacd2";
                     val groupid:String = "8e16424a-58fc-4ba4-ab20-5bc8e7c3c41f";

@@ -2,10 +2,13 @@ package com.gigforce.app.modules.auth.ui.main
 
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.text.SpannableString
+import android.text.style.UnderlineSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
@@ -13,7 +16,6 @@ import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.modules.auth.ui.main.LoginViewModel.Companion.STATE_SIGNIN_FAILED
 import com.gigforce.app.modules.auth.ui.main.LoginViewModel.Companion.STATE_SIGNIN_SUCCESS
-import com.google.firebase.auth.PhoneAuthProvider
 import kotlinx.android.synthetic.main.otp_verification.*
 import kotlinx.android.synthetic.main.otp_verification.view.*
 import java.util.regex.Matcher
@@ -50,12 +52,13 @@ class VerifyOTP: BaseFragment() {
         viewModel.verificationId = verificationId.toString()
         layout = inflateView(R.layout.otp_verification, inflater, container)
         //TODO
-        layout?.textView29?.text = "We have sent the OTP to your " +". Please enter the OTP";
+//        layout?.textView29?.text = "We have sent the OTP to your " +". Please enter the OTP";
         return layout
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initializeViews()
         listeners()
         observer()
 //        if(otpresentcounter>=2){
@@ -64,14 +67,34 @@ class VerifyOTP: BaseFragment() {
 //        }
     }
 
+    private fun initializeViews() {
+        var str = resources.getString(R.string.otp_reenter_mobile)
+        val spannableString1 = SpannableString(str)
+        spannableString1.setSpan(UnderlineSpan(),0,str.length,0)
+        reenter_mobile.text = spannableString1
+        textView29?.text = "We have sent the OTP to your " +". Please enter the OTP";
+    }
+
     private fun observer() {
-        viewModel.liveState.observe(viewLifecycleOwner, Observer { STATE ->
-            if(STATE == STATE_SIGNIN_FAILED){
-                otpnotcorrect.visibility = View.VISIBLE
-                otpnotcorrect.text = "Wrong Password !!";
+        viewModel.liveState.observe(viewLifecycleOwner, Observer { it ->
+            if(it.stateResponse == STATE_SIGNIN_FAILED){
+                showWrongOTPLayout(true)
+            }else if (it.stateResponse == STATE_SIGNIN_SUCCESS) {
+                navigate(R.id.onOTPSuccess)
             }
         })
 
+    }
+
+    private fun showWrongOTPLayout(show: Boolean) {
+        if(show){
+            cvotpwrong.visibility = View.VISIBLE
+            textView26.visibility = View.INVISIBLE
+        }
+        else{
+            cvotpwrong.visibility = View.INVISIBLE
+            textView26.visibility = View.VISIBLE
+        }
     }
 
     private fun listeners() {
@@ -84,30 +107,12 @@ class VerifyOTP: BaseFragment() {
         verify_otp_button?.setOnClickListener {
             val otpIn = layout?.txt_otp?.text
             match = OTP_NUMBER.matcher(otpIn)
-            textView26?.visibility = View.VISIBLE
-            layout?.cvotpwrong?.visibility = View.INVISIBLE;
             if(match.matches()){
                 viewModel.verifyPhoneNumberWithCode(otpIn.toString())
-                // wrong otp entered
-                if (viewModel.liveState.value?.equals(STATE_SIGNIN_FAILED)!!) {
-                    //layout?.otpnotcorrect.visibility = View.VISIBLE
-                    cvotpwrong.visibility = View.VISIBLE
-                    textView26.visibility = View.INVISIBLE
-                    //layout?.otpnotcorrect?.text = "Wrong Password !!";
-                    layout?.cvotpwrong?.visibility = View.VISIBLE;
-                }
-                // correct otp entered
-                if (viewModel.liveState.value?.equals(STATE_SIGNIN_SUCCESS)!!) {
-                    navigate(R.id.onOTPSuccess)
-                }
             }
             else {
-                //layout?.otpnotcorrect?.visibility = View.VISIBLE
-                //layout?.otpnotcorrect?.text = "Wrong Password !!";
-                textView26?.visibility = View.INVISIBLE
-                layout?.cvotpwrong?.visibility = View.VISIBLE;
+                showWrongOTPLayout(true)
             }
-            //findNavController().navigate(R.id.homeFragment)
         }
         otptimertv?.setOnClickListener {
             if(layout?.otptimertv?.text == "Resend") {
@@ -122,6 +127,7 @@ class VerifyOTP: BaseFragment() {
         reenter_mobile.setOnClickListener {
             findNavController().navigate(R.id.Login)
         }
+        txt_otp.doAfterTextChanged { showWrongOTPLayout(false) }
     }
 
     private fun counterStart(){
