@@ -26,7 +26,9 @@ class LoginViewModel() : ViewModel() {
         public const val STATE_SIGNIN_SUCCESS = 6
     }
 
-    val liveState: MutableLiveData<Int> = MutableLiveData<Int>(STATE_INITIALIZED)
+    //    val liveState: MutableLiveData<Int> = MutableLiveData<Int>(STATE_INITIALIZED)
+    val liveState: MutableLiveData<LoginResponse> = MutableLiveData<LoginResponse>()
+
     var verificationId: String? = null
     var token: PhoneAuthProvider.ForceResendingToken? = null
     var activity: Activity? = null
@@ -40,12 +42,12 @@ class LoginViewModel() : ViewModel() {
     private val callbacks = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
         override fun onVerificationCompleted(credential: PhoneAuthCredential) {
             Log.d(TAG, "onVerificationCompleted:$credential")
-            liveState.postValue(STATE_VERIFY_SUCCESS)
+            liveState.postValue(LoginResponse(STATE_VERIFY_SUCCESS,""))
             signInWithPhoneAuthCredential(credential)
         }
 
         override fun onVerificationFailed(e: FirebaseException) {
-            liveState.value = STATE_VERIFY_FAILED
+            liveState.postValue(LoginResponse(STATE_VERIFY_FAILED,e.toString()))
         }
 
         override fun onCodeSent(
@@ -55,10 +57,9 @@ class LoginViewModel() : ViewModel() {
             super.onCodeSent(_verificationId, _token)
             verificationId = _verificationId
             token = _token
-            liveState.postValue(STATE_CODE_SENT)
+            liveState.postValue(LoginResponse(STATE_CODE_SENT,""))
         }
     }
-
 
 
     fun sendVerificationCode(phoneNumber: String) {
@@ -76,23 +77,26 @@ class LoginViewModel() : ViewModel() {
         val credential = PhoneAuthProvider.getCredential(verificationId!!, code)
         signInWithPhoneAuthCredential(credential)
     }
+
     private fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential) {
         FirebaseAuth.getInstance()
             .signInWithCredential(credential)
             .addOnCompleteListener {
                 if (it.isSuccessful) {
                     Log.d(TAG, "signInWithCredential:success")
-                    liveState.postValue(STATE_SIGNIN_SUCCESS)
+                    liveState.postValue(LoginResponse(STATE_SIGNIN_SUCCESS,""))
                 } else {
                     Log.w(TAG, "signInWithCredential:failure", it.exception)
-                    liveState.value = STATE_SIGNIN_FAILED
+                    liveState.postValue(LoginResponse(STATE_SIGNIN_FAILED,""))
                 }
             }
             .addOnSuccessListener {
+                liveState.postValue(LoginResponse(STATE_SIGNIN_SUCCESS,""))
                 Log.d("status", "Signed in successfully")
             }
             .addOnFailureListener {
                 Log.d("status", "Signed in failed")
+                liveState.postValue(LoginResponse(STATE_SIGNIN_FAILED,it.toString()))
             }
     }
 }

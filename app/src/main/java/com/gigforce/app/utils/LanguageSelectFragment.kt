@@ -7,6 +7,7 @@ import android.widget.RadioButton
 import com.franmontiel.localechanger.LocaleChanger
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
+import com.gigforce.app.modules.auth.AuthFlowFragment
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_select_language.*
 import java.util.*
@@ -21,27 +22,12 @@ class LanguageSelectFragment : BaseFragment() {
             Locale("fr", "FR")
             //Locale("ar", "JO")
         )
-    /*
- * Copyright (c)  2017  Francisco José Montiel Navarro.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *    http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        this.setDarkStatusBarTheme(false)
+
+        this.setDarkStatusBarTheme(true)
         try {
             LocaleChanger.initialize(this.context, SUPPORTED_LOCALES)
         } catch (e: Exception) {
@@ -52,6 +38,7 @@ class LanguageSelectFragment : BaseFragment() {
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
         initializer()
         setDefaultLanguage()
         listener()
@@ -67,7 +54,6 @@ class LanguageSelectFragment : BaseFragment() {
         }
 
     }
-
 
     private fun setDefaultLanguage() {
         groupradio.findViewById<RadioButton>(R.id.en).isChecked = true

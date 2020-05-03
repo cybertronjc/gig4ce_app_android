@@ -92,6 +92,7 @@ class HomeScreenIcons : BaseFragment() {
         val noBtn = dialog?.findViewById(R.id.cancel) as TextView
         yesBtn.setOnClickListener {
             FirebaseAuth.getInstance().signOut()
+            navController.popBackStack(R.id.homeScreenIcons,true)
             dialog?.dismiss()
         }
         noBtn.setOnClickListener { dialog .dismiss() }

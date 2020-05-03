@@ -30,37 +30,44 @@ import com.gigforce.app.utils.popAllBackStates
  * create an instance of this fragment.
  */
 abstract class BaseFragment : Fragment() {
-//    abstract fun Activate(fragmentView: View?)
+    //    abstract fun Activate(fragmentView: View?)
     var mView: View? = null
-    open fun activate(view:View?){}
+    lateinit var baseFragment: BaseFragment
+    open fun activate(view: View?) {}
 
-    private lateinit var navController: NavController
+    lateinit var navController: NavController
 
     open fun inflateView(
         resource: Int, inflater: LayoutInflater,
         container: ViewGroup?
     ): View? {
+        baseFragment = this
         mView = inflater.inflate(resource, container, false)
         getActivity()?.setRequestedOrientation(
-            ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        );
         init()
 
         activate(mView)
 
         return mView
     }
+
     lateinit var SP: SharedPreferences
     // SP = this.getPreferences(Context.MODE_PRIVATELD_WRITEABLE);
     var editor: SharedPreferences.Editor? = null
+
     private fun init() { // GPS=new GPSTracker(this);
         navController = activity?.findNavController(R.id.nav_fragment)!!
         SP = activity?.getSharedPreferences(CoreConstants.SHARED_PREFERENCE_DB, 0)!!
         this.editor = SP.edit()
 
     }
-    fun getFragmentView():View{
+
+    fun getFragmentView(): View {
         return mView!!
     }
+
     open fun saveSharedData(Key: String?, Value: String?): Boolean {
         return try {
             editor?.putString(Key, Value)
@@ -73,7 +80,16 @@ abstract class BaseFragment : Fragment() {
     }
 
     // for delete
-
+    fun removeSavedShareData(key: String?): Boolean {
+        return try {
+            editor?.remove(key)
+            editor?.commit()
+            true
+        } catch (ex: Exception) {
+            Log.e("Error:", ex.toString())
+            false
+        }
+    }
 
     open fun getSharedData(key: String?, defValue: String?): String? {
         return SP.getString(key, defValue)
@@ -95,6 +111,7 @@ abstract class BaseFragment : Fragment() {
         val toast = Toast.makeText(context, Message, Toast.LENGTH_LONG)
         toast.show()
     }
+
     open fun navigate(
         @IdRes resId: Int, args: Bundle?,
         navOptions: NavOptions?
@@ -102,20 +119,21 @@ abstract class BaseFragment : Fragment() {
         navController
             .navigate(resId, null, navOptions)
     }
-    fun navigate(@IdRes resId: Int){
+
+    fun navigate(@IdRes resId: Int) {
         navController.navigate(resId)
     }
 
-    fun navigateWithAllPopupStack(@IdRes resId: Int){
+    fun navigateWithAllPopupStack(@IdRes resId: Int) {
         popAllBackStates()
         navigate(resId)
     }
 
-    fun popAllBackStates(){
-    navController.popAllBackStates()
+    fun popAllBackStates() {
+        navController.popAllBackStates()
     }
 
-    fun popBackState(){
+    fun popBackState() {
         navController.popBackStack()
     }
 
@@ -123,42 +141,43 @@ abstract class BaseFragment : Fragment() {
         return this.mView!!.findViewById(id)
     }
 
-    fun getTextView(view : PFRecyclerViewAdapter<Any?>.ViewHolder, id:Int):TextView{
+    fun getTextView(view: PFRecyclerViewAdapter<Any?>.ViewHolder, id: Int): TextView {
         return view.getView(id) as TextView
     }
 
-    fun getTextView(view : View, id:Int):TextView{
+    fun getTextView(view: View, id: Int): TextView {
         return view.findViewById(id) as TextView
     }
 
-    fun getImageView(view : PFRecyclerViewAdapter<Any?>.ViewHolder, id:Int):ImageView{
+    fun getImageView(view: PFRecyclerViewAdapter<Any?>.ViewHolder, id: Int): ImageView {
         return view.getView(id) as ImageView
     }
 
-    fun getImageView(view : View, id:Int):ImageView{
+    fun getImageView(view: View, id: Int): ImageView {
         return view.findViewById(id) as ImageView
     }
 
-    fun getView(view : View, id:Int):View{
+    fun getView(view: View, id: Int): View {
         return view.findViewById(id)
     }
 
-    open fun getView(view : PFRecyclerViewAdapter<Any?>.ViewHolder, id:Int):View{
+    open fun getView(view: PFRecyclerViewAdapter<Any?>.ViewHolder, id: Int): View {
         return view.getView(id)
     }
 
-    fun setTextViewColor(textView:TextView,color:Int){
+    fun setTextViewColor(textView: TextView, color: Int) {
         textView.setTextColor(ContextCompat.getColor(activity!!.applicationContext, color))
     }
 
-    fun setTextViewSize(textView:TextView,size:Float){
-        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP,size)
+    fun setTextViewSize(textView: TextView, size: Float) {
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, size)
     }
 
-    fun setViewBackgroundColor(view:View,color:Int){
+    fun setViewBackgroundColor(view: View, color: Int) {
         view.setBackgroundColor(ContextCompat.getColor(activity!!.applicationContext, color))
     }
-    open fun onBackPressed():Boolean{
+
+    open fun onBackPressed(): Boolean {
         return false
     }
 }

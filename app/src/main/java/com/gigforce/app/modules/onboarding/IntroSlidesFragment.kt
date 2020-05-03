@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
+import com.gigforce.app.modules.auth.AuthFlowFragment
 import com.gigforce.app.modules.onboarding.utils.DepthPageTransformer
 import com.gigforce.app.utils.AppConstants
 import com.gigforce.app.utils.GlideApp
@@ -45,7 +46,7 @@ class IntroSlidesFragment : BaseFragment() {
 
             override fun invoke() {
                 saveSharedData(AppConstants.INTRO_COMPLETE, "true")
-                navigateWithAllPopupStack(R.id.authFlowFragment)
+                navigate(R.id.authFlowFragment)
             }
         })
         // this.viewpager.setPageTransformer(DepthPageTransformer())
@@ -80,6 +81,7 @@ class IntroSlidesFragment : BaseFragment() {
 
     override fun onBackPressed(): Boolean {
         if(this.viewpager.currentItem==0){
+            removeSavedShareData(AppConstants.INTRO_COMPLETE)
             return false
         }
         else{

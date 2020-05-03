@@ -35,7 +35,6 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="0dp"
         android:layout_marginTop="0dp"
-        android:layout_marginRight="2dp"
         android:layout_below="@id/app_bar_lang_opt"
         android:paddingStart="2dp">
 
@@ -45,63 +44,91 @@
             android:layout_height="@dimen/height_select_lang_item"
             android:hint="en"
             android:text="English"
-            android:background="@drawable/rect_border"
-            android:textSize="14sp" />
-
+            android:textSize="14sp"
+            android:paddingLeft="16dp"
+            android:layout_marginLeft="16dp"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/line_seprator_language"/>
         <RadioButton
             android:id="@+id/hi"
             android:layout_width="fill_parent"
             android:layout_height="@dimen/height_select_lang_item"
             android:hint="hi"
             android:text="हिंदी"
-            android:background="@drawable/rect_border"
-            android:textSize="14sp" />
-
+            android:textSize="14sp"
+            android:paddingLeft="16dp"
+            android:layout_marginLeft="16dp"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/line_seprator_language"/>
         <RadioButton
             android:id="@+id/te"
             android:layout_width="fill_parent"
             android:layout_height="@dimen/height_select_lang_item"
             android:hint="te"
             android:text="తెలుగు"
-            android:background="@drawable/rect_border"
-            android:textSize="14sp" />
-
+            android:textSize="14sp"
+            android:paddingLeft="16dp"
+            android:layout_marginLeft="16dp"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/line_seprator_language"/>
         <RadioButton
             android:id="@+id/gu"
             android:layout_width="fill_parent"
             android:layout_height="@dimen/height_select_lang_item"
             android:hint="gu"
             android:text=" ગુજરતી"
-            android:background="@drawable/rect_border"
-            android:textSize="14sp" />
-
+            android:textSize="14sp"
+            android:paddingLeft="16dp"
+            android:layout_marginLeft="16dp"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/line_seprator_language"/>
         <RadioButton
             android:id="@+id/pu"
             android:layout_width="fill_parent"
             android:layout_height="@dimen/height_select_lang_item"
             android:hint="pa"
-            android:text="પંજાબી"
-            android:background="@drawable/rect_border"
-            android:textSize="14sp" />
-
+            android:text="ਪੰਜਾਬੀ"
+            android:textSize="14sp"
+            android:paddingLeft="16dp"
+            android:layout_marginLeft="16dp"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/line_seprator_language"/>
         <RadioButton
             android:id="@+id/fr"
             android:layout_width="fill_parent"
             android:layout_height="@dimen/height_select_lang_item"
             android:hint="fr"
             android:text="français"
-            android:background="@drawable/rect_border"
-            android:textSize="14sp" />
-
+            android:textSize="14sp"
+            android:paddingLeft="16dp"
+            android:layout_marginLeft="16dp"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/line_seprator_language"/>
         <RadioButton
             android:id="@+id/ma"
             android:layout_width="fill_parent"
             android:layout_height="@dimen/height_select_lang_item"
             android:hint="ma"
             android:text="मराठी"
-            android:background="@drawable/rect_border"
-            android:textSize="14sp" />
-
+            android:textSize="14sp"
+            android:paddingLeft="16dp"
+            android:layout_marginLeft="16dp"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/line_seprator_language"/>
     </RadioGroup>
 
     <ImageView

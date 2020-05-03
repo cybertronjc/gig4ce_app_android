@@ -8,38 +8,39 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cvotpwrong"
-        android:layout_height="wrap_content"
-        android:background="#76e02020"
         android:layout_width="match_parent"
+        android:layout_height="88dp"
+        android:background="#76e02020"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@+id/textView26"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        >
+        app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
             android:id="@+id/ivwrongotp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="60dp"
-            android:layout_marginTop="30dp"
+            android:src="@drawable/ic_warning"
+            android:layout_marginLeft="27dp"
+            android:layout_marginRight="12dp"
+            app:layout_constraintBottom_toBottomOf="@+id/tvwrongotp"
+            app:layout_constraintEnd_toStartOf="@+id/tvwrongotp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_warning" />
+            app:layout_constraintTop_toTopOf="@+id/tvwrongotp" />
 
 
         <TextView
             android:id="@+id/tvwrongotp"
-            android:layout_width="251dp"
-            android:layout_height="48dp"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="32dp"
-            android:text="You have entered invalid otp. Please re-enter  OTP."
+            android:layout_width="280dp"
+            android:layout_height="42dp"
+            android:fontFamily="@font/lato"
+            android:text="You have entered invalid OTP. Please re-enter OTP."
             android:textColor="#e02020"
             android:textSize="14sp"
+            android:layout_marginTop="39dp"
+            android:layout_marginRight="16dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.191"
-            app:layout_constraintStart_toEndOf="@+id/ivwrongotp"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -52,6 +53,7 @@
         android:textColor="#000000"
         android:textSize="20sp"
         android:textStyle="bold"
+        android:fontFamily="@font/lato_bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -63,6 +65,9 @@
         android:layout_marginTop="33dp"
         android:text="@string/otp_sent_otp_account"
         android:textSize="14sp"
+        android:paddingLeft="58dp"
+        android:paddingRight="58dp"
+        android:gravity="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView26" />
@@ -74,6 +79,8 @@
         android:layout_marginTop="32dp"
         android:digits="0123456789"
         android:inputType="number"
+        android:maxLength="6"
+        android:cursorVisible="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView29" />
