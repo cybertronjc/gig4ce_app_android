@@ -9,6 +9,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
+import android.view.View
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.Toast
@@ -28,6 +29,7 @@ import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
 import com.google.firebase.storage.UploadTask.TaskSnapshot
 import com.yalantis.ucrop.UCrop
+import kotlinx.android.synthetic.main.activity_photo_crop.*
 import kotlinx.android.synthetic.main.fragment_video_resume.*
 import kotlinx.android.synthetic.main.profile_photo_bottom_sheet.view.*
 import pub.devrel.easypermissions.EasyPermissions
@@ -314,10 +316,15 @@ class PhotoCrop : AppCompatActivity(),
         /**
          *  OnProgressListener to capture the progress. Can be used to create an upload progress bar
          */
+//        uploadTask.observe(.progress, handler: { (snap) in
+//                print("Our upload progress is: \(String(describing: snap.progress?.fractionCompleted))")
+//        })
         try {
             uploadTask.addOnProgressListener { taskSnapshot ->
                 val progress = (100.0 * taskSnapshot.bytesTransferred) / taskSnapshot.totalByteCount
                 println("Uploading in progress :$progress% done")
+                progress_circular.visibility=View.VISIBLE
+                progress_circular.progress= progress.toInt()
             }
         } catch (e: Exception) {
             Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show()
@@ -330,6 +337,7 @@ class PhotoCrop : AppCompatActivity(),
          */
         try {
             uploadTask.addOnSuccessListener { taskSnapshot: TaskSnapshot ->
+                progress_circular.visibility=View.GONE
                 val fname: String = taskSnapshot.metadata?.reference?.name.toString()
                 updateViewModel(purpose, fname)
                 loadImage(folder, fname)
