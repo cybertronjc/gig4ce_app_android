@@ -4,14 +4,14 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_profile">ProfileActivity</string>
 
-    <string name="intro_slide1_title">Welcome to Gigforce</string>
-    <string name="intro_slide1_subtitle">Learn. Earn. Enjoy.</string>
+    <string name="intro_slide1_title">Welcome to GiGforce</string>
+    <string name="intro_slide1_subtitle">Whats going to happen tomorrow?</string>
 
     <string name="intro_slide2_title">Work Happens</string>
-    <string name="intro_slide2_subtitle">Get Notified when work happens</string>
+    <string name="intro_slide2_subtitle">Get notified when work happens.</string>
 
     <string name="intro_slide3_title">Task and Assign</string>
-    <string name="intro_slide3_subtitle">Task and assign them to collegues!</string>
+    <string name="intro_slide3_subtitle">Task and assign them to colleagues.</string>
 
     <string name="ob_slide1_title">Onboarding</string>
     <string name="ob_slide1_subtitle">How to - 1</string>

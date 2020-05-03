@@ -5,13 +5,13 @@
     <string name="title_activity_profile">	ProfileActivity	</string>
 
     <string name="intro_slide1_title">	గిగ్‌ఫోర్స్‌కు స్వాగతం	</string>
-    <string name="intro_slide1_subtitle">	తెలుసుకోండి. సంపాదించండి. ఆనందించండి.	</string>
+    <string name="intro_slide1_subtitle">రేపు ఏమి జరగబోతోంది?</string>
 
     <string name="intro_slide2_title">	పని జరుగుతుంది	</string>
-    <string name="intro_slide2_subtitle">	పని జరిగినప్పుడు తెలియజేయండి	</string>
+    <string name="intro_slide2_subtitle">	పని జరిగినప్పుడు తెలియజేయండి.	</string>
 
     <string name="intro_slide3_title">	టాస్క్ మరియు కేటాయించండి	</string>
-    <string name="intro_slide3_subtitle">	టాస్క్ మరియు సహోద్యోగులకు కేటాయించండి!	</string>
+    <string name="intro_slide3_subtitle">	టాస్క్ మరియు సహోద్యోగులకు కేటాయించండి.	</string>
 
     <string name="ob_slide1_title">	ఆన్బోర్డింగ్	</string>
     <string name="ob_slide1_subtitle">	ఎలా - 1	</string>
