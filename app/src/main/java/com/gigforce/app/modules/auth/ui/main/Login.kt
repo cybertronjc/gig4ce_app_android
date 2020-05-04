@@ -17,6 +17,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
+import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import kotlinx.android.synthetic.main.login_frament.*
 import java.util.regex.Matcher
@@ -68,7 +69,10 @@ class Login: BaseFragment() {
     }
 
     fun navigateToOTPVarificationScreen(){
-        findNavController().navigate(LoginDirections.actionLogin2ToVerifyOTP(viewModel.verificationId!!))
+        // fixed by PD - during a hotfix for apk release - doubleclick issue resolved
+        if (navController.currentDestination?.id == R.id.Login) {
+            findNavController().navigate(LoginDirections.actionLogin2ToVerifyOTP(viewModel.verificationId!!))
+        }
     }
 
     private fun listeners() {
