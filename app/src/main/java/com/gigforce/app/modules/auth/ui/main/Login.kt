@@ -71,7 +71,9 @@ class Login: BaseFragment() {
     fun navigateToOTPVarificationScreen(){
         // fixed by PD - during a hotfix for apk release - doubleclick issue resolved
         if (navController.currentDestination?.id == R.id.Login) {
-            findNavController().navigate(LoginDirections.actionLogin2ToVerifyOTP(viewModel.verificationId!!))
+            try {
+                findNavController().navigate(LoginDirections.actionLogin2ToVerifyOTP(viewModel.verificationId!!))
+            }catch (e:Exception){}
         }
     }
 
