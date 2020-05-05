@@ -13,6 +13,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="bottom"
-            android:src="@drawable/splash_bottom" />
+            android:src="@drawable/splash_bottom"/>
     </item>
 </layer-list>

@@ -7,6 +7,7 @@
     <color name="colorLightAccent">#e42c64</color>
     <color name="topBarDark">#d72467</color>
     <color name="black">#000000</color>
+    <color name="black_20">#20000000</color>
     <color name="white">#ffffff</color>
     <color name="colorText">#313131</color>
     <color name="colorError">#d4e02020</color>
@@ -35,4 +36,8 @@
     <color name="active_nav_bg">#ffeef8</color>
     <color name="gray_color_calendar_previous_date">#e9e9e9</color>
     <color name="line_seprator_language">#ebecef</color>
+    <color name="timer_color">#e82e66</color>
+    <color name="time_up_color">#6d7278</color>
+
+
 </resources>
