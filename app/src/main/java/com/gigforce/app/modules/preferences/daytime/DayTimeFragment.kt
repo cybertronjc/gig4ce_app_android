@@ -79,7 +79,10 @@ class DayTimeFragment : BaseFragment() {
         if(preferencesDataModel.selecteddays.size==0){
             subTitle = "None"
         }else if(preferencesDataModel.selecteddays.size>1){
-            subTitle = preferencesDataModel.selecteddays.size.toString()+" days"
+            var totalDays = preferencesDataModel.selecteddays.size
+            if(totalDays==6)
+                totalDays-=1
+            subTitle = totalDays.toString()+" days"
         }
         else if(preferencesDataModel.selecteddays.size==1){
             subTitle = preferencesDataModel.selecteddays.size.toString()+" day"
