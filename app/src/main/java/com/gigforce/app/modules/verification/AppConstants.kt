@@ -1,7 +1,6 @@
 package com.gigforce.app.modules.verification
 
 object AppConstants{
-    const val JSON_PLACEHOLDER_BASE_URL = "https://jsonplaceholder.typicode.com"
     const val IDFY_BASE_URL = "https://eve.idfy.com/v3/tasks/"
     const val IDFY_PHOTO_URL = "https://eve.idfy.com/v3/tasks/sync/extract/ind_aadhaar"
     var idfyAcid = "fd5931df2bde/f8451777-05d8-4e0f-b859-ad5dfa895bd4";//BuildConfig.IDFY_AC_ID
