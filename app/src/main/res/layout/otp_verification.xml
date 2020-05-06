@@ -6,41 +6,38 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cvotpwrong"
         android:layout_width="match_parent"
         android:layout_height="88dp"
-        android:background="#76e02020"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="@+id/textView26"
+        android:background="#30e02020"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.4"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/ivwrongotp"
+            android:id="@+id/imageView17"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_warning"
-            android:layout_marginLeft="27dp"
-            android:layout_marginRight="12dp"
-            app:layout_constraintBottom_toBottomOf="@+id/tvwrongotp"
-            app:layout_constraintEnd_toStartOf="@+id/tvwrongotp"
+            android:layout_marginStart="27dp"
+            android:layout_marginTop="47dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/tvwrongotp" />
-
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_warning_" />
 
         <TextView
-            android:id="@+id/tvwrongotp"
-            android:layout_width="280dp"
-            android:layout_height="42dp"
-            android:fontFamily="@font/lato"
+            android:id="@+id/textView68"
+            android:layout_width="318dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
             android:text="You have entered invalid OTP. Please re-enter OTP."
-            android:textColor="#e02020"
+            android:textColor="#E02020"
             android:textSize="14sp"
-            android:layout_marginTop="39dp"
-            android:layout_marginRight="16dp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.636"
+            app:layout_constraintStart_toEndOf="@+id/imageView17"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -49,11 +46,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="52dp"
+        android:fontFamily="@font/lato_bold"
         android:text="@string/otp_verify_account"
         android:textColor="#000000"
         android:textSize="20sp"
         android:textStyle="bold"
-        android:fontFamily="@font/lato_bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -63,11 +60,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="33dp"
-        android:text="@string/otp_sent_otp_account"
-        android:textSize="14sp"
+        android:gravity="center"
         android:paddingLeft="58dp"
         android:paddingRight="58dp"
-        android:gravity="center"
+        android:text="@string/otp_sent_otp_account"
+        android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView26" />
@@ -76,14 +73,14 @@
         android:id="@+id/txt_otp"
         android:layout_width="256dp"
         android:layout_height="64dp"
-        android:layout_marginTop="32dp"
+        android:cursorVisible="false"
         android:digits="0123456789"
         android:inputType="number"
         android:maxLength="6"
-        android:cursorVisible="false"
+        android:layout_marginTop="30dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView29" />
+        app:layout_constraintTop_toBottomOf="@+id/otpnotcorrect" />
 
     <TextView
         android:id="@+id/otpnotcorrect"
@@ -91,28 +88,28 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/verify_otp_button"
         android:layout_centerHorizontal="true"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginRight="196dp"
-        android:text="@string/otp_notcorrect"
-        android:textColor="#e02020"
-        android:textSize="12sp"
-        android:visibility="invisible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        android:fontFamily="@font/lato"
+        android:text="@string/if_otp_not_received"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        android:visibility="visible"
+        android:layout_marginTop="36dp"
+        app:layout_constraintEnd_toStartOf="@+id/resend_otp"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txt_otp" />
+        app:layout_constraintTop_toBottomOf="@+id/textView29" />
 
     <TextView
-        android:id="@+id/otptimertv"
+        android:id="@+id/timer_tv"
         android:layout_width="wrap_content"
         android:layout_height="15dp"
         android:layout_above="@id/txt_otp"
         android:layout_centerHorizontal="true"
-        android:textAppearance="?android:attr/textAppearanceSmall"
         android:layout_marginTop="8dp"
-        android:textColor="#4D4DCD"
+        android:textColor="@color/timer_color"
         android:textSize="12sp"
+        android:letterSpacing="0.09"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/verify_otp_button" />
@@ -124,26 +121,37 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="19dp"
         android:backgroundTint="@android:color/background_dark"
-        android:shadowColor="@color/colorAccent"
-        android:textColor="#b5b5b5"
-        android:letterSpacing="0.09"
         android:gravity="end"
+        android:letterSpacing="0.09"
+        android:shadowColor="@color/colorAccent"
         android:text="@string/otp_reenter_mobile"
+        android:textColor="#b5b5b5"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/otptimertv" />
+        app:layout_constraintTop_toBottomOf="@+id/timer_tv" />
 
-    <Button
+    <TextView
         android:id="@+id/verify_otp_button"
         android:layout_width="256dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="65dp"
-        android:backgroundTint="#af2b81"
-        android:gravity="center_horizontal|center_vertical"
-        android:letterSpacing="0.04"
+        android:layout_height="36dp"
+        android:layout_marginTop="32dp"
         android:text="VERIFY"
+        style="@style/button_style"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txt_otp" />
+
+    <TextView
+        android:id="@+id/resend_otp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/lato"
+        android:text="@string/resend"
+        android:textColor="#e94b81"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/otpnotcorrect"
+        app:layout_constraintTop_toTopOf="@+id/otpnotcorrect" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
