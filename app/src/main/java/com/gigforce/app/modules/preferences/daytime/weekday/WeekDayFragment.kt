@@ -118,12 +118,12 @@ class WeekDayFragment : BaseFragment() {
         val builder = AlertDialog.Builder(activity)
         builder.setTitle("Days")
 
-        if (viewDataModel.selecteddays.size == 0) {
-            for (i in 0..items.size - 1) {
-                isSectionSelected[i] = true
-                selectedList.add(i)
-            }
-        } else
+//        if (viewDataModel.selecteddays.size == 0) {
+//            for (i in 0..items.size - 1) {
+//                isSectionSelected[i] = true
+//                selectedList.add(i)
+//            }
+//        } else
             for (i in 0..items.size - 1) {
                 var isfound = false
                 for (day in viewDataModel.selecteddays) {
@@ -222,12 +222,12 @@ class WeekDayFragment : BaseFragment() {
         val selectedList = ArrayList<Int>()
         val builder = AlertDialog.Builder(activity)
         builder.setTitle("Slots")
-        if (viewDataModel.selectedslots.size == 0) {
-            for (i in 0..items.size - 1) {
-                isSectionSelected[i] = true
-                selectedList.add(i)
-            }
-        } else
+//        if (viewDataModel.selectedslots.size == 0) {
+//            for (i in 0..items.size - 1) {
+//                isSectionSelected[i] = true
+//                selectedList.add(i)
+//            }
+//        } else
             for (i in 0..items.size - 1) {
                 var isfound = false
                 for (day in viewDataModel.selectedslots) {
