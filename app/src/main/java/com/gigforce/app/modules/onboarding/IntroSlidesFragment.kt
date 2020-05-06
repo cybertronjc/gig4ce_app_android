@@ -137,7 +137,7 @@ class IntroSlidesViewPagerAdapter(val viewpager:ViewPager2,
                 right_arrow.visibility = View.GONE
             }else if(position == 1){
                 GlideApp.with(itemView)
-                    .load(R.drawable.ic_intro_slides2_mainart)
+                    .load(R.drawable.ic_undraw_superhero)
                     .into(mainArtImageView)
 
                 titleTextView.setText(R.string.intro_slide2_title)

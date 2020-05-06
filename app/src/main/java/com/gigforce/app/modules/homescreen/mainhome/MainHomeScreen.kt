@@ -4,19 +4,27 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.request.RequestOptions
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.app.core.genericadapter.RecyclerGenericAdapter
 import com.gigforce.app.modules.homescreen.mainhome.verticalcalendar.VerticalCalendarDataItemModel
+import com.gigforce.app.modules.preferences.PreferencesFragment
+import com.gigforce.app.modules.profile.ProfileViewModel
+import com.gigforce.app.utils.GlideApp
+import com.google.firebase.storage.StorageReference
 import com.riningan.widget.ExtendedBottomSheetBehavior
 import com.riningan.widget.ExtendedBottomSheetBehavior.STATE_COLLAPSED
 import kotlinx.android.synthetic.main.homescreen_1nsvbs.*
-
+import java.text.SimpleDateFormat
+import java.util.*
 
 class MainHomeScreen : BaseFragment() {
 
@@ -27,6 +35,7 @@ class MainHomeScreen : BaseFragment() {
 
     private var mExtendedBottomSheetBehavior: ExtendedBottomSheetBehavior<*>? = null
     private lateinit var viewModel: MainHomeScreenViewModel
+    lateinit var viewModelProfile: ProfileViewModel
     private val itemList: Array<String>
         get() = arrayOf(
             "My Gig",
@@ -57,24 +66,57 @@ class MainHomeScreen : BaseFragment() {
         mExtendedBottomSheetBehavior?.state = STATE_COLLAPSED
         mExtendedBottomSheetBehavior?.isAllowUserDragging = true;
         viewModel = ViewModelProviders.of(this).get(MainHomeScreenViewModel::class.java)
-//        initializeViews()
+        viewModelProfile = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
+
+
+        val pattern = "MMM YYYY"
+        val simpleDateFormat = SimpleDateFormat(pattern)
+        val date: String = simpleDateFormat.format(Date())
+        tv2HS1.text = date
+        initializeViews()
+        listener()
         observePreferenceData()
     }
+
+    private fun listener() {
+        iv2HS1.setOnClickListener(View.OnClickListener { navigate(R.id.profileFragment) })
+        tv_hs1bs_alert.setOnClickListener(View.OnClickListener { navigate(R.id.verification) })
+    }
+
     private fun observePreferenceData() {
         viewModel.mainHomeLiveDataModel.observe(viewLifecycleOwner, Observer { homeDataModel ->
             viewModel.setDataModel(homeDataModel.all_gigs)
             initializeViews()
         })
+
+
+        // load user data
+        viewModelProfile.getProfileData().observe(viewLifecycleOwner, Observer { profile ->
+            displayImage(profile.profileAvatarName)
+            tv1HS1.text = profile.name
+        })
+    }
+
+    private fun displayImage(profileImg:String) {
+        if(profileImg!=null && !profileImg.equals("")) {
+            val profilePicRef: StorageReference =
+                PreferencesFragment.storage.reference.child("profile_pics").child(profileImg)
+            GlideApp.with(this.context!!)
+                .load(profilePicRef)
+                .apply(RequestOptions().circleCrop())
+                .into(profile_image)
+        }
     }
     private fun initializeViews() {
         initializeVerticalCalendarRV()
         initializeBSGridView()
+
     }
 
     private fun initializeBSGridView() {
         val adapter = this.context?.let {
             FeaturesAdapter(
-                it,
+                this,
                 R.layout.item_grid_features_hs1,
                 itemList
             )
@@ -88,9 +130,8 @@ class MainHomeScreen : BaseFragment() {
             RecyclerGenericAdapter<VerticalCalendarDataItemModel>(
                 activity?.applicationContext,
                 PFRecyclerViewAdapter.OnViewHolderClick<VerticalCalendarDataItemModel?> { view, position, item ->
-                    showToast(
-                        ""
-                    )
+                    Toast.makeText(this.context, "CLICKED ON DAY DEBUG", Toast.LENGTH_LONG).show()
+                    navigate(R.id.rosterDayFragment)
                 },
                 RecyclerGenericAdapter.ItemInterface<VerticalCalendarDataItemModel?> { obj, viewHolder, position ->
 

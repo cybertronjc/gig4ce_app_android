@@ -213,7 +213,7 @@
     </fragment>
     <fragment
         android:id="@+id/homeScreenIcons"
-        android:name="com.gigforce.app.modules.homescreen.HomeScreenIcons"
+        android:name="com.gigforce.app.modules.homescreen.mainhome.MainHomeScreen"
         android:label="HomeScreenIcons">
         <action
             android:id="@+id/action_homeScreenIcons_to_profileFragment"
