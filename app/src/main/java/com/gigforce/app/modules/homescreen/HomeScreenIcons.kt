@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
+import com.gigforce.app.utils.AppConstants
 import com.gigforce.app.utils.setDarkStatusBarTheme
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.*
@@ -23,7 +24,6 @@ import com.google.firebase.firestore.DocumentSnapshot as DocumentSnapshot1
 
 
 class HomeScreenIcons : BaseFragment() {
-
     //todo
     private lateinit var storage: FirebaseStorage
     var firebaseDB = FirebaseFirestore.getInstance()
@@ -92,6 +92,7 @@ class HomeScreenIcons : BaseFragment() {
         val noBtn = dialog?.findViewById(R.id.cancel) as TextView
         yesBtn.setOnClickListener {
             FirebaseAuth.getInstance().signOut()
+            removeSavedShareData(AppConstants.INTRO_COMPLETE)
             navController.popBackStack(R.id.homeScreenIcons,true)
             dialog?.dismiss()
         }
@@ -105,7 +106,6 @@ class HomeScreenIcons : BaseFragment() {
         val adapter = this.context?.let { HomeScreenAdapter(it, R.layout.item_gridhomescreen, gridItems) }
         gridview.adapter = adapter
         gridview.onItemClickListener = AdapterView.OnItemClickListener { parent, v, position, id ->
-            // Write code to perform action when item is clicked.
             if(gridItems.get(position).navigateToFragment!=0)
             navigate(gridItems.get(position).navigateToFragment)
             else
@@ -130,68 +130,3 @@ class HomeScreenIcons : BaseFragment() {
         return gridItems
     }
 }
-
-
-/** Algo:
-Check the KYC flag of Giger Profile from Profiles collection
-check which flag is true or false
-if address is false - go to verification
-if address is true, aadhaar is false and  all of (dl,voterid,passport) are false - go to aadhaarUpload
-if address is true, aadhaar is false and any of (dl,voterid,passport) is true - go to bankUpload
-if address and aadhaar are true, bank is false - go to bankUpload
-if address and aadhaar are true, bank is true - go to UploadPan
- */
-//            docref = firebaseDB.collection("Verification").document(uid);
-//            docref.get()
-//                .addOnSuccessListener { document ->
-//                    if (document != null) {
-//                        val items = document["kycVerified"] as HashMap<*, *>
-//                        items.forEach { (k, v) ->
-//                            Log.d(">>",">>$k = $v");
-//                            // Apply the above algorithm here!
-//                        }
-//                    } else {
-//                        Log.d(">>","null doc")
-//                    }
-//                }
-//                .addOnFailureListener { exception ->
-//                    Log.d("TAG", "get failed with ", exception)
-//                }
-
-
-
-//        firebaseDB.collection("Verification").whereEqualTo(FieldPath.documentId(),"GigerId1").whereEqualTo()
-
-//        firebaseDB.collection("Verification").document(uid).addSnapshotListener(EventListener<DocumentSnapshot1> {
-//                value, e ->
-//            if (e != null) {
-//                Log.w("HomeScreenIcons", "Listen failed", e)
-//                return@EventListener
-//            }
-//
-//            Log.d("HomeScreenIcons", value.toString())
-//
-//            Toast.makeText(context,
-//                "TODO CTA:"+value?.data?.keys.toString(), Toast.LENGTH_SHORT).show()
-
-//        firebaseDB.collection("Verification").whereEqualTo(FieldPath.documentId(),"GigerId1").whereEqualTo()
-
-//            value?.data?.keys?.forEach { k-> if(k.equals("bio_kyc_verified")){
-//
-//                value?.data?.values?.forEach()
-//                Toast.makeText(context,
-//                    "TODO CTA:"+k[0].toString(), Toast.LENGTH_SHORT).show()
-//            } }
-
-//            value?.data?.entries?.forEach { (key, value) -> if(key.equals("bio_kyc_verified")){
-//
-//                Toast.makeText(context,
-//                "TODO CTA: $key = $value", Toast.LENGTH_SHORT).show()
-//            }}
-
-
-/*
-              check the kyc flag and video resume flag and accordingly set the card views visibility
-               */
-//layout.cardviewkyc.visibility
-//layout.text_kyc.visibility=View.VISIBLE

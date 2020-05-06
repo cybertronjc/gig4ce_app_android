@@ -17,7 +17,9 @@ import androidx.core.app.ActivityCompat
 import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
+import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
+import com.gigforce.app.utils.AppConstants
 import kotlinx.android.synthetic.main.login_frament.*
 import java.util.regex.Matcher
 import java.util.regex.Pattern
@@ -38,7 +40,10 @@ class Login: BaseFragment() {
         Pattern.compile("^[+][0-9]{12}\$")
 
     lateinit var match: Matcher;
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
+    }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -51,11 +56,15 @@ class Login: BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        if(getSharedData(AppConstants.INTRO_COMPLETE,null)==null){
+            navigateWithAllPopupStack(R.id.authFlowFragment)
+        }
         viewModel.activity = this.activity!!
         listeners()
         observer()
         requestForDeviceMobileNumber()
     }
+
 
     private fun observer() {
         viewModel.liveState.observeForever {
@@ -68,7 +77,12 @@ class Login: BaseFragment() {
     }
 
     fun navigateToOTPVarificationScreen(){
-        findNavController().navigate(LoginDirections.actionLogin2ToVerifyOTP(viewModel.verificationId!!))
+        // fixed by PD - during a hotfix for apk release - doubleclick issue resolved
+        if (navController.currentDestination?.id == R.id.Login) {
+            try {
+                findNavController().navigate(LoginDirections.actionLogin2ToVerifyOTP(viewModel.verificationId!!))
+            }catch (e:Exception){}
+        }
     }
 
     private fun listeners() {

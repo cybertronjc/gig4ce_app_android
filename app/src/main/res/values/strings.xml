@@ -132,11 +132,11 @@
     <string name="otp_verify_account">Verify Account</string>
     <string name="mobile_verified">Mobile verification success!</string>
     <string name="otp_notcorrect">Wrong Password !!</string>
-    <string name="otp_sent_otp_account">We have sent the OTP to your number \nPlease enter the OTP</string>
+    <string name="otp_sent_otp_account">We have send the OTP on Number\n will apply auto to the fields</string>
     <string name="otp_hint">_ _ _ _ _ _</string>
     <string name="otp_verify">Verify</string>
     <string name="otp_reenter_mobile">Re-enter mobile number</string>
-    <string name="otp_send_otp">Send OTP</string>
+    <string name="otp_send_otp">SEND OTP</string>
 
     <!-- Add New Experience Bottom Sheet -->
     <string name="add_experience_new_experience">New Experience</string>
@@ -255,5 +255,7 @@
     <string name="empty_about_me_text">Please tell us about yourself</string>
     <string name="error_empty_mandatory_fields">* Please fill mandatory fields</string>
     <string name="about_me_hint">Tell us about yourself in detail</string>
-ayyy
+    <string name="if_otp_not_received">"If you didn’t receive the OTP, "</string>
+    <string name="resend">RESEND</string>
+    ayyy
 </resources>
