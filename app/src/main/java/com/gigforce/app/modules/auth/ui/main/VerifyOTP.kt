@@ -114,7 +114,6 @@ class VerifyOTP: BaseFragment() {
 
     private fun navigateToLoginScreen() {
         navigateWithAllPopupStack(R.id.Login)
-//        navController.popBackStack(R.id.Login,true)
     }
 
     private fun counterStart(){
@@ -134,7 +133,6 @@ class VerifyOTP: BaseFragment() {
 
             }
             override fun onFinish() {
-//                layout?.otptimertv?.text = "Resend"
                 showResendOTPMessage(true)
             }
         }.start()
