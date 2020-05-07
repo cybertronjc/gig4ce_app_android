@@ -14,6 +14,13 @@
         <item name="bottomSheetDialogTheme">@style/CustomBottomSheetDialog</item>
     </style>
 
+    <style name="Body1SelectedOnSurfaceHighEmphasisLeft">
+        <item name="android:textSize">16sp</item>
+        <item name="android:letterSpacing">0.03</item>
+        <item name="android:lineSpacingExtra">12sp</item>
+        <item name="android:textColor">#de000000</item>
+    </style>
+
     <style name="CustomBottomSheetDialog" parent="@style/ThemeOverlay.MaterialComponents.BottomSheetDialog">
         <item name="bottomSheetStyle">@style/CustomBottomSheet</item>
     </style>

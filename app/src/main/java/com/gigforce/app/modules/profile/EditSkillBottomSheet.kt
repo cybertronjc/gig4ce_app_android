@@ -13,9 +13,12 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.internal.main.DialogLayout
 import com.gigforce.app.R
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import kotlinx.android.synthetic.main.delete_confirmation_dialog.*
 import kotlinx.android.synthetic.main.edit_skill_bottom_sheet.*
+import kotlinx.android.synthetic.main.edit_skill_bottom_sheet.cancel
 import kotlinx.android.synthetic.main.edit_skill_bottom_sheet.view.*
 import kotlinx.android.synthetic.main.edit_skill_bottom_sheet.view.skill
 
@@ -53,7 +56,7 @@ class EditSkillBottomSheet: ProfileBaseBottomSheetFragment() {
     }
 
     private fun initialize() {
-        val skillAdapter = ArrayAdapter(this.context!!, R.layout.simple_spinner_dropdown_item, skills)
+        val skillAdapter = ArrayAdapter(this.requireContext(), R.layout.simple_spinner_dropdown_item, skills)
         val skillSpinner = skill
         skillSpinner.adapter = skillAdapter
         skillSpinner.onItemSelectedListener = object:
@@ -82,17 +85,14 @@ class EditSkillBottomSheet: ProfileBaseBottomSheetFragment() {
     private fun setListeners() {
 
         delete.setOnClickListener {
-            MaterialDialog(this.context!!).show {
-                title(text = "Confirm Delete")
-                message(text = "Are you sure to Delete this item?")
-                positiveButton(R.string.delete) {
-                    profileViewModel!!.removeProfileSkill(currentSkill)
-                    findNavController().navigate(R.id.educationExpandedFragment)
-                }
-                negativeButton(R.string.cancel_text) {
-
-                }
+            val dialog = getDeleteConfirmationDialog(requireContext())
+            dialog.yes.setOnClickListener {
+                profileViewModel.removeProfileSkill(currentSkill)
+                findNavController().navigate(R.id.educationExpandedFragment)
+                dialog .dismiss()
             }
+            dialog.show()
+
             Log.d("EditSkill", "Skill deleted" + skill)
         }
 
@@ -103,9 +103,11 @@ class EditSkillBottomSheet: ProfileBaseBottomSheetFragment() {
                 skills.add(selectedSkill)
                 profileViewModel!!.setProfileSkill(skills)
                 findNavController().navigate(R.id.educationExpandedFragment)
-            } else {
-                Toast.makeText(this.context, "Invalid Choice", Toast.LENGTH_LONG).show()
             }
+        }
+
+        cancel.setOnClickListener {
+            findNavController().navigate(R.id.educationExpandedFragment)
         }
 
     }

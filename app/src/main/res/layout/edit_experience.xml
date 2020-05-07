@@ -26,13 +26,28 @@
             android:letterSpacing="0.05"
             android:visibility="gone"
             android:text="@string/error_empty_mandatory_fields" />
-        <TextView
-            android:id="@+id/textView39"
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="@string/edit_experience"
-            style="@style/BsHeadingBold12"/>
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/textView39"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="center_vertical"
+                android:text="@string/edit_experience"
+                style="@style/BsHeadingBold12"/>
+            <ImageButton
+                android:id="@+id/delete_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_delete"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_weight="1" />
+        </LinearLayout>
+
 
         <TextView
             android:id="@+id/textView40"
@@ -65,18 +80,26 @@
             android:inputType="textPersonName"
             android:layout_marginTop="8dp" />
 
-        <TextView
-            android:id="@+id/textView41"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/employment_holder"
+            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="@string/employment_type" />
+            app:endIconDrawable="@drawable/ic_down"
+            app:boxBackgroundColor="@color/white"
+            android:focusable="false"
+            android:clickable="false">
 
-        <Spinner
-            android:id="@+id/employment_type"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"/>
+            <AutoCompleteTextView
+                android:id="@+id/employment_type"
+                android:paddingStart="3dp"
+                android:focusable="false"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/add_experience_employment_type"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
 
         <TextView
             android:id="@+id/textView42"
@@ -165,18 +188,16 @@
             android:layout_marginTop="24dp"
             android:orientation="horizontal">
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/delete_button"
+                android:id="@+id/cancel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/delete"
+                android:text="@string/cancel_text"
                 android:layout_weight="1"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
                 android:textColor="@color/gray_color"
-                app:iconTint="@color/gray_color"
-                app:icon="@drawable/ic_delete"
                 app:strokeColor="@color/gray_color"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"/>
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/save_button"

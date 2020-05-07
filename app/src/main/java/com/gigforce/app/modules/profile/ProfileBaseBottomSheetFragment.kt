@@ -1,9 +1,11 @@
 package com.gigforce.app.modules.profile
 
+import android.app.Dialog
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import android.widget.EditText
 import android.widget.TextView
 import androidx.fragment.app.activityViewModels
@@ -11,6 +13,8 @@ import androidx.lifecycle.ViewModel
 import com.gigforce.app.R
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.chip.Chip
+import com.google.firebase.auth.FirebaseAuth
+import kotlinx.android.synthetic.main.delete_confirmation_dialog.*
 
 abstract class ProfileBaseBottomSheetFragment: BottomSheetDialogFragment() {
     var mView: View? = null
@@ -67,5 +71,17 @@ abstract class ProfileBaseBottomSheetFragment: BottomSheetDialogFragment() {
         for (view in views) {
             (view as EditText).setHintTextColor(resources.getColor(R.color.colorHint))
         }
+    }
+
+    fun getDeleteConfirmationDialog(context: Context): Dialog {
+        val dialog = Dialog(context)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setCancelable(false)
+        dialog.setContentView(R.layout.delete_confirmation_dialog)
+
+        dialog.cancel.setOnClickListener {
+            dialog .dismiss()
+        }
+        return dialog
     }
 }

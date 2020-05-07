@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
 import com.gigforce.app.modules.profile.models.Experience
+import com.gigforce.app.utils.DropdownAdapter
 import kotlinx.android.synthetic.main.add_experience_bottom_sheet.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -46,30 +47,14 @@ class AddExperienceBottomSheet: ProfileBaseBottomSheetFragment() {
     }
 
     private fun setListeners() {
-        employments.addAll(listOf("--employment type--", "Full time", "internship", "Part time"))
-        val employmentAdapter = ArrayAdapter(this.context!!, R.layout.simple_spinner_dropdown_item, employments)
+        employments.addAll(listOf("Full time", "internship", "Part time"))
+        val employmentAdapter = DropdownAdapter(this.requireContext(), employments)
         val employmentSpinner = employment_type
-        employmentSpinner.adapter = employmentAdapter
-        employmentSpinner.onItemSelectedListener = object:
-            AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                selectedEmployment = if (position != 0) employments[position] else ""
-                Log.d("Spinner", "selected " + employments[position])
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-                //TODO("Not yet implemented")
-            }
-        }
+        employmentSpinner.setAdapter(employmentAdapter)
 
         var calendar = Calendar.getInstance(TimeZone.getDefault())
         end_date.setOnClickListener {
-            DatePickerDialog(this.context!!, DatePickerDialog.OnDateSetListener{
+            DatePickerDialog(this.requireContext(), DatePickerDialog.OnDateSetListener{
                     datePicker: DatePicker, i: Int, i1: Int, i2: Int ->
                 Log.d("TEMP", "tmp date")
                 selectedEndDate = "$i2/${i1+1}/$i"
@@ -78,7 +63,7 @@ class AddExperienceBottomSheet: ProfileBaseBottomSheetFragment() {
         }
 
         start_date.setOnClickListener {
-            DatePickerDialog(this.context!!, DatePickerDialog.OnDateSetListener{
+            DatePickerDialog(this.requireContext(), DatePickerDialog.OnDateSetListener{
                     datePicker: DatePicker, i: Int, i1: Int, i2: Int ->
                 Log.d("TEMP", "tmp date")
                 selectedStartDate = "$i2/${i1+1}/$i"
@@ -104,7 +89,7 @@ class AddExperienceBottomSheet: ProfileBaseBottomSheetFragment() {
                 addNewExperience()
                 title.setText("")
                 company.setText("")
-                employment_type.setSelection(0)
+                employment_type.setText("")
                 location.setText("")
                 start_date.setText("")
                 end_date.setText("")
@@ -131,12 +116,12 @@ class AddExperienceBottomSheet: ProfileBaseBottomSheetFragment() {
     }
 
     private fun addNewExperience() {
-        hideError(form_error, title, company, location, start_date, end_date)
+        hideError(form_error, title, company, employment_type, location, start_date, end_date)
         updates.add(
             Experience(
                 title = title.text.toString(),
                 company = company.text.toString(),
-                employmentType = selectedEmployment,
+                employmentType = employment_type.text.toString(),
                 location = location.text.toString(),
                 startDate = SimpleDateFormat("dd/MM/yyyy").parse(selectedStartDate),
                 endDate = if (selectedEndDate.isNotEmpty()) SimpleDateFormat("dd/MM/yyyy").parse(selectedEndDate) else null,
@@ -150,7 +135,7 @@ class AddExperienceBottomSheet: ProfileBaseBottomSheetFragment() {
         if (validation!!.isValidExperience(
                 title,
                 company,
-                selectedEmployment,
+                employment_type.text.toString(),
                 location,
                 selectedStartDate,
                 selectedEndDate,
@@ -160,10 +145,10 @@ class AddExperienceBottomSheet: ProfileBaseBottomSheetFragment() {
         }
         else {
             if (currentlyWorkHere) {
-                showError(form_error, title, company, location, start_date)
+                showError(form_error, title, company, employment_type, location, start_date)
             }
             else {
-                showError(form_error, title, company, location, start_date, end_date)
+                showError(form_error, title, company, employment_type, location, start_date, end_date)
             }
             return false
         }
