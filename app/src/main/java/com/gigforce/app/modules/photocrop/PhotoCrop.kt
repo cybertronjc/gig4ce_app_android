@@ -340,13 +340,14 @@ class PhotoCrop : AppCompatActivity(),
                 progress_circular.visibility=View.GONE
                 val fname: String = taskSnapshot.metadata?.reference?.name.toString()
                 updateViewModel(purpose, fname)
-                loadImage(folder, fname)
+                //loadImage(folder, fname)
                 Toast.makeText(this, "Successfully Uploaded :)", Toast.LENGTH_LONG).show()
                 Log.v(
                     "PHOTO_CROP",
                     "uploaded file in foldername" + CLOUD_OUTPUT_FOLDER + " file: " + fname
                 )
                 setResult(Activity.RESULT_OK, resultIntent)
+                onBackPressed()
             }
         } catch (e: Exception) {
             Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show()
@@ -376,6 +377,7 @@ class PhotoCrop : AppCompatActivity(),
             loadImage(CLOUD_INPUT_FOLDER, DEFAULT_PICTURE)
             resultIntent.putExtra("filename", DEFAULT_PICTURE)
             setResult(Activity.RESULT_OK, resultIntent)
+            onBackPressed()
         }
     }
 
@@ -408,9 +410,7 @@ class PhotoCrop : AppCompatActivity(),
         val pickTitle = "Select or take a new Picture"
         var outputFileUri: Uri? = Uri.fromFile(File.createTempFile(TEMP_FILE, EXTENSION))
         val chooserIntent = Intent.createChooser(pickIntent, pickTitle)
-        chooserIntent.putExtra(
-            Intent.EXTRA_INITIAL_INTENTS, arrayOf(takePhotoIntent, galleryIntent)
-        )
+        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, arrayOf(takePhotoIntent, galleryIntent))
         chooserIntent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri)
         startActivityForResult(chooserIntent, CODE_IMG_GALLERY)
     }
