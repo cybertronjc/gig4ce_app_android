@@ -13,6 +13,7 @@
         android:layout_height="match_parent"
         android:elevation="10dp"
         android:background="@color/white">
+
         <ProgressBar
             android:layout_width="64dp"
             android:layout_height="64dp"
@@ -58,6 +59,15 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/translusent_bar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:alpha="0.25"
+                android:src="@drawable/translucent_bar_grey"
+                app:layout_constraintTop_toTopOf="@id/collapse_toolbar"
+                />
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/htab_toolbar"
