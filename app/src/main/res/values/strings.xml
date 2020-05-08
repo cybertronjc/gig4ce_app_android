@@ -105,7 +105,7 @@
 
     <!-- Add New Language Bottom Sheet -->
     <string name="add_language_new_language">New Language</string>
-    <string name="add_language_name">Name *</string>
+    <string name="add_language_name">Language *</string>
     <string name="add_language_speaking_level">Speaking level</string>
     <string name="add_language_writing_level">Writing level</string>
 

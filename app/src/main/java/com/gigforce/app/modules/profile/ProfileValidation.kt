@@ -7,7 +7,7 @@ class ProfileValidation() {
 
     private fun isNotEmptyEditText(view: EditText?): Boolean {
         view?.let {
-            if (view.text.toString().isNotEmpty())
+            if (view.text.toString().trim().isNotEmpty())
                 return true
         }
         return false
@@ -24,14 +24,14 @@ class ProfileValidation() {
 
     private fun isNotEmptyString(value: String?): Boolean {
         value?.let {
-            if (value.isNotEmpty())
+            if (value.trim().isNotEmpty())
                 return true
         }
         return false
     }
 
     private fun isEmptyString(value: String?): Boolean {
-        return value.isNullOrEmpty()
+        return value.isNullOrEmpty() && value!!.trim().isEmpty()
     }
 
     fun isValidEducation(

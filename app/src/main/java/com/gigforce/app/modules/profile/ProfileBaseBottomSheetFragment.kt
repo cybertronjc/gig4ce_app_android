@@ -62,6 +62,7 @@ abstract class ProfileBaseBottomSheetFragment: BottomSheetDialogFragment() {
     fun showError(formError: TextView, vararg views: View?) {
         formError.visibility = View.VISIBLE
         for (view in views) {
+            (view as EditText).setText("")
             (view as EditText).setHintTextColor(resources.getColor(R.color.colorError))
         }
     }

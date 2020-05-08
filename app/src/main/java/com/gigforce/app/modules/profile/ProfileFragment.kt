@@ -7,6 +7,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import androidx.activity.addCallback
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -45,6 +46,13 @@ class ProfileFragment : Fragment() {
     private var scrollRange: Int = -1
     private var PROFILE_PICTURE_FOLDER: String = "profile_pics"
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        requireActivity().onBackPressedDispatcher.addCallback(this) {
+            findNavController().navigate(R.id.homeScreenIcons)
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -109,7 +117,9 @@ class ProfileFragment : Fragment() {
             }
 
             var mainAboutString = ""
-            mainAboutString += profile.aboutMe + "\n\n"
+            if (profile.aboutMe.isNotEmpty()) {
+                mainAboutString += profile.aboutMe + "\n\n"
+            }
             profile.languages?.let {
                 val languages = it.sortedByDescending { language ->
                      language.speakingSkill
@@ -126,7 +136,8 @@ class ProfileFragment : Fragment() {
             }
 
             layout.main_about_card.card_title.text = "About me"
-            layout.main_about_card.optional_title_text.text = "bio"
+            if (profile.aboutMe.isNotEmpty())
+                layout.main_about_card.optional_title_text.text = "bio"
             layout.main_about_card.card_content.text = mainAboutString
             layout.main_about_card.card_icon.setImageResource(R.drawable.ic_about_me)
             layout.main_about_card.card_view_more.setOnClickListener {
