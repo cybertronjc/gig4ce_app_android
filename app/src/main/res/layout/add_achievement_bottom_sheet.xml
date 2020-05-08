@@ -23,6 +23,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="14sp"
+            android:layout_marginTop="8dp"
             android:textColor="#d4e02020"
             android:letterSpacing="0.05"
             android:visibility="gone"
@@ -32,9 +33,9 @@
             android:id="@+id/textView11"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
             android:text="@string/add_achievement_sheet_new_achievement"
-            style="@style/BsHeadingBold12"/>
+            style="@style/LatoBold14"/>
 
         <EditText
             android:id="@+id/title"
@@ -77,6 +78,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:paddingStart="0dp"
             android:text="@string/add_more_text"
             android:textAlignment="textStart"
             app:icon="@drawable/ic_add"
