@@ -1,6 +1,7 @@
 package com.gigforce.app.modules.profile
 
 import android.os.Bundle
+import android.os.DropBoxManager
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +12,7 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
+import com.gigforce.app.utils.DropdownAdapter
 import kotlinx.android.synthetic.main.add_skill_bottom_sheet.*
 
 class AddSkillBottomSheetFragment: ProfileBaseBottomSheetFragment() {
@@ -29,7 +31,7 @@ class AddSkillBottomSheetFragment: ProfileBaseBottomSheetFragment() {
         Log.d("DEBUG", "ENTERED Profile Education Expanded VIEW")
         inflateView(R.layout.add_skill_bottom_sheet, inflater, container)
 
-        skills.addAll(listOf("--skill--", "skill1", "skill2", "skill3", "skill4", "skill5", "skill6", "skill7", "skill8"))
+        skills.addAll(listOf("skill1", "skill2", "skill3", "skill4", "skill5", "skill6", "skill7", "skill8"))
         return getFragmentView()
     }
 
@@ -39,30 +41,14 @@ class AddSkillBottomSheetFragment: ProfileBaseBottomSheetFragment() {
     }
 
     private fun setListeners() {
-        val skillAdapter = ArrayAdapter(this.context!!, R.layout.simple_spinner_dropdown_item, skills)
-        val skillSpinner = add_skill_name
-        skillSpinner.adapter = skillAdapter
-        skillSpinner.onItemSelectedListener = object:
-            AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                selectedSkill = if (position != 0) skills[position] else ""
-                Log.d("Spinner", "selected " + skills[position])
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-                //TODO("Not yet implemented")
-            }
-        }
+        val skillAdapter = DropdownAdapter(this.requireContext(), skills)
+        val skillSpinner = add_skill_skill_name
+        skillSpinner.setAdapter(skillAdapter)
 
         add_more_button.setOnClickListener {
             if (validateSkill()) {
                 addNewSkill()
-                add_skill_name.setSelection(0)
+                add_skill_skill_name.setText("")
             }
         }
 
@@ -75,7 +61,6 @@ class AddSkillBottomSheetFragment: ProfileBaseBottomSheetFragment() {
                 addNewSkill()
 
                 profileViewModel!!.setProfileSkill(updates)
-                Toast.makeText(this.context, "Updated Skills Section", Toast.LENGTH_LONG).show()
                 this.findNavController().navigate(R.id.educationExpandedFragment)
             }
         }
@@ -83,17 +68,19 @@ class AddSkillBottomSheetFragment: ProfileBaseBottomSheetFragment() {
     }
 
     private fun addNewSkill() {
-        showError(form_error)
+        hideError(form_error, add_skill_skill_name)
         updates.add(
-            selectedSkill
+            add_skill_skill_name.text.toString()
         )
     }
 
     private fun validateSkill(): Boolean {
-        if (validation!!.isValidSkill(selectedSkill))
+        Log.d("AddSkill", "validating skill " + add_skill_skill_name.text.toString())
+        if (validation!!.isValidSkill(add_skill_skill_name.text.toString()))
             return true
         else {
-            showError(form_error)
+            add_skill_skill_name.setHintTextColor(resources.getColor(R.color.colorError))
+            showError(form_error, add_skill_skill_name)
             return false
         }
     }
