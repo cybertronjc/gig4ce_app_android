@@ -196,9 +196,10 @@
             android:name="verificationId"
             android:defaultValue='""'
             app:argType="string" />
-        <action
-            android:id="@+id/action_verifyOTP_to_onOTPSuccess"
-            app:destination="@id/onOTPSuccess" />
+        <argument
+            android:name="mobile_number"
+            android:defaultValue='""'
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/homeScreenFragment"
@@ -212,7 +213,7 @@
             app:destination="@id/rosterDayFragment" />
     </fragment>
     <fragment
-        android:id="@+id/homeScreenIcons"
+        android:id="@+id/homeScreenIcons1"
         android:name="com.gigforce.app.modules.homescreen.mainhome.MainHomeScreen"
         android:label="HomeScreenIcons">
         <action
@@ -344,12 +345,9 @@
         android:name="com.gigforce.app.modules.roster.RosterDayFragment"
         android:label="RosterDayFragment" />
     <fragment
-        android:id="@+id/onOTPSuccess"
-        android:name="com.gigforce.app.modules.auth.ui.main.OnOTPSuccess"
+        android:id="@+id/homeScreenIcons"
+        android:name="com.gigforce.app.modules.auth.ui.main.LoginSuccessfulFragmentNew"
         android:label="OnOTPSuccess">
-        <action
-            android:id="@+id/action_onOTPSuccess_to_homeScreenIcons"
-            app:destination="@id/homeScreenIcons" />
     </fragment>
     <fragment
         android:id="@+id/locationFragment"

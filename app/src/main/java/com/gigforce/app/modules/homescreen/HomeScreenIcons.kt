@@ -93,7 +93,7 @@ class HomeScreenIcons : BaseFragment() {
         yesBtn.setOnClickListener {
             FirebaseAuth.getInstance().signOut()
             removeSavedShareData(AppConstants.INTRO_COMPLETE)
-            navController.popBackStack(R.id.homeScreenIcons,true)
+            popFragmentFromStack(R.id.homeScreenIcons)
             dialog?.dismiss()
         }
         noBtn.setOnClickListener { dialog .dismiss() }

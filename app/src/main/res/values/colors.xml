@@ -38,6 +38,7 @@
     <color name="line_seprator_language">#ebecef</color>
     <color name="timer_color">#e82e66</color>
     <color name="time_up_color">#6d7278</color>
+    <color name="black_color_future_date">#333333</color>
 
 
 </resources>
