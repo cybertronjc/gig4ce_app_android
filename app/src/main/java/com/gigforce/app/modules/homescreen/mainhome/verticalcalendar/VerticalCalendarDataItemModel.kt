@@ -38,11 +38,40 @@ class VerticalCalendarDataItemModel (
             }
             return VerticalCalendarDataItemModel(
                 "No gigs Assigned",
-                "No gigs Assigned",
+                "",
                 getDayOfWeek(calendar.get(Calendar.DAY_OF_WEEK)),
                 isToday,
                 isPreviousDateFound,
                 false,
+                false,
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DATE),
+                ""
+            )
+        }
+
+        fun getDetailedObject(
+            subTitle: String,
+            countGigs: String,
+            calendar: Calendar,
+        isPreviousDate: Boolean,
+            isToday: Boolean): VerticalCalendarDataItemModel {
+            var isPreviousDateFound:Boolean = isPreviousDate
+            if(isToday){
+                isPreviousDateFound = false
+            }
+            return VerticalCalendarDataItemModel(
+                subTitle,
+                countGigs,
+                getDayOfWeek(
+                    calendar.get(
+                        Calendar.DAY_OF_WEEK
+                    )
+                ),
+                isToday,
+                isPreviousDateFound,
+                true,
                 false,
                 calendar.get(Calendar.YEAR),
                 calendar.get(Calendar.MONTH),
@@ -82,33 +111,5 @@ class VerticalCalendarDataItemModel (
             return ""
         }
 
-        fun getDetailedObject(
-            subTitle: String,
-            countGigs: String,
-            calendar: Calendar,
-        isPreviousDate: Boolean,
-            isToday: Boolean): VerticalCalendarDataItemModel {
-            var isPreviousDateFound:Boolean = isPreviousDate
-            if(isToday){
-                isPreviousDateFound = false
-            }
-            return VerticalCalendarDataItemModel(
-                subTitle,
-                countGigs,
-                getDayOfWeek(
-                    calendar.get(
-                        Calendar.DAY_OF_WEEK
-                    )
-                ),
-                isToday,
-                isPreviousDateFound,
-                true,
-                false,
-                calendar.get(Calendar.YEAR),
-                calendar.get(Calendar.MONTH),
-                calendar.get(Calendar.DATE),
-                ""
-            )
-        }
     }
 }

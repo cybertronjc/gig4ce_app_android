@@ -113,6 +113,7 @@
 
 
     <!--login fragment-->
+    <string name="login">ਲਾਗਿਨ</string>
     <string name="title_login">ਕਿਰਪਾ ਕਰਕੇ ਲੌਗਇਨ ਕਰੋ</string>
     <string name="mobile_login">ਆਪਣਾ ਮੋਬਾਈਲ ਨੰਬਰ ਦਰਜ ਕਰੋ</string>
     <string name="confirm_login">ਪੁਸ਼ਟੀ ਕਰੋ</string>

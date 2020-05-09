@@ -113,6 +113,7 @@
 
 
     <!--login fragment-->
+    <string name="login">પ્રવેશ કરો</string>
     <string name="title_login">કૃપા કરીને લ .ગિન કરો</string>
     <string name="mobile_login">તમારો મોબાઇલ નંબર દાખલ કરો</string>
     <string name="confirm_login">પુષ્ટિ કરો</string>

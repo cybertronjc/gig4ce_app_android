@@ -19,6 +19,7 @@ import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.app.core.genericadapter.RecyclerGenericAdapter
+import com.gigforce.app.utils.AppConstants
 import com.gigforce.app.utils.GlideApp
 import com.gigforce.app.utils.setDarkStatusBarTheme
 import com.google.firebase.auth.FirebaseAuth
@@ -191,6 +192,8 @@ class PreferencesFragment : BaseFragment() {
         val noBtn = dialog?.findViewById(R.id.cancel) as TextView
         yesBtn.setOnClickListener {
             FirebaseAuth.getInstance().signOut()
+            removeSavedShareData(AppConstants.INTRO_COMPLETE)
+            popFragmentFromStack(R.id.settingFragment)
             dialog?.dismiss()
         }
         noBtn.setOnClickListener { dialog .dismiss() }

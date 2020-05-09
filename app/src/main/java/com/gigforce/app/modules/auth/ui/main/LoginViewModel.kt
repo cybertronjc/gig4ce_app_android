@@ -11,6 +11,7 @@ import com.google.firebase.FirebaseException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthProvider
+import java.lang.Exception
 import java.util.concurrent.TimeUnit
 
 class LoginViewModel() : ViewModel() {
@@ -63,13 +64,13 @@ class LoginViewModel() : ViewModel() {
 
 
     fun sendVerificationCode(phoneNumber: String) {
-        PhoneAuthProvider.getInstance().verifyPhoneNumber(
-            phoneNumber, // Phone number to verify
-            60, // Timeout duration
-            TimeUnit.SECONDS, // Unit of timeout
-            activity!!, // Activity (for callback binding)
-            callbacks // OnVerificationStateChangedCallbacks
-        ) // ForceResendingToken from callbacks
+            PhoneAuthProvider.getInstance().verifyPhoneNumber(
+                phoneNumber, // Phone number to verify
+                60, // Timeout duration
+                TimeUnit.SECONDS, // Unit of timeout
+                activity!!, // Activity (for callback binding)
+                callbacks // OnVerificationStateChangedCallbacks
+            ) // ForceResendingToken from callbacks
     }
 
 
