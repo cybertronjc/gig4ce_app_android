@@ -42,16 +42,18 @@
         app:layout_constraintVertical_bias="0.5"
         app:srcCompat="@drawable/back_button" />
 
+
     <ProgressBar
         android:id="@+id/progress_circular"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        app:layout_constraintTop_toTopOf="@id/profile_avatar_photo_crop"
         app:layout_constraintBottom_toBottomOf="@id/profile_avatar_photo_crop"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/profile_avatar_photo_crop" />
+
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

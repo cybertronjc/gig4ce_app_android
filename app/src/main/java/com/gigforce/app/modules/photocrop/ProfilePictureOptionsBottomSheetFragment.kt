@@ -6,12 +6,12 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import com.gigforce.app.R
-import com.gigforce.app.core.base.BaseFragment
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.android.synthetic.main.profile_photo_bottom_sheet.view.*
-import kotlin.properties.Delegates
+
 
 class ProfilePictureOptionsBottomSheetFragment : BottomSheetDialogFragment() {
     companion object {
@@ -49,6 +49,15 @@ class ProfilePictureOptionsBottomSheetFragment : BottomSheetDialogFragment() {
             dismiss()
         }
 
+    }
+
+    override fun onStart() {
+        super.onStart()
+        val params =
+            (layout.parent as View).layoutParams as CoordinatorLayout.LayoutParams
+        val behavior = params.behavior
+        (behavior as BottomSheetBehavior<*>?)!!.state = BottomSheetBehavior.STATE_EXPANDED
+        bottomSheetBehavior.setPeekHeight(view.getMeasuredHeight());
     }
 
     fun enableRemoveProfilePicture(){
