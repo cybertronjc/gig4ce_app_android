@@ -63,6 +63,10 @@ class EditAchievementBottomSheet: ProfileBaseBottomSheetFragment() {
 
     private fun setListeners() {
 
+        year.setOnClickListener {
+            showNumberPicker(requireContext(), year, year.text.toString().toInt())
+        }
+
         delete.setOnClickListener {
             Log.d("EditAchievement", "Deleting Achievement")
             val dialog = getDeleteConfirmationDialog(requireContext())

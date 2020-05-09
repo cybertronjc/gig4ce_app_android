@@ -50,7 +50,7 @@ class ProfileFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         requireActivity().onBackPressedDispatcher.addCallback(this) {
-            findNavController().navigate(R.id.homeScreenIcons)
+            findNavController().navigate(R.id.homeFragment)
         }
     }
 
@@ -104,15 +104,43 @@ class ProfileFragment : Fragment() {
                 //layout.main_expanded_is_verified.setBackgroundColor(Color.parseColor("#00FF00"))
             }
 
-            layout.bio.text = profile.bio
+            if (profile.bio.trim().isEmpty()) {
+                layout.add_bio_default.visibility = View.VISIBLE
+                layout.add_bio_default.setOnClickListener {
+                    findNavController().navigate(R.id.editCoverBottomSheet)
+                }
+                layout.bio_card.visibility = View.GONE
+            } else {
+                layout.add_bio_default.visibility = View.GONE
+                layout.bio_card.visibility = View.VISIBLE
+                layout.edit_cover_bio.visibility = View.VISIBLE
+                layout.bio.text = profile.bio
+
+                layout.bio_card.setOnClickListener {
+                    findNavController().navigate(R.id.editCoverBottomSheet)
+                }
+            }
 
             layout.main_tags.removeAllViews()
             profile.tags?.let {
+                if (it.size == 0) {
+                    layout.tag_card.visibility = View.GONE
+                    layout.add_tags_default.visibility = View.VISIBLE
+                    layout.add_tags_default.setOnClickListener {
+                        findNavController().navigate(R.id.editCoverBottomSheet)
+                    }
+                } else {
+                    layout.add_tags_default.visibility = View.GONE
+                    layout.tag_card.visibility = View.VISIBLE
+
+                    layout.tag_card.setOnClickListener {
+                        findNavController().navigate(R.id.editCoverBottomSheet)
+                    }
+
+                    layout.edit_cover_bio.visibility = View.INVISIBLE
+                }
                 for (tag in it) {
                     layout.main_tags.addView(addChip(this.requireContext(), tag))
-                }
-                if (it.size == 0) {
-                    layout.main_tags.addView(addChip(this.requireContext(), "giger"))
                 }
             }
 
@@ -140,6 +168,8 @@ class ProfileFragment : Fragment() {
                 layout.main_about_card.optional_title_text.text = "bio"
             layout.main_about_card.card_content.text = mainAboutString
             layout.main_about_card.card_icon.setImageResource(R.drawable.ic_about_me)
+            if (mainAboutString.trim().isEmpty())
+                layout.main_about_card.card_view_more.text = "Add bio"
             layout.main_about_card.card_view_more.setOnClickListener {
                 findNavController().navigate(R.id.aboutExpandedFragment)
             }
@@ -188,6 +218,8 @@ class ProfileFragment : Fragment() {
             layout.main_education_card.card_title.text = "Education"
             layout.main_education_card.card_content.text = mainEducationString
             layout.main_education_card.card_icon.setImageResource(R.drawable.ic_education)
+            if (mainEducationString.trim().isEmpty())
+                layout.main_education_card.card_view_more.text = "Add Education"
             layout.main_education_card.card_view_more.setOnClickListener {
                 findNavController().navigate(R.id.educationExpandedFragment)
             }
@@ -211,6 +243,8 @@ class ProfileFragment : Fragment() {
             layout.main_experience_card.card_title.text = "Experience"
             layout.main_experience_card.card_content.text = mainExperienceString
             layout.main_experience_card.card_icon.setImageResource(R.drawable.ic_experience)
+            if (mainExperienceString.trim().isEmpty())
+                layout.main_experience_card.card_view_more.text = "Add Experience"
             layout.main_experience_card.card_view_more.setOnClickListener {
                 findNavController().navigate(R.id.experienceExpandedFragment)
             }

@@ -65,7 +65,7 @@ class ExperienceExpandedFragment: ProfileBaseFragment() {
             experience_card.nextDestination = R.id.editExperienceBottomSheet
             experience_card.cardTitle = "Experience"
             experience_card.cardContent = experienceString
-            experience_card.cardBottom = "Add Experience"
+            experience_card.cardBottom = "Add experiences"
 
             experience_top_profile.imageName = profile.profileAvatarName
             experience_top_profile.userName = profile.name

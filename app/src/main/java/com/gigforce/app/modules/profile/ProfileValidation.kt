@@ -2,6 +2,7 @@ package com.gigforce.app.modules.profile
 
 import android.view.View
 import android.widget.EditText
+import com.google.protobuf.BoolValueOrBuilder
 
 class ProfileValidation() {
 
@@ -32,6 +33,12 @@ class ProfileValidation() {
 
     private fun isEmptyString(value: String?): Boolean {
         return value.isNullOrEmpty() && value!!.trim().isEmpty()
+    }
+
+    private fun doesNotContainHash(value: String?): Boolean {
+        if (value!!.contains('#'))
+            return false
+        return true
     }
 
     fun isValidEducation(
@@ -87,5 +94,12 @@ class ProfileValidation() {
 
     fun isValidLanguage(language: EditText?): Boolean {
         return isNotEmptyEditText(language)
+    }
+
+    fun isValidTag(tag: String?): Boolean {
+        if (isNotEmptyString(tag) && doesNotContainHash(tag.toString())) {
+            return true
+        }
+        return false
     }
 }

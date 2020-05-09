@@ -51,7 +51,7 @@ class EditExperienceBottomSheet: ProfileBaseBottomSheetFragment() {
         savedInstanceState: Bundle?
     ): View? {
         inflateView(R.layout.edit_experience, inflater, container)
-        employments.addAll(listOf("Full time", "internship", "Part time"))
+        employments.addAll(listOf("Full time", "Internship", "Part time"))
 
         return getFragmentView()
     }

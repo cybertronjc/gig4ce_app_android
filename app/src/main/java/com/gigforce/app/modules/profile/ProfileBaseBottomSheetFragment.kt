@@ -2,18 +2,24 @@ package com.gigforce.app.modules.profile
 
 import android.app.Dialog
 import android.content.Context
+import android.content.DialogInterface
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.widget.EditText
+import android.widget.NumberPicker
+import android.widget.RelativeLayout
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModel
 import com.gigforce.app.R
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.chip.Chip
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.android.synthetic.main.add_achievement_bottom_sheet.*
 import kotlinx.android.synthetic.main.delete_confirmation_dialog.*
 
 abstract class ProfileBaseBottomSheetFragment: BottomSheetDialogFragment() {
@@ -62,7 +68,6 @@ abstract class ProfileBaseBottomSheetFragment: BottomSheetDialogFragment() {
     fun showError(formError: TextView, vararg views: View?) {
         formError.visibility = View.VISIBLE
         for (view in views) {
-            (view as EditText).setText("")
             (view as EditText).setHintTextColor(resources.getColor(R.color.colorError))
         }
     }
@@ -84,5 +89,44 @@ abstract class ProfileBaseBottomSheetFragment: BottomSheetDialogFragment() {
             dialog .dismiss()
         }
         return dialog
+    }
+
+    fun showNumberPicker(context: Context, text: EditText, value: Int? = null) {
+        var selectedYear: Int = 0
+        val linearLayout = RelativeLayout(context)
+        val aNumberPicker = NumberPicker(context)
+        aNumberPicker.maxValue = 2050
+        aNumberPicker.minValue = 1950
+
+        aNumberPicker.value = value ?: 2012
+
+        val params = RelativeLayout.LayoutParams(50, 50)
+        val numPicerParams = RelativeLayout.LayoutParams(
+            RelativeLayout.LayoutParams.WRAP_CONTENT,
+            RelativeLayout.LayoutParams.WRAP_CONTENT
+        )
+        numPicerParams.addRule(RelativeLayout.CENTER_HORIZONTAL)
+
+        linearLayout.layoutParams = params
+        linearLayout.addView(aNumberPicker, numPicerParams)
+
+        val alertDialogBuilder: AlertDialog.Builder = AlertDialog.Builder(context)
+        alertDialogBuilder.setTitle("Select the Year")
+        alertDialogBuilder.setView(linearLayout)
+        alertDialogBuilder
+            .setCancelable(false)
+            .setPositiveButton("Ok",
+                DialogInterface.OnClickListener { dialog, id ->
+                    Log.d(
+                        "NUMBERPICKER",
+                        "New Quantity Value : " + aNumberPicker.value
+                    )
+                    text.setText(aNumberPicker.value.toString())
+                })
+            .setNegativeButton("Cancel",
+                DialogInterface.OnClickListener { dialog, id -> dialog.cancel() })
+
+        val alertDialog: AlertDialog = alertDialogBuilder.create()
+        alertDialog.show()
     }
 }

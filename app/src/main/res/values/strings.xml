@@ -255,5 +255,5 @@
     <string name="empty_about_me_text">Please tell us about yourself</string>
     <string name="error_empty_mandatory_fields">* Please fill mandatory fields</string>
     <string name="about_me_hint">Tell us about yourself in detail</string>
-    <string name="delete_confirmation_text">Are you sure you want to delete this Item?</string>
+    <string name="delete_confirmation_text">Are you sure you want to delete this item?</string>
 </resources>
