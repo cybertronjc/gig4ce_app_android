@@ -13,6 +13,7 @@
         android:layout_height="match_parent"
         android:elevation="10dp"
         android:background="@color/white">
+
         <ProgressBar
             android:layout_width="64dp"
             android:layout_height="64dp"
@@ -57,6 +58,15 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <ImageView
+                android:id="@+id/translusent_bar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:alpha="0.25"
+                android:src="@drawable/translucent_bar_grey"
+                app:layout_constraintTop_toTopOf="@id/collapse_toolbar"
+                />
+
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/htab_toolbar"
                 android:layout_width="match_parent"
@@ -85,7 +95,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/summary_bar"
                 android:layout_width="match_parent"
-                android:layout_height="87dp"
+                android:layout_height="103dp"
                 android:backgroundTint="@color/white"
                 android:elevation="2dp"
                 android:minHeight="65dp"
@@ -97,9 +107,9 @@
                     android:layout_height="77dp"
                     android:layout_marginStart="16dp"
                     android:layout_marginEnd="16dp"
+                    app:cardElevation="15dp"
                     app:cardCornerRadius="12dp"
                     app:layout_constraintTop_toTopOf="@+id/summary_bar"
-                    app:layout_constraintBottom_toBottomOf="@+id/summary_bar"
                     android:background="@color/white"
                     android:backgroundTint="@color/white"/>
 
@@ -108,13 +118,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    app:layout_constraintGuide_percent="0.55" />
+                    app:layout_constraintGuide_percent="0.42" />
 
                 <TextView
                     android:id="@+id/gigger_rating"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:translationZ="7dp"
+                    android:translationZ="16dp"
                     android:textSize="18sp"
                     android:textColor="#444444"
                     android:text="@string/empty_dash_string"
@@ -127,20 +137,20 @@
                     android:id="@+id/rating_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:translationZ="7dp"
+                    android:translationZ="16dp"
                     android:text="@string/rating_text"
                     android:layout_marginBottom="15dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="@id/divider1"
                     app:layout_constraintStart_toStartOf="@id/rating_card"
-                    app:layout_constraintTop_toBottomOf="@id/gigger_rating" />
+                    app:layout_constraintTop_toBottomOf="@id/gigger_rating"
+                    app:layout_constraintBottom_toBottomOf="@id/rating_card"/>
 
                 <View
                     android:id="@+id/divider1"
                     android:layout_width="3dp"
                     android:layout_height="27dp"
                     android:background="@color/lightGrey"
-                    android:translationZ="2dp"
+                    android:translationZ="15dp"
                     app:layout_constraintBottom_toBottomOf="@+id/rating_card"
                     app:layout_constraintStart_toStartOf="@id/guidelineLeft"
                     app:layout_constraintTop_toTopOf="@+id/rating_card" />
@@ -156,7 +166,7 @@
                     android:id="@+id/task_done"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:translationZ="7dp"
+                    android:translationZ="16dp"
                     android:textSize="18sp"
                     android:textColor="#444444"
                     android:text="@string/empty_dash_string"
@@ -170,7 +180,7 @@
                     android:id="@+id/tasks_done_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:translationZ="7dp"
+                    android:translationZ="16dp"
                     android:text="@string/tasks_done_text"
                     android:layout_marginBottom="15dp"
                     app:layout_constraintBottom_toBottomOf="@id/rating_card"
@@ -184,7 +194,7 @@
                     android:layout_width="3dp"
                     android:layout_height="27dp"
                     android:background="@color/lightGrey"
-                    android:translationZ="2dp"
+                    android:translationZ="15dp"
                     app:layout_constraintBottom_toBottomOf="@+id/rating_card"
                     app:layout_constraintStart_toStartOf="@id/guidelineRight"
                     app:layout_constraintTop_toTopOf="@+id/rating_card" />
@@ -200,7 +210,7 @@
                     android:id="@+id/connection_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:translationZ="7dp"
+                    android:translationZ="16dp"
                     android:textSize="18sp"
                     android:textColor="#444444"
                     android:text="@string/empty_dash_string"
@@ -214,7 +224,7 @@
                     android:id="@+id/connections_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:translationZ="7dp"
+                    android:translationZ="16dp"
                     android:layout_marginBottom="15dp"
                     android:text="@string/connections_text"
                     app:layout_constraintBottom_toBottomOf="@id/rating_card"
