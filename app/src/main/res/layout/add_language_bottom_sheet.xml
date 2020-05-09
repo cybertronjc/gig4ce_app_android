@@ -17,6 +17,7 @@
             android:id="@+id/form_error"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingTop="8dp"
             android:textSize="14sp"
             android:textColor="#d4e02020"
             android:letterSpacing="0.05"
@@ -26,9 +27,9 @@
             android:id="@+id/textView20"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
             android:text="@string/add_language_new_language"
-            style="@style/BsHeadingBold12" />
+            style="@style/LatoBold14" />
 
         <EditText
             android:id="@+id/add_language_name"
@@ -64,6 +65,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
+            style="@style/LatoRegularCardText12"
             android:text="@string/add_language_writing_level" />
 
         <SeekBar

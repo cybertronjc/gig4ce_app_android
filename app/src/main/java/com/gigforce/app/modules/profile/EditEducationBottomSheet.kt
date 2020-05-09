@@ -17,8 +17,13 @@ import androidx.navigation.fragment.findNavController
 import com.afollestad.materialdialogs.MaterialDialog
 import com.gigforce.app.R
 import com.gigforce.app.modules.profile.models.Education
+import com.gigforce.app.utils.DropdownAdapter
+import kotlinx.android.synthetic.main.add_education_bottom_sheet.*
+import kotlinx.android.synthetic.main.delete_confirmation_dialog.*
 import kotlinx.android.synthetic.main.edit_education_bottom_sheet.*
+import kotlinx.android.synthetic.main.edit_education_bottom_sheet.cancel
 import kotlinx.android.synthetic.main.edit_education_bottom_sheet.end_date
+import kotlinx.android.synthetic.main.edit_education_bottom_sheet.form_error
 import kotlinx.android.synthetic.main.edit_education_bottom_sheet.start_date
 import java.text.SimpleDateFormat
 import java.util.*
@@ -66,35 +71,19 @@ class EditEducationBottomSheet: ProfileBaseBottomSheetFragment() {
     private fun initialize() {
         val format = SimpleDateFormat("dd/MM/yyyy")
 
-        degrees.addAll(listOf("--degree--", "<10th", "10th", "12th", "Certificate", "Diploma", "Bachelor", "Masters", "PhD"))
-        val degreeAdapter = ArrayAdapter(this.context!!, R.layout.simple_spinner_dropdown_item, degrees)
+        degrees.addAll(listOf("<10th", "10th", "12th", "Certificate", "Diploma", "Bachelor", "Masters", "PhD"))
+        val degreeAdapter = DropdownAdapter(this.requireContext(), degrees)
         val degreeSpinner = degree
-        degreeSpinner.adapter = degreeAdapter
-        degreeSpinner.onItemSelectedListener = object:
-            AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                selectedDegree = if(position == 0) "" else degrees[position]
-                Log.d("Spinner", "selected " + degrees[position])
-            }
+        degreeSpinner.setAdapter(degreeAdapter)
 
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-                //TODO("Not yet implemented")
-            }
-        }
-
-        profileViewModel!!.userProfileData.observe(this, Observer { profile ->
+        profileViewModel.userProfileData.observe(this, Observer { profile ->
             profile.educations?.let {
                 val educations = it.sortedByDescending { education -> education.startYear!! }
                 education = educations[arrayLocation!!.toInt()]
                 institution.setText(education.institution)
                 course.setText(education.course)
                 selectedDegree = education.degree
-                degree.setSelection(degrees.indexOf(education.degree))
+                degree.setText(education.degree, false)
                 selectedStartDate = format.format(education.startYear!!)
                 selectedEndDate = format.format(education.endYear!!)
                 start_date.setText(format.format(education.startYear!!))
@@ -107,7 +96,7 @@ class EditEducationBottomSheet: ProfileBaseBottomSheetFragment() {
         var calendar = Calendar.getInstance(TimeZone.getDefault())
 
         end_date.setOnClickListener {
-            DatePickerDialog(this.context!!, DatePickerDialog.OnDateSetListener{
+            DatePickerDialog(this.requireContext(), DatePickerDialog.OnDateSetListener{
                     datePicker: DatePicker, i: Int, i1: Int, i2: Int ->
                 Log.d("TEMP", "tmp date")
                 selectedEndDate = "$i2/${i1+1}/$i"
@@ -116,7 +105,7 @@ class EditEducationBottomSheet: ProfileBaseBottomSheetFragment() {
         }
 
         start_date.setOnClickListener {
-            DatePickerDialog(this.context!!, DatePickerDialog.OnDateSetListener{
+            DatePickerDialog(this.requireContext(), DatePickerDialog.OnDateSetListener{
                     datePicker: DatePicker, i: Int, i1: Int, i2: Int ->
                 Log.d("TEMP", "tmp date")
                 selectedStartDate = "$i2/${i1+1}/$i"
@@ -124,41 +113,39 @@ class EditEducationBottomSheet: ProfileBaseBottomSheetFragment() {
             }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show()
         }
 
-
-
         delete.setOnClickListener {
             Log.d("EditEducation", "VOILA!")
-            MaterialDialog(this.context!!).show {
-                title(text = "Confirm Delete")
-                message(text = "Are you sure to Delete this item?")
-                positiveButton(R.string.delete) {
-                    profileViewModel!!.removeProfileEducation(education!!)
-                    findNavController().navigate(R.id.educationExpandedFragment)
-                }
-                negativeButton(R.string.cancel_text) {
-
-                }
+            val dialog = getDeleteConfirmationDialog(requireContext())
+            dialog.yes.setOnClickListener {
+                profileViewModel.removeProfileEducation(education)
+                findNavController().navigate(R.id.educationExpandedFragment)
+                dialog .dismiss()
             }
+            dialog.show()
         }
 
         save.setOnClickListener {
             Log.d("EditEducation", "updating")
             if (validateEducation()) {
-                profileViewModel!!.removeProfileEducation(education)
-                profileViewModel!!.removeProfileEducation(education)
+                profileViewModel.removeProfileEducation(education)
+                profileViewModel.removeProfileEducation(education)
                 var newEducation = ArrayList<Education>()
                 newEducation.add(
                     Education(
                         institution = institution.text.toString(),
                         course = course.text.toString(),
-                        degree = selectedDegree.toString(),
+                        degree = degree.text.toString(),
                         startYear = SimpleDateFormat("dd/MM/yyyy").parse(selectedStartDate.toString()),
                         endYear = SimpleDateFormat("dd/MM/yyyy").parse(selectedEndDate.toString())
                     )
                 )
-                profileViewModel!!.setProfileEducation(newEducation)
+                profileViewModel.setProfileEducation(newEducation)
                 findNavController().navigate(R.id.educationExpandedFragment)
             }
+        }
+
+        cancel.setOnClickListener {
+            findNavController().navigate(R.id.educationExpandedFragment)
         }
     }
 
@@ -166,12 +153,12 @@ class EditEducationBottomSheet: ProfileBaseBottomSheetFragment() {
         if (validation!!.isValidEducation(
                 institution,
                 course,
-                selectedDegree,
+                degree.text.toString(),
                 selectedStartDate,
                 selectedEndDate))
             return true
         else {
-            showError(form_error, institution, course, start_date, end_date)
+            showError(form_error, institution, course, degree, start_date, end_date)
             return false
         }
     }

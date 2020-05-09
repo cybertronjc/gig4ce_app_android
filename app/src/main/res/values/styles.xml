@@ -14,6 +14,20 @@
         <item name="bottomSheetDialogTheme">@style/CustomBottomSheetDialog</item>
     </style>
 
+    <style name="FieldtextLatoRegularGrey12">
+        <item name="android:textSize">12sp</item>
+        <item name="android:letterSpacing">0.05</item>
+        <item name="android:lineSpacingExtra">7.1sp</item>
+        <item name="android:textColor">#888888</item>
+    </style>
+
+    <style name="Body1SelectedOnSurfaceHighEmphasisLeft">
+        <item name="android:textSize">16sp</item>
+        <item name="android:letterSpacing">0.03</item>
+        <item name="android:lineSpacingExtra">12sp</item>
+        <item name="android:textColor">#de000000</item>
+    </style>
+
     <style name="CustomBottomSheetDialog" parent="@style/ThemeOverlay.MaterialComponents.BottomSheetDialog">
         <item name="bottomSheetStyle">@style/CustomBottomSheet</item>
     </style>
@@ -113,6 +127,13 @@
         <item name="android:letterSpacing">0.05</item>
         <item name="android:lineSpacingExtra">7.1sp</item>
         <item name="android:textColor">#000000</item>
+    </style>
+
+    <style name="LatoBold14">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">#000000</item>
+        <item name="android:letterSpacing">0.05</item>
+        <item name="android:lineSpacingExtra">5.1sp</item>
     </style>
 
     <style name="BsHeadingBold22">

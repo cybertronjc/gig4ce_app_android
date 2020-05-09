@@ -11,7 +11,10 @@ import androidx.navigation.fragment.findNavController
 import com.afollestad.materialdialogs.MaterialDialog
 import com.gigforce.app.R
 import com.gigforce.app.modules.profile.models.Achievement
+import kotlinx.android.synthetic.main.delete_confirmation_dialog.*
 import kotlinx.android.synthetic.main.edit_achievement_bottom_sheet.*
+import kotlinx.android.synthetic.main.edit_achievement_bottom_sheet.cancel
+import kotlinx.android.synthetic.main.edit_achievement_bottom_sheet.title
 
 class EditAchievementBottomSheet: ProfileBaseBottomSheetFragment() {
 
@@ -60,25 +63,25 @@ class EditAchievementBottomSheet: ProfileBaseBottomSheetFragment() {
 
     private fun setListeners() {
 
+        year.setOnClickListener {
+            showNumberPicker(requireContext(), year, year.text.toString().toInt())
+        }
+
         delete.setOnClickListener {
             Log.d("EditAchievement", "Deleting Achievement")
-            MaterialDialog(this.context!!).show {
-                title(text = "Confirm Delete")
-                message(text = "Are you sure to Delete this item?")
-                positiveButton(R.string.delete) {
-                    profileViewModel!!.removeProfileAchievement(achievement)
-                    findNavController().navigate(R.id.educationExpandedFragment)
-                }
-                negativeButton(R.string.cancel_text) {
-
-                }
+            val dialog = getDeleteConfirmationDialog(requireContext())
+            dialog.yes.setOnClickListener {
+                profileViewModel.removeProfileAchievement(achievement)
+                findNavController().navigate(R.id.educationExpandedFragment)
+                dialog .dismiss()
             }
+            dialog.show()
         }
 
         save.setOnClickListener {
             if (validateAchievement()) {
                 Log.d("EditAchievement", "Editing Achievement")
-                profileViewModel!!.removeProfileAchievement(achievement!!)
+                profileViewModel.removeProfileAchievement(achievement!!)
                 var newAchievement: ArrayList<Achievement> = ArrayList()
                 newAchievement.add(
                     Achievement(
@@ -88,9 +91,13 @@ class EditAchievementBottomSheet: ProfileBaseBottomSheetFragment() {
                         location = location.text.toString()
                     )
                 )
-                profileViewModel!!.setProfileAchievement(newAchievement)
+                profileViewModel.setProfileAchievement(newAchievement)
                 findNavController().navigate(R.id.educationExpandedFragment)
             }
+        }
+
+        cancel.setOnClickListener {
+            findNavController().navigate(R.id.educationExpandedFragment)
         }
 
     }

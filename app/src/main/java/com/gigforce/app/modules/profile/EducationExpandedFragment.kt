@@ -64,7 +64,7 @@ class EducationExpandedFragment: ProfileBaseFragment() {
             education_card.nextDestination = R.id.editEducationBottomSheet
             education_card.cardTitle = "Education"
             education_card.cardContent = educationString
-            education_card.cardBottom = "Add Education"
+            education_card.cardBottom = "Add educations"
 
             var skillString: String = ""
             profile.skills?.let {
@@ -76,7 +76,7 @@ class EducationExpandedFragment: ProfileBaseFragment() {
             skill_card.hasContentTitles = false
             skill_card.cardTitle = "Skills"
             skill_card.cardContent = skillString
-            skill_card.cardBottom = "Add Skill"
+            skill_card.cardBottom = "Add skills"
 
             var achievementString: String = ""
             profile.achievements?.let {
@@ -92,7 +92,7 @@ class EducationExpandedFragment: ProfileBaseFragment() {
             achievement_card.nextDestination = R.id.editAchievementBottomSheet
             achievement_card.cardTitle = "Achievement"
             achievement_card.cardContent = achievementString
-            achievement_card.cardBottom = "Add Achievement"
+            achievement_card.cardBottom = "Add achievements"
 
             education_top_profile.userName = profile.name
             education_top_profile.imageName = profile.profileAvatarName

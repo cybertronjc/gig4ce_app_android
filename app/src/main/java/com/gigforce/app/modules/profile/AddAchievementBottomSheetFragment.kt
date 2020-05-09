@@ -1,16 +1,21 @@
 package com.gigforce.app.modules.profile
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.NumberPicker
+import android.widget.RelativeLayout
 import android.widget.Toast
-import androidx.lifecycle.ViewModelProviders
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AlertDialog.Builder
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
 import com.gigforce.app.modules.profile.models.Achievement
 import kotlinx.android.synthetic.main.add_achievement_bottom_sheet.*
+
 
 class AddAchievementBottomSheetFragment: ProfileBaseBottomSheetFragment() {
     companion object {
@@ -34,6 +39,10 @@ class AddAchievementBottomSheetFragment: ProfileBaseBottomSheetFragment() {
     }
 
     private fun setListeners() {
+
+        year.setOnClickListener {
+            showNumberPicker(requireContext(), year)
+        }
         add_more_button.setOnClickListener{
             if (validateAchievement()) {
                 addNewAchievement()

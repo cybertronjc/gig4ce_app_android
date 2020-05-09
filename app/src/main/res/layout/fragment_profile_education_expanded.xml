@@ -4,14 +4,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:fillViewport="true">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="0dp"
-        android:background="@drawable/bg_exp_white_rect"
-        android:isScrollContainer="true">
+        android:layout_height="match_parent"
+        android:background="@drawable/bg_exp_white_rect">
 
         <com.gigforce.app.modules.profile.ProfileCardBackground
             android:id="@+id/achievement_card"

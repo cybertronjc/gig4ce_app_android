@@ -16,7 +16,11 @@ import androidx.navigation.fragment.findNavController
 import com.afollestad.materialdialogs.MaterialDialog
 import com.gigforce.app.R
 import com.gigforce.app.modules.profile.models.Experience
+import com.gigforce.app.utils.DropdownAdapter
+import kotlinx.android.synthetic.main.delete_confirmation_dialog.*
 import kotlinx.android.synthetic.main.edit_experience.*
+import kotlinx.android.synthetic.main.edit_experience.cancel
+import kotlinx.android.synthetic.main.edit_experience.title
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -47,7 +51,7 @@ class EditExperienceBottomSheet: ProfileBaseBottomSheetFragment() {
         savedInstanceState: Bundle?
     ): View? {
         inflateView(R.layout.edit_experience, inflater, container)
-        employments.addAll(listOf("--employment type--", "Full time", "internship", "Part time"))
+        employments.addAll(listOf("Full time", "Internship", "Part time"))
 
         return getFragmentView()
     }
@@ -66,7 +70,7 @@ class EditExperienceBottomSheet: ProfileBaseBottomSheetFragment() {
                 experience = experiences[arrayLocation.toInt()]
                 title.setText(experience.title)
                 company.setText(experience.company)
-                employment_type.setSelection(employments.indexOf(experience.employmentType))
+                employment_type.setText(experience.employmentType, false)
                 location.setText(experience.location)
                 selectedStartDate = format.format(experience.startDate!!)
                 experience.endDate?.let {
@@ -85,30 +89,14 @@ class EditExperienceBottomSheet: ProfileBaseBottomSheetFragment() {
 
     private fun setListeners() {
         val employmentAdapter =
-            ArrayAdapter(this.context!!, R.layout.simple_spinner_dropdown_item, employments)
+            DropdownAdapter(this.requireContext(), employments)
         val employmentSpinner = employment_type
-        employmentSpinner.adapter = employmentAdapter
-        employmentSpinner.onItemSelectedListener = object :
-            AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                selectedEmployment = if (position != 0) employments[position] else ""
-                Log.d("Spinner", "selected " + employments[position])
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-                //TODO("Not yet implemented")
-            }
-        }
+        employmentSpinner.setAdapter(employmentAdapter)
 
         var calendar = Calendar.getInstance(TimeZone.getDefault())
         end_date.setOnClickListener {
             DatePickerDialog(
-                this.context!!,
+                this.requireContext(),
                 DatePickerDialog.OnDateSetListener { datePicker: DatePicker, i: Int, i1: Int, i2: Int ->
                     Log.d("TEMP", "tmp date")
                     selectedEndDate = "$i2/${i1 + 1}/$i"
@@ -123,7 +111,7 @@ class EditExperienceBottomSheet: ProfileBaseBottomSheetFragment() {
         start_date.setOnClickListener {
 
             DatePickerDialog(
-                this.context!!,
+                this.requireContext(),
                 DatePickerDialog.OnDateSetListener { datePicker: DatePicker, i: Int, i1: Int, i2: Int ->
                     selectedStartDate = "$i2/${i1 + 1}/$i"
                     start_date.setText(selectedStartDate)
@@ -149,38 +137,38 @@ class EditExperienceBottomSheet: ProfileBaseBottomSheetFragment() {
 
         delete_button.setOnClickListener {
             Log.d("EditExperience", "Deleting Experience")
-            MaterialDialog(this.context!!).show {
-                title(text = "Confirm Delete")
-                message(text = "Are you sure to Delete this item?")
-                positiveButton(R.string.delete) {
-                    profileViewModel!!.removeProfileExperience(experience)
-                    findNavController().navigate(R.id.experienceExpandedFragment)
-                }
-                negativeButton(R.string.cancel_text) {
-
-                }
+            val dialog = getDeleteConfirmationDialog(requireContext())
+            dialog.yes.setOnClickListener {
+                profileViewModel.removeProfileExperience(experience)
+                findNavController().navigate(R.id.experienceExpandedFragment)
+                dialog .dismiss()
             }
+            dialog.show()
         }
 
         save_button.setOnClickListener {
             if (validateExperience()) {
                 Log.d("EditExperience", "Editing Experience")
-                profileViewModel!!.removeProfileExperience(experience!!)
+                profileViewModel.removeProfileExperience(experience)
                 val newExperience: ArrayList<Experience> = ArrayList()
                 newExperience.add(
                     Experience(
                         title = title.text.toString(),
                         company = company.text.toString(),
-                        employmentType = selectedEmployment,
+                        employmentType = employment_type.text.toString(),
                         location = location.text.toString(),
                         startDate = SimpleDateFormat("dd/MM/yyyy").parse(selectedStartDate),
                         endDate = if (selectedEndDate.isNotEmpty()) SimpleDateFormat("dd/MM/yyyy").parse(selectedEndDate) else null,
                         currentExperience = currentlyWorkHere
                     )
                 )
-                profileViewModel!!.setProfileExperience(newExperience)
+                profileViewModel.setProfileExperience(newExperience)
                 findNavController().navigate(R.id.experienceExpandedFragment)
             }
+        }
+
+        cancel.setOnClickListener {
+            findNavController().navigate(R.id.experienceExpandedFragment)
         }
 
     }
@@ -189,7 +177,7 @@ class EditExperienceBottomSheet: ProfileBaseBottomSheetFragment() {
         if (validation!!.isValidExperience(
                 title,
                 company,
-                selectedEmployment,
+                employment_type.text.toString(),
                 location,
                 selectedStartDate,
                 selectedEndDate,

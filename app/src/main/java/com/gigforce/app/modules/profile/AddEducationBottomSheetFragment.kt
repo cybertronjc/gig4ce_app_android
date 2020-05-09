@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
 import com.gigforce.app.modules.profile.models.Education
+import com.gigforce.app.utils.DropdownAdapter
 import kotlinx.android.synthetic.main.add_education_bottom_sheet.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -47,7 +48,7 @@ class AddEducationBottomSheetFragment: ProfileBaseBottomSheetFragment() {
         var calendar = Calendar.getInstance(TimeZone.getDefault())
 
         start_date.setOnClickListener {
-            DatePickerDialog(this.context!!, DatePickerDialog.OnDateSetListener{
+            DatePickerDialog(this.requireContext(), DatePickerDialog.OnDateSetListener{
                     datePicker: DatePicker, i: Int, i1: Int, i2: Int ->
                 Log.d("TEMP", "tmp date")
                 selectedStartDate = "$i2/${i1+1}/$i"
@@ -56,7 +57,7 @@ class AddEducationBottomSheetFragment: ProfileBaseBottomSheetFragment() {
         }
 
         end_date.setOnClickListener {
-            DatePickerDialog(this.context!!, DatePickerDialog.OnDateSetListener{
+            DatePickerDialog(this.requireContext(), DatePickerDialog.OnDateSetListener{
                     datePicker: DatePicker, i: Int, i1: Int, i2: Int ->
                 Log.d("TEMP", "tmp date")
                 selectedEndDate = "$i2/${i1+1}/$i"
@@ -64,26 +65,10 @@ class AddEducationBottomSheetFragment: ProfileBaseBottomSheetFragment() {
             }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show()
         }
 
-        degrees.addAll(listOf("-- degree * --", "<10th", "10th", "12th", "Certificate", "Diploma", "Bachelor", "Masters", "PhD"))
-        val degreeAdapter = ArrayAdapter(this.context!!, R.layout.simple_spinner_dropdown_item, degrees)
+        degrees.addAll(listOf("<10th", "10th", "12th", "Certificate", "Diploma", "Bachelor", "Masters", "PhD"))
+        val degreeAdapter = DropdownAdapter(this.requireContext(), degrees)
         val degreeSpinner = degree_name
-        degreeSpinner.adapter = degreeAdapter
-        degreeSpinner.onItemSelectedListener = object:
-            AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                selectedDegree = if (position != 0) degrees[position] else ""
-                Log.d("Spinner", "selected " + degrees[position])
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-                //TODO("Not yet implemented")
-            }
-        }
+        degreeSpinner.setAdapter(degreeAdapter)
 
         add_more_button.setOnClickListener{
             if (validateEducation()) {
@@ -91,7 +76,7 @@ class AddEducationBottomSheetFragment: ProfileBaseBottomSheetFragment() {
                 addNewEducation()
                 institution_name.setText("")
                 course_name.setText("")
-                degree_name.setSelection(0)
+                degree_name.setText("")
                 start_date.setText("")
                 end_date.setText("")
             }
@@ -113,11 +98,11 @@ class AddEducationBottomSheetFragment: ProfileBaseBottomSheetFragment() {
     }
 
     private fun addNewEducation() {
-        hideError(form_error, institution_name, course_name, start_date, end_date)
+        hideError(form_error, institution_name, course_name, degree_name, start_date, end_date)
         updates.add(Education(
             institution = institution_name.text.toString(),
             course = course_name.text.toString(),
-            degree = selectedDegree,
+            degree = degree_name.text.toString(),
             startYear = SimpleDateFormat("dd/MM/yyyy").parse(selectedStartDate.toString()),
             endYear = SimpleDateFormat("dd/MM/yyyy").parse(selectedEndDate.toString())
         ))
@@ -127,12 +112,12 @@ class AddEducationBottomSheetFragment: ProfileBaseBottomSheetFragment() {
         if (validation!!.isValidEducation(
                 institution_name,
                 course_name,
-                selectedDegree,
+                degree_name.text.toString(),
                 selectedStartDate,
                 selectedEndDate))
             return true
         else {
-            showError(form_error, institution_name, course_name, start_date, end_date)
+            showError(form_error, institution_name, course_name, degree_name, start_date, end_date)
             return false
         }
     }
