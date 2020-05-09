@@ -20,8 +20,6 @@ class ProfilePictureOptionsBottomSheetFragment : BottomSheetDialogFragment() {
     }
 
     lateinit var layout: View
-    private lateinit var mListener: BottomSheetListener
-    var isShowing: Boolean = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,52 +35,6 @@ class ProfilePictureOptionsBottomSheetFragment : BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         Log.d("ProfileOptionBS", "view created")
 
-        layout.updateProfilePicture.setOnClickListener {
-            Log.d("ProfileOptionBS", "select Profile clicked")
-            mListener.onButtonClicked(R.id.updateProfilePicture)
-            dismiss()
-        }
-
-        layout.removeProfilePicture.setOnClickListener {
-            Log.d("ProfileOptionBS", "remove Profile clicked")
-            mListener.onButtonClicked(R.id.removeProfilePicture)
-            dismiss()
-        }
-
     }
 
-    fun enableRemoveProfilePicture(){
-        layout.removeProfilePicture.isClickable=true
-        layout.removeProfilePicture.setTextColor(resources.getColor(R.color.text_color))
-
-    }
-
-    fun disableRemoveProfilePicture(){
-        layout.removeProfilePicture.isClickable=false
-        layout.removeProfilePicture.setTextColor(resources.getColor(R.color.lightGrey))
-    }
-
-    public interface BottomSheetListener {
-        fun onButtonClicked(id: Int)
-    }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        try {
-            mListener = context as BottomSheetListener
-            isShowing=true
-        } catch (e: Exception) {
-            throw ClassCastException(context.toString() + " must implement Bottom Sheet Listener")
-        }
-    }
-
-    override fun onDetach() {
-        super.onDetach()
-
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        isShowing=false
-    }
 }
