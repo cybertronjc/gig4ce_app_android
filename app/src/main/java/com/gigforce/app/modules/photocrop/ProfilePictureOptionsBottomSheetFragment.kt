@@ -51,15 +51,6 @@ class ProfilePictureOptionsBottomSheetFragment : BottomSheetDialogFragment() {
 
     }
 
-    override fun onStart() {
-        super.onStart()
-        val params =
-            (layout.parent as View).layoutParams as CoordinatorLayout.LayoutParams
-        val behavior = params.behavior
-        (behavior as BottomSheetBehavior<*>?)!!.state = BottomSheetBehavior.STATE_EXPANDED
-        bottomSheetBehavior.setPeekHeight(view.getMeasuredHeight());
-    }
-
     fun enableRemoveProfilePicture(){
         layout.removeProfilePicture.isClickable=true
         layout.removeProfilePicture.setTextColor(resources.getColor(R.color.text_color))
