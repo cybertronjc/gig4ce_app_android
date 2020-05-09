@@ -57,12 +57,13 @@
 
     <TextView
         android:id="@+id/textView29"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="33dp"
         android:gravity="center"
-        android:paddingLeft="58dp"
-        android:paddingRight="58dp"
+        android:paddingLeft="40dp"
+        android:paddingRight="40dp"
+        android:fontFamily="@font/lato"
         android:text="@string/otp_sent_otp_account"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"

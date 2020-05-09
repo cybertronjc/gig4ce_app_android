@@ -9,7 +9,6 @@ import android.widget.AdapterView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
-import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
@@ -20,7 +19,6 @@ import com.google.firebase.firestore.*
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.layout_home_screen.*
 import kotlinx.android.synthetic.main.layout_home_screen.view.*
-import com.google.firebase.firestore.DocumentSnapshot as DocumentSnapshot1
 
 
 class HomeScreenIcons : BaseFragment() {
@@ -93,7 +91,7 @@ class HomeScreenIcons : BaseFragment() {
         yesBtn.setOnClickListener {
             FirebaseAuth.getInstance().signOut()
             removeSavedShareData(AppConstants.INTRO_COMPLETE)
-            popFragmentFromStack(R.id.homeScreenIcons)
+            popFragmentFromStack(R.id.loginSuccessfulFragment)
             dialog?.dismiss()
         }
         noBtn.setOnClickListener { dialog .dismiss() }

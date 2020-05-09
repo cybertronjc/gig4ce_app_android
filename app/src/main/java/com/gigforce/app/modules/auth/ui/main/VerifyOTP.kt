@@ -74,7 +74,7 @@ class VerifyOTP: BaseFragment() {
         val spannableString1 = SpannableString(str)
         spannableString1.setSpan(UnderlineSpan(),0,str.length,0)
         reenter_mobile.text = spannableString1
-        textView29?.text = "We have send the OTP on "+mobile_number+"\nwill apply auto to the fields";
+        textView29?.text = "We have send the OTP on "+mobile_number+" will apply auto to the fields";
     }
 
     private fun observer() {
@@ -107,12 +107,18 @@ class VerifyOTP: BaseFragment() {
             }
         }
         resend_otp?.setOnClickListener {
-                otpresentcounter++;
-                counterStart();
-            viewModel.sendVerificationCode("+91"+mobile_number)
+                if(otpresentcounter>2) {
+                    otpresentcounter++;
+                    counterStart();
+                    viewModel.sendVerificationCode("+91" + mobile_number)
+                }else{
+                    navigateToLoginScreen()
+                }
         }
         reenter_mobile.setOnClickListener {
-            navigateToLoginScreen()
+            if(!timerStarted) {
+                navigateToLoginScreen()
+            }
         }
         txt_otp.doAfterTextChanged { showWrongOTPLayout(false) }
     }
