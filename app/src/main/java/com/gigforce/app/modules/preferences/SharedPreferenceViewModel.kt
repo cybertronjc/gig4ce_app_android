@@ -60,6 +60,7 @@ class SharedPreferenceViewModel : ViewModel() {
             }
             if(value?.data==null){
                 var defaultData = PreferencesDataModel()
+                defaultData.isweekdaysenabled = true
                 defaultData.selecteddays.addAll(getAllDays())
                 defaultData.selectedslots.addAll(getAllSlots())
              preferencesRepository.setDefaultData(defaultData)

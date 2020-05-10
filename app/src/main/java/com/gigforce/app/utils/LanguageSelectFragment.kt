@@ -26,12 +26,10 @@ class LanguageSelectFragment : BaseFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
 //        this.setDarkStatusBarTheme(true)
         try {
             LocaleChanger.initialize(this.context, SUPPORTED_LOCALES)
         } catch (e: Exception) {
-
         }
         return inflateView(R.layout.fragment_select_language, inflater, container)
     }
