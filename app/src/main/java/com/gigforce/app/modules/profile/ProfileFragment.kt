@@ -3,7 +3,6 @@ package com.gigforce.app.modules.profile
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -12,13 +11,9 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
 import com.gigforce.app.modules.photocrop.PhotoCrop
-import com.gigforce.app.modules.photocrop.*
-import com.gigforce.app.modules.profile.models.Achievement
 import com.gigforce.app.utils.GlideApp
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.chip.Chip
@@ -26,7 +21,6 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import kotlinx.android.synthetic.main.fragment_profile_main_expanded.view.*
 import kotlinx.android.synthetic.main.profile_main_card_background.view.*
-import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -296,7 +290,7 @@ class ProfileFragment : Fragment() {
          * back page navigation
          */
         layout.profile_main_expanded_back_button.setOnClickListener {
-            this.findNavController().navigate(R.id.homeScreenIcons)
+            this.findNavController().navigate(R.id.mainHomeScreen)
         }
     }
 

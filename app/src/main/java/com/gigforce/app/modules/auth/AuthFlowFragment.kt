@@ -5,14 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.navigation.NavOptions
-import androidx.navigation.fragment.NavHostFragment
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.utils.AppConstants
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import kotlinx.android.synthetic.main.fragment_select_language.*
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -31,6 +28,7 @@ class AuthFlowFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         val lang = getSharedData(AppConstants.APP_LANGUAGE, null)
         val introComplete = getSharedData(AppConstants.INTRO_COMPLETE, null)
+
         popFragmentFromStack(R.id.authFlowFragment)
         if (lang == null) {
             navigate(R.id.languageSelectFragment)//, null, navOptionsPopToHome)
@@ -56,7 +54,13 @@ class AuthFlowFragment : BaseFragment() {
         if (currentUser == null) {
             navigate(R.id.Login)
         } else {
-        navigateWithAllPopupStack(R.id.homeScreenIcons1)
+            var fragments = getFragmentManager()?.getFragments()
+            if(fragments!=null && fragments?.size==1) {
+                navigateWithAllPopupStack(R.id.mainHomeScreen)
+            }
+            else{
+                navigateWithAllPopupStack(R.id.loginSuccessfulFragment)
+            }
         }
     }
 

@@ -112,7 +112,7 @@ abstract class BaseFragment : Fragment() {
         toast.show()
     }
     fun popFragmentFromStack(id:Int){
-        navController.popBackStack(R.id.authFlowFragment,true)
+        navController.popBackStack(id,true)
     }
     open fun navigate(
         @IdRes resId: Int, args: Bundle?,
