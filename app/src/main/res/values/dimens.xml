@@ -22,5 +22,7 @@
     <dimen name="calendar_gig">12sp</dimen>
 
     <dimen name="roster_item_height">48dp</dimen>
+    <dimen name="eight_dp">8dp</dimen>
+    <dimen name="five_dp">5dp</dimen>
 
 </resources>

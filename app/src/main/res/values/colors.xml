@@ -39,6 +39,9 @@
     <color name="timer_color">#e82e66</color>
     <color name="time_up_color">#6d7278</color>
     <color name="black_color_future_date">#333333</color>
+    <color name="upcoming_gig_type">#2dc76d</color>
+    <color name="upcoming_gig_title">#25265e</color>
+    <color name="upcoming_gig_time">#787993</color>
 
 
 </resources>

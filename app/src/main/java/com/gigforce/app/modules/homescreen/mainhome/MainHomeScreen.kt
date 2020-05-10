@@ -1,13 +1,23 @@
 package com.gigforce.app.modules.homescreen.mainhome
 
+import android.graphics.Paint
+import android.graphics.Rect
+import android.graphics.drawable.Drawable
+import android.graphics.drawable.LayerDrawable
+import android.graphics.drawable.ShapeDrawable
+import android.graphics.drawable.shapes.RoundRectShape
 import android.os.Bundle
+import android.util.DisplayMetrics
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.annotation.ColorRes
+import androidx.annotation.DimenRes
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.request.RequestOptions
@@ -15,7 +25,7 @@ import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.app.core.genericadapter.RecyclerGenericAdapter
-import com.gigforce.app.modules.homescreen.mainhome.verticalcalendar.VerticalCalendarAdapter
+import com.gigforce.app.modules.homescreen.mainhome.bottomsheet.UpcomingGigModel
 import com.gigforce.app.modules.homescreen.mainhome.verticalcalendar.VerticalCalendarDataItemModel
 import com.gigforce.app.modules.preferences.PreferencesFragment
 import com.gigforce.app.modules.profile.ProfileViewModel
@@ -26,6 +36,7 @@ import com.riningan.widget.ExtendedBottomSheetBehavior.STATE_COLLAPSED
 import kotlinx.android.synthetic.main.homescreen_1nsvbs.*
 import java.text.SimpleDateFormat
 import java.util.*
+
 
 class MainHomeScreen : BaseFragment() {
 
@@ -68,17 +79,22 @@ class MainHomeScreen : BaseFragment() {
         mExtendedBottomSheetBehavior?.isAllowUserDragging = true;
         viewModel = ViewModelProviders.of(this).get(MainHomeScreenViewModel::class.java)
         viewModelProfile = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
-
-
-
         initializeViews()
         listener()
         observePreferenceData()
     }
 
+    private fun initializeViews() {
+        initialiseMonthTV()
+        initializeVerticalCalendarRV()
+        initializeBottomSheet()
+        initializeBSGridView()
+
+    }
+
     private fun listener() {
         iv2HS1.setOnClickListener(View.OnClickListener { navigate(R.id.profileFragment) })
-        tv_hs1bs_alert.setOnClickListener(View.OnClickListener { navigate(R.id.verification) })
+//        tv_hs1bs_alert.setOnClickListener(View.OnClickListener { navigate(R.id.verification) })
     }
 
     private fun observePreferenceData() {
@@ -108,12 +124,7 @@ class MainHomeScreen : BaseFragment() {
                 .into(profile_image)
         }
     }
-    private fun initializeViews() {
-        initialiseMonthTV()
-        initializeVerticalCalendarRV()
-        initializeBSGridView()
 
-    }
 
     private fun initialiseMonthTV() {
         val pattern = "MMM YYYY"
@@ -130,7 +141,7 @@ class MainHomeScreen : BaseFragment() {
                 itemList
             )
         }
-        gridView_hs1.adapter = adapter
+//        gridView_hs1.adapter = adapter
     }
     private val visibleThreshold = 10
     var isLoading:Boolean = false
@@ -272,8 +283,6 @@ class MainHomeScreen : BaseFragment() {
                             }
                         }
                     }
-
-
                 })!!
 
         recyclerGenericAdapter.list = viewModel.getAllCalendarData()
@@ -328,6 +337,101 @@ class MainHomeScreen : BaseFragment() {
             getView(viewHolder, R.id.calendar_month_cl).visibility = View.GONE
             getView(viewHolder, R.id.calendar_detail_item_cl).visibility = View.VISIBLE
         }
+    }
 
+    private fun initializeBottomSheet(){
+        nsv.setBackground(generateBackgroundWithShadow(nsv,R.color.white,
+            R.dimen.eight_dp,R.color.gray_color,R.dimen.five_dp, Gravity.TOP))
+        val displayMetrics = DisplayMetrics()
+        activity?.windowManager?.getDefaultDisplay()?.getMetrics(displayMetrics)
+        val width = displayMetrics.widthPixels
+        val itemWidth = (width / 3.33).toInt()
+
+        var datalist: ArrayList<UpcomingGigModel> = ArrayList<UpcomingGigModel>()
+        datalist.add(UpcomingGigModel())
+        datalist.add(UpcomingGigModel())
+        val recyclerGenericAdapter: RecyclerGenericAdapter<UpcomingGigModel> =
+            RecyclerGenericAdapter<UpcomingGigModel>(
+                activity?.applicationContext,
+                PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item -> showToast("")},
+                RecyclerGenericAdapter.ItemInterface<UpcomingGigModel?> { obj, viewHolder, position ->
+                    val lp = getView(viewHolder,R.id.card_view).layoutParams
+                    lp.height = lp.height
+                    lp.width = itemWidth
+                    getView(viewHolder,R.id.card_view).layoutParams = lp
+                })!!
+        recyclerGenericAdapter.setList(datalist)
+        recyclerGenericAdapter.setLayout(R.layout.upcoming_gig_item)
+        rv_.layoutManager = LinearLayoutManager(
+            activity?.applicationContext,
+            LinearLayoutManager.VERTICAL,
+            false
+        )
+        rv_.adapter = recyclerGenericAdapter
+
+    }
+    fun generateBackgroundWithShadow(
+        view: View, @ColorRes backgroundColor: Int,
+        @DimenRes cornerRadius: Int,
+        @ColorRes shadowColor: Int,
+        @DimenRes elevation: Int,
+        shadowGravity: Int
+    ): Drawable? {
+        val cornerRadiusValue =
+            view.context.resources.getDimension(cornerRadius)
+        val elevationValue = view.context.resources.getDimension(elevation).toInt()
+        val shadowColorValue = ContextCompat.getColor(view.context, shadowColor)
+        val backgroundColorValue = ContextCompat.getColor(view.context, backgroundColor)
+        val outerRadius = floatArrayOf(
+            cornerRadiusValue, cornerRadiusValue, cornerRadiusValue,
+            cornerRadiusValue, cornerRadiusValue, cornerRadiusValue, cornerRadiusValue,
+            cornerRadiusValue
+        )
+        val backgroundPaint = Paint()
+        backgroundPaint.setStyle(Paint.Style.FILL)
+        backgroundPaint.setShadowLayer(cornerRadiusValue, 0F, 0F, 0)
+        val shapeDrawablePadding = Rect()
+        shapeDrawablePadding.left = elevationValue
+        shapeDrawablePadding.right = elevationValue
+        val DY: Int
+        when (shadowGravity) {
+            Gravity.CENTER -> {
+                shapeDrawablePadding.top = elevationValue
+                shapeDrawablePadding.bottom = elevationValue
+                DY = 0
+            }
+            Gravity.TOP -> {
+                shapeDrawablePadding.top = elevationValue * 2
+                shapeDrawablePadding.bottom = elevationValue
+                DY = -1 * elevationValue / 3
+            }
+            Gravity.BOTTOM -> {
+                shapeDrawablePadding.top = elevationValue
+                shapeDrawablePadding.bottom = elevationValue * 2
+                DY = elevationValue / 3
+            }
+            else -> {
+                shapeDrawablePadding.top = elevationValue
+                shapeDrawablePadding.bottom = elevationValue * 2
+                DY = elevationValue / 3
+            }
+        }
+        val shapeDrawable = ShapeDrawable()
+        shapeDrawable.setPadding(shapeDrawablePadding)
+        shapeDrawable.paint.color = backgroundColorValue
+        shapeDrawable.paint
+            .setShadowLayer(cornerRadiusValue / 3, 0f, DY.toFloat(), shadowColorValue)
+        view.setLayerType(View.LAYER_TYPE_SOFTWARE, shapeDrawable.paint)
+        shapeDrawable.shape = RoundRectShape(outerRadius, null, null)
+        val drawable =
+            LayerDrawable(arrayOf<Drawable>(shapeDrawable))
+        drawable.setLayerInset(
+            0,
+            elevationValue,
+            elevationValue * 2,
+            elevationValue,
+            elevationValue * 2
+        )
+        return drawable
     }
 }

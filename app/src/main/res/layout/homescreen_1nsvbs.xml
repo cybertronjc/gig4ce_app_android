@@ -103,108 +103,43 @@
         android:id="@+id/nsv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="-198dp"
-        android:background="@android:color/white"
+        android:elevation="20dp"
+        android:background="@drawable/bottom_up_sheet"
         app:allowDragging="true"
-        app:halfOffset="172dp"
-        app:hideable="true"
-        app:layout_behavior="com.riningan.widget.ExtendedBottomSheetBehavior"
-        app:peekHeight="128dp">
+        android:layout_marginTop="-150dp"
+        app:halfOffset="0dp"
+        app:peekHeight="128dp"
+        app:hideable="false"
+        app:layout_behavior="com.riningan.widget.ExtendedBottomSheetBehavior">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
+            android:layout_height="match_parent"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
+            android:orientation="vertical"
+            android:layout_marginLeft="15dp">
             <View
                 android:id="@+id/v_hs1bs_partition"
                 android:layout_width="64dp"
                 android:layout_height="3dp"
-                android:layout_marginStart="148dp"
-                android:layout_marginTop="14.3dp"
-                android:background="@android:color/darker_gray"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@id/nsv"
-                tools:ignore="NotSibling" />
+                android:layout_marginTop="17dp"
+                android:layout_gravity="center"
+                android:background="@android:color/darker_gray"/>
 
             <TextView
-                android:id="@+id/tv_hs1bs_alert"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="29dp"
-                android:background="@drawable/rect_border"
-                android:padding="16dp"
-                android:text="@string/homescreen_bs_alert"
-                android:textSize="13sp"
-                app:layout_constraintStart_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/v_hs1bs_partition" />
-
-            <TextView
-                android:id="@+id/tv_hs1bs_features"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="29dp"
-                android:padding="16dp"
-                android:text="@string/homescreen_bs_features"
-                android:textColor="@color/black"
-                android:textSize="18sp"
-                app:layout_constraintStart_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/tv_hs1bs_alert" />
-
-
-            <HorizontalScrollView
+                android:text="@string/upcoming_gig"
+                android:layout_marginTop="13dp"
+                android:textColor="#080808"
+                android:textSize="14sp"/>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/upcoming_gig_rv"
                 android:layout_width="match_parent"
-                android:layout_height="fill_parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_hs1bs_features">
+                android:layout_height="102dp"
+                android:layout_marginTop="14dp"/>
 
-                <FrameLayout
-                    android:layout_width="fill_parent"
-                    android:layout_height="match_parent">
-
-                    <LinearLayout
-                        android:id="@+id/linearLayout_gridtableLayout"
-                        android:layout_width="900dp"
-                        android:layout_height="match_parent"
-                        android:orientation="horizontal">
-
-                        <GridView
-                            android:id="@+id/gridView_hs1"
-                            android:layout_width="fill_parent"
-                            android:layout_height="fill_parent"
-                            android:layout_margin="4dp"
-                            android:columnWidth="100dp"
-                            android:gravity="center"
-                            android:horizontalSpacing="1dp"
-                            android:numColumns="9"
-                            android:scrollbarAlwaysDrawHorizontalTrack="true"
-                            android:scrollbarAlwaysDrawVerticalTrack="true"
-                            android:scrollbars="horizontal"
-                            android:stretchMode="none"
-                            android:verticalSpacing="1dp"></GridView>
-                    </LinearLayout>
-                </FrameLayout>
-            </HorizontalScrollView>
-
-            <!--            <androidx.recyclerview.widget.RecyclerView-->
-            <!--                android:id="@+id/rv2_hs"-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="0dp"-->
-            <!--                app:layout_constraintEnd_toEndOf="parent"-->
-            <!--                app:layout_constraintStart_toStartOf="parent"-->
-            <!--                app:layout_constraintTop_toBottomOf="@+id/tv_hs1bs_features"-->
-            <!--                app:layout_constraintVertical_weight="1"-->
-            <!--                tools:ignore="NotSibling" />-->
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-    <!--    app:allowDragging="true"-->
-    <!--    app:halfOffset="172dp"-->
-    <!--    app:hideable="true"-->
-    <!--    app:layout_behavior="com.riningan.widget.ExtendedBottomSheetBehavior"-->
-    <!--    app:peekHeight="128dp"-->
