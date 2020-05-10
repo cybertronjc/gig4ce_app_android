@@ -70,10 +70,7 @@ class MainHomeScreen : BaseFragment() {
         viewModelProfile = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
 
 
-        val pattern = "MMM YYYY"
-        val simpleDateFormat = SimpleDateFormat(pattern)
-        val date: String = simpleDateFormat.format(Date())
-        tv2HS1.text = date
+
         initializeViews()
         listener()
         observePreferenceData()
@@ -112,9 +109,17 @@ class MainHomeScreen : BaseFragment() {
         }
     }
     private fun initializeViews() {
+        initialiseMonthTV()
         initializeVerticalCalendarRV()
         initializeBSGridView()
 
+    }
+
+    private fun initialiseMonthTV() {
+        val pattern = "MMM YYYY"
+        val simpleDateFormat = SimpleDateFormat(pattern)
+        val date: String = simpleDateFormat.format(Date())
+        tv2HS1.text = date
     }
 
     private fun initializeBSGridView() {
