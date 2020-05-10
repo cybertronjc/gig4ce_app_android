@@ -3,6 +3,8 @@ package com.gigforce.app.modules.profile
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -35,6 +37,7 @@ class ProfileFragment : Fragment() {
     private lateinit var layout: View
     private lateinit var profileAvatarName: String
     private lateinit var dWidth: Display
+    private lateinit var win:Window
     private var PHOTO_CROP: Int = 45
     private var isShow: Boolean = true
     private var scrollRange: Int = -1
@@ -42,16 +45,64 @@ class ProfileFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        makeStatusBarTransparent()
         requireActivity().onBackPressedDispatcher.addCallback(this) {
             findNavController().navigate(R.id.homeFragment)
         }
+    }
+
+    private fun makeStatusBarTransparent(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            win = requireActivity().window
+            win.setFlags(
+                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
+        }
+    }
+
+    private fun restoreStatusBar(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            win = requireActivity().window
+            win.clearFlags(
+                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+            )
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        makeStatusBarTransparent()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        makeStatusBarTransparent()
+    }
+
+    override fun onStop() {
+        super.onStop()
+    }
+
+    override fun onPause() {
+        super.onPause()
+
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        restoreStatusBar()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        restoreStatusBar()
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        makeStatusBarTransparent()
         storage = FirebaseStorage.getInstance()
         Log.d("DEBUG", "ENTERED PROFILE VIEW")
         val wm = requireContext().getSystemService(Context.WINDOW_SERVICE) as WindowManager

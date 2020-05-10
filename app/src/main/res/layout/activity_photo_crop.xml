@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:fillViewport="true"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="#888888"
+    android:background="@color/grey_photocrop_background"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".modules.photocrop.PhotoCrop">
@@ -26,14 +26,14 @@
         app:layout_constraintVertical_bias="0.305"
         tools:layout_editor_absoluteX="0dp" />
 
-    <ImageView
-        android:id="@+id/translusent_bar"
-        android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:alpha="0.25"
-        android:src="@drawable/translucent_bar_grey"
-        app:layout_constraintTop_toTopOf="parent"
-        />
+<!--    <ImageView-->
+<!--        android:id="@+id/translusent_bar"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="45dp"-->
+<!--        android:alpha="0.25"-->
+<!--        android:src="@drawable/translucent_bar_grey"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        />-->
 
     <ImageButton
         android:id="@+id/back_button_photo_crop"

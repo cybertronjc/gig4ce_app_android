@@ -73,7 +73,8 @@ class EditCoverBottomSheet(): ProfileBaseBottomSheetFragment() {
 
     private fun setListeners() {
         cancel_button.setOnClickListener {
-            findNavController().navigate(R.id.profileFragment)
+//            findNavController().navigate(R.id.profileFragment)
+            this.dismiss()
         }
 
         bio.addTextChangedListener (object : TextWatcher{
@@ -104,8 +105,10 @@ class EditCoverBottomSheet(): ProfileBaseBottomSheetFragment() {
             }
             profileViewModel.setProfileTag(tagsToAdd)
             profileViewModel.removeProfileTag(tagsToRemove)
-            if (bioValid)
-                findNavController().navigate(R.id.profileFragment)
+            if (bioValid) {
+//                findNavController().navigate(R.id.profileFragment)
+                this.dismiss()
+            }
         }
 
         add_button.setOnClickListener {
