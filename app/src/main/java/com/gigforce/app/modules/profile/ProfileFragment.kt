@@ -65,6 +65,15 @@ class ProfileFragment : Fragment() {
         }
     }
 
+    private fun restoreStatusBar(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            win = requireActivity().window
+            win.clearFlags(
+                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+            )
+        }
+    }
+
     override fun onResume() {
         super.onResume()
         makeStatusBarTransparent()
@@ -77,28 +86,28 @@ class ProfileFragment : Fragment() {
 
     override fun onStop() {
         super.onStop()
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            win = requireActivity().window
-            win.clearFlags(
-                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
-            )
-        }
     }
 
     override fun onPause() {
         super.onPause()
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            win = requireActivity().window
-            win.clearFlags(
-                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
-            )
-        }
+
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        restoreStatusBar()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        restoreStatusBar()
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        makeStatusBarTransparent()
         storage = FirebaseStorage.getInstance()
         Log.d("DEBUG", "ENTERED PROFILE VIEW")
         val wm = requireContext().getSystemService(Context.WINDOW_SERVICE) as WindowManager
