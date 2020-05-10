@@ -36,10 +36,10 @@ class Login: BaseFragment() {
         var MOBILENO_INPUT_CHANGED = false
     }
     lateinit var viewModel: LoginViewModel
-//    private val INDIAN_MOBILE_NUMBER =
-//        Pattern.compile("^[+][9][1][7-9][0-9]{9}\$")
     private val INDIAN_MOBILE_NUMBER =
-        Pattern.compile("^[+][0-9]{12}\$")
+        Pattern.compile("^[+][9][1][7-9][0-9]{9}\$")
+//    private val INDIAN_MOBILE_NUMBER =
+//        Pattern.compile("^[+][0-9]{12}\$")
     lateinit var match: Matcher;
     private var mobile_number:String = ""
 
