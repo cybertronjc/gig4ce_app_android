@@ -466,7 +466,7 @@ class PhotoCrop : AppCompatActivity() {
 
     private fun enableRemoveProfilePicture(){
         linear_layout_bottomsheet.removeProfilePicture.isClickable=true
-        linear_layout_bottomsheet.removeProfilePicture.setTextColor(resources.getColor(R.color.text_color))
+        linear_layout_bottomsheet.removeProfilePicture.setTextColor(resources.getColorStateList(R.color.text_color))
 
     }
 
