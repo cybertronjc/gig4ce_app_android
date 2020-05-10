@@ -29,25 +29,9 @@ class AuthFlowFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        val navOptionsPopToHome: NavOptions = NavOptions.Builder()
-//            .setPopUpTo(R.id.homeFragment, true)
-//            .build()
         val lang = getSharedData(AppConstants.APP_LANGUAGE, null)
         val introComplete = getSharedData(AppConstants.INTRO_COMPLETE, null)
-//        val navHostFragment: NavHostFragment? =
-//            activity?.supportFragmentManager?.findFragmentById(R.id.nav_fragment) as NavHostFragment?
-//
-//        var fragmentholder: Fragment? =
-//            navHostFragment!!.childFragmentManager.fragments[navHostFragment!!.childFragmentManager.fragments.size - 1]
-//        activity?.supportFragmentManager?.beginTransaction()?.remove(fragmentholder!!)
-        navController.popBackStack(R.id.authFlowFragment,true)
-//        val fragmentList: List<Fragment> = activity?.supportFragmentManager?.fragments!!
-//        var fragmentholder: Fragment? = null
-//        for (f in fragmentList) fragmentholder = f
-//        activity?.supportFragmentManager?.beginTransaction()?.remove(fragmentholder!!)?.commit()
-//        // Select Language by Default
-//        val fragmentList1: List<Fragment> = activity?.supportFragmentManager?.fragments!!
-
+        popFragmentFromStack(R.id.authFlowFragment)
         if (lang == null) {
             navigate(R.id.languageSelectFragment)//, null, navOptionsPopToHome)
         } else if (introComplete == null) {
@@ -72,7 +56,7 @@ class AuthFlowFragment : BaseFragment() {
         if (currentUser == null) {
             navigate(R.id.Login)
         } else {
-            navigateWithAllPopupStack(R.id.homeScreenIcons)
+        navigateWithAllPopupStack(R.id.homeScreenIcons1)
         }
     }
 

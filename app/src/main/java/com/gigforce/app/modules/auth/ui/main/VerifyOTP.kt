@@ -7,6 +7,7 @@ import android.text.style.UnderlineSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -14,6 +15,7 @@ import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.modules.auth.ui.main.LoginViewModel.Companion.STATE_SIGNIN_FAILED
 import com.gigforce.app.modules.auth.ui.main.LoginViewModel.Companion.STATE_SIGNIN_SUCCESS
+import com.gigforce.app.utils.popAllBackStates
 import kotlinx.android.synthetic.main.otp_verification.*
 import java.util.regex.Matcher
 import java.util.regex.Pattern
@@ -25,6 +27,7 @@ class VerifyOTP: BaseFragment() {
     }
 
     private var verificationId: String = ""
+    private var mobile_number:String = ""
     var layout: View? = null;
     lateinit var viewModel: LoginViewModel
     var otpresentcounter=0;
@@ -36,6 +39,7 @@ class VerifyOTP: BaseFragment() {
         super.onCreate(savedInstanceState)
         arguments?.let {
             verificationId = it.getString("verificationId")!!
+            mobile_number = it.getString("mobile_number")!!
         }
     }
 
@@ -54,6 +58,7 @@ class VerifyOTP: BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel.activity = this.activity!!
         initializeViews()
         listeners()
         observer()
@@ -69,8 +74,7 @@ class VerifyOTP: BaseFragment() {
         val spannableString1 = SpannableString(str)
         spannableString1.setSpan(UnderlineSpan(),0,str.length,0)
         reenter_mobile.text = spannableString1
-        textView29?.text = "We have send the OTP on Number\n" +
-                "will apply auto to the fields";
+        textView29?.text = "We have send the OTP on "+mobile_number+"\nwill apply auto to the fields";
     }
 
     private fun observer() {
@@ -78,7 +82,7 @@ class VerifyOTP: BaseFragment() {
             if(it.stateResponse == STATE_SIGNIN_FAILED){
                 showWrongOTPLayout(true)
             }else if (it.stateResponse == STATE_SIGNIN_SUCCESS) {
-                navigate(R.id.action_verifyOTP_to_onOTPSuccess)
+//                navigate(R.id.action_verifyOTP_to_onOTPSuccess)
             }
         })
 
@@ -105,6 +109,7 @@ class VerifyOTP: BaseFragment() {
         resend_otp?.setOnClickListener {
                 otpresentcounter++;
                 counterStart();
+            viewModel.sendVerificationCode("+91"+mobile_number)
         }
         reenter_mobile.setOnClickListener {
             navigateToLoginScreen()
@@ -113,7 +118,10 @@ class VerifyOTP: BaseFragment() {
     }
 
     private fun navigateToLoginScreen() {
-        navigateWithAllPopupStack(R.id.Login)
+        var bundle = bundleOf("mobileno" to mobile_number)
+        navController.popAllBackStates()
+        navController.navigate(R.id.Login,bundle)
+//        navigateWithAllPopupStack(R.id.Login)
     }
 
     private fun counterStart(){

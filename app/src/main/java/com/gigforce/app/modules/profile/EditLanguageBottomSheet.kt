@@ -11,7 +11,9 @@ import androidx.navigation.fragment.findNavController
 import com.afollestad.materialdialogs.MaterialDialog
 import com.gigforce.app.R
 import com.gigforce.app.modules.profile.models.Language
+import kotlinx.android.synthetic.main.delete_confirmation_dialog.*
 import kotlinx.android.synthetic.main.edit_language_bottom_sheet.*
+import kotlinx.android.synthetic.main.edit_language_bottom_sheet.cancel
 
 class EditLanguageBottomSheet: ProfileBaseBottomSheetFragment() {
     companion object {
@@ -59,17 +61,14 @@ class EditLanguageBottomSheet: ProfileBaseBottomSheetFragment() {
 
     private fun setListeners() {
         delete.setOnClickListener {
-            MaterialDialog(this.context!!).show {
-                title(text = "Confirm Delete")
-                message(text = "Are you sure to Delete this item?")
-                positiveButton(R.string.delete) {
-                    profileViewModel!!.removeProfileLanguage(language)
-                    findNavController().navigate(R.id.aboutExpandedFragment)
-                }
-                negativeButton(R.string.cancel_text) {
-
-                }
+            val dialog = getDeleteConfirmationDialog(requireContext())
+            dialog.yes.setOnClickListener {
+                profileViewModel.removeProfileLanguage(language)
+                findNavController().navigate(R.id.aboutExpandedFragment)
+                dialog .dismiss()
             }
+            dialog.show()
+
         }
 
         save.setOnClickListener {
@@ -88,6 +87,10 @@ class EditLanguageBottomSheet: ProfileBaseBottomSheetFragment() {
                 profileViewModel!!.setProfileLanguage(newLanguage)
                 findNavController().navigate(R.id.aboutExpandedFragment)
             }
+        }
+
+        cancel.setOnClickListener {
+            findNavController().navigate(R.id.aboutExpandedFragment)
         }
 
     }

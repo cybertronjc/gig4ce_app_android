@@ -113,6 +113,8 @@
 
 
     <!--login fragment-->
+    <string name="login">ప్రవేశించండి</string>
+
     <string name="title_login">	దయచేసి లాగిన్ అవ్వండి	</string>
     <string name="mobile_login">	మీ మొబైల్ నంబర్‌ను నమోదు చేయండి.	</string>
     <string name="confirm_login">	నిర్ధారించండి	</string>
