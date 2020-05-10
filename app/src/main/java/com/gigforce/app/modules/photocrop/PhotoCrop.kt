@@ -2,6 +2,7 @@ package com.gigforce.app.modules.photocrop
 
 import android.Manifest
 import android.app.Activity
+import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
@@ -10,17 +11,16 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
+import android.view.Window
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.ViewModelProviders
 import com.gigforce.app.R
-import com.gigforce.app.modules.photocrop.ProfilePictureOptionsBottomSheetFragment.BottomSheetListener
 import com.gigforce.app.modules.profile.ProfileViewModel
 import com.gigforce.app.utils.GlideApp
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.ml.vision.FirebaseVision
 import com.google.firebase.ml.vision.common.FirebaseVisionImage
 import com.google.firebase.ml.vision.face.FirebaseVisionFaceDetectorOptions
@@ -30,16 +30,16 @@ import com.google.firebase.storage.UploadTask
 import com.google.firebase.storage.UploadTask.TaskSnapshot
 import com.yalantis.ucrop.UCrop
 import kotlinx.android.synthetic.main.activity_photo_crop.*
-import kotlinx.android.synthetic.main.fragment_video_resume.*
+import kotlinx.android.synthetic.main.profile_photo_bottom_sheet.*
 import kotlinx.android.synthetic.main.profile_photo_bottom_sheet.view.*
+import kotlinx.android.synthetic.main.profile_photo_bottom_sheet.view.linear_layout_bottomsheet
 import pub.devrel.easypermissions.EasyPermissions
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 
-class PhotoCrop : AppCompatActivity(),
-    BottomSheetListener {
+class PhotoCrop : AppCompatActivity() {
 
     companion object {
         var profilePictureOptionsBottomSheetFragment: ProfilePictureOptionsBottomSheetFragment =
@@ -63,6 +63,7 @@ class PhotoCrop : AppCompatActivity(),
     private lateinit var imageView: ImageView
     private lateinit var backButton: ImageButton
     private lateinit var viewModel: ProfileViewModel
+    private lateinit var bottomSheetBehavior:BottomSheetBehavior<LinearLayout>
     private val TEMP_FILE: String = "profile_picture"
     private lateinit var purpose: String
 
@@ -94,6 +95,8 @@ class PhotoCrop : AppCompatActivity(),
         imageView = this.findViewById(R.id.profile_avatar_photo_crop)
         backButton = this.findViewById(R.id.back_button_photo_crop)
         var constLayout: ConstraintLayout = this.findViewById(R.id.constraintLayout)
+        var linearLayoutBottomSheet: LinearLayout = findViewById(R.id.linear_layout_bottomsheet)
+        bottomSheetBehavior = BottomSheetBehavior.from(linearLayoutBottomSheet)
         purpose = intent.getStringExtra("purpose")
         Log.e("PHOTO_CROP", "purpose = " + purpose + " comparing with: profilePictureCrop")
         /**
@@ -104,8 +107,8 @@ class PhotoCrop : AppCompatActivity(),
             verification -> verificationOptions()
         }
         checkPermissions()
-        imageView.setOnClickListener { showBottomSheet() }
-        constLayout.setOnClickListener { showBottomSheet() }
+        imageView.setOnClickListener { toggleBottomSheet() }
+        constLayout.setOnClickListener { toggleBottomSheet() }
     }
 
     private fun profilePictureOptions() {
@@ -157,21 +160,6 @@ class PhotoCrop : AppCompatActivity(),
 
     }
 
-    override fun onRestart() {
-        super.onRestart()
-        showBottomSheet()
-    }
-
-    /**
-     * Logic for what happens when the bottom sheet clickables are used
-     */
-    override fun onButtonClicked(id: Int) {
-        when (id) {
-            R.id.updateProfilePicture -> getImageFromPhone()
-            R.id.removeProfilePicture -> confirmRemoval()
-        }
-
-    }
 
     override fun onActivityResult(
         requestCode: Int,
@@ -323,8 +311,8 @@ class PhotoCrop : AppCompatActivity(),
             uploadTask.addOnProgressListener { taskSnapshot ->
                 val progress = (100.0 * taskSnapshot.bytesTransferred) / taskSnapshot.totalByteCount
                 println("Uploading in progress :$progress% done")
-                progress_circular.visibility=View.VISIBLE
-                progress_circular.progress= progress.toInt()
+                progress_circular.visibility = View.VISIBLE
+                progress_circular.progress = progress.toInt()
             }
         } catch (e: Exception) {
             Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show()
@@ -337,7 +325,7 @@ class PhotoCrop : AppCompatActivity(),
          */
         try {
             uploadTask.addOnSuccessListener { taskSnapshot: TaskSnapshot ->
-                progress_circular.visibility=View.GONE
+                progress_circular.visibility = View.GONE
                 val fname: String = taskSnapshot.metadata?.reference?.name.toString()
                 updateViewModel(purpose, fname)
                 //loadImage(folder, fname)
@@ -385,6 +373,8 @@ class PhotoCrop : AppCompatActivity(),
      *
      */
     private fun loadImage(folder: String, path: String) {
+        if(path==DEFAULT_PICTURE) disableRemoveProfilePicture()
+        else enableRemoveProfilePicture()
         Log.d("PHOTO_CROP", "loading - " + path)
         var profilePicRef: StorageReference =
             storage.reference.child(folder).child(path)
@@ -410,7 +400,10 @@ class PhotoCrop : AppCompatActivity(),
         val pickTitle = "Select or take a new Picture"
         var outputFileUri: Uri? = Uri.fromFile(File.createTempFile(TEMP_FILE, EXTENSION))
         val chooserIntent = Intent.createChooser(pickIntent, pickTitle)
-        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, arrayOf(takePhotoIntent, galleryIntent))
+        chooserIntent.putExtra(
+            Intent.EXTRA_INITIAL_INTENTS,
+            arrayOf(takePhotoIntent, galleryIntent)
+        )
         chooserIntent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri)
         startActivityForResult(chooserIntent, CODE_IMG_GALLERY)
     }
@@ -425,15 +418,19 @@ class PhotoCrop : AppCompatActivity(),
     }
 
     /**
-     * Needs to be called whenever the bottom sheet needs to be recreated.
+     * Initialises the bottomsheet
      */
     private fun showBottomSheet() {
-        if (!profilePictureOptionsBottomSheetFragment.isShowing) {
-            profilePictureOptionsBottomSheetFragment.show(
-                supportFragmentManager,
-                "profilePictureOptionBottomSheet"
-            )
-        }
+        bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+        linear_layout_bottomsheet.updateProfilePicture.setOnClickListener { getImageFromPhone()}
+        linear_layout_bottomsheet.removeProfilePicture.setOnClickListener { confirmRemoval()}
+    }
+
+    private fun toggleBottomSheet(){
+        if (bottomSheetBehavior.state == BottomSheetBehavior.STATE_EXPANDED) bottomSheetBehavior.state =
+            BottomSheetBehavior.STATE_COLLAPSED
+        else if (bottomSheetBehavior.state == BottomSheetBehavior.STATE_COLLAPSED) bottomSheetBehavior.state =
+            BottomSheetBehavior.STATE_EXPANDED
     }
 
     private fun hasCameraPermission(): Boolean {
@@ -467,26 +464,37 @@ class PhotoCrop : AppCompatActivity(),
 
     }
 
-    private fun disableRemovePhoto() {
-        profilePictureOptionsBottomSheetFragment.disableRemoveProfilePicture()
-        profilePictureOptionsBottomSheetFragment.layout.removeProfilePicture.setOnClickListener {
-            Toast.makeText(this, "No Picture to Remove", Toast.LENGTH_LONG).show()
-        }
+    private fun enableRemoveProfilePicture(){
+        linear_layout_bottomsheet.removeProfilePicture.isClickable=true
+        linear_layout_bottomsheet.removeProfilePicture.setTextColor(resources.getColorStateList(R.color.text_color))
 
     }
 
-    private fun confirmRemoval(){
-        val builder: AlertDialog.Builder = AlertDialog.Builder(this)
-        builder.setTitle(R.string.app_name)
-        builder.setMessage("Remove profile picture?")
-        builder.setIcon(R.drawable.ic_user_icon)
-        builder.setPositiveButton("Yes") { dialog, id ->
-            dialog.dismiss()
+    private fun disableRemoveProfilePicture(){
+        linear_layout_bottomsheet.removeProfilePicture.isClickable=false
+        linear_layout_bottomsheet.removeProfilePicture.setTextColor(resources.getColor(R.color.lightGrey))
+    }
+
+
+    private fun confirmRemoval() {
+        val dialog = this.let { Dialog(it) }
+        dialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog?.setCancelable(false)
+        dialog?.setContentView(R.layout.signout_custom_alert)
+        val titleDialog = dialog?.findViewById(R.id.title) as TextView
+        titleDialog.text = "Are sure you want to Remove the picture ?"
+        val noBtn = dialog?.findViewById(R.id.yes) as TextView
+        noBtn.text="No"
+        val yesBtn = dialog?.findViewById(R.id.cancel) as TextView
+        yesBtn.text="Yes"
+        yesBtn.setOnClickListener()
+        {
             defaultProfilePicture()
+            dialog?.dismiss()
         }
-        builder.setNegativeButton("No") { dialog, id -> dialog.dismiss() }
-        val alert: AlertDialog = builder.create()
-        alert.show()
+        noBtn.setOnClickListener()
+        { dialog.dismiss() }
+        dialog?.show()
     }
 
-}
+    }
