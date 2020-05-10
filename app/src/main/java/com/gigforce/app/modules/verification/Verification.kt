@@ -138,7 +138,7 @@ class Verification: BaseFragment() {
         layout?.button_veri_address_cancel?.setOnClickListener {
             // CHECK to reset or not?
             //resetLayout();
-            navigate(R.id.loginSuccessfulFragment);
+            navigate(R.id.mainHomeScreen);
         }
 
         layout?.button_veri_address_save?.setOnClickListener {

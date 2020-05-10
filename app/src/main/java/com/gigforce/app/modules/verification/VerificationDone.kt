@@ -28,6 +28,6 @@ class VerificationDone:BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        layout.buttonVeriDone.setOnClickListener { findNavController().navigate(R.id.loginSuccessfulFragment) }
+        layout.buttonVeriDone.setOnClickListener { findNavController().navigate(R.id.mainHomeScreen) }
     }
 }

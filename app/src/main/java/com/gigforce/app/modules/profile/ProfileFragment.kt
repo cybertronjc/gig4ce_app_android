@@ -290,7 +290,7 @@ class ProfileFragment : Fragment() {
          * back page navigation
          */
         layout.profile_main_expanded_back_button.setOnClickListener {
-            this.findNavController().navigate(R.id.loginSuccessfulFragment)
+            this.findNavController().navigate(R.id.mainHomeScreen)
         }
     }
 
