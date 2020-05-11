@@ -18,6 +18,7 @@ import androidx.annotation.DimenRes
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.request.RequestOptions
@@ -25,11 +26,12 @@ import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.app.core.genericadapter.RecyclerGenericAdapter
+import com.gigforce.app.modules.homescreen.mainhome.bottomsheet.FeatureModel
 import com.gigforce.app.modules.homescreen.mainhome.bottomsheet.UpcomingGigModel
 import com.gigforce.app.modules.homescreen.mainhome.verticalcalendar.VerticalCalendarDataItemModel
 import com.gigforce.app.modules.preferences.PreferencesFragment
 import com.gigforce.app.modules.profile.ProfileViewModel
-import com.gigforce.app.utils.GlideApp
+//import com.gigforce.app.utils.GlideApp
 import com.google.firebase.storage.StorageReference
 import com.riningan.widget.ExtendedBottomSheetBehavior
 import com.riningan.widget.ExtendedBottomSheetBehavior.STATE_COLLAPSED
@@ -88,9 +90,16 @@ class MainHomeScreen : BaseFragment() {
         initialiseMonthTV()
         initializeVerticalCalendarRV()
         initializeBottomSheet()
-        initializeBSGridView()
-
     }
+
+    private fun initializeBottomSheet() {
+//        nsv.setBackground(generateBackgroundWithShadow(nsv,R.color.white,
+//            R.dimen.eight_dp,R.color.gray_color,R.dimen.five_dp, Gravity.TOP))
+        initializeUpcomingGigBottomSheet()
+//        initializeFeaturesBottomSheet()
+    }
+
+
 
     private fun listener() {
         iv2HS1.setOnClickListener(View.OnClickListener { navigate(R.id.profileFragment) })
@@ -131,17 +140,6 @@ class MainHomeScreen : BaseFragment() {
         val simpleDateFormat = SimpleDateFormat(pattern)
         val date: String = simpleDateFormat.format(Date())
         tv2HS1.text = date
-    }
-
-    private fun initializeBSGridView() {
-        val adapter = this.context?.let {
-            FeaturesAdapter(
-                this,
-                R.layout.item_grid_features_hs1,
-                itemList
-            )
-        }
-//        gridView_hs1.adapter = adapter
     }
     private val visibleThreshold = 10
     var isLoading:Boolean = false
@@ -339,14 +337,13 @@ class MainHomeScreen : BaseFragment() {
         }
     }
 
-    private fun initializeBottomSheet(){
+    private fun initializeUpcomingGigBottomSheet(){
         nsv.setBackground(generateBackgroundWithShadow(nsv,R.color.white,
             R.dimen.eight_dp,R.color.gray_color,R.dimen.five_dp, Gravity.TOP))
         val displayMetrics = DisplayMetrics()
         activity?.windowManager?.getDefaultDisplay()?.getMetrics(displayMetrics)
         val width = displayMetrics.widthPixels
-        val itemWidth = (width / 3.33).toInt()
-
+        val itemWidth = ((width / 5)*4).toInt()
         var datalist: ArrayList<UpcomingGigModel> = ArrayList<UpcomingGigModel>()
         datalist.add(UpcomingGigModel())
         datalist.add(UpcomingGigModel())
@@ -362,12 +359,12 @@ class MainHomeScreen : BaseFragment() {
                 })!!
         recyclerGenericAdapter.setList(datalist)
         recyclerGenericAdapter.setLayout(R.layout.upcoming_gig_item)
-        rv_.layoutManager = LinearLayoutManager(
+        upcoming_gig_rv.layoutManager = LinearLayoutManager(
             activity?.applicationContext,
-            LinearLayoutManager.VERTICAL,
+            LinearLayoutManager.HORIZONTAL,
             false
         )
-        rv_.adapter = recyclerGenericAdapter
+        upcoming_gig_rv.adapter = recyclerGenericAdapter
 
     }
     fun generateBackgroundWithShadow(
@@ -433,5 +430,31 @@ class MainHomeScreen : BaseFragment() {
             elevationValue * 2
         )
         return drawable
+    }
+
+    private fun initializeFeaturesBottomSheet() {
+        var datalist: ArrayList<FeatureModel> = ArrayList<FeatureModel>()
+        datalist.add(FeatureModel("MyGig",R.drawable.mygig))
+        datalist.add(FeatureModel("Explore",R.drawable.ic_search_calendar))
+        datalist.add(FeatureModel("Wallet",R.drawable.wallet))
+        datalist.add(FeatureModel("Profile",R.drawable.profile))
+        datalist.add(FeatureModel("Learning",R.drawable.learning))
+        datalist.add(FeatureModel("Settings",R.drawable.settings))
+        datalist.add(FeatureModel("Chat",R.drawable.chat))
+        datalist.add(FeatureModel("Chat",R.drawable.chat))
+
+        val recyclerGenericAdapter: RecyclerGenericAdapter<FeatureModel> =
+            RecyclerGenericAdapter<FeatureModel>(
+                activity?.applicationContext,
+                PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item -> showToast("")},
+                RecyclerGenericAdapter.ItemInterface<FeatureModel?> { obj, viewHolder, position ->
+                        getImageView(viewHolder,R.id.feature_icon).setImageResource(obj?.icon!!)
+                        getTextView(viewHolder,R.id.feature_title).text = obj.title
+
+                })!!
+        recyclerGenericAdapter.setList(datalist)
+        recyclerGenericAdapter.setLayout(R.layout.feature_item)
+//        feature_rv.setLayoutManager(GridLayoutManager(activity, 2,GridLayoutManager.HORIZONTAL,false));
+//        feature_rv.adapter = recyclerGenericAdapter
     }
 }

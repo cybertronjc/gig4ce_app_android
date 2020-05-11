@@ -259,4 +259,5 @@
     <string name="if_otp_not_received">"If you didn’t receive the OTP, "</string>
     <string name="resend">RESEND</string>
     <string name="upcoming_gig">Upcoming Gig</string>
+    <string name="feature">Feature</string>
 </resources>
