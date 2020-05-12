@@ -36,6 +36,18 @@ class HourRow: MaterialCardView  {
             field = value
         }
 
+    var isDisabled = false
+        set(value) {
+            field = value
+            if (isDisabled) {
+                item_time.setTextColor(resources.getColor(R.color.hour_disabled))
+                this.isClickable = false
+            } else {
+                item_time.setTextColor(resources.getColor(R.color.black))
+                this.isClickable = true
+            }
+        }
+
 //    var isCurrentTime: Boolean = false
 //        set(value) {
 //            field = value

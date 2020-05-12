@@ -41,5 +41,7 @@
     <color name="black_color_future_date">#333333</color>
     <color name="grey_photocrop_background">#888888</color>
 
+    <color name="hour_disabled">#979797</color>
+
 
 </resources>

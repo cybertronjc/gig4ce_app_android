@@ -36,12 +36,16 @@
                 android:id="@+id/current_time_divider"
                 android:layout_width="match_parent"
                 android:layout_height="8dp"
+                android:layout_marginStart="80dp"
                 android:background="@drawable/bg_current_time"
                 android:elevation="5dp"
-                android:layout_marginStart="80dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@id/hour_0" />
+
+<!--            <com.gigforce.app.modules.roster.CompletedGigCard-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height=""-->
 
             <View
                 android:id="@+id/hour_0"
@@ -53,204 +57,23 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <!--            <com.gigforce.app.modules.roster.HourRow-->
-            <!--                android:id="@+id/hour_1"-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="@dimen/roster_item_height"-->
-            <!--                app:layout_constraintEnd_toEndOf="parent"-->
-            <!--                app:layout_constraintStart_toStartOf="parent"-->
-            <!--                app:layout_constraintTop_toBottomOf="@id/hour_0"/>-->
-
-            <!--            <com.gigforce.app.modules.roster.HourRow-->
-            <!--                android:id="@+id/hour_2"-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="@dimen/roster_item_height"-->
-            <!--                app:layout_constraintEnd_toEndOf="parent"-->
-            <!--                app:layout_constraintStart_toStartOf="parent"-->
-            <!--                app:layout_constraintTop_toBottomOf="@id/hour_1" />-->
-
-
-            <!--            <com.gigforce.app.modules.roster.HourRow-->
-            <!--                android:id="@+id/hour_3"-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="@dimen/roster_item_height"-->
-            <!--                app:layout_constraintEnd_toEndOf="parent"-->
-            <!--                app:layout_constraintStart_toStartOf="parent"-->
-            <!--                app:layout_constraintTop_toBottomOf="@id/hour_2" />-->
-
-            <!--            <com.gigforce.app.modules.roster.HourRow-->
-            <!--                android:id="@+id/hour_4"-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="@dimen/roster_item_height"-->
-            <!--                app:layout_constraintEnd_toEndOf="parent"-->
-            <!--                app:layout_constraintStart_toStartOf="parent"-->
-            <!--                app:layout_constraintTop_toBottomOf="@id/hour_3" />-->
-
-            <!--            <com.gigforce.app.modules.roster.HourRow-->
-            <!--                android:id="@+id/hour_5"-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="@dimen/roster_item_height"-->
-            <!--                app:layout_constraintEnd_toEndOf="parent"-->
-            <!--                app:layout_constraintStart_toStartOf="parent"-->
-            <!--                app:layout_constraintTop_toBottomOf="@id/hour_4" />-->
-
-            <!--            <com.gigforce.app.modules.roster.HourRow-->
-            <!--                android:id="@+id/hour_6"-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="@dimen/roster_item_height"-->
-            <!--                app:layout_constraintEnd_toEndOf="parent"-->
-            <!--                app:layout_constraintStart_toStartOf="parent"-->
-            <!--                app:layout_constraintTop_toBottomOf="@id/hour_5" />-->
-
-            <!--            <com.gigforce.app.modules.roster.HourRow-->
-            <!--                android:id="@+id/hour_7"-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="@dimen/roster_item_height"-->
-            <!--                app:layout_constraintEnd_toEndOf="parent"-->
-            <!--                app:layout_constraintStart_toStartOf="parent"-->
-            <!--                app:layout_constraintTop_toBottomOf="@id/hour_6" />-->
-
-            <!--            <com.gigforce.app.modules.roster.HourRow-->
-            <!--                android:id="@+id/hour_8"-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="@dimen/roster_item_height"-->
-            <!--                app:layout_constraintEnd_toEndOf="parent"-->
-            <!--                app:layout_constraintStart_toStartOf="parent"-->
-            <!--                app:layout_constraintTop_toBottomOf="@id/hour_7" />-->
-
-            <!--            <com.gigforce.app.modules.roster.HourRow-->
-            <!--                android:id="@+id/hour_9"-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="@dimen/roster_item_height"-->
-            <!--                app:layout_constraintEnd_toEndOf="parent"-->
-            <!--                app:layout_constraintStart_toStartOf="parent"-->
-            <!--                app:layout_constraintTop_toBottomOf="@id/hour_8" />-->
-
-            <!--            <com.gigforce.app.modules.roster.HourRow-->
-            <!--                android:id="@+id/hour_10"-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="@dimen/roster_item_height"-->
-            <!--                app:layout_constraintEnd_toEndOf="parent"-->
-            <!--                app:layout_constraintStart_toStartOf="parent"-->
-            <!--                app:layout_constraintTop_toBottomOf="@id/hour_9" />-->
-
-            <!--            <com.gigforce.app.modules.roster.HourRow-->
-            <!--                android:id="@+id/hour_11"-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="@dimen/roster_item_height"-->
-            <!--                app:layout_constraintEnd_toEndOf="parent"-->
-            <!--                app:layout_constraintStart_toStartOf="parent"-->
-            <!--                app:layout_constraintTop_toBottomOf="@id/hour_10" />-->
-
-            <!--            <com.gigforce.app.modules.roster.HourRow-->
-            <!--                android:id="@+id/hour_12"-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="@dimen/roster_item_height"-->
-            <!--                app:layout_constraintEnd_toEndOf="parent"-->
-            <!--                app:layout_constraintStart_toStartOf="parent"-->
-            <!--                app:layout_constraintTop_toBottomOf="@id/hour_11" />-->
-
-            <!--            <com.gigforce.app.modules.roster.HourRow-->
-            <!--                android:id="@+id/hour_13"-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="@dimen/roster_item_height"-->
-            <!--                app:layout_constraintEnd_toEndOf="parent"-->
-            <!--                app:layout_constraintStart_toStartOf="parent"-->
-            <!--                app:layout_constraintTop_toBottomOf="@id/hour_12" />-->
-
-            <!--            <com.gigforce.app.modules.roster.HourRow-->
-            <!--                android:id="@+id/hour_14"-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="@dimen/roster_item_height"-->
-            <!--                app:layout_constraintEnd_toEndOf="parent"-->
-            <!--                app:layout_constraintStart_toStartOf="parent"-->
-            <!--                app:layout_constraintTop_toBottomOf="@id/hour_13" />-->
-
-            <!--            <com.gigforce.app.modules.roster.HourRow-->
-            <!--                android:id="@+id/hour_15"-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="@dimen/roster_item_height"-->
-            <!--                app:layout_constraintEnd_toEndOf="parent"-->
-            <!--                app:layout_constraintStart_toStartOf="parent"-->
-            <!--                app:layout_constraintTop_toBottomOf="@id/hour_14" />-->
-
-            <!--            <com.gigforce.app.modules.roster.HourRow-->
-            <!--                android:id="@+id/hour_16"-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="@dimen/roster_item_height"-->
-            <!--                app:layout_constraintEnd_toEndOf="parent"-->
-            <!--                app:layout_constraintStart_toStartOf="parent"-->
-            <!--                app:layout_constraintTop_toBottomOf="@id/hour_15" />-->
-
-            <!--            <com.gigforce.app.modules.roster.HourRow-->
-            <!--                android:id="@+id/hour_17"-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="@dimen/roster_item_height"-->
-            <!--                app:layout_constraintEnd_toEndOf="parent"-->
-            <!--                app:layout_constraintStart_toStartOf="parent"-->
-            <!--                app:layout_constraintTop_toBottomOf="@id/hour_16" />-->
-
-            <!--            <com.gigforce.app.modules.roster.HourRow-->
-            <!--                android:id="@+id/hour_18"-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="@dimen/roster_item_height"-->
-            <!--                app:layout_constraintEnd_toEndOf="parent"-->
-            <!--                app:layout_constraintStart_toStartOf="parent"-->
-            <!--                app:layout_constraintTop_toBottomOf="@id/hour_17" />-->
-
-            <!--            <com.gigforce.app.modules.roster.HourRow-->
-            <!--                android:id="@+id/hour_19"-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="@dimen/roster_item_height"-->
-            <!--                app:layout_constraintEnd_toEndOf="parent"-->
-            <!--                app:layout_constraintStart_toStartOf="parent"-->
-            <!--                app:layout_constraintTop_toBottomOf="@id/hour_18" />-->
-
-            <!--            <com.gigforce.app.modules.roster.HourRow-->
-            <!--                android:id="@+id/hour_20"-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="@dimen/roster_item_height"-->
-            <!--                app:layout_constraintEnd_toEndOf="parent"-->
-            <!--                app:layout_constraintStart_toStartOf="parent"-->
-            <!--                app:layout_constraintTop_toBottomOf="@id/hour_19" />-->
-
-            <!--            <com.gigforce.app.modules.roster.HourRow-->
-            <!--                android:id="@+id/hour_21"-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="@dimen/roster_item_height"-->
-            <!--                app:layout_constraintEnd_toEndOf="parent"-->
-            <!--                app:layout_constraintStart_toStartOf="parent"-->
-            <!--                app:layout_constraintTop_toBottomOf="@id/hour_20" />-->
-
-            <!--            <com.gigforce.app.modules.roster.HourRow-->
-            <!--                android:id="@+id/hour_22"-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="@dimen/roster_item_height"-->
-            <!--                app:layout_constraintEnd_toEndOf="parent"-->
-            <!--                app:layout_constraintStart_toStartOf="parent"-->
-            <!--                app:layout_constraintTop_toBottomOf="@id/hour_21" />-->
-
-            <!--            <com.gigforce.app.modules.roster.HourRow-->
-            <!--                android:id="@+id/hour_23"-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="@dimen/roster_item_height"-->
-            <!--                app:layout_constraintEnd_toEndOf="parent"-->
-            <!--                app:layout_constraintStart_toStartOf="parent"-->
-            <!--                app:layout_constraintTop_toBottomOf="@id/hour_22" />-->
-
-            <!--            <com.gigforce.app.modules.roster.HourRow-->
-            <!--                android:id="@+id/hour_24"-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="@dimen/roster_item_height"-->
-            <!--                app:layout_constraintEnd_toEndOf="parent"-->
-            <!--                app:layout_constraintStart_toStartOf="parent"-->
-            <!--                app:layout_constraintTop_toBottomOf="@id/hour_23" />-->
-
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.core.widget.NestedScrollView>
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/end_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="50dp" />
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/start_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="100dp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
