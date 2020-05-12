@@ -3,21 +3,19 @@ package com.gigforce.app.modules.profile
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
+
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import androidx.activity.addCallback
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
 import com.gigforce.app.modules.photocrop.PhotoCrop
-import com.gigforce.app.modules.photocrop.*
-import com.gigforce.app.modules.profile.models.Achievement
 import com.gigforce.app.utils.GlideApp
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.chip.Chip
@@ -25,7 +23,6 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import kotlinx.android.synthetic.main.fragment_profile_main_expanded.view.*
 import kotlinx.android.synthetic.main.profile_main_card_background.view.*
-import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -40,16 +37,72 @@ class ProfileFragment : Fragment() {
     private lateinit var layout: View
     private lateinit var profileAvatarName: String
     private lateinit var dWidth: Display
+    private lateinit var win:Window
     private var PHOTO_CROP: Int = 45
     private var isShow: Boolean = true
     private var scrollRange: Int = -1
     private var PROFILE_PICTURE_FOLDER: String = "profile_pics"
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        makeStatusBarTransparent()
+        requireActivity().onBackPressedDispatcher.addCallback(this) {
+            findNavController().navigate(R.id.homeFragment)
+        }
+    }
+
+    private fun makeStatusBarTransparent(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            win = requireActivity().window
+            win.setFlags(
+                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
+        }
+    }
+
+    private fun restoreStatusBar(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            win = requireActivity().window
+            win.clearFlags(
+                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+            )
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        makeStatusBarTransparent()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        makeStatusBarTransparent()
+    }
+
+    override fun onStop() {
+        super.onStop()
+    }
+
+    override fun onPause() {
+        super.onPause()
+
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        restoreStatusBar()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        restoreStatusBar()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        makeStatusBarTransparent()
         storage = FirebaseStorage.getInstance()
         Log.d("DEBUG", "ENTERED PROFILE VIEW")
         val wm = requireContext().getSystemService(Context.WINDOW_SERVICE) as WindowManager
@@ -96,20 +149,50 @@ class ProfileFragment : Fragment() {
                 //layout.main_expanded_is_verified.setBackgroundColor(Color.parseColor("#00FF00"))
             }
 
-            layout.bio.text = profile.bio
+            if (profile.bio.trim().isEmpty()) {
+                layout.add_bio_default.visibility = View.VISIBLE
+                layout.add_bio_default.setOnClickListener {
+                    findNavController().navigate(R.id.editCoverBottomSheet)
+                }
+                layout.bio_card.visibility = View.GONE
+            } else {
+                layout.add_bio_default.visibility = View.GONE
+                layout.bio_card.visibility = View.VISIBLE
+                layout.edit_cover_bio.visibility = View.VISIBLE
+                layout.bio.text = profile.bio
+
+                layout.bio_card.setOnClickListener {
+                    findNavController().navigate(R.id.editCoverBottomSheet)
+                }
+            }
 
             layout.main_tags.removeAllViews()
             profile.tags?.let {
+                if (it.size == 0) {
+                    layout.tag_card.visibility = View.GONE
+                    layout.add_tags_default.visibility = View.VISIBLE
+                    layout.add_tags_default.setOnClickListener {
+                        findNavController().navigate(R.id.editCoverBottomSheet)
+                    }
+                } else {
+                    layout.add_tags_default.visibility = View.GONE
+                    layout.tag_card.visibility = View.VISIBLE
+
+                    layout.tag_card.setOnClickListener {
+                        findNavController().navigate(R.id.editCoverBottomSheet)
+                    }
+
+                    layout.edit_cover_bio.visibility = View.INVISIBLE
+                }
                 for (tag in it) {
                     layout.main_tags.addView(addChip(this.requireContext(), tag))
-                }
-                if (it.size == 0) {
-                    layout.main_tags.addView(addChip(this.requireContext(), "giger"))
                 }
             }
 
             var mainAboutString = ""
-            mainAboutString += profile.aboutMe + "\n\n"
+            if (profile.aboutMe.isNotEmpty()) {
+                mainAboutString += profile.aboutMe + "\n\n"
+            }
             profile.languages?.let {
                 val languages = it.sortedByDescending { language ->
                      language.speakingSkill
@@ -126,9 +209,12 @@ class ProfileFragment : Fragment() {
             }
 
             layout.main_about_card.card_title.text = "About me"
-            layout.main_about_card.optional_title_text.text = "bio"
+            if (profile.aboutMe.isNotEmpty())
+                layout.main_about_card.optional_title_text.text = "bio"
             layout.main_about_card.card_content.text = mainAboutString
             layout.main_about_card.card_icon.setImageResource(R.drawable.ic_about_me)
+            if (mainAboutString.trim().isEmpty())
+                layout.main_about_card.card_view_more.text = "Add bio"
             layout.main_about_card.card_view_more.setOnClickListener {
                 findNavController().navigate(R.id.aboutExpandedFragment)
             }
@@ -177,6 +263,8 @@ class ProfileFragment : Fragment() {
             layout.main_education_card.card_title.text = "Education"
             layout.main_education_card.card_content.text = mainEducationString
             layout.main_education_card.card_icon.setImageResource(R.drawable.ic_education)
+            if (mainEducationString.trim().isEmpty())
+                layout.main_education_card.card_view_more.text = "Add Education"
             layout.main_education_card.card_view_more.setOnClickListener {
                 findNavController().navigate(R.id.educationExpandedFragment)
             }
@@ -200,6 +288,8 @@ class ProfileFragment : Fragment() {
             layout.main_experience_card.card_title.text = "Experience"
             layout.main_experience_card.card_content.text = mainExperienceString
             layout.main_experience_card.card_icon.setImageResource(R.drawable.ic_experience)
+            if (mainExperienceString.trim().isEmpty())
+                layout.main_experience_card.card_view_more.text = "Add Experience"
             layout.main_experience_card.card_view_more.setOnClickListener {
                 findNavController().navigate(R.id.experienceExpandedFragment)
             }
@@ -251,7 +341,7 @@ class ProfileFragment : Fragment() {
          * back page navigation
          */
         layout.profile_main_expanded_back_button.setOnClickListener {
-            this.findNavController().navigate(R.id.homeScreenIcons)
+            this.findNavController().navigate(R.id.mainHomeScreen)
         }
     }
 

@@ -19,6 +19,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
+import com.gigforce.app.utils.AppConstants
 import kotlinx.android.synthetic.main.login_frament.*
 import java.util.regex.Matcher
 import java.util.regex.Pattern
@@ -36,10 +37,18 @@ class Login: BaseFragment() {
     }
     lateinit var viewModel: LoginViewModel
     private val INDIAN_MOBILE_NUMBER =
-        Pattern.compile("^[+][0-9]{12}\$")
-
+        Pattern.compile("^[+][9][1][7-9][0-9]{9}\$")
+//    private val INDIAN_MOBILE_NUMBER =
+//        Pattern.compile("^[+][0-9]{12}\$")
     lateinit var match: Matcher;
+    private var mobile_number:String = ""
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            mobile_number = it.getString("mobileno")!!
+        }
+    }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -52,11 +61,16 @@ class Login: BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        if(getSharedData(AppConstants.INTRO_COMPLETE,null)==null){
+            navigateWithAllPopupStack(R.id.authFlowFragment)
+        }
         viewModel.activity = this.activity!!
+        otp_mobile_number.setText(mobile_number)
         listeners()
         observer()
         requestForDeviceMobileNumber()
     }
+
 
     private fun observer() {
         viewModel.liveState.observeForever {
@@ -72,7 +86,7 @@ class Login: BaseFragment() {
         // fixed by PD - during a hotfix for apk release - doubleclick issue resolved
         if (navController.currentDestination?.id == R.id.Login) {
             try {
-                findNavController().navigate(LoginDirections.actionLogin2ToVerifyOTP(viewModel.verificationId!!))
+                findNavController().navigate(LoginDirections.actionLogin2ToVerifyOTP(viewModel.verificationId!!,otp_mobile_number.text.toString()))
             }catch (e:Exception){}
         }
     }

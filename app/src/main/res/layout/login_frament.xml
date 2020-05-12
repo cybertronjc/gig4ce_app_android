@@ -21,25 +21,25 @@
             android:id="@+id/ivwronglogin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="60dp"
+            android:layout_marginStart="27dp"
             android:layout_marginTop="30dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_warning" />
+            app:srcCompat="@drawable/ic_warning_" />
 
         <TextView
             android:id="@+id/tvwronglogin"
-            android:layout_width="251dp"
+            android:layout_width="wrap_content"
             android:layout_height="48dp"
             android:layout_marginStart="12dp"
             android:layout_marginTop="26dp"
-            android:text="Invalid Mobile Number.Please re-enter valid Mobile Number."
+            android:text="You have entered invalid mobile number.\nPlease re-enter valid mobile number."
             android:textColor="#E02020"
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.191"
-            app:layout_constraintStart_toEndOf="@+id/ivwronglogin"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/ivwronglogin"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
@@ -48,7 +48,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="52dp"
-        android:text="Login"
+        android:text="@string/login"
         android:textAlignment="center"
         android:textColor="#000000"
         android:textSize="20sp"
@@ -67,7 +67,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView23"
-        app:srcCompat="@drawable/ic_mobile" />
+        android:src="@drawable/ic_mobile_icon_login" />
 
     <TextView
         android:id="@+id/textView24"
@@ -94,8 +94,8 @@
         android:digits="0123456789"
         android:textAlignment="center"
         android:textSize="18sp"
-        android:hint="Enter Mobile Number"
-        app:backgroundTint="#af2b81"
+        android:hint="@string/mobile_login"
+        app:backgroundTint="#e94b81"
         android:dropDownHeight="120dp"
         android:dropDownWidth="200dp"
         android:dropDownVerticalOffset="0dp"
@@ -105,15 +105,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView24" />
 
-    <Button
+    <TextView
         android:id="@+id/login_button"
         android:layout_width="256dp"
-        android:layout_height="wrap_content"
+        android:layout_height="36dp"
         android:layout_marginTop="36dp"
-        android:backgroundTint="#af2b81"
         android:text="@string/otp_send_otp"
+        style="@style/button_style"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        android:gravity="center"
+        android:textColor="@color/white"
         app:layout_constraintTop_toBottomOf="@+id/otp_mobile_number" />
 
+<!--        android:background="@drawable/app_gradient_button"-->
 </androidx.constraintlayout.widget.ConstraintLayout>

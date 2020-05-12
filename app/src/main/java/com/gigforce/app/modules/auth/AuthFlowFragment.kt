@@ -5,14 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.navigation.NavOptions
-import androidx.navigation.fragment.NavHostFragment
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.utils.AppConstants
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import kotlinx.android.synthetic.main.fragment_select_language.*
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -29,25 +26,10 @@ class AuthFlowFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        val navOptionsPopToHome: NavOptions = NavOptions.Builder()
-//            .setPopUpTo(R.id.homeFragment, true)
-//            .build()
         val lang = getSharedData(AppConstants.APP_LANGUAGE, null)
         val introComplete = getSharedData(AppConstants.INTRO_COMPLETE, null)
-//        val navHostFragment: NavHostFragment? =
-//            activity?.supportFragmentManager?.findFragmentById(R.id.nav_fragment) as NavHostFragment?
-//
-//        var fragmentholder: Fragment? =
-//            navHostFragment!!.childFragmentManager.fragments[navHostFragment!!.childFragmentManager.fragments.size - 1]
-//        activity?.supportFragmentManager?.beginTransaction()?.remove(fragmentholder!!)
-        navController.popBackStack(R.id.authFlowFragment,true)
-//        val fragmentList: List<Fragment> = activity?.supportFragmentManager?.fragments!!
-//        var fragmentholder: Fragment? = null
-//        for (f in fragmentList) fragmentholder = f
-//        activity?.supportFragmentManager?.beginTransaction()?.remove(fragmentholder!!)?.commit()
-//        // Select Language by Default
-//        val fragmentList1: List<Fragment> = activity?.supportFragmentManager?.fragments!!
 
+        popFragmentFromStack(R.id.authFlowFragment)
         if (lang == null) {
             navigate(R.id.languageSelectFragment)//, null, navOptionsPopToHome)
         } else if (introComplete == null) {
@@ -72,7 +54,13 @@ class AuthFlowFragment : BaseFragment() {
         if (currentUser == null) {
             navigate(R.id.Login)
         } else {
-            navigateWithAllPopupStack(R.id.homeScreenIcons)
+            var fragments = getFragmentManager()?.getFragments()
+            if(fragments!=null && fragments?.size==1) {
+                navigateWithAllPopupStack(R.id.mainHomeScreen)
+            }
+            else{
+                navigateWithAllPopupStack(R.id.loginSuccessfulFragment)
+            }
         }
     }
 

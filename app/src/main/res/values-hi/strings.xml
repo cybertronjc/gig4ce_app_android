@@ -113,6 +113,7 @@
 
 
     <!--login fragment-->
+    <string name="login">लॉग इन करें</string>
     <string name="title_login"> कृपया लॉगिन करें </string>
     <string name="mobile_login">अपना मोबाइल नंबर दर्ज करें  </string>
     <string name="confirm_login">  पुष्टि करें </string>

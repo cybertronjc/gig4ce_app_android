@@ -59,7 +59,11 @@ class SharedPreferenceViewModel : ViewModel() {
                 return@EventListener
             }
             if(value?.data==null){
-             preferencesRepository.setDefaultData(PreferencesDataModel())
+                var defaultData = PreferencesDataModel()
+                defaultData.isweekdaysenabled = true
+                defaultData.selecteddays.addAll(getAllDays())
+                defaultData.selectedslots.addAll(getAllSlots())
+             preferencesRepository.setDefaultData(defaultData)
             }else {
                 preferenceDataModel.postValue(
                     value!!.toObject(PreferencesDataModel::class.java)
@@ -95,6 +99,27 @@ class SharedPreferenceViewModel : ViewModel() {
 
     }
 
+    private fun getAllDays(): ArrayList<String> {
+        var arrDays = ArrayList<String>()
+        arrDays.add("All")
+        arrDays.add("Monday")
+        arrDays.add("Tuesday")
+        arrDays.add("Wednesday")
+        arrDays.add("Thrusday")
+        arrDays.add("Friday")
+        return arrDays
+    }
+    private fun getAllSlots(): ArrayList<String> {
+        var arrSlots = ArrayList<String>()
+        arrSlots.add("All")
+        arrSlots.add("06:00 am - 10:00 am")
+        arrSlots.add("10:00 am - 12:00 pm")
+        arrSlots.add("12:00 pm - 06:00 pm")
+        arrSlots.add("06:00 pm - 09:00 pm")
+        arrSlots.add("09:00 pm - 12:00 pm")
+        arrSlots.add("12:00 am - 03:00 am")
+        return arrSlots
+    }
     fun setIsWeekdays(checked: Boolean) {
         preferencesRepository.setData(preferencesRepository.WEEKDAYS,checked)
     }
@@ -131,7 +156,10 @@ class SharedPreferenceViewModel : ViewModel() {
         if(preferencesDataModelObj.selecteddays.size==0){
             subTitle = "None"
         }else if(preferencesDataModelObj.selecteddays.size>1){
-            subTitle = preferencesDataModelObj.selecteddays.size.toString()+" days"
+            var totalDays = preferencesDataModelObj.selecteddays.size
+            if(totalDays==6)
+                totalDays-=1
+            subTitle = totalDays.toString()+" days"
         }
         else if(preferencesDataModelObj.selecteddays.size==1){
             subTitle = preferencesDataModelObj.selecteddays.size.toString()+" day"

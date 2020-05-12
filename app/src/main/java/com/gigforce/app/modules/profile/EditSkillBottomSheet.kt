@@ -15,6 +15,7 @@ import androidx.navigation.fragment.findNavController
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.internal.main.DialogLayout
 import com.gigforce.app.R
+import com.gigforce.app.utils.DropdownAdapter
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.android.synthetic.main.delete_confirmation_dialog.*
 import kotlinx.android.synthetic.main.edit_skill_bottom_sheet.*
@@ -45,7 +46,7 @@ class EditSkillBottomSheet: ProfileBaseBottomSheetFragment() {
         savedInstanceState: Bundle?
     ): View? {
         inflateView(R.layout.edit_skill_bottom_sheet, inflater, container)
-        skills.addAll(listOf("--skill--", "skill1", "skill2", "skill3", "skill4", "skill5", "skill6", "skill7", "skill8"))
+        skills.addAll(listOf("skill1", "skill2", "skill3", "skill4", "skill5", "skill6", "skill7", "skill8"))
 
         return getFragmentView()
     }
@@ -56,29 +57,13 @@ class EditSkillBottomSheet: ProfileBaseBottomSheetFragment() {
     }
 
     private fun initialize() {
-        val skillAdapter = ArrayAdapter(this.requireContext(), R.layout.simple_spinner_dropdown_item, skills)
+        val skillAdapter = DropdownAdapter(this.requireContext(), skills)
         val skillSpinner = skill
-        skillSpinner.adapter = skillAdapter
-        skillSpinner.onItemSelectedListener = object:
-            AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                selectedSkill = if (position != 0) skills[position] else ""
-                Log.d("Spinner", "selected " + skills[position])
-            }
+        skillSpinner.setAdapter(skillAdapter)
 
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-                //TODO("Not yet implemented")
-            }
-        }
-
-        profileViewModel!!.userProfileData.observe(this, Observer { profile ->
+        profileViewModel.userProfileData.observe(this, Observer { profile ->
             currentSkill = profile.skills!![arrayLocation.toInt()]
-            skill.setSelection(skills.indexOf(currentSkill))
+            skill.setText(currentSkill, false)
         })
     }
 
@@ -98,10 +83,10 @@ class EditSkillBottomSheet: ProfileBaseBottomSheetFragment() {
 
         save.setOnClickListener {
             if (validateSkill()) {
-                profileViewModel!!.removeProfileSkill(currentSkill)
+                profileViewModel.removeProfileSkill(currentSkill)
                 var skills: ArrayList<String> = ArrayList()
-                skills.add(selectedSkill)
-                profileViewModel!!.setProfileSkill(skills)
+                skills.add(skill.text.toString())
+                profileViewModel.setProfileSkill(skills)
                 findNavController().navigate(R.id.educationExpandedFragment)
             }
         }
@@ -113,7 +98,7 @@ class EditSkillBottomSheet: ProfileBaseBottomSheetFragment() {
     }
 
     private fun validateSkill(): Boolean {
-        if (validation!!.isValidSkill(selectedSkill)) {
+        if (validation!!.isValidSkill(skill.text.toString())) {
             return true
         } else{
             showError(form_error)

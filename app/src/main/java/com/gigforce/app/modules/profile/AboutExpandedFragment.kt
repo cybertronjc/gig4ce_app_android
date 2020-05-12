@@ -54,7 +54,7 @@ class AboutExpandedFragment: ProfileBaseFragment() {
             bio_card.cardContent = if (profile.aboutMe != "") profile.aboutMe
                                     else this.requireContext().getString(R.string.empty_about_me_text)
             bio_card.cardBottom = if (profile.aboutMe != "") ""
-                                    else "Add Bio"
+                                    else "Add bio"
 
             var languageString = ""
             profile.languages?.let {
@@ -68,7 +68,7 @@ class AboutExpandedFragment: ProfileBaseFragment() {
             language_card.nextDestination = R.id.editLanguageBottomSheet
             language_card.cardTitle = "Language"
             language_card.cardContent = languageString
-            language_card.cardBottom = "Add Language"
+            language_card.cardBottom = "Add languages"
 
             var contactString = ""
             profile.contact?.let {
@@ -80,7 +80,7 @@ class AboutExpandedFragment: ProfileBaseFragment() {
             contact_card.hasContentTitles = false
             contact_card.cardTitle = "Contact"
             contact_card.cardContent = contactString
-            contact_card.cardBottom = "Add Contact"
+            contact_card.cardBottom = "Add contacts"
 
             if (contact_card.edit_button != null) {
                 contact_card.edit_button.setOnClickListener {

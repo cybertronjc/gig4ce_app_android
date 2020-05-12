@@ -47,7 +47,7 @@ class AddExperienceBottomSheet: ProfileBaseBottomSheetFragment() {
     }
 
     private fun setListeners() {
-        employments.addAll(listOf("Full time", "internship", "Part time"))
+        employments.addAll(listOf("Full time", "Internship", "Part time"))
         val employmentAdapter = DropdownAdapter(this.requireContext(), employments)
         val employmentSpinner = employment_type
         employmentSpinner.setAdapter(employmentAdapter)

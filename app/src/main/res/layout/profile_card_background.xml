@@ -54,6 +54,7 @@
             android:textAlignment="textStart"
             android:layout_marginStart="14dp"
             android:paddingStart="0dp"
+            android:textAllCaps="false"
             app:icon="@drawable/ic_add"
             style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
             app:layout_constraintStart_toStartOf="parent"

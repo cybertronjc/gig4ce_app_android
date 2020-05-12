@@ -1,6 +1,8 @@
 package com.gigforce.app.modules.profile
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -8,10 +10,12 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Toast
+import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
+import com.gigforce.app.utils.DropdownAdapter
 import kotlinx.android.synthetic.main.edit_cover_bottom_sheet.*
 
 class EditCoverBottomSheet(): ProfileBaseBottomSheetFragment() {
@@ -40,23 +44,23 @@ class EditCoverBottomSheet(): ProfileBaseBottomSheetFragment() {
 
     private fun initialize() {
 
-        profileViewModel!!.getAllTags()
+        profileViewModel.getAllTags()
         val autotextview: AutoCompleteTextView = add_tag_new_tag
 
-        profileViewModel!!.Tags.observe(this, Observer {Tags->
+        profileViewModel.Tags.observe(this, Observer {Tags->
             for(tag in Tags.tagName!! ) {
                 allTags.add(tag)
             }
-            autotextview.setAdapter(ArrayAdapter(this.context!!, R.layout.support_simple_spinner_dropdown_item, allTags))
+            autotextview.setAdapter(DropdownAdapter(this.requireContext(), allTags))
         })
 
-        profileViewModel!!.userProfileData.observe(this, Observer { profile ->
+        profileViewModel.userProfileData.observe(this, Observer { profile ->
             bio.setText(profile.bio)
 
             userTags = profile.tags!!
 
             for (tag in profile.tags!!) {
-                var chip = addCrossableChip(this.context!!, tag)
+                var chip = addCrossableChip(this.requireContext(), tag)
                 tags.addView(chip)
                 chip.setOnCloseIconClickListener {
                     Log.d("STATUS", "Deleting tag")
@@ -69,40 +73,71 @@ class EditCoverBottomSheet(): ProfileBaseBottomSheetFragment() {
 
     private fun setListeners() {
         cancel_button.setOnClickListener {
-            findNavController().navigate(R.id.profileFragment)
+//            findNavController().navigate(R.id.profileFragment)
+            this.dismiss()
         }
 
-        save_button.setOnClickListener {
+        bio.addTextChangedListener (object : TextWatcher{
+            override fun afterTextChanged(s: Editable?) {
+                //TODO()
+            }
 
-            if (bio.text.toString() != "") {
-                if (bio.text.toString().length <= 150) {
-                    profileViewModel!!.setProfileBio(bio.text.toString())
-                    profileViewModel!!.setProfileTag(tagsToAdd)
-                    profileViewModel!!.removeProfileTag(tagsToRemove)
-                    findNavController().navigate(R.id.profileFragment)
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                //TODO("Not yet implemented")
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                if (s.toString().length >= 150) {
+                    form_error.visibility = View.VISIBLE
+                } else {
+                    form_error.visibility = View.GONE
                 }
-                else {
-                    Toast.makeText(this.context, "Bio text should be less than 150 characters", Toast.LENGTH_LONG).show()
-                }
+            }
+        })
+
+        save_button.setOnClickListener {
+            var bioValid: Boolean = false
+            if (bio.text.toString().length <= 150) {
+                profileViewModel.setProfileBio(bio.text.toString())
+                bioValid = true
+            } else {
+                Toast.makeText(requireContext(), "bio can not be > 150 characters", Toast.LENGTH_LONG).show()
+            }
+            profileViewModel.setProfileTag(tagsToAdd)
+            profileViewModel.removeProfileTag(tagsToRemove)
+            if (bioValid) {
+//                findNavController().navigate(R.id.profileFragment)
+                this.dismiss()
             }
         }
 
         add_button.setOnClickListener {
             var tag = add_tag_new_tag.text.toString()
-            if (!allTags.contains(tag)) {
-                profileViewModel!!.addNewTag(tag)
-            }
-            if (!userTags.contains(tag) && !tagsToAdd.contains(tag)) {
-                tagsToAdd.add(tag)
-                var chip = addCrossableChip(this.context!!, tag)
-                tags.addView(chip)
-                chip.setOnCloseIconClickListener {
-                    Log.d("STATUS", "Deleting tag")
-                    tagsToRemove.add(tag)
-                    tags.removeView(it)
+            if (ValidateTag()) {
+                if (!allTags.contains(tag)) {
+                    profileViewModel.addNewTag(tag)
                 }
+                if (!userTags.contains(tag) && !tagsToAdd.contains(tag)) {
+                    tagsToAdd.add(tag)
+                    var chip = addCrossableChip(this.requireContext(), tag)
+                    tags.addView(chip)
+                    chip.setOnCloseIconClickListener {
+                        Log.d("STATUS", "Deleting tag")
+                        tagsToRemove.add(tag)
+                        tags.removeView(it)
+                    }
+                }
+                add_tag_new_tag.setText("")
+            } else {
+                Toast.makeText(requireContext(), "Invalid tag, tag can not be empty or contain #", Toast.LENGTH_LONG).show()
             }
-            add_tag_new_tag.setText("")
         }
+    }
+
+    private fun ValidateTag(): Boolean {
+        if (validation!!.isValidTag(add_tag_new_tag.text.toString())) {
+            return true
+        }
+        return false
     }
 }

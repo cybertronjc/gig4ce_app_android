@@ -111,7 +111,9 @@ abstract class BaseFragment : Fragment() {
         val toast = Toast.makeText(context, Message, Toast.LENGTH_LONG)
         toast.show()
     }
-
+    fun popFragmentFromStack(id:Int){
+        navController.popBackStack(id,true)
+    }
     open fun navigate(
         @IdRes resId: Int, args: Bundle?,
         navOptions: NavOptions?
