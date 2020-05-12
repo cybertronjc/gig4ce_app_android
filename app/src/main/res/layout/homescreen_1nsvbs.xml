@@ -91,14 +91,6 @@
             app:srcCompat="@drawable/homescreen_month_dropdown" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-    <!--<include layout="@layout/homescreen_1" />-->
-    <!--        <LinearLayout-->
-    <!--            android:layout_width="match_parent"-->
-    <!--            android:layout_height="match_parent"-->
-    <!--            android:orientation="vertical">-->
-    <!--            -->
-    <!--        </LinearLayout>-->
-
     <androidx.core.widget.NestedScrollView
         android:id="@+id/nsv"
         android:layout_width="match_parent"
@@ -110,43 +102,13 @@
         app:halfOffset="130dp"
         app:peekHeight="128dp"
         app:hideable="false"
+        android:clipToPadding="false"
+        android:paddingBottom="250dp"
         app:layout_behavior="com.riningan.widget.ExtendedBottomSheetBehavior">
-        <LinearLayout
-            android:layout_height="match_parent"
+        <fragment
             android:layout_width="match_parent"
-            android:orientation="vertical"
-            android:layout_marginLeft="15dp">
-            <View
-                android:id="@+id/v_hs1bs_partition"
-                android:layout_width="64dp"
-                android:layout_height="3dp"
-                android:layout_marginTop="17dp"
-                android:layout_gravity="center"
-                android:background="@android:color/darker_gray"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/upcoming_gig"
-                android:layout_marginTop="13dp"
-                android:textColor="#080808"
-                android:textSize="14sp"/>
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/upcoming_gig_rv"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="14dp"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/lato_bold"
-                android:layout_gravity="center"
-                android:text="@string/feature"
-                android:layout_marginTop="15dp"
-                android:textColor="#080808"
-                android:textSize="18sp"/>
-        </LinearLayout>
-
+            android:layout_height="match_parent"
+            android:name="com.gigforce.app.modules.homescreen.mainhome.bottomsheet.HomeScreenBottomSheetFragment"/>
 
     </androidx.core.widget.NestedScrollView>
 
