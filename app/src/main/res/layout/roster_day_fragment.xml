@@ -2,11 +2,11 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main_tag"
-    android:paddingBottom="32dp"
+    android:id="@+id/main_parent"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#19eeeeee">
+    android:background="#19eeeeee"
+    android:paddingBottom="32dp">
 
     <com.gigforce.app.modules.roster.RosterTopBar
         android:id="@+id/top_bar"
@@ -20,22 +20,60 @@
         android:id="@+id/nested_scroll_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fillViewport="true"
+        android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/top_bar">
-        <FrameLayout
-            android:id="@+id/temp_trial"
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/day_times"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-            <LinearLayout
-                android:id="@+id/day_times"
+
+
+            <View
+                android:id="@+id/current_time_divider"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#19eeeeee"
-                android:orientation="vertical"
-                android:isScrollContainer="true">
-            </LinearLayout>
-        </FrameLayout>
+                android:layout_height="8dp"
+                android:layout_marginStart="80dp"
+                android:background="@drawable/bg_current_time"
+                android:elevation="5dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/hour_0" />
+
+<!--            <com.gigforce.app.modules.roster.CompletedGigCard-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height=""-->
+
+            <View
+                android:id="@+id/hour_0"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:tag="hour_0"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.core.widget.NestedScrollView>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/end_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="50dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/start_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="100dp" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

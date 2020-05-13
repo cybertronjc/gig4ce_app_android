@@ -43,4 +43,5 @@
     <color name="upcoming_gig_title">#25265e</color>
     <color name="upcoming_gig_time">#787993</color>
     <color name="grey_photocrop_background">#888888</color>
+    <color name="hour_disabled">#979797</color>
 </resources>
