@@ -185,7 +185,7 @@ class HomeScreenBottomSheetFragment : BaseFragment() {
         datalist.add(FeatureModel("Profile", R.drawable.profile))
         datalist.add(FeatureModel("Learning", R.drawable.learning))
         datalist.add(FeatureModel("Settings", R.drawable.settings))
-        datalist.add(FeatureModel("Video Resume", R.drawable.chat))
+        datalist.add(FeatureModel("Chat", R.drawable.chat))
         datalist.add(FeatureModel("Chat", R.drawable.chat))
         val itemWidth = ((width / 7) * 1.6).toInt()
         val recyclerGenericAdapter: RecyclerGenericAdapter<FeatureModel> =
@@ -224,7 +224,7 @@ class HomeScreenBottomSheetFragment : BaseFragment() {
             3 -> navigate(R.id.profileFragment)
             4 -> showToast("")
             5 -> navigate(R.id.settingFragment)
-            6 -> navigate(R.id.videoResumeFragment)
+            6 -> showToast("")
             7 -> showToast("")
 
         }
