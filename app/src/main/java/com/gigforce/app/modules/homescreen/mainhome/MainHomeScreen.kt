@@ -121,7 +121,7 @@ class MainHomeScreen : BaseFragment() {
             RecyclerGenericAdapter<VerticalCalendarDataItemModel>(
                 activity?.applicationContext,
                 PFRecyclerViewAdapter.OnViewHolderClick<VerticalCalendarDataItemModel?> { view, position, item ->
-                    Toast.makeText(this.context, "CLICKED ON DAY DEBUG", Toast.LENGTH_LONG).show()
+//                    Toast.makeText(this.context, "CLICKED ON DAY DEBUG", Toast.LENGTH_LONG).show()
                     navigate(R.id.rosterDayFragment)
                 },
                 RecyclerGenericAdapter.ItemInterface<VerticalCalendarDataItemModel?> { obj, viewHolder, position ->

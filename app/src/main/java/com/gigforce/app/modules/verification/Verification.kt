@@ -48,15 +48,15 @@ class Verification: BaseFragment() {
     }
 
     private fun observeVerficationData() {
-        viewModel.veriData.observe(this, Observer { verification ->
-            //if (verification!!.address!!.isNotEmpty()) {
+        viewModel.veriData.observe(viewLifecycleOwner, Observer { verification ->
+            if (verification!=null) {
             var lastSavedAddress = verification.Contact.get(verification.Contact.size-1)
             layout?.add_veri_address_line1?.setText(lastSavedAddress?.address)
             layout?.add_veri_address_line2?.setText(lastSavedAddress?.address)
             layout?.add_veri_address_state?.setText(lastSavedAddress?.state)
             layout?.add_veri_address_city?.setText(lastSavedAddress?.city)
             layout?.add_veri_address_pin?.setText(lastSavedAddress?.pincode)
-            //}
+            }
         })
     }
 

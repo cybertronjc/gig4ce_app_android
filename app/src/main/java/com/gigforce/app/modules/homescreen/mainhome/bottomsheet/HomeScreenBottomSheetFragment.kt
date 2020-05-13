@@ -47,6 +47,7 @@ class HomeScreenBottomSheetFragment : BaseFragment() {
         initializeBottomSheet()
 
     }
+
     private fun initializeBottomSheet() {
 //        nsv.setBackground(generateBackgroundWithShadow(nsv,R.color.white,
 //            R.dimen.eight_dp,R.color.gray_color,R.dimen.five_dp, Gravity.TOP))
@@ -57,22 +58,48 @@ class HomeScreenBottomSheetFragment : BaseFragment() {
         initializeFeaturesBottomSheet()
         initializeLearningBottomSheet()
         initializeAssessmentBottomSheet()
+        listener()
     }
-    var width:Int = 0
-    private fun initializeUpcomingGigBottomSheet(){
-        val itemWidth = ((width / 5)*4).toInt()
+
+    private fun listener() {
+        kyc_ll.setOnClickListener() {
+            navigate(R.id.verification)
+        }
+        video_resume.setOnClickListener(){
+            navigate(R.id.videoResumeFragment)
+        }
+        show_upcominggig_layout.setOnClickListener(){
+            showKYCAndHideUpcomingLayout(false)
+        }
+    }
+
+    private fun showKYCAndHideUpcomingLayout(show: Boolean) {
+        if (show) {
+            kyc_video_resume.visibility = View.VISIBLE
+            upcoming_gig_title.visibility = View.GONE
+            upcoming_gig_rv.visibility = View.GONE
+        } else {
+            upcoming_gig_title.visibility = View.VISIBLE
+            upcoming_gig_rv.visibility = View.VISIBLE
+            kyc_video_resume.visibility = View.GONE
+        }
+    }
+
+    var width: Int = 0
+    private fun initializeUpcomingGigBottomSheet() {
+        val itemWidth = ((width / 5) * 4).toInt()
         var datalist: ArrayList<UpcomingGigModel> = ArrayList<UpcomingGigModel>()
         datalist.add(UpcomingGigModel())
         datalist.add(UpcomingGigModel())
         val recyclerGenericAdapter: RecyclerGenericAdapter<UpcomingGigModel> =
             RecyclerGenericAdapter<UpcomingGigModel>(
                 activity?.applicationContext,
-                PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item -> showToast("")},
+                PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item -> showKYCAndHideUpcomingLayout(true) },
                 RecyclerGenericAdapter.ItemInterface<UpcomingGigModel?> { obj, viewHolder, position ->
-                    val lp = getView(viewHolder,R.id.card_view).layoutParams
+                    val lp = getView(viewHolder, R.id.card_view).layoutParams
                     lp.height = lp.height
                     lp.width = itemWidth
-                    getView(viewHolder,R.id.card_view).layoutParams = lp
+                    getView(viewHolder, R.id.card_view).layoutParams = lp
                 })!!
         recyclerGenericAdapter.setList(datalist)
         recyclerGenericAdapter.setLayout(R.layout.upcoming_gig_item)
@@ -84,6 +111,7 @@ class HomeScreenBottomSheetFragment : BaseFragment() {
         upcoming_gig_rv.adapter = recyclerGenericAdapter
 
     }
+
     fun generateBackgroundWithShadow(
         view: View, @ColorRes backgroundColor: Int,
         @DimenRes cornerRadius: Int,
@@ -151,65 +179,71 @@ class HomeScreenBottomSheetFragment : BaseFragment() {
 
     private fun initializeFeaturesBottomSheet() {
         var datalist: ArrayList<FeatureModel> = ArrayList<FeatureModel>()
-        datalist.add(FeatureModel("My Gig",R.drawable.mygig))
-        datalist.add(FeatureModel("Explore",R.drawable.ic_search_calendar))
-        datalist.add(FeatureModel("Wallet",R.drawable.wallet))
-        datalist.add(FeatureModel("Profile",R.drawable.profile))
-        datalist.add(FeatureModel("Learning",R.drawable.learning))
-        datalist.add(FeatureModel("Settings",R.drawable.settings))
-        datalist.add(FeatureModel("Chat",R.drawable.chat))
-        datalist.add(FeatureModel("Chat",R.drawable.chat))
-        val itemWidth = ((width / 7)*1.6).toInt()
+        datalist.add(FeatureModel("My Gig", R.drawable.mygig))
+        datalist.add(FeatureModel("Explore", R.drawable.ic_search_calendar))
+        datalist.add(FeatureModel("Wallet", R.drawable.wallet))
+        datalist.add(FeatureModel("Profile", R.drawable.profile))
+        datalist.add(FeatureModel("Learning", R.drawable.learning))
+        datalist.add(FeatureModel("Settings", R.drawable.settings))
+        datalist.add(FeatureModel("Video Resume", R.drawable.chat))
+        datalist.add(FeatureModel("Chat", R.drawable.chat))
+        val itemWidth = ((width / 7) * 1.6).toInt()
         val recyclerGenericAdapter: RecyclerGenericAdapter<FeatureModel> =
             RecyclerGenericAdapter<FeatureModel>(
                 activity?.applicationContext,
-                PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item -> navigateToFeature(position)},
+                PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
+                    navigateToFeature(
+                        position
+                    )
+                },
                 RecyclerGenericAdapter.ItemInterface<FeatureModel?> { obj, viewHolder, position ->
-                    val lp = getView(viewHolder,R.id.card_view).layoutParams
+                    val lp = getView(viewHolder, R.id.card_view).layoutParams
                     lp.height = lp.height
                     lp.width = itemWidth
-                    getView(viewHolder,R.id.card_view).layoutParams = lp
-                    getImageView(viewHolder,R.id.feature_icon).setImageResource(obj?.icon!!)
-                    getTextView(viewHolder,R.id.feature_title).text = obj.title
+                    getView(viewHolder, R.id.card_view).layoutParams = lp
+                    getImageView(viewHolder, R.id.feature_icon).setImageResource(obj?.icon!!)
+                    getTextView(viewHolder, R.id.feature_title).text = obj.title
 
                 })!!
         recyclerGenericAdapter.setList(datalist)
         recyclerGenericAdapter.setLayout(R.layout.feature_item)
         feature_rv.setLayoutManager(
-            GridLayoutManager(activity, 2,
-                GridLayoutManager.HORIZONTAL,false)
+            GridLayoutManager(
+                activity, 2,
+                GridLayoutManager.HORIZONTAL, false
+            )
         );
         feature_rv.adapter = recyclerGenericAdapter
     }
 
     private fun navigateToFeature(position: Int) {
-        when(position){
+        when (position) {
             0 -> showToast("")
             1 -> showToast("")
             2 -> showToast("")
             3 -> navigate(R.id.profileFragment)
             4 -> showToast("")
             5 -> navigate(R.id.settingFragment)
-            6 -> showToast("")
+            6 -> navigate(R.id.videoResumeFragment)
             7 -> showToast("")
 
         }
     }
 
     private fun initializeLearningBottomSheet() {
-        val itemWidth = ((width / 5)*3.1).toInt()
+        val itemWidth = ((width / 5) * 3.1).toInt()
         var datalist: ArrayList<UpcomingGigModel> = ArrayList<UpcomingGigModel>()
         datalist.add(UpcomingGigModel())
         datalist.add(UpcomingGigModel())
         val recyclerGenericAdapter: RecyclerGenericAdapter<UpcomingGigModel> =
             RecyclerGenericAdapter<UpcomingGigModel>(
                 activity?.applicationContext,
-                PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item -> showToast("")},
+                PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item -> showToast("") },
                 RecyclerGenericAdapter.ItemInterface<UpcomingGigModel?> { obj, viewHolder, position ->
-                    val lp = getView(viewHolder,R.id.card_view).layoutParams
+                    val lp = getView(viewHolder, R.id.card_view).layoutParams
                     lp.height = lp.height
                     lp.width = itemWidth
-                    getView(viewHolder,R.id.card_view).layoutParams = lp
+                    getView(viewHolder, R.id.card_view).layoutParams = lp
                 })!!
         recyclerGenericAdapter.setList(datalist)
         recyclerGenericAdapter.setLayout(R.layout.learning_bs_item)
@@ -222,19 +256,19 @@ class HomeScreenBottomSheetFragment : BaseFragment() {
     }
 
     private fun initializeAssessmentBottomSheet() {
-        val itemWidth = ((width / 5)*2.8).toInt()
+        val itemWidth = ((width / 5) * 2.8).toInt()
         var datalist: ArrayList<UpcomingGigModel> = ArrayList<UpcomingGigModel>()
         datalist.add(UpcomingGigModel())
         datalist.add(UpcomingGigModel())
         val recyclerGenericAdapter: RecyclerGenericAdapter<UpcomingGigModel> =
             RecyclerGenericAdapter<UpcomingGigModel>(
                 activity?.applicationContext,
-                PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item -> showToast("")},
+                PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item -> showToast("") },
                 RecyclerGenericAdapter.ItemInterface<UpcomingGigModel?> { obj, viewHolder, position ->
-                    val lp = getView(viewHolder,R.id.assessment_cl).layoutParams
+                    val lp = getView(viewHolder, R.id.assessment_cl).layoutParams
                     lp.height = lp.height
                     lp.width = itemWidth
-                    getView(viewHolder,R.id.assessment_cl).layoutParams = lp
+                    getView(viewHolder, R.id.assessment_cl).layoutParams = lp
                 })!!
         recyclerGenericAdapter.setList(datalist)
         recyclerGenericAdapter.setLayout(R.layout.assessment_bs_item)
