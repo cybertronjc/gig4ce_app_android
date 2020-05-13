@@ -83,7 +83,6 @@ class RosterDayFragment: RosterBaseFragment() {
 
         val timeViewGroup = day_times
         val hourIds = ArrayList<Int>()
-
         var widget: MaterialCardView
         val constraintSet: ConstraintSet?
 
@@ -180,7 +179,7 @@ class RosterDayFragment: RosterBaseFragment() {
         val constraintSet = ConstraintSet()
         constraintSet.clone(day_times)
         constraintSet.connect(unavailableCard.id, ConstraintSet.START, start_guideline.id, ConstraintSet.START, marginCardStart)
-        constraintSet.connect(unavailableCard.id, ConstraintSet.END, end_guideline.id, ConstraintSet.START, marginCardEnd)
+        constraintSet.connect(unavailableCard.id, ConstraintSet.END, end_guideline.id, ConstraintSet.START)
         constraintSet.connect(unavailableCard.id, ConstraintSet.TOP, day_times.id, ConstraintSet.TOP, marginTop)
         constraintSet.applyTo(day_times)
 

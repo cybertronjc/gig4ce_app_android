@@ -70,8 +70,8 @@ class RosterTopBar: MaterialCardView {
         set(value) {
             field = value
             if (isAvailable)
-                available_toggle.setImageResource(R.drawable.ic_toggle_on)
+                available_toggle.setIconResource(R.drawable.ic_toggle_on)
             else
-                available_toggle.setImageResource(R.drawable.ic_toggle_off)
+                available_toggle.setIconResource(R.drawable.ic_toggle_off)
         }
 }
