@@ -279,4 +279,6 @@
         <item name="android:gravity">center</item>
         <item name="android:letterSpacing">0.04</item>
     </style>
+
+
 </resources>

@@ -44,7 +44,9 @@ class MainActivity : AppCompatActivity() {
         var fragmentholder: Fragment? =
             navHostFragment!!.childFragmentManager.fragments[navHostFragment!!.childFragmentManager.fragments.size - 1]
         var handled = false
-        handled = (fragmentholder as BaseFragment).onBackPressed()
+        try {
+            handled = (fragmentholder as BaseFragment).onBackPressed()
+        }catch (e:Exception){}
 
         if (!handled) {
             super.onBackPressed()

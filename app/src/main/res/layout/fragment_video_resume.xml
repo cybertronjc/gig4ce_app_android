@@ -105,20 +105,23 @@
         android:text="@string/desc2_video_resume"
         android:textColor="#e94b81"
         android:textSize="12sp" />
-
-    <Button
-        android:id="@+id/play_video"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/guidelines"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="167dp"
         android:layout_marginTop="44dp"
-        android:layout_marginEnd="156dp"
-        android:layout_marginBottom="102dp"
+        android:gravity="center">
+
+    <Button
+        android:id="@+id/play_video"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
         android:text="Play" />
+    </LinearLayout>
 
     <Chronometer
         android:layout_width="wrap_content"

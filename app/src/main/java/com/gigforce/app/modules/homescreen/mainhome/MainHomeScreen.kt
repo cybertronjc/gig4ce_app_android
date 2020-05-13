@@ -1,13 +1,24 @@
 package com.gigforce.app.modules.homescreen.mainhome
 
+import android.graphics.Paint
+import android.graphics.Rect
+import android.graphics.drawable.Drawable
+import android.graphics.drawable.LayerDrawable
+import android.graphics.drawable.ShapeDrawable
+import android.graphics.drawable.shapes.RoundRectShape
 import android.os.Bundle
+import android.util.DisplayMetrics
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.annotation.ColorRes
+import androidx.annotation.DimenRes
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.request.RequestOptions
@@ -15,7 +26,8 @@ import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.app.core.genericadapter.RecyclerGenericAdapter
-import com.gigforce.app.modules.homescreen.mainhome.verticalcalendar.VerticalCalendarAdapter
+import com.gigforce.app.modules.homescreen.mainhome.bottomsheet.FeatureModel
+import com.gigforce.app.modules.homescreen.mainhome.bottomsheet.UpcomingGigModel
 import com.gigforce.app.modules.homescreen.mainhome.verticalcalendar.VerticalCalendarDataItemModel
 import com.gigforce.app.modules.preferences.PreferencesFragment
 import com.gigforce.app.modules.profile.ProfileViewModel
@@ -27,6 +39,7 @@ import kotlinx.android.synthetic.main.homescreen_1nsvbs.*
 import java.text.SimpleDateFormat
 import java.util.*
 
+
 class MainHomeScreen : BaseFragment() {
 
     companion object {
@@ -37,29 +50,12 @@ class MainHomeScreen : BaseFragment() {
     private var mExtendedBottomSheetBehavior: ExtendedBottomSheetBehavior<*>? = null
     private lateinit var viewModel: MainHomeScreenViewModel
     lateinit var viewModelProfile: ProfileViewModel
-    private val itemList: Array<String>
-        get() = arrayOf(
-            "My Gig",
-            "Item 2",
-            "Item 3",
-            "Item 4",
-            "Item 5",
-            "Item 6",
-            "Item 7",
-            "Item 8",
-            "Item 9",
-            "Item 10",
-            "Item 11",
-            "Item 12"
-        )
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         return inflateView(R.layout.homescreen_1nsvbs, inflater, container)
     }
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -68,17 +64,19 @@ class MainHomeScreen : BaseFragment() {
         mExtendedBottomSheetBehavior?.isAllowUserDragging = true;
         viewModel = ViewModelProviders.of(this).get(MainHomeScreenViewModel::class.java)
         viewModelProfile = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
-
-
-
         initializeViews()
         listener()
         observePreferenceData()
     }
 
+    private fun initializeViews() {
+        initialiseMonthTV()
+        initializeVerticalCalendarRV()
+    }
+
     private fun listener() {
         iv2HS1.setOnClickListener(View.OnClickListener { navigate(R.id.profileFragment) })
-        tv_hs1bs_alert.setOnClickListener(View.OnClickListener { navigate(R.id.verification) })
+//        tv_hs1bs_alert.setOnClickListener(View.OnClickListener { navigate(R.id.verification) })
     }
 
     private fun observePreferenceData() {
@@ -108,29 +106,13 @@ class MainHomeScreen : BaseFragment() {
                 .into(profile_image)
         }
     }
-    private fun initializeViews() {
-        initialiseMonthTV()
-        initializeVerticalCalendarRV()
-        initializeBSGridView()
 
-    }
 
     private fun initialiseMonthTV() {
         val pattern = "MMM YYYY"
         val simpleDateFormat = SimpleDateFormat(pattern)
         val date: String = simpleDateFormat.format(Date())
         tv2HS1.text = date
-    }
-
-    private fun initializeBSGridView() {
-        val adapter = this.context?.let {
-            FeaturesAdapter(
-                this,
-                R.layout.item_grid_features_hs1,
-                itemList
-            )
-        }
-        gridView_hs1.adapter = adapter
     }
     private val visibleThreshold = 10
     var isLoading:Boolean = false
@@ -139,7 +121,7 @@ class MainHomeScreen : BaseFragment() {
             RecyclerGenericAdapter<VerticalCalendarDataItemModel>(
                 activity?.applicationContext,
                 PFRecyclerViewAdapter.OnViewHolderClick<VerticalCalendarDataItemModel?> { view, position, item ->
-                    Toast.makeText(this.context, "CLICKED ON DAY DEBUG", Toast.LENGTH_LONG).show()
+//                    Toast.makeText(this.context, "CLICKED ON DAY DEBUG", Toast.LENGTH_LONG).show()
                     navigate(R.id.rosterDayFragment)
                 },
                 RecyclerGenericAdapter.ItemInterface<VerticalCalendarDataItemModel?> { obj, viewHolder, position ->
@@ -272,8 +254,6 @@ class MainHomeScreen : BaseFragment() {
                             }
                         }
                     }
-
-
                 })!!
 
         recyclerGenericAdapter.list = viewModel.getAllCalendarData()
@@ -328,6 +308,6 @@ class MainHomeScreen : BaseFragment() {
             getView(viewHolder, R.id.calendar_month_cl).visibility = View.GONE
             getView(viewHolder, R.id.calendar_detail_item_cl).visibility = View.VISIBLE
         }
-
     }
+
 }
