@@ -74,7 +74,7 @@ class VerifyOTP: BaseFragment() {
         val spannableString1 = SpannableString(str)
         spannableString1.setSpan(UnderlineSpan(),0,str.length,0)
         reenter_mobile.text = spannableString1
-        textView29?.text = "One Time Password (OTP) has been sent to your mobile "+mobile_number+", please enter the same here to login."
+        textView29?.text = "One Time Password (OTP) has been sent to your mobile "+mobile_number+". Please enter the same here to login."
     }
 
     private fun observer() {
