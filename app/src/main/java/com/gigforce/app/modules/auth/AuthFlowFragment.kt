@@ -1,5 +1,6 @@
 package com.gigforce.app.modules.auth
 
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +11,7 @@ import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.utils.AppConstants
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import java.util.*
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -28,7 +30,8 @@ class AuthFlowFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         val lang = getSharedData(AppConstants.APP_LANGUAGE, null)
         val introComplete = getSharedData(AppConstants.INTRO_COMPLETE, null)
-
+        if(lang!=null&&lang.length>0)
+        updateResources(lang)
         popFragmentFromStack(R.id.authFlowFragment)
         if (lang == null) {
             navigate(R.id.languageSelectFragment)//, null, navOptionsPopToHome)
@@ -41,7 +44,14 @@ class AuthFlowFragment : BaseFragment() {
         }
 
     }
-
+    private fun updateResources(language: String) {
+        val locale = Locale(language)
+        val config2 = Configuration()
+        config2.locale = locale
+        // updating locale
+        context?.resources?.updateConfiguration(config2, null)
+        Locale.setDefault(locale)
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

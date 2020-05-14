@@ -1,6 +1,7 @@
 package com.gigforce.app.utils
 
 import android.content.res.Configuration
+import android.content.res.Resources
 import android.os.Bundle
 import android.view.*
 import android.widget.RadioButton
@@ -36,13 +37,14 @@ class LanguageSelectFragment : BaseFragment() {
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
+        Resources.getSystem().getConfiguration().locale.getLanguage()
         initializer()
         setDefaultLanguage()
         listener()
     }
 
     private fun initializer() {
+
         groupradio.clearCheck()
     }
 
@@ -54,7 +56,18 @@ class LanguageSelectFragment : BaseFragment() {
     }
 
     private fun setDefaultLanguage() {
-        groupradio.findViewById<RadioButton>(R.id.en).isChecked = true
+        when(Resources.getSystem().getConfiguration().locale.getLanguage()){
+            "en" -> groupradio.findViewById<RadioButton>(R.id.en).isChecked = true
+            "hi" -> groupradio.findViewById<RadioButton>(R.id.hi).isChecked = true
+            "te" -> groupradio.findViewById<RadioButton>(R.id.te).isChecked = true
+            "gu" -> groupradio.findViewById<RadioButton>(R.id.gu).isChecked = true
+            "pa" -> groupradio.findViewById<RadioButton>(R.id.pu).isChecked = true
+            "fr" -> groupradio.findViewById<RadioButton>(R.id.fr).isChecked = true
+            "te" -> groupradio.findViewById<RadioButton>(R.id.te).isChecked = true
+            "mr" -> groupradio.findViewById<RadioButton>(R.id.mr).isChecked = true
+            else -> groupradio.findViewById<RadioButton>(R.id.en).isChecked = true
+        }
+
     }
 
     private fun onNextButtonClicked() {

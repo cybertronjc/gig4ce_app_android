@@ -22,16 +22,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="27dp"
-            android:layout_marginTop="47dp"
+            android:layout_marginTop="30dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_warning_" />
+            app:srcCompat="@drawable/warning_icon_" />
 
         <TextView
             android:id="@+id/textView68"
             android:layout_width="318dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="36dp"
+            android:layout_marginTop="26dp"
             android:text="You have entered invalid OTP. Please re-enter OTP."
             android:textColor="#E02020"
             android:textSize="14sp"

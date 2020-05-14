@@ -13,7 +13,11 @@
         <item name="android:textViewStyle">@style/AppTheme.TextStyle</item>
         <item name="bottomSheetDialogTheme">@style/CustomBottomSheetDialog</item>
     </style>
-
+    <style name="Theme.switchButton" parent="Theme.AppCompat.Light">
+        <item name="colorPrimary">@color/colorAccent</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorPrimary</item>
+    </style>
     <style name="FieldtextLatoRegularGrey12">
         <item name="android:textSize">12sp</item>
         <item name="android:letterSpacing">0.05</item>
