@@ -17,12 +17,14 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import com.gigforce.app.R
 import com.gigforce.app.modules.roster.models.Gig
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.card.MaterialCardView
 import com.google.type.Color
 import kotlinx.android.synthetic.main.day_view_top_bar.view.*
 import kotlinx.android.synthetic.main.gigs_today_warning_dialog.*
 import kotlinx.android.synthetic.main.reason_for_gig_cancel_dialog.*
 import kotlinx.android.synthetic.main.roster_day_fragment.*
+import kotlinx.android.synthetic.main.unavailable_time_adjustment_bottom_sheet.*
 import java.time.LocalDateTime
 import kotlin.collections.ArrayList
 
@@ -65,6 +67,44 @@ class RosterDayFragment: RosterBaseFragment() {
         addUnAvailableCard(5, 3.0F)
 
         addCompletedGigCard(sampleGigCompleted)
+
+        var bottomSheetBehaviour = BottomSheetBehavior.from(unavailable_bottom_sheet)
+
+        hour_0.setOnClickListener {
+            if (bottomSheetBehaviour.state != BottomSheetBehavior.STATE_COLLAPSED) {
+                bottomSheetBehaviour.setState(BottomSheetBehavior.STATE_COLLAPSED)
+            } else
+                bottomSheetBehaviour.state = BottomSheetBehavior.STATE_HIDDEN
+        }
+
+        bottomSheetBehaviour.setBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+                // React to state change
+                when (newState) {
+                    BottomSheetBehavior.STATE_HIDDEN -> {
+                    }
+                    BottomSheetBehavior.STATE_EXPANDED -> {
+                        time_expanded.visibility = View.VISIBLE
+                        time_text.visibility = View.GONE
+                        //unavailable_bottom_sheet.layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
+                    }
+                    BottomSheetBehavior.STATE_COLLAPSED -> {
+                        time_expanded.visibility = View.GONE
+                        time_text.visibility = View.VISIBLE
+                        //unavailable_bottom_sheet.layoutParams.height = 200.px
+                    }
+                    BottomSheetBehavior.STATE_DRAGGING -> {
+                        time_expanded.visibility = View.GONE
+                    }
+                    BottomSheetBehavior.STATE_SETTLING -> {
+                        time_expanded.visibility = View.GONE
+                    }
+                }            }
+
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {
+                // React to dragging events
+            }
+        })
     }
 
 
@@ -221,6 +261,8 @@ class RosterDayFragment: RosterBaseFragment() {
             toggleAvailability()
 
         }
+        
+
 
     }
 

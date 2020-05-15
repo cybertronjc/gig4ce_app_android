@@ -172,6 +172,9 @@ dependencies {
 
     // material dialogs
     implementation 'com.afollestad.material-dialogs:core:3.3.0'
+
+    // swipe button
+    implementation 'com.ncorti:slidetoact:0.3.0'
 }
 
 apply plugin: 'com.google.gms.google-services'
