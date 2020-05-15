@@ -29,7 +29,7 @@
                 android:textColor="#d4e02020"
                 android:letterSpacing="0.05"
                 android:visibility="gone"
-                android:text="* Bio text should not exceed 150 characters" />
+                android:text="@string/cover_error_text" />
 
             <TextView
                 android:id="@+id/bio_text"
