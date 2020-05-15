@@ -99,6 +99,7 @@ class AddEducationBottomSheetFragment: ProfileBaseBottomSheetFragment() {
 
     private fun addNewEducation() {
         hideError(form_error, institution_name, course_name, degree_name, start_date, end_date)
+        institution_name.requestFocus()
         updates.add(Education(
             institution = institution_name.text.toString(),
             course = course_name.text.toString(),
