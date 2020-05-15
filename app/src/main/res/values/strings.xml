@@ -258,4 +258,10 @@
     <string name="delete_confirmation_text">Are you sure you want to delete this item?</string>
     <string name="if_otp_not_received">"If you didn’t receive the OTP, "</string>
     <string name="resend">RESEND</string>
+    <string name="upcoming_gig">Upcoming Gig</string>
+    <string name="features">Features</string>
+    <string name="learning">Learning</string>
+    <string name="assessment">Assessment</string>
+    <string name="kyc_verification_not_done">Kyc Verification is not done , Click here to  complete.</string>
+    <string name="video_resume_pending">Your Video resume is Pending , Click here to  complete.</string>
 </resources>
