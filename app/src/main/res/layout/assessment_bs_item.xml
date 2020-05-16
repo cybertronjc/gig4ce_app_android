@@ -49,7 +49,7 @@
                 android:padding="4dp"
                 android:background="@drawable/rect_assessment_status"
                 android:textSize="11sp"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="14dp"
                 android:layout_marginLeft="20dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView74" />
@@ -66,6 +66,16 @@
                 app:layout_constraintBottom_toBottomOf="@+id/textView75"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/textView75" />
+
+            <ImageView
+                android:id="@+id/imageView18"
+                android:layout_width="11dp"
+                android:layout_height="11dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginBottom="2dp"
+                app:layout_constraintBottom_toBottomOf="@+id/textView76"
+                app:layout_constraintEnd_toStartOf="@+id/textView76"
+                android:src="@drawable/ic_clock_assessment" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.cardview.widget.CardView>

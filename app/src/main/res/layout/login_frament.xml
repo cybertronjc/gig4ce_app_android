@@ -25,7 +25,7 @@
             android:layout_marginTop="30dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_warning_" />
+            app:srcCompat="@drawable/warning_icon_" />
 
         <TextView
             android:id="@+id/tvwronglogin"

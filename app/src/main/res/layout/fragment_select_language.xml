@@ -118,10 +118,10 @@
             android:layout_height="1dp"
             android:background="@color/line_seprator_language"/>
         <RadioButton
-            android:id="@+id/ma"
+            android:id="@+id/mr"
             android:layout_width="fill_parent"
             android:layout_height="@dimen/height_select_lang_item"
-            android:hint="ma"
+            android:hint="mr"
             android:text="मराठी"
             android:textSize="14sp"
             android:paddingLeft="16dp"
