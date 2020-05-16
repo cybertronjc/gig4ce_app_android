@@ -46,6 +46,10 @@ class ProfileFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         makeStatusBarTransparent()
+
+        requireActivity().onBackPressedDispatcher.addCallback(this) {
+            findNavController().navigate(R.id.homeScreenNew)
+        }
     }
 
     private fun makeStatusBarTransparent(){
@@ -206,10 +210,6 @@ class ProfileFragment : Fragment() {
             }
 
             layout.main_about_card.card_title.text = "About me"
-            if (profile.aboutMe.isNotEmpty())
-                layout.main_about_card.optional_title_text.text = ""
-            else
-                layout.main_about_card.optional_title_text.text = "bio"
             layout.main_about_card.card_content.text = mainAboutString
             layout.main_about_card.card_icon.setImageResource(R.drawable.ic_about_me)
             if (mainAboutString.trim().isEmpty())

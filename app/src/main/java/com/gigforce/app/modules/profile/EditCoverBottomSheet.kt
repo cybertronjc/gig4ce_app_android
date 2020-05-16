@@ -4,9 +4,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Toast
@@ -28,6 +26,7 @@ class EditCoverBottomSheet(): ProfileBaseBottomSheetFragment() {
     var tagsToAdd: ArrayList<String> = ArrayList()
     var allTags: ArrayList<String> = ArrayList()
     var userTags: ArrayList<String> = ArrayList()
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
