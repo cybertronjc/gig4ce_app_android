@@ -70,6 +70,7 @@ class AddAchievementBottomSheetFragment: ProfileBaseBottomSheetFragment() {
 
     private fun addNewAchievement() {
         hideError(form_error, title, authority, year)
+        title.requestFocus()
         updates.add(
             Achievement(
                 title = title.text.toString(),

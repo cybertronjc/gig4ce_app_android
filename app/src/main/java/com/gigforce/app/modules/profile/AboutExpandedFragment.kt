@@ -1,9 +1,11 @@
 package com.gigforce.app.modules.profile
 
+import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.lifecycle.Observer
@@ -11,6 +13,8 @@ import androidx.navigation.fragment.findNavController
 import com.afollestad.materialdialogs.MaterialDialog
 import com.gigforce.app.R
 import kotlinx.android.synthetic.main.card_row.view.*
+import kotlinx.android.synthetic.main.contact_edit_warning_dialog.*
+import kotlinx.android.synthetic.main.delete_confirmation_dialog.*
 import kotlinx.android.synthetic.main.fragment_profile_about_expanded.*
 import kotlinx.android.synthetic.main.fragment_profile_about_expanded.view.*
 import kotlinx.android.synthetic.main.fragment_profile_about_expanded.view.nav_bar
@@ -109,20 +113,22 @@ class AboutExpandedFragment: ProfileBaseFragment() {
 
     }
 
-    fun showAddContactDialog() {
-        MaterialDialog(this.requireContext()).show {
-            title(text = "Update Contact Details")
-            message(
-                text = "To update these details the giger will need to re-upload their" +
-                        " Aadhar card images and undergo the KYC verification process again. " +
-                        "We recommend that you do not change the name or address details unless " +
-                        "necessary"
-            )
-            positiveButton(text = "Proceed") {
-                Toast.makeText(this.context, "Not Implemented", Toast.LENGTH_SHORT).show()
-            }
-            negativeButton(text = "Cancel") { }
+    private fun showAddContactDialog() {
+        val dialog = Dialog(requireContext())
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setCancelable(false)
+        dialog.setContentView(R.layout.contact_edit_warning_dialog)
+
+        dialog.cancel_button.setOnClickListener {
+            dialog .dismiss()
         }
+
+        dialog.submit_button.setOnClickListener {
+            Toast.makeText(requireContext(), "CTA NOT IMPLEMENTED", Toast.LENGTH_SHORT).show()
+            dialog .dismiss()
+        }
+
+        dialog.show()
     }
 
     private fun getLanguageLevel(level: Int): String {
