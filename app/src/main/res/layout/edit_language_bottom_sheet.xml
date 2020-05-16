@@ -83,6 +83,8 @@
 
         <SeekBar
             android:id="@+id/language_speaking_level"
+            android:progressTint="@color/colorPrimary"
+            android:thumbTint="@color/colorPrimary"
             android:layout_width="match_parent"
             android:layout_height="25dp"
             android:layout_marginTop="8dp" />
@@ -97,6 +99,8 @@
 
         <SeekBar
             android:id="@+id/language_writing_level"
+            android:progressTint="@color/colorPrimary"
+            android:thumbTint="@color/colorPrimary"
             android:layout_width="match_parent"
             android:layout_height="25dp"
             android:layout_marginTop="8dp" />

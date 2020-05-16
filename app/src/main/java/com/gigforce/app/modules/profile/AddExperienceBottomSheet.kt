@@ -117,6 +117,7 @@ class AddExperienceBottomSheet: ProfileBaseBottomSheetFragment() {
 
     private fun addNewExperience() {
         hideError(form_error, title, company, employment_type, location, start_date, end_date)
+        title.requestFocus()
         updates.add(
             Experience(
                 title = title.text.toString(),

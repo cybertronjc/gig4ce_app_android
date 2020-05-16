@@ -9,6 +9,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:paddingBottom="100dp"
         android:background="@drawable/bg_exp_white_rect">
 
         <com.gigforce.app.modules.profile.ProfileCardBackground
