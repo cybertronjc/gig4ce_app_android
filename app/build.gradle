@@ -60,6 +60,8 @@ dependencies {
     //Volley
     implementation 'com.android.volley:volley:1.1.1'
 
+    implementation 'com.github.pwittchen:swipe-rx2:0.3.0'
+
     //Moshi
     implementation "com.squareup.moshi:moshi-kotlin:$moshiVersion"
     kapt "com.squareup.moshi:moshi-kotlin-codegen:$moshiVersion"
@@ -175,7 +177,7 @@ dependencies {
     implementation 'com.afollestad.material-dialogs:core:3.3.0'
 
     // swipe button
-    implementation 'com.ncorti:slidetoact:0.3.0'
+    implementation "com.ncorti:slidetoact:0.8.0"
 }
 
 apply plugin: 'com.google.gms.google-services'

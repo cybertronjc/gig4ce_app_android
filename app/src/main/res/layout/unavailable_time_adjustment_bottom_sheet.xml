@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/unavailable_bottom_sheet"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:background="@color/white"
     app:behavior_hideable="false"
     app:behavior_peekHeight="200dp"
@@ -74,12 +75,20 @@
         app:layout_constraintTop_toBottomOf="@id/divider"
         app:layout_constraintBottom_toTopOf="@id/barrier"/>
 
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:barrierMargin="10dp"
+        app:constraint_referenced_ids="time_expanded" />
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/time_expanded"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
-        android:visibility="gone"
+        android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/divider"
@@ -186,11 +195,14 @@
 
         <LinearLayout
             android:id="@+id/assigned_gigs"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
-            android:orientation="horizontal"
+            android:layout_marginStart="41dp"
+            android:layout_marginEnd="24dp"
+            android:orientation="vertical"
             app:layout_constraintStart_toStartOf="@id/assigned_gigs_text"
+            app:layout_constraintEnd_toEndOf="@id/assigned_gigs_text"
             app:layout_constraintTop_toBottomOf="@id/assigned_gigs_text" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -207,17 +219,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/barrier"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:outer_color="#ffd9e6"
         app:slider_locked="true"
         app:text="UNAVAILABLE"
         app:text_style="bold" />
-
-    <androidx.constraintlayout.widget.Barrier
-        android:id="@+id/barrier"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:barrierMargin="90dp"
-        app:barrierDirection="bottom" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

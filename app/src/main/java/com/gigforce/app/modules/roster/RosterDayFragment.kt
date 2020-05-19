@@ -1,14 +1,12 @@
 package com.gigforce.app.modules.roster
 
-import android.app.ActionBar
 import android.app.Dialog
+import android.content.Context
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.view.Window
+import android.view.*
 import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.Toast
@@ -19,13 +17,14 @@ import com.gigforce.app.R
 import com.gigforce.app.modules.roster.models.Gig
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.card.MaterialCardView
-import com.google.type.Color
 import kotlinx.android.synthetic.main.day_view_top_bar.view.*
 import kotlinx.android.synthetic.main.gigs_today_warning_dialog.*
+import kotlinx.android.synthetic.main.item_roster_day.view.*
 import kotlinx.android.synthetic.main.reason_for_gig_cancel_dialog.*
 import kotlinx.android.synthetic.main.roster_day_fragment.*
 import kotlinx.android.synthetic.main.unavailable_time_adjustment_bottom_sheet.*
 import java.time.LocalDateTime
+import java.util.*
 import kotlin.collections.ArrayList
 
 class RosterDayFragment: RosterBaseFragment() {
@@ -35,8 +34,20 @@ class RosterDayFragment: RosterBaseFragment() {
     var upcomingGigs: ArrayList<Gig> = ArrayList<Gig>()
     var unavailableCards: ArrayList<String> = ArrayList()
 
-    val marginCardStart = 85.px
+    val marginCardStart = 95.px
     val marginCardEnd = 16.px
+
+    val currentDateTime = LocalDateTime.now()
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    var handler = Handler() { msg ->
+        var datetime = LocalDateTime.now()
+        val marginTop = (itemHeight * datetime.hour + ((datetime.minute / 60.0) * itemHeight).toInt()).px
+        val layoutParams = current_time_divider.layoutParams as ViewGroup.MarginLayoutParams
+        layoutParams.setMargins(marginCardStart - 8.px, marginTop, 0, 0)
+        current_time_divider.requestLayout()
+        true
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -54,13 +65,13 @@ class RosterDayFragment: RosterBaseFragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        initialize()
-        setListeners()
+
 
         var sampleGigUpcoming = Gig(startHour = 13, startMinute = 30, duration = 3.5F)
         var sampleGigCompleted = Gig(startHour = 9, duration = 4.0F)
 
         upcomingGigs.add(sampleGigUpcoming)
+        Log.d("Size internal -> ", upcomingGigs.size.toString())
 
         addUpcomingGigCard(sampleGigUpcoming)
 
@@ -77,7 +88,7 @@ class RosterDayFragment: RosterBaseFragment() {
                 bottomSheetBehaviour.state = BottomSheetBehavior.STATE_HIDDEN
         }
 
-        bottomSheetBehaviour.setBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+        bottomSheetBehaviour.addBottomSheetCallback(object: BottomSheetBehavior.BottomSheetCallback() {
             override fun onStateChanged(bottomSheet: View, newState: Int) {
                 // React to state change
                 when (newState) {
@@ -86,32 +97,41 @@ class RosterDayFragment: RosterBaseFragment() {
                     BottomSheetBehavior.STATE_EXPANDED -> {
                         time_expanded.visibility = View.VISIBLE
                         time_text.visibility = View.GONE
-                        //unavailable_bottom_sheet.layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
                     }
                     BottomSheetBehavior.STATE_COLLAPSED -> {
                         time_expanded.visibility = View.GONE
                         time_text.visibility = View.VISIBLE
-                        //unavailable_bottom_sheet.layoutParams.height = 200.px
                     }
                     BottomSheetBehavior.STATE_DRAGGING -> {
-                        time_expanded.visibility = View.GONE
+//                        time_expanded.visibility = View.VISIBLE
+//                        time_text.visibility = View.GONE
                     }
                     BottomSheetBehavior.STATE_SETTLING -> {
-                        time_expanded.visibility = View.GONE
+//                        time_text.visibility = View.VISIBLE
+//                        time_expanded.visibility = View.GONE
                     }
-                }            }
+                    BottomSheetBehavior.STATE_HALF_EXPANDED -> {
+                        //
+                    }
+                } }
 
             override fun onSlide(bottomSheet: View, slideOffset: Float) {
                 // React to dragging events
             }
         })
+
+        initialize()
+        setListeners()
     }
+
 
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun initialize() {
         initializeHourViews()
+        setUpBottomSheet()
         setCurrentTimeDivider()
+        scheduleCurrentTimerUpdate()
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -126,20 +146,36 @@ class RosterDayFragment: RosterBaseFragment() {
         var widget: MaterialCardView
         val constraintSet: ConstraintSet?
 
+        var cardDate = top_bar.date
+        var cardYear = top_bar.year
+        var cardMonth = top_bar.month
+
         // Adding hourly widgets
         for ((index, time) in times.withIndex()) {
             widget = HourRow(this.requireContext())
             widget.id = View.generateViewId()
             widget.hour = index + 1
             widget.time = time
+
             widget.setOnClickListener {
                 Toast.makeText(requireContext(), "Clicked on hour " + widget.hour.toString(), Toast.LENGTH_SHORT).show()
+            }
+
+            if (currentDateTime.year <= cardYear &&
+                    (currentDateTime.monthValue - 1) <= cardMonth &&
+                currentDateTime.dayOfMonth <= cardDate) {
+
+                if (widget.hour <= currentDateTime.hour) {
+                    //Log.d(TAG, "inactive hour")
+                    widget.item_time.setTextColor(resources.getColor(R.color.gray_color_calendar))
+                    widget.isClickable = false
+                }
             }
 
             timeViewGroup.addView(widget)
 
             hourIds.add(widget.id)
-            Log.d("PreviousID", widget.id.toString())
+            //Log.d("PreviousID", widget.id.toString())
 
         }
         // Adding constraints for hourly widgets
@@ -154,9 +190,21 @@ class RosterDayFragment: RosterBaseFragment() {
             constraintSet.connect(idx, ConstraintSet.START, start_guideline.id, ConstraintSet.START)
             constraintSet.connect(idx, ConstraintSet.END, end_guideline.id, ConstraintSet.START)
 
-            Log.d("Constraint", "applied")
+            //Log.d("Constraint", "applied")
         }
         constraintSet.applyTo(timeViewGroup)
+    }
+
+    private fun scheduleCurrentTimerUpdate() {
+        Timer().scheduleAtFixedRate(object: TimerTask() {
+            @RequiresApi(Build.VERSION_CODES.O)
+            override fun run() {
+                //Log.d(TAG, "HELLO WORLD")
+
+                handler.obtainMessage().sendToTarget()
+
+            }
+        }, 2000, 1000 * 60)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -165,7 +213,7 @@ class RosterDayFragment: RosterBaseFragment() {
         // set current time divider
         val marginTop = (itemHeight * datetime.hour + ((datetime.minute / 60.0) * itemHeight).toInt()).px
         val layoutParams = current_time_divider.layoutParams as ViewGroup.MarginLayoutParams
-        layoutParams.setMargins(0, marginTop, 0, 0)
+        layoutParams.setMargins(marginCardStart - 8.px, marginTop, 0, 0)
         current_time_divider.requestLayout()
     }
 
@@ -261,8 +309,6 @@ class RosterDayFragment: RosterBaseFragment() {
             toggleAvailability()
 
         }
-        
-
 
     }
 
@@ -314,7 +360,7 @@ class RosterDayFragment: RosterBaseFragment() {
         }
 
         dialog.yes.setOnClickListener {
-            Toast.makeText(requireContext(), "Clicked on YeS", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "Clicked on Yes", Toast.LENGTH_SHORT).show()
             showReasonForGigCancel()
             dialog .dismiss()
         }
@@ -348,4 +394,20 @@ class RosterDayFragment: RosterBaseFragment() {
 
         dialog.show()
     }
+
+    private fun setUpBottomSheet() {
+        Log.d(TAG, "Upcoming gigs size " + upcomingGigs.size.toString())
+        for (gig in upcomingGigs) {
+            var widget = UpcomingGigCard(requireContext())
+            widget.startHour = gig.startHour
+            widget.startMinute = gig.startMinute
+            widget.duration = gig.duration
+            widget.cardHeight = 60.px
+            assigned_gigs.addView(widget)
+
+            Log.d(TAG, "Added assigned gigs")
+        }
+    }
+
 }
+
