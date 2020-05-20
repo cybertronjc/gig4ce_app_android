@@ -60,8 +60,10 @@
                 app:iconPadding="0dp"
                 android:minWidth="0dp"
                 android:background="@color/fui_transparent"
+                app:iconTint = "@android:color/transparent"
+                app:iconTintMode="add"
                 app:icon="@drawable/ic_toggle_on"
-                style="@style/Widget.MaterialComponents.Button.TextButton"
+                style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/more_bottom"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -79,14 +81,15 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical">
 
             <TextView
                 android:id="@+id/day_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="16dp"
                 android:text="Day"
                 style="@style/LipstickCardBottom"
                 app:layout_constraintStart_toStartOf="parent"
@@ -97,10 +100,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Date"
+                android:layout_marginBottom="16dp"
                 style="@style/LipstickCardBottom"
                 app:layout_constraintEnd_toEndOf="@id/day_text"
                 app:layout_constraintStart_toStartOf="@id/day_text"
-                app:layout_constraintTop_toBottomOf="@id/day_text" />
+                app:layout_constraintTop_toBottomOf="@id/day_text"
+                app:layout_constraintBottom_toBottomOf="parent"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
