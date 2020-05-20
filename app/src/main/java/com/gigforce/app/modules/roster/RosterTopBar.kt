@@ -51,7 +51,7 @@ class RosterTopBar: MaterialCardView {
             for ((index, month) in monthTemplate.withIndex()) {
                 months[index] = month + " " + value
             }
-            month_selector.setAdapter(ArrayAdapter(this.context, R.layout.simple_spinner_dropdown_item ,months))
+            month_selector.setAdapter(DropdownAdapter(this.context, months))
         }
 
     var month: Int = 0

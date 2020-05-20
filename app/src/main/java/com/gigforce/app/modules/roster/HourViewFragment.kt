@@ -30,15 +30,9 @@ class HourViewFragment: RosterBaseFragment() {
 
     val hourIds = ArrayList<Int>()
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    var handler = Handler() { msg ->
-        var datetime = LocalDateTime.now()
-        val marginTop = (itemHeight * datetime.hour + ((datetime.minute / 60.0) * itemHeight).toInt()).px
-        val layoutParams = current_time_divider.layoutParams as ViewGroup.MarginLayoutParams
-        layoutParams.setMargins(marginCardStart - 8.px, marginTop, 0, 0)
-        current_time_divider.requestLayout()
-        true
-    }
+    var viewInitialized: Boolean = false
+
+    var timer = Timer()
 
     companion object {
         fun getInstance(position: Int): Fragment {
@@ -71,47 +65,27 @@ class HourViewFragment: RosterBaseFragment() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun initialize() {
-        var position = requireArguments().getInt("position")
-        var dayGap = position - 5000
-        Log.d("HourView", dayGap.toString())
-        if (dayGap < 0) {
-            activeDateTime = actualDateTime.minusDays((5000 - position).toLong())
-        } else {
-            activeDateTime = actualDateTime.plusDays((position - 5000).toLong())
-        }
 
-//        Toast.makeText(requireContext(), "Current day ${activeDateTime.toString()}", Toast.LENGTH_SHORT).show()
+        rosterViewModel.currentDateTime.observe(viewLifecycleOwner, Observer {
 
-        if (isSameDate(activeDateTime, actualDateTime)) {
-            setCurrentTimeDivider()
-            scheduleCurrentTimerUpdate()
-            current_time_divider.visibility = View.VISIBLE
-        }
+            Toast.makeText(requireContext(), "Current day ${it.toString()}", Toast.LENGTH_SHORT).show()
 
-        initializeHourViews()
-    }
+            activeDateTime = it
 
-    private fun scheduleCurrentTimerUpdate() {
-        Timer().scheduleAtFixedRate(object: TimerTask() {
-            @RequiresApi(Build.VERSION_CODES.O)
-            override fun run() {
-                Log.d("HOUR VIEW", "HELLO WORLD")
-
-                handler.obtainMessage().sendToTarget()
-
+            if (isSameDate(activeDateTime, actualDateTime)) {
+                todayHourActive()
+            } else if (isLessDate(activeDateTime, actualDateTime)) {
+                allHourInactive()
+            } else {
+                allHourActive()
             }
-        }, 0, 1000 * 60)
+
+            if (!viewInitialized)
+                initializeHourViews()
+        })
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun setCurrentTimeDivider() {
-        val datetime = LocalDateTime.now()
-        // set current time divider
-        val marginTop = (itemHeight * datetime.hour + ((datetime.minute / 60.0) * itemHeight).toInt()).px
-        val layoutParams = current_time_divider.layoutParams as ViewGroup.MarginLayoutParams
-        layoutParams.setMargins(marginCardStart - 8.px, marginTop, 0, 0)
-        current_time_divider.requestLayout()
-    }
+
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun initializeHourViews() {
@@ -152,20 +126,6 @@ class HourViewFragment: RosterBaseFragment() {
                 widget.isClickable = false
             }
 
-//            if (activeDateTime.year <= cardYear &&
-//                    (activeDateTime.monthValue - 1) <= cardMonth) {
-//                    if(activeDateTime.dayOfMonth == cardDate && activeDateTime.monthValue - 1 == cardMonth) {
-//                        if (widget.hour <= currentDateTime.hour) {
-//                            Log.d("HOURVIEW", "inactive hour")
-//                            widget.item_time.setTextColor(resources.getColor(R.color.gray_color_calendar))
-//                            widget.isClickable = false
-//                        }
-//                    } else if {
-//                        widget.item_time.setTextColor(resources.getColor(R.color.gray_color_calendar))
-//                        widget.isClickable = false
-//                    }
-//                }
-
             timeViewGroup.addView(widget)
 
             hourIds.add(widget.id)
@@ -187,12 +147,40 @@ class HourViewFragment: RosterBaseFragment() {
             Log.d("Constraint", "applied")
         }
         constraintSet.applyTo(timeViewGroup)
+
+        viewInitialized = true
     }
 
-    private fun makeHoursInactive() {
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun todayHourActive() {
         for (idx in hourIds) {
-            day_times.findViewById<HourRow>(idx).item_time.setTextColor(resources.getColor(R.color.gray_color_calendar))
-            day_times.findViewById<HourRow>(idx).isClickable = false
+            var widget = day_times.findViewById<HourRow>(idx)
+            if (widget.hour <= activeDateTime.hour) {
+                Log.d("HOURVIEW", "inactive hour")
+                widget.item_time.setTextColor(resources.getColor(R.color.gray_color_calendar))
+                widget.isClickable = false
+            } else {
+                widget.item_time.setTextColor(resources.getColor(R.color.black))
+                widget.isClickable = true
+            }
+        }
+    }
+
+    private fun allHourInactive() {
+        for (idx in hourIds) {
+            var widget = day_times.findViewById<HourRow>(idx)
+            Log.d("HOURVIEW", "inactive hour")
+            widget.item_time.setTextColor(resources.getColor(R.color.gray_color_calendar))
+            widget.isClickable = false
+        }
+    }
+
+    private fun allHourActive() {
+        for (idx in hourIds) {
+            var widget = day_times.findViewById<HourRow>(idx)
+            Log.d("HOURVIEW", "inactive hour")
+            widget.item_time.setTextColor(resources.getColor(R.color.black))
+            widget.isClickable = true
         }
     }
 }
