@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.view.*
+import android.widget.AdapterView
 import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.Toast
@@ -24,6 +25,7 @@ import kotlinx.android.synthetic.main.gigs_today_warning_dialog.*
 import kotlinx.android.synthetic.main.item_roster_day.view.*
 import kotlinx.android.synthetic.main.reason_for_gig_cancel_dialog.*
 import kotlinx.android.synthetic.main.roster_day_fragment.*
+import kotlinx.android.synthetic.main.roster_day_hour_view.*
 import java.time.LocalDateTime
 import java.util.*
 import kotlin.collections.ArrayList
@@ -78,15 +80,15 @@ class RosterDayFragment: RosterBaseFragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        initialize()
-        setListeners()
-//
         var sampleGigUpcoming = Gig(startHour = 13, startMinute = 30, duration = 3.5F)
         var sampleGigCompleted = Gig(startHour = 9, duration = 4.0F)
 
         upcomingGigs.add(sampleGigUpcoming)
 
-//        addUpcomingGigCard(sampleGigUpcoming)
+        initialize()
+        setListeners()
+//
+
 //
 //        addUnAvailableCard(5, 3.0F)
 //
@@ -109,11 +111,79 @@ class RosterDayFragment: RosterBaseFragment() {
             top_bar.day = it.dayOfWeek.value - 1
 
             top_bar.isCurrentDay = isSameDate(it, actualDateTime)
+
+            setCurrentTimeVisibility()
+
+            //addUpcomingGigCard(upcomingGigs[0])
+
         })
+
+        setCurrentTimeDivider()
+        scheduleCurrentTimerUpdate()
+
+        top_bar.month_selector.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                val monthGap = position - (activeDateTime.monthValue - 1)
+                if (monthGap < 0)
+                    activeDateTime = activeDateTime.minusMonths((-1 * monthGap).toLong())
+                else
+                    activeDateTime = activeDateTime.plusMonths((monthGap).toLong())
+                rosterViewModel.currentDateTime.setValue(activeDateTime)
+            }
+        }
 
         //initializeHourViews()
         //setCurrentTimeDivider()
         //scheduleCurrentTimerUpdate()
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun setCurrentTimeVisibility() {
+
+        if (isSameDate(activeDateTime, actualDateTime))
+            current_time_divider.visibility = View.VISIBLE
+        else
+            current_time_divider.visibility = View.INVISIBLE
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun scheduleCurrentTimerUpdate() {
+        var handler = Handler() { msg ->
+            var datetime = LocalDateTime.now()
+            val marginTop = (itemHeight * datetime.hour + ((datetime.minute / 60.0) * itemHeight).toInt()).px
+            val layoutParams = current_time_divider.layoutParams as ViewGroup.MarginLayoutParams
+            layoutParams.setMargins(marginCardStart - 8.px, marginTop, 0, 0)
+            current_time_divider.requestLayout()
+            true
+        }
+        Timer().scheduleAtFixedRate(object: TimerTask() {
+            @RequiresApi(Build.VERSION_CODES.O)
+            override fun run() {
+                Log.d("HOUR VIEW", "HELLO WORLD")
+
+                handler.obtainMessage().sendToTarget()
+
+            }
+        }, 0, 1000 * 60)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun setCurrentTimeDivider() {
+        val datetime = LocalDateTime.now()
+        // set current time divider
+        val marginTop = (itemHeight * datetime.hour + ((datetime.minute / 60.0) * itemHeight).toInt()).px
+        val layoutParams = current_time_divider.layoutParams as ViewGroup.MarginLayoutParams
+        layoutParams.setMargins(marginCardStart - 8.px, marginTop, 0, 0)
+        current_time_divider.requestLayout()
     }
 
     private fun setListeners() {
@@ -122,13 +192,22 @@ class RosterDayFragment: RosterBaseFragment() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
                 if (position < lastViewPosition) {
-                    rosterViewModel.currentDateTime.postValue(activeDateTime.minusDays(1))
-//                    Toast.makeText(requireContext(), "Reduce day ${activeDateTime.toString()} ", Toast.LENGTH_SHORT).show()
+                    rosterViewModel.currentDateTime.setValue(activeDateTime.minusDays(1))
                 } else if (position > lastViewPosition) {
-                    rosterViewModel.currentDateTime.postValue(activeDateTime.plusDays(1))
-//                    Toast.makeText(requireContext(), "Increase day ${activeDateTime.toString()}", Toast.LENGTH_SHORT).show()
+                    rosterViewModel.currentDateTime.setValue(activeDateTime.plusDays(1))
                 }
                 lastViewPosition = position
+            }
+
+            @RequiresApi(Build.VERSION_CODES.O)
+            override fun onPageScrollStateChanged(state: Int) {
+                super.onPageScrollStateChanged(state)
+
+                if (state == ViewPager2.SCROLL_STATE_IDLE) {
+                    setCurrentTimeVisibility()
+                } else {
+                    current_time_divider.visibility = View.INVISIBLE
+                }
             }
         }
 
@@ -140,118 +219,35 @@ class RosterDayFragment: RosterBaseFragment() {
         hourview_viewpager.unregisterOnPageChangeCallback(hourviewPageChangeCallBack)
     }
 
-//    @RequiresApi(Build.VERSION_CODES.O)
-//    private fun initializeHourViews() {
-//        val times = ArrayList<String>()
-//        times.addAll(listOf("01:00", "02:00", "03:00", "04:00", "05:00", "06:00", "07:00", "08:00", "09:00",
-//            "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00",
-//            "21:00", "22:00", "23:00", "24:00"))
-//
-//        val timeViewGroup = day_times
-//        val hourIds = ArrayList<Int>()
-//        var widget: MaterialCardView
-//        val constraintSet: ConstraintSet?
-//
-//        var cardDate = top_bar.date
-//        var cardYear = top_bar.year
-//        var cardMonth = top_bar.month
-//
-//        // Adding hourly widgets
-//        for ((index, time) in times.withIndex()) {
-//            widget = HourRow(this.requireContext())
-//            widget.id = View.generateViewId()
-//            widget.hour = index + 1
-//            widget.time = time
-//
-//            widget.setOnClickListener {
-//                Toast.makeText(requireContext(), "Clicked on hour " + widget.hour.toString(), Toast.LENGTH_SHORT).show()
-//            }
-//
-//            if (currentDateTime.year <= cardYear &&
-//                (currentDateTime.monthValue - 1) <= cardMonth &&
-//                currentDateTime.dayOfMonth <= cardDate) {
-//
-//                if (widget.hour <= currentDateTime.hour) {
-//                    Log.d(TAG, "inactive hour")
-//                    widget.item_time.setTextColor(resources.getColor(R.color.gray_color_calendar))
-//                    widget.isClickable = false
-//                }
-//            }
-//
-//            timeViewGroup.addView(widget)
-//
-//            hourIds.add(widget.id)
-//            Log.d("PreviousID", widget.id.toString())
-//
-//        }
-//        // Adding constraints for hourly widgets
-//        constraintSet = ConstraintSet()
-//        constraintSet.clone(timeViewGroup)
-//        for ((index,idx) in hourIds.withIndex()) {
-//            if (index == 0) {
-//                constraintSet.connect(idx, ConstraintSet.TOP, hour_0.id, ConstraintSet.BOTTOM, 0)
-//            } else {
-//                constraintSet.connect(idx, ConstraintSet.TOP, hourIds[index - 1], ConstraintSet.BOTTOM, 0)
-//            }
-//            constraintSet.connect(idx, ConstraintSet.START, start_guideline.id, ConstraintSet.START)
-//            constraintSet.connect(idx, ConstraintSet.END, end_guideline.id, ConstraintSet.START)
-//
-//            Log.d("Constraint", "applied")
-//        }
-//        constraintSet.applyTo(timeViewGroup)
-//    }
+    private fun addUpcomingGigCard(gig: Gig) {
+        val upcomingCard = UpcomingGigCard(requireContext())
 
-//    private fun scheduleCurrentTimerUpdate() {
-//        Timer().scheduleAtFixedRate(object: TimerTask() {
-//            @RequiresApi(Build.VERSION_CODES.O)
-//            override fun run() {
-//                Log.d(TAG, "HELLO WORLD")
-//
-//                handler.obtainMessage().sendToTarget()
-//
-//            }
-//        }, 2000, 1000 * 60)
-//    }
+        hours_view.addView(upcomingCard)
 
-//    @RequiresApi(Build.VERSION_CODES.O)
-//    private fun setCurrentTimeDivider() {
-//        val datetime = LocalDateTime.now()
-//        // set current time divider
-//        val marginTop = (itemHeight * datetime.hour + ((datetime.minute / 60.0) * itemHeight).toInt()).px
-//        val layoutParams = current_time_divider.layoutParams as ViewGroup.MarginLayoutParams
-//        layoutParams.setMargins(marginCardStart - 8.px, marginTop, 0, 0)
-//        current_time_divider.requestLayout()
-//    }
-//
-//    private fun addUpcomingGigCard(gig: Gig) {
-//        val upcomingCard = UpcomingGigCard(requireContext())
-//
-//        day_times.addView(upcomingCard)
-//
-//        upcomingCard.id = View.generateViewId()
-//        upcomingCard.startHour = gig.startHour
-//        upcomingCard.startMinute = gig.startMinute
-//        upcomingCard.duration = gig.duration
-//        upcomingCard.cardHeight = (itemHeight * gig.duration).toInt().px
-//
-//        var params = ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.WRAP_CONTENT)
-//        upcomingCard.setLayoutParams(params)
-//
-//        upcomingCard.tag = "gig_" + upcomingCard.startHour.toString() + "_" + upcomingCard.startMinute.toString()
-//        var marginTop = (upcomingCard.startHour * itemHeight + ((upcomingCard.startMinute/60.0F)*itemHeight).toInt()).px
-//
-//        var constraintSet = ConstraintSet()
-//        constraintSet.clone(day_times)
-//        constraintSet.connect(upcomingCard.id, ConstraintSet.START, start_guideline.id, ConstraintSet.START, marginCardStart)
-//        constraintSet.connect(upcomingCard.id, ConstraintSet.END, end_guideline.id, ConstraintSet.START, marginCardEnd)
-//        constraintSet.connect(upcomingCard.id, ConstraintSet.TOP, day_times.id, ConstraintSet.TOP, marginTop)
-//        constraintSet.applyTo(day_times)
-//
-//        upcomingCard.setOnClickListener {
-//            Toast.makeText(requireContext(), "Clicked on upcoming card", Toast.LENGTH_SHORT).show()
-//        }
-//    }
-//
+        upcomingCard.id = View.generateViewId()
+        upcomingCard.startHour = gig.startHour
+        upcomingCard.startMinute = gig.startMinute
+        upcomingCard.duration = gig.duration
+        upcomingCard.cardHeight = (itemHeight * gig.duration).toInt().px
+
+        var params = ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.WRAP_CONTENT)
+        upcomingCard.setLayoutParams(params)
+
+        upcomingCard.tag = "gig_" + upcomingCard.startHour.toString() + "_" + upcomingCard.startMinute.toString()
+        var marginTop = (upcomingCard.startHour * itemHeight + ((upcomingCard.startMinute/60.0F)*itemHeight).toInt()).px
+
+        var constraintSet = ConstraintSet()
+        constraintSet.clone(hours_view)
+        constraintSet.connect(upcomingCard.id, ConstraintSet.START, start_guideline_day.id, ConstraintSet.START, marginCardStart)
+        constraintSet.connect(upcomingCard.id, ConstraintSet.END, end_guideline_day.id, ConstraintSet.START, marginCardEnd)
+        constraintSet.connect(upcomingCard.id, ConstraintSet.TOP, hours_view.id, ConstraintSet.TOP, marginTop)
+        constraintSet.applyTo(hours_view)
+
+        upcomingCard.setOnClickListener {
+            Toast.makeText(requireContext(), "Clicked on upcoming card", Toast.LENGTH_SHORT).show()
+        }
+    }
+
 //    private fun addUnAvailableCard(startHour: Int, duration: Float) {
 //        // Sample attachment of unavailable card
 //        val unavailableCard = UnavailableCard(this.requireContext())

@@ -17,16 +17,21 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/first_layer"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content">
 
-            <ImageButton
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/back_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
+                android:paddingEnd="0dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="0dp"
+                android:paddingStart="0dp"
+                android:minWidth="0dp"
                 android:background="@color/fui_transparent"
-                android:src="@drawable/black_arrow_back"
+                app:icon="@drawable/black_arrow_back"
+                app:iconTint="@color/black"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -35,7 +40,6 @@
                 android:id="@+id/month_selector"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
                 style="@style/BsHeadingBold12"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@id/back_button"

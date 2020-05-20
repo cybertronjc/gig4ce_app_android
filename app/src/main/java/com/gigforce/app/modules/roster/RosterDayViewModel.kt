@@ -15,4 +15,8 @@ class RosterDayViewModel: ViewModel() {
         fun newInstance() = RosterDayViewModel()
     }
 
+    fun subtractDay() {
+
+    }
+
 }
