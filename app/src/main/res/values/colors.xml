@@ -49,5 +49,5 @@
     <color name="onboarding_rv_item_color_60">#60131415</color>
     <color name="onboarding_rv_item_color_40">#40131415</color>
     <color name="onboarding_rv_item_color_10">#10131415</color>
-
+    <color name="onboarding_name_underline_color_20">#202e2f30</color>
 </resources>

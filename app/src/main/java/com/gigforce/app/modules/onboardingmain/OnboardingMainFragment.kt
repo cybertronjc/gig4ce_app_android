@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.View.OnTouchListener
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -25,6 +26,7 @@ import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.app.core.genericadapter.RecyclerGenericAdapter
 import com.github.rubensousa.gravitysnaphelper.GravitySnapHelper
 import kotlinx.android.synthetic.main.onboarding_main_fragment.*
+import java.lang.Exception
 
 
 class OnboardingMainFragment : BaseFragment() {
@@ -48,33 +50,115 @@ class OnboardingMainFragment : BaseFragment() {
         initializeViews()
     }
 
-        val hashMapForRV = HashMap<Int, Boolean>()
+    val hashMapForRV = HashMap<Int, Boolean>()
     private fun initializeViews() {
-        for(i in 0..viewModel.getOnboardingData().size)
-            hashMapForRV.put(i,false)
+        for (i in 0..viewModel.getOnboardingData().size)
+            hashMapForRV.put(i, false)
         initializePager()
+        initializeTitleAsName()
         listeners()
     }
 
-    private fun listeners() {
-        next.setOnClickListener(){
-            onboarding_pager.setCurrentItem(onboarding_pager.currentItem+1)
-        }
+    private fun initializeTitleAsName() {
+        setProgressBarWeight(20f)
+        progress_completion_tv.text = "1/5"
+        title_onboarding.text = "Whats your Name ?"
     }
 
+    private fun initializeTitleAsAge() {
+        setProgressBarWeight(40f)
+        progress_completion_tv.text = "2/5"
+        title_onboarding.text = "Whats your Age Group ?"
+    }
+
+    private fun initializeTitleAsGender() {
+        setProgressBarWeight(60f)
+        progress_completion_tv.text = "3/5"
+        title_onboarding.text = "Select your Gender?"
+    }
+
+    private fun initializeTitleAsEducation() {
+        setProgressBarWeight(80f)
+        progress_completion_tv.text = "4/5"
+        title_onboarding.text = "Whats your highest education?"
+    }
+
+    private fun initializeTitleAsWorkStatus() {
+        setProgressBarWeight(100f)
+        progress_completion_tv.text = "5/5"
+        title_onboarding.text = "What is your work status ?"
+    }
+
+
+    private fun listeners() {
+        next.setOnClickListener() {
+            backpress_icon.visibility = View.VISIBLE
+            onboarding_pager.setCurrentItem(onboarding_pager.currentItem + 1)
+            if (onboarding_pager.currentItem == 0) {
+                initializeTitleAsName()
+            } else if (onboarding_pager.currentItem == 1) {
+                initializeTitleAsAge()
+            } else if (onboarding_pager.currentItem == 2) {
+
+                initializeTitleAsGender()
+            } else if (onboarding_pager.currentItem == 3) {
+
+                initializeTitleAsEducation()
+            } else if (onboarding_pager.currentItem == 4) {
+
+                initializeTitleAsWorkStatus()
+            }
+        }
+        backpress_icon.setOnClickListener(){
+            if(onboarding_pager.currentItem==1){
+                backpress_icon.visibility = View.INVISIBLE
+            }
+            onboarding_pager.setCurrentItem(onboarding_pager.currentItem - 1)
+            if (onboarding_pager.currentItem == 0) {
+                initializeTitleAsName()
+            } else if (onboarding_pager.currentItem == 1) {
+                initializeTitleAsAge()
+            } else if (onboarding_pager.currentItem == 2) {
+
+                initializeTitleAsGender()
+            } else if (onboarding_pager.currentItem == 3) {
+
+                initializeTitleAsEducation()
+            } else if (onboarding_pager.currentItem == 4) {
+                initializeTitleAsWorkStatus()
+            }
+        }
+    }
+    private fun setProgressBarWeight(weight:Float){
+//        var param = LinearLayout.LayoutParams(
+//            LinearLayout.LayoutParams.WRAP_CONTENT,
+//            LinearLayout.LayoutParams.MATCH_PARENT,
+//    weight
+//);
+        var params  =
+        progress_bar_view.getLayoutParams() as LinearLayout.LayoutParams;
+        params.weight = weight;
+        progress_bar_view.layoutParams = params
+    }
     private fun initializePager() {
         val recyclerGenericAdapter: RecyclerGenericAdapter<ArrayList<String>> =
             RecyclerGenericAdapter<ArrayList<String>>(
                 activity?.applicationContext,
-                PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item -> showToast("abc")},
+                PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item -> showToast("abc") },
                 RecyclerGenericAdapter.ItemInterface<ArrayList<String>?> { obj, viewHolder, position ->
-                    if(position!=0) {
+                    if (position != 0) {
+                        getView(viewHolder, R.id.user_name).visibility = View.GONE
                         getView(viewHolder, R.id.first_item_indicator).visibility = View.VISIBLE
                         var param = viewHolder.getView(R.id.first_item_indicator).layoutParams
-                        setRecylerData(getRecyclerView(viewHolder, R.id.onboarding_rv), obj,position,param.height)
-                    }
-                    else{
+                        setRecylerData(
+                            getRecyclerView(viewHolder, R.id.onboarding_rv),
+                            obj,
+                            position,
+                            param.height
+                        )
+                    } else {
                         viewHolder.getView(R.id.first_item_indicator).visibility = View.GONE
+
                     }
                 })!!
         recyclerGenericAdapter.setList(viewModel.getOnboardingData())
@@ -84,40 +168,45 @@ class OnboardingMainFragment : BaseFragment() {
     }
 
     private val visibleThreshold = 4
-    private fun setRecylerData(recyclerView: RecyclerView, dataArr: ArrayList<String>?,pagerPosition:Int,heightPagerItem:Int) {
-            val params: ViewGroup.LayoutParams = recyclerView.getLayoutParams()
-            params.height = heightPagerItem * (dataArr?.size!!)
-            recyclerView.setLayoutParams(params)
+    private fun setRecylerData(
+        recyclerView: RecyclerView,
+        dataArr: ArrayList<String>?,
+        pagerPosition: Int,
+        heightPagerItem: Int
+    ) {
+        val params: ViewGroup.LayoutParams = recyclerView.getLayoutParams()
+        params.height = heightPagerItem * (dataArr?.size!!)
+        recyclerView.setLayoutParams(params)
         val recyclerGenericAdapter: RecyclerGenericAdapter<String> =
             RecyclerGenericAdapter<String>(
                 activity?.applicationContext,
-                PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item -> showToast("abc")},
+                PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item -> showToast("abc") },
                 RecyclerGenericAdapter.ItemInterface<String?> { obj, viewHolder, position ->
-                    var tv = getTextView(viewHolder,R.id.item)
+                    var tv = getTextView(viewHolder, R.id.item)
                     tv.text = obj
-                    if(dataArr.size==position+1 && position==0){
-                        setTextViewColor(tv,R.color.onboarding_rv_item_color)
+                    if (dataArr.size == position + 1 && position == 0) {
+                        setTextViewColor(tv, R.color.onboarding_rv_item_color)
                         val face = Typeface.createFromAsset(
                             activity?.getAssets(),
                             "fonts/Lato-Bold.ttf"
                         )
                         tv.setTypeface(face)
-                    }else if(dataArr.size==position+1 &&position==1){
-                        setTextViewColor(tv,R.color.onboarding_rv_item_color_60)
+                    } else if (dataArr.size == position + 1 && position == 1) {
+                        setTextViewColor(tv, R.color.onboarding_rv_item_color_60)
                         val face = Typeface.createFromAsset(
                             activity?.getAssets(),
                             "fonts/Lato-Regular.ttf"
                         )
                         tv.setTypeface(face)
-                    }else if(dataArr.size==position+1 && position==2){
-                        setTextViewColor(tv,R.color.onboarding_rv_item_color_40)
+                    } else if (dataArr.size == position + 1 && position == 2) {
+                        setTextViewColor(tv, R.color.onboarding_rv_item_color_40)
                         val face = Typeface.createFromAsset(
                             activity?.getAssets(),
                             "fonts/Lato-Regular.ttf"
                         )
                         tv.setTypeface(face)
-                    }else if(dataArr.size==position+1 && position==3){
-                        setTextViewColor(tv,R.color.onboarding_rv_item_color_10)
+                    } else if (dataArr.size == position + 1 && position == 3) {
+                        setTextViewColor(tv, R.color.onboarding_rv_item_color_10)
                         val face = Typeface.createFromAsset(
                             activity?.getAssets(),
                             "fonts/Lato-Regular.ttf"
@@ -137,50 +226,54 @@ class OnboardingMainFragment : BaseFragment() {
         var scrollListener = object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
-
-                when (newState) {
-                    RecyclerView.SCROLL_STATE_IDLE -> {
-                        if(true) {
-                            var firstItem = recyclerView.getChildAt(0).findViewById<TextView>(R.id.item)
-                            setTextViewColor(firstItem, R.color.onboarding_rv_item_color)
-                            val face = Typeface.createFromAsset(
-                                activity?.getAssets(),
-                                "fonts/Lato-Bold.ttf"
-                            )
-                            firstItem.setTypeface(face)
+                try {
+                    when (newState) {
+                        RecyclerView.SCROLL_STATE_IDLE -> {
+                            if (true) {
+                                var firstItem =
+                                    recyclerView.getChildAt(0).findViewById<TextView>(R.id.item)
+                                setTextViewColor(firstItem, R.color.onboarding_rv_item_color)
+                                val face = Typeface.createFromAsset(
+                                    activity?.getAssets(),
+                                    "fonts/Lato-Bold.ttf"
+                                )
+                                firstItem.setTypeface(face)
+                            }
+                            if (true) {
+                                var firstItem =
+                                    recyclerView.getChildAt(1).findViewById<TextView>(R.id.item)
+                                setTextViewColor(firstItem, R.color.onboarding_rv_item_color_60)
+                                val face = Typeface.createFromAsset(
+                                    activity?.getAssets(),
+                                    "fonts/Lato-Regular.ttf"
+                                )
+                                firstItem.setTypeface(face)
+                            }
+                            if (true) {
+                                var firstItem =
+                                    recyclerView.getChildAt(2).findViewById<TextView>(R.id.item)
+                                setTextViewColor(firstItem, R.color.onboarding_rv_item_color_40)
+                                val face = Typeface.createFromAsset(
+                                    activity?.getAssets(),
+                                    "fonts/Lato-Regular.ttf"
+                                )
+                                firstItem.setTypeface(face)
+                            }
+                            if (true) {
+                                var firstItem =
+                                    recyclerView.getChildAt(3).findViewById<TextView>(R.id.item)
+                                setTextViewColor(firstItem, R.color.onboarding_rv_item_color_10)
+                                val face = Typeface.createFromAsset(
+                                    activity?.getAssets(),
+                                    "fonts/Lato-Regular.ttf"
+                                )
+                                firstItem.setTypeface(face)
+                            }
                         }
-                        if(true){
-                            var firstItem = recyclerView.getChildAt(1).findViewById<TextView>(R.id.item)
-                            setTextViewColor(firstItem,R.color.onboarding_rv_item_color_60)
-                            val face = Typeface.createFromAsset(
-                                activity?.getAssets(),
-                                "fonts/Lato-Regular.ttf"
-                            )
-                            firstItem.setTypeface(face)
-                        }
-                        if(true){
-                            var firstItem = recyclerView.getChildAt(2).findViewById<TextView>(R.id.item)
-                            setTextViewColor(firstItem,R.color.onboarding_rv_item_color_40)
-                            val face = Typeface.createFromAsset(
-                                activity?.getAssets(),
-                                "fonts/Lato-Regular.ttf"
-                            )
-                            firstItem.setTypeface(face)
-                        }
-                        if(true){
-                            var firstItem = recyclerView.getChildAt(3).findViewById<TextView>(R.id.item)
-                            setTextViewColor(firstItem,R.color.onboarding_rv_item_color_10)
-                            val face = Typeface.createFromAsset(
-                                activity?.getAssets(),
-                                "fonts/Lato-Regular.ttf"
-                            )
-                            firstItem.setTypeface(face)
-                        }
+                        RecyclerView.SCROLL_STATE_DRAGGING -> println("Scrolling now")
+                        RecyclerView.SCROLL_STATE_SETTLING -> println("Scroll Settling")
                     }
-                    RecyclerView.SCROLL_STATE_DRAGGING -> println("Scrolling now")
-                    RecyclerView.SCROLL_STATE_SETTLING -> println("Scroll Settling")
-                }
-
+                }catch (e:Exception){}
                 val totalItemCount = recyclerView!!.layoutManager?.itemCount
                 var layoutManager: LinearLayoutManager? = null
                 if (layoutManager == null) {
@@ -189,16 +282,16 @@ class OnboardingMainFragment : BaseFragment() {
                 val firstVisibleItem = layoutManager!!.findFirstVisibleItemPosition()
                 val lastVisibleItem = layoutManager!!.findLastVisibleItemPosition()
                 if (totalItemCount!! <= (lastVisibleItem + visibleThreshold)) {
-                    if(pagerPosition==1)
-                    recyclerGenericAdapter.list.addAll(viewModel.getAgeOptions())
-                    else if(pagerPosition==2)
+                    if (pagerPosition == 1)
+                        recyclerGenericAdapter.list.addAll(viewModel.getAgeOptions())
+                    else if (pagerPosition == 2)
                         recyclerGenericAdapter.list.addAll(viewModel.getGenderOptions())
-                    if(pagerPosition==3)
+                    if (pagerPosition == 3)
                         recyclerGenericAdapter.list.addAll(viewModel.getEducationOption())
-                    if(pagerPosition==4)
+                    if (pagerPosition == 4)
                         recyclerGenericAdapter.list.addAll(viewModel.getWorkStatusOptions())
                     recyclerGenericAdapter.notifyDataSetChanged()
-                    }
+                }
                 // below commented code will require later
 //                if (!isLoading && (firstVisibleItem - visibleThreshold)<=0) {
 //                    isLoading = true;
@@ -220,9 +313,16 @@ class OnboardingMainFragment : BaseFragment() {
 //        val linearSnapHelper: LinearSnapHelper = LinearSnapHelper()
         val snapHelperTop: SnapHelper = GravitySnapHelper(Gravity.TOP)
         snapHelperTop.attachToRecyclerView(recyclerView)
-        recyclerView.setLayoutManager(SpeedyLinearLayoutManager(context, LinearLayoutManager.VERTICAL, false))
+        recyclerView.setLayoutManager(
+            SpeedyLinearLayoutManager(
+                context,
+                LinearLayoutManager.VERTICAL,
+                false
+            )
+        )
 
     }
+
     class SnapHelperOneByOne : LinearSnapHelper() {
         override fun findTargetSnapPosition(
             layoutManager: RecyclerView.LayoutManager,
@@ -285,7 +385,7 @@ class OnboardingMainFragment : BaseFragment() {
         }
 
         companion object {
-            private const val MILLISECONDS_PER_INCH = 0.001f //default is 25f (bigger = slower)
+            private const val MILLISECONDS_PER_INCH = 1f //default is 25f (bigger = slower)
         }
     }
 }

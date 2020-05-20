@@ -65,7 +65,7 @@
                 <action android:name="android.intent.action.MAIN"
                         android:resource="@array/preloaded_fonts"
                         android:screenOrientation="portrait"
-                        android:windowSoftInputMode="adjustPan|adjustResize"/>
+                        android:windowSoftInputMode="adjustResize"/>
             </intent-filter>
         </activity>
         <meta-data

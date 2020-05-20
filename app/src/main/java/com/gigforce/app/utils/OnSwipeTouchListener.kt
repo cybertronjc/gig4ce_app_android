@@ -8,7 +8,7 @@ import android.view.View
 private const val SWIPE_THRESHOLD:Int = 100
 private const val SWIPE_VELOCITY_THRESHOLD = 100
 
-class OnSwipeTouchListener(val context:Context, val swipeListner:SimpleSwipeGestureListener)
+open class OnSwipeTouchListener(val context:Context, val swipeListner:SimpleSwipeGestureListener)
     :View.OnTouchListener
 {
     final var gestureDetector: GestureDetector

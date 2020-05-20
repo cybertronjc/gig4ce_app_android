@@ -1,14 +1,12 @@
 package com.gigforce.app.modules.roster
 
-import android.app.ActionBar
 import android.app.Dialog
+import android.content.Context
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.view.Window
+import android.view.*
 import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.Toast
@@ -17,13 +15,15 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import com.gigforce.app.R
 import com.gigforce.app.modules.roster.models.Gig
+import com.github.pwittchen.swipe.library.rx2.Swipe
 import com.google.android.material.card.MaterialCardView
-import com.google.type.Color
 import kotlinx.android.synthetic.main.day_view_top_bar.view.*
 import kotlinx.android.synthetic.main.gigs_today_warning_dialog.*
+import kotlinx.android.synthetic.main.item_roster_day.view.*
 import kotlinx.android.synthetic.main.reason_for_gig_cancel_dialog.*
 import kotlinx.android.synthetic.main.roster_day_fragment.*
 import java.time.LocalDateTime
+import java.util.*
 import kotlin.collections.ArrayList
 
 class RosterDayFragment: RosterBaseFragment() {
@@ -33,8 +33,22 @@ class RosterDayFragment: RosterBaseFragment() {
     var upcomingGigs: ArrayList<Gig> = ArrayList<Gig>()
     var unavailableCards: ArrayList<String> = ArrayList()
 
-    val marginCardStart = 85.px
+    val marginCardStart = 95.px
     val marginCardEnd = 16.px
+
+    val currentDateTime = LocalDateTime.now()
+
+    val swipe = Swipe()
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    var handler = Handler() { msg ->
+        var datetime = LocalDateTime.now()
+        val marginTop = (itemHeight * datetime.hour + ((datetime.minute / 60.0) * itemHeight).toInt()).px
+        val layoutParams = current_time_divider.layoutParams as ViewGroup.MarginLayoutParams
+        layoutParams.setMargins(marginCardStart - 8.px, marginTop, 0, 0)
+        current_time_divider.requestLayout()
+        true
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -68,10 +82,12 @@ class RosterDayFragment: RosterBaseFragment() {
     }
 
 
+
     @RequiresApi(Build.VERSION_CODES.O)
     private fun initialize() {
         initializeHourViews()
         setCurrentTimeDivider()
+        scheduleCurrentTimerUpdate()
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -86,14 +102,30 @@ class RosterDayFragment: RosterBaseFragment() {
         var widget: MaterialCardView
         val constraintSet: ConstraintSet?
 
+        var cardDate = top_bar.date
+        var cardYear = top_bar.year
+        var cardMonth = top_bar.month
+
         // Adding hourly widgets
         for ((index, time) in times.withIndex()) {
             widget = HourRow(this.requireContext())
             widget.id = View.generateViewId()
             widget.hour = index + 1
             widget.time = time
+
             widget.setOnClickListener {
                 Toast.makeText(requireContext(), "Clicked on hour " + widget.hour.toString(), Toast.LENGTH_SHORT).show()
+            }
+
+            if (currentDateTime.year <= cardYear &&
+                (currentDateTime.monthValue - 1) <= cardMonth &&
+                currentDateTime.dayOfMonth <= cardDate) {
+
+                if (widget.hour <= currentDateTime.hour) {
+                    Log.d(TAG, "inactive hour")
+                    widget.item_time.setTextColor(resources.getColor(R.color.gray_color_calendar))
+                    widget.isClickable = false
+                }
             }
 
             timeViewGroup.addView(widget)
@@ -119,13 +151,25 @@ class RosterDayFragment: RosterBaseFragment() {
         constraintSet.applyTo(timeViewGroup)
     }
 
+    private fun scheduleCurrentTimerUpdate() {
+        Timer().scheduleAtFixedRate(object: TimerTask() {
+            @RequiresApi(Build.VERSION_CODES.O)
+            override fun run() {
+                Log.d(TAG, "HELLO WORLD")
+
+                handler.obtainMessage().sendToTarget()
+
+            }
+        }, 2000, 1000 * 60)
+    }
+
     @RequiresApi(Build.VERSION_CODES.O)
     private fun setCurrentTimeDivider() {
         val datetime = LocalDateTime.now()
         // set current time divider
         val marginTop = (itemHeight * datetime.hour + ((datetime.minute / 60.0) * itemHeight).toInt()).px
         val layoutParams = current_time_divider.layoutParams as ViewGroup.MarginLayoutParams
-        layoutParams.setMargins(0, marginTop, 0, 0)
+        layoutParams.setMargins(marginCardStart - 8.px, marginTop, 0, 0)
         current_time_divider.requestLayout()
     }
 
@@ -306,4 +350,5 @@ class RosterDayFragment: RosterBaseFragment() {
 
         dialog.show()
     }
+
 }
