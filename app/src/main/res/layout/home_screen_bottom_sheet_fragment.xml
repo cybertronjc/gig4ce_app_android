@@ -150,8 +150,12 @@
         android:id="@+id/assessment_rv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
-
-    <View
+    <TextView
+        android:id="@+id/application_version"
         android:layout_width="match_parent"
-        android:layout_height="15dp" />
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:gravity="center"
+        android:textSize="12sp"
+        android:textColor="@color/onboarding_rv_item_color_40"/>
 </LinearLayout>

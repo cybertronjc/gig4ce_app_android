@@ -20,6 +20,8 @@
         android:layout_below="@id/iv_main_art_video"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="100dp"
+        android:textColor="@color/black"
+        android:letterSpacing="0"
         android:text="Welcome to Gigforce" />
 
     <TextView
@@ -30,6 +32,9 @@
         android:layout_below="@id/tv_title"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="16dp"
+        android:textColor="#80000000"
+        android:letterSpacing="0"
+        android:textSize="18sp"
         android:text="The Future of Work" />
 
     <ImageView

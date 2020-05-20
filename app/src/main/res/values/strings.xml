@@ -264,4 +264,5 @@
     <string name="assessment">Assessment</string>
     <string name="kyc_verification_not_done">Kyc Verification is not done , Click here to  complete.</string>
     <string name="video_resume_pending">Your Video resume is Pending , Click here to  complete.</string>
+    <string name="next">NEXT</string>
 </resources>
