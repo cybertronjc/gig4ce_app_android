@@ -12,7 +12,7 @@ import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.tasks.await
 
-class ProfileViewModel: ViewModel() {
+class ProfileViewModel : ViewModel() {
 
     companion object {
         fun newInstance() = ProfileViewModel()
@@ -24,39 +24,33 @@ class ProfileViewModel: ViewModel() {
     lateinit var uid: String
 
     fun getProfileData(): MutableLiveData<ProfileData> {
-        profileFirebaseRepository.getProfile().addSnapshotListener(EventListener<DocumentSnapshot> {
-            value, e ->
+        profileFirebaseRepository.getProfile()
+            .addSnapshotListener(EventListener<DocumentSnapshot> { value, e ->
+                if (e != null) {
+                    Log.w("ProfileViewModel", "Listen failed", e)
+                    return@EventListener
+                }
 
-            if (e != null) {
-                Log.w("ProfileViewModel", "Listen failed", e)
-                return@EventListener
-            }
-
-            if (value!!.data == null) {
-                profileFirebaseRepository.createEmptyProfile()
-            }
-            else {
-
-                Log.d("ProfileViewModel", value!!.data.toString())
-
-                userProfileData.postValue(
-                    value!!.toObject(ProfileData::class.java)
-                )
-
-                Log.d("ProfileViewModel", userProfileData.toString())
-            }
-        })
+                if (value!!.data == null) {
+                    profileFirebaseRepository.createEmptyProfile()
+                } else {
+                    Log.d("ProfileViewModel", value!!.data.toString())
+                    userProfileData.postValue(
+                        value!!.toObject(ProfileData::class.java)
+                    )
+                    Log.d("ProfileViewModel", userProfileData.toString())
+                }
+            })
         return userProfileData
     }
 
     fun getAllTags() {
-        lateinit var tags:Array<String>
+        lateinit var tags: Array<String>
         FirebaseFirestore.getInstance().collection("Tags").limit(1).get()
             .addOnSuccessListener {
                 if (it.isEmpty) {
 
-                }
-                else {
+                } else {
                     Tags.postValue(
                         it.documents[0].toObject(TagData::class.java)
                     )
@@ -64,7 +58,7 @@ class ProfileViewModel: ViewModel() {
             }
     }
 
-    fun addNewTag(tag:String) {
+    fun addNewTag(tag: String) {
         profileFirebaseRepository.addNewTag(tag)
     }
 

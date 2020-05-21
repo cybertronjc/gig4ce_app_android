@@ -18,6 +18,7 @@
 
     <color name="setting_bg">#f7f7f7</color>
     <color name="gray_color">#6d7278</color>
+    <color name="preferences_item_seprator">#c8c7cc</color>
     <color name="shadow_color">#c8c7cc</color>
 
     <color name="lightGrey">#c7c7cc</color>

@@ -19,6 +19,14 @@ class RosterTopBar: MaterialCardView {
     constructor(context: Context): super(context)
     constructor(context: Context, attrs: AttributeSet): super(context, attrs)
 
+    val datetime = LocalDateTime.now()
+
+    var monthTemplate = ArrayList<String> (
+        listOf("January", "February", "March", "April", "May",
+            "June", "July", "August", "September", "October",
+            "November", "December")
+    )
+
     var months = ArrayList<String> (
         listOf("January", "February", "March", "April", "May",
             "June", "July", "August", "September", "October",
@@ -31,7 +39,6 @@ class RosterTopBar: MaterialCardView {
     init {
         View.inflate(context, R.layout.day_view_top_bar, this)
 
-        val datetime = LocalDateTime.now()
         year = datetime.year
         month = datetime.monthValue - 1
         date = datetime.dayOfMonth
@@ -41,10 +48,10 @@ class RosterTopBar: MaterialCardView {
     var year: Int = 0
         set(value) {
             field = value
-            for ((index, month) in months.withIndex()) {
+            for ((index, month) in monthTemplate.withIndex()) {
                 months[index] = month + " " + value
             }
-            month_selector.setAdapter(ArrayAdapter(this.context, R.layout.simple_spinner_dropdown_item ,months))
+            month_selector.setAdapter(DropdownAdapter(this.context, months))
         }
 
     var month: Int = 0
@@ -58,6 +65,18 @@ class RosterTopBar: MaterialCardView {
         set(value) {
             field = value
             date_text.text = date.toString()
+        }
+
+    var isCurrentDay: Boolean = false
+        set(value){
+            field = value
+            if (!value) {
+                date_text.setTextColor(resources.getColor(R.color.gray_color_calendar))
+                day_text.setTextColor(resources.getColor(R.color.gray_color_calendar))
+            } else {
+                date_text.setTextColor(resources.getColor(R.color.colorPrimary))
+                day_text.setTextColor(resources.getColor(R.color.colorPrimary))
+            }
         }
 
     var day: Int = 0
