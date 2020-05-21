@@ -46,9 +46,9 @@ class ProfileFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         makeStatusBarTransparent()
-//        requireActivity().onBackPressedDispatcher.addCallback(this) {
-//            findNavController().navigate(R.id.homeScreenNew)
-//        }
+        requireActivity().onBackPressedDispatcher.addCallback(this) {
+            findNavController().navigate(R.id.homeScreenNew)
+        }
     }
 
     private fun makeStatusBarTransparent(){
