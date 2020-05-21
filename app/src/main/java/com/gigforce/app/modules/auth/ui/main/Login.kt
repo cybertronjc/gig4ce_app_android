@@ -1,18 +1,17 @@
 package com.gigforce.app.modules.auth.ui.main
 
 import android.Manifest
+import android.app.Dialog
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Handler
 import android.telephony.SubscriptionInfo
 import android.telephony.SubscriptionManager
-import android.view.KeyEvent
-import android.view.LayoutInflater
-import android.view.View
+import android.view.*
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
-import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.TextView
 import androidx.core.app.ActivityCompat
 import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.ViewModelProviders
@@ -20,6 +19,7 @@ import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.utils.AppConstants
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.login_frament.*
 import java.util.regex.Matcher
 import java.util.regex.Pattern
@@ -63,15 +63,27 @@ class Login: BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         if(getSharedData(AppConstants.INTRO_COMPLETE,null)==null){
             navigateWithAllPopupStack(R.id.authFlowFragment)
+        }else {
+            viewModel.activity = this.activity!!
+            otp_mobile_number.setText(mobile_number)
+            listeners()
+            observer()
+            showComfortDialog()
         }
-        viewModel.activity = this.activity!!
-        otp_mobile_number.setText(mobile_number)
-        listeners()
-        observer()
-        requestForDeviceMobileNumber()
+//        requestForDeviceMobileNumber()
     }
 
-
+    private fun showComfortDialog() {
+        val dialog = activity?.let { Dialog(it) }
+        dialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog?.setCancelable(false)
+        dialog?.setContentView(R.layout.comfort_message_login)
+        val okay = dialog?.findViewById(R.id.okay) as TextView
+        okay.setOnClickListener {
+            dialog?.dismiss()
+        }
+        dialog?.show()
+    }
     private fun observer() {
         viewModel.liveState.observeForever {
             when(it.stateResponse){

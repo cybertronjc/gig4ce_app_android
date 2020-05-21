@@ -156,11 +156,11 @@ class MainHomeScreen : BaseFragment() {
                             )
                             setTextViewColor(
                                 getTextView(viewHolder, R.id.title),
-                                R.color.vertical_calendar_today
+                                R.color.vertical_calendar_today1
                             )
                             setTextViewColor(
                                 getTextView(viewHolder, R.id.subtitle),
-                                R.color.vertical_calendar_today
+                                R.color.vertical_calendar_today1
                             )
                             setTextViewColor(
                                 getTextView(viewHolder, R.id.day),
@@ -235,15 +235,15 @@ class MainHomeScreen : BaseFragment() {
                             else{
                                 setTextViewColor(
                                     getTextView(viewHolder, R.id.title),
-                                    R.color.gray_color_calendar
+                                    R.color.gray_color_day_date_calendar
                                 )
                                 setTextViewColor(
                                     getTextView(viewHolder, R.id.day),
-                                    R.color.gray_color_calendar
+                                    R.color.gray_color_day_date_calendar
                                 )
                                 setTextViewColor(
                                     getTextView(viewHolder, R.id.date),
-                                    R.color.gray_color_calendar
+                                    R.color.gray_color_day_date_calendar
                                 )
                                 setViewBackgroundColor(
                                     getView(viewHolder, R.id.daydatecard),

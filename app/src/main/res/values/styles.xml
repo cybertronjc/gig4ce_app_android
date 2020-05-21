@@ -12,11 +12,13 @@
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:textViewStyle">@style/AppTheme.TextStyle</item>
         <item name="bottomSheetDialogTheme">@style/CustomBottomSheetDialog</item>
+        <item name="android:letterSpacing">0</item>
     </style>
     <style name="Theme.switchButton" parent="Theme.AppCompat.Light">
         <item name="colorPrimary">@color/colorAccent</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorPrimary</item>
+        <item name="android:letterSpacing">0</item>
     </style>
     <style name="FieldtextLatoRegularGrey12">
         <item name="android:textSize">12sp</item>
@@ -89,21 +91,22 @@
     </style>
 
     <style name="AppTheme.TextStyle.H6">
-        <item name="android:textSize">20sp</item>
-        <item name="android:fontFamily">@font/lato_bold</item>
-        <item name="android:letterSpacing">0.1</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:fontFamily">@font/lato</item>
     </style>
+<!--        <item name="android:color">#000000</item>-->
 
     <style name="AppTheme.TextStyle.Subtitle1">
-        <item name="android:textSize">16sp</item>
-        <item name="android:letterSpacing">0.15</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:fontFamily">@font/lato</item>
+        <item name="android:color">#313131</item>
     </style>
 
     <style name="AppTheme.TextStyle.Subtitle2">
-        <item name="android:textSize">14sp</item>
         <item name="android:fontFamily">@font/lato_bold</item>
         <item name="android:letterSpacing">0.1</item>
     </style>
+<!--        <item name="android:textSize">14sp</item>-->
 
     <style name="AppTheme.TextStyle.Body1">
         <item name="android:textSize">16sp</item>

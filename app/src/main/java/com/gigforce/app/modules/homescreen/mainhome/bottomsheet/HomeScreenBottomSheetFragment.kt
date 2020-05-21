@@ -58,6 +58,7 @@ class HomeScreenBottomSheetFragment : BaseFragment() {
         initializeFeaturesBottomSheet()
         initializeLearningBottomSheet()
         initializeAssessmentBottomSheet()
+        application_version.text = "version "+getCurrentVersion()
         listener()
     }
 
@@ -225,8 +226,7 @@ class HomeScreenBottomSheetFragment : BaseFragment() {
             4 -> showToast("")
             5 -> navigate(R.id.settingFragment)
             6 -> showToast("")
-            7 -> showToast("")
-
+            7 -> navigate(R.id.onboardingfragment)
         }
     }
 

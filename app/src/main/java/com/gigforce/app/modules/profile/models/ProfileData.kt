@@ -20,8 +20,11 @@ data class ProfileData(
     var connections: Int = 0,
     var rating: Rating? = Rating(),
     var tasksDone: Int = 0,
-    var address:AddressFirestoreModel = AddressFirestoreModel()
-
+    var address:AddressFirestoreModel = AddressFirestoreModel(),
+    var ageGroup:String = "",
+    var gender : String = "",
+    var highestEducation:String = "",
+    var workStatus : String = ""
 
 ) {
 
