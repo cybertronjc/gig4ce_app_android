@@ -60,7 +60,6 @@ class LocationFragment : BaseFragment() {
     private fun initializeViews() {
         preferenceDataModel = viewModel.getPreferenceDataModel()
         profileDataModel = viewModel.getProfileDataModel()
-        imageView10.setOnClickListener(View.OnClickListener { activity?.onBackPressed() })
         switch1.isChecked = preferenceDataModel.isWorkFromHome
         textView51.text = convertAddressToString(viewModel.getPermanentAddress())
         textView57.text = convertAddressToString(viewModel.getCurrentAddress())
@@ -82,6 +81,7 @@ class LocationFragment : BaseFragment() {
     }
 
     private fun listener() {
+        imageView10.setOnClickListener(View.OnClickListener { activity?.onBackPressed() })
         addloc.setOnClickListener(View.OnClickListener {
             if (viewModel.getCurrentAddress()!!.isEmpty())
                 showToast(getString(R.string.add_current_address))

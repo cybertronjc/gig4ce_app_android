@@ -111,7 +111,7 @@ class WeekDayFragment : BaseFragment() {
     }
 
     fun showDaysAlert() {
-        val items = arrayOf("All", "Monday", "Tuesday", "Wednesday", "Thrusday", "Friday")
+        val items = arrayOf("All", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday")
         val indexItem = arrayOf(0, 1, 2, 3, 4, 5)
         var isSectionSelected = BooleanArray(items.size)
         var selectedList = ArrayList<Int>()

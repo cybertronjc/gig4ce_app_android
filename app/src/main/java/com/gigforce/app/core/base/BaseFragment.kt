@@ -2,6 +2,8 @@ package com.gigforce.app.core.base
 
 import android.content.SharedPreferences
 import android.content.pm.ActivityInfo
+import android.content.pm.PackageInfo
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
@@ -18,10 +20,12 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
+import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.app.R
 import com.gigforce.app.core.CoreConstants
 import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.app.utils.popAllBackStates
+
 
 // TODO: Rename parameter arguments, choose names that match
 /**
@@ -159,6 +163,10 @@ abstract class BaseFragment : Fragment() {
         return view.findViewById(id) as ImageView
     }
 
+    fun getRecyclerView(view: PFRecyclerViewAdapter<Any?>.ViewHolder, id: Int): RecyclerView {
+        return view.getView(id) as RecyclerView
+    }
+
     fun getView(view: View, id: Int): View {
         return view.findViewById(id)
     }
@@ -181,5 +189,17 @@ abstract class BaseFragment : Fragment() {
 
     open fun onBackPressed(): Boolean {
         return false
+    }
+
+    fun getCurrentVersion():String{
+        try {
+            val pInfo: PackageInfo =
+                activity?.applicationContext!!.packageManager.getPackageInfo(activity!!.getPackageName(), 0)
+            val version = pInfo.versionName
+            return version
+        } catch (e: PackageManager.NameNotFoundException) {
+            e.printStackTrace()
+        }
+        return ""
     }
 }

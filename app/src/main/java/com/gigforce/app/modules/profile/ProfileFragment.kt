@@ -46,7 +46,6 @@ class ProfileFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         makeStatusBarTransparent()
-
         requireActivity().onBackPressedDispatcher.addCallback(this) {
             findNavController().navigate(R.id.homeScreenNew)
         }
@@ -161,7 +160,6 @@ class ProfileFragment : Fragment() {
                 layout.bio_card.visibility = View.VISIBLE
                 layout.edit_cover_bio.visibility = View.VISIBLE
                 layout.bio.text = profile.bio
-
                 layout.bio_card.setOnClickListener {
                     findNavController().navigate(R.id.editCoverBottomSheet)
                 }
@@ -340,7 +338,7 @@ class ProfileFragment : Fragment() {
          * back page navigation
          */
         layout.profile_main_expanded_back_button.setOnClickListener {
-            this.findNavController().navigate(R.id.mainHomeScreen)
+            activity?.onBackPressed()
         }
     }
 

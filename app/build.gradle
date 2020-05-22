@@ -12,8 +12,8 @@ android {
         applicationId "com.gigforce.app"
         minSdkVersion 23
         targetSdkVersion 29
-        versionCode 6
-        versionName "1.6.1"
+        versionCode 7
+        versionName "1.7.0"
 
         vectorDrawables.useSupportLibrary = true
 
@@ -173,8 +173,7 @@ dependencies {
 
     implementation 'com.riningan.widget:extendedbottomsheetbehavior:1.2'
 
-//    implementation 'com.mahc.custombottomsheetbehavior:googlemaps-like:0.9.4'
-
+    implementation 'com.github.rubensousa:gravitysnaphelper:1.5'
     // material dialogs
     implementation 'com.afollestad.material-dialogs:core:3.3.0'
 
