@@ -179,6 +179,7 @@ dependencies {
 
     // swipe button
     implementation "com.ncorti:slidetoact:0.8.0"
+    implementation 'androidx.palette:palette:1.0.0'
 }
 
 apply plugin: 'com.google.gms.google-services'

@@ -66,11 +66,13 @@ class Login: BaseFragment() {
         }else {
             viewModel.activity = this.activity!!
             otp_mobile_number.setText(mobile_number)
+            getAllEarlierMobileNumbers()
             listeners()
             observer()
             showComfortDialog()
+
         }
-//        requestForDeviceMobileNumber()
+        requestForDeviceMobileNumber()
     }
 
     private fun showComfortDialog() {
@@ -130,11 +132,12 @@ class Login: BaseFragment() {
                 if(login_button!=null)
                 login_button.setEnabled(true)
             }, 3000) // se
-
             doActionOnClick()
         }
 
     }
+
+
 
     private fun showWrongMobileNoLayout(show: Boolean) {
         if(show) {
@@ -192,6 +195,25 @@ class Login: BaseFragment() {
         }
         else{
             checkForAllPermissions()
+        }
+    }
+
+    private fun getAllEarlierMobileNumbers(){
+        var deviceMobileNos  = ArrayList<String>()
+        var oldMobileNumbers = getSharedData(AppConstants.ALL_MOBILE_NUMBERS_USED,"")
+        if(!oldMobileNumbers.equals("")) {
+            var oldDeviceMobileNosList = oldMobileNumbers?.split(",")
+            for (i in 0..oldDeviceMobileNosList?.size!!){
+                deviceMobileNos.add(oldDeviceMobileNosList.get(i))
+            }
+            otp_mobile_number.threshold = 0
+            otp_mobile_number.setAdapter(
+                ArrayAdapter(
+                    activity!!,
+                    com.gigforce.app.R.layout.support_simple_spinner_dropdown_item,
+                    deviceMobileNos
+                )
+            )
         }
     }
 

@@ -91,24 +91,28 @@
             app:srcCompat="@drawable/homescreen_month_dropdown" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
     <androidx.core.widget.NestedScrollView
         android:id="@+id/nsv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:elevation="20dp"
         android:background="@drawable/bottom_up_sheet"
+        android:elevation="20dp"
+        android:clipToPadding="true"
         app:allowDragging="true"
-        android:layout_marginTop="-150dp"
-        app:halfOffset="130dp"
+        app:halfOffset="170dp"
         app:peekHeight="128dp"
         app:hideable="false"
-        android:clipToPadding="false"
-        android:paddingBottom="250dp"
         app:layout_behavior="com.riningan.widget.ExtendedBottomSheetBehavior">
+
         <fragment
+            android:name="com.gigforce.app.modules.homescreen.mainhome.bottomsheet.HomeScreenBottomSheetFragment"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:name="com.gigforce.app.modules.homescreen.mainhome.bottomsheet.HomeScreenBottomSheetFragment"/>
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
 
     </androidx.core.widget.NestedScrollView>
 

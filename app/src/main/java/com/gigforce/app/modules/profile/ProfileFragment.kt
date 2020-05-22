@@ -15,6 +15,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
+import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.modules.photocrop.PhotoCrop
 import com.gigforce.app.utils.GlideApp
 import com.google.android.material.appbar.AppBarLayout
@@ -27,7 +28,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-class ProfileFragment : Fragment() {
+class ProfileFragment : BaseFragment() {
 
     companion object {
         fun newInstance() = ProfileFragment()
@@ -46,9 +47,9 @@ class ProfileFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         makeStatusBarTransparent()
-        requireActivity().onBackPressedDispatcher.addCallback(this) {
-            findNavController().navigate(R.id.homeScreenNew)
-        }
+//        requireActivity().onBackPressedDispatcher.addCallback(this) {
+//            findNavController().navigate(R.id.homeScreenNew)
+//        }
     }
 
     private fun makeStatusBarTransparent(){
@@ -107,7 +108,7 @@ class ProfileFragment : Fragment() {
         Log.d("DEBUG", "ENTERED PROFILE VIEW")
         val wm = requireContext().getSystemService(Context.WINDOW_SERVICE) as WindowManager
         dWidth = wm.defaultDisplay
-        layout = inflater.inflate(R.layout.fragment_profile_main_expanded, container, false)
+        layout = inflateView(R.layout.fragment_profile_main_expanded, inflater,container)!!
         layout.appbar.post(Runnable {
             val heightPx: Int = dWidth.width * 1 / 3
             setAppBarOffset(heightPx)

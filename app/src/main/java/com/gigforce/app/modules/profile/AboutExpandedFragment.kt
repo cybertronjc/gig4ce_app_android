@@ -28,9 +28,9 @@ class AboutExpandedFragment: ProfileBaseFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        requireActivity().onBackPressedDispatcher.addCallback(this) {
-            findNavController().navigate(R.id.profileFragment)
-        }
+//        requireActivity().onBackPressedDispatcher.addCallback(this) {
+//            findNavController().navigate(R.id.profileFragment)
+//        }
     }
 
     override fun onCreateView(

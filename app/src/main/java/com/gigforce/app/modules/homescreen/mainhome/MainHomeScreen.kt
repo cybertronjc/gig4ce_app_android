@@ -59,9 +59,6 @@ class MainHomeScreen : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mExtendedBottomSheetBehavior = ExtendedBottomSheetBehavior.from(nsv)
-        mExtendedBottomSheetBehavior?.state = STATE_COLLAPSED
-        mExtendedBottomSheetBehavior?.isAllowUserDragging = true;
         viewModel = ViewModelProviders.of(this).get(MainHomeScreenViewModel::class.java)
         viewModelProfile = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
         initializeViews()
@@ -70,8 +67,15 @@ class MainHomeScreen : BaseFragment() {
     }
 
     private fun initializeViews() {
+        initializeExtendedBottomSheet()
         initialiseMonthTV()
         initializeVerticalCalendarRV()
+    }
+
+    private fun initializeExtendedBottomSheet() {
+        mExtendedBottomSheetBehavior = ExtendedBottomSheetBehavior.from(nsv)
+        mExtendedBottomSheetBehavior?.state = STATE_COLLAPSED
+        mExtendedBottomSheetBehavior?.isAllowUserDragging = true;
     }
 
     private fun listener() {

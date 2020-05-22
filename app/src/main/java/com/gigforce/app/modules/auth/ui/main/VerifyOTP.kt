@@ -15,6 +15,7 @@ import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.modules.auth.ui.main.LoginViewModel.Companion.STATE_SIGNIN_FAILED
 import com.gigforce.app.modules.auth.ui.main.LoginViewModel.Companion.STATE_SIGNIN_SUCCESS
+import com.gigforce.app.utils.AppConstants
 import com.gigforce.app.utils.popAllBackStates
 import kotlinx.android.synthetic.main.otp_verification.*
 import java.util.regex.Matcher
@@ -62,12 +63,23 @@ class VerifyOTP: BaseFragment() {
         initializeViews()
         listeners()
         observer()
+        saveNewUsedMobileNumber()
 //        if(otpresentcounter>=2){
 //            layout.otptimertv.text = "try later!"
 //            Toast.makeText(layout.context, "Too many invalid attempts, Try again later!", Toast.LENGTH_SHORT).show()
 //        }
     }
+    private fun saveNewUsedMobileNumber() {
+        var oldData = getSharedData(AppConstants.ALL_MOBILE_NUMBERS_USED,"")
+        if(oldData==null) {
+            saveSharedData(AppConstants.ALL_MOBILE_NUMBERS_USED,mobile_number)
+        }
+        else if(!oldData.contains(mobile_number)){
+            oldData = ","+mobile_number
+            saveSharedData(AppConstants.ALL_MOBILE_NUMBERS_USED,oldData)
 
+        }
+    }
     private fun initializeViews() {
         counterStart();
         var str = resources.getString(R.string.otp_reenter_mobile)

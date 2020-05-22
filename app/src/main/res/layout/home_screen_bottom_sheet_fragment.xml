@@ -98,7 +98,8 @@
         android:id="@+id/upcoming_gig_rv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="14dp" />
+        android:layout_marginTop="14dp"
+        android:nestedScrollingEnabled="false"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -113,12 +114,14 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/feature_rv"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_marginTop="11.5dp"
+        android:nestedScrollingEnabled="false"/>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="8dp"
-        android:layout_marginTop="22dp"
+        android:layout_marginTop="9.5dp"
         android:background="#f1f1f1" />
 
     <TextView
@@ -134,7 +137,8 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/learning_rv"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:nestedScrollingEnabled="false"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -149,13 +153,16 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/assessment_rv"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:nestedScrollingEnabled="false"/>
     <TextView
         android:id="@+id/application_version"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
+        android:layout_marginBottom="50dp"
         android:gravity="center"
         android:textSize="12sp"
         android:textColor="@color/onboarding_rv_item_color_40"/>
+
 </LinearLayout>

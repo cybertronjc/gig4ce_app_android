@@ -1,5 +1,6 @@
 package com.gigforce.app.modules.homescreen.mainhome.bottomsheet
 
+import android.graphics.BitmapFactory
 import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.drawable.Drawable
@@ -17,6 +18,7 @@ import android.view.ViewGroup
 import androidx.annotation.ColorRes
 import androidx.annotation.DimenRes
 import androidx.core.content.ContextCompat
+import androidx.palette.graphics.Palette
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gigforce.app.R
@@ -45,6 +47,19 @@ class HomeScreenBottomSheetFragment : BaseFragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(HomeScreenBottomSheetViewModel::class.java)
         initializeBottomSheet()
+//        setColorFromBitmap()
+    }
+
+    private fun setColorFromBitmap() {
+        var bitmap = BitmapFactory.decodeResource(resources, R.drawable.gig4ce_logo)
+        Palette.from(bitmap).generate { palette ->
+            var defaultValue = resources.getColor(R.color.colorPrimaryDark)
+            var vibrant = palette?.getVibrantColor(defaultValue);
+            var vibrantLight = palette?.getLightVibrantColor(defaultValue);
+            var vibrantDark = palette?.getDarkVibrantColor(defaultValue);
+            var mutedLight = palette?.getLightMutedColor(defaultValue);
+            v_hs1bs_partition.setBackgroundColor(vibrant!!)
+        }
 
     }
 
@@ -58,7 +73,7 @@ class HomeScreenBottomSheetFragment : BaseFragment() {
         initializeFeaturesBottomSheet()
         initializeLearningBottomSheet()
         initializeAssessmentBottomSheet()
-        application_version.text = "version "+getCurrentVersion()
+        application_version.text = "version " + getCurrentVersion()
         listener()
     }
 
@@ -66,10 +81,10 @@ class HomeScreenBottomSheetFragment : BaseFragment() {
         kyc_ll.setOnClickListener() {
             navigate(R.id.verification)
         }
-        video_resume.setOnClickListener(){
+        video_resume.setOnClickListener() {
             navigate(R.id.videoResumeFragment)
         }
-        show_upcominggig_layout.setOnClickListener(){
+        show_upcominggig_layout.setOnClickListener() {
             showKYCAndHideUpcomingLayout(false)
         }
     }
@@ -95,7 +110,11 @@ class HomeScreenBottomSheetFragment : BaseFragment() {
         val recyclerGenericAdapter: RecyclerGenericAdapter<UpcomingGigModel> =
             RecyclerGenericAdapter<UpcomingGigModel>(
                 activity?.applicationContext,
-                PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item -> showKYCAndHideUpcomingLayout(true) },
+                PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
+                    showKYCAndHideUpcomingLayout(
+                        true
+                    )
+                },
                 RecyclerGenericAdapter.ItemInterface<UpcomingGigModel?> { obj, viewHolder, position ->
                     val lp = getView(viewHolder, R.id.card_view).layoutParams
                     lp.height = lp.height
