@@ -6,6 +6,7 @@ import android.view.ViewGroup.MarginLayoutParams
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.activityViewModels
 import com.gigforce.app.core.base.BaseFragment
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import java.time.LocalDate
 import java.time.LocalDateTime
 
@@ -38,7 +39,7 @@ abstract class RosterBaseFragment: BaseFragment() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun isMoreDate(compareWith: LocalDateTime, compareTo: LocalDateTime): Boolean {
-        return !isLessDate(compareWith, compareTo)
+        return !isLessDate(compareWith, compareTo) && !isSameDate(compareWith, compareTo)
     }
 
     open fun setMargins(

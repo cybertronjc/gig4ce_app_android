@@ -79,6 +79,16 @@ class RosterTopBar: MaterialCardView {
             }
         }
 
+    var isFutureDate: Boolean = false
+        set(value) {
+            field = value
+            if(value) {
+                date_text.setTextColor(resources.getColor(R.color.black))
+                day_text.setTextColor(resources.getColor(R.color.black))
+            }
+
+        }
+
     var day: Int = 0
         set(value) {
             field = value

@@ -65,8 +65,7 @@
                         android:id="@+id/rupee_icon"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/ic_rupee_symbol"
-                        android:background="@drawable/ic_pay_success_background"
+                        android:src="@drawable/ic_payment_success"
                         android:layout_toEndOf="@id/gig_rating"
                         android:layout_marginStart="16dp" />
                     <TextView
