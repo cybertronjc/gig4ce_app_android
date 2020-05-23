@@ -71,11 +71,11 @@ class VerifyOTP: BaseFragment() {
     }
     private fun saveNewUsedMobileNumber() {
         var oldData = getSharedData(AppConstants.ALL_MOBILE_NUMBERS_USED,"")
-        if(oldData==null) {
+        if(oldData==null||oldData.equals("")) {
             saveSharedData(AppConstants.ALL_MOBILE_NUMBERS_USED,mobile_number)
         }
         else if(!oldData.contains(mobile_number)){
-            oldData = ","+mobile_number
+            oldData += ","+mobile_number
             saveSharedData(AppConstants.ALL_MOBILE_NUMBERS_USED,oldData)
 
         }

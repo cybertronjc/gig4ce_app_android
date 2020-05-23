@@ -47,21 +47,9 @@ class HomeScreenBottomSheetFragment : BaseFragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(HomeScreenBottomSheetViewModel::class.java)
         initializeBottomSheet()
-//        setColorFromBitmap()
     }
 
-    private fun setColorFromBitmap() {
-        var bitmap = BitmapFactory.decodeResource(resources, R.drawable.gig4ce_logo)
-        Palette.from(bitmap).generate { palette ->
-            var defaultValue = resources.getColor(R.color.colorPrimaryDark)
-            var vibrant = palette?.getVibrantColor(defaultValue);
-            var vibrantLight = palette?.getLightVibrantColor(defaultValue);
-            var vibrantDark = palette?.getDarkVibrantColor(defaultValue);
-            var mutedLight = palette?.getLightMutedColor(defaultValue);
-            v_hs1bs_partition.setBackgroundColor(vibrant!!)
-        }
 
-    }
 
     private fun initializeBottomSheet() {
 //        nsv.setBackground(generateBackgroundWithShadow(nsv,R.color.white,

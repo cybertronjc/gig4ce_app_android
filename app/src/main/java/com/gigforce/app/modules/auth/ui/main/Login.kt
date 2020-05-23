@@ -2,24 +2,19 @@ package com.gigforce.app.modules.auth.ui.main
 
 import android.Manifest
 import android.app.Dialog
-import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Handler
-import android.telephony.SubscriptionInfo
-import android.telephony.SubscriptionManager
 import android.view.*
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.widget.ArrayAdapter
 import android.widget.TextView
-import androidx.core.app.ActivityCompat
 import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.utils.AppConstants
-import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.login_frament.*
 import java.util.regex.Matcher
 import java.util.regex.Pattern
@@ -70,9 +65,7 @@ class Login: BaseFragment() {
             listeners()
             observer()
             showComfortDialog()
-
         }
-        requestForDeviceMobileNumber()
     }
 
     private fun showComfortDialog() {
@@ -106,13 +99,7 @@ class Login: BaseFragment() {
     }
 
     private fun listeners() {
-
         cvloginwrong.visibility = INVISIBLE
-
-//        otp_mobile_number.setOnClickListener {
-//            cvloginwrong.visibility = INVISIBLE
-//            textView23.visibility = VISIBLE
-//        }
         otp_mobile_number.doAfterTextChanged { showWrongMobileNoLayout(false) }
         otp_mobile_number.setOnKeyListener(View.OnKeyListener { _, keyCode, event ->
             cvloginwrong.visibility = INVISIBLE
@@ -173,74 +160,70 @@ class Login: BaseFragment() {
         }
         return true
     }
-    private fun requestForDeviceMobileNumber() {
-        if (ActivityCompat.checkSelfPermission(activity!!, Manifest.permission.READ_PHONE_NUMBERS) ==
-            PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(activity!!,
-                Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
-            var mSubscriptionManager: SubscriptionManager = SubscriptionManager.from(context);
-            val subInfoList: List<SubscriptionInfo> = mSubscriptionManager.activeSubscriptionInfoList
-            var deviceMobileNos  = ArrayList<String>()
 
-            for (subscriptionInfo in subInfoList) {
-                if(subscriptionInfo.number!=null) {
-                    var numbStr = subscriptionInfo.number
-                    if(subscriptionInfo.number.contains("+91"))
-                        numbStr = subscriptionInfo.number.substringAfter("+91")
-                    deviceMobileNos.add(numbStr)
-                }
-            }
-            otp_mobile_number.threshold = 0
-            otp_mobile_number.setAdapter(ArrayAdapter(activity!!, com.gigforce.app.R.layout.support_simple_spinner_dropdown_item, deviceMobileNos))
-
-        }
-        else{
-            checkForAllPermissions()
-        }
-    }
 
     private fun getAllEarlierMobileNumbers(){
         var deviceMobileNos  = ArrayList<String>()
         var oldMobileNumbers = getSharedData(AppConstants.ALL_MOBILE_NUMBERS_USED,"")
         if(!oldMobileNumbers.equals("")) {
             var oldDeviceMobileNosList = oldMobileNumbers?.split(",")
-            for (i in 0..oldDeviceMobileNosList?.size!!){
+            for (i in 0..(oldDeviceMobileNosList?.size!!)-1!!){
                 deviceMobileNos.add(oldDeviceMobileNosList.get(i))
             }
-            otp_mobile_number.threshold = 0
-            otp_mobile_number.setAdapter(
-                ArrayAdapter(
-                    activity!!,
-                    com.gigforce.app.R.layout.support_simple_spinner_dropdown_item,
-                    deviceMobileNos
-                )
+            val adapter: ArrayAdapter<String> = ArrayAdapter<String>(activity!!, android.R.layout.select_dialog_item, deviceMobileNos)
+            otp_mobile_number.threshold = 1
+            otp_mobile_number.setAdapter(adapter
             )
         }
     }
-
-    private fun checkForAllPermissions() {
-        requestPermissions(permissionsRequired, PERMISSION_REQ_CODE)
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == PERMISSION_REQ_CODE && isAllPermissionGranted(grantResults)) {
-            requestForDeviceMobileNumber()
-            showToast("Permissions Granted")
-        } else {
-            checkForAllPermissions()
-        }
-    }
-    fun isAllPermissionGranted(grantResults: IntArray):Boolean{
-        for(result in grantResults){
-            if(result != PackageManager.PERMISSION_GRANTED){
-                return false
-            }
-        }
-        return true
-    }
-
 }
+
+//private fun checkForAllPermissions() {
+//    requestPermissions(Login.permissionsRequired, Login.PERMISSION_REQ_CODE)
+//}
+//override fun onRequestPermissionsResult(
+//        requestCode: Int,
+//        permissions: Array<out String>,
+//        grantResults: IntArray
+//) {
+//    super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+//    if (requestCode == Login.PERMISSION_REQ_CODE && isAllPermissionGranted(grantResults)) {
+//        requestForDeviceMobileNumber()
+//        showToast("Permissions Granted")
+//    } else {
+//        checkForAllPermissions()
+//    }
+//}
+//fun isAllPermissionGranted(grantResults: IntArray):Boolean{
+//    for(result in grantResults){
+//        if(result != PackageManager.PERMISSION_GRANTED){
+//            return false
+//        }
+//    }
+//    return true
+//}
+
+//private fun requestForDeviceMobileNumber() {
+//    if (ActivityCompat.checkSelfPermission(activity!!, Manifest.permission.READ_PHONE_NUMBERS) ==
+//            PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(activity!!,
+//                    Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
+//        var mSubscriptionManager: SubscriptionManager = SubscriptionManager.from(context);
+//        val subInfoList: List<SubscriptionInfo> = mSubscriptionManager.activeSubscriptionInfoList
+//        var deviceMobileNos  = ArrayList<String>()
+//
+//        for (subscriptionInfo in subInfoList) {
+//            if(subscriptionInfo.number!=null) {
+//                var numbStr = subscriptionInfo.number
+//                if(subscriptionInfo.number.contains("+91"))
+//                    numbStr = subscriptionInfo.number.substringAfter("+91")
+//                deviceMobileNos.add(numbStr)
+//            }
+//        }
+//        otp_mobile_number.threshold = 0
+//        otp_mobile_number.setAdapter(ArrayAdapter(activity!!, com.gigforce.app.R.layout.support_simple_spinner_dropdown_item, deviceMobileNos))
+//
+//    }
+//    else{
+//        checkForAllPermissions()
+//    }
+//}
