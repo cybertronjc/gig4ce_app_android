@@ -6,10 +6,18 @@
     android:layout_width="match_parent"
     android:layout_height="82dp"
     app:cardCornerRadius="4dp"
-    app:cardElevation="5dp"
+    app:cardElevation="4dp"
+    android:elevation="10dp"
+    android:fadingEdgeLength="12dp"
+    android:dividerHeight="50.0px"
+    android:clipToPadding="false"
+    android:clipChildren="false"
+    android:divider="@android:color/holo_blue_light"
+
     android:layout_marginLeft="18dp"
-    android:layout_marginTop="25dp"
-    android:layout_marginBottom="5dp">
+    android:layout_marginTop="12.5dp"
+    android:layout_marginBottom="12.5dp"
+    app:cardPreventCornerOverlap="false">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -17,7 +25,7 @@
             android:id="@+id/feature_icon"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:layout_marginTop="21dp"
+            android:layout_marginTop="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
@@ -27,12 +35,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="MyGig"
-            android:layout_marginTop="12dp"
             android:textColor="@color/black"
-            android:textSize="10sp"
+            android:textSize="12sp"
+            android:layout_marginBottom="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/feature_icon" />
+            app:layout_constraintStart_toStartOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>
