@@ -1,20 +1,26 @@
 package com.gigforce.app.modules.auth.ui.main
+
 import android.os.Bundle
 import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
-import com.gigforce.app.utils.setDarkStatusBarTheme
+import com.gigforce.app.modules.profile.models.ProfileData
 
-class LoginSuccessfulFragment: BaseFragment() {
+class LoginSuccessfulFragment : BaseFragment() {
+
     companion object {
         fun newInstance() = LoginSuccessfulFragment()
     }
-    private val SPLASH_TIME_OUT:Long = 2500 // 1 sec
-    var layout: View? = null;
 
+    private val SPLASH_TIME_OUT: Long = 2000 // 1 sec
+    var layout: View? = null;
+    private lateinit var viewModel: LoginSuccessfulViewModel
+    private lateinit var profileData: ProfileData
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -27,6 +33,8 @@ class LoginSuccessfulFragment: BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel = ViewModelProviders.of(this).get(LoginSuccessfulViewModel::class.java)
+        observer()
 //        layout?.setOnClickListener() {
 //        }
 //        successful_screen.setOnClickListener(){
@@ -34,8 +42,24 @@ class LoginSuccessfulFragment: BaseFragment() {
 //            navigateWithAllPopupStack(R.id.homeScreenIcons1);
 //        }
         Handler().postDelayed({
-            popFragmentFromStack(R.id.loginSuccessfulFragment)
-            navigateWithAllPopupStack(R.id.mainHomeScreen);
+            viewModel.getProfileData()
         }, SPLASH_TIME_OUT)
+    }
+
+    private fun observer() {
+        viewModel.userProfileData.observe(viewLifecycleOwner, Observer { profile ->
+            profileData = profile
+            if (profile != null) {
+                if (profile.status) {
+                    popFragmentFromStack(R.id.loginSuccessfulFragment)
+                    if (profile.isOnboardingCompleted) {
+                        navigateWithAllPopupStack(R.id.mainHomeScreen)
+                    } else {
+                        navigateWithAllPopupStack(R.id.onboardingfragment)
+                    }
+                } else
+                    showToast(profile.errormsg)
+            }
+        })
     }
 }

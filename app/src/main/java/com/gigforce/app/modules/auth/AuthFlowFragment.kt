@@ -28,10 +28,14 @@ class AuthFlowFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         val lang = getSharedData(AppConstants.APP_LANGUAGE, null)
+        if (lang != null && lang.length > 0)
+            updateResources(lang)
+
         val introComplete = getSharedData(AppConstants.INTRO_COMPLETE, null)
-        if(lang!=null&&lang.length>0)
-        updateResources(lang)
+
+
         popFragmentFromStack(R.id.authFlowFragment)
         if (lang == null) {
             navigate(R.id.languageSelectFragment)//, null, navOptionsPopToHome)
@@ -44,6 +48,7 @@ class AuthFlowFragment : BaseFragment() {
         }
 
     }
+
     private fun updateResources(language: String) {
         val locale = Locale(language)
         val config2 = Configuration()
@@ -52,6 +57,7 @@ class AuthFlowFragment : BaseFragment() {
         context?.resources?.updateConfiguration(config2, null)
         Locale.setDefault(locale)
     }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -65,10 +71,13 @@ class AuthFlowFragment : BaseFragment() {
             navigate(R.id.Login)
         } else {
             var fragments = getFragmentManager()?.getFragments()
-            if(fragments!=null && fragments?.size==1) {
-                navigateWithAllPopupStack(R.id.mainHomeScreen)
-            }
-            else{
+            if (fragments != null && fragments?.size == 1) {
+                val onboardingCompleted = getSharedData(AppConstants.ON_BOARDING_COMPLETED, null)
+                if (onboardingCompleted == null || onboardingCompleted.equals("")||onboardingCompleted.equals("false"))
+                    navigateWithAllPopupStack(R.id.onboardingfragment)
+                else
+                    navigateWithAllPopupStack(R.id.mainHomeScreen)
+            } else {
                 navigateWithAllPopupStack(R.id.loginSuccessfulFragment)
             }
         }

@@ -21,7 +21,10 @@ class OnboardingMainViewModel : ViewModel() {
         profileFirebaseRepository.getProfile()
             .addSnapshotListener(EventListener<DocumentSnapshot> { value, e ->
                 if (e != null) {
-                    Log.w("ProfileViewModel", "Listen failed", e)
+                    var errProfileData = ProfileData()
+                    errProfileData.status = false
+                    errProfileData.errormsg = e.toString()
+                    userProfileData.postValue(errProfileData)
                     return@EventListener
                 }
                 if (value!!.data == null) {
@@ -96,6 +99,10 @@ class OnboardingMainViewModel : ViewModel() {
 
     fun saveWorkStatus(selectedDataFromRecycler: String) {
         profileFirebaseRepository.setDataAsKeyValue("workStatus",selectedDataFromRecycler)
+    }
+
+    fun setOnboardingCompleted() {
+        profileFirebaseRepository.setDataAsKeyValue("isOnboardingCompleted",true)
     }
 
 

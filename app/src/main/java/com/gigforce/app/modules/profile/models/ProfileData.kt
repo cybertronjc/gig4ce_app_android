@@ -3,7 +3,9 @@ package com.gigforce.app.modules.profile.models
 import kotlin.collections.ArrayList
 
 data class ProfileData(
-    val id: String? = null,
+    var status : Boolean = true,
+    var errormsg : String = "",
+    var id: String? = null,
     var name: String = "",
     var aboutMe: String = "",
     var email: String = "",
@@ -24,7 +26,8 @@ data class ProfileData(
     var ageGroup:String = "",
     var gender : String = "",
     var highestEducation:String = "",
-    var workStatus : String = ""
+    var workStatus : String = "",
+    var isOnboardingCompleted : Boolean = false
 
 ) {
 

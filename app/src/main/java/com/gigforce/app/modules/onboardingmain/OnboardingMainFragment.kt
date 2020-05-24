@@ -21,6 +21,7 @@ import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.app.core.genericadapter.RecyclerGenericAdapter
 import com.gigforce.app.modules.profile.models.ProfileData
+import com.gigforce.app.utils.AppConstants
 import kotlinx.android.synthetic.main.onboarding_main_fragment.*
 
 
@@ -29,9 +30,9 @@ class OnboardingMainFragment : BaseFragment() {
     companion object {
         fun newInstance() = OnboardingMainFragment()
     }
-
+    private lateinit var profileData : ProfileData
     private lateinit var viewModel: OnboardingMainViewModel
-
+    private var firstTimeLoad : Boolean = true
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -45,10 +46,7 @@ class OnboardingMainFragment : BaseFragment() {
         initializeViews()
     }
 
-    val hashMapForRV = HashMap<Int, Boolean>()
     private fun initializeViews() {
-        for (i in 0..viewModel.getOnboardingData().size)
-            hashMapForRV.put(i, false)
         initializePager()
         initializeTitleAsName()
         listeners()
@@ -57,25 +55,79 @@ class OnboardingMainFragment : BaseFragment() {
 
     private fun observer() {
         viewModel.userProfileData.observe(viewLifecycleOwner, Observer { profile ->
-            if(profile!=null)
-            setViewListItems(profile)
+            profileData = profile
+            if (profile != null) {
+                if(profile.status) {
+                    if(firstTimeLoad){
+                        checkForAlreadyCompletedData()
+                        setLiveDataListItems()
+                        firstTimeLoad = false
+                    }
+                    else {
+                        if(nextPage())
+                        setLiveDataListItems()
+                    }
+                }
+                else
+                showToast(profile.errormsg)
+            }
         })
     }
 
-    private fun setViewListItems(profile: ProfileData) {
-        when(onboarding_pager.currentItem){
-            0 -> onboarding_pager.getChildAt(0).findViewById<EditText>(R.id.user_name).setText(profile.name)
-            1 -> setRecyclerItem(1,profile.ageGroup)
-            2 -> setRecyclerItem(2,profile.gender)
-            3 -> setRecyclerItem(3,profile.highestEducation)
-            4 -> setRecyclerItem(4,profile.workStatus)
+    private fun checkNullOrBlank(str:String):Boolean{
+        if(str==null || str.equals("")){
+            return true
+        }
+        return false
+    }
+    private fun checkForAlreadyCompletedData() {
+        if(!checkNullOrBlank(profileData.name)&&checkNullOrBlank(profileData.ageGroup)){
+            showHideBackIcon(true)
+            onboarding_pager.setCurrentItem(1)
+        }else if(checkNullOrBlank(profileData.gender)){
+            showHideBackIcon(true)
+            onboarding_pager.setCurrentItem(2)
+        }else if(checkNullOrBlank(profileData.highestEducation)){
+            showHideBackIcon(true)
+            onboarding_pager.setCurrentItem(3)
+        }else if(checkNullOrBlank(profileData.workStatus)){
+            showHideBackIcon(true)
+            onboarding_pager.setCurrentItem(4)
+        }
+    }
+
+    private fun setLiveDataListItems() {
+        when (onboarding_pager.currentItem) {
+            0 -> onboarding_pager.getChildAt(0).findViewById<EditText>(R.id.user_name).setText(
+                profileData.name
+            )
+            1 -> if (profileData.ageGroup != null || !profileData.ageGroup.equals(""))
+                setRecyclerItem(
+                1,
+                    profileData.ageGroup
+            )
+            2 -> if (profileData.gender != null || !profileData.gender.equals(""))
+                setRecyclerItem(
+                2,
+                    profileData.gender
+            )
+            3 -> if (profileData.highestEducation != null || !profileData.highestEducation.equals(""))
+                setRecyclerItem(
+                3,
+                    profileData.highestEducation
+            )
+            4 -> if (profileData.workStatus != null || !profileData.workStatus.equals(""))
+                setRecyclerItem(
+                    4, profileData.workStatus
+                )
         }
     }
 
     private fun setRecyclerItem(pagerPosition: Int, data: String) {
-        var recyclerView = allRecyclerViews.get(pagerPosition-1)
+//        showToast(onboarding_pager.adapter?.itemCount!!.toString()+"     "+onboarding_pager.currentItem)
+        var recyclerView = allRecyclerViews.get(onboarding_pager.currentItem-1)
         var position = (recyclerView.adapter as RecyclerGenericAdapter<String>).list.indexOf(data)
-        recyclerView.scrollToPosition(position)
+        (recyclerView.layoutManager as LinearLayoutManager)?.scrollToPositionWithOffset(position,0)
     }
 
     private fun initializeTitleAsName() {
@@ -108,76 +160,87 @@ class OnboardingMainFragment : BaseFragment() {
         title_onboarding.text = "What's your work status?"
     }
 
+    private fun nextPage():Boolean{
+        if(onboarding_pager.currentItem >=onboarding_pager.adapter?.itemCount!!-1)
+        return setPagerData(onboarding_pager.adapter?.itemCount!!)
+        else
+        onboarding_pager.setCurrentItem(onboarding_pager.currentItem + 1)
+        return setPagerData(onboarding_pager.currentItem)
+    }
+
+    private fun setPagerData(item:Int):Boolean {
+        when (item){
+            0 -> {
+                showHideBackIcon(false)
+                initializeTitleAsName()
+            }
+            1 -> initializeTitleAsAge()
+            2 -> initializeTitleAsGender()
+            3 -> initializeTitleAsEducation()
+            4 -> initializeTitleAsWorkStatus()
+            5 -> {
+                viewModel.setOnboardingCompleted()
+                saveSharedData(AppConstants.ON_BOARDING_COMPLETED, "true")
+                popFragmentFromStack(R.id.onboardingfragment)
+                navigateWithAllPopupStack(R.id.mainHomeScreen)
+                navigate(R.id.profileFragment)
+                return false
+            }
+        }
+        return true
+    }
+
+    private fun showHideBackIcon(show: Boolean) {
+        backpress_icon.visibility = if (show)  View.VISIBLE else View.INVISIBLE
+    }
 
     private fun listeners() {
-        onboarding_pager.isUserInputEnabled = false
+
         next.setOnClickListener() {
-            backpress_icon.visibility = View.VISIBLE
+            showHideBackIcon(true)
             saveDataToDB(onboarding_pager.currentItem)
-            onboarding_pager.setCurrentItem(onboarding_pager.currentItem + 1)
-            if (onboarding_pager.currentItem == 0) {
-                initializeTitleAsName()
-            } else if (onboarding_pager.currentItem == 1) {
-                initializeTitleAsAge()
-            } else if (onboarding_pager.currentItem == 2) {
-                initializeTitleAsGender()
-            } else if (onboarding_pager.currentItem == 3) {
-
-                initializeTitleAsEducation()
-            } else if (onboarding_pager.currentItem == 4) {
-
-                initializeTitleAsWorkStatus()
-            }
             viewModel.getProfileData()
         }
-        backpress_icon.setOnClickListener(){
-            if(onboarding_pager.currentItem==1){
-                backpress_icon.visibility = View.INVISIBLE
-            }
-            onboarding_pager.setCurrentItem(onboarding_pager.currentItem - 1)
-            if (onboarding_pager.currentItem == 0) {
-                initializeTitleAsName()
-            } else if (onboarding_pager.currentItem == 1) {
-                initializeTitleAsAge()
-            } else if (onboarding_pager.currentItem == 2) {
-
-                initializeTitleAsGender()
-            } else if (onboarding_pager.currentItem == 3) {
-
-                initializeTitleAsEducation()
-            } else if (onboarding_pager.currentItem == 4) {
-                initializeTitleAsWorkStatus()
-            }
+        backpress_icon.setOnClickListener() {
+            backPage()
+            setLiveDataListItems()
         }
     }
 
+    private fun disableViewPagerScroll() {
+        onboarding_pager.isUserInputEnabled = false
+    }
+
+    private fun backPage() {
+        onboarding_pager.setCurrentItem(onboarding_pager.currentItem - 1)
+        setPagerData(onboarding_pager.currentItem)
+    }
+
     private fun saveDataToDB(currentItem: Int) {
-        println("current item :"+currentItem.toString())
-        when(currentItem) {
+        when (currentItem) {
             0 -> viewModel.saveUserName(onboarding_pager.getChildAt(0).findViewById<EditText>(R.id.user_name).text.toString())
             1 -> viewModel.saveAgeGroup(getSelectedDataFromRecycler(1))
             2 -> viewModel.selectYourGender(getSelectedDataFromRecycler(2))
             3 -> viewModel.saveHighestQualification(getSelectedDataFromRecycler(3))
             4 -> viewModel.saveWorkStatus(getSelectedDataFromRecycler(4))
-
-
         }
     }
 
     private fun getSelectedDataFromRecycler(position: Int): String {
-//        var manager = allRecyclerViews.get(position-1).layoutManager as LinearLayoutManager
-//            return manager?.getChildAt(manager.findFirstVisibleItemPosition())?.findViewById<TextView>(R.id.item)?.text.toString()
-        return allRecyclerViews.get(position-1).getChildAt(0)?.findViewById<TextView>(R.id.item)?.text.toString()
+        return allRecyclerViews.get(position - 1).getChildAt(0)?.findViewById<TextView>(R.id.item)
+            ?.text.toString()
     }
 
-    private fun setProgressBarWeight(weight:Float){
-        var params  =
-        progress_bar_view.getLayoutParams() as LinearLayout.LayoutParams;
+    private fun setProgressBarWeight(weight: Float) {
+        var params =
+            progress_bar_view.getLayoutParams() as LinearLayout.LayoutParams;
         params.weight = weight;
         progress_bar_view.layoutParams = params
     }
+
     var allRecyclerViews = ArrayList<RecyclerView>()
     private fun initializePager() {
+        disableViewPagerScroll()
         val recyclerGenericAdapter: RecyclerGenericAdapter<ArrayList<String>> =
             RecyclerGenericAdapter<ArrayList<String>>(
                 activity?.applicationContext,
@@ -193,14 +256,15 @@ class OnboardingMainFragment : BaseFragment() {
                             position,
                             param.height
                         )
+
                     } else {
                         viewHolder.getView(R.id.first_item_indicator).visibility = View.GONE
-
                     }
                 })!!
         recyclerGenericAdapter.setList(viewModel.getOnboardingData())
         recyclerGenericAdapter.setLayout(R.layout.onboarding_pager_item)
         onboarding_pager.adapter = recyclerGenericAdapter
+        onboarding_pager.offscreenPageLimit = 5
     }
 
     private val visibleThreshold = 50
@@ -224,7 +288,7 @@ class OnboardingMainFragment : BaseFragment() {
         val recyclerGenericAdapter: RecyclerGenericAdapter<String> =
             RecyclerGenericAdapter<String>(
                 activity?.applicationContext,
-                PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->  },
+                PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item -> },
                 RecyclerGenericAdapter.ItemInterface<String?> { obj, viewHolder, position ->
                     var tv = getTextView(viewHolder, R.id.item)
                     tv.text = obj
@@ -256,8 +320,7 @@ class OnboardingMainFragment : BaseFragment() {
                             "fonts/Lato-Regular.ttf"
                         )
                         tv.setTypeface(face)
-                    }
-                    else{
+                    } else {
                         setTextViewColor(tv, R.color.onboarding_rv_item_color_10)
                         val face = Typeface.createFromAsset(
                             activity?.getAssets(),
@@ -309,10 +372,12 @@ class OnboardingMainFragment : BaseFragment() {
                 try {
                     when (newState) {
                         RecyclerView.SCROLL_STATE_IDLE -> {
-                                var positionView = 0//(recyclerView.getLayoutManager() as LinearLayoutManager).findFirstVisibleItemPosition();
+                            var positionView =
+                                0//(recyclerView.getLayoutManager() as LinearLayoutManager).findFirstVisibleItemPosition();
                             if (true) {
                                 var firstItem =
-                                    recyclerView.getChildAt(positionView).findViewById<TextView>(R.id.item)
+                                    recyclerView.getChildAt(positionView)
+                                        .findViewById<TextView>(R.id.item)
                                 setTextViewColor(firstItem, R.color.onboarding_rv_item_color)
                                 val face = Typeface.createFromAsset(
                                     activity?.getAssets(),
@@ -323,7 +388,8 @@ class OnboardingMainFragment : BaseFragment() {
                             }
                             if (true) {
                                 var firstItem =
-                                    recyclerView.getChildAt(positionView+1).findViewById<TextView>(R.id.item)
+                                    recyclerView.getChildAt(positionView + 1)
+                                        .findViewById<TextView>(R.id.item)
                                 setTextViewColor(firstItem, R.color.onboarding_rv_item_color_60)
                                 val face = Typeface.createFromAsset(
                                     activity?.getAssets(),
@@ -333,7 +399,8 @@ class OnboardingMainFragment : BaseFragment() {
                             }
                             if (true) {
                                 var firstItem =
-                                    recyclerView.getChildAt(positionView+2).findViewById<TextView>(R.id.item)
+                                    recyclerView.getChildAt(positionView + 2)
+                                        .findViewById<TextView>(R.id.item)
                                 setTextViewColor(firstItem, R.color.onboarding_rv_item_color_40)
                                 val face = Typeface.createFromAsset(
                                     activity?.getAssets(),
@@ -343,7 +410,8 @@ class OnboardingMainFragment : BaseFragment() {
                             }
                             if (true) {
                                 var firstItem =
-                                    recyclerView.getChildAt(positionView+3).findViewById<TextView>(R.id.item)
+                                    recyclerView.getChildAt(positionView + 3)
+                                        .findViewById<TextView>(R.id.item)
                                 setTextViewColor(firstItem, R.color.onboarding_rv_item_color_10)
                                 val face = Typeface.createFromAsset(
                                     activity?.getAssets(),
@@ -355,26 +423,17 @@ class OnboardingMainFragment : BaseFragment() {
                         RecyclerView.SCROLL_STATE_DRAGGING -> println("Scrolling now")
                         RecyclerView.SCROLL_STATE_SETTLING -> println("Scroll Settling")
                     }
-                }catch (e:Exception){}
-
+                } catch (e: Exception) {
+                }
             }
-
 //            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
 //                super.onScrolled(recyclerView, dx, dy)
 //
 //            }
-
-
         }
         recyclerView.addOnScrollListener(scrollListener)
-//        val linearSnapHelper: LinearSnapHelper = LinearSnapHelper()
-//        val snapHelperTop: SnapHelper = GravitySnapHelper(Gravity.TOP)
-//        snapHelperTop.attachToRecyclerView(recyclerView)
-//        snapHelperTop.attachToRecyclerView(recyclerView)
-         var linearSnapHelper:SnapHelper = SnapHelperOneByOne(Gravity.TOP);
+        var linearSnapHelper: SnapHelper = SnapHelperOneByOne(Gravity.TOP);
         linearSnapHelper.attachToRecyclerView(recyclerView);
-
-
         recyclerView.setLayoutManager(
             SpeedyLinearLayoutManager(
                 context,
@@ -384,35 +443,6 @@ class OnboardingMainFragment : BaseFragment() {
         )
         allRecyclerViews.add(recyclerView)
     }
-
-//    class SnapHelperOneByOne : GravitySnapHelper {
-//        constructor(gravity: Int) {
-//            super(gravity)
-//        }
-//        override fun findTargetSnapPosition(
-//            layoutManager: RecyclerView.LayoutManager,
-//            velocityX: Int,
-//            velocityY: Int
-//        ): Int {
-//            if (layoutManager !is ScrollVectorProvider) {
-//                return RecyclerView.NO_POSITION
-//            }
-//            val currentView = findSnapView(layoutManager) ?: return RecyclerView.NO_POSITION
-//            val myLayoutManager = layoutManager as LinearLayoutManager
-//            val position1 = myLayoutManager.findFirstVisibleItemPosition()
-//            val position2 = myLayoutManager.findLastVisibleItemPosition()
-//            var currentPosition = layoutManager.getPosition(currentView)
-//            if (velocityX > 400) {
-//                currentPosition = position2
-//            } else if (velocityX < 400) {
-//                currentPosition = position1
-//            }
-//            return if (currentPosition == RecyclerView.NO_POSITION) {
-//                RecyclerView.NO_POSITION
-//            } else currentPosition
-//        }
-//    }
-
     class SpeedyLinearLayoutManager : LinearLayoutManager {
         constructor(context: Context?) : super(context) {}
         constructor(context: Context?, orientation: Int, reverseLayout: Boolean) : super(
