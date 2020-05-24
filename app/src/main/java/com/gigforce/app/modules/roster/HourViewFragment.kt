@@ -2,10 +2,12 @@ package com.gigforce.app.modules.roster
 
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewParent
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -15,9 +17,13 @@ import com.gigforce.app.R
 import com.gigforce.app.modules.roster.models.Gig
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.card.MaterialCardView
+import kotlinx.android.synthetic.main.day_view_top_bar.view.*
 import kotlinx.android.synthetic.main.item_roster_day.view.*
+import kotlinx.android.synthetic.main.layout_home_screen.*
+import kotlinx.android.synthetic.main.roster_day_fragment.*
 import kotlinx.android.synthetic.main.roster_day_hour_view.*
 import kotlinx.android.synthetic.main.unavailable_time_adjustment_bottom_sheet.view.*
+import kotlinx.android.synthetic.main.unavailable_time_adjustment_bottom_sheet.view.day_text
 import java.time.LocalDateTime
 import java.util.*
 import kotlin.collections.ArrayList
@@ -33,6 +39,10 @@ class HourViewFragment: RosterBaseFragment() {
     val hourIds = ArrayList<Int>()
 
     var viewInitialized: Boolean = false
+
+    val times = ArrayList<String>(listOf("01:00", "02:00", "03:00", "04:00", "05:00", "06:00", "07:00", "08:00", "09:00",
+    "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00",
+    "21:00", "22:00", "23:00", "24:00"))
 
     var upcomingGigs = ArrayList<Gig>()
     var completedGigs = ArrayList<Gig>()
@@ -71,6 +81,8 @@ class HourViewFragment: RosterBaseFragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun initialize() {
 
+        rosterViewModel.bsBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+
         initializeHourViews()
         if (isSameDate(activeDateTime, actualDateTime)) {
             todayHourActive()
@@ -80,8 +92,45 @@ class HourViewFragment: RosterBaseFragment() {
             allHourActive()
         }
 
+        if (isSameDate(activeDateTime, actualDateTime)) {
+            setCurrentTimeDivider()
+            scheduleCurrentTimerUpdate()
+        }
+
+
         addGigCards()
 
+    }
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun scheduleCurrentTimerUpdate() {
+        val handler = Handler() { msg ->
+            val datetime = activeDateTime
+            val marginTop = (itemHeight * datetime.hour + ((datetime.minute / 60.0) * itemHeight).toInt()).px
+            val layoutParams = current_time_divider.layoutParams as ViewGroup.MarginLayoutParams
+            layoutParams.setMargins(marginCardStart - 8.px, marginTop, 0, 0)
+            current_time_divider.requestLayout()
+            true
+        }
+        Timer().scheduleAtFixedRate(object: TimerTask() {
+            @RequiresApi(Build.VERSION_CODES.O)
+            override fun run() {
+                Log.d("HOUR VIEW", "HELLO WORLD")
+
+                handler.obtainMessage().sendToTarget()
+
+            }
+        }, 0, 1000 * 60)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun setCurrentTimeDivider() {
+        val datetime = LocalDateTime.now()
+        // set current time divider
+        current_time_divider.visibility = View.VISIBLE
+        val marginTop = (itemHeight * datetime.hour + ((datetime.minute / 60.0) * itemHeight).toInt()).px
+        val layoutParams = current_time_divider.layoutParams as ViewGroup.MarginLayoutParams
+        layoutParams.setMargins(marginCardStart - 8.px, marginTop, 0, 0)
+        current_time_divider.requestLayout()
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -158,10 +207,6 @@ class HourViewFragment: RosterBaseFragment() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun initializeHourViews() {
-        val times = ArrayList<String>()
-        times.addAll(listOf("01:00", "02:00", "03:00", "04:00", "05:00", "06:00", "07:00", "08:00", "09:00",
-            "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00",
-            "21:00", "22:00", "23:00", "24:00"))
 
         val timeViewGroup = day_times
         var widget: MaterialCardView
@@ -174,23 +219,6 @@ class HourViewFragment: RosterBaseFragment() {
             widget.hour = index + 1
             widget.time = time
 
-//            if (isSameDate(activeDateTime, actualDateTime)) {
-//                if (widget.hour <= actualDateTime.hour) {
-//                    Log.d("HOURVIEW", "inactive hour")
-//                    widget.item_time.setTextColor(resources.getColor(R.color.gray_color_calendar))
-//                    widget.isClickable = false
-//                }
-//            }
-//
-//            if (isLessDate(activeDateTime, actualDateTime)) {
-//                widget.item_time.setTextColor(resources.getColor(R.color.gray_color_calendar))
-//                widget.isClickable = false
-//            }
-
-//            widget.setOnClickListener {
-//                rosterViewModel.bsBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
-//            }
-
             timeViewGroup.addView(widget)
 
             // set width to match parent
@@ -198,50 +226,11 @@ class HourViewFragment: RosterBaseFragment() {
             widget.requestLayout()
 
             widget.top_half.setOnClickListener {
-                rosterViewModel.bsBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
-                rosterViewModel.UnavailableBS.day_text.setText("HELLOW FROM TOP")
-
-                // for collapsed state
-                if (index > 0)
-                    rosterViewModel.UnavailableBS.time_text.setText("${times[index-1]} - ${times[index]}")
-                else
-                    rosterViewModel.UnavailableBS.time_text.setText("00:00 - ${times[index]}")
-
-                // for expanded state
-                rosterViewModel.UnavailableBS.start_day_text.setText(
-                    "${activeDateTime.dayOfWeek}, ${activeDateTime.dayOfMonth} " +
-                            "${activeDateTime.month}, ${activeDateTime.year}")
-
-                rosterViewModel.UnavailableBS.end_day_text.setText(
-                    "${activeDateTime.dayOfWeek}, ${activeDateTime.dayOfMonth} " +
-                            "${activeDateTime.month}, ${activeDateTime.year}")
-
-                if (index > 0)
-                    rosterViewModel.UnavailableBS.start_day_time.setText("${times[index-1]}")
-                else
-                    rosterViewModel.UnavailableBS.start_day_time.setText("00:00")
-
-                rosterViewModel.UnavailableBS.end_day_time.setText("${times[index]}")
-            }
+                setAndShowBottomSheet(index-1, index)
+           }
 
             widget.bottom_half.setOnClickListener {
-                rosterViewModel.bsBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
-                rosterViewModel.UnavailableBS.day_text.setText("HELLOW FROM BOTTOM")
-
-                rosterViewModel.UnavailableBS.time_text.setText("${times[index]} - ${times[index+1]}")
-
-                // for expanded state
-                rosterViewModel.UnavailableBS.start_day_text.setText(
-                    "${activeDateTime.dayOfWeek}, ${activeDateTime.dayOfMonth} " +
-                            "${activeDateTime.month}, ${activeDateTime.year}")
-
-                rosterViewModel.UnavailableBS.end_day_text.setText(
-                    "${activeDateTime.dayOfWeek}, ${activeDateTime.dayOfMonth } " +
-                            "${activeDateTime.month}, ${activeDateTime.year}")
-
-                rosterViewModel.UnavailableBS.start_day_time.setText("${times[index]}")
-
-                rosterViewModel.UnavailableBS.end_day_time.setText("${times[index+1]}")
+                setAndShowBottomSheet(index, index+1)
             }
 
             hourIds.add(widget.id)
@@ -266,6 +255,80 @@ class HourViewFragment: RosterBaseFragment() {
         constraintSet.applyTo(timeViewGroup)
 
         viewInitialized = true
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun setAndShowBottomSheet(startIndex: Int, endIndex: Int) {
+        rosterViewModel.bsBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+
+        setBsCollapsedDayTimeText(startIndex, endIndex)
+        setBsExpandedDayTimeText(startIndex, endIndex)
+        setBsExpandedAvailabilityToggle()
+        setBsExpandedUpcomingGigs()
+
+
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun setBsExpandedAvailabilityToggle() {
+        rosterViewModel.UnavailableBS.toggle_button.setOnClickListener {
+
+            //rosterViewModel.topBar.isAvailable = !rosterViewModel.topBar.isAvailable
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun setBsCollapsedDayTimeText(startIndex: Int, endIndex: Int) {
+        // set day text
+        if (isSameDate(activeDateTime, actualDateTime))
+            rosterViewModel.UnavailableBS.day_text.setText("Today")
+        else if (isSameDate(activeDateTime.plusDays(1), actualDateTime))
+            rosterViewModel.UnavailableBS.day_text.setText("Yesterday")
+        else if (isSameDate(activeDateTime.minusDays(1), actualDateTime))
+            rosterViewModel.UnavailableBS.day_text.setText("Tomorrow")
+        else
+            rosterViewModel.UnavailableBS.day_text.setText(activeDateTime.dayOfWeek.toString())
+
+        // set day time
+        if (endIndex == 0)
+            rosterViewModel.UnavailableBS.time_text.setText("00:00 - ${times[endIndex]}")
+        else
+            rosterViewModel.UnavailableBS.time_text.setText("${times[startIndex]} - ${times[endIndex]}")
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun setBsExpandedDayTimeText(startIndex: Int, endIndex: Int) {
+        // for expanded state
+        rosterViewModel.UnavailableBS.start_day_text.setText(
+            "${activeDateTime.dayOfWeek.toString().capitalize()}, ${activeDateTime.dayOfMonth} " +
+                    "${activeDateTime.month}, ${activeDateTime.year}")
+
+        rosterViewModel.UnavailableBS.end_day_text.setText(
+            "${activeDateTime.dayOfWeek.toString().capitalize()}, ${activeDateTime.dayOfMonth } " +
+                    "${activeDateTime.month}, ${activeDateTime.year}")
+
+        if (startIndex == 0)
+            rosterViewModel.UnavailableBS.start_day_time.setText("00:00")
+        else
+            rosterViewModel.UnavailableBS.start_day_time.setText("${times[startIndex]}")
+
+        rosterViewModel.UnavailableBS.end_day_time.setText("${times[endIndex]}")
+    }
+
+    private fun setBsExpandedUpcomingGigs() {
+        rosterViewModel.UnavailableBS.assigned_gigs.removeAllViews()
+        for (gig in upcomingGigs) {
+            val widget = UpcomingGigCard(requireContext())
+            rosterViewModel.UnavailableBS.assigned_gigs.addView(widget)
+            widget.id = View.generateViewId()
+            widget.startHour = gig.startHour
+            widget.startMinute = gig.startMinute
+            widget.duration = gig.duration
+            widget.cardHeight = 80.px
+
+            (widget.layoutParams as ViewGroup.MarginLayoutParams).setMargins(0, 16.px, 0, 0)
+            widget.requestLayout()
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

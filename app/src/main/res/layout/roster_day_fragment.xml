@@ -36,17 +36,7 @@
                 android:id="@+id/hours_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
-                <View
-                    android:id="@+id/current_time_divider"
-                    android:layout_width="match_parent"
-                    android:layout_height="8dp"
-                    android:layout_marginStart="80dp"
-                    android:background="@drawable/bg_current_time"
-                    android:visibility="invisible"
-                    android:elevation="5dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/hourview_viewpager" />
+
 
                 <androidx.viewpager2.widget.ViewPager2
                     android:id="@+id/hourview_viewpager"

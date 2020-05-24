@@ -16,10 +16,14 @@ class RosterDayViewModel: ViewModel() {
 
     var currentDateTime: MutableLiveData<LocalDateTime> = MutableLiveData(LocalDateTime.now())
 
+    var isDayAvailable: MutableLiveData<Boolean> = MutableLiveData(true)
+
     var userGigs = HashMap<String, ArrayList<Gig>>()
 
     lateinit var bsBehavior: BottomSheetBehavior<View>
     lateinit var UnavailableBS: View
+
+    lateinit var topBar: RosterTopBar
 
     companion object {
         fun newInstance() = RosterDayViewModel()
@@ -39,6 +43,11 @@ class RosterDayViewModel: ViewModel() {
         userGigs["2020MAY24"] = ArrayList<Gig>(listOf(
             Gig(gigStatus = "upcoming", startHour = 13, startMinute = 30, duration = 4.5F),
             Gig(gigStatus = "upcoming", startHour = 4, startMinute = 0, duration = 4.0F)
+        ))
+
+        userGigs["2020MAY25"] = ArrayList<Gig>(listOf(
+                Gig(gigStatus = "completed", startHour = 11, startMinute = 45, duration = 2.5F),
+                Gig(gigStatus = "upcoming", startHour = 15, startMinute = 0, duration = 5.6F)
         ))
     }
 
@@ -76,12 +85,4 @@ class RosterDayViewModel: ViewModel() {
         return filteredGigs
     }
 
-    fun removeUpcomingGigCards(upcomingGigs: ArrayList<Gig>, parentView: ViewPager2) {
-        for (gig in upcomingGigs) {
-            var card = parentView.findViewWithTag<UpcomingGigCard>(gig.tag)
-            parentView.removeView(card)
-            Log.d("RosterViewModel", "gig card removed")
-
-        }
-    }
 }

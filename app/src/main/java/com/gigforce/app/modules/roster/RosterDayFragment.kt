@@ -71,12 +71,12 @@ class RosterDayFragment: RosterBaseFragment() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun initialize() {
+        rosterViewModel.topBar = top_bar
         initializeBottomSheet()
         attachHourViewAdapter()
+        attachDayAvailabilityObserver()
         attachCurrentDateTimeChangeObserver()
         attachTopBarMonthChangeListener()
-        setCurrentTimeDivider()
-        scheduleCurrentTimerUpdate()
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -93,18 +93,6 @@ class RosterDayFragment: RosterBaseFragment() {
                 }
                 lastViewPosition = position
             }
-
-            @RequiresApi(Build.VERSION_CODES.O)
-            override fun onPageScrollStateChanged(state: Int) {
-                super.onPageScrollStateChanged(state)
-
-                if (state == ViewPager2.SCROLL_STATE_IDLE) {
-                    setCurrentTimeVisibility()
-                } else {
-                    current_time_divider.visibility = View.INVISIBLE
-                }
-
-            }
         }
 
         hourview_viewpager.registerOnPageChangeCallback(hourviewPageChangeCallBack)
@@ -114,8 +102,19 @@ class RosterDayFragment: RosterBaseFragment() {
         }
 
         top_bar.available_toggle.setOnClickListener {
-            toggleAvailability()
+            if (top_bar.isAvailable)
+                toggleAvailability()
+            else {
+                rosterViewModel.isDayAvailable.value = true
+                //updateHourVisibility()
+            }
         }
+    }
+
+    private fun attachDayAvailabilityObserver() {
+        rosterViewModel.isDayAvailable.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+           top_bar.isAvailable = it
+        })
     }
 
     private fun attachTopBarMonthChangeListener() {
@@ -168,8 +167,6 @@ class RosterDayFragment: RosterBaseFragment() {
 
             top_bar.isCurrentDay = isSameDate(it, actualDateTime)
             top_bar.isFutureDate = isMoreDate(it, actualDateTime)
-
-            setCurrentTimeVisibility()
 
             dayTag = "${activeDateTime.year}${activeDateTime.month}${activeDateTime.dayOfMonth}"
 
@@ -230,47 +227,6 @@ class RosterDayFragment: RosterBaseFragment() {
         })
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun setCurrentTimeVisibility() {
-
-        if (isSameDate(activeDateTime, actualDateTime))
-            current_time_divider.visibility = View.VISIBLE
-        else
-            current_time_divider.visibility = View.INVISIBLE
-    }
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun scheduleCurrentTimerUpdate() {
-        val handler = Handler() { msg ->
-            val datetime = LocalDateTime.now()
-            val marginTop = (itemHeight * datetime.hour + ((datetime.minute / 60.0) * itemHeight).toInt()).px
-            val layoutParams = current_time_divider.layoutParams as ViewGroup.MarginLayoutParams
-            layoutParams.setMargins(marginCardStart - 8.px, marginTop, 0, 0)
-            current_time_divider.requestLayout()
-            true
-        }
-        Timer().scheduleAtFixedRate(object: TimerTask() {
-            @RequiresApi(Build.VERSION_CODES.O)
-            override fun run() {
-                Log.d("HOUR VIEW", "HELLO WORLD")
-
-                handler.obtainMessage().sendToTarget()
-
-            }
-        }, 0, 1000 * 60)
-    }
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun setCurrentTimeDivider() {
-        val datetime = LocalDateTime.now()
-        // set current time divider
-        val marginTop = (itemHeight * datetime.hour + ((datetime.minute / 60.0) * itemHeight).toInt()).px
-        val layoutParams = current_time_divider.layoutParams as ViewGroup.MarginLayoutParams
-        layoutParams.setMargins(marginCardStart - 8.px, marginTop, 0, 0)
-        current_time_divider.requestLayout()
-    }
-
-
     override fun onDestroy() {
         super.onDestroy()
         hourview_viewpager.unregisterOnPageChangeCallback(hourviewPageChangeCallBack)
@@ -308,77 +264,12 @@ class RosterDayFragment: RosterBaseFragment() {
 //    }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun toggleAvailability() {
-        top_bar.isAvailable = !top_bar.isAvailable
-
-        // disable hours
-        var hourView: HourRow
-        for (idx in 1..24) {
-            hourView = day_times.findViewWithTag("hour_$idx")
-            hourView.isDisabled = !hourView.isDisabled
+    fun toggleAvailability() {
+       if (upcomingGigs.size > 0) {
+            showGigsTodayWarning(requireContext(), upcomingGigs, hourview_viewpager.getChildAt(0).findViewWithTag<ConstraintLayout>("day_times"))
+        } else {
+            rosterViewModel.isDayAvailable.value = false
         }
-        if (!top_bar.isAvailable) {
-            if (upcomingGigs.size > 0) {
-                showGigsTodayWarning()
-            }
-        }
-    }
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun showGigsTodayWarning() {
-        val dialog = Dialog(requireContext())
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog.setCancelable(false)
-        dialog.setContentView(R.layout.gigs_today_warning_dialog)
-
-        dialog.dialog_content.setText(
-            "You have " + upcomingGigs.size.toString() + " Gig(s) active on the day. These gigs will get canceled as well."
-        )
-
-        dialog.cancel.setOnClickListener {
-            toggleAvailability()
-            dialog .dismiss()
-        }
-
-        dialog.yes.setOnClickListener {
-            Toast.makeText(requireContext(), "Clicked on YeS", Toast.LENGTH_SHORT).show()
-            showReasonForGigCancel()
-            dialog .dismiss()
-        }
-
-        dialog.show()
-    }
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun showReasonForGigCancel() {
-        val dialog = Dialog(requireContext())
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog.setCancelable(false)
-        dialog.setContentView(R.layout.reason_for_gig_cancel_dialog)
-
-        var selectedText = ""
-
-        dialog.cancel_options.setOnCheckedChangeListener ( RadioGroup.OnCheckedChangeListener { group, checkedId ->
-            selectedText = dialog.findViewById<RadioButton>(checkedId).text.toString()
-        })
-
-        dialog.submit_button.setOnClickListener {
-            Toast.makeText(requireContext(), "selected option " + selectedText, Toast.LENGTH_SHORT).show()
-            val child = hourview_viewpager.getChildAt(0)
-
-            // removing upcoming gigs
-            // TODO: Can take this functioni out
-            for (gig in upcomingGigs)
-                child.findViewWithTag<ConstraintLayout>("day_times").removeView(child.findViewWithTag<UpcomingGigCard>(gig.tag))
-            dialog .dismiss()
-        }
-
-        dialog.cancel_button.setOnClickListener {
-            toggleAvailability()
-            dialog .dismiss()
-        }
-
-        dialog.show()
     }
 
 }
