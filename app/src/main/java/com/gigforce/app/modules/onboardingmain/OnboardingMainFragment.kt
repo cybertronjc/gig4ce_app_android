@@ -81,31 +81,31 @@ class OnboardingMainFragment : BaseFragment() {
     private fun initializeTitleAsName() {
         setProgressBarWeight(20f)
         progress_completion_tv.text = "1/5"
-        title_onboarding.text = "Whats your Name ?"
+        title_onboarding.text = "What's your name?"
     }
 
     private fun initializeTitleAsAge() {
         setProgressBarWeight(40f)
         progress_completion_tv.text = "2/5"
-        title_onboarding.text = "Whats your Age Group ?"
+        title_onboarding.text = "What's your age group?"
     }
 
     private fun initializeTitleAsGender() {
         setProgressBarWeight(60f)
         progress_completion_tv.text = "3/5"
-        title_onboarding.text = "Select your Gender?"
+        title_onboarding.text = "Select your gender."
     }
 
     private fun initializeTitleAsEducation() {
         setProgressBarWeight(80f)
         progress_completion_tv.text = "4/5"
-        title_onboarding.text = "Whats your highest education?"
+        title_onboarding.text = "What's your highest qualification?"
     }
 
     private fun initializeTitleAsWorkStatus() {
         setProgressBarWeight(100f)
         progress_completion_tv.text = "5/5"
-        title_onboarding.text = "What is your work status ?"
+        title_onboarding.text = "What's your work status?"
     }
 
 
@@ -181,7 +181,7 @@ class OnboardingMainFragment : BaseFragment() {
         val recyclerGenericAdapter: RecyclerGenericAdapter<ArrayList<String>> =
             RecyclerGenericAdapter<ArrayList<String>>(
                 activity?.applicationContext,
-                PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item -> showToast("abc") },
+                PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item -> showToast("") },
                 RecyclerGenericAdapter.ItemInterface<ArrayList<String>?> { obj, viewHolder, position ->
                     if (position != 0) {
                         getView(viewHolder, R.id.user_name).visibility = View.GONE
