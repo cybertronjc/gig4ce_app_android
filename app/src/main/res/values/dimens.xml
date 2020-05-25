@@ -23,5 +23,8 @@
 
     <dimen name="eight_dp">8dp</dimen>
     <dimen name="five_dp">5dp</dimen>
+
     <dimen name="roster_item_height">70dp</dimen>
+
+    <dimen name="bs_top_margin">16dp</dimen>
 </resources>

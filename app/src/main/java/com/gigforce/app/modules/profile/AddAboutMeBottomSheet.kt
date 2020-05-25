@@ -36,8 +36,14 @@ class AddAboutMeBottomSheet: ProfileBaseBottomSheetFragment() {
         }
 
         save_button.setOnClickListener {
-            profileViewModel!!.setProfileAboutMe(about_me_text.text.toString())
-            findNavController().navigate(R.id.aboutExpandedFragment)
+            if (about_me_text.text.toString().isNotEmpty() && about_me_text.text.toString().trim().isEmpty()) {
+                form_error.visibility = View.VISIBLE
+                about_me_text.setHintTextColor(resources.getColor(R.color.red))
+            }
+            else {
+                profileViewModel!!.setProfileAboutMe(about_me_text.text.toString())
+                findNavController().navigate(R.id.aboutExpandedFragment)
+            }
         }
         super.onViewCreated(view, savedInstanceState)
     }

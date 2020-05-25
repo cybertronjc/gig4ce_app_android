@@ -75,8 +75,7 @@ class EditLanguageBottomSheet: ProfileBaseBottomSheetFragment() {
             if (validateLanguage()) {
                 Log.d("EditLanguage", "Editing Language")
                 profileViewModel!!.removeProfileLanguage(language!!)
-                var newLanguage: ArrayList<Language> = ArrayList()
-                newLanguage.add(
+                profileViewModel.setProfileLanguage(
                     Language(
                         name = language_name.text.toString(),
                         speakingSkill = language_speaking_level.progress.toString(),
@@ -84,7 +83,6 @@ class EditLanguageBottomSheet: ProfileBaseBottomSheetFragment() {
                         isMotherLanguage = mother_language.isChecked
                     )
                 )
-                profileViewModel!!.setProfileLanguage(newLanguage)
                 findNavController().navigate(R.id.aboutExpandedFragment)
             }
         }

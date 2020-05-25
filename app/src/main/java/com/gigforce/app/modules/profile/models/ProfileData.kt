@@ -13,7 +13,7 @@ data class ProfileData(
     var profileAvatarName: String = "avatar.jpg",
     var isVerified: Boolean = false,
     var educations: ArrayList<Education>? = ArrayList<Education>(),
-    var skills: ArrayList<String>? = ArrayList<String>(),
+    var skills: ArrayList<Skill>? = ArrayList<Skill>(),
     var achievements: ArrayList<Achievement>? = ArrayList<Achievement>(),
     var languages: ArrayList<Language>? = ArrayList<Language>(),
     var contact: ArrayList<Contact>? = ArrayList<Contact>(),

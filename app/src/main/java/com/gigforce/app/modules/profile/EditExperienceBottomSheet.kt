@@ -150,8 +150,7 @@ class EditExperienceBottomSheet: ProfileBaseBottomSheetFragment() {
             if (validateExperience()) {
                 Log.d("EditExperience", "Editing Experience")
                 profileViewModel.removeProfileExperience(experience)
-                val newExperience: ArrayList<Experience> = ArrayList()
-                newExperience.add(
+                profileViewModel.setProfileExperience(
                     Experience(
                         title = title.text.toString(),
                         company = company.text.toString(),
@@ -162,7 +161,6 @@ class EditExperienceBottomSheet: ProfileBaseBottomSheetFragment() {
                         currentExperience = currentlyWorkHere
                     )
                 )
-                profileViewModel.setProfileExperience(newExperience)
                 findNavController().navigate(R.id.experienceExpandedFragment)
             }
         }

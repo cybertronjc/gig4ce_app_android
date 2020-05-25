@@ -63,12 +63,12 @@ class EducationExpandedFragment: ProfileBaseFragment() {
             education_card.nextDestination = R.id.editEducationBottomSheet
             education_card.cardTitle = "Education"
             education_card.cardContent = educationString
-            education_card.cardBottom = "Add educations"
+            education_card.cardBottom = "Add education"
 
             var skillString: String = ""
             profile.skills?.let {
                 for (skill in it) {
-                    skillString += skill + "\n\n"
+                    skillString += skill.id + "\n\n"
                 }
             }
             skill_card.nextDestination = R.id.editSkillBottomSheet

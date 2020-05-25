@@ -19,7 +19,6 @@ class AddLanguageBottomSheetFragment: ProfileBaseBottomSheetFragment() {
         fun newInstance() = AddLanguageBottomSheetFragment()
     }
 
-    var updates: ArrayList<Language> = ArrayList()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -54,8 +53,6 @@ class AddLanguageBottomSheetFragment: ProfileBaseBottomSheetFragment() {
         add_language_save.setOnClickListener{
             if (validateLanguage()) {
                 addNewLanguage()
-
-                profileViewModel!!.setProfileLanguage(updates)
                 findNavController().navigate(R.id.aboutExpandedFragment)
             }
         }
@@ -63,7 +60,7 @@ class AddLanguageBottomSheetFragment: ProfileBaseBottomSheetFragment() {
 
     private fun addNewLanguage() {
         hideError(form_error, add_language_name)
-        updates.add(
+        profileViewModel.setProfileLanguage(
             Language(
                 name = add_language_name.text.toString(),
                 speakingSkill = add_language_speaking_level.progress.toString(),
