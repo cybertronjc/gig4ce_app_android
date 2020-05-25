@@ -85,7 +85,6 @@ class AddEducationBottomSheetFragment: ProfileBaseBottomSheetFragment() {
         save_button.setOnClickListener{
             if(validateEducation()) {
                 addNewEducation()
-                profileViewModel!!.setProfileEducation(updates)
                 Toast.makeText(this.context, "Updated Education Section", Toast.LENGTH_LONG).show()
                 this.findNavController().navigate(R.id.educationExpandedFragment)
             }
@@ -100,7 +99,7 @@ class AddEducationBottomSheetFragment: ProfileBaseBottomSheetFragment() {
     private fun addNewEducation() {
         hideError(form_error, institution_name, course_name, degree_name, start_date, end_date)
         institution_name.requestFocus()
-        updates.add(Education(
+        profileViewModel.setProfileEducation(Education(
             institution = institution_name.text.toString(),
             course = course_name.text.toString(),
             degree = degree_name.text.toString(),

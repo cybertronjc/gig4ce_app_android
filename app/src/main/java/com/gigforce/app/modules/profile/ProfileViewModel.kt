@@ -8,9 +8,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.QuerySnapshot
-import com.google.firebase.storage.FirebaseStorage
-import kotlinx.coroutines.tasks.await
 
 class ProfileViewModel : ViewModel() {
 
@@ -45,7 +42,6 @@ class ProfileViewModel : ViewModel() {
     }
 
     fun getAllTags() {
-        lateinit var tags: Array<String>
         FirebaseFirestore.getInstance().collection("Tags").limit(1).get()
             .addOnSuccessListener {
                 if (it.isEmpty) {
@@ -70,20 +66,36 @@ class ProfileViewModel : ViewModel() {
         profileFirebaseRepository.setProfileTags(tags)
     }
 
+    fun setProfileEducation(education: Education) {
+        profileFirebaseRepository.setData(education)
+    }
+
+    fun setProfileExperience(experience: Experience) {
+        profileFirebaseRepository.setData(experience)
+    }
+
     fun setProfileEducation(education: ArrayList<Education>) {
         profileFirebaseRepository.setProfileEducation(education)
     }
 
     fun removeProfileEducation(education: Education) {
-        profileFirebaseRepository.removeProfileEducation(education)
+        profileFirebaseRepository.removeData(education)
+    }
+
+    fun setProfileSkill(skill: Skill) {
+        profileFirebaseRepository.setData(skill)
     }
 
     fun setProfileSkill(skills: ArrayList<String>) {
         profileFirebaseRepository.setProfileSkill(skills)
     }
 
-    fun removeProfileSkill(skill: String) {
-        profileFirebaseRepository.removeProfileSkill(skill)
+    fun removeProfileSkill(skill: Skill) {
+        profileFirebaseRepository.removeData(skill)
+    }
+
+    fun setProfileAchievement(achievement: Achievement) {
+        profileFirebaseRepository.setData(achievement)
     }
 
     fun setProfileAchievement(achievements: ArrayList<Achievement>) {
@@ -91,11 +103,15 @@ class ProfileViewModel : ViewModel() {
     }
 
     fun removeProfileAchievement(achievement: Achievement) {
-        profileFirebaseRepository.removeProfileAchievement(achievement)
+        profileFirebaseRepository.removeData(achievement)
     }
 
     fun setProfileContact(contacts: ArrayList<Contact>) {
         profileFirebaseRepository.setProfileContact(contacts)
+    }
+
+    fun setProfileLanguage(language: Language) {
+        profileFirebaseRepository.setData(language)
     }
 
     fun setProfileLanguage(languages: ArrayList<Language>) {
@@ -103,7 +119,7 @@ class ProfileViewModel : ViewModel() {
     }
 
     fun removeProfileLanguage(language: Language) {
-        profileFirebaseRepository.removeProfileLanguage(language)
+        profileFirebaseRepository.removeData(language)
     }
 
     fun setProfileExperience(experiences: ArrayList<Experience>) {
@@ -115,7 +131,7 @@ class ProfileViewModel : ViewModel() {
     }
 
     fun removeProfileExperience(experience: Experience) {
-        profileFirebaseRepository.removeProfileExperience(experience)
+        profileFirebaseRepository.removeData(experience)
     }
 
     fun setProfileBio(bio: String) {

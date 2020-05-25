@@ -22,8 +22,6 @@ class AddAchievementBottomSheetFragment: ProfileBaseBottomSheetFragment() {
         fun newInstance() = AddAchievementBottomSheetFragment()
     }
 
-    var updates: ArrayList<Achievement> = ArrayList()
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -61,7 +59,6 @@ class AddAchievementBottomSheetFragment: ProfileBaseBottomSheetFragment() {
             if (validateAchievement()) {
                 addNewAchievement()
 
-                profileViewModel!!.setProfileAchievement(updates)
                 Toast.makeText(this.context, "Updated Achievement Section", Toast.LENGTH_LONG).show()
                 this.findNavController().navigate(R.id.educationExpandedFragment)
             }
@@ -71,7 +68,7 @@ class AddAchievementBottomSheetFragment: ProfileBaseBottomSheetFragment() {
     private fun addNewAchievement() {
         hideError(form_error, title, authority, year)
         title.requestFocus()
-        updates.add(
+        profileViewModel.setProfileAchievement(
             Achievement(
                 title = title.text.toString(),
                 issuingAuthority = authority.text.toString(),

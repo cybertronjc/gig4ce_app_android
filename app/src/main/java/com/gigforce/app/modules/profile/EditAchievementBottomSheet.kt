@@ -82,8 +82,7 @@ class EditAchievementBottomSheet: ProfileBaseBottomSheetFragment() {
             if (validateAchievement()) {
                 Log.d("EditAchievement", "Editing Achievement")
                 profileViewModel.removeProfileAchievement(achievement!!)
-                var newAchievement: ArrayList<Achievement> = ArrayList()
-                newAchievement.add(
+                profileViewModel.setProfileAchievement(
                     Achievement(
                         title = title.text.toString(),
                         issuingAuthority = authority.text.toString(),
@@ -91,7 +90,6 @@ class EditAchievementBottomSheet: ProfileBaseBottomSheetFragment() {
                         location = location.text.toString()
                     )
                 )
-                profileViewModel.setProfileAchievement(newAchievement)
                 findNavController().navigate(R.id.educationExpandedFragment)
             }
         }

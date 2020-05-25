@@ -1,5 +1,6 @@
 package com.gigforce.app.modules.profile.models
 
+import com.gigforce.app.core.base.basefirestore.BaseFirestoreDataModel
 import java.util.*
 
 data class Education(
@@ -9,5 +10,5 @@ data class Education(
     var degree: String = "",
     var startYear: Date? = null,
     var endYear: Date? = null
-){
+): BaseFirestoreDataModel(tableName = "educations"){
 }
