@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
+import com.gigforce.app.modules.profile.models.Skill
 import com.gigforce.app.utils.DropdownAdapter
 import kotlinx.android.synthetic.main.add_skill_bottom_sheet.*
 
@@ -20,7 +21,6 @@ class AddSkillBottomSheetFragment: ProfileBaseBottomSheetFragment() {
         fun newInstance() = AddSkillBottomSheetFragment()
     }
 
-    var updates: ArrayList<String> = ArrayList()
     var skills: ArrayList<String> = ArrayList()
     var selectedSkill: String = ""
 
@@ -59,8 +59,6 @@ class AddSkillBottomSheetFragment: ProfileBaseBottomSheetFragment() {
         add_skill_save_button.setOnClickListener{
             if (validateSkill()) {
                 addNewSkill()
-
-                profileViewModel!!.setProfileSkill(updates)
                 this.findNavController().navigate(R.id.educationExpandedFragment)
             }
         }
@@ -69,8 +67,10 @@ class AddSkillBottomSheetFragment: ProfileBaseBottomSheetFragment() {
 
     private fun addNewSkill() {
         hideError(form_error, add_skill_skill_name)
-        updates.add(
-            add_skill_skill_name.text.toString()
+        profileViewModel.setProfileSkill(
+            Skill(
+                add_skill_skill_name.text.toString()
+            )
         )
     }
 

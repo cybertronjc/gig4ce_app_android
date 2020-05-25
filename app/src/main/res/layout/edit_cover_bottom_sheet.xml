@@ -12,7 +12,6 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:layout_marginStart="32dp"
             android:layout_marginEnd="32dp"
             android:isScrollContainer="true"
@@ -24,7 +23,7 @@
                 android:id="@+id/form_error"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="@dimen/bs_top_margin"
                 android:textSize="14sp"
                 android:textColor="#d4e02020"
                 android:letterSpacing="0.05"
@@ -35,7 +34,7 @@
                 android:id="@+id/bio_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="@dimen/bs_top_margin"
                 android:text="@string/bio_name"
                 style= "@style/LatoBold14" />
             <EditText

@@ -25,7 +25,6 @@ class AddExperienceBottomSheet: ProfileBaseBottomSheetFragment() {
         fun newInstance() = AddExperienceBottomSheet()
     }
 
-    var updates: ArrayList<Experience> = ArrayList()
     var employments: ArrayList<String> = ArrayList()
     var selectedEmployment: String = ""
     var selectedStartDate: String = ""
@@ -108,7 +107,6 @@ class AddExperienceBottomSheet: ProfileBaseBottomSheetFragment() {
         save_button.setOnClickListener{
             if (validateExperience()) {
                 addNewExperience()
-                profileViewModel!!.setProfileExperience(updates)
                 this.findNavController().navigate(R.id.experienceExpandedFragment)
             }
         }
@@ -118,7 +116,7 @@ class AddExperienceBottomSheet: ProfileBaseBottomSheetFragment() {
     private fun addNewExperience() {
         hideError(form_error, title, company, employment_type, location, start_date, end_date)
         title.requestFocus()
-        updates.add(
+        profileViewModel.setProfileExperience(
             Experience(
                 title = title.text.toString(),
                 company = company.text.toString(),

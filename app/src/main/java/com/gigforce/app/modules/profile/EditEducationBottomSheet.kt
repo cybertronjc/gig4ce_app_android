@@ -128,9 +128,7 @@ class EditEducationBottomSheet: ProfileBaseBottomSheetFragment() {
             Log.d("EditEducation", "updating")
             if (validateEducation()) {
                 profileViewModel.removeProfileEducation(education)
-                profileViewModel.removeProfileEducation(education)
-                var newEducation = ArrayList<Education>()
-                newEducation.add(
+                profileViewModel.setProfileEducation(
                     Education(
                         institution = institution.text.toString(),
                         course = course.text.toString(),
@@ -139,7 +137,6 @@ class EditEducationBottomSheet: ProfileBaseBottomSheetFragment() {
                         endYear = SimpleDateFormat("dd/MM/yyyy").parse(selectedEndDate.toString())
                     )
                 )
-                profileViewModel.setProfileEducation(newEducation)
                 findNavController().navigate(R.id.educationExpandedFragment)
             }
         }

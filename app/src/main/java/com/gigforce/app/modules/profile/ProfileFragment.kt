@@ -240,9 +240,9 @@ class ProfileFragment : Fragment() {
                 for ((index, value) in skills.withIndex()) {
                     if (index < 5) {
                         mainEducationString += if (index == 0)
-                            "Skills: " + value + "\n"
+                            "Skills: " + value.id + "\n"
                         else
-                            "\t\t\t\t\t" + value + "\n"
+                            "\t\t\t\t\t" + value.id + "\n"
                     }
                 }
                 mainEducationString += "\n"

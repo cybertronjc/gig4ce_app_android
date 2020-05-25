@@ -17,7 +17,7 @@
             android:id="@+id/form_error"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="8dp"
+            android:layout_marginTop="@dimen/bs_top_margin"
             android:textSize="14sp"
             android:textColor="#d4e02020"
             android:letterSpacing="0.05"
@@ -27,7 +27,7 @@
             android:id="@+id/textView20"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="@dimen/bs_top_margin"
             android:text="@string/add_language_new_language"
             style="@style/LatoBold14" />
 

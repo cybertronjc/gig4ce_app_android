@@ -14,9 +14,19 @@
         app:layout_constraintBottom_toBottomOf="parent"
         android:orientation="vertical">
         <TextView
+            android:id="@+id/form_error"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:textSize="14sp"
+            android:layout_marginTop="@dimen/bs_top_margin"
+            android:textColor="#d4e02020"
+            android:letterSpacing="0.05"
+            android:visibility="gone"
+            android:text="@string/error_empty_mandatory_fields" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/bs_top_margin"
             style="@style/BsHeadingBold12"
             android:text="@string/edit_aboutme_text" />
         <EditText

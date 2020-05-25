@@ -15,6 +15,7 @@ import androidx.navigation.fragment.findNavController
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.internal.main.DialogLayout
 import com.gigforce.app.R
+import com.gigforce.app.modules.profile.models.Skill
 import com.gigforce.app.utils.DropdownAdapter
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.android.synthetic.main.delete_confirmation_dialog.*
@@ -31,7 +32,7 @@ class EditSkillBottomSheet: ProfileBaseBottomSheetFragment() {
     var arrayLocation: String = ""
     var skills: ArrayList<String> = ArrayList()
     var selectedSkill: String = ""
-    lateinit var currentSkill: String
+    lateinit var currentSkill: Skill
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,7 +64,7 @@ class EditSkillBottomSheet: ProfileBaseBottomSheetFragment() {
 
         profileViewModel.userProfileData.observe(this, Observer { profile ->
             currentSkill = profile.skills!![arrayLocation.toInt()]
-            skill.setText(currentSkill, false)
+            skill.setText(currentSkill.id, false)
         })
     }
 
@@ -84,9 +85,7 @@ class EditSkillBottomSheet: ProfileBaseBottomSheetFragment() {
         save.setOnClickListener {
             if (validateSkill()) {
                 profileViewModel.removeProfileSkill(currentSkill)
-                var skills: ArrayList<String> = ArrayList()
-                skills.add(skill.text.toString())
-                profileViewModel.setProfileSkill(skills)
+                profileViewModel.setProfileSkill(Skill(skill.text.toString()))
                 findNavController().navigate(R.id.educationExpandedFragment)
             }
         }
