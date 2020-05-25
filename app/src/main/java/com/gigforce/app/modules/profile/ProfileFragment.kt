@@ -245,7 +245,6 @@ class ProfileFragment : Fragment() {
                             "\t\t\t\t\t" + value.id + "\n"
                     }
                 }
-                mainEducationString += "\n"
             }
 
             profile.achievements?.let {
