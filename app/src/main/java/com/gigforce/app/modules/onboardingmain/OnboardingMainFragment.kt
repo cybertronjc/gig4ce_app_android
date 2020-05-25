@@ -81,18 +81,26 @@ class OnboardingMainFragment : BaseFragment() {
         return false
     }
     private fun checkForAlreadyCompletedData() {
-        if(!checkNullOrBlank(profileData.name)&&checkNullOrBlank(profileData.ageGroup)){
+        if(checkNullOrBlank(profileData.name)){
+            // will keep pager to first page
+            showHideBackIcon(false)
+        }
+        else if(checkNullOrBlank(profileData.ageGroup)){
             showHideBackIcon(true)
             onboarding_pager.setCurrentItem(1)
+            setPagerData(onboarding_pager.currentItem)
         }else if(checkNullOrBlank(profileData.gender)){
             showHideBackIcon(true)
             onboarding_pager.setCurrentItem(2)
+            setPagerData(onboarding_pager.currentItem)
         }else if(checkNullOrBlank(profileData.highestEducation)){
             showHideBackIcon(true)
             onboarding_pager.setCurrentItem(3)
+            setPagerData(onboarding_pager.currentItem)
         }else if(checkNullOrBlank(profileData.workStatus)){
             showHideBackIcon(true)
             onboarding_pager.setCurrentItem(4)
+            setPagerData(onboarding_pager.currentItem)
         }
     }
 
