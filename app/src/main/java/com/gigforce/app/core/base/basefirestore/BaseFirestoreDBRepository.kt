@@ -59,6 +59,9 @@ abstract public class BaseFirestoreDBRepository {
     public fun setData(tableName: String, data: Boolean) {
         getDBCollection().update(tableName, data)
     }
+    public fun setDataAsKeyValue(tableName: String, data: Boolean) {
+        getDBCollection().update(tableName, data)
+    }
     //set data boolean end
     // for set DB data--------end
 

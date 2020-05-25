@@ -18,7 +18,6 @@ import android.view.ViewGroup
 import androidx.annotation.ColorRes
 import androidx.annotation.DimenRes
 import androidx.core.content.ContextCompat
-import androidx.palette.graphics.Palette
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gigforce.app.R
@@ -194,7 +193,7 @@ class HomeScreenBottomSheetFragment : BaseFragment() {
         datalist.add(FeatureModel("Learning", R.drawable.learning))
         datalist.add(FeatureModel("Settings", R.drawable.settings))
         datalist.add(FeatureModel("Chat", R.drawable.chat))
-        datalist.add(FeatureModel("Chat", R.drawable.chat))
+        datalist.add(FeatureModel("Testing", R.drawable.chat))
         val itemWidth = ((width / 7) * 1.6).toInt()
         val recyclerGenericAdapter: RecyclerGenericAdapter<FeatureModel> =
             RecyclerGenericAdapter<FeatureModel>(
