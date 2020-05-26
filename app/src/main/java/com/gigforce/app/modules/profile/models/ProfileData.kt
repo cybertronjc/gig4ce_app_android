@@ -28,7 +28,6 @@ data class ProfileData(
     var highestEducation:String = "",
     var workStatus : String = "",
     var isOnboardingCompleted : Boolean = false
-
-) {
+    ) {
 
 }

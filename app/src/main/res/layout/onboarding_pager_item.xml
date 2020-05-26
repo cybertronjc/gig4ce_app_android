@@ -62,7 +62,6 @@
             android:layout_marginRight="24dp"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
     <EditText
         android:id="@+id/user_name"
         android:layout_width="match_parent"

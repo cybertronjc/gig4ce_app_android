@@ -51,10 +51,28 @@ class OnboardingMainViewModel : ViewModel() {
     }
     fun getAgeOptions():ArrayList<String>{
         var ageOptions = ArrayList<String>()
+        ageOptions.add("<18")
         ageOptions.add("18-22")
         ageOptions.add("22-26")
         ageOptions.add("26-30")
         ageOptions.add("30-34")
+        ageOptions.add("34-38")
+        ageOptions.add("38-42")
+        ageOptions.add("42-46")
+        ageOptions.add("46-50")
+        ageOptions.add("50-54")
+        ageOptions.add("54-58")
+        ageOptions.add("58-62")
+        ageOptions.add("62-66")
+        ageOptions.add("66-70")
+        ageOptions.add("70-74")
+        ageOptions.add("74-78")
+        ageOptions.add("78-82")
+        ageOptions.add("82-86")
+        ageOptions.add("86-90")
+        ageOptions.add("90-94")
+        ageOptions.add("94-98")
+
         return ageOptions
     }
     fun getGenderOptions():ArrayList<String>{
@@ -66,16 +84,21 @@ class OnboardingMainViewModel : ViewModel() {
     }
     fun getEducationOption():ArrayList<String>{
         var educationOption = ArrayList<String>()
-        educationOption.add("Diploma")
-        educationOption.add("Bachelor’s")
-        educationOption.add("Master’s")
+        educationOption.add("<10th")
+        educationOption.add("10th")
         educationOption.add("12th")
+        educationOption.add("Certificate")
+        educationOption.add("Diploma")
+        educationOption.add("Bachelor's")
+        educationOption.add("Masters")
+        educationOption.add("Doctorate")
+        educationOption.add("Others")
         return educationOption
     }
     fun getWorkStatusOptions():ArrayList<String>{
         var workStatus = ArrayList<String>()
         workStatus.add("Fresher")
-        workStatus.add("Exprienced")
+        workStatus.add("Experienced")
         return workStatus
     }
 

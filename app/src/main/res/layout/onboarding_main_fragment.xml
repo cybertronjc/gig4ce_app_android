@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/onboarding_root_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".modules.onboardingmain.OnboardingMainFragment">
@@ -80,6 +81,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/relativeLayout" />
 
+
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/onboarding_pager"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginTop="86dp"
+        app:layout_constraintTop_toBottomOf="@+id/title_onboarding"
+        tools:layout_editor_absoluteX="30dp"
+        />
     <TextView
         android:id="@+id/next"
         style="@style/button_style"
@@ -92,18 +103,7 @@
         android:paddingTop="15dp"
         android:paddingBottom="15dp"
         android:text="@string/next"
-        android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/onboarding_pager"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_marginTop="86dp"
-        app:layout_constraintTop_toBottomOf="@+id/title_onboarding"
-        tools:layout_editor_absoluteX="30dp"
-        />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

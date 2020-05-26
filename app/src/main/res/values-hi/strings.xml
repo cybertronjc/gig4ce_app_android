@@ -160,4 +160,7 @@
     <string name="tags_text">  उपयोगकर्ता का टैग</string>
     <string name="about_me_text">  मेरे बारे में उपयोगकर्ता </string>
     <string name="to_be_filled_from_profile_data"> प्रोफ़ाइल डेटा से भरा जा करने के लिए </string>
+
+    <string name="settings">समायोजन</string>
+
 </resources>

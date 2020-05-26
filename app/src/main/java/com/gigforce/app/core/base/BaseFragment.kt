@@ -11,6 +11,7 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -150,7 +151,9 @@ abstract class BaseFragment : Fragment() {
     fun getTextView(view: PFRecyclerViewAdapter<Any?>.ViewHolder, id: Int): TextView {
         return view.getView(id) as TextView
     }
-
+    fun getEditText(view: PFRecyclerViewAdapter<Any?>.ViewHolder, id: Int): EditText {
+        return view.getView(id) as EditText
+    }
     fun getTextView(view: View, id: Int): TextView {
         return view.findViewById(id) as TextView
     }
