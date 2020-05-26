@@ -426,8 +426,9 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bg_main"
+                android:layout_height="match_parent"
+                android:background="#f2f2f2"
+                android:paddingBottom="150dp"
                 android:orientation="vertical">
 
                 <com.gigforce.app.modules.profile.ProfileMainCardBackground
