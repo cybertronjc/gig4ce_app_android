@@ -5,9 +5,10 @@ import android.util.AttributeSet
 import android.view.View
 import androidx.cardview.widget.CardView
 import com.gigforce.app.R
+import com.google.android.material.card.MaterialCardView
 import kotlinx.android.synthetic.main.profile_main_card_background.view.*
 
-class ProfileMainCardBackground: CardView {
+class ProfileMainCardBackground: MaterialCardView {
     constructor(context: Context): super(context)
     constructor(context: Context, attrs: AttributeSet): super(context, attrs)
 
