@@ -7,7 +7,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewParent
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -17,13 +16,14 @@ import com.gigforce.app.R
 import com.gigforce.app.modules.roster.models.Gig
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.card.MaterialCardView
-import kotlinx.android.synthetic.main.day_view_top_bar.view.*
+import kotlinx.android.synthetic.main.completed_gig_card.view.*
 import kotlinx.android.synthetic.main.item_roster_day.view.*
-import kotlinx.android.synthetic.main.layout_home_screen.*
-import kotlinx.android.synthetic.main.roster_day_fragment.*
 import kotlinx.android.synthetic.main.roster_day_hour_view.*
+import kotlinx.android.synthetic.main.unavailable_time_adjustment_bottom_sheet.*
 import kotlinx.android.synthetic.main.unavailable_time_adjustment_bottom_sheet.view.*
 import kotlinx.android.synthetic.main.unavailable_time_adjustment_bottom_sheet.view.day_text
+import kotlinx.android.synthetic.main.upcoming_gig_card.view.*
+import kotlinx.android.synthetic.main.upcoming_gig_card.view.gig_title
 import java.time.LocalDateTime
 import java.util.*
 import kotlin.collections.ArrayList
@@ -39,6 +39,8 @@ class HourViewFragment: RosterBaseFragment() {
     val hourIds = ArrayList<Int>()
 
     var viewInitialized: Boolean = false
+
+    var timer = Timer()
 
     val times = ArrayList<String>(listOf("01:00", "02:00", "03:00", "04:00", "05:00", "06:00", "07:00", "08:00", "09:00",
     "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00",
@@ -84,19 +86,13 @@ class HourViewFragment: RosterBaseFragment() {
         rosterViewModel.bsBehavior.state = BottomSheetBehavior.STATE_HIDDEN
 
         initializeHourViews()
-        if (isSameDate(activeDateTime, actualDateTime)) {
-            todayHourActive()
-        } else if (isLessDate(activeDateTime, actualDateTime)) {
-            allHourInactive()
-        } else {
-            allHourActive()
-        }
+
+        setHourVisibility(day_times, activeDateTime, actualDateTime)
 
         if (isSameDate(activeDateTime, actualDateTime)) {
             setCurrentTimeDivider()
             scheduleCurrentTimerUpdate()
         }
-
 
         addGigCards()
 
@@ -111,7 +107,7 @@ class HourViewFragment: RosterBaseFragment() {
             current_time_divider.requestLayout()
             true
         }
-        Timer().scheduleAtFixedRate(object: TimerTask() {
+        timer.scheduleAtFixedRate(object: TimerTask() {
             @RequiresApi(Build.VERSION_CODES.O)
             override fun run() {
                 Log.d("HOUR VIEW", "HELLO WORLD")
@@ -135,14 +131,17 @@ class HourViewFragment: RosterBaseFragment() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun addGigCards() {
-        dayTag = "${activeDateTime.year}${activeDateTime.month}${activeDateTime.dayOfMonth}"
-        upcomingGigs.addAll(rosterViewModel.getUpcomingGigsByDayTag(dayTag))
-        for (gig in upcomingGigs)
-            addUpcomingGigCard(gig)
+        dayTag = "${activeDateTime.year}${activeDateTime.monthValue.toString().format("%02c")}${activeDateTime.dayOfMonth}"
+        rosterViewModel.gigsQuery.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+            upcomingGigs.addAll(rosterViewModel.getUpcomingGigsByDayTag(dayTag, it))
+            for (gig in upcomingGigs)
+                addUpcomingGigCard(gig)
 
-        completedGigs.addAll(rosterViewModel.getCompletedGigsByDayTag(dayTag))
-        for (gig in completedGigs)
-            addCompletedGigCard(gig)
+            completedGigs.addAll(rosterViewModel.getCompletedGigsByDayTag(dayTag, it))
+            for (gig in completedGigs)
+                addCompletedGigCard(gig)
+        })
+
     }
 
     private fun addUpcomingGigCard(gig: Gig) {
@@ -156,6 +155,7 @@ class HourViewFragment: RosterBaseFragment() {
         upcomingCard.startHour = gig.startHour
         upcomingCard.startMinute = gig.startMinute
         upcomingCard.duration = gig.duration
+        upcomingCard.gig_title.text = gig.title
         upcomingCard.cardHeight = (itemHeight * gig.duration).toInt().px
 
         val params = ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.WRAP_CONTENT)
@@ -181,6 +181,7 @@ class HourViewFragment: RosterBaseFragment() {
         completedGigCard.gigStartHour = gig.startHour
         completedGigCard.gigStartMinute = gig.startMinute
         completedGigCard.gigDuration = gig.duration
+        completedGigCard.gig_title.text = gig.title
         completedGigCard.cardHeight = (itemHeight * gig.duration).toInt().px
         completedGigCard.id = View.generateViewId()
 
@@ -227,10 +228,36 @@ class HourViewFragment: RosterBaseFragment() {
 
             widget.top_half.setOnClickListener {
                 setAndShowBottomSheet(index-1, index)
+                var outline = HourOutline(requireContext())
+                outline.id = View.generateViewId()
+
+                val params = ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.WRAP_CONTENT)
+                day_times.addView(outline)
+                outline.setLayoutParams(params)
+                var constraintSet = ConstraintSet()
+                constraintSet.clone(day_times)
+                constraintSet.connect(outline.id, ConstraintSet.TOP, hour_0.id, ConstraintSet.TOP)
+                constraintSet.connect(outline.id, ConstraintSet.START, start_guideline.id, ConstraintSet.START)
+                constraintSet.connect(outline.id, ConstraintSet.END, end_guideline.id, ConstraintSet.END)
+                constraintSet.applyTo(day_times)
+                outline.layoutParams.height = 70.px
+                (outline.layoutParams as ViewGroup.MarginLayoutParams).setMargins(
+                    marginCardStart, widget.hour * 70.px, marginCardEnd, 0)
+                outline.requestLayout()
            }
 
             widget.bottom_half.setOnClickListener {
                 setAndShowBottomSheet(index, index+1)
+                var outline = HourOutline(requireContext())
+                outline.id = View.generateViewId()
+
+                day_times.addView(outline)
+                var constraintSet = ConstraintSet()
+                constraintSet.clone(day_times)
+                constraintSet.connect(outline.id, ConstraintSet.TOP, hour_0.id, ConstraintSet.TOP, widget.hour * 70.px)
+                constraintSet.connect(outline.id, ConstraintSet.START, start_guideline.id, ConstraintSet.START, marginCardStart)
+                constraintSet.connect(outline.id, ConstraintSet.END, end_guideline.id, ConstraintSet.END, marginCardEnd)
+                constraintSet.applyTo(day_times)
             }
 
             hourIds.add(widget.id)
@@ -271,10 +298,24 @@ class HourViewFragment: RosterBaseFragment() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun setBsExpandedAvailabilityToggle() {
-        rosterViewModel.UnavailableBS.toggle_button.setOnClickListener {
+//        rosterViewModel.isDayAvailable.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+//            toggle_button.isChecked = it
+//        })
 
-            //rosterViewModel.topBar.isAvailable = !rosterViewModel.topBar.isAvailable
-        }
+//        toggle_button.setOnClickListener {
+//            if (toggle_button.isChecked) {
+//                if (upcomingGigs.size > 0)
+//                    rosterViewModel.isDayAvailable.value = !showGigsTodayWarning(
+//                        requireContext(), upcomingGigs, day_times)
+//                else {
+//                    rosterViewModel.isDayAvailable.value = false
+//                    allHourInactive(day_times)
+//                }
+//            } else {
+//                rosterViewModel.isDayAvailable.value = true
+//                setHourVisibility(day_times, activeDateTime, actualDateTime)
+//            }
+//        }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -331,39 +372,6 @@ class HourViewFragment: RosterBaseFragment() {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun todayHourActive() {
-        for (idx in hourIds) {
-            var widget = day_times.findViewById<HourRow>(idx)
-            if (widget.hour <= activeDateTime.hour) {
-                Log.d("HOURVIEW", "inactive hour")
-                widget.item_time.setTextColor(resources.getColor(R.color.gray_color_calendar))
-                widget.isClickable = false
-            } else {
-                widget.item_time.setTextColor(resources.getColor(R.color.black))
-                widget.isClickable = true
-            }
-        }
-    }
-
-    private fun allHourInactive() {
-        for (idx in hourIds) {
-            var widget = day_times.findViewById<HourRow>(idx)
-            Log.d("HOURVIEW", "inactive hour")
-            widget.item_time.setTextColor(resources.getColor(R.color.gray_color_calendar))
-            widget.isClickable = false
-        }
-    }
-
-    private fun allHourActive() {
-        for (idx in hourIds) {
-            var widget = day_times.findViewById<HourRow>(idx)
-            Log.d("HOURVIEW", "inactive hour")
-            widget.item_time.setTextColor(resources.getColor(R.color.black))
-            widget.isClickable = true
-        }
-    }
-
     fun removeUpcomingGigCards() {
         for (gig in upcomingGigs) {
             var card = day_times.findViewWithTag<UpcomingGigCard>(gig.tag)
@@ -373,4 +381,9 @@ class HourViewFragment: RosterBaseFragment() {
         }
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        timer.cancel()
+        timer.purge()
+    }
 }

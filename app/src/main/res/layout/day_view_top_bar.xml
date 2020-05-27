@@ -56,18 +56,13 @@
                 app:layout_constraintEnd_toStartOf="@id/available_toggle"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <com.google.android.material.button.MaterialButton
+            <com.google.android.material.switchmaterial.SwitchMaterial
                 android:id="@+id/available_toggle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
-                app:iconPadding="0dp"
-                android:minWidth="0dp"
-                android:background="@color/fui_transparent"
-                app:iconTint = "@android:color/transparent"
-                app:iconTintMode="add"
-                app:icon="@drawable/ic_toggle_on"
-                style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
+                app:useMaterialThemeColors="false"
+                style="@style/Widget.MaterialComponents.CompoundButton.Switch"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/more_bottom"
                 app:layout_constraintTop_toTopOf="parent" />
