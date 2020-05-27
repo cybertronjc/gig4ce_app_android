@@ -426,8 +426,9 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bg_main"
+                android:layout_height="match_parent"
+                android:background="#f2f2f2"
+                android:paddingBottom="150dp"
                 android:orientation="vertical">
 
                 <com.gigforce.app.modules.profile.ProfileMainCardBackground
@@ -437,6 +438,7 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="58dp"
                     android:layout_marginEnd="16dp"
+                    app:cardCornerRadius="8dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/location_card" />
@@ -448,6 +450,7 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="24dp"
                     android:layout_marginEnd="16dp"
+                    app:cardCornerRadius="8dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintEnd_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/main_about_card" />
@@ -459,6 +462,7 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="24dp"
                     android:layout_marginEnd="16dp"
+                    app:cardCornerRadius="8dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/main_education_card" />
