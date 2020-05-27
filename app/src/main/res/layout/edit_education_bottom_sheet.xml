@@ -102,6 +102,7 @@
                 android:id="@+id/degree"
                 android:paddingStart="3dp"
                 android:focusable="false"
+                android:longClickable="false"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
