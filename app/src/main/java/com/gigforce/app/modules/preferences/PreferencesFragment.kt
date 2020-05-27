@@ -19,6 +19,7 @@ import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.app.core.genericadapter.RecyclerGenericAdapter
+import com.gigforce.app.modules.profile.models.ProfileData
 import com.gigforce.app.utils.AppConstants
 import com.gigforce.app.utils.GlideApp
 import com.gigforce.app.utils.setDarkStatusBarTheme
@@ -35,6 +36,7 @@ class PreferencesFragment : BaseFragment() {
         const val DAY_TIME = 2;
         const val LOCATION = 3;
         const val TITLE_OTHER = 5;
+        const val LANGUAGE = 6;
         const val TITLE_SIGNOUT = 8;
         var storage = FirebaseStorage.getInstance()
 
@@ -67,6 +69,7 @@ class PreferencesFragment : BaseFragment() {
     private fun observeProfileData() {
         viewModel.userProfileData.observe(this, Observer { profile ->
             displayImage(profile.profileAvatarName)
+
         })
 
     }
@@ -179,6 +182,7 @@ class PreferencesFragment : BaseFragment() {
         if(position== DAY_TIME) navigate(R.id.dayTimeFragment)
         if(position== TITLE_SIGNOUT){logoutConfirmationDialog()}
         if(position== LOCATION) navigate(R.id.locationFragment)
+        if(position==LANGUAGE) navigate(R.id.languagePreferenceFragment)
     }
 
     private fun logoutConfirmationDialog() {

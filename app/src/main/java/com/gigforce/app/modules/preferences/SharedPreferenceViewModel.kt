@@ -144,12 +144,14 @@ class SharedPreferenceViewModel : ViewModel() {
         prefrencesItems.add(PreferencesScreenItem(R.drawable.ic_settings,"Location","Work from home,Bangalore"))
         prefrencesItems.add(PreferencesScreenItem(R.drawable.ic_settings,"Earning","2000-2200rs"))
         prefrencesItems.add(PreferencesScreenItem(0,"OTHERS",""))
-        prefrencesItems.add(PreferencesScreenItem(R.drawable.ic_link_broken,"App Language","English"))
+        prefrencesItems.add(PreferencesScreenItem(R.drawable.ic_link_broken,"App Language",getLanguage()))
         prefrencesItems.add(PreferencesScreenItem(R.drawable.ic_broadcast,"Notification",""))
         prefrencesItems.add(PreferencesScreenItem(R.drawable.ic_products,"Sign out",""))
         return prefrencesItems;
     }
-
+    fun getLanguage():String{
+        if(preferencesDataModelObj!=null) return preferencesDataModelObj.languageName else return "English"
+    }
     fun getDateTimeSubtitle():String{
         var subTitle = ""
         var daysStr  = "day"
@@ -203,5 +205,11 @@ class SharedPreferenceViewModel : ViewModel() {
 
     fun getCities(): ArrayList<String>{
         return citiesRepository.getCities()
+    }
+
+    fun saveLanguageToFirebase(langStr: String, langCode: String) {
+        preferencesRepository.setDataAsKeyValue("languageName",langStr)
+        preferencesRepository.setDataAsKeyValue("languageCode",langCode)
+
     }
 }

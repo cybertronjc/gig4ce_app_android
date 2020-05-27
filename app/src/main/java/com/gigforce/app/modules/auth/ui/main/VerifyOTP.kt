@@ -117,7 +117,7 @@ class VerifyOTP: BaseFragment() {
             }
         }
         resend_otp?.setOnClickListener {
-                if(otpresentcounter>2) {
+                if(otpresentcounter<2) {
                     otpresentcounter++;
                     counterStart();
                     viewModel.sendVerificationCode("+91" + mobile_number)

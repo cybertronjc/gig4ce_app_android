@@ -46,7 +46,6 @@ class MainHomeScreen : BaseFragment() {
         fun newInstance() =
             MainHomeScreen()
     }
-
     private var mExtendedBottomSheetBehavior: ExtendedBottomSheetBehavior<*>? = null
     private lateinit var viewModel: MainHomeScreenViewModel
     lateinit var viewModelProfile: ProfileViewModel

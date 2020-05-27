@@ -44,7 +44,6 @@ class LanguageSelectFragment : BaseFragment() {
     }
 
     private fun initializer() {
-
         groupradio.clearCheck()
     }
 
