@@ -32,7 +32,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/bs_top_margin"
             android:text="@string/add_skill_sheet_new_skill"
-            style = "@style/LatoBold14"/>
+            style = "@style/BsHeadingBold12"/>
 
 
         <com.google.android.material.textfield.TextInputLayout

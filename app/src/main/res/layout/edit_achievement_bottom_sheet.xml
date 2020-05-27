@@ -39,7 +39,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_gravity="center_vertical"
-                style="@style/LatoBold14"
+                style="@style/BsHeadingBold12"
                 android:text="@string/edit_achievement" />
             <ImageButton
                 android:id="@+id/delete"

@@ -35,7 +35,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/bs_top_margin"
             android:text="@string/add_achievement_sheet_new_achievement"
-            style="@style/LatoBold14"/>
+            style="@style/BsHeadingBold12"/>
 
         <EditText
             android:id="@+id/title"

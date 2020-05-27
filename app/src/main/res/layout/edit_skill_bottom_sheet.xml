@@ -39,7 +39,7 @@
                 android:layout_weight="1"
                 android:layout_gravity="center_vertical"
                 android:text="@string/edit_skill"
-                style = "@style/LatoBold14"/>
+                style = "@style/BsHeadingBold12"/>
 
             <ImageButton
                 android:id="@+id/delete"
