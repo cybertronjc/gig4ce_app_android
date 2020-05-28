@@ -20,7 +20,6 @@ import com.gigforce.app.R
 import com.gigforce.app.modules.profile.ProfileViewModel
 import com.gigforce.app.utils.GlideApp
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.ml.vision.FirebaseVision
 import com.google.firebase.ml.vision.common.FirebaseVisionImage
 import com.google.firebase.ml.vision.face.FirebaseVisionFaceDetectorOptions
@@ -32,7 +31,6 @@ import com.yalantis.ucrop.UCrop
 import kotlinx.android.synthetic.main.activity_photo_crop.*
 import kotlinx.android.synthetic.main.profile_photo_bottom_sheet.*
 import kotlinx.android.synthetic.main.profile_photo_bottom_sheet.view.*
-import kotlinx.android.synthetic.main.profile_photo_bottom_sheet.view.linear_layout_bottomsheet
 import pub.devrel.easypermissions.EasyPermissions
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -480,7 +478,7 @@ class PhotoCrop : AppCompatActivity() {
         val dialog = this.let { Dialog(it) }
         dialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog?.setCancelable(false)
-        dialog?.setContentView(R.layout.signout_custom_alert)
+        dialog?.setContentView(R.layout.confirmation_custom_alert)
         val titleDialog = dialog?.findViewById(R.id.title) as TextView
         titleDialog.text = "Are sure you want to Remove the picture ?"
         val noBtn = dialog?.findViewById(R.id.yes) as TextView

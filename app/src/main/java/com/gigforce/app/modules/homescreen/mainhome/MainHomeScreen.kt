@@ -1,5 +1,6 @@
 package com.gigforce.app.modules.homescreen.mainhome
 
+import android.content.res.Configuration
 import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.drawable.Drawable

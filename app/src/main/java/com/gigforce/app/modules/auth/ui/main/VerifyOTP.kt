@@ -154,10 +154,13 @@ class VerifyOTP: BaseFragment() {
                     timeStr = timeStr+time
                 }
                 timer_tv?.text = timeStr
-
+                if(reenter_mobile!=null)
+                reenter_mobile.visibility = View.INVISIBLE
             }
             override fun onFinish() {
                 showResendOTPMessage(true)
+                if(reenter_mobile!=null)
+                reenter_mobile.visibility = View.VISIBLE
             }
         }.start()
     }

@@ -1,6 +1,8 @@
 package com.gigforce.app.modules.preferences
 
 import android.app.Dialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.style.UnderlineSpan
@@ -19,7 +21,6 @@ import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.app.core.genericadapter.RecyclerGenericAdapter
-import com.gigforce.app.modules.profile.models.ProfileData
 import com.gigforce.app.utils.AppConstants
 import com.gigforce.app.utils.GlideApp
 import com.gigforce.app.utils.setDarkStatusBarTheme
@@ -189,7 +190,8 @@ class PreferencesFragment : BaseFragment() {
         val dialog = activity?.let { Dialog(it) }
         dialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog?.setCancelable(false)
-        dialog?.setContentView(R.layout.signout_custom_alert)
+        dialog?.setContentView(R.layout.confirmation_custom_alert)
+        dialog?.getWindow()?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT));
         val titleDialog = dialog?.findViewById(R.id.title) as TextView
         titleDialog.text = "Do you really want to sign out?"
         val yesBtn = dialog?.findViewById(R.id.yes) as TextView

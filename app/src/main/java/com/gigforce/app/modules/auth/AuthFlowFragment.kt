@@ -49,15 +49,6 @@ class AuthFlowFragment : BaseFragment() {
 
     }
 
-    private fun updateResources(language: String) {
-        val locale = Locale(language)
-        val config2 = Configuration()
-        config2.locale = locale
-        // updating locale
-        context?.resources?.updateConfiguration(config2, null)
-        Locale.setDefault(locale)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

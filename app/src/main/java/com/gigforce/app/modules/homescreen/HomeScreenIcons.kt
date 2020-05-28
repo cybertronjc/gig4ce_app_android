@@ -83,7 +83,7 @@ class HomeScreenIcons : BaseFragment() {
         val dialog = activity?.let { Dialog(it) }
         dialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog?.setCancelable(false)
-        dialog?.setContentView(R.layout.signout_custom_alert)
+        dialog?.setContentView(R.layout.confirmation_custom_alert)
         val titleDialog = dialog?.findViewById(R.id.title) as TextView
         titleDialog.text = "Do you really want to sign out?"
         val yesBtn = dialog?.findViewById(R.id.yes) as TextView
