@@ -8,6 +8,8 @@ data class Gig (
     var startDateTime: Timestamp? = null,
     var title: String = "",
     var gigStatus: String = "upcoming",
+    var isGigCompleted: Boolean = false,
+    var isPaymentDone: Boolean = false,
     //var startHour: Int = 0,
     //var startMinute: Int = 0,
     var duration: Float = 0.0F

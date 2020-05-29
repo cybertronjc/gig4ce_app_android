@@ -97,9 +97,7 @@ class RosterDayFragment: RosterBaseFragment() {
 
         hourview_viewpager.registerOnPageChangeCallback(hourviewPageChangeCallBack)
 
-        bs_close_button.setOnClickListener {
-            rosterViewModel.bsBehavior.state = BottomSheetBehavior.STATE_HIDDEN
-        }
+
 
         top_bar.available_toggle.setOnClickListener {
             if (top_bar.isAvailable)
