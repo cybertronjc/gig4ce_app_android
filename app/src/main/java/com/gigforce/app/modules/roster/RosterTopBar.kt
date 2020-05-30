@@ -84,7 +84,7 @@ class RosterTopBar: MaterialCardView {
             field = value
             if(value) {
                 date_text.setTextColor(resources.getColor(R.color.black))
-                day_text.setTextColor(resources.getColor(R.color.black))
+                day_text.setTextColor(resources.getColor(R.color.gray_color_calendar))
             }
 
         }
@@ -98,10 +98,6 @@ class RosterTopBar: MaterialCardView {
     var isAvailable: Boolean = true
         set(value) {
             field = value
-            if (isAvailable)
-                available_toggle.setIconResource(R.drawable.ic_toggle_on)
-            else {
-                available_toggle.setIconResource(R.drawable.ic_toggle_off)
-            }
+            available_toggle.isChecked = isAvailable
         }
 }

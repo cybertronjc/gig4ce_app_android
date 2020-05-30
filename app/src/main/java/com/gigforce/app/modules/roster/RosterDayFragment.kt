@@ -97,16 +97,14 @@ class RosterDayFragment: RosterBaseFragment() {
 
         hourview_viewpager.registerOnPageChangeCallback(hourviewPageChangeCallBack)
 
-        bs_close_button.setOnClickListener {
-            rosterViewModel.bsBehavior.state = BottomSheetBehavior.STATE_HIDDEN
-        }
+
 
         top_bar.available_toggle.setOnClickListener {
             if (top_bar.isAvailable)
                 toggleAvailability()
             else {
                 rosterViewModel.isDayAvailable.value = true
-                //updateHourVisibility()
+                setHourVisibility(hourview_viewpager.getChildAt(0).findViewWithTag<ConstraintLayout>("day_times"), activeDateTime, actualDateTime)
             }
         }
     }
@@ -168,14 +166,24 @@ class RosterDayFragment: RosterBaseFragment() {
             top_bar.isCurrentDay = isSameDate(it, actualDateTime)
             top_bar.isFutureDate = isMoreDate(it, actualDateTime)
 
-            dayTag = "${activeDateTime.year}${activeDateTime.month}${activeDateTime.dayOfMonth}"
+            dayTag = "${activeDateTime.year}${activeDateTime.monthValue}${activeDateTime.dayOfMonth}"
 
+//            upcomingGigs.clear()
+//            upcomingGigs.addAll(rosterViewModel.getUpcomingGigsByDayTag(dayTag))
+            rosterViewModel.gigsQuery.value ?.let {
+                upcomingGigs.clear()
+                upcomingGigs.addAll(rosterViewModel.getUpcomingGigsByDayTag(dayTag, it))
+                completedGigs.clear()
+                completedGigs.addAll(rosterViewModel.getCompletedGigsByDayTag(dayTag, it))
+            }
+
+        })
+        rosterViewModel.gigsQuery.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
             upcomingGigs.clear()
-            upcomingGigs.addAll(rosterViewModel.getUpcomingGigsByDayTag(dayTag))
+            upcomingGigs.addAll(rosterViewModel.getUpcomingGigsByDayTag(dayTag, it))
 
             completedGigs.clear()
-            completedGigs.addAll(rosterViewModel.getCompletedGigsByDayTag(dayTag))
-
+            completedGigs.addAll(rosterViewModel.getCompletedGigsByDayTag(dayTag, it))
         })
     }
 
@@ -202,8 +210,8 @@ class RosterDayFragment: RosterBaseFragment() {
                 when(newState) {
                     BottomSheetBehavior.STATE_COLLAPSED -> {
                         Log.d("BS", "Collapsed State")
-                        time_collapsed.visibility = View.VISIBLE
-                        time_expanded.visibility = View.GONE
+                        //time_expanded.visibility = View.GONE
+                        //time_collapsed.visibility = View.VISIBLE
                     }
                     BottomSheetBehavior.STATE_EXPANDED -> {
                         Log.d("BS", "Expanded State")
@@ -218,8 +226,8 @@ class RosterDayFragment: RosterBaseFragment() {
                     }
                     BottomSheetBehavior.STATE_HALF_EXPANDED -> {
                         Log.d("BS", "Half Expanded State")
-                        time_collapsed.visibility = View.GONE
-                        time_expanded.visibility = View.VISIBLE
+//                        time_collapsed.visibility = View.GONE
+//                        time_expanded.visibility = View.VISIBLE
                     }
                 }
             }
@@ -266,9 +274,13 @@ class RosterDayFragment: RosterBaseFragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     fun toggleAvailability() {
        if (upcomingGigs.size > 0) {
-            showGigsTodayWarning(requireContext(), upcomingGigs, hourview_viewpager.getChildAt(0).findViewWithTag<ConstraintLayout>("day_times"))
+           rosterViewModel.isDayAvailable.value = !showGigsTodayWarning(
+               requireContext(), upcomingGigs,
+               hourview_viewpager.getChildAt(0).findViewWithTag<ConstraintLayout>("day_times"))
         } else {
-            rosterViewModel.isDayAvailable.value = false
+           rosterViewModel.isDayAvailable.value = false
+           allHourInactive(
+               hourview_viewpager.getChildAt(0).findViewWithTag<ConstraintLayout>("day_times"))
         }
     }
 
