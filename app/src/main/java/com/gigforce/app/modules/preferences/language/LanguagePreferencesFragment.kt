@@ -63,14 +63,6 @@ class LanguagePreferencesFragment : BaseFragment() {
     private fun initializer() {
         groupradio.clearCheck()
     }
-    private fun updateResources(language: String) {
-        val locale = Locale(language)
-        val config2 = Configuration()
-        config2.locale = locale
-        // updating locale
-        context?.resources?.updateConfiguration(config2, null)
-        Locale.setDefault(locale)
-    }
     private fun setDefaultLanguage() {
         val lang = getSharedData(AppConstants.APP_LANGUAGE, null)
         when(lang){

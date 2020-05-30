@@ -46,8 +46,15 @@ class HomeScreenBottomSheetFragment : BaseFragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(HomeScreenBottomSheetViewModel::class.java)
         initializeBottomSheet()
+        dismissLanguageSelectionDialog()
     }
 
+    private fun dismissLanguageSelectionDialog() {
+        //on Homescreen there is two fragment so two dialog will be there so dismiss one dialog
+        if(languageSelectionDialog!=null){
+            languageSelectionDialog!!.dismiss()
+        }
+    }
 
 
     private fun initializeBottomSheet() {

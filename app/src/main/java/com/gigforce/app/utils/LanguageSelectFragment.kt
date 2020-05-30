@@ -37,10 +37,20 @@ class LanguageSelectFragment : BaseFragment() {
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        Resources.getSystem().getConfiguration().locale.getLanguage()
+        dismissLanguageSelectionDialog()
+        storeDeviceLanguage()
         initializer()
         setDefaultLanguage()
         listener()
+    }
+    private fun dismissLanguageSelectionDialog() {
+        //LanguageSelectFragment is the first screen we don't need alert here and its picking up device language already for radio button.
+        if(languageSelectionDialog!=null){
+            languageSelectionDialog!!.dismiss()
+        }
+    }
+    private fun storeDeviceLanguage() {
+        saveSharedData(AppConstants.DEVICE_LANGUAGE, Resources.getSystem().getConfiguration().locale.getLanguage())
     }
 
     private fun initializer() {
@@ -62,7 +72,6 @@ class LanguageSelectFragment : BaseFragment() {
             "gu" -> groupradio.findViewById<RadioButton>(R.id.gu).isChecked = true
             "pa" -> groupradio.findViewById<RadioButton>(R.id.pu).isChecked = true
             "fr" -> groupradio.findViewById<RadioButton>(R.id.fr).isChecked = true
-            "te" -> groupradio.findViewById<RadioButton>(R.id.te).isChecked = true
             "mr" -> groupradio.findViewById<RadioButton>(R.id.mr).isChecked = true
             else -> groupradio.findViewById<RadioButton>(R.id.en).isChecked = true
         }
@@ -87,14 +96,7 @@ class LanguageSelectFragment : BaseFragment() {
         navigate(R.id.authFlowFragment)
     }
 
-    private fun updateResources(language: String) {
-        val locale = Locale(language)
-        val config2 = Configuration()
-        config2.locale = locale
-        // updating locale
-        context?.resources?.updateConfiguration(config2, null)
-        Locale.setDefault(locale)
-    }
+
 
     override fun onDestroyView() {
         LocaleChanger.resetLocale()

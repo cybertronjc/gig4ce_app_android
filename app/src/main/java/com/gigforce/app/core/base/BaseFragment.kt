@@ -1,9 +1,15 @@
 package com.gigforce.app.core.base
 
+import android.app.Dialog
+import android.content.Context
 import android.content.SharedPreferences
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
+import android.content.res.Configuration
+import android.content.res.Resources
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
@@ -11,10 +17,8 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
+import android.view.Window
+import android.widget.*
 import androidx.annotation.IdRes
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -25,7 +29,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.app.R
 import com.gigforce.app.core.CoreConstants
 import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
+import com.gigforce.app.utils.AppConstants
 import com.gigforce.app.utils.popAllBackStates
+import java.util.*
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -54,8 +60,65 @@ abstract class BaseFragment : Fragment() {
         init()
 
         activate(mView)
-
+        showDialogIfDeviceLanguageChanged()
         return mView
+    }
+
+    private fun showDialogIfDeviceLanguageChanged() {
+        var currentDeviceLanguageCode = Resources.getSystem().getConfiguration().locale.getLanguage()
+        var currentDeviceLanguageName = getDeviceLanguageString(currentDeviceLanguageCode)
+        if (!currentDeviceLanguageName.equals("") && !currentDeviceLanguageCode.equals(lastStoredDeviceLanguage())) {
+            confirmDialogForChangedLanguage(currentDeviceLanguageCode,currentDeviceLanguageName)
+        }
+    }
+
+    private fun getDeviceLanguageString(currentDeviceLanguage: String): String {
+        when(currentDeviceLanguage){
+            "en" -> return "English"
+            "hi" -> return "हिंदी"
+            "te" -> return "తెలుగు"
+            "gu" -> return "ગુજરતી"
+            "pa" -> return "ਪੰਜਾਬੀ"
+            "fr" -> return "français"
+            "mr" -> return "मराठी"
+            else -> return ""
+        }
+    }
+
+    var languageSelectionDialog : Dialog? = null
+    private fun confirmDialogForChangedLanguage(currentDeviceLanguageCode: String,currentDeviceLanguageString: String) {
+        languageSelectionDialog = activity?.let { Dialog(it) }
+        languageSelectionDialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        languageSelectionDialog?.setCancelable(false)
+        languageSelectionDialog?.setContentView(R.layout.confirmation_custom_alert)
+        languageSelectionDialog?.getWindow()?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT));
+        val titleDialog = languageSelectionDialog?.findViewById(R.id.title) as TextView
+        titleDialog.text = "Your device language changed to " + currentDeviceLanguageString+". Do you want to continue with this language?"
+        val yesBtn = languageSelectionDialog?.findViewById(R.id.yes) as TextView
+        val noBtn = languageSelectionDialog?.findViewById(R.id.cancel) as TextView
+        yesBtn.setOnClickListener {
+            saveSharedData(AppConstants.DEVICE_LANGUAGE, currentDeviceLanguageCode)
+            updateResources(currentDeviceLanguageCode)
+            languageSelectionDialog?.dismiss()
+        }
+        noBtn.setOnClickListener {
+            saveSharedData(AppConstants.DEVICE_LANGUAGE, currentDeviceLanguageCode)
+            languageSelectionDialog!!.dismiss()
+        }
+        languageSelectionDialog?.show()
+    }
+
+    fun updateResources(language: String) {
+        val locale = Locale(language)
+        val config2 = Configuration()
+        config2.locale = locale
+        // updating locale
+        context?.resources?.updateConfiguration(config2, null)
+        Locale.setDefault(locale)
+    }
+
+    private fun lastStoredDeviceLanguage(): String? {
+        return getSharedData(AppConstants.DEVICE_LANGUAGE, "")
     }
 
     lateinit var SP: SharedPreferences
@@ -64,7 +127,10 @@ abstract class BaseFragment : Fragment() {
 
     private fun init() { // GPS=new GPSTracker(this);
         navController = activity?.findNavController(R.id.nav_fragment)!!
-        SP = activity?.getSharedPreferences(CoreConstants.SHARED_PREFERENCE_DB, 0)!!
+        SP = activity?.getSharedPreferences(
+            CoreConstants.SHARED_PREFERENCE_DB,
+            Context.MODE_PRIVATE
+        )!!
         this.editor = SP.edit()
 
     }
@@ -116,9 +182,11 @@ abstract class BaseFragment : Fragment() {
         val toast = Toast.makeText(context, Message, Toast.LENGTH_LONG)
         toast.show()
     }
-    fun popFragmentFromStack(id:Int){
-        navController.popBackStack(id,true)
+
+    fun popFragmentFromStack(id: Int) {
+        navController.popBackStack(id, true)
     }
+
     open fun navigate(
         @IdRes resId: Int, args: Bundle?,
         navOptions: NavOptions?
@@ -151,9 +219,11 @@ abstract class BaseFragment : Fragment() {
     fun getTextView(view: PFRecyclerViewAdapter<Any?>.ViewHolder, id: Int): TextView {
         return view.getView(id) as TextView
     }
+
     fun getEditText(view: PFRecyclerViewAdapter<Any?>.ViewHolder, id: Int): EditText {
         return view.getView(id) as EditText
     }
+
     fun getTextView(view: View, id: Int): TextView {
         return view.findViewById(id) as TextView
     }
@@ -194,15 +264,23 @@ abstract class BaseFragment : Fragment() {
         return false
     }
 
-    fun getCurrentVersion():String{
+    fun getCurrentVersion(): String {
         try {
             val pInfo: PackageInfo =
-                activity?.applicationContext!!.packageManager.getPackageInfo(activity!!.getPackageName(), 0)
+                activity?.applicationContext!!.packageManager.getPackageInfo(
+                    activity!!.getPackageName(),
+                    0
+                )
             val version = pInfo.versionName
             return version
         } catch (e: PackageManager.NameNotFoundException) {
             e.printStackTrace()
         }
         return ""
+    }
+
+    override fun onDetach() {
+        if(languageSelectionDialog!=null)languageSelectionDialog!!.dismiss()
+        super.onDetach()
     }
 }

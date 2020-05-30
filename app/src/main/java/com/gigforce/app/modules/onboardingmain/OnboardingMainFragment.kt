@@ -56,22 +56,32 @@ class OnboardingMainFragment : BaseFragment() {
     private fun initializeViews() {
         onboarding_root_layout.getViewTreeObserver()
             .addOnGlobalLayoutListener(keyboardLayoutListener);
-        next.getLocationInWindow(originalLocation)
-        initializePager()
-        initializeTitleAsName()
-        listeners()
-        observer()
+        val onboardingCompleted = getSharedData(AppConstants.ON_BOARDING_COMPLETED, "")
+        if(onboardingCompleted!=null && onboardingCompleted.equals("true")){
+            navigateToHomeScreen()
+        }
+        else {
+            next.getLocationInWindow(originalLocation)
+            initializePager()
+            initializeTitleAsName()
+            listeners()
+            observer()
+        }
     }
 
     private fun observer() {
         viewModel.userProfileData.observe(viewLifecycleOwner, Observer { profile ->
-            profileData = profile
             if (profile != null) {
+                profileData = profile
                 if (profile.status) {
                     if (firstTimeLoad) {
-                        checkForAlreadyCompletedData()
-                        setLiveDataListItems()
-                        firstTimeLoad = false
+                        if (profileData.isOnboardingCompleted) {
+                            navigateToHomeScreen()
+                        } else {
+                            checkForAlreadyCompletedData()
+                            setLiveDataListItems()
+                            firstTimeLoad = false
+                        }
                     } else {
                         if (nextPage())
                             setLiveDataListItems()
@@ -97,42 +107,58 @@ class OnboardingMainFragment : BaseFragment() {
             showHideBackIcon(true)
             onboarding_pager.setCurrentItem(1)
             setPagerData(onboarding_pager.currentItem)
+            enableNextButton(false)
         } else if (checkNullOrBlank(profileData.gender)) {
             showHideBackIcon(true)
             onboarding_pager.setCurrentItem(2)
             setPagerData(onboarding_pager.currentItem)
+            enableNextButton(false)
         } else if (checkNullOrBlank(profileData.highestEducation)) {
             showHideBackIcon(true)
             onboarding_pager.setCurrentItem(3)
             setPagerData(onboarding_pager.currentItem)
+            enableNextButton(false)
         } else if (checkNullOrBlank(profileData.workStatus)) {
             showHideBackIcon(true)
             onboarding_pager.setCurrentItem(4)
             setPagerData(onboarding_pager.currentItem)
+            enableNextButton(false)
+        } else {
+            setOnboardingCompleteAndNavigate()
         }
     }
 
     private fun setLiveDataListItems() {
         when (onboarding_pager.currentItem) {
-            0 -> onboarding_pager.getChildAt(0).findViewById<EditText>(R.id.user_name).setText(
-                profileData.name
-            )
-            1 -> if (profileData.ageGroup != null || !profileData.ageGroup.equals(""))
+            0 -> if(profileData.name!=null && !profileData.name.equals("")) {
+                    onboarding_pager.getChildAt(0).findViewById<EditText>(R.id.user_name)
+                        .setText(profileData.name)
+                    enableNextButton(true)
+                }
+            1 -> if (profileData.ageGroup != null && !profileData.ageGroup.equals("")) {
                 setRecyclerItemFromDB(
                     profileData.ageGroup
                 )
-            2 -> if (profileData.gender != null || !profileData.gender.equals(""))
+                enableNextButton(true)
+            }
+            2 -> if (profileData.gender != null && !profileData.gender.equals("")) {
                 setRecyclerItemFromDB(
                     profileData.gender
                 )
-            3 -> if (profileData.highestEducation != null || !profileData.highestEducation.equals(""))
+                enableNextButton(true)
+            }
+            3 -> if (profileData.highestEducation != null && !profileData.highestEducation.equals("")) {
                 setRecyclerItemFromDB(
                     profileData.highestEducation
                 )
-            4 -> if (profileData.workStatus != null || !profileData.workStatus.equals(""))
+                enableNextButton(true)
+            }
+            4 -> if (profileData.workStatus != null && !profileData.workStatus.equals("")) {
                 setRecyclerItemFromDB(
                     profileData.workStatus
                 )
+                enableNextButton(true)
+            }
         }
     }
 
@@ -206,15 +232,22 @@ class OnboardingMainFragment : BaseFragment() {
             3 -> initializeTitleAsEducation()
             4 -> initializeTitleAsWorkStatus()
             5 -> {
-                viewModel.setOnboardingCompleted()
-                saveSharedData(AppConstants.ON_BOARDING_COMPLETED, "true")
-                popFragmentFromStack(R.id.onboardingfragment)
-                navigateWithAllPopupStack(R.id.mainHomeScreen)
-                navigate(R.id.profileFragment)
+                setOnboardingCompleteAndNavigate()
                 return false
             }
         }
         return true
+    }
+
+    private fun setOnboardingCompleteAndNavigate() {
+        viewModel.setOnboardingCompleted()
+        saveSharedData(AppConstants.ON_BOARDING_COMPLETED, "true")
+        navigateToHomeScreen()
+    }
+
+    private fun navigateToHomeScreen() {
+        popFragmentFromStack(R.id.onboardingfragment)
+        navigateWithAllPopupStack(R.id.mainHomeScreen)
     }
 
     private fun showHideBackIcon(show: Boolean) {
@@ -253,7 +286,6 @@ class OnboardingMainFragment : BaseFragment() {
     private fun backPage() {
         onboarding_pager.setCurrentItem(onboarding_pager.currentItem - 1)
         setPagerData(onboarding_pager.currentItem)
-        enableNextButton(false)
     }
 
     private fun saveDataToDB(currentItem: Int) {
@@ -345,7 +377,7 @@ class OnboardingMainFragment : BaseFragment() {
         pagerPosition: Int,
         heightPagerItem: Int
     ) {
-        recyclerView.setOnTouchListener(CustomTouchListener(next,requireActivity()))
+        recyclerView.setOnTouchListener(CustomTouchListener(next, requireActivity()))
         val params: ViewGroup.LayoutParams = recyclerView.getLayoutParams()
         params.height = heightPagerItem * (dataArr?.size!!)
         recyclerView.setLayoutParams(params)
@@ -362,6 +394,7 @@ class OnboardingMainFragment : BaseFragment() {
                 activity?.applicationContext,
                 PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
                     setRecyclerItemByClick(position)
+                    enableNextButton(true)
                 },
                 RecyclerGenericAdapter.ItemInterface<String?> { obj, viewHolder, position ->
                     var tv = getTextView(viewHolder, R.id.item)
@@ -599,11 +632,12 @@ class OnboardingMainFragment : BaseFragment() {
         showToast("working")
     }
 
-    class CustomTouchListener (var next:View,var activity:Activity): View.OnTouchListener {
+    class CustomTouchListener(var next: View, var activity: Activity) : View.OnTouchListener {
         override fun onTouch(view: View, motionEvent: MotionEvent): Boolean {
             enableNextButton()
             return false
         }
+
         private fun enableNextButton() {
             next.isEnabled = true
             next.background = activity.resources.getDrawable(R.drawable.app_gradient_button, null);
