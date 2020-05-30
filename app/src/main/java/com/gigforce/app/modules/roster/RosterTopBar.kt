@@ -84,7 +84,7 @@ class RosterTopBar: MaterialCardView {
             field = value
             if(value) {
                 date_text.setTextColor(resources.getColor(R.color.black))
-                day_text.setTextColor(resources.getColor(R.color.black))
+                day_text.setTextColor(resources.getColor(R.color.gray_color_calendar))
             }
 
         }

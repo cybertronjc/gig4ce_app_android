@@ -2,7 +2,11 @@ package com.gigforce.app.modules.roster
 
 import android.content.Context
 import android.util.AttributeSet
+import android.util.Log
 import android.view.View
+import android.view.ViewGroup
+import androidx.core.view.marginTop
+import androidx.core.view.updateMargins
 import com.gigforce.app.R
 import com.google.android.material.card.MaterialCardView
 import kotlinx.android.synthetic.main.hour_selected_outline.view.*
@@ -36,9 +40,19 @@ class HourOutline: MaterialCardView {
             field = value
         }
 
-    fun resetHeight() {
-        main_card.layoutParams.height = (
-                (endHour - startHour) * 70 - (startMinute/60)*70 + (endMinute/60)*70).px
+    fun resetHeightAndTopMargin(itemHeight: Int) {
+        Log.d("HourOutline", "Entered with $startHour $startMinute $endHour $endMinute")
+        main_card.layoutParams.height = ((endHour - startHour) * itemHeight -
+                (startMinute/60.0F)*itemHeight +
+                (endMinute/60.0F)*itemHeight)
+            .toInt().px
         main_card.requestLayout()
+
+        val marginTop = (itemHeight * startHour + (startMinute/60.0F) * itemHeight).toInt().px
+        (main_card.layoutParams as MarginLayoutParams).setMargins(0, marginTop, 0, 0)
+
+        main_card.requestLayout()
+
+        Log.d("HourOutline", "height margin changed")
     }
 }

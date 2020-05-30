@@ -11,7 +11,7 @@
     app:behavior_hideable="false"
     app:behavior_peekHeight="200dp"
     style="@style/Theme.MaterialComponents.BottomSheetDialog"
-    app:layout_behavior="@string/bottom_sheet_behavior">
+    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
     <View
         android:id="@+id/bs_head"

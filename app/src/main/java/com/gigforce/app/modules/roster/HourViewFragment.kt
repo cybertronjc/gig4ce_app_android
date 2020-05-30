@@ -47,6 +47,9 @@ class HourViewFragment: RosterBaseFragment() {
 
     var timer = Timer()
 
+    // This is used for card alignment of gig complete card
+    var cardStartPadding = 16.px
+
     val times = ArrayList<String>(listOf("01:00", "02:00", "03:00", "04:00", "05:00", "06:00", "07:00", "08:00", "09:00",
     "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00",
     "21:00", "22:00", "23:00", "24:00"))
@@ -280,31 +283,60 @@ class HourViewFragment: RosterBaseFragment() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun setAndShowBottomSheet(startIndex: Int, endIndex: Int) {
-        rosterViewModel.bsBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
 
+        // outline the selected Hour
+        setHourOUtline(startIndex, endIndex)
+
+        // set collapsed view elements
         setBsCollapsedDayTimeText(startIndex, endIndex)
+        // set expanded view elements
         setBsExpandedDayTimeText(startIndex, endIndex)
+        // make day availability toggle work in bottom sheet
         setBsExpandedAvailabilityToggle()
+        // set upcoming cards for expanded bottom sheet
         setBsExpandedUpcomingGigs(startIndex+1, endIndex+1)
-
-        var outline = HourOutline(requireContext())
-        outline.id = View.generateViewId()
-        outline.tag = "selected_time"
-        outline.startHour = startIndex + 1
-        outline.endHour = endIndex + 1
-        day_times.addView(outline)
-
-        var constraintSet = ConstraintSet()
-        constraintSet.clone(day_times)
-        constraintSet.connect(outline.id, ConstraintSet.TOP, day_times.id, ConstraintSet.TOP, (startIndex+1)*70.px)
-        constraintSet.connect(outline.id, ConstraintSet.START, start_guideline.id, ConstraintSet.START, marginCardStart-16.px)
-//      constraintSet.connect(outline.id, ConstraintSet.END, end_guideline.id, ConstraintSet.END)
-        constraintSet.applyTo(day_times)
 
         rosterViewModel.UnavailableBS.bs_close_button.setOnClickListener {
             rosterViewModel.bsBehavior.state = BottomSheetBehavior.STATE_HIDDEN
             day_times.removeView(day_times.findViewWithTag<HourOutline>("selected_time"))
         }
+
+        // show bottom sheet in collapsed mode
+        rosterViewModel.bsBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+
+        // This is to stop hours covered by bottom sheet from receiving click
+        rosterViewModel.UnavailableBS.setOnClickListener {  }
+    }
+
+    fun setHourOUtline(startIndex: Int, endIndex: Int) {
+        val bottom_sheet = rosterViewModel.UnavailableBS
+
+        // remove existing outline if any
+        day_times.removeView(bottom_sheet.findViewWithTag<HourOutline>("selected_time"))
+
+        // add new outline
+        val outline = HourOutline(requireContext())
+        outline.id = View.generateViewId()
+        outline.tag = "selected_time"
+
+        // initialize outline attrs
+        // The minimum selectable unit is hour right now.
+        outline.startHour = startIndex + 1
+        outline.startMinute = 0
+        outline.endHour = endIndex + 1
+        outline.endMinute = 0
+
+        day_times.addView(outline)
+
+        // TODO: Check why adding the end constraint results in unexpected alignment
+        val constraintSet = ConstraintSet()
+        constraintSet.clone(day_times)
+        constraintSet.connect(outline.id, ConstraintSet.TOP, day_times.id, ConstraintSet.TOP)
+        constraintSet.connect(outline.id, ConstraintSet.START, start_guideline.id, ConstraintSet.START, marginCardStart - cardStartPadding)
+//      constraintSet.connect(outline.id, ConstraintSet.END, end_guideline.id, ConstraintSet.END)
+        constraintSet.applyTo(day_times)
+
+        outline.resetHeightAndTopMargin(itemHeight)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -352,33 +384,36 @@ class HourViewFragment: RosterBaseFragment() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun setBsExpandedDayTimeText(startIndex: Int, endIndex: Int) {
+        val bottom_sheet = rosterViewModel.UnavailableBS
+
         // for expanded state
-        rosterViewModel.UnavailableBS.start_day_text.setText(
+        bottom_sheet.start_day_text.setText(
             "${activeDateTime.dayOfWeek.toString().capitalize()}, ${activeDateTime.dayOfMonth} " +
                     "${activeDateTime.month}, ${activeDateTime.year}")
 
-        rosterViewModel.UnavailableBS.end_day_text.setText(
+        bottom_sheet.end_day_text.setText(
             "${activeDateTime.dayOfWeek.toString().capitalize()}, ${activeDateTime.dayOfMonth } " +
                     "${activeDateTime.month}, ${activeDateTime.year}")
 
         if (startIndex == 0)
-            rosterViewModel.UnavailableBS.start_day_time.setText("00:00")
+            bottom_sheet.start_day_time.setText("00:00")
         else
-            rosterViewModel.UnavailableBS.start_day_time.setText("${times[startIndex]}")
+            bottom_sheet.start_day_time.setText("${times[startIndex]}")
 
-        rosterViewModel.UnavailableBS.end_day_time.setText("${times[endIndex]}")
+        bottom_sheet.end_day_time.setText("${times[endIndex]}")
 
-
-        rosterViewModel.UnavailableBS.start_day_time.setOnClickListener {
+        bottom_sheet.start_day_time.setOnClickListener {
             val cal = Calendar.getInstance()
             val timeSetListener = TimePickerDialog.OnTimeSetListener { timePicker, hour, minute, second ->
-                rosterViewModel.UnavailableBS.start_day_time.text = "$hour:$minute"
-                var outline = day_times.findViewWithTag<HourOutline>("selected_time")
+                bottom_sheet.start_day_time.text = "$hour:$minute"
+
+                // adjust outline as per changed time
+                val outline = day_times.findViewWithTag<HourOutline>("selected_time")
                 outline.startHour = hour
                 outline.startMinute = minute
-                outline.resetHeight()
-                (outline.layoutParams as ViewGroup.MarginLayoutParams).setMargins(marginCardStart-16.px, hour * 70.px + ((minute/60)*70).toInt().px, 0, 0)
-                outline.requestLayout()
+                outline.resetHeightAndTopMargin(itemHeight)
+//                (outline.layoutParams as ViewGroup.MarginLayoutParams).setMargins(marginCardStart-16.px, hour * 70.px + ((minute/60)*70).toInt().px, 0, 0)
+//                outline.requestLayout()
                 setBsExpandedUpcomingGigs(outline.startHour, outline.endHour)
             }
             TimePickerDialog.newInstance(timeSetListener, timeToHourMap[times[startIndex]]!!, 0, true).show(requireFragmentManager(), "DateTimePicker")
@@ -391,7 +426,7 @@ class HourViewFragment: RosterBaseFragment() {
                 var outline = day_times.findViewWithTag<HourOutline>("selected_time")
                 outline.endHour = hour
                 outline.endMinute = minute
-                outline.resetHeight()
+                outline.resetHeightAndTopMargin(itemHeight)
                 setBsExpandedUpcomingGigs(outline.startHour, outline.endHour)
             }
             TimePickerDialog.newInstance(timeSetListener, timeToHourMap[times[endIndex]]!!, 0, true).show(requireFragmentManager(), "DateTimePicker")
