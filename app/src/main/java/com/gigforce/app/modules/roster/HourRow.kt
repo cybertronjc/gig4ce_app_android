@@ -40,10 +40,14 @@ class HourRow: MaterialCardView  {
         set(value) {
             field = value
             if (isDisabled) {
-                item_time.setTextColor(resources.getColor(R.color.hour_disabled))
+                item_time.setTextColor(resources.getColor(R.color.gray_color_calendar))
+                top_half.isClickable = false
+                bottom_half.isClickable = false
                 this.isClickable = false
             } else {
                 item_time.setTextColor(resources.getColor(R.color.black))
+                top_half.isClickable = true
+                bottom_half.isClickable = true
                 this.isClickable = true
             }
         }
