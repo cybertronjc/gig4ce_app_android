@@ -63,16 +63,16 @@ class LocationFragment : BaseFragment() {
         textView79.text = convertAddressToString(viewModel.getPermanentAddress())
         textView81.text = convertAddressToString(viewModel.getCurrentAddress())
         if (viewModel.getCurrentAddress()!!.isEmpty()) {
-            switch2.isEnabled=false
+            switch2.isEnabled = false
             textView85.text = getString(R.string.add_current_address)
         } else {
-            switch2.isEnabled=true
+            switch2.isEnabled = true
             textView85.text = getString(R.string.around_current_address)
         }
     }
 
     private fun convertAddressToString(address: AddressModel?): String {
-        Log.e("ADDRESS",address!!.firstLine)
+        Log.e("ADDRESS", address!!.firstLine)
         return if (address!!.isEmpty() || address == null)
             getString(R.string.add_address)
         else
@@ -81,7 +81,7 @@ class LocationFragment : BaseFragment() {
 
     private fun listener() {
         imageView10.setOnClickListener(View.OnClickListener { activity?.onBackPressed() })
-        addloc.setOnClickListener(View.OnClickListener {
+        imageview_plus.setOnClickListener(View.OnClickListener {
             if (viewModel.getCurrentAddress()!!.isEmpty())
                 showToast(getString(R.string.add_current_address))
             else navigate(R.id.preferredLocationFragment)
@@ -91,7 +91,7 @@ class LocationFragment : BaseFragment() {
             else navigate(R.id.permanentAddressViewFragment)
         })
         constraintLayout5.setOnClickListener(View.OnClickListener {
-            if(profileDataModel.address.current.isEmpty()) navigate(R.id.currentAddressEditFragment)
+            if (profileDataModel.address.current.isEmpty()) navigate(R.id.currentAddressEditFragment)
             else navigate(R.id.currentAddressViewFragment)
         })
         switch1.setOnClickListener { view ->
