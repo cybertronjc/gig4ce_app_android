@@ -211,7 +211,7 @@ class PhotoCrop : AppCompatActivity() {
                         if (faces.size > 0) {
                             Toast.makeText(
                                 this,
-                                "Face Detected. Uploading..",
+                                "Face Detected. Uploading...",
                                 Toast.LENGTH_LONG
                             ).show()
                             upload(imageUriResultCrop, baos.toByteArray(), CLOUD_OUTPUT_FOLDER)
@@ -327,7 +327,7 @@ class PhotoCrop : AppCompatActivity() {
                 val fname: String = taskSnapshot.metadata?.reference?.name.toString()
                 updateViewModel(purpose, fname)
                 //loadImage(folder, fname)
-                Toast.makeText(this, "Successfully Uploaded :)", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "Successfully Uploaded", Toast.LENGTH_LONG).show()
                 Log.v(
                     "PHOTO_CROP",
                     "uploaded file in foldername" + CLOUD_OUTPUT_FOLDER + " file: " + fname
