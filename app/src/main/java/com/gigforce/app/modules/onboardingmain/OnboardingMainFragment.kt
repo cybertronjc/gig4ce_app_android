@@ -68,23 +68,24 @@ class OnboardingMainFragment : BaseFragment() {
             observer()
         }
     }
-
+    var singleTimeDBCall = true
     private fun observer() {
         viewModel.userProfileData.observe(viewLifecycleOwner, Observer { profile ->
-            if (profile != null) {
+            if (profile != null && singleTimeDBCall) {
+                singleTimeDBCall = false
                 profileData = profile
                 if (profile.status) {
-                    if (firstTimeLoad) {
-                        if (profileData.isOnboardingCompleted) {
-                            navigateToHomeScreen()
-                        } else {
+                    if (profileData.isOnboardingCompleted) {
+                        navigateToHomeScreen()
+                    }else {
+                        if (firstTimeLoad) {
                             checkForAlreadyCompletedData()
                             setLiveDataListItems()
                             firstTimeLoad = false
+                        } else {
+                            if (nextPage())
+                                setLiveDataListItems()
                         }
-                    } else {
-                        if (nextPage())
-                            setLiveDataListItems()
                     }
                 } else
                     showToast(profile.errormsg)
@@ -102,24 +103,24 @@ class OnboardingMainFragment : BaseFragment() {
     private fun checkForAlreadyCompletedData() {
         if (checkNullOrBlank(profileData.name)) {
             // will keep pager to first page
-            showHideBackIcon(false)
+            showBackIcon(false)
         } else if (checkNullOrBlank(profileData.ageGroup)) {
-            showHideBackIcon(true)
+            showBackIcon(true)
             onboarding_pager.setCurrentItem(1)
             setPagerData(onboarding_pager.currentItem)
             enableNextButton(false)
         } else if (checkNullOrBlank(profileData.gender)) {
-            showHideBackIcon(true)
+            showBackIcon(true)
             onboarding_pager.setCurrentItem(2)
             setPagerData(onboarding_pager.currentItem)
             enableNextButton(false)
         } else if (checkNullOrBlank(profileData.highestEducation)) {
-            showHideBackIcon(true)
+            showBackIcon(true)
             onboarding_pager.setCurrentItem(3)
             setPagerData(onboarding_pager.currentItem)
             enableNextButton(false)
         } else if (checkNullOrBlank(profileData.workStatus)) {
-            showHideBackIcon(true)
+            showBackIcon(true)
             onboarding_pager.setCurrentItem(4)
             setPagerData(onboarding_pager.currentItem)
             enableNextButton(false)
@@ -218,13 +219,14 @@ class OnboardingMainFragment : BaseFragment() {
         else
             onboarding_pager.setCurrentItem(onboarding_pager.currentItem + 1)
         enableNextButton(false)
+        showBackIcon(true)
         return setPagerData(onboarding_pager.currentItem)
     }
 
     private fun setPagerData(item: Int): Boolean {
         when (item) {
             0 -> {
-                showHideBackIcon(false)
+                showBackIcon(false)
                 initializeTitleAsName()
             }
             1 -> initializeTitleAsAge()
@@ -250,14 +252,14 @@ class OnboardingMainFragment : BaseFragment() {
         navigateWithAllPopupStack(R.id.mainHomeScreen)
     }
 
-    private fun showHideBackIcon(show: Boolean) {
+    private fun showBackIcon(show: Boolean) {
         backpress_icon.visibility = if (show) View.VISIBLE else View.INVISIBLE
     }
 
     private fun listeners() {
 
         next.setOnClickListener() {
-            showHideBackIcon(true)
+            singleTimeDBCall = true
             saveDataToDB(onboarding_pager.currentItem)
             viewModel.getProfileData()
         }

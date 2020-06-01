@@ -51,7 +51,7 @@ class OnboardingMainViewModel : ViewModel() {
     }
     fun getAgeOptions():ArrayList<String>{
         var ageOptions = ArrayList<String>()
-        ageOptions.add("<18")
+        ageOptions.add("14-18")
         ageOptions.add("18-22")
         ageOptions.add("22-26")
         ageOptions.add("26-30")
@@ -125,7 +125,7 @@ class OnboardingMainViewModel : ViewModel() {
     }
 
     fun setOnboardingCompleted() {
-        profileFirebaseRepository.setDataAsKeyValue("isOnboardingCompleted",true)
+        profileFirebaseRepository.setDataAsKeyValue("isOnboardingCompletedOnce","true")
     }
 
 

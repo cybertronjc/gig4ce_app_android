@@ -7,6 +7,7 @@ import android.widget.LinearLayout
 import androidx.cardview.widget.CardView
 import androidx.navigation.findNavController
 import com.gigforce.app.R
+import com.gigforce.app.core.base.BaseFragment
 import kotlinx.android.synthetic.main.profile_nav_bar.view.*
 
 class ProfileNavBar: LinearLayout {
@@ -17,12 +18,15 @@ class ProfileNavBar: LinearLayout {
         View.inflate(context, R.layout.profile_nav_bar, this)
 
         about_me.setOnClickListener {
+            findNavController().popBackStack(R.id.aboutExpandedFragment, true)
             findNavController().navigate(R.id.aboutExpandedFragment)
         }
         education.setOnClickListener {
+            findNavController().popBackStack(R.id.educationExpandedFragment, true)
             findNavController().navigate(R.id.educationExpandedFragment)
         }
         experience.setOnClickListener {
+            findNavController().popBackStack(R.id.experienceExpandedFragment, true)
             findNavController().navigate(R.id.experienceExpandedFragment)
         }
     }

@@ -25,8 +25,10 @@ class MainHomeScreenViewModel : ViewModel() {
                 if (e != null) {
                     return@EventListener
                 }
+                var data : MainHomeCompleteGigModel? = value!!.toObject(MainHomeCompleteGigModel::class.java)
+                arrMainHomeDataModel = data?.all_gigs
                 mainHomeLiveDataModel.postValue(
-                    value!!.toObject(MainHomeCompleteGigModel::class.java)
+                    data
                 )
             })
     }
@@ -55,14 +57,20 @@ class MainHomeScreenViewModel : ViewModel() {
 
         for (x in 0..20) {
             if ((calendar.get(Calendar.MONTH) - temp) != 0) {
-                if (isPreviousDay)
-                    datalist.add(0, VerticalCalendarDataItemModel.getMonthObject(calendar))
+                if (isPreviousDay) {
+                    var newcalendar: Calendar = Calendar.getInstance();
+                    newcalendar.set(Calendar.YEAR, calendar.get(Calendar.YEAR));
+                    newcalendar.set(Calendar.MONTH, calendar.get(Calendar.MONTH));
+                    newcalendar.set(Calendar.DATE, calendar.get(Calendar.DATE)+1)
+                    datalist.add(0, VerticalCalendarDataItemModel.getMonthObject(newcalendar))
+                }
                 else
                     datalist.add(VerticalCalendarDataItemModel.getMonthObject(calendar))
 
                 temp = calendar.get(Calendar.MONTH)
             } else {
                 var isGigFound = false;
+                if(arrMainHomeDataModel!=null)
                 for (data in arrMainHomeDataModel!!) {
                     if (data.month == calendar.get(Calendar.MONTH) && data.date == calendar.get(
                             Calendar.DATE
@@ -134,9 +142,9 @@ class MainHomeScreenViewModel : ViewModel() {
     }
 
 
-    fun setDataModel(mainHomeDataModel1: ArrayList<AllotedGigDataModel>?) {
-        arrMainHomeDataModel = mainHomeDataModel1
-    }
+//    fun setDataModel(mainHomeDataModel1: ArrayList<AllotedGigDataModel>?) {
+//        arrMainHomeDataModel = mainHomeDataModel1
+//    }
 
     fun isToday(calendar: Calendar): Boolean {
 

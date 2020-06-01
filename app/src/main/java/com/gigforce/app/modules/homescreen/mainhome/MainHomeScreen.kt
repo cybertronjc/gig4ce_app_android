@@ -86,7 +86,7 @@ class MainHomeScreen : BaseFragment() {
     private fun observePreferenceData() {
         viewModel.mainHomeLiveDataModel.observe(viewLifecycleOwner, Observer { homeDataModel ->
             if(homeDataModel!=null) {
-                viewModel.setDataModel(homeDataModel.all_gigs)
+//                viewModel.setDataModel(homeDataModel.all_gigs)
                 initializeViews()
             }
         })
@@ -125,7 +125,6 @@ class MainHomeScreen : BaseFragment() {
             RecyclerGenericAdapter<VerticalCalendarDataItemModel>(
                 activity?.applicationContext,
                 PFRecyclerViewAdapter.OnViewHolderClick<VerticalCalendarDataItemModel?> { view, position, item ->
-//                    Toast.makeText(this.context, "CLICKED ON DAY DEBUG", Toast.LENGTH_LONG).show()
                     navigate(R.id.rosterDayFragment)
                 },
                 RecyclerGenericAdapter.ItemInterface<VerticalCalendarDataItemModel?> { obj, viewHolder, position ->
@@ -271,32 +270,42 @@ class MainHomeScreen : BaseFragment() {
         rv_.scrollToPosition((recyclerGenericAdapter.list.size/2)-2)
 
         var scrollListener = object : RecyclerView.OnScrollListener() {
+
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
-                val totalItemCount = recyclerView!!.layoutManager?.itemCount
-                var layoutManager: LinearLayoutManager? = null
-                if (layoutManager == null) {
-                    layoutManager = recyclerView.layoutManager as LinearLayoutManager
+
+                if(!isLoading) {
+                    val totalItemCount = recyclerView!!.layoutManager?.itemCount
+                    var layoutManager: LinearLayoutManager? = null
+                    if (layoutManager == null) {
+                        layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                    }
+                    val firstVisibleItem = layoutManager!!.findFirstVisibleItemPosition()
+                    val lastVisibleItem = layoutManager!!.findLastVisibleItemPosition()
+                    if (totalItemCount!! <= (lastVisibleItem + visibleThreshold)) {
+                        isLoading = true;
+                        recyclerGenericAdapter.list.addAll(
+                            viewModel.getVerticalCalendarData(
+                                recyclerGenericAdapter.list.get(recyclerGenericAdapter.list.size - 1),
+                                false
+                            )
+                        )
+                        recyclerGenericAdapter.notifyDataSetChanged()
+                        isLoading = false
+                    }
+
+                    // below commented code will require later
+//                    else if ((firstVisibleItem - visibleThreshold)<=0) {
+//                        isLoading = true;
+//                        recyclerGenericAdapter.list.addAll(0,viewModel.getVerticalCalendarData(
+//                            recyclerGenericAdapter.list.get(0),true
+//                        ))
+//                        recyclerGenericAdapter.notifyDataSetChanged()
+//                        isLoading = false
+//                    }
                 }
-                val firstVisibleItem = layoutManager!!.findFirstVisibleItemPosition()
-                val lastVisibleItem = layoutManager!!.findLastVisibleItemPosition()
-                if (!isLoading && totalItemCount!! <= (lastVisibleItem + visibleThreshold)) {
-                    isLoading = true;
-                    recyclerGenericAdapter.list.addAll(viewModel.getVerticalCalendarData(
-                        recyclerGenericAdapter.list.get(recyclerGenericAdapter.list.size-1),false
-                    ))
-                    recyclerGenericAdapter.notifyDataSetChanged()
-                    isLoading = false
-                }
-                // below commented code will require later
-//                if (!isLoading && (firstVisibleItem - visibleThreshold)<=0) {
-//                    isLoading = true;
-//                    recyclerGenericAdapter.list.addAll(0,viewModel.getVerticalCalendarData(
-//                        recyclerGenericAdapter.list.get(0),true
-//                    ))
-//                    recyclerGenericAdapter.notifyDataSetChanged()
-//                    isLoading = false
-//                }
+
+
                 }
             }
         rv_.addOnScrollListener(scrollListener)
