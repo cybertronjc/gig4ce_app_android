@@ -73,7 +73,6 @@ class OnboardingMainFragment : BaseFragment() {
         viewModel.userProfileData.observe(viewLifecycleOwner, Observer { profile ->
             if (profile != null && singleTimeDBCall) {
                 singleTimeDBCall = false
-                println("all data "+profile.name+" "+profile.ageGroup+" "+profile.experiences + " "+profile.workStatus+" "+ profile.highestEducation+" "+profile.gender+" "+profile.isOnboardingCompleted)
                 profileData = profile
                 if (profile.status) {
                     if (profileData.isOnboardingCompleted) {
@@ -104,33 +103,23 @@ class OnboardingMainFragment : BaseFragment() {
     private fun checkForAlreadyCompletedData() {
         if (checkNullOrBlank(profileData.name)) {
             // will keep pager to first page
-            println("all data1 "+profileData.name+" "+profileData.ageGroup+ " "+profileData.workStatus+" "+ profileData.highestEducation+" "+profileData.gender)
-
             showBackIcon(false)
         } else if (checkNullOrBlank(profileData.ageGroup)) {
-            println("all data2 "+profileData.name+" "+profileData.ageGroup+ " "+profileData.workStatus+" "+ profileData.highestEducation+" "+profileData.gender)
-
             showBackIcon(true)
             onboarding_pager.setCurrentItem(1)
             setPagerData(onboarding_pager.currentItem)
             enableNextButton(false)
         } else if (checkNullOrBlank(profileData.gender)) {
-            println("all data3 "+profileData.name+" "+profileData.ageGroup+ " "+profileData.workStatus+" "+ profileData.highestEducation+" "+profileData.gender)
-
             showBackIcon(true)
             onboarding_pager.setCurrentItem(2)
             setPagerData(onboarding_pager.currentItem)
             enableNextButton(false)
         } else if (checkNullOrBlank(profileData.highestEducation)) {
-            println("all data4 "+profileData.name+" "+profileData.ageGroup+ " "+profileData.workStatus+" "+ profileData.highestEducation+" "+profileData.gender)
-
             showBackIcon(true)
             onboarding_pager.setCurrentItem(3)
             setPagerData(onboarding_pager.currentItem)
             enableNextButton(false)
         } else if (checkNullOrBlank(profileData.workStatus)) {
-            println("all data5 "+profileData.name+" "+profileData.ageGroup+ " "+profileData.workStatus+" "+ profileData.highestEducation+" "+profileData.gender)
-
             showBackIcon(true)
             onboarding_pager.setCurrentItem(4)
             setPagerData(onboarding_pager.currentItem)

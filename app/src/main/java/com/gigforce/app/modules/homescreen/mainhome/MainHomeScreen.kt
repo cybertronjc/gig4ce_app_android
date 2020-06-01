@@ -133,7 +133,6 @@ class MainHomeScreen : BaseFragment() {
                         getTextView(viewHolder,R.id.month_year).text = obj.monthStr+" "+obj.year
                     }
                     else{
-                    println(" DMY "+obj?.date.toString()+" "+obj?.month+" "+obj?.year +" "+rv_.adapter?.itemCount)
                         getView(viewHolder,R.id.coloredsideline).visibility = View.GONE
                         getView(viewHolder,R.id.graysideline).visibility = View.VISIBLE
                         showMonthLayout(false,viewHolder)
@@ -283,7 +282,6 @@ class MainHomeScreen : BaseFragment() {
                     }
                     val firstVisibleItem = layoutManager!!.findFirstVisibleItemPosition()
                     val lastVisibleItem = layoutManager!!.findLastVisibleItemPosition()
-                    println("total item count : "+totalItemCount +" : "+lastVisibleItem+" : "+visibleThreshold)
                     if (totalItemCount!! <= (lastVisibleItem + visibleThreshold)) {
                         isLoading = true;
                         recyclerGenericAdapter.list.addAll(
