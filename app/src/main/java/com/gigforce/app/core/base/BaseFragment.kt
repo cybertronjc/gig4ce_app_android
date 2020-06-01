@@ -25,14 +25,15 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.app.R
 import com.gigforce.app.core.CoreConstants
 import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
+import com.gigforce.app.modules.preferences.PreferencesRepository
 import com.gigforce.app.utils.AppConstants
 import com.gigforce.app.utils.popAllBackStates
 import java.util.*
-
 
 // TODO: Rename parameter arguments, choose names that match
 /**
@@ -44,9 +45,20 @@ abstract class BaseFragment : Fragment() {
     //    abstract fun Activate(fragmentView: View?)
     var mView: View? = null
     lateinit var baseFragment: BaseFragment
+    lateinit var navController: NavController
+    lateinit var preferencesRepository: PreferencesRepository
+    companion object {
+        var englishCode = "en"
+        var hindiCode = "hi"
+        var telguCode = "te"
+        var gujratiCode = "gu"
+        var punjabiCode = "pa"
+        var françaisCode = "fr"
+        var marathiCode = "mr"
+    }
+
     open fun activate(view: View?) {}
 
-    lateinit var navController: NavController
 
     open fun inflateView(
         resource: Int, inflater: LayoutInflater,
@@ -74,13 +86,13 @@ abstract class BaseFragment : Fragment() {
 
     private fun getDeviceLanguageString(currentDeviceLanguage: String): String {
         when(currentDeviceLanguage){
-            "en" -> return "English"
-            "hi" -> return "हिंदी"
-            "te" -> return "తెలుగు"
-            "gu" -> return "ગુજરતી"
-            "pa" -> return "ਪੰਜਾਬੀ"
-            "fr" -> return "français"
-            "mr" -> return "मराठी"
+            englishCode -> return getString(R.string.english)
+            hindiCode -> return getString(R.string.hindi)
+            telguCode -> return getString(R.string.telgu)
+            gujratiCode -> return getString(R.string.gujrati)
+            punjabiCode -> return getString(R.string.punjabi)
+            françaisCode -> return getString(R.string.francais)
+            marathiCode -> return getString(R.string.marathi)
             else -> return ""
         }
     }
@@ -97,8 +109,13 @@ abstract class BaseFragment : Fragment() {
         val yesBtn = languageSelectionDialog?.findViewById(R.id.yes) as TextView
         val noBtn = languageSelectionDialog?.findViewById(R.id.cancel) as TextView
         yesBtn.setOnClickListener {
+            preferencesRepository= PreferencesRepository()
             saveSharedData(AppConstants.DEVICE_LANGUAGE, currentDeviceLanguageCode)
+            saveSharedData(AppConstants.APP_LANGUAGE,currentDeviceLanguageCode)
+            saveSharedData(AppConstants.APP_LANGUAGE_NAME,currentDeviceLanguageString)
             updateResources(currentDeviceLanguageCode)
+            preferencesRepository.setDataAsKeyValue("languageName",currentDeviceLanguageString)
+            preferencesRepository.setDataAsKeyValue("languageCode",currentDeviceLanguageCode)
             languageSelectionDialog?.dismiss()
         }
         noBtn.setOnClickListener {
@@ -182,7 +199,6 @@ abstract class BaseFragment : Fragment() {
         val toast = Toast.makeText(context, Message, Toast.LENGTH_LONG)
         toast.show()
     }
-
     fun popFragmentFromStack(id: Int) {
         navController.popBackStack(id, true)
     }

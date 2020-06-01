@@ -96,7 +96,6 @@
         android:textSize="18sp"
         android:hint="@string/mobile_login"
         app:backgroundTint="#e94b81"
-        android:dropDownHeight="120dp"
         android:dropDownWidth="200dp"
         android:dropDownVerticalOffset="0dp"
         android:dropDownHorizontalOffset="0dp"

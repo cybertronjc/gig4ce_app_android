@@ -54,10 +54,9 @@ class LanguagePreferencesFragment : BaseFragment() {
                 val lang = radioButton.hint.toString()
                 updateResources(lang)
                 saveSharedData(AppConstants.APP_LANGUAGE, lang)
+                saveSharedData(AppConstants.APP_LANGUAGE_NAME,radioButton.text.toString())
                 viewModel.saveLanguageToFirebase(radioButton.text.toString(),radioButton.hint.toString())
             })
-
-
     }
 
     private fun initializer() {

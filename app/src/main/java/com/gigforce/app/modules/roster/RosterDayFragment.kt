@@ -235,11 +235,10 @@ class RosterDayFragment: RosterBaseFragment() {
         })
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView() {
+        super.onDestroyView()
         hourview_viewpager.unregisterOnPageChangeCallback(hourviewPageChangeCallBack)
     }
-
 
 //    private fun addUnAvailableCard(startHour: Int, duration: Float) {
 //        // Sample attachment of unavailable card
