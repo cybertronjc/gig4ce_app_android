@@ -227,7 +227,7 @@ class HomeScreenBottomSheetFragment : BaseFragment() {
         when (position) {
             0 -> showToast("")
             1 -> showToast("")
-            2 -> showToast("")
+            2 -> navigate(R.id.walletBalancePage)
             3 -> navigate(R.id.profileFragment)
             4 -> showToast("")
             5 -> navigate(R.id.settingFragment)
