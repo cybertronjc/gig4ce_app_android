@@ -321,4 +321,9 @@
         <item name="android:textSize">16sp</item>
     </style>
 
+    <style name="LatoBold18" parent="Widget.MaterialComponents.TextView">
+        <item name="android:textColor">#ca0071</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
 </resources>
