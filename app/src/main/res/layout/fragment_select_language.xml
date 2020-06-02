@@ -83,7 +83,7 @@
             android:layout_width="fill_parent"
             android:layout_height="@dimen/height_select_lang_item"
             android:hint="gu"
-            android:text=" ગુજરતી"
+            android:text="ગુજરતી"
             android:textSize="14sp"
             android:paddingLeft="16dp"
             android:layout_marginLeft="16dp"/>

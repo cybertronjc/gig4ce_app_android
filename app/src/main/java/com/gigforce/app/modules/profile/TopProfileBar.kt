@@ -6,7 +6,9 @@ import android.view.View
 import androidx.cardview.widget.CardView
 import androidx.navigation.findNavController
 import com.bumptech.glide.request.RequestOptions
+import com.gigforce.app.MainActivity
 import com.gigforce.app.R
+import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.utils.GlideApp
 import com.google.android.material.card.MaterialCardView
 import com.google.firebase.storage.FirebaseStorage
@@ -24,7 +26,7 @@ class TopProfileBar: MaterialCardView {
         View.inflate(context, R.layout.top_profile_bar, this)
 
         back_button.setOnClickListener {
-            findNavController().navigate(R.id.profileFragment)
+            (context as MainActivity).onBackPressed()
         }
     }
 

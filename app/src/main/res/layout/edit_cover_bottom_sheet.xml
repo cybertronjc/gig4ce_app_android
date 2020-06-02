@@ -36,7 +36,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/bs_top_margin"
                 android:text="@string/bio_name"
-                style= "@style/LatoBold14" />
+                style= "@style/BsHeadingBold12" />
             <EditText
                 android:id="@+id/bio"
                 android:layout_width="match_parent"
@@ -84,6 +84,7 @@
                         android:dropDownVerticalOffset = "-100dp"
                         android:dropDownAnchor="@id/tags"
                         android:dropDownHeight="200dp"
+                        android:longClickable="false"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/new_tag_hint"/>

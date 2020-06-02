@@ -34,11 +34,11 @@ public class SnapHelperOneByOne extends GravitySnapHelper {
 
         int currentPosition = layoutManager.getPosition(currentView);
 
-        if (velocityX > 400) {
-            currentPosition = position1;
-        } else if (velocityX < 400) {
-            currentPosition = position1;
-        }
+//        if (velocityX > 400) {
+//            currentPosition = position2;
+//        } else if (velocityX < 400) {
+//            currentPosition = position1;
+//        }
 
         if (currentPosition == RecyclerView.NO_POSITION) {
             return RecyclerView.NO_POSITION;

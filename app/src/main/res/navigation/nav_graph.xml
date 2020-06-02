@@ -358,6 +358,11 @@
         android:id="@+id/locationFragment"
         android:name="com.gigforce.app.modules.preferences.location.LocationFragment"
         android:label="LocationFragment" />
+
+    <fragment
+        android:id="@+id/languagePreferenceFragment"
+        android:name="com.gigforce.app.modules.preferences.language.LanguagePreferencesFragment"
+        android:label="LanguagePreferenceFragment" />
     <fragment
         android:id="@+id/preferredLocationFragment"
         android:name="com.gigforce.app.modules.preferences.location.PreferredLocationFragment"

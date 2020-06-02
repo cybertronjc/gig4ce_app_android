@@ -11,5 +11,7 @@ class PreferencesDataModel{
     var isweekendenabled:Boolean = false
     var locations:ArrayList<DocumentReference> = ArrayList<DocumentReference>()
     var isWorkFromHome:Boolean = false
+    var languageName : String = ""
+    var languageCode : String = ""
 
 }

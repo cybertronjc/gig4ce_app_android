@@ -20,7 +20,7 @@ import java.util.regex.Matcher
 import java.util.regex.Pattern
 
 
-class Login: BaseFragment() {
+class Login : BaseFragment() {
     companion object {
         fun newInstance() = Login()
         val PERMISSION_REQ_CODE = 100
@@ -30,13 +30,14 @@ class Login: BaseFragment() {
         )
         var MOBILENO_INPUT_CHANGED = false
     }
+
     lateinit var viewModel: LoginViewModel
     private val INDIAN_MOBILE_NUMBER =
         Pattern.compile("^[+][9][1][7-9][0-9]{9}\$")
-//    private val INDIAN_MOBILE_NUMBER =
+    //    private val INDIAN_MOBILE_NUMBER =
 //        Pattern.compile("^[+][0-9]{12}\$")
     lateinit var match: Matcher;
-    private var mobile_number:String = ""
+    private var mobile_number: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,6 +45,7 @@ class Login: BaseFragment() {
             mobile_number = it.getString("mobileno")!!
         }
     }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -56,9 +58,9 @@ class Login: BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if(getSharedData(AppConstants.INTRO_COMPLETE,null)==null){
+        if (getSharedData(AppConstants.INTRO_COMPLETE, null) == null) {
             navigateWithAllPopupStack(R.id.authFlowFragment)
-        }else {
+        } else {
             viewModel.activity = this.activity!!
             otp_mobile_number.setText(mobile_number)
             getAllEarlierMobileNumbers()
@@ -77,11 +79,19 @@ class Login: BaseFragment() {
         okay.setOnClickListener {
             dialog?.dismiss()
         }
+        val cancel = dialog?.findViewById<TextView>(R.id.cancel)
+        cancel.setOnClickListener() {
+            removeSavedShareData(AppConstants.INTRO_COMPLETE)
+            popFragmentFromStack(R.id.Login)
+            navigate(R.id.authFlowFragment)
+            dialog?.dismiss()
+        }
         dialog?.show()
     }
+
     private fun observer() {
         viewModel.liveState.observeForever {
-            when(it.stateResponse){
+            when (it.stateResponse) {
                 LoginViewModel.STATE_CODE_SENT -> navigateToOTPVarificationScreen()
                 LoginViewModel.STATE_VERIFY_FAILED -> showToast(it.msg)
                 LoginViewModel.STATE_VERIFY_SUCCESS -> navigateToOTPVarificationScreen()
@@ -89,12 +99,18 @@ class Login: BaseFragment() {
         }
     }
 
-    fun navigateToOTPVarificationScreen(){
+    fun navigateToOTPVarificationScreen() {
         // fixed by PD - during a hotfix for apk release - doubleclick issue resolved
         if (navController.currentDestination?.id == R.id.Login) {
             try {
-                findNavController().navigate(LoginDirections.actionLogin2ToVerifyOTP(viewModel.verificationId!!,otp_mobile_number.text.toString()))
-            }catch (e:Exception){}
+                findNavController().navigate(
+                    LoginDirections.actionLogin2ToVerifyOTP(
+                        viewModel.verificationId!!,
+                        otp_mobile_number.text.toString()
+                    )
+                )
+            } catch (e: Exception) {
+            }
         }
     }
 
@@ -111,13 +127,13 @@ class Login: BaseFragment() {
             false
         })
 
-        login_button.setOnClickListener{
+        login_button.setOnClickListener {
             login_button.setEnabled(false)
 
             Handler().postDelayed(Runnable {
                 // This method will be executed once the timer is over
-                if(login_button!=null)
-                login_button.setEnabled(true)
+                if (login_button != null)
+                    login_button.setEnabled(true)
             }, 3000) // se
             doActionOnClick()
         }
@@ -125,54 +141,57 @@ class Login: BaseFragment() {
     }
 
 
-
     private fun showWrongMobileNoLayout(show: Boolean) {
-        if(show) {
+        if (show) {
             cvloginwrong.visibility = VISIBLE
             textView23.visibility = INVISIBLE
-        }else{
+        } else {
             cvloginwrong.visibility = INVISIBLE
             textView23.visibility = VISIBLE
 
         }
     }
 
-    private fun doActionOnClick(){
+    private fun doActionOnClick() {
         var phoneNumber: String = "+91" + otp_mobile_number.text.toString();
-        if(!validatePhoneNumber(phoneNumber)){
+        if (!validatePhoneNumber(phoneNumber)) {
             // TODO make the error bar visible
             cvloginwrong.visibility = VISIBLE
             textView23.visibility = INVISIBLE
             login_button.isEnabled = true;
-        }
-        else{
+        } else {
             viewModel.sendVerificationCode(phoneNumber)
         }
     }
 
-    private fun validatePhoneNumber(phoneNumber:String): Boolean {
+    private fun validatePhoneNumber(phoneNumber: String): Boolean {
         match = INDIAN_MOBILE_NUMBER.matcher(phoneNumber)
         if (phoneNumber.isEmpty()) {
             return false
         }
-        if(!match.matches()) {
+        if (!match.matches()) {
             return false
         }
         return true
     }
 
 
-    private fun getAllEarlierMobileNumbers(){
-        var deviceMobileNos  = ArrayList<String>()
-        var oldMobileNumbers = getSharedData(AppConstants.ALL_MOBILE_NUMBERS_USED,"")
-        if(!oldMobileNumbers.equals("")) {
+    private fun getAllEarlierMobileNumbers() {
+        var deviceMobileNos = ArrayList<String>()
+        var oldMobileNumbers = getSharedData(AppConstants.ALL_MOBILE_NUMBERS_USED, "")
+        if (!oldMobileNumbers.equals("")) {
             var oldDeviceMobileNosList = oldMobileNumbers?.split(",")
-            for (i in 0..(oldDeviceMobileNosList?.size!!)-1!!){
+            for (i in 0..(oldDeviceMobileNosList?.size!!) - 1!!) {
                 deviceMobileNos.add(oldDeviceMobileNosList.get(i))
             }
-            val adapter: ArrayAdapter<String> = ArrayAdapter<String>(activity!!, android.R.layout.select_dialog_item, deviceMobileNos)
+            val adapter: ArrayAdapter<String> = ArrayAdapter<String>(
+                activity!!,
+                android.R.layout.select_dialog_item,
+                deviceMobileNos
+            )
             otp_mobile_number.threshold = 1
-            otp_mobile_number.setAdapter(adapter
+            otp_mobile_number.setAdapter(
+                adapter
             )
         }
     }

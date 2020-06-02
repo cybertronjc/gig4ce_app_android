@@ -4,6 +4,17 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_profile">ProfileActivity</string>
 
+
+    <string name="english">English</string>
+    <string name="hindi">हिंदी</string>
+    <string name="telgu">తెలుగు</string>
+    <string name="gujrati">ગુજરતી</string>
+    <string name="punjabi">ਪੰਜਾਬੀ</string>
+    <string name="francais">français</string>
+    <string name="marathi">मराठी</string>
+
+
+
     <string name="intro_slide1_title">Welcome to GiGforce</string>
     <string name="intro_slide1_subtitle">Whats going to happen tomorrow?</string>
 
@@ -273,4 +284,5 @@
     <string name="w_my_wallet_balance">My Wallet Balance</string>
     <string name="w_rs">Rs</string>
     <string name="w_transfer">Transfer</string>
+    <string name="settings">Settings</string>
 </resources>

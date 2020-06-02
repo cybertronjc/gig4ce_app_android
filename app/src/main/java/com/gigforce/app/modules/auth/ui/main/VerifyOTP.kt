@@ -117,7 +117,7 @@ class VerifyOTP: BaseFragment() {
             }
         }
         resend_otp?.setOnClickListener {
-                if(otpresentcounter>2) {
+                if(otpresentcounter<2) {
                     otpresentcounter++;
                     counterStart();
                     viewModel.sendVerificationCode("+91" + mobile_number)
@@ -154,10 +154,13 @@ class VerifyOTP: BaseFragment() {
                     timeStr = timeStr+time
                 }
                 timer_tv?.text = timeStr
-
+                if(reenter_mobile!=null)
+                reenter_mobile.visibility = View.INVISIBLE
             }
             override fun onFinish() {
                 showResendOTPMessage(true)
+                if(reenter_mobile!=null)
+                reenter_mobile.visibility = View.VISIBLE
             }
         }.start()
     }
