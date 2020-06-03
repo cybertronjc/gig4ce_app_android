@@ -319,6 +319,7 @@
     <style name="LatoBold16" parent="Widget.MaterialComponents.TextView">
         <item name="android:textColor">#d9000000</item>
         <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
     <style name="LatoBold18" parent="Widget.MaterialComponents.TextView">
