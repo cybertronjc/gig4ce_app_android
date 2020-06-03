@@ -322,8 +322,14 @@
     </style>
 
     <style name="LatoBold18" parent="Widget.MaterialComponents.TextView">
+        <item name="android:textSize">18sp</item>
         <item name="android:textColor">#ca0071</item>
         <item name="android:textStyle">bold</item>
+    </style>
+    
+    <style name="LatoRegular14Black" parent="Widget.MaterialComponents.TextView">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/black</item>
     </style>
 
     <style name="button_style_disable" parent="Widget.AppCompat.TextView">
