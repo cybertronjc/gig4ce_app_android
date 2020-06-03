@@ -52,27 +52,98 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/zero_balance"
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="200dp"
                 app:layout_constraintTop_toBottomOf="@+id/divider1"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent">
                 <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/zero_monthly_goal_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Monthly Goal"
                     style="@style/LatoBold16"
                     android:layout_marginStart="24dp"
-                    android:layout_marginTop="24dp"
+                    android:layout_marginTop="16dp"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent" />
+
+                <com.gigforce.app.modules.wallet.components.MonthlyGoalCard
+                    android:id="@+id/zero_monthly_goal_card"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginEnd="24dp"
+                    android:layout_marginTop="16dp"
+                    app:cardCornerRadius="8dp"
+                    app:layout_constraintTop_toBottomOf="@id/zero_monthly_goal_text"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+                <View
+                    android:id="@+id/zero_divider1"
+                    android:layout_width="match_parent"
+                    android:layout_height="5dp"
+                    android:background="#ebebeb"
+                    android:layout_marginTop="32dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/zero_monthly_goal_card" />
+
+                <ImageView
+                    android:id="@+id/zero_balance_transaction_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_zero_balance_transaction"
+                    android:layout_marginTop="28dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/zero_divider1" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/no_transaction_yet"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text = "No transactions yet"
+                    style="@style/LatoRegularCardText12"
+                    android:layout_marginTop="42dp"
+                    app:layout_constraintTop_toBottomOf="@id/zero_balance_transaction_icon"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/no_explore_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Looks like you have not explored much"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintTop_toBottomOf="@id/no_transaction_yet"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Explore Now"
+                    android:textAllCaps="false"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintTop_toBottomOf="@id/no_explore_text"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/non_zero_balance"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:visibility="visible"
+                android:layout_marginBottom="200dp"
                 app:layout_constraintTop_toBottomOf="@id/divider1"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent">
 
@@ -195,6 +266,7 @@
                     android:layout_marginTop="16dp"
                     android:layout_marginStart="24dp"
                     android:layout_marginEnd="24dp"
+                    app:cardCornerRadius="8dp"
                     app:layout_constraintTop_toBottomOf="@id/monthly_goal_text"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent" />
