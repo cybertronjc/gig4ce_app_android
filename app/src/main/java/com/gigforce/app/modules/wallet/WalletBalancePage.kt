@@ -4,7 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
 import com.gigforce.app.R
+import kotlinx.android.synthetic.main.wallet_balance_page.*
 
 class WalletBalancePage: WalletBaseFragment() {
 
@@ -15,5 +17,15 @@ class WalletBalancePage: WalletBaseFragment() {
     ): View? {
         inflateView(R.layout.wallet_balance_page, inflater, container)
         return getFragmentView()
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        walletViewModel.userWallet.observe(viewLifecycleOwner, Observer {
+            it.let {
+                zero_balance.visibility = if (it.balance == 0) View.VISIBLE else View.GONE
+                non_zero_balance.visibility = if (it.balance == 0) View.GONE else View.VISIBLE
+            }
+        })
     }
 }

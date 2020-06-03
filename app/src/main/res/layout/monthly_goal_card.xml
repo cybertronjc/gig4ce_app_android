@@ -50,7 +50,7 @@
             android:layout_marginEnd="32dp"
             android:layout_marginTop="16dp"
             style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-            android:progressBackgroundTint="#ffd14d"
+            android:progressTint="#ffd14d"
             android:progressTintMode="src_atop"
             app:layout_constraintTop_toBottomOf="@id/avg_earning"
             app:layout_constraintStart_toStartOf="parent"
