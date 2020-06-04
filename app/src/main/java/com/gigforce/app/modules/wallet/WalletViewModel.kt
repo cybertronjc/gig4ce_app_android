@@ -18,7 +18,7 @@ class WalletViewModel: ViewModel() {
     }
 
     private fun getUserWallet() {
-        walletRepository.getUserWallet().addSnapshotListener { value, e ->
+        walletRepository.getDBCollection().addSnapshotListener { value, e ->
             value?.let {
                 userWallet.postValue(it.toObject(Wallet::class.java))
             }

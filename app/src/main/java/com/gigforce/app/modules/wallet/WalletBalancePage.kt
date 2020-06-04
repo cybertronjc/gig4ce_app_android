@@ -21,6 +21,10 @@ class WalletBalancePage: WalletBaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initialize()
+    }
+
+    private fun initialize() {
         walletViewModel.userWallet.observe(viewLifecycleOwner, Observer {
             it.let {
                 zero_balance.visibility = if (it.balance == 0) View.VISIBLE else View.GONE
