@@ -32,7 +32,10 @@ internal class FeaturesAdapter internal constructor(val baseFragment: BaseFragme
             holder = convertView.tag as ItemHolder
         }
         holder.icon?.setOnClickListener{
-            if(position==4){
+            if (position == 1) {
+                baseFragment.navigate(R.id.walletBalancePage)
+            }
+            else if(position==4){
                 baseFragment.navigate(R.id.profileFragment)
             }
             else if(position==5){
