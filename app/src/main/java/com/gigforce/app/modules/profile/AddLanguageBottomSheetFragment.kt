@@ -4,14 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import kotlinx.android.synthetic.main.add_language_bottom_sheet.view.*
 import com.gigforce.app.modules.profile.models.Language
 import kotlinx.android.synthetic.main.add_language_bottom_sheet.*
-import kotlinx.android.synthetic.main.add_language_bottom_sheet.view.add_language_cancel
 
 class AddLanguageBottomSheetFragment: ProfileBaseBottomSheetFragment() {
 
@@ -40,7 +36,7 @@ class AddLanguageBottomSheetFragment: ProfileBaseBottomSheetFragment() {
 
             add_language_name.setText("")
             add_language_speaking_level.progress = 0
-            add_language_writing_level.progress = 0
+            arround_current_add_seekbar.progress = 0
         }
 
         mother_language.setOnCheckedChangeListener { mother_language, isChecked ->
@@ -64,7 +60,7 @@ class AddLanguageBottomSheetFragment: ProfileBaseBottomSheetFragment() {
             Language(
                 name = add_language_name.text.toString(),
                 speakingSkill = add_language_speaking_level.progress.toString(),
-                writingSkill = add_language_writing_level.progress.toString(),
+                writingSkill = arround_current_add_seekbar.progress.toString(),
                 isMotherLanguage = mother_language.isChecked
             )
         )

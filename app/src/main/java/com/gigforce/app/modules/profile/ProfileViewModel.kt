@@ -21,7 +21,7 @@ class ProfileViewModel : ViewModel() {
     lateinit var uid: String
 
     fun getProfileData(): MutableLiveData<ProfileData> {
-        profileFirebaseRepository.getProfile()
+        profileFirebaseRepository.getDBCollection()
             .addSnapshotListener(EventListener<DocumentSnapshot> { value, e ->
                 if (e != null) {
                     Log.w("ProfileViewModel", "Listen failed", e)

@@ -71,7 +71,7 @@
             android:text="@string/add_language_writing_level" />
 
         <SeekBar
-            android:id="@+id/add_language_writing_level"
+            android:id="@+id/arround_current_add_seekbar"
             android:progressTint="@color/colorPrimary"
             android:thumbTint="@color/colorPrimary"
             android:layout_width="match_parent"

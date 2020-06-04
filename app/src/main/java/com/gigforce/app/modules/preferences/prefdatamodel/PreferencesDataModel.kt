@@ -9,6 +9,8 @@ class PreferencesDataModel{
     var selecteddays :ArrayList<String> = ArrayList<String>()
     var selectedslots:ArrayList<String> = ArrayList<String>()
     var isweekendenabled:Boolean = false
+    var selectedweekends:ArrayList<String> = ArrayList<String>()
+    var selectedweekendslots:ArrayList<String> = ArrayList<String>()
     var locations:ArrayList<DocumentReference> = ArrayList<DocumentReference>()
     var isWorkFromHome:Boolean = false
     var languageName : String = ""

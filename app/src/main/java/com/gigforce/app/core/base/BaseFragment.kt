@@ -8,8 +8,6 @@ import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.content.res.Resources
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
@@ -25,14 +23,16 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.app.R
 import com.gigforce.app.core.CoreConstants
 import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.app.modules.preferences.PreferencesRepository
+import com.gigforce.app.modules.preferences.prefdatamodel.PreferencesDataModel
 import com.gigforce.app.utils.AppConstants
 import com.gigforce.app.utils.popAllBackStates
+import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.EventListener
 import java.util.*
 
 // TODO: Rename parameter arguments, choose names that match
@@ -46,7 +46,8 @@ abstract class BaseFragment : Fragment() {
     var mView: View? = null
     lateinit var baseFragment: BaseFragment
     lateinit var navController: NavController
-    lateinit var preferencesRepository: PreferencesRepository
+    lateinit var preferencesRepositoryForBaseFragment: PreferencesRepository
+
     companion object {
         var englishCode = "en"
         var hindiCode = "hi"
@@ -72,20 +73,31 @@ abstract class BaseFragment : Fragment() {
         init()
 
         activate(mView)
-        showDialogIfDeviceLanguageChanged()
+        try {
+            showDialogIfDeviceLanguageChanged()
+        }catch (e:Exception){
+
+        }
         return mView
     }
 
+
+
     private fun showDialogIfDeviceLanguageChanged() {
-        var currentDeviceLanguageCode = Resources.getSystem().getConfiguration().locale.getLanguage()
-        var currentDeviceLanguageName = getDeviceLanguageString(currentDeviceLanguageCode)
-        if (!currentDeviceLanguageName.equals("") && !currentDeviceLanguageCode.equals(lastStoredDeviceLanguage())) {
-            confirmDialogForChangedLanguage(currentDeviceLanguageCode,currentDeviceLanguageName)
+        preferencesRepositoryForBaseFragment = PreferencesRepository()
+        var currentDeviceLanguageCode =
+            Resources.getSystem().getConfiguration().locale.getLanguage()
+        var currentDeviceLanguageName = getLanguageCodeToName(currentDeviceLanguageCode)
+        if (!currentDeviceLanguageName.equals("") && !currentDeviceLanguageCode.equals(
+                lastStoredDeviceLanguage()
+            )
+        ) {
+            confirmDialogForChangedLanguage(currentDeviceLanguageCode, currentDeviceLanguageName)
         }
     }
 
-    private fun getDeviceLanguageString(currentDeviceLanguage: String): String {
-        when(currentDeviceLanguage){
+    fun getLanguageCodeToName(currentDeviceLanguage: String): String {
+        when (currentDeviceLanguage) {
             englishCode -> return getString(R.string.english)
             hindiCode -> return getString(R.string.hindi)
             telguCode -> return getString(R.string.telgu)
@@ -97,25 +109,34 @@ abstract class BaseFragment : Fragment() {
         }
     }
 
-    var languageSelectionDialog : Dialog? = null
-    private fun confirmDialogForChangedLanguage(currentDeviceLanguageCode: String,currentDeviceLanguageString: String) {
+    var languageSelectionDialog: Dialog? = null
+    private fun confirmDialogForChangedLanguage(
+        currentDeviceLanguageCode: String,
+        currentDeviceLanguageString: String
+    ) {
         languageSelectionDialog = activity?.let { Dialog(it) }
         languageSelectionDialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
         languageSelectionDialog?.setCancelable(false)
         languageSelectionDialog?.setContentView(R.layout.confirmation_custom_alert)
-        languageSelectionDialog?.getWindow()?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT));
         val titleDialog = languageSelectionDialog?.findViewById(R.id.title) as TextView
-        titleDialog.text = "Your device language changed to " + currentDeviceLanguageString+". Do you want to continue with this language?"
+        titleDialog.text =
+            "Your device language changed to " + currentDeviceLanguageString + ". Do you want to continue with this language?"
         val yesBtn = languageSelectionDialog?.findViewById(R.id.yes) as TextView
         val noBtn = languageSelectionDialog?.findViewById(R.id.cancel) as TextView
         yesBtn.setOnClickListener {
-            preferencesRepository= PreferencesRepository()
+
             saveSharedData(AppConstants.DEVICE_LANGUAGE, currentDeviceLanguageCode)
-            saveSharedData(AppConstants.APP_LANGUAGE,currentDeviceLanguageCode)
-            saveSharedData(AppConstants.APP_LANGUAGE_NAME,currentDeviceLanguageString)
+            saveSharedData(AppConstants.APP_LANGUAGE, currentDeviceLanguageCode)
+            saveSharedData(AppConstants.APP_LANGUAGE_NAME, currentDeviceLanguageString)
             updateResources(currentDeviceLanguageCode)
-            preferencesRepository.setDataAsKeyValue("languageName",currentDeviceLanguageString)
-            preferencesRepository.setDataAsKeyValue("languageCode",currentDeviceLanguageCode)
+            preferencesRepositoryForBaseFragment.setDataAsKeyValue(
+                "languageName",
+                currentDeviceLanguageString
+            )
+            preferencesRepositoryForBaseFragment.setDataAsKeyValue(
+                "languageCode",
+                currentDeviceLanguageCode
+            )
             languageSelectionDialog?.dismiss()
         }
         noBtn.setOnClickListener {
@@ -124,6 +145,8 @@ abstract class BaseFragment : Fragment() {
         }
         languageSelectionDialog?.show()
     }
+
+
 
     fun updateResources(language: String) {
         val locale = Locale(language)
@@ -199,6 +222,7 @@ abstract class BaseFragment : Fragment() {
         val toast = Toast.makeText(context, Message, Toast.LENGTH_LONG)
         toast.show()
     }
+
     fun popFragmentFromStack(id: Int) {
         navController.popBackStack(id, true)
     }
@@ -296,7 +320,7 @@ abstract class BaseFragment : Fragment() {
     }
 
     override fun onDetach() {
-        if(languageSelectionDialog!=null)languageSelectionDialog!!.dismiss()
+        if (languageSelectionDialog != null) languageSelectionDialog!!.dismiss()
         super.onDetach()
     }
 }

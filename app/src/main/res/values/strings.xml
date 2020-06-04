@@ -281,4 +281,8 @@
     <string name="change_contact_message">To Update these details the Giger will need to re-upload their Aadhar Crad images and undergo the KYC verification process again. We recommend that you do not change the name or address details unless necessary</string>
     <string name="okay">OKAY</string>
     <string name="settings">Settings</string>
+    <string name="weekend">Weekend</string>
+    <string name="addline1">Address Line 1</string>
+    <string name="addLine2">Address Line 2</string>
+    <string name="preferred_distance">Preferred Distance</string>
 </resources>

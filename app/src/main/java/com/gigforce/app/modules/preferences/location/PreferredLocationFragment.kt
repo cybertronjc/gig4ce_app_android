@@ -22,7 +22,7 @@ import com.gigforce.app.modules.preferences.PreferencesScreenItem
 import com.gigforce.app.modules.preferences.SharedPreferenceViewModel
 import com.gigforce.app.utils.setDarkStatusBarTheme
 import com.google.firebase.auth.FirebaseAuth
-import kotlinx.android.synthetic.main.preferences_fragment.*
+import kotlinx.android.synthetic.main.preferred_location_fragment.*
 
 
 class PreferredLocationFragment : BaseFragment() {
@@ -36,8 +36,8 @@ class PreferredLocationFragment : BaseFragment() {
     }
 
     private lateinit var viewModel: SharedPreferenceViewModel
-    lateinit var recyclerGenericAdapter: RecyclerGenericAdapter<PreferencesScreenItem>
-    val arrPrefrancesList : ArrayList<PreferencesScreenItem> = ArrayList<PreferencesScreenItem> ()
+    lateinit var recyclerGenericAdapter: RecyclerGenericAdapter<String>
+    val arrPrefrancesList : ArrayList<String> = ArrayList<String> ()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -59,8 +59,8 @@ class PreferredLocationFragment : BaseFragment() {
     }
 
     private fun listener() {
-        imageView8.setOnClickListener(View.OnClickListener { activity?.onBackPressed() })
-        imageView9.setOnClickListener(View.OnClickListener { navigate(R.id.profileFragment) })
+        imageView10.setOnClickListener(View.OnClickListener { activity?.onBackPressed() })
+//        imageView9.setOnClickListener(View.OnClickListener { navigate(R.id.profileFragment) })
     }
 
     private fun initializeViews() {
@@ -70,14 +70,14 @@ class PreferredLocationFragment : BaseFragment() {
 
     private fun initializeRecyclerView() {
         recyclerGenericAdapter =
-            RecyclerGenericAdapter<PreferencesScreenItem>(
+            RecyclerGenericAdapter<String>(
                 activity?.applicationContext,
-                PFRecyclerViewAdapter.OnViewHolderClick<PreferencesScreenItem> { view, position, item -> prefrencesItemSelect(position) },
-                RecyclerGenericAdapter.ItemInterface <PreferencesScreenItem?> { obj, viewHolder, position ->
-                    setPreferencesItems(obj,viewHolder,position)
+                PFRecyclerViewAdapter.OnViewHolderClick<String> { view, position, item -> },
+                RecyclerGenericAdapter.ItemInterface <String?> { obj, viewHolder, position ->
+                    getTextView(viewHolder,R.id.title).text = obj
                 })!!
         recyclerGenericAdapter.setList(arrPrefrancesList)
-        recyclerGenericAdapter.setLayout(R.layout.prefrences_item)
+        recyclerGenericAdapter.setLayout(R.layout.preferred_location_item)
 
         prefrences_rv.layoutManager = LinearLayoutManager(
             activity?.applicationContext,
@@ -91,7 +91,7 @@ class PreferredLocationFragment : BaseFragment() {
 
     private fun setPreferenecesList() {
         arrPrefrancesList.clear()
-        arrPrefrancesList.addAll(viewModel.getPrefrencesData())
+        arrPrefrancesList.addAll(viewModel.getPreferredLocationList())
         recyclerGenericAdapter.notifyDataSetChanged()
 
     }
@@ -100,76 +100,6 @@ class PreferredLocationFragment : BaseFragment() {
         viewModel.setPreferenceDataModel(preferenceData)
             setPreferenecesList()
         })
-    }
-
-
-
-    private fun setPreferencesItems(
-        obj: PreferencesScreenItem?,
-        viewHolder: PFRecyclerViewAdapter<Any?>.ViewHolder,
-        position: Int
-    ) {
-        var constraintView = getView(viewHolder,R.id.constraintLayout)
-        var otherAndSignout = getTextView(viewHolder,R.id.others_and_signout)
-        var title = getTextView(viewHolder,R.id.item_title)
-        var subTitle = getTextView(viewHolder,R.id.item_subtitle)
-        var imageView = getImageView(viewHolder,R.id.item_icon)
-        if(position== TITLE_OTHER){
-            visibleInvisibleMainItemView(constraintView,otherAndSignout,false)
-            setItemAsOther(otherAndSignout,obj);
-        }
-        else if(position== TITLE_SIGNOUT)
-        {
-            visibleInvisibleMainItemView(constraintView,otherAndSignout,false)
-            setItemAsSignOut(otherAndSignout,obj)
-        }
-        else{
-            visibleInvisibleMainItemView(constraintView,otherAndSignout,true)
-            setItems(imageView,title,subTitle,obj)
-        }
-    }
-
-    private fun setItems(imageView:ImageView,title: TextView, subTitle: TextView, obj: PreferencesScreenItem?) {
-        title.text = obj?.title
-        subTitle.text = obj?.subtitle
-        imageView.setImageResource(obj!!.icon)
-    }
-
-    private fun visibleInvisibleMainItemView(constraintView: View, otherAndSignout: TextView,isVisible:Boolean){
-        constraintView.visibility = if(isVisible) View.VISIBLE else View.INVISIBLE
-        otherAndSignout.visibility = if(!isVisible) View.VISIBLE else View.INVISIBLE
-    }
-    private fun setItemAsSignOut(otherAndSignout: TextView,obj: PreferencesScreenItem?) {
-        val spannableString1 = SpannableString(obj?.title)
-        spannableString1.setSpan(UnderlineSpan(),0,obj?.title!!.length,0)
-        otherAndSignout.text = spannableString1
-    }
-
-    private fun setItemAsOther(otherAndSignout: TextView,obj: PreferencesScreenItem?) {
-        otherAndSignout.text = obj?.title
-    }
-
-    private fun prefrencesItemSelect(position: Int) {
-        if(position== DAY_TIME) navigate(R.id.dayTimeFragment)
-        if(position== TITLE_SIGNOUT){logoutConfirmationDialog()}
-        if(position== LOCATION) navigate(R.id.locationFragment)
-    }
-
-    private fun logoutConfirmationDialog() {
-        val dialog = activity?.let { Dialog(it) }
-        dialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog?.setCancelable(false)
-        dialog?.setContentView(R.layout.confirmation_custom_alert)
-        val titleDialog = dialog?.findViewById(R.id.title) as TextView
-        titleDialog.text = "Do you really want to sign out?"
-        val yesBtn = dialog?.findViewById(R.id.yes) as TextView
-        val noBtn = dialog?.findViewById(R.id.cancel) as TextView
-        yesBtn.setOnClickListener {
-            FirebaseAuth.getInstance().signOut()
-            dialog?.dismiss()
-        }
-        noBtn.setOnClickListener { dialog .dismiss() }
-        dialog?.show()
     }
 
 }

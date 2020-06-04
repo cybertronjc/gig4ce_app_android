@@ -31,9 +31,9 @@ class ProfileFirebaseRepository: BaseFirestoreDBRepository() {
             .document("all_tags").update("tagName", FieldValue.arrayUnion(tag))
     }
 
-    fun getProfile(): DocumentReference {
-        return firebaseDB.collection(profileCollectionName).document(uid)
-    }
+//    fun getProfile(): DocumentReference {
+//        return firebaseDB.collection(profileCollectionName).document(uid)
+//    }
 
     fun createEmptyProfile() {
         firebaseDB.collection(profileCollectionName).document(uid).set(ProfileData(
@@ -144,6 +144,7 @@ class ProfileFirebaseRepository: BaseFirestoreDBRepository() {
      * Don't delete while refactoring. Base Repo doesn't cover this function
      */
     fun setAddress(address: AddressFirestoreModel){
+        firebaseDB.collection(profileCollectionName).document(uid).update("address",FieldValue.delete())
         firebaseDB.collection(profileCollectionName).document(uid).update("address",address)
     }
 }
