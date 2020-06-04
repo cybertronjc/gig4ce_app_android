@@ -387,5 +387,9 @@
         android:id="@+id/arrountCurrentAddress"
         android:name="com.gigforce.app.modules.preferences.location.AroundCurrentAddressFragment"
         android:label="ArroundCurrentAddressFragment" />
+    <fragment
+        android:id="@+id/walletBalancePage"
+        android:name="com.gigforce.app.modules.wallet.WalletBalancePage"
+        android:label="WalletBalancePage" />
 </navigation>
 

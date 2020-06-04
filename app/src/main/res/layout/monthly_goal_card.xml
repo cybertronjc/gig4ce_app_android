@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardElevation="5dp"
+    app:cardCornerRadius="8dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ImageView
+            android:id="@+id/icon"
+            android:layout_width="62dp"
+            android:layout_height="62dp"
+            android:src="@drawable/wallet"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="32dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/earning_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="32dp"
+            android:text="Earning"
+            style="@style/LatoRegular16Black"
+            app:layout_constraintTop_toBottomOf="@id/icon"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/avg_earning"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="AVG earning Rs12000 a week"
+            style="@style/LatoRegular14Black"
+            android:textColor="@color/gray_color"
+            android:layout_marginStart="32dp"
+            app:layout_constraintTop_toBottomOf="@id/earning_text"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="0dp"
+            android:layout_height="20dp"
+            android:progress="25"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginTop="16dp"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:progressTint="#ffd14d"
+            android:progressTintMode="src_atop"
+            app:layout_constraintTop_toBottomOf="@id/avg_earning"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+        
+        <ImageView
+            android:id="@+id/goal_status_icon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/wallet"
+            app:layout_constraintTop_toBottomOf="@id/progress_bar"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="32dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="You are doing really great, keep it up!"
+            android:layout_marginStart="24dp"
+            app:layout_constraintStart_toEndOf="@id/goal_status_icon"
+            app:layout_constraintTop_toTopOf="@id/goal_status_icon" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>
