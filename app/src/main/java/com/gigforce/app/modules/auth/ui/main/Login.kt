@@ -129,11 +129,13 @@ class Login : BaseFragment() {
 
         login_button.setOnClickListener {
             login_button.setEnabled(false)
-
+            progressBar.visibility = View.VISIBLE
             Handler().postDelayed(Runnable {
                 // This method will be executed once the timer is over
-                if (login_button != null)
+                if (login_button != null) {
                     login_button.setEnabled(true)
+                    progressBar.visibility = View.GONE
+                }
             }, 3000) // se
             doActionOnClick()
         }

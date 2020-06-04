@@ -14,7 +14,7 @@ class LoginSuccessfulViewModel() : ViewModel() {
     var userProfileData: MutableLiveData<ProfileData> = MutableLiveData<ProfileData>()
 
     fun getProfileData() {
-        profileFirebaseRepository.getProfile()
+        profileFirebaseRepository.getDBCollection()
             .addSnapshotListener(EventListener<DocumentSnapshot> { value, e ->
                 if (e != null) {
                     var errProfileData = ProfileData()

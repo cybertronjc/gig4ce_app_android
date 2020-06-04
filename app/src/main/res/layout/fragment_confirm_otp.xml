@@ -9,7 +9,7 @@
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/line2view"
         style="@style/text_pagetitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -21,13 +21,13 @@
         tools:text="Confirm OTP" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/areaview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="178dp"
         android:text="Please Enter OTP Received"
-        app:layout_constraintStart_toStartOf="@+id/textView2"
-        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+        app:layout_constraintStart_toStartOf="@+id/line2view"
+        app:layout_constraintTop_toBottomOf="@+id/line2view" />
 
     <EditText
         android:id="@+id/edit_otp"
@@ -39,8 +39,8 @@
         android:hint="Enter OTP Here"
         android:inputType="numberPassword"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/textView3"
-        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+        app:layout_constraintStart_toStartOf="@+id/areaview"
+        app:layout_constraintTop_toBottomOf="@+id/areaview" />
 
     <Button
         android:id="@+id/btn_confirm"

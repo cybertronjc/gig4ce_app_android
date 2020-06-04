@@ -22,6 +22,7 @@ import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.chip.Chip
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import kotlinx.android.synthetic.main.fragment_profile_main_expanded.*
 import kotlinx.android.synthetic.main.fragment_profile_main_expanded.view.*
 import kotlinx.android.synthetic.main.profile_main_card_background.view.*
 import java.text.SimpleDateFormat
@@ -340,6 +341,40 @@ class ProfileFragment : BaseFragment() {
         layout.profile_main_expanded_back_button.setOnClickListener {
             activity?.onBackPressed()
         }
+        listener()
+    }
+
+    private fun listener() {
+        collapseListener()
+    }
+
+    private fun collapseListener() {
+//        appbar.addOnOffsetChangedListener(object:AppBarStateChangeListener() {
+//            override fun onStateChanged(appBarLayout:AppBarLayout, state:State) {
+//                if(state == State.EXPANDED){
+//                    main_expanded_user_name.visibility = View.VISIBLE
+//                }
+//                else if(state == State.COLLAPSED){
+//                    main_expanded_user_name.visibility = View.INVISIBLE
+//
+//                }
+//            }
+//        })
+        appbar.addOnOffsetChangedListener(object:AppBarLayout.OnOffsetChangedListener {
+            override fun onOffsetChanged(appBarLayout:AppBarLayout, verticalOffset:Int) {
+                if (Math.abs(verticalOffset)-appBarLayout.getTotalScrollRange() == 0)
+                {
+                    main_expanded_user_name.animate().alpha(0.0f).setDuration(100)
+                    main_expanded_user_name.visibility = View.INVISIBLE
+                }
+                else
+                {
+                    main_expanded_user_name.animate().alpha(1.0f).setDuration(0)
+                    main_expanded_user_name.visibility = View.VISIBLE
+
+                }
+            }
+        })
     }
 
 
@@ -392,4 +427,48 @@ class ProfileFragment : BaseFragment() {
         }
     }
 
+
 }
+
+internal abstract class AppBarStateChangeListener:AppBarLayout.OnOffsetChangedListener {
+    private var mCurrentState = State.IDLE
+    enum class State {
+        EXPANDED,
+        COLLAPSED,
+        IDLE
+    }
+    override fun onOffsetChanged(appBarLayout:AppBarLayout, i:Int) {
+        if (i == 0)
+        {
+            if (mCurrentState != State.EXPANDED)
+            {
+                onStateChanged(appBarLayout, State.EXPANDED)
+            }
+            mCurrentState = State.EXPANDED
+        }
+        else if (Math.abs(i) >= appBarLayout.getTotalScrollRange())
+        {
+            if (mCurrentState != State.COLLAPSED)
+            {
+                onStateChanged(appBarLayout, State.COLLAPSED)
+            }
+            mCurrentState = State.COLLAPSED
+        }
+        else
+        {
+            if (mCurrentState != State.IDLE)
+            {
+                onStateChanged(appBarLayout, State.IDLE)
+            }
+            mCurrentState = State.IDLE
+        }
+    }
+    abstract fun onStateChanged(appBarLayout:AppBarLayout, state:State)
+}
+//And then you can use it:
+//appBarLayout.addOnOffsetChangedListener(new AppBarStateChangeListener() {
+//    #Override
+//    public void onStateChanged(AppBarLayout appBarLayout, State state) {
+//        Log.d("STATE", state.name());
+//    }
+//});

@@ -38,7 +38,7 @@
         </CollapsingToolbarLayout>
 
             <TextView
-                android:id="@+id/textView6"
+                android:id="@+id/pincodeview"
                 android:layout_width="327dp"
                 android:layout_height="77dp"
                 android:layout_marginTop="292dp"
@@ -56,8 +56,8 @@
                 android:layout_marginTop="305dp"
                 android:layout_marginEnd="49dp"
                 android:text="3"
-                app:layout_constraintEnd_toEndOf="@+id/textView6"
-                app:layout_constraintStart_toStartOf="@+id/textView6"
+                app:layout_constraintEnd_toEndOf="@+id/pincodeview"
+                app:layout_constraintStart_toStartOf="@+id/pincodeview"
                 app:layout_constraintTop_toTopOf="@+id/profile_avatar" />
 
             <TextView
@@ -68,8 +68,8 @@
                 android:layout_marginTop="305dp"
                 android:layout_marginEnd="142dp"
                 android:text="17"
-                app:layout_constraintEnd_toEndOf="@+id/textView6"
-                app:layout_constraintStart_toStartOf="@+id/textView6"
+                app:layout_constraintEnd_toEndOf="@+id/pincodeview"
+                app:layout_constraintStart_toStartOf="@+id/pincodeview"
                 app:layout_constraintTop_toTopOf="@+id/fragment_profile.xmlprofile_avatar" />
 
             <TextView
@@ -80,8 +80,8 @@
                 android:layout_marginTop="305dp"
                 android:layout_marginEnd="247dp"
                 android:text="4"
-                app:layout_constraintEnd_toEndOf="@+id/textView6"
-                app:layout_constraintStart_toStartOf="@+id/textView6"
+                app:layout_constraintEnd_toEndOf="@+id/pincodeview"
+                app:layout_constraintStart_toStartOf="@+id/pincodeview"
                 app:layout_constraintTop_toTopOf="parent" />
 
 
@@ -91,7 +91,7 @@
                 android:layout_height="100dp"
                 app:layout_constraintEnd_toEndOf="@+id/profile_avatar"
                 app:layout_constraintStart_toStartOf="@+id/profile_avatar"
-                app:layout_constraintTop_toBottomOf="@+id/textView6" />
+                app:layout_constraintTop_toBottomOf="@+id/pincodeview" />
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardView2"

@@ -45,7 +45,7 @@
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout4"
+        android:id="@+id/permanentAddLayout"
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:layout_marginTop="24dp"
@@ -106,14 +106,14 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout5"
+        android:id="@+id/currentAddLayout"
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:layout_marginTop="2dp"
         android:background="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout4">
+        app:layout_constraintTop_toBottomOf="@+id/permanentAddLayout">
 
 
         <ImageView
@@ -174,7 +174,7 @@
         android:background="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout5">
+        app:layout_constraintTop_toBottomOf="@+id/currentAddLayout">
         <ImageView
             android:id="@+id/imageView24"
             android:layout_width="wrap_content"
@@ -200,7 +200,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <Switch
-            android:id="@+id/switch1"
+            android:id="@+id/preferredDistanceSwitch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:theme="@style/Theme.switchButton"
@@ -225,7 +225,7 @@
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout6" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout7"
+        android:id="@+id/arroundCurrentAddressLayout"
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:layout_marginTop="15dp"
@@ -254,14 +254,14 @@
             android:lineSpacingExtra="8sp"
             android:textColor="#000000"
             android:textSize="14sp"
-            app:layout_constraintBottom_toTopOf="@+id/textView85"
+            app:layout_constraintBottom_toTopOf="@+id/preferredDistanceTV"
             app:layout_constraintStart_toEndOf="@+id/imageView25"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_chainStyle="packed"
             android:text="Around Current Address" />
 
         <TextView
-            android:id="@+id/textView85"
+            android:id="@+id/preferredDistanceTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
@@ -274,7 +274,7 @@
             android:text="Preferred Locations" />
 
         <Switch
-            android:id="@+id/switch2"
+            android:id="@+id/arroundCurrentAddSwitch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:theme="@style/Theme.switchButton"
@@ -303,7 +303,7 @@
         android:background="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout7">
+        app:layout_constraintTop_toBottomOf="@+id/arroundCurrentAddressLayout">
 
 
         <ImageView

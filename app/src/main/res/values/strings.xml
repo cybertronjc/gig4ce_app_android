@@ -285,4 +285,8 @@
     <string name="w_rs">Rs</string>
     <string name="w_transfer">Transfer</string>
     <string name="settings">Settings</string>
+    <string name="weekend">Weekend</string>
+    <string name="addline1">Address Line 1</string>
+    <string name="addLine2">Address Line 2</string>
+    <string name="preferred_distance">Preferred Distance</string>
 </resources>

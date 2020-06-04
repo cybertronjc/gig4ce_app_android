@@ -18,7 +18,7 @@ class OnboardingMainViewModel : ViewModel() {
         getProfileData()
     }
     fun getProfileData() {
-        profileFirebaseRepository.getProfile()
+        profileFirebaseRepository.getDBCollection()
             .addSnapshotListener(EventListener<DocumentSnapshot> { value, e ->
                 if (e != null) {
                     var errProfileData = ProfileData()

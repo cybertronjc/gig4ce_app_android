@@ -1,12 +1,14 @@
 package com.gigforce.app.modules.profile.models
 
 class AddressModel(
-    var city: String = "",
     var firstLine: String = "",
-    var pincode: String = "",
     var secondLine: String = "",
+    var area: String = "",
+    var city: String = "",
     var state: String = "",
-    var area: String = ""
+    var pincode: String = "",
+    var preferred_distance :Int = 0,
+    var preferredDistanceActive:Boolean = false
 ) {
 
     fun isEmpty(): Boolean {
