@@ -1,5 +1,6 @@
 package com.gigforce.app.modules.preferences.location
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.text.Html
 import android.util.Log
@@ -66,7 +67,7 @@ class PermanentAddressEditFragment : BaseFragment() {
     }
 
     private fun verificationViewsInitialize() {
-        textView90.text = Html.fromHtml("To Update Permanent address , you have to upload new address proofs. <font color='#d72467'>Click Here</font>")
+        textView90.text = Html.fromHtml("To Update Permanent address , you have to upload new address proofs. <font color='#E02020'>Click Here</font>")
     }
 
     private fun populateAddress(address: AddressModel) {

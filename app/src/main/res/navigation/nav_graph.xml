@@ -360,6 +360,11 @@
         android:label="LocationFragment" />
 
     <fragment
+        android:id="@+id/earningFragment"
+        android:name="com.gigforce.app.modules.preferences.earnings.EarningFragment"
+        android:label="EarningFragment" />
+
+    <fragment
         android:id="@+id/languagePreferenceFragment"
         android:name="com.gigforce.app.modules.preferences.language.LanguagePreferencesFragment"
         android:label="LanguagePreferenceFragment" />

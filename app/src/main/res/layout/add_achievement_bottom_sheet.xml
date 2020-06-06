@@ -4,7 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_bottom_sheet">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -83,6 +84,8 @@
             android:text="@string/add_more_text"
             android:textAlignment="textStart"
             app:icon="@drawable/ic_add"
+            android:textColor="@color/colorPrimary"
+            app:iconTint="@color/colorPrimary"
             style="@style/Widget.MaterialComponents.Button.TextButton.Icon" />
 
         <LinearLayout
@@ -109,6 +112,7 @@
                 android:text="@string/save_text"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
+                android:textColor="@color/colorPrimary"
                 app:strokeColor="@color/colorPrimary"
                 style="?attr/materialButtonOutlinedStyle"  />
         </LinearLayout>

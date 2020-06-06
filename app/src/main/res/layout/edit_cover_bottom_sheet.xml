@@ -8,7 +8,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@drawable/bg_bottom_sheet">
 
         <LinearLayout
             android:id="@+id/linearLayout2"
@@ -78,9 +79,9 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/tag_suggestions_rv"
                     android:layout_width="150dp"
-                    android:layout_height="100dp"
+                    android:layout_height="130dp"
                     android:layout_marginLeft="10dp"
-                    android:layout_marginTop="4dp"
+                    android:layout_marginTop="10dp"
                     android:background="@color/white"
                     android:elevation="8dp"
                     android:padding="4dp"
@@ -111,10 +112,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:dropDownAnchor="@id/tags"
-                        android:dropDownHeight="50dp"
+                        android:dropDownHeight="0dp"
                         android:hint="@string/new_tag_hint"
                         android:longClickable="false"
-
                         android:paddingStart="3dp" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -125,6 +125,7 @@
                     android:layout_height="50dp"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
+                    android:textColor="@color/colorPrimary"
                     android:text="@string/add" />
             </LinearLayout>
 
@@ -155,6 +156,7 @@
                     android:layout_marginEnd="8dp"
                     android:layout_weight="1"
                     android:text="@string/save_text"
+                    android:textColor="@color/colorPrimary"
                     app:strokeColor="@color/colorPrimary" />
             </LinearLayout>
 

@@ -63,8 +63,8 @@ class CurrentAddressEditFragment : BaseFragment() {
         var currentAddress = viewModel.getCurrentAddress()
         var permanentAddress = viewModel.getPermanentAddress()
         populateAddress(currentAddress!!)
-        preferredDistanceSwitch.isEnabled = !permanentAddress!!.isEmpty()
-        preferredDistanceSwitch.isChecked = currentAddress!!.isSame(viewModel.getPermanentAddress()!!)
+        workFromHomeSwitch.isEnabled = !permanentAddress!!.isEmpty()
+        workFromHomeSwitch.isChecked = currentAddress!!.isSame(viewModel.getPermanentAddress()!!)
     }
 
     private fun populateAddress(address: AddressModel) {
@@ -86,8 +86,8 @@ class CurrentAddressEditFragment : BaseFragment() {
     }
 
     private fun listener() {
-        if (preferredDistanceSwitch.isEnabled) {
-            preferredDistanceSwitch.setOnClickListener { view ->
+        if (workFromHomeSwitch.isEnabled) {
+            workFromHomeSwitch.setOnClickListener { view ->
                 var isChecked = (view as Switch).isChecked
                 if (isChecked) populateAddress(profileDataModel.address.home)
                 else populateAddress(profileDataModel.address.current)

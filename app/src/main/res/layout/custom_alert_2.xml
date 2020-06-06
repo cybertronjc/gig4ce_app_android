@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="8dp"
+    android:backgroundTint="@color/white">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/textView96"
+            android:layout_width="277dp"
+            android:layout_height="58dp"
+            android:background="#f3f3f3"
+            android:fontFamily="@font/lato"
+            android:letterSpacing="0"
+            android:paddingLeft="18dp"
+            android:paddingTop="24dp"
+            android:text="Preferred No. of Days of Work"
+            android:textColor="#000000"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <RadioGroup
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="22dp"
+            android:layout_marginLeft="17dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView96" >
+            <RadioButton
+                android:id="@+id/zeroToFour"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="15dp"
+                android:hint="00-04"
+                android:text="00-04 Days"
+                android:textColor="@color/black"
+                android:letterSpacing="0"
+                android:textSize="14sp" />
+            <RadioButton
+                android:id="@+id/fourToEight"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="15dp"
+                android:hint="04-08"
+                android:text="04-08 Days"
+                android:letterSpacing="0"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+            <RadioButton
+                android:id="@+id/eightToFifteen"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="15dp"
+                android:hint="08-15"
+                android:text="08-15 Days"
+                android:letterSpacing="0"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+            <RadioButton
+                android:id="@+id/fifteenToThirty"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="15dp"
+                android:textColor="@color/black"
+                android:letterSpacing="0"
+                android:hint="15-30"
+                android:text="15-30 Days"
+                android:textSize="14sp" />
+        </RadioGroup>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

@@ -40,7 +40,7 @@
             app:layout_constraintTop_toTopOf="@id/textView100" />
 
         <Switch
-            android:id="@+id/preferredDistanceSwitch"
+            android:id="@+id/workFromHomeSwitch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="24dp"
@@ -76,73 +76,75 @@
 
         <TextView
             android:id="@+id/line1view"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="54dp"
+            android:layout_marginTop="5dp"
+            android:letterSpacing="-0.01"
             android:text="@string/first_line"
-            android:layout_marginTop="19dp"
-            android:layout_marginEnd="100dp"
-            app:layout_constraintStart_toStartOf="@+id/textView101"
-            app:layout_constraintTop_toTopOf="@+id/textView91"
-            />
+            android:textColor="#000000"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="@+id/preferredNoOfDays"
+            app:layout_constraintTop_toBottomOf="@+id/textView91" />
 
         <TextView
             android:id="@+id/line2view"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/second_line"
-            android:layout_marginTop="2dp"
-            android:layout_marginEnd="100dp"
-            app:layout_constraintStart_toStartOf="@+id/textView101"
-            app:layout_constraintTop_toBottomOf="@+id/line1view"
-            />
+            android:textSize="14sp"
+            android:textColor="#000000"
+            android:letterSpacing="-0.01"
+            app:layout_constraintStart_toStartOf="@+id/line1view"
+            app:layout_constraintTop_toBottomOf="@+id/line1view" />
 
         <TextView
             android:id="@+id/areaview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/area"
             android:backgroundTint="@color/setting_bg"
-            android:layout_marginTop="2dp"
-            android:layout_marginEnd="100dp"
-            app:layout_constraintStart_toStartOf="@+id/textView101"
-            app:layout_constraintTop_toBottomOf="@+id/line2view"
-            />
+            android:letterSpacing="-0.01"
+            android:text="@string/area"
+            android:textColor="#000000"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/line2view" />
 
         <TextView
             android:id="@+id/cityview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/city"
             android:backgroundTint="@color/setting_bg"
-            android:layout_marginTop="2dp"
-            android:layout_marginEnd="100dp"
-            app:layout_constraintStart_toStartOf="@+id/textView101"
-            app:layout_constraintTop_toBottomOf="@+id/areaview"
-            />
+            android:letterSpacing="-0.01"
+            android:text="@string/city"
+            android:textColor="#000000"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/areaview" />
 
         <TextView
             android:id="@+id/stateview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/state"
             android:backgroundTint="@color/setting_bg"
-            android:layout_marginTop="2dp"
-            android:layout_marginEnd="100dp"
-            app:layout_constraintStart_toStartOf="@+id/textView101"
-            app:layout_constraintTop_toBottomOf="@+id/cityview"
-            />
+            android:letterSpacing="-0.01"
+            android:text="@string/state"
+            android:textColor="#000000"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cityview" />
 
         <TextView
             android:id="@+id/pincodeview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
-            android:layout_marginEnd="100dp"
             android:backgroundTint="@color/setting_bg"
+            android:letterSpacing="-0.01"
             android:text="@string/pincode"
-            app:layout_constraintStart_toStartOf="@+id/textView101"
-            app:layout_constraintTop_toBottomOf="@+id/stateview"
-            />
+            android:textColor="#000000"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/stateview" />
     </androidx.constraintlayout.widget.ConstraintLayout>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -169,7 +171,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <SeekBar
+        <com.gigforce.app.core.components.SeekBarWithHint
             android:id="@+id/arround_current_add_seekbar"
             android:layout_width="match_parent"
             android:layout_height="25dp"
@@ -203,6 +205,17 @@
             android:textColor="#787993"
             android:letterSpacing="0.05"
             app:layout_constraintEnd_toEndOf="@+id/arround_current_add_seekbar"
+            app:layout_constraintTop_toBottomOf="@+id/arround_current_add_seekbar" />
+
+        <com.gigforce.app.core.components.SeekBarDependentCanvas
+            android:id="@+id/seekbardependent"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="0dp"
+            android:background="@color/white"
+            app:layout_constraintEnd_toEndOf="@+id/arround_current_add_seekbar"
+            app:layout_constraintStart_toStartOf="@+id/arround_current_add_seekbar"
             app:layout_constraintTop_toBottomOf="@+id/arround_current_add_seekbar" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

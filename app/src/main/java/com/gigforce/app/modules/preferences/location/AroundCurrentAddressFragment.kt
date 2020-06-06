@@ -15,9 +15,8 @@ import kotlinx.android.synthetic.main.around_current_address_fragment.cityview
 import kotlinx.android.synthetic.main.around_current_address_fragment.line1view
 import kotlinx.android.synthetic.main.around_current_address_fragment.line2view
 import kotlinx.android.synthetic.main.around_current_address_fragment.pincodeview
-import kotlinx.android.synthetic.main.around_current_address_fragment.preferredDistanceSwitch
+import kotlinx.android.synthetic.main.around_current_address_fragment.workFromHomeSwitch
 import kotlinx.android.synthetic.main.around_current_address_fragment.stateview
-import kotlinx.android.synthetic.main.current_address_view_fragment.*
 
 class AroundCurrentAddressFragment : BaseFragment() {
 
@@ -42,9 +41,10 @@ class AroundCurrentAddressFragment : BaseFragment() {
     }
 
     private fun initializeAll() {
-        preferredDistanceSwitch.isChecked = viewModel.getCurrentAddress()?.preferredDistanceActive!!
+        workFromHomeSwitch.isChecked = viewModel.getCurrentAddress()?.preferredDistanceActive!!
         preferredDistanceActive = viewModel.getCurrentAddress()?.preferredDistanceActive!!
         arround_current_add_seekbar.progress = viewModel.getCurrentAddress()?.preferred_distance!!
+        arround_current_add_seekbar.setOtherView(seekbardependent)
         populateAddress(viewModel.getCurrentAddress()!!)
     }
     private fun populateAddress(address: AddressModel){
@@ -62,7 +62,7 @@ class AroundCurrentAddressFragment : BaseFragment() {
             viewModel.setCurrentAddressPrferredDistanceData(arround_current_add_seekbar.progress,false)
         }
         else {
-            preferredDistanceActive = preferredDistanceSwitch.isChecked
+            preferredDistanceActive = workFromHomeSwitch.isChecked
             viewModel.setCurrentAddressPrferredDistanceData(
                 arround_current_add_seekbar.progress,
                 preferredDistanceActive

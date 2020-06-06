@@ -34,13 +34,14 @@
                 android:src="@drawable/warning_icon_"
                 android:layout_marginLeft="12dp"/>
             <TextView
-                android:id="@+id/kyc_ll"
+                android:id="@+id/kyc_tv"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_marginLeft="16dp"
                 android:textSize="13sp"
                 android:textColor="#4a4a4a"
+                android:letterSpacing="0"
                 android:text="@string/kyc_verification_not_done"
                 android:layout_gravity="center"/>
             <ImageView
@@ -65,12 +66,14 @@
                 android:src="@drawable/warning_icon_"
                 android:layout_marginLeft="12dp"/>
             <TextView
+                android:id="@+id/video_resume_tv"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_marginLeft="16dp"
                 android:textSize="13sp"
                 android:textColor="#4a4a4a"
+                android:letterSpacing="0"
                 android:text="@string/video_resume_pending"
                 android:layout_gravity="center"/>
             <ImageView
@@ -99,7 +102,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="14dp"
-        android:nestedScrollingEnabled="false"/>
+        android:nestedScrollingEnabled="false"
+        android:clipToPadding="false"
+        android:paddingRight="20dp"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -116,7 +121,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="11.5dp"
-        android:nestedScrollingEnabled="false"/>
+        android:nestedScrollingEnabled="false"
+        android:clipToPadding="false"
+        android:paddingRight="20dp"/>
 
     <View
         android:layout_width="match_parent"
@@ -138,7 +145,9 @@
         android:id="@+id/learning_rv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:nestedScrollingEnabled="false"/>
+        android:nestedScrollingEnabled="false"
+        android:clipToPadding="false"
+        android:paddingRight="20dp"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -154,7 +163,9 @@
         android:id="@+id/assessment_rv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:nestedScrollingEnabled="false"/>
+        android:nestedScrollingEnabled="false"
+        android:clipToPadding="false"
+        android:paddingRight="20dp"/>
     <TextView
         android:id="@+id/application_version"
         android:layout_width="match_parent"

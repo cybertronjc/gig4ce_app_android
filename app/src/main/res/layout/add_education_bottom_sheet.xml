@@ -119,6 +119,8 @@
             android:text="@string/add_more_text"
             android:textAlignment="textStart"
             app:icon="@drawable/ic_add"
+            android:textColor="@color/colorPrimary"
+            app:iconTint="@color/colorPrimary"
             style="@style/Widget.MaterialComponents.Button.TextButton.Icon" />
 
         <LinearLayout
@@ -147,6 +149,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
                 app:strokeColor="@color/colorPrimary"
+                android:textColor="@color/colorPrimary"
                 style="?attr/materialButtonOutlinedStyle"  />
         </LinearLayout>
     </LinearLayout>

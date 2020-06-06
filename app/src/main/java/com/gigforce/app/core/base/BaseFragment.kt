@@ -146,7 +146,29 @@ abstract class BaseFragment : Fragment() {
         languageSelectionDialog?.show()
     }
 
+    //Confirmation dialog start
+    // this dialog having right side yes button with gradient. Need to create one having swipable functionality
+    fun showConfirmationDialog(title:String,buttonClickListener:ConfirmationDialogOnClickListener){
+        var customialog:Dialog? = activity?.let { Dialog(it) }
+        customialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        customialog?.setCancelable(false)
+        customialog?.setContentView(R.layout.confirmation_custom_alert)
+        val titleDialog = customialog?.findViewById(R.id.title) as TextView
+        titleDialog.text = title
+        val yesBtn = customialog?.findViewById(R.id.yes) as TextView
+        val noBtn = customialog?.findViewById(R.id.cancel) as TextView
+        yesBtn.setOnClickListener (View.OnClickListener {
+            buttonClickListener.clickedOnYes(customialog)
+        })
+        noBtn.setOnClickListener (View.OnClickListener { buttonClickListener.clickedOnNo(customialog) })
+        customialog?.show()
+    }
 
+    interface ConfirmationDialogOnClickListener{
+        fun clickedOnYes(dialog:Dialog?)
+        fun clickedOnNo(dialog:Dialog?)
+    }
+    //Confirmation dialog end
 
     fun updateResources(language: String) {
         val locale = Locale(language)
@@ -289,7 +311,7 @@ abstract class BaseFragment : Fragment() {
     }
 
     fun setTextViewColor(textView: TextView, color: Int) {
-        textView.setTextColor(ContextCompat.getColor(activity!!.applicationContext, color))
+        textView.setTextColor(ContextCompat.getColor(requireActivity().applicationContext, color))
     }
 
     fun setTextViewSize(textView: TextView, size: Float) {
@@ -297,7 +319,7 @@ abstract class BaseFragment : Fragment() {
     }
 
     fun setViewBackgroundColor(view: View, color: Int) {
-        view.setBackgroundColor(ContextCompat.getColor(activity!!.applicationContext, color))
+        view.setBackgroundColor(ContextCompat.getColor(requireActivity().applicationContext, color))
     }
 
     open fun onBackPressed(): Boolean {
@@ -308,7 +330,7 @@ abstract class BaseFragment : Fragment() {
         try {
             val pInfo: PackageInfo =
                 activity?.applicationContext!!.packageManager.getPackageInfo(
-                    activity!!.getPackageName(),
+                    requireActivity().getPackageName(),
                     0
                 )
             val version = pInfo.versionName

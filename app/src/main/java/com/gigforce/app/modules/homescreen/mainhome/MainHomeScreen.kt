@@ -177,7 +177,7 @@ class MainHomeScreen : BaseFragment() {
         if(profileImg!=null && !profileImg.equals("")) {
             val profilePicRef: StorageReference =
                 PreferencesFragment.storage.reference.child("profile_pics").child(profileImg)
-            GlideApp.with(this.context!!)
+            GlideApp.with(this.requireContext())
                 .load(profilePicRef)
                 .apply(RequestOptions().circleCrop())
                 .into(profile_image)
@@ -191,7 +191,7 @@ class MainHomeScreen : BaseFragment() {
         val date: String = simpleDateFormat.format(Date())
         tv2HS1.text = date
     }
-    private val visibleThreshold = 10
+    private val visibleThreshold = 20
     var isLoading:Boolean = false
     private fun initializeVerticalCalendarRV() {
         val recyclerGenericAdapter: RecyclerGenericAdapter<VerticalCalendarDataItemModel> =

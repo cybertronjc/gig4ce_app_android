@@ -38,6 +38,7 @@
             android:text="Location"
             android:textColor="@color/black"
             android:textSize="20sp"
+            android:letterSpacing="0"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/imageView10"
             app:layout_constraintTop_toTopOf="parent" />
@@ -200,7 +201,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <Switch
-            android:id="@+id/preferredDistanceSwitch"
+            android:id="@+id/workFromHomeSwitch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:theme="@style/Theme.switchButton"

@@ -53,7 +53,7 @@ class EditCoverBottomSheet(): ProfileBaseBottomSheetFragment() {
     private fun initialize() {
 
         profileViewModel.getAllTags()
-        val autotextview: AutoCompleteTextView = add_tag_new_tag
+//        val autotextview: AutoCompleteTextView = add_tag_new_tag
 
         profileViewModel.Tags.observe(this, Observer {Tags->
             for(tag in Tags.tagName!! ) {
@@ -65,7 +65,7 @@ class EditCoverBottomSheet(): ProfileBaseBottomSheetFragment() {
                 RecyclerGenericAdapter<String>(
                     activity?.applicationContext,
                     PFRecyclerViewAdapter.OnViewHolderClick<String> { view, position, item ->
-                        autotextview.setText(allTagsForPopup.get(position))
+                        add_tag_new_tag.setText(allTagsForPopup.get(position))
                         tag_suggestions_rv.visibility = View.GONE
                     },
                     RecyclerGenericAdapter.ItemInterface<String?> { obj, viewHolder, position ->
@@ -79,11 +79,12 @@ class EditCoverBottomSheet(): ProfileBaseBottomSheetFragment() {
                 LinearLayoutManager.VERTICAL,
                 false
             )
+            add_tag_new_tag.threshold = 10
 //            autotextview.setAdapter(adapter)
             tag_suggestions_rv.adapter = recyclerGenericAdapter
 //            getDialog()?.getWindow()?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 //            autotextview.setAdapter(DropdownAdapter(this.requireContext(), allTags))
-            autotextview.addTextChangedListener (object : TextWatcher{
+            add_tag_new_tag.addTextChangedListener (object : TextWatcher{
                 override fun afterTextChanged(s: Editable?) {}
 
                 override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}

@@ -63,4 +63,8 @@
     // The height of the bottom sheet when it is collapsed
     <attr name="superBottomSheet_peekHeight" format="dimension"/>
 
+    <declare-styleable name="SeekBarWithHint">
+        <attr name="hint_text_size" format="dimension"></attr>
+        <attr name="hint_text_color" format="color" >#000000</attr>
+    </declare-styleable>
 </resources>

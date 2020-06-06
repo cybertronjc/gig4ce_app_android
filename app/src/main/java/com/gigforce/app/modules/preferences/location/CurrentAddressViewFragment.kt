@@ -62,8 +62,8 @@ class CurrentAddressViewFragment: BaseFragment() {
         var currentAddress = profileDataModel.address.current
         var permanentAddress =  profileDataModel.address.home
         populateAddress(currentAddress)
-        preferredDistanceSwitch.isEnabled = !permanentAddress.isEmpty()
-        preferredDistanceSwitch.isChecked = currentAddress.isSame(permanentAddress)
+        workFromHomeSwitch.isEnabled = !permanentAddress.isEmpty()
+        workFromHomeSwitch.isChecked = currentAddress.isSame(permanentAddress)
     }
 
     private fun populateAddress(address: AddressModel){
@@ -85,7 +85,7 @@ class CurrentAddressViewFragment: BaseFragment() {
     }
 
     private fun listener() {
-        imageView11.setOnClickListener {
+        editCurrentLocation.setOnClickListener {
             navigate(R.id.currentAddressEditFragment)
         }
 

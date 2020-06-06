@@ -73,7 +73,7 @@ class PermanentAddressViewFragment : BaseFragment() {
     }
 
     private fun listener() {
-        imageView11.setOnClickListener {
+        editCurrentLocation.setOnClickListener {
             navigate(R.id.permanentAddressEditFragment)
         }
     }
