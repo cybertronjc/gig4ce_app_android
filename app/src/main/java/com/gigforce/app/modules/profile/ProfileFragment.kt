@@ -142,6 +142,7 @@ class ProfileFragment : BaseFragment() {
         viewModel.getProfileData().observe(viewLifecycleOwner, Observer { profile ->
             layout.gigger_rating.text = if (profile.rating != null) profile.rating!!.getTotal().toString()
                                         else "-"
+            rating_bar.rating = profile.rating!!.getTotal()
             layout.task_done.text = profile.tasksDone.toString()
             layout.connection_count.text = profile.connections.toString()
             layout.main_expanded_user_name.text = profile.name

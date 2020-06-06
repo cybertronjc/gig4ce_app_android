@@ -9,6 +9,9 @@ import android.graphics.drawable.ShapeDrawable
 import android.graphics.drawable.shapes.RoundRectShape
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.text.Html
+import android.text.SpannableString
+import android.text.style.UnderlineSpan
 import android.util.DisplayMetrics
 import android.view.Gravity
 import androidx.fragment.app.Fragment
@@ -63,6 +66,7 @@ class HomeScreenBottomSheetFragment : BaseFragment() {
         val displayMetrics = DisplayMetrics()
         activity?.windowManager?.getDefaultDisplay()?.getMetrics(displayMetrics)
         width = displayMetrics.widthPixels
+        initializeVerificationAlert()
         initializeUpcomingGigBottomSheet()
         initializeFeaturesBottomSheet()
         initializeLearningBottomSheet()
@@ -71,8 +75,16 @@ class HomeScreenBottomSheetFragment : BaseFragment() {
         listener()
     }
 
+    private fun initializeVerificationAlert() {
+        var clickhere :String ="Click here";
+        var content :SpannableString= SpannableString(clickhere);
+        content.setSpan(UnderlineSpan(), 0, content.length, 0);
+        kyc_tv.text = Html.fromHtml( "Kyc Verification is not done , <font color='#060606'><u>Click here</u></font> to  complete.")
+        video_resume_tv.text = Html.fromHtml( "Your Video resume is Pending , <font color='#060606'><u>Click here</u></font> to  complete.")
+    }
+
     private fun listener() {
-        kyc_ll.setOnClickListener() {
+        kyc_tv.setOnClickListener() {
             navigate(R.id.verification)
         }
         video_resume.setOnClickListener() {

@@ -3,6 +3,7 @@ package com.gigforce.app.modules.profile
 import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
+import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +14,7 @@ import android.widget.NumberPicker
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModel
 import com.gigforce.app.R
@@ -128,5 +130,10 @@ abstract class ProfileBaseBottomSheetFragment: BottomSheetDialogFragment() {
 
         val alertDialog: AlertDialog = alertDialogBuilder.create()
         alertDialog.show()
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setStyle(DialogFragment.STYLE_NORMAL, R.style.DialogStyle)
     }
 }

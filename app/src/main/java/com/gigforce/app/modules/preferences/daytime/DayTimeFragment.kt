@@ -47,7 +47,7 @@ class DayTimeFragment : BaseFragment() {
 
     private fun initializeViews() {
         preferencesDataModel = viewModel.getPreferenceDataModel()
-        preferredDistanceSwitch.setChecked(preferencesDataModel.isweekdaysenabled)
+        workFromHomeSwitch.setChecked(preferencesDataModel.isweekdaysenabled)
         arroundCurrentAddSwitch.setChecked(preferencesDataModel.isweekendenabled)
         reflectForWeekdays()
         reflectForWeekends()
@@ -102,11 +102,11 @@ class DayTimeFragment : BaseFragment() {
         textView55.setOnClickListener(View.OnClickListener { navigate(R.id.weekEndFragment) })
         imageView10.setOnClickListener(View.OnClickListener { activity?.onBackPressed() })
         // weekday listener
-        preferredDistanceSwitch.setOnClickListener{ view->
+        workFromHomeSwitch.setOnClickListener{ view->
             var isChecked = (view as Switch).isChecked
             if(isChecked && preferencesDataModel.selecteddays.size == 0){
                 navigate(R.id.weekDayFragment)
-                preferredDistanceSwitch.setChecked(false)
+                workFromHomeSwitch.setChecked(false)
             }
             else
             viewModel.setIsWeekdays(isChecked)

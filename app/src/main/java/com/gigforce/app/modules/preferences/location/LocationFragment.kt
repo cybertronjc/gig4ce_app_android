@@ -59,7 +59,7 @@ class LocationFragment : BaseFragment() {
     private fun initializeViews() {
         preferenceDataModel = viewModel.getPreferenceDataModel()
         profileDataModel = viewModel.getProfileDataModel()
-        preferredDistanceSwitch.isChecked = preferenceDataModel.isWorkFromHome
+        workFromHomeSwitch.isChecked = preferenceDataModel.isWorkFromHome
         textView79.text = convertAddressToString(viewModel.getPermanentAddress())
         textView81.text = convertAddressToString(viewModel.getCurrentAddress())
         if (viewModel.getCurrentAddress()!!.isEmpty()) {
@@ -83,8 +83,10 @@ class LocationFragment : BaseFragment() {
     private fun listener() {
         imageView10.setOnClickListener(View.OnClickListener { activity?.onBackPressed() })
         imageview_plus.setOnClickListener(View.OnClickListener {
-            if (viewModel.getCurrentAddress()!!.isEmpty())
-                showToast(getString(R.string.add_current_address))
+            if (viewModel.getCurrentAddress()!!.isEmpty()) {
+                navigate(R.id.preferredLocationFragment)
+                navigate(R.id.currentAddressEditFragment)
+            }
             else navigate(R.id.preferredLocationFragment)
         })
         permanentAddLayout.setOnClickListener(View.OnClickListener {
@@ -95,8 +97,11 @@ class LocationFragment : BaseFragment() {
             if (profileDataModel.address.current.isEmpty()) navigate(R.id.currentAddressEditFragment)
             else navigate(R.id.currentAddressViewFragment)
         })
-        preferredDistanceSwitch.setOnClickListener { view ->
+        workFromHomeSwitch.setOnClickListener { view ->
             var isChecked = (view as Switch).isChecked
+            if(viewModel.getCurrentAddress()!!.isEmpty()){
+                navigate(R.id.currentAddressEditFragment)
+            }else
             viewModel.setWorkFromHome(isChecked)
         }
         arroundCurrentAddressLayout.setOnClickListener { view ->

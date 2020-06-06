@@ -42,7 +42,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/textView101"
+        android:id="@+id/preferredNoOfDays"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
@@ -62,8 +62,8 @@
             android:hint="@string/addline1"
             android:textSize="12sp"
             android:layout_marginBottom="4dp"
-            app:layout_constraintStart_toStartOf="@+id/textView101"
-            app:layout_constraintTop_toTopOf="@+id/textView101" />
+            app:layout_constraintStart_toStartOf="@+id/preferredNoOfDays"
+            app:layout_constraintTop_toTopOf="@+id/preferredNoOfDays" />
 
         <EditText
             android:id="@+id/line2"
@@ -75,7 +75,7 @@
             android:hint="@string/addLine2"
             android:layout_marginBottom="4dp"
             android:textSize="12sp"
-            app:layout_constraintStart_toStartOf="@+id/textView101"
+            app:layout_constraintStart_toStartOf="@+id/preferredNoOfDays"
             app:layout_constraintTop_toBottomOf="@+id/line1" />
 
         <EditText
@@ -87,7 +87,7 @@
             android:hint="@string/area"
             android:textSize="12sp"
             android:layout_marginBottom="4dp"
-            app:layout_constraintStart_toStartOf="@+id/textView101"
+            app:layout_constraintStart_toStartOf="@+id/preferredNoOfDays"
             app:layout_constraintTop_toBottomOf="@+id/line2" />
 
         <EditText
@@ -100,7 +100,7 @@
             android:backgroundTint="@color/setting_bg"
             android:hint="@string/location"
             android:layout_marginBottom="4dp"
-            app:layout_constraintEnd_toEndOf="@+id/textView101"
+            app:layout_constraintEnd_toEndOf="@+id/preferredNoOfDays"
             app:layout_constraintTop_toBottomOf="@+id/line2" />
 
         <EditText
@@ -112,7 +112,7 @@
             android:hint="@string/state"
             android:textSize="12sp"
             android:layout_marginBottom="4dp"
-            app:layout_constraintStart_toStartOf="@+id/textView101"
+            app:layout_constraintStart_toStartOf="@+id/preferredNoOfDays"
             app:layout_constraintTop_toBottomOf="@+id/area" />
 
         <EditText
@@ -125,7 +125,7 @@
             android:backgroundTint="@color/setting_bg"
             android:hint="@string/pincode"
             android:layout_marginBottom="4dp"
-            app:layout_constraintEnd_toEndOf="@+id/textView101"
+            app:layout_constraintEnd_toEndOf="@+id/preferredNoOfDays"
             app:layout_constraintTop_toBottomOf="@+id/area" />
 
         <ImageView
@@ -162,11 +162,11 @@
         android:layout_marginRight="26dp"
         android:text="@string/save"
         android:textSize="14sp"
-        android:textColor="@color/colorLightAccent"
+        android:textColor="@color/colorPrimary"
         app:layout_constraintBottom_toTopOf="@+id/cancel_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:strokeColor="@color/colorLightAccent"
+        app:strokeColor="@color/colorPrimary"
         app:strokeWidth="2dp"
         app:backgroundTint="@color/setting_bg"/>
 

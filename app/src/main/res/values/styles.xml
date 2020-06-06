@@ -20,6 +20,12 @@
         <item name="colorAccent">@color/colorPrimary</item>
         <item name="android:letterSpacing">0</item>
     </style>
+    <style name="Theme.checkbox" parent="Theme.AppCompat.Light">
+        <item name="colorPrimary">@color/colorAccent</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorPrimary</item>
+        <item name="android:letterSpacing">0</item>
+    </style>
     <style name="FieldtextLatoRegularGrey12">
         <item name="android:textSize">12sp</item>
         <item name="android:letterSpacing">0.05</item>
@@ -340,5 +346,12 @@
         <item name="android:gravity">center</item>
         <item name="android:letterSpacing">0.04</item>
     </style>
-
+    <style name="customRatingBar" parent="android:style/Widget.Material.RatingBar.Small">
+        <item name="colorControlActivated">#ffc107</item>
+    </style>
+    <style name="DialogStyle" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:colorBackground">@android:color/transparent</item>
+        <item name="android:windowSoftInputMode">adjustResize</item>
+    </style>
 </resources>

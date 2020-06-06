@@ -66,7 +66,7 @@
 
 
     <Switch
-        android:id="@+id/preferredDistanceSwitch"
+        android:id="@+id/workFromHomeSwitch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="24dp"
@@ -76,7 +76,7 @@
         app:layout_constraintTop_toTopOf="@+id/textView49" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/textView101"
+        android:id="@+id/preferredNoOfDays"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
@@ -85,92 +85,96 @@
         app:layout_constraintTop_toBottomOf="@+id/textView49"
          >
         <ImageView
-            android:id="@+id/imageView11"
+            android:id="@+id/editCurrentLocation"
             android:layout_width="16dp"
             android:layout_height="16dp"
             android:layout_marginEnd="23dp"
             android:layout_marginTop="19dp"
-            android:src="@drawable/ic_edit"
-            app:layout_constraintEnd_toEndOf="@+id/textView101"
-            app:layout_constraintTop_toTopOf="@+id/textView101"
+            android:src="@drawable/ic_pencil_edit"
+            app:layout_constraintEnd_toEndOf="@+id/preferredNoOfDays"
+            app:layout_constraintTop_toTopOf="@+id/preferredNoOfDays"
             />
 
 
         <TextView
             android:id="@+id/line1view"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/first_line"
+            android:layout_marginStart="54dp"
             android:layout_marginTop="19dp"
-            android:layout_marginStart="49dp"
-            android:layout_marginEnd="100dp"
-            app:layout_constraintStart_toStartOf="@+id/textView101"
-            app:layout_constraintTop_toTopOf="@+id/textView101"
-            />
+            android:text="@string/first_line"
+            android:textSize="14sp"
+            android:textColor="#000000"
+            android:letterSpacing="-0.01"
+            app:layout_constraintStart_toStartOf="@+id/preferredNoOfDays"
+            app:layout_constraintTop_toTopOf="@+id/preferredNoOfDays" />
 
         <TextView
             android:id="@+id/line2view"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/second_line"
-            android:layout_marginTop="2dp"
-            android:layout_marginStart="49dp"
-            android:layout_marginEnd="100dp"
-            app:layout_constraintStart_toStartOf="@+id/textView101"
-            app:layout_constraintTop_toBottomOf="@+id/line1view"
-            />
+            android:textSize="14sp"
+            android:textColor="#000000"
+            android:letterSpacing="-0.01"
+            app:layout_constraintStart_toStartOf="@+id/line1view"
+            app:layout_constraintTop_toBottomOf="@+id/line1view" />
 
         <TextView
             android:id="@+id/areaview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/area"
-            android:backgroundTint="@color/setting_bg"
+            android:layout_marginStart="54dp"
             android:layout_marginTop="2dp"
-            android:layout_marginStart="49dp"
-            android:layout_marginEnd="100dp"
-            app:layout_constraintStart_toStartOf="@+id/textView101"
-            app:layout_constraintTop_toBottomOf="@+id/line2view"
-            />
+            android:backgroundTint="@color/setting_bg"
+            android:text="@string/area"
+            android:textSize="14sp"
+            android:textColor="#000000"
+            android:letterSpacing="-0.01"
+            app:layout_constraintStart_toStartOf="@+id/preferredNoOfDays"
+            app:layout_constraintTop_toBottomOf="@+id/line2view" />
 
         <TextView
             android:id="@+id/cityview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/city"
-            android:backgroundTint="@color/setting_bg"
+            android:layout_marginStart="54dp"
             android:layout_marginTop="2dp"
-            android:layout_marginStart="49dp"
-            android:layout_marginEnd="100dp"
-            app:layout_constraintStart_toStartOf="@+id/textView101"
-            app:layout_constraintTop_toBottomOf="@+id/areaview"
-            />
+            android:backgroundTint="@color/setting_bg"
+            android:text="@string/city"
+            android:textSize="14sp"
+            android:textColor="#000000"
+            android:letterSpacing="-0.01"
+            app:layout_constraintStart_toStartOf="@+id/preferredNoOfDays"
+            app:layout_constraintTop_toBottomOf="@+id/areaview" />
 
         <TextView
             android:id="@+id/stateview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/state"
-            android:backgroundTint="@color/setting_bg"
+            android:layout_marginStart="54dp"
             android:layout_marginTop="2dp"
-            android:layout_marginStart="49dp"
-            android:layout_marginEnd="100dp"
-            app:layout_constraintStart_toStartOf="@+id/textView101"
-            app:layout_constraintTop_toBottomOf="@+id/cityview"
-            />
+            android:backgroundTint="@color/setting_bg"
+            android:text="@string/state"
+            android:textSize="14sp"
+            android:textColor="#000000"
+            android:letterSpacing="-0.01"
+            app:layout_constraintStart_toStartOf="@+id/preferredNoOfDays"
+            app:layout_constraintTop_toBottomOf="@+id/cityview" />
 
         <TextView
             android:id="@+id/pincodeview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="54dp"
             android:layout_marginTop="2dp"
-            android:layout_marginStart="49dp"
-            android:layout_marginEnd="100dp"
             android:backgroundTint="@color/setting_bg"
             android:text="@string/pincode"
-            app:layout_constraintStart_toStartOf="@+id/textView101"
-            app:layout_constraintTop_toBottomOf="@+id/stateview"
-            />
+            android:textSize="14sp"
+            android:textColor="#000000"
+            android:letterSpacing="-0.01"
+            app:layout_constraintStart_toStartOf="@+id/preferredNoOfDays"
+            app:layout_constraintTop_toBottomOf="@+id/stateview"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
     
 

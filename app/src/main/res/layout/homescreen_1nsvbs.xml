@@ -98,8 +98,8 @@
         android:elevation="20dp"
         android:clipToPadding="true"
         app:allowDragging="true"
-        app:halfOffset="170dp"
-        app:peekHeight="128dp"
+        app:halfOffset="350dp"
+        app:peekHeight="200dp"
         app:hideable="false"
         app:layout_behavior="com.riningan.widget.ExtendedBottomSheetBehavior">
 

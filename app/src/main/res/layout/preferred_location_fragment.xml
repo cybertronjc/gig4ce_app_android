@@ -31,10 +31,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="19dp"
-        android:fontFamily="@font/lato_bold"
+        android:fontFamily="@font/lato"
         android:text="@string/preferred_locations"
         android:textColor="@color/black"
         android:textSize="20sp"
+        android:letterSpacing="0"
         app:layout_constraintStart_toEndOf="@+id/imageView10"
         app:layout_constraintTop_toTopOf="@id/textView100"
         app:layout_constraintBottom_toBottomOf="@id/textView100" />
@@ -48,7 +49,7 @@
         app:layout_constraintTop_toBottomOf="@id/textView100" />
 
     <RadioButton
-        android:id="@+id/en"
+        android:id="@+id/city_radio_button"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/height_select_lang_item"
         android:layout_marginLeft="28dp"
@@ -78,16 +79,15 @@
         android:visibility="gone"/>
 
     <ImageView
-        android:id="@+id/imageView11"
+        android:id="@+id/editCurrentLocation"
         android:layout_width="16dp"
         android:layout_height="16dp"
         android:layout_marginEnd="23dp"
-        android:src="@drawable/ic_edit"
+        android:src="@drawable/ic_pencil_edit"
         app:layout_constraintBottom_toBottomOf="@+id/textView49"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/textView49"
         />
-
 
     <TextView
         android:id="@+id/textView33"
