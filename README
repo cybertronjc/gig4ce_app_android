@@ -1,8 +1,8 @@
-this is sprints/sprint9 branch
+this is sprints/sprint10 branch
 Please follow nomenclature:
 
 feature branch:
-features/sprint9/GFAPP-XYZ etc
+features/sprint10/GFAPP-XYZ etc
 
 delete multiple branches:
 git branch -r | awk -F/ '/\/PREFIX/{print $2}' | xargs -I {} git push origin :{}
