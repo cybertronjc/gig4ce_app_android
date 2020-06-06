@@ -34,6 +34,7 @@
         android:fontFamily="@font/lato"
         android:gravity="center"
         android:text="OKAY"
+        android:layout_marginBottom="24dp"
         android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

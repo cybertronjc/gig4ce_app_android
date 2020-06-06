@@ -63,6 +63,7 @@ class PreferredLocationFragment : BaseFragment() {
             var fragmentholder: Fragment? =
                 navHostFragment!!.childFragmentManager.fragments[navHostFragment!!.childFragmentManager.fragments.size - 1]
             if (!isCurrentAddressScreen(fragmentholder)) {
+                popFragmentFromStack(R.id.preferredLocationFragment)
             }
         }
     }
@@ -88,7 +89,7 @@ class PreferredLocationFragment : BaseFragment() {
         customialog?.setContentView(R.layout.custom_alert_3)
         val yesBtn = customialog?.findViewById(R.id.okay) as TextView
         yesBtn.setOnClickListener (View.OnClickListener {
-            popFragmentFromStack(R.id.currentAddressEditFragment)
+            navigate(R.id.currentAddressEditFragment)
             customialog.dismiss()
         })
         customialog?.show()

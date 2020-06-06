@@ -5,7 +5,6 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -41,9 +40,9 @@ class EarningFragment : BaseFragment() {
     private fun listener() {
         checkbox_monthly_constract.setOnCheckedChangeListener{buttonview,ischecked->
             if(ischecked)
-            monthly_expectation_constraintlayout.visibility = View.GONE
+            monthly_expectation_constraintlayout.visibility = View.VISIBLE
             else
-                monthly_expectation_constraintlayout.visibility = View.VISIBLE
+                monthly_expectation_constraintlayout.visibility = View.GONE
         }
         preferredNoOfDays.setOnClickListener{
             showDialogPreferredNoOfDays()
@@ -51,7 +50,8 @@ class EarningFragment : BaseFragment() {
     }
 
     private fun initializeViews() {
-        seekBarWithHint.setOtherView(seekBarDependentCanvas2)
+        seekBarWithHint.setOtherView(seekBarDependentCanvas2,true,"Rs")
+        seekBarWithHint1.setOtherView(seekBarDependentCanvas3,true,"Rs")
     }
 
     override fun onBackPressed(): Boolean {
@@ -60,7 +60,7 @@ class EarningFragment : BaseFragment() {
     }
 
     private fun confirmationForSavingData() {
-        showConfirmationDialog(" Are sure you want to change prefrences ?",
+        showConfirmationDialog("Are sure you want to change prefrences ?",
             object :ConfirmationDialogOnClickListener{
                 override fun clickedOnYes(dialog: Dialog?) {
                     saveEarningDataToDB()

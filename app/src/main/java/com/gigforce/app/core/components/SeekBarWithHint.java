@@ -70,11 +70,16 @@ public class SeekBarWithHint extends SeekBar {
         seekBarHintPaint.setTextAlign(Paint.Align.CENTER);
         seekBarHintPaint.setTextSize(40);
     }
-
+    Boolean preConcat = false;
+    String text = "";
+    public void setOtherView(SeekBarDependentCanvas otherView,Boolean preConcat,String text) {
+        this.otherView = otherView;
+        this.preConcat = preConcat;
+        this.text = text;
+    }
     public void setOtherView(SeekBarDependentCanvas otherView) {
         this.otherView = otherView;
     }
-
     int thumb_x = -1;
     int middle = -1;
     private Canvas canvas = null;
@@ -88,14 +93,17 @@ public class SeekBarWithHint extends SeekBar {
         thumb_x = (int) (((double) this.getProgress() / this.getMax()) * (double) this.getWidth()) + 10;
         middle = getHeight() / 2 + 4;
         if (this.otherView != null && this.canvas != null) {
-            String text = "";
+            String dataText = String.valueOf(getProgress());
+            if(preConcat) {
+              dataText = text + " "+dataText;
+            }else{
+                dataText = dataText + " " +text;
+            }
             if(String.valueOf(getProgress()).equals("0")) {
-                text = "  0 KM";
-                this.canvas.drawText(text, thumb_x+25, middle, seekBarHintPaint);
+                this.canvas.drawText(dataText, thumb_x+25, middle, seekBarHintPaint);
             }
             else {
-                text = String.valueOf(getProgress()) + " KM";
-                this.canvas.drawText(text, thumb_x, middle, seekBarHintPaint);
+                this.canvas.drawText(dataText, thumb_x, middle, seekBarHintPaint);
             }
         }
     }
