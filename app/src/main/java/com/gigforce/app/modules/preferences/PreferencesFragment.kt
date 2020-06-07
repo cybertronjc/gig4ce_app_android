@@ -37,6 +37,7 @@ class PreferencesFragment : BaseFragment() {
 
         const val DAY_TIME = 2;
         const val LOCATION = 3;
+        const val EARNING = 4;
         const val TITLE_OTHER = 5;
         const val LANGUAGE = 6;
         const val TITLE_SIGNOUT = 8;
@@ -194,11 +195,12 @@ class PreferencesFragment : BaseFragment() {
 
     private fun prefrencesItemSelect(position: Int) {
         if (position == DAY_TIME) navigate(R.id.dayTimeFragment)
-        if (position == TITLE_SIGNOUT) {
+        else if (position == TITLE_SIGNOUT) {
             logoutConfirmationDialog()
         }
-        if (position == LOCATION) navigate(R.id.locationFragment)
-        if (position == LANGUAGE) navigate(R.id.languagePreferenceFragment)
+        else if(position== EARNING) navigate(R.id.earningFragment)
+        else if (position == LOCATION) navigate(R.id.locationFragment)
+        else if (position == LANGUAGE) navigate(R.id.languagePreferenceFragment)
     }
 
     private fun logoutConfirmationDialog() {

@@ -15,6 +15,7 @@
     <color name="colorLigthSeparater">#e4e4e4</color>
     <color name="colorImportantText">#Df2966</color>
     <color name="red">#FF0000</color>
+    <color name="app_red">#E02020</color>
 
     <color name="setting_bg">#f7f7f7</color>
     <color name="gray_color">#6d7278</color>
@@ -52,4 +53,5 @@
     <color name="onboarding_rv_item_color_10">#10131415</color>
     <color name="onboarding_name_underline_color_20">#202e2f30</color>
     <color name="disabled_button_color">#888888</color>
+    <color name="cancelcolor">#979797</color>
 </resources>

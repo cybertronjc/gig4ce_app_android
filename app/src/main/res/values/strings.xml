@@ -54,8 +54,8 @@
 
     <!-- Profile main expanded page -->
     <string name="rating_text">Rating</string>
-    <string name="tasks_done_text">Tasks Done</string>
-    <string name="connections_text">Connections</string>
+    <string name="tasks_done_text">TASK DONE</string>
+    <string name="connections_text">CONNECTIONS</string>
     <string name="default_location_text">Location</string>
     <string name="default_distance_text">220KM away</string>
     <string name="education_card_education_text">Education</string>
@@ -256,7 +256,7 @@
 
     <string name="area">Area</string>
     <string name="permanent_address">Permanent Address</string>
-    <string name="address_proof_smalls">Address Proof</string>
+    <string name="address_proof_smalls">Adhaar Card</string>
     <string name="document_under_verification">Document Under Verification</string>
     <string name="cancel">CANCEL</string>
     <string name="save">SAVE</string>
@@ -285,4 +285,9 @@
     <string name="w_rs">Rs</string>
     <string name="w_transfer">Transfer</string>
     <string name="settings">Settings</string>
+    <string name="weekend">Weekend</string>
+    <string name="addline1">Address Line 1</string>
+    <string name="addLine2">Address Line 2</string>
+    <string name="preferred_distance">Preferred Distance</string>
+    <string name="earning">Earning</string>
 </resources>

@@ -50,7 +50,7 @@
         tools:layout_editor_absoluteX="-16dp" />
 
     <ImageView
-        android:id="@+id/imageView11"
+        android:id="@+id/editCurrentLocation"
         android:layout_width="20dp"
         android:layout_height="21dp"
         android:layout_marginLeft="24dp"
@@ -87,7 +87,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView50" />
 
     <Switch
-        android:id="@+id/switch1"
+        android:id="@+id/workFromHomeSwitch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="24dp"
@@ -103,7 +103,7 @@
         android:background="@color/gray_color"
         android:layout_marginRight="13dp"
         app:layout_constraintBottom_toBottomOf="@+id/textView49"
-        app:layout_constraintEnd_toStartOf="@+id/switch1"
+        app:layout_constraintEnd_toStartOf="@+id/workFromHomeSwitch"
         app:layout_constraintTop_toBottomOf="@+id/textView47" />
 
     <View
@@ -161,7 +161,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView56" />
 
     <Switch
-        android:id="@+id/switch2"
+        android:id="@+id/arroundCurrentAddSwitch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="24dp"
@@ -177,6 +177,6 @@
         android:background="@color/gray_color"
         android:layout_marginRight="13dp"
         app:layout_constraintBottom_toBottomOf="@+id/textView55"
-        app:layout_constraintEnd_toStartOf="@+id/switch2"
+        app:layout_constraintEnd_toStartOf="@+id/arroundCurrentAddSwitch"
         app:layout_constraintTop_toTopOf="@+id/textView55" />
 </androidx.constraintlayout.widget.ConstraintLayout>

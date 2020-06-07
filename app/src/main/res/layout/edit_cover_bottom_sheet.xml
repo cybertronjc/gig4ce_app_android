@@ -1,64 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@drawable/bg_bottom_sheet">
 
         <LinearLayout
+            android:id="@+id/linearLayout2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
             android:layout_marginEnd="32dp"
             android:isScrollContainer="true"
             android:orientation="vertical"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" >
-            <TextView
-                android:id="@+id/form_error"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/bs_top_margin"
-                android:textSize="14sp"
-                android:textColor="#d4e02020"
-                android:letterSpacing="0.05"
-                android:visibility="gone"
-                android:text="@string/cover_error_text" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-            <TextView
-                android:id="@+id/bio_text"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/bs_top_margin"
-                android:text="@string/bio_name"
-                style= "@style/BsHeadingBold12" />
-            <EditText
-                android:id="@+id/bio"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:maxLength="150"
-                android:ems="10"
-                android:inputType="textMultiLine"
-                android:hint="@string/bio_hint_text" />
+                android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/tags_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="@string/add_tags"
-                style="@style/LatoBold14"/>
-            <com.google.android.material.chip.ChipGroup
-                android:id="@+id/tags"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/form_error"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/bs_top_margin"
+                        android:letterSpacing="0.05"
+                        android:text="@string/cover_error_text"
+                        android:textColor="#d4e02020"
+                        android:textSize="14sp"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/bio_text"
+                        style="@style/BsHeadingBold12"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/bs_top_margin"
+                        android:text="@string/bio_name" />
+
+                    <EditText
+                        android:id="@+id/bio"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:ems="10"
+                        android:hint="@string/bio_hint_text"
+                        android:inputType="textMultiLine"
+                        android:maxLength="150" />
+
+                    <TextView
+                        android:id="@+id/tags_text"
+                        style="@style/LatoBold14"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="@string/add_tags" />
+
+                    <com.google.android.material.chip.ChipGroup
+                        android:id="@+id/tags"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp" />
+                </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/tag_suggestions_rv"
+                    android:layout_width="150dp"
+                    android:layout_height="130dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/white"
+                    android:elevation="8dp"
+                    android:padding="4dp"
+                    android:visibility="gone"/>
+            </RelativeLayout>
+
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -69,37 +98,36 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/tag_holder"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                    app:boxStrokeWidth="0dp"
-                    app:boxBackgroundMode="outline"
                     android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_weight="6"
                     android:baselineAligned="true"
-                    android:layout_height="wrap_content"
-                    app:endIconDrawable="@drawable/ic_down"
-                    app:boxBackgroundColor="@color/white">
+                    app:boxBackgroundColor="@color/white"
+                    app:boxBackgroundMode="outline"
+                    app:boxStrokeWidth="0dp"
+                    app:endIconDrawable="@drawable/ic_down">
 
                     <AutoCompleteTextView
                         android:id="@+id/add_tag_new_tag"
-                        android:paddingStart="3dp"
-                        android:dropDownVerticalOffset = "-100dp"
-                        android:dropDownAnchor="@id/tags"
-                        android:dropDownHeight="200dp"
-                        android:longClickable="false"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/new_tag_hint"/>
+                        android:dropDownAnchor="@id/tags"
+                        android:dropDownHeight="0dp"
+                        android:hint="@string/new_tag_hint"
+                        android:longClickable="false"
+                        android:paddingStart="3dp" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/add_button"
-                    android:layout_gravity="center_vertical"
                     android:layout_width="wrap_content"
                     android:layout_height="50dp"
+                    android:layout_gravity="center_vertical"
                     android:layout_weight="1"
+                    android:textColor="@color/colorPrimary"
                     android:text="@string/add" />
             </LinearLayout>
-
 
 
             <LinearLayout
@@ -107,31 +135,34 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:orientation="horizontal">
+
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/cancel_button"
+                    style="?attr/materialButtonOutlinedStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/cancel_text"
                     android:layout_marginStart="8dp"
                     android:layout_marginEnd="8dp"
-                    android:textColor="@color/gray_color"
-                    style="?attr/materialButtonOutlinedStyle"/>
+                    android:layout_weight="1"
+                    android:text="@string/cancel_text"
+                    android:textColor="@color/gray_color" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/save_button"
+                    style="?attr/materialButtonOutlinedStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/save_text"
                     android:layout_marginStart="8dp"
                     android:layout_marginEnd="8dp"
-                    app:strokeColor="@color/colorPrimary"
-                    style="?attr/materialButtonOutlinedStyle"  />
+                    android:layout_weight="1"
+                    android:text="@string/save_text"
+                    android:textColor="@color/colorPrimary"
+                    app:strokeColor="@color/colorPrimary" />
             </LinearLayout>
 
 
         </LinearLayout>
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

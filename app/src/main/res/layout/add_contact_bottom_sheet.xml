@@ -4,7 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_bottom_sheet">
 
     <TextView
         android:id="@+id/textView22"
@@ -50,6 +51,8 @@
         android:textAlignment="textStart"
         app:icon="@drawable/ic_add"
         style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
+        android:textColor="@color/colorPrimary"
+        app:iconTint="@color/colorPrimary"
         app:layout_constraintStart_toStartOf="@+id/add_contact_email"
         app:layout_constraintTop_toBottomOf="@+id/add_contact_email" />
 

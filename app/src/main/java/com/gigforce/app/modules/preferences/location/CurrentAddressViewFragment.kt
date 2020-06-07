@@ -40,7 +40,7 @@ class CurrentAddressViewFragment: BaseFragment() {
     }
 
     private fun observePreferenceData() {
-        viewModel.preferenceDataModel.observe(this, Observer { preferenceData ->
+        viewModel.preferenceDataModel.observe(viewLifecycleOwner, Observer { preferenceData ->
             viewModel.setPreferenceDataModel(preferenceData)
             initializeViews()
         })
@@ -48,7 +48,7 @@ class CurrentAddressViewFragment: BaseFragment() {
     }
 
     private fun observeProfileData() {
-        viewModel.profileDataModel.observe(this, Observer { profileData ->
+        viewModel.userProfileData.observe(viewLifecycleOwner, Observer { profileData ->
             viewModel.setProfileDataModel(profileData)
             initializeViews()
         })
@@ -62,17 +62,17 @@ class CurrentAddressViewFragment: BaseFragment() {
         var currentAddress = profileDataModel.address.current
         var permanentAddress =  profileDataModel.address.home
         populateAddress(currentAddress)
-        switch1.isEnabled = !permanentAddress.isEmpty()
-        switch1.isChecked = currentAddress.isSame(permanentAddress)
+        workFromHomeSwitch.isEnabled = !permanentAddress.isEmpty()
+        workFromHomeSwitch.isChecked = currentAddress.isSame(permanentAddress)
     }
 
     private fun populateAddress(address: AddressModel){
-        textView1.text = address.firstLine
-        textView2.text = address.secondLine
-        textView3.text = address.area
-        textView4.text = address.city
-        textView5.text = address.state
-        textView6.text = address.pincode
+        line1view.text = address.firstLine
+        line2view.text = address.secondLine
+        areaview.text = address.area
+        cityview.text = address.city
+        stateview.text = address.state
+        pincodeview.text = address.pincode
 
     }
 
@@ -85,7 +85,7 @@ class CurrentAddressViewFragment: BaseFragment() {
     }
 
     private fun listener() {
-        imageView11.setOnClickListener {
+        editCurrentLocation.setOnClickListener {
             navigate(R.id.currentAddressEditFragment)
         }
 

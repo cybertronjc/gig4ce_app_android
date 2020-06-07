@@ -61,7 +61,7 @@ class Login : BaseFragment() {
         if (getSharedData(AppConstants.INTRO_COMPLETE, null) == null) {
             navigateWithAllPopupStack(R.id.authFlowFragment)
         } else {
-            viewModel.activity = this.activity!!
+            viewModel.activity = this.requireActivity()
             otp_mobile_number.setText(mobile_number)
             getAllEarlierMobileNumbers()
             listeners()
@@ -129,11 +129,13 @@ class Login : BaseFragment() {
 
         login_button.setOnClickListener {
             login_button.setEnabled(false)
-
+            progressBar.visibility = View.VISIBLE
             Handler().postDelayed(Runnable {
                 // This method will be executed once the timer is over
-                if (login_button != null)
+                if (login_button != null) {
                     login_button.setEnabled(true)
+                    progressBar.visibility = View.GONE
+                }
             }, 3000) // se
             doActionOnClick()
         }
@@ -185,7 +187,7 @@ class Login : BaseFragment() {
                 deviceMobileNos.add(oldDeviceMobileNosList.get(i))
             }
             val adapter: ArrayAdapter<String> = ArrayAdapter<String>(
-                activity!!,
+                requireActivity(),
                 android.R.layout.select_dialog_item,
                 deviceMobileNos
             )

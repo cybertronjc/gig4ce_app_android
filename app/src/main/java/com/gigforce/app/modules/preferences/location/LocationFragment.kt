@@ -42,7 +42,7 @@ class LocationFragment : BaseFragment() {
     }
 
     private fun observePreferenceData() {
-        viewModel.preferenceDataModel.observe(this, Observer { preferenceData ->
+        viewModel.preferenceDataModel.observe(viewLifecycleOwner, Observer { preferenceData ->
             viewModel.setPreferenceDataModel(preferenceData)
             initializeViews()
         })
@@ -50,7 +50,7 @@ class LocationFragment : BaseFragment() {
     }
 
     private fun observeProfileData() {
-        viewModel.profileDataModel.observe(this, Observer { profileData ->
+        viewModel.userProfileData.observe(viewLifecycleOwner, Observer { profileData ->
             viewModel.setProfileDataModel(profileData)
             initializeViews()
         })
@@ -59,16 +59,17 @@ class LocationFragment : BaseFragment() {
     private fun initializeViews() {
         preferenceDataModel = viewModel.getPreferenceDataModel()
         profileDataModel = viewModel.getProfileDataModel()
-        switch1.isChecked = preferenceDataModel.isWorkFromHome
+        workFromHomeSwitch.isChecked = preferenceDataModel.isWorkFromHome
         textView79.text = convertAddressToString(viewModel.getPermanentAddress())
         textView81.text = convertAddressToString(viewModel.getCurrentAddress())
         if (viewModel.getCurrentAddress()!!.isEmpty()) {
-            switch2.isEnabled = false
-            textView85.text = getString(R.string.add_current_address)
+            arroundCurrentAddSwitch.isEnabled = false
+            preferredDistanceTV.text = getString(R.string.add_current_address)
         } else {
-            switch2.isEnabled = true
-            textView85.text = getString(R.string.around_current_address)
+            arroundCurrentAddSwitch.isEnabled = true
+            preferredDistanceTV.text = viewModel.getCurrentAddress()?.preferred_distance.toString()+" KM Around the Current Address"
         }
+        arroundCurrentAddSwitch.isChecked = viewModel.getCurrentAddress()?.preferredDistanceActive!!
     }
 
     private fun convertAddressToString(address: AddressModel?): String {
@@ -82,21 +83,41 @@ class LocationFragment : BaseFragment() {
     private fun listener() {
         imageView10.setOnClickListener(View.OnClickListener { activity?.onBackPressed() })
         imageview_plus.setOnClickListener(View.OnClickListener {
-            if (viewModel.getCurrentAddress()!!.isEmpty())
-                showToast(getString(R.string.add_current_address))
+            if (viewModel.getCurrentAddress()!!.isEmpty()) {
+                navigate(R.id.preferredLocationFragment)
+                navigate(R.id.currentAddressEditFragment)
+            }
             else navigate(R.id.preferredLocationFragment)
         })
-        constraintLayout4.setOnClickListener(View.OnClickListener {
+        permanentAddLayout.setOnClickListener(View.OnClickListener {
             if (profileDataModel.address.home.isEmpty()) navigate(R.id.permanentAddressEditFragment)
             else navigate(R.id.permanentAddressViewFragment)
         })
-        constraintLayout5.setOnClickListener(View.OnClickListener {
+        currentAddLayout.setOnClickListener(View.OnClickListener {
             if (profileDataModel.address.current.isEmpty()) navigate(R.id.currentAddressEditFragment)
             else navigate(R.id.currentAddressViewFragment)
         })
-        switch1.setOnClickListener { view ->
+        workFromHomeSwitch.setOnClickListener { view ->
             var isChecked = (view as Switch).isChecked
+            if(viewModel.getCurrentAddress()!!.isEmpty()){
+                navigate(R.id.currentAddressEditFragment)
+            }else
             viewModel.setWorkFromHome(isChecked)
+        }
+        arroundCurrentAddressLayout.setOnClickListener { view ->
+            if(!viewModel.getCurrentAddress()!!.isEmpty()){
+                navigate(R.id.arrountCurrentAddress)
+            }
+            else{
+                showToast("Please add current address")
+            }
+        }
+        arroundCurrentAddSwitch.setOnClickListener { view ->
+            var isChecked = (view as Switch).isChecked
+            if(viewModel.getCurrentAddress()?.preferred_distance!=0)
+            viewModel.setCurrentAddressPreferredDistanceActive(isChecked)
+            else
+                navigate(R.id.arrountCurrentAddress)
         }
     }
 

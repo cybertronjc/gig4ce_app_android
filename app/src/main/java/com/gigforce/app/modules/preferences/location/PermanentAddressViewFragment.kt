@@ -1,7 +1,6 @@
 package com.gigforce.app.modules.preferences.location
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -40,7 +39,7 @@ class PermanentAddressViewFragment : BaseFragment() {
     }
 
     private fun observePreferenceData() {
-        viewModel.preferenceDataModel.observe(this, Observer { preferenceData ->
+        viewModel.preferenceDataModel.observe(viewLifecycleOwner, Observer { preferenceData ->
             viewModel.setPreferenceDataModel(preferenceData)
             initializeViews()
         })
@@ -48,7 +47,7 @@ class PermanentAddressViewFragment : BaseFragment() {
     }
 
     private fun observeProfileData() {
-        viewModel.profileDataModel.observe(this, Observer { profileData ->
+        viewModel.userProfileData.observe(viewLifecycleOwner, Observer { profileData ->
             viewModel.setProfileDataModel(profileData)
             initializeViews()
         })
@@ -64,17 +63,17 @@ class PermanentAddressViewFragment : BaseFragment() {
     }
 
     private fun populateAddress(address: AddressModel){
-        textView1.text = address.firstLine
-        textView2.text = address.secondLine
-        textView3.text = address.area
-        textView4.text = address.city
-        textView5.text = address.state
-        textView6.text = address.pincode
+        line1view.text = address.firstLine
+        line2view.text = address.secondLine
+        areaview.text = address.area
+        cityview.text = address.city
+        stateview.text = address.state
+        pincodeview.text = address.pincode
 
     }
 
     private fun listener() {
-        imageView11.setOnClickListener {
+        editCurrentLocation.setOnClickListener {
             navigate(R.id.permanentAddressEditFragment)
         }
     }

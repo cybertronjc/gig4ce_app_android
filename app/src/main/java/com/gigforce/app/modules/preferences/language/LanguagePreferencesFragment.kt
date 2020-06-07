@@ -57,6 +57,7 @@ class LanguagePreferencesFragment : BaseFragment() {
                 saveSharedData(AppConstants.APP_LANGUAGE_NAME,radioButton.text.toString())
                 viewModel.saveLanguageToFirebase(radioButton.text.toString(),radioButton.hint.toString())
             })
+        imageView10.setOnClickListener(View.OnClickListener { activity?.onBackPressed() })
     }
 
     private fun initializer() {

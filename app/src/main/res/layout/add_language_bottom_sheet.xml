@@ -4,7 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_bottom_sheet">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -71,7 +72,7 @@
             android:text="@string/add_language_writing_level" />
 
         <SeekBar
-            android:id="@+id/add_language_writing_level"
+            android:id="@+id/arround_current_add_seekbar"
             android:progressTint="@color/colorPrimary"
             android:thumbTint="@color/colorPrimary"
             android:layout_width="match_parent"
@@ -86,6 +87,8 @@
             android:text="@string/add_more_text"
             android:textAlignment="textStart"
             app:icon="@drawable/ic_add"
+            android:textColor="@color/colorPrimary"
+            app:iconTint="@color/colorPrimary"
             style="@style/Widget.MaterialComponents.Button.TextButton.Icon" />
 
         <LinearLayout
@@ -113,6 +116,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
                 app:strokeColor="@color/colorPrimary"
+                android:textColor="@color/colorPrimary"
                 style="?attr/materialButtonOutlinedStyle"  />
         </LinearLayout>
     </LinearLayout>

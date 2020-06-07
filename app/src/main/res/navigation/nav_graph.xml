@@ -360,6 +360,11 @@
         android:label="LocationFragment" />
 
     <fragment
+        android:id="@+id/earningFragment"
+        android:name="com.gigforce.app.modules.preferences.earnings.EarningFragment"
+        android:label="EarningFragment" />
+
+    <fragment
         android:id="@+id/languagePreferenceFragment"
         android:name="com.gigforce.app.modules.preferences.language.LanguagePreferencesFragment"
         android:label="LanguagePreferenceFragment" />
@@ -383,6 +388,10 @@
         android:id="@+id/permanentAddressViewFragment"
         android:name="com.gigforce.app.modules.preferences.location.PermanentAddressViewFragment"
         android:label="PermanentAddressViewFragment" />
+    <fragment
+        android:id="@+id/arrountCurrentAddress"
+        android:name="com.gigforce.app.modules.preferences.location.AroundCurrentAddressFragment"
+        android:label="ArroundCurrentAddressFragment" />
     <fragment
         android:id="@+id/walletBalancePage"
         android:name="com.gigforce.app.modules.wallet.WalletBalancePage"

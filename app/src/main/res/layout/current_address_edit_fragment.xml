@@ -7,178 +7,190 @@
     android:background="@color/setting_bg"
     tools:context=".modules.preferences.location.CurrentAddressEditFragment">
 
-    <View
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/textView100"
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:background="@color/white"
+        android:layout_marginTop="21dp"
         app:layout_constraintTop_toTopOf="parent"
-        />
+        >
+        <ImageView
+            android:id="@+id/imageView10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:outlineSpotShadowColor="@color/black"
+            android:src="@drawable/ic_arrow_back_black"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/textView100"
+            app:layout_constraintBottom_toBottomOf="@id/textView100"/>
 
-    <ImageView
-        android:id="@+id/imageView10"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:outlineSpotShadowColor="@color/black"
-        android:src="@drawable/ic_arrow_back_black"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/textView100"
-        app:layout_constraintBottom_toBottomOf="@id/textView100"/>
+        <TextView
+            android:id="@+id/textView46"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="19dp"
+            android:fontFamily="@font/lato_bold"
+            android:text="@string/current_address"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            app:layout_constraintStart_toEndOf="@+id/imageView10"
+            app:layout_constraintTop_toTopOf="@id/textView100"
+            app:layout_constraintBottom_toBottomOf="@id/textView100" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <TextView
-        android:id="@+id/textView46"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="19dp"
-        android:fontFamily="@font/lato_bold"
-        android:text="@string/current_address"
-        android:textColor="@color/black"
-        android:textSize="20sp"
-        app:layout_constraintStart_toEndOf="@+id/imageView10"
-        app:layout_constraintTop_toTopOf="@id/textView100"
-        app:layout_constraintBottom_toBottomOf="@id/textView100" />
 
-    <View
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/textView49"
         android:layout_width="match_parent"
         android:layout_height="70dp"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="24dp"
         android:background="@color/white"
-        app:layout_constraintTop_toBottomOf="@id/textView100" />
+        app:layout_constraintTop_toBottomOf="@id/textView100" >
+        <TextView
+            android:id="@+id/textView50"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/same_as_permanent_address"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            android:layout_marginStart="26dp"
+            android:fontFamily="@font/lato_bold"
+            app:layout_constraintBottom_toBottomOf="@+id/textView49"
+            app:layout_constraintStart_toStartOf="@+id/textView49"
+            app:layout_constraintTop_toTopOf="@+id/textView49" />
 
 
-    <TextView
-        android:id="@+id/textView50"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/same_as_permanent_address"
-        android:textColor="@color/black"
-        android:textSize="14sp"
-        android:layout_marginStart="63dp"
-        android:fontFamily="@font/lato"
-        app:layout_constraintBottom_toBottomOf="@+id/textView49"
-        app:layout_constraintStart_toStartOf="@+id/textView49"
-        app:layout_constraintTop_toTopOf="@+id/textView49" />
+        <Switch
+            android:id="@+id/workFromHomeSwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="24dp"
+            android:theme="@style/Theme.switchButton"
+            app:layout_constraintBottom_toBottomOf="@+id/textView49"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/textView49" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-    <Switch
-        android:id="@+id/switch1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="24dp"
-        app:layout_constraintBottom_toBottomOf="@+id/textView49"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/textView49" />
 
-    <View
-        android:id="@+id/textView101"
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/preferredNoOfDays"
         android:layout_width="match_parent"
         android:layout_height="206dp"
         android:layout_marginTop="24dp"
         android:background="@color/white"
         app:layout_constraintTop_toBottomOf="@+id/textView49"
-        tools:layout_editor_absoluteX="-16dp" />
+        tools:layout_editor_absoluteX="-16dp" >
+        <EditText
+            android:id="@+id/line1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="23dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginRight="23dp"
+            android:backgroundTint="@color/setting_bg"
+            android:hint="@string/addline1"
+            android:textSize="12sp"
+            android:layout_marginBottom="4dp"
+            app:layout_constraintStart_toStartOf="@+id/preferredNoOfDays"
+            app:layout_constraintTop_toTopOf="@+id/preferredNoOfDays" />
 
-    
-    <EditText
-        android:id="@+id/editText1"
-        android:layout_width="match_parent"
-        android:layout_height="44dp"
-        android:hint="@string/first_line"
-        android:backgroundTint="@color/setting_bg"
-        android:layout_marginTop="2dp"
-        android:layout_marginRight="23dp"
-        android:layout_marginLeft="23dp"
-        app:layout_constraintStart_toStartOf="@+id/textView101"
-        app:layout_constraintTop_toTopOf="@+id/textView101"
-        />
+        <EditText
+            android:id="@+id/line2"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:layout_marginLeft="23dp"
+            android:layout_marginRight="23dp"
+            android:backgroundTint="@color/setting_bg"
+            android:hint="@string/addLine2"
+            android:layout_marginBottom="4dp"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="@+id/preferredNoOfDays"
+            app:layout_constraintTop_toBottomOf="@+id/line1" />
 
-    <EditText
-        android:id="@+id/editText2"
-        android:layout_width="match_parent"
-        android:layout_height="44dp"
-        android:hint="@string/second_line"
-        android:backgroundTint="@color/setting_bg"
-        android:layout_marginRight="23dp"
-        android:layout_marginLeft="23dp"
-        app:layout_constraintStart_toStartOf="@+id/textView101"
-        app:layout_constraintTop_toBottomOf="@+id/editText1"
-        />
+        <EditText
+            android:id="@+id/area"
+            android:layout_width="150dp"
+            android:layout_height="44dp"
+            android:layout_marginStart="23dp"
+            android:backgroundTint="@color/setting_bg"
+            android:hint="@string/area"
+            android:textSize="12sp"
+            android:layout_marginBottom="4dp"
+            app:layout_constraintStart_toStartOf="@+id/preferredNoOfDays"
+            app:layout_constraintTop_toBottomOf="@+id/line2" />
 
-    <EditText
-        android:id="@+id/editText3"
-        android:layout_width="150dp"
-        android:layout_height="44dp"
-        android:hint="@string/area"
-        android:backgroundTint="@color/setting_bg"
-        android:layout_marginStart="23dp"
-        app:layout_constraintStart_toStartOf="@+id/textView101"
-        app:layout_constraintTop_toBottomOf="@+id/editText2"
-        />
+        <EditText
+            android:id="@+id/location"
+            android:layout_width="150dp"
+            android:layout_height="44dp"
+            android:layout_marginLeft="23dp"
+            android:layout_marginRight="23dp"
+            android:textSize="12sp"
+            android:backgroundTint="@color/setting_bg"
+            android:hint="@string/location"
+            android:layout_marginBottom="4dp"
+            app:layout_constraintEnd_toEndOf="@+id/preferredNoOfDays"
+            app:layout_constraintTop_toBottomOf="@+id/line2" />
 
-    <EditText
-        android:id="@+id/editText4"
-        android:layout_width="150dp"
-        android:layout_height="44dp"
-        android:hint="@string/city"
-        android:backgroundTint="@color/setting_bg"
-        android:layout_marginRight="23dp"
-        android:layout_marginLeft="23dp"
-        app:layout_constraintEnd_toEndOf="@+id/textView101"
-        app:layout_constraintTop_toBottomOf="@+id/editText2"
-        />
+        <EditText
+            android:id="@+id/state"
+            android:layout_width="150dp"
+            android:layout_height="44dp"
+            android:layout_marginStart="23dp"
+            android:backgroundTint="@color/setting_bg"
+            android:hint="@string/state"
+            android:textSize="12sp"
+            android:layout_marginBottom="4dp"
+            app:layout_constraintStart_toStartOf="@+id/preferredNoOfDays"
+            app:layout_constraintTop_toBottomOf="@+id/area" />
 
-    <EditText
-        android:id="@+id/editText5"
-        android:layout_width="150dp"
-        android:layout_height="44dp"
-        android:hint="@string/state"
-        android:backgroundTint="@color/setting_bg"
-        android:layout_marginLeft="23dp"
-        app:layout_constraintStart_toStartOf="@+id/textView101"
-        app:layout_constraintTop_toBottomOf="@+id/editText3"
-        />
+        <EditText
+            android:id="@+id/pincode"
+            android:layout_width="150dp"
+            android:layout_height="44dp"
+            android:layout_marginLeft="23dp"
+            android:layout_marginRight="23dp"
+            android:textSize="12sp"
+            android:backgroundTint="@color/setting_bg"
+            android:hint="@string/pincode"
+            android:layout_marginBottom="4dp"
+            app:layout_constraintEnd_toEndOf="@+id/preferredNoOfDays"
+            app:layout_constraintTop_toBottomOf="@+id/area" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <EditText
-        android:id="@+id/editText6"
-        android:layout_width="150dp"
-        android:layout_height="44dp"
-        android:layout_marginRight="23dp"
-        android:backgroundTint="@color/setting_bg"
-        android:layout_marginLeft="23dp"
-        android:hint="@string/pincode"
-        app:layout_constraintEnd_toEndOf="@+id/textView101"
-        app:layout_constraintTop_toBottomOf="@+id/editText3"
-        />
-
-
-
-    <Button
-        android:id="@+id/button1"
-        android:layout_width="156dp"
-        android:layout_height="48dp"
-        app:layout_constraintStart_toStartOf="@id/editText5"
-        android:textColor="@color/colorLightAccent"
-        app:backgroundTint="@color/setting_bg"
-        app:strokeColor="@color/colorLightAccent"
-        app:strokeWidth="2dp"
-        android:text="@string/cancel"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="29dp"
-        />
-    
     <Button
         android:id="@+id/button2"
-        android:layout_width="156dp"
-        android:layout_height="48dp"
-        app:layout_constraintStart_toStartOf="@id/editText6"
-        android:background="@drawable/bg_rectangle"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginBottom="23dp"
+        android:layout_marginLeft="26dp"
+        android:layout_marginRight="26dp"
         android:text="@string/save"
+        android:textSize="14sp"
+        android:textColor="@color/colorPrimary"
+        app:layout_constraintBottom_toTopOf="@+id/cancel_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:strokeColor="@color/colorPrimary"
+        app:strokeWidth="2dp"
+        app:backgroundTint="@color/setting_bg"/>
+
+    <TextView
+        android:id="@+id/cancel_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="21dp"
+        android:text="@string/cancel"
+        android:fontFamily="@font/lato_bold"
+        android:textColor="@color/cancelcolor"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="29dp"
-        android:layout_marginEnd="23dp"
-        />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 
 

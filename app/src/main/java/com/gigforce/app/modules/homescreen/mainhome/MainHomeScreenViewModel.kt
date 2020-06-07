@@ -55,7 +55,7 @@ class MainHomeScreenViewModel : ViewModel() {
         }
         var temp: Int = calendar.get(Calendar.MONTH)
 
-        for (x in 0..20) {
+        for (x in 0..60) {
             if ((calendar.get(Calendar.MONTH) - temp) != 0) {
                 if (isPreviousDay) {
                     var newcalendar: Calendar = Calendar.getInstance();

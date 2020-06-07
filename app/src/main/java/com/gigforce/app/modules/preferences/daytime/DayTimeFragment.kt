@@ -1,14 +1,11 @@
 package com.gigforce.app.modules.preferences.daytime
 
-import android.graphics.Color
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Switch
-import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
@@ -50,8 +47,8 @@ class DayTimeFragment : BaseFragment() {
 
     private fun initializeViews() {
         preferencesDataModel = viewModel.getPreferenceDataModel()
-        switch1.setChecked(preferencesDataModel.isweekdaysenabled)
-        switch2.setChecked(preferencesDataModel.isweekendenabled)
+        workFromHomeSwitch.setChecked(preferencesDataModel.isweekdaysenabled)
+        arroundCurrentAddSwitch.setChecked(preferencesDataModel.isweekendenabled)
         reflectForWeekdays()
         reflectForWeekends()
     }
@@ -102,20 +99,20 @@ class DayTimeFragment : BaseFragment() {
 
     private fun listener() {
         textView49.setOnClickListener(View.OnClickListener { navigate(R.id.weekDayFragment) })
-        textView55.setOnClickListener(View.OnClickListener {  })
+        textView55.setOnClickListener(View.OnClickListener { navigate(R.id.weekEndFragment) })
         imageView10.setOnClickListener(View.OnClickListener { activity?.onBackPressed() })
         // weekday listener
-        switch1.setOnClickListener{view->
+        workFromHomeSwitch.setOnClickListener{ view->
             var isChecked = (view as Switch).isChecked
             if(isChecked && preferencesDataModel.selecteddays.size == 0){
                 navigate(R.id.weekDayFragment)
-                switch1.setChecked(false)
+                workFromHomeSwitch.setChecked(false)
             }
             else
             viewModel.setIsWeekdays(isChecked)
         }
         //weekend listener
-        switch2.setOnClickListener{view->
+        arroundCurrentAddSwitch.setOnClickListener{ view->
             var isChecked = (view as Switch).isChecked
             viewModel.setIsWeekend(isChecked)
         }

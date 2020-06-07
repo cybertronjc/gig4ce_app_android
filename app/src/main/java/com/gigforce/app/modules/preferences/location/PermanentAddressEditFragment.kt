@@ -1,6 +1,8 @@
 package com.gigforce.app.modules.preferences.location
 
+import android.annotation.SuppressLint
 import android.os.Bundle
+import android.text.Html
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -13,7 +15,7 @@ import com.gigforce.app.modules.preferences.SharedPreferenceViewModel
 import com.gigforce.app.modules.preferences.prefdatamodel.PreferencesDataModel
 import com.gigforce.app.modules.profile.models.AddressModel
 import com.gigforce.app.modules.profile.models.ProfileData
-import kotlinx.android.synthetic.main.current_address_edit_fragment.*
+import kotlinx.android.synthetic.main.permanent_address_edit_fragment.*
 
 class PermanentAddressEditFragment : BaseFragment() {
     companion object {
@@ -40,7 +42,7 @@ class PermanentAddressEditFragment : BaseFragment() {
     }
 
     private fun observePreferenceData() {
-        viewModel.preferenceDataModel.observe(this, Observer { preferenceData ->
+        viewModel.preferenceDataModel.observe(viewLifecycleOwner, Observer { preferenceData ->
             viewModel.setPreferenceDataModel(preferenceData)
             initializeViews()
         })
@@ -48,7 +50,7 @@ class PermanentAddressEditFragment : BaseFragment() {
     }
 
     private fun observeProfileData() {
-        viewModel.profileDataModel.observe(this, Observer { profileData ->
+        viewModel.userProfileData.observe(viewLifecycleOwner, Observer { profileData ->
             viewModel.setProfileDataModel(profileData)
             initializeViews()
         })
@@ -58,19 +60,23 @@ class PermanentAddressEditFragment : BaseFragment() {
     private fun initializeViews() {
         preferenceDataModel = viewModel.getPreferenceDataModel()
         profileDataModel = viewModel.getProfileDataModel()
-        imageView10.setOnClickListener { activity?.onBackPressed() }
+        verificationViewsInitialize()
         var currentAddress = viewModel.getCurrentAddress()
         var permanentAddress = viewModel.getPermanentAddress()
-        populateAddress(currentAddress!!)
+        populateAddress(permanentAddress!!)
+    }
+
+    private fun verificationViewsInitialize() {
+        textView90.text = Html.fromHtml("To Update Permanent address , you have to upload new address proofs. <font color='#E02020'>Click Here</font>")
     }
 
     private fun populateAddress(address: AddressModel) {
-        editText1.setText(address.firstLine)
-        editText2.setText(address.secondLine)
-        editText3.setText(address.area)
-        editText4.setText(address.city)
-        editText5.setText(address.state)
-        editText6.setText(address.pincode)
+        line1.setText(address.firstLine)
+        line2.setText(address.secondLine)
+        area.setText(address.area)
+        location.setText(address.city)
+        state.setText(address.state)
+        pincode.setText(address.pincode)
 
     }
 
@@ -84,7 +90,7 @@ class PermanentAddressEditFragment : BaseFragment() {
 
     private fun listener() {
 
-        button1.setOnClickListener {
+        cancel_button.setOnClickListener {
             showToastLong("Cancel", 2)
             activity?.onBackPressed()
         }
@@ -92,16 +98,17 @@ class PermanentAddressEditFragment : BaseFragment() {
         button2.setOnClickListener {
             showToastLong("Saving", 2)
             var editedAddress = AddressModel(
-                editText1.text.toString(),
-                editText2.text.toString(),
-                editText3.text.toString(),
-                editText4.text.toString(),
-                editText5.text.toString(),
-                editText6.text.toString()
+                line1.text.toString(),
+                line2.text.toString(),
+                area.text.toString(),
+                location.text.toString(),
+                state.text.toString(),
+                pincode.text.toString()
             )
             Log.e("EDIT CURRENT", convertAddressToString(editedAddress))
             viewModel.setPermanentAddress(editedAddress)
             activity?.onBackPressed()
         }
+        imageView10.setOnClickListener { activity?.onBackPressed() }
     }
 }

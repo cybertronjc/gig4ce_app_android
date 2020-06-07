@@ -21,7 +21,7 @@
         android:gravity="center"
         android:numColumns="3" />
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/cityview"
         style="@style/AppTheme.TextStyle.H5"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

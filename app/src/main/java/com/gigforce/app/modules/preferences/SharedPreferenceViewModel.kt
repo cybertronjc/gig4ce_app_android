@@ -27,10 +27,10 @@ class SharedPreferenceViewModel : ViewModel() {
     var profileFirebaseRepository = ProfileFirebaseRepository()
     var userProfileData: MutableLiveData<ProfileData> = MutableLiveData<ProfileData>()
     var preferencesRepository:PreferencesRepository = PreferencesRepository()
-    var profileRepository:ProfileFirebaseRepository = ProfileFirebaseRepository()
+//    var profileRepository:ProfileFirebaseRepository = ProfileFirebaseRepository()
     var citiesRepository:CitiesRepository = CitiesRepository()
     var preferenceDataModel: MutableLiveData<PreferencesDataModel> = MutableLiveData<PreferencesDataModel>()
-    var profileDataModel: MutableLiveData<ProfileData> = MutableLiveData<ProfileData>()
+//    var profileDataModel: MutableLiveData<ProfileData> = MutableLiveData<ProfileData>()
 
     fun getPreferenceDataModel():PreferencesDataModel{
         return preferencesDataModelObj
@@ -71,7 +71,7 @@ class SharedPreferenceViewModel : ViewModel() {
             }
         })
 
-        profileFirebaseRepository.getProfile().addSnapshotListener(EventListener<DocumentSnapshot> {
+        profileFirebaseRepository.getDBCollection().addSnapshotListener(EventListener<DocumentSnapshot> {
                 value, e ->
             if (e != null) {
                 return@EventListener
@@ -86,15 +86,15 @@ class SharedPreferenceViewModel : ViewModel() {
             }
         })
 
-        profileRepository.getDBCollection().addSnapshotListener(EventListener<DocumentSnapshot> {
-                value, e ->
-            if (e != null) {
-                return@EventListener
-            }
-            profileDataModel.postValue(
-                value!!.toObject(ProfileData::class.java)
-            )
-        })
+//        profileRepository.getDBCollection().addSnapshotListener(EventListener<DocumentSnapshot> {
+//                value, e ->
+//            if (e != null) {
+//                return@EventListener
+//            }
+//            profileDataModel.postValue(
+//                value!!.toObject(ProfileData::class.java)
+//            )
+//        })
 
 
     }
@@ -124,9 +124,6 @@ class SharedPreferenceViewModel : ViewModel() {
         preferencesRepository.setData(preferencesRepository.WEEKDAYS,checked)
     }
 
-    fun setIsWeekend(checked: Boolean){
-        preferencesRepository.setData(preferencesRepository.WEEKEND,checked)
-    }
 
     fun setWorkingDays(arrDays:ArrayList<String>){
         preferencesRepository.setDataAndDeleteOldData(preferencesRepository.WORKINGDAYS,arrDays)
@@ -134,6 +131,18 @@ class SharedPreferenceViewModel : ViewModel() {
 
     fun setWorkingSlots(arrDays:ArrayList<String>){
         preferencesRepository.setDataAndDeleteOldData(preferencesRepository.WORKINGSLOTS,arrDays)
+    }
+
+    fun setIsWeekend(checked: Boolean){
+        preferencesRepository.setData(preferencesRepository.WEEKEND,checked)
+    }
+
+    fun setWorkendDays(arrDays:ArrayList<String>){
+        preferencesRepository.setDataAndDeleteOldData(preferencesRepository.WEEKENDDAYS,arrDays)
+    }
+
+    fun setWorkendSlots(arrDays:ArrayList<String>){
+        preferencesRepository.setDataAndDeleteOldData(preferencesRepository.WEEKENDSLOTS,arrDays)
     }
 
     fun getPrefrencesData(): ArrayList<PreferencesScreenItem> {
@@ -149,6 +158,19 @@ class SharedPreferenceViewModel : ViewModel() {
         prefrencesItems.add(PreferencesScreenItem(R.drawable.ic_products,"Sign out",""))
         return prefrencesItems;
     }
+
+    fun getPreferredLocationList():ArrayList<String>{
+        var preferredList = ArrayList<String>()
+        preferredList.add("HSR")
+        preferredList.add("Kormangala Block 1")
+        preferredList.add("Kormangala Block 2")
+        preferredList.add("BTM Layout 1")
+        preferredList.add("BTM Layout 2")
+        preferredList.add("HSR Sector 2")
+        preferredList.add("Bellandur")
+        return preferredList
+    }
+
     fun getLanguage():String{
         if(preferencesDataModelObj!=null) return preferencesDataModelObj.languageName else return "English"
     }
@@ -182,13 +204,23 @@ class SharedPreferenceViewModel : ViewModel() {
     fun setCurrentAddress(address: AddressModel){
         var addressMap:AddressFirestoreModel= profileDataModelObj.address
         addressMap.current=address
-        profileRepository.setAddress(addressMap)
+        profileFirebaseRepository.setAddress(addressMap)
     }
-
+    fun setCurrentAddressPrferredDistanceData(preferredDistance:Int, preferredDistanceActive:Boolean){
+        var addressMap:AddressFirestoreModel= profileDataModelObj.address
+        addressMap.current.preferred_distance = preferredDistance
+        addressMap.current.preferredDistanceActive = preferredDistanceActive
+        profileFirebaseRepository.setAddress(addressMap)
+    }
+    fun setCurrentAddressPreferredDistanceActive(preferredDistanceActive:Boolean){
+        var addressMap:AddressFirestoreModel= profileDataModelObj.address
+        addressMap.current.preferredDistanceActive = preferredDistanceActive
+        profileFirebaseRepository.setAddress(addressMap)
+    }
     fun setPermanentAddress(address: AddressModel){
         var addressMap:AddressFirestoreModel= profileDataModelObj.address
         addressMap.home=address
-        profileRepository.setAddress(addressMap)
+        profileFirebaseRepository.setAddress(addressMap)
     }
 
     fun getLocations(): ArrayList<DocumentReference> {
@@ -210,6 +242,5 @@ class SharedPreferenceViewModel : ViewModel() {
     fun saveLanguageToFirebase(langStr: String, langCode: String) {
         preferencesRepository.setDataAsKeyValue("languageName",langStr)
         preferencesRepository.setDataAsKeyValue("languageCode",langCode)
-
     }
 }

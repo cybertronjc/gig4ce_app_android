@@ -71,9 +71,8 @@
                 android:id="@+id/htab_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="78dp"
-                android:layout_gravity="top"
                 android:paddingLeft="42dp"
-                android:layout_marginBottom="4dp"
+                android:layout_marginTop="10dp"
                 app:layout_collapseMode="pin"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
@@ -129,11 +128,25 @@
                     android:textSize="18sp"
                     android:textColor="#444444"
                     android:text="@string/empty_dash_string"
+                    android:fontFamily="@font/lato_bold"
                     app:layout_constraintEnd_toEndOf="@id/rating_text"
                     app:layout_constraintStart_toStartOf="@id/rating_text"
                     app:layout_constraintBottom_toTopOf="@id/guidelineMiddle"
                     app:layout_constraintBottom_toBottomOf="@id/rating_card"/>
-
+                <RatingBar
+                    android:id="@+id/rating_bar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:translationZ="16dp"
+                    android:layout_marginBottom="15dp"
+                    android:theme="@style/customRatingBar"
+                    style="@style/customRatingBar"
+                    android:numStars="5"
+                    android:rating="3.5"
+                    app:layout_constraintEnd_toEndOf="@id/divider1"
+                    app:layout_constraintStart_toStartOf="@id/rating_card"
+                    app:layout_constraintTop_toBottomOf="@id/gigger_rating"
+                    app:layout_constraintBottom_toBottomOf="@id/rating_card"></RatingBar>
                 <TextView
                     android:id="@+id/rating_text"
                     android:layout_width="wrap_content"
@@ -144,7 +157,8 @@
                     app:layout_constraintEnd_toEndOf="@id/divider1"
                     app:layout_constraintStart_toStartOf="@id/rating_card"
                     app:layout_constraintTop_toBottomOf="@id/gigger_rating"
-                    app:layout_constraintBottom_toBottomOf="@id/rating_card"/>
+                    app:layout_constraintBottom_toBottomOf="@id/rating_card"
+                    android:visibility="gone"/>
 
                 <View
                     android:id="@+id/divider1"
@@ -172,6 +186,7 @@
                     android:textColor="#444444"
                     android:text="@string/empty_dash_string"
                     android:textAlignment="center"
+                    android:fontFamily="@font/lato_bold"
                     app:layout_constraintEnd_toEndOf="@id/tasks_done_text"
                     app:layout_constraintStart_toStartOf="@id/tasks_done_text"
                     app:layout_constraintBottom_toTopOf="@id/guidelineMiddle"
@@ -184,6 +199,10 @@
                     android:translationZ="16dp"
                     android:text="@string/tasks_done_text"
                     android:layout_marginBottom="15dp"
+                    android:textSize="12sp"
+                    android:textColor="#50222222"
+                    android:fontFamily="@font/lato_bold"
+                    android:letterSpacing="0"
                     app:layout_constraintBottom_toBottomOf="@id/rating_card"
                     app:layout_constraintTop_toTopOf="@id/rating_text"
                     app:layout_constraintStart_toEndOf="@id/divider1"
@@ -216,6 +235,8 @@
                     android:textColor="#444444"
                     android:text="@string/empty_dash_string"
                     android:textAlignment="center"
+                    android:fontFamily="@font/lato_bold"
+                    android:letterSpacing="0"
                     app:layout_constraintEnd_toEndOf="@id/connections_text"
                     app:layout_constraintStart_toStartOf="@id/connections_text"
                     app:layout_constraintBottom_toTopOf="@id/guidelineMiddle"
@@ -228,6 +249,10 @@
                     android:translationZ="16dp"
                     android:layout_marginBottom="15dp"
                     android:text="@string/connections_text"
+                    android:textSize="12sp"
+                    android:textColor="#50222222"
+                    android:letterSpacing="0"
+                    android:fontFamily="@font/lato_bold"
                     app:layout_constraintBottom_toBottomOf="@id/rating_card"
                     app:layout_constraintTop_toTopOf="@id/rating_text"
                     app:layout_constraintStart_toEndOf="@id/divider2"

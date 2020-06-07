@@ -41,7 +41,7 @@ class CurrentAddressEditFragment : BaseFragment() {
     }
 
     private fun observePreferenceData() {
-        viewModel.preferenceDataModel.observe(this, Observer { preferenceData ->
+        viewModel.preferenceDataModel.observe(viewLifecycleOwner, Observer { preferenceData ->
             viewModel.setPreferenceDataModel(preferenceData)
             initializeViews()
         })
@@ -49,7 +49,7 @@ class CurrentAddressEditFragment : BaseFragment() {
     }
 
     private fun observeProfileData() {
-        viewModel.profileDataModel.observe(this, Observer { profileData ->
+        viewModel.userProfileData.observe(viewLifecycleOwner, Observer { profileData ->
             viewModel.setProfileDataModel(profileData)
             initializeViews()
         })
@@ -63,17 +63,17 @@ class CurrentAddressEditFragment : BaseFragment() {
         var currentAddress = viewModel.getCurrentAddress()
         var permanentAddress = viewModel.getPermanentAddress()
         populateAddress(currentAddress!!)
-        switch1.isEnabled = !permanentAddress!!.isEmpty()
-        switch1.isChecked = currentAddress!!.isSame(viewModel.getPermanentAddress()!!)
+        workFromHomeSwitch.isEnabled = !permanentAddress!!.isEmpty()
+        workFromHomeSwitch.isChecked = currentAddress!!.isSame(viewModel.getPermanentAddress()!!)
     }
 
     private fun populateAddress(address: AddressModel) {
-        editText1.setText(address.firstLine)
-        editText2.setText(address.secondLine)
-        editText3.setText(address.area)
-        editText4.setText(address.city)
-        editText5.setText(address.state)
-        editText6.setText(address.pincode)
+        line1.setText(address.firstLine)
+        line2.setText(address.secondLine)
+        area.setText(address.area)
+        location.setText(address.city)
+        state.setText(address.state)
+        pincode.setText(address.pincode)
 
     }
 
@@ -86,27 +86,26 @@ class CurrentAddressEditFragment : BaseFragment() {
     }
 
     private fun listener() {
-        if (switch1.isEnabled) {
-            switch1.setOnClickListener { view ->
+        if (workFromHomeSwitch.isEnabled) {
+            workFromHomeSwitch.setOnClickListener { view ->
                 var isChecked = (view as Switch).isChecked
                 if (isChecked) populateAddress(profileDataModel.address.home)
                 else populateAddress(profileDataModel.address.current)
             }
 
-            button1.setOnClickListener {
-                showToastLong("Cancel", 2)
+            cancel_button.setOnClickListener {
                 activity?.onBackPressed()
             }
 
             button2.setOnClickListener {
                 showToastLong("Saving", 2)
                 var editedAddress = AddressModel(
-                    editText1.text.toString(),
-                    editText2.text.toString(),
-                    editText3.text.toString(),
-                    editText4.text.toString(),
-                    editText5.text.toString(),
-                    editText6.text.toString()
+                    line1.text.toString(),
+                    line2.text.toString(),
+                    area.text.toString(),
+                    location.text.toString(),
+                    state.text.toString(),
+                    pincode.text.toString()
                 )
                 Log.e("EDIT CURRENT", convertAddressToString(editedAddress))
                 viewModel.setCurrentAddress(editedAddress)

@@ -1,5 +1,6 @@
 package com.gigforce.app.modules.homescreen.mainhome
 
+import android.app.Dialog
 import android.content.res.Configuration
 import android.graphics.Paint
 import android.graphics.Rect
@@ -9,10 +10,8 @@ import android.graphics.drawable.ShapeDrawable
 import android.graphics.drawable.shapes.RoundRectShape
 import android.os.Bundle
 import android.util.DisplayMetrics
-import android.view.Gravity
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.ColorRes
 import androidx.annotation.DimenRes
@@ -31,8 +30,12 @@ import com.gigforce.app.modules.homescreen.mainhome.bottomsheet.FeatureModel
 import com.gigforce.app.modules.homescreen.mainhome.bottomsheet.UpcomingGigModel
 import com.gigforce.app.modules.homescreen.mainhome.verticalcalendar.VerticalCalendarDataItemModel
 import com.gigforce.app.modules.preferences.PreferencesFragment
+import com.gigforce.app.modules.preferences.prefdatamodel.PreferencesDataModel
 import com.gigforce.app.modules.profile.ProfileViewModel
+import com.gigforce.app.utils.AppConstants
 import com.gigforce.app.utils.GlideApp
+import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.EventListener
 import com.google.firebase.storage.StorageReference
 import com.riningan.widget.ExtendedBottomSheetBehavior
 import com.riningan.widget.ExtendedBottomSheetBehavior.STATE_COLLAPSED
@@ -64,8 +67,78 @@ class MainHomeScreen : BaseFragment() {
         initializeViews()
         listener()
         observePreferenceData()
+        languageSelectionProcess()
     }
 
+    private fun languageSelectionProcess() {
+        requestPreferenceRepositoryData()
+    }
+    private fun requestPreferenceRepositoryData() {
+        if(preferencesRepositoryForBaseFragment!=null)
+        preferencesRepositoryForBaseFragment.getDBCollection()
+            .addSnapshotListener(EventListener<DocumentSnapshot> { value, e ->
+                var preferencesDataModel: PreferencesDataModel? =
+                    value!!.toObject(PreferencesDataModel::class.java)
+                if (preferencesDataModel != null) {
+                    var languageCode = getSharedData(AppConstants.APP_LANGUAGE, "")
+                    if (preferencesDataModel.languageCode == null || preferencesDataModel.languageCode.equals(
+                            ""
+                        )
+                    ) {
+
+                        if (languageCode != null && !languageCode.equals("")) {
+                            var languageName = getLanguageCodeToName(languageCode)
+                            preferencesRepositoryForBaseFragment.setDataAsKeyValue(
+                                "languageName",
+                                languageName
+                            )
+                            preferencesRepositoryForBaseFragment.setDataAsKeyValue(
+                                "languageCode",
+                                languageCode
+                            )
+                        }
+                    } else if (!languageCode.equals(preferencesDataModel.languageCode)) {
+                        lastLoginSelectedLanguage(preferencesDataModel.languageCode,preferencesDataModel.languageName)
+                    }
+                }
+            })
+    }
+    private fun lastLoginSelectedLanguage(
+        lastLoginLanguageCode: String,
+        lastLoginLanguageName: String
+    ) {
+        val languageSelectionDialog = activity?.let { Dialog(it) }
+        languageSelectionDialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        languageSelectionDialog?.setCancelable(false)
+        languageSelectionDialog?.setContentView(R.layout.confirmation_custom_alert)
+        val titleDialog = languageSelectionDialog?.findViewById(R.id.title) as TextView
+        titleDialog.text =
+            "Your last login selected language was " + lastLoginLanguageName + ". Do you want to continue with this language?"
+        val yesBtn = languageSelectionDialog?.findViewById(R.id.yes) as TextView
+        val noBtn = languageSelectionDialog?.findViewById(R.id.cancel) as TextView
+        yesBtn.setOnClickListener {
+            saveSharedData(AppConstants.APP_LANGUAGE, lastLoginLanguageCode)
+            saveSharedData(AppConstants.APP_LANGUAGE_NAME, lastLoginLanguageName)
+            updateResources(lastLoginLanguageCode)
+            languageSelectionDialog?.dismiss()
+        }
+        noBtn.setOnClickListener {
+            var currentLanguageCode = getSharedData(AppConstants.APP_LANGUAGE, "")
+            if (currentLanguageCode != null) {
+                preferencesRepositoryForBaseFragment.setDataAsKeyValue(
+                    "languageName",
+                    getLanguageCodeToName(currentLanguageCode)
+                )
+
+                preferencesRepositoryForBaseFragment.setDataAsKeyValue(
+                    "languageCode",
+                    currentLanguageCode
+                )
+            }
+            languageSelectionDialog!!.dismiss()
+        }
+        languageSelectionDialog?.show()
+    }
     private fun initializeViews() {
         initializeExtendedBottomSheet()
         initialiseMonthTV()
@@ -104,7 +177,7 @@ class MainHomeScreen : BaseFragment() {
         if(profileImg!=null && !profileImg.equals("")) {
             val profilePicRef: StorageReference =
                 PreferencesFragment.storage.reference.child("profile_pics").child(profileImg)
-            GlideApp.with(this.context!!)
+            GlideApp.with(this.requireContext())
                 .load(profilePicRef)
                 .apply(RequestOptions().circleCrop())
                 .into(profile_image)
@@ -118,7 +191,7 @@ class MainHomeScreen : BaseFragment() {
         val date: String = simpleDateFormat.format(Date())
         tv2HS1.text = date
     }
-    private val visibleThreshold = 10
+    private val visibleThreshold = 20
     var isLoading:Boolean = false
     private fun initializeVerticalCalendarRV() {
         val recyclerGenericAdapter: RecyclerGenericAdapter<VerticalCalendarDataItemModel> =
