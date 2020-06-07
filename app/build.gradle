@@ -179,6 +179,9 @@ dependencies {
 
     // swipe button
     implementation "com.ncorti:slidetoact:0.8.0"
+
+    // round seekbar
+    implementation 'com.akexorcist:round-corner-progress-bar:2.1.1'
 }
 
 apply plugin: 'com.google.gms.google-services'
