@@ -74,7 +74,7 @@
         app:layout_constraintTop_toTopOf="@+id/imageView28" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/selected_pre_no_of_days"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/lato"
@@ -111,7 +111,7 @@
             app:layout_constraintTop_toTopOf="@+id/textView102" />
 
         <TextView
-            android:id="@+id/textView5"
+            android:id="@+id/dailyGoalsTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -136,13 +136,13 @@
             app:layout_constraintStart_toStartOf="@+id/textView4"
             app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
-        <com.gigforce.app.core.components.SeekBarWithHint
-            android:id="@+id/seekBarWithHint"
+        <SeekBar
+            android:id="@+id/perDayGoalSB"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="45dp"
             android:layout_marginTop="20dp"
-            android:layout_marginRight="28dp"
+            android:layout_marginRight="35dp"
             android:max="2000"
             android:min="0"
             android:progressTint="@color/colorPrimary"
@@ -151,15 +151,16 @@
             app:layout_constraintStart_toStartOf="@+id/textView102"
             app:layout_constraintTop_toBottomOf="@+id/textView6" />
 
-        <com.gigforce.app.core.components.SeekBarDependentCanvas
+        <TextView
             android:id="@+id/seekBarDependentCanvas2"
             android:layout_width="match_parent"
             android:layout_height="20dp"
-            android:layout_marginLeft="40dp"
-            android:layout_marginRight="22dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/seekBarWithHint" />
+            android:layout_marginLeft="30dp"
+            android:textSize="12sp"
+            android:textColor="#787993"
+            android:letterSpacing="0"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -187,7 +188,7 @@
             app:layout_constraintTop_toTopOf="@+id/textView103" />
 
         <TextView
-            android:id="@+id/textView8"
+            android:id="@+id/monthlyGoalsTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -212,14 +213,14 @@
             app:layout_constraintStart_toStartOf="@+id/textView7"
             app:layout_constraintTop_toBottomOf="@+id/textView7" />
 
-        <com.gigforce.app.core.components.SeekBarWithHint
-            android:id="@+id/seekBarWithHint1"
+        <SeekBar
+            android:id="@+id/permonthGoalSB"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="45dp"
             android:layout_marginTop="20dp"
-            android:layout_marginRight="28dp"
-            android:max="2000"
+            android:layout_marginRight="35dp"
+            android:max="60000"
             android:min="0"
             android:progressTint="@color/colorPrimary"
             android:thumbTint="@color/colorPrimary"
@@ -227,15 +228,16 @@
             app:layout_constraintStart_toStartOf="@+id/textView103"
             app:layout_constraintTop_toBottomOf="@+id/textView9" />
 
-        <com.gigforce.app.core.components.SeekBarDependentCanvas
+        <TextView
             android:id="@+id/seekBarDependentCanvas3"
             android:layout_width="match_parent"
             android:layout_height="20dp"
-            android:layout_marginLeft="40dp"
-            android:layout_marginRight="22dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/seekBarWithHint1" />
+            android:layout_marginLeft="30dp"
+            android:textSize="12sp"
+            android:textColor="#787993"
+            android:letterSpacing="0"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
@@ -280,6 +282,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView104">
 
+
             <TextView
                 android:id="@+id/textView85"
                 android:layout_width="wrap_content"
@@ -292,15 +295,14 @@
                 android:textSize="14sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
-
-            <com.gigforce.app.core.components.SeekBarWithHint
-                android:id="@+id/seekBarWithHint2"
+            <SeekBar
+                android:id="@+id/monthlyExpectationSB"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="45dp"
                 android:layout_marginTop="20dp"
-                android:layout_marginRight="28dp"
-                android:max="20000"
+                android:layout_marginRight="35dp"
+                android:max="60000"
                 android:min="0"
                 android:progressTint="@color/colorPrimary"
                 android:thumbTint="@color/colorPrimary"
@@ -308,15 +310,16 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView85" />
 
-            <com.gigforce.app.core.components.SeekBarDependentCanvas
+            <TextView
                 android:id="@+id/seekBarDependentCanvas4"
                 android:layout_width="match_parent"
                 android:layout_height="20dp"
-                android:layout_marginLeft="40dp"
-                android:layout_marginRight="22dp"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginLeft="30dp"
+                android:textSize="12sp"
+                android:textColor="#787993"
+                android:letterSpacing="0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/seekBarWithHint2" />
+                app:layout_constraintTop_toBottomOf="@+id/monthlyExpectationSB" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>

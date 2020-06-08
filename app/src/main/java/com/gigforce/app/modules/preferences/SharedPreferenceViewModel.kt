@@ -6,6 +6,7 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.gigforce.app.R
+import com.gigforce.app.modules.preferences.earnings.EarningDataModel
 import com.gigforce.app.modules.preferences.location.CitiesRepository
 import com.gigforce.app.modules.preferences.location.models.LocationPreferenceModel
 import com.gigforce.app.modules.profile.models.AddressModel
@@ -151,12 +152,17 @@ class SharedPreferenceViewModel : ViewModel() {
         prefrencesItems.add(PreferencesScreenItem(R.drawable.ic_product_services_pressed,"Roles","At atm"))
         prefrencesItems.add(PreferencesScreenItem(R.drawable.ic_referal,"Day and Time",getDateTimeSubtitle()))
         prefrencesItems.add(PreferencesScreenItem(R.drawable.ic_settings,"Location","Work from home,Bangalore"))
-        prefrencesItems.add(PreferencesScreenItem(R.drawable.ic_settings,"Earning","2000-2200rs"))
+        prefrencesItems.add(PreferencesScreenItem(R.drawable.ic_settings,"Earning",getEarning()))
         prefrencesItems.add(PreferencesScreenItem(0,"OTHERS",""))
         prefrencesItems.add(PreferencesScreenItem(R.drawable.ic_link_broken,"App Language",getLanguage()))
         prefrencesItems.add(PreferencesScreenItem(R.drawable.ic_broadcast,"Notification",""))
         prefrencesItems.add(PreferencesScreenItem(R.drawable.ic_products,"Sign out",""))
         return prefrencesItems;
+    }
+
+    private fun getEarning(): String {
+
+        return preferencesDataModelObj.earning.perMonthGoal.toString()+ " Rs"
     }
 
     fun getPreferredLocationList():ArrayList<String>{
@@ -242,5 +248,9 @@ class SharedPreferenceViewModel : ViewModel() {
     fun saveLanguageToFirebase(langStr: String, langCode: String) {
         preferencesRepository.setDataAsKeyValue("languageName",langStr)
         preferencesRepository.setDataAsKeyValue("languageCode",langCode)
+    }
+
+    fun saveEarningData(earningData : EarningDataModel) {
+        preferencesRepository.setDataAsKeyValue(earningData)
     }
 }

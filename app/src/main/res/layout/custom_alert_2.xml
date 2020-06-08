@@ -20,13 +20,14 @@
             android:letterSpacing="0"
             android:paddingLeft="18dp"
             android:paddingTop="24dp"
-            android:text="Preferred No. of Days of Work"
+            android:text="Preferred no. of days of work"
             android:textColor="#000000"
             android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <RadioGroup
+            android:id="@+id/radio_group"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="22dp"

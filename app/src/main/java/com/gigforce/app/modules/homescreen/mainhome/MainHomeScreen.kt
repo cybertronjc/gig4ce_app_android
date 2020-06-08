@@ -1,24 +1,11 @@
 package com.gigforce.app.modules.homescreen.mainhome
 
 import android.app.Dialog
-import android.content.res.Configuration
-import android.graphics.Paint
-import android.graphics.Rect
-import android.graphics.drawable.Drawable
-import android.graphics.drawable.LayerDrawable
-import android.graphics.drawable.ShapeDrawable
-import android.graphics.drawable.shapes.RoundRectShape
 import android.os.Bundle
-import android.util.DisplayMetrics
 import android.view.*
 import android.widget.TextView
-import android.widget.Toast
-import androidx.annotation.ColorRes
-import androidx.annotation.DimenRes
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.request.RequestOptions
@@ -26,8 +13,6 @@ import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.app.core.genericadapter.RecyclerGenericAdapter
-import com.gigforce.app.modules.homescreen.mainhome.bottomsheet.FeatureModel
-import com.gigforce.app.modules.homescreen.mainhome.bottomsheet.UpcomingGigModel
 import com.gigforce.app.modules.homescreen.mainhome.verticalcalendar.VerticalCalendarDataItemModel
 import com.gigforce.app.modules.preferences.PreferencesFragment
 import com.gigforce.app.modules.preferences.prefdatamodel.PreferencesDataModel
@@ -110,7 +95,7 @@ class MainHomeScreen : BaseFragment() {
         val languageSelectionDialog = activity?.let { Dialog(it) }
         languageSelectionDialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
         languageSelectionDialog?.setCancelable(false)
-        languageSelectionDialog?.setContentView(R.layout.confirmation_custom_alert)
+        languageSelectionDialog?.setContentView(R.layout.confirmation_custom_alert_type1)
         val titleDialog = languageSelectionDialog?.findViewById(R.id.title) as TextView
         titleDialog.text =
             "Your last login selected language was " + lastLoginLanguageName + ". Do you want to continue with this language?"

@@ -28,11 +28,8 @@ import com.gigforce.app.R
 import com.gigforce.app.core.CoreConstants
 import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.app.modules.preferences.PreferencesRepository
-import com.gigforce.app.modules.preferences.prefdatamodel.PreferencesDataModel
 import com.gigforce.app.utils.AppConstants
 import com.gigforce.app.utils.popAllBackStates
-import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.EventListener
 import java.util.*
 
 // TODO: Rename parameter arguments, choose names that match
@@ -117,7 +114,7 @@ abstract class BaseFragment : Fragment() {
         languageSelectionDialog = activity?.let { Dialog(it) }
         languageSelectionDialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
         languageSelectionDialog?.setCancelable(false)
-        languageSelectionDialog?.setContentView(R.layout.confirmation_custom_alert)
+        languageSelectionDialog?.setContentView(R.layout.confirmation_custom_alert_type1)
         val titleDialog = languageSelectionDialog?.findViewById(R.id.title) as TextView
         titleDialog.text =
             "Your device language changed to " + currentDeviceLanguageString + ". Do you want to continue with this language?"
@@ -148,11 +145,11 @@ abstract class BaseFragment : Fragment() {
 
     //Confirmation dialog start
     // this dialog having right side yes button with gradient. Need to create one having swipable functionality
-    fun showConfirmationDialog(title:String,buttonClickListener:ConfirmationDialogOnClickListener){
+    fun showConfirmationDialogType1(title:String, buttonClickListener:ConfirmationDialogOnClickListener){
         var customialog:Dialog? = activity?.let { Dialog(it) }
         customialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
         customialog?.setCancelable(false)
-        customialog?.setContentView(R.layout.confirmation_custom_alert)
+        customialog?.setContentView(R.layout.confirmation_custom_alert_type1)
         val titleDialog = customialog?.findViewById(R.id.title) as TextView
         titleDialog.text = title
         val yesBtn = customialog?.findViewById(R.id.yes) as TextView
@@ -163,7 +160,21 @@ abstract class BaseFragment : Fragment() {
         noBtn.setOnClickListener (View.OnClickListener { buttonClickListener.clickedOnNo(customialog) })
         customialog?.show()
     }
-
+    fun showConfirmationDialogType2(title:String, buttonClickListener:ConfirmationDialogOnClickListener){
+        var customialog:Dialog? = activity?.let { Dialog(it) }
+        customialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        customialog?.setCancelable(false)
+        customialog?.setContentView(R.layout.confirmation_custom_alert_type2)
+        val titleDialog = customialog?.findViewById(R.id.title) as TextView
+        titleDialog.text = title
+        val yesBtn = customialog?.findViewById(R.id.yes) as TextView
+        val noBtn = customialog?.findViewById(R.id.cancel) as TextView
+        yesBtn.setOnClickListener (View.OnClickListener {
+            buttonClickListener.clickedOnYes(customialog)
+        })
+        noBtn.setOnClickListener (View.OnClickListener { buttonClickListener.clickedOnNo(customialog) })
+        customialog?.show()
+    }
     interface ConfirmationDialogOnClickListener{
         fun clickedOnYes(dialog:Dialog?)
         fun clickedOnNo(dialog:Dialog?)

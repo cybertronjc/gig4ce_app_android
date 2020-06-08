@@ -27,7 +27,9 @@ abstract public class BaseFirestoreDBRepository {
     public fun <M : BaseFirestoreDataModel> setData(obj: M) {
         getDBCollection().update(obj.tableName, FieldValue.arrayUnion(obj))
     }
-
+    public fun <M : BaseFirestoreDataModel> setDataAsKeyValue(obj: M) {
+        getDBCollection().update(obj.tableName, obj)
+    }
     // set data object end
     //set data string
     public fun setData(tableName: String, arrData: ArrayList<String>) {
@@ -44,7 +46,10 @@ abstract public class BaseFirestoreDBRepository {
         getDBCollection().update(tableName, FieldValue.delete())
         setData(tableName, data)
     }
-
+    public fun<M : BaseFirestoreDataModel> setDataAndDeleteOldData(obj: M) {
+        removeData(obj)
+        setData(obj)
+    }
     public fun setDataAndDeleteOldData(tableName: String, arrData: ArrayList<String>) {
         getDBCollection().update(tableName, FieldValue.delete())
         for (obj in arrData) {

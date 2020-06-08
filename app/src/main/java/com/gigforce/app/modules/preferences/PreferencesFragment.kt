@@ -1,8 +1,6 @@
 package com.gigforce.app.modules.preferences
 
 import android.app.Dialog
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.style.UnderlineSpan
@@ -71,7 +69,7 @@ class PreferencesFragment : BaseFragment() {
     }
 
     private fun observeProfileData() {
-        viewModel.userProfileData.observe(this, Observer { profile ->
+        viewModel.userProfileData.observe(viewLifecycleOwner, Observer { profile ->
             displayImage(profile.profileAvatarName)
 
         })
@@ -82,7 +80,7 @@ class PreferencesFragment : BaseFragment() {
         if (profileImg != null && !profileImg.equals("")) {
             val profilePicRef: StorageReference =
                 storage.reference.child("profile_pics").child(profileImg)
-            GlideApp.with(this.context!!)
+            GlideApp.with(this.requireContext())
                 .load(profilePicRef)
                 .apply(RequestOptions().circleCrop())
                 .into(profile_image)
@@ -207,7 +205,7 @@ class PreferencesFragment : BaseFragment() {
         val dialog = activity?.let { Dialog(it) }
         dialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
 //        dialog?.setCancelable(false)
-        dialog?.setContentView(R.layout.confirmation_custom_alert)
+        dialog?.setContentView(R.layout.confirmation_custom_alert_type1)
 //        dialog?.getWindow()?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT));
 //        val titleDialog = dialog?.findViewById(R.id.dialog_title) as TextView
 //        titleDialog.visibility = View.VISIBLE
