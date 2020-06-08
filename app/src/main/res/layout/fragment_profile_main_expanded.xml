@@ -274,10 +274,11 @@
                     android:id="@+id/main_expanded_user_name"
                     style="@style/ProfileName"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="40dp"
                     android:layout_marginStart="26dp"
                     android:layout_marginTop="16dp"
                     android:layout_weight="1"
+                    android:layout_gravity="center_vertical"
                     android:text="@string/education_expanded_user_name"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />

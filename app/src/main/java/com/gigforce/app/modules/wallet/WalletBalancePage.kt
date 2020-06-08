@@ -29,6 +29,8 @@ class WalletBalancePage: WalletBaseFragment() {
             it.let {
                 zero_balance.visibility = if (it.balance == 0) View.VISIBLE else View.GONE
                 non_zero_balance.visibility = if (it.balance == 0) View.GONE else View.VISIBLE
+
+                monthly_goal_card.isMonthlyGoalSet = false
             }
         })
     }
