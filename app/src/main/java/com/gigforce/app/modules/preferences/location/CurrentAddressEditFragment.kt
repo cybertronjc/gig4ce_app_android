@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.Switch
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -15,6 +16,16 @@ import com.gigforce.app.modules.preferences.prefdatamodel.PreferencesDataModel
 import com.gigforce.app.modules.profile.models.AddressModel
 import com.gigforce.app.modules.profile.models.ProfileData
 import kotlinx.android.synthetic.main.current_address_edit_fragment.*
+import kotlinx.android.synthetic.main.current_address_edit_fragment.area
+import kotlinx.android.synthetic.main.current_address_edit_fragment.button2
+import kotlinx.android.synthetic.main.current_address_edit_fragment.cancel_button
+import kotlinx.android.synthetic.main.current_address_edit_fragment.imageView10
+import kotlinx.android.synthetic.main.current_address_edit_fragment.line1
+import kotlinx.android.synthetic.main.current_address_edit_fragment.line2
+import kotlinx.android.synthetic.main.current_address_edit_fragment.location
+import kotlinx.android.synthetic.main.current_address_edit_fragment.pincode
+import kotlinx.android.synthetic.main.current_address_edit_fragment.state
+import kotlinx.android.synthetic.main.permanent_address_edit_fragment.*
 
 class CurrentAddressEditFragment : BaseFragment() {
     companion object {
@@ -98,19 +109,46 @@ class CurrentAddressEditFragment : BaseFragment() {
             }
 
             button2.setOnClickListener {
-                showToastLong("Saving", 2)
-                var editedAddress = AddressModel(
-                    line1.text.toString(),
-                    line2.text.toString(),
-                    area.text.toString(),
-                    location.text.toString(),
-                    state.text.toString(),
-                    pincode.text.toString()
-                )
-                Log.e("EDIT CURRENT", convertAddressToString(editedAddress))
-                viewModel.setCurrentAddress(editedAddress)
-                activity?.onBackPressed()
+                if(validate()) {
+                    var editedAddress = AddressModel(
+                        line1.text.toString(),
+                        line2.text.toString(),
+                        area.text.toString(),
+                        location.text.toString(),
+                        state.text.toString(),
+                        pincode.text.toString()
+                    )
+                    Log.e("EDIT CURRENT", convertAddressToString(editedAddress))
+                    viewModel.setCurrentAddress(editedAddress)
+                    activity?.onBackPressed()
+                }
             }
         }
     }
+
+    fun addressIsValid(view: EditText):Boolean{
+        if(view.text.toString().trim().length<3){
+            view.setError("More detail require!!")
+            return false
+        }
+        return true
+    }
+    private fun validate(): Boolean {
+        if(!addressIsValid(line1))
+            return false
+        if(!addressIsValid(line2))
+            return false
+        if(!addressIsValid(area))
+            return false
+        if(!addressIsValid(location))
+            return false
+        if(!addressIsValid(state))
+            return false
+        if(pincode.text.toString().length<6){
+            pincode.setError("Pincode is not correct!!")
+            return false
+        }
+        return true
+    }
+
 }

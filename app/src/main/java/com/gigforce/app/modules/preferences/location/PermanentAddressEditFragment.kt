@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.gigforce.app.R
@@ -91,24 +92,50 @@ class PermanentAddressEditFragment : BaseFragment() {
     private fun listener() {
 
         cancel_button.setOnClickListener {
-            showToastLong("Cancel", 2)
+//            showToastLong("Cancel", 2)
             activity?.onBackPressed()
         }
 
         button2.setOnClickListener {
-            showToastLong("Saving", 2)
-            var editedAddress = AddressModel(
-                line1.text.toString(),
-                line2.text.toString(),
-                area.text.toString(),
-                location.text.toString(),
-                state.text.toString(),
-                pincode.text.toString()
-            )
-            Log.e("EDIT CURRENT", convertAddressToString(editedAddress))
-            viewModel.setPermanentAddress(editedAddress)
-            activity?.onBackPressed()
+//            showToastLong("Saving", 2)
+            if(validate()) {
+                var editedAddress = AddressModel(
+                    line1.text.toString(),
+                    line2.text.toString(),
+                    area.text.toString(),
+                    location.text.toString(),
+                    state.text.toString(),
+                    pincode.text.toString()
+                )
+                viewModel.setPermanentAddress(editedAddress)
+                activity?.onBackPressed()
+            }
         }
         imageView10.setOnClickListener { activity?.onBackPressed() }
+
+    }
+    fun addressIsValid(view:EditText):Boolean{
+        if(view.text.toString().trim().length<3){
+            view.setError("More detail require!!")
+            return false
+        }
+        return true
+    }
+    private fun validate(): Boolean {
+        if(!addressIsValid(line1))
+            return false
+        if(!addressIsValid(line2))
+            return false
+        if(!addressIsValid(area))
+            return false
+        if(!addressIsValid(location))
+            return false
+        if(!addressIsValid(state))
+            return false
+        if(pincode.text.toString().length<6){
+            pincode.setError("Pincode is not correct!!")
+            return false
+        }
+        return true
     }
 }

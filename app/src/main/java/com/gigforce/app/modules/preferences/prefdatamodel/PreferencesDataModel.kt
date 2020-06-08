@@ -1,6 +1,7 @@
 package com.gigforce.app.modules.preferences.prefdatamodel
 
 
+import com.gigforce.app.modules.preferences.earnings.EarningDataModel
 import com.google.firebase.firestore.DocumentReference
 
 class PreferencesDataModel{
@@ -15,5 +16,6 @@ class PreferencesDataModel{
     var isWorkFromHome:Boolean = false
     var languageName : String = ""
     var languageCode : String = ""
+    var earning : EarningDataModel = EarningDataModel()
 
 }

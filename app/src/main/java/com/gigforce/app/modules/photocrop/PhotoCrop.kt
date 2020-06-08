@@ -478,7 +478,7 @@ class PhotoCrop : AppCompatActivity() {
         val dialog = this.let { Dialog(it) }
         dialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog?.setCancelable(false)
-        dialog?.setContentView(R.layout.confirmation_custom_alert)
+        dialog?.setContentView(R.layout.confirmation_custom_alert_type1)
         val titleDialog = dialog?.findViewById(R.id.title) as TextView
         titleDialog.text = "Are sure you want to Remove the picture ?"
         val noBtn = dialog?.findViewById(R.id.yes) as TextView
