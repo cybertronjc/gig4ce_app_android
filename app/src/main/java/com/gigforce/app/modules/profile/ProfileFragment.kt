@@ -155,7 +155,7 @@ class ProfileFragment : BaseFragment() {
             if (profile.bio.trim().isEmpty()) {
                 layout.add_bio_default.visibility = View.VISIBLE
                 layout.add_bio_default.setOnClickListener {
-                    findNavController().navigate(R.id.editCoverBottomSheet)
+                    findNavController().navigate(R.id.editHeadlineBottomSheet)
                 }
                 layout.bio_card.visibility = View.GONE
             } else {
@@ -164,7 +164,7 @@ class ProfileFragment : BaseFragment() {
                 layout.edit_cover_bio.visibility = View.VISIBLE
                 layout.bio.text = profile.bio
                 layout.bio_card.setOnClickListener {
-                    findNavController().navigate(R.id.editCoverBottomSheet)
+                    findNavController().navigate(R.id.editHeadlineBottomSheet)
                 }
             }
 
@@ -174,14 +174,14 @@ class ProfileFragment : BaseFragment() {
                     layout.tag_card.visibility = View.GONE
                     layout.add_tags_default.visibility = View.VISIBLE
                     layout.add_tags_default.setOnClickListener {
-                        findNavController().navigate(R.id.editCoverBottomSheet)
+                        findNavController().navigate(R.id.editTagBottomSheet)
                     }
                 } else {
                     layout.add_tags_default.visibility = View.GONE
                     layout.tag_card.visibility = View.VISIBLE
 
                     layout.tag_card.setOnClickListener {
-                        findNavController().navigate(R.id.editCoverBottomSheet)
+                        findNavController().navigate(R.id.editTagBottomSheet)
                     }
 
                     layout.edit_cover_bio.visibility = View.INVISIBLE
@@ -333,7 +333,7 @@ class ProfileFragment : BaseFragment() {
         }
 
         layout.edit_cover.setOnClickListener{
-            this.findNavController().navigate(R.id.editCoverBottomSheet)
+            this.findNavController().navigate(R.id.editTagBottomSheet)
         }
 
         /**

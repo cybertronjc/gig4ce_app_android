@@ -396,5 +396,15 @@
         android:id="@+id/walletBalancePage"
         android:name="com.gigforce.app.modules.wallet.WalletBalancePage"
         android:label="WalletBalancePage" />
+
+    <dialog
+        android:id="@+id/editHeadlineBottomSheet"
+        android:name="com.gigforce.app.modules.profile.EditHeadlineBottomSheet"
+        android:label="EditHeadlineBottomSheet" />
+
+    <dialog
+        android:id="@+id/editTagBottomSheet"
+        android:name="com.gigforce.app.modules.profile.EditTagBottomSheet"
+        android:label="EditTagBottomSheet" />
 </navigation>
 
