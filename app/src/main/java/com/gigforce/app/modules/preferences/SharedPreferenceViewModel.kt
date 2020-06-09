@@ -15,6 +15,7 @@ import com.gigforce.app.modules.profile.ProfileFirebaseRepository
 
 import com.gigforce.app.modules.profile.models.AddressFirestoreModel
 import com.gigforce.app.modules.profile.models.ProfileData
+import com.gigforce.app.utils.configrepository.ConfigDataModel
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.EventListener
@@ -120,6 +121,13 @@ class SharedPreferenceViewModel : ViewModel() {
         arrSlots.add("09:00 pm - 12:00 pm")
         arrSlots.add("12:00 am - 03:00 am")
         return arrSlots
+    }
+    private fun getAllSlots(configDataModel:ConfigDataModel):ArrayList<String>{
+        var arrTimeSlots = ArrayList<String>()
+        if(configDataModel!=null){
+            configDataModel.time_slots
+        }
+        return arrTimeSlots;
     }
     fun setIsWeekdays(checked: Boolean) {
         preferencesRepository.setData(preferencesRepository.WEEKDAYS,checked)

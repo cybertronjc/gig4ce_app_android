@@ -201,6 +201,7 @@ class WeekDayFragment : BaseFragment() {
     }
 
     fun showSlotsAlert() {
+        var slots = viewModel.getAllSlots(configDataModel)
         val items = arrayOf(
             "All",
             "06:00 am - 10:00 am",

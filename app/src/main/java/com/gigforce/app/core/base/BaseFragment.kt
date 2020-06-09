@@ -29,6 +29,8 @@ import com.gigforce.app.core.CoreConstants
 import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.app.modules.preferences.PreferencesRepository
 import com.gigforce.app.utils.AppConstants
+import com.gigforce.app.utils.configrepository.ConfigDataModel
+import com.gigforce.app.utils.configrepository.ConfigRepository
 import com.gigforce.app.utils.popAllBackStates
 import java.util.*
 
@@ -44,7 +46,7 @@ abstract class BaseFragment : Fragment() {
     lateinit var baseFragment: BaseFragment
     lateinit var navController: NavController
     lateinit var preferencesRepositoryForBaseFragment: PreferencesRepository
-
+    private var configrepositoryObj: ConfigRepository? = null;
     companion object {
         var englishCode = "en"
         var hindiCode = "hi"
@@ -205,7 +207,14 @@ abstract class BaseFragment : Fragment() {
             Context.MODE_PRIVATE
         )!!
         this.editor = SP.edit()
-
+        configObserver()
+    }
+    var configDataModel : ConfigDataModel? = null
+    private fun configObserver() {
+        this.configrepositoryObj = ConfigRepository.getInstance()
+        this.configrepositoryObj?.configLiveDataModel?.observe(viewLifecycleOwner, androidx.lifecycle.Observer { configDataModel ->
+            this.configDataModel = configDataModel
+        })
     }
 
     fun getFragmentView(): View {
