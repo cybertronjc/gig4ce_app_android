@@ -212,6 +212,7 @@ abstract class BaseFragment : Fragment() {
     var configDataModel : ConfigDataModel? = null
     private fun configObserver() {
         this.configrepositoryObj = ConfigRepository.getInstance()
+        this.configrepositoryObj?.configCollectionListener()
         this.configrepositoryObj?.configLiveDataModel?.observe(viewLifecycleOwner, androidx.lifecycle.Observer { configDataModel ->
             this.configDataModel = configDataModel
         })
