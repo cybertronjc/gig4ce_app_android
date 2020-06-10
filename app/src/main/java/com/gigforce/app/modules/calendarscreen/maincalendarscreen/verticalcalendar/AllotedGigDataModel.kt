@@ -1,4 +1,4 @@
-package com.gigforce.app.modules.homescreen.mainhome
+package com.gigforce.app.modules.calendarscreen.maincalendarscreen.verticalcalendar
 
 import com.gigforce.app.core.base.basefirestore.BaseFirestoreDataModel
 

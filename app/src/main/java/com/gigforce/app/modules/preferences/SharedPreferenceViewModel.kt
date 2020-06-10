@@ -144,7 +144,6 @@ class SharedPreferenceViewModel : ViewModel() {
             arrTimeSlots.add("All")
             for (congTimeSlot in configDataModel.time_slots) {
                 for (seletedSlot in selectedSlots) {
-
                     if (congTimeSlot.time_slot_id.toString().equals(seletedSlot))
                         arrTimeSlots.add(
                             getTime(congTimeSlot.start_time_slot) + "-" + getTime(

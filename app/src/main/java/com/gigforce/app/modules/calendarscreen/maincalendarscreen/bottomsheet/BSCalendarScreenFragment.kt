@@ -1,6 +1,5 @@
-package com.gigforce.app.modules.homescreen.mainhome.bottomsheet
+package com.gigforce.app.modules.calendarscreen.maincalendarscreen.bottomsheet
 
-import android.graphics.BitmapFactory
 import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.drawable.Drawable
@@ -14,7 +13,6 @@ import android.text.SpannableString
 import android.text.style.UnderlineSpan
 import android.util.DisplayMetrics
 import android.view.Gravity
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,13 +28,13 @@ import com.gigforce.app.core.genericadapter.RecyclerGenericAdapter
 import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.*
 import java.util.ArrayList
 
-class HomeScreenBottomSheetFragment : BaseFragment() {
+class BSCalendarScreenFragment : BaseFragment() {
 
     companion object {
-        fun newInstance() = HomeScreenBottomSheetFragment()
+        fun newInstance() = BSCalendarScreenFragment()
     }
 
-    private lateinit var viewModel: HomeScreenBottomSheetViewModel
+    private lateinit var viewModel: BSCalendarScreenViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,7 +45,7 @@ class HomeScreenBottomSheetFragment : BaseFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(HomeScreenBottomSheetViewModel::class.java)
+        viewModel = ViewModelProviders.of(this).get(BSCalendarScreenViewModel::class.java)
         initializeBottomSheet()
         dismissLanguageSelectionDialog()
     }

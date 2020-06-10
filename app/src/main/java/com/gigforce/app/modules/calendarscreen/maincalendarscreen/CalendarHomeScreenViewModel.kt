@@ -1,16 +1,18 @@
-package com.gigforce.app.modules.homescreen.mainhome
+package com.gigforce.app.modules.calendarscreen.maincalendarscreen
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.gigforce.app.modules.homescreen.mainhome.verticalcalendar.VerticalCalendarDataItemModel
+import com.gigforce.app.modules.calendarscreen.maincalendarscreen.verticalcalendar.AllotedGigDataModel
+import com.gigforce.app.modules.calendarscreen.maincalendarscreen.verticalcalendar.MainHomeCompleteGigModel
+import com.gigforce.app.modules.calendarscreen.maincalendarscreen.verticalcalendar.VerticalCalendarDataItemModel
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.EventListener
 import java.util.*
 import kotlin.collections.ArrayList
 
-class MainHomeScreenViewModel : ViewModel() {
+class CalendarHomeScreenViewModel : ViewModel() {
     // TODO: Implement the ViewModel
-    var mainHomeRepository = MainHomeRepository()
+    var mainHomeRepository = CalendarHomeRepository()
     var mainHomeLiveDataModel: MutableLiveData<MainHomeCompleteGigModel> =
         MutableLiveData<MainHomeCompleteGigModel>()
     var arrMainHomeDataModel: ArrayList<AllotedGigDataModel>? = ArrayList<AllotedGigDataModel>()
@@ -25,7 +27,8 @@ class MainHomeScreenViewModel : ViewModel() {
                 if (e != null) {
                     return@EventListener
                 }
-                var data : MainHomeCompleteGigModel? = value!!.toObject(MainHomeCompleteGigModel::class.java)
+                var data : MainHomeCompleteGigModel? = value!!.toObject(
+                    MainHomeCompleteGigModel::class.java)
                 arrMainHomeDataModel = data?.all_gigs
                 mainHomeLiveDataModel.postValue(
                     data

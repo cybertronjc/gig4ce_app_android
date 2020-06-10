@@ -104,7 +104,7 @@
         app:layout_behavior="com.riningan.widget.ExtendedBottomSheetBehavior">
 
         <fragment
-            android:name="com.gigforce.app.modules.homescreen.mainhome.bottomsheet.HomeScreenBottomSheetFragment"
+            android:name="com.gigforce.app.modules.calendarscreen.maincalendarscreen.bottomsheet.BSCalendarScreenFragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
