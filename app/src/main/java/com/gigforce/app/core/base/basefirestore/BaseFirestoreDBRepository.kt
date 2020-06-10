@@ -98,5 +98,9 @@ abstract public class BaseFirestoreDBRepository {
             .document(uid)
     }
     // for get collection data ----------------
-
+     public open fun getCustomUid(): String?{ return ""}
+    fun getCustomDBCollection(): DocumentReference {
+        return firebaseDB.collection(getCollectionName())
+            .document(getCustomUid()!!)
+    }
 }
