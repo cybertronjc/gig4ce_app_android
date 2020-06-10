@@ -1,8 +1,6 @@
 package com.gigforce.app.modules.preferences
 
 
-import android.location.Location
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.gigforce.app.R
@@ -148,16 +146,16 @@ class SharedPreferenceViewModel : ViewModel() {
 
     fun getPrefrencesData(): ArrayList<PreferencesScreenItem> {
         val prefrencesItems = ArrayList<PreferencesScreenItem>()
-        prefrencesItems.add(PreferencesScreenItem(R.drawable.ic_products,"Category",""))
-        prefrencesItems.add(PreferencesScreenItem(R.drawable.ic_product_services_pressed,"Roles","At atm"))
-        prefrencesItems.add(PreferencesScreenItem(R.drawable.ic_referal,"Day and Time",getDateTimeSubtitle()))
-        prefrencesItems.add(PreferencesScreenItem(R.drawable.ic_settings,"Location","Work from home,Bangalore"))
-        prefrencesItems.add(PreferencesScreenItem(R.drawable.ic_settings,"Earning",getEarning()))
+        prefrencesItems.add(PreferencesScreenItem(R.drawable.ic_link_black,"Category",""))
+        prefrencesItems.add(PreferencesScreenItem(R.drawable.ic_group_black,"Roles","At atm"))
+        prefrencesItems.add(PreferencesScreenItem(R.drawable.ic_clock_black,"Day and Time",getDateTimeSubtitle()))
+        prefrencesItems.add(PreferencesScreenItem(R.drawable.ic_location_pin_black,"Location","Work from home,Bangalore"))
+        prefrencesItems.add(PreferencesScreenItem(R.drawable.ic_credit_card_black,"Earning",getEarning()))
         prefrencesItems.add(PreferencesScreenItem(0,"OTHERS",""))
-        prefrencesItems.add(PreferencesScreenItem(R.drawable.ic_link_broken,"App Language",getLanguage()))
-        prefrencesItems.add(PreferencesScreenItem(R.drawable.ic_broadcast,"Notification",""))
-        prefrencesItems.add(PreferencesScreenItem(R.drawable.ic_products,"Sign out",""))
-        return prefrencesItems;
+        prefrencesItems.add(PreferencesScreenItem(R.drawable.ic_language_black,"App Language",getLanguage()))
+        prefrencesItems.add(PreferencesScreenItem(R.drawable.ic_notifications_on_black,"Notification",""))
+        prefrencesItems.add(PreferencesScreenItem(R.drawable.ic_power_button_black,"Sign out",""))
+        return prefrencesItems
     }
 
     private fun getEarning(): String {
