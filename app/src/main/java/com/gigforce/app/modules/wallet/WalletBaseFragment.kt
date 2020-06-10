@@ -6,4 +6,6 @@ import com.gigforce.app.core.base.BaseFragment
 abstract class WalletBaseFragment: BaseFragment() {
 
     val walletViewModel: WalletViewModel by activityViewModels<WalletViewModel>()
+
+    val invoiceViewModel: InvoiceViewModel by activityViewModels<InvoiceViewModel>()
 }

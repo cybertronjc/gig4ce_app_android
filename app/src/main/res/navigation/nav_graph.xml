@@ -406,5 +406,15 @@
         android:id="@+id/editTagBottomSheet"
         android:name="com.gigforce.app.modules.profile.EditTagBottomSheet"
         android:label="EditTagBottomSheet" />
+
+    <fragment
+        android:id="@+id/invoiceStatusPage"
+        android:name="com.gigforce.app.modules.wallet.InvoiceStatusPage"
+        android:label="InvoiceStatusPage" />
+
+    <fragment
+        android:id="@+id/paymentDisputePage"
+        android:name="com.gigforce.app.modules.wallet.PaymentDisputePage"
+        android:label="PaymentDisputePage" />
 </navigation>
 

@@ -341,6 +341,12 @@
         <item name="android:textColor">@color/black</item>
     </style>
 
+    <style name="LatoRegular12Black" parent="Widget.MaterialComponents.TextView">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+
     <style name="button_style_disable" parent="Widget.AppCompat.TextView">
         <item name="android:textColor">@color/white</item>
         <item name="android:background">#888888</item>
@@ -355,5 +361,18 @@
         <item name="android:windowIsFloating">false</item>
         <item name="android:colorBackground">@android:color/transparent</item>
         <item name="android:windowSoftInputMode">adjustResize</item>
+    </style>
+    
+    <style name="AppTabLayout" parent="Widget.Design.TabLayout">
+        <item name="tabBackground">@color/colorPrimary</item>
+        <item name="tabIndicatorColor">@color/white</item>
+        <item name="tabSelectedTextColor">@color/white</item>
+    </style>
+
+    <style name="AppTabTextAppearance" parent="TextAppearance.Design.Tab">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">#d16f6f</item>
+        <item name="android:textStyle">bold</item>
+        <item name="textAllCaps">false</item>
     </style>
 </resources>
