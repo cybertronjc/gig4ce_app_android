@@ -13,9 +13,13 @@ import com.gigforce.app.modules.profile.ProfileFirebaseRepository
 
 import com.gigforce.app.modules.profile.models.AddressFirestoreModel
 import com.gigforce.app.modules.profile.models.ProfileData
+import com.gigforce.app.utils.configrepository.ConfigDataModel
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.EventListener
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 class SharedPreferenceViewModel : ViewModel() {
     companion object {
@@ -23,26 +27,29 @@ class SharedPreferenceViewModel : ViewModel() {
         var profileDataModelObj: ProfileData = ProfileData()
         var addressModelObj: AddressModel = AddressModel()
     }
+
     var profileFirebaseRepository = ProfileFirebaseRepository()
     var userProfileData: MutableLiveData<ProfileData> = MutableLiveData<ProfileData>()
-    var preferencesRepository:PreferencesRepository = PreferencesRepository()
-//    var profileRepository:ProfileFirebaseRepository = ProfileFirebaseRepository()
-    var citiesRepository:CitiesRepository = CitiesRepository()
-    var preferenceDataModel: MutableLiveData<PreferencesDataModel> = MutableLiveData<PreferencesDataModel>()
+    var preferencesRepository: PreferencesRepository = PreferencesRepository()
+    //    var profileRepository:ProfileFirebaseRepository = ProfileFirebaseRepository()
+    var citiesRepository: CitiesRepository = CitiesRepository()
+    var preferenceDataModel: MutableLiveData<PreferencesDataModel> =
+        MutableLiveData<PreferencesDataModel>()
 //    var profileDataModel: MutableLiveData<ProfileData> = MutableLiveData<ProfileData>()
 
-    fun getPreferenceDataModel():PreferencesDataModel{
+    fun getPreferenceDataModel(): PreferencesDataModel {
         return preferencesDataModelObj
     }
-    fun setPreferenceDataModel(preferencesDataModel: PreferencesDataModel){
+
+    fun setPreferenceDataModel(preferencesDataModel: PreferencesDataModel) {
         preferencesDataModelObj = preferencesDataModel
     }
 
-    fun getProfileDataModel(): ProfileData{
+    fun getProfileDataModel(): ProfileData {
         return profileDataModelObj
     }
 
-    fun setProfileDataModel(profileDataModel: ProfileData){
+    fun setProfileDataModel(profileDataModel: ProfileData) {
         profileDataModelObj = profileDataModel
     }
 
@@ -51,39 +58,38 @@ class SharedPreferenceViewModel : ViewModel() {
         getAllData()
     }
 
-    fun getAllData(){
-        preferencesRepository.getDBCollection().addSnapshotListener(EventListener<DocumentSnapshot> {
-                value, e ->
-            if (e != null) {
-                return@EventListener
-            }
-            if(value?.data==null){
-                var defaultData = PreferencesDataModel()
-                defaultData.isweekdaysenabled = true
-                defaultData.selecteddays.addAll(getAllDays())
-                defaultData.selectedslots.addAll(getAllSlots())
-             preferencesRepository.setDefaultData(defaultData)
-            }else {
-                preferenceDataModel.postValue(
-                    value!!.toObject(PreferencesDataModel::class.java)
-                )
-            }
-        })
+    fun getAllData() {
+        preferencesRepository.getDBCollection()
+            .addSnapshotListener(EventListener<DocumentSnapshot> { value, e ->
+                if (e != null) {
+                    return@EventListener
+                }
+                if (value?.data == null) {
+                    var defaultData = PreferencesDataModel()
+                    defaultData.isweekdaysenabled = true
+                    defaultData.selecteddays.addAll(getAllDays())
+                    defaultData.selectedslots.addAll(getAllSlots())
+                    preferencesRepository.setDefaultData(defaultData)
+                } else {
+                    preferenceDataModel.postValue(
+                        value!!.toObject(PreferencesDataModel::class.java)
+                    )
+                }
+            })
 
-        profileFirebaseRepository.getDBCollection().addSnapshotListener(EventListener<DocumentSnapshot> {
-                value, e ->
-            if (e != null) {
-                return@EventListener
-            }
-            if (value!!.data == null) {
-                profileFirebaseRepository.createEmptyProfile()
-            }
-            else {
-                userProfileData.postValue(
-                    value!!.toObject(ProfileData::class.java)
-                )
-            }
-        })
+        profileFirebaseRepository.getDBCollection()
+            .addSnapshotListener(EventListener<DocumentSnapshot> { value, e ->
+                if (e != null) {
+                    return@EventListener
+                }
+                if (value!!.data == null) {
+                    profileFirebaseRepository.createEmptyProfile()
+                } else {
+                    userProfileData.postValue(
+                        value!!.toObject(ProfileData::class.java)
+                    )
+                }
+            })
 
 //        profileRepository.getDBCollection().addSnapshotListener(EventListener<DocumentSnapshot> {
 //                value, e ->
@@ -108,6 +114,7 @@ class SharedPreferenceViewModel : ViewModel() {
         arrDays.add("Friday")
         return arrDays
     }
+
     private fun getAllSlots(): ArrayList<String> {
         var arrSlots = ArrayList<String>()
         arrSlots.add("All")
@@ -119,29 +126,77 @@ class SharedPreferenceViewModel : ViewModel() {
         arrSlots.add("12:00 am - 03:00 am")
         return arrSlots
     }
+
+    public fun getAllSlotsToShow(configDataModel: ConfigDataModel?): ArrayList<String> {
+        var arrTimeSlots = ArrayList<String>()
+        if (configDataModel != null) {
+            arrTimeSlots.add("All")
+            for (congTimeSlot in configDataModel.time_slots) {
+                arrTimeSlots.add(getTime(congTimeSlot.start_time_slot) + "-" + getTime(congTimeSlot.end_time_slot))
+            }
+        }
+        return arrTimeSlots;
+    }
+    public fun getSelectedSlotsToShow(configDataModel: ConfigDataModel?,selectedSlots:ArrayList<String>): ArrayList<String> {
+        var arrTimeSlots = ArrayList<String>()
+        if (configDataModel != null && selectedSlots!=null) {
+            if(selectedSlots.size==configDataModel.time_slots.size)
+            arrTimeSlots.add("All")
+            for (congTimeSlot in configDataModel.time_slots) {
+                for (seletedSlot in selectedSlots) {
+
+                    if (congTimeSlot.time_slot_id.toString().equals(seletedSlot))
+                        arrTimeSlots.add(
+                            getTime(congTimeSlot.start_time_slot) + "-" + getTime(
+                                congTimeSlot.end_time_slot
+                            )
+                        )
+                }
+            }
+        }
+        return arrTimeSlots;
+    }
+    fun getSelectedSlotsIds(indices: IntRange,configDataModel: ConfigDataModel?): ArrayList<String> {
+        var arrListSlots = ArrayList<String>()
+        if(configDataModel!=null)
+        for (index in indices) {
+            if(index!=0)
+                arrListSlots.add(configDataModel.time_slots.get(index-1).time_slot_id.toString())
+        }
+    return arrListSlots
+    }
+    private fun getTime(date: Date?): String {
+        if (date != null) {
+            var dateFormat = SimpleDateFormat("hh:mm aa")
+            var convertedDate = dateFormat.format(date)
+            return convertedDate
+        }
+        return ""
+    }
+
     fun setIsWeekdays(checked: Boolean) {
-        preferencesRepository.setData(preferencesRepository.WEEKDAYS,checked)
+        preferencesRepository.setData(preferencesRepository.WEEKDAYS, checked)
     }
 
 
-    fun setWorkingDays(arrDays:ArrayList<String>){
-        preferencesRepository.setDataAndDeleteOldData(preferencesRepository.WORKINGDAYS,arrDays)
+    fun setWorkingDays(arrDays: ArrayList<String>) {
+        preferencesRepository.setDataAndDeleteOldData(preferencesRepository.WORKINGDAYS, arrDays)
     }
 
-    fun setWorkingSlots(arrDays:ArrayList<String>){
-        preferencesRepository.setDataAndDeleteOldData(preferencesRepository.WORKINGSLOTS,arrDays)
+    fun setWorkingSlots(arrDays: ArrayList<String>) {
+        preferencesRepository.setDataAndDeleteOldData(preferencesRepository.WORKINGSLOTS, arrDays)
     }
 
-    fun setIsWeekend(checked: Boolean){
-        preferencesRepository.setData(preferencesRepository.WEEKEND,checked)
+    fun setIsWeekend(checked: Boolean) {
+        preferencesRepository.setData(preferencesRepository.WEEKEND, checked)
     }
 
-    fun setWorkendDays(arrDays:ArrayList<String>){
-        preferencesRepository.setDataAndDeleteOldData(preferencesRepository.WEEKENDDAYS,arrDays)
+    fun setWorkendDays(arrDays: ArrayList<String>) {
+        preferencesRepository.setDataAndDeleteOldData(preferencesRepository.WEEKENDDAYS, arrDays)
     }
 
-    fun setWorkendSlots(arrDays:ArrayList<String>){
-        preferencesRepository.setDataAndDeleteOldData(preferencesRepository.WEEKENDSLOTS,arrDays)
+    fun setWorkendSlots(arrDays: ArrayList<String>) {
+        preferencesRepository.setDataAndDeleteOldData(preferencesRepository.WEEKENDSLOTS, arrDays)
     }
 
     fun getPrefrencesData(): ArrayList<PreferencesScreenItem> {
@@ -160,10 +215,10 @@ class SharedPreferenceViewModel : ViewModel() {
 
     private fun getEarning(): String {
 
-        return preferencesDataModelObj.earning.perMonthGoal.toString()+ " Rs"
+        return preferencesDataModelObj.earning.perMonthGoal.toString() + " Rs"
     }
 
-    fun getPreferredLocationList():ArrayList<String>{
+    fun getPreferredLocationList(): ArrayList<String> {
         var preferredList = ArrayList<String>()
         preferredList.add("HSR")
         preferredList.add("Kormangala Block 1")
@@ -175,22 +230,22 @@ class SharedPreferenceViewModel : ViewModel() {
         return preferredList
     }
 
-    fun getLanguage():String{
-        if(preferencesDataModelObj!=null) return preferencesDataModelObj.languageName else return "English"
+    fun getLanguage(): String {
+        if (preferencesDataModelObj != null) return preferencesDataModelObj.languageName else return "English"
     }
-    fun getDateTimeSubtitle():String{
+
+    fun getDateTimeSubtitle(): String {
         var subTitle = ""
-        var daysStr  = "day"
-        if(preferencesDataModelObj.selecteddays.size==0){
+        var daysStr = "day"
+        if (preferencesDataModelObj.selecteddays.size == 0) {
             subTitle = "None"
-        }else if(preferencesDataModelObj.selecteddays.size>1){
+        } else if (preferencesDataModelObj.selecteddays.size > 1) {
             var totalDays = preferencesDataModelObj.selecteddays.size
-            if(totalDays==6)
-                totalDays-=1
-            subTitle = totalDays.toString()+" days"
-        }
-        else if(preferencesDataModelObj.selecteddays.size==1){
-            subTitle = preferencesDataModelObj.selecteddays.size.toString()+" day"
+            if (totalDays == 6)
+                totalDays -= 1
+            subTitle = totalDays.toString() + " days"
+        } else if (preferencesDataModelObj.selecteddays.size == 1) {
+            subTitle = preferencesDataModelObj.selecteddays.size.toString() + " day"
 
         }
         return subTitle
@@ -205,25 +260,31 @@ class SharedPreferenceViewModel : ViewModel() {
     }
 
 
-    fun setCurrentAddress(address: AddressModel){
-        var addressMap:AddressFirestoreModel= profileDataModelObj.address
-        addressMap.current=address
+    fun setCurrentAddress(address: AddressModel) {
+        var addressMap: AddressFirestoreModel = profileDataModelObj.address
+        addressMap.current = address
         profileFirebaseRepository.setAddress(addressMap)
     }
-    fun setCurrentAddressPrferredDistanceData(preferredDistance:Int, preferredDistanceActive:Boolean){
-        var addressMap:AddressFirestoreModel= profileDataModelObj.address
+
+    fun setCurrentAddressPrferredDistanceData(
+        preferredDistance: Int,
+        preferredDistanceActive: Boolean
+    ) {
+        var addressMap: AddressFirestoreModel = profileDataModelObj.address
         addressMap.current.preferred_distance = preferredDistance
         addressMap.current.preferredDistanceActive = preferredDistanceActive
         profileFirebaseRepository.setAddress(addressMap)
     }
-    fun setCurrentAddressPreferredDistanceActive(preferredDistanceActive:Boolean){
-        var addressMap:AddressFirestoreModel= profileDataModelObj.address
+
+    fun setCurrentAddressPreferredDistanceActive(preferredDistanceActive: Boolean) {
+        var addressMap: AddressFirestoreModel = profileDataModelObj.address
         addressMap.current.preferredDistanceActive = preferredDistanceActive
         profileFirebaseRepository.setAddress(addressMap)
     }
-    fun setPermanentAddress(address: AddressModel){
-        var addressMap:AddressFirestoreModel= profileDataModelObj.address
-        addressMap.home=address
+
+    fun setPermanentAddress(address: AddressModel) {
+        var addressMap: AddressFirestoreModel = profileDataModelObj.address
+        addressMap.home = address
         profileFirebaseRepository.setAddress(addressMap)
     }
 
@@ -231,24 +292,63 @@ class SharedPreferenceViewModel : ViewModel() {
         return preferencesDataModelObj.locations
     }
 
-    fun setLocations(locations: LocationPreferenceModel){
+    fun setLocations(locations: LocationPreferenceModel) {
         preferencesRepository.setData(locations)
     }
 
-    fun setWorkFromHome(boolean: Boolean){
-        preferencesRepository.setData("workFromHome",boolean)
+    fun setWorkFromHome(boolean: Boolean) {
+        preferencesRepository.setData("workFromHome", boolean)
     }
 
-    fun getCities(): ArrayList<String>{
+    fun getCities(): ArrayList<String> {
         return citiesRepository.getCities()
     }
 
     fun saveLanguageToFirebase(langStr: String, langCode: String) {
-        preferencesRepository.setDataAsKeyValue("languageName",langStr)
-        preferencesRepository.setDataAsKeyValue("languageCode",langCode)
+        preferencesRepository.setDataAsKeyValue("languageName", langStr)
+        preferencesRepository.setDataAsKeyValue("languageCode", langCode)
     }
 
-    fun saveEarningData(earningData : EarningDataModel) {
+    fun saveEarningData(earningData: EarningDataModel) {
         preferencesRepository.setDataAsKeyValue(earningData)
     }
+
+
 }
+
+/*
+        prefrencesItems.add(PreferencesScreenItem(R.drawable.ic_products, "Category", ""))
+        prefrencesItems.add(
+            PreferencesScreenItem(
+                R.drawable.ic_product_services_pressed,
+                "Roles",
+                "At atm"
+            )
+        )
+        prefrencesItems.add(
+            PreferencesScreenItem(
+                R.drawable.ic_referal,
+                "Day and Time",
+                getDateTimeSubtitle()
+            )
+        )
+        prefrencesItems.add(
+            PreferencesScreenItem(
+                R.drawable.ic_settings,
+                "Location",
+                "Work from home,Bangalore"
+            )
+        )
+        prefrencesItems.add(PreferencesScreenItem(R.drawable.ic_settings, "Earning", getEarning()))
+        prefrencesItems.add(PreferencesScreenItem(0, "OTHERS", ""))
+        prefrencesItems.add(
+            PreferencesScreenItem(
+                R.drawable.ic_link_broken,
+                "App Language",
+                getLanguage()
+            )
+        )
+        prefrencesItems.add(PreferencesScreenItem(R.drawable.ic_broadcast, "Notification", ""))
+        prefrencesItems.add(PreferencesScreenItem(R.drawable.ic_products, "Sign out", ""))
+        return prefrencesItems;
+ */
