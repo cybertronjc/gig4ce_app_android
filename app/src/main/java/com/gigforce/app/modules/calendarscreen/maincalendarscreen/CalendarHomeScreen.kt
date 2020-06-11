@@ -1,4 +1,4 @@
-package com.gigforce.app.modules.homescreen.mainhome
+package com.gigforce.app.modules.calendarscreen.maincalendarscreen
 
 import android.app.Dialog
 import android.os.Bundle
@@ -13,7 +13,7 @@ import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.app.core.genericadapter.RecyclerGenericAdapter
-import com.gigforce.app.modules.homescreen.mainhome.verticalcalendar.VerticalCalendarDataItemModel
+import com.gigforce.app.modules.calendarscreen.maincalendarscreen.verticalcalendar.VerticalCalendarDataItemModel
 import com.gigforce.app.modules.preferences.PreferencesFragment
 import com.gigforce.app.modules.preferences.prefdatamodel.PreferencesDataModel
 import com.gigforce.app.modules.profile.ProfileViewModel
@@ -24,30 +24,30 @@ import com.google.firebase.firestore.EventListener
 import com.google.firebase.storage.StorageReference
 import com.riningan.widget.ExtendedBottomSheetBehavior
 import com.riningan.widget.ExtendedBottomSheetBehavior.STATE_COLLAPSED
-import kotlinx.android.synthetic.main.homescreen_1nsvbs.*
+import kotlinx.android.synthetic.main.calendar_home_screen.*
 import java.text.SimpleDateFormat
 import java.util.*
 
 
-class MainHomeScreen : BaseFragment() {
+class CalendarHomeScreen : BaseFragment() {
 
     companion object {
         fun newInstance() =
-            MainHomeScreen()
+            CalendarHomeScreen()
     }
     private var mExtendedBottomSheetBehavior: ExtendedBottomSheetBehavior<*>? = null
-    private lateinit var viewModel: MainHomeScreenViewModel
+    private lateinit var viewModel: CalendarHomeScreenViewModel
     lateinit var viewModelProfile: ProfileViewModel
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflateView(R.layout.homescreen_1nsvbs, inflater, container)
+        return inflateView(R.layout.calendar_home_screen, inflater, container)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(MainHomeScreenViewModel::class.java)
+        viewModel = ViewModelProviders.of(this).get(CalendarHomeScreenViewModel::class.java)
         viewModelProfile = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
         initializeViews()
         listener()

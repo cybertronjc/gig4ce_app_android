@@ -1,4 +1,4 @@
-package com.gigforce.app.modules.homescreen
+package com.gigforce.app.modules.calendarscreen
 
 import android.app.Dialog
 import android.os.Build

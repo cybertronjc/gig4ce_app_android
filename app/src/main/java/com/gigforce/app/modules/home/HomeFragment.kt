@@ -11,7 +11,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.gigforce.app.R
 import com.gigforce.app.modules.chat.ChatsHomeFragment
-import com.gigforce.app.modules.homescreen.HomeScreenFragment
+import com.gigforce.app.modules.calendarscreen.HomeScreenFragment
 import com.gigforce.app.utils.popAllBackStates
 
 class HomeFragment: Fragment(), View.OnClickListener {
