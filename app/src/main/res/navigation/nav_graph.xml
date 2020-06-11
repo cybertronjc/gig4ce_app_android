@@ -123,6 +123,13 @@
         android:name="com.gigforce.app.modules.chat.ChatFragment"
         android:label="chat_fragment"
         tools:layout="@layout/fragment_chat" />
+
+    <fragment
+        android:id="@+id/landinghomefragment"
+        android:name="com.gigforce.app.modules.landingscreen.LandingScreenFragment"
+        android:label="landing_home_fragment"
+        tools:layout="@layout/landingscreen_fragment" />
+
     <fragment
         android:id="@+id/educationExpandedFragment"
         android:name="com.gigforce.app.modules.profile.EducationExpandedFragment"
@@ -212,7 +219,7 @@
     </fragment>
     <fragment
         android:id="@+id/homeScreenFragment"
-        android:name="com.gigforce.app.modules.homescreen.HomeScreenFragment"
+        android:name="com.gigforce.app.modules.calendarscreen.HomeScreenFragment"
         android:label="HomeScreenFragment">
         <action
             android:id="@+id/action_homeScreenFragment_to_profileFragment"
@@ -223,7 +230,7 @@
     </fragment>
     <fragment
         android:id="@+id/mainHomeScreen"
-        android:name="com.gigforce.app.modules.homescreen.mainhome.MainHomeScreen"
+        android:name="com.gigforce.app.modules.calendarscreen.maincalendarscreen.CalendarHomeScreen"
         android:label="HomeScreenIcons">
         <action
             android:id="@+id/action_homeScreenIcons_to_profileFragment"
@@ -334,7 +341,7 @@
         android:label="EditCoverBottomSheet" />
     <fragment
         android:id="@+id/homeScreenNew"
-        android:name="com.gigforce.app.modules.homescreen.mainhome.MainHomeScreen"
+        android:name="com.gigforce.app.modules.calendarscreen.maincalendarscreen.CalendarHomeScreen"
         android:label="home_screen_new_fragment"
         tools:layout="@layout/item_homescreen1" />
     <dialog

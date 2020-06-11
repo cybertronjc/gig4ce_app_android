@@ -50,6 +50,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView52" />
 
+
+    <ImageView
+        android:id="@+id/days_iv"
+        android:layout_width="20dp"
+        android:layout_height="21dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="14dp"
+        app:layout_constraintStart_toStartOf="@+id/textView60"
+        app:layout_constraintTop_toTopOf="@+id/textView60"
+        android:src="@drawable/ic_calendar_black" />
+
     <TextView
         android:id="@+id/textView61"
         android:layout_width="wrap_content"
@@ -97,6 +108,17 @@
         android:background="@color/white"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView60" />
+
+
+    <ImageView
+        android:id="@+id/slots_iv"
+        android:layout_width="20dp"
+        android:layout_height="21dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="14dp"
+        app:layout_constraintStart_toStartOf="@+id/textView64"
+        app:layout_constraintTop_toTopOf="@+id/textView64"
+        android:src="@drawable/ic_calendar_black" />
 
     <TextView
         android:id="@+id/textView65"

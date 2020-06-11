@@ -1,4 +1,4 @@
-package com.gigforce.app.modules.homescreen
+package com.gigforce.app.modules.calendarscreen
 
 import com.gigforce.app.R
 

@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.RadioButton
 import android.widget.RadioGroup
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
@@ -41,7 +42,7 @@ class LanguagePreferencesFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(SharedPreferenceViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(SharedPreferenceViewModel::class.java)
         initializer()
         setDefaultLanguage()
         listener()
@@ -72,7 +73,6 @@ class LanguagePreferencesFragment : BaseFragment() {
             "gu" -> groupradio.findViewById<RadioButton>(R.id.gu).isChecked = true
             "pa" -> groupradio.findViewById<RadioButton>(R.id.pu).isChecked = true
             "fr" -> groupradio.findViewById<RadioButton>(R.id.fr).isChecked = true
-            "te" -> groupradio.findViewById<RadioButton>(R.id.te).isChecked = true
             "mr" -> groupradio.findViewById<RadioButton>(R.id.mr).isChecked = true
             else -> groupradio.findViewById<RadioButton>(R.id.en).isChecked = true
         }

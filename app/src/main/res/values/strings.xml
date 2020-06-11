@@ -288,7 +288,7 @@
     <string name="addline1">Address Line 1</string>
     <string name="addLine2">Address Line 2</string>
     <string name="preferred_distance">Preferred Distance</string>
-    <string name="earning">Earning</string>
+    <string name="earning">Earnings</string>
     <string name="submit_documents">Submit documents</string>
     <string name="giger_verification_desc">We need to verify your information.please submit the documents below to process giger verification</string>
     <string name="selfie_video">Selfie Video *</string>

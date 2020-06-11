@@ -39,7 +39,7 @@ class ProfileFragment : BaseFragment() {
     private lateinit var layout: View
     private lateinit var profileAvatarName: String
     private lateinit var dWidth: Display
-    private lateinit var win: Window
+    private lateinit var win:Window
     private var PHOTO_CROP: Int = 45
     private var isShow: Boolean = true
     private var scrollRange: Int = -1
@@ -53,17 +53,20 @@ class ProfileFragment : BaseFragment() {
 //        }
     }
 
-    private fun makeStatusBarTransparent() {
+    private fun makeStatusBarTransparent(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             win = requireActivity().window
             win.setFlags(
                 WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
-            )
+                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
+            win.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            win.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            win.setStatusBarColor(requireActivity().getColor(R.color.white))
+
         }
     }
 
-    private fun restoreStatusBar() {
+    private fun restoreStatusBar(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             win = requireActivity().window
             win.clearFlags(
@@ -272,10 +275,8 @@ class ProfileFragment : BaseFragment() {
                     mainExperienceString += experiences[0].employmentType + "\n"
                     mainExperienceString += experiences[0].location + "\n"
                     mainExperienceString += format.format(experiences[0].startDate!!) + "-"
-                    mainExperienceString += if (experiences[0].endDate != null) format.format(
-                        experiences[0].endDate!!
-                    ) + "\n"
-                    else "current" + "\n"
+                    mainExperienceString += if(experiences[0].endDate != null) format.format(experiences[0].endDate!!) + "\n"
+                                            else "current" + "\n"
                 }
             }
 
@@ -327,7 +328,7 @@ class ProfileFragment : BaseFragment() {
             startActivityForResult(photoCropIntent, PHOTO_CROP)
         }
 
-        layout.edit_cover.setOnClickListener {
+        layout.edit_cover.setOnClickListener{
             this.findNavController().navigate(R.id.editTagBottomSheet)
         }
 
@@ -356,13 +357,16 @@ class ProfileFragment : BaseFragment() {
 //                }
 //            }
 //        })
-        appbar.addOnOffsetChangedListener(object : AppBarLayout.OnOffsetChangedListener {
-            override fun onOffsetChanged(appBarLayout: AppBarLayout, verticalOffset: Int) {
-                if (Math.abs(verticalOffset) - appBarLayout.totalScrollRange == 0) {
-                    main_expanded_user_name.animate().alpha(0.0f).duration = 100
+        appbar.addOnOffsetChangedListener(object:AppBarLayout.OnOffsetChangedListener {
+            override fun onOffsetChanged(appBarLayout:AppBarLayout, verticalOffset:Int) {
+                if (Math.abs(verticalOffset)-appBarLayout.getTotalScrollRange() == 0)
+                {
+                    main_expanded_user_name.animate().alpha(0.0f).setDuration(100)
                     main_expanded_user_name.visibility = View.INVISIBLE
-                } else {
-                    main_expanded_user_name.animate().alpha(1.0f).duration = 0
+                }
+                else
+                {
+                    main_expanded_user_name.animate().alpha(1.0f).setDuration(0)
                     main_expanded_user_name.visibility = View.VISIBLE
 
                 }
@@ -423,35 +427,40 @@ class ProfileFragment : BaseFragment() {
 
 }
 
-internal abstract class AppBarStateChangeListener : AppBarLayout.OnOffsetChangedListener {
+internal abstract class AppBarStateChangeListener:AppBarLayout.OnOffsetChangedListener {
     private var mCurrentState = State.IDLE
-
     enum class State {
         EXPANDED,
         COLLAPSED,
         IDLE
     }
-
-    override fun onOffsetChanged(appBarLayout: AppBarLayout, i: Int) {
-        if (i == 0) {
-            if (mCurrentState != State.EXPANDED) {
+    override fun onOffsetChanged(appBarLayout:AppBarLayout, i:Int) {
+        if (i == 0)
+        {
+            if (mCurrentState != State.EXPANDED)
+            {
                 onStateChanged(appBarLayout, State.EXPANDED)
             }
             mCurrentState = State.EXPANDED
-        } else if (Math.abs(i) >= appBarLayout.totalScrollRange) {
-            if (mCurrentState != State.COLLAPSED) {
+        }
+        else if (Math.abs(i) >= appBarLayout.getTotalScrollRange())
+        {
+            if (mCurrentState != State.COLLAPSED)
+            {
                 onStateChanged(appBarLayout, State.COLLAPSED)
             }
             mCurrentState = State.COLLAPSED
-        } else {
-            if (mCurrentState != State.IDLE) {
+        }
+        else
+        {
+            if (mCurrentState != State.IDLE)
+            {
                 onStateChanged(appBarLayout, State.IDLE)
             }
             mCurrentState = State.IDLE
         }
     }
-
-    abstract fun onStateChanged(appBarLayout: AppBarLayout, state: State)
+    abstract fun onStateChanged(appBarLayout:AppBarLayout, state:State)
 }
 //And then you can use it:
 //appBarLayout.addOnOffsetChangedListener(new AppBarStateChangeListener() {

@@ -10,7 +10,7 @@ import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import com.gigforce.app.core.base.BaseFragment
-import com.gigforce.app.modules.homescreen.mainhome.MainHomeScreen
+import com.gigforce.app.modules.calendarscreen.maincalendarscreen.CalendarHomeScreen
 import com.gigforce.app.modules.onboardingmain.OnboardingMainFragment
 import com.gigforce.app.utils.popAllBackStates
 
@@ -74,7 +74,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun isMainScreen(fragmentholder: Fragment?): Boolean {
         try {
-            var isMainHome = (fragmentholder as MainHomeScreen)
+            var isMainHome = (fragmentholder as CalendarHomeScreen)
             if (isMainHome != null) return true
         } catch (e: Exception) {
         }
