@@ -39,7 +39,7 @@ class ProfileFragment : BaseFragment() {
     private lateinit var layout: View
     private lateinit var profileAvatarName: String
     private lateinit var dWidth: Display
-    private lateinit var win:Window
+    private lateinit var win: Window
     private var PHOTO_CROP: Int = 45
     private var isShow: Boolean = true
     private var scrollRange: Int = -1
@@ -53,16 +53,17 @@ class ProfileFragment : BaseFragment() {
 //        }
     }
 
-    private fun makeStatusBarTransparent(){
+    private fun makeStatusBarTransparent() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             win = requireActivity().window
             win.setFlags(
                 WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
+                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+            )
         }
     }
 
-    private fun restoreStatusBar(){
+    private fun restoreStatusBar() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             win = requireActivity().window
             win.clearFlags(
@@ -79,15 +80,6 @@ class ProfileFragment : BaseFragment() {
     override fun onStart() {
         super.onStart()
         makeStatusBarTransparent()
-    }
-
-    override fun onStop() {
-        super.onStop()
-    }
-
-    override fun onPause() {
-        super.onPause()
-
     }
 
     override fun onDestroyView() {
@@ -109,7 +101,7 @@ class ProfileFragment : BaseFragment() {
         Log.d("DEBUG", "ENTERED PROFILE VIEW")
         val wm = requireContext().getSystemService(Context.WINDOW_SERVICE) as WindowManager
         dWidth = wm.defaultDisplay
-        layout = inflateView(R.layout.fragment_profile_main_expanded, inflater,container)!!
+        layout = inflateView(R.layout.fragment_profile_main_expanded, inflater, container)!!
         layout.appbar.post(Runnable {
             val heightPx: Int = dWidth.width * 1 / 3
             setAppBarOffset(heightPx)
@@ -140,8 +132,9 @@ class ProfileFragment : BaseFragment() {
 
         // load user data
         viewModel.getProfileData().observe(viewLifecycleOwner, Observer { profile ->
-            layout.gigger_rating.text = if (profile.rating != null) profile.rating!!.getTotal().toString()
-                                        else "-"
+            layout.gigger_rating.text =
+                if (profile.rating != null) profile.rating!!.getTotal().toString()
+                else "-"
             rating_bar.rating = profile.rating!!.getTotal()
             layout.task_done.text = profile.tasksDone.toString()
             layout.connection_count.text = profile.connections.toString()
@@ -197,16 +190,16 @@ class ProfileFragment : BaseFragment() {
             }
             profile.languages?.let {
                 val languages = it.sortedByDescending { language ->
-                     language.speakingSkill
+                    language.speakingSkill
                 }
                 // TODO: Add a generic way for string formatting.
                 for ((index, language) in languages.withIndex()) {
                     mainAboutString += if (index == 0)
-                                            "Language known: " + language.name + " (" +
-                                                    getLanguageLevel(language.speakingSkill.toInt()) + ")\n"
-                                        else
-                                            "\t\t\t\t\t\t\t\t\t\t\t\t\t\t" + language.name + " (" +
-                                                    getLanguageLevel(language.speakingSkill.toInt()) + ")\n"
+                        "Language known: " + language.name + " (" +
+                                getLanguageLevel(language.speakingSkill.toInt()) + ")\n"
+                    else
+                        "\t\t\t\t\t\t\t\t\t\t\t\t\t\t" + language.name + " (" +
+                                getLanguageLevel(language.speakingSkill.toInt()) + ")\n"
                 }
             }
 
@@ -225,8 +218,8 @@ class ProfileFragment : BaseFragment() {
             val format = SimpleDateFormat("dd/MM/yyyy", Locale.US)
             var mainEducationString = ""
             profile.educations?.let {
-                val educations = it.sortedByDescending {
-                        education -> education.startYear
+                val educations = it.sortedByDescending { education ->
+                    education.startYear
                 }
                 if (educations.isNotEmpty()) {
                     mainEducationString += educations[0].institution + "\n"
@@ -279,8 +272,10 @@ class ProfileFragment : BaseFragment() {
                     mainExperienceString += experiences[0].employmentType + "\n"
                     mainExperienceString += experiences[0].location + "\n"
                     mainExperienceString += format.format(experiences[0].startDate!!) + "-"
-                    mainExperienceString += if(experiences[0].endDate != null) format.format(experiences[0].endDate!!) + "\n"
-                                            else "current" + "\n"
+                    mainExperienceString += if (experiences[0].endDate != null) format.format(
+                        experiences[0].endDate!!
+                    ) + "\n"
+                    else "current" + "\n"
                 }
             }
 
@@ -290,10 +285,10 @@ class ProfileFragment : BaseFragment() {
             if (mainExperienceString.trim().isEmpty())
                 layout.main_experience_card.card_view_more.text = "Add Experience"
             layout.main_experience_card.card_view_more.setOnClickListener {
-                findNavController().navigate(R.id.experienceExpandedFragment)
+                findNavController().navigate(R.id.gigerVerificationFragment)
             }
             layout.main_experience_card.setOnClickListener {
-                findNavController().navigate(R.id.experienceExpandedFragment)
+                findNavController().navigate(R.id.gigerVerificationFragment)
             }
 
             layout.appbar.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { barLayout, verticalOffset ->
@@ -332,7 +327,7 @@ class ProfileFragment : BaseFragment() {
             startActivityForResult(photoCropIntent, PHOTO_CROP)
         }
 
-        layout.edit_cover.setOnClickListener{
+        layout.edit_cover.setOnClickListener {
             this.findNavController().navigate(R.id.editTagBottomSheet)
         }
 
@@ -361,16 +356,13 @@ class ProfileFragment : BaseFragment() {
 //                }
 //            }
 //        })
-        appbar.addOnOffsetChangedListener(object:AppBarLayout.OnOffsetChangedListener {
-            override fun onOffsetChanged(appBarLayout:AppBarLayout, verticalOffset:Int) {
-                if (Math.abs(verticalOffset)-appBarLayout.getTotalScrollRange() == 0)
-                {
-                    main_expanded_user_name.animate().alpha(0.0f).setDuration(100)
+        appbar.addOnOffsetChangedListener(object : AppBarLayout.OnOffsetChangedListener {
+            override fun onOffsetChanged(appBarLayout: AppBarLayout, verticalOffset: Int) {
+                if (Math.abs(verticalOffset) - appBarLayout.totalScrollRange == 0) {
+                    main_expanded_user_name.animate().alpha(0.0f).duration = 100
                     main_expanded_user_name.visibility = View.INVISIBLE
-                }
-                else
-                {
-                    main_expanded_user_name.animate().alpha(1.0f).setDuration(0)
+                } else {
+                    main_expanded_user_name.animate().alpha(1.0f).duration = 0
                     main_expanded_user_name.visibility = View.VISIBLE
 
                 }
@@ -431,40 +423,35 @@ class ProfileFragment : BaseFragment() {
 
 }
 
-internal abstract class AppBarStateChangeListener:AppBarLayout.OnOffsetChangedListener {
+internal abstract class AppBarStateChangeListener : AppBarLayout.OnOffsetChangedListener {
     private var mCurrentState = State.IDLE
+
     enum class State {
         EXPANDED,
         COLLAPSED,
         IDLE
     }
-    override fun onOffsetChanged(appBarLayout:AppBarLayout, i:Int) {
-        if (i == 0)
-        {
-            if (mCurrentState != State.EXPANDED)
-            {
+
+    override fun onOffsetChanged(appBarLayout: AppBarLayout, i: Int) {
+        if (i == 0) {
+            if (mCurrentState != State.EXPANDED) {
                 onStateChanged(appBarLayout, State.EXPANDED)
             }
             mCurrentState = State.EXPANDED
-        }
-        else if (Math.abs(i) >= appBarLayout.getTotalScrollRange())
-        {
-            if (mCurrentState != State.COLLAPSED)
-            {
+        } else if (Math.abs(i) >= appBarLayout.totalScrollRange) {
+            if (mCurrentState != State.COLLAPSED) {
                 onStateChanged(appBarLayout, State.COLLAPSED)
             }
             mCurrentState = State.COLLAPSED
-        }
-        else
-        {
-            if (mCurrentState != State.IDLE)
-            {
+        } else {
+            if (mCurrentState != State.IDLE) {
                 onStateChanged(appBarLayout, State.IDLE)
             }
             mCurrentState = State.IDLE
         }
     }
-    abstract fun onStateChanged(appBarLayout:AppBarLayout, state:State)
+
+    abstract fun onStateChanged(appBarLayout: AppBarLayout, state: State)
 }
 //And then you can use it:
 //appBarLayout.addOnOffsetChangedListener(new AppBarStateChangeListener() {
