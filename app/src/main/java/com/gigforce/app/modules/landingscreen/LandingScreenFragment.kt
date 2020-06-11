@@ -15,6 +15,7 @@ import com.gigforce.app.core.genericadapter.RecyclerGenericAdapter
 import com.gigforce.app.modules.calendarscreen.maincalendarscreen.bottomsheet.UpcomingGigModel
 import kotlinx.android.synthetic.main.explore_by_role_item.*
 import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.*
+import kotlinx.android.synthetic.main.landingscreen_fragment.*
 import java.util.ArrayList
 
 class LandingScreenFragment : Fragment() {
@@ -38,10 +39,11 @@ class LandingScreenFragment : Fragment() {
         val displayMetrics = DisplayMetrics()
         activity?.windowManager?.getDefaultDisplay()?.getMetrics(displayMetrics)
         width = displayMetrics.widthPixels
-//        initializeUpcomingGigBottomSheet()
+        initializeUpcomingGigBottomSheet()
     }
     private fun initializeUpcomingGigBottomSheet() {
         val itemWidth = ((width / 5) * 4).toInt()
+        // model will change when integrated with DB
         var datalist: ArrayList<UpcomingGigModel> = ArrayList<UpcomingGigModel>()
         datalist.add(UpcomingGigModel())
         datalist.add(UpcomingGigModel())
@@ -59,12 +61,12 @@ class LandingScreenFragment : Fragment() {
                 })!!
         recyclerGenericAdapter.setList(datalist)
         recyclerGenericAdapter.setLayout(R.layout.explore_by_role_item)
-        upcoming_gig_rv.layoutManager = LinearLayoutManager(
+        explore_by_role_rv.layoutManager = LinearLayoutManager(
             activity?.applicationContext,
             LinearLayoutManager.HORIZONTAL,
             false
         )
-        upcoming_gig_rv.adapter = recyclerGenericAdapter
+        explore_by_role_rv.adapter = recyclerGenericAdapter
 
     }
 }
