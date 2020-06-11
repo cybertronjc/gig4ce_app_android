@@ -1,6 +1,5 @@
 package com.gigforce.app.modules.preferences.location
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.text.Html
 import android.util.Log
@@ -111,7 +110,7 @@ class PermanentAddressEditFragment : BaseFragment() {
                 activity?.onBackPressed()
             }
         }
-        imageView10.setOnClickListener { activity?.onBackPressed() }
+        back_arrow_iv.setOnClickListener { activity?.onBackPressed() }
 
     }
     fun addressIsValid(view:EditText):Boolean{

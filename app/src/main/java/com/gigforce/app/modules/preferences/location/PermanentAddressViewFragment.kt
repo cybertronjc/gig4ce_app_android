@@ -57,7 +57,7 @@ class PermanentAddressViewFragment : BaseFragment() {
     private fun initializeViews() {
         preferenceDataModel = viewModel.getPreferenceDataModel()
         profileDataModel = viewModel.getProfileDataModel()
-        imageView10.setOnClickListener { activity?.onBackPressed() }
+        back_arrow_iv.setOnClickListener { activity?.onBackPressed() }
         var permanentAddress =  profileDataModel.address.home
         populateAddress(permanentAddress)
     }

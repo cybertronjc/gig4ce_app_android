@@ -58,7 +58,7 @@ class CurrentAddressViewFragment: BaseFragment() {
     private fun initializeViews() {
         preferenceDataModel = viewModel.getPreferenceDataModel()
         profileDataModel = viewModel.getProfileDataModel()
-        imageView10.setOnClickListener { activity?.onBackPressed() }
+        back_arrow_iv.setOnClickListener { activity?.onBackPressed() }
         var currentAddress = profileDataModel.address.current
         var permanentAddress =  profileDataModel.address.home
         populateAddress(currentAddress)
