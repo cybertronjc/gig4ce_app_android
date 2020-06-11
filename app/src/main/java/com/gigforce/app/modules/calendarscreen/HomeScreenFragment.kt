@@ -1,28 +1,20 @@
-package com.gigforce.app.modules.homescreen
+package com.gigforce.app.modules.calendarscreen
 
 //import com.gigforce.app.modules.onboarding.CustomAdapter
 //import com.gigforce.app.modules.onboarding.models.MessageModel
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.ImageView
-import android.widget.Toast
-import androidx.core.view.get
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.NavHostFragment.findNavController
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
 import com.gigforce.app.utils.GlideApp
 import kotlinx.android.synthetic.main.bottom_home.*
-import kotlinx.android.synthetic.main.bottom_home.view.*
 import kotlinx.android.synthetic.main.fragment_roaster.*
-import kotlinx.android.synthetic.main.item_grid_action.*
-import kotlinx.android.synthetic.main.item_grid_action.view.*
-import kotlinx.android.synthetic.main.layout_home_screen.*
 
 //import kotlinx.android.synthetic.main.fragment_roaster.buttonCP
 

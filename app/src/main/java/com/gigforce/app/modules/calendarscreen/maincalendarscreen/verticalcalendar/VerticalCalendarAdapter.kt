@@ -1,4 +1,4 @@
-package com.gigforce.app.modules.homescreen.mainhome.verticalcalendar
+package com.gigforce.app.modules.calendarscreen.maincalendarscreen.verticalcalendar
 
 import android.view.LayoutInflater
 import android.view.View

@@ -2,8 +2,6 @@ package com.gigforce.app.modules.preferences
 
 import android.app.Dialog
 import android.os.Bundle
-import android.text.SpannableString
-import android.text.style.UnderlineSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +9,7 @@ import android.view.Window
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.request.RequestOptions
@@ -33,12 +31,12 @@ class PreferencesFragment : BaseFragment() {
         fun newInstance() =
             PreferencesFragment()
 
-        const val DAY_TIME = 2;
-        const val LOCATION = 3;
-        const val EARNING = 4;
-        const val TITLE_OTHER = 5;
-        const val LANGUAGE = 6;
-        const val TITLE_SIGNOUT = 8;
+        const val DAY_TIME = 2
+        const val LOCATION = 3
+        const val EARNING = 4
+        const val TITLE_OTHER = 5
+        const val LANGUAGE = 6
+        const val TITLE_SIGNOUT = 8
         var storage = FirebaseStorage.getInstance()
 
     }
@@ -53,15 +51,10 @@ class PreferencesFragment : BaseFragment() {
         return inflateView(R.layout.preferences_fragment, inflater, container)
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
-
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         this.setDarkStatusBarTheme(false)
-        viewModel = ViewModelProviders.of(this).get(SharedPreferenceViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(SharedPreferenceViewModel::class.java)
         initializeViews()
         listener()
         observePreferenceData()
@@ -109,7 +102,7 @@ class PreferencesFragment : BaseFragment() {
                 RecyclerGenericAdapter.ItemInterface<PreferencesScreenItem?> { obj, viewHolder, position ->
                     setPreferencesItems(obj, viewHolder, position)
                 })!!
-        recyclerGenericAdapter.setList(arrPrefrancesList)
+        recyclerGenericAdapter.list = arrPrefrancesList
         recyclerGenericAdapter.setLayout(R.layout.prefrences_item)
 
         prefrences_rv.layoutManager = LinearLayoutManager(
@@ -145,18 +138,26 @@ class PreferencesFragment : BaseFragment() {
         position: Int
     ) {
         var constraintView = getView(viewHolder, R.id.constraintLayout)
-        var otherAndSignout = getTextView(viewHolder, R.id.others_and_signout)
+
+        var signOutView = getView(viewHolder, R.id.signOutLayout)
+        var signOutTV = getTextView(viewHolder, R.id.signOutTitle)
+        var signOutIV = getImageView(viewHolder, R.id.signOutIcon)
+
+        var othersTV = getTextView(viewHolder, R.id.others_and_signout)
         var title = getTextView(viewHolder, R.id.item_title)
         var subTitle = getTextView(viewHolder, R.id.item_subtitle)
         var imageView = getImageView(viewHolder, R.id.item_icon)
         if (position == TITLE_OTHER) {
-            visibleInvisibleMainItemView(constraintView, otherAndSignout, false)
-            setItemAsOther(otherAndSignout, obj);
+            signOutView.visibility = View.GONE
+            visibleInvisibleMainItemView(constraintView, othersTV, false)
+            setItemAsOther(othersTV, obj)
         } else if (position == TITLE_SIGNOUT) {
-            visibleInvisibleMainItemView(constraintView, otherAndSignout, false)
-            setItemAsSignOut(otherAndSignout, obj)
+            signOutView.visibility = View.VISIBLE
+            hideMainConstraintViewAndOthersViewInItemView(constraintView, othersTV)
+            setItemAsSignOut(signOutTV, signOutIV, obj)
         } else {
-            visibleInvisibleMainItemView(constraintView, otherAndSignout, true)
+            signOutView.visibility = View.GONE
+            visibleInvisibleMainItemView(constraintView, othersTV, true)
             setItems(imageView, title, subTitle, obj)
         }
     }
@@ -181,10 +182,22 @@ class PreferencesFragment : BaseFragment() {
         otherAndSignout.visibility = if (!isVisible) View.VISIBLE else View.INVISIBLE
     }
 
-    private fun setItemAsSignOut(otherAndSignout: TextView, obj: PreferencesScreenItem?) {
-        val spannableString1 = SpannableString(obj?.title)
-        spannableString1.setSpan(UnderlineSpan(), 0, obj?.title!!.length, 0)
-        otherAndSignout.text = spannableString1
+    private fun hideMainConstraintViewAndOthersViewInItemView(
+        constraintView: View,
+        otherAndSignout: TextView
+    ) {
+        constraintView.visibility = View.INVISIBLE
+        otherAndSignout.visibility = View.INVISIBLE
+    }
+
+
+    private fun setItemAsSignOut(
+        signOutTV: TextView,
+        signOutIV: ImageView,
+        obj: PreferencesScreenItem?
+    ) {
+        signOutTV.text = obj?.title
+        signOutIV.setImageResource(obj!!.icon)
     }
 
     private fun setItemAsOther(otherAndSignout: TextView, obj: PreferencesScreenItem?) {
@@ -195,8 +208,7 @@ class PreferencesFragment : BaseFragment() {
         if (position == DAY_TIME) navigate(R.id.dayTimeFragment)
         else if (position == TITLE_SIGNOUT) {
             logoutConfirmationDialog()
-        }
-        else if(position== EARNING) navigate(R.id.earningFragment)
+        } else if (position == EARNING) navigate(R.id.earningFragment)
         else if (position == LOCATION) navigate(R.id.locationFragment)
         else if (position == LANGUAGE) navigate(R.id.languagePreferenceFragment)
     }
@@ -213,16 +225,16 @@ class PreferencesFragment : BaseFragment() {
         val title = dialog?.findViewById(R.id.title) as TextView
         title.text =
             "You'll miss out on updates on upcoming gigs around you if you sign out."
-        val yesBtn = dialog?.findViewById(R.id.yes) as TextView
-        val noBtn = dialog?.findViewById(R.id.cancel) as TextView
+        val yesBtn = dialog.findViewById(R.id.yes) as TextView
+        val noBtn = dialog.findViewById(R.id.cancel) as TextView
         yesBtn.setOnClickListener {
             FirebaseAuth.getInstance().signOut()
             removeSavedShareData(AppConstants.INTRO_COMPLETE)
             popFragmentFromStack(R.id.settingFragment)
-            dialog?.dismiss()
+            dialog.dismiss()
         }
         noBtn.setOnClickListener { dialog.dismiss() }
-        dialog?.show()
+        dialog.show()
     }
 
 }
