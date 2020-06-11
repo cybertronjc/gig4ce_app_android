@@ -99,4 +99,8 @@ abstract public class BaseFirestoreDBRepository {
     }
     // for get collection data ----------------
 
+    fun<M: BaseFirestoreDataModel> setDBCollection(obj: M) {
+        firebaseDB.collection(getCollectionName()).document(uid).set(obj)
+    }
+
 }
