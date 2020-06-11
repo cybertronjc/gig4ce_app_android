@@ -54,10 +54,10 @@
         android:layout_width="20dp"
         android:layout_height="21dp"
         android:layout_marginLeft="24dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="20dp"
         app:layout_constraintStart_toStartOf="@+id/textView49"
         app:layout_constraintTop_toTopOf="@+id/textView49"
-        android:src="@drawable/ic_calendar_" />
+        android:src="@drawable/ic_calendar_black" />
 
     <TextView
         android:id="@+id/textView50"
@@ -67,7 +67,7 @@
         android:textColor="@color/black"
         android:textSize="14sp"
         android:layout_marginLeft="63dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="20dp"
         android:fontFamily="@font/lato"
         app:layout_constraintStart_toStartOf="@+id/textView49"
         app:layout_constraintTop_toTopOf="@+id/textView49" />
@@ -80,7 +80,7 @@
         android:textColor="@color/gray_color"
         android:textSize="10sp"
         android:layout_marginLeft="63dp"
-        android:layout_marginTop="9dp"
+        android:layout_marginTop="5dp"
         android:layout_marginBottom="12dp"
         android:fontFamily="@font/lato"
         app:layout_constraintStart_toStartOf="@+id/textView49"
@@ -128,8 +128,8 @@
         android:layout_width="20dp"
         android:layout_height="21dp"
         android:layout_marginLeft="24dp"
-        android:layout_marginTop="16dp"
-        android:src="@drawable/ic_calendar_"
+        android:layout_marginTop="20dp"
+        android:src="@drawable/ic_calendar_black"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/textView55" />
 
@@ -142,7 +142,7 @@
         android:textColor="@color/black"
         android:textSize="14sp"
         android:layout_marginLeft="63dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="20dp"
         app:layout_constraintStart_toStartOf="@+id/textView55"
         app:layout_constraintTop_toTopOf="@+id/textView55" />
 
@@ -155,7 +155,7 @@
         android:textColor="@color/gray_color"
         android:textSize="10sp"
         android:layout_marginLeft="63dp"
-        android:layout_marginTop="9dp"
+        android:layout_marginTop="3dp"
         android:layout_marginBottom="12dp"
         app:layout_constraintStart_toStartOf="@+id/textView55"
         app:layout_constraintTop_toBottomOf="@+id/textView56" />

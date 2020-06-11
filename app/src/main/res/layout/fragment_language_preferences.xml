@@ -104,10 +104,10 @@
             android:id="@+id/gu"
             android:layout_width="fill_parent"
             android:layout_height="@dimen/height_select_lang_item"
-            android:layout_marginLeft="16dp"
+            android:layout_marginLeft="15dp"
             android:hint="gu"
-            android:paddingLeft="16dp"
-            android:text=" ગુજરતી"
+            android:paddingLeft="11dp"
+            android:text="ગુજરતી"
             android:textSize="14sp" />
 
         <View

@@ -289,5 +289,5 @@
     <string name="addline1">Address Line 1</string>
     <string name="addLine2">Address Line 2</string>
     <string name="preferred_distance">Preferred Distance</string>
-    <string name="earning">Earning</string>
+    <string name="earning">Earnings</string>
 </resources>
