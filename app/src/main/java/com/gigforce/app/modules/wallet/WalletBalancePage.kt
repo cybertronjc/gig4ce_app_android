@@ -5,7 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
+import kotlinx.android.synthetic.main.payment_summary_component.view.*
 import kotlinx.android.synthetic.main.wallet_balance_page.*
 
 class WalletBalancePage: WalletBaseFragment() {
@@ -22,6 +24,13 @@ class WalletBalancePage: WalletBaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initialize()
+        payment_summary.invoice_due.setOnClickListener {
+            findNavController().navigate(R.id.invoiceStatusPage)
+        }
+
+        payment_summary.payment_dispute.setOnClickListener {
+            findNavController().navigate(R.id.paymentDisputePage)
+        }
     }
 
     private fun initialize() {

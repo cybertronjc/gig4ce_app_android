@@ -1,0 +1,27 @@
+package com.gigforce.app.modules.wallet
+
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import com.gigforce.app.R
+import kotlinx.android.synthetic.main.fragment_select_language.*
+import kotlinx.android.synthetic.main.payment_dispute_page.*
+
+class PaymentDisputePage: WalletBaseFragment() {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        inflateView(R.layout.payment_dispute_page, inflater, container)
+        return getFragmentView()
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        payment_1.invoiceStatus = "rejected"
+        payment_2.invoiceStatus = "rejected"
+        payment_3.invoiceStatus = "rejected"
+    }
+}
