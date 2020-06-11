@@ -286,10 +286,10 @@ class ProfileFragment : BaseFragment() {
             if (mainExperienceString.trim().isEmpty())
                 layout.main_experience_card.card_view_more.text = "Add Experience"
             layout.main_experience_card.card_view_more.setOnClickListener {
-                findNavController().navigate(R.id.gigerVerificationFragment)
+                findNavController().navigate(R.id.experienceExpandedFragment)
             }
             layout.main_experience_card.setOnClickListener {
-                findNavController().navigate(R.id.gigerVerificationFragment)
+                findNavController().navigate(R.id.experienceExpandedFragment)
             }
 
             layout.appbar.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { barLayout, verticalOffset ->
