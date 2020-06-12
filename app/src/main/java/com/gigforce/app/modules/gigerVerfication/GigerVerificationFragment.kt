@@ -21,14 +21,13 @@ class GigerVerificationFragment : BaseFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ) = inflater.inflate(R.layout.fragment_giger_verification, container, false)
+    ) = inflateView(R.layout.fragment_giger_verification, inflater, container)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
         setListeners()
     }
-
 
     private fun initView() {
         Glide.with(requireContext())
@@ -78,6 +77,10 @@ class GigerVerificationFragment : BaseFragment() {
 
         drivingLayout.setOnClickListener {
             findNavController().navigate(R.id.addDrivingLicenseInfoFragment)
+        }
+
+        aadharLayout.setOnClickListener {
+            findNavController().navigate(R.id.addAadharCardInfoFragment)
         }
     }
 }
