@@ -1,24 +1,58 @@
 package com.gigforce.app.modules.gigerVerfication.panCard
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
 import com.gigforce.app.R
+import com.gigforce.app.core.base.BaseFragment
+import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
+import kotlinx.android.synthetic.main.fragment_add_pan_card_info.*
+import kotlinx.android.synthetic.main.fragment_verification_image_holder.view.*
 
-class AddPanCardInfoFragment : Fragment() {
+class AddPanCardInfoFragment : BaseFragment() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
+    private val viewModel: GigVerificationViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_add_pan_card_info, container, false)
+    ) = inflateView(R.layout.fragment_add_pan_card_info, inflater, container)
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initViews()
+    }
+
+    private fun initViews() {
+        panImageHolder.documentUploadLabelTV.text = getString(R.string.upload_pan_card)
+        panImageHolder.documentUploadSubLabelTV.text = getString(R.string.please_upload_your_pan)
+        panSubmitSliderBtn.isEnabled = false
+
+        panCardAvailaibilityOptionRG.setOnCheckedChangeListener { _, checkedId ->
+
+            if (checkedId == R.id.panYesRB) {
+                showPanImageAndInfoLayout()
+            } else {
+                hidePanImageAndInfoLayout()
+                enableSubmitButton()
+            }
+        }
+    }
+
+    private fun showPanImageAndInfoLayout() {
+        panImageHolder.visibility = View.VISIBLE
+        panInfoLayout.visibility = View.VISIBLE
+    }
+
+    private fun hidePanImageAndInfoLayout() {
+        panImageHolder.visibility = View.GONE
+        panInfoLayout.visibility = View.GONE
+    }
+
+    private fun enableSubmitButton() {
+        panSubmitSliderBtn.isEnabled = true
     }
 
 }
