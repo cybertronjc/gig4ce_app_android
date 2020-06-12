@@ -47,7 +47,9 @@ class WeekDayFragment : BaseFragment() {
             initializeViews()
         })
     }
-
+    override fun isConfigRequired(): Boolean {
+        return true
+    }
     private fun initializeViews() {
         viewDataModel = viewModel.getPreferenceDataModel()
         switch3.setChecked(viewDataModel.isweekdaysenabled)

@@ -39,7 +39,7 @@ class DayTimeFragment : BaseFragment() {
     }
 
     private fun observePreferenceData() {
-        viewModel.preferenceDataModel.observe(this, Observer { preferenceData ->
+        viewModel.preferenceDataModel.observe(viewLifecycleOwner, Observer { preferenceData ->
             viewModel.setPreferenceDataModel(preferenceData)
             initializeViews()
         })
