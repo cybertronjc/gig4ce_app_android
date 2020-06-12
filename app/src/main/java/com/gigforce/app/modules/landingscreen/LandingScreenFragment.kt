@@ -39,6 +39,13 @@ class LandingScreenFragment : BaseFragment() {
         initializeExploreByRole()
         initializeExploreByIndustry()
         initializeLearningModule()
+        listener()
+    }
+
+    private fun listener() {
+        complete_now.setOnClickListener{
+            navigate(R.id.gigerVerificationFragment)
+        }
     }
 
     private fun initializeLearningModule() {
@@ -111,7 +118,7 @@ class LandingScreenFragment : BaseFragment() {
             RecyclerGenericAdapter<UpcomingGigModel>(
                 activity?.applicationContext,
                 PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
-
+                        navigate(R.id.explore_by_role)
                 },
                 RecyclerGenericAdapter.ItemInterface<UpcomingGigModel?> { obj, viewHolder, position ->
                     var view = getView(viewHolder, R.id.card_view)
