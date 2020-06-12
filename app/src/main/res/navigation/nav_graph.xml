@@ -126,7 +126,7 @@
 
     <fragment
         android:id="@+id/landinghomefragment"
-        android:name="com.gigforce.app.modules.landingscreen.LandingScreenFFragment"
+        android:name="com.gigforce.app.modules.landingscreen.LandingScreenFragment"
         android:label="landing_home_fragment"
         tools:layout="@layout/landingscreen_fragment" />
 
