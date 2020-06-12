@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".modules.gigerVerfication.drivingLicense.AddDrivingLicenseInfoFragment">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?android:attr/actionBarSize"
+            android:background="@color/white"
+            app:navigationIcon="@drawable/ic_arrow_back_black"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            app:title="Giger Verification"
+            app:titleTextColor="@color/black" />
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <TextView
+                android:id="@+id/aadharLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="22dp"
+                android:fontFamily="@font/lato_bold"
+                android:letterSpacing="0"
+                android:text="@string/aadhar_card"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent"  />
+
+
+            <ImageView
+                android:id="@+id/helpIconIV"
+                android:layout_width="14dp"
+                android:layout_height="14dp"
+                android:layout_marginEnd="13dp"
+                android:layout_marginTop="22dp"
+                android:src="@drawable/ic_add_pink"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="4dp"
+                android:letterSpacing="-0.01"
+                android:text="@string/why_do_we_need_this"
+                android:textColor="@color/battle_ship_grey"
+                android:textSize="12sp"
+                android:layout_marginTop="22dp"
+                app:layout_constraintEnd_toStartOf="@+id/helpIconIV"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/doYouHaveAadharLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="12dp"
+                android:fontFamily="@font/lato"
+                android:letterSpacing="-0.01"
+                android:text="@string/do_you_have_aadhar_card"
+                android:textColor="@color/black"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/aadharLabel" />
+
+            <RadioGroup
+                android:id="@+id/aadharAvailaibilityOptionRG"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="15dp"
+                app:layout_constraintTop_toBottomOf="@id/doYouHaveAadharLabel">
+
+                <com.google.android.material.radiobutton.MaterialRadioButton
+                    android:id="@+id/aadharYesRB"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/lato"
+                    android:text="@string/yes_i_have_aadhar_card" />
+
+                <com.google.android.material.radiobutton.MaterialRadioButton
+                    android:id="@+id/aadharNoRB"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/lato"
+                    android:text="@string/no_i_don_t_have_aadhar_card" />
+
+            </RadioGroup>
+
+            <include
+                android:id="@+id/aadharFrontImageHolder"
+                layout="@layout/fragment_verification_image_holder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/aadharAvailaibilityOptionRG" />
+
+
+            <include
+                android:id="@+id/aadharBackImageHolder"
+                layout="@layout/fragment_verification_image_holder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/aadharFrontImageHolder" />
+
+
+            <LinearLayout
+                android:id="@+id/aadharInfoLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="visible"
+                app:layout_constraintTop_toBottomOf="@id/aadharBackImageHolder">
+
+                <View
+                    android:id="@+id/topSeaparator"
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginTop="22dp"
+                    android:background="#cdccd1" />
+
+                <LinearLayout
+                    android:id="@+id/aadharEditLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:paddingBottom="12dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/lato"
+                        android:letterSpacing="-0.01"
+                        android:text="@string/please_confirm_the_following_information"
+                        android:textColor="@color/black" />
+
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:src="@drawable/ic_pencil_edit" />
+
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white_two"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:id="@+id/nameLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        android:fontFamily="@font/lato_bold"
+                        android:letterSpacing="0"
+                        android:text="@string/name_with_colon"
+                        android:textColor="@color/black"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/nameTV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_toEndOf="@id/nameLabel"
+                        android:fontFamily="@font/lato"
+                        android:letterSpacing="0"
+                        android:textColor="@color/black"
+                        android:textSize="14sp"
+                        tools:text="Rahul Chaudhary" />
+
+
+
+                    <TextView
+                        android:id="@+id/dobLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/nameTV"
+                        android:layout_marginTop="12dp"
+                        android:fontFamily="@font/lato_bold"
+                        android:letterSpacing="0"
+                        android:text="@string/date_of_birth"
+                        android:textColor="@color/black"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/dobTV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/nameTV"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginTop="12dp"
+                        android:layout_toEndOf="@id/dobLabel"
+                        android:fontFamily="@font/lato"
+                        android:letterSpacing="0"
+                        android:textColor="@color/black"
+                        android:textSize="14sp"
+                        tools:text="29/02/1990" />
+
+
+                    <TextView
+                        android:id="@+id/genderLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/dobTV"
+                        android:layout_marginTop="12dp"
+                        android:fontFamily="@font/lato_bold"
+                        android:letterSpacing="0"
+                        android:text="@string/gender_with_colon"
+                        android:textColor="@color/black"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/genderTV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/dobTV"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginTop="12dp"
+                        android:layout_toEndOf="@id/genderLabel"
+                        android:fontFamily="@font/lato"
+                        android:letterSpacing="0"
+                        android:textColor="@color/black"
+                        android:textSize="14sp"
+                        tools:text="Male" />
+
+
+                    <TextView
+                        android:id="@+id/aadharNoLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/genderTV"
+                        android:layout_marginTop="12dp"
+                        android:fontFamily="@font/lato_bold"
+                        android:letterSpacing="0"
+                        android:text="@string/aadhar_number_with_colon"
+                        android:textColor="@color/black"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/aadharNoTV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/genderTV"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginTop="12dp"
+                        android:layout_toEndOf="@id/aadharNoLabel"
+                        android:fontFamily="@font/lato"
+                        android:letterSpacing="0"
+                        android:textColor="@color/black"
+                        android:textSize="14sp"
+                        tools:text="1234567890" />
+
+
+                    <TextView
+                        android:id="@+id/addressLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/aadharNoTV"
+                        android:layout_marginTop="12dp"
+                        android:fontFamily="@font/lato_bold"
+                        android:letterSpacing="0"
+                        android:text="@string/address_with_colon"
+                        android:textColor="@color/black"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/addressTV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/aadharNoTV"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginTop="12dp"
+                        android:layout_toEndOf="@id/addressLabel"
+                        android:fontFamily="@font/lato"
+                        android:letterSpacing="0"
+                        android:textColor="@color/black"
+                        android:textSize="14sp"
+                        tools:text="29/02/1990" />
+
+                </RelativeLayout>
+            </LinearLayout>
+
+
+            <com.ncorti.slidetoact.SlideToActView
+                android:id="@+id/aadharSubmitSliderBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="30dp"
+                app:border_radius="12dp"
+                app:inner_color="#888888"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:outer_color="#dddddd"
+                app:slider_height="48dp"
+                app:slider_icon="@drawable/ic_arrow_forward_white"
+                app:text="@string/save_all_caps" />
+
+            <com.google.android.material.checkbox.MaterialCheckBox
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="13dp"
+                android:layout_marginBottom="18dp"
+                android:text="@string/yes_i_confirm_the_data_is_correct"
+                app:layout_constraintBottom_toTopOf="@id/aadharSubmitSliderBtn"
+                app:layout_constraintTop_toBottomOf="@id/aadharInfoLayout"
+                app:layout_constraintVertical_bias="0.98"
+                tools:layout_editor_absoluteX="0dp" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+</LinearLayout>

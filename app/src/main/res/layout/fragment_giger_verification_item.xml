@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:clickable="true"
+    android:focusable="true"
+    android:paddingStart="23dp"
+    android:paddingTop="16dp"
+    android:paddingBottom="16dp">
+
+
+    <ImageView
+        android:id="@+id/optionIconIV"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        tools:src="@drawable/ic_video_round" />
+
+    <TextView
+        android:id="@+id/optionTitleTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_toEndOf="@id/optionIconIV"
+        android:fontFamily="@font/lato"
+        android:letterSpacing="-0.01"
+        android:textColor="@color/black"
+        tools:text="Selfie Video *" />
+
+    <TextView
+        android:id="@+id/descTitleTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/optionTitleTV"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="8dp"
+        android:layout_toEndOf="@id/optionIconIV"
+        android:fontFamily="@font/lato"
+        android:letterSpacing="0"
+        android:textColor="@color/battle_ship_grey"
+        android:textSize="12sp"
+        tools:text="Tap To Upload" />
+
+    <ImageView
+        android:layout_width="24dp"
+        android:layout_height="47dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="15dp"
+        android:src="@drawable/ic_next_screen" />
+
+
+</RelativeLayout>
