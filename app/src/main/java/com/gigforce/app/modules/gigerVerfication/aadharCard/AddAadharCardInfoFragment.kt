@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
@@ -47,6 +48,10 @@ class AddAadharCardInfoFragment : BaseFragment() {
                 hideAadharImageAndInfoLayout()
                 enableSubmitButton()
             }
+        }
+
+        aadharEditLayout.setOnClickListener {
+            findNavController().navigate(R.id.editAadharInfoBottomSheet)
         }
     }
 

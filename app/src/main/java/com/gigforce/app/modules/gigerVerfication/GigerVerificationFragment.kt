@@ -82,5 +82,9 @@ class GigerVerificationFragment : BaseFragment() {
         aadharLayout.setOnClickListener {
             findNavController().navigate(R.id.addAadharCardInfoFragment)
         }
+
+        bankDetailsLayout.setOnClickListener {
+            findNavController().navigate(R.id.addBankDetailsInfoFragment)
+        }
     }
 }

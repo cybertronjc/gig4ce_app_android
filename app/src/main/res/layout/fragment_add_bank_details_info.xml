@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".modules.gigerVerfication.drivingLicense.AddDrivingLicenseInfoFragment">
+    tools:context=".modules.gigerVerfication.bankDetails.AddBankDetailsInfoFragment">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBar"
@@ -37,14 +37,14 @@
 
 
             <TextView
-                android:id="@+id/aadharLabel"
+                android:id="@+id/bankAccDetailsLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="22dp"
                 android:fontFamily="@font/lato_bold"
                 android:letterSpacing="0"
-                android:text="@string/aadhar_card"
+                android:text="@string/bank_account_details"
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -75,65 +75,58 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/doYouHaveAadharLabel"
+                android:id="@+id/doYouHavePassbookLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="12dp"
                 android:fontFamily="@font/lato"
                 android:letterSpacing="-0.01"
-                android:text="@string/do_you_have_aadhar_card"
+                android:text="@string/do_you_have_bank_passbook"
                 android:textColor="@color/black"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/aadharLabel" />
+                app:layout_constraintTop_toBottomOf="@id/bankAccDetailsLabel" />
 
             <RadioGroup
-                android:id="@+id/aadharAvailaibilityOptionRG"
+                android:id="@+id/passbookAvailaibilityOptionRG"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="15dp"
-                app:layout_constraintTop_toBottomOf="@id/doYouHaveAadharLabel">
+                app:layout_constraintTop_toBottomOf="@id/doYouHavePassbookLabel">
 
                 <com.google.android.material.radiobutton.MaterialRadioButton
-                    android:id="@+id/aadharYesRB"
+                    android:id="@+id/passbookYesRB"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/lato"
-                    android:text="@string/yes_i_have_aadhar_card" />
+                    android:text="@string/yes_i_have_bank_passbook" />
 
                 <com.google.android.material.radiobutton.MaterialRadioButton
-                    android:id="@+id/aadharNoRB"
+                    android:id="@+id/passbookNoRB"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/lato"
-                    android:text="@string/no_i_don_t_have_aadhar_card" />
+                    android:text="@string/no_i_dont_have_bank_passbook" />
 
             </RadioGroup>
 
             <include
-                android:id="@+id/aadharFrontImageHolder"
+                android:id="@+id/passbookImageHolder"
                 layout="@layout/fragment_verification_image_holder"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/aadharAvailaibilityOptionRG" />
+                app:layout_constraintTop_toBottomOf="@id/passbookAvailaibilityOptionRG" />
 
-
-            <include
-                android:id="@+id/aadharBackImageHolder"
-                layout="@layout/fragment_verification_image_holder"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/aadharFrontImageHolder" />
 
 
             <LinearLayout
-                android:id="@+id/aadharInfoLayout"
+                android:id="@+id/passbookInfoLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:visibility="visible"
-                app:layout_constraintTop_toBottomOf="@id/aadharBackImageHolder">
+                app:layout_constraintTop_toBottomOf="@id/passbookImageHolder">
 
                 <View
                     android:id="@+id/topSeaparator"
@@ -143,7 +136,7 @@
                     android:background="#cdccd1" />
 
                 <LinearLayout
-                    android:id="@+id/aadharEditLayout"
+                    android:id="@+id/editBankDetailsLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
@@ -203,25 +196,25 @@
 
 
                     <TextView
-                        android:id="@+id/dobLabel"
+                        android:id="@+id/fathersNameLabel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/nameTV"
                         android:layout_marginTop="12dp"
                         android:fontFamily="@font/lato_bold"
                         android:letterSpacing="0"
-                        android:text="@string/date_of_birth"
+                        android:text="@string/father_s_name_with_colon"
                         android:textColor="@color/black"
                         android:textSize="14sp" />
 
                     <TextView
-                        android:id="@+id/dobTV"
+                        android:id="@+id/fathersNameTV"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/nameTV"
                         android:layout_alignParentEnd="true"
                         android:layout_marginTop="12dp"
-                        android:layout_toEndOf="@id/dobLabel"
+                        android:layout_toEndOf="@id/fathersNameLabel"
                         android:fontFamily="@font/lato"
                         android:letterSpacing="0"
                         android:textColor="@color/black"
@@ -230,25 +223,25 @@
 
 
                     <TextView
-                        android:id="@+id/genderLabel"
+                        android:id="@+id/cifNoLabel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/dobTV"
+                        android:layout_below="@id/fathersNameTV"
                         android:layout_marginTop="12dp"
                         android:fontFamily="@font/lato_bold"
                         android:letterSpacing="0"
-                        android:text="@string/gender_with_colon"
+                        android:text="@string/cif_number_with_colon"
                         android:textColor="@color/black"
                         android:textSize="14sp" />
 
                     <TextView
-                        android:id="@+id/genderTV"
+                        android:id="@+id/cifNumberTV"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/dobTV"
+                        android:layout_below="@id/fathersNameTV"
                         android:layout_alignParentEnd="true"
                         android:layout_marginTop="12dp"
-                        android:layout_toEndOf="@id/genderLabel"
+                        android:layout_toEndOf="@id/cifNoLabel"
                         android:fontFamily="@font/lato"
                         android:letterSpacing="0"
                         android:textColor="@color/black"
@@ -257,25 +250,25 @@
 
 
                     <TextView
-                        android:id="@+id/aadharNoLabel"
+                        android:id="@+id/accNoLabel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/genderTV"
+                        android:layout_below="@id/cifNumberTV"
                         android:layout_marginTop="12dp"
                         android:fontFamily="@font/lato_bold"
                         android:letterSpacing="0"
-                        android:text="@string/aadhar_number_with_colon"
+                        android:text="@string/account_number_with_colon"
                         android:textColor="@color/black"
                         android:textSize="14sp" />
 
                     <TextView
-                        android:id="@+id/aadharNoTV"
+                        android:id="@+id/accNoTV"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/genderTV"
+                        android:layout_below="@id/cifNumberTV"
                         android:layout_alignParentEnd="true"
                         android:layout_marginTop="12dp"
-                        android:layout_toEndOf="@id/aadharNoLabel"
+                        android:layout_toEndOf="@id/accNoLabel"
                         android:fontFamily="@font/lato"
                         android:letterSpacing="0"
                         android:textColor="@color/black"
@@ -284,10 +277,37 @@
 
 
                     <TextView
+                        android:id="@+id/ifscLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/accNoTV"
+                        android:layout_marginTop="12dp"
+                        android:fontFamily="@font/lato_bold"
+                        android:letterSpacing="0"
+                        android:text="@string/ifsc_with_colon"
+                        android:textColor="@color/black"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/ifscTV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/accNoTV"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginTop="12dp"
+                        android:layout_toEndOf="@id/ifscLabel"
+                        android:fontFamily="@font/lato"
+                        android:letterSpacing="0"
+                        android:textColor="@color/black"
+                        android:textSize="14sp"
+                        tools:text="29/02/1990" />
+
+
+                    <TextView
                         android:id="@+id/addressLabel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/aadharNoTV"
+                        android:layout_below="@id/ifscTV"
                         android:layout_marginTop="12dp"
                         android:fontFamily="@font/lato_bold"
                         android:letterSpacing="0"
@@ -299,7 +319,7 @@
                         android:id="@+id/addressTV"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/aadharNoTV"
+                        android:layout_below="@id/ifscTV"
                         android:layout_alignParentEnd="true"
                         android:layout_marginTop="12dp"
                         android:layout_toEndOf="@id/addressLabel"
@@ -314,7 +334,7 @@
 
 
             <com.ncorti.slidetoact.SlideToActView
-                android:id="@+id/aadharSubmitSliderBtn"
+                android:id="@+id/passbookSubmitSliderBtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="30dp"
@@ -332,8 +352,8 @@
                 android:layout_marginStart="13dp"
                 android:layout_marginBottom="18dp"
                 android:text="@string/yes_i_confirm_the_data_is_correct"
-                app:layout_constraintBottom_toTopOf="@id/aadharSubmitSliderBtn"
-                app:layout_constraintTop_toBottomOf="@id/aadharInfoLayout"
+                app:layout_constraintBottom_toTopOf="@id/passbookSubmitSliderBtn"
+                app:layout_constraintTop_toBottomOf="@id/passbookInfoLayout"
                 app:layout_constraintVertical_bias="0.98"
                 tools:layout_editor_absoluteX="0dp" />
 

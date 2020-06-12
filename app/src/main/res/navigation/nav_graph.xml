@@ -436,5 +436,20 @@
         android:id="@+id/addAadharCardInfoFragment"
         android:name="com.gigforce.app.modules.gigerVerfication.aadharCard.AddAadharCardInfoFragment"
         android:label="AddAadharCardInfoFragment" />
+    <fragment
+        android:id="@+id/addBankDetailsInfoFragment"
+        android:name="com.gigforce.app.modules.gigerVerfication.bankDetails.AddBankDetailsInfoFragment"
+        android:label="fragment_add_bank_details_info"
+        tools:layout="@layout/fragment_add_bank_details_info" />
+    <dialog
+        android:id="@+id/editAadharInfoBottomSheet"
+        android:name="com.gigforce.app.modules.gigerVerfication.aadharCard.EditAadharInfoBottomSheet"
+        android:label="fragment_edit_aadhar_info"
+        tools:layout="@layout/fragment_edit_aadhar_info" />
+    <dialog
+        android:id="@+id/editBankDetailsInfoBottomSheet"
+        android:name="com.gigforce.app.modules.gigerVerfication.bankDetails.EditBankDetailsInfoBottomSheet"
+        android:label="fragment_edit_bank_info"
+        tools:layout="@layout/fragment_edit_bank_info" />
 </navigation>
 
