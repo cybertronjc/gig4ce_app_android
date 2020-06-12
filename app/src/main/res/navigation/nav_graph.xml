@@ -407,6 +407,14 @@
         android:id="@+id/walletBalancePage"
         android:name="com.gigforce.app.modules.wallet.WalletBalancePage"
         android:label="WalletBalancePage" />
+    <fragment
+        android:id="@+id/invoiceStatusPage"
+        android:name="com.gigforce.app.modules.wallet.InvoiceStatusPage"
+        android:label="InvoiceStatusPage" />
+    <fragment
+        android:id="@+id/paymentDisputePage"
+        android:name="com.gigforce.app.modules.wallet.PaymentDisputePage"
+        android:label="PaymentDisputePage" />
 
     <dialog
         android:id="@+id/editHeadlineBottomSheet"
@@ -451,5 +459,8 @@
         android:name="com.gigforce.app.modules.gigerVerfication.bankDetails.EditBankDetailsInfoBottomSheet"
         android:label="fragment_edit_bank_info"
         tools:layout="@layout/fragment_edit_bank_info" />
+
+
+
 </navigation>
 
