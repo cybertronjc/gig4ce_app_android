@@ -56,4 +56,7 @@
     <color name="onboarding_name_underline_color_20">#202e2f30</color>
     <color name="disabled_button_color">#888888</color>
     <color name="cancelcolor">#979797</color>
+    <color name="battle_ship_grey">#6d7278</color>
+    <color name="white_two">#f4f4f4</color>
+    <color name="lipstick">#d72467</color>
 </resources>

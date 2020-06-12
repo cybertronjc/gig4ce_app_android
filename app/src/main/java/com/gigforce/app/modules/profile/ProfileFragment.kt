@@ -85,15 +85,6 @@ class ProfileFragment : BaseFragment() {
         makeStatusBarTransparent()
     }
 
-    override fun onStop() {
-        super.onStop()
-    }
-
-    override fun onPause() {
-        super.onPause()
-
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
         restoreStatusBar()
@@ -113,7 +104,7 @@ class ProfileFragment : BaseFragment() {
         Log.d("DEBUG", "ENTERED PROFILE VIEW")
         val wm = requireContext().getSystemService(Context.WINDOW_SERVICE) as WindowManager
         dWidth = wm.defaultDisplay
-        layout = inflateView(R.layout.fragment_profile_main_expanded, inflater,container)!!
+        layout = inflateView(R.layout.fragment_profile_main_expanded, inflater, container)!!
         layout.appbar.post(Runnable {
             val heightPx: Int = dWidth.width * 1 / 3
             setAppBarOffset(heightPx)
@@ -144,8 +135,9 @@ class ProfileFragment : BaseFragment() {
 
         // load user data
         viewModel.getProfileData().observe(viewLifecycleOwner, Observer { profile ->
-            layout.gigger_rating.text = if (profile.rating != null) profile.rating!!.getTotal().toString()
-                                        else "-"
+            layout.gigger_rating.text =
+                if (profile.rating != null) profile.rating!!.getTotal().toString()
+                else "-"
             rating_bar.rating = profile.rating!!.getTotal()
             layout.task_done.text = profile.tasksDone.toString()
             layout.connection_count.text = profile.connections.toString()
@@ -201,16 +193,16 @@ class ProfileFragment : BaseFragment() {
             }
             profile.languages?.let {
                 val languages = it.sortedByDescending { language ->
-                     language.speakingSkill
+                    language.speakingSkill
                 }
                 // TODO: Add a generic way for string formatting.
                 for ((index, language) in languages.withIndex()) {
                     mainAboutString += if (index == 0)
-                                            "Language known: " + language.name + " (" +
-                                                    getLanguageLevel(language.speakingSkill.toInt()) + ")\n"
-                                        else
-                                            "\t\t\t\t\t\t\t\t\t\t\t\t\t\t" + language.name + " (" +
-                                                    getLanguageLevel(language.speakingSkill.toInt()) + ")\n"
+                        "Language known: " + language.name + " (" +
+                                getLanguageLevel(language.speakingSkill.toInt()) + ")\n"
+                    else
+                        "\t\t\t\t\t\t\t\t\t\t\t\t\t\t" + language.name + " (" +
+                                getLanguageLevel(language.speakingSkill.toInt()) + ")\n"
                 }
             }
 
@@ -229,8 +221,8 @@ class ProfileFragment : BaseFragment() {
             val format = SimpleDateFormat("dd/MM/yyyy", Locale.US)
             var mainEducationString = ""
             profile.educations?.let {
-                val educations = it.sortedByDescending {
-                        education -> education.startYear
+                val educations = it.sortedByDescending { education ->
+                    education.startYear
                 }
                 if (educations.isNotEmpty()) {
                     mainEducationString += educations[0].institution + "\n"
