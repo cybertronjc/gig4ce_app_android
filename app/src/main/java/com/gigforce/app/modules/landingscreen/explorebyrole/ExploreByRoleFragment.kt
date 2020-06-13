@@ -7,8 +7,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.gigforce.app.R
+import com.gigforce.app.core.base.BaseFragment
+import kotlinx.android.synthetic.main.explore_by_role_fragment.*
 
-class ExploreByRoleFragment : Fragment() {
+class ExploreByRoleFragment : BaseFragment() {
 
     companion object {
         fun newInstance() = ExploreByRoleFragment()
@@ -26,7 +28,13 @@ class ExploreByRoleFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(ExploreByRoleViewModel::class.java)
-        // TODO: Use the ViewModel
+        listener()
+    }
+
+    private fun listener() {
+        backpress_icon.setOnClickListener{
+            activity?.onBackPressed()
+        }
     }
 
 }
