@@ -411,10 +411,7 @@
         android:id="@+id/invoiceStatusPage"
         android:name="com.gigforce.app.modules.wallet.InvoiceStatusPage"
         android:label="InvoiceStatusPage" />
-    <fragment
-        android:id="@+id/paymentDisputePage"
-        android:name="com.gigforce.app.modules.wallet.PaymentDisputePage"
-        android:label="PaymentDisputePage" />
+
 
     <dialog
         android:id="@+id/editHeadlineBottomSheet"
@@ -459,6 +456,7 @@
         android:name="com.gigforce.app.modules.gigerVerfication.bankDetails.EditBankDetailsInfoBottomSheet"
         android:label="fragment_edit_bank_info"
         tools:layout="@layout/fragment_edit_bank_info" />
+
     <dialog
         android:id="@+id/editDrivingLicenseInfoBottomSheet"
         android:name="com.gigforce.app.modules.gigerVerfication.drivingLicense.EditDrivingLicenseInfoBottomSheet"
@@ -475,5 +473,19 @@
         android:label="AddSelfieVideoFragment" />
 
 
+    <fragment
+        android:id="@+id/paymentDisputePage"
+        android:name="com.gigforce.app.modules.wallet.PaymentDisputePage"
+        android:label="PaymentDisputePage" />
+
+    <fragment
+        android:id="@+id/paymentDisputeExpandedPage"
+        android:name="com.gigforce.app.modules.wallet.PaymentDisputeExpandedPage"
+        android:label="PaymentDisputeExpandedPage" />
+
+    <fragment
+        android:id="@+id/monthlyEarningPage"
+        android:name="com.gigforce.app.modules.wallet.MonthlyEarningPage"
+        android:label="MonthlyEarningPage" />
 </navigation>
 

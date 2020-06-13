@@ -19,13 +19,12 @@ import kotlinx.android.synthetic.main.current_address_edit_fragment.*
 import kotlinx.android.synthetic.main.current_address_edit_fragment.area
 import kotlinx.android.synthetic.main.current_address_edit_fragment.button2
 import kotlinx.android.synthetic.main.current_address_edit_fragment.cancel_button
-import kotlinx.android.synthetic.main.current_address_edit_fragment.imageView10
+import kotlinx.android.synthetic.main.current_address_edit_fragment.back_arrow_iv
 import kotlinx.android.synthetic.main.current_address_edit_fragment.line1
 import kotlinx.android.synthetic.main.current_address_edit_fragment.line2
 import kotlinx.android.synthetic.main.current_address_edit_fragment.location
 import kotlinx.android.synthetic.main.current_address_edit_fragment.pincode
 import kotlinx.android.synthetic.main.current_address_edit_fragment.state
-import kotlinx.android.synthetic.main.permanent_address_edit_fragment.*
 
 class CurrentAddressEditFragment : BaseFragment() {
     companion object {
@@ -70,7 +69,7 @@ class CurrentAddressEditFragment : BaseFragment() {
     private fun initializeViews() {
         preferenceDataModel = viewModel.getPreferenceDataModel()
         profileDataModel = viewModel.getProfileDataModel()
-        imageView10.setOnClickListener { activity?.onBackPressed() }
+        back_arrow_iv.setOnClickListener { activity?.onBackPressed() }
         var currentAddress = viewModel.getCurrentAddress()
         var permanentAddress = viewModel.getPermanentAddress()
         populateAddress(currentAddress!!)

@@ -47,6 +47,7 @@ abstract class BaseFragment : Fragment() {
     lateinit var navController: NavController
     lateinit var preferencesRepositoryForBaseFragment: PreferencesRepository
     private var configrepositoryObj: ConfigRepository? = null;
+
     companion object {
         var englishCode = "en"
         var hindiCode = "hi"
@@ -59,6 +60,9 @@ abstract class BaseFragment : Fragment() {
 
     open fun activate(view: View?) {}
 
+    open fun isConfigRequired(): Boolean {
+        return false
+    }
 
     open fun inflateView(
         resource: Int, inflater: LayoutInflater,
@@ -74,13 +78,34 @@ abstract class BaseFragment : Fragment() {
         activate(mView)
         try {
             showDialogIfDeviceLanguageChanged()
-        }catch (e:Exception){
+        } catch (e: Exception) {
 
         }
         return mView
     }
 
+    private fun init() { // GPS=new GPSTracker(this);
+        navController = activity?.findNavController(R.id.nav_fragment)!!
+        SP = activity?.getSharedPreferences(
+            CoreConstants.SHARED_PREFERENCE_DB,
+            Context.MODE_PRIVATE
+        )!!
+        this.editor = SP.edit()
+        if (isConfigRequired()) {
+            configObserver()
+        }
+    }
 
+    var configDataModel: ConfigDataModel? = null
+    private fun configObserver() {
+        this.configrepositoryObj = ConfigRepository.getInstance()
+        this.configrepositoryObj?.configCollectionListener()
+        this.configrepositoryObj?.configLiveDataModel?.observe(
+            viewLifecycleOwner,
+            androidx.lifecycle.Observer { configDataModel ->
+                this.configDataModel = configDataModel
+            })
+    }
 
     private fun showDialogIfDeviceLanguageChanged() {
         preferencesRepositoryForBaseFragment = PreferencesRepository()
@@ -147,8 +172,11 @@ abstract class BaseFragment : Fragment() {
 
     //Confirmation dialog start
     // this dialog having right side yes button with gradient. Need to create one having swipable functionality
-    fun showConfirmationDialogType1(title:String, buttonClickListener:ConfirmationDialogOnClickListener){
-        var customialog:Dialog? = activity?.let { Dialog(it) }
+    fun showConfirmationDialogType1(
+        title: String,
+        buttonClickListener: ConfirmationDialogOnClickListener
+    ) {
+        var customialog: Dialog? = activity?.let { Dialog(it) }
         customialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
         customialog?.setCancelable(false)
         customialog?.setContentView(R.layout.confirmation_custom_alert_type1)
@@ -156,14 +184,18 @@ abstract class BaseFragment : Fragment() {
         titleDialog.text = title
         val yesBtn = customialog?.findViewById(R.id.yes) as TextView
         val noBtn = customialog?.findViewById(R.id.cancel) as TextView
-        yesBtn.setOnClickListener (View.OnClickListener {
+        yesBtn.setOnClickListener(View.OnClickListener {
             buttonClickListener.clickedOnYes(customialog)
         })
-        noBtn.setOnClickListener (View.OnClickListener { buttonClickListener.clickedOnNo(customialog) })
+        noBtn.setOnClickListener(View.OnClickListener { buttonClickListener.clickedOnNo(customialog) })
         customialog?.show()
     }
-    fun showConfirmationDialogType2(title:String, buttonClickListener:ConfirmationDialogOnClickListener){
-        var customialog:Dialog? = activity?.let { Dialog(it) }
+
+    fun showConfirmationDialogType2(
+        title: String,
+        buttonClickListener: ConfirmationDialogOnClickListener
+    ) {
+        var customialog: Dialog? = activity?.let { Dialog(it) }
         customialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
         customialog?.setCancelable(false)
         customialog?.setContentView(R.layout.confirmation_custom_alert_type2)
@@ -171,15 +203,16 @@ abstract class BaseFragment : Fragment() {
         titleDialog.text = title
         val yesBtn = customialog?.findViewById(R.id.yes) as TextView
         val noBtn = customialog?.findViewById(R.id.cancel) as TextView
-        yesBtn.setOnClickListener (View.OnClickListener {
+        yesBtn.setOnClickListener(View.OnClickListener {
             buttonClickListener.clickedOnYes(customialog)
         })
-        noBtn.setOnClickListener (View.OnClickListener { buttonClickListener.clickedOnNo(customialog) })
+        noBtn.setOnClickListener(View.OnClickListener { buttonClickListener.clickedOnNo(customialog) })
         customialog?.show()
     }
-    interface ConfirmationDialogOnClickListener{
-        fun clickedOnYes(dialog:Dialog?)
-        fun clickedOnNo(dialog:Dialog?)
+
+    interface ConfirmationDialogOnClickListener {
+        fun clickedOnYes(dialog: Dialog?)
+        fun clickedOnNo(dialog: Dialog?)
     }
     //Confirmation dialog end
 
@@ -200,23 +233,6 @@ abstract class BaseFragment : Fragment() {
     // SP = this.getPreferences(Context.MODE_PRIVATELD_WRITEABLE);
     var editor: SharedPreferences.Editor? = null
 
-    private fun init() { // GPS=new GPSTracker(this);
-        navController = activity?.findNavController(R.id.nav_fragment)!!
-        SP = activity?.getSharedPreferences(
-            CoreConstants.SHARED_PREFERENCE_DB,
-            Context.MODE_PRIVATE
-        )!!
-        this.editor = SP.edit()
-        configObserver()
-    }
-    var configDataModel : ConfigDataModel? = null
-    private fun configObserver() {
-        this.configrepositoryObj = ConfigRepository.getInstance()
-        this.configrepositoryObj?.configCollectionListener()
-        this.configrepositoryObj?.configLiveDataModel?.observe(viewLifecycleOwner, androidx.lifecycle.Observer { configDataModel ->
-            this.configDataModel = configDataModel
-        })
-    }
 
     fun getFragmentView(): View {
         return mView!!

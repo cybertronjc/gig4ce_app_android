@@ -76,7 +76,7 @@ class PreferredLocationFragment : BaseFragment() {
         return false
     }
     private fun listener() {
-        imageView10.setOnClickListener(View.OnClickListener { activity?.onBackPressed() })
+        back_arrow_iv.setOnClickListener(View.OnClickListener { activity?.onBackPressed() })
         editCurrentLocation.setOnClickListener{
         showEditLoactionAlert()
         }
