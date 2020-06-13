@@ -466,7 +466,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/learning_cl"
                 android:layout_width="match_parent"
-                android:layout_height="188dp">
+                android:layout_height="233dp">
 
                 <ImageView
                     android:id="@+id/imageView36"

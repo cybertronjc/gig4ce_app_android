@@ -4,13 +4,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/card_view"
     android:layout_width="match_parent"
-    android:layout_height="109dp"
+    android:layout_height="150dp"
     app:cardCornerRadius="4dp"
+    android:layout_marginBottom="2dp"
     android:layout_marginLeft="18dp">
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/learning_bg">
+    >
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:background="@drawable/learning_bg"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"/>
 
     <TextView
         android:id="@+id/textView69"
@@ -18,7 +26,7 @@
         android:layout_height="wrap_content"
         android:text="Module 1"
         android:textSize="10sp"
-        android:textColor="#ffffff"
+        android:textColor="#000000"
         android:layout_marginLeft="13dp"
         android:layout_marginBottom="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -30,7 +38,7 @@
         android:layout_height="wrap_content"
         android:text="CASHIER"
         android:textSize="14sp"
-        android:textColor="#ffffff"
+        android:textColor="#000000"
         android:layout_marginBottom="1dp"
         android:layout_marginLeft="13dp"
         app:layout_constraintBottom_toTopOf="@+id/textView69"
