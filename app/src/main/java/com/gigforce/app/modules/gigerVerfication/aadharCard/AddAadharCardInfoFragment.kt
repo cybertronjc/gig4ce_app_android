@@ -53,6 +53,10 @@ class AddAadharCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetAc
 
         aadharSubmitSliderBtn.isEnabled = false
 
+        toolbar.setNavigationOnClickListener {
+            activity?.onBackPressed()
+        }
+
         aadharAvailaibilityOptionRG.setOnCheckedChangeListener { _, checkedId ->
 
             if (checkedId == R.id.aadharYesRB) {

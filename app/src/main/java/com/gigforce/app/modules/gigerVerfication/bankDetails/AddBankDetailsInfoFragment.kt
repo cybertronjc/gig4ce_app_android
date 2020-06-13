@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
@@ -38,6 +37,10 @@ class AddBankDetailsInfoFragment : BaseFragment(), SelectImageSourceBottomSheetA
             getString(R.string.upload_bank_passbook)
         passbookImageHolder.documentUploadSubLabelTV.text =
             getString(R.string.upload_bank_passbook_sublabel)
+
+        toolbar.setNavigationOnClickListener {
+            activity?.onBackPressed()
+        }
 
         passbookSubmitSliderBtn.isEnabled = false
 

@@ -31,6 +31,11 @@ class AddSelfieVideoFragment : BaseFragment() {
     }
 
     private fun initViews() {
+
+        toolbar.setNavigationOnClickListener {
+            activity?.onBackPressed()
+        }
+
         if (hasCameraPermissions())
             initCamera()
         else

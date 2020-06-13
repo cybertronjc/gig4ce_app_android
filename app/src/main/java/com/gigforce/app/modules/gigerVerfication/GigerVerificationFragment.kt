@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
@@ -30,6 +29,11 @@ class GigerVerificationFragment : BaseFragment() {
     }
 
     private fun initView() {
+
+        toolbar.setNavigationOnClickListener {
+            activity?.onBackPressed()
+        }
+
         Glide.with(requireContext())
             .load(R.drawable.ic_video_round)
             .into(selfieVideoLayout.optionIconIV)
