@@ -313,5 +313,12 @@
     <string name="father_s_name">Father\'s Name</string>
     <string name="cif_number">CIF Number</string>
     <string name="account_number">Account Number</string>
+    <string name="license_validity">License Validity</string>
+    <string name="permanent_account_number">Permanent Account Number</string>
+    <string name="upload_document">Upload Document</string>
+    <string name="from_camera">From Camera</string>
+    <string name="from_gallery">From Gallery</string>
+    <string name="update">UPDATE</string>
+    <string name="how_to_record_selfie_video">How to Record Selfie Video?</string>
     ayyy
 </resources>

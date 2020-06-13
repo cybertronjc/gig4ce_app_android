@@ -1,4 +1,4 @@
-package com.gigforce.app.modules.gigerVerfication.aadharCard
+package com.gigforce.app.modules.gigerVerfication.panCard
 
 import android.app.DatePickerDialog
 import android.os.Bundle
@@ -9,10 +9,10 @@ import android.widget.DatePicker
 import com.gigforce.app.R
 import com.gigforce.app.utils.DateHelper
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import kotlinx.android.synthetic.main.fragment_edit_aadhar_info.*
+import kotlinx.android.synthetic.main.fragment_edit_pan_info.*
 import java.util.*
 
-class EditAadharInfoBottomSheet : BottomSheetDialogFragment() {
+class EditPanInfoBottomSheet : BottomSheetDialogFragment() {
 
     private val dateOfBirthPicker: DatePickerDialog by lazy {
         val cal = Calendar.getInstance()
@@ -39,7 +39,7 @@ class EditAadharInfoBottomSheet : BottomSheetDialogFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ) = inflater.inflate(R.layout.fragment_edit_aadhar_info, container, false)
+    ) = inflater.inflate(R.layout.fragment_edit_pan_info, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -47,13 +47,12 @@ class EditAadharInfoBottomSheet : BottomSheetDialogFragment() {
     }
 
     private fun initView() {
+        editPanCrossIcon.setOnClickListener {
+            dismiss()
+        }
+
         selectDobButton.setOnClickListener {
             dateOfBirthPicker.show()
         }
-
-        editAadharCrossIcon.setOnClickListener {
-            dismiss()
-        }
     }
-
 }

@@ -459,7 +459,20 @@
         android:name="com.gigforce.app.modules.gigerVerfication.bankDetails.EditBankDetailsInfoBottomSheet"
         android:label="fragment_edit_bank_info"
         tools:layout="@layout/fragment_edit_bank_info" />
-
+    <dialog
+        android:id="@+id/editDrivingLicenseInfoBottomSheet"
+        android:name="com.gigforce.app.modules.gigerVerfication.drivingLicense.EditDrivingLicenseInfoBottomSheet"
+        android:label="fragment_edit_driving_license"
+        tools:layout="@layout/fragment_edit_driving_license" />
+    <dialog
+        android:id="@+id/editPanInfoBottomSheet"
+        android:name="com.gigforce.app.modules.gigerVerfication.panCard.EditPanInfoBottomSheet"
+        android:label="fragment_edit_pan_info"
+        tools:layout="@layout/fragment_edit_pan_info" />
+    <fragment
+        android:id="@+id/addSelfieVideoFragment"
+        android:name="com.gigforce.app.modules.gigerVerfication.selfieVideo.AddSelfieVideoFragment"
+        android:label="AddSelfieVideoFragment" />
 
 
 </navigation>

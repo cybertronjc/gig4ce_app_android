@@ -6,7 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context=".modules.gigerVerfication.aadharCard.EditAadharInfoBottomSheet">
+    tools:context=".modules.gigerVerfication.drivingLicense.EditDrivingLicenseInfoBottomSheet">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -29,13 +29,11 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
-            android:id="@+id/editAadharCrossIcon"
+            android:id="@+id/editDlCrossIcon"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="19dp"
-            android:clickable="true"
-            android:focusable="true"
             android:src="@drawable/ic_cross_grey"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -59,13 +57,33 @@
             app:layout_constraintTop_toBottomOf="@id/nameLabel" />
 
         <TextView
+            android:id="@+id/fathersNameLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/father_s_name"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/nameET" />
+
+        <EditText
+            android:id="@+id/fathersNameET"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:textColor="@color/black"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/fathersNameLabel" />
+
+
+
+        <TextView
             android:id="@+id/dobLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="28dp"
             android:text="@string/date_of_birth_without_colon"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/nameET" />
+            app:layout_constraintTop_toBottomOf="@id/fathersNameET" />
 
         <EditText
             android:id="@+id/dobET"
@@ -90,42 +108,56 @@
 
 
         <TextView
-            android:id="@+id/genderLabel"
+            android:id="@+id/licenseNoLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="28dp"
-            android:text="@string/gender_wo_colon"
+            android:layout_marginTop="16dp"
+            android:text="License Number"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@id/dobET" />
 
-        <androidx.appcompat.widget.AppCompatSpinner
-            android:id="@+id/genderSpinner"
+        <EditText
+            android:id="@+id/licenseNoET"
             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:textColor="@color/black"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/licenseNoLabel" />
+
+
+        <TextView
+            android:id="@+id/licenseValidityLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:text="@string/license_validity"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/licenseNoET" />
+
+        <EditText
+            android:id="@+id/licenseValidityET"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
             android:enabled="false"
             android:textColor="@color/black"
+            app:layout_constraintEnd_toEndOf="@id/selectLicenseValidityButton"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/genderLabel" />
+            app:layout_constraintTop_toBottomOf="@id/licenseValidityLabel" />
 
-
-        <TextView
-            android:id="@+id/aadharLabel"
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/selectLicenseValidityButton"
+            style="@style/IconOnlyButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="@string/aadhar_card"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/genderSpinner" />
+            app:icon="@drawable/ic_calendar_black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/licenseValidityET"
+            app:layout_constraintTop_toTopOf="@id/licenseValidityET" />
 
-        <EditText
-            android:id="@+id/aadharET"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
-            android:textColor="@color/black"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/aadharLabel" />
+
+
 
 
         <TextView
@@ -135,7 +167,7 @@
             android:layout_marginTop="16dp"
             android:text="@string/address_line"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/aadharET" />
+            app:layout_constraintTop_toBottomOf="@id/licenseValidityET" />
 
         <EditText
             android:id="@+id/addressLineET"
@@ -255,6 +287,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="33dp"
+            android:background="@color/lipstick"
+            android:textColor="@color/lipstick"
             android:text="@string/update"
             app:layout_constraintTop_toBottomOf="@id/statePinLayout" />
 

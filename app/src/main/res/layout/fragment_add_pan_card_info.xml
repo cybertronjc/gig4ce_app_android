@@ -54,7 +54,7 @@
                 android:layout_width="14dp"
                 android:layout_height="14dp"
                 android:layout_marginEnd="13dp"
-                android:src="@drawable/ic_add_pink"
+                android:src="@drawable/ic_time"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -112,7 +112,7 @@
                 layout="@layout/fragment_verification_image_holder"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="visible"
+                android:visibility="gone"
                 app:layout_constraintTop_toBottomOf="@id/panCardAvailaibilityOptionRG" />
 
             <LinearLayout
@@ -120,7 +120,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:visibility="visible"
+                android:visibility="gone"
                 app:layout_constraintTop_toBottomOf="@id/panImageHolder">
 
                 <View
@@ -131,9 +131,12 @@
                     android:background="#cdccd1" />
 
                 <LinearLayout
+                    android:id="@+id/editPanInfoLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
+                    android:clickable="true"
+                    android:focusable="true"
                     android:paddingBottom="12dp">
 
                     <TextView

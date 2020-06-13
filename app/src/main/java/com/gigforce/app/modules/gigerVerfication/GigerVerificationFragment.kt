@@ -39,14 +39,14 @@ class GigerVerificationFragment : BaseFragment() {
 
 
         Glide.with(requireContext())
-            .load(R.drawable.ic_video_round)
+            .load(R.drawable.ic_dl)
             .into(panLayout.optionIconIV)
 
         panLayout.optionTitleTV.text = getString(R.string.pan_card)
         panLayout.descTitleTV.text = getString(R.string.tap_to_upload)
 
         Glide.with(requireContext())
-            .load(R.drawable.ic_video_round)
+            .load(R.drawable.ic_bank)
             .into(aadharLayout.optionIconIV)
 
         aadharLayout.optionTitleTV.text = getString(R.string.aadhar_card)
@@ -54,7 +54,7 @@ class GigerVerificationFragment : BaseFragment() {
 
 
         Glide.with(requireContext())
-            .load(R.drawable.ic_video_round)
+            .load(R.drawable.ic_dl)
             .into(drivingLayout.optionIconIV)
 
         drivingLayout.optionTitleTV.text = getString(R.string.driving_license)
@@ -62,7 +62,7 @@ class GigerVerificationFragment : BaseFragment() {
 
 
         Glide.with(requireContext())
-            .load(R.drawable.ic_video_round)
+            .load(R.drawable.ic_bank)
             .into(bankDetailsLayout.optionIconIV)
 
         bankDetailsLayout.optionTitleTV.text = getString(R.string.bank_details)
@@ -85,6 +85,10 @@ class GigerVerificationFragment : BaseFragment() {
 
         bankDetailsLayout.setOnClickListener {
             findNavController().navigate(R.id.addBankDetailsInfoFragment)
+        }
+
+        selfieVideoLayout.setOnClickListener {
+            findNavController().navigate(R.id.addSelfieVideoFragment)
         }
     }
 }
