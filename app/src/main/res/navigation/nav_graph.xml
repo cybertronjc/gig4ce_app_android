@@ -131,6 +131,12 @@
         tools:layout="@layout/landingscreen_fragment" />
 
     <fragment
+        android:id="@+id/explore_by_role"
+        android:name="com.gigforce.app.modules.landingscreen.explorebyrole.ExploreByRoleFragment"
+        android:label="explore_by_role_fragment"
+        tools:layout="@layout/explore_by_role_fragment" />
+
+    <fragment
         android:id="@+id/educationExpandedFragment"
         android:name="com.gigforce.app.modules.profile.EducationExpandedFragment"
         android:label="EducationExpandedFragment"
