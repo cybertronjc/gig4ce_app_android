@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.gigforce.app.R
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import kotlinx.android.synthetic.main.fragment_edit_bank_info.*
 
 class EditBankDetailsInfoBottomSheet : BottomSheetDialogFragment() {
 
@@ -21,7 +22,9 @@ class EditBankDetailsInfoBottomSheet : BottomSheetDialogFragment() {
     }
 
     private fun initView() {
-
+        editBankDetailsCrossIcon.setOnClickListener {
+            dismiss()
+        }
     }
 
 }

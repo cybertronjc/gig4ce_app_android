@@ -1,4 +1,4 @@
-package com.gigforce.app.modules.gigerVerfication.aadharCard
+package com.gigforce.app.modules.gigerVerfication.drivingLicense
 
 import android.app.DatePickerDialog
 import android.os.Bundle
@@ -9,10 +9,10 @@ import android.widget.DatePicker
 import com.gigforce.app.R
 import com.gigforce.app.utils.DateHelper
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import kotlinx.android.synthetic.main.fragment_edit_aadhar_info.*
+import kotlinx.android.synthetic.main.fragment_edit_driving_license.*
 import java.util.*
 
-class EditAadharInfoBottomSheet : BottomSheetDialogFragment() {
+class EditDrivingLicenseInfoBottomSheet : BottomSheetDialogFragment() {
 
     private val dateOfBirthPicker: DatePickerDialog by lazy {
         val cal = Calendar.getInstance()
@@ -35,11 +35,31 @@ class EditAadharInfoBottomSheet : BottomSheetDialogFragment() {
         datePickerDialog
     }
 
+
+    private val licenseValidityPicker: DatePickerDialog by lazy {
+        val cal = Calendar.getInstance()
+        DatePickerDialog(
+            requireContext(),
+            DatePickerDialog.OnDateSetListener { _: DatePicker?, year: Int, month: Int, dayOfMonth: Int ->
+                val newCal = Calendar.getInstance()
+                newCal.set(Calendar.YEAR, year)
+                newCal.set(Calendar.MONTH, month)
+                newCal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+
+                licenseValidityET.setText(DateHelper.getDateInDDMMYYYY(newCal.time))
+            },
+            cal.get(Calendar.YEAR),
+            cal.get(Calendar.MONTH),
+            cal.get(Calendar.DAY_OF_MONTH)
+        )
+    }
+
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ) = inflater.inflate(R.layout.fragment_edit_aadhar_info, container, false)
+    ) = inflater.inflate(R.layout.fragment_edit_driving_license, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -47,13 +67,19 @@ class EditAadharInfoBottomSheet : BottomSheetDialogFragment() {
     }
 
     private fun initView() {
+
+        editDlCrossIcon.setOnClickListener {
+            dismiss()
+        }
+
+        selectLicenseValidityButton.setOnClickListener {
+            licenseValidityPicker.show()
+        }
+
         selectDobButton.setOnClickListener {
             dateOfBirthPicker.show()
         }
 
-        editAadharCrossIcon.setOnClickListener {
-            dismiss()
-        }
     }
 
 }

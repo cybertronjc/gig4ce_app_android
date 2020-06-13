@@ -166,6 +166,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="18dp"
+                android:layout_marginStart="16dp"
                 android:text="I Authorise Gigforce to conduct/ update/ fetch my verification as required by regulations."
                 app:layout_constraintBottom_toTopOf="@id/submitSliderBtn"
                 app:layout_constraintTop_toBottomOf="@id/itemsEndingSeparator" />
