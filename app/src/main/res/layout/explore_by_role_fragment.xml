@@ -117,7 +117,7 @@
         app:layout_constraintBottom_toTopOf="@+id/status_bar"
         app:layout_constraintStart_toStartOf="@+id/role_main_view"
         app:layout_constraintTop_toTopOf="@+id/role_main_view"
-        tools:src="@tools:sample/avatars" />
+        android:src="@drawable/ic_profile_pic_2" />
 
     <TextView
         android:id="@+id/role_name"
@@ -204,7 +204,7 @@
         app:layout_constraintBottom_toTopOf="@+id/status_bar1"
         app:layout_constraintStart_toStartOf="@+id/role_main_view1"
         app:layout_constraintTop_toTopOf="@+id/role_main_view1"
-        tools:src="@tools:sample/avatars" />
+        android:src="@drawable/ic_profile_pic_3" />
 
     <TextView
         android:id="@+id/role_name1"
@@ -294,7 +294,7 @@
         app:layout_constraintBottom_toTopOf="@+id/status_bar2"
         app:layout_constraintStart_toStartOf="@+id/role_main_view2"
         app:layout_constraintTop_toTopOf="@+id/role_main_view2"
-        tools:src="@tools:sample/avatars" />
+        android:src="@drawable/ic_profile_pic_2" />
 
     <TextView
         android:id="@+id/role_name2"
@@ -381,7 +381,7 @@
         app:layout_constraintBottom_toTopOf="@+id/status_bar3"
         app:layout_constraintStart_toStartOf="@+id/role_main_view3"
         app:layout_constraintTop_toTopOf="@+id/role_main_view3"
-        tools:src="@tools:sample/avatars" />
+        android:src="@drawable/ic_profile_pic_3" />
 
     <TextView
         android:id="@+id/role_name3"

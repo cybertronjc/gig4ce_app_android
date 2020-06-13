@@ -524,7 +524,7 @@
                     android:layout_height="24dp"
                     android:layout_marginTop="16dp"
                     android:layout_marginLeft="16dp"
-                    android:src="@drawable/ic_help"
+                    android:src="@drawable/ic_help_icon"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
                 <TextView
@@ -558,7 +558,7 @@
                     app:layout_constraintBottom_toBottomOf="@id/help_first_card"
                     app:layout_constraintTop_toTopOf="@id/help_first_card"
                     android:elevation="5dp"
-                    android:background="@drawable/role_industry_background"
+                    android:background="@drawable/video_icon"
                     android:scaleType="centerCrop"/>
 
                 <TextView
@@ -629,7 +629,7 @@
                     app:layout_constraintLeft_toLeftOf="@id/help_first_card1"
                     app:layout_constraintBottom_toBottomOf="@id/help_first_card1"
                     app:layout_constraintTop_toTopOf="@id/help_first_card1"
-                    android:background="@drawable/role_industry_background"
+                    android:background="@drawable/video_icon"
                     android:scaleType="centerCrop"
                     android:elevation="5dp"
                     />
