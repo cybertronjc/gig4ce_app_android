@@ -23,5 +23,17 @@ class PaymentDisputePage: WalletBaseFragment() {
         payment_1.invoiceStatus = "rejected"
         payment_2.invoiceStatus = "rejected"
         payment_3.invoiceStatus = "rejected"
+
+        payment_1.setOnClickListener {
+            navigate(R.id.paymentDisputeExpandedPage)
+        }
+
+        payment_2.setOnClickListener {
+            navigate(R.id.paymentDisputeExpandedPage)
+        }
+
+        payment_3.setOnClickListener {
+            navigate(R.id.paymentDisputeExpandedPage)
+        }
     }
 }

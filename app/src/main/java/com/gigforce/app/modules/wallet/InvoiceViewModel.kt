@@ -8,6 +8,8 @@ class InvoiceViewModel: ViewModel() {
     var pendingInvoices: MutableLiveData<ArrayList<Invoice>> = MutableLiveData(ArrayList())
     var generatedInvoice: MutableLiveData<ArrayList<Invoice>> = MutableLiveData(ArrayList())
 
+    var monthlyInvoice: ArrayList<Invoice> = ArrayList()
+
     companion object {
         fun newInstance() = InvoiceViewModel()
     }
@@ -20,6 +22,8 @@ class InvoiceViewModel: ViewModel() {
         generatedInvoice.value = ArrayList(
             listOf(Invoice(), Invoice(), Invoice(), Invoice())
         )
+
+        monthlyInvoice.addAll(listOf(Invoice(), Invoice(), Invoice(), Invoice()))
     }
 
 }

@@ -33,7 +33,8 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:animateLayoutChanges="true">
 
 
             <TextView
@@ -48,16 +49,16 @@
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toTopOf="parent"  />
+                app:layout_constraintTop_toTopOf="parent" />
 
 
             <ImageView
                 android:id="@+id/helpIconIV"
                 android:layout_width="14dp"
                 android:layout_height="14dp"
-                android:layout_marginEnd="13dp"
                 android:layout_marginTop="22dp"
-                android:src="@drawable/ic_add_pink"
+                android:layout_marginEnd="13dp"
+                android:src="@drawable/ic_time"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -65,12 +66,12 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="22dp"
                 android:layout_marginEnd="4dp"
                 android:letterSpacing="-0.01"
                 android:text="@string/why_do_we_need_this"
                 android:textColor="@color/battle_ship_grey"
                 android:textSize="12sp"
-                android:layout_marginTop="22dp"
                 app:layout_constraintEnd_toStartOf="@+id/helpIconIV"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -116,6 +117,7 @@
                 layout="@layout/fragment_verification_image_holder"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:visibility="gone"
                 app:layout_constraintTop_toBottomOf="@id/aadharAvailaibilityOptionRG" />
 
 
@@ -124,6 +126,7 @@
                 layout="@layout/fragment_verification_image_holder"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:visibility="gone"
                 app:layout_constraintTop_toBottomOf="@id/aadharFrontImageHolder" />
 
 
@@ -132,7 +135,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:visibility="visible"
+                android:visibility="gone"
                 app:layout_constraintTop_toBottomOf="@id/aadharBackImageHolder">
 
                 <View
@@ -146,9 +149,9 @@
                     android:id="@+id/aadharEditLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
                     android:clickable="true"
                     android:focusable="true"
+                    android:orientation="horizontal"
                     android:paddingBottom="12dp">
 
                     <TextView
@@ -199,7 +202,6 @@
                         android:textColor="@color/black"
                         android:textSize="14sp"
                         tools:text="Rahul Chaudhary" />
-
 
 
                     <TextView

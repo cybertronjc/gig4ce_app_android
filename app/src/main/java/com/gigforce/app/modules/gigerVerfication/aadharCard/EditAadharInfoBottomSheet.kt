@@ -1,13 +1,39 @@
 package com.gigforce.app.modules.gigerVerfication.aadharCard
 
+import android.app.DatePickerDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.DatePicker
 import com.gigforce.app.R
+import com.gigforce.app.utils.DateHelper
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import kotlinx.android.synthetic.main.fragment_edit_aadhar_info.*
+import java.util.*
 
 class EditAadharInfoBottomSheet : BottomSheetDialogFragment() {
+
+    private val dateOfBirthPicker: DatePickerDialog by lazy {
+        val cal = Calendar.getInstance()
+        val datePickerDialog = DatePickerDialog(
+            requireContext(),
+            DatePickerDialog.OnDateSetListener { _: DatePicker?, year: Int, month: Int, dayOfMonth: Int ->
+                val newCal = Calendar.getInstance()
+                newCal.set(Calendar.YEAR, year)
+                newCal.set(Calendar.MONTH, month)
+                newCal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+
+                dobET.setText(DateHelper.getDateInDDMMYYYY(newCal.time))
+            },
+            1990,
+            cal.get(Calendar.MONTH),
+            cal.get(Calendar.DAY_OF_MONTH)
+        )
+
+        datePickerDialog.datePicker.maxDate = Calendar.getInstance().timeInMillis
+        datePickerDialog
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -21,7 +47,13 @@ class EditAadharInfoBottomSheet : BottomSheetDialogFragment() {
     }
 
     private fun initView() {
+        selectDobButton.setOnClickListener {
+            dateOfBirthPicker.show()
+        }
 
+        editAadharCrossIcon.setOnClickListener {
+            dismiss()
+        }
     }
 
 }

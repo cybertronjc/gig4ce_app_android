@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context=".modules.gigerVerfication.drivingLicense.EditDrivingLicenseInfoBottomSheet">
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingStart="22dp"
+        android:paddingEnd="22dp"
+        android:paddingBottom="30dp">
+
+        <TextView
+            android:id="@+id/editLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="22dp"
+            android:fontFamily="@font/lato_bold"
+            android:letterSpacing="0"
+            android:text="@string/edit"
+            android:textColor="@color/black"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/editDlCrossIcon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="19dp"
+            android:src="@drawable/ic_cross_grey"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/nameLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/name"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/editLabel" />
+
+        <EditText
+            android:id="@+id/nameET"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:textColor="@color/black"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/nameLabel" />
+
+        <TextView
+            android:id="@+id/fathersNameLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/father_s_name"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/nameET" />
+
+        <EditText
+            android:id="@+id/fathersNameET"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:textColor="@color/black"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/fathersNameLabel" />
+
+
+
+        <TextView
+            android:id="@+id/dobLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:text="@string/date_of_birth_without_colon"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/fathersNameET" />
+
+        <EditText
+            android:id="@+id/dobET"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:enabled="false"
+            android:textColor="@color/black"
+            app:layout_constraintEnd_toEndOf="@id/selectDobButton"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/dobLabel" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/selectDobButton"
+            style="@style/IconOnlyButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:icon="@drawable/ic_calendar_black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/dobET"
+            app:layout_constraintTop_toTopOf="@id/dobET" />
+
+
+        <TextView
+            android:id="@+id/licenseNoLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="License Number"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/dobET" />
+
+        <EditText
+            android:id="@+id/licenseNoET"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:textColor="@color/black"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/licenseNoLabel" />
+
+
+        <TextView
+            android:id="@+id/licenseValidityLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:text="@string/license_validity"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/licenseNoET" />
+
+        <EditText
+            android:id="@+id/licenseValidityET"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:enabled="false"
+            android:textColor="@color/black"
+            app:layout_constraintEnd_toEndOf="@id/selectLicenseValidityButton"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/licenseValidityLabel" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/selectLicenseValidityButton"
+            style="@style/IconOnlyButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:icon="@drawable/ic_calendar_black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/licenseValidityET"
+            app:layout_constraintTop_toTopOf="@id/licenseValidityET" />
+
+
+
+
+
+        <TextView
+            android:id="@+id/addressLineLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/address_line"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/licenseValidityET" />
+
+        <EditText
+            android:id="@+id/addressLineET"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:textColor="@color/black"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/addressLineLabel" />
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/areaLocationLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:layout_constraintTop_toBottomOf="@id/addressLineET">
+
+            <TextView
+                android:id="@+id/areaLabel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/area"
+                app:layout_constraintEnd_toStartOf="@+id/locationLabel"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <TextView
+                android:id="@+id/locationLabel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/location"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/areaLabel"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <EditText
+                android:id="@+id/areaET"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:textColor="@color/black"
+                app:layout_constraintEnd_toStartOf="@+id/locationET"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/locationLabel" />
+
+
+            <EditText
+                android:id="@+id/locationET"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:textColor="@color/black"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/areaET"
+                app:layout_constraintTop_toBottomOf="@id/locationLabel" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/statePinLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:layout_constraintTop_toBottomOf="@id/areaLocationLayout">
+
+            <TextView
+                android:id="@+id/stateLabel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/state"
+                app:layout_constraintEnd_toStartOf="@+id/pinLabel"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <TextView
+                android:id="@+id/pinLabel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/pincode"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/stateLabel"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <EditText
+                android:id="@+id/stateET"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:textColor="@color/black"
+                app:layout_constraintEnd_toStartOf="@+id/pinET"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/stateLabel" />
+
+
+            <EditText
+                android:id="@+id/pinET"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:inputType="number"
+                android:maxLength="6"
+                android:textColor="@color/black"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/stateET"
+                app:layout_constraintTop_toBottomOf="@id/pinLabel" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <com.google.android.material.button.MaterialButton
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="33dp"
+            android:background="@color/lipstick"
+            android:textColor="@color/lipstick"
+            android:text="@string/update"
+            app:layout_constraintTop_toBottomOf="@id/statePinLayout" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>

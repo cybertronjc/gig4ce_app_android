@@ -59,4 +59,7 @@
     <color name="battle_ship_grey">#6d7278</color>
     <color name="white_two">#f4f4f4</color>
     <color name="lipstick">#d72467</color>
+    <color name="light_pink">#ffd9e6</color>
+    <color name="warm_grey">#888888</color>
+    <color name="light_grey">#dddddd</color>
 </resources>
