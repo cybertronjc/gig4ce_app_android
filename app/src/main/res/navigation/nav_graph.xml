@@ -423,5 +423,15 @@
         android:id="@+id/paymentDisputePage"
         android:name="com.gigforce.app.modules.wallet.PaymentDisputePage"
         android:label="PaymentDisputePage" />
+
+    <fragment
+        android:id="@+id/paymentDisputeExpandedPage"
+        android:name="com.gigforce.app.modules.wallet.PaymentDisputeExpandedPage"
+        android:label="PaymentDisputeExpandedPage" />
+
+    <fragment
+        android:id="@+id/monthlyEarningPage"
+        android:name="com.gigforce.app.modules.wallet.MonthlyEarningPage"
+        android:label="MonthlyEarningPage" />
 </navigation>
 

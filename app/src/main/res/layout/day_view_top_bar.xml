@@ -62,7 +62,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 app:thumbTint="@color/colorPrimary"
-                app:trackTint="@color/colorPrimary"
+                app:trackTint="#ffd9e6"
                 style="@style/Widget.MaterialComponents.CompoundButton.Switch"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/more_bottom"
