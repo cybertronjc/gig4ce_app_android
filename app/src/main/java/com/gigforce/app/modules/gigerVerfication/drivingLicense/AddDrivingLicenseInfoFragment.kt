@@ -65,7 +65,7 @@ class AddDrivingLicenseInfoFragment : BaseFragment(), SelectImageSourceBottomShe
         }
 
         editDrivingLicenseInfoLayout.setOnClickListener {
-            findNavController().navigate(R.id.editDrivingLicenseInfoBottomSheet)
+            navigate(R.id.editDrivingLicenseInfoBottomSheet)
         }
 
         dlFrontImageHolder.uploadDocumentCardView.setOnClickListener {

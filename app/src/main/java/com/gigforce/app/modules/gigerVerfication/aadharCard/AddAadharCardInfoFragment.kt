@@ -82,7 +82,7 @@ class AddAadharCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetAc
         }
 
         aadharEditLayout.setOnClickListener {
-            findNavController().navigate(R.id.editAadharInfoBottomSheet)
+            navigate(R.id.editAadharInfoBottomSheet)
         }
     }
 

@@ -72,23 +72,23 @@ class GigerVerificationFragment : BaseFragment() {
 
     private fun setListeners() {
         panLayout.setOnClickListener {
-            findNavController().navigate(R.id.addPanCardInfoFragment)
+            navigate(R.id.addPanCardInfoFragment)
         }
 
         drivingLayout.setOnClickListener {
-            findNavController().navigate(R.id.addDrivingLicenseInfoFragment)
+            navigate(R.id.addDrivingLicenseInfoFragment)
         }
 
         aadharLayout.setOnClickListener {
-            findNavController().navigate(R.id.addAadharCardInfoFragment)
+            navigate(R.id.addAadharCardInfoFragment)
         }
 
         bankDetailsLayout.setOnClickListener {
-            findNavController().navigate(R.id.addBankDetailsInfoFragment)
+            navigate(R.id.addBankDetailsInfoFragment)
         }
 
         selfieVideoLayout.setOnClickListener {
-            findNavController().navigate(R.id.addSelfieVideoFragment)
+            navigate(R.id.addSelfieVideoFragment)
         }
     }
 }

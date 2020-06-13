@@ -84,7 +84,7 @@ class AddBankDetailsInfoFragment : BaseFragment(), SelectImageSourceBottomSheetA
         }
 
         editBankDetailsLayout.setOnClickListener {
-            findNavController().navigate(R.id.editBankDetailsInfoBottomSheet)
+            navigate(R.id.editBankDetailsInfoBottomSheet)
         }
     }
 

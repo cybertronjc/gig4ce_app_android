@@ -60,7 +60,7 @@ class AddPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetActio
         }
 
         editPanInfoLayout.setOnClickListener {
-            findNavController().navigate(R.id.editPanInfoBottomSheet)
+            navigate(R.id.editPanInfoBottomSheet)
         }
     }
 
