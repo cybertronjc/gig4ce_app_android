@@ -39,7 +39,7 @@ class DayTimeFragment : BaseFragment() {
     }
 
     private fun observePreferenceData() {
-        viewModel.preferenceDataModel.observe(this, Observer { preferenceData ->
+        viewModel.preferenceDataModel.observe(viewLifecycleOwner, Observer { preferenceData ->
             viewModel.setPreferenceDataModel(preferenceData)
             initializeViews()
         })
@@ -100,7 +100,7 @@ class DayTimeFragment : BaseFragment() {
     private fun listener() {
         textView49.setOnClickListener(View.OnClickListener { navigate(R.id.weekDayFragment) })
         textView55.setOnClickListener(View.OnClickListener { navigate(R.id.weekEndFragment) })
-        imageView10.setOnClickListener(View.OnClickListener { activity?.onBackPressed() })
+        back_arrow_iv.setOnClickListener(View.OnClickListener { activity?.onBackPressed() })
         // weekday listener
         workFromHomeSwitch.setOnClickListener{ view->
             var isChecked = (view as Switch).isChecked

@@ -99,6 +99,10 @@
             app:destination="@id/experienceExpandedFragment" />
 
         <action
+            android:id="@+id/action_profileFragment_to_gigerVerificationFragment"
+            app:destination="@id/gigerVerificationFragment" />
+
+        <action
             android:id="@+id/action_profileFragment_to_experienceExpandedFragment2"
             app:destination="@id/experienceExpandedFragment" />
         <action
@@ -403,6 +407,11 @@
         android:id="@+id/walletBalancePage"
         android:name="com.gigforce.app.modules.wallet.WalletBalancePage"
         android:label="WalletBalancePage" />
+    <fragment
+        android:id="@+id/invoiceStatusPage"
+        android:name="com.gigforce.app.modules.wallet.InvoiceStatusPage"
+        android:label="InvoiceStatusPage" />
+
 
     <dialog
         android:id="@+id/editHeadlineBottomSheet"
@@ -413,11 +422,40 @@
         android:id="@+id/editTagBottomSheet"
         android:name="com.gigforce.app.modules.profile.EditTagBottomSheet"
         android:label="EditTagBottomSheet" />
-
     <fragment
-        android:id="@+id/invoiceStatusPage"
-        android:name="com.gigforce.app.modules.wallet.InvoiceStatusPage"
-        android:label="InvoiceStatusPage" />
+        android:id="@+id/gigerVerificationFragment"
+        android:name="com.gigforce.app.modules.gigerVerfication.GigerVerificationFragment"
+        android:label="fragment_giger_verification"
+        tools:layout="@layout/fragment_giger_verification" />
+    <fragment
+        android:id="@+id/addDrivingLicenseInfoFragment"
+        android:name="com.gigforce.app.modules.gigerVerfication.drivingLicense.AddDrivingLicenseInfoFragment"
+        android:label="fragment_add_driving_license_info"
+        tools:layout="@layout/fragment_add_driving_license_info" />
+    <fragment
+        android:id="@+id/addPanCardInfoFragment"
+        android:name="com.gigforce.app.modules.gigerVerfication.panCard.AddPanCardInfoFragment"
+        android:label="fragment_add_pan_card_info"
+        tools:layout="@layout/fragment_add_pan_card_info" />
+    <fragment
+        android:id="@+id/addAadharCardInfoFragment"
+        android:name="com.gigforce.app.modules.gigerVerfication.aadharCard.AddAadharCardInfoFragment"
+        android:label="AddAadharCardInfoFragment" />
+    <fragment
+        android:id="@+id/addBankDetailsInfoFragment"
+        android:name="com.gigforce.app.modules.gigerVerfication.bankDetails.AddBankDetailsInfoFragment"
+        android:label="fragment_add_bank_details_info"
+        tools:layout="@layout/fragment_add_bank_details_info" />
+    <dialog
+        android:id="@+id/editAadharInfoBottomSheet"
+        android:name="com.gigforce.app.modules.gigerVerfication.aadharCard.EditAadharInfoBottomSheet"
+        android:label="fragment_edit_aadhar_info"
+        tools:layout="@layout/fragment_edit_aadhar_info" />
+    <dialog
+        android:id="@+id/editBankDetailsInfoBottomSheet"
+        android:name="com.gigforce.app.modules.gigerVerfication.bankDetails.EditBankDetailsInfoBottomSheet"
+        android:label="fragment_edit_bank_info"
+        tools:layout="@layout/fragment_edit_bank_info" />
 
     <fragment
         android:id="@+id/paymentDisputePage"

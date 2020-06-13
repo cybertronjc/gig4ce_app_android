@@ -6,13 +6,11 @@
     android:layout_width="match_parent"
     android:layout_height="109dp"
     app:cardCornerRadius="4dp"
-    android:layout_marginTop="13dp"
-    android:layout_marginLeft="18dp"
-    android:layout_marginBottom="13dp">
+    android:layout_marginLeft="18dp">
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/black_gradient">
+    android:background="@drawable/learning_bg">
 
     <TextView
         android:id="@+id/textView69"

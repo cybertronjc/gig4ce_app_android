@@ -83,7 +83,7 @@ class BSCalendarScreenFragment : BaseFragment() {
 
     private fun listener() {
         kyc_tv.setOnClickListener() {
-            navigate(R.id.verification)
+            navigate(R.id.gigerVerificationFragment)
         }
         video_resume.setOnClickListener() {
             navigate(R.id.videoResumeFragment)

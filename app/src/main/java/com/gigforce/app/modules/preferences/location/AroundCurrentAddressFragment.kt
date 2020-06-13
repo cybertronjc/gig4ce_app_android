@@ -13,13 +13,11 @@ import com.gigforce.app.modules.profile.models.AddressModel
 import kotlinx.android.synthetic.main.around_current_address_fragment.*
 import kotlinx.android.synthetic.main.around_current_address_fragment.areaview
 import kotlinx.android.synthetic.main.around_current_address_fragment.cityview
-import kotlinx.android.synthetic.main.around_current_address_fragment.imageView10
 import kotlinx.android.synthetic.main.around_current_address_fragment.line1view
 import kotlinx.android.synthetic.main.around_current_address_fragment.line2view
 import kotlinx.android.synthetic.main.around_current_address_fragment.pincodeview
 import kotlinx.android.synthetic.main.around_current_address_fragment.workFromHomeSwitch
 import kotlinx.android.synthetic.main.around_current_address_fragment.stateview
-import kotlinx.android.synthetic.main.earning_fragment.*
 
 class AroundCurrentAddressFragment : BaseFragment() {
 
@@ -59,7 +57,7 @@ class AroundCurrentAddressFragment : BaseFragment() {
             }
         })
 
-        imageView10.setOnClickListener{
+        back_arrow_iv.setOnClickListener{
             activity?.onBackPressed()
         }
     }

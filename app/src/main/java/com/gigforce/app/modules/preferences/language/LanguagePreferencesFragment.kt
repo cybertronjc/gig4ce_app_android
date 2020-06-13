@@ -1,7 +1,5 @@
 package com.gigforce.app.modules.preferences.language
 
-import android.content.res.Configuration
-import android.content.res.Resources
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -10,15 +8,12 @@ import android.view.ViewGroup
 import android.widget.RadioButton
 import android.widget.RadioGroup
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.modules.preferences.SharedPreferenceViewModel
 import com.gigforce.app.utils.AppConstants
 import kotlinx.android.synthetic.main.fragment_language_preferences.*
-import kotlinx.android.synthetic.main.fragment_select_language.*
 import kotlinx.android.synthetic.main.fragment_select_language.groupradio
-import java.util.*
 
 
 /**
@@ -58,7 +53,7 @@ class LanguagePreferencesFragment : BaseFragment() {
                 saveSharedData(AppConstants.APP_LANGUAGE_NAME,radioButton.text.toString())
                 viewModel.saveLanguageToFirebase(radioButton.text.toString(),radioButton.hint.toString())
             })
-        imageView10.setOnClickListener(View.OnClickListener { activity?.onBackPressed() })
+        back_arrow_iv.setOnClickListener(View.OnClickListener { activity?.onBackPressed() })
     }
 
     private fun initializer() {

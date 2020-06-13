@@ -52,6 +52,9 @@ class EarningFragment : BaseFragment() {
     }
 
     private fun listener() {
+        back_arrow_iv.setOnClickListener{
+            this.onBackPressed()
+        }
         perDayGoalSB.setOnSeekBarChangeListener(object:SeekBar.OnSeekBarChangeListener{
             override fun onProgressChanged(seekBar:SeekBar, progress:Int, fromUser:Boolean) {
                 val value = (progress * (seekBar.getWidth() - 2 * seekBar.getThumbOffset())) / seekBar.getMax()
@@ -103,6 +106,7 @@ class EarningFragment : BaseFragment() {
         preferredNoOfDays.setOnClickListener{
             showDialogPreferredNoOfDays()
         }
+
     }
 
     private fun initializeViews() {

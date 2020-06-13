@@ -145,6 +145,7 @@
         android:id="@+id/learning_rv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="13dp"
         android:nestedScrollingEnabled="false"
         android:clipToPadding="false"
         android:paddingRight="20dp"/>

@@ -81,7 +81,7 @@ class LocationFragment : BaseFragment() {
     }
 
     private fun listener() {
-        imageView10.setOnClickListener(View.OnClickListener { activity?.onBackPressed() })
+        back_arrow_iv.setOnClickListener(View.OnClickListener { activity?.onBackPressed() })
         imageview_plus.setOnClickListener(View.OnClickListener {
             if (viewModel.getCurrentAddress()!!.isEmpty()) {
                 navigate(R.id.preferredLocationFragment)
