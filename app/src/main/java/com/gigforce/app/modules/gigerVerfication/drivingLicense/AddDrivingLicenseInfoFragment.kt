@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
@@ -13,8 +12,6 @@ import com.gigforce.app.modules.gigerVerfication.ImageSource
 import com.gigforce.app.modules.gigerVerfication.SelectImageSourceBottomSheet
 import com.gigforce.app.modules.gigerVerfication.SelectImageSourceBottomSheetActionListener
 import kotlinx.android.synthetic.main.fragment_add_driving_license_info.*
-import kotlinx.android.synthetic.main.fragment_add_driving_license_info.dobTV
-import kotlinx.android.synthetic.main.fragment_add_driving_license_info.nameTV
 import kotlinx.android.synthetic.main.fragment_verification_image_holder.view.*
 import java.io.File
 
@@ -53,6 +50,10 @@ class AddDrivingLicenseInfoFragment : BaseFragment(), SelectImageSourceBottomShe
         dlBackImageHolder.documentUploadSubLabelTV.text =
             getString(R.string.upload_your_driving_license)
         dlSubmitSliderBtn.isEnabled = false
+
+        toolbar.setNavigationOnClickListener {
+            activity?.onBackPressed()
+        }
 
         dlAvailaibilityOptionRG.setOnCheckedChangeListener { _, checkedId ->
 
