@@ -37,6 +37,7 @@
             android:layout_marginLeft="19dp"
             android:fontFamily="@font/lato"
             android:text="Language"
+            android:letterSpacing="0"
             android:textColor="@color/black"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"

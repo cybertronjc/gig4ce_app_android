@@ -95,6 +95,7 @@
         android:layout_marginTop="20dp"
         android:text="@string/upcoming_gig"
         android:textColor="#080808"
+        android:letterSpacing="0"
         android:textSize="14sp" />
 
     <androidx.recyclerview.widget.RecyclerView
@@ -113,6 +114,7 @@
         android:layout_marginTop="15dp"
         android:fontFamily="@font/lato_bold"
         android:text="@string/features"
+        android:letterSpacing="0"
         android:textColor="#080808"
         android:textSize="18sp" />
 
@@ -138,6 +140,7 @@
         android:layout_marginTop="20dp"
         android:fontFamily="@font/lato_bold"
         android:text="@string/learning"
+        android:letterSpacing="0"
         android:textColor="#080808"
         android:textSize="16sp" />
 
@@ -157,6 +160,7 @@
         android:layout_marginTop="15dp"
         android:fontFamily="@font/lato_bold"
         android:text="@string/assessment"
+        android:letterSpacing="0"
         android:textColor="#686868"
         android:textSize="14sp" />
 
@@ -175,6 +179,7 @@
         android:layout_marginBottom="50dp"
         android:gravity="center"
         android:textSize="12sp"
+        android:letterSpacing="0"
         android:textColor="@color/onboarding_rv_item_color_40"/>
 
 </LinearLayout>

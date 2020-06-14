@@ -35,6 +35,7 @@
         android:text="@string/permanent_address"
         android:textColor="@color/black"
         android:textSize="20sp"
+        android:letterSpacing="0"
         app:layout_constraintBottom_toBottomOf="@id/textView100"
         app:layout_constraintStart_toEndOf="@+id/back_arrow_iv"
         app:layout_constraintTop_toTopOf="@id/textView100" />
@@ -70,7 +71,7 @@
             android:text="@string/first_line"
             android:textSize="14sp"
             android:textColor="#000000"
-            android:letterSpacing="-0.01"
+            android:letterSpacing="0"
             app:layout_constraintStart_toStartOf="@+id/preferredNoOfDays"
             app:layout_constraintTop_toTopOf="@+id/preferredNoOfDays" />
 
@@ -81,7 +82,7 @@
             android:text="@string/second_line"
             android:textSize="14sp"
             android:textColor="#000000"
-            android:letterSpacing="-0.01"
+            android:letterSpacing="0"
             app:layout_constraintStart_toStartOf="@+id/line1view"
             app:layout_constraintTop_toBottomOf="@+id/line1view" />
 
@@ -95,7 +96,7 @@
             android:text="@string/area"
             android:textSize="14sp"
             android:textColor="#000000"
-            android:letterSpacing="-0.01"
+            android:letterSpacing="0"
             app:layout_constraintStart_toStartOf="@+id/preferredNoOfDays"
             app:layout_constraintTop_toBottomOf="@+id/line2view" />
 
@@ -109,7 +110,7 @@
             android:text="@string/city"
             android:textSize="14sp"
             android:textColor="#000000"
-            android:letterSpacing="-0.01"
+            android:letterSpacing="0"
             app:layout_constraintStart_toStartOf="@+id/preferredNoOfDays"
             app:layout_constraintTop_toBottomOf="@+id/areaview" />
 
@@ -123,7 +124,7 @@
             android:text="@string/state"
             android:textSize="14sp"
             android:textColor="#000000"
-            android:letterSpacing="-0.01"
+            android:letterSpacing="0"
             app:layout_constraintStart_toStartOf="@+id/preferredNoOfDays"
             app:layout_constraintTop_toBottomOf="@+id/cityview" />
 
@@ -137,7 +138,7 @@
             android:text="@string/pincode"
             android:textSize="14sp"
             android:textColor="#000000"
-            android:letterSpacing="-0.01"
+            android:letterSpacing="0"
             app:layout_constraintStart_toStartOf="@+id/preferredNoOfDays"
             app:layout_constraintTop_toBottomOf="@+id/stateview"/>
 
@@ -154,7 +155,7 @@
         android:text="@string/address_proof"
         android:textColor="@color/gray_color"
         android:textSize="12sp"
-        android:letterSpacing="-0.01"
+        android:letterSpacing="0"
         app:layout_constraintStart_toStartOf="@+id/preferredNoOfDays"
         app:layout_constraintTop_toBottomOf="@+id/preferredNoOfDays" />
 
@@ -180,7 +181,7 @@
         android:text="@string/address_proof_smalls"
         android:textColor="@color/black"
         android:textSize="12sp"
-        android:letterSpacing="-0.01"
+        android:letterSpacing="0"
         app:layout_constraintStart_toStartOf="@+id/textView110"
         app:layout_constraintTop_toTopOf="@+id/textView110" />
 
@@ -193,7 +194,7 @@
         android:fontFamily="@font/lato"
         android:text="@string/document_under_verification"
         android:textColor="@color/gray_color"
-        android:letterSpacing="-0.01"
+        android:letterSpacing="0"
         android:textSize="12sp"
         app:layout_constraintStart_toStartOf="@+id/preferredNoOfDays"
         app:layout_constraintTop_toBottomOf="@+id/textView111" />

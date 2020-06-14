@@ -58,6 +58,7 @@ class LanguageSelectFragment : BaseFragment() {
     }
 
     private fun listener() {
+
         nextbuttonLang.setOnClickListener() {
             onNextButtonClicked()
         }

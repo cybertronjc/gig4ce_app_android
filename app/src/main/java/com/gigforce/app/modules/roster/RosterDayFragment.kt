@@ -19,6 +19,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.gigforce.app.R
 import com.gigforce.app.modules.roster.models.Gig
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import kotlinx.android.synthetic.main.day_view_top_bar.*
 import kotlinx.android.synthetic.main.day_view_top_bar.view.*
 import kotlinx.android.synthetic.main.gigs_today_warning_dialog.*
 import kotlinx.android.synthetic.main.reason_for_gig_cancel_dialog.*
@@ -81,6 +82,9 @@ class RosterDayFragment: RosterBaseFragment() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun setListeners() {
+        back_button.setOnClickListener{
+            activity?.onBackPressed()
+        }
         hourviewPageChangeCallBack = object: ViewPager2.OnPageChangeCallback() {
 
             @RequiresApi(Build.VERSION_CODES.O)

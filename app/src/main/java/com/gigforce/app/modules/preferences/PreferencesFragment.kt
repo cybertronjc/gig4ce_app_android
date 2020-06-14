@@ -151,11 +151,13 @@ class PreferencesFragment : BaseFragment() {
             signOutView.visibility = View.GONE
             visibleInvisibleMainItemView(constraintView, othersTV, false)
             setItemAsOther(othersTV, obj)
-        } else if (position == TITLE_SIGNOUT) {
-            signOutView.visibility = View.VISIBLE
-            hideMainConstraintViewAndOthersViewInItemView(constraintView, othersTV)
-            setItemAsSignOut(signOutTV, signOutIV, obj)
-        } else {
+        }
+//        else if (position == TITLE_SIGNOUT) {
+//            signOutView.visibility = View.VISIBLE
+//            hideMainConstraintViewAndOthersViewInItemView(constraintView, othersTV)
+//            setItemAsSignOut(signOutTV, signOutIV, obj)
+//        }
+        else {
             signOutView.visibility = View.GONE
             visibleInvisibleMainItemView(constraintView, othersTV, true)
             setItems(imageView, title, subTitle, obj)

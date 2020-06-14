@@ -22,6 +22,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/title_lang"
                 android:textAlignment="center"
+                android:letterSpacing="0"
                 android:fontFamily="@font/lato"
                 android:textColor="@color/cardview_light_background"
                 android:textSize="20sp" />
@@ -46,6 +47,9 @@
             android:hint="en"
             android:text="English"
             android:textSize="14sp"
+            android:letterSpacing="0"
+            android:buttonTint="@color/colorPrimary"
+
             android:paddingLeft="16dp"
             android:layout_marginLeft="16dp"/>
         <View
@@ -58,6 +62,8 @@
             android:layout_height="@dimen/height_select_lang_item"
             android:hint="hi"
             android:text="हिंदी"
+            android:letterSpacing="0"
+            android:buttonTint="@color/colorPrimary"
             android:textSize="14sp"
             android:paddingLeft="16dp"
             android:layout_marginLeft="16dp"/>
@@ -72,7 +78,9 @@
             android:hint="te"
             android:text="తెలుగు"
             android:textSize="14sp"
+            android:buttonTint="@color/colorPrimary"
             android:paddingLeft="16dp"
+            android:letterSpacing="0"
             android:layout_marginLeft="16dp"/>
         <View
             android:layout_width="match_parent"
@@ -85,6 +93,8 @@
             android:hint="gu"
             android:text="ગુજરતી"
             android:textSize="14sp"
+            android:letterSpacing="0"
+            android:buttonTint="@color/colorPrimary"
             android:paddingLeft="16dp"
             android:layout_marginLeft="16dp"/>
         <View
@@ -97,7 +107,9 @@
             android:layout_height="@dimen/height_select_lang_item"
             android:hint="pa"
             android:text="ਪੰਜਾਬੀ"
+            android:letterSpacing="0"
             android:textSize="14sp"
+            android:buttonTint="@color/colorPrimary"
             android:paddingLeft="16dp"
             android:layout_marginLeft="16dp"/>
         <View
@@ -110,7 +122,9 @@
             android:layout_height="@dimen/height_select_lang_item"
             android:hint="fr"
             android:text="français"
+            android:letterSpacing="0"
             android:textSize="14sp"
+            android:buttonTint="@color/colorPrimary"
             android:paddingLeft="16dp"
             android:layout_marginLeft="16dp"/>
         <View
@@ -123,7 +137,9 @@
             android:layout_height="@dimen/height_select_lang_item"
             android:hint="mr"
             android:text="मराठी"
+            android:letterSpacing="0"
             android:textSize="14sp"
+            android:buttonTint="@color/colorPrimary"
             android:paddingLeft="16dp"
             android:layout_marginLeft="16dp"/>
         <View
@@ -134,13 +150,13 @@
 
     <ImageView
         android:id="@+id/nextbuttonLang"
-        android:layout_width="72dp"
-        android:layout_height="72dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
-        app:srcCompat="@drawable/next_button" />
+        app:srcCompat="@drawable/ic_button_next1" />
 
 </RelativeLayout>
     <!--
