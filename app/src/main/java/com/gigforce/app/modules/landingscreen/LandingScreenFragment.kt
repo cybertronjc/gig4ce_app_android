@@ -7,6 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.PagerSnapHelper
+import androidx.recyclerview.widget.SnapHelper
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
@@ -36,10 +38,50 @@ class LandingScreenFragment : BaseFragment() {
         val displayMetrics = DisplayMetrics()
         activity?.windowManager?.getDefaultDisplay()?.getMetrics(displayMetrics)
         width = displayMetrics.widthPixels
+        initializeGigforceTip()
         initializeExploreByRole()
         initializeExploreByIndustry()
         initializeLearningModule()
         listener()
+    }
+    class GigforceTips(var title:String,var subtitle:String){
+
+    }
+    private fun initializeGigforceTip() {
+        // model will change when integrated with DB
+        var datalist: ArrayList<GigforceTips> = ArrayList<GigforceTips>()
+        datalist.add(GigforceTips("Gigforce Tip ","Having  an experience can help you start earning fast"))
+        datalist.add(GigforceTips("Gigforce Tip ","Having  an experience can help you start earning fast"))
+        datalist.add(GigforceTips("Gigforce Tip ","Having  an experience can help you start earning fast"))
+        datalist.add(GigforceTips("Gigforce Tip ","Having  an experience can help you start earning fast"))
+
+        val recyclerGenericAdapter: RecyclerGenericAdapter<GigforceTips> =
+            RecyclerGenericAdapter<GigforceTips>(
+                activity?.applicationContext,
+                PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
+                    navigate(R.id.explore_by_role)
+                },
+                RecyclerGenericAdapter.ItemInterface<GigforceTips?> { obj, viewHolder, position ->
+                    var title = getTextView(viewHolder, R.id.gigtip_title)
+                    var subtitle = getTextView(viewHolder, R.id.gigtip_subtitle)
+
+                    val lp = title.layoutParams
+                    lp.height = lp.height
+                    lp.width = width
+                    title.layoutParams = lp
+                    title.text = obj?.title
+                    subtitle.text = obj?.subtitle
+                })!!
+        recyclerGenericAdapter.setList(datalist)
+        recyclerGenericAdapter.setLayout(R.layout.gigforce_tips_item)
+        gigforce_tip.layoutManager = LinearLayoutManager(
+            activity?.applicationContext,
+            LinearLayoutManager.HORIZONTAL,
+            false
+        )
+        gigforce_tip.adapter = recyclerGenericAdapter
+         var pagerHelper  = PagerSnapHelper()
+        pagerHelper.attachToRecyclerView(gigforce_tip)
     }
 
     private fun listener() {

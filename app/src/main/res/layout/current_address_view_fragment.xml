@@ -35,6 +35,7 @@
         android:text="@string/current_address"
         android:textColor="@color/black"
         android:textSize="20sp"
+        android:letterSpacing="0"
         app:layout_constraintStart_toEndOf="@+id/back_arrow_iv"
         app:layout_constraintTop_toTopOf="@id/textView100"
         app:layout_constraintBottom_toBottomOf="@id/textView100"/>
@@ -60,6 +61,7 @@
         android:layout_marginStart="63dp"
         android:fontFamily="@font/lato"
         android:visibility="gone"
+        android:letterSpacing="0"
         app:layout_constraintBottom_toBottomOf="@+id/textView49"
         app:layout_constraintStart_toStartOf="@+id/textView49"
         app:layout_constraintTop_toTopOf="@+id/textView49" />
@@ -105,7 +107,7 @@
             android:text="@string/first_line"
             android:textSize="14sp"
             android:textColor="#000000"
-            android:letterSpacing="-0.01"
+            android:letterSpacing="0"
             app:layout_constraintStart_toStartOf="@+id/preferredNoOfDays"
             app:layout_constraintTop_toTopOf="@+id/preferredNoOfDays" />
 
@@ -116,7 +118,7 @@
             android:text="@string/second_line"
             android:textSize="14sp"
             android:textColor="#000000"
-            android:letterSpacing="-0.01"
+            android:letterSpacing="0"
             app:layout_constraintStart_toStartOf="@+id/line1view"
             app:layout_constraintTop_toBottomOf="@+id/line1view" />
 
@@ -130,7 +132,7 @@
             android:text="@string/area"
             android:textSize="14sp"
             android:textColor="#000000"
-            android:letterSpacing="-0.01"
+            android:letterSpacing="0"
             app:layout_constraintStart_toStartOf="@+id/preferredNoOfDays"
             app:layout_constraintTop_toBottomOf="@+id/line2view" />
 
@@ -144,7 +146,7 @@
             android:text="@string/city"
             android:textSize="14sp"
             android:textColor="#000000"
-            android:letterSpacing="-0.01"
+            android:letterSpacing="0"
             app:layout_constraintStart_toStartOf="@+id/preferredNoOfDays"
             app:layout_constraintTop_toBottomOf="@+id/areaview" />
 
@@ -158,7 +160,7 @@
             android:text="@string/state"
             android:textSize="14sp"
             android:textColor="#000000"
-            android:letterSpacing="-0.01"
+            android:letterSpacing="0"
             app:layout_constraintStart_toStartOf="@+id/preferredNoOfDays"
             app:layout_constraintTop_toBottomOf="@+id/cityview" />
 
@@ -172,7 +174,7 @@
             android:text="@string/pincode"
             android:textSize="14sp"
             android:textColor="#000000"
-            android:letterSpacing="-0.01"
+            android:letterSpacing="0"
             app:layout_constraintStart_toStartOf="@+id/preferredNoOfDays"
             app:layout_constraintTop_toBottomOf="@+id/stateview"/>
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -3,7 +3,7 @@
     <color name="colorPrimary">#d72467</color>
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="calendar_disabled_bg">#efefef</color>
-    <color name="colorAccent">#990077</color>
+    <color name="colorAccent">#930077</color>
     <color name="colorLightAccent">#e42c64</color>
     <color name="topBarDark">#d72467</color>
     <color name="black">#000000</color>
@@ -22,7 +22,7 @@
     <color name="gray_color">#6d7278</color>
     <color name="preferences_item_seprator">#c8c7cc</color>
     <color name="shadow_color">#c8c7cc</color>
-
+    <color name="gray_color1">#cdcdcd</color>
     <color name="lightGrey">#c7c7cc</color>
 <!---->
     <color name="vertical_calendar_today">#a30674</color>

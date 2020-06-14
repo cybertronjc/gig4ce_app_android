@@ -49,9 +49,12 @@
                 android:id="@+id/available_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                style="@style/BsHeadingBold12"
+                android:layout_marginEnd="4dp"
+                android:textSize="14sp"
+                android:fontFamily="@font/lato"
+                android:textColor="#000"
                 android:text="Available"
+                android:letterSpacing="0"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/available_toggle"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -74,6 +77,7 @@
                 android:layout_height="wrap_content"
                 android:background="@color/fui_transparent"
                 android:src="@drawable/ic_more_vert"
+                android:layout_marginRight="16dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

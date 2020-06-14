@@ -2,6 +2,7 @@ package com.gigforce.app.modules.auth.ui.main
 
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.os.Handler
 import android.text.SpannableString
 import android.text.style.UnderlineSpan
 import android.view.LayoutInflater
@@ -17,7 +18,9 @@ import com.gigforce.app.modules.auth.ui.main.LoginViewModel.Companion.STATE_SIGN
 import com.gigforce.app.modules.auth.ui.main.LoginViewModel.Companion.STATE_SIGNIN_SUCCESS
 import com.gigforce.app.utils.AppConstants
 import com.gigforce.app.utils.popAllBackStates
+import kotlinx.android.synthetic.main.login_frament.*
 import kotlinx.android.synthetic.main.otp_verification.*
+import kotlinx.android.synthetic.main.otp_verification.progressBar
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
@@ -59,7 +62,7 @@ class VerifyOTP: BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.activity = this.activity!!
+        viewModel.activity = this.requireActivity()
         initializeViews()
         listeners()
         observer()
@@ -110,6 +113,15 @@ class VerifyOTP: BaseFragment() {
             val otpIn = txt_otp?.text
             match = OTP_NUMBER.matcher(otpIn)
             if(match.matches()){
+                progressBar.visibility = View.VISIBLE
+                verify_otp_button.setEnabled(false)
+                Handler().postDelayed(Runnable {
+                    // This method will be executed once the timer is over
+                    if (verify_otp_button != null) {
+                        verify_otp_button.setEnabled(true)
+                        progressBar.visibility = View.GONE
+                    }
+                }, 3000)
                 viewModel.verifyPhoneNumberWithCode(otpIn.toString())
             }
             else {
@@ -117,7 +129,9 @@ class VerifyOTP: BaseFragment() {
             }
         }
         resend_otp?.setOnClickListener {
-                if(otpresentcounter<2) {
+
+
+            if(otpresentcounter<2) {
                     otpresentcounter++;
                     counterStart();
                     viewModel.sendVerificationCode("+91" + mobile_number)

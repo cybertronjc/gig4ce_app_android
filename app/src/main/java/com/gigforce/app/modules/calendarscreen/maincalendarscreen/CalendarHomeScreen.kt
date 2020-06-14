@@ -137,7 +137,7 @@ class CalendarHomeScreen : BaseFragment() {
     }
 
     private fun listener() {
-        iv2HS1.setOnClickListener(View.OnClickListener { navigate(R.id.profileFragment) })
+        cardView.setOnClickListener(View.OnClickListener { navigate(R.id.profileFragment) })
 //        tv_hs1bs_alert.setOnClickListener(View.OnClickListener { navigate(R.id.verification) })
     }
 
@@ -191,6 +191,8 @@ class CalendarHomeScreen : BaseFragment() {
                         getTextView(viewHolder,R.id.month_year).text = obj.monthStr+" "+obj.year
                     }
                     else{
+                        setTextViewSize(getTextView(viewHolder, R.id.title), 14F)
+                        setTextViewSize(getTextView(viewHolder, R.id.subtitle), 12F)
                         getView(viewHolder,R.id.coloredsideline).visibility = View.GONE
                         getView(viewHolder,R.id.graysideline).visibility = View.VISIBLE
                         showMonthLayout(false,viewHolder)
@@ -232,8 +234,8 @@ class CalendarHomeScreen : BaseFragment() {
                                 R.color.white
                             )
                             getView(viewHolder, R.id.daydatecard).alpha = 1.0F
-                            setTextViewSize(getTextView(viewHolder, R.id.title), 14F)
-                            setTextViewSize(getTextView(viewHolder, R.id.subtitle), 10F)
+//                            setTextViewSize(getTextView(viewHolder, R.id.title), 14F)
+//                            setTextViewSize(getTextView(viewHolder, R.id.subtitle), 12F)
                             setTextViewSize(getTextView(viewHolder, R.id.day), 12F)
                             setTextViewSize(getTextView(viewHolder, R.id.date), 14F)
                         }
@@ -259,6 +261,8 @@ class CalendarHomeScreen : BaseFragment() {
                                 getView(viewHolder, R.id.daydatecard),
                                 R.color.gray_color_calendar_previous_date
                             )
+
+
                             if (obj!!.isGigAssign) {
                                 getView(viewHolder, R.id.daydatecard).alpha = 1.0F
                             }

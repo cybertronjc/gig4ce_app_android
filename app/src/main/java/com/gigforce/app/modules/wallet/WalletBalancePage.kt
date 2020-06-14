@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.gigforce.app.R
 import kotlinx.android.synthetic.main.payment_summary_component.view.*
 import kotlinx.android.synthetic.main.wallet_balance_page.*
+import kotlinx.android.synthetic.main.wallet_top_bar_component.*
 
 class WalletBalancePage: WalletBaseFragment() {
 
@@ -34,6 +35,10 @@ class WalletBalancePage: WalletBaseFragment() {
 
         payment_summary.monthly_earning.setOnClickListener {
             navigate(R.id.monthlyEarningPage)
+        }
+
+        back_button.setOnClickListener{
+            activity?.onBackPressed()
         }
     }
 

@@ -136,7 +136,7 @@ class Login : BaseFragment() {
                     login_button.setEnabled(true)
                     progressBar.visibility = View.GONE
                 }
-            }, 3000) // se
+            }, 3000)
             doActionOnClick()
         }
 

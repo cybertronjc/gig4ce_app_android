@@ -208,7 +208,7 @@ class ProfileFragment : BaseFragment() {
 
             layout.main_about_card.card_title.text = "About me"
             layout.main_about_card.card_content.text = mainAboutString
-            layout.main_about_card.card_icon.setImageResource(R.drawable.ic_about_me)
+            layout.main_about_card.card_icon.setImageResource(R.drawable.about_me_new)
             if (mainAboutString.trim().isEmpty())
                 layout.main_about_card.card_view_more.text = "Add bio"
             layout.main_about_card.card_view_more.setOnClickListener {
@@ -257,7 +257,7 @@ class ProfileFragment : BaseFragment() {
             Log.d("ProfileFragment", mainEducationString)
             layout.main_education_card.card_title.text = "Education"
             layout.main_education_card.card_content.text = mainEducationString
-            layout.main_education_card.card_icon.setImageResource(R.drawable.ic_education)
+            layout.main_education_card.card_icon.setImageResource(R.drawable.ic_education_new)
             if (mainEducationString.trim().isEmpty())
                 layout.main_education_card.card_view_more.text = "Add Education"
             layout.main_education_card.card_view_more.setOnClickListener {

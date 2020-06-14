@@ -338,6 +338,9 @@ class OnboardingMainFragment : BaseFragment() {
 
                     } else {
                         usernameEditText = getEditText(viewHolder, R.id.user_name)
+                        if(usernameEditText.text.toString().length<=3){
+                            enableNextButton(false)
+                        }
                         usernameEditText?.addTextChangedListener(object :
                             TextWatcher {
                             override fun afterTextChanged(s: Editable?) {}

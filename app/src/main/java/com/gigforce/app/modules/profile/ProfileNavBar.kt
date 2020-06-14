@@ -37,8 +37,8 @@ class ProfileNavBar: LinearLayout {
             if (value) {
                 about_me.setChipBackgroundColorResource(R.color.active_nav_bg)
                 about_me.setChipStrokeWidthResource(R.dimen.border_width)
-                about_me.setChipStrokeColorResource(R.color.colorAccent)
-                about_me.setTextColor(resources.getColor(R.color.colorAccent))
+                about_me.setChipStrokeColorResource(R.color.colorPrimary)
+                about_me.setTextColor(resources.getColor(R.color.colorPrimary))
             }
         }
 
@@ -48,8 +48,8 @@ class ProfileNavBar: LinearLayout {
             if (value) {
                 education.setChipBackgroundColorResource(R.color.active_nav_bg)
                 education.setChipStrokeWidthResource(R.dimen.border_width)
-                education.setChipStrokeColorResource(R.color.colorAccent)
-                education.setTextColor(resources.getColor(R.color.colorAccent))
+                education.setChipStrokeColorResource(R.color.colorPrimary)
+                education.setTextColor(resources.getColor(R.color.colorPrimary))
             }
         }
 
@@ -59,8 +59,8 @@ class ProfileNavBar: LinearLayout {
             if (value) {
                 experience.setChipBackgroundColorResource(R.color.active_nav_bg)
                 experience.setChipStrokeWidthResource(R.dimen.border_width)
-                experience.setChipStrokeColorResource(R.color.colorAccent)
-                experience.setTextColor(resources.getColor(R.color.colorAccent))
+                experience.setChipStrokeColorResource(R.color.colorPrimary)
+                experience.setTextColor(resources.getColor(R.color.colorPrimary))
             }
         }
 }
