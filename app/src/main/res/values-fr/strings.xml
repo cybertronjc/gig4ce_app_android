@@ -217,4 +217,10 @@
     <string name="from_gallery">From Gallery</string>
     <string name="update">UPDATE</string>
     <string name="how_to_record_selfie_video">How to Record Selfie Video?</string>
+    <string name="learning">Learning</string>
+    <string name="why_learning_is_important">Why Learning is Important?</string>
+    <string name="increase_your_knowlegde">Increase Your Knowlegde</string>
+    <string name="anytime_anywhere">ANYTIME ANYWHERE</string>
+    <string name="learning_based_on_nroles_and_industry">Learning based on\nroles and industry</string>
+    <string name="recently_added">Recently Added</string>
 </resources>
