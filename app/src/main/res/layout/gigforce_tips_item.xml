@@ -35,7 +35,7 @@
         android:layout_marginLeft="55dp"
         android:layout_marginTop="9dp"
         android:fontFamily="@font/lato"
-        android:text="Having  an experience can help you start earning fast"
+        android:text="Having an experience can help you start earning fast"
         android:textColor="#000000"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"

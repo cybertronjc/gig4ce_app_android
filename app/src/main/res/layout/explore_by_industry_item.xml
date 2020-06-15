@@ -20,7 +20,7 @@
             android:id="@+id/textView115"
             android:layout_width="match_parent"
             android:layout_height="96dp"
-            android:background="@drawable/role_industry_background"
+            android:background="@drawable/explore_by_industry"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
