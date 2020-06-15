@@ -4,14 +4,14 @@
     <string name="hello_blank_fragment">	హలో ఖాళీ శకలం	</string>
     <string name="title_activity_profile">	ProfileActivity	</string>
 
-    <string name="intro_slide1_title">	గిగ్‌ఫోర్స్‌కు స్వాగతం	</string>
-    <string name="intro_slide1_subtitle">రేపు ఏమి జరగబోతోంది?</string>
+    <string name="intro_slide1_title">గిగ్‌ఫోర్స్‌కు స్వాగతం</string>
+    <string name="intro_slide1_subtitle">మీకు ఎల్లప్పుడూ ఉండే ఉద్యోగం</string>
 
-    <string name="intro_slide2_title">	పని జరుగుతుంది	</string>
-    <string name="intro_slide2_subtitle">	పని జరిగినప్పుడు తెలియజేయండి.	</string>
+    <string name="intro_slide2_title">ప్రొఫెషనల్‌గా ఉండండి</string>
+    <string name="intro_slide2_subtitle">మీ నైపుణ్యాలను అప్‌గ్రేడ్ చేయడానికి ప్రొఫైల్ మరియు రైలును రూపొందించండి</string>
 
-    <string name="intro_slide3_title">	టాస్క్ మరియు కేటాయించండి	</string>
-    <string name="intro_slide3_subtitle">	టాస్క్ మరియు సహోద్యోగులకు కేటాయించండి.	</string>
+    <string name="intro_slide3_title">పని జరగనివ్వండి</string>
+    <string name="intro_slide3_subtitle">మీ ప్రాధాన్యతను సెట్ చేయండి మరియు వేదికలు మిమ్మల్ని కనుగొంటాయి</string>
 
     <string name="ob_slide1_title">	ఆన్బోర్డింగ్	</string>
     <string name="ob_slide1_subtitle">	ఎలా - 1	</string>
@@ -218,4 +218,10 @@
     <string name="from_gallery">From Gallery</string>
     <string name="update">UPDATE</string>
     <string name="how_to_record_selfie_video">How to Record Selfie Video?</string>
+    <string name="learning">Learning</string>
+    <string name="why_learning_is_important">Why Learning is Important?</string>
+    <string name="increase_your_knowlegde">Increase Your Knowlegde</string>
+    <string name="anytime_anywhere">ANYTIME ANYWHERE</string>
+    <string name="learning_based_on_nroles_and_industry">Learning based on\nroles and industry</string>
+    <string name="recently_added">Recently Added</string>
 </resources>

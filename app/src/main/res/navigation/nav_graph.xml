@@ -493,5 +493,10 @@
         android:id="@+id/monthlyEarningPage"
         android:name="com.gigforce.app.modules.wallet.MonthlyEarningPage"
         android:label="MonthlyEarningPage" />
+    <fragment
+        android:id="@+id/mainLearningFragment"
+        android:name="com.gigforce.app.modules.learning.MainLearningFragment"
+        android:label="fragment_main_learning"
+        tools:layout="@layout/fragment_main_learning" />
 </navigation>
 

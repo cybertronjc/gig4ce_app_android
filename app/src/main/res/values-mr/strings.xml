@@ -5,13 +5,13 @@
     <string name="title_activity_profile">ProfileActivity</string>
 
     <string name="intro_slide1_title">गिगफोर्समध्ये आपले स्वागत आहे</string>
-    <string name="intro_slide1_subtitle">उद्या काय होणार आहे?</string>
+    <string name="intro_slide1_subtitle">A Job you always have</string>
 
-    <string name="intro_slide2_title">कार्य होते</string>
-    <string name="intro_slide2_subtitle">कार्य झाल्यावर सूचना मिळवा.</string>
+    <string name="intro_slide2_title">एक व्यावसायिक व्हा</string>
+    <string name="intro_slide2_subtitle">आपली कौशल्ये श्रेणीसुधारित करण्यासाठी प्रोफाइल आणि ट्रेन तयार करा</string>
 
-    <string name="intro_slide3_title">कार्य आणि असाइन करा</string>
-    <string name="intro_slide3_subtitle">कार्य करा आणि त्यांना सहकार्यांना नियुक्त करा.</string>
+    <string name="intro_slide3_title">काम होऊ द्या</string>
+    <string name="intro_slide3_subtitle">आपले प्राधान्य सेट करा आणि gigs आपल्याला सापडतील</string>
 
     <string name="ob_slide1_title">ऑनबोर्डिंग</string>
     <string name="ob_slide1_subtitle">कसे - 1</string>
@@ -320,5 +320,11 @@
     <string name="from_gallery">From Gallery</string>
     <string name="update">UPDATE</string>
     <string name="how_to_record_selfie_video">How to Record Selfie Video?</string>
+    <string name="learning">Learning</string>
+    <string name="why_learning_is_important">Why Learning is Important?</string>
+    <string name="increase_your_knowlegde">Increase Your Knowlegde</string>
+    <string name="anytime_anywhere">ANYTIME ANYWHERE</string>
+    <string name="learning_based_on_nroles_and_industry">Learning based on\nroles and industry</string>
+    <string name="recently_added">Recently Added</string>
     ayyy
 </resources>

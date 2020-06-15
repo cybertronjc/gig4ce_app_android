@@ -5,13 +5,13 @@
     <string name="title_activity_profile">ਪਰੋਫਾਈਲ ਕਿਰਿਆ</string>
 
     <string name="intro_slide1_title">ਗਿਗਫੋਰਸ ਵਿੱਚ ਤੁਹਾਡਾ ਸਵਾਗਤ ਹੈ</string>
-    <string name="intro_slide1_subtitle">ਕੱਲ ਕੀ ਹੋਣ ਜਾ ਰਿਹਾ ਹੈ?</string>
+    <string name="intro_slide1_subtitle">ਇਕ ਨੌਕਰੀ ਜੋ ਤੁਸੀਂ ਹਮੇਸ਼ਾਂ ਕਰਦੇ ਹੋ</string>
 
-    <string name="intro_slide2_title">ਕੰਮ ਹੁੰਦਾ ਹੈ</string>
-    <string name="intro_slide2_subtitle">ਜਦੋਂ ਕੰਮ ਹੁੰਦਾ ਹੈ ਤਾਂ ਸੂਚਿਤ ਕਰੋ</string>
+    <string name="intro_slide2_title">ਪੇਸ਼ੇਵਰ ਬਣੋ</string>
+    <string name="intro_slide2_subtitle">ਆਪਣੇ ਹੁਨਰਾਂ ਨੂੰ ਅਪਗ੍ਰੇਡ ਕਰਨ ਲਈ ਇੱਕ ਪ੍ਰੋਫਾਈਲ ਅਤੇ ਟ੍ਰੇਨ ਬਣਾਓ</string>
 
-    <string name="intro_slide3_title">ਕਾਰਜ ਅਤੇ ਨਿਰਧਾਰਤ ਕਰੋ</string>
-    <string name="intro_slide3_subtitle">ਕੰਮ ਕਰੋ ਅਤੇ ਉਨ੍ਹਾਂ ਨੂੰ ਸਹਿਯੋਗੀ ਨੂੰ ਦਿਓ.</string>
+    <string name="intro_slide3_title">ਕੰਮ ਹੋਣ ਦਿਓ</string>
+    <string name="intro_slide3_subtitle">ਆਪਣੀ ਤਰਜੀਹ ਸੈਟ ਕਰੋ ਅਤੇ ਜੀਗ ਤੁਹਾਨੂੰ ਲੱਭਣਗੇ</string>
 
     <string name="ob_slide1_title">ਬੋਰਡਿੰਗ</string>
     <string name="ob_slide1_subtitle">ਕਿਵੇਂ - 1</string>
@@ -217,4 +217,10 @@
     <string name="from_gallery">From Gallery</string>
     <string name="update">UPDATE</string>
     <string name="how_to_record_selfie_video">How to Record Selfie Video?</string>
+    <string name="learning">Learning</string>
+    <string name="why_learning_is_important">Why Learning is Important?</string>
+    <string name="increase_your_knowlegde">Increase Your Knowlegde</string>
+    <string name="anytime_anywhere">ANYTIME ANYWHERE</string>
+    <string name="learning_based_on_nroles_and_industry">Learning based on\nroles and industry</string>
+    <string name="recently_added">Recently Added</string>
 </resources>
