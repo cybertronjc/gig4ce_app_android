@@ -1,6 +1,7 @@
 package com.gigforce.app.modules.landingscreen
 
 import android.os.Bundle
+import android.os.Handler
 import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
@@ -44,16 +45,40 @@ class LandingScreenFragment : BaseFragment() {
         initializeLearningModule()
         listener()
     }
-    class GigforceTips(var title:String,var subtitle:String){
+
+    class GigforceTips(var title: String, var subtitle: String) {
 
     }
+
+    private val SPLASH_TIME_OUT: Long = 2000 // 1 sec
+    var forward = true
     private fun initializeGigforceTip() {
         // model will change when integrated with DB
         var datalist: ArrayList<GigforceTips> = ArrayList<GigforceTips>()
-        datalist.add(GigforceTips("Gigforce Tip ","Having  an experience can help you start earning fast"))
-        datalist.add(GigforceTips("Gigforce Tip ","Having  an experience can help you start earning fast"))
-        datalist.add(GigforceTips("Gigforce Tip ","Having  an experience can help you start earning fast"))
-        datalist.add(GigforceTips("Gigforce Tip ","Having  an experience can help you start earning fast"))
+        datalist.add(
+            GigforceTips(
+                "Gigforce Tip ",
+                "Having  an experience can help you start earning fast"
+            )
+        )
+        datalist.add(
+            GigforceTips(
+                "Gigforce Tip ",
+                "Having  an experience can help you start earning fast"
+            )
+        )
+        datalist.add(
+            GigforceTips(
+                "Gigforce Tip ",
+                "Having  an experience can help you start earning fast"
+            )
+        )
+        datalist.add(
+            GigforceTips(
+                "Gigforce Tip ",
+                "Having  an experience can help you start earning fast"
+            )
+        )
 
         val recyclerGenericAdapter: RecyclerGenericAdapter<GigforceTips> =
             RecyclerGenericAdapter<GigforceTips>(
@@ -80,13 +105,51 @@ class LandingScreenFragment : BaseFragment() {
             false
         )
         gigforce_tip.adapter = recyclerGenericAdapter
-         var pagerHelper  = PagerSnapHelper()
+        var pagerHelper = PagerSnapHelper()
         pagerHelper.attachToRecyclerView(gigforce_tip)
+        var handler = Handler()
+//        val runnable = Runnable {
+//            var currentVisiblePosition = (gigforce_tip.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+//            gigforce_tip.scrollToPosition(currentVisiblePosition+1)
+//            handler.postDelayed(runnable,SPLASH_TIME_OUT)
+//        }
+
+        val runnableCode = object : Runnable {
+            override fun run() {
+                try {
+                    var currentVisiblePosition =
+                        (gigforce_tip.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+                    if ((gigforce_tip.adapter as RecyclerGenericAdapter<GigforceTips>).list.size == currentVisiblePosition + 1) {
+                        forward = false
+                    }
+                    if (currentVisiblePosition == 0) {
+                        forward = true
+                    }
+                    if (!forward) {
+                        gigforce_tip.smoothScrollToPosition(currentVisiblePosition - 1)
+                    } else
+                        gigforce_tip.smoothScrollToPosition(currentVisiblePosition + 1)
+
+
+                    handler.postDelayed(this, SPLASH_TIME_OUT)
+                }catch (e:Exception){
+
+                }
+
+            }
+        }
+        handler.postDelayed(runnableCode, SPLASH_TIME_OUT)
     }
 
     private fun listener() {
-        complete_now.setOnClickListener{
+        complete_now.setOnClickListener {
             navigate(R.id.gigerVerificationFragment)
+        }
+        view_my_gig.setOnClickListener {
+            navigate(R.id.mainHomeScreen)
+        }
+        skip_about_intro.setOnClickListener {
+            about_us_cl.visibility = View.GONE
         }
     }
 
@@ -160,7 +223,7 @@ class LandingScreenFragment : BaseFragment() {
             RecyclerGenericAdapter<UpcomingGigModel>(
                 activity?.applicationContext,
                 PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
-                        navigate(R.id.explore_by_role)
+                    navigate(R.id.explore_by_role)
                 },
                 RecyclerGenericAdapter.ItemInterface<UpcomingGigModel?> { obj, viewHolder, position ->
                     var view = getView(viewHolder, R.id.card_view)

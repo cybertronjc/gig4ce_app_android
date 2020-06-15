@@ -126,6 +126,7 @@
             android:orientation="vertical">
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/about_us_cl"
                 android:layout_width="match_parent"
                 android:layout_height="148dp"
                 android:background="#ffd9e6">
@@ -180,7 +181,7 @@
                     app:layout_constraintEnd_toEndOf="parent" />
 
                 <TextView
-                    android:id="@+id/textView101"
+                    android:id="@+id/skip_about_intro"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="24dp"
@@ -318,323 +319,59 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/mygigs_cl"
                 android:layout_width="match_parent"
-                android:layout_height="129dp"
-                android:background="#e5e5e5">
-
-                <View
-                    android:id="@+id/textView116"
-                    android:layout_width="match_parent"
-                    android:layout_height="2dp"
-                    android:background="#34d8d8d8"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                android:layout_height="91dp"
+                android:background="#ffd9e6">
 
                 <ImageView
-                    android:id="@+id/imageView35"
+                    android:id="@+id/imageView38"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginTop="16dp"
-                    android:src="@drawable/ic_group_prefereneces"
+                    android:src="@drawable/ic_gigs_calendarview"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView116" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_marginLeft="28dp"/>
 
                 <TextView
-                    android:id="@+id/textView117"
+                    android:id="@+id/textView132"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
+                    android:text="My gigs"
+                    android:textSize="16sp"
+                    android:textColor="#d9000000"
                     android:fontFamily="@font/lato_bold"
-                    android:letterSpacing="0"
-                    android:text="Set Your Preferences"
+                    app:layout_constraintStart_toEndOf="@+id/imageView38"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_marginTop="18dp"
+                    android:layout_marginLeft="19dp"/>
+
+                <TextView
+                    android:id="@+id/textView133"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Manage your schedule"
+                    android:textSize="16sp"
                     android:textColor="#000000"
-                    android:textSize="16sp"
-                    app:layout_constraintBottom_toBottomOf="@+id/imageView35"
-                    app:layout_constraintStart_toEndOf="@+id/imageView35"
-                    app:layout_constraintTop_toTopOf="@+id/imageView35" />
+                    android:layout_marginTop="5dp"
+                    app:layout_constraintStart_toStartOf="@+id/textView132"
+                    app:layout_constraintTop_toBottomOf="@+id/textView132" />
 
                 <TextView
-                    android:id="@+id/textView118"
-                    android:layout_width="250dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="11dp"
-                    android:fontFamily="@font/lato"
-                    android:letterSpacing="0"
-                    android:text="Becoming a verified Giger for higher chances of getting recruited faster"
-                    android:textColor="#424242"
-                    android:textSize="14sp"
-                    app:layout_constraintStart_toStartOf="@+id/textView117"
-                    app:layout_constraintTop_toBottomOf="@+id/textView117" />
-
-                <TextView
-                    android:id="@+id/textView119"
+                    android:id="@+id/view_my_gig"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="24dp"
-                    android:layout_marginBottom="17dp"
-                    android:fontFamily="@font/lato_bold"
-                    android:letterSpacing="0"
-                    android:text="Complete Now"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="14sp"
+                    android:text="View"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent" />
-
-                <TextView
-                    android:id="@+id/textView122"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Not Now"
-                    android:textSize="14sp"
-                    android:textColor="#444444"
-                    android:fontFamily="@font/lato"
-                    android:layout_marginRight="19dp"
-                    android:letterSpacing="0"
-                    app:layout_constraintBottom_toBottomOf="@+id/textView119"
-                    app:layout_constraintEnd_toStartOf="@+id/textView119"
-                    app:layout_constraintTop_toTopOf="@+id/textView119" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/learning_cl"
-                android:layout_width="match_parent"
-                android:layout_height="233dp">
-
-                <ImageView
-                    android:id="@+id/imageView36"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginTop="24dp"
-                    android:src="@drawable/ic_group_learning"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/textView120"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
-                    android:fontFamily="@font/lato_bold"
-                    android:text="Learning"
-                    android:textColor="#080808"
-                    android:textSize="16sp"
-                    app:layout_constraintBottom_toBottomOf="@+id/imageView36"
-                    app:layout_constraintStart_toEndOf="@+id/imageView36"
-                    app:layout_constraintTop_toTopOf="@+id/imageView36" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/learning_rv"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                    android:clipToPadding="false"
-                    android:nestedScrollingEnabled="false"
-                    android:paddingRight="20dp"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView120" />
-
-                <View
-                    android:id="@+id/textView121"
-                    android:layout_width="match_parent"
-                    android:layout_height="3dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintLeft_toRightOf="parent"
-                    android:background="@color/app_gray_color1_34"/>
-            </androidx.constraintlayout.widget.ConstraintLayout>
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/help_cl"
-                android:layout_width="match_parent"
-                android:layout_height="337dp">
-
-
-                <ImageView
-                    android:id="@+id/imageView37"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginLeft="16dp"
-                    android:src="@drawable/ic_help_icon"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="16sp"
-                    android:textColor="#080808"
-                    android:text="Help"
-                    android:fontFamily="@font/lato_bold"
-                    app:layout_constraintLeft_toRightOf="@id/imageView37"
-                    app:layout_constraintTop_toTopOf="@id/imageView37"
-                    app:layout_constraintBottom_toBottomOf="@id/imageView37"
-                    android:layout_marginLeft="8dp"/>
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/help_first_card"
-                    android:layout_width="match_parent"
-                    android:layout_height="88dp"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/imageView37"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:layout_marginTop="22dp"
-                    android:elevation="5dp"
-                    />
-                <ImageView
-                    android:id="@+id/help_first_card_img"
-                    android:layout_width="98dp"
-                    android:layout_height="88dp"
-                    app:layout_constraintLeft_toLeftOf="@id/help_first_card"
-                    app:layout_constraintBottom_toBottomOf="@id/help_first_card"
-                    app:layout_constraintTop_toTopOf="@id/help_first_card"
-                    android:elevation="5dp"
-                    android:background="@drawable/video_icon"
-                    android:scaleType="centerCrop"/>
-
-                <TextView
-                    android:layout_width="250dp"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintLeft_toRightOf="@+id/help_first_card_img"
-                    app:layout_constraintTop_toTopOf="@+id/help_first_card"
-                    app:layout_constraintRight_toRightOf="@+id/help_first_card"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
-                    android:layout_marginTop="8dp"
-                    android:textSize="14sp"
-                    android:textColor="#444444"
-                    android:letterSpacing="0"
-                    android:text="Lorem Ipsum is simply dummy text of the printing"
-                    android:fontFamily="@font/lato"
-                    android:elevation="5dp"/>
-
-                <TextView
-                    android:id="@+id/time_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_marginRight="24dp"
                     android:layout_marginBottom="8dp"
-                    android:layout_marginRight="16dp"
-                    android:elevation="5dp"
-                    android:fontFamily="@font/lato"
-                    android:text="02:00"
-                    android:textColor="#36000000"
-                    android:textSize="12sp"
-                    app:layout_constraintBottom_toBottomOf="@+id/help_first_card"
-                    app:layout_constraintRight_toRightOf="@+id/help_first_card" />
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_time_help"
-                    app:layout_constraintRight_toLeftOf="@+id/time_text"
-                    app:layout_constraintBottom_toBottomOf="@id/time_text"
-                    app:layout_constraintTop_toTopOf="@+id/time_text"
-                    android:layout_marginRight="3dp"
-                    android:elevation="5dp"/>
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_baseline_play_circle_outline_24"
-                    app:layout_constraintLeft_toLeftOf="@id/help_first_card_img"
-                    app:layout_constraintTop_toTopOf="@id/help_first_card_img"
-                    app:layout_constraintBottom_toBottomOf="@id/help_first_card_img"
-                    app:layout_constraintRight_toRightOf="@id/help_first_card_img"
-                    android:elevation="5dp"/>
-
-
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/help_first_card1"
-                    android:layout_width="match_parent"
-                    android:layout_height="88dp"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/help_first_card"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:layout_marginTop="20dp"
-                    android:elevation="5dp"
-                    />
-                <ImageView
-                    android:id="@+id/help_first_card_img1"
-                    android:layout_width="98dp"
-                    android:layout_height="88dp"
-                    app:layout_constraintLeft_toLeftOf="@id/help_first_card1"
-                    app:layout_constraintBottom_toBottomOf="@id/help_first_card1"
-                    app:layout_constraintTop_toTopOf="@id/help_first_card1"
-                    android:background="@drawable/video_icon"
-                    android:scaleType="centerCrop"
-                    android:elevation="5dp"
-                    />
-
-                <TextView
-                    android:layout_width="250dp"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintLeft_toRightOf="@+id/help_first_card_img1"
-                    app:layout_constraintTop_toTopOf="@+id/help_first_card1"
-                    app:layout_constraintRight_toRightOf="@+id/help_first_card1"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
-                    android:layout_marginTop="8dp"
                     android:textSize="14sp"
-                    android:textColor="#444444"
-                    android:letterSpacing="0"
-                    android:text="Lorem Ipsum is simply dummy text of the printing"
-                    android:fontFamily="@font/lato"
-                    android:elevation="5dp"/>
-
-                <TextView
-                    android:id="@+id/time_text1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:layout_marginRight="16dp"
-                    android:elevation="5dp"
-                    android:fontFamily="@font/lato"
-                    android:text="02:00"
-                    android:textColor="#36000000"
-                    android:textSize="12sp"
-                    app:layout_constraintBottom_toBottomOf="@+id/help_first_card1"
-                    app:layout_constraintRight_toRightOf="@+id/help_first_card1" />
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_time_help"
-                    app:layout_constraintRight_toLeftOf="@+id/time_text1"
-                    app:layout_constraintBottom_toBottomOf="@id/time_text1"
-                    app:layout_constraintTop_toTopOf="@+id/time_text1"
-                    android:layout_marginRight="3dp"
-                    android:elevation="5dp"/>
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_baseline_play_circle_outline_24"
-                    app:layout_constraintLeft_toLeftOf="@id/help_first_card_img1"
-                    app:layout_constraintTop_toTopOf="@id/help_first_card_img1"
-                    app:layout_constraintBottom_toBottomOf="@id/help_first_card_img1"
-                    app:layout_constraintRight_toRightOf="@id/help_first_card_img1"
-                    android:elevation="5dp"/>
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="36dp"
-                    android:text="See more"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:layout_marginTop="24dp"
-                    android:fontFamily="@font/lato_bold"
-                    android:textColor="@color/colorLightAccent"
-                    android:background="@drawable/rect_button_outline"
-                    app:layout_constraintTop_toBottomOf="@id/help_first_card1"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    android:gravity="center"
-                    />
-
+                    android:textColor="@color/colorPrimary"
+                    android:fontFamily="@font/lato_bold"/>
             </androidx.constraintlayout.widget.ConstraintLayout>
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="129dp"
@@ -713,6 +450,334 @@
                     app:layout_constraintEnd_toStartOf="@+id/complete_now"
                     app:layout_constraintTop_toTopOf="@+id/complete_now" />
             </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/learning_cl"
+                android:layout_width="match_parent"
+                android:layout_height="233dp">
+
+                <ImageView
+                    android:id="@+id/imageView36"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="24dp"
+                    android:src="@drawable/ic_group_learning"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/textView120"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:fontFamily="@font/lato_bold"
+                    android:text="Learning"
+                    android:textColor="#080808"
+                    android:textSize="16sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/imageView36"
+                    app:layout_constraintStart_toEndOf="@+id/imageView36"
+                    app:layout_constraintTop_toTopOf="@+id/imageView36" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/learning_rv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:clipToPadding="false"
+                    android:nestedScrollingEnabled="false"
+                    android:paddingRight="20dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView120" />
+
+                <View
+                    android:id="@+id/textView121"
+                    android:layout_width="match_parent"
+                    android:layout_height="3dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintLeft_toRightOf="parent"
+                    android:background="@color/app_gray_color1_34"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="129dp"
+                android:background="#e5e5e5">
+
+                <View
+                    android:id="@+id/textView116"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:background="#34d8d8d8"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/imageView35"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="16dp"
+                    android:src="@drawable/ic_group_prefereneces"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView116" />
+
+                <TextView
+                    android:id="@+id/textView117"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:fontFamily="@font/lato_bold"
+                    android:letterSpacing="0"
+                    android:text="Set Your Preferences"
+                    android:textColor="#000000"
+                    android:textSize="16sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/imageView35"
+                    app:layout_constraintStart_toEndOf="@+id/imageView35"
+                    app:layout_constraintTop_toTopOf="@+id/imageView35" />
+
+                <TextView
+                    android:id="@+id/textView118"
+                    android:layout_width="250dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="11dp"
+                    android:fontFamily="@font/lato"
+                    android:letterSpacing="0"
+                    android:text="Becoming a verified Giger for higher chances of getting recruited faster"
+                    android:textColor="#424242"
+                    android:textSize="14sp"
+                    app:layout_constraintStart_toStartOf="@+id/textView117"
+                    app:layout_constraintTop_toBottomOf="@+id/textView117" />
+
+                <TextView
+                    android:id="@+id/textView119"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="24dp"
+                    android:layout_marginBottom="17dp"
+                    android:fontFamily="@font/lato_bold"
+                    android:letterSpacing="0"
+                    android:text="Complete Now"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="14sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+                <TextView
+                    android:id="@+id/textView122"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Not Now"
+                    android:textSize="14sp"
+                    android:textColor="#444444"
+                    android:fontFamily="@font/lato"
+                    android:layout_marginRight="19dp"
+                    android:letterSpacing="0"
+                    app:layout_constraintBottom_toBottomOf="@+id/textView119"
+                    app:layout_constraintEnd_toStartOf="@+id/textView119"
+                    app:layout_constraintTop_toTopOf="@+id/textView119" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/help_cl"
+                android:layout_width="match_parent"
+                android:layout_height="337dp">
+
+
+                <ImageView
+                    android:id="@+id/imageView37"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:src="@drawable/ic_help_icon"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:textColor="#080808"
+                    android:text="Help"
+                    android:fontFamily="@font/lato_bold"
+                    app:layout_constraintLeft_toRightOf="@id/imageView37"
+                    app:layout_constraintTop_toTopOf="@id/imageView37"
+                    app:layout_constraintBottom_toBottomOf="@id/imageView37"
+                    android:layout_marginLeft="8dp"/>
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/help_first_card"
+                    android:layout_width="match_parent"
+                    android:layout_height="88dp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/imageView37"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginTop="22dp"
+                    android:elevation="5dp"
+                    />
+                <ImageView
+                    android:id="@+id/help_first_card_img"
+                    android:layout_width="98dp"
+                    android:layout_height="88dp"
+                    app:layout_constraintLeft_toLeftOf="@id/help_first_card"
+                    app:layout_constraintBottom_toBottomOf="@id/help_first_card"
+                    app:layout_constraintTop_toTopOf="@id/help_first_card"
+                    android:elevation="5dp"
+                    android:background="@drawable/video_icon"
+                    android:scaleType="centerCrop"/>
+                <androidx.constraintlayout.widget.Barrier
+                    android:id="@+id/start_barrier"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:barrierDirection="end"
+                    app:constraint_referenced_ids="help_first_card_img"/>
+                <TextView
+                    android:layout_width="250dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintLeft_toRightOf="@+id/help_first_card_img"
+                    app:layout_constraintTop_toTopOf="@+id/help_first_card"
+                    app:layout_constraintRight_toRightOf="@+id/help_first_card"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginTop="8dp"
+                    android:textSize="14sp"
+                    android:textColor="#444444"
+                    android:letterSpacing="0"
+                    android:text="Lorem Ipsum is simply dummy text of the printing"
+                    android:fontFamily="@font/lato"
+                    android:elevation="5dp"/>
+
+                <TextView
+                    android:id="@+id/time_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginRight="16dp"
+                    android:elevation="5dp"
+                    android:fontFamily="@font/lato"
+                    android:text="02:00"
+                    android:textColor="#36000000"
+                    android:textSize="12sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/help_first_card"
+                    app:layout_constraintRight_toRightOf="@+id/help_first_card" />
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_time_help"
+                    app:layout_constraintRight_toLeftOf="@+id/time_text"
+                    app:layout_constraintBottom_toBottomOf="@id/time_text"
+                    app:layout_constraintTop_toTopOf="@+id/time_text"
+                    android:layout_marginRight="3dp"
+                    android:elevation="5dp"/>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_baseline_play_circle_outline_24"
+                    app:layout_constraintLeft_toLeftOf="@id/help_first_card_img"
+                    app:layout_constraintTop_toTopOf="@id/help_first_card_img"
+                    app:layout_constraintBottom_toBottomOf="@id/help_first_card_img"
+                    app:layout_constraintRight_toRightOf="@id/help_first_card_img"
+                    android:elevation="5dp"/>
+
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/help_first_card1"
+                    android:layout_width="match_parent"
+                    android:layout_height="88dp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/help_first_card"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginTop="20dp"
+                    android:elevation="5dp"
+                    />
+                <ImageView
+                    android:id="@+id/help_first_card_img1"
+                    android:layout_width="98dp"
+                    android:layout_height="88dp"
+                    app:layout_constraintLeft_toLeftOf="@id/help_first_card1"
+                    app:layout_constraintBottom_toBottomOf="@id/help_first_card1"
+                    app:layout_constraintTop_toTopOf="@id/help_first_card1"
+                    android:background="@drawable/video_icon"
+                    android:scaleType="centerCrop"
+                    android:elevation="5dp"
+                    />
+                <androidx.constraintlayout.widget.Barrier
+                    android:id="@+id/start_barrier1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:barrierDirection="end"
+                    app:constraint_referenced_ids="help_first_card_img1"/>
+                <TextView
+                    android:layout_width="250dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintLeft_toRightOf="@+id/help_first_card_img1"
+                    app:layout_constraintTop_toTopOf="@+id/help_first_card1"
+                    app:layout_constraintRight_toRightOf="@+id/help_first_card1"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginTop="8dp"
+                    android:textSize="14sp"
+                    android:textColor="#444444"
+                    android:letterSpacing="0"
+                    android:text="Lorem Ipsum is simply dummy text of the printing"
+                    android:fontFamily="@font/lato"
+                    android:elevation="5dp"/>
+
+                <TextView
+                    android:id="@+id/time_text1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginRight="16dp"
+                    android:elevation="5dp"
+                    android:fontFamily="@font/lato"
+                    android:text="02:00"
+                    android:textColor="#36000000"
+                    android:textSize="12sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/help_first_card1"
+                    app:layout_constraintRight_toRightOf="@+id/help_first_card1" />
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_time_help"
+                    app:layout_constraintRight_toLeftOf="@+id/time_text1"
+                    app:layout_constraintBottom_toBottomOf="@id/time_text1"
+                    app:layout_constraintTop_toTopOf="@+id/time_text1"
+                    android:layout_marginRight="3dp"
+                    android:elevation="5dp"/>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_baseline_play_circle_outline_24"
+                    app:layout_constraintLeft_toLeftOf="@id/help_first_card_img1"
+                    app:layout_constraintTop_toTopOf="@id/help_first_card_img1"
+                    app:layout_constraintBottom_toBottomOf="@id/help_first_card_img1"
+                    app:layout_constraintRight_toRightOf="@id/help_first_card_img1"
+                    android:elevation="5dp"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="36dp"
+                    android:text="See more"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginTop="24dp"
+                    android:fontFamily="@font/lato_bold"
+                    android:textColor="@color/colorLightAccent"
+                    android:background="@drawable/rect_button_outline"
+                    app:layout_constraintTop_toBottomOf="@id/help_first_card1"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    android:gravity="center"
+                    />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
