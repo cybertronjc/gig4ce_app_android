@@ -261,7 +261,7 @@ class BSCalendarScreenFragment : BaseFragment() {
         val recyclerGenericAdapter: RecyclerGenericAdapter<UpcomingGigModel> =
             RecyclerGenericAdapter<UpcomingGigModel>(
                 activity?.applicationContext,
-                PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item -> showToast("") },
+                PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item -> navigate(R.id.mainLearningFragment) },
                 RecyclerGenericAdapter.ItemInterface<UpcomingGigModel?> { obj, viewHolder, position ->
                     val lp = getView(viewHolder, R.id.card_view).layoutParams
                     lp.height = lp.height
