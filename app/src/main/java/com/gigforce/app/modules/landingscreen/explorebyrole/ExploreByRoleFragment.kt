@@ -22,7 +22,7 @@ class ExploreByRoleFragment : BaseFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.explore_by_role_fragment, container, false)
+        return inflateView(R.layout.explore_by_role_fragment,  inflater,container)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -32,6 +32,9 @@ class ExploreByRoleFragment : BaseFragment() {
     }
 
     private fun listener() {
+        activate_status2.setOnClickListener{
+            navigate(R.id.jdScreenFragment)
+        }
         backpress_icon.setOnClickListener{
             activity?.onBackPressed()
         }

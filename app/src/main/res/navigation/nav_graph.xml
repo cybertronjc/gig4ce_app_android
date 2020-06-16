@@ -58,6 +58,11 @@
         tools:layout="@layout/fragment_chat_screen" />
 
     <fragment
+        android:id="@+id/jdScreenFragment"
+        android:name="com.gigforce.app.modules.landingscreen.explorebyrole.jdscreens.JDScreenFragment"
+        tools:layout="@layout/j_d_screen_fragment" />
+
+    <fragment
         android:id="@+id/contactScreenFragment"
         android:name="com.abhijai.gigschatdemo.contacts_module.ui.ContactScreenFragment"
         tools:layout="@layout/contact_screen_fragment" />
