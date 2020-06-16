@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.viewModels
+import com.bumptech.glide.Glide
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
@@ -50,6 +51,16 @@ class AddBankDetailsInfoFragment : BaseFragment(), SelectImageSourceBottomSheetA
                 selectImageSourceBottomSheetActionListener = this
             )
         }
+
+        passbookImageHolder.uploadImageLayout.reuploadBtn.setOnClickListener {
+            SelectImageSourceBottomSheet.launch(
+                childFragmentManager = childFragmentManager,
+                selectImageSourceBottomSheetActionListener = this
+            )
+        }
+
+        passbookImageHolder.uploadImageLayout.imageLabelTV.text =
+            getString(R.string.upload_bank_passbook)
 
         passbookAvailaibilityOptionRG.setOnCheckedChangeListener { _, checkedId ->
 
@@ -127,15 +138,26 @@ class AddBankDetailsInfoFragment : BaseFragment(), SelectImageSourceBottomSheetA
         bankDetailsDataConfirmationCB.visibility = View.VISIBLE
 
         clickedImagePath = File("na")
+        showPanInfoCard()
         setBankDetailsInfoOnView(
             name = "Rahul Jain",
-            fathersName = "sahil Jain",
+            fathersName = "Sahil Jain",
             cifNumber = "TF-334",
             accountNumber = "PU23SDDLOJIJ",
             ifsc = "PKSSM09233",
-            address = "Test Addre, Sssd, 1120"
+            address = "House no 342, Preet Vihar, 113320"
         )
     }
+
+    private fun showPanInfoCard(panInfoPath: File? = null) {
+        passbookImageHolder.uploadDocumentCardView.visibility = View.GONE
+        passbookImageHolder.uploadImageLayout.visibility = View.VISIBLE
+
+        Glide.with(requireContext())
+            .load(R.drawable.bg_passbook)
+            .into(passbookImageHolder.uploadImageLayout.clickedImageIV)
+    }
+
 
     private fun setBankDetailsInfoOnView(
         name: String?,
