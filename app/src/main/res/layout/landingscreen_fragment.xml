@@ -515,7 +515,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="129dp"
-                android:background="#e5e5e5">
+                android:background="#30e5e5e5">
 
                 <View
                     android:id="@+id/textView116"
@@ -645,11 +645,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:barrierDirection="end"
-                    app:constraint_referenced_ids="help_first_card_img"/>
+                    app:constraint_referenced_ids="help_first_card_img,help_first_card_img1"/>
                 <TextView
                     android:layout_width="250dp"
                     android:layout_height="wrap_content"
-                    app:layout_constraintLeft_toRightOf="@+id/help_first_card_img"
+                    app:layout_constraintLeft_toRightOf="@+id/start_barrier"
                     app:layout_constraintTop_toTopOf="@+id/help_first_card"
                     app:layout_constraintRight_toRightOf="@+id/help_first_card"
                     android:layout_marginLeft="8dp"
@@ -718,16 +718,11 @@
                     android:scaleType="centerCrop"
                     android:elevation="5dp"
                     />
-                <androidx.constraintlayout.widget.Barrier
-                    android:id="@+id/start_barrier1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:barrierDirection="end"
-                    app:constraint_referenced_ids="help_first_card_img1"/>
+
                 <TextView
                     android:layout_width="250dp"
                     android:layout_height="wrap_content"
-                    app:layout_constraintLeft_toRightOf="@+id/help_first_card_img1"
+                    app:layout_constraintLeft_toRightOf="@+id/start_barrier"
                     app:layout_constraintTop_toTopOf="@+id/help_first_card1"
                     app:layout_constraintRight_toRightOf="@+id/help_first_card1"
                     android:layout_marginLeft="8dp"

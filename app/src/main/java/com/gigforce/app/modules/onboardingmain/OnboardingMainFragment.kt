@@ -249,7 +249,8 @@ class OnboardingMainFragment : BaseFragment() {
 
     private fun navigateToHomeScreen() {
         popFragmentFromStack(R.id.onboardingfragment)
-        navigateWithAllPopupStack(R.id.mainHomeScreen)
+//        navigateWithAllPopupStack(R.id.mainHomeScreen)
+        navigate(R.id.authFlowFragment)
     }
 
     private fun showBackIcon(show: Boolean) {

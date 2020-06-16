@@ -362,7 +362,7 @@
         android:id="@+id/activate_status2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Activation Pending"
+        android:text="Activate"
         android:layout_marginRight="16dp"
         android:textSize="14sp"
         android:textColor="@color/colorPrimary"
