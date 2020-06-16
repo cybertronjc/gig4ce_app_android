@@ -151,6 +151,9 @@ class LandingScreenFragment : BaseFragment() {
         skip_about_intro.setOnClickListener {
             about_us_cl.visibility = View.GONE
         }
+        chat_icon_iv.setOnClickListener{
+        navigate(R.id.contactScreenFragment)
+        }
     }
 
     private fun initializeLearningModule() {

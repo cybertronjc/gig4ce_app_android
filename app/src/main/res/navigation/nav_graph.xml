@@ -53,6 +53,16 @@
         tools:layout="@layout/onboarding_main_fragment" />
 
     <fragment
+        android:id="@+id/chatScreenFragment"
+        android:name="com.abhijai.gigschatdemo.contacts_module.ui.ChatScreenFragment"
+        tools:layout="@layout/fragment_chat_screen" />
+
+    <fragment
+        android:id="@+id/contactScreenFragment"
+        android:name="com.abhijai.gigschatdemo.contacts_module.ui.ContactScreenFragment"
+        tools:layout="@layout/contact_screen_fragment" />
+
+    <fragment
         android:id="@+id/weekEndFragment"
         android:name="com.gigforce.app.modules.preferences.daytime.weekend.WeekEndFragment"
         tools:layout="@layout/week_end_fragment" />
