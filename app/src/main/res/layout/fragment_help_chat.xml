@@ -16,9 +16,9 @@
             android:id="@+id/learningToolbarLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="15dp"
-            android:paddingTop="15dp"
             android:background="@color/white"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -41,10 +41,10 @@
                 android:id="@+id/imageView30"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="6dp"
                 android:scaleX="0.8"
                 android:scaleY="0.8"
-                android:layout_marginStart="19dp"
-                android:layout_marginTop="6dp"
                 android:src="@drawable/logo_gig_force_v_2_small"
                 app:layout_constraintStart_toEndOf="@id/helpChatBackButton"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -54,12 +54,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="6dp"
+                android:layout_marginTop="8dp"
                 android:fontFamily="@font/lato_bold"
                 android:letterSpacing="0.01"
                 android:text="Help"
                 android:textColor="@color/lipstick"
-                android:textSize="24sp"
+                android:textSize="20sp"
                 app:layout_constraintStart_toEndOf="@id/imageView30"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -68,7 +68,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="6dp"
+                android:layout_marginTop="5dp"
                 android:fontFamily="@font/lato_bold"
                 android:letterSpacing="0.01"
                 android:text="Typing..."
@@ -76,6 +76,21 @@
                 android:textSize="12sp"
                 app:layout_constraintStart_toEndOf="@id/imageView30"
                 app:layout_constraintTop_toBottomOf="@id/tv1HS1" />
+
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="12dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:scaleX="0.75"
+                android:scaleY="0.75"
+                android:src="@drawable/ic_ellipses"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.appbar.AppBarLayout>
@@ -827,10 +842,43 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minHeight="60dp"
         android:background="#f6f7f8"
+        android:gravity="center_vertical"
+        android:minHeight="50dp"
         android:orientation="horizontal">
 
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="11dp"
+            android:src="@drawable/ic_emoji" />
+
+        <EditText
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_weight="1" />
+
+
+        <View
+            android:layout_width="0.8dp"
+            android:layout_height="35dp"
+            android:layout_marginStart="10dp"
+            android:background="@android:color/darker_gray" />
+
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="13dp"
+            android:src="@drawable/ic_plus_icon" />
+
+        <ImageView
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginStart="11dp"
+            android:layout_marginEnd="13dp"
+            android:src="@drawable/ic_send" />
 
 
     </LinearLayout>
