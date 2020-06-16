@@ -34,6 +34,8 @@ class MonthlyEarningPage: WalletBaseFragment() {
             adapter = MonthlyTransactionAdapter(invoiceViewModel.monthlyInvoice)
         }
         earning_graph.attachAdapter()
+
+        back_button.setOnClickListener { requireActivity().onBackPressed() }
     }
 }
 
