@@ -1,10 +1,12 @@
 package com.gigforce.app.modules.wallet
 
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.app.R
@@ -24,14 +26,16 @@ class MonthlyEarningPage: WalletBaseFragment() {
         return inflateView(R.layout.monthly_earning_page, inflater, container)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         month_transactions.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = MonthlyTransactionAdapter(invoiceViewModel.monthlyInvoice)
         }
-
         earning_graph.attachAdapter()
+
+        back_button.setOnClickListener { requireActivity().onBackPressed() }
     }
 }
 

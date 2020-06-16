@@ -140,7 +140,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="date"
-                    android:drawableEnd="@drawable/ic_calendar"
+                    android:drawableEnd="@drawable/ic_calendar_small"
                     android:focusable="false" />
             </LinearLayout>
 
@@ -159,7 +159,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
-                    android:drawableEnd="@drawable/ic_calendar"
+                    android:drawableEnd="@drawable/ic_calendar_small"
                     android:inputType="date"
                     android:focusable="false" />
             </LinearLayout>

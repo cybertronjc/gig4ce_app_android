@@ -38,9 +38,12 @@ class MonthlyGoalCard: MaterialCardView {
 
     private fun setSummaryText() {
         if (!isMonthlyGoalSet && avgMonthSalary == 0) {
-            avg_earning.text = "Click here to add monthly goal"
+            avg_earning.text = "Click here to set monthly goal"
+            progress_bar.progress = 5F
+
         } else if (!isMonthlyGoalSet && avgMonthSalary > 0){
             avg_earning.text = "Average earning per month is Rs XYZ. Click here to set monthly goal."
+            progress_bar.progress = 5F
         } else if (isMonthlyGoalSet && avgMonthSalary == 0) {
             avg_earning.text = "Monthly goal is Rs XYZ"
         } else {

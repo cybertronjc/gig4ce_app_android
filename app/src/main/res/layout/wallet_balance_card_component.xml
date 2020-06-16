@@ -2,50 +2,70 @@
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/wallet_card"
-    app:cardBackgroundColor="#a30674"
     app:cardCornerRadius="15dp"
     android:layout_width="match_parent"
     android:layout_height="160dp">
 
-    <com.google.android.material.textview.MaterialTextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/w_my_wallet_balance"
-        style="@style/LatoWhite16"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="24dp" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/bg_wallet_card">
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/w_balance_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/w_my_wallet_balance"
+            style="@style/LatoWhite16"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="24dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
 
-    <com.google.android.material.textview.MaterialTextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/w_rs"
-        style="@style/LatoWhite16"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="84dp" />
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/amount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Rs 6,800.86"
+            style="@style/LatoWhite28"
+            android:layout_marginTop="24dp"
+            app:layout_constraintStart_toStartOf="@id/w_balance_text"
+            app:layout_constraintTop_toBottomOf="@id/w_balance_text"/>
 
-    <com.google.android.material.textview.MaterialTextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="6,800.86"
-        style="@style/LatoWhite28"
-        android:layout_marginStart="56dp"
-        android:layout_marginTop="84dp"/>
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/renew_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:icon="@drawable/ic_baseline_autorenew_24"
+            app:iconTint="@color/white"
+            style="@style/IconOnlyButton"
+            app:layout_constraintStart_toStartOf="@id/amount"
+            app:layout_constraintTop_toBottomOf="@id/amount"/>
 
-    <com.google.android.material.button.MaterialButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:icon="@drawable/ic_baseline_autorenew_24"
-        app:iconTint="@color/white"
-        style="@style/IconOnlyButton"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="120dp"/>
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text = "Last Updated Text"
+            style="@style/LatoWhiteRegular"
+            android:layout_marginTop = "16dp"
+            app:layout_constraintStart_toEndOf="@id/renew_icon"
+            app:layout_constraintTop_toBottomOf="@id/amount"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <com.google.android.material.textview.MaterialTextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text = "Last Updated Text"
-        style="@style/LatoWhiteRegular"
-        android:layout_marginTop="132dp"
-        android:layout_marginStart="78dp" />
+<!--    <com.google.android.material.textview.MaterialTextView-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="@string/w_my_wallet_balance"-->
+<!--        style="@style/LatoWhite16"-->
+<!--        android:layout_marginStart="24dp"-->
+<!--        android:layout_marginTop="24dp" />-->
+
+<!--    <com.google.android.material.textview.MaterialTextView-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="@string/w_rs"-->
+<!--        style="@style/LatoWhite16"-->
+<!--        android:layout_marginStart="24dp"-->
+<!--        android:layout_marginTop="84dp" />-->
+
 
 </com.google.android.material.card.MaterialCardView>

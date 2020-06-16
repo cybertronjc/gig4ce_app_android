@@ -44,6 +44,10 @@ class InvoiceStatusPage: WalletBaseFragment() {
             else
                 tab.text = "something wrong"
         }.attach()
+
+        back_button.setOnClickListener {
+            requireActivity().onBackPressed()
+        }
     }
 
 }

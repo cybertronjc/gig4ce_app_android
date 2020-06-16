@@ -31,7 +31,13 @@ class AddSkillBottomSheetFragment: ProfileBaseBottomSheetFragment() {
         Log.d("DEBUG", "ENTERED Profile Education Expanded VIEW")
         inflateView(R.layout.add_skill_bottom_sheet, inflater, container)
 
-        skills.addAll(listOf("skill1", "skill2", "skill3", "skill4", "skill5", "skill6", "skill7", "skill8"))
+        skills.addAll(listOf(
+            "Driving", "Cooking", "Shop-keeping", "Managing Catalog",
+            "Cashier", "Tele-calling", "Waiter", "Bartender", "Barback",
+            "Fleet Management", "Assembly-dismantling", "E-commence delivery",
+            "Admin assistant", "Store manager", "In-store promoter",
+            "Record keeper", "Barista", "House keeping", "Reception", "Artist"))
+
         return getFragmentView()
     }
 

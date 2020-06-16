@@ -48,9 +48,6 @@ class ProfileFragment : BaseFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         makeStatusBarTransparent()
-//        requireActivity().onBackPressedDispatcher.addCallback(this) {
-//            findNavController().navigate(R.id.homeScreenNew)
-//        }
     }
 
     private fun makeStatusBarTransparent(){
@@ -162,6 +159,9 @@ class ProfileFragment : BaseFragment() {
                 layout.bio_card.setOnClickListener {
                     findNavController().navigate(R.id.editHeadlineBottomSheet)
                 }
+                layout.edit_cover_bio.setOnClickListener {
+                    navigate(R.id.editHeadlineBottomSheet)
+                }
             }
 
             layout.main_tags.removeAllViews()
@@ -180,7 +180,11 @@ class ProfileFragment : BaseFragment() {
                         findNavController().navigate(R.id.editTagBottomSheet)
                     }
 
-                    layout.edit_cover_bio.visibility = View.INVISIBLE
+                    layout.edit_cover.setOnClickListener {
+                        navigate(R.id.editTagBottomSheet)
+                    }
+
+                    //layout.edit_cover_bio.visibility = View.INVISIBLE
                 }
                 for (tag in it) {
                     layout.main_tags.addView(addChip(this.requireContext(), tag))
