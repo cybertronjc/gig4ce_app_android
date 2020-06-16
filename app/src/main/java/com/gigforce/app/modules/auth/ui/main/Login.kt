@@ -167,13 +167,13 @@ class Login : BaseFragment() {
     }
 
     private fun validatePhoneNumber(phoneNumber: String): Boolean {
-        //match = INDIAN_MOBILE_NUMBER.matcher(phoneNumber)
+        match = INDIAN_MOBILE_NUMBER.matcher(phoneNumber)
         if (phoneNumber.isEmpty()) {
             return false
         }
-//        if (!match.matches()) {
-//            return false
-//        }
+        if (!match.matches()) {
+            return false
+        }
         return true
     }
 
