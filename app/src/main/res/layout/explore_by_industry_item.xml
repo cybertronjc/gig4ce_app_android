@@ -9,18 +9,18 @@
     android:layout_marginLeft="16dp"
     android:layout_marginTop="5dp"
     android:layout_marginBottom="5dp"
-    app:cardCornerRadius="4dp"
-    app:cardElevation="5dp">
+    app:cardCornerRadius="4dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <View
-            android:id="@+id/textView115"
+        <ImageView
+            android:id="@+id/img_view"
             android:layout_width="match_parent"
-            android:layout_height="96dp"
-            android:background="@drawable/explore_by_industry"
+            android:layout_height="108dp"
+            android:scaleType="centerCrop"
+            android:adjustViewBounds="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -32,7 +32,7 @@
             android:text="Retail"
             android:fontFamily="@font/lato"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView115"
+            app:layout_constraintTop_toBottomOf="@+id/img_view"
             android:layout_marginTop="10dp"
             android:layout_marginLeft="6dp"
             android:textSize="14sp"
@@ -48,7 +48,8 @@
             app:layout_constraintStart_toStartOf="@+id/title"
             app:layout_constraintTop_toBottomOf="@+id/title"
             android:textSize="10sp"
-            android:textColor="#000000"/>
+            android:textColor="#000000"
+            android:visibility="gone"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>

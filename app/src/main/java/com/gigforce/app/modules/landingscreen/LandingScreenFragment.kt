@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
-import androidx.recyclerview.widget.SnapHelper
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
@@ -46,7 +45,7 @@ class LandingScreenFragment : BaseFragment() {
         listener()
     }
 
-    class GigforceTips(var title: String, var subtitle: String) {
+    class TitleSubtitleModel(var title: String, var subtitle: String,var imgIcon:Int=0) {
 
     }
 
@@ -54,39 +53,113 @@ class LandingScreenFragment : BaseFragment() {
     var forward = true
     private fun initializeGigforceTip() {
         // model will change when integrated with DB
-        var datalist: ArrayList<GigforceTips> = ArrayList<GigforceTips>()
+        var datalist: ArrayList<TitleSubtitleModel> = ArrayList<TitleSubtitleModel>()
+
         datalist.add(
-            GigforceTips(
+            TitleSubtitleModel(
                 "Gigforce Tip ",
-                "Having  an experience can help you start earning fast"
+                "Your education details help build your profile."
             )
         )
         datalist.add(
-            GigforceTips(
+            TitleSubtitleModel(
                 "Gigforce Tip ",
-                "Having  an experience can help you start earning fast"
+                "Your work experience helps find similar gigs for you."
             )
         )
         datalist.add(
-            GigforceTips(
+            TitleSubtitleModel(
                 "Gigforce Tip ",
-                "Having  an experience can help you start earning fast"
-            )
-        )
-        datalist.add(
-            GigforceTips(
-                "Gigforce Tip ",
-                "Having  an experience can help you start earning fast"
+                "Adding your skills helps recommend suitable gigs."
             )
         )
 
-        val recyclerGenericAdapter: RecyclerGenericAdapter<GigforceTips> =
-            RecyclerGenericAdapter<GigforceTips>(
+        datalist.add(
+            TitleSubtitleModel(
+                "Gigforce Tip ",
+                "Adding a profile photo shows off your personality."
+            )
+        )
+
+        datalist.add(
+            TitleSubtitleModel(
+                "Gigforce Tip ",
+                "How many languages can you speak in?"
+            )
+        )
+
+
+        datalist.add(
+            TitleSubtitleModel(
+                "Gigforce Tip ",
+                "Tell me 2 lines that best describe your."
+            )
+        )
+        datalist.add(
+            TitleSubtitleModel(
+                "Gigforce Tip ",
+                "Sharing your past achievements highlights your profile."
+            )
+        )
+        datalist.add(
+            TitleSubtitleModel(
+                "Gigforce Tip ",
+                "Add your permanent address to complete verification?"
+            )
+        )
+        datalist.add(
+            TitleSubtitleModel(
+                "Gigforce Tip ",
+                "Have you shared where you are looking for work?"
+            )
+        )
+        datalist.add(
+            TitleSubtitleModel(
+                "Gigforce Tip ",
+                "What are your preferred areas to work from?"
+            )
+        )
+        datalist.add(
+            TitleSubtitleModel(
+                "Gigforce Tip ",
+                "How far are you willing to travel for work daily?"
+            )
+        )
+        datalist.add(
+            TitleSubtitleModel(
+                "Gigforce Tip ",
+                "What is your daily earning expectation?"
+            )
+        )
+
+
+        datalist.add(
+            TitleSubtitleModel(
+                "Gigforce Tip ",
+                "How many days during the week are you willing to work?"
+            )
+        )
+        datalist.add(
+            TitleSubtitleModel(
+                "Gigforce Tip ",
+                "Are you willing to work during the weekends?"
+            )
+        )
+
+        datalist.add(
+            TitleSubtitleModel(
+                "Gigforce Tip ",
+                "Would you want to work from home?"
+            )
+        )
+
+        val recyclerGenericAdapter: RecyclerGenericAdapter<TitleSubtitleModel> =
+            RecyclerGenericAdapter<TitleSubtitleModel>(
                 activity?.applicationContext,
                 PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
                     navigate(R.id.explore_by_role)
                 },
-                RecyclerGenericAdapter.ItemInterface<GigforceTips?> { obj, viewHolder, position ->
+                RecyclerGenericAdapter.ItemInterface<TitleSubtitleModel?> { obj, viewHolder, position ->
                     var title = getTextView(viewHolder, R.id.gigtip_title)
                     var subtitle = getTextView(viewHolder, R.id.gigtip_subtitle)
 
@@ -96,6 +169,11 @@ class LandingScreenFragment : BaseFragment() {
                     title.layoutParams = lp
                     title.text = obj?.title
                     subtitle.text = obj?.subtitle
+
+//                    getTextView(viewHolder, R.id.skip).setOnClickListener{
+//                        datalist.removeAt(position)
+//                        gigforce_tip.adapter?.notifyItemChanged(position+1)
+//                    }
                 })!!
         recyclerGenericAdapter.setList(datalist)
         recyclerGenericAdapter.setLayout(R.layout.gigforce_tips_item)
@@ -119,7 +197,7 @@ class LandingScreenFragment : BaseFragment() {
                 try {
                     var currentVisiblePosition =
                         (gigforce_tip.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
-                    if ((gigforce_tip.adapter as RecyclerGenericAdapter<GigforceTips>).list.size == currentVisiblePosition + 1) {
+                    if ((gigforce_tip.adapter as RecyclerGenericAdapter<TitleSubtitleModel>).list.size == currentVisiblePosition + 1) {
                         forward = false
                     }
                     if (currentVisiblePosition == 0) {
@@ -160,21 +238,57 @@ class LandingScreenFragment : BaseFragment() {
 
         val itemWidth = ((width / 3) * 2).toInt()
         // model will change when integrated with DB
-        var datalist: ArrayList<UpcomingGigModel> = ArrayList<UpcomingGigModel>()
-        datalist.add(UpcomingGigModel())
-        datalist.add(UpcomingGigModel())
-        val recyclerGenericAdapter: RecyclerGenericAdapter<UpcomingGigModel> =
-            RecyclerGenericAdapter<UpcomingGigModel>(
+        var datalist: ArrayList<TitleSubtitleModel> = ArrayList<TitleSubtitleModel>()
+
+        datalist.add(
+            TitleSubtitleModel(
+                "Retail Sales Executive",
+                "Demonstrate products to customers",R.drawable.learning2
+            )
+        )
+
+        datalist.add(
+            TitleSubtitleModel(
+                "Quick Service Restaurant",
+                "Manage food displays",
+                R.drawable.learning1
+            )
+        )
+        datalist.add(
+            TitleSubtitleModel(
+                "Delivery",
+                "Maintaining hygiene and safety",
+                R.drawable.learning_bg
+            )
+        )
+        datalist.add(
+            TitleSubtitleModel(
+                "Retail Sales executive",
+                "Help customers choose the right products",
+                R.drawable.learning2
+            )
+        )
+        val recyclerGenericAdapter: RecyclerGenericAdapter<TitleSubtitleModel> =
+            RecyclerGenericAdapter<TitleSubtitleModel>(
                 activity?.applicationContext,
                 PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
 
                 },
-                RecyclerGenericAdapter.ItemInterface<UpcomingGigModel?> { obj, viewHolder, position ->
+                RecyclerGenericAdapter.ItemInterface<TitleSubtitleModel?> { obj, viewHolder, position ->
                     var view = getView(viewHolder, R.id.card_view)
                     val lp = view.layoutParams
                     lp.height = lp.height
                     lp.width = itemWidth
                     view.layoutParams = lp
+
+                    var title = getTextView(viewHolder, R.id.title_)
+                    title.text = obj?.title
+
+                    var subtitle = getTextView(viewHolder, R.id.title)
+                    subtitle.text = obj?.subtitle
+
+                    var img = getImageView(viewHolder,R.id.learning_img)
+                    img.setImageResource(obj?.imgIcon!!)
                 })!!
         recyclerGenericAdapter.setList(datalist)
         recyclerGenericAdapter.setLayout(R.layout.learning_bs_item)
@@ -190,21 +304,60 @@ class LandingScreenFragment : BaseFragment() {
 
         val itemWidth = ((width / 3) * 2).toInt()
         // model will change when integrated with DB
-        var datalist: ArrayList<UpcomingGigModel> = ArrayList<UpcomingGigModel>()
-        datalist.add(UpcomingGigModel())
-        datalist.add(UpcomingGigModel())
-        val recyclerGenericAdapter: RecyclerGenericAdapter<UpcomingGigModel> =
-            RecyclerGenericAdapter<UpcomingGigModel>(
+//        var datalist: ArrayList<UpcomingGigModel> = ArrayList<UpcomingGigModel>()
+        var datalist: ArrayList<TitleSubtitleModel> = ArrayList<TitleSubtitleModel>()
+
+        datalist.add(
+            TitleSubtitleModel(
+                "Delivery",
+                "",
+                R.drawable.industry
+            )
+        )
+
+        datalist.add(
+            TitleSubtitleModel(
+                "Retail",
+                "",
+                R.drawable.industry3
+            )
+        )
+
+
+        datalist.add(
+            TitleSubtitleModel(
+                "Quick Service Restuarant",
+                "",
+                R.drawable.industry1
+            )
+        )
+
+        datalist.add(
+            TitleSubtitleModel(
+                "Telesales and Support",
+                "",
+                R.drawable.industry2
+            )
+        )
+
+        val recyclerGenericAdapter: RecyclerGenericAdapter<TitleSubtitleModel> =
+            RecyclerGenericAdapter<TitleSubtitleModel>(
                 activity?.applicationContext,
                 PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
 
                 },
-                RecyclerGenericAdapter.ItemInterface<UpcomingGigModel?> { obj, viewHolder, position ->
+                RecyclerGenericAdapter.ItemInterface<TitleSubtitleModel?> { obj, viewHolder, position ->
                     var view = getView(viewHolder, R.id.card_view)
                     val lp = view.layoutParams
                     lp.height = lp.height
                     lp.width = itemWidth
                     view.layoutParams = lp
+
+                    var title = getTextView(viewHolder, R.id.title)
+                    title.text = obj?.title
+
+                    var img = getImageView(viewHolder, R.id.img_view)
+                    img.setImageResource(obj?.imgIcon!!)
                 })!!
         recyclerGenericAdapter.setList(datalist)
         recyclerGenericAdapter.setLayout(R.layout.explore_by_industry_item)
@@ -219,21 +372,59 @@ class LandingScreenFragment : BaseFragment() {
     private fun initializeExploreByRole() {
         val itemWidth = ((width / 3) * 2).toInt()
         // model will change when integrated with DB
-        var datalist: ArrayList<UpcomingGigModel> = ArrayList<UpcomingGigModel>()
-        datalist.add(UpcomingGigModel())
-        datalist.add(UpcomingGigModel())
-        val recyclerGenericAdapter: RecyclerGenericAdapter<UpcomingGigModel> =
-            RecyclerGenericAdapter<UpcomingGigModel>(
+//        var datalist: ArrayList<UpcomingGigModel> = ArrayList<UpcomingGigModel>()
+        var datalist: ArrayList<TitleSubtitleModel> = ArrayList<TitleSubtitleModel>()
+
+
+        datalist.add(
+            TitleSubtitleModel(
+                "Driver",
+                "Welcome to Gigforce! Let's talk about what's a gig and how do you start working as a giger at Gigforce.",R.drawable.driver_img
+            )
+        )
+        datalist.add(
+            TitleSubtitleModel(
+                "Delivery Executive",
+                "Welcome to Gigforce! Let's talk about what's a gig and how do you start working as a giger at Gigforce.",
+                R.drawable.delivery_executive_ls_img
+            )
+        )
+
+        datalist.add(
+            TitleSubtitleModel(
+                "Retail Sales Executive",
+                "Welcome to Gigforce! Let's talk about what's a gig and how do you start working as a giger at Gigforce.",
+                R.drawable.retail_img_ls
+            )
+        )
+
+        datalist.add(
+            TitleSubtitleModel(
+                "Barista",
+                "Welcome to Gigforce! Let's talk about what's a gig and how do you start working as a giger at Gigforce.",
+                R.drawable.brista_ls_img
+            )
+        )
+
+        val recyclerGenericAdapter: RecyclerGenericAdapter<TitleSubtitleModel> =
+            RecyclerGenericAdapter<TitleSubtitleModel>(
                 activity?.applicationContext,
                 PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
                     navigate(R.id.explore_by_role)
                 },
-                RecyclerGenericAdapter.ItemInterface<UpcomingGigModel?> { obj, viewHolder, position ->
+                RecyclerGenericAdapter.ItemInterface<TitleSubtitleModel?> { obj, viewHolder, position ->
                     var view = getView(viewHolder, R.id.card_view)
                     val lp = view.layoutParams
                     lp.height = lp.height
                     lp.width = itemWidth
                     view.layoutParams = lp
+
+                    var title = getTextView(viewHolder, R.id.title)
+                    title.text = obj?.title
+
+                    var img = getImageView(viewHolder, R.id.img_view)
+                    img.setImageResource(obj?.imgIcon!!)
+
                 })!!
         recyclerGenericAdapter.setList(datalist)
         recyclerGenericAdapter.setLayout(R.layout.explore_by_role_item)

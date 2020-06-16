@@ -106,6 +106,7 @@
         android:text="20%"
         android:textColor="#888888"
         android:textSize="14sp"
+        android:letterSpacing="0"
         app:layout_constraintBottom_toBottomOf="@+id/relativeLayout"
         app:layout_constraintEnd_toStartOf="@+id/relativeLayout"
         app:layout_constraintTop_toTopOf="@+id/relativeLayout" />
@@ -148,9 +149,10 @@
                     android:layout_marginLeft="7dp"
                     android:layout_marginTop="24dp"
                     android:fontFamily="@font/lato_bold"
-                    android:text="What we do ?"
+                    android:text="Welcome to Gigforce!"
                     android:textColor="#000000"
                     android:textSize="14sp"
+                    android:letterSpacing="0"
                     app:layout_constraintStart_toEndOf="@+id/imageView31"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -160,7 +162,8 @@
                     android:layout_height="40dp"
                     android:layout_marginTop="12dp"
                     android:fontFamily="@font/lato"
-                    android:text="Lorem Ipsum is simply dummy text of the printing and"
+                    android:text="Let's talk about what's a gig and how do you start working as a giger at Gigforce."
+                    android:letterSpacing="0"
                     android:textColor="#000000"
                     android:textSize="12sp"
                     app:layout_constraintStart_toStartOf="@+id/textView98"
@@ -207,7 +210,8 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/gigforce_tip"
                 android:layout_width="match_parent"
-                android:layout_height="124dp"/>
+                android:layout_height="124dp"
+                android:nestedScrollingEnabled="false"/>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -233,6 +237,7 @@
                     android:text="My Interest"
                     android:textColor="@color/white"
                     android:textSize="16sp"
+                    android:letterSpacing="0"
                     app:layout_constraintBottom_toBottomOf="@+id/imageView33"
                     app:layout_constraintStart_toEndOf="@+id/imageView33"
                     app:layout_constraintTop_toTopOf="@+id/imageView33" />
@@ -244,7 +249,7 @@
                     android:layout_marginTop="6dp"
                     android:fontFamily="@font/lato"
                     android:letterSpacing="0"
-                    android:text="Explore Interesting Gigs to start Earning"
+                    android:text="Explore gigs to start earning."
                     android:textColor="@color/white"
                     android:textSize="14sp"
                     app:layout_constraintStart_toStartOf="@+id/textView109"
@@ -279,7 +284,8 @@
                     android:paddingRight="20dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView114" />
+                    app:layout_constraintTop_toBottomOf="@+id/textView114"
+                    />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <View
@@ -315,7 +321,8 @@
                     android:paddingRight="20dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/industry" />
+                    app:layout_constraintTop_toBottomOf="@+id/industry"
+                    />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -338,9 +345,10 @@
                     android:id="@+id/textView132"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="My gigs"
+                    android:text="My Gigs"
                     android:textSize="16sp"
                     android:textColor="#d9000000"
+                    android:letterSpacing="0"
                     android:fontFamily="@font/lato_bold"
                     app:layout_constraintStart_toEndOf="@+id/imageView38"
                     app:layout_constraintTop_toTopOf="parent"
@@ -355,6 +363,7 @@
                     android:textSize="16sp"
                     android:textColor="#000000"
                     android:layout_marginTop="5dp"
+                    android:letterSpacing="0"
                     app:layout_constraintStart_toStartOf="@+id/textView132"
                     app:layout_constraintTop_toBottomOf="@+id/textView132" />
 
@@ -363,6 +372,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="View"
+                    android:letterSpacing="0"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     android:layout_marginRight="24dp"
@@ -403,7 +413,7 @@
                     android:layout_marginLeft="8dp"
                     android:fontFamily="@font/lato_bold"
                     android:letterSpacing="0"
-                    android:text="Complete your Verification"
+                    android:text="Complete Your Verification"
                     android:textColor="#000000"
                     android:textSize="16sp"
                     app:layout_constraintBottom_toBottomOf="@+id/icon"
@@ -417,7 +427,7 @@
                     android:layout_marginTop="11dp"
                     android:fontFamily="@font/lato"
                     android:letterSpacing="0"
-                    android:text="Becoming a verified Giger for higher chances of getting recruited faster"
+                    android:text="Verified giger's get recruited first"
                     android:textColor="#424242"
                     android:textSize="14sp"
                     app:layout_constraintStart_toStartOf="@+id/title"
@@ -475,6 +485,7 @@
                     android:text="Learning"
                     android:textColor="#080808"
                     android:textSize="16sp"
+                    android:letterSpacing="0"
                     app:layout_constraintBottom_toBottomOf="@+id/imageView36"
                     app:layout_constraintStart_toEndOf="@+id/imageView36"
                     app:layout_constraintTop_toTopOf="@+id/imageView36" />
@@ -489,7 +500,8 @@
                     android:paddingRight="20dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView120" />
+                    app:layout_constraintTop_toBottomOf="@+id/textView120"
+                    />
 
                 <View
                     android:id="@+id/textView121"
@@ -545,7 +557,7 @@
                     android:layout_marginTop="11dp"
                     android:fontFamily="@font/lato"
                     android:letterSpacing="0"
-                    android:text="Becoming a verified Giger for higher chances of getting recruited faster"
+                    android:text="Add your preferences to get gigs that suit you"
                     android:textColor="#424242"
                     android:textSize="14sp"
                     app:layout_constraintStart_toStartOf="@+id/textView117"
@@ -600,6 +612,7 @@
                     android:textSize="16sp"
                     android:textColor="#080808"
                     android:text="Help"
+                    android:letterSpacing="0"
                     android:fontFamily="@font/lato_bold"
                     app:layout_constraintLeft_toRightOf="@id/imageView37"
                     app:layout_constraintTop_toTopOf="@id/imageView37"
@@ -645,7 +658,7 @@
                     android:textSize="14sp"
                     android:textColor="#444444"
                     android:letterSpacing="0"
-                    android:text="Lorem Ipsum is simply dummy text of the printing"
+                    android:text="What's a Gig? Gigs vs full-time jobs."
                     android:fontFamily="@font/lato"
                     android:elevation="5dp"/>
 
@@ -723,7 +736,7 @@
                     android:textSize="14sp"
                     android:textColor="#444444"
                     android:letterSpacing="0"
-                    android:text="Lorem Ipsum is simply dummy text of the printing"
+                    android:text="What are the benefits of developing a profile on Gigforce?"
                     android:fontFamily="@font/lato"
                     android:elevation="5dp"/>
 
@@ -763,6 +776,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="36dp"
                     android:text="See more"
+                    android:letterSpacing="0"
                     android:layout_marginLeft="16dp"
                     android:layout_marginRight="16dp"
                     android:layout_marginTop="24dp"

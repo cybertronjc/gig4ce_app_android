@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/card_view"
     android:layout_width="match_parent"
-    android:layout_height="150dp"
+    android:layout_height="144dp"
     android:layout_marginLeft="18dp"
     android:layout_marginBottom="2dp"
     app:cardCornerRadius="4dp">
@@ -13,35 +13,37 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <View
+        <ImageView
+            android:id="@+id/learning_img"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="96dp"
+            android:scaleType="centerCrop"
+            android:adjustViewBounds="true"
             android:background="@drawable/learning_bg"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/textView69"
+            android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="13dp"
-            android:layout_marginBottom="10dp"
             android:text="Module 1"
             android:textColor="#000000"
             android:textSize="10sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/title_" />
 
         <TextView
-            android:id="@+id/textView72"
+            android:id="@+id/title_"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="13dp"
-            android:layout_marginBottom="1dp"
             android:text="CASHIER"
             android:textColor="#000000"
             android:textSize="14sp"
-            app:layout_constraintBottom_toTopOf="@+id/textView69"
-            app:layout_constraintStart_toStartOf="parent" />
+            android:layout_marginTop="10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/learning_img" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

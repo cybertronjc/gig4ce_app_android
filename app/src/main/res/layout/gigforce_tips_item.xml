@@ -56,12 +56,12 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
-        android:id="@+id/textView103"
+        android:id="@+id/skip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="24dp"
         android:letterSpacing="0"
-        android:text="No Experience"
+        android:text="Skip"
         android:textColor="#444444"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="@+id/textView102"
