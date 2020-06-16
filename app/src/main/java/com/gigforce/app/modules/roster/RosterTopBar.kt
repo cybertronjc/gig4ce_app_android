@@ -101,14 +101,5 @@ class RosterTopBar: MaterialCardView {
             field = value
             available_toggle.isChecked = isAvailable
 
-            available_toggle.trackTintList = ColorStateList(
-                arrayOf(intArrayOf(android.R.attr.state_checked), intArrayOf(-android.R.attr.state_checked)),
-                intArrayOf(R.color.red, R.color.black))
-
-//            if (available_toggle.isChecked) {
-//                available_toggle.setTrackResource(R.color.light_pink)
-//            } else {
-//                available_toggle.setTrackResource(R.color.white)
-//            }
         }
 }
