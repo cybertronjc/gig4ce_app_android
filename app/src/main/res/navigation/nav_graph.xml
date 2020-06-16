@@ -498,5 +498,10 @@
         android:name="com.gigforce.app.modules.learning.MainLearningFragment"
         android:label="fragment_main_learning"
         tools:layout="@layout/fragment_main_learning" />
+    <fragment
+        android:id="@+id/helpChatFragment"
+        android:name="com.gigforce.app.modules.chat.help.HelpChatFragment"
+        android:label="fragment_help_chat"
+        tools:layout="@layout/fragment_help_chat" />
 </navigation>
 
