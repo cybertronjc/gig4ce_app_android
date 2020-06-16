@@ -125,6 +125,7 @@ class MonthlyGraphAdapter(private val transactions: ArrayList<Int>): RecyclerVie
 
         fun bindGraph(transaction: String) {
             //view.text.text = transaction
+            //view.me_status_icon.setImageResource()
 
         }
     }

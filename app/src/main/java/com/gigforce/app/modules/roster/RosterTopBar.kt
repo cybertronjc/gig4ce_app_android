@@ -1,6 +1,7 @@
 package com.gigforce.app.modules.roster
 
 import android.content.Context
+import android.content.res.ColorStateList
 import android.os.Build
 import android.util.AttributeSet
 import android.util.Log
@@ -99,5 +100,15 @@ class RosterTopBar: MaterialCardView {
         set(value) {
             field = value
             available_toggle.isChecked = isAvailable
+
+            available_toggle.trackTintList = ColorStateList(
+                arrayOf(intArrayOf(android.R.attr.state_checked), intArrayOf(-android.R.attr.state_checked)),
+                intArrayOf(R.color.red, R.color.black))
+
+//            if (available_toggle.isChecked) {
+//                available_toggle.setTrackResource(R.color.light_pink)
+//            } else {
+//                available_toggle.setTrackResource(R.color.white)
+//            }
         }
 }
