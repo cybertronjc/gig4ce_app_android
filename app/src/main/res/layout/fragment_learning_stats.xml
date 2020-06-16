@@ -236,7 +236,7 @@
                 android:textSize="18sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:text="Last Time watching" />
+                android:text="Last Time watching" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/resumeButton"
@@ -246,7 +246,6 @@
                 android:text="Resume"
                 app:icon="@drawable/ic_play"
                 app:iconPadding="8dp"
-                app:outlineSpotShadowColor="@color/lipstick"
                 android:layout_marginEnd="16dp"
                 android:layout_marginTop="14dp"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
@@ -297,7 +296,7 @@
                 android:layout_marginBottom="12dp"
                 app:layout_constraintStart_toEndOf="@+id/videoThumbnailIV"
                 app:layout_constraintTop_toBottomOf="@+id/textView107"
-                tools:text="20 min learning pending " />
+                android:text="20 min learning pending " />
             
 
         </androidx.constraintlayout.widget.ConstraintLayout>

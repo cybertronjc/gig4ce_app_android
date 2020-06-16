@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    tools:context=".modules.learning.learningVideo.PlayVideoDialogFragment">
+>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="303dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/bg_square_pos" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#d9000000"
+        android:gravity="center_vertical"
+        android:minHeight="50dp"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginLeft="20dp"
+            android:src="@drawable/ic_play" />
+
+        <androidx.appcompat.widget.AppCompatSeekBar
+            android:layout_width="180dp"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="60 Sec"
+            android:textColor="@color/white"
+            />
+
+
+
+
+    </LinearLayout>
+
+
+</LinearLayout>

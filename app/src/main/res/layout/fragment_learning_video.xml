@@ -64,6 +64,7 @@
             app:layout_constraintTop_toBottomOf="@id/learningToolbarLayout" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
+           android:id="@+id/playFab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="245dp"
@@ -83,7 +84,7 @@
             android:layout_marginTop="25dp"
             android:fontFamily="@font/lato_bold"
             android:letterSpacing="0"
-            android:text="How to become Retail Executive"
+            android:text="Demonstrate products to customers"
             android:textColor="#d9000000"
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
@@ -104,7 +105,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/videoTitleTV"
-            tools:text="Lorem Ipsum is simply dummy text of the printing.Loe
+            android:text="Lorem Ipsum is simply dummy text of the printing.Loe
 m Ipsum is simply dummy text of the printing.Lorem Ipsum is simply dummy text of the printing.Loe Ipsum is simply dummy text of the printing.is simply dummy text of the printing." />
 
 
@@ -154,7 +155,7 @@ m Ipsum is simply dummy text of the printing.Lorem Ipsum is simply dummy text of
             android:layout_marginTop="12dp"
             android:fontFamily="@font/lato"
             android:letterSpacing="0"
-            android:text="2/6 Lessons Completed "
+            android:text="2/4 Lessons completed"
             android:textColor="#000000"
             android:textSize="14sp"
             app:layout_constraintStart_toEndOf="@+id/imageView38"
@@ -181,7 +182,7 @@ m Ipsum is simply dummy text of the printing.Lorem Ipsum is simply dummy text of
             android:layout_marginTop="12dp"
             android:fontFamily="@font/lato"
             android:letterSpacing="0"
-            android:text="3 assessment "
+            android:text="1/4 Assessments completes"
             android:textColor="#000000"
             android:textSize="14sp"
             app:layout_constraintStart_toEndOf="@+id/imageView38"
@@ -222,8 +223,10 @@ m Ipsum is simply dummy text of the printing.Lorem Ipsum is simply dummy text of
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="12dp"
             android:text="SEE MORE"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
             app:layout_constraintTop_toBottomOf="@id/lessonsRV" />
 
         <View
@@ -253,6 +256,8 @@ m Ipsum is simply dummy text of the printing.Lorem Ipsum is simply dummy text of
             layout="@layout/assessment_bs_item"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/assessmentsLabel" />
 
@@ -261,17 +266,42 @@ m Ipsum is simply dummy text of the printing.Lorem Ipsum is simply dummy text of
             layout="@layout/assessment_bs_item"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/assessmentItem1" />
+
+        <include
+            android:id="@+id/assessmentItem3"
+            layout="@layout/assessment_bs_item"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/assessmentItem2" />
+
+
+        <include
+            android:id="@+id/assessmentItem4"
+            layout="@layout/assessment_bs_item"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/assessmentItem3" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/assessmentSeeMoreButton"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="16dp"
             android:text="SEE MORE"
-            app:layout_constraintTop_toBottomOf="@id/assessmentItem2" />
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            app:layout_constraintTop_toBottomOf="@id/assessmentItem4" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

@@ -498,5 +498,19 @@
         android:name="com.gigforce.app.modules.learning.MainLearningFragment"
         android:label="fragment_main_learning"
         tools:layout="@layout/fragment_main_learning" />
+    <fragment
+        android:id="@+id/learningWithStatsFragment"
+        android:name="com.gigforce.app.modules.learning.LearningWithStatsFragment"
+        android:label="fragment_learning_stats"
+        tools:layout="@layout/fragment_learning_stats" />
+    <fragment
+        android:id="@+id/learningVideoFragment"
+        android:name="com.gigforce.app.modules.learning.LearningVideoFragment"
+        android:label="LearningVideoFragment" />
+    <fragment
+        android:id="@+id/playVideoDialogFragment"
+        android:name="com.gigforce.app.modules.learning.learningVideo.PlayVideoDialogFragment"
+        android:label="fragment_play_video"
+        tools:layout="@layout/fragment_play_video" />
 </navigation>
 
