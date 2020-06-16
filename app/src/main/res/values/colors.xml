@@ -35,7 +35,10 @@
     <color name="gray_color_day_date_calendar">#50000000</color>
     <color name="app_gray_color_38">#38979797</color>
     <color name="app_gray_color1_34">#34d8d8d8</color>
+
     <color name="gray_color_calendar">#979797</color>
+    <color name="gray_chat_module">#979797</color>
+    <color name="gray_chat_module1">#646464</color>
     <color name="gray_color_calendar_previous_date_50">#50e9e9e9</color>
 
     <color name="active_nav_bg">#ffeef8</color>
@@ -63,4 +66,5 @@
     <color name="warm_grey">#888888</color>
     <color name="light_grey">#dddddd</color>
     <color name="darkish_pink_two">#e94b81</color>
+
 </resources>

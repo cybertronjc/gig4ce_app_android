@@ -67,7 +67,7 @@ class AuthFlowFragment : BaseFragment() {
                 if (onboardingCompleted == null || onboardingCompleted.equals("")||onboardingCompleted.equals("false"))
                     navigateWithAllPopupStack(R.id.onboardingfragment)
                 else
-                    navigateWithAllPopupStack(R.id.mainHomeScreen)
+                    navigateWithAllPopupStack(R.id.landinghomefragment)
             } else {
                 navigateWithAllPopupStack(R.id.loginSuccessfulFragment)
             }

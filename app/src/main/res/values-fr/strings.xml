@@ -5,13 +5,13 @@
     <string name="title_activity_profile">ProfileActivity</string>
 
     <string name="intro_slide1_title">Bienvenue chez Gigforce</string>
-    <string name="intro_slide1_subtitle">Que va-t-il se passer demain?</string>
+    <string name="intro_slide1_subtitle">Un travail que vous avez toujours</string>
 
-    <string name="intro_slide2_title">Le travail arrive</string>
-    <string name="intro_slide2_subtitle">Recevez une notification lorsque le travail se produit.</string>
+    <string name="intro_slide2_title">Soyez un professionnel</string>
+    <string name="intro_slide2_subtitle">Créez un profil et entraînez-vous pour améliorer vos compétences</string>
 
-    <string name="intro_slide3_title">Tâche et affectation</string>
-    <string name="intro_slide3_subtitle">Tâchez-les et affectez-les à vos collègues.</string>
+    <string name="intro_slide3_title">Laissez le travail se produire</string>
+    <string name="intro_slide3_subtitle">Définissez vos préférences et les concerts vous trouveront</string>
 
     <string name="ob_slide1_title">Intégration</string>
     <string name="ob_slide1_subtitle">Comment - 1</string>

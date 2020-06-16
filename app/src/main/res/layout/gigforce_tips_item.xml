@@ -35,7 +35,7 @@
         android:layout_marginLeft="55dp"
         android:layout_marginTop="9dp"
         android:fontFamily="@font/lato"
-        android:text="Having  an experience can help you start earning fast"
+        android:text="Having an experience can help you start earning fast"
         android:textColor="#000000"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -56,12 +56,12 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
-        android:id="@+id/textView103"
+        android:id="@+id/skip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="24dp"
         android:letterSpacing="0"
-        android:text="No Experience"
+        android:text="Skip"
         android:textColor="#444444"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="@+id/textView102"

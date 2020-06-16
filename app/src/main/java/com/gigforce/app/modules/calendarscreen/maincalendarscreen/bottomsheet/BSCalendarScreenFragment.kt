@@ -248,7 +248,7 @@ class BSCalendarScreenFragment : BaseFragment() {
             3 -> navigate(R.id.profileFragment)
             4 -> showToast("")
             5 -> navigate(R.id.settingFragment)
-            6 -> showToast("")
+            6 -> navigate(R.id.helpChatFragment)
             7 -> navigate(R.id.landinghomefragment)
         }
     }
