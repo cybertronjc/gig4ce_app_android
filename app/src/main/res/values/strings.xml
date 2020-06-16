@@ -14,14 +14,14 @@
     <string name="marathi">मराठी</string>
 
 
-    <string name="intro_slide1_title">Welcome to GiGforce</string>
-    <string name="intro_slide1_subtitle">Whats going to happen tomorrow?</string>
+    <string name="intro_slide1_title">Welcome to Gigforce</string>
+    <string name="intro_slide1_subtitle">A Job you always have</string>
 
-    <string name="intro_slide2_title">Work Happens</string>
-    <string name="intro_slide2_subtitle">Get notified when work happens.</string>
+    <string name="intro_slide2_title">Be a professional</string>
+    <string name="intro_slide2_subtitle">Build a profile and train to upgrade your skills</string>
 
-    <string name="intro_slide3_title">Task and Assign</string>
-    <string name="intro_slide3_subtitle">Task and assign them to colleagues.</string>
+    <string name="intro_slide3_title">Let work happen</string>
+    <string name="intro_slide3_subtitle">Set your preference and gigs will find you</string>
 
     <string name="ob_slide1_title">Onboarding</string>
     <string name="ob_slide1_subtitle">How to - 1</string>
@@ -180,7 +180,7 @@
     <string name="title">title</string>
     <string name="authority">authority</string>
     <string name="location">Location</string>
-    <string name="year" />
+    <string name="year" >year</string>
     <string name="year_text">Year</string>
     <string name="edit_skill">Edit Skill</string>
     <string name="edit_experience">Edit Experience</string>
@@ -357,4 +357,12 @@
     <string name="anytime_anywhere">ANYTIME ANYWHERE</string>
     <string name="learning_based_on_nroles_and_industry">Learning based on\nroles and industry</string>
     <string name="recently_added">Recently Added</string>
+
+
+
+    // chat appbar menu items
+    <string name="action_block">Block</string>
+    <string name="action_report">Report</string>
+    <string name="action_invite_friends">Invite a friends</string>
+    <string name="action_refresh">Refresh</string>
 </resources>
