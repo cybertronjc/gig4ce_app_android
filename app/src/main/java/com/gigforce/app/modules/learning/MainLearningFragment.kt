@@ -14,7 +14,7 @@ import com.gigforce.app.modules.calendarscreen.maincalendarscreen.bottomsheet.Up
 import com.gigforce.app.modules.landingscreen.LandingScreenFragment
 import kotlinx.android.synthetic.main.fragment_main_learning.*
 import kotlinx.android.synthetic.main.fragment_main_learning_recent_video_item.view.*
-import java.util.ArrayList
+import java.util.*
 
 
 class MainLearningFragment : BaseFragment() {
@@ -46,7 +46,6 @@ class MainLearningFragment : BaseFragment() {
         initializeExploreByIndustry()
         mostPopularLearning()
         listener()
-
     }
 
     private fun listener() {

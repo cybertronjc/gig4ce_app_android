@@ -56,6 +56,7 @@ class CalendarHomeScreenViewModel : ViewModel() {
             calendar.set(Calendar.MONTH, dataItem.month);
             calendar.set(Calendar.DATE, dataItem.date + 1)
         }
+        calendar.time
         var temp: Int = calendar.get(Calendar.MONTH)
 
         for (x in 0..60) {
