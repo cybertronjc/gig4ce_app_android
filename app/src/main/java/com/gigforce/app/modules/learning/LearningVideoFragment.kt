@@ -58,17 +58,17 @@ class LearningVideoFragment : BaseFragment() {
 
         setDataOnLearningVideo()
 
-        assessmentItem1.textView74.text = "Getting prepared for a product demo"
-        assessmentItem1.textView76.text = "02:00"
-        assessmentItem1.textView75.text = "COMPLETED"
-        assessmentItem1.textView75.setBackgroundColor(
+        assessmentItem1.title.text = "Getting prepared for a product demo"
+        assessmentItem1.time.text = "02:00"
+        assessmentItem1.status.text = "COMPLETED"
+        assessmentItem1.status.setBackgroundColor(
             ResourcesCompat.getColor(
                 resources,
                 R.color.green,
                 null
             )
         )
-        assessmentItem1.textView73.setCardBackgroundColor(
+        assessmentItem1.side_bar_status.setCardBackgroundColor(
             ResourcesCompat.getColor(
                 resources,
                 R.color.green,
@@ -77,36 +77,17 @@ class LearningVideoFragment : BaseFragment() {
         )
 
 
-        assessmentItem2.textView74.text = "Conducting an effective product demo"
-        assessmentItem2.textView76.text = "05:00"
-        assessmentItem2.textView75.text = "PENDING"
-        assessmentItem2.textView75.setBackgroundColor(
+        assessmentItem2.title.text = "Conducting an effective product demo"
+        assessmentItem2.time.text = "05:00"
+        assessmentItem2.status.text = "PENDING"
+        assessmentItem2.status.setBackgroundColor(
             ResourcesCompat.getColor(
                 resources,
                 R.color.yellow,
                 null
             )
         )
-        assessmentItem2.textView73.setCardBackgroundColor(
-            ResourcesCompat.getColor(
-                resources,
-                R.color.yellow,
-                null
-            )
-        )
-
-
-        assessmentItem3.textView74.text = "How to connect with customer"
-        assessmentItem3.textView76.text = "05:00"
-        assessmentItem3.textView75.text = "PENDING"
-        assessmentItem3.textView75.setBackgroundColor(
-            ResourcesCompat.getColor(
-                resources,
-                R.color.yellow,
-                null
-            )
-        )
-        assessmentItem3.textView73.setCardBackgroundColor(
+        assessmentItem2.side_bar_status.setCardBackgroundColor(
             ResourcesCompat.getColor(
                 resources,
                 R.color.yellow,
@@ -114,17 +95,36 @@ class LearningVideoFragment : BaseFragment() {
             )
         )
 
-        assessmentItem4.textView74.text = "Closing the product demo"
-        assessmentItem4.textView76.text = "05:00"
-        assessmentItem4.textView75.text = "PENDING"
-        assessmentItem4.textView75.setBackgroundColor(
+
+        assessmentItem3.title.text = "How to connect with customer"
+        assessmentItem3.time.text = "05:00"
+        assessmentItem3.status.text = "PENDING"
+        assessmentItem3.status.setBackgroundColor(
             ResourcesCompat.getColor(
                 resources,
                 R.color.yellow,
                 null
             )
         )
-        assessmentItem4.textView73.setCardBackgroundColor(
+        assessmentItem3.side_bar_status.setCardBackgroundColor(
+            ResourcesCompat.getColor(
+                resources,
+                R.color.yellow,
+                null
+            )
+        )
+
+        assessmentItem4.title.text = "Closing the product demo"
+        assessmentItem4.time.text = "05:00"
+        assessmentItem4.status.text = "PENDING"
+        assessmentItem4.status.setBackgroundColor(
+            ResourcesCompat.getColor(
+                resources,
+                R.color.yellow,
+                null
+            )
+        )
+        assessmentItem4.side_bar_status.setCardBackgroundColor(
             ResourcesCompat.getColor(
                 resources,
                 R.color.yellow,
