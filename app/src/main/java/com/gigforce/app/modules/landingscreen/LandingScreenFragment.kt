@@ -6,15 +6,23 @@ import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
+import com.bumptech.glide.request.RequestOptions
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.app.core.genericadapter.RecyclerGenericAdapter
 import com.gigforce.app.modules.calendarscreen.maincalendarscreen.bottomsheet.UpcomingGigModel
+import com.gigforce.app.modules.preferences.PreferencesFragment
+import com.gigforce.app.modules.profile.ProfileViewModel
+import com.gigforce.app.utils.GlideApp
+import com.google.firebase.storage.StorageReference
 import kotlinx.android.synthetic.main.landingscreen_fragment.*
+import kotlinx.android.synthetic.main.landingscreen_fragment.chat_icon_iv
 import java.util.ArrayList
 
 class LandingScreenFragment : BaseFragment() {
@@ -43,8 +51,28 @@ class LandingScreenFragment : BaseFragment() {
         initializeExploreByIndustry()
         initializeLearningModule()
         listener()
+        observers()
     }
-
+    lateinit var viewModelProfile: ProfileViewModel
+    private fun observers() {
+        // load user data
+        viewModelProfile = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
+        viewModelProfile.getProfileData().observe(viewLifecycleOwner, Observer { profile ->
+            displayImage(profile.profileAvatarName)
+            if(profile.name!=null && !profile.name.equals(""))
+                profile_name.text = profile.name
+        })
+    }
+    private fun displayImage(profileImg:String) {
+        if(profileImg!=null && !profileImg.equals("")) {
+            val profilePicRef: StorageReference =
+                PreferencesFragment.storage.reference.child("profile_pics").child(profileImg)
+            GlideApp.with(this.requireContext())
+                .load(profilePicRef)
+                .apply(RequestOptions().circleCrop())
+                .into(profile_image)
+        }
+    }
     class TitleSubtitleModel(var title: String, var subtitle: String,var imgIcon:Int=0) {
 
     }
@@ -231,6 +259,10 @@ class LandingScreenFragment : BaseFragment() {
         }
         chat_icon_iv.setOnClickListener{
         navigate(R.id.contactScreenFragment)
+        }
+
+        profile_image.setOnClickListener{
+            navigate(R.id.profileFragment)
         }
     }
 

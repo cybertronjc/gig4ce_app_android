@@ -3,6 +3,7 @@ package com.gigforce.app.modules.calendarscreen.maincalendarscreen
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.gigforce.app.modules.calendarscreen.maincalendarscreen.verticalcalendar.AllotedGigDataModel
+import com.gigforce.app.modules.calendarscreen.maincalendarscreen.verticalcalendar.GigsDetail
 import com.gigforce.app.modules.calendarscreen.maincalendarscreen.verticalcalendar.MainHomeCompleteGigModel
 import com.gigforce.app.modules.calendarscreen.maincalendarscreen.verticalcalendar.VerticalCalendarDataItemModel
 import com.google.firebase.firestore.DocumentSnapshot
@@ -29,11 +30,45 @@ class CalendarHomeScreenViewModel : ViewModel() {
                 }
                 var data : MainHomeCompleteGigModel? = value!!.toObject(
                     MainHomeCompleteGigModel::class.java)
-                arrMainHomeDataModel = data?.all_gigs
+
+//                arrMainHomeDataModel = data?.all_gigs
+                arrMainHomeDataModel = getAllGigData()
                 mainHomeLiveDataModel.postValue(
                     data
                 )
             })
+    }
+    private fun getGigData(date:Int,month:Int,year:Int,title:String,gigDetails:ArrayList<GigsDetail>,available:Boolean):AllotedGigDataModel{
+        var data = AllotedGigDataModel()
+        data.date = date
+        data.month= month
+        data.year = year
+        data.title = title
+        data.gigDetails =  gigDetails
+        data.available = available
+        return data
+    }
+    private fun getGigDetailData(title: String,isCompleted:Boolean):ArrayList<GigsDetail>{
+        var arrayListGigDetail = ArrayList<GigsDetail>()
+        var data = GigsDetail()
+        data.subTitle = title
+        data.gigCompleted = isCompleted
+        arrayListGigDetail.add(data)
+        return arrayListGigDetail
+    }
+    private fun getAllGigData(): ArrayList<AllotedGigDataModel>? {
+        var arrayList = ArrayList<AllotedGigDataModel>()
+        arrayList.add(getGigData(18,5,2020,"Retail Sale executive",getGigDetailData("Retail Sale executive",false),true))
+
+        arrayList.add(getGigData(17,5,2020,"Retail Sale executive",getGigDetailData("Retail Sale executive",false),true))
+
+        arrayList.add(getGigData(16,5,2020,"Retail Sale executive",getGigDetailData("Retail Sale executive",true),true))
+
+        arrayList.add(getGigData(15,5,2020,"Retail Sale executive",getGigDetailData("Retail Sale executive",false),true))
+
+        arrayList.add(getGigData(14,5,2020,"Retail Sale executive",getGigDetailData("Retail Sale executive",true),true))
+
+        return arrayList
     }
 
     fun getAllCalendarData(): ArrayList<VerticalCalendarDataItemModel> {

@@ -38,23 +38,50 @@ class ContactViewModel : ViewModel() {
         contactsMutableLiveData.value = contactList
     }
 
-    fun prepareChatList(){
-        val chatModel1 = ChatModel(AppConstants.FROM_CONTACT_MSG_1,"6:00 AM",true)
+//    fun prepareChatList(){
+//        val chatModel1 = ChatModel(AppConstants.FROM_CONTACT_MSG_1,"6:00 AM",true)
+//        val chatModel2 = ChatModel(AppConstants.TO_CONTACT_MSG_1,"6:30 AM",false)
+//        val chatModel3 = ChatModel(AppConstants.FROM_CONTACT_MSG_2,"7:15 AM",true)
+//        val chatModel4 = ChatModel(AppConstants.TO_CONTACT_MSG_2,"8:10 AM",false)
+//        val chatModel5 = ChatModel(AppConstants.FROM_CONTACT_MSG_3,"8:45 AM",true)
+//        chatList.add(chatModel1)
+//        chatList.add(chatModel2)
+//        chatList.add(chatModel3)
+//        chatList.add(chatModel4)
+//        chatList.add(chatModel5)
+//
+//        chatList.add(chatModel1)
+//        chatList.add(chatModel2)
+//        chatList.add(chatModel3)
+//        chatList.add(chatModel4)
+//        chatList.add(chatModel5)
+//        chatsMutableLiveData.value = chatList
+//    }
+
+    fun prepareChatList(username:String){
+//        val chatModel1 = ChatModel(AppConstants.FROM_CONTACT_MSG_1,"6:00 AM",true)
         val chatModel2 = ChatModel(AppConstants.TO_CONTACT_MSG_1,"6:30 AM",false)
-        val chatModel3 = ChatModel(AppConstants.FROM_CONTACT_MSG_2,"7:15 AM",true)
+        val chatModel3 = ChatModel("Hi $username, how did that happen?","7:15 AM",true)
         val chatModel4 = ChatModel(AppConstants.TO_CONTACT_MSG_2,"8:10 AM",false)
         val chatModel5 = ChatModel(AppConstants.FROM_CONTACT_MSG_3,"8:45 AM",true)
-        chatList.add(chatModel1)
-        chatList.add(chatModel2)
-        chatList.add(chatModel3)
-        chatList.add(chatModel4)
-        chatList.add(chatModel5)
+        val chatModel6 = ChatModel(AppConstants.TO_CONTACT_MSG_3,"8:55 AM",false)
+        val chatModel7 = ChatModel(AppConstants.FROM_CONTACT_MSG_4,"9:00 AM",true)
+        val chatModel8 = ChatModel(AppConstants.TO_CONTACT_MSG_4,"9:10 AM",false)
 
-        chatList.add(chatModel1)
+//        chatList.add(chatModel1)
         chatList.add(chatModel2)
         chatList.add(chatModel3)
         chatList.add(chatModel4)
         chatList.add(chatModel5)
+        chatList.add(chatModel6)
+        chatList.add(chatModel7)
+        chatList.add(chatModel8)
+
+//        chatList.add(chatModel1)
+//        chatList.add(chatModel2)
+//        chatList.add(chatModel3)
+//        chatList.add(chatModel4)
+//        chatList.add(chatModel5)
         chatsMutableLiveData.value = chatList
     }
 

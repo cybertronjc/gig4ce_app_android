@@ -30,6 +30,7 @@
                 android:id="@+id/first_member"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
+                app:cardCornerRadius="24dp"
                 app:layout_constraintStart_toEndOf="@id/iv_backArrowInChat"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"

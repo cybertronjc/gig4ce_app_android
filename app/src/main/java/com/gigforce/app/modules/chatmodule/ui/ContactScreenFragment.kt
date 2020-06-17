@@ -107,6 +107,13 @@ class ContactScreenFragment : BaseFragment(),OnContactClickListener {
 //        intent.putExtra(AppConstants.IMAGE_URL,url)
 //        intent.putExtra(AppConstants.CONTACT_NAME,name)
 //        startActivity(intent)
-        navigate(R.id.chatScreenFragment)
+        if(name.equals("Help")){
+            navigate(R.id.helpChatFragment)
+        }else {
+            val bundle = Bundle()
+            bundle.putSerializable(AppConstants.IMAGE_URL, url)
+            bundle.putSerializable(AppConstants.CONTACT_NAME, name)
+            navController.navigate(R.id.chatScreenFragment, bundle)
+        }
     }
 }

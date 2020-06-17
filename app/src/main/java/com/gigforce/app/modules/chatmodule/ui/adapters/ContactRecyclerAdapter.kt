@@ -49,7 +49,7 @@ class ContactRecyclerAdapter(private val requestManager: RequestManager,private 
         private var textViewTime : TextView = itemView.findViewById(R.id.tv_timeValue)
         private var viewPinkCircle : View = itemView.findViewById(R.id.view_pinkCircle)
         fun bindValues(contactModel : ContactModel?){
-            val uri = Uri.parse("android.resource://com.abhijai.gigschatdemo/drawable/" + contactModel?.imageUrl)
+            val uri = Uri.parse("android.resource://com.gigforce.app/drawable/" + contactModel?.imageUrl)
             requestManager.load(uri).into(circleImageView)
             if (contactModel?.name.equals("Help")){
                 textViewName.setTextColor(Color.parseColor("#E91E63"))
