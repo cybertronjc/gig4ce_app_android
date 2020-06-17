@@ -41,6 +41,10 @@ class WalletBalancePage: WalletBaseFragment() {
         back_button.setOnClickListener{
             activity?.onBackPressed()
         }
+
+        walletViewModel.userProfileData.observe(viewLifecycleOwner, Observer {
+            top_bar.imageName = it.profileAvatarName
+        })
     }
 
     private fun initialize() {

@@ -518,5 +518,10 @@
         android:name="com.gigforce.app.modules.chat.help.HelpChatFragment"
         android:label="fragment_help_chat"
         tools:layout="@layout/fragment_help_chat" />
+
+    <fragment
+        android:id="@+id/gigPageExpanded"
+        android:name="com.gigforce.app.modules.roster.GigPageExpanded"
+        android:label="GigPageExpanded" />
 </navigation>
 
