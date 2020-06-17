@@ -28,10 +28,17 @@ class InvoiceCollapsedCard: MaterialCardView {
             agent_name.text = agent
         }
 
-    var gigId: Int = 123
+    var gigId: String = "123"
         set(value) {
             field = value
             gig_id_text.text = "Gig ID: $gigId"
+        }
+
+    var isInvoiceGenerated: Boolean = true
+        set(value) {
+            field = value
+            start_date_text.text = "Invoice Generated: $startDate"
+            end_date_text.text = ""
         }
 
     var startDate: String = "XX-XX-XXXX"
@@ -59,7 +66,10 @@ class InvoiceCollapsedCard: MaterialCardView {
 
             if (invoiceStatus == "rejected") {
                 gig_invoice_status.setTextColor(resources.getColor(R.color.app_red))
-            } else {
+            } else if (invoiceStatus == "processed") {
+                gig_invoice_status.setTextColor(resources.getColor(R.color.app_green))
+            }
+            else {
                 gig_invoice_status.setTextColor(resources.getColor(R.color.app_orange))
             }
         }

@@ -84,17 +84,15 @@ class InvoicePageFragment: WalletBaseFragment() {
             val position: Int = getInt("position")
             if (position == 0) {
                 // invoice generated
-                textView.text = "Invoice generated page"
 
                 invoiceViewModel.generatedInvoice.observe(viewLifecycleOwner, Observer {invoices ->
                     addInvoices(invoices_container, invoices)
                 })
             } else if (position == 1) {
                 // invoice pending
-                textView.text = "Invoice pending page"
 
                 invoiceViewModel.pendingInvoices.observe(viewLifecycleOwner, Observer { invoices ->
-                    addInvoices(invoices_container, invoices)
+                    //addInvoices(invoices_container, invoices)
                 })
             }
         }
@@ -109,6 +107,13 @@ class InvoicePageFragment: WalletBaseFragment() {
         for (invoice in invoices) {
             var widget = InvoiceCollapsedCard(requireContext())
             widget.id = View.generateViewId()
+
+            widget.startDate = invoice.invoiceGeneratedTime
+            widget.isInvoiceGenerated = true
+            widget.agent = invoice.agentName
+            widget.invoiceStatus = invoice.invoiceStatus
+            widget.gigAmount = invoice.gigAmount
+            widget.gigId = invoice.gigId
 
             parentView.addView(widget)
             widgets.add(widget)
