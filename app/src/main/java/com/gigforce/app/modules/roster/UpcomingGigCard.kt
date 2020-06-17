@@ -36,4 +36,12 @@ class UpcomingGigCard: MaterialCardView {
             upcoming_card.layoutParams.height = value
             upcoming_card.requestLayout()
         }
+
+    fun setTimings() {
+        var endHour = startHour + duration.toInt()
+        var endMinute = ((duration - duration.toInt())*100).toInt()
+        gig_timing.text = (
+                String.format("%02d", startHour) + ":" + String.format("%02d", startMinute) +
+                        "-" + String.format("%02d", endHour) + ":" + String.format("%02d", endMinute))
+    }
 }

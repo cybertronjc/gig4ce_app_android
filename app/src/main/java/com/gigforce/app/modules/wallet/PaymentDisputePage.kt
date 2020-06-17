@@ -35,5 +35,11 @@ class PaymentDisputePage: WalletBaseFragment() {
         payment_3.setOnClickListener {
             navigate(R.id.paymentDisputeExpandedPage)
         }
+
+        back_button.setOnClickListener { requireActivity().onBackPressed() }
+
+        payment_1.visibility = View.GONE
+        payment_2.visibility = View.GONE
+        payment_3.visibility = View.GONE
     }
 }

@@ -14,4 +14,10 @@ class WalletBalanceCard: MaterialCardView {
     init {
         View.inflate(context, R.layout.wallet_balance_card_component, this)
     }
+
+    var balance: Int = 0
+        set(value) {
+            field = value
+            amount.text = "Rs $value"
+        }
 }

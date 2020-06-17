@@ -14,18 +14,25 @@
         <item name="bottomSheetDialogTheme">@style/CustomBottomSheetDialog</item>
         <item name="android:letterSpacing">0</item>
     </style>
+
     <style name="Theme.switchButton" parent="Theme.AppCompat.Light">
         <item name="colorPrimary">@color/colorAccent</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorPrimary</item>
         <item name="android:letterSpacing">0</item>
     </style>
+
     <style name="Theme.checkbox" parent="Theme.AppCompat.Light">
         <item name="colorPrimary">@color/colorAccent</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorPrimary</item>
         <item name="android:letterSpacing">0</item>
     </style>
+
+    <style name="Theme.RadioButtonLipstickPink" parent="Widget.AppCompat.CompoundButton.RadioButton">
+        <item name="buttonTint">@drawable/radio_button_drawable</item>
+    </style>
+
     <style name="FieldtextLatoRegularGrey12">
         <item name="android:textSize">12sp</item>
         <item name="android:letterSpacing">0.05</item>
@@ -100,7 +107,7 @@
         <item name="android:textSize">24sp</item>
         <item name="android:fontFamily">@font/lato</item>
     </style>
-<!--        <item name="android:color">#000000</item>-->
+    <!--        <item name="android:color">#000000</item>-->
 
     <style name="AppTheme.TextStyle.Subtitle1">
         <item name="android:textSize">18sp</item>
@@ -112,7 +119,7 @@
         <item name="android:fontFamily">@font/lato_bold</item>
         <item name="android:letterSpacing">0.1</item>
     </style>
-<!--        <item name="android:textSize">14sp</item>-->
+    <!--        <item name="android:textSize">14sp</item>-->
 
     <style name="AppTheme.TextStyle.Body1">
         <item name="android:textSize">16sp</item>
@@ -134,7 +141,7 @@
         <item name="android:textSize">10sp</item>
         <item name="android:letterSpacing">0.5</item>
     </style>
-    
+
     <style name="LatoBold24">
         <item name="android:textSize">24sp</item>
         <item name="android:textColor">#000000</item>
@@ -148,9 +155,11 @@
         <item name="android:lineSpacingExtra">7.1sp</item>
         <item name="android:textColor">#000000</item>
     </style>
+
     <style name="LatoBold14">
         <item name="android:textSize">14sp</item>
         <item name="android:textColor">#000000</item>
+        <item name="android:textStyle">bold</item>
         <item name="android:letterSpacing">0.05</item>
         <item name="android:lineSpacingExtra">5.1sp</item>
     </style>
@@ -211,7 +220,7 @@
     </style>
 
     <style name="LargeRegularText">
-        <item name="android:textSize">8.6sp </item>
+        <item name="android:textSize">8.6sp</item>
         <item name="android:textColor">#222222</item>
         <item name="android:letterSpacing">0.15</item>
         <item name="android:lineSpacingExtra">32.2sp</item>
@@ -268,13 +277,11 @@
         <item name="android:layout_margin">8dp</item>
     </style>
 
-    <style name="AppBottomSheetDialogTheme"
-        parent="Theme.Design.Light.BottomSheetDialog">
+    <style name="AppBottomSheetDialogTheme" parent="Theme.Design.Light.BottomSheetDialog">
         <item name="bottomSheetStyle">@style/AppModalStyle</item>
     </style>
 
-    <style name="AppModalStyle"
-        parent="Widget.Design.BottomSheet.Modal">
+    <style name="AppModalStyle" parent="Widget.Design.BottomSheet.Modal">
         <item name="android:background">@drawable/rounded_bottomsheet</item>
     </style>
 
@@ -290,6 +297,7 @@
         <item name="android:lineSpacingExtra">19.1sp</item>
         <item name="android:textColor">#222222</item>
     </style>
+
     <style name="LatoRegular8">
         <item name="android:textSize">10sp</item>
         <item name="android:letterSpacing">0.14</item>
@@ -331,6 +339,13 @@
         <item name="android:textSize">28sp</item>
     </style>
 
+    <style name="LatoBold28" parent="Widget.MaterialComponents.TextView">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">#d9000000</item>
+        <item name="android:textSize">28sp</item>
+        <item name="android:fontFamily">@font/lato</item>
+    </style>
+
     <style name="LatoBold16" parent="Widget.MaterialComponents.TextView">
         <item name="android:textColor">#d9000000</item>
         <item name="android:textSize">16sp</item>
@@ -342,7 +357,7 @@
         <item name="android:textColor">#ca0071</item>
         <item name="android:textStyle">bold</item>
     </style>
-    
+
     <style name="LatoRegular14Black" parent="Widget.MaterialComponents.TextView">
         <item name="android:textSize">14sp</item>
         <item name="android:textColor">@color/black</item>
@@ -361,15 +376,17 @@
         <item name="android:gravity">center</item>
         <item name="android:letterSpacing">0.04</item>
     </style>
+
     <style name="customRatingBar" parent="android:style/Widget.Material.RatingBar.Small">
         <item name="colorControlActivated">#ffc107</item>
     </style>
+
     <style name="DialogStyle" parent="Theme.Design.Light.BottomSheetDialog">
         <item name="android:windowIsFloating">false</item>
         <item name="android:colorBackground">@android:color/transparent</item>
         <item name="android:windowSoftInputMode">adjustResize</item>
     </style>
-    
+
     <style name="AppTabLayout" parent="Widget.Design.TabLayout">
         <item name="tabBackground">@color/colorPrimary</item>
         <item name="tabIndicatorColor">@color/white</item>

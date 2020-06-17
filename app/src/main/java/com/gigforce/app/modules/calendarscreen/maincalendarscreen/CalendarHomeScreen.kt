@@ -1,11 +1,14 @@
 package com.gigforce.app.modules.calendarscreen.maincalendarscreen
 
 import android.app.Dialog
+import android.os.Build
 import android.os.Bundle
 import android.view.*
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.request.RequestOptions
@@ -25,7 +28,9 @@ import com.google.firebase.storage.StorageReference
 import com.riningan.widget.ExtendedBottomSheetBehavior
 import com.riningan.widget.ExtendedBottomSheetBehavior.STATE_COLLAPSED
 import kotlinx.android.synthetic.main.calendar_home_screen.*
+import kotlinx.android.synthetic.main.fragment_add_aadhar_card_info.view.*
 import java.text.SimpleDateFormat
+import java.time.LocalDateTime
 import java.util.*
 
 
@@ -45,6 +50,7 @@ class CalendarHomeScreen : BaseFragment() {
         return inflateView(R.layout.calendar_home_screen, inflater, container)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(CalendarHomeScreenViewModel::class.java)
@@ -53,6 +59,7 @@ class CalendarHomeScreen : BaseFragment() {
         listener()
         observePreferenceData()
         languageSelectionProcess()
+
     }
 
     private fun languageSelectionProcess() {
@@ -124,6 +131,7 @@ class CalendarHomeScreen : BaseFragment() {
         }
         languageSelectionDialog?.show()
     }
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun initializeViews() {
         initializeExtendedBottomSheet()
         initialiseMonthTV()
@@ -139,8 +147,13 @@ class CalendarHomeScreen : BaseFragment() {
     private fun listener() {
         cardView.setOnClickListener(View.OnClickListener { navigate(R.id.profileFragment) })
 //        tv_hs1bs_alert.setOnClickListener(View.OnClickListener { navigate(R.id.verification) })
+        chat_icon_iv.setOnClickListener{
+            navigate(R.id.contactScreenFragment)
+        }
+
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun observePreferenceData() {
         viewModel.mainHomeLiveDataModel.observe(viewLifecycleOwner, Observer { homeDataModel ->
             if(homeDataModel!=null) {
@@ -178,12 +191,19 @@ class CalendarHomeScreen : BaseFragment() {
     }
     private val visibleThreshold = 20
     var isLoading:Boolean = false
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun initializeVerticalCalendarRV() {
         val recyclerGenericAdapter: RecyclerGenericAdapter<VerticalCalendarDataItemModel> =
             RecyclerGenericAdapter<VerticalCalendarDataItemModel>(
                 activity?.applicationContext,
                 PFRecyclerViewAdapter.OnViewHolderClick<VerticalCalendarDataItemModel?> { view, position, item ->
-                    navigate(R.id.rosterDayFragment)
+                    //item?.year, item?.month, item?.date
+
+                    val activeDateTime = LocalDateTime.of(item?.year!!, item.month + 1, item.date, 0, 0, 0)
+
+                    val bundle = Bundle()
+                    bundle.putSerializable("active_date", activeDateTime)
+                    findNavController().navigate(R.id.rosterDayFragment, bundle)
                 },
                 RecyclerGenericAdapter.ItemInterface<VerticalCalendarDataItemModel?> { obj, viewHolder, position ->
                     if (obj!!.isMonth) {

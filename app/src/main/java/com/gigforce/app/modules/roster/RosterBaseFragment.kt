@@ -126,7 +126,7 @@ abstract class RosterBaseFragment: BaseFragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     fun setHourVisibility(parentView: ConstraintLayout, activeDateTime: LocalDateTime, actualDateTime: LocalDateTime) {
         if (isSameDate(activeDateTime, actualDateTime)) {
-            todayHourActive(parentView, activeDateTime)
+            todayHourActive(parentView, actualDateTime)
         }
         else if (isLessDate(activeDateTime, actualDateTime)) {
             allHourInactive(parentView)

@@ -12,8 +12,8 @@ android {
         applicationId "com.gigforce.app"
         minSdkVersion 23
         targetSdkVersion 29
-        versionCode 19
-        versionName "1.10.3"
+        versionCode 21
+        versionName "1.10.5"
 
         vectorDrawables.useSupportLibrary = true
 
@@ -184,7 +184,7 @@ dependencies {
     implementation 'com.akexorcist:round-corner-progress-bar:2.1.1'
 
     // semi circle progressbar
-    implementation 'com.github.lzyzsd:circleprogress:1.1.1'
+    implementation 'com.github.lzyzsd:circleprogress:1.2.1'
 
     // timeline view
     implementation 'com.github.vipulasri:timelineview:1.1.5'

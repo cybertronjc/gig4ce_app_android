@@ -53,7 +53,7 @@ class LoginSuccessfulFragment : BaseFragment() {
                 if (profile.status) {
                     popFragmentFromStack(R.id.loginSuccessfulFragment)
                     if (profile.isOnboardingCompleted!=null && profile.isOnboardingCompleted) {
-                        navigateWithAllPopupStack(R.id.mainHomeScreen)
+                        navigateWithAllPopupStack(R.id.landinghomefragment)
                     } else {
                         navigateWithAllPopupStack(R.id.onboardingfragment)
                     }

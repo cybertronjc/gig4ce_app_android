@@ -130,7 +130,7 @@
                     android:ems="10"
                     android:inputType="date"
                     android:focusable="false"
-                    android:drawableEnd="@drawable/ic_calendar"
+                    android:drawableEnd="@drawable/ic_calendar_small"
                     android:layout_marginTop="8dp" />
             </LinearLayout>
             <LinearLayout
@@ -150,7 +150,7 @@
                     android:ems="10"
                     android:inputType="date"
                     android:focusable="false"
-                    android:drawableEnd="@drawable/ic_calendar"
+                    android:drawableEnd="@drawable/ic_calendar_small"
                     android:layout_marginTop="8dp" />
             </LinearLayout>
         </LinearLayout>

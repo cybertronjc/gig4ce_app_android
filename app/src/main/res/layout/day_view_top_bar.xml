@@ -59,14 +59,12 @@
                 app:layout_constraintEnd_toStartOf="@id/available_toggle"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <com.google.android.material.switchmaterial.SwitchMaterial
+            <Switch
                 android:id="@+id/available_toggle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
-                app:thumbTint="@color/colorPrimary"
-                app:trackTint="#ffd9e6"
-                style="@style/Widget.MaterialComponents.CompoundButton.Switch"
+                android:theme="@style/Theme.switchButton"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/more_bottom"
                 app:layout_constraintTop_toTopOf="parent" />

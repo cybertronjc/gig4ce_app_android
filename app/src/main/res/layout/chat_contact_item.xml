@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="5dp"
+    android:paddingBottom="5dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/contactImage_cv"
+        android:layout_width="58dp"
+        android:layout_height="58dp"
+        app:cardCornerRadius="29dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="10dp"
+        >
+        <ImageView
+            android:id="@+id/contactImage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/aftab"
+            />
+    </androidx.cardview.widget.CardView>
+    <View
+        android:layout_width="11dp"
+        android:layout_height="11dp"
+        app:layout_constraintBottom_toBottomOf="@+id/contactImage_cv"
+        app:layout_constraintEnd_toStartOf="@+id/tv_dateValue"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:id="@+id/view_pinkCircle"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Title"
+        android:textSize="16sp"
+        android:fontFamily="@font/lato"
+        android:textColor="@color/gray_chat_module1"
+        app:layout_constraintStart_toEndOf="@+id/contactImage_cv"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginStart="10dp"
+        android:id="@+id/tv_nameValue"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="NA"
+        android:textSize="12sp"
+        android:fontFamily="@font/lato"
+        android:textColor="@color/gray_chat_module"
+        app:layout_constraintStart_toStartOf="@+id/tv_nameValue"
+        app:layout_constraintTop_toBottomOf="@+id/tv_nameValue"
+        android:layout_marginTop="5dp"
+        android:id="@+id/tv_dateValue"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="NA"
+        android:textSize="12sp"
+        android:textColor="@color/gray_chat_module"
+        android:fontFamily="@font/lato"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="10dp"
+        app:layout_constraintStart_toEndOf="@+id/tv_dateValue"
+        app:layout_constraintTop_toBottomOf="@+id/tv_nameValue"
+        android:id="@+id/tv_timeValue"
+        />
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="#35BDBDBD"
+        app:layout_constraintTop_toBottomOf="@+id/contactImage_cv"
+        app:layout_constraintStart_toStartOf="@+id/tv_dateValue"
+        android:layout_marginTop="3dp"
+        android:id="@+id/view_bottomBorder"
+        />
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -13,6 +13,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 @RequiresApi(Build.VERSION_CODES.O)
 class RosterDayViewModel: ViewModel() {
@@ -56,7 +57,95 @@ class RosterDayViewModel: ViewModel() {
     }
 
     init {
-        queryGigs()
+        //queryGigs()
+        gigsQuery.value = ArrayList(
+            listOf(
+                Gig(
+                    date = 18,
+                    month = 6,
+                    year = 2020,
+                    startHour = 10,
+                    startMinute = 0,
+                    duration = 8F,
+                    title = "Retail Sale executive",
+                    gigAmount = 0,
+                    gigStatus = "upcoming",
+                    isGigCompleted = false,
+                    isPaymentDone = false,
+                    gigRating = 0F
+                ),
+                Gig(
+                    date = 17,
+                    month = 6,
+                    year = 2020,
+                    startHour = 10,
+                    startMinute = 0,
+                    duration = 8F,
+                    title = "Retail Sale executive",
+                    gigAmount = 0,
+                    gigStatus = "upcoming",
+                    isGigCompleted = false,
+                    isPaymentDone = false,
+                    gigRating = 0F
+                ),
+                Gig(
+                    date = 16,
+                    month = 6,
+                    year = 2020,
+                    startHour = 10,
+                    startMinute = 0,
+                    duration = 8F,
+                    title = "Retail Sale executive",
+                    gigAmount = 1200,
+                    gigStatus = "completed",
+                    isGigCompleted = true,
+                    isPaymentDone = true,
+                    gigRating = 4.8F
+                ),
+                Gig(
+                    date = 15,
+                    month = 6,
+                    year = 2020,
+                    startHour = 10,
+                    startMinute = 0,
+                    duration = 8F,
+                    title = "Retail Sale executive",
+                    gigAmount = 1200,
+                    gigStatus = "completed",
+                    isGigCompleted = true,
+                    isPaymentDone = true,
+                    gigRating = 4.0F
+                ),
+                Gig(
+                    date = 14,
+                    month = 6,
+                    year = 2020,
+                    startHour = 16,
+                    startMinute = 0,
+                    duration = 3F,
+                    title = "Retail Sale executive",
+                    gigAmount = 400,
+                    gigStatus = "completed",
+                    isGigCompleted = true,
+                    isPaymentDone = true,
+                    gigRating = 5.0F
+                ),
+                Gig(
+                    date = 14,
+                    month = 6,
+                    year = 2020,
+                    startHour = 16,
+                    startMinute = 0,
+                    duration = 3F,
+                    title = "Retail Sale executive",
+                    gigAmount = 400,
+                    gigStatus = "completed",
+                    isGigCompleted = true,
+                    isPaymentDone = true,
+                    gigRating = 5.0F
+                )
+            )
+        )
 //        userGigs["20200522"] = ArrayList<Gig>(listOf(
 //            Gig(gigStatus = "upcoming", startHour = 9, startMinute = 30, duration = 3.5F),
 //            Gig(gigStatus = "completed", startHour = 4, startMinute = 0, duration = 4.0F)
@@ -80,38 +169,22 @@ class RosterDayViewModel: ViewModel() {
 
     fun getUpcomingGigsByDayTag(dayTag: String, gigsQuery: ArrayList<Gig>): ArrayList<Gig> {
         val filteredGigs = ArrayList<Gig>()
-        val pattern = SimpleDateFormat("yyyyMdd")
+        val pattern = DateTimeFormatter.ofPattern("yyyyMdd")
         for (gig in gigsQuery) {
-            val idx = pattern.format(gig.startDateTime!!.toDate())
-//            Log.d("RosterViewModel", "gettign tag $idx")
-//            Log.d("RosterViewModel", "dayTag $dayTag")
-//            Log.d("RosterViewModel", "gig ${gig.toString()}")
+            //val idx = pattern.format(gig.startDateTime!!)
+            val idx = gig.startDateTime!!.toLocalDate().format(pattern)
             if (dayTag == idx && gig.gigStatus == "upcoming")
                 filteredGigs.add(gig)
         }
-//        for (dayWiseGigs in userGigs) {
-//            if (dayWiseGigs.key == dayTag) {
-//                Log.d("HourView", "Adding Gigs")
-//                for (gig in dayWiseGigs.value) {
-//                    if (gig.gigStatus == "upcoming") {
-//                        gig.tag = "${gig.startHour}${gig.startMinute}${gig.gigStatus}"
-//                        Log.d("HourView", "Upcoming gig called")
-//                        filteredGigs.add(gig)
-//                    }
-//                }
-//            }
-//        }
         return filteredGigs
     }
 
     fun getCompletedGigsByDayTag(dayTag: String, gigsQuery: ArrayList<Gig>): ArrayList<Gig> {
         val filteredGigs = ArrayList<Gig>()
-        val pattern = SimpleDateFormat("yyyyMdd")
+        val pattern = DateTimeFormatter.ofPattern("yyyyMdd")
         for (gig in gigsQuery) {
-            val idx = pattern.format(gig.startDateTime!!.toDate())
-//            Log.d("RosterViewModel", "gettign tag $idx")
-//            Log.d("RosterViewModel", "dayTag $dayTag")
-//            Log.d("RosterViewModel", "gig ${gig.toString()}")
+            //val idx = pattern.format(gig.startDateTime!!)
+            val idx = gig.startDateTime!!.toLocalDate().format(pattern)
             if (dayTag == idx && gig.gigStatus == "completed" )
                 filteredGigs.add(gig)
         }

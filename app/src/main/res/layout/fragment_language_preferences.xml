@@ -63,6 +63,7 @@
             android:layout_marginLeft="15dp"
             android:paddingLeft="11dp"
             android:hint="en"
+            style="@style/Theme.RadioButtonLipstickPink"
             android:text="English"
             android:textSize="14sp" />
 
@@ -78,6 +79,7 @@
             android:layout_marginLeft="15dp"
             android:paddingLeft="11dp"
             android:hint="hi"
+            style="@style/Theme.RadioButtonLipstickPink"
             android:text="हिंदी"
             android:textSize="14sp" />
 
@@ -94,6 +96,7 @@
             android:paddingLeft="11dp"
             android:hint="te"
             android:text="తెలుగు"
+            style="@style/Theme.RadioButtonLipstickPink"
             android:textSize="14sp" />
 
         <View
@@ -109,6 +112,7 @@
             android:hint="gu"
             android:paddingLeft="11dp"
             android:text="ગુજરતી"
+            style="@style/Theme.RadioButtonLipstickPink"
             android:textSize="14sp" />
 
         <View
@@ -124,6 +128,7 @@
             android:paddingLeft="11dp"
             android:hint="pa"
             android:text="ਪੰਜਾਬੀ"
+            style="@style/Theme.RadioButtonLipstickPink"
             android:textSize="14sp" />
 
         <View
@@ -140,6 +145,7 @@
             android:paddingLeft="11dp"
             android:hint="fr"
             android:text="français"
+            style="@style/Theme.RadioButtonLipstickPink"
             android:textSize="14sp" />
 
         <View
@@ -155,6 +161,7 @@
             android:paddingLeft="11dp"
             android:hint="mr"
             android:text="मराठी"
+            style="@style/Theme.RadioButtonLipstickPink"
             android:textSize="14sp" />
 
     </RadioGroup>

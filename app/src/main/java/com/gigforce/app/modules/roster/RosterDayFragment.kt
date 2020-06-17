@@ -50,12 +50,22 @@ class RosterDayFragment: RosterBaseFragment() {
 
     lateinit var hourviewPageChangeCallBack: ViewPager2.OnPageChangeCallback
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            activeDateTime = LocalDateTime.parse(it.getSerializable("active_date").toString())
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         inflateView(R.layout.roster_day_fragment, inflater, container)
+
+        rosterViewModel.currentDateTime.value = activeDateTime
 
         return getFragmentView()
     }
@@ -192,7 +202,7 @@ class RosterDayFragment: RosterBaseFragment() {
     }
 
     private fun attachHourViewAdapter() {
-        val hourViewAdapter = HourViewAdapter(requireActivity(), 10000, actualDateTime)
+        val hourViewAdapter = HourViewAdapter(requireActivity(), 10000, activeDateTime)
         hourview_viewpager .adapter = hourViewAdapter
         hourview_viewpager.setCurrentItem(lastViewPosition, false)
     }

@@ -54,6 +54,7 @@
             android:text="Start Date: XX-XX-XXXX"
             style="@style/LatoRegular12Black"
             android:layout_marginTop="16dp"
+            android:letterSpacing="-0.01"
             app:layout_constraintTop_toBottomOf="@id/gig_id_text"
             app:layout_constraintStart_toStartOf="@id/start_barrier" />
 
@@ -63,6 +64,7 @@
             android:layout_height="wrap_content"
             android:text="End Date: XX-XX-XXXX"
             style="@style/LatoRegular12Black"
+            android:letterSpacing="-0.01"
             android:layout_marginTop="4dp"
             app:layout_constraintTop_toBottomOf="@id/start_date_text"
             app:layout_constraintStart_toStartOf="@id/start_barrier" />

@@ -32,6 +32,8 @@ class PaymentDisputeExpandedPage: WalletBaseFragment() {
             layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
             adapter = TimelineAdapter(ArrayList((1..10).toList()))
         }
+
+        back_button.setOnClickListener { requireActivity().onBackPressed() }
     }
 }
 

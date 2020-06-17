@@ -24,6 +24,9 @@ import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.RequestManager
+import com.bumptech.glide.request.RequestOptions
 import com.gigforce.app.R
 import com.gigforce.app.core.CoreConstants
 import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
@@ -47,6 +50,7 @@ abstract class BaseFragment : Fragment() {
     lateinit var navController: NavController
     lateinit var preferencesRepositoryForBaseFragment: PreferencesRepository
     private var configrepositoryObj: ConfigRepository? = null;
+    private var requestOptions : RequestOptions? = null
 
     companion object {
         var englishCode = "en"
@@ -382,4 +386,14 @@ abstract class BaseFragment : Fragment() {
         if (languageSelectionDialog != null) languageSelectionDialog!!.dismiss()
         super.onDetach()
     }
+
+
+    fun initGlide(): RequestManager?
+    {
+        if (requestOptions==null){
+            requestOptions= RequestOptions().placeholder(R.drawable.white_background).error(R.drawable.white_background)
+        }
+        return Glide.with(this).setDefaultRequestOptions(requestOptions!!)
+    }
+
 }
