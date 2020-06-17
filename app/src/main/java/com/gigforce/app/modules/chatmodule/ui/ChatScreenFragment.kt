@@ -24,13 +24,24 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 
-class ChatScreenFragment : BaseFragment(),PopupMenu.OnMenuItemClickListener {
+class ChatScreenFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener {
 
-    private lateinit var viewModel : ContactViewModel
-    private lateinit var mAdapter : ChatRecyclerAdapter
+    private lateinit var viewModel: ContactViewModel
+    private lateinit var mAdapter: ChatRecyclerAdapter
+    lateinit var imageUrl: String
+    lateinit var username: String
 
     companion object {
         fun newInstance() = ChatScreenFragment()
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            imageUrl = it.getSerializable(AppConstants.IMAGE_URL).toString()
+            username = it.getSerializable(AppConstants.CONTACT_NAME).toString()
+
+        }
     }
 
     override fun onCreateView(
@@ -39,17 +50,18 @@ class ChatScreenFragment : BaseFragment(),PopupMenu.OnMenuItemClickListener {
     ): View? {
         return inflateView(R.layout.fragment_chat_screen, inflater, container)
     }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         init()
         manageTime()
         subscribeViewModel()
-        viewModel.prepareChatList()
+        viewModel.prepareChatList(username)
         manageNewMessageToContact()
         manageBackIcon()
     }
 
-    private fun init(){
+    private fun init() {
         mAdapter = ChatRecyclerAdapter()
         initIntent()
         initListeners()
@@ -57,46 +69,46 @@ class ChatScreenFragment : BaseFragment(),PopupMenu.OnMenuItemClickListener {
         viewModel = ViewModelProviders.of(this).get(ContactViewModel::class.java)
     }
 
-    private fun initRecycler(){
+    private fun initRecycler() {
         rv_chats.layoutManager = LinearLayoutManager(activity?.applicationContext)
         rv_chats.addItemDecoration(VerticalItemDecorator(30))
         rv_chats.adapter = mAdapter
     }
 
-    private fun subscribeViewModel(){
+    private fun subscribeViewModel() {
         viewModel.getChatLiveData().observe(viewLifecycleOwner, Observer {
-            if (it!=null){
+            if (it != null) {
                 mAdapter.setData(it as ArrayList<ChatModel>)
-                rv_chats.scrollToPosition(it.size-1)
+                rv_chats.scrollToPosition(it.size - 1)
             }
         })
     }
 
-    private fun initIntent(){
-        val intentData = Intent()
-        val url = intentData.getStringExtra(AppConstants.IMAGE_URL)
-        val contactName = intentData.getStringExtra(AppConstants.CONTACT_NAME)
+    private fun initIntent() {
+//        val intentData = Intent()
+//        val url = intentData.getStringExtra(AppConstants.IMAGE_URL)
+//        val contactName = intentData.getStringExtra(AppConstants.CONTACT_NAME)
         val req = initGlide()
-        val uri = Uri.parse("android.resource://com.abhijai.gigschatdemo/drawable/" + url)
+        val uri = Uri.parse("android.resource://com.gigforce.app/drawable/" + imageUrl)
         req!!.load(uri).into(civ_personImage)
-        tv_nameValueInChat.text = contactName
+        tv_nameValueInChat.text = username
     }
 
-    private fun initListeners(){
+    private fun initListeners() {
         iv_verticalDots.setOnClickListener {
             manageMenu(it)
         }
     }
 
-    private fun manageMenu(view:View){
-        val popUp = PopupMenu(activity?.applicationContext,view)
+    private fun manageMenu(view: View) {
+        val popUp = PopupMenu(activity?.applicationContext, view)
         popUp.setOnMenuItemClickListener(this)
         popUp.inflate(R.menu.menu_chat)
         popUp.show()
     }
 
-    private fun manageTime():String{
-        var current : LocalDateTime
+    private fun manageTime(): String {
+        var current: LocalDateTime
         val formatter = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             current = LocalDateTime.now()
             DateTimeFormatter.ofPattern("HH:mm")
@@ -110,13 +122,12 @@ class ChatScreenFragment : BaseFragment(),PopupMenu.OnMenuItemClickListener {
         return formatted
     }
 
-    override fun onMenuItemClick(item: MenuItem?): Boolean = when(item?.itemId)
-    {
+    override fun onMenuItemClick(item: MenuItem?): Boolean = when (item?.itemId) {
         R.id.action_block -> {
             showToast("Block")
             true
         }
-        R.id.action_report->{
+        R.id.action_report -> {
             showToast("Report")
             true
         }
@@ -125,25 +136,25 @@ class ChatScreenFragment : BaseFragment(),PopupMenu.OnMenuItemClickListener {
         }
     }
 
-    private fun manageNewMessageToContact(){
+    private fun manageNewMessageToContact() {
         iv_sendMessage.setOnClickListener {
-            if (validateNewMessageTask()){
+            if (validateNewMessageTask()) {
                 val message = et_typedMessageValue.text.toString()
                 val msgTime = manageTime()
-                viewModel.addNewMessageToTheList(message,msgTime)
+                viewModel.addNewMessageToTheList(message, msgTime)
                 et_typedMessageValue.setText("")
             }
         }
     }
 
-    private fun validateNewMessageTask():Boolean{
-        if (et_typedMessageValue.text.toString().isBlank()){
+    private fun validateNewMessageTask(): Boolean {
+        if (et_typedMessageValue.text.toString().isBlank()) {
             return false
         }
         return true
     }
 
-    private fun manageBackIcon(){
+    private fun manageBackIcon() {
         iv_backArrowInChat.setOnClickListener {
             onBackPressed()
         }

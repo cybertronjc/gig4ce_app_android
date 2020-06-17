@@ -28,6 +28,7 @@ import com.google.firebase.storage.StorageReference
 import com.riningan.widget.ExtendedBottomSheetBehavior
 import com.riningan.widget.ExtendedBottomSheetBehavior.STATE_COLLAPSED
 import kotlinx.android.synthetic.main.calendar_home_screen.*
+import kotlinx.android.synthetic.main.fragment_add_aadhar_card_info.view.*
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.util.*
@@ -58,6 +59,7 @@ class CalendarHomeScreen : BaseFragment() {
         listener()
         observePreferenceData()
         languageSelectionProcess()
+
     }
 
     private fun languageSelectionProcess() {
@@ -145,6 +147,10 @@ class CalendarHomeScreen : BaseFragment() {
     private fun listener() {
         cardView.setOnClickListener(View.OnClickListener { navigate(R.id.profileFragment) })
 //        tv_hs1bs_alert.setOnClickListener(View.OnClickListener { navigate(R.id.verification) })
+        chat_icon_iv.setOnClickListener{
+            navigate(R.id.contactScreenFragment)
+        }
+
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

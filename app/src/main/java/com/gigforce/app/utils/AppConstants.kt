@@ -51,13 +51,15 @@ object AppConstants {
 
     const val FROM_CONTACT_MSG_1 = "What is Lorem Ipsum?"
     const val TO_CONTACT_MSG_1 =
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. " +
-                "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type " +
-                "specimen book."
+        "Hello sir. The one coffee machine in the box has a broken handle. What should I do?"
     const val FROM_CONTACT_MSG_2 = "Nice nice."
-    const val TO_CONTACT_MSG_2 = "Now you tell, Why do we use it?"
+    const val TO_CONTACT_MSG_2 = "Sir I just opened the box and it was broken. "
 
     const val FROM_CONTACT_MSG_3 =
-        "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout."
+        "Alright, we’ll return it. Can you keep it in the storage section in the damage goods section and make a not in the register?"
+
+    const val TO_CONTACT_MSG_3 = "Okay sir, will do that. Thank you."
+    const val FROM_CONTACT_MSG_4 ="Okay, let me know when done. Next time onwards also keep any damaged goods there and make a note in the register."
+    const val TO_CONTACT_MSG_4 = "Okay sir"
 
 }
