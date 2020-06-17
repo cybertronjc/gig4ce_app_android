@@ -14,7 +14,14 @@ class WalletViewModel: ViewModel() {
     var userWallet: MutableLiveData<Wallet> = MutableLiveData<Wallet>()
 
     init {
-        getUserWallet()
+        //getUserWallet()
+
+        userWallet.value = Wallet(
+            balance = 450,
+            isMonthlyGoalSet = true,
+            monthlyGoalLimit = 5000,
+            monthlyEarnedAmount = 4000
+        )
     }
 
     private fun getUserWallet() {

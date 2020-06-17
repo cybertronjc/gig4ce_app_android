@@ -15,15 +15,55 @@ class InvoiceViewModel: ViewModel() {
     }
 
     init {
+        generatedInvoice.value = ArrayList(
+            listOf(
+                Invoice(
+                    gigId = "GFP1234",
+                    agentName = "P&G Retail",
+                    date = 16,
+                    month = 6,
+                    year = 2020,
+                    gigTiming = "16 June, 10:00",
+                    gigAmount = 1200,
+                    invoiceStatus = "processed",
+                    isInvoiceGenerated = true,
+                    invoiceGeneratedTime = "16 June, 17:00"
+                ),
+                Invoice(
+                    gigId = "GFG1230",
+                    agentName = "P&G",
+                    date = 15,
+                    month = 6,
+                    year = 2020,
+                    gigTiming = "15 June, 10:00",
+                    gigAmount = 1200,
+                    invoiceStatus = "processed",
+                    isInvoiceGenerated = true,
+                    invoiceGeneratedTime = "16 June, 19:00"
+                ),
+                Invoice(
+                    gigId = "GPG1220",
+                    agentName = "P&G",
+                    date = 11,
+                    month = 6,
+                    year = 2020,
+                    gigTiming = "11 June, 10:00",
+                    gigAmount = 400,
+                    invoiceStatus = "processed",
+                    isInvoiceGenerated = true,
+                    invoiceGeneratedTime = "13 June, 17:00"
+                )
+            )
+        )
         pendingInvoices.value = ArrayList(
             listOf(Invoice(), Invoice(), Invoice())
         )
 
-        generatedInvoice.value = ArrayList(
-            listOf(Invoice(), Invoice(), Invoice(), Invoice())
-        )
+//        generatedInvoice.value = ArrayList(
+//            listOf(Invoice(), Invoice(), Invoice(), Invoice())
+//        )
 
-        monthlyInvoice.addAll(listOf(Invoice(), Invoice(), Invoice(), Invoice()))
+        monthlyInvoice = generatedInvoice.value!!
     }
 
 }

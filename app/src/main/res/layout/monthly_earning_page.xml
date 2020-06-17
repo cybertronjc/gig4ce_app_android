@@ -65,7 +65,7 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginTop="16dp"
-            android:text = "April 2020"
+            android:text = "June 2020"
             style="@style/LatoRegular14Black"
             android:textAlignment="gravity"
             android:gravity="center_vertical"

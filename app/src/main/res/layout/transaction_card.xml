@@ -18,7 +18,7 @@
             app:layout_constraintStart_toStartOf="parent" />
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/title"
+            android:id="@+id/t_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Transaction Title"
@@ -29,35 +29,36 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/timings"
+            android:id="@+id/t_timings"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="timings"
             android:layout_marginStart="5dp"
             style="@style/LatoRegularCardText12"
-            app:layout_constraintTop_toBottomOf="@id/title"
-            app:layout_constraintStart_toStartOf="@id/title" />
+            app:layout_constraintTop_toBottomOf="@id/t_title"
+            app:layout_constraintStart_toStartOf="@id/t_title" />
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/amount"
+            android:id="@+id/t_amount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Rs. 10000"
             style="@style/LatoRegular16Black"
-            android:layout_marginEnd="16dp"
-            app:layout_constraintTop_toTopOf="@id/title"
+            android:layout_marginEnd="24dp"
+            app:layout_constraintTop_toTopOf="@id/t_title"
             app:layout_constraintEnd_toEndOf="parent" />
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/status"
+            android:id="@+id/t_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="status"
+            android:textColor="#468800"
             style="@style/LatoRegularCardText12"
-            android:layout_marginStart="5dp"
-            app:layout_constraintTop_toBottomOf="@id/amount"
+            android:layout_marginEnd="12dp"
+            app:layout_constraintTop_toBottomOf="@id/t_amount"
             android:layout_marginTop="3dp"
-            app:layout_constraintStart_toStartOf="@id/amount" />
+            app:layout_constraintEnd_toEndOf="parent"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

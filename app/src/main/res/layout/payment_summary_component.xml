@@ -35,12 +35,13 @@
             android:id="@+id/monthly_earning_card_text"
             android:layout_width="wrap_content"
             android:layout_height="19dp"
-            android:text="SAMPLE TITLE"
+            android:text="Current month"
             android:layout_marginTop="40dp"
             android:layout_marginStart="60dp"
             style="@style/LatoRegularCardText12" />
 
         <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/monthly_earning_amount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -89,12 +90,13 @@
             android:id="@+id/invoice_due_card_text"
             android:layout_width="wrap_content"
             android:layout_height="19dp"
-            android:text="SAMPLE TITLE"
+            android:text="Invoice due"
             android:layout_marginTop="40dp"
             android:layout_marginStart="60dp"
             style="@style/LatoRegularCardText12" />
 
         <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/invoice_status_amount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -141,12 +143,13 @@
             android:id="@+id/payment_dispute_card_text"
             android:layout_width="wrap_content"
             android:layout_height="19dp"
-            android:text="SAMPLE TITLE"
+            android:text="Last updated, 17 June 2020"
             android:layout_marginTop="40dp"
             android:layout_marginStart="60dp"
             style="@style/LatoRegularCardText12" />
 
         <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/payment_dispute_amount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
