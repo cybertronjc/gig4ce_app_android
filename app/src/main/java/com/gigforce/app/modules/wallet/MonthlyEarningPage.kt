@@ -7,11 +7,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.app.R
 import com.gigforce.app.modules.roster.inflate
 import com.gigforce.app.modules.wallet.models.Invoice
+import kotlinx.android.synthetic.main.invoice_collapsed_card.view.*
 import kotlinx.android.synthetic.main.monthly_earning_page.*
 
 class MonthlyEarningPage: WalletBaseFragment() {
@@ -36,6 +38,18 @@ class MonthlyEarningPage: WalletBaseFragment() {
         earning_graph.attachAdapter()
 
         back_button.setOnClickListener { requireActivity().onBackPressed() }
+
+        earning_graph.month.observe(viewLifecycleOwner, Observer { month ->
+            monthly_text.text = "$month 2020"
+
+            if (month != "June") {
+                month_transactions.adapter = MonthlyTransactionAdapter(ArrayList<Invoice>())
+                (month_transactions.adapter as MonthlyTransactionAdapter).notifyDataSetChanged()
+            } else {
+                month_transactions.adapter = MonthlyTransactionAdapter(invoiceViewModel.monthlyInvoice)
+                (month_transactions.adapter as MonthlyTransactionAdapter).notifyDataSetChanged()
+            }
+        })
     }
 }
 
@@ -78,6 +92,13 @@ class MonthlyTransactionAdapter(private val transactions: ArrayList<Invoice>): R
 
         fun bindTransaction(transaction: Invoice) {
             this.transaction = transaction
+            view.start_date_text.text = "Invoice Generated ${transaction.invoiceGeneratedTime}"
+            view.end_date_text.text = ""
+            view.gig_invoice_status.text = "processed"
+            view.gig_invoice_status.setTextColor(view.resources.getColor(R.color.app_green))
+            view.agent_name.text = transaction.agentName
+            view.gig_amount_text.text = "Rs ${transaction.gigAmount}"
+            view.gig_id_text.text = "Gig Id: ${transaction.gigId}"
         }
     }
 }

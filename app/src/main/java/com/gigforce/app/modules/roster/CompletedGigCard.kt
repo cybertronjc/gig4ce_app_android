@@ -6,6 +6,8 @@ import android.view.View
 import com.gigforce.app.R
 import com.google.android.material.card.MaterialCardView
 import kotlinx.android.synthetic.main.completed_gig_card.view.*
+import kotlinx.android.synthetic.main.completed_gig_card.view.gig_timing
+import kotlinx.android.synthetic.main.upcoming_gig_card.view.*
 
 class CompletedGigCard: MaterialCardView {
     constructor(context: Context): super(context)
@@ -56,4 +58,26 @@ class CompletedGigCard: MaterialCardView {
             main_card.layoutParams.height = value
             main_card.requestLayout()
         }
+
+    var gigRating: Float = 0F
+        set(value) {
+            field = value
+            if(value > 0) {
+                gig_rating.text = value.toString()
+            }
+        }
+
+    var gigAmount: Int = 0
+        set(value) {
+            field = value
+            rupee_value.text = value.toString()
+        }
+
+    fun setTimings() {
+        var endHour = gigStartHour + gigDuration.toInt()
+        var endMinute = ((gigDuration - gigDuration.toInt())*100).toInt()
+        gig_timing.text = (
+                String.format("%02d", gigStartHour) + ":" + String.format("%02d", gigStartMinute) +
+                        "-" + String.format("%02d", endHour) + ":" + String.format("%02d", endMinute))
+    }
 }

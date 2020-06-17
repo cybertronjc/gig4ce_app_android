@@ -176,6 +176,7 @@ class HourViewFragment: RosterBaseFragment() {
         upcomingCard.duration = gig.duration
         upcomingCard.gig_title.text = gig.title
         upcomingCard.cardHeight = (itemHeight * gig.duration).toInt().px
+        upcomingCard.setTimings()
 
         val params = ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.WRAP_CONTENT)
         upcomingCard.setLayoutParams(params)
@@ -192,6 +193,7 @@ class HourViewFragment: RosterBaseFragment() {
 
         upcomingCard.setOnClickListener {
             Toast.makeText(requireContext(), "Clicked on upcoming card", Toast.LENGTH_SHORT).show()
+            navigate(R.id.gigPageExpanded)
         }
     }
 
@@ -205,6 +207,9 @@ class HourViewFragment: RosterBaseFragment() {
         completedGigCard.id = View.generateViewId()
         completedGigCard.gigSuccess = gig.isGigCompleted
         completedGigCard.paymentSuccess = gig.isPaymentDone
+        completedGigCard.gigRating = gig.gigRating
+        completedGigCard.gigAmount = gig.gigAmount
+        completedGigCard.setTimings()
 
         val params = ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.WRAP_CONTENT)
         completedGigCard.setLayoutParams(params)
@@ -222,6 +227,7 @@ class HourViewFragment: RosterBaseFragment() {
 
         completedGigCard.setOnClickListener {
             Toast.makeText(requireContext(), "Clicked on completed card", Toast.LENGTH_SHORT).show()
+            navigate(R.id.gigPageExpanded)
         }
 
     }
@@ -248,12 +254,12 @@ class HourViewFragment: RosterBaseFragment() {
             widget.requestLayout()
 
             widget.top_half.setOnClickListener {
-                setAndShowBottomSheet(index-1, index)
+                //setAndShowBottomSheet(index-1, index)
 
            }
 
             widget.bottom_half.setOnClickListener {
-                setAndShowBottomSheet(index, index+1)
+                //setAndShowBottomSheet(index, index+1)
 
             }
 

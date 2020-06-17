@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.core.content.res.ResourcesCompat
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
@@ -34,6 +35,8 @@ class MonthlyGraphCard: MaterialCardView {
         "-", "January", "February", "March", "April", "May", "June", "July",
         "August", "September", "October", "November", "December"
     ))
+
+    var month: MutableLiveData<String> = MutableLiveData("June")
 
     init {
         View.inflate(context, R.layout.monthly_graph_card, this)
@@ -72,6 +75,7 @@ class MonthlyGraphCard: MaterialCardView {
             //Log.d("MCD", snapPosition.toString())
             if (snapPosition != null) {
                 month_text.text = months[snapPosition%12 + 1]
+                month.value = months[snapPosition%12 + 1]
             }
         }
 
@@ -123,10 +127,26 @@ class MonthlyGraphAdapter(private val transactions: ArrayList<Int>): RecyclerVie
             private val TRANSACTION_KEY = "TRANSACTION"
         }
 
-        fun bindGraph(transaction: String) {
+        fun bindGraph(month: String) {
             //view.text.text = transaction
             //view.me_status_icon.setImageResource()
-            view.me_status_icon.setImageDrawable(ResourcesCompat.getDrawable(view.resources, R.drawable.ic_ok, view.context.theme))
+            if (month == "June") {
+                view.me_status_icon.setImageDrawable(
+                    ResourcesCompat.getDrawable(
+                        view.resources,
+                        R.drawable.ic_ok,
+                        view.context.theme
+                    )
+                )
+                view.me_amount.text = "4000"
+                view.arc.progress = 80
+            }
+            else {
+                view.me_status_icon.visibility = View.GONE
+                view.me_status_text.visibility = View.GONE
+                view.me_amount.text = "0"
+                view.arc.progress = 0
+            }
 
         }
     }

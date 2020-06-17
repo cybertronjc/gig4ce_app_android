@@ -53,10 +53,8 @@ class RosterDayFragment: RosterBaseFragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d("RDF", "Coming in oncreate with arguments " + arguments.toString())
         arguments?.let {
             activeDateTime = LocalDateTime.parse(it.getSerializable("active_date").toString())
-            Log.d("RDF", activeDateTime.toString())
         }
     }
 
