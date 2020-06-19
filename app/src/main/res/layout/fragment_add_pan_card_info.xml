@@ -294,16 +294,15 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="30dp"
                 app:border_radius="12dp"
-                app:inner_color="#888888"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:outer_color="#dddddd"
                 app:rotate_icon="false"
                 app:slider_height="48dp"
-                app:slider_icon="@drawable/ic_arrow_forward_white"
+                app:slider_icon="@drawable/ic_add_pink"
                 app:slider_icon_color="@color/white"
                 app:text="SAVE" />
 
             <com.google.android.material.checkbox.MaterialCheckBox
+                android:id="@+id/panDataCorrectCB"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="13dp"

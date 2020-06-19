@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
 import com.gigforce.app.R
@@ -12,7 +13,11 @@ import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
 import com.gigforce.app.modules.gigerVerfication.ImageSource
 import com.gigforce.app.modules.gigerVerfication.SelectImageSourceBottomSheet
 import com.gigforce.app.modules.gigerVerfication.SelectImageSourceBottomSheetActionListener
+import kotlinx.android.synthetic.main.fragment_add_bank_details_info.*
 import kotlinx.android.synthetic.main.fragment_add_pan_card_info.*
+import kotlinx.android.synthetic.main.fragment_add_pan_card_info.fathersNameTV
+import kotlinx.android.synthetic.main.fragment_add_pan_card_info.nameTV
+import kotlinx.android.synthetic.main.fragment_add_pan_card_info.toolbar
 import kotlinx.android.synthetic.main.fragment_verification_image_holder.view.*
 import java.io.File
 
@@ -73,6 +78,14 @@ class AddPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetActio
             }
         }
 
+        panDataCorrectCB.setOnCheckedChangeListener { _, isChecked ->
+
+            if (isChecked) {
+                enableSubmitButton()
+            } else
+                disableSubmitButton()
+        }
+
         editPanInfoLayout.setOnClickListener {
             navigate(R.id.editPanInfoBottomSheet)
         }
@@ -93,6 +106,11 @@ class AddPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetActio
 
     private fun enableSubmitButton() {
         panSubmitSliderBtn.isEnabled = true
+
+        panSubmitSliderBtn.outerColor =
+            ResourcesCompat.getColor(resources, R.color.light_pink, null)
+        panSubmitSliderBtn.innerColor =
+            ResourcesCompat.getColor(resources, R.color.lipstick, null)
     }
 
     private fun disableSubmitButton() {
