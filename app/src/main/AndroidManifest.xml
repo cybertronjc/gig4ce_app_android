@@ -24,7 +24,6 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:configChanges="layoutDirection|locale"
         android:theme="@style/AppTheme">
         <!--
                Set to true if your app is Standalone, that is, it does not require the handheld
@@ -60,11 +59,12 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"
+            android:configChanges="layoutDirection|locale|orientation|screenSize|keyboardHidden"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"
                         android:resource="@array/preloaded_fonts"
-                        android:screenOrientation="portrait"
                         android:windowSoftInputMode="adjustResize"/>
             </intent-filter>
         </activity>

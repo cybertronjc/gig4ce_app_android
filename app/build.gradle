@@ -191,6 +191,10 @@ dependencies {
 
     //Camera View
     implementation 'com.otaliastudios:cameraview:2.6.2'
+
+    //Exo Player
+    implementation 'com.google.android.exoplayer:exoplayer-core:2.11.5'
+    implementation 'com.google.android.exoplayer:exoplayer-ui:2.11.5'
 }
 
 apply plugin: 'com.google.gms.google-services'
