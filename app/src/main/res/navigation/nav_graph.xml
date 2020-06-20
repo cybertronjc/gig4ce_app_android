@@ -523,5 +523,10 @@
         android:id="@+id/gigPageExpanded"
         android:name="com.gigforce.app.modules.roster.GigPageExpanded"
         android:label="GigPageExpanded" />
+
+    <fragment
+        android:id="@+id/walletExpandedPage"
+        android:name="com.gigforce.app.modules.wallet.models.WalletExpandedPage"
+        android:label="WalletExpandedPage" />
 </navigation>
 

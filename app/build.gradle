@@ -191,6 +191,9 @@ dependencies {
 
     //Camera View
     implementation 'com.otaliastudios:cameraview:2.6.2'
+
+    // Sticky header
+    implementation 'com.github.qiujayen:sticky-layoutmanager:1.0.1'
 }
 
 apply plugin: 'com.google.gms.google-services'

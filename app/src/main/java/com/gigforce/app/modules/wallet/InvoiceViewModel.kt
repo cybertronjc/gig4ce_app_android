@@ -10,6 +10,8 @@ class InvoiceViewModel: ViewModel() {
 
     var monthlyInvoice: ArrayList<Invoice> = ArrayList()
 
+    lateinit var allInvoices: ArrayList<Invoice>
+
     companion object {
         fun newInstance() = InvoiceViewModel()
     }
@@ -76,6 +78,56 @@ class InvoiceViewModel: ViewModel() {
 //        )
 
         monthlyInvoice = generatedInvoice.value!!
+
+        allInvoices = ArrayList(
+            listOf(
+                Invoice(
+                    date = 12,
+                    month = 6,
+                    year = 2020
+                ),
+                Invoice(
+                    date = 1,
+                    month = 6,
+                    year = 2020
+                ),
+                Invoice(
+                    date = 15,
+                    month = 5,
+                    year = 2020
+                ),
+                Invoice(
+                    date = 1,
+                    month = 5,
+                    year = 2020
+                ),
+                Invoice(
+                    date = 5,
+                    month = 3,
+                    year = 2020
+                ),
+                Invoice(
+                    date = 2,
+                    month = 1,
+                    year = 2020
+                ),
+                Invoice(
+                    date = 12,
+                    month = 11,
+                    year = 2019
+                ),
+                Invoice(
+                    date = 13,
+                    month = 6,
+                    year = 2019
+                ),
+                Invoice(
+                    date = 15,
+                    month = 3,
+                    year = 2018
+                )
+            )
+        )
     }
 
 }
