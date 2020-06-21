@@ -72,7 +72,7 @@ class CalendarHomeScreen : BaseFragment() {
                 var preferencesDataModel: PreferencesDataModel? =
                     value!!.toObject(PreferencesDataModel::class.java)
                 if (preferencesDataModel != null) {
-                    var languageCode = getSharedData(AppConstants.APP_LANGUAGE, "")
+                    var languageCode = getAppLanguageCode()
                     if (preferencesDataModel.languageCode == null || preferencesDataModel.languageCode.equals(
                             ""
                         )
@@ -109,13 +109,13 @@ class CalendarHomeScreen : BaseFragment() {
         val yesBtn = languageSelectionDialog?.findViewById(R.id.yes) as TextView
         val noBtn = languageSelectionDialog?.findViewById(R.id.cancel) as TextView
         yesBtn.setOnClickListener {
-            saveSharedData(AppConstants.APP_LANGUAGE, lastLoginLanguageCode)
-            saveSharedData(AppConstants.APP_LANGUAGE_NAME, lastLoginLanguageName)
+            saveAppLanuageCode(lastLoginLanguageCode)
+            saveAppLanguageName(lastLoginLanguageName)
             updateResources(lastLoginLanguageCode)
             languageSelectionDialog?.dismiss()
         }
         noBtn.setOnClickListener {
-            var currentLanguageCode = getSharedData(AppConstants.APP_LANGUAGE, "")
+            var currentLanguageCode = getAppLanguageCode()
             if (currentLanguageCode != null) {
                 preferencesRepositoryForBaseFragment.setDataAsKeyValue(
                     "languageName",

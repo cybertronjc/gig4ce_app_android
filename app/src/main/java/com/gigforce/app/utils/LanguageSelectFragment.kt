@@ -1,6 +1,5 @@
 package com.gigforce.app.utils
 
-import android.content.res.Configuration
 import android.content.res.Resources
 import android.os.Bundle
 import android.view.*
@@ -8,7 +7,6 @@ import android.widget.RadioButton
 import com.franmontiel.localechanger.LocaleChanger
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
-import com.gigforce.app.modules.auth.AuthFlowFragment
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_select_language.*
 import java.util.*
@@ -37,20 +35,26 @@ class LanguageSelectFragment : BaseFragment() {
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        dismissLanguageSelectionDialog()
+//        dismissLanguageSelectionDialog()
         storeDeviceLanguage()
         initializer()
         setDefaultLanguage()
         listener()
     }
-    private fun dismissLanguageSelectionDialog() {
-        //LanguageSelectFragment is the first screen we don't need alert here and its picking up device language already for radio button.
-        if(languageSelectionDialog!=null){
-            languageSelectionDialog!!.dismiss()
-        }
+
+    override fun isDeviceLanguageChangedDialogRequired(): Boolean {
+        return false
     }
+
+//    private fun dismissLanguageSelectionDialog() {
+//        //LanguageSelectFragment is the first screen we don't need alert here and its picking up device language already for radio button.
+//        if(languageSelectionDialog!=null){
+//            languageSelectionDialog!!.dismiss()
+//        }
+//    }
+
     private fun storeDeviceLanguage() {
-        saveSharedData(AppConstants.DEVICE_LANGUAGE, Resources.getSystem().getConfiguration().locale.getLanguage())
+        saveDeviceLanguage(Resources.getSystem().getConfiguration().locale.getLanguage())
     }
 
     private fun initializer() {
@@ -88,7 +92,7 @@ class LanguageSelectFragment : BaseFragment() {
             val radioButton = groupradio.findViewById<RadioButton>(selectedId)
             val lang = radioButton.hint.toString()
             updateResources(lang)
-            saveSharedData(AppConstants.APP_LANGUAGE, lang)
+            saveAppLanuageCode(lang)
             navNext()
         }
     }

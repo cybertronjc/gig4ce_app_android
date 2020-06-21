@@ -14,8 +14,8 @@ class PaymentDisputePage: WalletBaseFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        inflateView(R.layout.payment_dispute_page, inflater, container)
-        return getFragmentView()
+
+        return inflateView(R.layout.payment_dispute_page, inflater, container)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

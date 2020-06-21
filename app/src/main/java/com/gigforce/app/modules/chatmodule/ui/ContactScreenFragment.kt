@@ -113,7 +113,7 @@ class ContactScreenFragment : BaseFragment(),OnContactClickListener {
             val bundle = Bundle()
             bundle.putSerializable(AppConstants.IMAGE_URL, url)
             bundle.putSerializable(AppConstants.CONTACT_NAME, name)
-            navController.navigate(R.id.chatScreenFragment, bundle)
+            navigate(R.id.chatScreenFragment, bundle)
         }
     }
 }

@@ -58,7 +58,7 @@ class Login : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if (getSharedData(AppConstants.INTRO_COMPLETE, null) == null) {
+        if (getIntroCompleted() == null) {
             navigateWithAllPopupStack(R.id.authFlowFragment)
         } else {
             viewModel.activity = this.requireActivity()
@@ -81,7 +81,7 @@ class Login : BaseFragment() {
         }
         val cancel = dialog?.findViewById<TextView>(R.id.cancel)
         cancel.setOnClickListener() {
-            removeSavedShareData(AppConstants.INTRO_COMPLETE)
+            removeIntroComplete()
             popFragmentFromStack(R.id.Login)
             navigate(R.id.authFlowFragment)
             dialog?.dismiss()
@@ -101,7 +101,7 @@ class Login : BaseFragment() {
 
     fun navigateToOTPVarificationScreen() {
         // fixed by PD - during a hotfix for apk release - doubleclick issue resolved
-        if (navController.currentDestination?.id == R.id.Login) {
+        if (getNavigationController().currentDestination?.id == R.id.Login) {
             try {
                 findNavController().navigate(
                     LoginDirections.actionLogin2ToVerifyOTP(
@@ -180,7 +180,7 @@ class Login : BaseFragment() {
 
     private fun getAllEarlierMobileNumbers() {
         var deviceMobileNos = ArrayList<String>()
-        var oldMobileNumbers = getSharedData(AppConstants.ALL_MOBILE_NUMBERS_USED, "")
+        var oldMobileNumbers = getAllMobileNumber()
         if (!oldMobileNumbers.equals("")) {
             var oldDeviceMobileNosList = oldMobileNumbers?.split(",")
             for (i in 0..(oldDeviceMobileNosList?.size!!) - 1!!) {
