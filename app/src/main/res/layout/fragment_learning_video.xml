@@ -72,6 +72,7 @@
             android:backgroundTint="@color/white"
             android:src="@drawable/ic_play"
             app:layout_constraintEnd_toEndOf="parent"
+            app:backgroundTint="@color/light_grey"
             app:layout_constraintTop_toBottomOf="@+id/learningToolbarLayout"
             app:tint="@color/lipstick" />
 

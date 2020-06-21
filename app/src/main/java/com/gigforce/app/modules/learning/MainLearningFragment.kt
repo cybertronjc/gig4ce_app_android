@@ -96,7 +96,7 @@ class MainLearningFragment : BaseFragment() {
             RecyclerGenericAdapter<TitleSubtitleModel>(
                 activity?.applicationContext,
                 PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
-
+                    navigate(R.id.learningVideoFragment)
                 },
                 RecyclerGenericAdapter.ItemInterface<TitleSubtitleModel?> { obj, viewHolder, position ->
                     var view = getView(viewHolder, R.id.card_view)

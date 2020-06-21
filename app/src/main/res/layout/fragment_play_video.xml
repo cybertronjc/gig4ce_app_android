@@ -3,51 +3,54 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context=".modules.learning.learningVideo.PlayVideoDialogFragment">
 
     <com.google.android.exoplayer2.ui.PlayerView
         android:id="@+id/playerView"
         android:layout_width="match_parent"
-        android:layout_height="303dp" />
+        android:layout_height="303dp"
+        app:controller_layout_id="@layout/fragment_play_video_controls"
+        />
 
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#d9000000"
-        android:gravity="center_vertical"
-        android:minHeight="50dp"
-        android:orientation="horizontal">
+<!--    <LinearLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:background="#d9000000"-->
+<!--        android:gravity="center_vertical"-->
+<!--        android:minHeight="50dp"-->
+<!--        android:orientation="horizontal">-->
 
-        <ImageView
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_marginLeft="20dp"
-            android:src="@drawable/ic_play" />
+<!--        <ImageView-->
+<!--            android:layout_width="20dp"-->
+<!--            android:layout_height="20dp"-->
+<!--            android:layout_marginLeft="20dp"-->
+<!--            android:src="@drawable/ic_play" />-->
 
-        <androidx.appcompat.widget.AppCompatSeekBar
-            android:layout_width="180dp"
-            android:layout_height="wrap_content" />
+<!--        <androidx.appcompat.widget.AppCompatSeekBar-->
+<!--            android:layout_width="180dp"-->
+<!--            android:layout_height="wrap_content" />-->
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="60 Sec"
-            android:textColor="@color/white" />
-
-
-        <ImageView
-            android:id="@+id/fullScreenIV"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:clickable="true"
-            android:focusable="true"
-            android:layout_marginLeft="20dp"
-            android:src="@drawable/ic_play" />
+<!--        <TextView-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="60 Sec"-->
+<!--            android:textColor="@color/white" />-->
 
 
-    </LinearLayout>
+<!--        <ImageView-->
+<!--            android:id="@+id/fullScreenIV"-->
+<!--            android:layout_width="20dp"-->
+<!--            android:layout_height="20dp"-->
+<!--            android:clickable="true"-->
+<!--            android:focusable="true"-->
+<!--            android:layout_marginLeft="20dp"-->
+<!--            android:src="@drawable/ic_play" />-->
+
+
+<!--    </LinearLayout>-->
 
 
 </LinearLayout>
