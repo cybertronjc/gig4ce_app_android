@@ -50,16 +50,11 @@ class BSCalendarScreenFragment : BaseFragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(BSCalendarScreenViewModel::class.java)
         initializeBottomSheet()
-        dismissLanguageSelectionDialog()
     }
 
-    private fun dismissLanguageSelectionDialog() {
-        //on Homescreen there is two fragment so two dialog will be there so dismiss one dialog
-        if(languageSelectionDialog!=null){
-            languageSelectionDialog!!.dismiss()
-        }
+    override fun isDeviceLanguageChangedDialogRequired(): Boolean {
+        return false
     }
-
 
     private fun initializeBottomSheet() {
 //        nsv.setBackground(generateBackgroundWithShadow(nsv,R.color.white,

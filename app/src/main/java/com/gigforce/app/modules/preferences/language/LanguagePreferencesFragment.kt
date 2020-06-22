@@ -49,8 +49,8 @@ class LanguagePreferencesFragment : BaseFragment() {
                 val radioButton = groupradio.findViewById<RadioButton>(checkedId)
                 val lang = radioButton.hint.toString()
                 updateResources(lang)
-                saveSharedData(AppConstants.APP_LANGUAGE, lang)
-                saveSharedData(AppConstants.APP_LANGUAGE_NAME,radioButton.text.toString())
+                saveAppLanuageCode(lang)
+                saveAppLanguageName(radioButton.text.toString())
                 viewModel.saveLanguageToFirebase(radioButton.text.toString(),radioButton.hint.toString())
             })
         back_arrow_iv.setOnClickListener(View.OnClickListener { activity?.onBackPressed() })
@@ -60,7 +60,7 @@ class LanguagePreferencesFragment : BaseFragment() {
         groupradio.clearCheck()
     }
     private fun setDefaultLanguage() {
-        val lang = getSharedData(AppConstants.APP_LANGUAGE, null)
+        val lang = getAppLanguageCode()
         when(lang){
             "en" -> groupradio.findViewById<RadioButton>(R.id.en).isChecked = true
             "hi" -> groupradio.findViewById<RadioButton>(R.id.hi).isChecked = true
@@ -71,6 +71,5 @@ class LanguagePreferencesFragment : BaseFragment() {
             "mr" -> groupradio.findViewById<RadioButton>(R.id.mr).isChecked = true
             else -> groupradio.findViewById<RadioButton>(R.id.en).isChecked = true
         }
-
     }
 }

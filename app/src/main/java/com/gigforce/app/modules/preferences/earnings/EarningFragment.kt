@@ -16,6 +16,7 @@ import android.widget.TextView
 import androidx.lifecycle.Observer
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
+import com.gigforce.app.core.base.dialog.ConfirmationDialogOnClickListener
 import com.gigforce.app.modules.preferences.SharedPreferenceViewModel
 import kotlinx.android.synthetic.main.earning_fragment.*
 

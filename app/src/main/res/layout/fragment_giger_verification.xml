@@ -26,8 +26,8 @@
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:fillViewport="true"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -147,29 +147,6 @@
                 android:background="#cdccd1"
                 app:layout_constraintTop_toBottomOf="@id/bankDetailsLayout" />
 
-
-            <com.ncorti.slidetoact.SlideToActView
-                android:id="@+id/submitSliderBtn"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="30dp"
-                app:border_radius="12dp"
-                app:inner_color="#888888"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:outer_color="#dddddd"
-                app:slider_height="48dp"
-                app:slider_icon="@drawable/ic_arrow_forward_white"
-                app:slider_icon_color="@color/white"
-                app:text="SAVE" />
-
-            <com.google.android.material.checkbox.MaterialCheckBox
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="18dp"
-                android:layout_marginStart="16dp"
-                android:text="I Authorise Gigforce to conduct/ update/ fetch my verification as required by regulations."
-                app:layout_constraintBottom_toTopOf="@id/submitSliderBtn"
-                app:layout_constraintTop_toBottomOf="@id/itemsEndingSeparator" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

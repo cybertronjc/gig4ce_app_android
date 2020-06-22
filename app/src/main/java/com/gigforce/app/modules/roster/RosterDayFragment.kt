@@ -63,11 +63,8 @@ class RosterDayFragment: RosterBaseFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        inflateView(R.layout.roster_day_fragment, inflater, container)
-
         rosterViewModel.currentDateTime.value = activeDateTime
-
-        return getFragmentView()
+        return inflateView(R.layout.roster_day_fragment, inflater, container)
     }
 
 

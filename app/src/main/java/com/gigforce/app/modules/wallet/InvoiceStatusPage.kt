@@ -27,8 +27,7 @@ class InvoiceStatusPage: WalletBaseFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        inflateView(R.layout.all_invoice_status_page, inflater, container)
-        return getFragmentView()
+        return inflateView(R.layout.all_invoice_status_page, inflater, container)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -73,8 +72,7 @@ class InvoicePageFragment: WalletBaseFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        inflateView(R.layout.invoice_status_page, inflater, container)
-        return getFragmentView()
+        return inflateView(R.layout.invoice_status_page, inflater, container)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

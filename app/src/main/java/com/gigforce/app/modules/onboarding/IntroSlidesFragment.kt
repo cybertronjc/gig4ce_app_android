@@ -41,11 +41,14 @@ class IntroSlidesFragment : BaseFragment() {
         setupViewPager()
     }
 
+    override fun isDeviceLanguageChangedDialogRequired(): Boolean {
+        return false
+    }
     fun setupViewPager(){
         this.viewpager.adapter = IntroSlidesViewPagerAdapter(this.viewpager, object: OnIntroSlidesCompleted(){
 
             override fun invoke() {
-                saveSharedData(AppConstants.INTRO_COMPLETE, "true")
+                saveIntroCompleted()
                 navigate(R.id.authFlowFragment)
             }
         })
@@ -81,7 +84,7 @@ class IntroSlidesFragment : BaseFragment() {
 
     override fun onBackPressed(): Boolean {
         if(this.viewpager.currentItem==0){
-            removeSavedShareData(AppConstants.INTRO_COMPLETE)
+            removeIntroComplete()
             return false
         }
         else{

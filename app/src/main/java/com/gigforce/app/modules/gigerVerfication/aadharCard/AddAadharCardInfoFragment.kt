@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
@@ -76,7 +76,25 @@ class AddAadharCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetAc
             )
         }
 
+        aadharFrontImageHolder.uploadImageLayout.reuploadBtn.setOnClickListener {
+            currentlyClickingImageOfSide = AadharCardSides.FRONT_SIDE
+
+            SelectImageSourceBottomSheet.launch(
+                childFragmentManager = childFragmentManager,
+                selectImageSourceBottomSheetActionListener = this
+            )
+        }
+
         aadharBackImageHolder.uploadDocumentCardView.setOnClickListener {
+            currentlyClickingImageOfSide = AadharCardSides.BACK_SIDE
+
+            SelectImageSourceBottomSheet.launch(
+                childFragmentManager = childFragmentManager,
+                selectImageSourceBottomSheetActionListener = this
+            )
+        }
+
+        aadharBackImageHolder.uploadImageLayout.reuploadBtn.setOnClickListener {
             currentlyClickingImageOfSide = AadharCardSides.BACK_SIDE
 
             SelectImageSourceBottomSheet.launch(
@@ -117,19 +135,43 @@ class AddAadharCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetAc
             return
         else if (currentlyClickingImageOfSide == AadharCardSides.BACK_SIDE) {
             aadharBackImagePath = File("ma")
+            showBackAadharCard(aadharBackImagePath)
             enableSubmitButton()
         } else if (currentlyClickingImageOfSide == AadharCardSides.FRONT_SIDE) {
             aadharFrontImagePath = File("ma")
+            showFrontAadharCard(aadharFrontImagePath)
             enableSubmitButton()
         }
 
         setAadharInfoOnView(
-            name = "Rahul Jr",
+            name = "Rahul Jain",
             dob = "11/09/1990",
             gender = "Male",
             aadharNo = "2345 7624 9238",
-            address = "PU23SDDLOJIJ"
+            address = "House no 3601, PT-Vihar, New Delhi, Delhi 110033"
         )
+    }
+
+    private fun showFrontAadharCard(aadharFrontImagePath: File? = null) {
+        aadharFrontImageHolder.uploadDocumentCardView.visibility = View.GONE
+        aadharFrontImageHolder.uploadImageLayout.visibility = View.VISIBLE
+        aadharFrontImageHolder.uploadImageLayout.imageLabelTV.text =
+            getString(R.string.upload_aadhar_card_front_side)
+
+        Glide.with(requireContext())
+            .load(R.drawable.bg_aadhar_front_placeholder)
+            .into(aadharFrontImageHolder.uploadImageLayout.clickedImageIV)
+    }
+
+    private fun showBackAadharCard(aadharBackImagePath: File? = null) {
+        aadharBackImageHolder.uploadDocumentCardView.visibility = View.GONE
+        aadharBackImageHolder.uploadImageLayout.visibility = View.VISIBLE
+        aadharBackImageHolder.uploadImageLayout.imageLabelTV.text =
+            getString(R.string.upload_aadhar_card_back_side)
+
+        Glide.with(requireContext())
+            .load(R.drawable.bg_aadhar_front_placeholder)
+            .into(aadharBackImageHolder.uploadImageLayout.clickedImageIV)
     }
 
     private fun setAadharInfoOnView(
