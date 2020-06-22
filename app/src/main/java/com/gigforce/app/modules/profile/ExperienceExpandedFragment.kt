@@ -33,9 +33,9 @@ class ExperienceExpandedFragment: ProfileBaseFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        inflateView(R.layout.fragment_profile_experience_expanded, inflater, container)
-        getFragmentView().nav_bar.experience_active = true
-        return getFragmentView()
+        var view = inflateView(R.layout.fragment_profile_experience_expanded, inflater, container)
+        view?.nav_bar?.experience_active = true
+        return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

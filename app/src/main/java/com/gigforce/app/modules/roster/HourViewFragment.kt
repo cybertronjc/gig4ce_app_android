@@ -86,11 +86,11 @@ class HourViewFragment: RosterBaseFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        inflateView(R.layout.roster_day_hour_view, inflater, container)
+
         activeDateTime = LocalDateTime.parse(arguments?.getSerializable("activeDate").toString())
         Log.d("HourView", "Entered Hourly view")
         Log.d("HourView", "Datetime received from Adapter is ${activeDateTime.toString()}")
-        return getFragmentView()
+        return inflateView(R.layout.roster_day_hour_view, inflater, container)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
