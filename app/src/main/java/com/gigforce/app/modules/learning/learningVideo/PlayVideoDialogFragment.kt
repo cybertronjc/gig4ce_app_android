@@ -1,14 +1,19 @@
 package com.gigforce.app.modules.learning.learningVideo
 
 
+import android.app.Dialog
 import android.content.pm.ActivityInfo
 import android.content.res.Configuration
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import com.gigforce.app.R
 import com.google.android.exoplayer2.SimpleExoPlayer
@@ -50,7 +55,7 @@ class PlayVideoDialogFragment : DialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setStyle(DialogFragment.STYLE_NO_TITLE, android.R.style.Theme_Translucent_NoTitleBar_Fullscreen)
+//        setStyle(DialogFragment.STYLE_NO_TITLE, android.R.style.Theme_Translucent_NoTitleBar_Fullscreen)
     }
 
     private fun initializePlayer() {
@@ -121,13 +126,5 @@ class PlayVideoDialogFragment : DialogFragment() {
             initializePlayer()
     }
 
-
-    override fun onStart() {
-        super.onStart()
-        val window = dialog?.window
-        val windowParams = window?.attributes
-        windowParams?.dimAmount = 0.0f
-        window?.attributes = windowParams
-    }
 
 }
