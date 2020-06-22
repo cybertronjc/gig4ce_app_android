@@ -145,7 +145,7 @@ class AddBankDetailsInfoFragment : BaseFragment(), SelectImageSourceBottomSheetA
             cifNumber = "TF-334",
             accountNumber = "PU23SDDLOJIJ",
             ifsc = "PKSSM09233",
-            address = "House no 342, Preet Vihar, 113320"
+            address = "House no 342, Preet Vihar,New Delhi, Delhi 113320"
         )
     }
 

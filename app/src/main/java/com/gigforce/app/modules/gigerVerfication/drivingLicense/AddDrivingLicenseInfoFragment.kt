@@ -157,9 +157,9 @@ class AddDrivingLicenseInfoFragment : BaseFragment(), SelectImageSourceBottomShe
             name = "Rahul Jain",
             dob = "11/09/1990",
             fathersName = "Male",
-            licenseNo = "2345 7624 9238",
+            licenseNo = "DL234576249238",
             licenseValidity = "10/2030",
-            address = "House no 3432, Preet Vihar 112034"
+            address = "House no 3432, Preet Vihar, New Delhi, Delhi 112034"
         )
     }
 

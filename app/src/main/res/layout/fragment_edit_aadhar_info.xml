@@ -55,6 +55,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
             android:textColor="@color/black"
+            android:text="Rahul Jain"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/nameLabel" />
 
@@ -74,6 +75,7 @@
             android:layout_marginTop="2dp"
             android:enabled="false"
             android:textColor="@color/black"
+            android:text="11/09/1990"
             app:layout_constraintEnd_toEndOf="@id/selectDobButton"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/dobLabel" />
@@ -126,6 +128,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
             android:textColor="@color/black"
+            android:text="234576249238"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/aadharLabel" />
 
@@ -145,6 +148,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
             android:textColor="@color/black"
+            android:text="House no 3601"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/addressLineLabel" />
 
@@ -182,6 +186,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
                 android:textColor="@color/black"
+                android:text="Preet Vihar"
                 app:layout_constraintEnd_toStartOf="@+id/locationET"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/locationLabel" />
@@ -193,6 +198,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
                 android:textColor="@color/black"
+                android:text="New Delhi"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/areaET"
                 app:layout_constraintTop_toBottomOf="@id/locationLabel" />
@@ -233,6 +239,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
                 android:textColor="@color/black"
+                android:text="Delhi"
                 app:layout_constraintEnd_toStartOf="@+id/pinET"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/stateLabel" />
@@ -245,6 +252,7 @@
                 android:layout_marginTop="2dp"
                 android:inputType="number"
                 android:maxLength="6"
+                android:text="110033"
                 android:textColor="@color/black"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/stateET"

@@ -148,7 +148,7 @@ class AddAadharCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetAc
             dob = "11/09/1990",
             gender = "Male",
             aadharNo = "2345 7624 9238",
-            address = "House no 3601, PT-Vihar, Delhi"
+            address = "House no 3601, PT-Vihar, New Delhi, Delhi 110033"
         )
     }
 
