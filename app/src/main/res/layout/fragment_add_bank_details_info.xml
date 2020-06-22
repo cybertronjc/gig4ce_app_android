@@ -339,11 +339,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="30dp"
-                app:border_radius="12dp"
+                app:border_radius="8dp"
+                app:slider_height="60dp"
                 app:inner_color="@color/warm_grey"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:outer_color="@color/light_grey"
-                app:slider_height="48dp"
+                app:slider_icon_color="@color/white"
                 app:slider_icon="@drawable/ic_arrow_forward_white"
                 app:text="@string/save_all_caps" />
 
