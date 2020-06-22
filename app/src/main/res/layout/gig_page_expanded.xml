@@ -26,7 +26,7 @@
             android:id="@+id/gig_title"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="Retail Sail Executive"
+            android:text="Retail Sale Executive"
             style="@style/LatoRegular16Black"
             android:gravity="center"
             app:layout_constraintStart_toEndOf="@id/back_button"
@@ -50,7 +50,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:adjustViewBounds="true"
-                android:src="@drawable/jd_screen"/>
+                android:src="@drawable/gig_page"/>
             <View
                 android:layout_width="match_parent"
                 android:layout_height="60dp"/>

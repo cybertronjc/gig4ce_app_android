@@ -45,9 +45,9 @@ class WalletViewModel: ViewModel() {
         getProfileData()
 
         userWallet.value = Wallet(
-            balance = 450,
+            balance = 20800,
             isMonthlyGoalSet = true,
-            monthlyGoalLimit = 5000,
+            monthlyGoalLimit = 15000,
             monthlyEarnedAmount = 4000
         )
     }

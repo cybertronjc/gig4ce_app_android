@@ -524,6 +524,10 @@
         android:label="GigPageExpanded" />
 
     <fragment
+        android:id="@+id/walletExpandedPage"
+        android:name="com.gigforce.app.modules.wallet.models.WalletExpandedPage"
+        android:label="WalletExpandedPage" />
+    <fragment
         android:id="@+id/learningWithStatsFragment"
         android:name="com.gigforce.app.modules.learning.LearningWithStatsFragment"
         android:label="fragment_learning_stats"
