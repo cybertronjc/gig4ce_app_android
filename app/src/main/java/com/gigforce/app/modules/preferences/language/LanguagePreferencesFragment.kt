@@ -71,6 +71,5 @@ class LanguagePreferencesFragment : BaseFragment() {
             "mr" -> groupradio.findViewById<RadioButton>(R.id.mr).isChecked = true
             else -> groupradio.findViewById<RadioButton>(R.id.en).isChecked = true
         }
-
     }
 }

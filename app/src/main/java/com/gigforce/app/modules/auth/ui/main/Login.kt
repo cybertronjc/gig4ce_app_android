@@ -46,6 +46,9 @@ class Login : BaseFragment() {
         }
     }
 
+    override fun isDeviceLanguageChangedDialogRequired(): Boolean {
+        return false
+    }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

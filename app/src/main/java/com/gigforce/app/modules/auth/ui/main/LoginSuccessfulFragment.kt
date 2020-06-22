@@ -31,6 +31,9 @@ class LoginSuccessfulFragment : BaseFragment() {
         return layout
     }
 
+    override fun isDeviceLanguageChangedDialogRequired(): Boolean {
+        return false
+    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(LoginSuccessfulViewModel::class.java)
