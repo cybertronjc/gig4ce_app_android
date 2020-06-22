@@ -41,6 +41,9 @@ class IntroSlidesFragment : BaseFragment() {
         setupViewPager()
     }
 
+    override fun isDeviceLanguageChangedDialogRequired(): Boolean {
+        return false
+    }
     fun setupViewPager(){
         this.viewpager.adapter = IntroSlidesViewPagerAdapter(this.viewpager, object: OnIntroSlidesCompleted(){
 

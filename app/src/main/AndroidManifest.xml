@@ -81,7 +81,10 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
         </provider>
-
+<!--        <receiver android:name=".core.base.language.LanguageChangeReceiver">-->
+<!--            <intent-filter><action android:name="android.intent.action.ACTION_LOCALE_CHANGED"/>-->
+<!--            </intent-filter>-->
+<!--        </receiver>-->
 <!--        <service android:name="com.gigforce.app.modules.notifications.Notification">-->
 <!--            <intent-filter>-->
 <!--                <action android:name="com.google.firebase.MESSAGING_EVENT" />-->

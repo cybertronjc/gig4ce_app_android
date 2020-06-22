@@ -60,6 +60,9 @@ class VerifyOTP: BaseFragment() {
         return layout
     }
 
+    override fun isDeviceLanguageChangedDialogRequired(): Boolean {
+        return false
+    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.activity = this.requireActivity()
@@ -72,6 +75,7 @@ class VerifyOTP: BaseFragment() {
 //            Toast.makeText(layout.context, "Too many invalid attempts, Try again later!", Toast.LENGTH_SHORT).show()
 //        }
     }
+
     private fun saveNewUsedMobileNumber() {
         var oldData = getAllMobileNumber()
         if(oldData==null||oldData.equals("")) {

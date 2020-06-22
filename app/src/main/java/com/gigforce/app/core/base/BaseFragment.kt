@@ -18,6 +18,8 @@ import com.gigforce.app.R
 import com.gigforce.app.core.base.dialog.AppDialogsImp
 import com.gigforce.app.core.base.dialog.AppDialogsInterface
 import com.gigforce.app.core.base.dialog.ConfirmationDialogOnClickListener
+import com.gigforce.app.core.base.language.LanguageUtilImp
+import com.gigforce.app.core.base.language.LanguageUtilInterface
 import com.gigforce.app.core.base.navigation.NavigationImpl
 import com.gigforce.app.core.base.navigation.NavigationInterface
 import com.gigforce.app.core.base.shareddata.SharedDataImp
@@ -27,7 +29,6 @@ import com.gigforce.app.core.base.utilfeatures.UtilAndValidationInterface
 import com.gigforce.app.core.base.viewsfromviews.ViewsFromViewsImpl
 import com.gigforce.app.core.base.viewsfromviews.ViewsFromViewsInterface
 import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
-import com.gigforce.app.modules.preferences.PreferencesRepository
 import com.gigforce.app.utils.configrepository.ConfigDataModel
 import com.gigforce.app.utils.configrepository.ConfigRepository
 
@@ -38,17 +39,18 @@ import com.gigforce.app.utils.configrepository.ConfigRepository
  * create an instance of this fragment.
  */
 open class BaseFragment : Fragment(), ViewsFromViewsInterface, NavigationInterface,
-    SharedDataInterface, AppDialogsInterface, UtilAndValidationInterface {
+    SharedDataInterface, AppDialogsInterface, UtilAndValidationInterface,LanguageUtilInterface {
 
     lateinit var viewsFromViewsInterface: ViewsFromViewsInterface
     lateinit var navigationInterface: NavigationInterface
     lateinit var sharedDataInterface: SharedDataInterface
     lateinit var appDialogsInterface: AppDialogsInterface
+    lateinit var languageUtilInterface: LanguageUtilInterface
+
     lateinit var utilAndValidationInterface: UtilAndValidationInterface
     lateinit var baseFragment: BaseFragment
     var mView: View? = null
 
-    lateinit var preferencesRepositoryForBaseFragment: PreferencesRepository
     private var configrepositoryObj: ConfigRepository? = null;
     private var requestOptions: RequestOptions? = null
 
@@ -82,6 +84,7 @@ open class BaseFragment : Fragment(), ViewsFromViewsInterface, NavigationInterfa
         navigationInterface = NavigationImpl(requireActivity())
         sharedDataInterface = SharedDataImp(requireActivity())
         appDialogsInterface = AppDialogsImp(requireActivity())
+        languageUtilInterface = LanguageUtilImp(this)
         utilAndValidationInterface = UtilAndValidationImp(requireActivity())
     }
 
@@ -115,7 +118,7 @@ open class BaseFragment : Fragment(), ViewsFromViewsInterface, NavigationInterfa
     }
 
     override fun onDetach() {
-        if (appDialogsInterface.getDeviceLanguageDialog() != null) appDialogsInterface.getDeviceLanguageDialog()!!.dismiss()
+        if (languageUtilInterface.getDeviceLanguageDialog() != null) languageUtilInterface.getDeviceLanguageDialog()!!.dismiss()
         super.onDetach()
     }
 
@@ -263,45 +266,8 @@ open class BaseFragment : Fragment(), ViewsFromViewsInterface, NavigationInterfa
         return sharedDataInterface.getAllMobileNumber()
     }
 
-
-    //Dialogs
-    private fun showDialogIfDeviceLanguageChanged() {
-        var currentDeviceLanguageCode =
-            appDialogsInterface.getDeviceLanguageChanged(sharedDataInterface.getLastStoredDeviceLanguage()!!)
-        if (!(currentDeviceLanguageCode.equals(""))) {
-            preferencesRepositoryForBaseFragment = PreferencesRepository()
-            confirmDialogForDeviceLanguageChanged(currentDeviceLanguageCode,
-                object : ConfirmationDialogOnClickListener {
-                    override fun clickedOnYes(dialog: Dialog?) {
-                        sharedDataInterface.saveDeviceLanguage(currentDeviceLanguageCode)
-                        sharedDataInterface.saveAppLanuageCode(currentDeviceLanguageCode)
-                        sharedDataInterface.saveAppLanguageName(
-                            appDialogsInterface.getLanguageCodeToName(
-                                currentDeviceLanguageCode
-                            )
-                        )
-                        updateResources(currentDeviceLanguageCode)
-                        preferencesRepositoryForBaseFragment.setDataAsKeyValue(
-                            "languageName",
-                            appDialogsInterface.getLanguageCodeToName(currentDeviceLanguageCode)
-                        )
-                        preferencesRepositoryForBaseFragment.setDataAsKeyValue(
-                            "languageCode",
-                            currentDeviceLanguageCode
-                        )
-                        dialog?.dismiss()
-                    }
-
-                    override fun clickedOnNo(dialog: Dialog?) {
-                        sharedDataInterface.saveDeviceLanguage(currentDeviceLanguageCode)
-                        dialog!!.dismiss()
-                    }
-                })
-        }
-    }
-
-    override fun getDeviceLanguageChanged(deviceLanguage: String): String {
-        return appDialogsInterface.getDeviceLanguageChanged(deviceLanguage)
+    override fun getChangedDeviceLanguageCode(deviceLanguage: String): String {
+        return languageUtilInterface.getChangedDeviceLanguageCode(deviceLanguage)
 
     }
 
@@ -309,14 +275,18 @@ open class BaseFragment : Fragment(), ViewsFromViewsInterface, NavigationInterfa
         currentDeviceLanguageCode: String,
         buttonClickListener: ConfirmationDialogOnClickListener
     ) {
-        appDialogsInterface.confirmDialogForDeviceLanguageChanged(
+        languageUtilInterface.confirmDialogForDeviceLanguageChanged(
             currentDeviceLanguageCode,
             buttonClickListener
         )
     }
 
+    override fun showDialogIfDeviceLanguageChanged() {
+        languageUtilInterface.showDialogIfDeviceLanguageChanged()
+    }
+
     override fun getDeviceLanguageDialog(): Dialog? {
-        return appDialogsInterface.getDeviceLanguageDialog()
+        return languageUtilInterface.getDeviceLanguageDialog()
     }
 
     override fun showConfirmationDialogType1(
@@ -334,7 +304,7 @@ open class BaseFragment : Fragment(), ViewsFromViewsInterface, NavigationInterfa
     }
 
     override fun getLanguageCodeToName(languageCode: String): String {
-        return appDialogsInterface.getLanguageCodeToName(languageCode)
+        return languageUtilInterface.getLanguageCodeToName(languageCode)
     }
 
     override fun showToast(message: String) {

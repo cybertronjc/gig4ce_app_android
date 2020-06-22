@@ -35,8 +35,7 @@
 
     <fragment
         android:id="@+id/authFlowFragment"
-        android:name="com.gigforce.app.modules.auth.AuthFlowFragment"
-        tools:layout="@layout/fragment_auth_flow" />
+        android:name="com.gigforce.app.modules.auth.AuthFlowFragment"/>
 
     <fragment
         android:id="@+id/settingFragment"
