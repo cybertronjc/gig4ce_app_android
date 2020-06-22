@@ -56,7 +56,7 @@ class OnboardingMainFragment : BaseFragment() {
     private fun initializeViews() {
         onboarding_root_layout.getViewTreeObserver()
             .addOnGlobalLayoutListener(keyboardLayoutListener);
-        val onboardingCompleted = getSharedData(AppConstants.ON_BOARDING_COMPLETED, "")
+        val onboardingCompleted = isOnBoardingCompleted()
         if(onboardingCompleted!=null && onboardingCompleted.equals("true")){
             navigateToHomeScreen()
         }
@@ -243,13 +243,14 @@ class OnboardingMainFragment : BaseFragment() {
 
     private fun setOnboardingCompleteAndNavigate() {
         viewModel.setOnboardingCompleted()
-        saveSharedData(AppConstants.ON_BOARDING_COMPLETED, "true")
+        saveOnBoardingCompleted()
         navigateToHomeScreen()
     }
 
     private fun navigateToHomeScreen() {
         popFragmentFromStack(R.id.onboardingfragment)
-        navigateWithAllPopupStack(R.id.mainHomeScreen)
+//        navigateWithAllPopupStack(R.id.mainHomeScreen)
+        navigate(R.id.authFlowFragment)
     }
 
     private fun showBackIcon(show: Boolean) {
@@ -338,6 +339,9 @@ class OnboardingMainFragment : BaseFragment() {
 
                     } else {
                         usernameEditText = getEditText(viewHolder, R.id.user_name)
+                        if(usernameEditText.text.toString().length<=3){
+                            enableNextButton(false)
+                        }
                         usernameEditText?.addTextChangedListener(object :
                             TextWatcher {
                             override fun afterTextChanged(s: Editable?) {}

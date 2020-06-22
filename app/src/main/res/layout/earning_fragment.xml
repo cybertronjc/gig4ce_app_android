@@ -164,7 +164,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/textView103"
+        android:id="@+id/skip"
         android:layout_width="match_parent"
         android:layout_height="108dp"
         android:layout_marginTop="4dp"
@@ -185,7 +185,7 @@
             android:textColor="#000000"
             android:textSize="14sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/textView103" />
+            app:layout_constraintTop_toTopOf="@+id/skip" />
 
         <TextView
             android:id="@+id/monthlyGoalsTV"
@@ -199,7 +199,7 @@
             android:textColor="#979797"
             android:textSize="12sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/textView103" />
+            app:layout_constraintTop_toTopOf="@+id/skip" />
 
         <TextView
             android:id="@+id/textView9"
@@ -224,8 +224,8 @@
             android:min="0"
             android:progressTint="@color/colorPrimary"
             android:thumbTint="@color/colorPrimary"
-            app:layout_constraintEnd_toEndOf="@+id/textView103"
-            app:layout_constraintStart_toStartOf="@+id/textView103"
+            app:layout_constraintEnd_toEndOf="@+id/skip"
+            app:layout_constraintStart_toStartOf="@+id/skip"
             app:layout_constraintTop_toBottomOf="@+id/textView9" />
 
         <TextView
@@ -249,7 +249,7 @@
         android:background="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView103">
+        app:layout_constraintTop_toBottomOf="@+id/skip">
 
         <View
             android:id="@+id/textView104"

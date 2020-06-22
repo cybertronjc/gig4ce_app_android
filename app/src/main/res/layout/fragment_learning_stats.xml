@@ -1,0 +1,391 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".modules.learning.LearningWithStatsFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/learningToolbarLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+
+            <ImageView
+                android:id="@+id/learningBackButton"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="18dp"
+                android:layout_marginTop="18dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:scaleX="0.75"
+                android:scaleY="0.75"
+                android:src="@drawable/ic_arrow_back_black"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv1HS1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="18dp"
+                android:layout_marginTop="22dp"
+                android:fontFamily="@font/lato_bold"
+                android:letterSpacing="0.01"
+                android:text="@string/learning"
+                android:textColor="#cd000000"
+                android:textSize="24sp"
+                app:layout_constraintStart_toEndOf="@id/learningBackButton"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <ImageView
+                android:id="@+id/imageView11"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:src="@drawable/ic_home_chat"
+                app:layout_constraintBottom_toBottomOf="@+id/cardView"
+                app:layout_constraintEnd_toStartOf="@+id/cardView"
+                app:layout_constraintTop_toTopOf="@+id/cardView" />
+
+            <ImageView
+                android:id="@+id/imageView30"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:src="@drawable/ic_landinghome_search"
+                app:layout_constraintBottom_toBottomOf="@+id/imageView11"
+                app:layout_constraintEnd_toStartOf="@+id/imageView11"
+                app:layout_constraintTop_toTopOf="@+id/imageView11" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardView"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:layout_marginTop="21dp"
+                android:layout_marginEnd="16dp"
+                app:cardCornerRadius="21dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/profile_image"
+                    android:layout_width="42dp"
+                    android:layout_height="42dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/placeholder_user"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.cardview.widget.CardView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/learningStatsLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginEnd="16dp"
+            app:cardBackgroundColor="@color/light_pink"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/learningToolbarLayout">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="39dp"
+                        android:layout_height="41dp"
+                        android:layout_marginTop="4dp"
+                        android:gravity="center"
+                        android:letterSpacing="0.04"
+                        android:lineSpacingExtra="22.9sp"
+                        android:text="2"
+                        android:textColor="@color/greyish_brown"
+                        android:textSize="18sp" />
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="18dp"
+                        android:gravity="center_horizontal"
+                        android:text="ONGOING"
+                        android:textColor="#d9000000"
+                        android:textSize="12sp" />
+
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="27dp"
+                    android:layout_gravity="center_vertical"
+                    android:background="@android:color/darker_gray" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="39dp"
+                        android:layout_height="41dp"
+                        android:layout_marginTop="4dp"
+                        android:gravity="center"
+                        android:letterSpacing="0.04"
+                        android:lineSpacingExtra="22.9sp"
+                        android:text="1"
+                        android:textColor="@color/greyish_brown"
+                        android:textSize="18sp" />
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="18dp"
+                        android:gravity="center_horizontal"
+                        android:text="PENDING"
+                        android:textColor="#d9000000"
+                        android:textSize="12sp" />
+
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="27dp"
+                    android:layout_gravity="center_vertical"
+                    android:background="@android:color/darker_gray" />
+
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="39dp"
+                        android:layout_height="41dp"
+                        android:layout_marginTop="4dp"
+                        android:gravity="center"
+                        android:letterSpacing="0.04"
+                        android:lineSpacingExtra="22.9sp"
+                        android:text="2"
+                        android:textColor="@color/greyish_brown"
+                        android:textSize="18sp" />
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="18dp"
+                        android:gravity="center_horizontal"
+                        android:text="COMPLETED"
+                        android:textColor="#d9000000"
+                        android:textSize="12sp" />
+
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/lastTimeWatchingLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#e5e5e5"
+            android:paddingBottom="12dp"
+            android:layout_marginTop="22dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/learningStatsLayout">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="17dp"
+                android:layout_marginTop="14dp"
+                android:textColor="#3e3e47"
+                android:textSize="18sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:text="Last Time watching" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/resumeButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:text="Resume"
+                app:icon="@drawable/ic_play"
+                app:iconPadding="8dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginTop="14dp"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/videoThumbnailIV"
+                android:layout_width="67dp"
+                android:layout_height="62dp"
+                android:layout_marginTop="19dp"
+                android:layout_marginStart="14dp"
+                app:layout_constraintStart_toStartOf="parent"
+                android:src="@drawable/bg_square_pos"
+                android:scaleType="fitXY"
+                app:layout_constraintTop_toBottomOf="@+id/resumeButton" />
+
+            <TextView
+                android:id="@+id/videoTitleTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                android:layout_marginTop="19dp"
+                android:layout_marginStart="12dp"
+                app:layout_constraintStart_toEndOf="@+id/videoThumbnailIV"
+                app:layout_constraintTop_toBottomOf="@+id/resumeButton"
+                android:text="Introduction to Retail Market ?" />
+
+            <TextView
+                android:id="@+id/textView107"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="6dp"
+                android:text="Industry based "
+                android:textColor="@color/battle_ship_grey"
+                android:textSize="12sp"
+                app:layout_constraintStart_toEndOf="@+id/videoThumbnailIV"
+                app:layout_constraintTop_toBottomOf="@+id/videoTitleTV" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/warm_grey"
+                android:textSize="14sp"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginBottom="12dp"
+                app:layout_constraintStart_toEndOf="@+id/videoThumbnailIV"
+                app:layout_constraintTop_toBottomOf="@+id/textView107"
+                android:text="20 min learning pending " />
+            
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <ImageView
+            android:id="@+id/becuaseYouSearchedIV"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="30dp"
+            android:src="@drawable/ic_play_round_pink_bck"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/lastTimeWatchingLayout" />
+
+        <TextView
+            android:id="@+id/becuaseYouSearchedLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="30dp"
+            android:fontFamily="@font/lato_bold"
+            android:letterSpacing="0"
+            android:text="Because you searched for “ Retail” "
+            android:textColor="#080808"
+            android:textSize="16sp"
+            app:layout_constraintStart_toEndOf="@id/becuaseYouSearchedIV"
+            app:layout_constraintTop_toBottomOf="@id/lastTimeWatchingLayout" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/searchSuggestionBasedVideosRV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="15dp"
+            app:layout_constraintStart_toEndOf="@id/becuaseYouSearchedIV"
+            app:layout_constraintTop_toBottomOf="@id/becuaseYouSearchedLabel" />
+
+
+        <TextView
+            android:id="@+id/assesmentBasedLearningLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/lato"
+            android:letterSpacing="0"
+            android:text="@string/assessment_based_on_learnings"
+            android:textColor="#080808"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/searchSuggestionBasedVideosRV" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/assesmentBasedLearningRV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="15dp"
+            app:layout_constraintStart_toEndOf="@id/becuaseYouSearchedIV"
+            app:layout_constraintTop_toBottomOf="@id/assesmentBasedLearningLabel" />
+
+
+        <TextView
+            android:id="@+id/exploreLearningsLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/lato"
+            android:letterSpacing="0"
+            android:text="@string/explore_learnings"
+            android:textColor="#080808"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/assesmentBasedLearningRV" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/exploreLearningsRV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="15dp"
+            app:layout_constraintStart_toEndOf="@id/becuaseYouSearchedIV"
+            app:layout_constraintTop_toBottomOf="@id/exploreLearningsLabel" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

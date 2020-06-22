@@ -34,9 +34,9 @@ class EducationExpandedFragment: ProfileBaseFragment() {
         savedInstanceState: Bundle?
     ): View? {
         Log.d("DEBUG", "ENTERED Profile Education Expanded VIEW")
-        inflateView(R.layout.fragment_profile_education_expanded, inflater, container)
-        getFragmentView().nav_bar.education_active = true
-        return getFragmentView()
+        var view =inflateView(R.layout.fragment_profile_education_expanded, inflater, container)
+        view?.nav_bar?.education_active = true
+        return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

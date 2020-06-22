@@ -102,6 +102,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/lato"
+                    style="@style/Theme.RadioButtonLipstickPink"
                     android:text="@string/yes_i_have_driving_license" />
 
                 <com.google.android.material.radiobutton.MaterialRadioButton
@@ -109,6 +110,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/lato"
+                    style="@style/Theme.RadioButtonLipstickPink"
                     android:text="@string/no_i_don_t_have_driving_license" />
 
             </RadioGroup>

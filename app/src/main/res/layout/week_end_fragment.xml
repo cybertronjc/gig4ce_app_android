@@ -26,6 +26,7 @@
         android:layout_marginLeft="19dp"
         android:textColor="@color/black"
         android:textSize="20sp"
+        android:letterSpacing="0"
         app:layout_constraintBottom_toBottomOf="@+id/textView52"
         app:layout_constraintStart_toEndOf="@+id/imageView16"
         app:layout_constraintTop_toTopOf="parent" />
@@ -71,6 +72,7 @@
         android:text="Days"
         android:textColor="@color/black"
         android:textSize="14sp"
+        android:letterSpacing="0"
         app:layout_constraintStart_toStartOf="@+id/textView60"
         app:layout_constraintTop_toTopOf="@+id/textView60" />
 
@@ -83,6 +85,7 @@
         android:text="Mon, Tues, Wed, Thus, Fri"
         android:textColor="@color/gray_color"
         android:textSize="10sp"
+        android:letterSpacing="0"
         app:layout_constraintStart_toStartOf="@+id/textView60"
         app:layout_constraintTop_toBottomOf="@+id/textView61" />
 
@@ -96,6 +99,7 @@
         android:text="Schedules"
         android:textColor="@color/black"
         android:textSize="14sp"
+        android:letterSpacing="0"
         app:layout_constraintBottom_toTopOf="@+id/textView60"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -130,6 +134,7 @@
         android:text="Slots"
         android:textColor="@color/black"
         android:textSize="14sp"
+        android:letterSpacing="0"
         app:layout_constraintStart_toStartOf="@+id/textView64"
         app:layout_constraintTop_toTopOf="@+id/textView64" />
 
@@ -142,6 +147,7 @@
         android:text="10:00 am"
         android:textColor="@color/gray_color"
         android:textSize="10sp"
+        android:letterSpacing="0"
         app:layout_constraintStart_toStartOf="@+id/textView64"
         app:layout_constraintTop_toBottomOf="@+id/textView65" />
 

@@ -10,7 +10,7 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/card_view"
         android:layout_width="match_parent"
-        android:layout_height="78dp"
+        android:layout_height="88dp"
         android:layout_marginLeft="3dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
@@ -26,7 +26,7 @@
 
 
             <TextView
-                android:id="@+id/textView74"
+                android:id="@+id/title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="15dp"
@@ -39,33 +39,33 @@
                 android:text="Assessment 1" />
 
             <TextView
-                android:id="@+id/textView75"
+                android:id="@+id/status"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:background="@drawable/rect_assessment_status_pending"
                 android:gravity="center"
                 android:letterSpacing="0.05"
+                android:padding="4dp"
                 android:text="PENDING"
                 android:textColor="#ffffff"
-                android:padding="4dp"
-                android:background="@drawable/rect_assessment_status"
                 android:textSize="11sp"
-                android:layout_marginTop="14dp"
-                android:layout_marginLeft="20dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView74" />
+                android:layout_marginBottom="5dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
 
             <TextView
-                android:id="@+id/textView76"
+                android:id="@+id/time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="16dp"
                 android:letterSpacing="0.02"
                 android:text="12:00"
                 android:textColor="#000000"
-                android:textSize="16sp"
-                android:layout_marginRight="16dp"
-                app:layout_constraintBottom_toBottomOf="@+id/textView75"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/textView75" />
+                android:textSize="12sp"
+                android:layout_marginBottom="5dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
 
             <ImageView
                 android:id="@+id/imageView18"
@@ -73,15 +73,15 @@
                 android:layout_height="11dp"
                 android:layout_marginRight="5dp"
                 android:layout_marginBottom="2dp"
-                app:layout_constraintBottom_toBottomOf="@+id/textView76"
-                app:layout_constraintEnd_toStartOf="@+id/textView76"
+                app:layout_constraintBottom_toBottomOf="@+id/time"
+                app:layout_constraintEnd_toStartOf="@+id/time"
                 android:src="@drawable/ic_clock_assessment" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/textView73"
+        android:id="@+id/side_bar_status"
         android:layout_width="6dp"
         android:layout_height="42dp"
         app:cardBackgroundColor="#f5a623"

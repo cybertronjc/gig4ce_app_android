@@ -14,8 +14,8 @@ class PaymentDisputePage: WalletBaseFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        inflateView(R.layout.payment_dispute_page, inflater, container)
-        return getFragmentView()
+
+        return inflateView(R.layout.payment_dispute_page, inflater, container)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -35,5 +35,11 @@ class PaymentDisputePage: WalletBaseFragment() {
         payment_3.setOnClickListener {
             navigate(R.id.paymentDisputeExpandedPage)
         }
+
+        back_button.setOnClickListener { requireActivity().onBackPressed() }
+
+        payment_1.visibility = View.GONE
+        payment_2.visibility = View.GONE
+        payment_3.visibility = View.GONE
     }
 }

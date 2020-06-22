@@ -4,14 +4,14 @@
     <string name="hello_blank_fragment">हैलो खाली टुकड़ा </string>
     <string name="title_activity_profile"> ProfileActivity </string>
 
-    <string name="intro_slide1_title"> गिगफोर्स में आपका स्वागत है </string>
-    <string name="intro_slide1_subtitle">कल क्या होने वाला है?</string>
+    <string name="intro_slide1_title">आपका स्वागत है Gigforce में</string>
+    <string name="intro_slide1_subtitle">एक नौकरी जो आपके पास हमेशा होती है</string>
 
-    <string name="intro_slide2_title"> काम होता है </string>
-    <string name="intro_slide2_subtitle">  काम होने पर सूचित करें  </string>
+    <string name="intro_slide2_title">एक पेशेवर बनें</string>
+    <string name="intro_slide2_subtitle">एक प्रोफ़ाइल बनाएं और अपने कौशल को अपग्रेड करने के लिए ट्रेन करें</string>
 
-    <string name="intro_slide3_title"> कार्य और निरुपित </string>
-    <string name="intro_slide3_subtitle">  कार्य करें और उन्हें सहयोगियों को सौंपें। </string>
+    <string name="intro_slide3_title">काम होने दो</string>
+    <string name="intro_slide3_subtitle">अपनी प्राथमिकता निर्धारित करें और जिग्स आपको पाएंगे</string>
 
     <string name="ob_slide1_title"> ज्ञानप्राप्ति</string>
     <string name="ob_slide1_subtitle"> कैसे - १ </string>
@@ -225,5 +225,13 @@
     <string name="from_gallery">From Gallery</string>
     <string name="update">UPDATE</string>
     <string name="how_to_record_selfie_video">How to Record Selfie Video?</string>
+    <string name="learning">Learning</string>
+    <string name="why_learning_is_important">Why Learning is Important?</string>
+    <string name="increase_your_knowlegde">Increase Your Knowlegde</string>
+    <string name="anytime_anywhere">ANYTIME ANYWHERE</string>
+    <string name="learning_based_on_nroles_and_industry">Learning based on\nroles and industry</string>
+    <string name="recently_added">Recently Added</string>
+    <string name="assessment_based_on_learnings">Assessment based on learnings</string>
+    <string name="explore_learnings">Explore Learnings</string>
 
 </resources>

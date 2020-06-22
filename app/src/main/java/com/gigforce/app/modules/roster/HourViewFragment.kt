@@ -86,11 +86,11 @@ class HourViewFragment: RosterBaseFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        inflateView(R.layout.roster_day_hour_view, inflater, container)
+
         activeDateTime = LocalDateTime.parse(arguments?.getSerializable("activeDate").toString())
         Log.d("HourView", "Entered Hourly view")
         Log.d("HourView", "Datetime received from Adapter is ${activeDateTime.toString()}")
-        return getFragmentView()
+        return inflateView(R.layout.roster_day_hour_view, inflater, container)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -119,7 +119,7 @@ class HourViewFragment: RosterBaseFragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun scheduleCurrentTimerUpdate() {
         val handler = Handler() { msg ->
-            val datetime = activeDateTime
+            val datetime = LocalDateTime.now()
             val marginTop = (itemHeight * datetime.hour + ((datetime.minute / 60.0) * itemHeight).toInt()).px
             val layoutParams = current_time_divider.layoutParams as ViewGroup.MarginLayoutParams
             layoutParams.setMargins(marginCardStart - 8.px, marginTop, 0, 0)
@@ -176,6 +176,7 @@ class HourViewFragment: RosterBaseFragment() {
         upcomingCard.duration = gig.duration
         upcomingCard.gig_title.text = gig.title
         upcomingCard.cardHeight = (itemHeight * gig.duration).toInt().px
+        upcomingCard.setTimings()
 
         val params = ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.WRAP_CONTENT)
         upcomingCard.setLayoutParams(params)
@@ -192,6 +193,7 @@ class HourViewFragment: RosterBaseFragment() {
 
         upcomingCard.setOnClickListener {
             Toast.makeText(requireContext(), "Clicked on upcoming card", Toast.LENGTH_SHORT).show()
+            navigate(R.id.gigPageExpanded)
         }
     }
 
@@ -205,6 +207,9 @@ class HourViewFragment: RosterBaseFragment() {
         completedGigCard.id = View.generateViewId()
         completedGigCard.gigSuccess = gig.isGigCompleted
         completedGigCard.paymentSuccess = gig.isPaymentDone
+        completedGigCard.gigRating = gig.gigRating
+        completedGigCard.gigAmount = gig.gigAmount
+        completedGigCard.setTimings()
 
         val params = ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.WRAP_CONTENT)
         completedGigCard.setLayoutParams(params)
@@ -222,6 +227,7 @@ class HourViewFragment: RosterBaseFragment() {
 
         completedGigCard.setOnClickListener {
             Toast.makeText(requireContext(), "Clicked on completed card", Toast.LENGTH_SHORT).show()
+            navigate(R.id.gigPageExpanded)
         }
 
     }
@@ -248,12 +254,12 @@ class HourViewFragment: RosterBaseFragment() {
             widget.requestLayout()
 
             widget.top_half.setOnClickListener {
-                setAndShowBottomSheet(index-1, index)
+                //setAndShowBottomSheet(index-1, index)
 
            }
 
             widget.bottom_half.setOnClickListener {
-                setAndShowBottomSheet(index, index+1)
+                //setAndShowBottomSheet(index, index+1)
 
             }
 

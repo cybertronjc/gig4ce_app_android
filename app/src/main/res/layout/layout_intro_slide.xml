@@ -14,7 +14,6 @@
 
     <TextView
         android:id="@+id/tv_title"
-        style="@style/AppTheme.TextStyle.H6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/iv_main_art_video"
@@ -22,11 +21,13 @@
         android:layout_marginTop="100dp"
         android:textColor="@color/black"
         android:letterSpacing="0"
+        android:fontFamily="@font/lato"
+        android:textSize="24sp"
         android:text="Welcome to Gigforce" />
 
     <TextView
         android:id="@+id/tv_subtitle"
-        style="@style/AppTheme.TextStyle.Subtitle2"
+        android:fontFamily="@font/lato"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/tv_title"
@@ -55,6 +56,7 @@
         android:layout_marginBottom="35dp"
         android:text="Get Started"
         android:textSize="18sp"
+        android:letterSpacing="0"
         android:textColor="@android:color/white" />
 
     <ImageView

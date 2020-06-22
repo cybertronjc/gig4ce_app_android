@@ -19,6 +19,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.gigforce.app.R
 import com.gigforce.app.modules.roster.models.Gig
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import kotlinx.android.synthetic.main.day_view_top_bar.*
 import kotlinx.android.synthetic.main.day_view_top_bar.view.*
 import kotlinx.android.synthetic.main.gigs_today_warning_dialog.*
 import kotlinx.android.synthetic.main.reason_for_gig_cancel_dialog.*
@@ -49,14 +50,21 @@ class RosterDayFragment: RosterBaseFragment() {
 
     lateinit var hourviewPageChangeCallBack: ViewPager2.OnPageChangeCallback
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            activeDateTime = LocalDateTime.parse(it.getSerializable("active_date").toString())
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        inflateView(R.layout.roster_day_fragment, inflater, container)
-
-        return getFragmentView()
+        rosterViewModel.currentDateTime.value = activeDateTime
+        return inflateView(R.layout.roster_day_fragment, inflater, container)
     }
 
 
@@ -81,6 +89,9 @@ class RosterDayFragment: RosterBaseFragment() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun setListeners() {
+        back_button.setOnClickListener{
+            activity?.onBackPressed()
+        }
         hourviewPageChangeCallBack = object: ViewPager2.OnPageChangeCallback() {
 
             @RequiresApi(Build.VERSION_CODES.O)
@@ -188,7 +199,7 @@ class RosterDayFragment: RosterBaseFragment() {
     }
 
     private fun attachHourViewAdapter() {
-        val hourViewAdapter = HourViewAdapter(requireActivity(), 10000, actualDateTime)
+        val hourViewAdapter = HourViewAdapter(requireActivity(), 10000, activeDateTime)
         hourview_viewpager .adapter = hourViewAdapter
         hourview_viewpager.setCurrentItem(lastViewPosition, false)
     }

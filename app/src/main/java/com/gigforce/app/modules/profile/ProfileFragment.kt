@@ -48,9 +48,6 @@ class ProfileFragment : BaseFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         makeStatusBarTransparent()
-//        requireActivity().onBackPressedDispatcher.addCallback(this) {
-//            findNavController().navigate(R.id.homeScreenNew)
-//        }
     }
 
     private fun makeStatusBarTransparent(){
@@ -162,6 +159,9 @@ class ProfileFragment : BaseFragment() {
                 layout.bio_card.setOnClickListener {
                     findNavController().navigate(R.id.editHeadlineBottomSheet)
                 }
+                layout.edit_cover_bio.setOnClickListener {
+                    navigate(R.id.editHeadlineBottomSheet)
+                }
             }
 
             layout.main_tags.removeAllViews()
@@ -180,7 +180,11 @@ class ProfileFragment : BaseFragment() {
                         findNavController().navigate(R.id.editTagBottomSheet)
                     }
 
-                    layout.edit_cover_bio.visibility = View.INVISIBLE
+                    layout.edit_cover.setOnClickListener {
+                        navigate(R.id.editTagBottomSheet)
+                    }
+
+                    //layout.edit_cover_bio.visibility = View.INVISIBLE
                 }
                 for (tag in it) {
                     layout.main_tags.addView(addChip(this.requireContext(), tag))
@@ -208,7 +212,7 @@ class ProfileFragment : BaseFragment() {
 
             layout.main_about_card.card_title.text = "About me"
             layout.main_about_card.card_content.text = mainAboutString
-            layout.main_about_card.card_icon.setImageResource(R.drawable.ic_about_me)
+            layout.main_about_card.card_icon.setImageResource(R.drawable.about_me_new)
             if (mainAboutString.trim().isEmpty())
                 layout.main_about_card.card_view_more.text = "Add bio"
             layout.main_about_card.card_view_more.setOnClickListener {
@@ -257,7 +261,7 @@ class ProfileFragment : BaseFragment() {
             Log.d("ProfileFragment", mainEducationString)
             layout.main_education_card.card_title.text = "Education"
             layout.main_education_card.card_content.text = mainEducationString
-            layout.main_education_card.card_icon.setImageResource(R.drawable.ic_education)
+            layout.main_education_card.card_icon.setImageResource(R.drawable.ic_education_new)
             if (mainEducationString.trim().isEmpty())
                 layout.main_education_card.card_view_more.text = "Add Education"
             layout.main_education_card.card_view_more.setOnClickListener {

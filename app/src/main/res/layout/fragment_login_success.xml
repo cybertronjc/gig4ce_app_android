@@ -25,6 +25,7 @@
         android:text="Successful!"
         android:textColor="#313131"
         android:textSize="24sp"
+        android:letterSpacing="0"
         android:layout_marginTop="43dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -37,7 +38,8 @@
         android:layout_marginTop="30dp"
         android:textSize="14sp"
         android:textColor="#3a3936"
-        android:text="Mobile verfication has successfully done.  "
+        android:letterSpacing="0"
+        android:text="Mobile verification is successful done."
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView70" />

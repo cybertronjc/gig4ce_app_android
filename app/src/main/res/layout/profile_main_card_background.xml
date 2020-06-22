@@ -40,7 +40,7 @@
             android:layout_marginEnd="15dp"
             android:layout_marginStart="8dp"
             app:layout_goneMarginEnd="8dp"
-            android:background="@drawable/bg_divider"
+            android:background="#40ffffff"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/optional_title_text" />

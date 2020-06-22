@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    android:orientation="horizontal">
+
+    <com.github.vipulasri.timelineview.TimelineView
+        android:id="@+id/timeline"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        app:endLineColor="@color/colorPrimary"
+        app:lineStyle="dash"
+        app:lineWidth="3dp"
+        app:markerSize="20dp"
+        app:startLineColor="@color/colorPrimary" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="15dp">
+
+        <RelativeLayout
+            android:id="@+id/imageLayout"
+            android:layout_width="88dp"
+            android:layout_height="72dp"
+            android:layout_gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/videoThumbnailIV"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitXY"
+                android:src="@drawable/bg_square_pos" />
+
+        </RelativeLayout>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/video_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="17dp"
+            android:layout_marginTop="5dp"
+            android:layout_toRightOf="@id/imageLayout"
+            android:fontFamily="@font/lato"
+            android:letterSpacing="0"
+            android:textColor="#d9000000"
+            tools:text="Order Successfully Completed" />
+
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/time_imageview"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_below="@id/video_title"
+            android:layout_marginLeft="17dp"
+            android:layout_marginTop="6dp"
+            android:layout_toRightOf="@id/imageLayout"
+            android:src="@drawable/ic_time"
+            tools:text="Order Successfully Completed" />
+
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/video_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/video_title"
+            android:layout_marginLeft="6dp"
+            android:layout_marginTop="6dp"
+            android:layout_toRightOf="@id/time_imageview"
+            android:fontFamily="@font/lato"
+            android:letterSpacing="0"
+            android:textColor="@color/warm_grey"
+            android:textSize="12sp"
+            tools:text="6:15" />
+
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/lessonNameTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/video_time"
+            android:layout_marginLeft="17dp"
+            android:layout_marginTop="6dp"
+            android:layout_toRightOf="@id/imageLayout"
+            android:fontFamily="@font/lato"
+            android:letterSpacing="0"
+            android:textColor="@color/warm_grey"
+            android:textSize="12sp"
+            tools:text="Lesson 2" />
+
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/lessonsSeeMoreButton"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="SEE MORE"
+            android:layout_below="@id/video_time"/>
+
+    </RelativeLayout>
+</LinearLayout>

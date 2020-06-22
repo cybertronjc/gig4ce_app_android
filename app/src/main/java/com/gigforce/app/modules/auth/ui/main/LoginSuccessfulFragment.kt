@@ -31,6 +31,9 @@ class LoginSuccessfulFragment : BaseFragment() {
         return layout
     }
 
+    override fun isDeviceLanguageChangedDialogRequired(): Boolean {
+        return false
+    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(LoginSuccessfulViewModel::class.java)
@@ -53,7 +56,7 @@ class LoginSuccessfulFragment : BaseFragment() {
                 if (profile.status) {
                     popFragmentFromStack(R.id.loginSuccessfulFragment)
                     if (profile.isOnboardingCompleted!=null && profile.isOnboardingCompleted) {
-                        navigateWithAllPopupStack(R.id.mainHomeScreen)
+                        navigateWithAllPopupStack(R.id.landinghomefragment)
                     } else {
                         navigateWithAllPopupStack(R.id.onboardingfragment)
                     }
