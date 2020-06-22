@@ -5,13 +5,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import com.bumptech.glide.Glide
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
 import com.gigforce.app.modules.gigerVerfication.ImageSource
 import com.gigforce.app.modules.gigerVerfication.SelectImageSourceBottomSheet
 import com.gigforce.app.modules.gigerVerfication.SelectImageSourceBottomSheetActionListener
+import com.gigforce.app.modules.gigerVerfication.aadharCard.AadharCardSides
+import kotlinx.android.synthetic.main.fragment_add_aadhar_card_info.*
 import kotlinx.android.synthetic.main.fragment_add_driving_license_info.*
+import kotlinx.android.synthetic.main.fragment_add_driving_license_info.dobTV
+import kotlinx.android.synthetic.main.fragment_add_driving_license_info.nameTV
+import kotlinx.android.synthetic.main.fragment_add_driving_license_info.toolbar
 import kotlinx.android.synthetic.main.fragment_verification_image_holder.view.*
 import java.io.File
 
@@ -86,6 +92,30 @@ class AddDrivingLicenseInfoFragment : BaseFragment(), SelectImageSourceBottomShe
                 selectImageSourceBottomSheetActionListener = this
             )
         }
+
+        dlFrontImageHolder.uploadImageLayout.imageLabelTV.text =
+            getString(R.string.upload_driving_license_front_side)
+
+        dlBackImageHolder.uploadImageLayout.imageLabelTV.text =
+            getString(R.string.upload_driving_license_back_side)
+
+        dlFrontImageHolder.uploadImageLayout.reuploadBtn.setOnClickListener {
+            currentlyClickingImageOfSide = DrivingLicenseSides.FRONT_SIDE
+
+            SelectImageSourceBottomSheet.launch(
+                childFragmentManager = childFragmentManager,
+                selectImageSourceBottomSheetActionListener = this
+            )
+        }
+
+        dlBackImageHolder.uploadImageLayout.reuploadBtn.setOnClickListener {
+            currentlyClickingImageOfSide = DrivingLicenseSides.BACK_SIDE
+
+            SelectImageSourceBottomSheet.launch(
+                childFragmentManager = childFragmentManager,
+                selectImageSourceBottomSheetActionListener = this
+            )
+        }
     }
 
     private fun showDLImageAndInfoLayout() {
@@ -116,20 +146,41 @@ class AddDrivingLicenseInfoFragment : BaseFragment(), SelectImageSourceBottomShe
         else if (currentlyClickingImageOfSide == DrivingLicenseSides.BACK_SIDE) {
             dlBackImagePath = File("ma")
             enableSubmitButton()
+            showBackDrivingLicense()
         } else if (currentlyClickingImageOfSide == DrivingLicenseSides.FRONT_SIDE) {
             dlFrontImagePath = File("ma")
             enableSubmitButton()
+            showFrontDrivingLicense()
         }
 
         setDLInfoOnView(
-            name = "Rahul Jr",
+            name = "Rahul Jain",
             dob = "11/09/1990",
             fathersName = "Male",
-            licenseNo = "2345 7624 9238",
+            licenseNo = "DL234576249238",
             licenseValidity = "10/2030",
-            address = "PU23SDDLOJIJ"
+            address = "House no 3432, Preet Vihar, New Delhi, Delhi 112034"
         )
     }
+
+    private fun showFrontDrivingLicense(aadharFrontImagePath: File? = null) {
+        dlFrontImageHolder.uploadDocumentCardView.visibility = View.GONE
+        dlFrontImageHolder.uploadImageLayout.visibility = View.VISIBLE
+
+        Glide.with(requireContext())
+            .load(R.drawable.bg_dl)
+            .into(dlFrontImageHolder.uploadImageLayout.clickedImageIV)
+    }
+
+    private fun showBackDrivingLicense(aadharBackImagePath: File? = null) {
+        dlBackImageHolder.uploadDocumentCardView.visibility = View.GONE
+        dlBackImageHolder.uploadImageLayout.visibility = View.VISIBLE
+
+        Glide.with(requireContext())
+            .load(R.drawable.bg_dl)
+            .into(dlBackImageHolder.uploadImageLayout.clickedImageIV)
+    }
+
 
     private fun setDLInfoOnView(
         name: String?,

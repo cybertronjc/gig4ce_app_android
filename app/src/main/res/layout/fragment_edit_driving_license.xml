@@ -53,6 +53,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
             android:textColor="@color/black"
+            android:text="Rahul Jain"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/nameLabel" />
 
@@ -71,6 +72,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
             android:textColor="@color/black"
+            android:text="Sahil Jain"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/fathersNameLabel" />
 
@@ -91,6 +93,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
             android:enabled="false"
+            android:text="11/09/1990"
             android:textColor="@color/black"
             app:layout_constraintEnd_toEndOf="@id/selectDobButton"
             app:layout_constraintStart_toStartOf="parent"
@@ -122,6 +125,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
             android:textColor="@color/black"
+            android:text="DL234576249238"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/licenseNoLabel" />
 
@@ -141,6 +145,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
             android:enabled="false"
+            android:text="10/2030"
             android:textColor="@color/black"
             app:layout_constraintEnd_toEndOf="@id/selectLicenseValidityButton"
             app:layout_constraintStart_toStartOf="parent"
@@ -175,6 +180,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
             android:textColor="@color/black"
+            android:text="House no 3432"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/addressLineLabel" />
 
@@ -212,6 +218,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
                 android:textColor="@color/black"
+                android:text="Preet Vihar"
                 app:layout_constraintEnd_toStartOf="@+id/locationET"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/locationLabel" />
@@ -223,6 +230,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
                 android:textColor="@color/black"
+                android:text="New Delhi"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/areaET"
                 app:layout_constraintTop_toBottomOf="@id/locationLabel" />
@@ -263,6 +271,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
                 android:textColor="@color/black"
+                android:text="Delhi"
                 app:layout_constraintEnd_toStartOf="@+id/pinET"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/stateLabel" />
@@ -275,6 +284,7 @@
                 android:layout_marginTop="2dp"
                 android:inputType="number"
                 android:maxLength="6"
+                android:text="112034"
                 android:textColor="@color/black"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/stateET"
