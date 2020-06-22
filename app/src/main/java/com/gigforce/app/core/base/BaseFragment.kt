@@ -46,7 +46,6 @@ open class BaseFragment : Fragment(), ViewsFromViewsInterface, NavigationInterfa
     lateinit var sharedDataInterface: SharedDataInterface
     lateinit var appDialogsInterface: AppDialogsInterface
     lateinit var languageUtilInterface: LanguageUtilInterface
-
     lateinit var utilAndValidationInterface: UtilAndValidationInterface
     lateinit var baseFragment: BaseFragment
     var mView: View? = null

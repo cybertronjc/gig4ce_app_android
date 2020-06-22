@@ -16,9 +16,6 @@ import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.modules.auth.ui.main.LoginViewModel.Companion.STATE_SIGNIN_FAILED
 import com.gigforce.app.modules.auth.ui.main.LoginViewModel.Companion.STATE_SIGNIN_SUCCESS
-import com.gigforce.app.utils.AppConstants
-import com.gigforce.app.utils.popAllBackStates
-import kotlinx.android.synthetic.main.login_frament.*
 import kotlinx.android.synthetic.main.otp_verification.*
 import kotlinx.android.synthetic.main.otp_verification.progressBar
 import java.util.regex.Matcher

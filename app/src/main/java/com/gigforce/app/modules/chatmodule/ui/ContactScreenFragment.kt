@@ -65,6 +65,9 @@ class ContactScreenFragment : BaseFragment(),OnContactClickListener {
         iv_search.setOnClickListener {
             showToast("Search Operation...")
         }
+        back_arrow.setOnClickListener{
+            activity?.onBackPressed()
+        }
     }
 
     private fun subscribeViewModel(){

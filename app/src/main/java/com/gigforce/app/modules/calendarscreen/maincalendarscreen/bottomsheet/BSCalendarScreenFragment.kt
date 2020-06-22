@@ -201,22 +201,21 @@ class BSCalendarScreenFragment : BaseFragment() {
 
     private fun initializeFeaturesBottomSheet() {
         var datalist: ArrayList<FeatureModel> = ArrayList<FeatureModel>()
-        datalist.add(FeatureModel("My Gig", R.drawable.mygig))
-        datalist.add(FeatureModel("Explore", R.drawable.ic_landinghome_search))
-        datalist.add(FeatureModel("Wallet", R.drawable.wallet))
-        datalist.add(FeatureModel("Profile", R.drawable.profile))
-        datalist.add(FeatureModel("Learning", R.drawable.learning))
-        datalist.add(FeatureModel("Settings", R.drawable.settings))
-        datalist.add(FeatureModel("Chat", R.drawable.chat))
-        datalist.add(FeatureModel("Landing HS", R.drawable.chat))
+        datalist.add(FeatureModel("My Gig", R.drawable.mygig,-1))
+        datalist.add(FeatureModel("Explore", R.drawable.ic_landinghome_search,-1))
+        datalist.add(FeatureModel("Wallet", R.drawable.wallet,R.id.walletBalancePage))
+        datalist.add(FeatureModel("Profile", R.drawable.profile,R.id.profileFragment))
+        datalist.add(FeatureModel("Learning", R.drawable.learning,-1))
+        datalist.add(FeatureModel("Settings", R.drawable.settings,R.id.settingFragment))
+        datalist.add(FeatureModel("Chat", R.drawable.chat,R.id.contactScreenFragment))
+        datalist.add(FeatureModel("Landing HS", R.drawable.chat,R.id.landinghomefragment))
+
         val itemWidth = ((width / 7) * 1.6).toInt()
         val recyclerGenericAdapter: RecyclerGenericAdapter<FeatureModel> =
             RecyclerGenericAdapter<FeatureModel>(
                 activity?.applicationContext,
-                PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
-                    navigateToFeature(
-                        position
-                    )
+                PFRecyclerViewAdapter.OnViewHolderClick<FeatureModel?> { view, position, item ->
+                    if(item?.navigationID!=-1)navigate(item?.navigationID!!)
                 },
                 RecyclerGenericAdapter.ItemInterface<FeatureModel?> { obj, viewHolder, position ->
                     val lp = getView(viewHolder, R.id.card_view).layoutParams
@@ -238,18 +237,18 @@ class BSCalendarScreenFragment : BaseFragment() {
         feature_rv.adapter = recyclerGenericAdapter
     }
 
-    private fun navigateToFeature(position: Int) {
-        when (position) {
-            0 -> showToast("")
-            1 -> showToast("")
-            2 -> navigate(R.id.walletBalancePage)
-            3 -> navigate(R.id.profileFragment)
-            4 -> showToast("")
-            5 -> navigate(R.id.settingFragment)
-            6 -> navigate(R.id.helpChatFragment)
-            7 -> navigate(R.id.landinghomefragment)
-        }
-    }
+//    private fun navigateToFeature(position: Int) {
+//        when (position) {
+//            0 -> showToast("")
+//            1 -> showToast("")
+//            2 -> navigate(R.id.walletBalancePage)
+//            3 -> navigate(R.id.profileFragment)
+//            4 -> showToast("")
+//            5 -> navigate(R.id.settingFragment)
+//            6 -> navigate(R.id.helpChatFragment)
+//            7 -> navigate(R.id.landinghomefragment)
+//        }
+//    }
 
     private fun initializeLearningModule() {
 
@@ -280,7 +279,7 @@ class BSCalendarScreenFragment : BaseFragment() {
         )
         datalist.add(
             LandingScreenFragment.TitleSubtitleModel(
-                "Retail Sales executive",
+                "Retail Sales Executive",
                 "Help customers choose the right products",
                 R.drawable.learning2
             )
