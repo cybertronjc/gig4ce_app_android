@@ -1,7 +1,6 @@
 package com.gigforce.app.modules.learning.learningVideo
 
 
-import android.app.Dialog
 import android.content.pm.ActivityInfo
 import android.content.res.Configuration
 import android.net.Uri
@@ -28,9 +27,9 @@ class PlayVideoDialogFragment : DialogFragment() {
     private var player: SimpleExoPlayer? = null
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View {
 
         savedInstanceState?.let {
@@ -51,23 +50,15 @@ class PlayVideoDialogFragment : DialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setStyle(
-            STYLE_NORMAL,
-            android.R.style.Theme_Black_NoTitleBar_Fullscreen
-        )
+        setStyle(DialogFragment.STYLE_NO_TITLE, android.R.style.Theme_Translucent_NoTitleBar_Fullscreen)
     }
 
     private fun initializePlayer() {
         player = SimpleExoPlayer.Builder(requireContext()).build()
         playerView.player = player
 
-//        FirebaseStorage.getInstance().reference.child("learning_videos/")
-//        val uri =
-//            Uri.parse("https://storage.googleapis.com/exoplayer-test-media-0/BigBuckBunny_320x180.mp4")
-
         val uri =
-            Uri.parse("https://firebasestorage.googleapis.com/v0/b/gigforce-dev.appspot.com/o/learning_videos%2FM1L2_2.mp4?alt=media&token=7cbacffa-6d28-431d-bf0f-04ce388af935")
-
+                Uri.parse("https://firebasestorage.googleapis.com/v0/b/gigforce-dev.appspot.com/o/learning_videos%2FM1L2_2.mp4?alt=media&token=7cbacffa-6d28-431d-bf0f-04ce388af935")
         val mediaSource = buildMediaSource(uri)
 
         player?.playWhenReady = playWhenReady
@@ -112,16 +103,16 @@ class PlayVideoDialogFragment : DialogFragment() {
             initializePlayer()
 
         playerView
-            .findViewById<View>(R.id.toggle_full_screen)
-            .setOnClickListener {
+                .findViewById<View>(R.id.toggle_full_screen)
+                .setOnClickListener {
 
-                when (resources.configuration.orientation) {
-                    Configuration.ORIENTATION_PORTRAIT -> activity?.requestedOrientation =
-                        ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-                    Configuration.ORIENTATION_LANDSCAPE -> activity?.requestedOrientation =
-                        ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+                    when (resources.configuration.orientation) {
+                        Configuration.ORIENTATION_PORTRAIT -> activity?.requestedOrientation =
+                                ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+                        Configuration.ORIENTATION_LANDSCAPE -> activity?.requestedOrientation =
+                                ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+                    }
                 }
-            }
     }
 
     override fun onResume() {
@@ -130,19 +121,6 @@ class PlayVideoDialogFragment : DialogFragment() {
             initializePlayer()
     }
 
-
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        return object : Dialog(requireActivity(), theme) {
-            override fun onBackPressed() {
-
-                when (resources.configuration.orientation) {
-                    Configuration.ORIENTATION_LANDSCAPE -> activity?.requestedOrientation =
-                        ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-                    else -> super.onBackPressed()
-                }
-            }
-        }
-    }
 
     override fun onStart() {
         super.onStart()
