@@ -102,7 +102,7 @@ class HourViewFragment: RosterBaseFragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun initialize() {
 
-        rosterViewModel.bsBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+        //rosterViewModel.bsBehavior.state = BottomSheetBehavior.STATE_HIDDEN
 
         initializeHourViews()
 

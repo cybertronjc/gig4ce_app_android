@@ -69,7 +69,8 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <include layout="@layout/unavailable_time_adjustment_bottom_sheet"
-        android:id="@+id/mark_unavailable_bs" />
+        android:id="@+id/mark_unavailable_bs"
+        android:visibility="gone"/>
 
 
 </com.google.android.material.circularreveal.coordinatorlayout.CircularRevealCoordinatorLayout>
