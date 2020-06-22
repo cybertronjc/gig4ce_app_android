@@ -364,4 +364,13 @@
 <!--    <string name="learning_based_on_nroles_and_industry">Learning based on\nroles and industry</string>-->
 <!--    <string name="recently_added">Recently Added</string>-->
 <!--&gt;>>>>>> 42aeab89cfc85555af79affd7616ee32ca2b5b2e-->
+
+    <string name="why_learning_is_important">Why Learning is Important?</string>
+    <string name="increase_your_knowlegde">Increase Your Knowlegde</string>
+    <string name="anytime_anywhere">ANYTIME ANYWHERE</string>
+    <string name="learning_based_on_nroles_and_industry">Learning based on\nroles and industry</string>
+    <string name="recently_added">Recently Added</string>
+
+
+
 </resources>

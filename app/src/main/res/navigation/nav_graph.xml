@@ -523,5 +523,21 @@
         android:id="@+id/gigPageExpanded"
         android:name="com.gigforce.app.modules.roster.GigPageExpanded"
         android:label="GigPageExpanded" />
+
+    <fragment
+        android:id="@+id/learningWithStatsFragment"
+        android:name="com.gigforce.app.modules.learning.LearningWithStatsFragment"
+        android:label="fragment_learning_stats"
+        tools:layout="@layout/fragment_learning_stats" />
+    <fragment
+        android:id="@+id/learningVideoFragment"
+        android:name="com.gigforce.app.modules.learning.LearningVideoFragment"
+        android:label="LearningVideoFragment" />
+    <fragment
+        android:id="@+id/playVideoDialogFragment"
+        android:name="com.gigforce.app.modules.learning.learningVideo.PlayVideoDialogFragment"
+        android:label="fragment_play_video"
+        tools:layout="@layout/fragment_play_video" />
+
 </navigation>
 

@@ -358,6 +358,8 @@
     <string name="learning_based_on_nroles_and_industry">Learning based on\nroles and industry</string>
     <string name="recently_added">Recently Added</string>
 
+    <string name="assessment_based_on_learnings">Assessment based on learnings</string>
+    <string name="explore_learnings">Explore Learnings</string>
 
 
     // chat appbar menu items

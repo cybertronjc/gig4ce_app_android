@@ -66,11 +66,11 @@
     <color name="warm_grey">#888888</color>
     <color name="light_grey">#dddddd</color>
     <color name="darkish_pink_two">#e94b81</color>
+    <color name="greyish_brown">#444444</color>
+    <color name="yellow">#f5a623</color>
+    <color name="green">#72a839</color>
     <color name="status_bg_pending">#f5a623</color>
     <color name="status_bg_completed">#72a839</color>
-
-
-
     <color name="app_green">#468800</color>
 
 </resources>
