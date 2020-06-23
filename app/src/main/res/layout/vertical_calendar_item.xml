@@ -7,9 +7,10 @@
     android:background="@color/white">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/active_layout"
+        android:id="@+id/action_layout"
         android:layout_width="match_parent"
         android:layout_height="56dp"
+        android:background="#33e02020"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -21,9 +22,28 @@
             android:layout_height="wrap_content"
             android:text="Marked Unavailable"
             android:layout_marginLeft="14dp"
+            android:textColor="#e02020"
+            android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textView72"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#66e02020"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/textView73"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#66e02020"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/calendar_detail_item_cl"
@@ -31,10 +51,10 @@
         android:layout_height="wrap_content"
         android:visibility="gone"
         android:elevation="1dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintBottom_toBottomOf="@+id/action_layout"
+        app:layout_constraintEnd_toEndOf="@+id/action_layout"
+        app:layout_constraintStart_toStartOf="@+id/action_layout"
+        app:layout_constraintTop_toTopOf="@+id/action_layout">
 
         <View
             android:id="@+id/daydatecard"
