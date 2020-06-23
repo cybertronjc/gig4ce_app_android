@@ -63,50 +63,116 @@
         app:layout_constraintEnd_toStartOf="@+id/helpIconIV"
         app:layout_constraintTop_toBottomOf="@id/appBar" />
 
-    <RelativeLayout
-        android:id="@+id/cameraViewContainer"
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="278dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="37dp"
         android:layout_marginEnd="16dp"
+        android:orientation="vertical"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/selfieVideoLabel">
 
-        <com.otaliastudios.cameraview.CameraView
-            android:id="@+id/cameraView"
+
+        <RelativeLayout
+            android:id="@+id/cameraViewContainer"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:keepScreenOn="true"
-            android:orientation="vertical"
-            app:cameraAudio="off"
-            app:cameraAutoFocusMarker="@string/cameraview_default_autofocus_marker"
-            app:cameraEngine="camera2"
-            app:cameraExperimental="true"
-            app:cameraFacing="front"
-            app:cameraFlash="auto"
-            app:cameraGestureTap="autoFocus"
-            app:cameraGrid="off"
-            app:cameraMode="picture"
-            app:cameraPreview="glSurface" />
+            android:layout_height="240dp">
+
+            <com.otaliastudios.cameraview.CameraView
+                android:id="@+id/cameraView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:keepScreenOn="true"
+                android:orientation="vertical"
+                app:cameraAudio="on"
+                app:cameraAutoFocusMarker="@string/cameraview_default_autofocus_marker"
+                app:cameraEngine="camera2"
+                app:cameraExperimental="true"
+                app:cameraFacing="front"
+                app:cameraFlash="auto"
+                app:elevation="5dp"
+                app:cameraGestureTap="autoFocus"
+                app:cameraMode="video"
+                app:cameraPlaySounds="true"
+                app:cameraPreview="glSurface" />
+
+            <LinearLayout
+                android:id="@+id/cameraControlsLayout"
+                android:layout_width="match_parent"
+                android:layout_height="36dp"
+                android:layout_alignParentBottom="true"
+                android:background="#51000000"
+                android:gravity="center">
+
+                <ImageButton
+                    android:id="@+id/recordVideoButton"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:scaleX="0.7"
+                    android:scaleY="0.7"
+                    android:src="@drawable/ic_record" />
+
+            </LinearLayout>
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@id/cameraControlsLayout"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="7dp"
+                app:cardBackgroundColor="#51000000"
+                app:cardCornerRadius="8dp">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="8dp">
+
+                    <ImageView
+                        android:layout_width="12dp"
+                        android:layout_height="12dp"
+                        android:src="@drawable/ic_record" />
+
+                    <TextView
+                        android:id="@+id/countDownTimerTV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:fontFamily="@font/lato"
+                        android:text="00:10"
+                        android:textColor="@color/white"
+                        android:textSize="12sp" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+
+        </RelativeLayout>
 
         <LinearLayout
+            android:id="@+id/videoPlayerContainer"
             android:layout_width="match_parent"
-            android:layout_height="36dp"
-            android:gravity="center"
-            android:layout_alignParentBottom="true"
-            android:background="#51000000">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:visibility="visible">
 
-            <ImageView
-                android:layout_width="35dp"
-                android:src="@drawable/ic_record"
-                android:scaleX="0.7"
-                android:scaleY="0.7"
-                android:layout_height="35dp" />
-            
+            <fragment
+                android:id="@+id/selfieVideoPlayerFragment"
+                android:name="com.gigforce.app.modules.gigerVerfication.selfieVideo.PlayVideoFragment"
+                android:layout_width="match_parent"
+                android:layout_height="240dp"
+                app:controller_layout_id="@layout/fragment_play_video_controls" />
+
         </LinearLayout>
-    </RelativeLayout>
+
+    </LinearLayout>
 
 
     <com.ncorti.slidetoact.SlideToActView
@@ -119,6 +185,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:outer_color="#dddddd"
         app:slider_height="60dp"
+        android:visibility="gone"
         app:slider_icon="@drawable/ic_arrow_forward_white"
         app:slider_icon_color="@color/white"
         app:text="SAVE" />
@@ -129,6 +196,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="13dp"
         android:layout_marginBottom="18dp"
+        android:visibility="gone"
         android:text="@string/yes_i_confirm_the_data_is_correct"
         app:layout_constraintBottom_toTopOf="@id/selfieVideoSubmitSliderBtn"
         app:layout_constraintVertical_bias="0.98"

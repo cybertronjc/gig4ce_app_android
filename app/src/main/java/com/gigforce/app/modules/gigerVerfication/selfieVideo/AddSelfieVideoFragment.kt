@@ -3,6 +3,7 @@ package com.gigforce.app.modules.gigerVerfication.selfieVideo
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -12,14 +13,18 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.viewModels
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
-import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
+import com.gigforce.app.utils.DateHelper
 import com.otaliastudios.cameraview.CameraLogger
-import com.otaliastudios.cameraview.PictureResult
+import com.otaliastudios.cameraview.VideoResult
+import com.otaliastudios.cameraview.controls.Mode
 import kotlinx.android.synthetic.main.fragment_add_selfie_video.*
+import java.io.File
 
 class AddSelfieVideoFragment : BaseFragment() {
 
-    private val viewModel: GigVerificationViewModel by viewModels()
+    private val viewModel: SelfiVideoViewModel by viewModels()
+    private var videoPath: File? = null
+    private lateinit var playVideoFragment: PlayVideoFragment
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,11 +36,12 @@ class AddSelfieVideoFragment : BaseFragment() {
         initViews()
     }
 
+
     private fun initViews() {
 
-        toolbar.setNavigationOnClickListener {
-            activity?.onBackPressed()
-        }
+        playVideoFragment =
+            childFragmentManager.findFragmentById(R.id.selfieVideoPlayerFragment) as PlayVideoFragment
+        toolbar.setNavigationOnClickListener { activity?.onBackPressed() }
 
         if (hasCameraPermissions())
             initCamera()
@@ -48,8 +54,25 @@ class AddSelfieVideoFragment : BaseFragment() {
                 enableSubmitButton()
             else
                 disableSubmitButton()
-
         }
+
+        recordVideoButton.setOnClickListener {
+            startRecordingVideo()
+            startTimer()
+        }
+    }
+
+    private fun startTimer() {
+        val timer = object : CountDownTimer(SELFIE_VIDEO_TIME.toLong(), 1000) {
+            override fun onFinish() {
+
+            }
+
+            override fun onTick(millisUntilFinished: Long) {
+                countDownTimerTV.text = "00:0${millisUntilFinished / 1000}"
+            }
+        }
+        timer.start()
     }
 
     private fun hasCameraPermissions(): Boolean {
@@ -87,6 +110,7 @@ class AddSelfieVideoFragment : BaseFragment() {
         cameraView.addCameraListener(CameraListener())
     }
 
+
     private fun enableSubmitButton() {
         selfieVideoSubmitSliderBtn.isEnabled = true
 
@@ -107,15 +131,67 @@ class AddSelfieVideoFragment : BaseFragment() {
 
     private inner class CameraListener : com.otaliastudios.cameraview.CameraListener() {
 
-        override fun onPictureTaken(result: PictureResult) {
-            super.onPictureTaken(result)
-            //User Image
-            Log.d("Test", "Picture Taken")
+        override fun onVideoTaken(result: VideoResult) {
+            super.onVideoTaken(result)
+            showToast("Video Recorded")
+            videoPath = result.file
+
+           // hideCaptureVideoControls()
+            //showVideoPreviewControls()
+
+            playVideoFragment.playVideo(result.file)
+        }
+    }
+
+    private fun startRecordingVideo() {
+        if (cameraView.mode == Mode.PICTURE) {
+            Log.e("AddSelfieVideoFragment", "Camera Is In Picture Mode, Skipping Record Video")
+            return
+        }
+
+        if (cameraView.isTakingPicture || cameraView.isTakingVideo)
+            return
+
+        videoPath = File(requireContext().filesDir, "vid_${DateHelper.getFullDateTimeStamp()}.mp4")
+        cameraView.takeVideo(videoPath!!, SELFIE_VIDEO_TIME)
+    }
+
+    private fun stashRecordedVideoAndShowPreview() {
+        if (videoPath != null)
+            deleteExistingVideoIfExist()
+
+        hideVideoPreviewControls()
+        hideVideoPreviewControls()
+    }
+
+    private fun showCaptureVideoControls() {
+        cameraViewContainer.visibility = View.VISIBLE
+    }
+
+    private fun hideCaptureVideoControls() {
+        cameraViewContainer.visibility = View.GONE
+    }
+
+    private fun hideVideoPreviewControls() {
+        videoPlayerContainer.visibility = View.INVISIBLE
+    }
+
+    private fun showVideoPreviewControls() {
+        videoPlayerContainer.visibility = View.VISIBLE
+    }
+
+    private fun deleteExistingVideoIfExist() {
+        runCatching {
+            if (videoPath!!.exists())
+                videoPath?.delete()
+
+        }.onFailure {
+            Log.e("AddSelfieVideoPath", "Unable to Delete Video", it)
         }
     }
 
     companion object {
         private const val REQUEST_CAMERA_PERMISSION = 2321
+        private const val SELFIE_VIDEO_TIME = 10_000 //10 Secs
     }
-
 }
