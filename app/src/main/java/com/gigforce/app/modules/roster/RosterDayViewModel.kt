@@ -97,7 +97,7 @@ class RosterDayViewModel: ViewModel() {
                     title = "Retail Sale executive",
                     gigAmount = 1200,
                     gigStatus = "completed",
-                    isGigCompleted = true,
+                    isGigCompleted = false,
                     isPaymentDone = true,
                     gigRating = 4.8F
                 ),
@@ -111,7 +111,7 @@ class RosterDayViewModel: ViewModel() {
                     title = "Retail Sale executive",
                     gigAmount = 1200,
                     gigStatus = "completed",
-                    isGigCompleted = true,
+                    isGigCompleted = false,
                     isPaymentDone = true,
                     gigRating = 4.0F
                 ),
@@ -125,7 +125,7 @@ class RosterDayViewModel: ViewModel() {
                     title = "Retail Sale executive",
                     gigAmount = 400,
                     gigStatus = "completed",
-                    isGigCompleted = true,
+                    isGigCompleted = false,
                     isPaymentDone = true,
                     gigRating = 5.0F
                 ),
@@ -139,7 +139,7 @@ class RosterDayViewModel: ViewModel() {
                     title = "Retail Sale executive",
                     gigAmount = 400,
                     gigStatus = "completed",
-                    isGigCompleted = true,
+                    isGigCompleted = false,
                     isPaymentDone = true,
                     gigRating = 5.0F
                 ),
@@ -166,10 +166,10 @@ class RosterDayViewModel: ViewModel() {
                     duration = 8F,
                     title = "Retail Sale executive",
                     gigAmount = 0,
-                    gigStatus = "upcoming",
-                    isGigCompleted = false,
-                    isPaymentDone = false,
-                    gigRating = 0F
+                    gigStatus = "completed",
+                    isGigCompleted = true,
+                    isPaymentDone = true,
+                    gigRating = 4.8F
                 ),
                 Gig(
                     date = 22,
@@ -183,7 +183,7 @@ class RosterDayViewModel: ViewModel() {
                     gigStatus = "completed",
                     isGigCompleted = true,
                     isPaymentDone = true,
-                    gigRating = 4.8F
+                    gigRating = 4.2F
                 ),
                 Gig(
                     date = 21,

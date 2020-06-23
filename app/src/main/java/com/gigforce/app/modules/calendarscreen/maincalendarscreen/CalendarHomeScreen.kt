@@ -7,6 +7,7 @@ import androidx.annotation.RequiresApi
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.request.RequestOptions
@@ -14,6 +15,7 @@ import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.app.core.genericadapter.RecyclerGenericAdapter
+import com.gigforce.app.modules.calendarscreen.maincalendarscreen.verticalcalendar.CalendarRecyclerItemTouchHelper
 import com.gigforce.app.modules.calendarscreen.maincalendarscreen.verticalcalendar.VerticalCalendarDataItemModel
 import com.gigforce.app.modules.preferences.PreferencesFragment
 import com.gigforce.app.modules.preferences.prefdatamodel.PreferencesDataModel
@@ -28,7 +30,7 @@ import java.time.LocalDateTime
 import java.util.*
 
 
-class CalendarHomeScreen : BaseFragment() {
+class CalendarHomeScreen : BaseFragment() , CalendarRecyclerItemTouchHelper.RecyclerItemTouchHelperListener{
 
     companion object {
         fun newInstance() =
@@ -319,8 +321,12 @@ class CalendarHomeScreen : BaseFragment() {
         }
         rv_.addOnScrollListener(scrollListener)
 
+//        var itemTouchListener = CalendarRecyclerItemTouchHelper(0,ItemTouchHelper.RIGHT,this)
+//        ItemTouchHelper(itemTouchListener).attachToRecyclerView(rv_)
     }
+    override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int, position: Int) {
 
+    }
     private fun showMonthLayout(show: Boolean, viewHolder: PFRecyclerViewAdapter<Any?>.ViewHolder) {
         if (show) {
             getView(viewHolder, R.id.calendar_month_cl).visibility = View.VISIBLE
@@ -330,5 +336,7 @@ class CalendarHomeScreen : BaseFragment() {
             getView(viewHolder, R.id.calendar_detail_item_cl).visibility = View.VISIBLE
         }
     }
+
+
 
 }

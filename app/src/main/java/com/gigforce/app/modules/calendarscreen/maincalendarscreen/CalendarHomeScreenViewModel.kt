@@ -58,6 +58,8 @@ class CalendarHomeScreenViewModel : ViewModel() {
     }
     private fun getAllGigData(): ArrayList<AllotedGigDataModel>? {
         var arrayList = ArrayList<AllotedGigDataModel>()
+        arrayList.add(getGigData(30,5,2020,"Retail Sale executive",getGigDetailData("Retail Sale executive",false),true))
+
         arrayList.add(getGigData(29,5,2020,"Retail Sale executive",getGigDetailData("Retail Sale executive",false),true))
 
         arrayList.add(getGigData(28,5,2020,"Retail Sale executive",getGigDetailData("Retail Sale executive",false),true))
