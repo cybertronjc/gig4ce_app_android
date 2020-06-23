@@ -25,19 +25,24 @@ class LearningVideoFragment : BaseFragment() {
             thumbnail = R.drawable.bg_user_learning,
             title = "Getting prepared for a product demo",
             videoLength = "03: 34",
-            lessonName = "Lesson 1"
+            lessonName = "Lesson 1",
+            lessonsSeeMoreButton = "Replay"
         ),
         LearningVideo(
             thumbnail = R.drawable.bg_user_learning,
             title = "Conducting an effective product demo",
             videoLength = "60 Sec",
-            lessonName = "Lesson 2"
+            lessonName = "Lesson 2",
+            lessonsSeeMoreButton = "Replay"
+
         ),
         LearningVideo(
             thumbnail = R.drawable.bg_user_learning,
             title = "Post demo: How to connect with customer",
             videoLength = "01:34",
-            lessonName = "Lesson 3"
+            lessonName = "Lesson 3",
+            lessonsSeeMoreButton = "Play Now"
+
         )
     )
 

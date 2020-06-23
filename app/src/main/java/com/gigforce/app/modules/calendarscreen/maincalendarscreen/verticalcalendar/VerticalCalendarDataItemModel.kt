@@ -37,7 +37,7 @@ class VerticalCalendarDataItemModel (
                 isPreviousDateFound = false
             }
             return VerticalCalendarDataItemModel(
-                "No gigs Assigned",
+                "No gigs assigned",
                 "",
                 getDayOfWeek(calendar.get(Calendar.DAY_OF_WEEK)),
                 isToday,
