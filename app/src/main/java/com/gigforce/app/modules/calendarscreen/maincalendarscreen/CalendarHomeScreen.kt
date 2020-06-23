@@ -323,6 +323,7 @@ class CalendarHomeScreen : BaseFragment() , CalendarRecyclerItemTouchHelper.Recy
 
         var itemTouchListener = CalendarRecyclerItemTouchHelper(0,ItemTouchHelper.RIGHT,this)
         ItemTouchHelper(itemTouchListener).attachToRecyclerView(rv_)
+
     }
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int, position: Int) {
 

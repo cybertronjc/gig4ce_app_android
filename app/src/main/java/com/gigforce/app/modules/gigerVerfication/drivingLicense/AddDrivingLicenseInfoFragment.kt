@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
 import com.gigforce.app.R
@@ -12,12 +13,7 @@ import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
 import com.gigforce.app.modules.gigerVerfication.ImageSource
 import com.gigforce.app.modules.gigerVerfication.SelectImageSourceBottomSheet
 import com.gigforce.app.modules.gigerVerfication.SelectImageSourceBottomSheetActionListener
-import com.gigforce.app.modules.gigerVerfication.aadharCard.AadharCardSides
-import kotlinx.android.synthetic.main.fragment_add_aadhar_card_info.*
 import kotlinx.android.synthetic.main.fragment_add_driving_license_info.*
-import kotlinx.android.synthetic.main.fragment_add_driving_license_info.dobTV
-import kotlinx.android.synthetic.main.fragment_add_driving_license_info.nameTV
-import kotlinx.android.synthetic.main.fragment_add_driving_license_info.toolbar
 import kotlinx.android.synthetic.main.fragment_verification_image_holder.view.*
 import java.io.File
 
@@ -65,10 +61,25 @@ class AddDrivingLicenseInfoFragment : BaseFragment(), SelectImageSourceBottomShe
 
             if (checkedId == R.id.dlYesRB) {
                 showDLImageAndInfoLayout()
-            } else {
+            } else if(checkedId == R.id.dlNoRB && confirmDLDataCB.isChecked){
                 hideDLImageAndInfoLayout()
                 enableSubmitButton()
-            }
+            } else
+                disableSubmitButton()
+        }
+
+        confirmDLDataCB.setOnCheckedChangeListener { buttonView, isChecked ->
+
+            if (isChecked) {
+
+                if (dlYesRB.isChecked && dlFrontImagePath != null)
+                    enableSubmitButton()
+                else if (dlNoRB.isChecked)
+                    enableSubmitButton()
+                else
+                    disableSubmitButton()
+            } else
+                disableSubmitButton()
         }
 
         editDrivingLicenseInfoLayout.setOnClickListener {
@@ -121,7 +132,6 @@ class AddDrivingLicenseInfoFragment : BaseFragment(), SelectImageSourceBottomShe
     private fun showDLImageAndInfoLayout() {
         dlBackImageHolder.visibility = View.VISIBLE
         dlFrontImageHolder.visibility = View.VISIBLE
-
     }
 
     private fun hideDLImageAndInfoLayout() {
@@ -132,6 +142,20 @@ class AddDrivingLicenseInfoFragment : BaseFragment(), SelectImageSourceBottomShe
 
     private fun enableSubmitButton() {
         dlSubmitSliderBtn.isEnabled = true
+
+        dlSubmitSliderBtn.outerColor =
+            ResourcesCompat.getColor(resources, R.color.light_pink, null)
+        dlSubmitSliderBtn.innerColor =
+            ResourcesCompat.getColor(resources, R.color.lipstick, null)
+    }
+
+    private fun disableSubmitButton() {
+        dlSubmitSliderBtn.isEnabled = false
+
+        dlSubmitSliderBtn.outerColor =
+            ResourcesCompat.getColor(resources, R.color.light_grey, null)
+        dlSubmitSliderBtn.innerColor =
+            ResourcesCompat.getColor(resources, R.color.warm_grey, null)
     }
 
     private fun showImageInfoLayout() {
@@ -145,11 +169,17 @@ class AddDrivingLicenseInfoFragment : BaseFragment(), SelectImageSourceBottomShe
             return
         else if (currentlyClickingImageOfSide == DrivingLicenseSides.BACK_SIDE) {
             dlBackImagePath = File("ma")
-            enableSubmitButton()
+
+            if (confirmDLDataCB.isChecked)
+                enableSubmitButton()
+
             showBackDrivingLicense()
         } else if (currentlyClickingImageOfSide == DrivingLicenseSides.FRONT_SIDE) {
             dlFrontImagePath = File("ma")
-            enableSubmitButton()
+
+            if (confirmDLDataCB.isChecked)
+                enableSubmitButton()
+
             showFrontDrivingLicense()
         }
 

@@ -80,6 +80,7 @@ class CalendarHomeScreenViewModel : ViewModel() {
 
         arrayList.add(getGigData(19,5,2020,"Retail Sales Executive",getGigDetailData("Retail Sales Executive",true),true))
 
+
         return arrayList
     }
 

@@ -33,7 +33,7 @@ class InvoiceViewModel: ViewModel() {
                 ),
                 Invoice(
                     gigId = "GFG1230",
-                    agentName = "P&G",
+                    agentName = "P&G Retail",
                     date = 15,
                     month = 6,
                     year = 2020,
@@ -45,7 +45,7 @@ class InvoiceViewModel: ViewModel() {
                 ),
                 Invoice (
                     gigId = "GPG1201",
-                    agentName = "P&G",
+                    agentName = "P&G Retail",
                     date = 14,
                     month = 6,
                     year = 2020,
@@ -57,7 +57,7 @@ class InvoiceViewModel: ViewModel() {
                 ),
                 Invoice(
                     gigId = "GPG1220",
-                    agentName = "P&G",
+                    agentName = "P&G Retail",
                     date = 11,
                     month = 6,
                     year = 2020,

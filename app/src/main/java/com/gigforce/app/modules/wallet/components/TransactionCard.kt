@@ -24,7 +24,7 @@ class TransactionCard: MaterialCardView {
     var amount: Int = 0
         set(value) {
             field = value
-            t_amount.text = value.toString()
+            t_amount.text = "Rs $value"
         }
 
     var agent: String = ""

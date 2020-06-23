@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.viewModels
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
@@ -40,6 +41,15 @@ class AddSelfieVideoFragment : BaseFragment() {
             initCamera()
         else
             requestCameraPermission()
+
+        selfieVideoCorrectCB.setOnCheckedChangeListener { buttonView, isChecked ->
+
+            if (isChecked)
+                enableSubmitButton()
+            else
+                disableSubmitButton()
+
+        }
     }
 
     private fun hasCameraPermissions(): Boolean {
@@ -75,6 +85,24 @@ class AddSelfieVideoFragment : BaseFragment() {
         CameraLogger.setLogLevel(CameraLogger.LEVEL_VERBOSE)
         cameraView.setLifecycleOwner(this)
         cameraView.addCameraListener(CameraListener())
+    }
+
+    private fun enableSubmitButton() {
+        selfieVideoSubmitSliderBtn.isEnabled = true
+
+        selfieVideoSubmitSliderBtn.outerColor =
+            ResourcesCompat.getColor(resources, R.color.light_pink, null)
+        selfieVideoSubmitSliderBtn.innerColor =
+            ResourcesCompat.getColor(resources, R.color.lipstick, null)
+    }
+
+    private fun disableSubmitButton() {
+        selfieVideoSubmitSliderBtn.isEnabled = false
+
+        selfieVideoSubmitSliderBtn.outerColor =
+            ResourcesCompat.getColor(resources, R.color.light_grey, null)
+        selfieVideoSubmitSliderBtn.innerColor =
+            ResourcesCompat.getColor(resources, R.color.warm_grey, null)
     }
 
     private inner class CameraListener : com.otaliastudios.cameraview.CameraListener() {

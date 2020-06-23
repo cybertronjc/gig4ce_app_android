@@ -13,11 +13,7 @@ import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
 import com.gigforce.app.modules.gigerVerfication.ImageSource
 import com.gigforce.app.modules.gigerVerfication.SelectImageSourceBottomSheet
 import com.gigforce.app.modules.gigerVerfication.SelectImageSourceBottomSheetActionListener
-import kotlinx.android.synthetic.main.fragment_add_bank_details_info.*
 import kotlinx.android.synthetic.main.fragment_add_pan_card_info.*
-import kotlinx.android.synthetic.main.fragment_add_pan_card_info.fathersNameTV
-import kotlinx.android.synthetic.main.fragment_add_pan_card_info.nameTV
-import kotlinx.android.synthetic.main.fragment_add_pan_card_info.toolbar
 import kotlinx.android.synthetic.main.fragment_verification_image_holder.view.*
 import java.io.File
 
@@ -67,12 +63,12 @@ class AddPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetActio
             if (checkedId == R.id.panYesRB) {
                 showPanImageLayout()
 
-                if (clickedImagePath != null) {
+                if (clickedImagePath != null && panDataCorrectCB.isChecked) {
                     showImageInfoLayout()
                     enableSubmitButton()
                 } else
                     disableSubmitButton()
-            } else {
+            } else if (panDataCorrectCB.isChecked) {
                 hidePanImageAndInfoLayout()
                 enableSubmitButton()
             }
@@ -81,7 +77,13 @@ class AddPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetActio
         panDataCorrectCB.setOnCheckedChangeListener { _, isChecked ->
 
             if (isChecked) {
-                enableSubmitButton()
+
+                if (panYesRB.isChecked && clickedImagePath != null)
+                    enableSubmitButton()
+                else if (panNoRB.isChecked)
+                    enableSubmitButton()
+                else
+                    disableSubmitButton()
             } else
                 disableSubmitButton()
         }
@@ -115,13 +117,21 @@ class AddPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetActio
 
     private fun disableSubmitButton() {
         panSubmitSliderBtn.isEnabled = false
+
+        panSubmitSliderBtn.outerColor =
+            ResourcesCompat.getColor(resources, R.color.light_grey, null)
+        panSubmitSliderBtn.innerColor =
+            ResourcesCompat.getColor(resources, R.color.warm_grey, null)
     }
 
     override fun onImageSourceSelected(source: ImageSource) {
         showImageInfoLayout()
 
         clickedImagePath = File("na")
-        enableSubmitButton()
+
+        if (panDataCorrectCB.isChecked)
+            enableSubmitButton()
+
         showPanInfoCard(clickedImagePath)
         setPanInfoOnView(
             name = "Rahul Jain",
