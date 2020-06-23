@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
 import com.gigforce.app.R
@@ -61,10 +62,24 @@ class AddAadharCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetAc
 
             if (checkedId == R.id.aadharYesRB) {
                 showAadharImageAndInfoLayout()
-            } else {
+            } else if (checkedId == R.id.aadharNoRB && aadharDataCorrectCB.isChecked) {
                 hideAadharImageAndInfoLayout()
                 enableSubmitButton()
-            }
+            } else
+                disableSubmitButton()
+        }
+
+        aadharDataCorrectCB.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (isChecked) {
+
+                if (aadharYesRB.isChecked && aadharFrontImagePath != null)
+                    enableSubmitButton()
+                else if (aadharNoRB.isChecked)
+                    enableSubmitButton()
+                else
+                    disableSubmitButton()
+            } else
+                disableSubmitButton()
         }
 
         aadharFrontImageHolder.uploadDocumentCardView.setOnClickListener {
@@ -111,7 +126,6 @@ class AddAadharCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetAc
     private fun showAadharImageAndInfoLayout() {
         aadharBackImageHolder.visibility = View.VISIBLE
         aadharFrontImageHolder.visibility = View.VISIBLE
-
     }
 
     private fun hideAadharImageAndInfoLayout() {
@@ -122,6 +136,20 @@ class AddAadharCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetAc
 
     private fun enableSubmitButton() {
         aadharSubmitSliderBtn.isEnabled = true
+
+        aadharSubmitSliderBtn.outerColor =
+            ResourcesCompat.getColor(resources, R.color.light_pink, null)
+        aadharSubmitSliderBtn.innerColor =
+            ResourcesCompat.getColor(resources, R.color.lipstick, null)
+    }
+
+    private fun disableSubmitButton() {
+        aadharSubmitSliderBtn.isEnabled = false
+
+        aadharSubmitSliderBtn.outerColor =
+            ResourcesCompat.getColor(resources, R.color.light_grey, null)
+        aadharSubmitSliderBtn.innerColor =
+            ResourcesCompat.getColor(resources, R.color.warm_grey, null)
     }
 
     private fun showImageInfoLayout() {
@@ -136,11 +164,16 @@ class AddAadharCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetAc
         else if (currentlyClickingImageOfSide == AadharCardSides.BACK_SIDE) {
             aadharBackImagePath = File("ma")
             showBackAadharCard(aadharBackImagePath)
-            enableSubmitButton()
+
+            if (aadharDataCorrectCB.isChecked)
+                enableSubmitButton()
+
         } else if (currentlyClickingImageOfSide == AadharCardSides.FRONT_SIDE) {
             aadharFrontImagePath = File("ma")
             showFrontAadharCard(aadharFrontImagePath)
-            enableSubmitButton()
+
+            if (aadharDataCorrectCB.isChecked)
+                enableSubmitButton()
         }
 
         setAadharInfoOnView(
