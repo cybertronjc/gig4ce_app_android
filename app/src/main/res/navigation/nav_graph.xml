@@ -542,5 +542,11 @@
         android:label="fragment_play_video"
         tools:layout="@layout/fragment_play_video" />
 
+    <fragment
+        android:id="@+id/helpExpandedPage"
+        android:name="com.gigforce.app.modules.wallet.HelpExpandedPage"
+        android:label="HelpExpandedPage"
+        tools:layout="@layout/help_expanded_page" />
+
 </navigation>
 

@@ -30,7 +30,8 @@ class WalletExpandedPage: WalletBaseFragment() {
 
         initialize()
 
-        back_button.setOnClickListener { requireActivity().onBackPressed() }
+        setListeners()
+
     }
 
     private fun initialize() {
@@ -39,6 +40,11 @@ class WalletExpandedPage: WalletBaseFragment() {
             adapter = TransactionAdapter(ArrayList(arrangeTransactions(invoiceViewModel.generatedInvoice.value!!)))
         }
 
+    }
+
+    private fun setListeners() {
+        help.setOnClickListener { navigate(R.id.helpExpandedPage) }
+        back_button.setOnClickListener { requireActivity().onBackPressed() }
     }
 
     private fun arrangeTransactions(allTransactions: ArrayList<Invoice>): ArrayList<TransactionAdapter.IRow> {
