@@ -78,6 +78,7 @@
             android:layout_marginTop="2dp"
             android:text="Received"
             style="@style/LatoRegular12Black"
+            android:drawableTint="#468800"
             android:drawableStart="@drawable/ic_small_square"
             app:layout_constraintStart_toStartOf="@id/monthly_received"
             app:layout_constraintTop_toBottomOf="@id/monthly_received" />
@@ -96,6 +97,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:drawableStart="@drawable/ic_small_square"
+            android:drawableTint="#e02020"
             android:text="Withdrawn"
             style="@style/LatoRegular12Black"
             app:layout_constraintStart_toStartOf="@id/monthly_withdrawn"

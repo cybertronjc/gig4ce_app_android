@@ -2,6 +2,9 @@
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="68dp"
+    app:cardElevation="0dp"
+    app:strokeWidth="1dp"
+    app:strokeColor="#ebebeb"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     
     <androidx.constraintlayout.widget.ConstraintLayout
