@@ -17,8 +17,10 @@ class CalendarRecyclerItemTouchHelper(dragDirs:Int, swipeDirs:Int, listener:Recy
     }
 
     fun getTopView(viewHolder:RecyclerView.ViewHolder):View{
-        return (viewHolder as PFRecyclerViewAdapter<VerticalCalendarDataItemModel>.ViewHolder).getView(
+        var view = (viewHolder as PFRecyclerViewAdapter<VerticalCalendarDataItemModel>.ViewHolder).getView(
             R.id.calendar_detail_item_cl)
+//        view.findViewById<View>(R.id.daydatecard).visibility = View.GONE
+        return view
     }
 
 //    fun onSelectedChanged(viewHolder:RecyclerView.ViewHolder, actionState:Int) {
