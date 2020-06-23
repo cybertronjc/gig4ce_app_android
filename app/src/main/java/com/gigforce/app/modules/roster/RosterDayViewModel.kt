@@ -59,9 +59,22 @@ class RosterDayViewModel: ViewModel() {
     init {
         //queryGigs()
         gigsQuery.value = ArrayList(
-            listOf(
+            listOf(Gig(
+                date = 30,
+                month = 6,
+                year = 2020,
+                startHour = 10,
+                startMinute = 0,
+                duration = 8F,
+                title = "Retail Sale executive",
+                gigAmount = 0,
+                gigStatus = "upcoming",
+                isGigCompleted = false,
+                isPaymentDone = false,
+                gigRating = 0F
+            ),
                 Gig(
-                    date = 18,
+                    date = 29,
                     month = 6,
                     year = 2020,
                     startHour = 10,
@@ -75,7 +88,63 @@ class RosterDayViewModel: ViewModel() {
                     gigRating = 0F
                 ),
                 Gig(
-                    date = 17,
+                    date = 28,
+                    month = 6,
+                    year = 2020,
+                    startHour = 10,
+                    startMinute = 0,
+                    duration = 8F,
+                    title = "Retail Sale executive",
+                    gigAmount = 1200,
+                    gigStatus = "completed",
+                    isGigCompleted = false,
+                    isPaymentDone = true,
+                    gigRating = 4.8F
+                ),
+                Gig(
+                    date = 27,
+                    month = 6,
+                    year = 2020,
+                    startHour = 10,
+                    startMinute = 0,
+                    duration = 8F,
+                    title = "Retail Sale executive",
+                    gigAmount = 1200,
+                    gigStatus = "completed",
+                    isGigCompleted = false,
+                    isPaymentDone = true,
+                    gigRating = 4.0F
+                ),
+                Gig(
+                    date = 26,
+                    month = 6,
+                    year = 2020,
+                    startHour = 16,
+                    startMinute = 0,
+                    duration = 3F,
+                    title = "Retail Sale executive",
+                    gigAmount = 400,
+                    gigStatus = "completed",
+                    isGigCompleted = false,
+                    isPaymentDone = true,
+                    gigRating = 5.0F
+                ),
+                Gig(
+                    date = 25,
+                    month = 6,
+                    year = 2020,
+                    startHour = 16,
+                    startMinute = 0,
+                    duration = 3F,
+                    title = "Retail Sale executive",
+                    gigAmount = 400,
+                    gigStatus = "completed",
+                    isGigCompleted = false,
+                    isPaymentDone = true,
+                    gigRating = 5.0F
+                ),
+                Gig(
+                    date = 24,
                     month = 6,
                     year = 2020,
                     startHour = 10,
@@ -89,7 +158,21 @@ class RosterDayViewModel: ViewModel() {
                     gigRating = 0F
                 ),
                 Gig(
-                    date = 16,
+                    date = 23,
+                    month = 6,
+                    year = 2020,
+                    startHour = 10,
+                    startMinute = 0,
+                    duration = 8F,
+                    title = "Retail Sale executive",
+                    gigAmount = 0,
+                    gigStatus = "completed",
+                    isGigCompleted = true,
+                    isPaymentDone = true,
+                    gigRating = 4.8F
+                ),
+                Gig(
+                    date = 22,
                     month = 6,
                     year = 2020,
                     startHour = 10,
@@ -100,10 +183,10 @@ class RosterDayViewModel: ViewModel() {
                     gigStatus = "completed",
                     isGigCompleted = true,
                     isPaymentDone = true,
-                    gigRating = 4.8F
+                    gigRating = 4.2F
                 ),
                 Gig(
-                    date = 15,
+                    date = 21,
                     month = 6,
                     year = 2020,
                     startHour = 10,
@@ -117,7 +200,7 @@ class RosterDayViewModel: ViewModel() {
                     gigRating = 4.0F
                 ),
                 Gig(
-                    date = 14,
+                    date = 20,
                     month = 6,
                     year = 2020,
                     startHour = 16,
@@ -131,7 +214,7 @@ class RosterDayViewModel: ViewModel() {
                     gigRating = 5.0F
                 ),
                 Gig(
-                    date = 14,
+                    date = 19,
                     month = 6,
                     year = 2020,
                     startHour = 16,

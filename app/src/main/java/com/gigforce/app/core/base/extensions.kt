@@ -1,7 +1,6 @@
-package com.gigforce.app.utils
+package com.gigforce.app.core.base
 
 import android.content.res.Resources
-import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import androidx.fragment.app.Fragment

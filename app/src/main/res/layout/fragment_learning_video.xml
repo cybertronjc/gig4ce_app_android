@@ -45,7 +45,7 @@
                 android:layout_marginTop="22dp"
                 android:fontFamily="@font/lato_bold"
                 android:letterSpacing="0.01"
-                android:text="Retail Executive"
+                android:text="Retail Sales Executive"
                 android:textColor="#cd000000"
                 android:textSize="24sp"
                 app:layout_constraintStart_toEndOf="@id/learningBackButton"
