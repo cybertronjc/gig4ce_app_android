@@ -44,6 +44,8 @@ class WalletBalancePage: WalletBaseFragment() {
 
         balance_card.setOnClickListener { navigate(R.id.walletExpandedPage) }
 
+        transaction_head.setOnClickListener {navigate(R.id.walletExpandedPage)}
+
         walletViewModel.userProfileData.observe(viewLifecycleOwner, Observer {
             top_bar.imageName = it.profileAvatarName
         })

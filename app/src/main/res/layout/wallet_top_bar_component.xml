@@ -29,12 +29,12 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/search_icon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:icon="@drawable/ic_search_calendar"
-        app:iconTint="@color/black"
+        android:layout_width="18dp"
+        android:layout_height="18dp"
+        app:icon="@drawable/ic_landinghome_search"
+        app:iconTint="#6d7278"
         style="@style/IconOnlyButton"
-        android:layout_marginEnd="24dp"
+        android:layout_marginEnd="16dp"
         app:layout_constraintEnd_toStartOf="@id/profile_image"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>

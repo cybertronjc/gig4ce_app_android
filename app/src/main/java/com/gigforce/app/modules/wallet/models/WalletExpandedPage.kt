@@ -12,6 +12,7 @@ import com.gigforce.app.modules.wallet.WalletBaseFragment
 import com.jay.widget.StickyHeaders
 import com.jay.widget.StickyHeadersLinearLayoutManager
 import kotlinx.android.synthetic.main.balance_expanded_page.*
+import kotlinx.android.synthetic.main.invoice_collapsed_card.view.*
 import kotlinx.android.synthetic.main.recview_wallet_month.view.*
 
 class WalletExpandedPage: WalletBaseFragment() {
@@ -35,7 +36,7 @@ class WalletExpandedPage: WalletBaseFragment() {
     private fun initialize() {
         transactions.apply {
             layoutManager = StickyHeadersLinearLayoutManager<TransactionAdapter>(requireContext())
-            adapter = TransactionAdapter(ArrayList(arrangeTransactions(invoiceViewModel.allInvoices)))
+            adapter = TransactionAdapter(ArrayList(arrangeTransactions(invoiceViewModel.generatedInvoice.value!!)))
         }
 
     }
@@ -122,6 +123,7 @@ class TransactionAdapter(private val transactions: ArrayList<IRow>):
     }
 
     private fun OnBindSection(holder: RecyclerView.ViewHolder, row: SectionRow) {
+        (holder as SectionViewHolder).bindTransaction(row.invoice)
 
     }
 
@@ -129,8 +131,28 @@ class TransactionAdapter(private val transactions: ArrayList<IRow>):
 
     }
 
-    class SectionViewHolder(view: View): RecyclerView.ViewHolder(view) {
+    class SectionViewHolder(v: View): RecyclerView.ViewHolder(v) {
 
+        private var view: View = v
+        private var transaction: Invoice? = null
+
+        init {
+        }
+
+        companion object {
+            private val TRANSACTION_KEY = "TRANSACTION"
+        }
+
+        fun bindTransaction(transaction: Invoice) {
+            this.transaction = transaction
+            view.start_date_text.text = "Invoice Generated ${transaction.invoiceGeneratedTime}"
+            view.end_date_text.text = ""
+            view.gig_invoice_status.text = "processed"
+            view.gig_invoice_status.setTextColor(view.resources.getColor(R.color.app_green))
+            view.agent_name.text = transaction.agentName
+            view.gig_amount_text.text = "Rs ${transaction.gigAmount}"
+            view.gig_id_text.text = "Gig Id: ${transaction.gigId}"
+        }
     }
 
     override fun isStickyHeader(p0: Int): Boolean {
