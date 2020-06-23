@@ -242,20 +242,6 @@ class RosterDayViewModel: ViewModel() {
                     gigRating = 4.2F
                 ),
                 Gig(
-                    date = 22,
-                    month = 6,
-                    year = 2020,
-                    startHour = 10,
-                    startMinute = 0,
-                    duration = 8F,
-                    title = "Retail Sale executive",
-                    gigAmount = 1200,
-                    gigStatus = "completed",
-                    isGigCompleted = true,
-                    isPaymentDone = true,
-                    gigRating = 4.2F
-                ),
-                Gig(
                     date = 21,
                     month = 6,
                     year = 2020,
