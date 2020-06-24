@@ -2,4 +2,5 @@
 <resources>
     <string name="assessment_based_on_learnings">Assessment based on learnings</string>
     <string name="explore_learnings">Explore Learnings</string>
+    <string name="uploaded">Uploaded</string>
 </resources>

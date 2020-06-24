@@ -11,9 +11,11 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.utils.DateHelper
+import com.gigforce.app.utils.Lse
 import com.otaliastudios.cameraview.CameraLogger
 import com.otaliastudios.cameraview.VideoResult
 import com.otaliastudios.cameraview.controls.Mode
@@ -23,6 +25,7 @@ import java.io.File
 class AddSelfieVideoFragment : BaseFragment() {
 
     private val viewModel: SelfiVideoViewModel by viewModels()
+
     private var videoPath: File? = null
     private lateinit var playVideoFragment: PlayVideoFragment
 
@@ -34,6 +37,18 @@ class AddSelfieVideoFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViews()
+        initViewModel()
+    }
+
+    private fun initViewModel() {
+        viewModel.uploadSelfieState
+            .observe(viewLifecycleOwner, Observer {
+                when (it) {
+                    Lse.Loading -> Log.d("Himanshu", "loading")
+                    Lse.Success -> Log.d("Himanshu", "success")
+                    is Lse.Error -> Log.e("Himanshu", it.error)
+                }
+            })
     }
 
 
@@ -136,10 +151,11 @@ class AddSelfieVideoFragment : BaseFragment() {
             showToast("Video Recorded")
             videoPath = result.file
 
-           // hideCaptureVideoControls()
+            // hideCaptureVideoControls()
             //showVideoPreviewControls()
 
-            playVideoFragment.playVideo(result.file)
+            //  playVideoFragment.playVideo(result.file)
+            viewModel.uploadSelfieVideo(result.file)
         }
     }
 
@@ -192,6 +208,6 @@ class AddSelfieVideoFragment : BaseFragment() {
 
     companion object {
         private const val REQUEST_CAMERA_PERMISSION = 2321
-        private const val SELFIE_VIDEO_TIME = 10_000 //10 Secs
+        private const val SELFIE_VIDEO_TIME = 5_000 //10 Secs
     }
 }

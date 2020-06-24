@@ -4,12 +4,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import kotlinx.android.synthetic.main.fragment_giger_verification.*
 import kotlinx.android.synthetic.main.fragment_giger_verification_item.view.*
+import kotlinx.android.synthetic.main.fragment_giger_verification_main.*
+import kotlinx.android.synthetic.main.fragment_giger_verification_main.view.*
 
 
 class GigerVerificationFragment : BaseFragment() {
@@ -26,6 +30,7 @@ class GigerVerificationFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         initView()
         setListeners()
+        initViewModel()
     }
 
     private fun initView() {
@@ -75,24 +80,60 @@ class GigerVerificationFragment : BaseFragment() {
 
 
     private fun setListeners() {
-        panLayout.setOnClickListener {
+        verificationMainLayout.panLayout.setOnClickListener {
             navigate(R.id.addPanCardInfoFragment)
         }
 
-        drivingLayout.setOnClickListener {
+        verificationMainLayout.drivingLayout.setOnClickListener {
             navigate(R.id.addDrivingLicenseInfoFragment)
         }
 
-        aadharLayout.setOnClickListener {
+        verificationMainLayout.aadharLayout.setOnClickListener {
             navigate(R.id.addAadharCardInfoFragment)
         }
 
-        bankDetailsLayout.setOnClickListener {
+        verificationMainLayout.bankDetailsLayout.setOnClickListener {
             navigate(R.id.addBankDetailsInfoFragment)
         }
 
-        selfieVideoLayout.setOnClickListener {
+        verificationMainLayout.selfieVideoLayout.setOnClickListener {
             navigate(R.id.addSelfieVideoFragment)
         }
+    }
+
+    private fun initViewModel() {
+        viewModel.gigerVerificationStatus
+            .observe(viewLifecycleOwner, Observer {
+
+                if (it.everyDocumentUploaded) {
+                    verificationMainLayout.visibility = View.GONE
+                    verificationDocSubmittedLayout.visibility = View.VISIBLE
+                } else {
+                    verificationDocSubmittedLayout.visibility = View.GONE
+                    verificationMainLayout.visibility = View.VISIBLE
+
+                    if(it.selfieVideoUploaded) {
+                        selfieVideoLayout.descTitleTV.text = getString(R.string.uploaded)
+                        selfieVideoLayout.descTitleTV.setTextColor(
+                            ResourcesCompat.getColor(
+                                resources,
+                                R.color.green,
+                                null
+                            )
+                        )
+                    } else{
+                        selfieVideoLayout.descTitleTV.text = getString(R.string.tap_to_upload)
+                        selfieVideoLayout.descTitleTV.setTextColor(
+                            ResourcesCompat.getColor(
+                                resources,
+                                R.color.battle_ship_grey,
+                                null
+                            )
+                        )
+                    }
+                }
+            })
+
+        viewModel.startListeningForGigerVerificationStatusChanges()
     }
 }

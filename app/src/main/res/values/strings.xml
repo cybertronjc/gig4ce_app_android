@@ -367,4 +367,5 @@
     <string name="action_report">Report</string>
     <string name="action_invite_friends">Invite a friends</string>
     <string name="action_refresh">Refresh</string>
+    <string name="uploaded">Uploaded</string>
 </resources>
