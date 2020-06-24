@@ -58,27 +58,28 @@ class CalendarHomeScreenViewModel : ViewModel() {
     }
     private fun getAllGigData(): ArrayList<AllotedGigDataModel>? {
         var arrayList = ArrayList<AllotedGigDataModel>()
-        arrayList.add(getGigData(30,5,2020,"Retail Sale executive",getGigDetailData("Retail Sale executive",false),true))
+        arrayList.add(getGigData(30,5,2020,"Retail Sales Executive",getGigDetailData("Retail Sales Executive",false),true))
 
-        arrayList.add(getGigData(29,5,2020,"Retail Sale executive",getGigDetailData("Retail Sale executive",false),true))
+        arrayList.add(getGigData(29,5,2020,"Retail Sales Executive",getGigDetailData("Retail Sales Executive",false),true))
 
-        arrayList.add(getGigData(28,5,2020,"Retail Sale executive",getGigDetailData("Retail Sale executive",false),true))
+        arrayList.add(getGigData(28,5,2020,"Retail Sales Executive",getGigDetailData("Retail Sales Executive",false),true))
 
-        arrayList.add(getGigData(27,5,2020,"Retail Sale executive",getGigDetailData("Retail Sale executive",true),true))
+        arrayList.add(getGigData(27,5,2020,"Retail Sales Executive",getGigDetailData("Retail Sales Executive",true),true))
 
-        arrayList.add(getGigData(26,5,2020,"Retail Sale executive",getGigDetailData("Retail Sale executive",false),true))
+        arrayList.add(getGigData(26,5,2020,"Retail Sales Executive",getGigDetailData("Retail Sales Executive",false),true))
 
-        arrayList.add(getGigData(25,5,2020,"Retail Sale executive",getGigDetailData("Retail Sale executive",true),true))
-        arrayList.add(getGigData(24,5,2020,"Retail Sale executive",getGigDetailData("Retail Sale executive",true),true))
-        arrayList.add(getGigData(23,5,2020,"Retail Sale executive",getGigDetailData("Retail Sale executive",false),true))
+        arrayList.add(getGigData(25,5,2020,"Retail Sales Executive",getGigDetailData("Retail Sales Executive",true),true))
+        arrayList.add(getGigData(24,5,2020,"Retail Sales Executive",getGigDetailData("Retail Sales Executive",true),true))
+        arrayList.add(getGigData(23,5,2020,"Retail Sales Executive",getGigDetailData("Retail Sales Executive",false),true))
 
-        arrayList.add(getGigData(22,5,2020,"Retail Sale executive",getGigDetailData("Retail Sale executive",false),true))
+        arrayList.add(getGigData(22,5,2020,"Retail Sales Executive",getGigDetailData("Retail Sales Executive",false),true))
 
-        arrayList.add(getGigData(21,5,2020,"Retail Sale executive",getGigDetailData("Retail Sale executive",true),true))
+        arrayList.add(getGigData(21,5,2020,"Retail Sales Executive",getGigDetailData("Retail Sales Executive",true),true))
 
-        arrayList.add(getGigData(20,5,2020,"Retail Sale executive",getGigDetailData("Retail Sale executive",false),true))
+        arrayList.add(getGigData(20,5,2020,"Retail Sales Executive",getGigDetailData("Retail Sales Executive",false),true))
 
-        arrayList.add(getGigData(19,5,2020,"Retail Sale executive",getGigDetailData("Retail Sale executive",true),true))
+        arrayList.add(getGigData(19,5,2020,"Retail Sales Executive",getGigDetailData("Retail Sales Executive",true),true))
+
 
         return arrayList
     }

@@ -72,5 +72,13 @@
     <color name="status_bg_pending">#f5a623</color>
     <color name="status_bg_completed">#72a839</color>
     <color name="app_green">#468800</color>
+    <color name="snakbar_action_color">#ff0057</color>
+    <color name="snakbar_background">#ffcfdf</color>
+    <color name="snakbar_border_color">#e94b81</color>
+    <color name="date_day_unavailable_color">#f7f7f7</color>
+    <color name="action_layout_available">#33335d05</color>
+    <color name="action_layout_available_border">#66335d05</color>
+    <color name="action_layout_available_title">#375b0e</color>
+
 
 </resources>

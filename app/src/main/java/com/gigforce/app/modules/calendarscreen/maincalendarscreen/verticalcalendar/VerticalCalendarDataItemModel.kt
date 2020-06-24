@@ -3,17 +3,18 @@ package com.gigforce.app.modules.calendarscreen.maincalendarscreen.verticalcalen
 import java.util.*
 
 class VerticalCalendarDataItemModel (
-    val title: String,
+    var title: String,
     val subTitle: String,
     val day: String,
     val isToday: Boolean,
     val isPreviousDate: Boolean,
-    val isGigAssign: Boolean,
+    var isGigAssign: Boolean,
     val isMonth: Boolean,
     val year : Int,
     val month : Int,
     val date: Int,
-    val monthStr:String
+    val monthStr:String,
+    var isUnavailable:Boolean = false
 ){
     companion object {
         fun getMonthObject(calendar:Calendar):VerticalCalendarDataItemModel{
@@ -28,7 +29,8 @@ class VerticalCalendarDataItemModel (
                 calendar.get(Calendar.YEAR),
                 calendar.get(Calendar.MONTH),
                 calendar.get(Calendar.DATE),
-                getMonth(calendar.get(Calendar.MONTH))
+                getMonth(calendar.get(Calendar.MONTH)),
+                false
             )
         }
         fun getIfNoGigFoundObject(calendar: Calendar,isPreviousDate: Boolean,isToday: Boolean): VerticalCalendarDataItemModel {
@@ -37,7 +39,7 @@ class VerticalCalendarDataItemModel (
                 isPreviousDateFound = false
             }
             return VerticalCalendarDataItemModel(
-                "No gigs Assigned",
+                "No gigs assigned",
                 "",
                 getDayOfWeek(calendar.get(Calendar.DAY_OF_WEEK)),
                 isToday,
@@ -47,7 +49,8 @@ class VerticalCalendarDataItemModel (
                 calendar.get(Calendar.YEAR),
                 calendar.get(Calendar.MONTH),
                 calendar.get(Calendar.DATE),
-                ""
+                "",
+                false
             )
         }
 
@@ -76,7 +79,8 @@ class VerticalCalendarDataItemModel (
                 calendar.get(Calendar.YEAR),
                 calendar.get(Calendar.MONTH),
                 calendar.get(Calendar.DATE),
-                ""
+                "",
+                false
             )
         }
 

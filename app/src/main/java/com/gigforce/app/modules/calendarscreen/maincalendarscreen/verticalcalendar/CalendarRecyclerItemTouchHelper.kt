@@ -6,6 +6,8 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.app.R
 import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
+import com.gigforce.app.core.genericadapter.RecyclerGenericAdapter
+
 
 class CalendarRecyclerItemTouchHelper(dragDirs:Int, swipeDirs:Int, listener:RecyclerItemTouchHelperListener):ItemTouchHelper.SimpleCallback(dragDirs, swipeDirs) {
     private val listener:RecyclerItemTouchHelperListener
@@ -17,10 +19,20 @@ class CalendarRecyclerItemTouchHelper(dragDirs:Int, swipeDirs:Int, listener:Recy
     }
 
     fun getTopView(viewHolder:RecyclerView.ViewHolder):View{
-        return (viewHolder as PFRecyclerViewAdapter<VerticalCalendarDataItemModel>.ViewHolder).getView(
+        var view = (viewHolder as PFRecyclerViewAdapter<VerticalCalendarDataItemModel>.ViewHolder).getView(
             R.id.calendar_detail_item_cl)
+//        view.findViewById<View>(R.id.daydatecard).visibility = View.GONE
+        return view
     }
 
+    override fun getSwipeDirs(
+        recyclerView: RecyclerView,
+        viewHolder: RecyclerView.ViewHolder
+    ): Int {
+        var position = viewHolder.getAdapterPosition();
+        var item = (recyclerView.adapter as RecyclerGenericAdapter<VerticalCalendarDataItemModel>).items.get(position)
+        return if (item.isPreviousDate || item.isMonth ) 0 else super.getSwipeDirs(recyclerView, viewHolder)
+    }
 //    fun onSelectedChanged(viewHolder:RecyclerView.ViewHolder, actionState:Int) {
 //        if (viewHolder != null)
 //        {

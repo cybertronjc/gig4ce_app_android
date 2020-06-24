@@ -106,8 +106,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/videoTitleTV"
-            android:text="Lorem Ipsum is simply dummy text of the printing.Loe
-m Ipsum is simply dummy text of the printing.Lorem Ipsum is simply dummy text of the printing.Loe Ipsum is simply dummy text of the printing.is simply dummy text of the printing." />
+            android:text="Every customer is unique, so every demo should be uniquely matched to that customer. Before you demonstrate a product, do your research. Learn how to become a master of the art of demonstrating a product to  a customer." />
 
 
         <ImageView
@@ -183,7 +182,7 @@ m Ipsum is simply dummy text of the printing.Lorem Ipsum is simply dummy text of
             android:layout_marginTop="12dp"
             android:fontFamily="@font/lato"
             android:letterSpacing="0"
-            android:text="1/4 Assessments completes"
+            android:text="1/4 Assessments completed"
             android:textColor="#000000"
             android:textSize="14sp"
             app:layout_constraintStart_toEndOf="@+id/imageView38"
