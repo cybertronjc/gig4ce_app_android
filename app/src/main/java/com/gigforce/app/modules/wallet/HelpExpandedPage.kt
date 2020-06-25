@@ -48,7 +48,7 @@ class HelpExpandedPage: WalletBaseFragment() {
             }
         }
 
-        back_button.setOnClickListener { this.onBackPressed() }
+        back_button.setOnClickListener { requireActivity().onBackPressed() }
 
         val qas = ArrayList(
             listOf(
