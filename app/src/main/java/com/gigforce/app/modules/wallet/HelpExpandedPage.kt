@@ -48,6 +48,8 @@ class HelpExpandedPage: WalletBaseFragment() {
             }
         }
 
+        back_button.setOnClickListener { this.onBackPressed() }
+
         val qas = ArrayList(
             listOf(
                 QA(

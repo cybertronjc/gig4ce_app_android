@@ -41,5 +41,7 @@ class PaymentDisputePage: WalletBaseFragment() {
         payment_1.visibility = View.GONE
         payment_2.visibility = View.GONE
         payment_3.visibility = View.GONE
+
+        help_ic.setOnClickListener { navigate(R.id.helpExpandedPage) }
     }
 }
