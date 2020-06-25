@@ -35,151 +35,231 @@
             app:layout_constraintBottom_toBottomOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="6dp"
-        android:background="#ebebeb" />
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/toggle_terminology"
-        android:layout_width="match_parent"
-        android:layout_height="70dp">
-        <com.google.android.material.textview.MaterialTextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="Get Help With Terminologies"
-            style="@style/LatoBold16"
-            android:layout_marginStart="20dp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/bt_expand_terminology"/>
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/bt_expand_terminology"
-            android:layout_width="12dp"
-            android:layout_height="12dp"
-            style="@style/IconOnlyButton"
-            app:icon="@drawable/ic_baseline_forward_24"
-            app:iconTint="#c7c7cc"
-            android:layout_marginEnd="16dp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-    
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/terminologies"
-        android:visibility="gone"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <com.gigforce.app.modules.wallet.components.HelpRow
-            android:id="@+id/money_received"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:content_help="@string/money_received_info"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_height="match_parent">
 
-        <com.gigforce.app.modules.wallet.components.HelpRow
-            android:id="@+id/money_withdrawn"
+            <View
+                android:id="@+id/divider1"
+                android:layout_width="match_parent"
+                android:layout_height="6dp"
+                android:background="#ebebeb"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/toggle_terminology"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:content_help="@string/money_withdrawn_info"
-            app:layout_constraintTop_toBottomOf="@id/money_received"
+            android:layout_height="70dp"
+            app:layout_constraintTop_toBottomOf="@id/divider1"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintEnd_toEndOf="parent">
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Get Help With Terminologies"
+                style="@style/LatoBold16"
+                android:layout_marginStart="20dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/bt_expand_terminology"/>
 
-        <com.gigforce.app.modules.wallet.components.HelpRow
-            android:id="@+id/earning"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:content_help="@string/earning_info"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/money_withdrawn" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/bt_expand_terminology"
+                android:layout_width="12dp"
+                 android:layout_height="12dp"
+                style="@style/IconOnlyButton"
+                app:icon="@drawable/ic_baseline_forward_24"
+                app:iconTint="#c7c7cc"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+             </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <com.gigforce.app.modules.wallet.components.HelpRow
-            android:id="@+id/wallet_balance"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:content_help="@string/wallet_balance_info"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/earning" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/terminologies"
+                android:visibility="gone"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/toggle_terminology"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
 
-        <com.gigforce.app.modules.wallet.components.HelpRow
-            android:id="@+id/monthly_earning"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:content_help="@string/monthly_earning_info"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/wallet_balance" />
+                <com.gigforce.app.modules.wallet.components.HelpRow
+                    android:id="@+id/money_received"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:content_help="@string/money_received_info"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-        <com.gigforce.app.modules.wallet.components.HelpRow
-            android:id="@+id/monthly_goal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:content_help="@string/monthly_goal_info"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/monthly_earning" />
+                <com.gigforce.app.modules.wallet.components.HelpRow
+                    android:id="@+id/money_withdrawn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:content_help="@string/money_withdrawn_info"
+                    app:layout_constraintTop_toBottomOf="@id/money_received"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
+                <com.gigforce.app.modules.wallet.components.HelpRow
+                    android:id="@+id/earning"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:content_help="@string/earning_info"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/money_withdrawn" />
+
+                <com.gigforce.app.modules.wallet.components.HelpRow
+                    android:id="@+id/wallet_balance"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:content_help="@string/wallet_balance_info"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/earning" />
+
+                <com.gigforce.app.modules.wallet.components.HelpRow
+                    android:id="@+id/monthly_earning"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:content_help="@string/monthly_earning_info"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/wallet_balance" />
+
+                <com.gigforce.app.modules.wallet.components.HelpRow
+                    android:id="@+id/monthly_goal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:content_help="@string/monthly_goal_info"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/monthly_earning" />
 
 
-        <com.gigforce.app.modules.wallet.components.HelpRow
-            android:id="@+id/payment_due"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:content_help="@string/payment_due_info"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/monthly_goal" />
+                <com.gigforce.app.modules.wallet.components.HelpRow
+                    android:id="@+id/payment_due"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:content_help="@string/payment_due_info"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/monthly_goal" />
 
 
-        <com.gigforce.app.modules.wallet.components.HelpRow
-            android:id="@+id/invoice"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:content_help="@string/invoice_info"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/payment_due" />
+                <com.gigforce.app.modules.wallet.components.HelpRow
+                    android:id="@+id/invoice"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:content_help="@string/invoice_info"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/payment_due" />
 
-        <com.gigforce.app.modules.wallet.components.HelpRow
-            android:id="@+id/invoice_generated"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:content_help="@string/invoice_generated_info"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/invoice" />
+                <com.gigforce.app.modules.wallet.components.HelpRow
+                    android:id="@+id/invoice_generated"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:content_help="@string/invoice_generated_info"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/invoice" />
 
 
-        <com.gigforce.app.modules.wallet.components.HelpRow
-            android:id="@+id/pending_invoice"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:content_help="@string/pending_invoice_info"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/invoice_generated" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                <com.gigforce.app.modules.wallet.components.HelpRow
+                    android:id="@+id/pending_invoice"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:content_help="@string/pending_invoice_info"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/invoice_generated" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+            <View
+                android:id="@+id/divider2"
+                android:layout_width="match_parent"
+                android:layout_height="6dp"
+                android:background="#ebebeb"
+                app:layout_constraintTop_toBottomOf="@id/terminologies"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="6dp"
-        android:background="#ebebeb" />
-    
-    <com.google.android.material.textview.MaterialTextView
-        android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:text="Popular Help Topics"
-        android:textAlignment="gravity"
-        style="@style/LatoBold16"
-        android:layout_marginStart="20dp" />
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/help_topic_heading"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:text="Popular Help Topics"
+                android:gravity="center_vertical"
+                style="@style/LatoBold16"
+                android:layout_marginStart="20dp"
+                app:layout_constraintTop_toBottomOf="@id/divider2"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <LinearLayout
+                android:id="@+id/help_topics"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintTop_toBottomOf="@id/help_topic_heading"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+                <com.gigforce.app.modules.wallet.components.QArow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+                <com.gigforce.app.modules.wallet.components.QArow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+                <com.gigforce.app.modules.wallet.components.QArow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            <View
+                android:id="@+id/divider3"
+                android:layout_width="match_parent"
+                android:layout_height="4dp"
+                android:background="#ebebeb"
+                app:layout_constraintTop_toBottomOf="@id/help_topics"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/contact_text"
+                android:layout_width="0dp"
+                android:layout_height="70dp"
+                android:text="Contact 24X7 Help"
+                style="@style/LatoBold16"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="8dp"
+                android:gravity="center_vertical"
+                android:drawableEnd="@drawable/ic_baseline_forward_24"
+                android:drawableTint="#c7c7cc"
+                app:layout_constraintTop_toBottomOf="@id/divider3"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Our executive will help you solve your Problems"
+                style="@style/LatoRegular14Black"
+                android:letterSpacing="-0.01"
+                app:layout_constraintStart_toStartOf="@id/contact_text"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/contact_text" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+
 </LinearLayout>
