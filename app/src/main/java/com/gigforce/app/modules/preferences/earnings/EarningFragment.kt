@@ -132,7 +132,7 @@ class EarningFragment : BaseFragment() {
     }
 
     private fun confirmationForSavingData() {
-        showConfirmationDialogType2("Are sure you want to change prefrences ?",
+        showConfirmationDialogType2("Are sure you want to change preferences ?",
             object :ConfirmationDialogOnClickListener{
                 override fun clickedOnYes(dialog: Dialog?) {
                     saveDataToDB()
