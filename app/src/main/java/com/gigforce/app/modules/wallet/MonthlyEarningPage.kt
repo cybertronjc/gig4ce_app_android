@@ -50,6 +50,8 @@ class MonthlyEarningPage: WalletBaseFragment() {
                 (month_transactions.adapter as MonthlyTransactionAdapter).notifyDataSetChanged()
             }
         })
+
+        help_ic.setOnClickListener { navigate(R.id.helpExpandedPage) }
     }
 }
 
