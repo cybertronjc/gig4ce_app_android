@@ -216,15 +216,6 @@
                 app:layout_constraintTop_toBottomOf="@id/help_topic_heading"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent">
-                <com.gigforce.app.modules.wallet.components.QArow
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-                <com.gigforce.app.modules.wallet.components.QArow
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-                <com.gigforce.app.modules.wallet.components.QArow
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
             </LinearLayout>
 
             <View

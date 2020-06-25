@@ -7,7 +7,9 @@ import com.gigforce.app.R
 import com.google.android.material.card.MaterialCardView
 import kotlinx.android.synthetic.main.qa_row.view.*
 
-class QArow (context: Context, attributeSet: AttributeSet): MaterialCardView(context, attributeSet) {
+class QArow: MaterialCardView {
+    constructor(context: Context): super(context)
+    constructor(context: Context, attributeSet: AttributeSet): super(context, attributeSet)
 
     init {
         View.inflate(context, R.layout.qa_row, this)
@@ -16,7 +18,8 @@ class QArow (context: Context, attributeSet: AttributeSet): MaterialCardView(con
     var ques: String = ""
         set(value) {
             field = value
-            question.text = value
+            if (value.trim() != "")
+                question.text = value
         }
 
     var ans: String = ""
@@ -27,7 +30,8 @@ class QArow (context: Context, attributeSet: AttributeSet): MaterialCardView(con
     var ans_summary: String = ""
         set(value) {
             field = value
-            answer_summary.text = ans_summary
+            if (value.trim() != "")
+                answer_summary.text = ans_summary
         }
 
 }
