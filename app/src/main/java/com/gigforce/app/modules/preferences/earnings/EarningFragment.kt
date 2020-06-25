@@ -25,7 +25,6 @@ class EarningFragment : BaseFragment() {
     companion object {
         fun newInstance() = EarningFragment()
     }
-
     private lateinit var viewModel: SharedPreferenceViewModel
     private var earningDataModel : EarningDataModel = EarningDataModel()
     override fun onCreateView(
@@ -54,7 +53,7 @@ class EarningFragment : BaseFragment() {
 
     private fun listener() {
         back_arrow_iv.setOnClickListener{
-            this.onBackPressed()
+            activity?.onBackPressed()
         }
         perDayGoalSB.setOnSeekBarChangeListener(object:SeekBar.OnSeekBarChangeListener{
             override fun onProgressChanged(seekBar:SeekBar, progress:Int, fromUser:Boolean) {
@@ -62,7 +61,6 @@ class EarningFragment : BaseFragment() {
                 seekBarDependentCanvas2.text =  "Rs "+progress.toString()
                 seekBarDependentCanvas2.setX(seekBar.getX() + value + seekBar.getThumbOffset() / 2)
                 dailyGoalsTV.text = "Rs 0 - Rs "+progress
-
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
@@ -99,8 +97,11 @@ class EarningFragment : BaseFragment() {
             }
         })
         checkbox_monthly_constract.setOnCheckedChangeListener{buttonview,ischecked->
-            if(ischecked)
-            monthly_expectation_constraintlayout.visibility = View.VISIBLE
+            if(ischecked) {
+                monthly_expectation_constraintlayout.visibility = View.VISIBLE
+                monthlyExpectationSB.setProgress(0)
+                monthlyExpectationSB.setProgress(viewModel.getPreferenceDataModel().earning.monthlyExpectation)
+            }
             else
                 monthly_expectation_constraintlayout.visibility = View.GONE
         }
@@ -127,8 +128,10 @@ class EarningFragment : BaseFragment() {
     }
 
     override fun onBackPressed(): Boolean {
-        confirmationForSavingData()
-        return true
+        if(isDataChanged()) {
+            confirmationForSavingData()
+            return true
+        }else return false
     }
 
     private fun confirmationForSavingData() {
@@ -147,7 +150,23 @@ class EarningFragment : BaseFragment() {
 
             })
     }
-
+    fun isDataChanged():Boolean{
+        if(viewModel.getPreferenceDataModel().earning.preferredNoOfDays != selected_pre_no_of_days.text.toString().split(" ")[0])
+            return true
+        if(viewModel.getPreferenceDataModel().earning.perDayGoal != perDayGoalSB.progress){
+            return true
+        }
+        if(viewModel.getPreferenceDataModel().earning.perMonthGoal != permonthGoalSB.progress){
+            return true
+        }
+        if(viewModel.getPreferenceDataModel().earning.monthlyContractRequired != checkbox_monthly_constract.isChecked){
+            return true
+        }
+        if(viewModel.getPreferenceDataModel().earning.monthlyExpectation != monthlyExpectationSB.progress){
+            return true
+        }
+        return false
+    }
     private fun saveDataToDB() {
         earningDataModel.preferredNoOfDays = selected_pre_no_of_days.text.toString().split(" ")[0]
         earningDataModel.perDayGoal = perDayGoalSB.progress
@@ -166,6 +185,7 @@ class EarningFragment : BaseFragment() {
         val okay = customialog?.findViewById(R.id.okay) as TextView
         okay.setOnClickListener (View.OnClickListener {
             customialog.dismiss()
+//            activity?.onBackPressed()
             popFragmentFromStack(R.id.earningFragment)
         })
         customialog?.show()
