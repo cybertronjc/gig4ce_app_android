@@ -1,7 +1,7 @@
 package com.gigforce.app.utils
 
 /**
- * Lse (Loading-Success-Error Class for sharing state between viewModel & view)
+ * Lse (Loading-Success-Error) Class for sharing state between viewModel & view
  */
 sealed class Lse {
 

@@ -1,5 +1,6 @@
 package com.gigforce.app.modules.gigerVerfication.bankDetails
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,11 +14,17 @@ import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
 import com.gigforce.app.modules.gigerVerfication.ImageSource
 import com.gigforce.app.modules.gigerVerfication.SelectImageSourceBottomSheet
 import com.gigforce.app.modules.gigerVerfication.SelectImageSourceBottomSheetActionListener
+import com.gigforce.app.modules.gigerVerfication.panCard.AddPanCardInfoFragment
+import com.gigforce.app.modules.photocrop.PhotoCrop
 import kotlinx.android.synthetic.main.fragment_add_bank_details_info.*
 import kotlinx.android.synthetic.main.fragment_verification_image_holder.view.*
 import java.io.File
 
 class AddBankDetailsInfoFragment : BaseFragment(), SelectImageSourceBottomSheetActionListener {
+
+    companion object {
+        const val REQUEST_CODE_UPLOAD_PAN_IMAGE = 2333
+    }
 
     private val viewModel: GigVerificationViewModel by viewModels()
     private var clickedImagePath: File? = null
@@ -46,17 +53,11 @@ class AddBankDetailsInfoFragment : BaseFragment(), SelectImageSourceBottomSheetA
         passbookSubmitSliderBtn.isEnabled = false
 
         passbookImageHolder.uploadDocumentCardView.setOnClickListener {
-            SelectImageSourceBottomSheet.launch(
-                childFragmentManager = childFragmentManager,
-                selectImageSourceBottomSheetActionListener = this
-            )
+            showCameraAndGalleryOption()
         }
 
         passbookImageHolder.uploadImageLayout.reuploadBtn.setOnClickListener {
-            SelectImageSourceBottomSheet.launch(
-                childFragmentManager = childFragmentManager,
-                selectImageSourceBottomSheetActionListener = this
-            )
+            showCameraAndGalleryOption()
         }
 
         passbookImageHolder.uploadImageLayout.imageLabelTV.text =
@@ -100,6 +101,21 @@ class AddBankDetailsInfoFragment : BaseFragment(), SelectImageSourceBottomSheetA
         editBankDetailsLayout.setOnClickListener {
             navigate(R.id.editBankDetailsInfoBottomSheet)
         }
+    }
+
+    private fun showCameraAndGalleryOption() {
+//        SelectImageSourceBottomSheet.launch(
+//            childFragmentManager = childFragmentManager,
+//            selectImageSourceBottomSheetActionListener = this
+//        )
+
+        val photoCropIntent = Intent(requireContext(), PhotoCrop::class.java)
+        photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_PURPOSE, PhotoCrop.PURPOSE_UPLOAD_BANK_DETAILS_IMAGE)
+        photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_FIREBASE_FOLDER_NAME, "/verification/")
+        photoCropIntent.putExtra("folder", "verification")
+        photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_DETECT_FACE, 0)
+        photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_FIREBASE_FILE_NAME, "pan_card.jpg")
+        startActivityForResult(photoCropIntent, REQUEST_CODE_UPLOAD_PAN_IMAGE)
     }
 
     private fun disableSubmitButton() {

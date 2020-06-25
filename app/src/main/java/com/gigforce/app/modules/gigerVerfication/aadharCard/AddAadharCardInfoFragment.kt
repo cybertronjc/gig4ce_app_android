@@ -1,5 +1,6 @@
 package com.gigforce.app.modules.gigerVerfication.aadharCard
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,8 +12,8 @@ import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
 import com.gigforce.app.modules.gigerVerfication.ImageSource
-import com.gigforce.app.modules.gigerVerfication.SelectImageSourceBottomSheet
 import com.gigforce.app.modules.gigerVerfication.SelectImageSourceBottomSheetActionListener
+import com.gigforce.app.modules.photocrop.PhotoCrop
 import kotlinx.android.synthetic.main.fragment_add_aadhar_card_info.*
 import kotlinx.android.synthetic.main.fragment_verification_image_holder.view.*
 import java.io.File
@@ -23,6 +24,10 @@ enum class AadharCardSides {
 }
 
 class AddAadharCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetActionListener {
+
+    companion object {
+        const val REQUEST_CODE_UPLOAD_PAN_IMAGE = 2333
+    }
 
     private val viewModel: GigVerificationViewModel by viewModels()
 
@@ -83,44 +88,65 @@ class AddAadharCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetAc
         }
 
         aadharFrontImageHolder.uploadDocumentCardView.setOnClickListener {
-            currentlyClickingImageOfSide = AadharCardSides.FRONT_SIDE
-
-            SelectImageSourceBottomSheet.launch(
-                childFragmentManager = childFragmentManager,
-                selectImageSourceBottomSheetActionListener = this
-            )
+            openCameraAndGalleryOptionForFrontSideImage()
         }
 
         aadharFrontImageHolder.uploadImageLayout.reuploadBtn.setOnClickListener {
-            currentlyClickingImageOfSide = AadharCardSides.FRONT_SIDE
-
-            SelectImageSourceBottomSheet.launch(
-                childFragmentManager = childFragmentManager,
-                selectImageSourceBottomSheetActionListener = this
-            )
+            openCameraAndGalleryOptionForFrontSideImage()
         }
 
         aadharBackImageHolder.uploadDocumentCardView.setOnClickListener {
-            currentlyClickingImageOfSide = AadharCardSides.BACK_SIDE
-
-            SelectImageSourceBottomSheet.launch(
-                childFragmentManager = childFragmentManager,
-                selectImageSourceBottomSheetActionListener = this
-            )
+            openCameraAndGalleryOptionForBackSideImage()
         }
 
         aadharBackImageHolder.uploadImageLayout.reuploadBtn.setOnClickListener {
-            currentlyClickingImageOfSide = AadharCardSides.BACK_SIDE
-
-            SelectImageSourceBottomSheet.launch(
-                childFragmentManager = childFragmentManager,
-                selectImageSourceBottomSheetActionListener = this
-            )
+            openCameraAndGalleryOptionForBackSideImage()
         }
 
         aadharEditLayout.setOnClickListener {
             navigate(R.id.editAadharInfoBottomSheet)
         }
+    }
+
+    private fun openCameraAndGalleryOptionForFrontSideImage() {
+//        currentlyClickingImageOfSide = AadharCardSides.FRONT_SIDE
+//
+//        SelectImageSourceBottomSheet.launch(
+//            childFragmentManager = childFragmentManager,
+//            selectImageSourceBottomSheetActionListener = this
+//        )
+
+        val photoCropIntent = Intent(requireContext(), PhotoCrop::class.java)
+        photoCropIntent.putExtra(
+            PhotoCrop.INTENT_EXTRA_PURPOSE,
+            PhotoCrop.PURPOSE_UPLOAD_AADHAR_FRONT_IMAGE
+        )
+        photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_FIREBASE_FOLDER_NAME, "/verification/")
+        photoCropIntent.putExtra("folder", "verification")
+        photoCropIntent.putExtra("detectFace", 0)
+        photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_FIREBASE_FILE_NAME, "aadhar_card_front.jpg")
+        startActivityForResult(photoCropIntent, REQUEST_CODE_UPLOAD_PAN_IMAGE)
+
+    }
+
+    private fun openCameraAndGalleryOptionForBackSideImage() {
+//        currentlyClickingImageOfSide = AadharCardSides.BACK_SIDE
+//
+//        SelectImageSourceBottomSheet.launch(
+//            childFragmentManager = childFragmentManager,
+//            selectImageSourceBottomSheetActionListener = this
+//        )
+
+        val photoCropIntent = Intent(requireContext(), PhotoCrop::class.java)
+        photoCropIntent.putExtra(
+            PhotoCrop.INTENT_EXTRA_PURPOSE,
+            PhotoCrop.PURPOSE_UPLOAD_AADHAR_BACK_IMAGE
+        )
+        photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_FIREBASE_FOLDER_NAME, "/verification/")
+        photoCropIntent.putExtra("folder", "verification")
+        photoCropIntent.putExtra("detectFace", 0)
+        photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_FIREBASE_FILE_NAME, "aadhar_card_back.jpg")
+        startActivityForResult(photoCropIntent, REQUEST_CODE_UPLOAD_PAN_IMAGE)
     }
 
     private fun showAadharImageAndInfoLayout() {

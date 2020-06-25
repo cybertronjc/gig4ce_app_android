@@ -1,36 +1,44 @@
 package com.gigforce.app.modules.gigerVerfication.panCard
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
 import com.gigforce.app.modules.gigerVerfication.ImageSource
-import com.gigforce.app.modules.gigerVerfication.SelectImageSourceBottomSheet
 import com.gigforce.app.modules.gigerVerfication.SelectImageSourceBottomSheetActionListener
+import com.gigforce.app.modules.photocrop.PhotoCrop
 import kotlinx.android.synthetic.main.fragment_add_pan_card_info.*
 import kotlinx.android.synthetic.main.fragment_verification_image_holder.view.*
 import java.io.File
 
 class AddPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetActionListener {
 
+    companion object {
+        const val REQUEST_CODE_UPLOAD_PAN_IMAGE = 2333
+    }
+
     private val viewModel: GigVerificationViewModel by viewModels()
     private var clickedImagePath: File? = null
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
     ) = inflateView(R.layout.fragment_add_pan_card_info, inflater, container)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViews()
+        initViewModel()
     }
+
 
     private fun initViews() {
         panImageHolder.documentUploadLabelTV.text = getString(R.string.upload_pan_card)
@@ -42,21 +50,15 @@ class AddPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetActio
         }
 
         panImageHolder.uploadDocumentCardView.setOnClickListener {
-            SelectImageSourceBottomSheet.launch(
-                childFragmentManager = childFragmentManager,
-                selectImageSourceBottomSheetActionListener = this
-            )
+            launchSelectImageSourceDialog()
         }
 
         panImageHolder.uploadImageLayout.reuploadBtn.setOnClickListener {
-            SelectImageSourceBottomSheet.launch(
-                childFragmentManager = childFragmentManager,
-                selectImageSourceBottomSheetActionListener = this
-            )
+            launchSelectImageSourceDialog()
         }
 
         panImageHolder.uploadImageLayout.imageLabelTV.text =
-            getString(R.string.upload_pan_card)
+                getString(R.string.upload_pan_card)
 
         panCardAvailaibilityOptionRG.setOnCheckedChangeListener { _, checkedId ->
 
@@ -93,6 +95,35 @@ class AddPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetActio
         }
     }
 
+
+    private fun initViewModel() {
+        viewModel.gigerVerificationStatus
+                .observe(viewLifecycleOwner, Observer {
+
+                    if (it.panCardDetailsUploaded) {
+
+                    }
+                })
+
+        viewModel.startListeningForGigerVerificationStatusChanges()
+    }
+
+
+    private fun launchSelectImageSourceDialog() {
+//        SelectImageSourceBottomSheet.launch(
+//            childFragmentManager = childFragmentManager,
+//            selectImageSourceBottomSheetActionListener = this
+//        )
+
+        val photoCropIntent = Intent(requireContext(), PhotoCrop::class.java)
+        photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_PURPOSE, PhotoCrop.PURPOSE_UPLOAD_PAN_IMAGE)
+        photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_FIREBASE_FOLDER_NAME, "/verification/")
+        photoCropIntent.putExtra("folder", "verification")
+        photoCropIntent.putExtra("detectFace", 0)
+        photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_FIREBASE_FILE_NAME, "pan_card.jpg")
+        startActivityForResult(photoCropIntent, REQUEST_CODE_UPLOAD_PAN_IMAGE)
+    }
+
     private fun showImageInfoLayout() {
         panInfoLayout.visibility = View.VISIBLE
     }
@@ -110,18 +141,18 @@ class AddPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetActio
         panSubmitSliderBtn.isEnabled = true
 
         panSubmitSliderBtn.outerColor =
-            ResourcesCompat.getColor(resources, R.color.light_pink, null)
+                ResourcesCompat.getColor(resources, R.color.light_pink, null)
         panSubmitSliderBtn.innerColor =
-            ResourcesCompat.getColor(resources, R.color.lipstick, null)
+                ResourcesCompat.getColor(resources, R.color.lipstick, null)
     }
 
     private fun disableSubmitButton() {
         panSubmitSliderBtn.isEnabled = false
 
         panSubmitSliderBtn.outerColor =
-            ResourcesCompat.getColor(resources, R.color.light_grey, null)
+                ResourcesCompat.getColor(resources, R.color.light_grey, null)
         panSubmitSliderBtn.innerColor =
-            ResourcesCompat.getColor(resources, R.color.warm_grey, null)
+                ResourcesCompat.getColor(resources, R.color.warm_grey, null)
     }
 
     override fun onImageSourceSelected(source: ImageSource) {
@@ -134,10 +165,10 @@ class AddPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetActio
 
         showPanInfoCard(clickedImagePath)
         setPanInfoOnView(
-            name = "Rahul Jain",
-            fathersName = "Sahil Jain",
-            dob = "11/09/1990",
-            pan = "PU23SDDLOJIJ"
+                name = "Rahul Jain",
+                fathersName = "Sahil Jain",
+                dob = "11/09/1990",
+                pan = "PU23SDDLOJIJ"
         )
     }
 
@@ -146,15 +177,15 @@ class AddPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetActio
         panImageHolder.uploadImageLayout.visibility = View.VISIBLE
 
         Glide.with(requireContext())
-            .load(R.drawable.bg_pan_card)
-            .into(panImageHolder.uploadImageLayout.clickedImageIV)
+                .load(R.drawable.bg_pan_card)
+                .into(panImageHolder.uploadImageLayout.clickedImageIV)
     }
 
     private fun setPanInfoOnView(
-        name: String?,
-        fathersName: String?,
-        dob: String?,
-        pan: String?
+            name: String?,
+            fathersName: String?,
+            dob: String?,
+            pan: String?
     ) {
         nameTV.text = name
         fathersNameTV.text = fathersName

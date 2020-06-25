@@ -1,5 +1,6 @@
 package com.gigforce.app.modules.gigerVerfication.drivingLicense
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,8 +12,9 @@ import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
 import com.gigforce.app.modules.gigerVerfication.ImageSource
-import com.gigforce.app.modules.gigerVerfication.SelectImageSourceBottomSheet
 import com.gigforce.app.modules.gigerVerfication.SelectImageSourceBottomSheetActionListener
+import com.gigforce.app.modules.gigerVerfication.aadharCard.AddAadharCardInfoFragment
+import com.gigforce.app.modules.photocrop.PhotoCrop
 import kotlinx.android.synthetic.main.fragment_add_driving_license_info.*
 import kotlinx.android.synthetic.main.fragment_verification_image_holder.view.*
 import java.io.File
@@ -61,7 +63,7 @@ class AddDrivingLicenseInfoFragment : BaseFragment(), SelectImageSourceBottomShe
 
             if (checkedId == R.id.dlYesRB) {
                 showDLImageAndInfoLayout()
-            } else if(checkedId == R.id.dlNoRB && confirmDLDataCB.isChecked){
+            } else if (checkedId == R.id.dlNoRB && confirmDLDataCB.isChecked) {
                 hideDLImageAndInfoLayout()
                 enableSubmitButton()
             } else
@@ -87,21 +89,11 @@ class AddDrivingLicenseInfoFragment : BaseFragment(), SelectImageSourceBottomShe
         }
 
         dlFrontImageHolder.uploadDocumentCardView.setOnClickListener {
-            currentlyClickingImageOfSide = DrivingLicenseSides.FRONT_SIDE
-
-            SelectImageSourceBottomSheet.launch(
-                childFragmentManager = childFragmentManager,
-                selectImageSourceBottomSheetActionListener = this
-            )
+            openCameraAndGalleryOptionForFrontSideImage()
         }
 
         dlBackImageHolder.uploadDocumentCardView.setOnClickListener {
-            currentlyClickingImageOfSide = DrivingLicenseSides.BACK_SIDE
-
-            SelectImageSourceBottomSheet.launch(
-                childFragmentManager = childFragmentManager,
-                selectImageSourceBottomSheetActionListener = this
-            )
+            openCameraAndGalleryOptionForBackSideImage()
         }
 
         dlFrontImageHolder.uploadImageLayout.imageLabelTV.text =
@@ -111,22 +103,59 @@ class AddDrivingLicenseInfoFragment : BaseFragment(), SelectImageSourceBottomShe
             getString(R.string.upload_driving_license_back_side)
 
         dlFrontImageHolder.uploadImageLayout.reuploadBtn.setOnClickListener {
-            currentlyClickingImageOfSide = DrivingLicenseSides.FRONT_SIDE
-
-            SelectImageSourceBottomSheet.launch(
-                childFragmentManager = childFragmentManager,
-                selectImageSourceBottomSheetActionListener = this
-            )
+            openCameraAndGalleryOptionForFrontSideImage()
         }
 
         dlBackImageHolder.uploadImageLayout.reuploadBtn.setOnClickListener {
-            currentlyClickingImageOfSide = DrivingLicenseSides.BACK_SIDE
-
-            SelectImageSourceBottomSheet.launch(
-                childFragmentManager = childFragmentManager,
-                selectImageSourceBottomSheetActionListener = this
-            )
+            openCameraAndGalleryOptionForBackSideImage()
         }
+    }
+
+    private fun openCameraAndGalleryOptionForFrontSideImage() {
+//        currentlyClickingImageOfSide = DrivingLicenseSides.FRONT_SIDE
+//
+//        SelectImageSourceBottomSheet.launch(
+//            childFragmentManager = childFragmentManager,
+//            selectImageSourceBottomSheetActionListener = this
+//        )
+
+        val photoCropIntent = Intent(requireContext(), PhotoCrop::class.java)
+        photoCropIntent.putExtra(
+            PhotoCrop.INTENT_EXTRA_PURPOSE,
+            PhotoCrop.PURPOSE_UPLOAD_DL_FRONT_IMAGE
+        )
+        photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_FIREBASE_FOLDER_NAME, "/verification/")
+        photoCropIntent.putExtra("folder", "verification")
+        photoCropIntent.putExtra("detectFace", 0)
+        photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_FIREBASE_FILE_NAME, "aadhar_card_front.jpg")
+        startActivityForResult(
+            photoCropIntent,
+            AddAadharCardInfoFragment.REQUEST_CODE_UPLOAD_PAN_IMAGE
+        )
+
+    }
+
+    private fun openCameraAndGalleryOptionForBackSideImage() {
+//        currentlyClickingImageOfSide = DrivingLicenseSides.BACK_SIDE
+//
+//        SelectImageSourceBottomSheet.launch(
+//            childFragmentManager = childFragmentManager,
+//            selectImageSourceBottomSheetActionListener = this
+//        )
+
+        val photoCropIntent = Intent(requireContext(), PhotoCrop::class.java)
+        photoCropIntent.putExtra(
+            PhotoCrop.INTENT_EXTRA_PURPOSE,
+            PhotoCrop.PURPOSE_UPLOAD_DL_BACK_IMAGE
+        )
+        photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_FIREBASE_FOLDER_NAME, "/verification/")
+        photoCropIntent.putExtra("folder", "verification")
+        photoCropIntent.putExtra("detectFace", 0)
+        photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_FIREBASE_FILE_NAME, "aadhar_card_back.jpg")
+        startActivityForResult(
+            photoCropIntent,
+            AddAadharCardInfoFragment.REQUEST_CODE_UPLOAD_PAN_IMAGE
+        )
     }
 
     private fun showDLImageAndInfoLayout() {

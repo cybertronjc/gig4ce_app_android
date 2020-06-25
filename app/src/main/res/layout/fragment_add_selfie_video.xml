@@ -64,9 +64,9 @@
         app:layout_constraintTop_toBottomOf="@id/appBar" />
 
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="300dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="37dp"
         android:layout_marginEnd="16dp"
@@ -78,7 +78,7 @@
         <RelativeLayout
             android:id="@+id/cameraViewContainer"
             android:layout_width="match_parent"
-            android:layout_height="240dp">
+            android:layout_height="300dp">
 
             <com.otaliastudios.cameraview.CameraView
                 android:id="@+id/cameraView"
@@ -87,17 +87,17 @@
                 android:layout_gravity="center"
                 android:keepScreenOn="true"
                 android:orientation="vertical"
-                app:cameraAudio="on"
+                app:cameraAudio="off"
                 app:cameraAutoFocusMarker="@string/cameraview_default_autofocus_marker"
                 app:cameraEngine="camera2"
                 app:cameraExperimental="true"
                 app:cameraFacing="front"
                 app:cameraFlash="auto"
-                app:elevation="5dp"
                 app:cameraGestureTap="autoFocus"
                 app:cameraMode="video"
                 app:cameraPlaySounds="true"
-                app:cameraPreview="glSurface" />
+                app:cameraPreview="glSurface"
+                app:elevation="5dp" />
 
             <LinearLayout
                 android:id="@+id/cameraControlsLayout"
@@ -137,6 +137,7 @@
                     <ImageView
                         android:layout_width="12dp"
                         android:layout_height="12dp"
+                        android:background="#51000000"
                         android:src="@drawable/ic_record" />
 
                     <TextView
@@ -145,7 +146,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="8dp"
                         android:fontFamily="@font/lato"
-                        android:text="00:10"
+                        android:text="00:05"
+                        android:background="#51000000"
                         android:textColor="@color/white"
                         android:textSize="12sp" />
 
@@ -156,12 +158,37 @@
 
         </RelativeLayout>
 
+
+        <LinearLayout
+            android:id="@+id/uploadingVideoContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="5dp"
+            android:gravity="center"
+            android:visibility="gone"
+            android:orientation="vertical">
+
+            <ProgressBar
+                android:layout_width="40dp"
+                android:layout_height="40dp" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Uploading Video..."
+                android:textColor="@color/black" />
+
+
+        </LinearLayout>
+
         <LinearLayout
             android:id="@+id/videoPlayerContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:visibility="visible">
+            android:visibility="gone">
 
             <fragment
                 android:id="@+id/selfieVideoPlayerFragment"
@@ -172,7 +199,7 @@
 
         </LinearLayout>
 
-    </LinearLayout>
+    </FrameLayout>
 
 
     <com.ncorti.slidetoact.SlideToActView
@@ -185,7 +212,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:outer_color="#dddddd"
         app:slider_height="60dp"
-        android:visibility="gone"
         app:slider_icon="@drawable/ic_arrow_forward_white"
         app:slider_icon_color="@color/white"
         app:text="SAVE" />
@@ -196,7 +222,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="13dp"
         android:layout_marginBottom="18dp"
-        android:visibility="gone"
         android:text="@string/yes_i_confirm_the_data_is_correct"
         app:layout_constraintBottom_toTopOf="@id/selfieVideoSubmitSliderBtn"
         app:layout_constraintVertical_bias="0.98"

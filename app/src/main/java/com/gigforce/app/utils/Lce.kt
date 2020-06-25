@@ -1,7 +1,7 @@
 package com.gigforce.app.utils
 
 /**
- * Lce (Loading-Content-Error Class for sharing state btween viewModel & view)
+ * Lce (Loading-Content-Error) Class for sharing state between viewModel & view
  */
 sealed class Lce<out T> {
 

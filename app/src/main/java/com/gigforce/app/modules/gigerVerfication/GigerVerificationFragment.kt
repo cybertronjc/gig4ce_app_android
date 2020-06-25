@@ -131,6 +131,93 @@ class GigerVerificationFragment : BaseFragment() {
                             )
                         )
                     }
+
+                    if(it.panCardDetailsUploaded) {
+                        panLayout.descTitleTV.text = getString(R.string.uploaded)
+                        panLayout.descTitleTV.setTextColor(
+                            ResourcesCompat.getColor(
+                                resources,
+                                R.color.green,
+                                null
+                            )
+                        )
+                    } else{
+                        panLayout.descTitleTV.text = getString(R.string.tap_to_upload)
+                        panLayout.descTitleTV.setTextColor(
+                            ResourcesCompat.getColor(
+                                resources,
+                                R.color.battle_ship_grey,
+                                null
+                            )
+                        )
+                    }
+
+
+
+                    if(it.bankDetailsUploaded) {
+                        bankDetailsLayout.descTitleTV.text = getString(R.string.uploaded)
+                        bankDetailsLayout.descTitleTV.setTextColor(
+                            ResourcesCompat.getColor(
+                                resources,
+                                R.color.green,
+                                null
+                            )
+                        )
+                    } else{
+                        bankDetailsLayout.descTitleTV.text = getString(R.string.tap_to_upload)
+                        bankDetailsLayout.descTitleTV.setTextColor(
+                            ResourcesCompat.getColor(
+                                resources,
+                                R.color.battle_ship_grey,
+                                null
+                            )
+                        )
+                    }
+
+
+
+                    if(it.aadharCardDetailsUploaded) {
+                        aadharLayout.descTitleTV.text = getString(R.string.uploaded)
+                        aadharLayout.descTitleTV.setTextColor(
+                            ResourcesCompat.getColor(
+                                resources,
+                                R.color.green,
+                                null
+                            )
+                        )
+                    } else{
+                        aadharLayout.descTitleTV.text = getString(R.string.tap_to_upload)
+                        aadharLayout.descTitleTV.setTextColor(
+                            ResourcesCompat.getColor(
+                                resources,
+                                R.color.battle_ship_grey,
+                                null
+                            )
+                        )
+                    }
+
+
+
+                    if(it.dlCardDetailsUploaded) {
+                        drivingLayout.descTitleTV.text = getString(R.string.uploaded)
+                        drivingLayout.descTitleTV.setTextColor(
+                            ResourcesCompat.getColor(
+                                resources,
+                                R.color.green,
+                                null
+                            )
+                        )
+                    } else{
+                        drivingLayout.descTitleTV.text = getString(R.string.tap_to_upload)
+                        drivingLayout.descTitleTV.setTextColor(
+                            ResourcesCompat.getColor(
+                                resources,
+                                R.color.battle_ship_grey,
+                                null
+                            )
+                        )
+                    }
+
                 }
             })
 

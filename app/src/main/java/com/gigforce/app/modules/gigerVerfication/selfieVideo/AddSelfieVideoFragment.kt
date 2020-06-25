@@ -16,6 +16,7 @@ import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.utils.DateHelper
 import com.gigforce.app.utils.Lse
+import com.ncorti.slidetoact.SlideToActView
 import com.otaliastudios.cameraview.CameraLogger
 import com.otaliastudios.cameraview.VideoResult
 import com.otaliastudios.cameraview.controls.Mode
@@ -44,8 +45,14 @@ class AddSelfieVideoFragment : BaseFragment() {
         viewModel.uploadSelfieState
             .observe(viewLifecycleOwner, Observer {
                 when (it) {
-                    Lse.Loading -> Log.d("Himanshu", "loading")
-                    Lse.Success -> Log.d("Himanshu", "success")
+                    Lse.Loading -> {
+                        hideCaptureVideoControls()
+                        uploadingVideoContainer.visibility = View.VISIBLE
+                    }
+                    Lse.Success -> {
+                        showToast("Video Uploaded")
+                        activity?.onBackPressed()
+                    }
                     is Lse.Error -> Log.e("Himanshu", it.error)
                 }
             })
@@ -74,6 +81,21 @@ class AddSelfieVideoFragment : BaseFragment() {
         recordVideoButton.setOnClickListener {
             startRecordingVideo()
             startTimer()
+        }
+
+        selfieVideoSubmitSliderBtn.onSlideCompleteListener =
+            object : SlideToActView.OnSlideCompleteListener {
+
+                override fun onSlideComplete(view: SlideToActView) {
+                    viewModel.uploadSelfieVideo(videoPath!!)
+                }
+            }
+
+        selfieVideoSubmitSliderBtn.onSlideResetListener = object  : SlideToActView.OnSlideResetListener{
+
+            override fun onSlideReset(view: SlideToActView) {
+                viewModel.uploadSelfieVideo(videoPath!!)
+            }
         }
     }
 
@@ -153,9 +175,9 @@ class AddSelfieVideoFragment : BaseFragment() {
 
             // hideCaptureVideoControls()
             //showVideoPreviewControls()
+            cameraView.close()
 
             //  playVideoFragment.playVideo(result.file)
-            viewModel.uploadSelfieVideo(result.file)
         }
     }
 

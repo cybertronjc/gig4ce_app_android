@@ -13,10 +13,11 @@ import android.util.Log
 import android.view.View
 import android.view.Window
 import android.widget.*
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.lifecycle.ViewModelProviders
 import com.gigforce.app.R
+import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
 import com.gigforce.app.modules.profile.ProfileViewModel
 import com.gigforce.app.utils.GlideApp
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -42,6 +43,19 @@ class PhotoCrop : AppCompatActivity() {
     companion object {
         var profilePictureOptionsBottomSheetFragment: ProfilePictureOptionsBottomSheetFragment =
             ProfilePictureOptionsBottomSheetFragment()
+
+
+        const val INTENT_EXTRA_PURPOSE = "purpose"
+        const val INTENT_EXTRA_FIREBASE_FOLDER_NAME = "fbDir"
+        const val INTENT_EXTRA_FIREBASE_FILE_NAME = "file"
+        const val INTENT_EXTRA_DETECT_FACE = "detectFace"
+
+        const val PURPOSE_UPLOAD_PAN_IMAGE = "upload_pan_image"
+        const val PURPOSE_UPLOAD_AADHAR_FRONT_IMAGE = "aadhar_front_image"
+        const val PURPOSE_UPLOAD_AADHAR_BACK_IMAGE = "aadhar_back_image"
+        const val PURPOSE_UPLOAD_BANK_DETAILS_IMAGE = "bank_passbook_image"
+        const val PURPOSE_UPLOAD_DL_BACK_IMAGE = "dl_back_image"
+        const val PURPOSE_UPLOAD_DL_FRONT_IMAGE = "dl_front_image"
     }
 
     private val CODE_IMG_GALLERY: Int = 1
@@ -51,8 +65,8 @@ class PhotoCrop : AppCompatActivity() {
     private val resultIntent: Intent = Intent()
     private var PREFIX: String = "IMG"
     private lateinit var storage: FirebaseStorage
-    private lateinit var CLOUD_INPUT_FOLDER: String;
-    private var detectFace: Int = 1;
+    private lateinit var CLOUD_INPUT_FOLDER: String
+    private var detectFace: Int = 1
     private val DEFAULT_PICTURE: String = "avatar.jpg"
     private val profilePictureCrop: String = "profilePictureCrop"
     private val verification: String = "verification"
@@ -60,10 +74,12 @@ class PhotoCrop : AppCompatActivity() {
     private lateinit var incomingFile: String
     private lateinit var imageView: ImageView
     private lateinit var backButton: ImageButton
-    private lateinit var viewModel: ProfileViewModel
-    private lateinit var bottomSheetBehavior:BottomSheetBehavior<LinearLayout>
+    private val viewModel: ProfileViewModel by viewModels()
+    private lateinit var bottomSheetBehavior: BottomSheetBehavior<LinearLayout>
     private val TEMP_FILE: String = "profile_picture"
     private lateinit var purpose: String
+
+    private val gigerVerificationViewModel: GigVerificationViewModel by viewModels()
 
     var mStorage: FirebaseStorage = FirebaseStorage.getInstance()
 
@@ -103,6 +119,7 @@ class PhotoCrop : AppCompatActivity() {
         when (purpose) {
             profilePictureCrop -> profilePictureOptions()
             verification -> verificationOptions()
+            else -> verificationOptions()
         }
         checkPermissions()
         imageView.setOnClickListener { toggleBottomSheet() }
@@ -126,13 +143,14 @@ class PhotoCrop : AppCompatActivity() {
         loadImage(CLOUD_INPUT_FOLDER, incomingFile)
     }
 
+
     private fun verificationOptions() {
         Log.e("PHOTO_CROP", "verification options started")
         CLOUD_OUTPUT_FOLDER = intent.getStringExtra("folder")
         incomingFile = "verification_" + intent.getStringExtra("file")
         cropX = 7F
         cropY = 5F
-        PREFIX = intent.getStringExtra("uid")
+        PREFIX = intent.getStringExtra("uid") ?: viewModel.uid
         val bundle = intent.extras
         if (bundle != null) {
             CLOUD_INPUT_FOLDER = bundle.get("fbDir").toString()
@@ -146,7 +164,6 @@ class PhotoCrop : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        viewModel = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
         backButton.setOnClickListener {
             super.finish()
         }
@@ -193,18 +210,18 @@ class PhotoCrop : AppCompatActivity() {
             val imageUriResultCrop: Uri? = UCrop.getOutput((data!!))
             Log.d("ImageUri", imageUriResultCrop.toString())
             if (imageUriResultCrop != null) {
-                resultIntent.putExtra("uri", imageUriResultCrop);
+                resultIntent.putExtra("uri", imageUriResultCrop)
                 Log.v("REQUEST CROP", requestCode.toString())
             }
             var baos = ByteArrayOutputStream()
             if (imageUriResultCrop == null) {
-                var bitmap = data?.data as Bitmap
+                var bitmap = data.data as Bitmap
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
             }
             var fvImage = imageUriResultCrop?.let { FirebaseVisionImage.fromFilePath(this, it) }
 
             //  Face detect - Check if face is present in the cropped image or not.
-            if (detectFace === 1) {
+            if (detectFace == 1) {
                 val result = detector.detectInImage(fvImage!!)
                     .addOnSuccessListener { faces ->
                         // Task completed successfully
@@ -231,7 +248,7 @@ class PhotoCrop : AppCompatActivity() {
                     }
             } else {
                 //just upload wihtout face detection eg for pan, aadhar, other docs.
-                upload(imageUriResultCrop, baos.toByteArray(), CLOUD_OUTPUT_FOLDER);
+                upload(imageUriResultCrop, baos.toByteArray(), CLOUD_OUTPUT_FOLDER)
             }
         }
         Log.d("CStatus", "completed result on activity")
@@ -349,6 +366,30 @@ class PhotoCrop : AppCompatActivity() {
     private fun updateViewModel(purpose: String, name: String) {
         when (purpose) {
             profilePictureCrop -> viewModel.setProfileAvatarName(name)
+            PURPOSE_UPLOAD_PAN_IMAGE -> gigerVerificationViewModel.updatePanImagePath(name)
+            PURPOSE_UPLOAD_BANK_DETAILS_IMAGE -> gigerVerificationViewModel.updateBankPassbookImagePath(
+                name
+            )
+            PURPOSE_UPLOAD_AADHAR_FRONT_IMAGE -> gigerVerificationViewModel.updateAadharData(
+                true,
+                name,
+                null
+            )
+            PURPOSE_UPLOAD_AADHAR_BACK_IMAGE -> gigerVerificationViewModel.updateAadharData(
+                true,
+                null,
+                name
+            )
+            PURPOSE_UPLOAD_DL_FRONT_IMAGE -> gigerVerificationViewModel.updateDLData(
+                userHasDL = true,
+                frontImagePath = name,
+                backImagePath = null
+            )
+            PURPOSE_UPLOAD_DL_BACK_IMAGE -> gigerVerificationViewModel.updateDLData(
+                userHasDL = true,
+                frontImagePath = null,
+                backImagePath = name
+            )
         }
     }
 
@@ -371,7 +412,7 @@ class PhotoCrop : AppCompatActivity() {
      *
      */
     private fun loadImage(folder: String, path: String) {
-        if(path==DEFAULT_PICTURE) disableRemoveProfilePicture()
+        if (path == DEFAULT_PICTURE) disableRemoveProfilePicture()
         else enableRemoveProfilePicture()
         Log.d("PHOTO_CROP", "loading - " + path)
         var profilePicRef: StorageReference =
@@ -394,7 +435,7 @@ class PhotoCrop : AppCompatActivity() {
             Intent.ACTION_PICK,
             android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI
         )
-        galleryIntent.setType("image/gallery");
+        galleryIntent.type = "image/gallery"
         val pickTitle = "Select or take a new Picture"
         var outputFileUri: Uri? = Uri.fromFile(File.createTempFile(TEMP_FILE, EXTENSION))
         val chooserIntent = Intent.createChooser(pickIntent, pickTitle)
@@ -420,11 +461,11 @@ class PhotoCrop : AppCompatActivity() {
      */
     private fun showBottomSheet() {
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
-        linear_layout_bottomsheet.updateProfilePicture.setOnClickListener { getImageFromPhone()}
-        linear_layout_bottomsheet.removeProfilePicture.setOnClickListener { confirmRemoval()}
+        linear_layout_bottomsheet.updateProfilePicture.setOnClickListener { getImageFromPhone() }
+        linear_layout_bottomsheet.removeProfilePicture.setOnClickListener { confirmRemoval() }
     }
 
-    private fun toggleBottomSheet(){
+    private fun toggleBottomSheet() {
         if (bottomSheetBehavior.state == BottomSheetBehavior.STATE_EXPANDED) bottomSheetBehavior.state =
             BottomSheetBehavior.STATE_COLLAPSED
         else if (bottomSheetBehavior.state == BottomSheetBehavior.STATE_COLLAPSED) bottomSheetBehavior.state =
@@ -462,37 +503,37 @@ class PhotoCrop : AppCompatActivity() {
 
     }
 
-    private fun enableRemoveProfilePicture(){
-        linear_layout_bottomsheet.removeProfilePicture.isClickable=true
+    private fun enableRemoveProfilePicture() {
+        linear_layout_bottomsheet.removeProfilePicture.isClickable = true
         linear_layout_bottomsheet.removeProfilePicture.setTextColor(resources.getColorStateList(R.color.text_color))
 
     }
 
-    private fun disableRemoveProfilePicture(){
-        linear_layout_bottomsheet.removeProfilePicture.isClickable=false
+    private fun disableRemoveProfilePicture() {
+        linear_layout_bottomsheet.removeProfilePicture.isClickable = false
         linear_layout_bottomsheet.removeProfilePicture.setTextColor(resources.getColor(R.color.lightGrey))
     }
 
 
     private fun confirmRemoval() {
         val dialog = this.let { Dialog(it) }
-        dialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog?.setCancelable(false)
-        dialog?.setContentView(R.layout.confirmation_custom_alert_type1)
-        val titleDialog = dialog?.findViewById(R.id.title) as TextView
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setCancelable(false)
+        dialog.setContentView(R.layout.confirmation_custom_alert_type1)
+        val titleDialog = dialog.findViewById(R.id.title) as TextView
         titleDialog.text = "Are sure you want to Remove the picture ?"
-        val noBtn = dialog?.findViewById(R.id.yes) as TextView
-        noBtn.text="No"
-        val yesBtn = dialog?.findViewById(R.id.cancel) as TextView
-        yesBtn.text="Yes"
+        val noBtn = dialog.findViewById(R.id.yes) as TextView
+        noBtn.text = "No"
+        val yesBtn = dialog.findViewById(R.id.cancel) as TextView
+        yesBtn.text = "Yes"
         yesBtn.setOnClickListener()
         {
             defaultProfilePicture()
-            dialog?.dismiss()
+            dialog.dismiss()
         }
         noBtn.setOnClickListener()
         { dialog.dismiss() }
-        dialog?.show()
+        dialog.show()
     }
 
-    }
+}
