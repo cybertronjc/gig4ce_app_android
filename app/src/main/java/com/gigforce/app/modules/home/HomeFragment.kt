@@ -12,7 +12,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.gigforce.app.R
 import com.gigforce.app.modules.chat.ChatsHomeFragment
 import com.gigforce.app.modules.calendarscreen.HomeScreenFragment
-import com.gigforce.app.utils.popAllBackStates
+import com.gigforce.app.core.base.popAllBackStates
 
 class HomeFragment: Fragment(), View.OnClickListener {
 

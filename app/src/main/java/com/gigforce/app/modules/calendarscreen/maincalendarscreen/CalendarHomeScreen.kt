@@ -1,24 +1,32 @@
 package com.gigforce.app.modules.calendarscreen.maincalendarscreen
 
+import android.app.Dialog
 import android.os.Build
 import android.os.Bundle
-import android.view.*
+import android.os.Handler
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.request.RequestOptions
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
+import com.gigforce.app.core.base.dialog.ConfirmationDialogOnClickListener
 import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.app.core.genericadapter.RecyclerGenericAdapter
+import com.gigforce.app.modules.calendarscreen.maincalendarscreen.verticalcalendar.CalendarRecyclerItemTouchHelper
 import com.gigforce.app.modules.calendarscreen.maincalendarscreen.verticalcalendar.VerticalCalendarDataItemModel
 import com.gigforce.app.modules.preferences.PreferencesFragment
-import com.gigforce.app.modules.preferences.prefdatamodel.PreferencesDataModel
 import com.gigforce.app.modules.profile.ProfileViewModel
 import com.gigforce.app.utils.GlideApp
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.storage.StorageReference
 import com.riningan.widget.ExtendedBottomSheetBehavior
 import com.riningan.widget.ExtendedBottomSheetBehavior.STATE_COLLAPSED
@@ -28,11 +36,13 @@ import java.time.LocalDateTime
 import java.util.*
 
 
-class CalendarHomeScreen : BaseFragment() {
+class CalendarHomeScreen : BaseFragment(),
+    CalendarRecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
 
     companion object {
         fun newInstance() =
             CalendarHomeScreen()
+        lateinit var temporaryData : VerticalCalendarDataItemModel
     }
 
     private var mExtendedBottomSheetBehavior: ExtendedBottomSheetBehavior<*>? = null
@@ -63,7 +73,6 @@ class CalendarHomeScreen : BaseFragment() {
 
     private fun requestPreferenceRepositoryData() {
     }
-
 
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -124,12 +133,12 @@ class CalendarHomeScreen : BaseFragment() {
         val date: String = simpleDateFormat.format(Date())
         tv2HS1.text = date
     }
-
+    lateinit var recyclerGenericAdapter: RecyclerGenericAdapter<VerticalCalendarDataItemModel>
     private val visibleThreshold = 20
     var isLoading: Boolean = false
     @RequiresApi(Build.VERSION_CODES.O)
     private fun initializeVerticalCalendarRV() {
-        val recyclerGenericAdapter: RecyclerGenericAdapter<VerticalCalendarDataItemModel> =
+        recyclerGenericAdapter =
             RecyclerGenericAdapter<VerticalCalendarDataItemModel>(
                 activity?.applicationContext,
                 PFRecyclerViewAdapter.OnViewHolderClick<VerticalCalendarDataItemModel?> { view, position, item ->
@@ -221,7 +230,28 @@ class CalendarHomeScreen : BaseFragment() {
                                 getView(viewHolder, R.id.daydatecard).alpha = 0.5F
                             }
                         } else {
-                            if (obj!!.isGigAssign) {
+                            if(obj!!.isUnavailable){
+                                getTextView(viewHolder, R.id.title).text = "Unavailable"
+                                    setTextViewColor(
+                                    getTextView(viewHolder, R.id.title),
+                                    R.color.gray_color_day_date_calendar
+                                )
+                                setTextViewColor(
+                                    getTextView(viewHolder, R.id.day),
+                                    R.color.gray_color_day_date_calendar
+                                )
+                                setTextViewColor(
+                                    getTextView(viewHolder, R.id.date),
+                                    R.color.gray_color_day_date_calendar
+                                )
+                                setViewBackgroundColor(
+                                    getView(viewHolder, R.id.daydatecard),
+                                    R.color.date_day_unavailable_color
+                                )
+                                getView(viewHolder, R.id.daydatecard).alpha = 1.0F
+                                setBackgroundStateAvailable(viewHolder)
+                            }
+                            else if (obj!!.isGigAssign) {
                                 setTextViewColor(
                                     getTextView(viewHolder, R.id.title),
                                     R.color.black_color_future_date
@@ -319,8 +349,112 @@ class CalendarHomeScreen : BaseFragment() {
         }
         rv_.addOnScrollListener(scrollListener)
 
+        var itemTouchListener = CalendarRecyclerItemTouchHelper(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT, this)
+        ItemTouchHelper(itemTouchListener).attachToRecyclerView(rv_)
+
     }
 
+    private fun setBackgroundStateAvailable(viewHolder: PFRecyclerViewAdapter<Any?>.ViewHolder) {
+        setViewBackgroundColor(getView(viewHolder,R.id.action_layout),R.color.action_layout_available)
+        setViewBackgroundColor(getView(viewHolder,R.id.border_top),R.color.action_layout_available_border)
+        setViewBackgroundColor(getView(viewHolder,R.id.border_bottom),R.color.action_layout_available_border)
+        setTextViewColor(getTextView(viewHolder,R.id.title_calendar_action_item),R.color.action_layout_available_title)
+        getTextView(viewHolder,R.id.title_calendar_action_item).text = "Marked Available"
+        getImageView(viewHolder,R.id.flash_icon).setImageResource(R.drawable.ic_flash_green)
+    }
+
+
+    override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int, position: Int) {
+        temporaryData = recyclerGenericAdapter.list.get(position)
+        if(temporaryData.isGigAssign){
+            if(temporaryData.isUnavailable) {
+                temporaryData.isUnavailable = false
+                recyclerGenericAdapter.notifyItemChanged(position)
+            }
+            else{
+                var subTitle =
+                    "You have " + temporaryData.title + " Gig \non the day. These gig will get " +
+                            "cancelled as well."
+                showConfirmationDialogType3(
+                    " Are sure you want to change availablilty ?",
+                    subTitle,
+                    object : ConfirmationDialogOnClickListener {
+                        override fun clickedOnYes(dialog: Dialog?) {
+                            showConfirmationDialogType4("Cancelling out on a gig !","Please let us know your reason, to mark unavailable ?",object : ConfirmationDialogOnClickListener {
+                                override fun clickedOnYes(dialog: Dialog?) {
+                                    temporaryData.isUnavailable = true
+                                    temporaryData.isGigAssign = false
+                                    temporaryData.title = "No gigs assigned"
+                                    recyclerGenericAdapter.notifyItemChanged(position)
+                                    dialog?.dismiss()
+                                }
+
+                                override fun clickedOnNo(dialog: Dialog?) {
+                                    dialog?.dismiss()
+                                }
+                            })
+                            dialog?.dismiss()
+                        }
+
+                        override fun clickedOnNo(dialog: Dialog?) {
+                            recyclerGenericAdapter.notifyItemChanged(position)
+                            dialog?.dismiss()
+                        }
+
+                    })
+            }
+        }
+        else if(temporaryData.isUnavailable){
+            temporaryData.isUnavailable = false
+            recyclerGenericAdapter.notifyItemChanged(position)
+        }
+        else{
+        temporaryData.isUnavailable = true
+        recyclerGenericAdapter.notifyItemChanged(position)
+        showSnackbar(position)
+        }
+//        val snackbar = Snackbar
+//            .make(coodinate_layout, "Item was removed from the list.", Snackbar.LENGTH_LONG)
+//        snackbar.setAction("UNDO", View.OnClickListener {
+//        })
+//        snackbar.setActionTextColor(resources.getColor(R.color.snakbar_action_color))
+//        snackbar.show()
+    }
+
+    class OnSnackBarUndoClickListener(var position: Int,var recyclerGenericAdapter:RecyclerGenericAdapter<VerticalCalendarDataItemModel>,var snackbar:Snackbar) : View.OnClickListener{
+        override fun onClick(v: View?) {
+            temporaryData.isUnavailable = false
+            recyclerGenericAdapter.notifyItemChanged(position)
+            snackbar.dismiss()
+        }
+    }
+
+    private fun showSnackbar(position: Int) {
+        nsv.visibility = View.GONE
+        val snackbar = Snackbar.make(coodinate_layout, "", Snackbar.LENGTH_LONG);
+        // Get the Snackbar's layout view
+        var layout = snackbar.getView() as Snackbar.SnackbarLayout;
+        // Hide the text
+        var textView =
+            layout.findViewById<TextView>(com.google.android.material.R.id.snackbar_text);
+        textView.setVisibility(View.INVISIBLE);
+
+        // Inflate our custom view
+        var snackView = layoutInflater.inflate(R.layout.snackbar_layout, null);
+        snackView.setOnClickListener(OnSnackBarUndoClickListener(position,recyclerGenericAdapter,snackbar))
+        //If the view is not covering the whole snackbar layout, add this line
+        layout.setPadding(0, 0, 0, 0);
+        // Add the view to the Snackbar's layout
+        layout.addView(snackView, 0);
+        // Show the Snackbar
+        snackbar.show();
+        Handler().postDelayed({
+            nsv.visibility = View.VISIBLE
+        }, SNACKBAR_TIMEOUT)
+
+    }
+
+    private val SNACKBAR_TIMEOUT: Long = 2000 // 1 sec
     private fun showMonthLayout(show: Boolean, viewHolder: PFRecyclerViewAdapter<Any?>.ViewHolder) {
         if (show) {
             getView(viewHolder, R.id.calendar_month_cl).visibility = View.VISIBLE

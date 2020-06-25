@@ -46,7 +46,6 @@ open class BaseFragment : Fragment(), ViewsFromViewsInterface, NavigationInterfa
     lateinit var sharedDataInterface: SharedDataInterface
     lateinit var appDialogsInterface: AppDialogsInterface
     lateinit var languageUtilInterface: LanguageUtilInterface
-
     lateinit var utilAndValidationInterface: UtilAndValidationInterface
     lateinit var baseFragment: BaseFragment
     var mView: View? = null
@@ -301,6 +300,22 @@ open class BaseFragment : Fragment(), ViewsFromViewsInterface, NavigationInterfa
         buttonClickListener: ConfirmationDialogOnClickListener
     ) {
         appDialogsInterface.showConfirmationDialogType2(title, buttonClickListener)
+    }
+
+    override fun showConfirmationDialogType3(
+        title: String,
+        subTitle: String,
+        buttonClickListener: ConfirmationDialogOnClickListener
+    ) {
+        appDialogsInterface.showConfirmationDialogType3(title,subTitle,buttonClickListener)
+    }
+
+    override fun showConfirmationDialogType4(
+        title: String,
+        subTitle: String,
+        buttonClickListener: ConfirmationDialogOnClickListener
+    ) {
+        appDialogsInterface.showConfirmationDialogType4(title,subTitle,buttonClickListener)
     }
 
     override fun getLanguageCodeToName(languageCode: String): String {
