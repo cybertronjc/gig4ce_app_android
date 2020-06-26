@@ -58,46 +58,49 @@
 
     <TextView
         android:id="@+id/textView77"
-        android:layout_width="340dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="9dp"
         android:fontFamily="@font/lato"
         android:gravity="left"
         android:letterSpacing="0"
+        android:paddingEnd="24dp"
         android:text="This mobile no. will be used to call you for various job opportunities and their interview processes."
         android:textColor="#000000"
         android:textSize="14sp"
-        android:paddingEnd="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/start_barrier"
         app:layout_constraintTop_toTopOf="@+id/textView107" />
 
     <TextView
         android:id="@+id/textView108"
-        android:layout_width="340dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="9dp"
         android:fontFamily="@font/lato"
         android:gravity="left"
         android:letterSpacing="0"
+        android:paddingRight="24dp"
         android:text="This overrides any DND requests with your operator and you are allowing us to call you for these opportunities."
         android:textColor="#000000"
         android:textSize="14sp"
-        android:layout_marginLeft="9dp"
-        android:paddingRight="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/textView109"
         app:layout_constraintTop_toTopOf="@+id/textView109" />
 
     <TextView
         android:id="@+id/textView111"
-        android:layout_width="340dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="9dp"
         android:fontFamily="@font/lato"
         android:gravity="left"
         android:letterSpacing="0"
+        android:paddingRight="24dp"
         android:text="Your number will not be shared with any third party without your permission."
         android:textColor="#000000"
         android:textSize="14sp"
-        android:layout_marginLeft="9dp"
-        android:paddingRight="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/textView110"
         app:layout_constraintTop_toTopOf="@+id/textView110" />
 

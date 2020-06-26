@@ -19,6 +19,7 @@ import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.base.dialog.ConfirmationDialogOnClickListener
 import com.gigforce.app.modules.preferences.SharedPreferenceViewModel
 import kotlinx.android.synthetic.main.earning_fragment.*
+import kotlinx.android.synthetic.main.fragment_select_language.*
 
 class EarningFragment : BaseFragment() {
 
@@ -195,9 +196,10 @@ class EarningFragment : BaseFragment() {
         var customialog:Dialog? = activity?.let { Dialog(it) }
         customialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
         customialog?.getWindow()?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT));
-        customialog?.setCancelable(false)
+//        customialog?.setCancelable(false)
         customialog?.setContentView(R.layout.custom_alert_2)
         var radioGroup = customialog?.findViewById(R.id.radio_group) as RadioGroup;
+        setPreferenceNoOfDays(radioGroup)
         radioGroup?.setOnCheckedChangeListener(
             RadioGroup.OnCheckedChangeListener { group, checkedId ->
                 val radioButton = radioGroup.findViewById<RadioButton>(checkedId)
@@ -208,6 +210,16 @@ class EarningFragment : BaseFragment() {
             showToast("working")
         }
         customialog?.show()
+    }
+
+    private fun setPreferenceNoOfDays(radioGroup: RadioGroup) {
+        when(selected_pre_no_of_days.text){
+            "00-04 Days" -> radioGroup.findViewById<RadioButton>(R.id.zeroToFour).isChecked = true
+            "04-08 Days" -> radioGroup.findViewById<RadioButton>(R.id.fourToEight).isChecked = true
+            "08-15 Days" -> radioGroup.findViewById<RadioButton>(R.id.eightToFifteen).isChecked = true
+            "15-30 Days" -> radioGroup.findViewById<RadioButton>(R.id.fifteenToThirty).isChecked = true
+        }
+
     }
 
 }
