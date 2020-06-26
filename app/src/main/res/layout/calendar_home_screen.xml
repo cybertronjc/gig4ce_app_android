@@ -99,13 +99,6 @@
             app:layout_constraintTop_toBottomOf="@+id/tv1HS1"
             app:srcCompat="@drawable/homescreen_month_dropdown" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="123dp"
-            android:layout_height="123dp"
-            tools:layout_editor_absoluteX="130dp"
-            tools:layout_editor_absoluteY="116dp">
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
