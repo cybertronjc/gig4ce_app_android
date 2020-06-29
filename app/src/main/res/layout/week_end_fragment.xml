@@ -54,8 +54,8 @@
 
     <ImageView
         android:id="@+id/days_iv"
-        android:layout_width="20dp"
-        android:layout_height="21dp"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="14dp"
         app:layout_constraintStart_toStartOf="@+id/textView60"
@@ -116,8 +116,8 @@
 
     <ImageView
         android:id="@+id/slots_iv"
-        android:layout_width="20dp"
-        android:layout_height="21dp"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="14dp"
         app:layout_constraintStart_toStartOf="@+id/textView64"
@@ -156,6 +156,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="24dp"
+        android:tint="@color/black"
         android:src="@drawable/ic_baseline_arrow_back_24"
         app:layout_constraintBottom_toBottomOf="@+id/textView52"
         app:layout_constraintStart_toStartOf="@+id/textView52"
