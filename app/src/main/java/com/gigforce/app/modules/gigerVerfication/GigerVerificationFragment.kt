@@ -11,6 +11,7 @@ import com.bumptech.glide.Glide
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import kotlinx.android.synthetic.main.fragment_giger_verification.*
+import kotlinx.android.synthetic.main.fragment_giger_verification_documents_submitted.*
 import kotlinx.android.synthetic.main.fragment_giger_verification_item.view.*
 import kotlinx.android.synthetic.main.fragment_giger_verification_main.*
 import kotlinx.android.synthetic.main.fragment_giger_verification_main.view.*
@@ -36,6 +37,9 @@ class GigerVerificationFragment : BaseFragment() {
     private fun initView() {
 
         toolbar.setNavigationOnClickListener {
+            activity?.onBackPressed()
+        }
+        verificationCompletedBtn.setOnClickListener {
             activity?.onBackPressed()
         }
 
@@ -108,11 +112,12 @@ class GigerVerificationFragment : BaseFragment() {
                 if (it.everyDocumentUploaded) {
                     verificationMainLayout.visibility = View.GONE
                     verificationDocSubmittedLayout.visibility = View.VISIBLE
+
                 } else {
                     verificationDocSubmittedLayout.visibility = View.GONE
                     verificationMainLayout.visibility = View.VISIBLE
 
-                    if(it.selfieVideoUploaded) {
+                    if (it.selfieVideoUploaded) {
                         selfieVideoLayout.descTitleTV.text = getString(R.string.uploaded)
                         selfieVideoLayout.descTitleTV.setTextColor(
                             ResourcesCompat.getColor(
@@ -121,7 +126,7 @@ class GigerVerificationFragment : BaseFragment() {
                                 null
                             )
                         )
-                    } else{
+                    } else {
                         selfieVideoLayout.descTitleTV.text = getString(R.string.tap_to_upload)
                         selfieVideoLayout.descTitleTV.setTextColor(
                             ResourcesCompat.getColor(
@@ -132,7 +137,7 @@ class GigerVerificationFragment : BaseFragment() {
                         )
                     }
 
-                    if(it.panCardDetailsUploaded) {
+                    if (it.panCardDetailsUploaded) {
                         panLayout.descTitleTV.text = getString(R.string.uploaded)
                         panLayout.descTitleTV.setTextColor(
                             ResourcesCompat.getColor(
@@ -141,7 +146,7 @@ class GigerVerificationFragment : BaseFragment() {
                                 null
                             )
                         )
-                    } else{
+                    } else {
                         panLayout.descTitleTV.text = getString(R.string.tap_to_upload)
                         panLayout.descTitleTV.setTextColor(
                             ResourcesCompat.getColor(
@@ -154,7 +159,7 @@ class GigerVerificationFragment : BaseFragment() {
 
 
 
-                    if(it.bankDetailsUploaded) {
+                    if (it.bankDetailsUploaded) {
                         bankDetailsLayout.descTitleTV.text = getString(R.string.uploaded)
                         bankDetailsLayout.descTitleTV.setTextColor(
                             ResourcesCompat.getColor(
@@ -163,7 +168,7 @@ class GigerVerificationFragment : BaseFragment() {
                                 null
                             )
                         )
-                    } else{
+                    } else {
                         bankDetailsLayout.descTitleTV.text = getString(R.string.tap_to_upload)
                         bankDetailsLayout.descTitleTV.setTextColor(
                             ResourcesCompat.getColor(
@@ -176,7 +181,7 @@ class GigerVerificationFragment : BaseFragment() {
 
 
 
-                    if(it.aadharCardDetailsUploaded) {
+                    if (it.aadharCardDetailsUploaded) {
                         aadharLayout.descTitleTV.text = getString(R.string.uploaded)
                         aadharLayout.descTitleTV.setTextColor(
                             ResourcesCompat.getColor(
@@ -185,7 +190,7 @@ class GigerVerificationFragment : BaseFragment() {
                                 null
                             )
                         )
-                    } else{
+                    } else {
                         aadharLayout.descTitleTV.text = getString(R.string.tap_to_upload)
                         aadharLayout.descTitleTV.setTextColor(
                             ResourcesCompat.getColor(
@@ -198,7 +203,7 @@ class GigerVerificationFragment : BaseFragment() {
 
 
 
-                    if(it.dlCardDetailsUploaded) {
+                    if (it.dlCardDetailsUploaded) {
                         drivingLayout.descTitleTV.text = getString(R.string.uploaded)
                         drivingLayout.descTitleTV.setTextColor(
                             ResourcesCompat.getColor(
@@ -207,7 +212,7 @@ class GigerVerificationFragment : BaseFragment() {
                                 null
                             )
                         )
-                    } else{
+                    } else {
                         drivingLayout.descTitleTV.text = getString(R.string.tap_to_upload)
                         drivingLayout.descTitleTV.setTextColor(
                             ResourcesCompat.getColor(

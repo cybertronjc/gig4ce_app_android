@@ -118,10 +118,10 @@ class AddBankDetailsInfoFragment : BaseFragment(), SelectImageSourceBottomSheetA
                             passbookImagePath = null
                         )
 
-                        findNavController().popBackStack(R.id.gigerVerificationFragment, true)
+                        findNavController().popBackStack(R.id.addSelfieVideoFragment, false)
                         activity?.onBackPressed()
                     } else {
-                        findNavController().popBackStack(R.id.gigerVerificationFragment, true)
+                        findNavController().popBackStack(R.id.addSelfieVideoFragment, false)
                         activity?.onBackPressed()
                     }
                 }

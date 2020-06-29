@@ -38,6 +38,7 @@
         android:text="@string/documents_uploaded_long" />
     
     <com.google.android.material.button.MaterialButton
+        android:id="@+id/verificationCompletedBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"
