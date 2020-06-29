@@ -47,7 +47,7 @@ class WalletViewModel: ViewModel() {
         userWallet.value = Wallet(
             balance = 20800,
             isMonthlyGoalSet = true,
-            monthlyGoalLimit = 15000,
+            monthlyGoalLimit = 5000,
             monthlyEarnedAmount = 4000
         )
     }

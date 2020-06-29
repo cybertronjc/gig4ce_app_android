@@ -12,8 +12,8 @@ android {
         applicationId "com.gigforce.app"
         minSdkVersion 23
         targetSdkVersion 29
-        versionCode 21
-        versionName "1.10.5"
+        versionCode 24
+        versionName "1.11.0"
 
         vectorDrawables.useSupportLibrary = true
 
@@ -194,6 +194,7 @@ dependencies {
 
     // Sticky header
     implementation 'com.github.qiujayen:sticky-layoutmanager:1.0.1'
+
     //Exo Player
     implementation 'com.google.android.exoplayer:exoplayer-core:2.11.5'
     implementation 'com.google.android.exoplayer:exoplayer-ui:2.11.5'

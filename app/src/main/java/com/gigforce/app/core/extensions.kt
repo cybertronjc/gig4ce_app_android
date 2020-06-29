@@ -1,4 +1,4 @@
-package com.gigforce.app.utils
+package com.gigforce.app.core
 
 import android.content.res.Resources
 import android.view.View
@@ -16,7 +16,7 @@ val Int.dp: Int
         return (this * Resources.getSystem().displayMetrics.density).toInt()
     }
 
-fun ViewPager2.reduceDragSensitivity(factor:Int = 4) {
+fun ViewPager2.reduceDragSensitivity(factor: Int = 4) {
     val recyclerViewField = ViewPager2::class.java.getDeclaredField("mRecyclerView")
     recyclerViewField.isAccessible = true
     val recyclerView = recyclerViewField.get(this) as RecyclerView
@@ -24,22 +24,34 @@ fun ViewPager2.reduceDragSensitivity(factor:Int = 4) {
     val touchSlopField = RecyclerView::class.java.getDeclaredField("mTouchSlop")
     touchSlopField.isAccessible = true
     val touchSlop = touchSlopField.get(recyclerView) as Int
-    touchSlopField.set(recyclerView, touchSlop*factor)       // "8" was obtained experimentally
+    touchSlopField.set(recyclerView, touchSlop * factor)       // "8" was obtained experimentally
 }
 
-fun Fragment.setDarkStatusBarTheme(isDark:Boolean = true) {
-    val window: Window = this.activity!!.window
+fun Fragment.setDarkStatusBarTheme(isDark: Boolean = true) {
+    val window: Window = this.requireActivity().window
     window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-    if(isDark) {
+    if (isDark) {
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
         window.statusBarColor = activity!!.resources.getColor(R.color.colorAccent)
         window.decorView.systemUiVisibility = 0
     }
 }
 
-fun NavController.popAllBackStates(){
+fun NavController.popAllBackStates() {
     var hasBackStack = true;
     while (hasBackStack) {
         hasBackStack = this.popBackStack()
     }
+}
+
+fun View.gone() {
+    visibility = View.GONE
+}
+
+fun View.visible() {
+    visibility = View.VISIBLE
+}
+
+fun View.invisible() {
+    visibility = View.INVISIBLE
 }

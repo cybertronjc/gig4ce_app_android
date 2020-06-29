@@ -593,7 +593,7 @@
                         android:fontFamily="@font/lato"
                         android:letterSpacing="0"
                         android:lineHeight="21sp"
-                        android:text="Okay Mihir, I am here for you"
+                        android:text="Okay Shampa, I am here for you"
                         android:textColor="#d9000000" />
 
                     <TextView

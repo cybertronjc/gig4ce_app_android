@@ -8,7 +8,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@drawable/bg_monthly_goal">
         <ImageView
             android:id="@+id/icon"
             android:layout_width="62dp"
@@ -59,8 +60,8 @@
         
         <ImageView
             android:id="@+id/goal_status_icon"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="17dp"
+            android:layout_height="17dp"
             android:src="@drawable/ic_ok"
             app:layout_constraintTop_toBottomOf="@id/progress_bar"
             android:layout_marginStart="32dp"
@@ -74,7 +75,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="You are doing really great, \nkeep it up!"
-            android:layout_marginStart="24dp"
+            android:layout_marginStart="16dp"
             app:layout_constraintStart_toEndOf="@id/goal_status_icon"
             app:layout_constraintTop_toTopOf="@id/goal_status_icon" />
 

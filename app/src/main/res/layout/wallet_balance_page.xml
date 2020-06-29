@@ -86,7 +86,7 @@
                 <View
                     android:id="@+id/zero_divider1"
                     android:layout_width="match_parent"
-                    android:layout_height="5dp"
+                    android:layout_height="3dp"
                     android:background="#ebebeb"
                     android:layout_marginTop="32dp"
                     app:layout_constraintStart_toStartOf="parent"
@@ -250,7 +250,7 @@
                 <View
                     android:id="@+id/divider3"
                     android:layout_width="match_parent"
-                    android:layout_height="5dp"
+                    android:layout_height="3dp"
                     android:background="#ebebeb"
                     app:layout_constraintTop_toBottomOf="@id/transaction_3"
                     app:layout_constraintStart_toStartOf="parent"
@@ -275,6 +275,8 @@
                     android:layout_marginStart="24dp"
                     android:layout_marginEnd="24dp"
                     app:cardCornerRadius="8dp"
+                    app:cardElevation="3dp"
+                    app:cardUseCompatPadding="true"
                     app:layout_constraintTop_toBottomOf="@id/monthly_goal_text"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent" />

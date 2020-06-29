@@ -4,20 +4,28 @@ import android.os.Bundle
 import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
+import androidx.lifecycle.Observer
 import android.view.ViewGroup
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.request.RequestOptions
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.app.core.genericadapter.RecyclerGenericAdapter
-import com.gigforce.app.modules.calendarscreen.maincalendarscreen.bottomsheet.UpcomingGigModel
-import com.gigforce.app.modules.landingscreen.LandingScreenFragment
+import com.gigforce.app.modules.preferences.PreferencesFragment
+import com.gigforce.app.modules.profile.ProfileViewModel
+import com.gigforce.app.utils.GlideApp
+import com.google.firebase.storage.StorageReference
+import kotlinx.android.synthetic.main.calendar_home_screen.*
 import kotlinx.android.synthetic.main.fragment_main_learning.*
+import kotlinx.android.synthetic.main.fragment_main_learning.chat_icon_iv
 import kotlinx.android.synthetic.main.fragment_main_learning_recent_video_item.view.*
 import java.util.*
 
 
 class MainLearningFragment : BaseFragment() {
+    lateinit var viewModelProfile: ProfileViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -26,7 +34,7 @@ class MainLearningFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        viewModelProfile = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
         learningBackButton.setOnClickListener {
             activity?.onBackPressed()
         }
@@ -46,8 +54,25 @@ class MainLearningFragment : BaseFragment() {
         initializeExploreByIndustry()
         mostPopularLearning()
         listener()
+        observerProfile()
     }
 
+    private fun observerProfile() {
+        viewModelProfile.getProfileData().observe(viewLifecycleOwner, Observer { profile ->
+            displayImage(profile.profileAvatarName)
+        })
+
+    }
+    private fun displayImage(profileImg: String) {
+        if (profileImg != null && !profileImg.equals("")) {
+            val profilePicRef: StorageReference =
+                PreferencesFragment.storage.reference.child("profile_pics").child(profileImg)
+            GlideApp.with(this.requireContext())
+                .load(profilePicRef)
+                .apply(RequestOptions().circleCrop())
+                .into(profile_image_main)
+        }
+    }
     private fun listener() {
         chat_icon_iv.setOnClickListener{
             navigate(R.id.contactScreenFragment)

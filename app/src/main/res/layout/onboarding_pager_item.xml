@@ -71,6 +71,8 @@
         android:ems="20"
         android:hint="Name"
         android:gravity="center"
+        android:maxLength="20"
+        android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
         android:backgroundTint="@color/onboarding_name_underline_color_20"
-        android:inputType="textPersonName" />
+        android:inputType="text" />
 </RelativeLayout>

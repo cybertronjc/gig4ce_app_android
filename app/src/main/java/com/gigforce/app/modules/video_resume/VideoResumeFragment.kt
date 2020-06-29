@@ -5,8 +5,6 @@ import android.app.Activity.RESULT_CANCELED
 import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
-import android.graphics.drawable.BitmapDrawable
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
@@ -30,7 +28,7 @@ import com.gigforce.app.R
 import com.gigforce.app.R.*
 import com.gigforce.app.modules.onboarding.utils.DepthPageTransformer
 import com.gigforce.app.utils.GlideApp
-import com.gigforce.app.utils.dp
+import com.gigforce.app.core.dp
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageMetadata
 import com.google.firebase.storage.StorageReference

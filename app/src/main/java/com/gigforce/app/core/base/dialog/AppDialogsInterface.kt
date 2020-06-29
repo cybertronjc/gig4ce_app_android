@@ -5,9 +5,26 @@ import com.gigforce.app.core.base.BaseFragment
 
 interface AppDialogsInterface {
 
-    fun showConfirmationDialogType1(title: String, buttonClickListener: ConfirmationDialogOnClickListener)
-    fun showConfirmationDialogType2(title: String, buttonClickListener: ConfirmationDialogOnClickListener)
+    fun showConfirmationDialogType1(
+        title: String,
+        buttonClickListener: ConfirmationDialogOnClickListener
+    )
 
+    fun showConfirmationDialogType2(
+        title: String,
+        buttonClickListener: ConfirmationDialogOnClickListener
+    )
+
+    fun showConfirmationDialogType3(
+        title: String,
+        subTitle: String,
+        buttonClickListener: ConfirmationDialogOnClickListener
+    )
+    fun showConfirmationDialogType4(
+    title: String,
+    subTitle:String,
+    buttonClickListener: ConfirmationDialogOnClickListener
+    )
 }
 
 interface ConfirmationDialogOnClickListener {
