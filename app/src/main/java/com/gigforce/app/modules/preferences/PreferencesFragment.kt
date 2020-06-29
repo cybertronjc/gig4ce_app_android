@@ -18,7 +18,7 @@ import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.app.core.genericadapter.RecyclerGenericAdapter
 import com.gigforce.app.utils.GlideApp
-import com.gigforce.app.core.base.setDarkStatusBarTheme
+import com.gigforce.app.core.setDarkStatusBarTheme
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference

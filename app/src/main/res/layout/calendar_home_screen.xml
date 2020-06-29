@@ -25,7 +25,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/tv2HS1"
+            android:id="@+id/month_year"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
@@ -62,9 +62,9 @@
             android:id="@+id/cardView"
             android:layout_width="42dp"
             android:layout_height="42dp"
-            app:cardCornerRadius="21dp"
             android:layout_marginTop="5dp"
             android:layout_marginEnd="16dp"
+            app:cardCornerRadius="21dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -86,8 +86,7 @@
             android:layout_marginTop="9dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv2HS1"
-            />
+            app:layout_constraintTop_toBottomOf="@+id/month_year" />
 
         <ImageView
             android:id="@+id/imageView13"
@@ -95,7 +94,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
             android:layout_marginTop="24dp"
-            app:layout_constraintStart_toEndOf="@+id/tv2HS1"
+            app:layout_constraintStart_toEndOf="@+id/month_year"
             app:layout_constraintTop_toBottomOf="@+id/tv1HS1"
             app:srcCompat="@drawable/homescreen_month_dropdown" />
 
@@ -107,13 +106,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/bottom_up_sheet"
-        android:elevation="20dp"
         android:clipToPadding="true"
+        android:elevation="20dp"
         app:allowDragging="true"
         app:halfOffset="350dp"
-        app:peekHeight="200dp"
         app:hideable="false"
-        app:layout_behavior="com.riningan.widget.ExtendedBottomSheetBehavior">
+        app:layout_behavior="com.riningan.widget.ExtendedBottomSheetBehavior"
+        app:peekHeight="200dp">
 
         <fragment
             android:name="com.gigforce.app.modules.calendarscreen.maincalendarscreen.bottomsheet.BSCalendarScreenFragment"
@@ -122,16 +121,91 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.core.widget.NestedScrollView>
 
-    <ImageView
-        android:id="@+id/imageView34"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_oval_top_landingscreen"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/bottom_sheet_top_shadow"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:elevation="30dp">
+
+        <View
+            android:id="@+id/bottom_sheet_shadow_view"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:background="#90979797"
+            android:clickable="true"
+            android:elevation="30dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/imageView34"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:elevation="10dp"
+            android:src="@drawable/ic_oval_top_landingscreen"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:id="@+id/below_oval"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="40dp"
+            android:elevation="5dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/imageView34" />
+
+        <View
+            android:id="@+id/margin_40"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@color/white"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/imageView34" />
+
+        <LinearLayout
+            android:id="@+id/calendar_cv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#90979797"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@+id/below_oval">
+
+            <com.gigforce.app.core.base.components.CalendarView
+                android:id="@+id/calendarView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/main_calendar_rect_border"
+                android:paddingTop="30dp" />
+        </LinearLayout>
+
+        <View
+            android:id="@+id/calendar_dependent"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="#90979797"
+            android:clickable="true"
+            android:elevation="30dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/calendar_cv" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
