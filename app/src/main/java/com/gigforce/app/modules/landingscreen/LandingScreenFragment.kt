@@ -353,7 +353,7 @@ class LandingScreenFragment : BaseFragment() {
         complete_now.setOnClickListener {
             navigate(R.id.gigerVerificationFragment)
         }
-        view_my_gig.setOnClickListener {
+        mygigs_cl.setOnClickListener {
             navigate(R.id.mainHomeScreen)
         }
         skip_about_intro.setOnClickListener {

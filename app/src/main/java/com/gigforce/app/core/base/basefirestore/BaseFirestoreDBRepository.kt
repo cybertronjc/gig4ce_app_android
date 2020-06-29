@@ -27,9 +27,11 @@ abstract public class BaseFirestoreDBRepository {
     public fun <M : BaseFirestoreDataModel> setData(obj: M) {
         getDBCollection().update(obj.tableName, FieldValue.arrayUnion(obj))
     }
+
     public fun <M : BaseFirestoreDataModel> setDataAsKeyValue(obj: M) {
         getDBCollection().update(obj.tableName, obj)
     }
+
     // set data object end
     //set data string
     public fun setData(tableName: String, arrData: ArrayList<String>) {
@@ -46,24 +48,29 @@ abstract public class BaseFirestoreDBRepository {
         getDBCollection().update(tableName, FieldValue.delete())
         setData(tableName, data)
     }
-    public fun<M : BaseFirestoreDataModel> setDataAndDeleteOldData(obj: M) {
+
+    public fun <M : BaseFirestoreDataModel> setDataAndDeleteOldData(obj: M) {
         removeData(obj)
         setData(obj)
     }
+
     public fun setDataAndDeleteOldData(tableName: String, arrData: ArrayList<String>) {
         getDBCollection().update(tableName, FieldValue.delete())
         for (obj in arrData) {
             setData(tableName, obj)
         }
     }
+
     public fun setDataAsKeyValue(tableName: String, data: String) {
         getDBCollection().update(tableName, data)
     }
+
     //set data string end
     // set data boolean
     public fun setData(tableName: String, data: Boolean) {
         getDBCollection().update(tableName, data)
     }
+
     public fun setDataAsKeyValue(tableName: String, data: Boolean) {
         getDBCollection().update(tableName, data)
     }
@@ -99,7 +106,10 @@ abstract public class BaseFirestoreDBRepository {
     }
     // for get collection data ----------------
 
-     public open fun getCustomUid(): String?{ return ""}
+    public open fun getCustomUid(): String? {
+        return ""
+    }
+
     fun getCustomDBCollection(): DocumentReference {
         return firebaseDB.collection(getCollectionName())
             .document(getCustomUid()!!)

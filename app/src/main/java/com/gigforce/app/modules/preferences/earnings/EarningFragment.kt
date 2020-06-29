@@ -60,7 +60,7 @@ class EarningFragment : BaseFragment() {
             override fun onProgressChanged(seekBar:SeekBar, progress:Int, fromUser:Boolean) {
                 val value = (progress * (seekBar.getWidth() - 2 * seekBar.getThumbOffset())) / seekBar.getMax()
                 seekBarDependentCanvas2.text =  "Rs "+progress.toString()
-                seekBarDependentCanvas2.setX(seekBar.getX() + value + seekBar.getThumbOffset() / 2)
+                seekBarDependentCanvas2.setX((seekBar.getX() + value + seekBar.getThumbOffset() / 2)-35)
                 dailyGoalsTV.text = "Rs 0 - Rs "+progress
             }
 
@@ -74,7 +74,7 @@ class EarningFragment : BaseFragment() {
             override fun onProgressChanged(seekBar:SeekBar, progress:Int, fromUser:Boolean) {
                 val value = (progress * (seekBar.getWidth() - 2 * seekBar.getThumbOffset())) / seekBar.getMax()
                 seekBarDependentCanvas3.text =  "Rs "+progress.toString()
-                seekBarDependentCanvas3.setX(seekBar.getX() + value + seekBar.getThumbOffset() / 2)
+                seekBarDependentCanvas3.setX((seekBar.getX() + value + seekBar.getThumbOffset() / 2)-35)
                 monthlyGoalsTV.text = "Rs 0 - Rs "+progress
             }
 
@@ -88,7 +88,7 @@ class EarningFragment : BaseFragment() {
             override fun onProgressChanged(seekBar:SeekBar, progress:Int, fromUser:Boolean) {
                 val value = (progress * (seekBar.getWidth() - 2 * seekBar.getThumbOffset())) / seekBar.getMax()
                 seekBarDependentCanvas4.text =  "Rs "+progress.toString()
-                seekBarDependentCanvas4.setX(seekBar.getX() + value + seekBar.getThumbOffset() / 2)
+                seekBarDependentCanvas4.setX((seekBar.getX() + value + seekBar.getThumbOffset() / 2)-35)
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {

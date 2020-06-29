@@ -1,7 +1,5 @@
 package com.gigforce.app.modules.calendarscreen.maincalendarscreen
 
-import android.animation.Animator
-import android.animation.AnimatorListenerAdapter
 import android.app.Dialog
 import android.os.Build
 import android.os.Bundle
@@ -21,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.request.RequestOptions
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
+import com.gigforce.app.core.base.components.CalendarView
 import com.gigforce.app.core.base.dialog.ConfirmationDialogOnClickListener
 import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.app.core.genericadapter.RecyclerGenericAdapter
@@ -73,22 +72,13 @@ class CalendarHomeScreen : BaseFragment(),
         initializeViews()
         listener()
         observePreferenceData()
-//        languageSelectionProcess()
-
-    }
-
-    private fun languageSelectionProcess() {
-        requestPreferenceRepositoryData()
-    }
-
-    private fun requestPreferenceRepositoryData() {
     }
 
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun initializeViews() {
         initializeExtendedBottomSheet()
-        initialiseMonthTV()
+        initialiseMonthTV(Calendar.getInstance())
         initializeVerticalCalendarRV()
     }
 
@@ -113,6 +103,16 @@ class CalendarHomeScreen : BaseFragment(),
         calendar_dependent.setOnClickListener{
             changeVisibilityCalendarView()
         }
+        calendarView.setMonthChangeListener(object : CalendarView.MonthChangeListener{
+            override fun onMonthChange(monthModel: CalendarView.MonthModel) {
+                var calendar = Calendar.getInstance()
+                calendar.set(Calendar.MONTH,monthModel.currentMonth)
+                calendar.set(Calendar.YEAR,monthModel.year)
+                calendar.set(Calendar.DATE,1)
+                initialiseMonthTV(calendar)
+            }
+
+        })
     }
 
     private fun changeVisibilityCalendarView() {
@@ -120,6 +120,7 @@ class CalendarHomeScreen : BaseFragment(),
             ExtendedBottomSheetBehavior.from(nsv);
         if (extendedBottomSheetBehavior.isAllowUserDragging) {
             hideDependentViews(false)
+            extendedBottomSheetBehavior.state = ExtendedBottomSheetBehavior.STATE_COLLAPSED
             extendedBottomSheetBehavior.isAllowUserDragging = false
         } else {
             hideDependentViews(true)
@@ -166,10 +167,10 @@ class CalendarHomeScreen : BaseFragment(),
     }
 
 
-    private fun initialiseMonthTV() {
-        val pattern = "MMM YYYY"
+    private fun initialiseMonthTV(calendar:Calendar) {
+        val pattern = "MMMM YYYY"
         val simpleDateFormat = SimpleDateFormat(pattern)
-        val date: String = simpleDateFormat.format(Date())
+        val date: String = simpleDateFormat.format(calendar.time)
         month_year.text = date
     }
 

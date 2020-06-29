@@ -225,7 +225,8 @@ class PreferencesFragment : BaseFragment() {
 //        titleDialog?.text = "Missing out on gigs?"
         val title = dialog?.findViewById(R.id.title) as TextView
         title.text =
-            "You'll miss out on updates on upcoming gigs around you if you sign out."
+            "Are you sure?\n" +
+                    "Signing out means missing out on gigs around you."
         val yesBtn = dialog.findViewById(R.id.yes) as TextView
         val noBtn = dialog.findViewById(R.id.cancel) as TextView
         yesBtn.setOnClickListener {
