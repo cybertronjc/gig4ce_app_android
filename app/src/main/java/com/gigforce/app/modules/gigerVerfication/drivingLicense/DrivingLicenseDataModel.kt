@@ -5,7 +5,7 @@ import com.gigforce.app.core.base.basefirestore.BaseFirestoreDataModel
 
 @Keep
 data class DrivingLicenseDataModel(
-    val userHasDL : Boolean,
+    val userHasDL : Boolean?,
     val frontImage: String? = null,
     val backImage: String? = null,
     val verified: Boolean = false

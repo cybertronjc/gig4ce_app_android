@@ -1,21 +1,24 @@
 package com.gigforce.app.modules.gigerVerfication.bankDetails
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
 import com.gigforce.app.modules.gigerVerfication.ImageSource
-import com.gigforce.app.modules.gigerVerfication.SelectImageSourceBottomSheet
 import com.gigforce.app.modules.gigerVerfication.SelectImageSourceBottomSheetActionListener
-import com.gigforce.app.modules.gigerVerfication.panCard.AddPanCardInfoFragment
 import com.gigforce.app.modules.photocrop.PhotoCrop
+import com.google.firebase.storage.FirebaseStorage
+import com.ncorti.slidetoact.SlideToActView
 import kotlinx.android.synthetic.main.fragment_add_bank_details_info.*
 import kotlinx.android.synthetic.main.fragment_verification_image_holder.view.*
 import java.io.File
@@ -28,6 +31,7 @@ class AddBankDetailsInfoFragment : BaseFragment(), SelectImageSourceBottomSheetA
 
     private val viewModel: GigVerificationViewModel by viewModels()
     private var clickedImagePath: File? = null
+    private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,7 +42,9 @@ class AddBankDetailsInfoFragment : BaseFragment(), SelectImageSourceBottomSheetA
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViews()
+        initViewModel()
     }
+
 
     private fun initViews() {
         passbookImageHolder.documentUploadLabelTV.text =
@@ -51,7 +57,6 @@ class AddBankDetailsInfoFragment : BaseFragment(), SelectImageSourceBottomSheetA
         }
 
         passbookSubmitSliderBtn.isEnabled = false
-
         passbookImageHolder.uploadDocumentCardView.setOnClickListener {
             showCameraAndGalleryOption()
         }
@@ -64,12 +69,13 @@ class AddBankDetailsInfoFragment : BaseFragment(), SelectImageSourceBottomSheetA
             getString(R.string.upload_bank_passbook)
 
         passbookAvailaibilityOptionRG.setOnCheckedChangeListener { _, checkedId ->
+            passbookSubmitSliderBtn.resetSlider()
 
             if (checkedId == R.id.passbookYesRB) {
                 showPassbookImageLayout()
 
-                if (clickedImagePath != null && bankDetailsDataConfirmationCB.isChecked) {
-                    showPassbookInfoLayout()
+                if (bankDetailsDataConfirmationCB.isChecked) {
+                    //showPassbookInfoLayout()
                     enableSubmitButton()
                 } else
                     disableSubmitButton()
@@ -101,7 +107,67 @@ class AddBankDetailsInfoFragment : BaseFragment(), SelectImageSourceBottomSheetA
         editBankDetailsLayout.setOnClickListener {
             navigate(R.id.editBankDetailsInfoBottomSheet)
         }
+
+        passbookSubmitSliderBtn.onSlideCompleteListener =
+            object : SlideToActView.OnSlideCompleteListener {
+                override fun onSlideComplete(view: SlideToActView) {
+
+                    if (passbookNoRB.isChecked) {
+                        viewModel.updateBankPassbookImagePath(
+                            userHasPassBook = false,
+                            passbookImagePath = null
+                        )
+
+                        findNavController().popBackStack(R.id.gigerVerificationFragment, true)
+                        activity?.onBackPressed()
+                    } else {
+                        findNavController().popBackStack(R.id.gigerVerificationFragment, true)
+                        activity?.onBackPressed()
+                    }
+                }
+            }
     }
+
+    private fun initViewModel() {
+        viewModel.gigerVerificationStatus
+            .observe(viewLifecycleOwner, Observer {
+
+                if (it.bankDetailsUploaded && it.bankUploadDetailsDataModel != null) {
+
+                    if (it.bankUploadDetailsDataModel.userHasPassBook != null) {
+                        if (it.bankUploadDetailsDataModel.userHasPassBook)
+                            passbookAvailaibilityOptionRG.check(R.id.passbookYesRB)
+                        else
+                            passbookAvailaibilityOptionRG.check(R.id.passbookNoRB)
+                    } else {
+                        //Uncheck both and hide capture layout
+                        passbookAvailaibilityOptionRG.clearCheck()
+                        passbookImageHolder.visibility = View.GONE
+                    }
+
+                    if (it.bankUploadDetailsDataModel.passbookImagePath != null) {
+                        val imageRef = firebaseStorage
+                            .reference
+                            .child("verification")
+                            .child(it.bankUploadDetailsDataModel.passbookImagePath)
+
+                        clickedImagePath = File(it.bankUploadDetailsDataModel.passbookImagePath)
+                        if (bankDetailsDataConfirmationCB.isChecked)
+                            passbookSubmitSliderBtn.isEnabled = true
+
+
+                        imageRef.downloadUrl.addOnSuccessListener {
+                            showPanInfoCard(it)
+                        }.addOnFailureListener {
+                            print("ee")
+                        }
+                    }
+                }
+            })
+
+        viewModel.startListeningForGigerVerificationStatusChanges()
+    }
+
 
     private fun showCameraAndGalleryOption() {
 //        SelectImageSourceBottomSheet.launch(
@@ -110,7 +176,10 @@ class AddBankDetailsInfoFragment : BaseFragment(), SelectImageSourceBottomSheetA
 //        )
 
         val photoCropIntent = Intent(requireContext(), PhotoCrop::class.java)
-        photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_PURPOSE, PhotoCrop.PURPOSE_UPLOAD_BANK_DETAILS_IMAGE)
+        photoCropIntent.putExtra(
+            PhotoCrop.INTENT_EXTRA_PURPOSE,
+            PhotoCrop.PURPOSE_UPLOAD_BANK_DETAILS_IMAGE
+        )
         photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_FIREBASE_FOLDER_NAME, "/verification/")
         photoCropIntent.putExtra("folder", "verification")
         photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_DETECT_FACE, 0)
@@ -150,27 +219,27 @@ class AddBankDetailsInfoFragment : BaseFragment(), SelectImageSourceBottomSheetA
     }
 
     override fun onImageSourceSelected(source: ImageSource) {
-        showPassbookInfoLayout()
-        bankDetailsDataConfirmationCB.visibility = View.VISIBLE
-
-        clickedImagePath = File("na")
-        showPanInfoCard()
-        setBankDetailsInfoOnView(
-            name = "Rahul Jain",
-            fathersName = "Sahil Jain",
-            cifNumber = "TF-334",
-            accountNumber = "PU23SDDLOJIJ",
-            ifsc = "PKSSM09233",
-            address = "House no 342, Preet Vihar,New Delhi, Delhi 113320"
-        )
+//        showPassbookInfoLayout()
+//        bankDetailsDataConfirmationCB.visibility = View.VISIBLE
+//
+//        clickedImagePath = File("na")
+//        showPanInfoCard()
+//        setBankDetailsInfoOnView(
+//            name = "Rahul Jain",
+//            fathersName = "Sahil Jain",
+//            cifNumber = "TF-334",
+//            accountNumber = "PU23SDDLOJIJ",
+//            ifsc = "PKSSM09233",
+//            address = "House no 342, Preet Vihar,New Delhi, Delhi 113320"
+//        )
     }
 
-    private fun showPanInfoCard(panInfoPath: File? = null) {
+    private fun showPanInfoCard(panInfoPath: Uri) {
         passbookImageHolder.uploadDocumentCardView.visibility = View.GONE
         passbookImageHolder.uploadImageLayout.visibility = View.VISIBLE
 
         Glide.with(requireContext())
-            .load(R.drawable.bg_passbook)
+            .load(panInfoPath)
             .into(passbookImageHolder.uploadImageLayout.clickedImageIV)
     }
 

@@ -301,8 +301,18 @@ class PhotoCrop : AppCompatActivity() {
 
     private fun upload(uri: Uri?, data: ByteArray, folder: String) {
         Log.v("Upload Image", "started")
-        var mReference =
-            mStorage.reference.child(folder).child(uri!!.lastPathSegment!!)
+        var mReference = mStorage.reference.child(folder).child(uri!!.lastPathSegment!!)
+
+//            when (purpose) {
+//            profilePictureCrop -> mStorage.reference.child("verification").child("${folder}/${uri!!.lastPathSegment!!}")
+//            PURPOSE_UPLOAD_PAN_IMAGE -> mStorage.reference.child("verification").child("${folder}/${uri!!.lastPathSegment!!}")
+//            PURPOSE_UPLOAD_BANK_DETAILS_IMAGE -> mStorage.reference.child("verification").child("${folder}/${uri!!.lastPathSegment!!}")
+//            PURPOSE_UPLOAD_AADHAR_FRONT_IMAGE -> mStorage.reference.child("verification").child("${folder}/${uri!!.lastPathSegment!!}")
+//            PURPOSE_UPLOAD_AADHAR_BACK_IMAGE -> mStorage.reference.child("verification").child("${folder}/${uri!!.lastPathSegment!!}")
+//            PURPOSE_UPLOAD_DL_FRONT_IMAGE -> mStorage.reference.child("verification").child("${folder}/${uri!!.lastPathSegment!!}")
+//            PURPOSE_UPLOAD_DL_BACK_IMAGE -> mStorage.reference.child("verification").child("${folder}/${uri!!.lastPathSegment!!}")
+//            else ->
+//        }
 
         /**
          * Uploading task created and initiated here.
@@ -366,9 +376,13 @@ class PhotoCrop : AppCompatActivity() {
     private fun updateViewModel(purpose: String, name: String) {
         when (purpose) {
             profilePictureCrop -> viewModel.setProfileAvatarName(name)
-            PURPOSE_UPLOAD_PAN_IMAGE -> gigerVerificationViewModel.updatePanImagePath(name)
+            PURPOSE_UPLOAD_PAN_IMAGE -> gigerVerificationViewModel.updatePanImagePath(
+                userhasPan = true,
+                panPath = name
+            )
             PURPOSE_UPLOAD_BANK_DETAILS_IMAGE -> gigerVerificationViewModel.updateBankPassbookImagePath(
-                name
+                userHasPassBook = true,
+                passbookImagePath = name
             )
             PURPOSE_UPLOAD_AADHAR_FRONT_IMAGE -> gigerVerificationViewModel.updateAadharData(
                 true,

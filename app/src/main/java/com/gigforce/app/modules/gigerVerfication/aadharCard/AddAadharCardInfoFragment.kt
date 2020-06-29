@@ -1,12 +1,14 @@
 package com.gigforce.app.modules.gigerVerfication.aadharCard
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
@@ -14,6 +16,8 @@ import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
 import com.gigforce.app.modules.gigerVerfication.ImageSource
 import com.gigforce.app.modules.gigerVerfication.SelectImageSourceBottomSheetActionListener
 import com.gigforce.app.modules.photocrop.PhotoCrop
+import com.google.firebase.storage.FirebaseStorage
+import com.ncorti.slidetoact.SlideToActView
 import kotlinx.android.synthetic.main.fragment_add_aadhar_card_info.*
 import kotlinx.android.synthetic.main.fragment_verification_image_holder.view.*
 import java.io.File
@@ -31,6 +35,7 @@ class AddAadharCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetAc
 
     private val viewModel: GigVerificationViewModel by viewModels()
 
+    private var aadharCardDataModel: AadharCardDataModel? = null
     private var aadharFrontImagePath: File? = null
     private var aadharBackImagePath: File? = null
     private var currentlyClickingImageOfSide: AadharCardSides? = null
@@ -44,6 +49,7 @@ class AddAadharCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetAc
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViews()
+        initViewModel()
     }
 
     private fun initViews() {
@@ -77,7 +83,7 @@ class AddAadharCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetAc
         aadharDataCorrectCB.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) {
 
-                if (aadharYesRB.isChecked && aadharFrontImagePath != null)
+                if (aadharYesRB.isChecked && aadharCardDataModel != null && aadharCardDataModel?.frontImage != null && aadharCardDataModel?.backImage != null)
                     enableSubmitButton()
                 else if (aadharNoRB.isChecked)
                     enableSubmitButton()
@@ -106,7 +112,78 @@ class AddAadharCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetAc
         aadharEditLayout.setOnClickListener {
             navigate(R.id.editAadharInfoBottomSheet)
         }
+
+        aadharSubmitSliderBtn.onSlideCompleteListener =
+            object : SlideToActView.OnSlideCompleteListener {
+
+                override fun onSlideComplete(view: SlideToActView) {
+
+                    if (aadharYesRB.isChecked)
+                        navigate(R.id.addDrivingLicenseInfoFragment)
+                    else if (aadharNoRB.isChecked) {
+                        viewModel.updateAadharData(false, null, null)
+                        navigate(R.id.addDrivingLicenseInfoFragment)
+                    }
+                }
+            }
     }
+
+    private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance()
+
+    private fun initViewModel() {
+        viewModel.gigerVerificationStatus
+            .observe(viewLifecycleOwner, Observer {
+
+                if (it.aadharCardDetailsUploaded && it.aadharCardDataModel != null) {
+                    this.aadharCardDataModel = it.aadharCardDataModel
+
+                    if (it.aadharCardDataModel.userHasAadharCard != null) {
+                        if (it.aadharCardDataModel.userHasAadharCard)
+                            aadharAvailaibilityOptionRG.check(R.id.aadharYesRB)
+                        else
+                            aadharAvailaibilityOptionRG.check(R.id.aadharNoRB)
+                    } else {
+                        //Uncheck both and hide capture layout
+                        aadharAvailaibilityOptionRG.clearCheck()
+                        hideAadharImageAndInfoLayout()
+                    }
+
+                    if (it.aadharCardDataModel.frontImage != null) {
+                        val imageRef = firebaseStorage
+                            .reference
+                            .child("verification")
+                            .child(it.aadharCardDataModel.frontImage)
+
+                        imageRef.downloadUrl.addOnSuccessListener {
+                            showFrontAadharCard(it)
+                        }.addOnFailureListener {
+                            print("ee")
+                        }
+                    }
+
+                    if (it.aadharCardDataModel.backImage != null) {
+                        val imageRef = firebaseStorage
+                            .reference
+                            .child("verification")
+                            .child(it.aadharCardDataModel.backImage)
+
+                        imageRef.downloadUrl.addOnSuccessListener {
+                            showBackAadharCard(it)
+                        }.addOnFailureListener {
+                            print("ee")
+                        }
+                    }
+
+                    if (aadharDataCorrectCB.isChecked && it.aadharCardDataModel.frontImage != null && it.aadharCardDataModel.backImage != null) {
+                        enableSubmitButton()
+                    }
+                }
+
+            })
+
+        viewModel.startListeningForGigerVerificationStatusChanges()
+    }
+
 
     private fun openCameraAndGalleryOptionForFrontSideImage() {
 //        currentlyClickingImageOfSide = AadharCardSides.FRONT_SIDE
@@ -123,7 +200,7 @@ class AddAadharCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetAc
         )
         photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_FIREBASE_FOLDER_NAME, "/verification/")
         photoCropIntent.putExtra("folder", "verification")
-        photoCropIntent.putExtra("detectFace", 0)
+        photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_DETECT_FACE, 0)
         photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_FIREBASE_FILE_NAME, "aadhar_card_front.jpg")
         startActivityForResult(photoCropIntent, REQUEST_CODE_UPLOAD_PAN_IMAGE)
 
@@ -144,7 +221,7 @@ class AddAadharCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetAc
         )
         photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_FIREBASE_FOLDER_NAME, "/verification/")
         photoCropIntent.putExtra("folder", "verification")
-        photoCropIntent.putExtra("detectFace", 0)
+        photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_DETECT_FACE, 0)
         photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_FIREBASE_FILE_NAME, "aadhar_card_back.jpg")
         startActivityForResult(photoCropIntent, REQUEST_CODE_UPLOAD_PAN_IMAGE)
     }
@@ -189,14 +266,14 @@ class AddAadharCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetAc
             return
         else if (currentlyClickingImageOfSide == AadharCardSides.BACK_SIDE) {
             aadharBackImagePath = File("ma")
-            showBackAadharCard(aadharBackImagePath)
+            //   showBackAadharCard(aadharBackImagePath)
 
             if (aadharDataCorrectCB.isChecked)
                 enableSubmitButton()
 
         } else if (currentlyClickingImageOfSide == AadharCardSides.FRONT_SIDE) {
             aadharFrontImagePath = File("ma")
-            showFrontAadharCard(aadharFrontImagePath)
+            // showFrontAadharCard(aadharFrontImagePath)
 
             if (aadharDataCorrectCB.isChecked)
                 enableSubmitButton()
@@ -211,25 +288,25 @@ class AddAadharCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetAc
         )
     }
 
-    private fun showFrontAadharCard(aadharFrontImagePath: File? = null) {
+    private fun showFrontAadharCard(aadharFrontImagePath: Uri) {
         aadharFrontImageHolder.uploadDocumentCardView.visibility = View.GONE
         aadharFrontImageHolder.uploadImageLayout.visibility = View.VISIBLE
         aadharFrontImageHolder.uploadImageLayout.imageLabelTV.text =
             getString(R.string.upload_aadhar_card_front_side)
 
         Glide.with(requireContext())
-            .load(R.drawable.bg_aadhar_front_placeholder)
+            .load(aadharFrontImagePath)
             .into(aadharFrontImageHolder.uploadImageLayout.clickedImageIV)
     }
 
-    private fun showBackAadharCard(aadharBackImagePath: File? = null) {
+    private fun showBackAadharCard(aadharBackImagePath: Uri) {
         aadharBackImageHolder.uploadDocumentCardView.visibility = View.GONE
         aadharBackImageHolder.uploadImageLayout.visibility = View.VISIBLE
         aadharBackImageHolder.uploadImageLayout.imageLabelTV.text =
             getString(R.string.upload_aadhar_card_back_side)
 
         Glide.with(requireContext())
-            .load(R.drawable.bg_aadhar_front_placeholder)
+            .load(aadharBackImagePath)
             .into(aadharBackImageHolder.uploadImageLayout.clickedImageIV)
     }
 

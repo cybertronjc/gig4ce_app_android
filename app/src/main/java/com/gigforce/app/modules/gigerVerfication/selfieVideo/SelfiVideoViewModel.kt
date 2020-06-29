@@ -8,12 +8,15 @@ import com.gigforce.app.modules.gigerVerfication.GigerVerificationRepository
 import com.gigforce.app.utils.Lse
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import com.google.firebase.storage.UploadTask
 import java.io.File
 
 class SelfiVideoViewModel constructor(
     private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance(),
     private val gigerVerificationRepository: GigerVerificationRepository = GigerVerificationRepository()
-) : ViewModel (){
+) : ViewModel() {
+
+    private var selfieVideoUploadTask: UploadTask? = null
 
     private val _uploadSelfieState = MutableLiveData<Lse>()
     val uploadSelfieState: LiveData<Lse> get() = _uploadSelfieState
@@ -24,13 +27,12 @@ class SelfiVideoViewModel constructor(
             firebaseStorage.reference.child("$FB_SELFIE_VIDEO_FOLDER_NAME/${videoFile.lastPathSegment}")
 
         _uploadSelfieState.value = Lse.loading()
-        fileRef.putFile(videoFile)
-            .addOnSuccessListener {
-                getDownloadOfUploadedSelfieVideo(fileRef)
-            }
-            .addOnFailureListener {
-                _uploadSelfieState.value = Lse.error(it.localizedMessage)
-            }
+        selfieVideoUploadTask = fileRef.putFile(videoFile)
+        selfieVideoUploadTask!!.addOnSuccessListener {
+            getDownloadOfUploadedSelfieVideo(fileRef)
+        }.addOnFailureListener {
+            _uploadSelfieState.value = Lse.error(it.localizedMessage)
+        }
     }
 
     private fun getDownloadOfUploadedSelfieVideo(fileRef: StorageReference) {
@@ -54,6 +56,13 @@ class SelfiVideoViewModel constructor(
             _uploadSelfieState.value = Lse.error(it.localizedMessage)
         }.onSuccess {
             _uploadSelfieState.value = Lse.success()
+        }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        selfieVideoUploadTask?.let {
+            if (it.isInProgress) it.cancel()
         }
     }
 

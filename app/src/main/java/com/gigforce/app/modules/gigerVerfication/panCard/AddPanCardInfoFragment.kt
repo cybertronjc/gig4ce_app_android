@@ -1,6 +1,7 @@
 package com.gigforce.app.modules.gigerVerfication.panCard
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,9 +13,12 @@ import com.bumptech.glide.Glide
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
+import com.gigforce.app.modules.gigerVerfication.GigerVerificationStatus
 import com.gigforce.app.modules.gigerVerfication.ImageSource
 import com.gigforce.app.modules.gigerVerfication.SelectImageSourceBottomSheetActionListener
 import com.gigforce.app.modules.photocrop.PhotoCrop
+import com.google.firebase.storage.FirebaseStorage
+import com.ncorti.slidetoact.SlideToActView
 import kotlinx.android.synthetic.main.fragment_add_pan_card_info.*
 import kotlinx.android.synthetic.main.fragment_verification_image_holder.view.*
 import java.io.File
@@ -27,10 +31,11 @@ class AddPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetActio
 
     private val viewModel: GigVerificationViewModel by viewModels()
     private var clickedImagePath: File? = null
+    private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance()
 
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
     ) = inflateView(R.layout.fragment_add_pan_card_info, inflater, container)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -58,7 +63,7 @@ class AddPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetActio
         }
 
         panImageHolder.uploadImageLayout.imageLabelTV.text =
-                getString(R.string.upload_pan_card)
+            getString(R.string.upload_pan_card)
 
         panCardAvailaibilityOptionRG.setOnCheckedChangeListener { _, checkedId ->
 
@@ -73,6 +78,8 @@ class AddPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetActio
             } else if (panDataCorrectCB.isChecked) {
                 hidePanImageAndInfoLayout()
                 enableSubmitButton()
+            } else {
+                hidePanImageAndInfoLayout()
             }
         }
 
@@ -80,7 +87,7 @@ class AddPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetActio
 
             if (isChecked) {
 
-                if (panYesRB.isChecked && clickedImagePath != null)
+                if (panYesRB.isChecked && panCardDataModel != null && panCardDataModel?.panCardImagePath != null)
                     enableSubmitButton()
                 else if (panNoRB.isChecked)
                     enableSubmitButton()
@@ -93,19 +100,61 @@ class AddPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetActio
         editPanInfoLayout.setOnClickListener {
             navigate(R.id.editPanInfoBottomSheet)
         }
+
+        panSubmitSliderBtn.onSlideCompleteListener =
+            object : SlideToActView.OnSlideCompleteListener {
+
+                override fun onSlideComplete(view: SlideToActView) {
+
+                    if (panYesRB.isChecked)
+                        navigate(R.id.addAadharCardInfoFragment)
+                    else if (panNoRB.isChecked) {
+                        viewModel.updatePanImagePath(false, null)
+                        navigate(R.id.addAadharCardInfoFragment)
+                    }
+                }
+            }
     }
 
 
     private fun initViewModel() {
         viewModel.gigerVerificationStatus
-                .observe(viewLifecycleOwner, Observer {
-
-                    if (it.panCardDetailsUploaded) {
-
-                    }
-                })
+            .observe(viewLifecycleOwner, Observer {
+                updatePanInfo(it)
+            })
 
         viewModel.startListeningForGigerVerificationStatusChanges()
+    }
+
+
+    private var panCardDataModel: PanCardDataModel? = null
+    private fun updatePanInfo(it: GigerVerificationStatus) {
+        if (it.panCardDetailsUploaded && it.panCardDetails != null) {
+            this.panCardDataModel = it.panCardDetails
+            if (it.panCardDetails.userHasPanCard != null) {
+                if (it.panCardDetails.userHasPanCard)
+                    panCardAvailaibilityOptionRG.check(R.id.panYesRB)
+                else
+                    panCardAvailaibilityOptionRG.check(R.id.panNoRB)
+            } else {
+                //Uncheck both and hide capture layout
+                panCardAvailaibilityOptionRG.clearCheck()
+                panImageHolder.visibility = View.GONE
+            }
+
+            if (it.panCardDetails.panCardImagePath != null) {
+                val imageRef = firebaseStorage
+                    .reference
+                    .child("verification")
+                    .child(it.panCardDetails.panCardImagePath)
+
+                imageRef.downloadUrl.addOnSuccessListener {
+                    showPanInfoCard(it)
+                }.addOnFailureListener {
+                    print("ee")
+                }
+            }
+        }
     }
 
 
@@ -119,7 +168,7 @@ class AddPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetActio
         photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_PURPOSE, PhotoCrop.PURPOSE_UPLOAD_PAN_IMAGE)
         photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_FIREBASE_FOLDER_NAME, "/verification/")
         photoCropIntent.putExtra("folder", "verification")
-        photoCropIntent.putExtra("detectFace", 0)
+        photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_DETECT_FACE, 0)
         photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_FIREBASE_FILE_NAME, "pan_card.jpg")
         startActivityForResult(photoCropIntent, REQUEST_CODE_UPLOAD_PAN_IMAGE)
     }
@@ -141,18 +190,18 @@ class AddPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetActio
         panSubmitSliderBtn.isEnabled = true
 
         panSubmitSliderBtn.outerColor =
-                ResourcesCompat.getColor(resources, R.color.light_pink, null)
+            ResourcesCompat.getColor(resources, R.color.light_pink, null)
         panSubmitSliderBtn.innerColor =
-                ResourcesCompat.getColor(resources, R.color.lipstick, null)
+            ResourcesCompat.getColor(resources, R.color.lipstick, null)
     }
 
     private fun disableSubmitButton() {
         panSubmitSliderBtn.isEnabled = false
 
         panSubmitSliderBtn.outerColor =
-                ResourcesCompat.getColor(resources, R.color.light_grey, null)
+            ResourcesCompat.getColor(resources, R.color.light_grey, null)
         panSubmitSliderBtn.innerColor =
-                ResourcesCompat.getColor(resources, R.color.warm_grey, null)
+            ResourcesCompat.getColor(resources, R.color.warm_grey, null)
     }
 
     override fun onImageSourceSelected(source: ImageSource) {
@@ -163,29 +212,29 @@ class AddPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetActio
         if (panDataCorrectCB.isChecked)
             enableSubmitButton()
 
-        showPanInfoCard(clickedImagePath)
+//        showPanInfoCard(clickedImagePath)
         setPanInfoOnView(
-                name = "Rahul Jain",
-                fathersName = "Sahil Jain",
-                dob = "11/09/1990",
-                pan = "PU23SDDLOJIJ"
+            name = "Rahul Jain",
+            fathersName = "Sahil Jain",
+            dob = "11/09/1990",
+            pan = "PU23SDDLOJIJ"
         )
     }
 
-    private fun showPanInfoCard(panInfoPath: File? = null) {
+    private fun showPanInfoCard(panInfoPath: Uri) {
         panImageHolder.uploadDocumentCardView.visibility = View.GONE
         panImageHolder.uploadImageLayout.visibility = View.VISIBLE
 
         Glide.with(requireContext())
-                .load(R.drawable.bg_pan_card)
-                .into(panImageHolder.uploadImageLayout.clickedImageIV)
+            .load(panInfoPath)
+            .into(panImageHolder.uploadImageLayout.clickedImageIV)
     }
 
     private fun setPanInfoOnView(
-            name: String?,
-            fathersName: String?,
-            dob: String?,
-            pan: String?
+        name: String?,
+        fathersName: String?,
+        dob: String?,
+        pan: String?
     ) {
         nameTV.text = name
         fathersNameTV.text = fathersName
