@@ -29,13 +29,14 @@ class CalendarView : LinearLayout {
         lateinit var changedMonthModelListener: MonthChangeListener
         var calendarData = Calendar.getInstance()
     }
+
     lateinit var recyclerGenericAdapter: RecyclerGenericAdapter<MonthModel>
 
     private fun initControl(context: Context?) {
         val inflater =
             context?.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         inflater.inflate(R.layout.calendar_view_layout, this)
-        calendarData.set(Calendar.DATE,1)
+        calendarData.set(Calendar.DATE, 1)
         initializeGridView()
     }
 
@@ -99,7 +100,7 @@ class CalendarView : LinearLayout {
         var date: Int = -1
         var month: Int = -1
         var year: Int = -1
-        var currentMonth : Int = -1
+        var currentMonth: Int = -1
     }
 
     private fun getDefaultItems(): ArrayList<MonthModel>? {
@@ -133,7 +134,7 @@ class CalendarView : LinearLayout {
     }
 
     private fun setNextMonthCalendar() {
-        calendarData.add(Calendar.MONTH,1)
+        calendarData.add(Calendar.MONTH, 1)
     }
 
     private fun getDays(): ArrayList<DayModel> {
@@ -141,7 +142,9 @@ class CalendarView : LinearLayout {
         var dayOfWeek = calendarData.get(Calendar.DAY_OF_WEEK)
         var startingDayOfWeek = getStartingDayOfWeek(dayOfWeek)
         var lastMonth = getLastMonth()
-        for (x in lastMonth.getActualMaximum(Calendar.DATE) downTo lastMonth.getActualMaximum(Calendar.DATE) - startingDayOfWeek + 1) {
+        for (x in lastMonth.getActualMaximum(Calendar.DATE) downTo lastMonth.getActualMaximum(
+            Calendar.DATE
+        ) - startingDayOfWeek + 1) {
             var dayModel = DayModel()
             dayModel.date = x
             dayModel.month = lastMonth.get(Calendar.MONTH)
@@ -176,7 +179,7 @@ class CalendarView : LinearLayout {
         return calendar1
     }
 
-    private  fun getLastMonth():Calendar{
+    private fun getLastMonth(): Calendar {
         var calendar1: Calendar = Calendar.getInstance();
         calendar1.set(Calendar.MONTH, calendarData.get(Calendar.MONTH) - 1)
         return calendar1

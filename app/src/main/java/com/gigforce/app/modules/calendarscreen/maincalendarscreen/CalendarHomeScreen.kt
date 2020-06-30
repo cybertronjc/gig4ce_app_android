@@ -24,7 +24,6 @@ import com.gigforce.app.core.base.dialog.ConfirmationDialogOnClickListener
 import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.app.core.genericadapter.RecyclerGenericAdapter
 import com.gigforce.app.core.gone
-import com.gigforce.app.core.invisible
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.calendarscreen.maincalendarscreen.verticalcalendar.CalendarRecyclerItemTouchHelper
 import com.gigforce.app.modules.calendarscreen.maincalendarscreen.verticalcalendar.VerticalCalendarDataItemModel
@@ -50,6 +49,7 @@ class CalendarHomeScreen : BaseFragment(),
 
         lateinit var temporaryData: VerticalCalendarDataItemModel
     }
+        lateinit var selectedMonthModel : CalendarView.MonthModel
 
     lateinit var arrCalendarDependent: Array<View>
     private var mExtendedBottomSheetBehavior: ExtendedBottomSheetBehavior<*>? = null
@@ -68,7 +68,7 @@ class CalendarHomeScreen : BaseFragment(),
         viewModel = ViewModelProviders.of(this).get(CalendarHomeScreenViewModel::class.java)
         viewModelProfile = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
         arrCalendarDependent =
-            arrayOf(calendar_dependent, margin_40, below_oval,calendar_cv, bottom_sheet_top_shadow)
+            arrayOf(calendar_dependent, margin_40, below_oval, calendar_cv, bottom_sheet_top_shadow)
         initializeViews()
         listener()
         observePreferenceData()
@@ -78,7 +78,7 @@ class CalendarHomeScreen : BaseFragment(),
     @RequiresApi(Build.VERSION_CODES.O)
     private fun initializeViews() {
         initializeExtendedBottomSheet()
-        initialiseMonthTV(Calendar.getInstance())
+        initializeMonthTV(Calendar.getInstance())
         initializeVerticalCalendarRV()
     }
 
@@ -97,19 +97,28 @@ class CalendarHomeScreen : BaseFragment(),
         month_year.setOnClickListener(View.OnClickListener {
             changeVisibilityCalendarView()
         })
-        bottom_sheet_shadow_view.setOnClickListener{
+        bottom_sheet_shadow_view.setOnClickListener {
             changeVisibilityCalendarView()
         }
-        calendar_dependent.setOnClickListener{
+        calendar_dependent.setOnClickListener {
             changeVisibilityCalendarView()
         }
-        calendarView.setMonthChangeListener(object : CalendarView.MonthChangeListener{
+        calendarView.setMonthChangeListener(object : CalendarView.MonthChangeListener {
             override fun onMonthChange(monthModel: CalendarView.MonthModel) {
+                selectedMonthModel = monthModel
                 var calendar = Calendar.getInstance()
-                calendar.set(Calendar.MONTH,monthModel.currentMonth)
-                calendar.set(Calendar.YEAR,monthModel.year)
-                calendar.set(Calendar.DATE,1)
-                initialiseMonthTV(calendar)
+                calendar.set(Calendar.MONTH, monthModel.currentMonth)
+                calendar.set(Calendar.YEAR, monthModel.year)
+                calendar.set(Calendar.DATE, 1)
+                initializeMonthTV(calendar)
+                if(!isLoading) {
+                    recyclerGenericAdapter.list.addAll(
+                        viewModel.getVerticalCalendarData(
+                            recyclerGenericAdapter.list.get(recyclerGenericAdapter.list.size - 1),
+                            false
+                        )
+                    )
+                }
             }
 
         })
@@ -123,10 +132,13 @@ class CalendarHomeScreen : BaseFragment(),
             extendedBottomSheetBehavior.state = ExtendedBottomSheetBehavior.STATE_COLLAPSED
             extendedBottomSheetBehavior.isAllowUserDragging = false
         } else {
+            scrollVerticalCalendarToSelectedMonth()
             hideDependentViews(true)
             extendedBottomSheetBehavior.isAllowUserDragging = true
         }
     }
+
+
 
     private fun hideDependentViews(hide: Boolean) {
         for (view in arrCalendarDependent) {
@@ -167,7 +179,7 @@ class CalendarHomeScreen : BaseFragment(),
     }
 
 
-    private fun initialiseMonthTV(calendar:Calendar) {
+    private fun initializeMonthTV(calendar: Calendar) {
         val pattern = "MMMM YYYY"
         val simpleDateFormat = SimpleDateFormat(pattern)
         val date: String = simpleDateFormat.format(calendar.time)
@@ -352,14 +364,22 @@ class CalendarHomeScreen : BaseFragment(),
 
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
-
+                var layoutManager: LinearLayoutManager? = null
+                if (layoutManager == null) {
+                    layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                }
+//                val firstVisibleItem = layoutManager!!.findFirstVisibleItemPosition()
+//                var calendar = Calendar.getInstance()
+//                calendar.set(
+//                    Calendar.MONTH,
+//                    recyclerGenericAdapter.list.get(firstVisibleItem).month
+//                )
+//                calendar.set(Calendar.YEAR, recyclerGenericAdapter.list.get(firstVisibleItem).year)
+//                initializeMonthTV(calendar)
                 if (!isLoading) {
                     val totalItemCount = recyclerView!!.layoutManager?.itemCount
-                    var layoutManager: LinearLayoutManager? = null
-                    if (layoutManager == null) {
-                        layoutManager = recyclerView.layoutManager as LinearLayoutManager
-                    }
-                    val firstVisibleItem = layoutManager!!.findFirstVisibleItemPosition()
+
+
                     val lastVisibleItem = layoutManager!!.findLastVisibleItemPosition()
                     if (totalItemCount!! <= (lastVisibleItem + visibleThreshold)) {
                         isLoading = true;
@@ -386,6 +406,22 @@ class CalendarHomeScreen : BaseFragment(),
 
 
             }
+
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                var layoutManager: LinearLayoutManager? = null
+                if (layoutManager == null) {
+                    layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                }
+                val firstVisibleItem = layoutManager!!.findFirstVisibleItemPosition()
+                var calendar = Calendar.getInstance()
+                calendar.set(
+                    Calendar.MONTH,
+                    recyclerGenericAdapter.list.get(firstVisibleItem-1).month
+                )
+                calendar.set(Calendar.YEAR, recyclerGenericAdapter.list.get(firstVisibleItem).year)
+                initializeMonthTV(calendar)
+            }
         }
         rv_.addOnScrollListener(scrollListener)
 
@@ -394,7 +430,25 @@ class CalendarHomeScreen : BaseFragment(),
         ItemTouchHelper(itemTouchListener).attachToRecyclerView(rv_)
 
     }
-
+    private fun scrollVerticalCalendarToSelectedMonth() {
+        var layoutManager: LinearLayoutManager? = null
+        if (layoutManager == null) {
+            layoutManager = rv_.layoutManager as LinearLayoutManager
+        }
+        val firstVisibleItem = layoutManager!!.findFirstVisibleItemPosition()
+        if(recyclerGenericAdapter.list.get(firstVisibleItem).month<selectedMonthModel.currentMonth){
+        for(index in firstVisibleItem..recyclerGenericAdapter.list.size) {
+            if(recyclerGenericAdapter.list.get(index).month==selectedMonthModel.currentMonth){
+                (rv_.layoutManager as LinearLayoutManager)?.scrollToPositionWithOffset(
+                    index+1,
+                    0
+                )
+//                rv_.scrollToPosition(index)
+                break
+            }
+        }
+        }
+    }
     private fun setBackgroundStateAvailable(viewHolder: PFRecyclerViewAdapter<Any?>.ViewHolder) {
         setViewBackgroundColor(
             getView(viewHolder, R.id.action_layout),

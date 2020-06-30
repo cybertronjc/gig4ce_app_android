@@ -118,6 +118,14 @@ class IntroSlidesViewPagerAdapter(val viewpager:ViewPager2,
                     onIntroSlidesCompleted.invoke()
                 }
             }
+            right_arrow.setOnClickListener {
+                if(currentPosition < 2)
+                    viewpager.setCurrentItem(currentPosition+1, true)
+                else if (currentPosition == 2) {
+                    // on Final CA Executed
+                    onIntroSlidesCompleted.invoke()
+                }
+            }
         }
 
         fun Bind(position: Int){
