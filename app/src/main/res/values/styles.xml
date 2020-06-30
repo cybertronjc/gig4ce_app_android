@@ -33,6 +33,10 @@
         <item name="buttonTint">@drawable/radio_button_drawable</item>
     </style>
 
+    <style name="Theme.CheckBoxLipstickPink" parent="Widget.AppCompat.CompoundButton.CheckBox">
+        <item name="buttonTint">@drawable/radio_button_drawable</item>
+    </style>
+
     <style name="FieldtextLatoRegularGrey12">
         <item name="android:textSize">12sp</item>
         <item name="android:letterSpacing">0.05</item>
