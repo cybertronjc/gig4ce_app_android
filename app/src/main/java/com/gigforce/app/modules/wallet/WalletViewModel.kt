@@ -5,9 +5,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.gigforce.app.modules.profile.ProfileFirebaseRepository
 import com.gigforce.app.modules.profile.models.ProfileData
+import com.gigforce.app.modules.roster.models.Gig
+import com.gigforce.app.modules.wallet.models.Invoice
 import com.gigforce.app.modules.wallet.models.Wallet
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.EventListener
+import com.google.firebase.firestore.FirebaseFirestore
 
 class WalletViewModel: ViewModel() {
 
@@ -55,4 +59,5 @@ class WalletViewModel: ViewModel() {
             }
         }
     }
+
 }

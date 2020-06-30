@@ -9,9 +9,12 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gigforce.app.R
+import kotlinx.android.synthetic.main.help_expanded_page.*
 import kotlinx.android.synthetic.main.payment_summary_component.view.*
 import kotlinx.android.synthetic.main.wallet_balance_page.*
+import kotlinx.android.synthetic.main.wallet_balance_page.top_bar
 import kotlinx.android.synthetic.main.wallet_top_bar_component.*
+import kotlinx.android.synthetic.main.wallet_top_bar_component.back_button
 
 class WalletBalancePage: WalletBaseFragment() {
 
@@ -62,30 +65,29 @@ class WalletBalancePage: WalletBaseFragment() {
 
                 payment_summary.monthlyEarning = wallet.monthlyEarnedAmount
                 payment_summary.invoiceAmount = 4000
-                payment_summary.paymentDueAmount = 0
 
-                var t0 = invoiceViewModel.generatedInvoice.value?.get(0)
-                var t1 = invoiceViewModel.generatedInvoice.value?.get(1)
-                var t2 = invoiceViewModel.generatedInvoice.value?.get(2)
-
-                t0?.let {
-                    transaction_1.agent = it.agentName
-                    transaction_1.amount = it.gigAmount
-                    transaction_1.status = it.invoiceStatus
-                    transaction_1.timings = it.gigTiming
-                }
-                t1?.let {
-                    transaction_2.agent = it.agentName
-                    transaction_2.amount = it.gigAmount
-                    transaction_2.status = it.invoiceStatus
-                    transaction_2.timings = it.gigTiming
-                }
-                t2?.let {
-                    transaction_3.agent = it.agentName
-                    transaction_3.amount = it.gigAmount
-                    transaction_3.status = it.invoiceStatus
-                    transaction_3.timings = it.gigTiming
-                }
+//                var t0 = invoiceViewModel.generatedInvoice.value?.get(0)
+//                var t1 = invoiceViewModel.generatedInvoice.value?.get(1)
+//                var t2 = invoiceViewModel.generatedInvoice.value?.get(2)
+//
+//                t0?.let {
+//                    transaction_1.agent = it.agentName
+//                    transaction_1.amount = it.gigAmount
+//                    transaction_1.status = it.invoiceStatus
+//                    transaction_1.timings = it.gigTiming
+//                }
+//                t1?.let {
+//                    transaction_2.agent = it.agentName
+//                    transaction_2.amount = it.gigAmount
+//                    transaction_2.status = it.invoiceStatus
+//                    transaction_2.timings = it.gigTiming
+//                }
+//                t2?.let {
+//                    transaction_3.agent = it.agentName
+//                    transaction_3.amount = it.gigAmount
+//                    transaction_3.status = it.invoiceStatus
+//                    transaction_3.timings = it.gigTiming
+//                }
 
                 monthly_goal_card.currentMonthSalary = wallet.monthlyEarnedAmount
                 monthly_goal_card.monthlyGoalAmount = wallet.monthlyGoalLimit
@@ -95,6 +97,10 @@ class WalletBalancePage: WalletBaseFragment() {
                 monthly_goal_card.isMonthlyGoalSet = wallet.isMonthlyGoalSet
             }
 
+        })
+
+        invoiceViewModel.allInvoices.observe(viewLifecycleOwner, Observer {
+            payment_summary.paymentDueAmount = invoiceViewModel.getPaymentDueAmount(it)
         })
     }
 }
