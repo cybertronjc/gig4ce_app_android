@@ -41,21 +41,14 @@ class WalletViewModel: ViewModel() {
             })
     }
     init {
-        //getUserWallet()
+        getUserWallet()
         getProfileData()
-
-        userWallet.value = Wallet(
-            balance = 20800,
-            isMonthlyGoalSet = true,
-            monthlyGoalLimit = 5000,
-            monthlyEarnedAmount = 4000
-        )
     }
 
     private fun getUserWallet() {
         walletRepository.getDBCollection().addSnapshotListener { value, e ->
             if (value!!.data == null) {
-                walletRepository.setDefaultData(Wallet(balance = 0))
+                walletRepository.setDefaultData(Wallet(balance = 0F))
             }
             else {
                 userWallet.postValue(value.toObject(Wallet::class.java))

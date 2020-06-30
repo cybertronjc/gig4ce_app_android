@@ -54,8 +54,8 @@ class WalletBalancePage: WalletBaseFragment() {
     private fun initialize() {
         walletViewModel.userWallet.observe(viewLifecycleOwner, Observer {userWallet ->
             userWallet?.let { wallet ->
-                zero_balance.visibility = if (wallet.balance == 0) View.VISIBLE else View.GONE
-                non_zero_balance.visibility = if (wallet.balance == 0) View.GONE else View.VISIBLE
+                zero_balance.visibility = if (wallet.balance == 0F) View.VISIBLE else View.GONE
+                non_zero_balance.visibility = if (wallet.balance == 0F) View.GONE else View.VISIBLE
 
                 monthly_goal_card.isMonthlyGoalSet = wallet.isMonthlyGoalSet
                 balance_card.balance = wallet.balance
