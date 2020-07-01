@@ -6,5 +6,6 @@
     android:textColor="@color/black"
     android:fontFamily="@font/lato"
     android:letterSpacing="0"
+    android:text="Dummy Test"
     style="@style/Theme.CheckBoxLipstickPink"
     android:layout_height="wrap_content" />

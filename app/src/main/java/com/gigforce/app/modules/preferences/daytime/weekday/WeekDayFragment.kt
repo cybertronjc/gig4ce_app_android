@@ -126,6 +126,7 @@ class WeekDayFragment : BaseFragment() {
         var selectedList = ArrayList<Int>()
         val builder = AlertDialog.Builder(activity)
         builder.setTitle("Days")
+        builder.setView(R.layout.fragment_settings_slots_row)
         for (i in 0..items.size - 1) {
             var isfound = false
             for (day in viewDataModel.selecteddays) {
@@ -146,6 +147,8 @@ class WeekDayFragment : BaseFragment() {
         ) { dialog, which, isChecked ->
             val dialog = dialog as AlertDialog
             val v: ListView = dialog.listView
+
+
             if (which == 0) {
                 if (isChecked)
                     selectedList.addAll(indexItem)
