@@ -20,7 +20,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/tv2HS1"
+        android:id="@+id/month_year"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="23dp"
@@ -58,7 +58,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="32dp"
-        app:layout_constraintStart_toEndOf="@+id/tv2HS1"
+        app:layout_constraintStart_toEndOf="@+id/month_year"
         app:layout_constraintTop_toBottomOf="@+id/tv1HS1"
         app:srcCompat="@drawable/homescreen_month_dropdown" />
 
@@ -68,7 +68,7 @@
         android:layout_height="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv2HS1"
+        app:layout_constraintTop_toBottomOf="@+id/month_year"
         app:layout_constraintBottom_toTopOf="parent"
         app:layout_constraintVertical_weight="1">
     </androidx.recyclerview.widget.RecyclerView>

@@ -12,7 +12,7 @@ import androidx.navigation.fragment.NavHostFragment
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.modules.landingscreen.LandingScreenFragment
 import com.gigforce.app.modules.onboardingmain.OnboardingMainFragment
-import com.gigforce.app.core.base.popAllBackStates
+import com.gigforce.app.core.popAllBackStates
 
 
 class MainActivity : AppCompatActivity() {
