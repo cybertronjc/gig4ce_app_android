@@ -3,7 +3,7 @@ package com.gigforce.app.modules.gigerVerfication.selfieVideo
 import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
 import com.gigforce.app.modules.gigerVerfication.GigerVerificationRepository
 import com.gigforce.app.utils.Lse
 import com.google.firebase.storage.FirebaseStorage
@@ -14,7 +14,7 @@ import java.io.File
 class SelfiVideoViewModel constructor(
     private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance(),
     private val gigerVerificationRepository: GigerVerificationRepository = GigerVerificationRepository()
-) : ViewModel() {
+) : GigVerificationViewModel() {
 
     private var selfieVideoUploadTask: UploadTask? = null
 
@@ -29,27 +29,21 @@ class SelfiVideoViewModel constructor(
         _uploadSelfieState.value = Lse.loading()
         selfieVideoUploadTask = fileRef.putFile(videoFile)
         selfieVideoUploadTask!!.addOnSuccessListener {
-            getDownloadOfUploadedSelfieVideo(fileRef)
+            val fileName = it.metadata?.reference?.name.toString()
+            setCompleteSelfieInfo(fileName)
         }.addOnFailureListener {
             _uploadSelfieState.value = Lse.error(it.localizedMessage)
         }
     }
 
-    private fun getDownloadOfUploadedSelfieVideo(fileRef: StorageReference) {
-        fileRef.downloadUrl
-            .addOnSuccessListener {
-                setCompleteSelfieInfo(it)
-            }.addOnFailureListener {
-                _uploadSelfieState.value = Lse.error(it.localizedMessage)
-            }
-    }
 
-    private fun setCompleteSelfieInfo(selfieVideoDownloadUri: Uri) {
+    private fun setCompleteSelfieInfo(selfieVideoFileName: String) {
         runCatching {
 
             gigerVerificationRepository.setDataAsKeyValue(
                 SelfieVideoDataModel(
-                    videoPath = selfieVideoDownloadUri.toString()
+                    videoPath = selfieVideoFileName,
+                    verified = false
                 )
             )
         }.onFailure {

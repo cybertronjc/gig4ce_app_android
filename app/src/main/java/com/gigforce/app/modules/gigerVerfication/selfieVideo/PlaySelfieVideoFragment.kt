@@ -27,7 +27,7 @@ class PlaySelfieVideoFragment : Fragment() {
     private lateinit var mPlaySelfieVideoFragmentEventListener: PlaySelfieVideoFragmentEventListener
 
     private var player: SimpleExoPlayer? = null
-    private lateinit var file: File
+    private lateinit var uri: Uri
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,10 +38,16 @@ class PlaySelfieVideoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if (savedInstanceState != null)
-            file = File(savedInstanceState.getString(INTENT_EXTRA_FILE))
-        else
-            file = File(arguments?.getString(INTENT_EXTRA_FILE))
+        if (savedInstanceState != null) {
+
+            if (savedInstanceState.getString(INTENT_EXTRA_URI) != null)
+                uri = Uri.parse(savedInstanceState.getString(INTENT_EXTRA_URI))
+        } else {
+
+            if (arguments?.getString(INTENT_EXTRA_URI) != null)
+                uri = Uri.parse(arguments?.getString(INTENT_EXTRA_URI))
+        }
+
 
         if (Build.VERSION.SDK_INT > 23)
             initVideoPlayer()
@@ -49,7 +55,7 @@ class PlaySelfieVideoFragment : Fragment() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putString(INTENT_EXTRA_FILE, file.absolutePath)
+        outState.putString(INTENT_EXTRA_URI, uri.toString())
     }
 
     override fun onResume() {
@@ -82,7 +88,7 @@ class PlaySelfieVideoFragment : Fragment() {
         selfieVideoPlayerView.resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FILL
         player?.videoScalingMode = C.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING
 
-        playVideo(file)
+        playVideo(uri)
     }
 
     fun playVideo(file: File) {
@@ -93,6 +99,15 @@ class PlaySelfieVideoFragment : Fragment() {
         player?.seekTo(0, 0)
         player?.prepare(mediaSource, false, false)
     }
+
+    fun playVideo(uri: Uri) {
+        val mediaSource = buildMediaSource(uri)
+
+        player?.playWhenReady = false
+        player?.seekTo(0, 0)
+        player?.prepare(mediaSource, false, false)
+    }
+
 
     private fun buildMediaSource(uri: Uri): MediaSource {
         val dataSourceFactory = DefaultDataSourceFactory(requireContext(), "gig4ce-agent")
@@ -116,16 +131,17 @@ class PlaySelfieVideoFragment : Fragment() {
 
     companion object {
         const val TAG = "PlaySelfieVideoFragment"
-        private const val INTENT_EXTRA_FILE = "file"
+        private const val INTENT_EXTRA_URI = "uri"
+
 
         fun getInstance(
             playSelfieVideoFragmentEventListener: PlaySelfieVideoFragmentEventListener,
-            file: File
+            uri: Uri
         ): PlaySelfieVideoFragment {
             return PlaySelfieVideoFragment()
                 .apply {
                     val bundle = Bundle()
-                    bundle.putString(INTENT_EXTRA_FILE, file.absolutePath)
+                    bundle.putString(INTENT_EXTRA_URI, uri.toString())
                     this.arguments = bundle
 
                     this.mPlaySelfieVideoFragmentEventListener =

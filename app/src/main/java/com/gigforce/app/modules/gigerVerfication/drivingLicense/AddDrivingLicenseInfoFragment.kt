@@ -128,10 +128,10 @@ class AddDrivingLicenseInfoFragment : BaseFragment(), SelectImageSourceBottomShe
         }
 
         dlFrontImageHolder.uploadImageLayout.imageLabelTV.text =
-                getString(R.string.upload_driving_license_front_side)
+                "Driving License (Front Side)"
 
         dlBackImageHolder.uploadImageLayout.imageLabelTV.text =
-                getString(R.string.upload_driving_license_back_side)
+                "Driving License (Back Side)"
 
         dlFrontImageHolder.uploadImageLayout.reuploadBtn.setOnClickListener {
             openCameraAndGalleryOptionForFrontSideImage()

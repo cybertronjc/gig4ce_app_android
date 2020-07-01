@@ -292,7 +292,7 @@ class AddAadharCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetAc
         aadharFrontImageHolder.uploadDocumentCardView.visibility = View.GONE
         aadharFrontImageHolder.uploadImageLayout.visibility = View.VISIBLE
         aadharFrontImageHolder.uploadImageLayout.imageLabelTV.text =
-            getString(R.string.upload_aadhar_card_front_side)
+            "Aadhar Card (Front Side)"
 
         Glide.with(requireContext())
             .load(aadharFrontImagePath)
@@ -303,7 +303,7 @@ class AddAadharCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetAc
         aadharBackImageHolder.uploadDocumentCardView.visibility = View.GONE
         aadharBackImageHolder.uploadImageLayout.visibility = View.VISIBLE
         aadharBackImageHolder.uploadImageLayout.imageLabelTV.text =
-            getString(R.string.upload_aadhar_card_back_side)
+            "Aadhar Card (Back Side)"
 
         Glide.with(requireContext())
             .load(aadharBackImagePath)
