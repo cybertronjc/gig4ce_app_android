@@ -39,10 +39,10 @@ class MonthlyEarningPage: WalletBaseFragment() {
 
         back_button.setOnClickListener { requireActivity().onBackPressed() }
 
-        earning_graph.month.observe(viewLifecycleOwner, Observer { month ->
-            monthly_text.text = "$month 2020"
+        earning_graph.monthYear.observe(viewLifecycleOwner, Observer { monthYear ->
+            monthly_text.text = monthYear
 
-            if (month != "June") {
+            if (monthYear != "June 2020") {
                 month_transactions.adapter = MonthlyTransactionAdapter(ArrayList<Invoice>())
                 (month_transactions.adapter as MonthlyTransactionAdapter).notifyDataSetChanged()
             } else {
