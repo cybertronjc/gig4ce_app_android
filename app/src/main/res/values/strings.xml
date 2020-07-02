@@ -180,7 +180,7 @@
     <string name="title">title</string>
     <string name="authority">authority</string>
     <string name="location">Location</string>
-    <string name="year" >year</string>
+    <string name="year">year</string>
     <string name="year_text">Year</string>
     <string name="edit_skill">Edit Skill</string>
     <string name="edit_experience">Edit Experience</string>
