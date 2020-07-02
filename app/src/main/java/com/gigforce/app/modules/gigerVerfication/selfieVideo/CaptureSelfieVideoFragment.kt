@@ -25,6 +25,8 @@ interface CaptureVideoFragmentEventListener {
 class CaptureSelfieVideoFragment : BaseFragment() {
 
     private lateinit var mCaptureVideoFragmentEventListener: CaptureVideoFragmentEventListener
+    private var capturingVideo = false
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,8 +43,14 @@ class CaptureSelfieVideoFragment : BaseFragment() {
             requestCameraPermission()
 
         recordVideoButton.setOnClickListener {
-            startRecordingVideo()
-           startTimer()
+
+            if (!capturingVideo) {
+                capturingVideo = true
+
+                recordingTimerLayout.visibility = View.VISIBLE
+                startRecordingVideo()
+                startTimer()
+            }
         }
     }
 
@@ -103,6 +111,7 @@ class CaptureSelfieVideoFragment : BaseFragment() {
 
         override fun onVideoTaken(result: VideoResult) {
             super.onVideoTaken(result)
+            capturingVideo = false
             mCaptureVideoFragmentEventListener.videoCaptured(result.file)
         }
     }

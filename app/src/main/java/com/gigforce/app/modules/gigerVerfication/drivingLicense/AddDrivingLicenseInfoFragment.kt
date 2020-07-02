@@ -38,9 +38,9 @@ class AddDrivingLicenseInfoFragment : BaseFragment(), SelectImageSourceBottomShe
     private var currentlyClickingImageOfSide: DrivingLicenseSides? = null
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ) = inflateView(R.layout.fragment_add_driving_license_info, inflater, container)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -52,14 +52,14 @@ class AddDrivingLicenseInfoFragment : BaseFragment(), SelectImageSourceBottomShe
 
     private fun initViews() {
         dlFrontImageHolder.documentUploadLabelTV.text =
-                getString(R.string.upload_driving_license_front_side)
+            getString(R.string.upload_driving_license_front_side)
         dlFrontImageHolder.documentUploadSubLabelTV.text =
-                getString(R.string.upload_your_driving_license)
+            getString(R.string.upload_your_driving_license)
 
         dlBackImageHolder.documentUploadLabelTV.text =
-                getString(R.string.upload_driving_license_back_side)
+            getString(R.string.upload_driving_license_back_side)
         dlBackImageHolder.documentUploadSubLabelTV.text =
-                getString(R.string.upload_your_driving_license)
+            getString(R.string.upload_your_driving_license)
         dlSubmitSliderBtn.isEnabled = false
 
         toolbar.setNavigationOnClickListener {
@@ -72,17 +72,22 @@ class AddDrivingLicenseInfoFragment : BaseFragment(), SelectImageSourceBottomShe
                 showDLImageAndInfoLayout()
 
                 if (confirmDLDataCB.isChecked
-                        && drivingLicenseDetail != null
-                        && drivingLicenseDetail?.frontImage != null
-                        && drivingLicenseDetail?.backImage != null) {
+                    && drivingLicenseDetail != null
+                    && drivingLicenseDetail?.frontImage != null
+                    && drivingLicenseDetail?.backImage != null
+                ) {
                     enableSubmitButton()
                 }
 
-            } else if (checkedId == R.id.dlNoRB && confirmDLDataCB.isChecked) {
+            } else if (checkedId == R.id.dlNoRB) {
                 hideDLImageAndInfoLayout()
-                enableSubmitButton()
-            } else
+
+                if (confirmDLDataCB.isChecked)
+                    enableSubmitButton()
+            } else {
+                hideDLImageAndInfoLayout()
                 disableSubmitButton()
+            }
         }
 
         confirmDLDataCB.setOnCheckedChangeListener { buttonView, isChecked ->
@@ -90,9 +95,10 @@ class AddDrivingLicenseInfoFragment : BaseFragment(), SelectImageSourceBottomShe
             if (isChecked) {
 
                 if (dlYesRB.isChecked
-                        && drivingLicenseDetail != null
-                        && drivingLicenseDetail?.frontImage != null
-                        && drivingLicenseDetail?.backImage != null)
+                    && drivingLicenseDetail != null
+                    && drivingLicenseDetail?.frontImage != null
+                    && drivingLicenseDetail?.backImage != null
+                )
                     enableSubmitButton()
                 else if (dlNoRB.isChecked)
                     enableSubmitButton()
@@ -102,18 +108,19 @@ class AddDrivingLicenseInfoFragment : BaseFragment(), SelectImageSourceBottomShe
                 disableSubmitButton()
         }
 
-        dlSubmitSliderBtn.onSlideCompleteListener = object : SlideToActView.OnSlideCompleteListener {
+        dlSubmitSliderBtn.onSlideCompleteListener =
+            object : SlideToActView.OnSlideCompleteListener {
 
-            override fun onSlideComplete(view: SlideToActView) {
+                override fun onSlideComplete(view: SlideToActView) {
 
-                if (dlYesRB.isChecked)
-                    navigate(R.id.addBankDetailsInfoFragment)
-                else if (dlNoRB.isChecked) {
-                    viewModel.updateDLData(false, null, null)
-                    navigate(R.id.addBankDetailsInfoFragment)
+                    if (dlYesRB.isChecked)
+                        navigate(R.id.addBankDetailsInfoFragment)
+                    else if (dlNoRB.isChecked) {
+                        viewModel.updateDLData(false, null, null)
+                        navigate(R.id.addBankDetailsInfoFragment)
+                    }
                 }
             }
-        }
 
         editDrivingLicenseInfoLayout.setOnClickListener {
             navigate(R.id.editDrivingLicenseInfoBottomSheet)
@@ -128,10 +135,10 @@ class AddDrivingLicenseInfoFragment : BaseFragment(), SelectImageSourceBottomShe
         }
 
         dlFrontImageHolder.uploadImageLayout.imageLabelTV.text =
-                "Driving License (Front Side)"
+            "Driving License (Front Side)"
 
         dlBackImageHolder.uploadImageLayout.imageLabelTV.text =
-                "Driving License (Back Side)"
+            "Driving License (Back Side)"
 
         dlFrontImageHolder.uploadImageLayout.reuploadBtn.setOnClickListener {
             openCameraAndGalleryOptionForFrontSideImage()
@@ -146,54 +153,54 @@ class AddDrivingLicenseInfoFragment : BaseFragment(), SelectImageSourceBottomShe
 
     private fun initViewModel() {
         viewModel.gigerVerificationStatus
-                .observe(viewLifecycleOwner, Observer {
+            .observe(viewLifecycleOwner, Observer {
 
-                    if (it.dlCardDetailsUploaded && it.drivingLicenseDataModel != null) {
-                        this.drivingLicenseDetail = it.drivingLicenseDataModel
+                if (it.dlCardDetailsUploaded && it.drivingLicenseDataModel != null) {
+                    this.drivingLicenseDetail = it.drivingLicenseDataModel
 
-                        if (it.drivingLicenseDataModel.userHasDL != null) {
-                            if (it.drivingLicenseDataModel.userHasDL)
-                                dlAvailaibilityOptionRG.check(R.id.dlYesRB)
-                            else
-                                dlAvailaibilityOptionRG.check(R.id.dlNoRB)
-                        } else {
-                            //Uncheck both and hide capture layout
-                            dlAvailaibilityOptionRG.clearCheck()
-                            hideDLImageAndInfoLayout()
-                        }
+                    if (it.drivingLicenseDataModel.userHasDL != null) {
+                        if (it.drivingLicenseDataModel.userHasDL)
+                            dlAvailaibilityOptionRG.check(R.id.dlYesRB)
+                        else
+                            dlAvailaibilityOptionRG.check(R.id.dlNoRB)
+                    } else {
+                        //Uncheck both and hide capture layout
+                        dlAvailaibilityOptionRG.clearCheck()
+                        hideDLImageAndInfoLayout()
+                    }
 
-                        if (it.drivingLicenseDataModel.frontImage != null) {
-                            val imageRef = firebaseStorage
-                                    .reference
-                                    .child("verification")
-                                    .child(it.drivingLicenseDataModel.frontImage)
+                    if (it.drivingLicenseDataModel.frontImage != null) {
+                        val imageRef = firebaseStorage
+                            .reference
+                            .child("verification")
+                            .child(it.drivingLicenseDataModel.frontImage)
 
-                            imageRef.downloadUrl.addOnSuccessListener {
-                                showFrontDrivingLicense(it)
-                            }.addOnFailureListener {
-                                print("ee")
-                            }
-                        }
-
-                        if (it.drivingLicenseDataModel.backImage != null) {
-                            val imageRef = firebaseStorage
-                                    .reference
-                                    .child("verification")
-                                    .child(it.drivingLicenseDataModel.backImage)
-
-                            imageRef.downloadUrl.addOnSuccessListener {
-                                showBackDrivingLicense(it)
-                            }.addOnFailureListener {
-                                print("ee")
-                            }
-                        }
-
-                        if (confirmDLDataCB.isChecked && it.drivingLicenseDataModel.frontImage != null && it.drivingLicenseDataModel.backImage != null) {
-                            enableSubmitButton()
+                        imageRef.downloadUrl.addOnSuccessListener {
+                            showFrontDrivingLicense(it)
+                        }.addOnFailureListener {
+                            print("ee")
                         }
                     }
 
-                })
+                    if (it.drivingLicenseDataModel.backImage != null) {
+                        val imageRef = firebaseStorage
+                            .reference
+                            .child("verification")
+                            .child(it.drivingLicenseDataModel.backImage)
+
+                        imageRef.downloadUrl.addOnSuccessListener {
+                            showBackDrivingLicense(it)
+                        }.addOnFailureListener {
+                            print("ee")
+                        }
+                    }
+
+                    if (confirmDLDataCB.isChecked && it.drivingLicenseDataModel.frontImage != null && it.drivingLicenseDataModel.backImage != null) {
+                        enableSubmitButton()
+                    }
+                }
+
+            })
 
         viewModel.startListeningForGigerVerificationStatusChanges()
     }
@@ -209,16 +216,16 @@ class AddDrivingLicenseInfoFragment : BaseFragment(), SelectImageSourceBottomShe
 
         val photoCropIntent = Intent(requireContext(), PhotoCrop::class.java)
         photoCropIntent.putExtra(
-                PhotoCrop.INTENT_EXTRA_PURPOSE,
-                PhotoCrop.PURPOSE_UPLOAD_DL_FRONT_IMAGE
+            PhotoCrop.INTENT_EXTRA_PURPOSE,
+            PhotoCrop.PURPOSE_UPLOAD_DL_FRONT_IMAGE
         )
         photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_FIREBASE_FOLDER_NAME, "/verification/")
         photoCropIntent.putExtra("folder", "verification")
         photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_DETECT_FACE, 0)
         photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_FIREBASE_FILE_NAME, "aadhar_card_front.jpg")
         startActivityForResult(
-                photoCropIntent,
-                AddAadharCardInfoFragment.REQUEST_CODE_UPLOAD_PAN_IMAGE
+            photoCropIntent,
+            AddAadharCardInfoFragment.REQUEST_CODE_UPLOAD_PAN_IMAGE
         )
 
     }
@@ -233,16 +240,16 @@ class AddDrivingLicenseInfoFragment : BaseFragment(), SelectImageSourceBottomShe
 
         val photoCropIntent = Intent(requireContext(), PhotoCrop::class.java)
         photoCropIntent.putExtra(
-                PhotoCrop.INTENT_EXTRA_PURPOSE,
-                PhotoCrop.PURPOSE_UPLOAD_DL_BACK_IMAGE
+            PhotoCrop.INTENT_EXTRA_PURPOSE,
+            PhotoCrop.PURPOSE_UPLOAD_DL_BACK_IMAGE
         )
         photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_FIREBASE_FOLDER_NAME, "/verification/")
         photoCropIntent.putExtra("folder", "verification")
         photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_DETECT_FACE, 0)
         photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_FIREBASE_FILE_NAME, "aadhar_card_back.jpg")
         startActivityForResult(
-                photoCropIntent,
-                AddAadharCardInfoFragment.REQUEST_CODE_UPLOAD_PAN_IMAGE
+            photoCropIntent,
+            AddAadharCardInfoFragment.REQUEST_CODE_UPLOAD_PAN_IMAGE
         )
     }
 
@@ -261,18 +268,18 @@ class AddDrivingLicenseInfoFragment : BaseFragment(), SelectImageSourceBottomShe
         dlSubmitSliderBtn.isEnabled = true
 
         dlSubmitSliderBtn.outerColor =
-                ResourcesCompat.getColor(resources, R.color.light_pink, null)
+            ResourcesCompat.getColor(resources, R.color.light_pink, null)
         dlSubmitSliderBtn.innerColor =
-                ResourcesCompat.getColor(resources, R.color.lipstick, null)
+            ResourcesCompat.getColor(resources, R.color.lipstick, null)
     }
 
     private fun disableSubmitButton() {
         dlSubmitSliderBtn.isEnabled = false
 
         dlSubmitSliderBtn.outerColor =
-                ResourcesCompat.getColor(resources, R.color.light_grey, null)
+            ResourcesCompat.getColor(resources, R.color.light_grey, null)
         dlSubmitSliderBtn.innerColor =
-                ResourcesCompat.getColor(resources, R.color.warm_grey, null)
+            ResourcesCompat.getColor(resources, R.color.warm_grey, null)
     }
 
     private fun showImageInfoLayout() {
@@ -301,12 +308,12 @@ class AddDrivingLicenseInfoFragment : BaseFragment(), SelectImageSourceBottomShe
         }
 
         setDLInfoOnView(
-                name = "Rahul Jain",
-                dob = "11/09/1990",
-                fathersName = "Male",
-                licenseNo = "DL234576249238",
-                licenseValidity = "10/2030",
-                address = "House no 3432, Preet Vihar, New Delhi, Delhi 112034"
+            name = "Rahul Jain",
+            dob = "11/09/1990",
+            fathersName = "Male",
+            licenseNo = "DL234576249238",
+            licenseValidity = "10/2030",
+            address = "House no 3432, Preet Vihar, New Delhi, Delhi 112034"
         )
     }
 
@@ -315,8 +322,8 @@ class AddDrivingLicenseInfoFragment : BaseFragment(), SelectImageSourceBottomShe
         dlFrontImageHolder.uploadImageLayout.visibility = View.VISIBLE
 
         Glide.with(requireContext())
-                .load(aadharFrontImagePath)
-                .into(dlFrontImageHolder.uploadImageLayout.clickedImageIV)
+            .load(aadharFrontImagePath)
+            .into(dlFrontImageHolder.uploadImageLayout.clickedImageIV)
     }
 
     private fun showBackDrivingLicense(aadharBackImagePath: Uri) {
@@ -324,18 +331,18 @@ class AddDrivingLicenseInfoFragment : BaseFragment(), SelectImageSourceBottomShe
         dlBackImageHolder.uploadImageLayout.visibility = View.VISIBLE
 
         Glide.with(requireContext())
-                .load(aadharBackImagePath)
-                .into(dlBackImageHolder.uploadImageLayout.clickedImageIV)
+            .load(aadharBackImagePath)
+            .into(dlBackImageHolder.uploadImageLayout.clickedImageIV)
     }
 
 
     private fun setDLInfoOnView(
-            name: String?,
-            fathersName: String?,
-            dob: String?,
-            licenseNo: String?,
-            licenseValidity: String?,
-            address: String?
+        name: String?,
+        fathersName: String?,
+        dob: String?,
+        licenseNo: String?,
+        licenseValidity: String?,
+        address: String?
     ) {
         nameTV.text = name
         fathersNameTV.text = fathersName
