@@ -35,7 +35,7 @@
 
     <fragment
         android:id="@+id/authFlowFragment"
-        android:name="com.gigforce.app.modules.auth.AuthFlowFragment"/>
+        android:name="com.gigforce.app.modules.auth.AuthFlowFragment" />
 
     <fragment
         android:id="@+id/settingFragment"
@@ -142,7 +142,16 @@
         android:id="@+id/landinghomefragment"
         android:name="com.gigforce.app.modules.landingscreen.LandingScreenFragment"
         android:label="landing_home_fragment"
-        tools:layout="@layout/landingscreen_fragment" />
+        tools:layout="@layout/landingscreen_fragment">
+        <action
+            android:id="@+id/action_landinghomefragment_to_gigerVerificationFragment"
+            app:destination="@id/gigerVerificationFragment"
+            app:enterAnim="@anim/fragment_close_enter"
+            app:exitAnim="@anim/fragment_close_exit"
+            app:launchSingleTop="true"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+    </fragment>
 
     <fragment
         android:id="@+id/explore_by_role"
@@ -383,8 +392,7 @@
     <fragment
         android:id="@+id/loginSuccessfulFragment"
         android:name="com.gigforce.app.modules.auth.ui.main.LoginSuccessfulFragment"
-        android:label="OnOTPSuccess">
-    </fragment>
+        android:label="OnOTPSuccess"></fragment>
     <fragment
         android:id="@+id/locationFragment"
         android:name="com.gigforce.app.modules.preferences.location.LocationFragment"

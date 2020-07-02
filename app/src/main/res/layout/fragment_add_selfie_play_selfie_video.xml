@@ -10,6 +10,7 @@
         android:id="@+id/selfieVideoPlayerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        app:show_buffering="always"
         app:controller_layout_id="@layout/fragment_add_selfie_play_selfie_video_controls"
         tools:context=".modules.gigerVerfication.panCard.AddPanCardInfoFragment" />
 

@@ -66,7 +66,7 @@ class AddBankDetailsInfoFragment : BaseFragment(), SelectImageSourceBottomSheetA
         }
 
         passbookImageHolder.uploadImageLayout.imageLabelTV.text =
-            getString(R.string.upload_bank_passbook)
+            "Bank Passbook (Front Page)"
 
         passbookAvailaibilityOptionRG.setOnCheckedChangeListener { _, checkedId ->
             passbookSubmitSliderBtn.resetSlider()
