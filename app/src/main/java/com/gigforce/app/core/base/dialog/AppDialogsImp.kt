@@ -2,13 +2,16 @@ package com.gigforce.app.core.base.dialog
 
 import android.app.Activity
 import android.app.Dialog
-import android.content.res.Resources
 import android.util.DisplayMetrics
 import android.view.View
 import android.view.Window
+import android.widget.RadioButton
+import android.widget.RadioGroup
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.gigforce.app.R
+import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.fragment_select_language.*
 
 open class AppDialogsImp(var activity: Activity) : AppDialogsInterface {
 
@@ -83,7 +86,7 @@ open class AppDialogsImp(var activity: Activity) : AppDialogsInterface {
     override fun showConfirmationDialogType4(
         title: String,
         subTitle:String,
-        buttonClickListener: ConfirmationDialogOnClickListener
+        optionSelected: OptionSelected
     ) {
         var customialog: Dialog? = activity?.let { Dialog(it) }
         customialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -93,11 +96,23 @@ open class AppDialogsImp(var activity: Activity) : AppDialogsInterface {
         titleDialog.text = title
         val subTitleDialog = customialog?.findViewById(R.id.sub_title) as TextView
         subTitleDialog.text = subTitle
+        val groupRadio = customialog?.findViewById<RadioGroup>(R.id.groupradio)
         val yesBtn = customialog?.findViewById(R.id.yes) as TextView
         yesBtn.setOnClickListener(View.OnClickListener {
-            buttonClickListener.clickedOnYes(customialog)
+            optionSelected.optionSelected(customialog,getOptionSelected(groupRadio))
         })
         customialog?.show()
+    }
+
+    fun getOptionSelected(groupradio:RadioGroup):String{
+        val selectedId = groupradio.checkedRadioButtonId
+        if (selectedId == -1) {
+            return ""
+        } else {
+            val radioButton = groupradio.findViewById<RadioButton>(selectedId)
+            val lang = radioButton.hint.toString()
+            return lang
+        }
     }
 
 }

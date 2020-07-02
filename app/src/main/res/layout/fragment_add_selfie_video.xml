@@ -63,51 +63,20 @@
         app:layout_constraintEnd_toStartOf="@+id/helpIconIV"
         app:layout_constraintTop_toBottomOf="@id/appBar" />
 
-    <RelativeLayout
-        android:id="@+id/cameraViewContainer"
+
+    <FrameLayout
+        android:id="@+id/selfieVideoAndPlayContainer"
         android:layout_width="match_parent"
-        android:layout_height="278dp"
+        android:layout_height="280dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="37dp"
         android:layout_marginEnd="16dp"
+        android:orientation="vertical"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/selfieVideoLabel">
 
-        <com.otaliastudios.cameraview.CameraView
-            android:id="@+id/cameraView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:keepScreenOn="true"
-            android:orientation="vertical"
-            app:cameraAudio="off"
-            app:cameraAutoFocusMarker="@string/cameraview_default_autofocus_marker"
-            app:cameraEngine="camera2"
-            app:cameraExperimental="true"
-            app:cameraFacing="front"
-            app:cameraFlash="auto"
-            app:cameraGestureTap="autoFocus"
-            app:cameraGrid="off"
-            app:cameraMode="picture"
-            app:cameraPreview="glSurface" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="36dp"
-            android:gravity="center"
-            android:layout_alignParentBottom="true"
-            android:background="#51000000">
-
-            <ImageView
-                android:layout_width="35dp"
-                android:src="@drawable/ic_record"
-                android:scaleX="0.7"
-                android:scaleY="0.7"
-                android:layout_height="35dp" />
-            
-        </LinearLayout>
-    </RelativeLayout>
-
+    </FrameLayout>
 
     <com.ncorti.slidetoact.SlideToActView
         android:id="@+id/selfieVideoSubmitSliderBtn"

@@ -18,17 +18,24 @@ class ProfileNavBar: LinearLayout {
         View.inflate(context, R.layout.profile_nav_bar, this)
 
         about_me.setOnClickListener {
-            findNavController().popBackStack(R.id.aboutExpandedFragment, true)
+            clearAllFragment()
             findNavController().navigate(R.id.aboutExpandedFragment)
         }
         education.setOnClickListener {
-            findNavController().popBackStack(R.id.educationExpandedFragment, true)
+            clearAllFragment()
             findNavController().navigate(R.id.educationExpandedFragment)
         }
         experience.setOnClickListener {
-            findNavController().popBackStack(R.id.experienceExpandedFragment, true)
+            clearAllFragment()
             findNavController().navigate(R.id.experienceExpandedFragment)
         }
+    }
+
+    fun clearAllFragment(){
+        findNavController().popBackStack(R.id.aboutExpandedFragment, true)
+        findNavController().popBackStack(R.id.educationExpandedFragment, true)
+        findNavController().popBackStack(R.id.experienceExpandedFragment, true)
+
     }
 
     var about_me_active: Boolean = false

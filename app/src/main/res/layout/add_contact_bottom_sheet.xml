@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_bottom_sheet">
+    android:background="@drawable/bottom_up_sheet">
 
     <TextView
         android:id="@+id/textView22"

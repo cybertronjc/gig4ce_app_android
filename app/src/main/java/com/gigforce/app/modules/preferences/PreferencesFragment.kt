@@ -9,6 +9,7 @@ import android.view.Window
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,7 +19,7 @@ import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.app.core.genericadapter.RecyclerGenericAdapter
 import com.gigforce.app.utils.GlideApp
-import com.gigforce.app.core.base.setDarkStatusBarTheme
+import com.gigforce.app.core.setDarkStatusBarTheme
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
@@ -53,7 +54,10 @@ class PreferencesFragment : BaseFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         this.setDarkStatusBarTheme(false)
-        viewModel = ViewModelProvider(this).get(SharedPreferenceViewModel::class.java)
+//        viewModel = ViewModelProvider(this).get(SharedPreferenceViewModel::class.java)
+        viewModel = ViewModelProvider(this, ParameterizedSharedPreferenceVM(configDataModel)).get(
+            SharedPreferenceViewModel::class.java
+        )
         initializeViews()
         listener()
         observePreferenceData()
@@ -68,6 +72,9 @@ class PreferencesFragment : BaseFragment() {
 
     }
 
+    override fun isConfigRequired(): Boolean {
+        return true
+    }
     private fun displayImage(profileImg: String) {
         if (profileImg != null && !profileImg.equals("")) {
             val profilePicRef: StorageReference =
@@ -127,6 +134,9 @@ class PreferencesFragment : BaseFragment() {
                 viewModel.setPreferenceDataModel(preferenceData)
                 setPreferenecesList()
             }
+            else if(configDataModel==null){
+                    showToast("Config data not loaded!!")
+                }
         })
     }
 
@@ -225,7 +235,8 @@ class PreferencesFragment : BaseFragment() {
 //        titleDialog?.text = "Missing out on gigs?"
         val title = dialog?.findViewById(R.id.title) as TextView
         title.text =
-            "You'll miss out on updates on upcoming gigs around you if you sign out."
+            "Are you sure?\n" +
+                    "Signing out means missing out on gigs around you."
         val yesBtn = dialog.findViewById(R.id.yes) as TextView
         val noBtn = dialog.findViewById(R.id.cancel) as TextView
         yesBtn.setOnClickListener {

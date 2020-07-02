@@ -19,13 +19,13 @@ import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.base.dialog.ConfirmationDialogOnClickListener
 import com.gigforce.app.modules.preferences.SharedPreferenceViewModel
 import kotlinx.android.synthetic.main.earning_fragment.*
+import kotlinx.android.synthetic.main.fragment_select_language.*
 
 class EarningFragment : BaseFragment() {
 
     companion object {
         fun newInstance() = EarningFragment()
     }
-
     private lateinit var viewModel: SharedPreferenceViewModel
     private var earningDataModel : EarningDataModel = EarningDataModel()
     override fun onCreateView(
@@ -54,15 +54,14 @@ class EarningFragment : BaseFragment() {
 
     private fun listener() {
         back_arrow_iv.setOnClickListener{
-            this.onBackPressed()
+            activity?.onBackPressed()
         }
         perDayGoalSB.setOnSeekBarChangeListener(object:SeekBar.OnSeekBarChangeListener{
             override fun onProgressChanged(seekBar:SeekBar, progress:Int, fromUser:Boolean) {
                 val value = (progress * (seekBar.getWidth() - 2 * seekBar.getThumbOffset())) / seekBar.getMax()
                 seekBarDependentCanvas2.text =  "Rs "+progress.toString()
-                seekBarDependentCanvas2.setX(seekBar.getX() + value + seekBar.getThumbOffset() / 2)
+                seekBarDependentCanvas2.setX((seekBar.getX() + value + seekBar.getThumbOffset() / 2)-35)
                 dailyGoalsTV.text = "Rs 0 - Rs "+progress
-
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
@@ -75,7 +74,7 @@ class EarningFragment : BaseFragment() {
             override fun onProgressChanged(seekBar:SeekBar, progress:Int, fromUser:Boolean) {
                 val value = (progress * (seekBar.getWidth() - 2 * seekBar.getThumbOffset())) / seekBar.getMax()
                 seekBarDependentCanvas3.text =  "Rs "+progress.toString()
-                seekBarDependentCanvas3.setX(seekBar.getX() + value + seekBar.getThumbOffset() / 2)
+                seekBarDependentCanvas3.setX((seekBar.getX() + value + seekBar.getThumbOffset() / 2)-35)
                 monthlyGoalsTV.text = "Rs 0 - Rs "+progress
             }
 
@@ -89,7 +88,7 @@ class EarningFragment : BaseFragment() {
             override fun onProgressChanged(seekBar:SeekBar, progress:Int, fromUser:Boolean) {
                 val value = (progress * (seekBar.getWidth() - 2 * seekBar.getThumbOffset())) / seekBar.getMax()
                 seekBarDependentCanvas4.text =  "Rs "+progress.toString()
-                seekBarDependentCanvas4.setX(seekBar.getX() + value + seekBar.getThumbOffset() / 2)
+                seekBarDependentCanvas4.setX((seekBar.getX() + value + seekBar.getThumbOffset() / 2)-35)
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
@@ -99,8 +98,11 @@ class EarningFragment : BaseFragment() {
             }
         })
         checkbox_monthly_constract.setOnCheckedChangeListener{buttonview,ischecked->
-            if(ischecked)
-            monthly_expectation_constraintlayout.visibility = View.VISIBLE
+            if(ischecked) {
+                monthly_expectation_constraintlayout.visibility = View.VISIBLE
+                monthlyExpectationSB.setProgress(0)
+                monthlyExpectationSB.setProgress(viewModel.getPreferenceDataModel().earning.monthlyExpectation)
+            }
             else
                 monthly_expectation_constraintlayout.visibility = View.GONE
         }
@@ -127,12 +129,14 @@ class EarningFragment : BaseFragment() {
     }
 
     override fun onBackPressed(): Boolean {
-        confirmationForSavingData()
-        return true
+        if(isDataChanged()) {
+            confirmationForSavingData()
+            return true
+        }else return false
     }
 
     private fun confirmationForSavingData() {
-        showConfirmationDialogType2("Are sure you want to change prefrences ?",
+        showConfirmationDialogType2("Are sure you want to change preferences ?",
             object :ConfirmationDialogOnClickListener{
                 override fun clickedOnYes(dialog: Dialog?) {
                     saveDataToDB()
@@ -147,7 +151,23 @@ class EarningFragment : BaseFragment() {
 
             })
     }
-
+    fun isDataChanged():Boolean{
+        if(viewModel.getPreferenceDataModel().earning.preferredNoOfDays != selected_pre_no_of_days.text.toString().split(" ")[0])
+            return true
+        if(viewModel.getPreferenceDataModel().earning.perDayGoal != perDayGoalSB.progress){
+            return true
+        }
+        if(viewModel.getPreferenceDataModel().earning.perMonthGoal != permonthGoalSB.progress){
+            return true
+        }
+        if(viewModel.getPreferenceDataModel().earning.monthlyContractRequired != checkbox_monthly_constract.isChecked){
+            return true
+        }
+        if(viewModel.getPreferenceDataModel().earning.monthlyExpectation != monthlyExpectationSB.progress){
+            return true
+        }
+        return false
+    }
     private fun saveDataToDB() {
         earningDataModel.preferredNoOfDays = selected_pre_no_of_days.text.toString().split(" ")[0]
         earningDataModel.perDayGoal = perDayGoalSB.progress
@@ -166,6 +186,7 @@ class EarningFragment : BaseFragment() {
         val okay = customialog?.findViewById(R.id.okay) as TextView
         okay.setOnClickListener (View.OnClickListener {
             customialog.dismiss()
+//            activity?.onBackPressed()
             popFragmentFromStack(R.id.earningFragment)
         })
         customialog?.show()
@@ -175,9 +196,10 @@ class EarningFragment : BaseFragment() {
         var customialog:Dialog? = activity?.let { Dialog(it) }
         customialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
         customialog?.getWindow()?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT));
-        customialog?.setCancelable(false)
+//        customialog?.setCancelable(false)
         customialog?.setContentView(R.layout.custom_alert_2)
         var radioGroup = customialog?.findViewById(R.id.radio_group) as RadioGroup;
+        setPreferenceNoOfDays(radioGroup)
         radioGroup?.setOnCheckedChangeListener(
             RadioGroup.OnCheckedChangeListener { group, checkedId ->
                 val radioButton = radioGroup.findViewById<RadioButton>(checkedId)
@@ -188,6 +210,16 @@ class EarningFragment : BaseFragment() {
             showToast("working")
         }
         customialog?.show()
+    }
+
+    private fun setPreferenceNoOfDays(radioGroup: RadioGroup) {
+        when(selected_pre_no_of_days.text){
+            "00-04 Days" -> radioGroup.findViewById<RadioButton>(R.id.zeroToFour).isChecked = true
+            "04-08 Days" -> radioGroup.findViewById<RadioButton>(R.id.fourToEight).isChecked = true
+            "08-15 Days" -> radioGroup.findViewById<RadioButton>(R.id.eightToFifteen).isChecked = true
+            "15-30 Days" -> radioGroup.findViewById<RadioButton>(R.id.fifteenToThirty).isChecked = true
+        }
+
     }
 
 }

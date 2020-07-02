@@ -39,7 +39,7 @@
         android:textColor="#1d1d1d"
         android:letterSpacing="0"
         android:layout_marginTop="12dp"
-        android:text="New prefrences  has been set !!"
+        android:text="New preferences  has been set"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView92" />

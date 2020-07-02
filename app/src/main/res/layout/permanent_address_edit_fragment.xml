@@ -143,13 +143,13 @@
 
         <TextView
             android:id="@+id/textView90"
-            android:layout_width="316dp"
+            android:layout_width="0dp"
             android:layout_height="33dp"
             android:layout_marginLeft="6dp"
-            android:textSize="12sp"
-            android:textColor="#181717"
             android:letterSpacing="0.04"
             android:text="To Update Permanent address , you have to upload new address proofs. Click Here  "
+            android:textColor="#181717"
+            android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="@+id/imageView27"
             app:layout_constraintEnd_toEndOf="@+id/pincode"
             app:layout_constraintStart_toEndOf="@+id/imageView27"

@@ -15,9 +15,15 @@ class WalletBalanceCard: MaterialCardView {
         View.inflate(context, R.layout.wallet_balance_card_component, this)
     }
 
-    var balance: Int = 0
+    var balance: Float = 0F
         set(value) {
             field = value
-            amount.text = "Rs $value"
+            val wholePart = value.toInt()
+            val fractionPart = value - wholePart
+            if (fractionPart == 0F) {
+                amount.text = String.format("Rs %d", wholePart)
+            } else {
+                amount.text = String.format("Rs %.2f", value)
+            }
         }
 }

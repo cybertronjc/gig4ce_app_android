@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cameraViewContainer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.otaliastudios.cameraview.CameraView
+        android:id="@+id/cameraView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:keepScreenOn="true"
+        android:orientation="vertical"
+        app:cameraAudio="on"
+        app:cameraAutoFocusMarker="@string/cameraview_default_autofocus_marker"
+        app:cameraEngine="camera2"
+        app:cameraExperimental="true"
+        app:cameraFacing="front"
+        app:cameraFlash="auto"
+        app:cameraGestureTap="autoFocus"
+        app:cameraMode="video"
+        app:cameraPlaySounds="true"
+        app:cameraPreview="glSurface"
+        app:elevation="5dp" />
+
+    <LinearLayout
+        android:id="@+id/cameraControlsLayout"
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:layout_alignParentBottom="true"
+        android:background="#51000000"
+        android:gravity="center">
+
+        <ImageButton
+            android:id="@+id/recordVideoButton"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:scaleX="0.7"
+            android:scaleY="0.7"
+            android:src="@drawable/ic_record" />
+
+    </LinearLayout>
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/cameraControlsLayout"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="7dp"
+        app:cardBackgroundColor="#51000000"
+        app:cardCornerRadius="8dp">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="8dp">
+
+            <ImageView
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:background="#51000000"
+                android:src="@drawable/ic_record" />
+
+            <TextView
+                android:id="@+id/countDownTimerTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:background="#51000000"
+                android:fontFamily="@font/lato"
+                android:textColor="@color/white"
+                android:textSize="12sp" />
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+
+</RelativeLayout>

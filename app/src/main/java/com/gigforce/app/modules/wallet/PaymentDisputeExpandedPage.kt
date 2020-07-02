@@ -34,6 +34,7 @@ class PaymentDisputeExpandedPage: WalletBaseFragment() {
         }
 
         back_button.setOnClickListener { requireActivity().onBackPressed() }
+        help_ic.setOnClickListener { navigate(R.id.helpExpandedPage) }
     }
 }
 

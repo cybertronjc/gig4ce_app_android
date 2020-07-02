@@ -20,7 +20,7 @@
             android:id="@+id/title_calendar_action_item"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Marked Unavailable"
+            android:text="Marked not working"
             android:layout_marginLeft="14dp"
             android:textColor="#e02020"
             android:textSize="12sp"

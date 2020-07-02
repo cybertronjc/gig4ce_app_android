@@ -40,11 +40,16 @@ class DayTimeFragment : BaseFragment() {
 
     private fun observePreferenceData() {
         viewModel.preferenceDataModel.observe(viewLifecycleOwner, Observer { preferenceData ->
-            viewModel.setPreferenceDataModel(preferenceData)
-            initializeViews()
+            if(preferenceData!=null) {
+                viewModel.setPreferenceDataModel(preferenceData)
+                initializeViews()
+            }
         })
     }
 
+    override fun isConfigRequired(): Boolean {
+        return true
+    }
     private fun initializeViews() {
         preferencesDataModel = viewModel.getPreferenceDataModel()
         workFromHomeSwitch.setChecked(preferencesDataModel.isweekdaysenabled)
