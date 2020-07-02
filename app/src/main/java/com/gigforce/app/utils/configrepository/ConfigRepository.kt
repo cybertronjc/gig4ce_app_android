@@ -11,14 +11,14 @@ class ConfigRepository : BaseFirestoreDBRepository {
     var CUSTOMUID = "N9EzW0SOAhOLVI1oA9Pu"
 
     companion object {
-        private var configrepositoryObj: ConfigRepository? = null;
+//        private var configrepositoryObj: ConfigRepository? = null;
         private var documentReference:DocumentReference?=null
-        fun getInstance(): ConfigRepository? {
-            if (configrepositoryObj == null) configrepositoryObj =
-                ConfigRepository()
-
-            return configrepositoryObj
-        }
+//        fun getInstance(): ConfigRepository? {
+//            if (configrepositoryObj == null) configrepositoryObj =
+//                ConfigRepository()
+//
+//            return configrepositoryObj
+//        }
     }
 
     var configLiveDataModel: MutableLiveData<ConfigDataModel> = MutableLiveData<ConfigDataModel>()

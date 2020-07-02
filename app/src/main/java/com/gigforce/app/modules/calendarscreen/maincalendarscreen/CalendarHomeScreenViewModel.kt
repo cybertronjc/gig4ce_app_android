@@ -99,14 +99,17 @@ class CalendarHomeScreenViewModel : ViewModel() {
         var datalist: ArrayList<VerticalCalendarDataItemModel> =
             ArrayList<VerticalCalendarDataItemModel>()
         var calendar: Calendar = Calendar.getInstance();
+        var temp:Int = -1
         if (dataItem != null) {
             calendar.set(Calendar.YEAR, dataItem.year);
             calendar.set(Calendar.MONTH, dataItem.month);
+            temp = calendar.get(Calendar.MONTH)
             calendar.set(Calendar.DATE, dataItem.date + 1)
         }
-        calendar.time
-        var temp: Int = calendar.get(Calendar.MONTH)
+        else{
+            temp = calendar.get(Calendar.MONTH)
 
+        }
         for (x in 0..60) {
             if ((calendar.get(Calendar.MONTH) - temp) != 0) {
                 if (isPreviousDay) {

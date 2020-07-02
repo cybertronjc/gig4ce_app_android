@@ -14,7 +14,8 @@ class VerticalCalendarDataItemModel (
     val month : Int,
     val date: Int,
     val monthStr:String,
-    var isUnavailable:Boolean = false
+    var isUnavailable:Boolean = false,
+    var reason:String = ""
 ){
     companion object {
         fun getMonthObject(calendar:Calendar):VerticalCalendarDataItemModel{

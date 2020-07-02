@@ -7,6 +7,7 @@ import android.widget.GridView
 import android.widget.LinearLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
+import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SnapHelper
 import com.gigforce.app.R
 import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
@@ -24,15 +25,29 @@ class CalendarView : LinearLayout {
         initControl(context);
     }
 
+    companion object {
+        lateinit var changedMonthModelListener: MonthChangeListener
+        var calendarData = Calendar.getInstance()
+    }
+
+    lateinit var recyclerGenericAdapter: RecyclerGenericAdapter<MonthModel>
+
     private fun initControl(context: Context?) {
         val inflater =
             context?.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         inflater.inflate(R.layout.calendar_view_layout, this)
-        // layout is inflated, assign local variables to components
+        calendarData.set(Calendar.DATE, 1)
         initializeGridView()
     }
 
-    lateinit var recyclerGenericAdapter: RecyclerGenericAdapter<MonthModel>
+
+    fun setMonthChangeListener(changedMonthModelListener1: MonthChangeListener) {
+        changedMonthModelListener = changedMonthModelListener1
+    }
+
+    open interface MonthChangeListener {
+        fun onMonthChange(monthModel: MonthModel)
+    }
 
     private fun initializeGridView() {
         recyclerGenericAdapter =
@@ -55,125 +70,119 @@ class CalendarView : LinearLayout {
         calendar_rv.adapter = recyclerGenericAdapter
         var linearSnapHelper: SnapHelper = PagerSnapHelper()
         linearSnapHelper.attachToRecyclerView(calendar_rv)
+        var scrollListener = object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                var currentVisiblePosition =
+                    (calendar_rv.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+                changedMonthModelListener.onMonthChange(
+                    recyclerGenericAdapter.list.get(
+                        currentVisiblePosition
+                    )
+                )
+
+            }
+
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+            }
+        }
+        calendar_rv.addOnScrollListener(scrollListener)
     }
 
     class MonthModel {
         var year: Int = -1
         var currentMonth: Int = -1
-        lateinit var days: ArrayList<DayModel>
+        var days = ArrayList<DayModel>()
     }
 
     class DayModel {
         var date: Int = -1
         var month: Int = -1
         var year: Int = -1
+        var currentMonth: Int = -1
     }
 
     private fun getDefaultItems(): ArrayList<MonthModel>? {
         var arrlist = ArrayList<MonthModel>()
-        arrlist.add(getCurrentMonthData())
-        arrlist.add(getNextMonthData(arrlist.get(arrlist.size - 1)))
-        arrlist.add(getNextMonthData(arrlist.get(arrlist.size - 1)))
-        arrlist.add(getNextMonthData(arrlist.get(arrlist.size - 1)))
-        arrlist.add(getNextMonthData(arrlist.get(arrlist.size - 1)))
-        arrlist.add(getNextMonthData(arrlist.get(arrlist.size - 1)))
-        arrlist.add(getNextMonthData(arrlist.get(arrlist.size - 1)))
-        arrlist.add(getNextMonthData(arrlist.get(arrlist.size - 1)))
-        arrlist.add(getNextMonthData(arrlist.get(arrlist.size - 1)))
-        arrlist.add(getNextMonthData(arrlist.get(arrlist.size - 1)))
-        arrlist.add(getNextMonthData(arrlist.get(arrlist.size - 1)))
-
+        arrlist.add(getMonthData())
+        arrlist.add(getMonthData())
+        arrlist.add(getMonthData())
+        arrlist.add(getMonthData())
+        arrlist.add(getMonthData())
+        arrlist.add(getMonthData())
+        arrlist.add(getMonthData())
+        arrlist.add(getMonthData())
+        arrlist.add(getMonthData())
+        arrlist.add(getMonthData())
+        arrlist.add(getMonthData())
+        arrlist.add(getMonthData())
+        arrlist.add(getMonthData())
+        arrlist.add(getMonthData())
+        arrlist.add(getMonthData())
+        arrlist.add(getMonthData())
         return arrlist
     }
 
-    private fun getNextMonthData(lastMonthModel: MonthModel): MonthModel {
+    private fun getMonthData(): MonthModel {
         var model = MonthModel()
-        var calendar: Calendar = Calendar.getInstance();
-        calendar.set(Calendar.MONTH, lastMonthModel.currentMonth + 1)
-        model.currentMonth = calendar.get(Calendar.MONTH)
-        model.year = calendar.get(Calendar.YEAR)
-        model.days = getDays(lastMonthModel)
+        model.currentMonth = calendarData.get(Calendar.MONTH)
+        model.year = calendarData.get(Calendar.YEAR)
+        model.days = getDays()
+        setNextMonthCalendar()
         return model
     }
 
-    private fun getDays(lastMonthModel: MonthModel): ArrayList<DayModel> {
-        var arrListDays = ArrayList<DayModel>()
-        arrListDays.addAll(
-            lastMonthModel.days.subList(
-                lastMonthModel.days.size - 7,
-                lastMonthModel.days.size
-            )
-        )
-        for (x in arrListDays.get(arrListDays.size - 1).date + 1..getLastDateOfCurrentMonth(
-            lastMonthModel.currentMonth + 1
-        )) {
-            var dayModel = DayModel()
-            dayModel.date = x
-            dayModel.month = lastMonthModel.currentMonth + 1
-            dayModel.year = lastMonthModel.year
-            arrListDays.add(dayModel)
-        }
-        for (x in 1..(35 - arrListDays.size)) {
-            var dayModel = DayModel()
-            dayModel.date = x
-            dayModel.month = lastMonthModel.currentMonth + 1
-            dayModel.year = lastMonthModel.year
-            arrListDays.add(dayModel)
-        }
-        return arrListDays
+    private fun setNextMonthCalendar() {
+        calendarData.add(Calendar.MONTH, 1)
     }
 
-    private fun getCurrentMonthData(): MonthModel {
-        var model = MonthModel()
-        var calendar: Calendar = Calendar.getInstance();
-        model.currentMonth = calendar.get(Calendar.MONTH)
-        model.year = calendar.get(Calendar.YEAR)
-        model.days = getDays(model.currentMonth, model.year)
-        return model
-    }
-
-    private fun getDays(currentMonth: Int, year: Int): ArrayList<DayModel> {
+    private fun getDays(): ArrayList<DayModel> {
         var arrListDays = ArrayList<DayModel>()
-        var calendar: Calendar = Calendar.getInstance();
-        calendar.set(Calendar.MONTH, currentMonth)
-        calendar.set(Calendar.DATE, 1)
-        var dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK)
+        var dayOfWeek = calendarData.get(Calendar.DAY_OF_WEEK)
         var startingDayOfWeek = getStartingDayOfWeek(dayOfWeek)
-        for (x in getLastDateOfLastMonth(calendar) downTo getLastDateOfLastMonth(calendar) - startingDayOfWeek + 1) {
+        var lastMonth = getLastMonth()
+        for (x in lastMonth.getActualMaximum(Calendar.DATE) downTo lastMonth.getActualMaximum(
+            Calendar.DATE
+        ) - startingDayOfWeek + 1) {
             var dayModel = DayModel()
             dayModel.date = x
-            dayModel.month = currentMonth
-            dayModel.year = year
+            dayModel.month = lastMonth.get(Calendar.MONTH)
+            dayModel.year = lastMonth.get(Calendar.YEAR)
+            dayModel.currentMonth = calendarData.get(Calendar.MONTH)
             arrListDays.add(0, dayModel)
         }
-        for (x in 1..calendar.getActualMaximum(Calendar.DATE)) {
+        for (x in 1..calendarData.getActualMaximum(Calendar.DATE)) {
             var dayModel = DayModel()
             dayModel.date = x
-            dayModel.month = currentMonth
-            dayModel.year = year
+            dayModel.month = calendarData.get(Calendar.MONTH)
+            dayModel.year = calendarData.get(Calendar.YEAR)
+            dayModel.currentMonth = calendarData.get(Calendar.MONTH)
             arrListDays.add(dayModel)
         }
 //        for (x in 1..(7 - (arrListDays.size % 7))) {
-        for (x in 1..(35 - arrListDays.size)) {
+        var nextMonth = getNextMonth()
+        for (x in 1..(42 - arrListDays.size)) {
             var dayModel = DayModel()
             dayModel.date = x
-            dayModel.month = currentMonth + 1
-            dayModel.year = year
+            dayModel.month = nextMonth.get(Calendar.MONTH)
+            dayModel.year = nextMonth.get(Calendar.YEAR)
+            dayModel.currentMonth = calendarData.get(Calendar.MONTH)
             arrListDays.add(dayModel)
         }
         return arrListDays
     }
 
-    private fun getLastDateOfLastMonth(calendar: Calendar): Int {
+    private fun getNextMonth(): Calendar {
         var calendar1: Calendar = Calendar.getInstance();
-        calendar1.set(Calendar.MONTH, calendar.get(Calendar.MONTH) - 1)
-        return calendar1.getActualMaximum(Calendar.DATE)
+        calendar1.set(Calendar.MONTH, calendarData.get(Calendar.MONTH) + 1)
+        return calendar1
     }
 
-    private fun getLastDateOfCurrentMonth(month: Int): Int {
+    private fun getLastMonth(): Calendar {
         var calendar1: Calendar = Calendar.getInstance();
-        calendar1.set(Calendar.MONTH, month)
-        return calendar1.getActualMaximum(Calendar.DATE)
+        calendar1.set(Calendar.MONTH, calendarData.get(Calendar.MONTH) - 1)
+        return calendar1
     }
 
     fun getStartingDayOfWeek(dayofweek: Int): Int {

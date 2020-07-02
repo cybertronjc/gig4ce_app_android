@@ -140,14 +140,16 @@
 
     <TextView
         android:id="@+id/textView66"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="67dp"
         android:layout_marginTop="4dp"
+        android:letterSpacing="0"
         android:text="10:00 am"
         android:textColor="@color/gray_color"
         android:textSize="10sp"
-        android:letterSpacing="0"
+        android:layout_marginRight="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/textView64"
         app:layout_constraintTop_toBottomOf="@+id/textView65" />
 
