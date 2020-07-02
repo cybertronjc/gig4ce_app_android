@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_bottom_sheet">
+    android:background="@drawable/bottom_up_sheet">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -100,6 +100,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
                 app:strokeColor="@color/colorPrimary"
+                android:textColor="@color/colorPrimary"
                 style="?attr/materialButtonOutlinedStyle"  />
         </LinearLayout>
     </LinearLayout>

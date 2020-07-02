@@ -37,6 +37,7 @@ class MonthlyGraphCard: MaterialCardView {
     ))
 
     var month: MutableLiveData<String> = MutableLiveData("June")
+    var monthYear: MutableLiveData<String> = MutableLiveData("June 2020")
 
     init {
         View.inflate(context, R.layout.monthly_graph_card, this)
