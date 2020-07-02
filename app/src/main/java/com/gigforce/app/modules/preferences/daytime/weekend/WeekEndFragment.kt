@@ -47,12 +47,22 @@ class WeekEndFragment : BaseFragment() {
             initializeViews()
         })
     }
-
+    override fun isConfigRequired(): Boolean {
+        return true
+    }
     private fun initializeViews() {
         viewDataModel = viewModel.getPreferenceDataModel()
         switch3.setChecked(viewDataModel.isweekendenabled)
         textView62.text = getArrayToString(viewDataModel.selectedweekends)
-        textView66.text = getArrayToString(viewDataModel.selectedweekendslots)
+//        textView66.text = getArrayToString(viewDataModel.selectedweekendslots)
+        var selectedStrForSubtitle = getArrayToString(
+            viewModel.getSelectedSlotsToShow(
+                configDataModel,
+                viewDataModel.selectedweekendslots
+            )
+        )
+        textView66.text = selectedStrForSubtitle
+
         if (viewDataModel.isweekendenabled) {
             setTextViewColor(textView61, R.color.black)
             setTextViewColor(textView65, R.color.black)
@@ -115,7 +125,7 @@ class WeekEndFragment : BaseFragment() {
         val indexItem = arrayOf(0, 1, 2)
         var isSectionSelected = BooleanArray(items.size)
         var selectedList = ArrayList<Int>()
-        val builder = AlertDialog.Builder(activity)
+        val builder = AlertDialog.Builder(activity,R.style.MultiSelectDialogStyle)
         builder.setTitle("Days")
         for (i in 0..items.size - 1) {
             var isfound = false
@@ -194,41 +204,36 @@ class WeekEndFragment : BaseFragment() {
         builder.show()
     }
 
-    private fun setAllDaysEnabled(v: ListView, size: Int) {
-        for (i in 0..size - 1) {
-            v.setItemChecked(i, true)
-        }
-    }
+
 
     fun showSlotsAlert() {
-        val items = arrayOf(
-            "All",
-            "06:00 am - 10:00 am",
-            "10:00 am - 12:00 pm",
-            "12:00 pm - 06:00 pm",
-            "06:00 pm - 09:00 pm",
-            "09:00 pm - 12:00 pm",
-            "12:00 am - 03:00 am"
-        )
-        val indexItem = arrayOf(0, 1, 2, 3, 4, 5, 6)
+        val slots = viewModel.getAllSlotsToShow(configDataModel)
+        val items = slots.toTypedArray()
+        val indexItem = (0..slots.size - 1).toList().toTypedArray()
         val isSectionSelected = BooleanArray(items.size)
         val selectedList = ArrayList<Int>()
-        val builder = AlertDialog.Builder(activity)
+        val builder = AlertDialog.Builder(activity,R.style.MultiSelectDialogStyle)
         builder.setTitle("Slots")
         for (i in 0..items.size - 1) {
             var isfound = false
-            for (day in viewDataModel.selectedweekendslots) {
-                if (items[i].equals(day)) {
-                    isSectionSelected[i] = true
-                    isfound = true
-                    selectedList.add(i)
-                    break
+            if(i==0 && items.size==(viewDataModel.selectedweekendslots.size+1)){
+                isfound=true
+                isSectionSelected[i] = true
+                selectedList.add(0)
+            } else
+                for (day in viewDataModel.selectedweekendslots) {
+                    if (indexItem[i].toString().equals(day)) {
+                        isSectionSelected[i] = true
+                        isfound = true
+                        selectedList.add(i)
+                        break
+                    }
                 }
-            }
             if (!isfound) {
                 isSectionSelected[i] = false
             }
         }
+
         builder.setMultiChoiceItems(
             items, isSectionSelected
         ) { dialog, which, isChecked ->
@@ -251,7 +256,8 @@ class WeekEndFragment : BaseFragment() {
 
             } else if (isChecked) {
                 selectedList.add(which)
-                if (selectedList.size == 6) {
+                // if only first option is left to be select
+                if (selectedList.size == items.size - 1) {
                     selectedList.add(0)
                     v.setItemChecked(0, true)
                 }
@@ -270,15 +276,21 @@ class WeekEndFragment : BaseFragment() {
         }
 
         builder.setPositiveButton("DONE") { dialogInterface, i ->
-            val selectedStrings = ArrayList<String>()
-
+            val selectedItemsForDB = ArrayList<String>()
+            val selectedItemForView = ArrayList<String>()
             for (j in selectedList.indices) {
-                selectedStrings.add(items[selectedList[j]])
+                selectedItemForView.add(items[selectedList[j]])
             }
+            selectedItemsForDB.addAll(
+                viewModel.getSelectedSlotsIds(
+                    selectedList,
+                    configDataModel
+                )
+            )
+            viewModel.setWorkendSlots(selectedItemsForDB) //selectedString is array for DB
 
-            var selectedStr = getArrayToString(selectedStrings)
-            viewModel.setWorkendSlots(selectedStrings) //selectedString is array for DB
-            if (!selectedStr.equals("None")) {
+            var selectedStrForSubtitle = getArrayToString(selectedItemForView)
+            if (!selectedStrForSubtitle.equals("None")) {
                 if (ifWeekenddaysNotSelected()) {
                     showDaysAlert()
                 } else
@@ -286,7 +298,7 @@ class WeekEndFragment : BaseFragment() {
             } else {
                 viewModel.setIsWeekend(false)
             }
-            textView66.text = selectedStr
+            textView66.text = selectedStrForSubtitle
         }
         builder.setOnDismissListener { dialog -> initializeViews() }
         builder.show()

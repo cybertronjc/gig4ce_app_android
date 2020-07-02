@@ -39,7 +39,7 @@
         android:textSize="14sp"
         android:textColor="#3a3936"
         android:letterSpacing="0"
-        android:text="Mobile verification has successfully done."
+        android:text="Mobile verification is successfully done."
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView70" />

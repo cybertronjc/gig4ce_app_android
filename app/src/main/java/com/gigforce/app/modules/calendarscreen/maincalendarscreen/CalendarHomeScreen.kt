@@ -21,6 +21,7 @@ import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.base.components.CalendarView
 import com.gigforce.app.core.base.dialog.ConfirmationDialogOnClickListener
+import com.gigforce.app.core.base.dialog.OptionSelected
 import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.app.core.genericadapter.RecyclerGenericAdapter
 import com.gigforce.app.core.gone
@@ -62,6 +63,9 @@ class CalendarHomeScreen : BaseFragment(),
         return inflateView(R.layout.calendar_home_screen, inflater, container)
     }
 
+    override fun isConfigRequired(): Boolean {
+        return true
+    }
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -284,7 +288,7 @@ class CalendarHomeScreen : BaseFragment(),
                             }
                         } else {
                             if (obj!!.isUnavailable) {
-                                getTextView(viewHolder, R.id.title).text = "Unavailable"
+                                getTextView(viewHolder, R.id.title).text = "Not working"
                                 setTextViewColor(
                                     getTextView(viewHolder, R.id.title),
                                     R.color.gray_color_day_date_calendar
@@ -466,7 +470,7 @@ class CalendarHomeScreen : BaseFragment(),
             getTextView(viewHolder, R.id.title_calendar_action_item),
             R.color.action_layout_available_title
         )
-        getTextView(viewHolder, R.id.title_calendar_action_item).text = "Marked Available"
+        getTextView(viewHolder, R.id.title_calendar_action_item).text = "Marked working"
         getImageView(viewHolder, R.id.flash_icon).setImageResource(R.drawable.ic_flash_green)
     }
 
@@ -488,19 +492,21 @@ class CalendarHomeScreen : BaseFragment(),
                         override fun clickedOnYes(dialog: Dialog?) {
                             showConfirmationDialogType4(
                                 "Cancelling out on a gig !",
-                                "Please let us know your reason, to mark unavailable ?",
-                                object : ConfirmationDialogOnClickListener {
-                                    override fun clickedOnYes(dialog: Dialog?) {
-                                        temporaryData.isUnavailable = true
-                                        temporaryData.isGigAssign = false
-                                        temporaryData.title = "No gigs assigned"
-                                        recyclerGenericAdapter.notifyItemChanged(position)
-                                        dialog?.dismiss()
+                                "Please let us know your reason, to mark 'not Working' ?",
+                                object : OptionSelected {
+                                    override fun optionSelected(dialog: Dialog?, option: String) {
+                                        if(option.equals("")){
+                                            showToast("Please select one option.")
+                                        }else {
+                                            temporaryData.isUnavailable = true
+                                            temporaryData.isGigAssign = false
+                                            temporaryData.title = "No gigs assigned"
+                                            temporaryData.reason = option
+                                            recyclerGenericAdapter.notifyItemChanged(position)
+                                            dialog?.dismiss()
+                                        }
                                     }
 
-                                    override fun clickedOnNo(dialog: Dialog?) {
-                                        dialog?.dismiss()
-                                    }
                                 })
                             dialog?.dismiss()
                         }

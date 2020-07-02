@@ -18,6 +18,7 @@ import com.gigforce.app.R
 import com.gigforce.app.core.base.dialog.AppDialogsImp
 import com.gigforce.app.core.base.dialog.AppDialogsInterface
 import com.gigforce.app.core.base.dialog.ConfirmationDialogOnClickListener
+import com.gigforce.app.core.base.dialog.OptionSelected
 import com.gigforce.app.core.base.language.LanguageUtilImp
 import com.gigforce.app.core.base.language.LanguageUtilInterface
 import com.gigforce.app.core.base.navigation.NavigationImpl
@@ -56,7 +57,9 @@ open class BaseFragment : Fragment(), ViewsFromViewsInterface, NavigationInterfa
     open fun isConfigRequired(): Boolean {
         return false
     }
-
+    companion object{
+    var configDataModel: ConfigDataModel? = null
+    }
     open fun inflateView(
         resource: Int, inflater: LayoutInflater,
         container: ViewGroup?
@@ -101,15 +104,14 @@ open class BaseFragment : Fragment(), ViewsFromViewsInterface, NavigationInterfa
         }
     }
 
-    var configDataModel: ConfigDataModel? = null
     private fun configObserver() {
-        this.configrepositoryObj = ConfigRepository.getInstance()
-        this.configrepositoryObj?.configCollectionListener()
+        this.configrepositoryObj = ConfigRepository()//ConfigRepository.getInstance()
         this.configrepositoryObj?.configLiveDataModel?.observe(
             viewLifecycleOwner,
-            androidx.lifecycle.Observer { configDataModel ->
-                this.configDataModel = configDataModel
+            androidx.lifecycle.Observer { configDataModel1 ->
+                configDataModel = configDataModel1
             })
+        this.configrepositoryObj?.configCollectionListener()
     }
 
     open fun onBackPressed(): Boolean {
@@ -117,7 +119,7 @@ open class BaseFragment : Fragment(), ViewsFromViewsInterface, NavigationInterfa
     }
 
     override fun onDetach() {
-        if (languageUtilInterface.getDeviceLanguageDialog() != null) languageUtilInterface.getDeviceLanguageDialog()!!.dismiss()
+        if (this::languageUtilInterface.isInitialized && languageUtilInterface.getDeviceLanguageDialog() != null) languageUtilInterface.getDeviceLanguageDialog()!!.dismiss()
         super.onDetach()
     }
 
@@ -313,9 +315,9 @@ open class BaseFragment : Fragment(), ViewsFromViewsInterface, NavigationInterfa
     override fun showConfirmationDialogType4(
         title: String,
         subTitle: String,
-        buttonClickListener: ConfirmationDialogOnClickListener
+        optionSelected: OptionSelected
     ) {
-        appDialogsInterface.showConfirmationDialogType4(title,subTitle,buttonClickListener)
+        appDialogsInterface.showConfirmationDialogType4(title,subTitle,optionSelected)
     }
 
     override fun getLanguageCodeToName(languageCode: String): String {

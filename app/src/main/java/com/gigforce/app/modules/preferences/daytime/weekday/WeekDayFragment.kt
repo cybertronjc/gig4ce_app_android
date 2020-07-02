@@ -30,6 +30,7 @@ class WeekDayFragment : BaseFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         return inflateView(R.layout.week_day_fragment, inflater, container)
     }
 
@@ -107,16 +108,16 @@ class WeekDayFragment : BaseFragment() {
     private fun ifSlotsNotSelected(): Boolean {
         if (getArrayToString(viewDataModel.selectedslots).equals("None")) {
             return true
-        } else
+        }
             return false
     }
 
     private fun ifWeekdaysNotSelected(): Boolean {
         if (getArrayToString(viewDataModel.selecteddays).equals("None")) {
             return true
-        } else {
-            return false
         }
+        return false
+
     }
 
     fun showDaysAlert() {
@@ -124,7 +125,7 @@ class WeekDayFragment : BaseFragment() {
         val indexItem = arrayOf(0, 1, 2, 3, 4, 5)
         var isSectionSelected = BooleanArray(items.size)
         var selectedList = ArrayList<Int>()
-        val builder = AlertDialog.Builder(activity)
+        val builder = AlertDialog.Builder(activity,R.style.MultiSelectDialogStyle)
         builder.setTitle("Days")
         for (i in 0..items.size - 1) {
             var isfound = false
@@ -203,34 +204,24 @@ class WeekDayFragment : BaseFragment() {
         builder.show()
     }
 
-    private fun setAllDaysEnabled(v: ListView, size: Int) {
-        for (i in 0..size - 1) {
-            v.setItemChecked(i, true)
-        }
-    }
 
     fun showSlotsAlert() {
-//        var slots = viewModel.getAllSlots(configDataModel)
         val slots = viewModel.getAllSlotsToShow(configDataModel)
         val items = slots.toTypedArray()
-//        val items = arrayOf(
-//            "All",
-//            "06:00 am - 10:00 am",
-//            "10:00 am - 12:00 pm",
-//            "12:00 pm - 06:00 pm",
-//            "06:00 pm - 09:00 pm",
-//            "09:00 pm - 12:00 pm",
-//            "12:00 am - 03:00 am"
-//        )
         val indexItem = (0..slots.size - 1).toList().toTypedArray()
         val isSectionSelected = BooleanArray(items.size)
         val selectedList = ArrayList<Int>()
-        val builder = AlertDialog.Builder(activity)
+        val builder = AlertDialog.Builder(activity,R.style.MultiSelectDialogStyle)
         builder.setTitle("Slots")
         for (i in 0..items.size - 1) {
             var isfound = false
+            if(i==0 && items.size==(viewDataModel.selectedslots.size+1)){
+                isfound=true
+                isSectionSelected[i] = true
+                selectedList.add(0)
+            } else
             for (day in viewDataModel.selectedslots) {
-                if (indexItem[i].equals(day)) {
+                if (indexItem[i].toString().equals(day)) {
                     isSectionSelected[i] = true
                     isfound = true
                     selectedList.add(i)
@@ -241,6 +232,7 @@ class WeekDayFragment : BaseFragment() {
                 isSectionSelected[i] = false
             }
         }
+
         builder.setMultiChoiceItems(
             items, isSectionSelected
         ) { dialog, which, isChecked ->
@@ -290,7 +282,7 @@ class WeekDayFragment : BaseFragment() {
             }
             selectedItemsForDB.addAll(
                 viewModel.getSelectedSlotsIds(
-                    selectedList.indices,
+                    selectedList,
                     configDataModel
                 )
             )
