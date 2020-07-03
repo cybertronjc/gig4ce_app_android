@@ -46,8 +46,14 @@ class SlotsRecyclerAdapter : RecyclerView.Adapter<SlotsRecyclerAdapter.MyViewHol
     }
 
     fun setItemChecked(position: Int, checked: Boolean) {
-        sectionSelection[position] = checked
-        notifyItemChanged(position)
+
+        try {
+            sectionSelection[position] = checked
+            notifyItemChanged(position)
+        } catch (e : Exception) {
+            //Dissolve
+        }
+
     }
 
     inner class MyViewHolder(view: View) : RecyclerView.ViewHolder(view),
