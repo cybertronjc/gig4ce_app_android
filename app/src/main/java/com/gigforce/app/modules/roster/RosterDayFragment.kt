@@ -80,7 +80,7 @@ class RosterDayFragment: RosterBaseFragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun initialize() {
         rosterViewModel.topBar = top_bar
-        //initializeBottomSheet()
+        initializeBottomSheet()
         attachHourViewAdapter()
         attachDayAvailabilityObserver()
         attachCurrentDateTimeChangeObserver()
@@ -204,12 +204,13 @@ class RosterDayFragment: RosterBaseFragment() {
     }
 
     private fun initializeBottomSheet() {
-//        rosterViewModel.bsBehavior = BottomSheetBehavior.from(mark_unavailable_bs)
-//        rosterViewModel.UnavailableBS = mark_unavailable_bs
+        rosterViewModel.bsBehavior = BottomSheetBehavior.from(mark_unavailable_bs)
+        rosterViewModel.UnavailableBS = mark_unavailable_bs
 
         rosterViewModel.bsBehavior.setPeekHeight(200.px)
         rosterViewModel.bsBehavior.halfExpandedRatio = 0.65F
         rosterViewModel.bsBehavior.isHideable = true
+
 
         rosterViewModel.bsBehavior.addBottomSheetCallback(object: BottomSheetBehavior.BottomSheetCallback() {
             override fun onSlide(bottomSheet: View, slideOffset: Float) {
