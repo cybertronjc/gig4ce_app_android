@@ -99,7 +99,12 @@ class HourViewFragment: RosterBaseFragment() {
 
         initializeHourViews()
 
-        setHourVisibility(day_times, activeDateTime, actualDateTime)
+        rosterViewModel.isDayAvailable.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+            if (it)
+                setHourVisibility(day_times, activeDateTime, actualDateTime)
+            else
+                allHourInactive(day_times)
+        })
 
         if (isSameDate(activeDateTime, actualDateTime)) {
             setCurrentTimeDivider()

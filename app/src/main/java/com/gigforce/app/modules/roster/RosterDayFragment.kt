@@ -114,7 +114,9 @@ class RosterDayFragment: RosterBaseFragment() {
                 toggleAvailability()
             else {
                 rosterViewModel.isDayAvailable.value = true
-                setHourVisibility(hourview_viewpager.getChildAt(0).findViewWithTag<ConstraintLayout>("day_times"), activeDateTime, actualDateTime)
+                setHourVisibility(
+                    hourview_viewpager.getChildAt(0).findViewWithTag<ConstraintLayout>("day_times"),
+                    activeDateTime, actualDateTime)
             }
         }
     }
