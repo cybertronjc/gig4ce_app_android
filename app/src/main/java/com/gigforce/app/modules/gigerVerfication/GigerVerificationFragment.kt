@@ -110,11 +110,8 @@ class GigerVerificationFragment : BaseFragment() {
             .observe(viewLifecycleOwner, Observer {
 
                 if (it.everyDocumentUploaded) {
-//                    verificationMainLayout.visibility = View.GONE
-//                    verificationDocSubmittedLayout.visibility = View.VISIBLE
-
-                    verificationDocSubmittedLayout.visibility = View.GONE
-                    verificationMainLayout.visibility = View.VISIBLE
+                    verificationMainLayout.visibility = View.GONE
+                    verificationDocSubmittedLayout.visibility = View.VISIBLE
 
                 } else {
                     verificationDocSubmittedLayout.visibility = View.GONE
