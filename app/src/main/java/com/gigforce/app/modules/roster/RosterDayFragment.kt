@@ -58,16 +58,16 @@ class RosterDayFragment: RosterBaseFragment() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         rosterViewModel.currentDateTime.value = activeDateTime
+        rosterViewModel.checkDayAvailable(activeDateTime)
         return inflateView(R.layout.roster_day_fragment, inflater, container)
     }
-
-
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -97,18 +97,17 @@ class RosterDayFragment: RosterBaseFragment() {
             @RequiresApi(Build.VERSION_CODES.O)
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
-                if (position < lastViewPosition) {
-                    rosterViewModel.currentDateTime.setValue(activeDateTime.minusDays(1))
-                } else if (position > lastViewPosition) {
-                    rosterViewModel.currentDateTime.setValue(activeDateTime.plusDays(1))
-                }
+                val newDateTime =  (
+                        if (position < lastViewPosition) activeDateTime.minusDays(1)
+                        else activeDateTime.plusDays(1)
+                        )
+                rosterViewModel.currentDateTime.value = newDateTime
                 lastViewPosition = position
+                rosterViewModel.checkDayAvailable(newDateTime)
             }
         }
 
         hourview_viewpager.registerOnPageChangeCallback(hourviewPageChangeCallBack)
-
-
 
         top_bar.available_toggle.setOnClickListener {
             if (top_bar.isAvailable)
