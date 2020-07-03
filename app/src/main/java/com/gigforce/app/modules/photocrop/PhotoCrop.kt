@@ -160,6 +160,8 @@ class PhotoCrop : AppCompatActivity() {
         }
         showBottomSheet()
         loadImage(CLOUD_INPUT_FOLDER, incomingFile)
+
+        getImageFromPhone()
     }
 
     override fun onStart() {
