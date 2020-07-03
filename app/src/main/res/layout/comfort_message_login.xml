@@ -35,7 +35,6 @@
         android:layout_marginTop="16dp"
         android:backgroundTint="@color/colorPrimary"
         app:cardCornerRadius="4dp"
-        android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView77" />
 
@@ -82,7 +81,6 @@
         android:gravity="left"
         android:letterSpacing="0"
         android:paddingRight="24dp"
-        android:visibility="gone"
         android:text="This overrides any DND requests with your operator and you are allowing us to call you for these opportunities."
         android:textColor="#000000"
         android:textSize="14sp"
