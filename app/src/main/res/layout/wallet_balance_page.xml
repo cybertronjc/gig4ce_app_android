@@ -225,25 +225,13 @@
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <com.gigforce.app.modules.wallet.components.TransactionCard
-                    android:id="@+id/transaction_1"
+
+                <LinearLayout
+                    android:id="@+id/transactions"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:orientation="vertical"
                     app:layout_constraintTop_toBottomOf="@id/transaction_head"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent" />
-                <com.gigforce.app.modules.wallet.components.TransactionCard
-                    android:id="@+id/transaction_2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintTop_toBottomOf="@id/transaction_1"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent" />
-                <com.gigforce.app.modules.wallet.components.TransactionCard
-                    android:id="@+id/transaction_3"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintTop_toBottomOf="@id/transaction_2"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent" />
 
@@ -252,7 +240,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="3dp"
                     android:background="#ebebeb"
-                    app:layout_constraintTop_toBottomOf="@id/transaction_3"
+                    app:layout_constraintTop_toBottomOf="@id/transactions"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent" />
 

@@ -24,7 +24,6 @@ class PaymentSummaryComponent: ConstraintLayout {
     var invoiceAmount: Int = 0
         set(value) {
             field = value
-            invoice_status_amount.text = "Rs $value"
         }
 
     var paymentDueAmount: Int = 0

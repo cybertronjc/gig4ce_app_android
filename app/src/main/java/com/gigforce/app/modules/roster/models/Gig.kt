@@ -20,7 +20,7 @@ data class Gig (
     var date: Int = 0,
     var month: Int = 0,
     var year: Int = 0,
-    var duration: Float = 0.0F,
+    var duration: Float = 0.0F, // consider changing to end date time
     var gigRating: Float = 0.0F
 ) {
     init {
