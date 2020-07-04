@@ -366,6 +366,10 @@ class LandingScreenFragment : BaseFragment() {
         profile_image.setOnClickListener {
             navigate(R.id.profileFragment)
         }
+
+        textView119.setOnClickListener {
+            navigate(R.id.settingFragment)
+        }
     }
 
     private fun initializeLearningModule() {
