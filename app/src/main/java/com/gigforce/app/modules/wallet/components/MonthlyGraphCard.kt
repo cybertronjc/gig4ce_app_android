@@ -42,6 +42,7 @@ class MonthlyGraphCard: MaterialCardView {
 
     init {
         View.inflate(context, R.layout.monthly_graph_card, this)
+        year = LocalDateTime.now().year
         //month_text.text = months[activeMonth + 1]
     }
 
@@ -56,6 +57,7 @@ class MonthlyGraphCard: MaterialCardView {
         val snapHelper = PagerSnapHelper()
         snapHelper.attachToRecyclerView(graph_recycler)
 
+        // 12*4 is current year
         graph_recycler.scrollToPosition(12*4 + LocalDateTime.now().monthValue - 1)
 
         prev_month_btn.setOnClickListener {
@@ -76,10 +78,31 @@ class MonthlyGraphCard: MaterialCardView {
             val snapPosition = snapView?.let { (graph_recycler.layoutManager as GridLayoutManager).getPosition(snapView)}
             //Log.d("MCD", snapPosition.toString())
             if (snapPosition != null) {
-                month_text.text = months[snapPosition%12 + 1]
                 //month.value = months[snapPosition%12 + 1]
                 month.value = snapPosition%12 + 1
+
+                setYearFromPosition(snapPosition)
+
+                month_text.text = String.format("%s %04d", months[snapPosition%12 + 1], year)
             }
+        }
+
+    }
+
+    fun setYearFromPosition(position: Int) {
+        // 12*4 is current year
+        var yearDiff = position - 12*4 - LocalDateTime.now().monthValue + 1
+
+
+        if (yearDiff < 0) {
+            // gone backward
+            var gap = -1*yearDiff
+
+            year = LocalDateTime.now().minusMonths(gap.toLong()).year
+
+        } else {
+            // gone forward
+            year = LocalDateTime.now().plusMonths(yearDiff.toLong()).year
         }
 
     }
