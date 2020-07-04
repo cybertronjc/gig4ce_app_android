@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.app.R
@@ -12,6 +13,7 @@ import com.gigforce.app.modules.wallet.WalletBaseFragment
 import com.jay.widget.StickyHeaders
 import com.jay.widget.StickyHeadersLinearLayoutManager
 import kotlinx.android.synthetic.main.balance_expanded_page.*
+import kotlinx.android.synthetic.main.balance_main_card.view.*
 import kotlinx.android.synthetic.main.invoice_collapsed_card.view.*
 import kotlinx.android.synthetic.main.recview_wallet_month.view.*
 
@@ -39,6 +41,10 @@ class WalletExpandedPage: WalletBaseFragment() {
             layoutManager = StickyHeadersLinearLayoutManager<TransactionAdapter>(requireContext())
             adapter = TransactionAdapter(ArrayList(arrangeTransactions(invoiceViewModel.generatedInvoice.value!!)))
         }
+
+        walletViewModel.userWallet.observe(viewLifecycleOwner, Observer {
+            balance_card.balance = it.balance
+        })
 
     }
 
