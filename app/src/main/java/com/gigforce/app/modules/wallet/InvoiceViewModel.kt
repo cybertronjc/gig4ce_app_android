@@ -50,6 +50,28 @@ class InvoiceViewModel: ViewModel() {
         }
         return paymentDue
     }
+
+    fun getDisputedInvoices(invoices: ArrayList<Invoice>): ArrayList<Invoice> {
+        var result = ArrayList<Invoice>()
+
+        invoices.forEach {
+            if (it.invoiceStatus == "rejected") result.add(it)
+        }
+
+        return result
+    }
+
+    fun getMonthlyInvoices(invoices: ArrayList<Invoice>?, month: Int, year: Int): ArrayList<Invoice> {
+        val result = ArrayList<Invoice>()
+        invoices?.let {
+            it.forEach {invoice ->
+                if (invoice.month == month && invoice.year == year) {
+                    result.add(invoice)
+                }
+            }
+        }
+        return result
+    }
     init {
 //        generatedInvoice.value = ArrayList(
 //            listOf(

@@ -36,8 +36,9 @@ class MonthlyGraphCard: MaterialCardView {
         "August", "September", "October", "November", "December"
     ))
 
-    var month: MutableLiveData<String> = MutableLiveData("June")
+    var month: MutableLiveData<Int> = MutableLiveData(6)
     var monthYear: MutableLiveData<String> = MutableLiveData("June 2020")
+    var year: Int = 2020
 
     init {
         View.inflate(context, R.layout.monthly_graph_card, this)
@@ -76,7 +77,8 @@ class MonthlyGraphCard: MaterialCardView {
             //Log.d("MCD", snapPosition.toString())
             if (snapPosition != null) {
                 month_text.text = months[snapPosition%12 + 1]
-                month.value = months[snapPosition%12 + 1]
+                //month.value = months[snapPosition%12 + 1]
+                month.value = snapPosition%12 + 1
             }
         }
 

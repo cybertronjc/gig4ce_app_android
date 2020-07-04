@@ -39,7 +39,7 @@ class WalletExpandedPage: WalletBaseFragment() {
     private fun initialize() {
         transactions.apply {
             layoutManager = StickyHeadersLinearLayoutManager<TransactionAdapter>(requireContext())
-            adapter = TransactionAdapter(ArrayList(arrangeTransactions(invoiceViewModel.generatedInvoice.value!!)))
+            adapter = TransactionAdapter(ArrayList(arrangeTransactions(invoiceViewModel.allInvoices.value!!)))
         }
 
         walletViewModel.userWallet.observe(viewLifecycleOwner, Observer {
