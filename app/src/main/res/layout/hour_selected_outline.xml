@@ -5,13 +5,13 @@
     app:strokeColor="@color/colorPrimary"
     app:strokeWidth="2dp"
     android:background="@android:color/transparent"
-    android:elevation="10dp"
+    android:elevation="1dp"
     android:layout_width="match_parent"
     android:layout_height="70dp">
 
     <View
         android:id="@+id/temp"
-        android:elevation="10dp"
+        android:elevation="1dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@android:color/transparent" />
