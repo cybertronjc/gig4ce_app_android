@@ -160,6 +160,8 @@
             android:textSize="12sp"
             android:backgroundTint="@color/setting_bg"
             android:hint="@string/pincode"
+            android:maxLength="6"
+            android:inputType="number"
             android:layout_marginBottom="4dp"
             app:layout_constraintEnd_toEndOf="@+id/preferredNoOfDays"
             app:layout_constraintTop_toBottomOf="@+id/area" />

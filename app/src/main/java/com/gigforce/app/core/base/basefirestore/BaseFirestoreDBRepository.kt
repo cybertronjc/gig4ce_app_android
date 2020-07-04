@@ -1,6 +1,7 @@
 package com.gigforce.app.core.base.basefirestore
 
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
@@ -17,6 +18,7 @@ abstract public class BaseFirestoreDBRepository {
     public fun setDefaultData(data: Any) {
         getDBCollection().set(data)
     }
+
 
     public fun <M : BaseFirestoreDataModel> setData(arrData: ArrayList<M>) {
         for (obj in arrData) {
@@ -100,6 +102,12 @@ abstract public class BaseFirestoreDBRepository {
     //for remove data------------------
 
     // for get collection data
+    fun getCollectionReference(): CollectionReference {
+        return firebaseDB.collection(getCollectionName())
+    }
+    fun getUID():String{
+        return uid
+    }
     fun getDBCollection(): DocumentReference {
         return firebaseDB.collection(getCollectionName())
             .document(uid)

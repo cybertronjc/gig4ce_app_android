@@ -30,53 +30,59 @@
             android:id="@+id/radio_group"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="22dp"
             android:layout_marginLeft="17dp"
+            android:layout_marginTop="22dp"
+            android:layout_marginBottom="22dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView96" >
+            app:layout_constraintTop_toBottomOf="@+id/textView96">
+
             <RadioButton
                 android:id="@+id/zeroToFour"
+                style="@style/Theme.RadioButtonLipstickPink"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:paddingLeft="15dp"
                 android:hint="00-04"
+                android:letterSpacing="0"
+                android:paddingLeft="15dp"
                 android:text="00-04 Days"
                 android:textColor="@color/black"
-                android:letterSpacing="0"
-                style="@style/Theme.RadioButtonLipstickPink"
                 android:textSize="14sp" />
+
             <RadioButton
                 android:id="@+id/fourToEight"
+                style="@style/Theme.RadioButtonLipstickPink"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:paddingLeft="15dp"
                 android:hint="04-08"
-                android:text="04-08 Days"
                 android:letterSpacing="0"
+                android:paddingLeft="15dp"
+                android:text="04-08 Days"
                 android:textColor="@color/black"
-                style="@style/Theme.RadioButtonLipstickPink"
                 android:textSize="14sp" />
+
             <RadioButton
                 android:id="@+id/eightToFifteen"
+                style="@style/Theme.RadioButtonLipstickPink"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:paddingLeft="15dp"
                 android:hint="08-15"
-                android:text="08-15 Days"
                 android:letterSpacing="0"
+                android:paddingLeft="15dp"
+                android:text="08-15 Days"
                 android:textColor="@color/black"
-                style="@style/Theme.RadioButtonLipstickPink"
                 android:textSize="14sp" />
+
             <RadioButton
                 android:id="@+id/fifteenToThirty"
+                style="@style/Theme.RadioButtonLipstickPink"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:paddingLeft="15dp"
-                android:textColor="@color/black"
-                android:letterSpacing="0"
                 android:hint="15-30"
+                android:letterSpacing="0"
+                android:paddingLeft="15dp"
                 android:text="15-30 Days"
-                style="@style/Theme.RadioButtonLipstickPink"
+                android:textColor="@color/black"
                 android:textSize="14sp" />
         </RadioGroup>
     </androidx.constraintlayout.widget.ConstraintLayout>
