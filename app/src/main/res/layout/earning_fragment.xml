@@ -295,7 +295,7 @@
             android:id="@+id/monthly_expectation_constraintlayout"
             android:layout_width="match_parent"
             android:layout_height="79dp"
-            android:visibility="visible"
+            android:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView104">
 

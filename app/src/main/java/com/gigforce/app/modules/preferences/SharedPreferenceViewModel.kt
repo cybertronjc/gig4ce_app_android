@@ -1,10 +1,8 @@
 package com.gigforce.app.modules.preferences
 
 
-import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.gigforce.app.MainApplication
 import com.gigforce.app.R
 import com.gigforce.app.modules.preferences.earnings.EarningDataModel
 import com.gigforce.app.modules.preferences.location.CitiesRepository

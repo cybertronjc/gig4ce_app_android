@@ -11,6 +11,7 @@ import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -28,6 +29,10 @@ import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.calendarscreen.maincalendarscreen.verticalcalendar.CalendarRecyclerItemTouchHelper
 import com.gigforce.app.modules.calendarscreen.maincalendarscreen.verticalcalendar.VerticalCalendarDataItemModel
+import com.gigforce.app.modules.custom_gig_preferences.CustomPreferencesViewModel
+import com.gigforce.app.modules.custom_gig_preferences.ParamCustPreferViewModel
+import com.gigforce.app.modules.custom_gig_preferences.UnavailableDataModel
+import com.gigforce.app.modules.preferences.ParameterizedSharedPreferenceVM
 import com.gigforce.app.modules.preferences.PreferencesFragment
 import com.gigforce.app.modules.profile.ProfileViewModel
 import com.gigforce.app.utils.GlideApp
@@ -56,6 +61,7 @@ class CalendarHomeScreen : BaseFragment(),
     private var mExtendedBottomSheetBehavior: ExtendedBottomSheetBehavior<*>? = null
     private lateinit var viewModel: CalendarHomeScreenViewModel
     lateinit var viewModelProfile: ProfileViewModel
+    lateinit var viewModelCustomPreference : CustomPreferencesViewModel
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -71,11 +77,16 @@ class CalendarHomeScreen : BaseFragment(),
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(CalendarHomeScreenViewModel::class.java)
         viewModelProfile = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
+        viewModelCustomPreference = ViewModelProvider(this, ParamCustPreferViewModel(viewLifecycleOwner)).get(
+            CustomPreferencesViewModel::class.java
+        )
+
         arrCalendarDependent =
             arrayOf(calendar_dependent, margin_40, below_oval, calendar_cv, bottom_sheet_top_shadow)
         initializeViews()
         listener()
         observePreferenceData()
+//        viewModel.setGigData()
     }
 
 
@@ -168,6 +179,10 @@ class CalendarHomeScreen : BaseFragment(),
             displayImage(profile.profileAvatarName)
             if (profile.name != null && !profile.name.equals(""))
                 tv1HS1.text = profile.name
+        })
+        viewModelCustomPreference.customPreferencesLiveDataModel.observe(viewLifecycleOwner, Observer { data ->
+            viewModel.setCustomPreferenceData(viewModelCustomPreference.getCustomPreferenceData())
+            initializeViews()
         })
     }
 
@@ -502,6 +517,10 @@ class CalendarHomeScreen : BaseFragment(),
                                             temporaryData.isGigAssign = false
                                             temporaryData.title = "No gigs assigned"
                                             temporaryData.reason = option
+                                            viewModelCustomPreference.updateCustomPreference(
+                                                UnavailableDataModel(temporaryData.date,
+                                                    temporaryData.month, temporaryData.year)
+                                            )
                                             recyclerGenericAdapter.notifyItemChanged(position)
                                             dialog?.dismiss()
                                         }
@@ -520,9 +539,17 @@ class CalendarHomeScreen : BaseFragment(),
             }
         } else if (temporaryData.isUnavailable) {
             temporaryData.isUnavailable = false
+            viewModelCustomPreference.deleteCustomPreference(
+                UnavailableDataModel(temporaryData.date,
+                    temporaryData.month, temporaryData.year)
+            )
             recyclerGenericAdapter.notifyItemChanged(position)
         } else {
             temporaryData.isUnavailable = true
+            viewModelCustomPreference.updateCustomPreference(
+                UnavailableDataModel(temporaryData.date,
+                    temporaryData.month, temporaryData.year)
+            )
             recyclerGenericAdapter.notifyItemChanged(position)
             showSnackbar(position)
         }
@@ -537,10 +564,15 @@ class CalendarHomeScreen : BaseFragment(),
     class OnSnackBarUndoClickListener(
         var position: Int,
         var recyclerGenericAdapter: RecyclerGenericAdapter<VerticalCalendarDataItemModel>,
-        var snackbar: Snackbar
+        var snackbar: Snackbar,
+        var viewModelCustomPreference : CustomPreferencesViewModel
     ) : View.OnClickListener {
         override fun onClick(v: View?) {
             temporaryData.isUnavailable = false
+            viewModelCustomPreference.deleteCustomPreference(
+                UnavailableDataModel(temporaryData.date,
+                    temporaryData.month, temporaryData.year)
+            )
             recyclerGenericAdapter.notifyItemChanged(position)
             snackbar.dismiss()
         }
@@ -562,7 +594,8 @@ class CalendarHomeScreen : BaseFragment(),
             OnSnackBarUndoClickListener(
                 position,
                 recyclerGenericAdapter,
-                snackbar
+                snackbar,
+                viewModelCustomPreference
             )
         )
         //If the view is not covering the whole snackbar layout, add this line

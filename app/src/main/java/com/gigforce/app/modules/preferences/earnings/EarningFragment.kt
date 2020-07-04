@@ -186,10 +186,10 @@ class EarningFragment : BaseFragment() {
 
     private fun saveDataToDB() {
         earningDataModel.preferredNoOfDays = selected_pre_no_of_days.text.toString().split(" ")[0]
-        earningDataModel.perDayGoal = perDayGoalSB.progress
-        earningDataModel.perMonthGoal = permonthGoalSB.progress
+        earningDataModel.perDayGoal = perDayGoalSB.progress*500
+        earningDataModel.perMonthGoal = permonthGoalSB.progress*500
         earningDataModel.monthlyContractRequired = checkbox_monthly_constract.isChecked
-        earningDataModel.monthlyExpectation = monthlyExpectationSB.progress
+        earningDataModel.monthlyExpectation = monthlyExpectationSB.progress*500
         viewModel.saveEarningData(earningDataModel)
 
     }
