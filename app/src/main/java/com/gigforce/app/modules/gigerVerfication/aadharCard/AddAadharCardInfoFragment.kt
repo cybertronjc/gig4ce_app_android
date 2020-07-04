@@ -73,11 +73,15 @@ class AddAadharCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetAc
 
             if (checkedId == R.id.aadharYesRB) {
                 showAadharImageAndInfoLayout()
-            } else if (checkedId == R.id.aadharNoRB && aadharDataCorrectCB.isChecked) {
+            } else if (checkedId == R.id.aadharNoRB) {
                 hideAadharImageAndInfoLayout()
-                enableSubmitButton()
-            } else
+
+                if (aadharDataCorrectCB.isChecked)
+                    enableSubmitButton()
+            } else {
+                hideAadharImageAndInfoLayout()
                 disableSubmitButton()
+            }
         }
 
         aadharDataCorrectCB.setOnCheckedChangeListener { buttonView, isChecked ->
