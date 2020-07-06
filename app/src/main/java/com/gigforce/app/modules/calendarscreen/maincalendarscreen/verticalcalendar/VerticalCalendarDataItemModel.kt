@@ -18,6 +18,13 @@ class VerticalCalendarDataItemModel (
     var isUnavailable:Boolean = false,
     var reason:String = ""
 ){
+    fun getDateObj():Date{
+        var dateObj = Date()
+        dateObj.date = date
+        dateObj.month = month
+        dateObj.year = year
+        return dateObj
+    }
     companion object {
         fun getMonthObject(calendar:Calendar):VerticalCalendarDataItemModel{
             return VerticalCalendarDataItemModel(
@@ -55,7 +62,7 @@ class VerticalCalendarDataItemModel (
                 false
             )
             for(model in customPreferenceUnavailableData){
-                if(calendar.get(Calendar.DATE)==model.day && calendar.get(Calendar.MONTH)==model.month && calendar.get(Calendar.YEAR)==model.year){
+                if(calendar.get(Calendar.DATE)==model.date.date && calendar.get(Calendar.MONTH)==model.date.month && calendar.get(Calendar.YEAR)==model.date.year){
                     dataModel.isUnavailable = true
                     break;
                 }
@@ -92,7 +99,7 @@ class VerticalCalendarDataItemModel (
                 false
             )
             for(model in customPreferenceUnavailableData){
-                if(calendar.get(Calendar.DATE)==model.day && calendar.get(Calendar.MONTH)==model.month && calendar.get(Calendar.YEAR)==model.year){
+                if(calendar.get(Calendar.DATE)==model.date.date && calendar.get(Calendar.MONTH)==model.date.month && calendar.get(Calendar.YEAR)==model.date.year){
                     dataModel.isUnavailable = true
                     break;
                 }

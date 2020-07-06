@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.SnapHelper
 import com.gigforce.app.R
 import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.app.core.genericadapter.RecyclerGenericAdapter
+import kotlinx.android.synthetic.main.calendar_home_screen.*
 import kotlinx.android.synthetic.main.calendar_view_layout.view.*
 import java.util.*
 import kotlin.collections.ArrayList
@@ -27,8 +28,10 @@ class CalendarView : LinearLayout {
 
     companion object {
         lateinit var changedMonthModelListener: MonthChangeListener
-        var calendarData = Calendar.getInstance()
+        var arrlist = ArrayList<MonthModel>()
     }
+
+    lateinit var calendarData: Calendar
 
     lateinit var recyclerGenericAdapter: RecyclerGenericAdapter<MonthModel>
 
@@ -36,6 +39,7 @@ class CalendarView : LinearLayout {
         val inflater =
             context?.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         inflater.inflate(R.layout.calendar_view_layout, this)
+        calendarData = Calendar.getInstance()
         calendarData.set(Calendar.DATE, 1)
         initializeGridView()
     }
@@ -94,6 +98,11 @@ class CalendarView : LinearLayout {
         var year: Int = -1
         var currentMonth: Int = -1
         var days = ArrayList<DayModel>()
+
+        constructor() {}
+        constructor(currentMonth: Int) {
+            this.currentMonth = currentMonth
+        }
     }
 
     class DayModel {
@@ -104,7 +113,7 @@ class CalendarView : LinearLayout {
     }
 
     private fun getDefaultItems(): ArrayList<MonthModel>? {
-        var arrlist = ArrayList<MonthModel>()
+        arrlist = ArrayList<MonthModel>()
         arrlist.add(getMonthData())
         arrlist.add(getMonthData())
         arrlist.add(getMonthData())
@@ -196,5 +205,45 @@ class CalendarView : LinearLayout {
             7 -> return 5
         }
         return 0
+    }
+
+    fun setVerticalMonthChanged(calendar: Calendar) {
+        var layoutManager: LinearLayoutManager? = null
+        if (layoutManager == null) {
+            layoutManager = calendar_rv.layoutManager as LinearLayoutManager
+        }
+        val firstVisibleItem = layoutManager!!.findFirstVisibleItemPosition()
+        if (firstVisibleItem != -1 && arrlist.size > 0) {
+            if (calendar.get(Calendar.YEAR) > arrlist.get(firstVisibleItem).year || (calendar.get(
+                    Calendar.YEAR
+                ) == arrlist.get(firstVisibleItem).year && calendar.get(Calendar.MONTH) > arrlist.get(
+                    firstVisibleItem
+                ).currentMonth)
+            ) {
+                for (index in firstVisibleItem..arrlist.size-1) {
+                    if (arrlist.get(index).currentMonth == calendar.get(Calendar.MONTH) && arrlist.get(
+                            index
+                        ).year == calendar.get(Calendar.YEAR)
+                    ) {
+                        layoutManager.scrollToPositionWithOffset(
+                            index,
+                            0
+                        )
+                    }
+                }
+            } else {
+                for (index in 0..firstVisibleItem) {
+                    if (arrlist.get(index).currentMonth == calendar.get(Calendar.MONTH) && arrlist.get(
+                            index
+                        ).year == calendar.get(Calendar.YEAR)
+                    ) {
+                        layoutManager.scrollToPositionWithOffset(
+                            index,
+                            0
+                        )
+                    }
+                }
+            }
+        }
     }
 }

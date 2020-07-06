@@ -55,13 +55,14 @@ class CalendarHomeScreen : BaseFragment(),
 
         lateinit var temporaryData: VerticalCalendarDataItemModel
     }
-        lateinit var selectedMonthModel : CalendarView.MonthModel
+
+    lateinit var selectedMonthModel: CalendarView.MonthModel
 
     lateinit var arrCalendarDependent: Array<View>
     private var mExtendedBottomSheetBehavior: ExtendedBottomSheetBehavior<*>? = null
     private lateinit var viewModel: CalendarHomeScreenViewModel
     lateinit var viewModelProfile: ProfileViewModel
-    lateinit var viewModelCustomPreference : CustomPreferencesViewModel
+    lateinit var viewModelCustomPreference: CustomPreferencesViewModel
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -72,17 +73,20 @@ class CalendarHomeScreen : BaseFragment(),
     override fun isConfigRequired(): Boolean {
         return true
     }
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(CalendarHomeScreenViewModel::class.java)
         viewModelProfile = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
-        viewModelCustomPreference = ViewModelProvider(this, ParamCustPreferViewModel(viewLifecycleOwner)).get(
-            CustomPreferencesViewModel::class.java
-        )
+        viewModelCustomPreference =
+            ViewModelProvider(this, ParamCustPreferViewModel(viewLifecycleOwner)).get(
+                CustomPreferencesViewModel::class.java
+            )
 
         arrCalendarDependent =
             arrayOf(calendar_dependent, margin_40, below_oval, calendar_cv, bottom_sheet_top_shadow)
+        selectedMonthModel = CalendarView.MonthModel(Calendar.getInstance().get(Calendar.MONTH))
         initializeViews()
         listener()
         observePreferenceData()
@@ -93,7 +97,7 @@ class CalendarHomeScreen : BaseFragment(),
     @RequiresApi(Build.VERSION_CODES.O)
     private fun initializeViews() {
         initializeExtendedBottomSheet()
-        initializeMonthTV(Calendar.getInstance())
+        initializeMonthTV(Calendar.getInstance(), true)
         initializeVerticalCalendarRV()
     }
 
@@ -125,8 +129,8 @@ class CalendarHomeScreen : BaseFragment(),
                 calendar.set(Calendar.MONTH, monthModel.currentMonth)
                 calendar.set(Calendar.YEAR, monthModel.year)
                 calendar.set(Calendar.DATE, 1)
-                initializeMonthTV(calendar)
-                if(!isLoading) {
+                initializeMonthTV(calendar, false)
+                if (!isLoading) {
                     recyclerGenericAdapter.list.addAll(
                         viewModel.getVerticalCalendarData(
                             recyclerGenericAdapter.list.get(recyclerGenericAdapter.list.size - 1),
@@ -154,7 +158,6 @@ class CalendarHomeScreen : BaseFragment(),
     }
 
 
-
     private fun hideDependentViews(hide: Boolean) {
         for (view in arrCalendarDependent) {
             if (hide)
@@ -180,10 +183,12 @@ class CalendarHomeScreen : BaseFragment(),
             if (profile.name != null && !profile.name.equals(""))
                 tv1HS1.text = profile.name
         })
-        viewModelCustomPreference.customPreferencesLiveDataModel.observe(viewLifecycleOwner, Observer { data ->
-            viewModel.setCustomPreferenceData(viewModelCustomPreference.getCustomPreferenceData())
-            initializeViews()
-        })
+        viewModelCustomPreference.customPreferencesLiveDataModel.observe(
+            viewLifecycleOwner,
+            Observer { data ->
+                viewModel.setCustomPreferenceData(viewModelCustomPreference.getCustomPreferenceData())
+                initializeViews()
+            })
     }
 
     private fun displayImage(profileImg: String) {
@@ -198,11 +203,13 @@ class CalendarHomeScreen : BaseFragment(),
     }
 
 
-    private fun initializeMonthTV(calendar: Calendar) {
+    private fun initializeMonthTV(calendar: Calendar, needaction: Boolean) {
         val pattern = "MMMM YYYY"
         val simpleDateFormat = SimpleDateFormat(pattern)
         val date: String = simpleDateFormat.format(calendar.time)
         month_year.text = date
+        if (needaction)
+            calendarView.setVerticalMonthChanged(calendar)
     }
 
     lateinit var recyclerGenericAdapter: RecyclerGenericAdapter<VerticalCalendarDataItemModel>
@@ -433,13 +440,15 @@ class CalendarHomeScreen : BaseFragment(),
                     layoutManager = recyclerView.layoutManager as LinearLayoutManager
                 }
                 val firstVisibleItem = layoutManager!!.findFirstVisibleItemPosition()
+                if(firstVisibleItem==0)return;
                 var calendar = Calendar.getInstance()
+
                 calendar.set(
                     Calendar.MONTH,
-                    recyclerGenericAdapter.list.get(firstVisibleItem-1).month
+                    recyclerGenericAdapter.list.get(firstVisibleItem - 1).month
                 )
                 calendar.set(Calendar.YEAR, recyclerGenericAdapter.list.get(firstVisibleItem).year)
-                initializeMonthTV(calendar)
+                initializeMonthTV(calendar, true)
             }
         }
         rv_.addOnScrollListener(scrollListener)
@@ -449,25 +458,42 @@ class CalendarHomeScreen : BaseFragment(),
         ItemTouchHelper(itemTouchListener).attachToRecyclerView(rv_)
 
     }
+
     private fun scrollVerticalCalendarToSelectedMonth() {
         var layoutManager: LinearLayoutManager? = null
         if (layoutManager == null) {
             layoutManager = rv_.layoutManager as LinearLayoutManager
         }
         val firstVisibleItem = layoutManager!!.findFirstVisibleItemPosition()
-        if(recyclerGenericAdapter.list.get(firstVisibleItem).month<selectedMonthModel.currentMonth){
-        for(index in firstVisibleItem..recyclerGenericAdapter.list.size) {
-            if(recyclerGenericAdapter.list.get(index).month==selectedMonthModel.currentMonth){
-                (rv_.layoutManager as LinearLayoutManager)?.scrollToPositionWithOffset(
-                    index+1,
-                    0
-                )
-//                rv_.scrollToPosition(index)
-                break
+        if (recyclerGenericAdapter.list.get(firstVisibleItem).year < selectedMonthModel.year || (recyclerGenericAdapter.list.get(
+                firstVisibleItem
+            ).year == selectedMonthModel.year && recyclerGenericAdapter.list.get(firstVisibleItem).month < selectedMonthModel.currentMonth)
+        ) {
+            for (index in firstVisibleItem..recyclerGenericAdapter.list.size) {
+                if (recyclerGenericAdapter.list.get(index).year == selectedMonthModel.year && recyclerGenericAdapter.list.get(
+                        index
+                    ).month == selectedMonthModel.currentMonth
+                ) {
+                    (rv_.layoutManager as LinearLayoutManager)?.scrollToPositionWithOffset(
+                        index + 1,
+                        0
+                    )
+                    break
+                }
+            }
+        } else {
+            for (index in 0..firstVisibleItem) {
+                if (recyclerGenericAdapter.list.get(index).year == selectedMonthModel.year && recyclerGenericAdapter.list.get(index).month == selectedMonthModel.currentMonth) {
+                    (rv_.layoutManager as LinearLayoutManager)?.scrollToPositionWithOffset(
+                        index + 1,
+                        0
+                    )
+                    break
+                }
             }
         }
-        }
     }
+
     private fun setBackgroundStateAvailable(viewHolder: PFRecyclerViewAdapter<Any?>.ViewHolder) {
         setViewBackgroundColor(
             getView(viewHolder, R.id.action_layout),
@@ -510,16 +536,15 @@ class CalendarHomeScreen : BaseFragment(),
                                 "Please let us know your reason, to mark 'not Working' ?",
                                 object : OptionSelected {
                                     override fun optionSelected(dialog: Dialog?, option: String) {
-                                        if(option.equals("")){
+                                        if (option.equals("")) {
                                             showToast("Please select one option.")
-                                        }else {
+                                        } else {
                                             temporaryData.isUnavailable = true
                                             temporaryData.isGigAssign = false
                                             temporaryData.title = "No gigs assigned"
                                             temporaryData.reason = option
                                             viewModelCustomPreference.updateCustomPreference(
-                                                UnavailableDataModel(temporaryData.date,
-                                                    temporaryData.month, temporaryData.year)
+                                                UnavailableDataModel(temporaryData.getDateObj())
                                             )
                                             recyclerGenericAdapter.notifyItemChanged(position)
                                             dialog?.dismiss()
@@ -540,15 +565,13 @@ class CalendarHomeScreen : BaseFragment(),
         } else if (temporaryData.isUnavailable) {
             temporaryData.isUnavailable = false
             viewModelCustomPreference.deleteCustomPreference(
-                UnavailableDataModel(temporaryData.date,
-                    temporaryData.month, temporaryData.year)
+                UnavailableDataModel(temporaryData.getDateObj())
             )
             recyclerGenericAdapter.notifyItemChanged(position)
         } else {
             temporaryData.isUnavailable = true
             viewModelCustomPreference.updateCustomPreference(
-                UnavailableDataModel(temporaryData.date,
-                    temporaryData.month, temporaryData.year)
+                UnavailableDataModel(temporaryData.getDateObj())
             )
             recyclerGenericAdapter.notifyItemChanged(position)
             showSnackbar(position)
@@ -565,13 +588,12 @@ class CalendarHomeScreen : BaseFragment(),
         var position: Int,
         var recyclerGenericAdapter: RecyclerGenericAdapter<VerticalCalendarDataItemModel>,
         var snackbar: Snackbar,
-        var viewModelCustomPreference : CustomPreferencesViewModel
+        var viewModelCustomPreference: CustomPreferencesViewModel
     ) : View.OnClickListener {
         override fun onClick(v: View?) {
             temporaryData.isUnavailable = false
             viewModelCustomPreference.deleteCustomPreference(
-                UnavailableDataModel(temporaryData.date,
-                    temporaryData.month, temporaryData.year)
+                UnavailableDataModel(temporaryData.getDateObj())
             )
             recyclerGenericAdapter.notifyItemChanged(position)
             snackbar.dismiss()
