@@ -97,7 +97,7 @@ class CalendarHomeScreen : BaseFragment(),
     @RequiresApi(Build.VERSION_CODES.O)
     private fun initializeViews() {
         initializeExtendedBottomSheet()
-        initializeMonthTV(Calendar.getInstance())
+        initializeMonthTV(Calendar.getInstance(), true)
         initializeVerticalCalendarRV()
     }
 
@@ -129,7 +129,7 @@ class CalendarHomeScreen : BaseFragment(),
                 calendar.set(Calendar.MONTH, monthModel.currentMonth)
                 calendar.set(Calendar.YEAR, monthModel.year)
                 calendar.set(Calendar.DATE, 1)
-                initializeMonthTV(calendar)
+                initializeMonthTV(calendar, false)
                 if (!isLoading) {
                     recyclerGenericAdapter.list.addAll(
                         viewModel.getVerticalCalendarData(
@@ -203,11 +203,13 @@ class CalendarHomeScreen : BaseFragment(),
     }
 
 
-    private fun initializeMonthTV(calendar: Calendar) {
+    private fun initializeMonthTV(calendar: Calendar, needaction: Boolean) {
         val pattern = "MMMM YYYY"
         val simpleDateFormat = SimpleDateFormat(pattern)
         val date: String = simpleDateFormat.format(calendar.time)
         month_year.text = date
+        if (needaction)
+            calendarView.setVerticalMonthChanged(calendar)
     }
 
     lateinit var recyclerGenericAdapter: RecyclerGenericAdapter<VerticalCalendarDataItemModel>
@@ -438,13 +440,15 @@ class CalendarHomeScreen : BaseFragment(),
                     layoutManager = recyclerView.layoutManager as LinearLayoutManager
                 }
                 val firstVisibleItem = layoutManager!!.findFirstVisibleItemPosition()
+                if(firstVisibleItem==0)return;
                 var calendar = Calendar.getInstance()
+
                 calendar.set(
                     Calendar.MONTH,
                     recyclerGenericAdapter.list.get(firstVisibleItem - 1).month
                 )
                 calendar.set(Calendar.YEAR, recyclerGenericAdapter.list.get(firstVisibleItem).year)
-                initializeMonthTV(calendar)
+                initializeMonthTV(calendar, true)
             }
         }
         rv_.addOnScrollListener(scrollListener)
@@ -461,9 +465,15 @@ class CalendarHomeScreen : BaseFragment(),
             layoutManager = rv_.layoutManager as LinearLayoutManager
         }
         val firstVisibleItem = layoutManager!!.findFirstVisibleItemPosition()
-        if (recyclerGenericAdapter.list.get(firstVisibleItem).month < selectedMonthModel.currentMonth) {
+        if (recyclerGenericAdapter.list.get(firstVisibleItem).year < selectedMonthModel.year || (recyclerGenericAdapter.list.get(
+                firstVisibleItem
+            ).year == selectedMonthModel.year && recyclerGenericAdapter.list.get(firstVisibleItem).month < selectedMonthModel.currentMonth)
+        ) {
             for (index in firstVisibleItem..recyclerGenericAdapter.list.size) {
-                if (recyclerGenericAdapter.list.get(index).month == selectedMonthModel.currentMonth) {
+                if (recyclerGenericAdapter.list.get(index).year == selectedMonthModel.year && recyclerGenericAdapter.list.get(
+                        index
+                    ).month == selectedMonthModel.currentMonth
+                ) {
                     (rv_.layoutManager as LinearLayoutManager)?.scrollToPositionWithOffset(
                         index + 1,
                         0
@@ -473,7 +483,7 @@ class CalendarHomeScreen : BaseFragment(),
             }
         } else {
             for (index in 0..firstVisibleItem) {
-                if (recyclerGenericAdapter.list.get(index).month == selectedMonthModel.currentMonth) {
+                if (recyclerGenericAdapter.list.get(index).year == selectedMonthModel.year && recyclerGenericAdapter.list.get(index).month == selectedMonthModel.currentMonth) {
                     (rv_.layoutManager as LinearLayoutManager)?.scrollToPositionWithOffset(
                         index + 1,
                         0
