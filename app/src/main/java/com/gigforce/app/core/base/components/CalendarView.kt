@@ -27,8 +27,8 @@ class CalendarView : LinearLayout {
 
     companion object {
         lateinit var changedMonthModelListener: MonthChangeListener
-        var calendarData = Calendar.getInstance()
     }
+    lateinit var calendarData :Calendar
 
     lateinit var recyclerGenericAdapter: RecyclerGenericAdapter<MonthModel>
 
@@ -36,6 +36,7 @@ class CalendarView : LinearLayout {
         val inflater =
             context?.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         inflater.inflate(R.layout.calendar_view_layout, this)
+        calendarData = Calendar.getInstance()
         calendarData.set(Calendar.DATE, 1)
         initializeGridView()
     }
@@ -94,6 +95,8 @@ class CalendarView : LinearLayout {
         var year: Int = -1
         var currentMonth: Int = -1
         var days = ArrayList<DayModel>()
+        constructor(){}
+        constructor(currentMonth: Int){this.currentMonth = currentMonth}
     }
 
     class DayModel {

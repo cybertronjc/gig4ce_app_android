@@ -9,24 +9,13 @@ class CustomPreferencesDataModel {
 }
 
 class UnavailableDataModel : BaseFirestoreDataModel{
-    var day: Int = -1
-    var month: Int = -1
-    var year: Int = -1
+    lateinit var date :Date
     var timeSlots = ArrayList<TimeSlotsDataModel>()
     var isDayUnavailable: Boolean = false
     constructor():super("unavailable") {
     }
     constructor(date: Date):super("unavailable")  {
-        this.day = date.day
-        this.month = date.month
-        this.year = date.year
-    }
-    constructor(date: Int,
-                month: Int,
-                year: Int):super("unavailable") {
-        this.day = date
-        this.month = month
-        this.year = year
+        this.date = date
     }
 
     fun findDateDataModel(
@@ -39,12 +28,11 @@ class UnavailableDataModel : BaseFirestoreDataModel{
         arrUnavailable: java.util.ArrayList<UnavailableDataModel>
     ): UnavailableDataModel? {
         for (unavailable in arrUnavailable) {
-            if (unavailable.day == this.day && unavailable.month == this.month && unavailable.year == this.year) {
+            if (unavailable.date.date == this.date.date && unavailable.date.month == this.date.month && unavailable.date.year == this.date.year) {
                 return unavailable
             }
         }
         return null
-
     }
 }
 
