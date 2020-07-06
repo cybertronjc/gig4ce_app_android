@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dp"
+    android:orientation="horizontal">
+    
+    <ImageView
+        android:layout_width="10dp"
+        android:layout_height="10dp"
+        android:background="@drawable/round_pink"/>
+
+    <TextView
+        android:id="@+id/text"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_marginLeft="10dp"
+        android:fontFamily="@font/lato"
+        android:textColor="@color/black_85"
+        android:letterSpacing="0"
+        android:text="Somre Rellassy ssoedoed dede d deed"
+        android:layout_height="wrap_content"/>
+    
+
+</LinearLayout>

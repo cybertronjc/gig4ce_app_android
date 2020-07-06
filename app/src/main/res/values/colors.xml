@@ -79,6 +79,7 @@
     <color name="action_layout_available">#33335d05</color>
     <color name="action_layout_available_border">#66335d05</color>
     <color name="action_layout_available_title">#375b0e</color>
+    <color name="black_85">#d9000000</color>
 
 
 </resources>

@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    app:cardBackgroundColor="@color/white"
+    android:elevation="7dp"
+    android:layout_height="wrap_content">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="20dp"
+        app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
+
+        <ImageView
+            android:id="@+id/sheetEdge"
+            android:layout_width="73dp"
+            android:layout_height="6dp"
+            android:layout_marginTop="18dp"
+            android:background="@color/battle_ship_grey"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/estimateTimeToReachTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="19dp"
+            android:layout_marginTop="15dp"
+            android:fontFamily="@font/lato"
+            android:letterSpacing="0"
+            android:textColor="@color/lipstick"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/sheetEdge"
+            tools:text="1 Hour 20 Mins" />
+
+
+        <TextView
+            android:id="@+id/toReachTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="19dp"
+            android:layout_marginTop="4dp"
+            android:textColor="@color/black_85"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/estimateTimeToReachTV"
+            tools:text="to reach : Tarang Shopping Complex " />
+
+
+        <View
+            android:id="@+id/seaprator1"
+            android:layout_width="wrap_content"
+            android:layout_height="0.5dp"
+            android:layout_marginTop="16dp"
+            android:background="#c0c0c0"
+            app:layout_constraintStart_toStartOf="@+id/textView41"
+            app:layout_constraintTop_toBottomOf="@+id/toReachTV" />
+
+        <ImageView
+            android:id="@+id/contactPersonIV"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="19dp"
+            android:layout_marginTop="15dp"
+            android:src="@drawable/ic_emoji"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/seaprator1" />
+
+        <TextView
+            android:id="@+id/contactPersonLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="15dp"
+            android:letterSpacing="0"
+
+            android:text="Contact Person"
+            android:textColor="@color/upcoming_gig_time"
+            android:textSize="12sp"
+            app:layout_constraintStart_toEndOf="@id/contactPersonIV"
+            app:layout_constraintTop_toBottomOf="@+id/seaprator1" />
+
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/messageCardView"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginRight="17dp"
+            app:cardBackgroundColor="@color/light_pink"
+            app:cardCornerRadius="12dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/seaprator1">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:gravity="center"
+                android:scaleX="0.5"
+                android:scaleY="0.5"
+                android:src="@drawable/fui_ic_phone_white_24dp"
+                android:text="N"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:tint="@color/lipstick" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/callCardView"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginRight="8dp"
+            app:cardBackgroundColor="@color/light_pink"
+            app:cardCornerRadius="12dp"
+            app:layout_constraintRight_toLeftOf="@id/messageCardView"
+            app:layout_constraintTop_toBottomOf="@id/seaprator1">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:gravity="center"
+                android:scaleX="0.5"
+                android:scaleY="0.5"
+                android:src="@drawable/fui_ic_phone_white_24dp"
+                android:text="N"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:tint="@color/lipstick" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+
+        <TextView
+            android:id="@+id/contactPersonTV"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:letterSpacing="0"
+            android:text="Contact Person"
+            android:textColor="@color/black_85"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toStartOf="@+id/callCardView"
+            app:layout_constraintStart_toStartOf="@id/contactPersonLabel"
+            app:layout_constraintTop_toBottomOf="@id/contactPersonLabel" />
+
+
+        <com.ncorti.slidetoact.SlideToActView
+            android:id="@+id/startNavigationSliderBtn"
+            android:layout_width="match_parent"
+            android:layout_height="69dp"
+            android:layout_marginTop="30dp"
+            app:border_radius="8dp"
+            app:inner_color="@color/lipstick"
+            app:layout_constraintTop_toBottomOf="@+id/contactPersonTV"
+            app:outer_color="@color/light_pink"
+            app:slider_height="60dp"
+            app:slider_icon="@drawable/ic_arrow_forward_white"
+            app:slider_icon_color="@color/white"
+            app:text="START NAVIGATION" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>
