@@ -3,6 +3,7 @@ package com.gigforce.app.modules.gigerVerfication
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.gigforce.app.modules.GigerVerification3rdPartyStatusRepository
 import com.gigforce.app.modules.gigerVerfication.aadharCard.AadharCardDataModel
 import com.gigforce.app.modules.gigerVerfication.bankDetails.BankDetailsDataModel
 import com.gigforce.app.modules.gigerVerfication.drivingLicense.DrivingLicenseDataModel
@@ -26,7 +27,8 @@ data class GigerVerificationStatus(
 )
 
 open class GigVerificationViewModel constructor(
-    private val gigerVerificationRepository: GigerVerificationRepository = GigerVerificationRepository()
+    private val gigerVerificationRepository: GigerVerificationRepository = GigerVerificationRepository(),
+    private val gigerVerification3rdPartyStatusRepository: GigerVerification3rdPartyStatusRepository = GigerVerification3rdPartyStatusRepository()
 ) : ViewModel() {
 
     private val _gigerVerificationStatus = MutableLiveData<GigerVerificationStatus>()
@@ -203,6 +205,7 @@ open class GigVerificationViewModel constructor(
         var aadharBackImageName: String?
         var userHasAadhar: Boolean?
         var aadharVerified: Boolean
+        var aadharCardNo: String?
 
         try {
 
@@ -217,24 +220,30 @@ open class GigVerificationViewModel constructor(
                     hashMap[AadharCardDataModel.KEY_NAME_USER_HAS_AADHAR] as Boolean?
                 aadharVerified =
                     hashMap[AadharCardDataModel.KEY_NAME_VERIFIED] as Boolean
+                aadharCardNo =
+                    hashMap[AadharCardDataModel.KEY_AADHAR_CARD_NO] as String?
+
             } else {
                 aadharFrontImageName = null
                 aadharBackImageName = null
                 userHasAadhar = null
                 aadharVerified = false
+                aadharCardNo = null
             }
         } catch (e: Exception) {
             aadharFrontImageName = null
             aadharBackImageName = null
             userHasAadhar = null
             aadharVerified = false
+            aadharCardNo = null
         }
 
         return AadharCardDataModel(
             userHasAadharCard = userHasAadhar,
             frontImage = aadharFrontImageName,
             backImage = aadharBackImageName,
-            verified = aadharVerified
+            verified = aadharVerified,
+            aadharCardNo = aadharCardNo
         )
     }
 
@@ -301,14 +310,16 @@ open class GigVerificationViewModel constructor(
     fun updateAadharData(
         userHasAadhar: Boolean,
         frontImagePath: String?,
-        backImagePath: String?
+        backImagePath: String?,
+        aadharCardNumber: String?
     ) {
 
         if (!userHasAadhar) {
             gigerVerificationRepository.setDataAsKeyValue(
                 AadharCardDataModel(
                     userHasAadharCard = false,
-                    verified = false
+                    verified = false,
+                    aadharCardNo = null
                 )
             )
         } else {
@@ -321,7 +332,8 @@ open class GigVerificationViewModel constructor(
                             userHasAadharCard = true,
                             frontImage = frontImagePath,
                             backImage = backImagePath,
-                            verified = false
+                            verified = false,
+                            aadharCardNo = aadharCardNumber
                         )
                     )
                 } else {
@@ -343,9 +355,13 @@ open class GigVerificationViewModel constructor(
                             userHasAadharCard = true,
                             frontImage = newFrontImage,
                             backImage = newBackImage,
-                            verified = false
+                            verified = false,
+                            aadharCardNo = aadharCardNumber
                         )
                     )
+
+
+//                    gigerVerification3rdPartyStatusRepository.getCustomDBCollection().set()
                 }
             }
         }

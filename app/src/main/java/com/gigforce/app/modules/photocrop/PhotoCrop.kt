@@ -389,12 +389,14 @@ class PhotoCrop : AppCompatActivity() {
             PURPOSE_UPLOAD_AADHAR_FRONT_IMAGE -> gigerVerificationViewModel.updateAadharData(
                 true,
                 name,
+                null,
                 null
             )
             PURPOSE_UPLOAD_AADHAR_BACK_IMAGE -> gigerVerificationViewModel.updateAadharData(
                 true,
                 null,
-                name
+                name,
+                null
             )
             PURPOSE_UPLOAD_DL_FRONT_IMAGE -> gigerVerificationViewModel.updateDLData(
                 userHasDL = true,

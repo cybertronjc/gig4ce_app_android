@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
@@ -114,7 +115,10 @@ class AddAadharCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetAc
         }
 
         aadharEditLayout.setOnClickListener {
-            navigate(R.id.editAadharInfoBottomSheet)
+        }
+
+        aadharCardET.doOnTextChanged { text, start, count, after ->
+            aadharCardLayout.error = null
         }
 
         aadharSubmitSliderBtn.onSlideCompleteListener =
@@ -122,10 +126,16 @@ class AddAadharCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetAc
 
                 override fun onSlideComplete(view: SlideToActView) {
 
-                    if (aadharYesRB.isChecked)
-                        navigate(R.id.addDrivingLicenseInfoFragment)
-                    else if (aadharNoRB.isChecked) {
-                        viewModel.updateAadharData(false, null, null)
+                    if (aadharYesRB.isChecked) {
+                        if (aadharCardET.text!!.length != 12) {
+                            aadharCardLayout.error = "Enter Valid Aadhar Card No"
+                            return
+                        }
+
+                        val aadharNo = aadharCardET.text.toString()
+                        viewModel.updateAadharData(true, null, null, aadharNo)
+                    } else if (aadharNoRB.isChecked) {
+                        viewModel.updateAadharData(false, null, null, null)
                         navigate(R.id.addDrivingLicenseInfoFragment)
                     }
                 }
@@ -283,13 +293,6 @@ class AddAadharCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetAc
                 enableSubmitButton()
         }
 
-        setAadharInfoOnView(
-            name = "Rahul Jain",
-            dob = "11/09/1990",
-            gender = "Male",
-            aadharNo = "2345 7624 9238",
-            address = "House no 3601, PT-Vihar, New Delhi, Delhi 110033"
-        )
     }
 
     private fun showFrontAadharCard(aadharFrontImagePath: Uri) {
@@ -314,18 +317,5 @@ class AddAadharCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetAc
             .into(aadharBackImageHolder.uploadImageLayout.clickedImageIV)
     }
 
-    private fun setAadharInfoOnView(
-        name: String?,
-        dob: String?,
-        gender: String?,
-        aadharNo: String?,
-        address: String?
-    ) {
-        nameTV.text = name
-        dobTV.text = dob
-        genderTV.text = gender
-        aadharNoTV.text = aadharNo
-        addressTV.text = address
-    }
 
 }
