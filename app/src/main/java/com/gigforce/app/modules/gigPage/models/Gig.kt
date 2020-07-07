@@ -12,5 +12,7 @@ data class Gig(
     var gigDetails: GigDetails,
     var gigHighLights: List<String>,
     var gigRequirements: List<String>,
-    var gigLocationDetails: GigLocationDetails?
+    var gigLocationDetails: GigLocationDetails?,
+    var attendance : GigAttendance?,
+    var gigContactDetails: GigContactDetails
 )

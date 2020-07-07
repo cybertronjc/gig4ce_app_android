@@ -78,7 +78,7 @@ class GigPageNavigationFragment : BaseFragment() {
     private fun initViewModel(savedInstanceState: Bundle?) {
         viewModel.gigDetails
             .observe(viewLifecycleOwner, Observer {
-                setGigDetailsOnView(it)
+
             })
 
         val gigId = if (savedInstanceState != null) {
@@ -109,68 +109,6 @@ class GigPageNavigationFragment : BaseFragment() {
             .zoom(15f)
             .build()
         it.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
-    }
-
-    private fun setGigDetailsOnView(gig: Gig) {
-        roleNameTV.text = gig.title
-        companyNameTV.text = "@ ${gig.companyName}"
-        gigTypeTV.text = gig.gigType
-        gigIdTV.text = gig.gigId
-
-        if (isGigOfToday(gig.startDate)) {
-            checkInOrContactUsBtn.text = "Check In"
-            fetchingLocationTV.text = "Note :We are fetching your location to mark attendance."
-        } else {
-            checkInOrContactUsBtn.text = "Contact Us"
-            TODO("calc days")
-            fetchingLocationTV.text = "Note :We are preparing your gig.It will start in next 2 Days"
-        }
-
-        setGigDetails(gig.gigDetails)
-
-        gigHighlightsContainer.removeAllViews()
-        inflateGigHighlights(gig.gigHighLights)
-
-        gigRequirementsContainer.removeAllViews()
-        inflateGigRequirements(gig.gigHighLights)
-
-        if (gig.gigLocationDetails != null) {
-            fullMapAddresTV.text = gig.gigLocationDetails?.fullAddress
-            addMarkerOnMap(
-                latitude = gig.gigLocationDetails!!.latitude!!,
-                longitude = gig.gigLocationDetails!!.longitude!!
-            )
-        } else {
-            //make location layout invisivle
-        }
-    }
-
-    private fun inflateGigRequirements(gigRequirements: List<String>) = gigRequirements.forEach {
-        gigRequirementsContainer.inflate(R.layout.gig_details_item)
-        val gigItem: LinearLayout =
-            gigRequirementsContainer.getChildAt(gigRequirementsContainer.childCount - 1) as LinearLayout
-        val gigTextTV: TextView = gigItem.findViewById(R.id.text)
-        gigTextTV.text = it
-    }
-
-
-    private fun inflateGigHighlights(gigHighLights: List<String>) = gigHighLights.forEach {
-        gigHighlightsContainer.inflate(R.layout.gig_details_item)
-        val gigItem: LinearLayout =
-            gigHighlightsContainer.getChildAt(gigHighlightsContainer.childCount - 1) as LinearLayout
-        val gigTextTV: TextView = gigItem.findViewById(R.id.text)
-        gigTextTV.text = it
-    }
-
-    private val dateFormatter = SimpleDateFormat("dd/MM/yyyy")
-
-    @SuppressLint("SetTextI18n")
-    private fun setGigDetails(gigDetails: GigDetails) {
-        durationTextTV.text =
-            "${dateFormatter.format(gigDetails.startTime)} - ${dateFormatter.format(gigDetails.endTime)}"
-        shiftTV.text = gigDetails.shiftDuration
-        addressTV.text = gigDetails.address
-        wageTV.text = gigDetails.wage
     }
 
     private fun isGigOfToday(startDate: Date): Boolean {
