@@ -15,8 +15,12 @@ import android.widget.RadioGroup
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
 import com.gigforce.app.R
+import com.gigforce.app.modules.custom_gig_preferences.CustomPreferencesViewModel
+import com.gigforce.app.modules.custom_gig_preferences.ParamCustPreferViewModel
+import com.gigforce.app.modules.custom_gig_preferences.UnavailableDataModel
 import com.gigforce.app.modules.roster.models.Gig
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import kotlinx.android.synthetic.main.day_view_top_bar.*
@@ -26,7 +30,9 @@ import kotlinx.android.synthetic.main.reason_for_gig_cancel_dialog.*
 import kotlinx.android.synthetic.main.roster_day_fragment.*
 import kotlinx.android.synthetic.main.roster_day_hour_view.*
 import kotlinx.android.synthetic.main.unavailable_time_adjustment_bottom_sheet.*
+import java.sql.Timestamp
 import java.time.LocalDateTime
+import java.time.ZoneId
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -68,10 +74,13 @@ class RosterDayFragment: RosterBaseFragment() {
         rosterViewModel.checkDayAvailable(activeDateTime)
         return inflateView(R.layout.roster_day_fragment, inflater, container)
     }
-
+    lateinit var  viewModelCustomPreference : CustomPreferencesViewModel
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
+         viewModelCustomPreference =
+            ViewModelProvider(this, ParamCustPreferViewModel(viewLifecycleOwner)).get(
+                CustomPreferencesViewModel::class.java
+            )
         initialize()
         setListeners()
 
@@ -110,13 +119,28 @@ class RosterDayFragment: RosterBaseFragment() {
         hourview_viewpager.registerOnPageChangeCallback(hourviewPageChangeCallBack)
 
         top_bar.available_toggle.setOnClickListener {
-            if (top_bar.isAvailable)
+            if (top_bar.isAvailable) {
                 toggleAvailability()
+                viewModelCustomPreference.updateCustomPreference(
+                    UnavailableDataModel(
+                        Date
+                            .from(activeDateTime.atZone(ZoneId.systemDefault())
+                                .toInstant())
+                    )
+                )
+            }
             else {
                 rosterViewModel.isDayAvailable.value = true
                 setHourVisibility(
                     hourview_viewpager.getChildAt(0).findViewWithTag<ConstraintLayout>("day_times"),
                     activeDateTime, actualDateTime)
+                viewModelCustomPreference.deleteCustomPreference(
+                    UnavailableDataModel(
+                        Date
+                            .from(activeDateTime.atZone(ZoneId.systemDefault())
+                                .toInstant())
+                    )
+                )
             }
         }
     }
