@@ -137,7 +137,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:visibility="gone"
+                android:visibility="visible"
                 app:layout_constraintTop_toBottomOf="@id/dlBackImageHolder">
 
                 <View
@@ -170,177 +170,62 @@
                         android:layout_height="16dp"
                         android:layout_marginTop="16dp"
                         android:layout_marginEnd="16dp"
+                        android:visibility="gone"
                         android:src="@drawable/ic_pencil_edit" />
 
                 </LinearLayout>
 
-                <RelativeLayout
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/white_two"
-                    android:padding="16dp">
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:paddingTop="8dp"
+                    android:orientation="vertical"
+                    android:paddingBottom="8dp">
 
                     <TextView
-                        android:id="@+id/nameLabel"
+                        android:id="@+id/stateLabel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="State"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/dobET" />
 
-                        android:fontFamily="@font/lato_bold"
-                        android:letterSpacing="0"
-                        android:text="@string/name_with_colon"
-                        android:textColor="@color/black"
-                        android:textSize="14sp" />
-
-                    <TextView
-                        android:id="@+id/nameTV"
-                        android:layout_width="wrap_content"
+                    <androidx.appcompat.widget.AppCompatSpinner
+                        android:id="@+id/stateSpinner"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-
-                        android:layout_toEndOf="@id/nameLabel"
-                        android:fontFamily="@font/lato"
-                        android:letterSpacing="0"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp"
                         android:textColor="@color/black"
-                        android:textSize="14sp"
-                        tools:text="Rahul Chaudhary" />
+                        android:entries="@array/indian_states"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/genderLabel" />
 
 
-                    <TextView
-                        android:id="@+id/fathersNameLabel"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/nameTV"
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/drivingLicenseTextInputLayout"
+                        style="@style/Widget.Design.TextInputLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
 
-                        android:layout_marginTop="12dp"
-                        android:fontFamily="@font/lato_bold"
-                        android:letterSpacing="0"
-                        android:text="@string/father_s_name_with_colon"
-                        android:textColor="@color/black"
-                        android:textSize="14sp" />
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/drivingLicenseEditText"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Driving License No"
+                            android:imeActionLabel="Done"
+                            android:imeOptions="actionGo"
+                            android:inputType="textNoSuggestions"
+                            android:maxLength="15"
+                            android:maxLines="1" />
 
-                    <TextView
-                        android:id="@+id/fathersNameTV"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/nameTV"
-                        android:layout_alignParentEnd="true"
-                        android:layout_marginTop="12dp"
-                        android:layout_toEndOf="@id/fathersNameLabel"
-                        android:fontFamily="@font/lato"
-                        android:letterSpacing="0"
-                        android:textColor="@color/black"
-                        android:textSize="14sp"
-                        tools:text="Rahul Sr. Chaudhary" />
-
-                    <TextView
-                        android:id="@+id/dobLabel"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/fathersNameTV"
-
-                        android:layout_marginTop="12dp"
-                        android:fontFamily="@font/lato_bold"
-                        android:letterSpacing="0"
-                        android:text="@string/date_of_birth"
-                        android:textColor="@color/black"
-                        android:textSize="14sp" />
-
-                    <TextView
-                        android:id="@+id/dobTV"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/fathersNameTV"
-                        android:layout_alignParentEnd="true"
-                        android:layout_marginTop="12dp"
-                        android:layout_toEndOf="@id/dobLabel"
-                        android:fontFamily="@font/lato"
-                        android:letterSpacing="0"
-                        android:textColor="@color/black"
-                        android:textSize="14sp"
-                        tools:text="29/02/1990" />
+                    </com.google.android.material.textfield.TextInputLayout>
 
 
-                    <TextView
-                        android:id="@+id/licenseNoLabel"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/dobTV"
-                        android:layout_marginTop="12dp"
-                        android:fontFamily="@font/lato_bold"
-                        android:letterSpacing="0"
-                        android:text="@string/license_number_with_colon"
-                        android:textColor="@color/black"
-                        android:textSize="14sp" />
-
-                    <TextView
-                        android:id="@+id/licenseNoTV"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/dobTV"
-                        android:layout_alignParentEnd="true"
-                        android:layout_marginTop="12dp"
-                        android:layout_toEndOf="@id/licenseNoLabel"
-                        android:fontFamily="@font/lato"
-                        android:letterSpacing="0"
-                        android:textColor="@color/black"
-                        android:textSize="14sp"
-                        tools:text="29/02/1990" />
-
-
-                    <TextView
-                        android:id="@+id/licenseValidityLabel"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/licenseNoTV"
-                        android:layout_marginTop="12dp"
-                        android:fontFamily="@font/lato_bold"
-                        android:letterSpacing="0"
-                        android:text="@string/license_validity_with_colon"
-                        android:textColor="@color/black"
-                        android:textSize="14sp" />
-
-                    <TextView
-                        android:id="@+id/licenseValidityTV"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/licenseNoTV"
-                        android:layout_alignParentEnd="true"
-                        android:layout_marginTop="12dp"
-                        android:layout_toEndOf="@id/licenseValidityLabel"
-                        android:fontFamily="@font/lato"
-                        android:letterSpacing="0"
-                        android:textColor="@color/black"
-                        android:textSize="14sp"
-                        tools:text="29/02/1990" />
-
-
-                    <TextView
-                        android:id="@+id/addOnLicenseLabel"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/licenseValidityTV"
-                        android:layout_marginTop="12dp"
-                        android:fontFamily="@font/lato_bold"
-                        android:letterSpacing="0"
-                        android:text="@string/address_with_colon"
-                        android:textColor="@color/black"
-                        android:textSize="14sp" />
-
-                    <TextView
-                        android:id="@+id/addOnlicenseTV"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/licenseValidityTV"
-                        android:layout_alignParentEnd="true"
-                        android:layout_marginTop="12dp"
-                        android:layout_toEndOf="@id/addOnLicenseLabel"
-                        android:fontFamily="@font/lato"
-                        android:letterSpacing="0"
-                        android:textColor="@color/black"
-                        android:textSize="14sp"
-                        tools:text="29/02/1990" />
-
-                </RelativeLayout>
+                </LinearLayout>
             </LinearLayout>
 
 

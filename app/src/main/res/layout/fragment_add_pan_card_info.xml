@@ -122,7 +122,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:visibility="gone"
+                android:visibility="visible"
                 app:layout_constraintTop_toBottomOf="@id/panImageHolder">
 
                 <View
@@ -145,7 +145,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
-                        android:layout_marginTop="16dp"
+                        android:layout_marginTop="12dp"
                         android:layout_weight="1"
                         android:fontFamily="@font/lato"
                         android:letterSpacing="-0.01"
@@ -157,6 +157,7 @@
                         android:layout_height="16dp"
                         android:layout_marginTop="16dp"
                         android:layout_marginEnd="16dp"
+                        android:visibility="gone"
                         android:src="@drawable/ic_pencil_edit" />
 
                 </LinearLayout>
@@ -164,128 +165,33 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/white_two"
-                    android:padding="16dp">
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp">
 
-                    <TextView
-                        android:id="@+id/nameLabel"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/panCardNoTextInputLayout"
+                        style="@style/Widget.Design.TextInputLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
 
-                        android:fontFamily="@font/lato_bold"
-                        android:letterSpacing="0"
-                        android:text="@string/name_with_colon"
-                        android:textColor="@color/black"
-                        android:textSize="14sp" />
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/panCardEditText"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="PAN Card No"
+                            android:imeActionLabel="Done"
+                            android:imeOptions="actionGo"
+                            android:inputType="textNoSuggestions"
+                            android:maxLength="10"
+                            android:maxLines="1" />
 
-                    <TextView
-                        android:id="@+id/nameTV"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
+                    </com.google.android.material.textfield.TextInputLayout>
 
-                        android:layout_toEndOf="@id/nameLabel"
-                        android:fontFamily="@font/lato"
-                        android:letterSpacing="0"
-                        android:textColor="@color/black"
-                        android:textSize="14sp"
-                        tools:text="Rahul Chaudhary" />
-
-
-                    <TextView
-                        android:id="@+id/fathersNameLabel"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/nameTV"
-
-                        android:layout_marginTop="12dp"
-                        android:fontFamily="@font/lato_bold"
-                        android:letterSpacing="0"
-                        android:text="@string/father_s_name_with_colon"
-                        android:textColor="@color/black"
-                        android:textSize="14sp" />
-
-                    <TextView
-                        android:id="@+id/fathersNameTV"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/nameTV"
-                        android:layout_alignParentEnd="true"
-                        android:layout_marginTop="12dp"
-                        android:layout_toEndOf="@id/fathersNameLabel"
-                        android:fontFamily="@font/lato"
-                        android:letterSpacing="0"
-                        android:textColor="@color/black"
-                        android:textSize="14sp"
-                        tools:text="Rahul Sr. Chaudhary" />
-
-                    <TextView
-                        android:id="@+id/dobLabel"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/fathersNameTV"
-
-                        android:layout_marginTop="12dp"
-                        android:fontFamily="@font/lato_bold"
-                        android:letterSpacing="0"
-                        android:text="@string/date_of_birth"
-                        android:textColor="@color/black"
-                        android:textSize="14sp" />
-
-                    <TextView
-                        android:id="@+id/dobTV"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/fathersNameTV"
-                        android:layout_alignParentEnd="true"
-                        android:layout_marginTop="12dp"
-                        android:layout_toEndOf="@id/dobLabel"
-                        android:fontFamily="@font/lato"
-                        android:letterSpacing="0"
-                        android:textColor="@color/black"
-                        android:textSize="14sp"
-                        tools:text="29/02/1990" />
-
-
-                    <TextView
-                        android:id="@+id/panLabel"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/dobTV"
-                        android:layout_marginTop="12dp"
-                        android:fontFamily="@font/lato_bold"
-                        android:letterSpacing="0"
-                        android:text="@string/pan_with_colon"
-                        android:textColor="@color/black"
-                        android:textSize="14sp" />
-
-                    <TextView
-                        android:id="@+id/panNoTV"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/dobTV"
-                        android:layout_alignParentEnd="true"
-                        android:layout_marginTop="12dp"
-                        android:layout_toEndOf="@id/panLabel"
-                        android:fontFamily="@font/lato"
-                        android:letterSpacing="0"
-                        android:textColor="@color/black"
-                        android:textSize="14sp"
-                        tools:text="29/02/1990" />
 
                 </RelativeLayout>
 
-                <TextView
-                    android:id="@+id/panstatusTV"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="12dp"
-                    android:fontFamily="@font/lato"
-                    android:letterSpacing="0"
-                    android:textColor="#468800"
-                    android:textSize="12sp"
-                    tools:text="PAN is verified" />
 
             </LinearLayout>
 

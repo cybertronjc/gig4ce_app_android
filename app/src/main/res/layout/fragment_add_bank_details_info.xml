@@ -98,18 +98,18 @@
 
                 <com.google.android.material.radiobutton.MaterialRadioButton
                     android:id="@+id/passbookYesRB"
+                    style="@style/Theme.RadioButtonLipstickPink"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/lato"
-                    style="@style/Theme.RadioButtonLipstickPink"
                     android:text="@string/yes_i_have_bank_passbook" />
 
                 <com.google.android.material.radiobutton.MaterialRadioButton
                     android:id="@+id/passbookNoRB"
+                    style="@style/Theme.RadioButtonLipstickPink"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/lato"
-                    style="@style/Theme.RadioButtonLipstickPink"
                     android:text="@string/no_i_dont_have_bank_passbook" />
 
             </RadioGroup>
@@ -127,7 +127,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:visibility="gone"
+                android:visibility="visible"
                 app:layout_constraintTop_toBottomOf="@id/passbookImageHolder">
 
                 <View
@@ -162,175 +162,78 @@
                         android:layout_height="16dp"
                         android:layout_marginTop="16dp"
                         android:layout_marginEnd="16dp"
-                        android:src="@drawable/ic_pencil_edit" />
+                        android:src="@drawable/ic_pencil_edit"
+                        android:visibility="gone" />
 
                 </LinearLayout>
 
-                <RelativeLayout
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/white_two"
-                    android:padding="16dp">
-
-                    <TextView
-                        android:id="@+id/nameLabel"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-
-                        android:fontFamily="@font/lato_bold"
-                        android:letterSpacing="0"
-                        android:text="@string/name_with_colon"
-                        android:textColor="@color/black"
-                        android:textSize="14sp" />
-
-                    <TextView
-                        android:id="@+id/nameTV"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:layout_toEndOf="@id/nameLabel"
-                        android:fontFamily="@font/lato"
-                        android:letterSpacing="0"
-                        android:textColor="@color/black"
-                        android:textSize="14sp"
-                        tools:text="Rahul Chaudhary" />
+                    android:orientation="vertical"
+                    android:paddingStart="16dp"
+                    android:paddingTop="8dp"
+                    android:paddingEnd="16dp"
+                    android:paddingBottom="8dp">
 
 
                     <TextView
-                        android:id="@+id/fathersNameLabel"
+                        android:id="@+id/stateLabel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/nameTV"
-                        android:layout_marginTop="12dp"
-                        android:fontFamily="@font/lato_bold"
-                        android:letterSpacing="0"
-                        android:text="@string/father_s_name_with_colon"
-                        android:textColor="@color/black"
-                        android:textSize="14sp" />
-
-                    <TextView
-                        android:id="@+id/fathersNameTV"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/nameTV"
-                        android:layout_alignParentEnd="true"
-                        android:layout_marginTop="12dp"
-                        android:layout_toEndOf="@id/fathersNameLabel"
-                        android:fontFamily="@font/lato"
-                        android:letterSpacing="0"
-                        android:textColor="@color/black"
-                        android:textSize="14sp"
-                        tools:text="29/02/1990" />
+                        android:layout_marginTop="8dp"
+                        android:text="IFSC"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/dobET" />
 
 
-                    <TextView
-                        android:id="@+id/cifNoLabel"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/fathersNameTV"
-                        android:layout_marginTop="12dp"
-                        android:fontFamily="@font/lato_bold"
-                        android:letterSpacing="0"
-                        android:text="@string/cif_number_with_colon"
-                        android:textColor="@color/black"
-                        android:textSize="14sp" />
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/ifscTextInputLayout"
+                        style="@style/Widget.Design.TextInputLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
 
-                    <TextView
-                        android:id="@+id/cifNumberTV"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/fathersNameTV"
-                        android:layout_alignParentEnd="true"
-                        android:layout_marginTop="12dp"
-                        android:layout_toEndOf="@id/cifNoLabel"
-                        android:fontFamily="@font/lato"
-                        android:letterSpacing="0"
-                        android:textColor="@color/black"
-                        android:textSize="14sp"
-                        tools:text="Male" />
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/ifscEditText"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
 
+                            android:imeActionLabel="Done"
+                            android:imeOptions="actionGo"
+                            android:inputType="textNoSuggestions"
+                            android:maxLength="15"
+                            android:maxLines="1" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
 
                     <TextView
                         android:id="@+id/accNoLabel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/cifNumberTV"
-                        android:layout_marginTop="12dp"
-                        android:fontFamily="@font/lato_bold"
-                        android:letterSpacing="0"
-                        android:text="@string/account_number_with_colon"
-                        android:textColor="@color/black"
-                        android:textSize="14sp" />
-
-                    <TextView
-                        android:id="@+id/accNoTV"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/cifNumberTV"
-                        android:layout_alignParentEnd="true"
-                        android:layout_marginTop="12dp"
-                        android:layout_toEndOf="@id/accNoLabel"
-                        android:fontFamily="@font/lato"
-                        android:letterSpacing="0"
-                        android:textColor="@color/black"
-                        android:textSize="14sp"
-                        tools:text="1234567890" />
+                        android:layout_marginTop="8dp"
+                        android:text="Account No"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/dobET" />
 
 
-                    <TextView
-                        android:id="@+id/ifscLabel"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/accNoTV"
-                        android:layout_marginTop="12dp"
-                        android:fontFamily="@font/lato_bold"
-                        android:letterSpacing="0"
-                        android:text="@string/ifsc_with_colon"
-                        android:textColor="@color/black"
-                        android:textSize="14sp" />
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/accountNoTextInputLayout"
+                        style="@style/Widget.Design.TextInputLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
 
-                    <TextView
-                        android:id="@+id/ifscTV"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/accNoTV"
-                        android:layout_alignParentEnd="true"
-                        android:layout_marginTop="12dp"
-                        android:layout_toEndOf="@id/ifscLabel"
-                        android:fontFamily="@font/lato"
-                        android:letterSpacing="0"
-                        android:textColor="@color/black"
-                        android:textSize="14sp"
-                        tools:text="29/02/1990" />
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/accountNoEditText"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:imeActionLabel="Done"
+                            android:imeOptions="actionGo"
+                            android:inputType="textNoSuggestions"
+                            android:maxLength="30"
+                            android:maxLines="1" />
 
-
-                    <TextView
-                        android:id="@+id/addressLabel"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/ifscTV"
-                        android:layout_marginTop="12dp"
-                        android:fontFamily="@font/lato_bold"
-                        android:letterSpacing="0"
-                        android:text="@string/address_with_colon"
-                        android:textColor="@color/black"
-                        android:textSize="14sp" />
-
-                    <TextView
-                        android:id="@+id/addressTV"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/ifscTV"
-                        android:layout_alignParentEnd="true"
-                        android:layout_marginTop="12dp"
-                        android:layout_toEndOf="@id/addressLabel"
-                        android:fontFamily="@font/lato"
-                        android:letterSpacing="0"
-                        android:textColor="@color/black"
-                        android:textSize="14sp"
-                        tools:text="29/02/1990" />
-
-                </RelativeLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
+                </LinearLayout>
             </LinearLayout>
 
 
@@ -340,12 +243,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="30dp"
                 app:border_radius="8dp"
-                app:slider_height="60dp"
                 app:inner_color="@color/warm_grey"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:outer_color="@color/light_grey"
-                app:slider_icon_color="@color/white"
+                app:slider_height="60dp"
                 app:slider_icon="@drawable/ic_arrow_forward_white"
+                app:slider_icon_color="@color/white"
                 app:text="@string/save_all_caps" />
 
             <com.google.android.material.checkbox.MaterialCheckBox

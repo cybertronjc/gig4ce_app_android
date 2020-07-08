@@ -113,20 +113,48 @@ class AddBankDetailsInfoFragment : BaseFragment(), SelectImageSourceBottomSheetA
                 override fun onSlideComplete(view: SlideToActView) {
 
                     if (passbookNoRB.isChecked) {
+
+
                         viewModel.updateBankPassbookImagePath(
                             userHasPassBook = false,
-                            passbookImagePath = null
+                            passbookImagePath = null,
+                            ifscCode = null,
+                            accountNo = null
                         )
 
                         findNavController().popBackStack(R.id.addSelfieVideoFragment, false)
                         activity?.onBackPressed()
                     } else {
+
+                        if (ifscEditText.text!!.length != 11) {
+                            ifscTextInputLayout.error = "Enter Valid IfSC Code"
+                            return
+                        }
+
+                        if (accountNoEditText.text.isNullOrBlank()) {
+                            accountNoTextInputLayout.error = "Enter Account No"
+                            return
+                        }
+
+                        val ifsc = ifscEditText.text.toString()
+                        val accNo = accountNoEditText.text.toString()
+
+                        viewModel.updateBankPassbookImagePath(
+                            userHasPassBook = true,
+                            passbookImagePath = null,
+                            ifscCode = ifsc,
+                            accountNo = accNo
+                        )
+
+
                         findNavController().popBackStack(R.id.addSelfieVideoFragment, false)
                         activity?.onBackPressed()
                     }
                 }
             }
     }
+
+    //9967027631
 
     private fun initViewModel() {
         viewModel.gigerVerificationStatus
@@ -252,12 +280,7 @@ class AddBankDetailsInfoFragment : BaseFragment(), SelectImageSourceBottomSheetA
         ifsc: String?,
         address: String?
     ) {
-        nameTV.text = name
-        fathersNameTV.text = fathersName
-        cifNumberTV.text = cifNumber
-        accNoTV.text = accountNumber
-        ifscTV.text = ifsc
-        addressTV.text = address
+
     }
 
 }

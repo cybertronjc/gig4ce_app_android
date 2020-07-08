@@ -1,10 +1,7 @@
 package com.gigforce.app.core.base.basefirestore
 
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.CollectionReference
-import com.google.firebase.firestore.DocumentReference
-import com.google.firebase.firestore.FieldValue
-import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.*
 
 
 abstract public class BaseFirestoreDBRepository {
@@ -28,6 +25,7 @@ abstract public class BaseFirestoreDBRepository {
 
     public fun <M : BaseFirestoreDataModel> setData(obj: M) {
         getDBCollection().update(obj.tableName, FieldValue.arrayUnion(obj))
+        getCollectionReference()
     }
 
     public fun <M : BaseFirestoreDataModel> setDataAsKeyValue(obj: M) {
@@ -71,6 +69,7 @@ abstract public class BaseFirestoreDBRepository {
     // set data boolean
     public fun setData(tableName: String, data: Boolean) {
         getDBCollection().update(tableName, data)
+
     }
 
     public fun setDataAsKeyValue(tableName: String, data: Boolean) {

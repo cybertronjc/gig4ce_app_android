@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
@@ -20,6 +21,7 @@ import com.gigforce.app.modules.photocrop.PhotoCrop
 import com.google.firebase.storage.FirebaseStorage
 import com.ncorti.slidetoact.SlideToActView
 import kotlinx.android.synthetic.main.fragment_add_pan_card_info.*
+import kotlinx.android.synthetic.main.fragment_add_pan_card_info.toolbar
 import kotlinx.android.synthetic.main.fragment_verification_image_holder.view.*
 import java.io.File
 
@@ -64,6 +66,11 @@ class AddPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetActio
 
         panImageHolder.uploadImageLayout.imageLabelTV.text = getString(R.string.pan_card_image)
 
+
+        panCardEditText.doOnTextChanged { text, start, count, after ->
+            panCardNoTextInputLayout.error = null
+        }
+
         panCardAvailaibilityOptionRG.setOnCheckedChangeListener { _, checkedId ->
 
             if (checkedId == R.id.panYesRB) {
@@ -105,10 +112,16 @@ class AddPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetActio
 
                 override fun onSlideComplete(view: SlideToActView) {
 
-                    if (panYesRB.isChecked)
-                        navigate(R.id.addAadharCardInfoFragment)
-                    else if (panNoRB.isChecked) {
-                        viewModel.updatePanImagePath(false, null)
+                    if (panYesRB.isChecked) {
+                        if (panCardEditText.text!!.length != 10) {
+                            panCardNoTextInputLayout.error = "Enter Valid PAN Card No"
+                            return
+                        }
+
+                        val panNo = panCardEditText.text.toString()
+                        viewModel.updatePanImagePath(false, null, panNo)
+                    } else if (panNoRB.isChecked) {
+                        viewModel.updatePanImagePath(false, null, null)
                         navigate(R.id.addAadharCardInfoFragment)
                     }
                 }
@@ -235,10 +248,7 @@ class AddPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetActio
         dob: String?,
         pan: String?
     ) {
-        nameTV.text = name
-        fathersNameTV.text = fathersName
-        dobTV.text = dob
-        panNoTV.text = pan
+
     }
 
 }

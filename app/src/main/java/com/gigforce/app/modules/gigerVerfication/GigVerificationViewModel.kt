@@ -3,7 +3,6 @@ package com.gigforce.app.modules.gigerVerfication
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.gigforce.app.modules.GigerVerification3rdPartyStatusRepository
 import com.gigforce.app.modules.gigerVerfication.aadharCard.AadharCardDataModel
 import com.gigforce.app.modules.gigerVerfication.bankDetails.BankDetailsDataModel
 import com.gigforce.app.modules.gigerVerfication.drivingLicense.DrivingLicenseDataModel
@@ -40,6 +39,9 @@ open class GigVerificationViewModel constructor(
         verificationChangesListener = gigerVerificationRepository
             .getDBCollection()
             .addSnapshotListener { documentSnapshot, firebaseFirestoreException ->
+                if (documentSnapshot == null)
+                    createADefaultEntry()
+
                 val docSnap = documentSnapshot ?: return@addSnapshotListener
 
                 val selfieUploaded = docSnap.contains(SelfieVideoDataModel.TABLE_NAME)
@@ -82,6 +84,10 @@ open class GigVerificationViewModel constructor(
             }
     }
 
+    private fun createADefaultEntry() {
+        gigerVerificationRepository.setDefaultData(DefaultEntryModel())
+    }
+
     private fun extractSelfieVideoInfo(
         selfieVideoUploaded: Boolean,
         docSnap: DocumentSnapshot
@@ -122,6 +128,7 @@ open class GigVerificationViewModel constructor(
         var panCardImageName: String?
         var userHasPanCard: Boolean?
         var panVerified: Boolean
+        var panCardNo: String?
 
         try {
 
@@ -134,21 +141,26 @@ open class GigVerificationViewModel constructor(
                     hashMap[PanCardDataModel.KEY_NAME_USER_HAS_PAN_CARD] as Boolean?
                 panVerified =
                     hashMap[PanCardDataModel.KEY_NAME_VERIFIED] as Boolean
+                panCardNo =
+                    hashMap[PanCardDataModel.KEY_PAN_NO] as String?
             } else {
                 panCardImageName = null
                 userHasPanCard = null
                 panVerified = false
+                panCardNo = null
             }
         } catch (e: Exception) {
             panCardImageName = null
             userHasPanCard = null
             panVerified = false
+            panCardNo = null
         }
 
         val panCardDetails = PanCardDataModel(
             panCardImagePath = panCardImageName,
             userHasPanCard = userHasPanCard,
-            verified = panVerified
+            verified = panVerified,
+            panCardNo = panCardNo
         )
         return panCardDetails
     }
@@ -162,6 +174,8 @@ open class GigVerificationViewModel constructor(
         var dlBackImageName: String?
         var userHasDL: Boolean?
         var dlVerified: Boolean
+        var dlNo: String?
+        var dlState: String?
 
         try {
 
@@ -170,6 +184,10 @@ open class GigVerificationViewModel constructor(
                     docSnap.get(DrivingLicenseDataModel.TABLE_NAME) as HashMap<String, Any?>
                 dlFrontImageName =
                     hashMap[DrivingLicenseDataModel.KEY_NAME_FRONT_IMAGE] as String?
+                dlNo =
+                    hashMap[DrivingLicenseDataModel.KEY_DL_NO] as String?
+                dlState =
+                    hashMap[DrivingLicenseDataModel.KEY_DL_STATE] as String?
                 dlBackImageName =
                     hashMap[DrivingLicenseDataModel.KEY_NAME_BACK_IMAGE] as String?
                 userHasDL =
@@ -181,19 +199,25 @@ open class GigVerificationViewModel constructor(
                 dlBackImageName = null
                 userHasDL = null
                 dlVerified = false
+                dlNo = null
+                dlState = null
             }
         } catch (e: Exception) {
             dlFrontImageName = null
             dlBackImageName = null
             userHasDL = null
             dlVerified = false
+            dlNo = null
+            dlState = null
         }
 
         return DrivingLicenseDataModel(
             userHasDL = userHasDL,
             frontImage = dlFrontImageName,
             backImage = dlBackImageName,
-            verified = dlVerified
+            verified = dlVerified,
+            dlNo = dlNo,
+            dlState = dlState
         )
     }
 
@@ -253,9 +277,11 @@ open class GigVerificationViewModel constructor(
         docSnap: DocumentSnapshot
     ): BankDetailsDataModel {
 
-        var passbookImageName: String?
-        var userHasPassbook: Boolean?
-        var passbookVerified: Boolean
+        var passbookImageName: String? = null
+        var userHasPassbook: Boolean? = null
+        var passbookVerified: Boolean = false
+        var accountNo: String? = null
+        var ifscCode: String? = null
 
         try {
 
@@ -268,43 +294,54 @@ open class GigVerificationViewModel constructor(
                     hashMap[BankDetailsDataModel.KEY_USER_HAS_PASSBOOK] as Boolean?
                 passbookVerified =
                     hashMap[BankDetailsDataModel.KEY_NAME_VERIFIED] as Boolean
-            } else {
-                passbookImageName = null
-                userHasPassbook = null
-                passbookVerified = false
+                ifscCode =
+                    hashMap[BankDetailsDataModel.KEY_NAME_IFSC] as String?
+                accountNo =
+                    hashMap[BankDetailsDataModel.KEY_NAME_ACCOUNT_NO] as String?
             }
         } catch (e: Exception) {
-            passbookImageName = null
-            userHasPassbook = null
-            passbookVerified = false
         }
 
         return BankDetailsDataModel(
             userHasPassBook = userHasPassbook,
             passbookImagePath = passbookImageName,
-            verified = passbookVerified
+            verified = passbookVerified,
+            ifscCode = ifscCode,
+            accountNo = accountNo
         )
     }
 
 
-    fun updatePanImagePath(userhasPan: Boolean, panPath: String?) {
+    fun updatePanImagePath(userhasPan: Boolean, panPath: String?, panCardNo: String?) {
         gigerVerificationRepository.setDataAsKeyValue(
             PanCardDataModel(
                 userHasPanCard = userhasPan,
                 panCardImagePath = panPath,
-                verified = false
+                verified = false,
+                panCardNo = panCardNo
             )
         )
+
+        markDataAsUnverified()
     }
 
-    fun updateBankPassbookImagePath(userHasPassBook: Boolean, passbookImagePath: String?) {
+    fun updateBankPassbookImagePath(
+        userHasPassBook: Boolean,
+        passbookImagePath: String?,
+        ifscCode: String?,
+        accountNo: String?
+    ) {
         gigerVerificationRepository.setDataAsKeyValue(
             BankDetailsDataModel(
                 userHasPassBook = userHasPassBook,
                 passbookImagePath = passbookImagePath,
-                verified = false
+                verified = false,
+                ifscCode = ifscCode,
+                accountNo = accountNo
             )
         )
+
+        markDataAsUnverified()
     }
 
     fun updateAadharData(
@@ -360,8 +397,8 @@ open class GigVerificationViewModel constructor(
                         )
                     )
 
+                    markDataAsUnverified()
 
-//                    gigerVerification3rdPartyStatusRepository.getCustomDBCollection().set()
                 }
             }
         }
@@ -370,14 +407,18 @@ open class GigVerificationViewModel constructor(
     fun updateDLData(
         userHasDL: Boolean,
         frontImagePath: String?,
-        backImagePath: String?
+        backImagePath: String?,
+        dlState: String?,
+        dlNo: String?
     ) {
 
         if (!userHasDL) {
             gigerVerificationRepository.setDataAsKeyValue(
                 DrivingLicenseDataModel(
                     userHasDL = false,
-                    verified = false
+                    verified = false,
+                    dlState = null,
+                    dlNo = null
                 )
             )
         } else {
@@ -390,7 +431,9 @@ open class GigVerificationViewModel constructor(
                             userHasDL = true,
                             frontImage = frontImagePath,
                             backImage = backImagePath,
-                            verified = false
+                            verified = false,
+                            dlState = null,
+                            dlNo = dlNo
                         )
                     )
                 } else {
@@ -412,12 +455,24 @@ open class GigVerificationViewModel constructor(
                             userHasDL = true,
                             frontImage = newFrontImage,
                             backImage = newBackImage,
-                            verified = false
+                            verified = false,
+                            dlState = dlState,
+                            dlNo = dlNo
                         )
                     )
+
+                    markDataAsUnverified()
                 }
             }
         }
+    }
+
+    private fun markDataAsUnverified() {
+        gigerVerification3rdPartyStatusRepository.getDBCollection().set(
+            VerificationStatus3rdPartyStatus(
+                app_data_sync = false
+            )
+        )
     }
 
 

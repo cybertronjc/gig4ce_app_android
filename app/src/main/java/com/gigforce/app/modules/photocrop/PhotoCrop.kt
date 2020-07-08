@@ -380,11 +380,14 @@ class PhotoCrop : AppCompatActivity() {
             profilePictureCrop -> viewModel.setProfileAvatarName(name)
             PURPOSE_UPLOAD_PAN_IMAGE -> gigerVerificationViewModel.updatePanImagePath(
                 userhasPan = true,
-                panPath = name
+                panPath = name,
+                panCardNo = null
             )
             PURPOSE_UPLOAD_BANK_DETAILS_IMAGE -> gigerVerificationViewModel.updateBankPassbookImagePath(
                 userHasPassBook = true,
-                passbookImagePath = name
+                passbookImagePath = name,
+                ifscCode = null,
+                accountNo = null
             )
             PURPOSE_UPLOAD_AADHAR_FRONT_IMAGE -> gigerVerificationViewModel.updateAadharData(
                 true,
@@ -401,12 +404,16 @@ class PhotoCrop : AppCompatActivity() {
             PURPOSE_UPLOAD_DL_FRONT_IMAGE -> gigerVerificationViewModel.updateDLData(
                 userHasDL = true,
                 frontImagePath = name,
-                backImagePath = null
+                backImagePath = null,
+                dlState = null,
+                dlNo = null
             )
             PURPOSE_UPLOAD_DL_BACK_IMAGE -> gigerVerificationViewModel.updateDLData(
                 userHasDL = true,
                 frontImagePath = null,
-                backImagePath = name
+                backImagePath = name,
+                dlState = null,
+                dlNo = null
             )
         }
     }

@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
@@ -17,6 +18,7 @@ import com.gigforce.app.modules.gigerVerfication.ImageSource
 import com.gigforce.app.modules.gigerVerfication.SelectImageSourceBottomSheetActionListener
 import com.gigforce.app.modules.gigerVerfication.aadharCard.AddAadharCardInfoFragment
 import com.gigforce.app.modules.photocrop.PhotoCrop
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.storage.FirebaseStorage
 import com.ncorti.slidetoact.SlideToActView
 import kotlinx.android.synthetic.main.fragment_add_driving_license_info.*
@@ -108,15 +110,46 @@ class AddDrivingLicenseInfoFragment : BaseFragment(), SelectImageSourceBottomShe
                 disableSubmitButton()
         }
 
+        drivingLicenseEditText.doOnTextChanged { text, start, count, after ->
+            drivingLicenseTextInputLayout.error = null
+        }
+
         dlSubmitSliderBtn.onSlideCompleteListener =
             object : SlideToActView.OnSlideCompleteListener {
 
                 override fun onSlideComplete(view: SlideToActView) {
 
-                    if (dlYesRB.isChecked)
-                        navigate(R.id.addBankDetailsInfoFragment)
-                    else if (dlNoRB.isChecked) {
-                        viewModel.updateDLData(false, null, null)
+                    if (dlYesRB.isChecked) {
+
+                        if (stateSpinner.selectedItemPosition == 0) {
+                            MaterialAlertDialogBuilder(requireContext())
+                                .setMessage("Please Select State")
+                                .show()
+                            return
+                        }
+
+                        if (drivingLicenseEditText.text!!.length != 15) {
+                            drivingLicenseTextInputLayout.error = "Enter Valid Driving License"
+                            return
+                        }
+
+                        val dlNo = drivingLicenseEditText.text.toString()
+                        val state = stateSpinner.selectedItem.toString()
+                        viewModel.updateDLData(
+                            true,
+                            null,
+                            null,
+                            state,
+                            dlNo
+                        )
+                    } else if (dlNoRB.isChecked) {
+                        viewModel.updateDLData(
+                            false,
+                            null,
+                            null,
+                            null,
+                            null
+                        )
                         navigate(R.id.addBankDetailsInfoFragment)
                     }
                 }
@@ -344,12 +377,12 @@ class AddDrivingLicenseInfoFragment : BaseFragment(), SelectImageSourceBottomShe
         licenseValidity: String?,
         address: String?
     ) {
-        nameTV.text = name
-        fathersNameTV.text = fathersName
-        dobTV.text = dob
-        licenseNoTV.text = licenseNo
-        licenseValidityTV.text = licenseValidity
-        addOnlicenseTV.text = address
+//        nameTV.text = name
+//        fathersNameTV.text = fathersName
+//        dobTV.text = dob
+//        licenseNoTV.text = licenseNo
+//        licenseValidityTV.text = licenseValidity
+//        addOnlicenseTV.text = address
     }
 
 }
