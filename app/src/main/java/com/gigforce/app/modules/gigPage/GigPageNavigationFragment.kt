@@ -87,7 +87,7 @@ class GigPageNavigationFragment : BaseFragment() {
             arguments?.getString(INTENT_EXTRA_GIG_ID)
         }
 
-        viewModel.getPresentGig(gigId!!)
+//        viewModel.getPresentGig(gigId!!)
     }
 
     private fun addMarkerOnMap(

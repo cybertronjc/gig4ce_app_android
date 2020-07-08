@@ -3,69 +3,85 @@ package com.gigforce.app.modules.gigPage
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.gigforce.app.modules.gigPage.models.*
+import com.gigforce.app.modules.gigPage.models.Gig
+import com.gigforce.app.utils.Lce
+import com.google.firebase.firestore.ListenerRegistration
+import com.google.firebase.firestore.QuerySnapshot
 import java.util.*
 
 class GigViewModel constructor(
-    private val gigRepository: GigRepository = GigRepository()
+        private val gigsRepository: GigsRepository = GigsRepository()
 ) : ViewModel() {
 
-    private val _gigDetails = MutableLiveData<Gig>()
-    val gigDetails: LiveData<Gig> get() = _gigDetails
+    private var mWatchUpcomingRepoRegistration: ListenerRegistration? = null
+    private var mWatchSingleGigRegistration: ListenerRegistration? = null
 
-    fun getPresentGig(gigId: String) {
+    private val _upcomingGigs = MutableLiveData<Lce<List<Gig>>>()
+    val upcomingGigs: LiveData<Lce<List<Gig>>> get() = _upcomingGigs
 
-        val loc  = GigLocationDetails(
-            latitude = 34.2332,
-            longitude = 43.2323,
-            fullAddress = "fulll Addresss"
-        )
+    fun watchUpcomingGigs() {
+        _upcomingGigs.value = Lce.loading()
+        mWatchUpcomingRepoRegistration = gigsRepository
+                .getCurrentUserGigs()
+                .addSnapshotListener { querySnapshot, firebaseFirestoreException ->
 
-        val attendance = GigAttendance(
-            checkInMarked = true,
-            checkInLat = 34.2323,
-            checkInLong = 56.233,
-            checkInImage = "Image_name.jpg",
-            checkOutMarked = true,
-            checkOutLat = 34.2323,
-            checkOutLong = 56.233,
-            checkOutImage = "Image_name.jpg"
-        )
+                    if (querySnapshot != null) {
+                        extractUpcomingGigs(querySnapshot)
+                    } else {
+                        _upcomingGigs.value = Lce.error(firebaseFirestoreException!!.message!!)
+                    }
+                }
+    }
 
-        val details = GigDetails(
-            startTime = Date(),
-            endTime = Date(),
-            wage = "34 Per Hour",
-            shiftDuration = "5 Hours",
-            address = "Some Address"
-        )
+    private fun extractUpcomingGigs(querySnapshot: QuerySnapshot) {
+        val userGigs: MutableList<Gig> = mutableListOf()
+        querySnapshot.documents.forEach { t ->
+            t.toObject(Gig::class.java)?.let {
+                it.gigId = t.id
+                userGigs.add(it)
+            }
+        }
 
-        val gigContactDetails = GigContactDetails(
-            contactName = "Name",
-            mobileNo = "9798948823"
-        )
+        val currentDate = Date()
+        val upcomingGigs = userGigs.filter {
+            it.startDate.toDate().time > currentDate.time
+        }
+        _upcomingGigs.value = Lce.content(upcomingGigs)
+    }
 
-        val gig = Gig(
-            gigId = "GIG00001",
-            title = "Sales Executive",
-            startDate = Date(),
-            companyName = "Company XYZ",
-            contactNo = "9892849832948",
-            gigType = "On Site",
-            gigHighLights = listOf(
-                "Provide Advice On Purchase",
-                "Communication with clients and customers about their experience with a products and services."
-            ),
-            gigRequirements = listOf(
-                "Req 1",
-                "Req 2"
-            ),
-            gigLocationDetails = loc,
-            gigDetails = details,
-            attendance = attendance,
-            gigContactDetails = gigContactDetails
-        )
 
-        _gigDetails.value = gig
+    /**
+     * Specific Gig
+     */
+
+    private val _gigDetails = MutableLiveData<Lce<Gig>>()
+    val gigDetails: LiveData<Lce<Gig>> get() = _gigDetails
+
+    fun watchGig(gigId: String) {
+        _gigDetails.value = Lce.loading()
+        mWatchUpcomingRepoRegistration = gigsRepository
+                .getCollectionReference()
+                .document(gigId)
+                .addSnapshotListener { documentSnapshot, firebaseFirestoreException ->
+
+                    if (documentSnapshot != null) {
+                        runCatching {
+                            documentSnapshot.toObject(Gig::class.java)
+                        }.onSuccess {
+                            _gigDetails.value = Lce.content(it!!)
+                        }.onFailure {
+                            _gigDetails.value = Lce.error(it.message!!)
+                        }
+                    } else {
+                        _gigDetails.value = Lce.error(firebaseFirestoreException!!.message!!)
+                    }
+                }
+    }
+
+
+    override fun onCleared() {
+        super.onCleared()
+        mWatchUpcomingRepoRegistration?.remove()
+        mWatchSingleGigRegistration?.remove()
     }
 }

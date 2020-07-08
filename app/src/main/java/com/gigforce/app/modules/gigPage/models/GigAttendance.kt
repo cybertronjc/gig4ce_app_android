@@ -1,5 +1,8 @@
 package com.gigforce.app.modules.gigPage.models
 
+import androidx.annotation.Keep
+
+@Keep
 data class GigAttendance(
     var checkInMarked: Boolean,
     var checkInLat: Double?,

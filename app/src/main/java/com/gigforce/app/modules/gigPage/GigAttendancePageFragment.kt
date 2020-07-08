@@ -11,6 +11,7 @@ import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.modules.gigPage.models.Gig
 import com.gigforce.app.modules.gigPage.models.GigDetails
+import com.gigforce.app.utils.Lce
 import kotlinx.android.synthetic.main.fragment_gig_page_attendance.*
 import java.text.SimpleDateFormat
 
@@ -19,29 +20,40 @@ class GigAttendancePageFragment : BaseFragment() {
 
     private val viewModel: GigViewModel by viewModels()
 
+    private lateinit var gigId: String
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ) =  inflateView(R.layout.fragment_gig_page_attendance,inflater, container)
+    ) = inflateView(R.layout.fragment_gig_page_attendance, inflater, container)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        getData(arguments, savedInstanceState)
         initViewModel(savedInstanceState)
+    }
+
+    private fun getData(arguments: Bundle?, savedInstanceState: Bundle?) {
+        gigId = if (savedInstanceState != null) {
+            savedInstanceState.getString(PresentGigPageFragment.INTENT_EXTRA_GIG_ID)!!
+        } else {
+            arguments?.getString(PresentGigPageFragment.INTENT_EXTRA_GIG_ID)!!
+        }
     }
 
     private fun initViewModel(savedInstanceState: Bundle?) {
         viewModel.gigDetails
             .observe(viewLifecycleOwner, Observer {
-                setGigDetailsOnView(it)
+                when (it) {
+                    Lce.Loading -> {
+                    }
+                    is Lce.Content -> setGigDetailsOnView(it.content)
+                    is Lce.Error -> {
+                    }
+                }
             })
 
-        val gigId = if (savedInstanceState != null) {
-            savedInstanceState.getString(PresentGigPageFragment.INTENT_EXTRA_GIG_ID)
-        } else {
-            arguments?.getString(PresentGigPageFragment.INTENT_EXTRA_GIG_ID)
-        }
-
-        viewModel.getPresentGig("some")
+        viewModel.watchGig(gigId)
     }
 
     private fun setGigDetailsOnView(gig: Gig) {
@@ -56,7 +68,7 @@ class GigAttendancePageFragment : BaseFragment() {
 
 
         if (gig.gigLocationDetails != null) {
-  //          fullMapAddresTV.text = gig.gigLocationDetails?.fullAddress
+            //          fullMapAddresTV.text = gig.gigLocationDetails?.fullAddress
 //            addMarkerOnMap(
 //                latitude = gig.gigLocationDetails!!.latitude!!,
 //                longitude = gig.gigLocationDetails!!.longitude!!
@@ -65,8 +77,6 @@ class GigAttendancePageFragment : BaseFragment() {
             //make location layout invisivle
         }
     }
-
-
 
 
     private val dateFormatter = SimpleDateFormat("dd/MM/yyyy")

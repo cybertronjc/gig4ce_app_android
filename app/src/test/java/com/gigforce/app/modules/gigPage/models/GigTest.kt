@@ -1,5 +1,6 @@
 package com.gigforce.app.modules.gigPage.models
 
+import com.google.firebase.Timestamp
 import com.google.gson.Gson
 import com.squareup.moshi.Moshi
 import org.junit.Test
@@ -44,8 +45,13 @@ class GigTest {
 
         val gig = Gig(
             gigId = "GIG00001",
+            gigerId = "gigerId",
             title = "Sales Executive",
-            startDate = Date(),
+            startDate = Timestamp.now(),
+            duration = 3.1F,
+            gigAmount = 10000.0,
+            gigRating = 4.5F,
+
             companyName = "Company XYZ",
             contactNo = "9892849832948",
             gigType = "On Site",
