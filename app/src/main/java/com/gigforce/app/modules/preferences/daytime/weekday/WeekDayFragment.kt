@@ -2,6 +2,7 @@ package com.gigforce.app.modules.preferences.daytime.weekday
 
 import android.app.AlertDialog
 import android.os.Bundle
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,10 +10,16 @@ import android.widget.ListView
 import android.widget.Switch
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.modules.preferences.SharedPreferenceViewModel
+import com.gigforce.app.modules.preferences.daytime.OnSlotClickListener
+import com.gigforce.app.modules.preferences.daytime.SlotsRecyclerAdapter
 import com.gigforce.app.modules.preferences.prefdatamodel.PreferencesDataModel
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import kotlinx.android.synthetic.main.fragment_settings_slots.view.*
 import kotlinx.android.synthetic.main.week_day_fragment.*
 import java.util.*
 import kotlin.collections.ArrayList
@@ -30,6 +37,7 @@ class WeekDayFragment : BaseFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         return inflateView(R.layout.week_day_fragment, inflater, container)
     }
 
@@ -107,16 +115,16 @@ class WeekDayFragment : BaseFragment() {
     private fun ifSlotsNotSelected(): Boolean {
         if (getArrayToString(viewDataModel.selectedslots).equals("None")) {
             return true
-        } else
+        }
             return false
     }
 
     private fun ifWeekdaysNotSelected(): Boolean {
         if (getArrayToString(viewDataModel.selecteddays).equals("None")) {
             return true
-        } else {
-            return false
         }
+        return false
+
     }
 
     fun showDaysAlert() {
@@ -124,8 +132,6 @@ class WeekDayFragment : BaseFragment() {
         val indexItem = arrayOf(0, 1, 2, 3, 4, 5)
         var isSectionSelected = BooleanArray(items.size)
         var selectedList = ArrayList<Int>()
-        val builder = AlertDialog.Builder(activity)
-        builder.setTitle("Days")
         for (i in 0..items.size - 1) {
             var isfound = false
             for (day in viewDataModel.selecteddays) {
@@ -141,44 +147,19 @@ class WeekDayFragment : BaseFragment() {
             }
         }
 
-        builder.setMultiChoiceItems(
-            items, isSectionSelected
-        ) { dialog, which, isChecked ->
-            val dialog = dialog as AlertDialog
-            val v: ListView = dialog.listView
-            if (which == 0) {
-                if (isChecked)
-                    selectedList.addAll(indexItem)
-                else {
-                    selectedList.clear()
-                    for (i in 0..isSectionSelected.size - 1) {
-                        isSectionSelected[i] = false
-                    }
-                }
-                var i = 1
-                while (i < items.size) {
-                    v.setItemChecked(i, isChecked)
-                    i++
-                }
 
-            } else if (isChecked) {
-                selectedList.add(which)
-                if (selectedList.size == 5) {
-                    selectedList.add(0)
-                    v.setItemChecked(0, true)
-                }
-            } else if (selectedList.contains(which)) {
-                selectedList.remove(Integer.valueOf(which))
-                isSectionSelected[which] = false
-                if (selectedList.contains(0)) {
-                    selectedList.remove(Integer.valueOf(0))
-                    v.setItemChecked(0, false)
-                    isSectionSelected[0] = false
-                }
-            }
-            selectedList.sort()
-            removeDuplicates(selectedList)
-        }
+        val builder = MaterialAlertDialogBuilder(requireContext())
+        val view = layoutInflater.inflate(R.layout.fragment_settings_slots, null)
+        view.dialogTitleTV.text = "Days"
+        builder.setView(view)
+
+        val rv: RecyclerView = view.findViewById(R.id.slotsRV)
+        rv.layoutManager = LinearLayoutManager(requireContext())
+
+        val slotsRecyclerAdapter = SlotsRecyclerAdapter()
+        rv.adapter = slotsRecyclerAdapter
+
+
         builder.setPositiveButton("DONE") { dialogInterface, i ->
             val selectedStrings = ArrayList<String>()
             for (j in selectedList.indices) {
@@ -199,38 +180,73 @@ class WeekDayFragment : BaseFragment() {
             textView62.text = selectedStr
         }
         builder.setOnDismissListener { dialog -> initializeViews() }
-
         builder.show()
+
+        slotsRecyclerAdapter.updateSlots(items, isSectionSelected)
+
+        Handler().postDelayed({
+
+            slotsRecyclerAdapter.setOnTransactionClickListener(object : OnSlotClickListener {
+
+                override fun onItemChecked(which: Int, isChecked: Boolean) {
+
+                    if (which == 0) {
+                        if (isChecked)
+                            selectedList.addAll(indexItem)
+                        else {
+                            selectedList.clear()
+                            for (i in 0..isSectionSelected.size - 1) {
+                                isSectionSelected[i] = false
+                            }
+                        }
+                        var i = 1
+                        while (i < items.size) {
+                            slotsRecyclerAdapter.setItemChecked(i, isChecked)
+                            i++
+                        }
+
+                    } else if (isChecked) {
+                        selectedList.add(which)
+                        if (selectedList.size == 5) {
+                            selectedList.add(0)
+                            slotsRecyclerAdapter.setItemChecked(0, true)
+                        }
+                    } else if (selectedList.contains(which)) {
+                        selectedList.remove(Integer.valueOf(which))
+                        isSectionSelected[which] = false
+                        if (selectedList.contains(0)) {
+                            selectedList.remove(Integer.valueOf(0))
+                            slotsRecyclerAdapter.setItemChecked(0, false)
+                            isSectionSelected[0] = false
+                        }
+                    }
+                    selectedList.sort()
+                    removeDuplicates(selectedList)
+
+                }
+            })
+
+
+        }, 300)
+
     }
 
-    private fun setAllDaysEnabled(v: ListView, size: Int) {
-        for (i in 0..size - 1) {
-            v.setItemChecked(i, true)
-        }
-    }
 
     fun showSlotsAlert() {
-//        var slots = viewModel.getAllSlots(configDataModel)
         val slots = viewModel.getAllSlotsToShow(configDataModel)
         val items = slots.toTypedArray()
-//        val items = arrayOf(
-//            "All",
-//            "06:00 am - 10:00 am",
-//            "10:00 am - 12:00 pm",
-//            "12:00 pm - 06:00 pm",
-//            "06:00 pm - 09:00 pm",
-//            "09:00 pm - 12:00 pm",
-//            "12:00 am - 03:00 am"
-//        )
         val indexItem = (0..slots.size - 1).toList().toTypedArray()
         val isSectionSelected = BooleanArray(items.size)
         val selectedList = ArrayList<Int>()
-        val builder = AlertDialog.Builder(activity)
-        builder.setTitle("Slots")
         for (i in 0..items.size - 1) {
             var isfound = false
+            if(i==0 && items.size==(viewDataModel.selectedslots.size+1)){
+                isfound=true
+                isSectionSelected[i] = true
+                selectedList.add(0)
+            } else
             for (day in viewDataModel.selectedslots) {
-                if (indexItem[i].equals(day)) {
+                if (indexItem[i].toString().equals(day)) {
                     isSectionSelected[i] = true
                     isfound = true
                     selectedList.add(i)
@@ -241,46 +257,19 @@ class WeekDayFragment : BaseFragment() {
                 isSectionSelected[i] = false
             }
         }
-        builder.setMultiChoiceItems(
-            items, isSectionSelected
-        ) { dialog, which, isChecked ->
-            val dialog = dialog as AlertDialog
-            val v: ListView = dialog.listView
-            if (which == 0) {
-                if (isChecked)
-                    selectedList.addAll(indexItem)
-                else {
-                    selectedList.clear()
-                    for (i in 0..isSectionSelected.size - 1) {
-                        isSectionSelected[i] = false
-                    }
-                }
-                var i = 1
-                while (i < items.size) {
-                    v.setItemChecked(i, isChecked)
-                    i++
-                }
 
-            } else if (isChecked) {
-                selectedList.add(which)
-                // if only first option is left to be select
-                if (selectedList.size == items.size - 1) {
-                    selectedList.add(0)
-                    v.setItemChecked(0, true)
-                }
-            } else if (selectedList.contains(which)) {
 
-                selectedList.remove(Integer.valueOf(which))
-                isSectionSelected[which] = false
-                if (selectedList.contains(0)) {
-                    selectedList.remove(Integer.valueOf(0))
-                    v.setItemChecked(0, false)
-                    isSectionSelected[0] = false
-                }
-            }
-            selectedList.sort()
-            removeDuplicates(selectedList)
-        }
+        val builder = MaterialAlertDialogBuilder(requireContext())
+        val view = layoutInflater.inflate(R.layout.fragment_settings_slots, null)
+        view.dialogTitleTV.text = "Slots"
+        builder.setView(view)
+
+        val rv: RecyclerView = view.findViewById(R.id.slotsRV)
+        rv.layoutManager = LinearLayoutManager(requireContext())
+
+        val slotsRecyclerAdapter = SlotsRecyclerAdapter()
+        rv.adapter = slotsRecyclerAdapter
+
 
         builder.setPositiveButton("DONE") { dialogInterface, i ->
             val selectedItemsForDB = ArrayList<String>()
@@ -290,7 +279,7 @@ class WeekDayFragment : BaseFragment() {
             }
             selectedItemsForDB.addAll(
                 viewModel.getSelectedSlotsIds(
-                    selectedList.indices,
+                    selectedList,
                     configDataModel
                 )
             )
@@ -309,6 +298,56 @@ class WeekDayFragment : BaseFragment() {
         }
         builder.setOnDismissListener { dialog -> initializeViews() }
         builder.show()
+
+        slotsRecyclerAdapter.updateSlots(items, isSectionSelected)
+
+        Handler().postDelayed({
+
+            slotsRecyclerAdapter.setOnTransactionClickListener(object : OnSlotClickListener {
+
+                override fun onItemChecked(which: Int, isChecked: Boolean) {
+
+                    if (which == 0) {
+                        if (isChecked)
+                            selectedList.addAll(indexItem)
+                        else {
+                            selectedList.clear()
+                            for (i in 0..isSectionSelected.size - 1) {
+                                isSectionSelected[i] = false
+                            }
+                        }
+                        var i = 1
+                        while (i < items.size) {
+                            slotsRecyclerAdapter.setItemChecked(i, isChecked)
+                            i++
+                        }
+
+                    } else if (isChecked) {
+                        selectedList.add(which)
+                        // if only first option is left to be select
+                        if (selectedList.size == items.size - 1) {
+                            selectedList.add(0)
+                            slotsRecyclerAdapter.setItemChecked(0, true)
+                        }
+                    } else if (selectedList.contains(which)) {
+
+                        selectedList.remove(Integer.valueOf(which))
+                        isSectionSelected[which] = false
+                        if (selectedList.contains(0)) {
+                            selectedList.remove(Integer.valueOf(0))
+                            slotsRecyclerAdapter.setItemChecked(0, false)
+                            isSectionSelected[0] = false
+                        }
+                    }
+                    selectedList.sort()
+                    removeDuplicates(selectedList)
+
+                }
+            })
+
+
+        }, 300)
+
 
     }
 

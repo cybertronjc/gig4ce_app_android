@@ -62,8 +62,7 @@ class AddPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetActio
             launchSelectImageSourceDialog()
         }
 
-        panImageHolder.uploadImageLayout.imageLabelTV.text =
-            getString(R.string.upload_pan_card)
+        panImageHolder.uploadImageLayout.imageLabelTV.text = getString(R.string.pan_card_image)
 
         panCardAvailaibilityOptionRG.setOnCheckedChangeListener { _, checkedId ->
 

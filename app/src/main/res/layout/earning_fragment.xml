@@ -130,6 +130,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:letterSpacing="0"
+            android:visibility="gone"
             android:text="Per day goal"
             android:textColor="#000000"
             android:textSize="12sp"
@@ -143,7 +144,7 @@
             android:layout_marginLeft="45dp"
             android:layout_marginTop="20dp"
             android:layout_marginRight="35dp"
-            android:max="2000"
+            android:max="4"
             android:min="0"
             android:progressTint="@color/colorPrimary"
             android:thumbTint="@color/colorPrimary"
@@ -160,7 +161,8 @@
             android:textColor="#787993"
             android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/perDayGoalSB" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -207,7 +209,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:letterSpacing="0"
-            android:text="Per Month goal"
+            android:visibility="gone"
+            android:text="Per month goal"
             android:textColor="#000000"
             android:textSize="12sp"
             app:layout_constraintStart_toStartOf="@+id/textView7"
@@ -220,7 +223,7 @@
             android:layout_marginLeft="45dp"
             android:layout_marginTop="20dp"
             android:layout_marginRight="35dp"
-            android:max="60000"
+            android:max="120"
             android:min="0"
             android:progressTint="@color/colorPrimary"
             android:thumbTint="@color/colorPrimary"
@@ -237,7 +240,8 @@
             android:textColor="#787993"
             android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/permonthGoalSB" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
@@ -274,6 +278,19 @@
             app:layout_constraintStart_toStartOf="@+id/textView104"
             app:layout_constraintTop_toTopOf="@+id/textView104" />
 
+        <TextView
+            android:id="@+id/monthlyContractTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="17dp"
+            android:letterSpacing="0"
+            android:lineSpacingExtra="10sp"
+            android:text="Rs0 - Rs60000"
+            android:textColor="#979797"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@+id/checkbox_monthly_constract"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/checkbox_monthly_constract" />
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/monthly_expectation_constraintlayout"
             android:layout_width="match_parent"
@@ -290,7 +307,7 @@
                 android:layout_marginLeft="46dp"
                 android:letterSpacing="-0.01"
                 android:lineSpacingExtra="8sp"
-                android:text="Monthly Expectation"
+                android:text="Monthly contract earning goal"
                 android:textColor="#000000"
                 android:textSize="14sp"
                 app:layout_constraintStart_toStartOf="parent"
@@ -302,7 +319,7 @@
                 android:layout_marginLeft="45dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginRight="35dp"
-                android:max="60000"
+                android:max="120"
                 android:min="0"
                 android:progressTint="@color/colorPrimary"
                 android:thumbTint="@color/colorPrimary"
@@ -315,9 +332,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="20dp"
                 android:layout_marginLeft="15dp"
-                android:textSize="12sp"
-                android:textColor="#787993"
                 android:letterSpacing="0"
+                android:textColor="#787993"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/monthlyExpectationSB" />
 

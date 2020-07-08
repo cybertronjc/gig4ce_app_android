@@ -25,6 +25,8 @@ interface CaptureVideoFragmentEventListener {
 class CaptureSelfieVideoFragment : BaseFragment() {
 
     private lateinit var mCaptureVideoFragmentEventListener: CaptureVideoFragmentEventListener
+    private var capturingVideo = false
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,26 +43,37 @@ class CaptureSelfieVideoFragment : BaseFragment() {
             requestCameraPermission()
 
         recordVideoButton.setOnClickListener {
-            startRecordingVideo()
-           startTimer()
+
+            if (capturingVideo) {
+                //Stop capture
+                capturingVideo = false
+                cameraView.stopVideo()
+            } else {
+                capturingVideo = true
+                recordingTimerLayout.visibility = View.VISIBLE
+                recordVideoButton.setImageResource(R.drawable.ic_stop)
+                startRecordingVideo()
+                startTimer()
+            }
         }
     }
 
-    private fun startTimer() {
-        val timer =
-            object : CountDownTimer(SELFIE_VIDEO_TIME.toLong() + 1000, 1000) {
-                override fun onFinish() {
-                    countDownTimerTV.text = "00:00"
-                }
-
-                override fun onTick(millisUntilFinished: Long) {
-
-                    if (millisUntilFinished >= 10_000)
-                        countDownTimerTV.text = "00:${millisUntilFinished / 1000}"
-                    else
-                        countDownTimerTV.text = "00:0${millisUntilFinished / 1000}"
-                }
+    val timer =
+        object : CountDownTimer(SELFIE_VIDEO_TIME.toLong() + 1000, 1000) {
+            override fun onFinish() {
+                countDownTimerTV.text = "00:00"
             }
+
+            override fun onTick(millisUntilFinished: Long) {
+
+                if (millisUntilFinished >= 10_000)
+                    countDownTimerTV.text = "00:${millisUntilFinished / 1000}"
+                else
+                    countDownTimerTV.text = "00:0${millisUntilFinished / 1000}"
+            }
+        }
+
+    private fun startTimer() {
         timer.start()
     }
 
@@ -79,6 +92,10 @@ class CaptureSelfieVideoFragment : BaseFragment() {
             REQUEST_CAMERA_PERMISSION
         )
 
+    override fun onDestroy() {
+        super.onDestroy()
+        timer.cancel()
+    }
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
@@ -103,7 +120,21 @@ class CaptureSelfieVideoFragment : BaseFragment() {
 
         override fun onVideoTaken(result: VideoResult) {
             super.onVideoTaken(result)
-            mCaptureVideoFragmentEventListener.videoCaptured(result.file)
+            recordVideoButton.setImageResource(R.drawable.ic_record)
+            recordingTimerLayout.visibility = View.GONE
+
+            if (capturingVideo)
+                mCaptureVideoFragmentEventListener.videoCaptured(result.file)
+            else {
+                //Video Cpature Was cancelled In Mid
+                try {
+                    result.file.delete()
+                } catch (e: Exception) {
+                    //Dissolve
+                }
+            }
+
+            capturingVideo = false
         }
     }
 

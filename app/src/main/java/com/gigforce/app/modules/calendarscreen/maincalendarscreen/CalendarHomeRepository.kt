@@ -6,8 +6,7 @@ class CalendarHomeRepository : BaseFirestoreDBRepository() {
 
     override fun getCollectionName(): String {
 //        getDBCollection()
-        return "alloted_gigs_vol2"
-
+        return "Gigs"
     }
 }
 

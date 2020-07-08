@@ -88,19 +88,21 @@ class InvoicePageFragment: WalletBaseFragment() {
                 // invoice generated
 
                 invoiceViewModel.generatedInvoice.observe(viewLifecycleOwner, Observer {invoices ->
-                    addInvoices(invoices_container, invoices)
+                    addInvoices(invoices_container, invoiceViewModel.getGeneratedInvoices(invoices))
                 })
             } else if (position == 1) {
                 // invoice pending
 
                 invoiceViewModel.pendingInvoices.observe(viewLifecycleOwner, Observer { invoices ->
-                    //addInvoices(invoices_container, invoices)
+                    addInvoices(invoices_container, invoiceViewModel.getPendingInvoices(invoices))
                 })
             }
         }
     }
 
    private fun addInvoices(parentView: ConstraintLayout, invoices: ArrayList<Invoice>) {
+       if (invoices.size == 0)
+           return
         // clear constraint layout first in case invoice
         // changes and function is recalled
         parentView.removeAllViews()

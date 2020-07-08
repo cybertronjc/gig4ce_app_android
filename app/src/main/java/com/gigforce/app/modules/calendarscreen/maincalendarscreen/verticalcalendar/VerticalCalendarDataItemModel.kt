@@ -1,5 +1,6 @@
 package com.gigforce.app.modules.calendarscreen.maincalendarscreen.verticalcalendar
 
+import com.gigforce.app.modules.custom_gig_preferences.UnavailableDataModel
 import java.util.*
 
 class VerticalCalendarDataItemModel (
@@ -14,8 +15,16 @@ class VerticalCalendarDataItemModel (
     val month : Int,
     val date: Int,
     val monthStr:String,
-    var isUnavailable:Boolean = false
+    var isUnavailable:Boolean = false,
+    var reason:String = ""
 ){
+    fun getDateObj():Date{
+        var dateObj = Date()
+        dateObj.date = date
+        dateObj.month = month
+        dateObj.year = year
+        return dateObj
+    }
     companion object {
         fun getMonthObject(calendar:Calendar):VerticalCalendarDataItemModel{
             return VerticalCalendarDataItemModel(
@@ -33,12 +42,12 @@ class VerticalCalendarDataItemModel (
                 false
             )
         }
-        fun getIfNoGigFoundObject(calendar: Calendar,isPreviousDate: Boolean,isToday: Boolean): VerticalCalendarDataItemModel {
+        fun getIfNoGigFoundObject(calendar: Calendar,isPreviousDate: Boolean,isToday: Boolean,customPreferenceUnavailableData : ArrayList<UnavailableDataModel>): VerticalCalendarDataItemModel {
             var isPreviousDateFound:Boolean = isPreviousDate
             if(isToday){
                 isPreviousDateFound = false
             }
-            return VerticalCalendarDataItemModel(
+            var dataModel = VerticalCalendarDataItemModel(
                 "No gigs assigned",
                 "",
                 getDayOfWeek(calendar.get(Calendar.DAY_OF_WEEK)),
@@ -52,6 +61,13 @@ class VerticalCalendarDataItemModel (
                 "",
                 false
             )
+            for(model in customPreferenceUnavailableData){
+                if(calendar.get(Calendar.DATE)==model.date.date && calendar.get(Calendar.MONTH)==model.date.month && calendar.get(Calendar.YEAR)==model.date.year){
+                    dataModel.isUnavailable = true
+                    break;
+                }
+            }
+            return dataModel
         }
 
         fun getDetailedObject(
@@ -59,12 +75,12 @@ class VerticalCalendarDataItemModel (
             countGigs: String,
             calendar: Calendar,
         isPreviousDate: Boolean,
-            isToday: Boolean): VerticalCalendarDataItemModel {
+            isToday: Boolean,customPreferenceUnavailableData : ArrayList<UnavailableDataModel>): VerticalCalendarDataItemModel {
             var isPreviousDateFound:Boolean = isPreviousDate
             if(isToday){
                 isPreviousDateFound = false
             }
-            return VerticalCalendarDataItemModel(
+            var dataModel = VerticalCalendarDataItemModel(
                 subTitle,
                 countGigs,
                 getDayOfWeek(
@@ -82,6 +98,13 @@ class VerticalCalendarDataItemModel (
                 "",
                 false
             )
+            for(model in customPreferenceUnavailableData){
+                if(calendar.get(Calendar.DATE)==model.date.date && calendar.get(Calendar.MONTH)==model.date.month && calendar.get(Calendar.YEAR)==model.date.year){
+                    dataModel.isUnavailable = true
+                    break;
+                }
+            }
+            return dataModel
         }
 
         fun getMonth(month: Int): String {

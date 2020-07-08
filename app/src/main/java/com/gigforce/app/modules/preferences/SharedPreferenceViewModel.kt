@@ -21,11 +21,12 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-class SharedPreferenceViewModel : ViewModel() {
+class SharedPreferenceViewModel : ViewModel {
     companion object {
         var preferencesDataModelObj: PreferencesDataModel = PreferencesDataModel()
         var profileDataModelObj: ProfileData = ProfileData()
         var addressModelObj: AddressModel = AddressModel()
+        var configDataModel: ConfigDataModel? = null
     }
 
     var profileFirebaseRepository = ProfileFirebaseRepository()
@@ -36,7 +37,10 @@ class SharedPreferenceViewModel : ViewModel() {
     var preferenceDataModel: MutableLiveData<PreferencesDataModel> =
         MutableLiveData<PreferencesDataModel>()
 //    var profileDataModel: MutableLiveData<ProfileData> = MutableLiveData<ProfileData>()
-
+    constructor(){}
+    constructor(configDataModel1: ConfigDataModel?){
+    configDataModel = configDataModel1
+    }
     fun getPreferenceDataModel(): PreferencesDataModel {
         return preferencesDataModelObj
     }
@@ -65,11 +69,18 @@ class SharedPreferenceViewModel : ViewModel() {
                     return@EventListener
                 }
                 if (value?.data == null) {
-                    var defaultData = PreferencesDataModel()
-                    defaultData.isweekdaysenabled = true
-                    defaultData.selecteddays.addAll(getAllDays())
-                    defaultData.selectedslots.addAll(getAllSlots())
-                    preferencesRepository.setDefaultData(defaultData)
+                    if(configDataModel!=null) {
+                        var defaultData = PreferencesDataModel()
+                        var slots = getAllSlots()
+                        defaultData.isweekdaysenabled = true
+                        defaultData.selecteddays.addAll(getAllDays())
+                        defaultData.selectedslots.addAll(slots)
+                        defaultData.isweekendenabled = true
+                        defaultData.selectedweekends.addAll(getAllWeekendsDays())
+                        defaultData.selectedweekendslots.addAll(slots)
+                        preferencesRepository.setDefaultData(defaultData)
+                    }
+
                 } else {
                     preferenceDataModel.postValue(
                         value!!.toObject(PreferencesDataModel::class.java)
@@ -104,27 +115,32 @@ class SharedPreferenceViewModel : ViewModel() {
 
     }
 
+    private fun getAllWeekendsDays(): ArrayList<String> {
+        var weekendDays = ArrayList<String>()
+        weekendDays.add("All")
+        weekendDays.add("Saturday")
+        weekendDays.add("Sunday")
+        return weekendDays
+    }
+
     private fun getAllDays(): ArrayList<String> {
         var arrDays = ArrayList<String>()
         arrDays.add("All")
         arrDays.add("Monday")
         arrDays.add("Tuesday")
         arrDays.add("Wednesday")
-        arrDays.add("Thrusday")
+        arrDays.add("Thursday")
         arrDays.add("Friday")
         return arrDays
     }
 
     private fun getAllSlots(): ArrayList<String> {
-        var arrSlots = ArrayList<String>()
-        arrSlots.add("All")
-        arrSlots.add("06:00 am - 10:00 am")
-        arrSlots.add("10:00 am - 12:00 pm")
-        arrSlots.add("12:00 pm - 06:00 pm")
-        arrSlots.add("06:00 pm - 09:00 pm")
-        arrSlots.add("09:00 pm - 12:00 pm")
-        arrSlots.add("12:00 am - 03:00 am")
-        return arrSlots
+        var arr = ArrayList<String>()
+        if(configDataModel!=null)
+        for(slot in configDataModel?.time_slots!!){
+            arr.add(slot.time_slot_id.toString())
+        }
+        return arr
     }
 
     public fun getAllSlotsToShow(configDataModel: ConfigDataModel?): ArrayList<String> {
@@ -155,7 +171,7 @@ class SharedPreferenceViewModel : ViewModel() {
         }
         return arrTimeSlots;
     }
-    fun getSelectedSlotsIds(indices: IntRange,configDataModel: ConfigDataModel?): ArrayList<String> {
+    fun getSelectedSlotsIds(indices: ArrayList<Int>,configDataModel: ConfigDataModel?): ArrayList<String> {
         var arrListSlots = ArrayList<String>()
         if(configDataModel!=null)
         for (index in indices) {

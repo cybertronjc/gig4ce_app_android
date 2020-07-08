@@ -33,6 +33,10 @@
         <item name="buttonTint">@drawable/radio_button_drawable</item>
     </style>
 
+    <style name="Theme.CheckBoxLipstickPink" parent="Widget.AppCompat.CompoundButton.CheckBox">
+        <item name="buttonTint">@drawable/radio_button_drawable</item>
+    </style>
+
     <style name="FieldtextLatoRegularGrey12">
         <item name="android:textSize">12sp</item>
         <item name="android:letterSpacing">0.05</item>
@@ -403,5 +407,11 @@
         <item name="android:textColor">#d16f6f</item>
         <item name="android:textStyle">bold</item>
         <item name="textAllCaps">false</item>
+    </style>
+
+    <style name="MultiSelectDialogStyle" parent="Theme.AppCompat.Light.Dialog">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorPrimary</item>
     </style>
 </resources>

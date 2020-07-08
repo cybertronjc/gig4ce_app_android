@@ -20,14 +20,19 @@ interface AppDialogsInterface {
         subTitle: String,
         buttonClickListener: ConfirmationDialogOnClickListener
     )
+
     fun showConfirmationDialogType4(
-    title: String,
-    subTitle:String,
-    buttonClickListener: ConfirmationDialogOnClickListener
+        title: String,
+        subTitle: String,
+        buttonClickListener: OptionSelected
     )
 }
 
 interface ConfirmationDialogOnClickListener {
     fun clickedOnYes(dialog: Dialog?)
     fun clickedOnNo(dialog: Dialog?)
+}
+
+interface OptionSelected {
+    fun optionSelected(dialog: Dialog?, option:String)
 }

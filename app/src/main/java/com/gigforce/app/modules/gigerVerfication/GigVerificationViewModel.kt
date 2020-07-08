@@ -13,6 +13,7 @@ import com.google.firebase.firestore.ListenerRegistration
 
 data class GigerVerificationStatus(
     val selfieVideoUploaded: Boolean,
+    val selfieVideoDataModel: SelfieVideoDataModel?,
     val panCardDetailsUploaded: Boolean,
     val panCardDetails: PanCardDataModel?,
     val aadharCardDetailsUploaded: Boolean,
@@ -24,7 +25,7 @@ data class GigerVerificationStatus(
     val everyDocumentUploaded: Boolean
 )
 
-class GigVerificationViewModel constructor(
+open class GigVerificationViewModel constructor(
     private val gigerVerificationRepository: GigerVerificationRepository = GigerVerificationRepository()
 ) : ViewModel() {
 
@@ -40,6 +41,7 @@ class GigVerificationViewModel constructor(
                 val docSnap = documentSnapshot ?: return@addSnapshotListener
 
                 val selfieUploaded = docSnap.contains(SelfieVideoDataModel.TABLE_NAME)
+                val selfieVideoDetails = extractSelfieVideoInfo(selfieUploaded, docSnap)
 
                 val panDetailsUploaded = docSnap.contains(PanCardDataModel.TABLE_NAME)
                 val panCardDetails = extractPanCardInfo(panDetailsUploaded, docSnap)
@@ -64,6 +66,7 @@ class GigVerificationViewModel constructor(
 
                 _gigerVerificationStatus.value = GigerVerificationStatus(
                     selfieVideoUploaded = selfieUploaded,
+                    selfieVideoDataModel = selfieVideoDetails,
                     panCardDetailsUploaded = panDetailsUploaded,
                     panCardDetails = panCardDetails,
                     aadharCardDetailsUploaded = aadharCardDetailsUploaded,
@@ -75,6 +78,39 @@ class GigVerificationViewModel constructor(
                     everyDocumentUploaded = everyDocumentUploaded
                 )
             }
+    }
+
+    private fun extractSelfieVideoInfo(
+        selfieVideoUploaded: Boolean,
+        docSnap: DocumentSnapshot
+    ): SelfieVideoDataModel {
+        var selfieVideoPath: String
+        var videoVerified: Boolean = false
+
+
+        try {
+
+            if (selfieVideoUploaded) {
+                val hashMap =
+                    docSnap.get(SelfieVideoDataModel.TABLE_NAME) as HashMap<String, Any?>
+                selfieVideoPath =
+                    hashMap[SelfieVideoDataModel.KEY_NAME_VIDEO_PATH] as String
+//                videoVerified =
+//                    hashMap[SelfieVideoDataModel.KEY_NAME_VERIFIED] as Boolean
+
+            } else {
+                selfieVideoPath = ""
+                videoVerified = false
+            }
+        } catch (e: Exception) {
+            selfieVideoPath = ""
+            videoVerified = false
+        }
+
+        return SelfieVideoDataModel(
+            videoPath = selfieVideoPath,
+            verified = videoVerified
+        )
     }
 
     private fun extractPanCardInfo(

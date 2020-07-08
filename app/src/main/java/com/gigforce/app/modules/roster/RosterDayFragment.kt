@@ -58,16 +58,16 @@ class RosterDayFragment: RosterBaseFragment() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         rosterViewModel.currentDateTime.value = activeDateTime
+        rosterViewModel.checkDayAvailable(activeDateTime)
         return inflateView(R.layout.roster_day_fragment, inflater, container)
     }
-
-
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -80,7 +80,7 @@ class RosterDayFragment: RosterBaseFragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun initialize() {
         rosterViewModel.topBar = top_bar
-        //initializeBottomSheet()
+        initializeBottomSheet()
         attachHourViewAdapter()
         attachDayAvailabilityObserver()
         attachCurrentDateTimeChangeObserver()
@@ -97,25 +97,26 @@ class RosterDayFragment: RosterBaseFragment() {
             @RequiresApi(Build.VERSION_CODES.O)
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
-                if (position < lastViewPosition) {
-                    rosterViewModel.currentDateTime.setValue(activeDateTime.minusDays(1))
-                } else if (position > lastViewPosition) {
-                    rosterViewModel.currentDateTime.setValue(activeDateTime.plusDays(1))
-                }
+                val newDateTime =  (
+                        if (position < lastViewPosition) activeDateTime.minusDays(1)
+                        else activeDateTime.plusDays(1)
+                        )
+                rosterViewModel.currentDateTime.value = newDateTime
                 lastViewPosition = position
+                rosterViewModel.checkDayAvailable(newDateTime)
             }
         }
 
         hourview_viewpager.registerOnPageChangeCallback(hourviewPageChangeCallBack)
-
-
 
         top_bar.available_toggle.setOnClickListener {
             if (top_bar.isAvailable)
                 toggleAvailability()
             else {
                 rosterViewModel.isDayAvailable.value = true
-                setHourVisibility(hourview_viewpager.getChildAt(0).findViewWithTag<ConstraintLayout>("day_times"), activeDateTime, actualDateTime)
+                setHourVisibility(
+                    hourview_viewpager.getChildAt(0).findViewWithTag<ConstraintLayout>("day_times"),
+                    activeDateTime, actualDateTime)
             }
         }
     }
@@ -205,12 +206,13 @@ class RosterDayFragment: RosterBaseFragment() {
     }
 
     private fun initializeBottomSheet() {
-//        rosterViewModel.bsBehavior = BottomSheetBehavior.from(mark_unavailable_bs)
-//        rosterViewModel.UnavailableBS = mark_unavailable_bs
+        rosterViewModel.bsBehavior = BottomSheetBehavior.from(mark_unavailable_bs)
+        rosterViewModel.UnavailableBS = mark_unavailable_bs
 
         rosterViewModel.bsBehavior.setPeekHeight(200.px)
         rosterViewModel.bsBehavior.halfExpandedRatio = 0.65F
         rosterViewModel.bsBehavior.isHideable = true
+
 
         rosterViewModel.bsBehavior.addBottomSheetCallback(object: BottomSheetBehavior.BottomSheetCallback() {
             override fun onSlide(bottomSheet: View, slideOffset: Float) {

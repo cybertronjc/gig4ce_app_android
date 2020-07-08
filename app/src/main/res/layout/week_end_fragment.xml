@@ -45,7 +45,7 @@
         android:id="@+id/textView60"
         android:layout_width="wrap_content"
         android:layout_height="61dp"
-        android:layout_marginTop="67dp"
+        android:layout_marginTop="50dp"
         android:background="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -54,8 +54,8 @@
 
     <ImageView
         android:id="@+id/days_iv"
-        android:layout_width="20dp"
-        android:layout_height="21dp"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="14dp"
         app:layout_constraintStart_toStartOf="@+id/textView60"
@@ -116,13 +116,13 @@
 
     <ImageView
         android:id="@+id/slots_iv"
-        android:layout_width="20dp"
-        android:layout_height="21dp"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="14dp"
         app:layout_constraintStart_toStartOf="@+id/textView64"
         app:layout_constraintTop_toTopOf="@+id/textView64"
-        android:src="@drawable/ic_calendar_black" />
+        android:src="@drawable/ic_clock_black" />
 
     <TextView
         android:id="@+id/textView65"
@@ -140,14 +140,16 @@
 
     <TextView
         android:id="@+id/textView66"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="67dp"
         android:layout_marginTop="4dp"
+        android:letterSpacing="0"
         android:text="10:00 am"
         android:textColor="@color/gray_color"
         android:textSize="10sp"
-        android:letterSpacing="0"
+        android:layout_marginRight="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/textView64"
         app:layout_constraintTop_toBottomOf="@+id/textView65" />
 
@@ -156,6 +158,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="24dp"
+        android:tint="@color/black"
         android:src="@drawable/ic_baseline_arrow_back_24"
         app:layout_constraintBottom_toBottomOf="@+id/textView52"
         app:layout_constraintStart_toStartOf="@+id/textView52"

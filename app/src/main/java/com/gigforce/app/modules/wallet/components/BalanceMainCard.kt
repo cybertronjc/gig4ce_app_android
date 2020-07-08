@@ -5,6 +5,8 @@ import android.util.AttributeSet
 import android.view.View
 import com.gigforce.app.R
 import com.google.android.material.card.MaterialCardView
+import kotlinx.android.synthetic.main.balance_main_card.view.*
+import kotlinx.android.synthetic.main.wallet_balance_card_component.view.*
 
 class BalanceMainCard: MaterialCardView {
     constructor(context: Context): super(context)
@@ -13,4 +15,28 @@ class BalanceMainCard: MaterialCardView {
     init {
         View.inflate(context, R.layout.balance_main_card, this)
     }
+
+    var balance: Float = 0F
+        set(value) {
+            field = value
+            val wholePart = value.toInt()
+            val fractionPart = value - wholePart
+            if (fractionPart == 0F) {
+                total_amount.text = String.format("Rs %d", wholePart)
+            } else {
+                total_amount.text = String.format("Rs %.2f", value)
+            }
+        }
+
+    var receivedThisMonth: Int = 0
+        set(value) {
+            field = value
+            monthly_received.text = "Rs $value"
+        }
+
+    var withdrawnThisMonth: Int = 0
+        set(value) {
+            field = value
+            monthly_withdrawn.text = "Rs $value"
+        }
 }

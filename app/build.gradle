@@ -13,8 +13,8 @@ android {
         applicationId "com.gigforce.app"
         minSdkVersion 23
         targetSdkVersion 29
-        versionCode 25
-        versionName "1.11.1"
+        versionCode 29
+        versionName "1.12.2"
 
         vectorDrawables.useSupportLibrary = true
 
@@ -103,7 +103,7 @@ dependencies {
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'com.google.android.material:material:1.1.0'
     // Navigation library
-    def nav_version = "2.1.0"
+    def nav_version = "2.3.0"
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
     implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
 

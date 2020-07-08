@@ -7,11 +7,14 @@ import androidx.annotation.RequiresApi
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.viewpager2.widget.ViewPager2
+import com.gigforce.app.modules.preferences.PreferencesRepository
+import com.gigforce.app.modules.preferences.prefdatamodel.PreferencesDataModel
 import com.gigforce.app.modules.roster.models.Gig
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import java.text.SimpleDateFormat
+import java.time.Instant
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -23,6 +26,8 @@ class RosterDayViewModel: ViewModel() {
     var isDayAvailable: MutableLiveData<Boolean> = MutableLiveData(true)
 
     var gigsQuery: MutableLiveData<ArrayList<Gig>> = MutableLiveData<ArrayList<Gig>>()
+    var userPref: MutableLiveData<PreferencesDataModel> = MutableLiveData<PreferencesDataModel>()
+    var preferencesRepository = PreferencesRepository()
 
     var userGigs = HashMap<String, ArrayList<Gig>>()
 
@@ -32,24 +37,39 @@ class RosterDayViewModel: ViewModel() {
     lateinit var topBar: RosterTopBar
 
     fun queryGigs() {
-        var db = FirebaseFirestore.getInstance()
-        var uid = FirebaseAuth.getInstance().currentUser?.uid
-        var collection = "Gigs"
+        val db = FirebaseFirestore.getInstance()
+        val uid = FirebaseAuth.getInstance().currentUser?.uid
+        val collection = "Gigs"
 
         db.collection(collection).whereEqualTo("gigerId", uid)
             .addSnapshotListener { querySnapshot, firebaseFirestoreException ->
-                var userGigs = ArrayList<Gig>()
-                if (querySnapshot != null) {
-//                    gigsQuery.postValue(querySnapshot.documents.forEach { t -> t.data })
-                    //Log.d("RosterViewModel", querySnapshot.documentstoString())
-                    querySnapshot.documents.forEach { t ->
-                        Log.d("RosterViewModel", t.toString())
-                        t.toObject(Gig::class.java)?.let { userGigs.add(it) }
-                    }
-
+                val userGigs = ArrayList<Gig>()
+                querySnapshot?.documents?.forEach { t ->
+                    Log.d("RosterViewModel", t.toString())
+                    t.toObject(Gig::class.java)?.let { userGigs.add(it) }
                 }
                 gigsQuery.value = userGigs
             }
+    }
+
+    fun preferenceListener() {
+        preferencesRepository.getDBCollection().addSnapshotListener { document, firebaseFirestoreException ->
+            document?.let {
+                userPref.postValue(it.toObject(PreferencesDataModel::class.java))
+            }
+        }
+    }
+
+    fun checkDayAvailable(date: LocalDateTime) {
+        isDayAvailable.postValue(false)
+        userPref.value ?.let {
+            Log.d("RDVM", date.dayOfWeek.toString())
+            var weekDays = it.selecteddays.map { item -> item.toUpperCase() }
+            var weekEnds = it.selectedweekends.map { item -> item.toUpperCase() }
+            Log.d("RDVM", weekDays.toString())
+            isDayAvailable.postValue(
+                weekDays.contains(date.dayOfWeek.toString()) || weekEnds.contains(date.dayOfWeek.toString()))
+        }
     }
 
     companion object {
@@ -57,261 +77,15 @@ class RosterDayViewModel: ViewModel() {
     }
 
     init {
-        //queryGigs()
-        gigsQuery.value = ArrayList(
-            listOf(Gig(
-                date = 30,
-                month = 6,
-                year = 2020,
-                startHour = 10,
-                startMinute = 0,
-                duration = 8F,
-                title = "Retail Sales Executive",
-                gigAmount = 0,
-                gigStatus = "upcoming",
-                isGigCompleted = false,
-                isPaymentDone = false,
-                gigRating = 0F
-            ),
-                Gig(
-                    date = 29,
-                    month = 6,
-                    year = 2020,
-                    startHour = 10,
-                    startMinute = 0,
-                    duration = 8F,
-                    title = "Retail Sales Executive",
-                    gigAmount = 0,
-                    gigStatus = "upcoming",
-                    isGigCompleted = false,
-                    isPaymentDone = false,
-                    gigRating = 0F
-                ),
-                Gig(
-                    date = 28,
-                    month = 6,
-                    year = 2020,
-                    startHour = 10,
-                    startMinute = 0,
-                    duration = 8F,
-                    title = "Retail Sale executive",
-                    gigAmount = 1200,
-                    gigStatus = "completed",
-                    isGigCompleted = false,
-                    isPaymentDone = true,
-                    gigRating = 4.8F
-                ),
-                Gig(
-                    date = 27,
-                    month = 6,
-                    year = 2020,
-                    startHour = 10,
-                    startMinute = 0,
-                    duration = 8F,
-                    title = "Retail Sale executive",
-                    gigAmount = 1200,
-                    gigStatus = "completed",
-                    isGigCompleted = false,
-                    isPaymentDone = true,
-                    gigRating = 4.0F
-                ),
-                Gig(
-                    date = 26,
-                    month = 6,
-                    year = 2020,
-                    startHour = 16,
-                    startMinute = 0,
-                    duration = 3F,
-                    title = "Retail Sale executive",
-                    gigAmount = 400,
-                    gigStatus = "completed",
-                    isGigCompleted = false,
-                    isPaymentDone = true,
-                    gigRating = 5.0F
-                ),
-                Gig(
-                    date = 25,
-                    month = 6,
-                    year = 2020,
-                    startHour = 16,
-                    startMinute = 0,
-                    duration = 3F,
-                    title = "Retail Sale executive",
-                    gigAmount = 400,
-                    gigStatus = "completed",
-                    isGigCompleted = false,
-                    isPaymentDone = true,
-                    gigRating = 5.0F
-                ),
-                Gig(
-                    date = 24,
-                    month = 6,
-                    year = 2020,
-                    startHour = 10,
-                    startMinute = 0,
-                    duration = 8F,
-                    title = "Retail Sales Executive",
-                    gigAmount = 1200,
-                    gigStatus = "upcoming",
-                    isGigCompleted = false,
-                    isPaymentDone = false,
-                    gigRating = 4.8F
-                ),
-                Gig(
-                    date = 27,
-                    month = 6,
-                    year = 2020,
-                    startHour = 10,
-                    startMinute = 0,
-                    duration = 8F,
-                    title = "Retail Sales Executive",
-                    gigAmount = 1200,
-                    gigStatus = "upcoming",
-                    isGigCompleted = false,
-                    isPaymentDone = false,
-                    gigRating = 4.0F
-                ),
-                Gig(
-                    date = 26,
-                    month = 6,
-                    year = 2020,
-                    startHour = 16,
-                    startMinute = 0,
-                    duration = 3F,
-                    title = "Retail Sales Executive",
-                    gigAmount = 400,
-                    gigStatus = "upcoming",
-                    isGigCompleted = false,
-                    isPaymentDone = false,
-                    gigRating = 5.0F
-                ),
-                Gig(
-                    date = 25,
-                    month = 6,
-                    year = 2020,
-                    startHour = 16,
-                    startMinute = 0,
-                    duration = 3F,
-                    title = "Retail Sales Executive",
-                    gigAmount = 400,
-                    gigStatus = "upcoming",
-                    isGigCompleted = false,
-                    isPaymentDone = false,
-                    gigRating = 5.0F
-                ),
-                Gig(
-                    date = 24,
-                    month = 6,
-                    year = 2020,
-                    startHour = 10,
-                    startMinute = 0,
-                    duration = 8F,
-                    title = "Retail Sales Executive",
-                    gigAmount = 0,
-                    gigStatus = "upcoming",
-                    isGigCompleted = false,
-                    isPaymentDone = false,
-                    gigRating = 0F
-                ),
-                Gig(
-                    date = 23,
-                    month = 6,
-                    year = 2020,
-                    startHour = 8,
-                    startMinute = 0,
-                    duration = 10F,
-                    title = "Retail Sales Executive",
-                    gigAmount = 0,
-                    gigStatus = "upcoming",
-                    isGigCompleted = false,
-                    isPaymentDone = false,
-                    gigRating = 4.8F
-                ),
-                Gig(
-                    date = 22,
-                    month = 6,
-                    year = 2020,
-                    startHour = 8,
-                    startMinute = 0,
-                    duration = 10F,
-                    title = "Retail Sales Executive",
-                    gigAmount = 1200,
-                    gigStatus = "completed",
-                    isGigCompleted = true,
-                    isPaymentDone = true,
-                    gigRating = 4.2F
-                ),
-                Gig(
-                    date = 21,
-                    month = 6,
-                    year = 2020,
-                    startHour = 8,
-                    startMinute = 0,
-                    duration = 10F,
-                    title = "Retail Sales Executive",
-                    gigAmount = 1200,
-                    gigStatus = "completed",
-                    isGigCompleted = true,
-                    isPaymentDone = true,
-                    gigRating = 4.0F
-                ),
-                Gig(
-                    date = 20,
-                    month = 6,
-                    year = 2020,
-                    startHour = 15,
-                    startMinute = 0,
-                    duration = 4F,
-                    title = "Retail Sales Executive",
-                    gigAmount = 400,
-                    gigStatus = "completed",
-                    isGigCompleted = true,
-                    isPaymentDone = true,
-                    gigRating = 5.0F
-                ),
-                Gig(
-                    date = 19,
-                    month = 6,
-                    year = 2020,
-                    startHour = 15,
-                    startMinute = 0,
-                    duration = 4F,
-                    title = "Retail Sales Executive",
-                    gigAmount = 400,
-                    gigStatus = "completed",
-                    isGigCompleted = true,
-                    isPaymentDone = true,
-                    gigRating = 5.0F
-                )
-            )
-        )
-//        userGigs["20200522"] = ArrayList<Gig>(listOf(
-//            Gig(gigStatus = "upcoming", startHour = 9, startMinute = 30, duration = 3.5F),
-//            Gig(gigStatus = "completed", startHour = 4, startMinute = 0, duration = 4.0F)
-//        ))
-//
-//        userGigs["20200520"] = ArrayList<Gig>(listOf(
-//            Gig(gigStatus = "completed", startHour = 9, startMinute = 30, duration = 3.5F),
-//            Gig(gigStatus = "completed", startHour = 4, startMinute = 0, duration = 4.0F)
-//        ))
-//
-//        userGigs["20200524"] = ArrayList<Gig>(listOf(
-//            Gig(gigStatus = "upcoming", startHour = 13, startMinute = 30, duration = 4.5F),
-//            Gig(gigStatus = "upcoming", startHour = 4, startMinute = 0, duration = 4.0F)
-//        ))
-//
-//        userGigs["20200525"] = ArrayList<Gig>(listOf(
-//                Gig(gigStatus = "completed", startHour = 11, startMinute = 45, duration = 2.5F),
-//                Gig(gigStatus = "upcoming", startHour = 15, startMinute = 0, duration = 5.6F)
-//        ))
+        queryGigs()
+        preferenceListener()
     }
 
     fun getUpcomingGigsByDayTag(dayTag: String, gigsQuery: ArrayList<Gig>): ArrayList<Gig> {
         val filteredGigs = ArrayList<Gig>()
-        val pattern = DateTimeFormatter.ofPattern("yyyyMdd")
+        val format = SimpleDateFormat("yyyyMdd")
         for (gig in gigsQuery) {
-            //val idx = pattern.format(gig.startDateTime!!)
-            val idx = gig.startDateTime!!.toLocalDate().format(pattern)
+            val idx = format.format(gig.startDateTime!!.toDate())
             if (dayTag == idx && gig.gigStatus == "upcoming")
                 filteredGigs.add(gig)
         }
@@ -320,10 +94,9 @@ class RosterDayViewModel: ViewModel() {
 
     fun getCompletedGigsByDayTag(dayTag: String, gigsQuery: ArrayList<Gig>): ArrayList<Gig> {
         val filteredGigs = ArrayList<Gig>()
-        val pattern = DateTimeFormatter.ofPattern("yyyyMdd")
+        val format = SimpleDateFormat("yyyyMdd")
         for (gig in gigsQuery) {
-            //val idx = pattern.format(gig.startDateTime!!)
-            val idx = gig.startDateTime!!.toLocalDate().format(pattern)
+            val idx = format.format(gig.startDateTime!!.toDate())
             if (dayTag == idx && gig.gigStatus == "completed" )
                 filteredGigs.add(gig)
         }

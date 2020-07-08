@@ -1,11 +1,13 @@
 package com.gigforce.app.modules.gigerVerfication.selfieVideo
 
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.net.toUri
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -13,12 +15,13 @@ import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.utils.Lse
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.firebase.storage.FirebaseStorage
 import com.ncorti.slidetoact.SlideToActView
 import kotlinx.android.synthetic.main.fragment_add_selfie_video.*
 import java.io.File
 
 class AddSelfieVideoFragment : BaseFragment(), CaptureVideoFragmentEventListener,
-        PlaySelfieVideoFragmentEventListener {
+    PlaySelfieVideoFragmentEventListener {
 
     private val viewModel: SelfiVideoViewModel by viewModels()
 
@@ -26,16 +29,17 @@ class AddSelfieVideoFragment : BaseFragment(), CaptureVideoFragmentEventListener
 
     private lateinit var captureSelfieVideoFragment: CaptureSelfieVideoFragment
     private lateinit var playSelfieVideoFragment: PlaySelfieVideoFragment
+    private val firebaseStorage = FirebaseStorage.getInstance()
 
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
     ) = inflateView(R.layout.fragment_add_selfie_video, inflater, container)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViews()
-        addCaptureVideoFragment()
+       // addCaptureVideoFragment()
         initViewModel()
     }
 
@@ -43,21 +47,33 @@ class AddSelfieVideoFragment : BaseFragment(), CaptureVideoFragmentEventListener
         captureSelfieVideoFragment = CaptureSelfieVideoFragment.getInstance(this)
         val transaction = childFragmentManager.beginTransaction()
         transaction.add(
-                R.id.selfieVideoAndPlayContainer,
-                captureSelfieVideoFragment,
-                CaptureSelfieVideoFragment.TAG
+            R.id.selfieVideoAndPlayContainer,
+            captureSelfieVideoFragment,
+            CaptureSelfieVideoFragment.TAG
+        )
+        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+        transaction.commit()
+    }
+
+    private fun addPlayVideoFragment(remoteUri: Uri) {
+        playSelfieVideoFragment = PlaySelfieVideoFragment.getInstance(this, remoteUri)
+        val transaction = childFragmentManager.beginTransaction()
+        transaction.add(
+            R.id.selfieVideoAndPlayContainer,
+            playSelfieVideoFragment,
+            PlaySelfieVideoFragment.TAG
         )
         transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
         transaction.commit()
     }
 
     private fun replaceCaptureFragmentWithPreviewFragment(file: File) {
-        playSelfieVideoFragment = PlaySelfieVideoFragment.getInstance(this, file)
+        playSelfieVideoFragment = PlaySelfieVideoFragment.getInstance(this, file.toUri())
         val transaction = childFragmentManager.beginTransaction()
         transaction.replace(
-                R.id.selfieVideoAndPlayContainer,
-                playSelfieVideoFragment,
-                PlaySelfieVideoFragment.TAG
+            R.id.selfieVideoAndPlayContainer,
+            playSelfieVideoFragment,
+            PlaySelfieVideoFragment.TAG
         )
         transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
         transaction.commit()
@@ -67,9 +83,9 @@ class AddSelfieVideoFragment : BaseFragment(), CaptureVideoFragmentEventListener
         captureSelfieVideoFragment = CaptureSelfieVideoFragment.getInstance(this)
         val transaction = childFragmentManager.beginTransaction()
         transaction.replace(
-                R.id.selfieVideoAndPlayContainer,
-                captureSelfieVideoFragment,
-                CaptureSelfieVideoFragment.TAG
+            R.id.selfieVideoAndPlayContainer,
+            captureSelfieVideoFragment,
+            CaptureSelfieVideoFragment.TAG
         )
         transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
         transaction.commit()
@@ -77,24 +93,51 @@ class AddSelfieVideoFragment : BaseFragment(), CaptureVideoFragmentEventListener
 
     private fun initViewModel() {
         viewModel.uploadSelfieState
-                .observe(viewLifecycleOwner, Observer {
-                    when (it) {
-                        Lse.Loading -> {
-                            playSelfieVideoFragment.showVideoUploadingProgress()
-                        }
-                        Lse.Success -> {
-                            showToast("Video Uploaded")
-                            navigate(R.id.addPanCardInfoFragment)
-                        }
-                        is Lse.Error -> {
-                            playSelfieVideoFragment.showPlayVideoLayout()
-                            selfieVideoSubmitSliderBtn.resetSlider()
-                            MaterialAlertDialogBuilder(requireContext())
-                                    .setMessage(it.error)
-                                    .show()
-                        }
+            .observe(viewLifecycleOwner, Observer {
+                when (it) {
+                    Lse.Loading -> {
+                        playSelfieVideoFragment.showVideoUploadingProgress()
                     }
-                })
+                    Lse.Success -> {
+                        showToast("Video Uploaded")
+                        navigate(R.id.addPanCardInfoFragment)
+                    }
+                    is Lse.Error -> {
+                        playSelfieVideoFragment.showPlayVideoLayout()
+                        selfieVideoSubmitSliderBtn.resetSlider()
+                        MaterialAlertDialogBuilder(requireContext())
+                            .setMessage(it.error)
+                            .show()
+                    }
+                }
+            })
+
+        viewModel.gigerVerificationStatus
+            .observe(viewLifecycleOwner, Observer {
+
+                if (it.selfieVideoUploaded) {
+                    if (::captureSelfieVideoFragment.isInitialized) {
+                        //Video Just Got Uploaded
+                    } else {
+                        //Cold Start
+                        val videoRef = firebaseStorage
+                            .reference
+                            .child("verification_selfie_videos")
+                            .child(it.selfieVideoDataModel!!.videoPath)
+
+                        videoRef.downloadUrl.addOnSuccessListener {
+                            addPlayVideoFragment(it)
+                        }.addOnFailureListener {
+                            it.printStackTrace()
+                        }
+
+                    }
+                } else {
+                    addCaptureVideoFragment()
+                }
+            })
+
+        viewModel.startListeningForGigerVerificationStatusChanges()
     }
 
 
@@ -110,12 +153,12 @@ class AddSelfieVideoFragment : BaseFragment(), CaptureVideoFragmentEventListener
         }
 
         selfieVideoSubmitSliderBtn.onSlideCompleteListener =
-                object : SlideToActView.OnSlideCompleteListener {
+            object : SlideToActView.OnSlideCompleteListener {
 
-                    override fun onSlideComplete(view: SlideToActView) {
-                        viewModel.uploadSelfieVideo(mCapturedVideoPath!!)
-                    }
+                override fun onSlideComplete(view: SlideToActView) {
+                    viewModel.uploadSelfieVideo(mCapturedVideoPath!!)
                 }
+            }
     }
 
 
@@ -123,18 +166,18 @@ class AddSelfieVideoFragment : BaseFragment(), CaptureVideoFragmentEventListener
         selfieVideoSubmitSliderBtn.isEnabled = true
 
         selfieVideoSubmitSliderBtn.outerColor =
-                ResourcesCompat.getColor(resources, R.color.light_pink, null)
+            ResourcesCompat.getColor(resources, R.color.light_pink, null)
         selfieVideoSubmitSliderBtn.innerColor =
-                ResourcesCompat.getColor(resources, R.color.lipstick, null)
+            ResourcesCompat.getColor(resources, R.color.lipstick, null)
     }
 
     private fun disableSubmitButton() {
         selfieVideoSubmitSliderBtn.isEnabled = false
 
         selfieVideoSubmitSliderBtn.outerColor =
-                ResourcesCompat.getColor(resources, R.color.light_grey, null)
+            ResourcesCompat.getColor(resources, R.color.light_grey, null)
         selfieVideoSubmitSliderBtn.innerColor =
-                ResourcesCompat.getColor(resources, R.color.warm_grey, null)
+            ResourcesCompat.getColor(resources, R.color.warm_grey, null)
     }
 
     private fun deleteExistingVideoIfExist() {

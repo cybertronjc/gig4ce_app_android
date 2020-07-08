@@ -96,7 +96,7 @@ class CurrentAddressEditFragment : BaseFragment() {
     }
 
     private fun listener() {
-        if (workFromHomeSwitch.isEnabled) {
+//        if (workFromHomeSwitch.isEnabled) {
             workFromHomeSwitch.setOnClickListener { view ->
                 var isChecked = (view as Switch).isChecked
                 if (isChecked) populateAddress(profileDataModel.address.home)
@@ -122,7 +122,7 @@ class CurrentAddressEditFragment : BaseFragment() {
                     activity?.onBackPressed()
                 }
             }
-        }
+//        }
     }
 
     fun addressIsValid(view: EditText):Boolean{

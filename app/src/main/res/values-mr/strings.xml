@@ -334,5 +334,6 @@
     <string name="documents_uploaded_long">As your documents will get verifed, you will be able to start your gigs.</string>
     <string name="please_let_us_know_more_about_your_gig">Please let us know more about your Gig .</string>
     <string name="gig_location">Gig Location</string>
-    ayyy
+    <string name="pan_card_image">Pan Card Image</string>
+
 </resources>
