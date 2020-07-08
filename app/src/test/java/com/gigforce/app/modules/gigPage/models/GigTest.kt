@@ -51,7 +51,6 @@ class GigTest {
             duration = 3.1F,
             gigAmount = 10000.0,
             gigRating = 4.5F,
-
             companyName = "Company XYZ",
             contactNo = "9892849832948",
             gigType = "On Site",

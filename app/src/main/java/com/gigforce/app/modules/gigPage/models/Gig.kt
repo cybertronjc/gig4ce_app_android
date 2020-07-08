@@ -18,7 +18,7 @@ data class Gig(
         var duration: Float = 0.0F,
         var gigRating: Float = 0.0F,
         var gigType: String?,
-        var gigDetails: GigDetails,
+        var gigDetails: GigDetails?,
         var gigHighLights: List<String>,
         var gigRequirements: List<String>,
         var gigLocationDetails: GigLocationDetails?,
