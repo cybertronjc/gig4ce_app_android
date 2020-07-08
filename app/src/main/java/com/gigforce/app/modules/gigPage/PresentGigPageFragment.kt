@@ -14,10 +14,8 @@ import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.modules.gigPage.models.Gig
 import com.gigforce.app.modules.gigPage.models.GigDetails
 import com.gigforce.app.modules.roster.inflate
-import com.google.android.gms.common.GooglePlayServicesNotAvailableException
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.MapsInitializer
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
@@ -47,31 +45,20 @@ class PresentGigPageFragment : BaseFragment() {
     }
 
     private fun initUi() {
-        gigLocationMapView.getMapAsync {
-            mGoogleMap = it
-            gigLocationMapView.onCreate(null)
+//        gigLocationMapView.getMapAsync {
+//            mGoogleMap = it
+//            gigLocationMapView.onCreate(null)
+//
+//            try {
+//                MapsInitializer.initialize(requireContext())
+//            } catch (e: GooglePlayServicesNotAvailableException) {
+//                e.printStackTrace()
+//            }
+//        }
 
-            try {
-                MapsInitializer.initialize(requireContext())
-            } catch (e: GooglePlayServicesNotAvailableException) {
-                e.printStackTrace()
-            }
+        checkInOrContactUsBtn.setOnClickListener {
+            navigate(R.id.gigAttendancePageFragment)
         }
-    }
-
-    override fun onResume() {
-        gigLocationMapView.onResume()
-        super.onResume()
-    }
-
-    override fun onPause() {
-        gigLocationMapView.onPause()
-        super.onPause()
-    }
-
-    override fun onDestroy() {
-        gigLocationMapView.onDestroy()
-        super.onDestroy()
     }
 
 
@@ -87,7 +74,7 @@ class PresentGigPageFragment : BaseFragment() {
             arguments?.getString(INTENT_EXTRA_GIG_ID)
         }
 
-        viewModel.getPresentGig(gigId!!)
+        viewModel.getPresentGig("some")
     }
 
     private fun addMarkerOnMap(
@@ -132,7 +119,7 @@ class PresentGigPageFragment : BaseFragment() {
         inflateGigHighlights(gig.gigHighLights)
 
         gigRequirementsContainer.removeAllViews()
-        inflateGigRequirements(gig.gigHighLights)
+        inflateGigRequirements(gig.gigRequirements)
 
         if (gig.gigLocationDetails != null) {
             fullMapAddresTV.text = gig.gigLocationDetails?.fullAddress
@@ -146,7 +133,7 @@ class PresentGigPageFragment : BaseFragment() {
     }
 
     private fun inflateGigRequirements(gigRequirements: List<String>) = gigRequirements.forEach {
-        gigRequirementsContainer.inflate(R.layout.gig_details_item)
+        gigRequirementsContainer.inflate(R.layout.gig_details_item, true)
         val gigItem: LinearLayout =
             gigRequirementsContainer.getChildAt(gigRequirementsContainer.childCount - 1) as LinearLayout
         val gigTextTV: TextView = gigItem.findViewById(R.id.text)
@@ -155,7 +142,7 @@ class PresentGigPageFragment : BaseFragment() {
 
 
     private fun inflateGigHighlights(gigHighLights: List<String>) = gigHighLights.forEach {
-        gigHighlightsContainer.inflate(R.layout.gig_details_item)
+        gigHighlightsContainer.inflate(R.layout.gig_details_item, true)
         val gigItem: LinearLayout =
             gigHighlightsContainer.getChildAt(gigHighlightsContainer.childCount - 1) as LinearLayout
         val gigTextTV: TextView = gigItem.findViewById(R.id.text)

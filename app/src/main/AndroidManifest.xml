@@ -43,6 +43,8 @@
                app to run.
         -->
 
+        <meta-data android:name="com.google.android.geo.API_KEY" android:value="your API key"/>
+
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"

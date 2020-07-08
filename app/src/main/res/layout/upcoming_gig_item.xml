@@ -31,7 +31,7 @@
             android:layout_width="18dp"
             android:layout_height="18dp"
             android:layout_marginStart="17dp"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="17dp"
             android:src="@drawable/ic_emoji"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -89,15 +89,12 @@
 
 
 
-
-
-
-        <com.google.android.material.card.MaterialCardView
+        <androidx.cardview.widget.CardView
             android:id="@+id/messageCardView"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_marginTop="12dp"
-            android:layout_marginRight="17dp"
+            android:layout_marginEnd="17dp"
             app:cardCornerRadius="12dp"
             app:cardBackgroundColor="@color/light_pink"
             app:layout_constraintEnd_toEndOf="parent"
@@ -108,17 +105,14 @@
                 android:layout_height="24dp"
                 android:scaleY="0.5"
                 android:scaleX="0.5"
-                android:gravity="center"
-                android:text="N"
                 android:tint="@color/lipstick"
                 android:src="@drawable/fui_ic_phone_white_24dp"
-                android:textColor="@color/white"
-                android:textSize="18sp"/>
+            />
 
-        </com.google.android.material.card.MaterialCardView>
+        </androidx.cardview.widget.CardView>
 
 
-        <com.google.android.material.card.MaterialCardView
+        <androidx.cardview.widget.CardView
             android:id="@+id/callCardView"
             android:layout_width="24dp"
             android:layout_height="24dp"
@@ -134,14 +128,11 @@
                 android:layout_height="24dp"
                 android:scaleY="0.5"
                 android:scaleX="0.5"
-                android:gravity="center"
-                android:text="N"
                 android:tint="@color/lipstick"
                 android:src="@drawable/fui_ic_phone_white_24dp"
-                android:textColor="@color/white"
-                android:textSize="18sp"/>
+                />
 
-        </com.google.android.material.card.MaterialCardView>
+        </androidx.cardview.widget.CardView>
 
 
         <TextView

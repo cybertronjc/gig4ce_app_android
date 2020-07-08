@@ -47,30 +47,30 @@ class GigPageNavigationFragment : BaseFragment() {
     }
 
     private fun initUi() {
-        mapView.getMapAsync {
-            mGoogleMap = it
-            mapView.onCreate(null)
-
-            try {
-                MapsInitializer.initialize(requireContext())
-            } catch (e: GooglePlayServicesNotAvailableException) {
-                e.printStackTrace()
-            }
-        }
+//        mapView.getMapAsync {
+//            mGoogleMap = it
+//            mapView.onCreate(null)
+//
+//            try {
+//                MapsInitializer.initialize(requireContext())
+//            } catch (e: GooglePlayServicesNotAvailableException) {
+//                e.printStackTrace()
+//            }
+//        }
     }
 
     override fun onResume() {
-        mapView.onResume()
+     //   mapView.onResume()
         super.onResume()
     }
 
     override fun onPause() {
-        mapView.onPause()
+       // mapView.onPause()
         super.onPause()
     }
 
     override fun onDestroy() {
-        mapView.onDestroy()
+       // mapView.onDestroy()
         super.onDestroy()
     }
 

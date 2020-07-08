@@ -35,7 +35,7 @@
 
     <fragment
         android:id="@+id/authFlowFragment"
-        android:name="com.gigforce.app.modules.auth.AuthFlowFragment"/>
+        android:name="com.gigforce.app.modules.auth.AuthFlowFragment" />
 
     <fragment
         android:id="@+id/settingFragment"
@@ -383,8 +383,7 @@
     <fragment
         android:id="@+id/loginSuccessfulFragment"
         android:name="com.gigforce.app.modules.auth.ui.main.LoginSuccessfulFragment"
-        android:label="OnOTPSuccess">
-    </fragment>
+        android:label="OnOTPSuccess"></fragment>
     <fragment
         android:id="@+id/locationFragment"
         android:name="com.gigforce.app.modules.preferences.location.LocationFragment"
@@ -547,6 +546,21 @@
         android:name="com.gigforce.app.modules.wallet.HelpExpandedPage"
         android:label="HelpExpandedPage"
         tools:layout="@layout/help_expanded_page" />
+    <fragment
+        android:id="@+id/presentGigPageFragment"
+        android:name="com.gigforce.app.modules.gigPage.PresentGigPageFragment"
+        android:label="fragment_gig_page_present"
+        tools:layout="@layout/fragment_gig_page_present">
+
+        <argument
+            android:name="gig_id"
+            app:argType="string" />
+
+    </fragment>
+    <fragment
+        android:id="@+id/gigAttendancePageFragment"
+        android:name="com.gigforce.app.modules.gigPage.GigAttendancePageFragment"
+        android:label="GigAttendancePageFragment" />
 
 </navigation>
 
