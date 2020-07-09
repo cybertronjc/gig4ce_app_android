@@ -28,7 +28,6 @@ class MarkAttendanceFragment : BaseFragment() {
         fun newInstance() = MarkAttendanceFragment()
     }
 
-    private lateinit var viewModel: MarkAttendanceViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,7 +38,6 @@ class MarkAttendanceFragment : BaseFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(MarkAttendanceViewModel::class.java)
         // TODO: Use the ViewModel
         updateGPS()
     }
@@ -72,9 +70,9 @@ class MarkAttendanceFragment : BaseFragment() {
         }catch (e: Exception){
             address.text = "Not Working"
         }
-        var gigsRepositoryTest = GigsRepositoryTest()
-        var markAttendance = MarkAttendance(true, Date(),location.latitude,location.longitude,"",locationAddress)
-        gigsRepositoryTest.markAttendance(markAttendance)
+//        var gigsRepositoryTest = GigsRepositoryTest()
+//        var markAttendance = MarkAttendance(true, Date(),location.latitude,location.longitude,"",locationAddress)
+//        gigsRepositoryTest.markAttendance(markAttendance)
     }
 
     override fun onRequestPermissionsResult(

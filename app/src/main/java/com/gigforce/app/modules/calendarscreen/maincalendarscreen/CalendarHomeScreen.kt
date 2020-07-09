@@ -90,7 +90,7 @@ class CalendarHomeScreen : BaseFragment(),
         listener()
         observePreferenceData()
 //        viewModel.setGigData()
-        navigate(R.id.markAttendanceFragment)
+//        navigate(R.id.markAttendanceFragment)
 
     }
 
