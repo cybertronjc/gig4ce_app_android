@@ -122,6 +122,7 @@ class BSCalendarScreenFragment : BaseFragment() {
                     lp.height = lp.height
                     lp.width = itemWidth
                     getView(viewHolder, R.id.card_view).layoutParams = lp
+                    
                 })!!
         recyclerGenericAdapter.setList(datalist)
         recyclerGenericAdapter.setLayout(R.layout.upcoming_gig_item)
@@ -134,6 +135,13 @@ class BSCalendarScreenFragment : BaseFragment() {
 
     }
 
+    class NavigationClickListener(var position : Int,var baseFragment: BaseFragment) : View.OnClickListener{
+        override fun onClick(v: View?) {
+         baseFragment.showToast(""+position)
+        }
+
+
+    }
     fun generateBackgroundWithShadow(
         view: View, @ColorRes backgroundColor: Int,
         @DimenRes cornerRadius: Int,

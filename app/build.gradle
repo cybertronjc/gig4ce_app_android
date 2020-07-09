@@ -198,6 +198,8 @@ dependencies {
     //Exo Player
     implementation 'com.google.android.exoplayer:exoplayer-core:2.11.5'
     implementation 'com.google.android.exoplayer:exoplayer-ui:2.11.5'
+
+    implementation 'com.google.android.gms:play-services-location:17.0.0'
 }
 
 apply plugin: 'com.google.gms.google-services'

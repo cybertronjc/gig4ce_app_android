@@ -32,7 +32,6 @@ import com.gigforce.app.modules.calendarscreen.maincalendarscreen.verticalcalend
 import com.gigforce.app.modules.custom_gig_preferences.CustomPreferencesViewModel
 import com.gigforce.app.modules.custom_gig_preferences.ParamCustPreferViewModel
 import com.gigforce.app.modules.custom_gig_preferences.UnavailableDataModel
-import com.gigforce.app.modules.preferences.ParameterizedSharedPreferenceVM
 import com.gigforce.app.modules.preferences.PreferencesFragment
 import com.gigforce.app.modules.profile.ProfileViewModel
 import com.gigforce.app.utils.GlideApp
@@ -91,6 +90,8 @@ class CalendarHomeScreen : BaseFragment(),
         listener()
         observePreferenceData()
 //        viewModel.setGigData()
+        navigate(R.id.markAttendanceFragment)
+
     }
 
 
