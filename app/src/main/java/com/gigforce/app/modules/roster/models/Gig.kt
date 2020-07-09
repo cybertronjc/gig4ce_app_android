@@ -9,6 +9,7 @@ import java.time.LocalDateTime
 
 data class Gig (
     var tag: String = "",
+    var gigId: String = "",
     var gigerId: String = "",
     var gigAmount: Int = 0,
     var startDateTime: Timestamp? = null,

@@ -558,6 +558,26 @@
         android:name="com.gigforce.app.modules.wallet.HelpExpandedPage"
         android:label="HelpExpandedPage"
         tools:layout="@layout/help_expanded_page" />
+    <fragment
+        android:id="@+id/presentGigPageFragment"
+        android:name="com.gigforce.app.modules.gigPage.PresentGigPageFragment"
+        android:label="fragment_gig_page_present"
+        tools:layout="@layout/fragment_gig_page_present">
+
+        <argument
+            android:name="gig_id"
+            app:argType="string" />
+
+    </fragment>
+    <fragment
+        android:id="@+id/gigAttendancePageFragment"
+        android:name="com.gigforce.app.modules.gigPage.GigAttendancePageFragment"
+        android:label="GigAttendancePageFragment" />
+    <fragment
+        android:id="@+id/gigPageNavigationFragment"
+        android:name="com.gigforce.app.modules.gigPage.GigPageNavigationFragment"
+        android:label="fragment_gig_navigation"
+        tools:layout="@layout/fragment_gig_navigation" />
 
 </navigation>
 

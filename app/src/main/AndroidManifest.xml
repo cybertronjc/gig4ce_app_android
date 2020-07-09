@@ -18,6 +18,9 @@
 
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+
     <uses-feature android:name="android.hardware.camera" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
 
@@ -42,6 +45,8 @@
         android:name="preloaded_fonts"
                app to run.
         -->
+
+        <meta-data android:name="com.google.android.geo.API_KEY" android:value="your API key"/>
 
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
