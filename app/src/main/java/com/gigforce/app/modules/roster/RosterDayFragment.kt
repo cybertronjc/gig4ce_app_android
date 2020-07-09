@@ -70,17 +70,17 @@ class RosterDayFragment: RosterBaseFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        viewModelCustomPreference =
+            ViewModelProvider(this, ParamCustPreferViewModel(viewLifecycleOwner)).get(
+                CustomPreferencesViewModel::class.java
+            )
         rosterViewModel.currentDateTime.value = activeDateTime
-        rosterViewModel.checkDayAvailable(activeDateTime)
+        rosterViewModel.checkDayAvailable(activeDateTime, viewModelCustomPreference)
         return inflateView(R.layout.roster_day_fragment, inflater, container)
     }
     lateinit var  viewModelCustomPreference : CustomPreferencesViewModel
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-         viewModelCustomPreference =
-            ViewModelProvider(this, ParamCustPreferViewModel(viewLifecycleOwner)).get(
-                CustomPreferencesViewModel::class.java
-            )
         initialize()
         setListeners()
 
@@ -112,36 +112,16 @@ class RosterDayFragment: RosterBaseFragment() {
                         )
                 rosterViewModel.currentDateTime.value = newDateTime
                 lastViewPosition = position
-                rosterViewModel.checkDayAvailable(newDateTime)
+                rosterViewModel.checkDayAvailable(newDateTime, viewModelCustomPreference)
             }
         }
 
         hourview_viewpager.registerOnPageChangeCallback(hourviewPageChangeCallBack)
 
         top_bar.available_toggle.setOnClickListener {
-            if (top_bar.isAvailable) {
-                toggleAvailability()
-                viewModelCustomPreference.updateCustomPreference(
-                    UnavailableDataModel(
-                        Date
-                            .from(activeDateTime.atZone(ZoneId.systemDefault())
-                                .toInstant())
-                    )
-                )
-            }
-            else {
-                rosterViewModel.isDayAvailable.value = true
-                setHourVisibility(
-                    hourview_viewpager.getChildAt(0).findViewWithTag<ConstraintLayout>("day_times"),
-                    activeDateTime, actualDateTime)
-                viewModelCustomPreference.deleteCustomPreference(
-                    UnavailableDataModel(
-                        Date
-                            .from(activeDateTime.atZone(ZoneId.systemDefault())
-                                .toInstant())
-                    )
-                )
-            }
+            rosterViewModel.toggleDayAvailability(
+                requireContext(), hourview_viewpager.getChildAt(0).findViewWithTag<ConstraintLayout>("day_times"),
+                upcomingGigs, rosterViewModel.isDayAvailable.value!!, activeDateTime, actualDateTime, viewModelCustomPreference)
         }
     }
 
@@ -307,17 +287,17 @@ class RosterDayFragment: RosterBaseFragment() {
 //        }
 //    }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    fun toggleAvailability() {
-       if (upcomingGigs.size > 0) {
-           rosterViewModel.isDayAvailable.value = !showGigsTodayWarning(
-               requireContext(), upcomingGigs,
-               hourview_viewpager.getChildAt(0).findViewWithTag<ConstraintLayout>("day_times"))
-        } else {
-           rosterViewModel.isDayAvailable.value = false
-           allHourInactive(
-               hourview_viewpager.getChildAt(0).findViewWithTag<ConstraintLayout>("day_times"))
-        }
-    }
+//    @RequiresApi(Build.VERSION_CODES.O)
+//    fun toggleAvailability() {
+//       if (upcomingGigs.size > 0) {
+//           rosterViewModel.isDayAvailable.value = !showGigsTodayWarning(
+//               requireContext(), upcomingGigs,
+//               hourview_viewpager.getChildAt(0).findViewWithTag<ConstraintLayout>("day_times"))
+//        } else {
+//           rosterViewModel.isDayAvailable.value = false
+//           allHourInactive(
+//               hourview_viewpager.getChildAt(0).findViewWithTag<ConstraintLayout>("day_times"))
+//        }
+//    }
 
 }

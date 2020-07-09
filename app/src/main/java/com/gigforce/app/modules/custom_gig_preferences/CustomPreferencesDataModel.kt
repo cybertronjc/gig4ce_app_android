@@ -11,7 +11,7 @@ class CustomPreferencesDataModel {
 class UnavailableDataModel : BaseFirestoreDataModel{
     lateinit var date :Date
     var timeSlots = ArrayList<TimeSlotsDataModel>()
-    var isDayUnavailable: Boolean = false
+    var dayUnavailable: Boolean = false
     constructor():super("unavailable") {
     }
     constructor(date: Date):super("unavailable")  {
