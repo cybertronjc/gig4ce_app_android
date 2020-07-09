@@ -4,16 +4,17 @@ import androidx.lifecycle.*
 
 class CustomPreferencesViewModel(var owner: LifecycleOwner) : ViewModel() {
     var customPreferencesRepository = CustomPreferencesRepository()
-    lateinit var customPreferencesDataModel : CustomPreferencesDataModel
+    lateinit var customPreferencesDataModel: CustomPreferencesDataModel
     var customPreferencesLiveDataModel: MutableLiveData<CustomPreferencesDataModel> =
         MutableLiveData<CustomPreferencesDataModel>()
+
     init {
         getAllData()
     }
 
     private fun getAllData() {
         customPreferencesRepository.getDBCollection()
-            .addSnapshotListener{ value, e ->
+            .addSnapshotListener { value, e ->
                 if (e != null) {
                     return@addSnapshotListener
 
@@ -22,35 +23,81 @@ class CustomPreferencesViewModel(var owner: LifecycleOwner) : ViewModel() {
                     customPreferencesLiveDataModel.postValue(
                         value!!.toObject(CustomPreferencesDataModel::class.java)
                     )
-                }
-                else{
-                    var customPreferencesDataModel1  = CustomPreferencesDataModel()
+                } else {
+                    var customPreferencesDataModel1 = CustomPreferencesDataModel()
                     customPreferencesDataModel1.unavailable = ArrayList<UnavailableDataModel>()
                     customPreferencesRepository.setDefaultData(customPreferencesDataModel1)
                 }
             }
-        customPreferencesLiveDataModel.observe( owner, Observer { data ->
+        customPreferencesLiveDataModel.observe(owner, Observer { data ->
             customPreferencesDataModel = data
         })
     }
-    fun getCustomPreferenceData():CustomPreferencesDataModel{
+
+    fun getCustomPreferenceData(): CustomPreferencesDataModel {
         return customPreferencesDataModel
     }
-    fun updateCustomPreference(unavailableDataModel : UnavailableDataModel){
 
-        if(customPreferencesDataModel!=null && unavailableDataModel!=null) {
+    fun updateCustomPreference(unavailableDataModel: UnavailableDataModel) {
+
+        if (customPreferencesDataModel != null && unavailableDataModel != null) {
             deleteCustomPreference(unavailableDataModel)
             customPreferencesRepository.setData(unavailableDataModel)
         }
     }
 
-    fun deleteCustomPreference(unavailableDataModel : UnavailableDataModel){
+    fun deleteCustomPreference(unavailableDataModel: UnavailableDataModel) {
         var oldUnavailableDataModel = unavailableDataModel.findDateDataModel(
             customPreferencesDataModel.unavailable
         )
-        if(oldUnavailableDataModel!=null){
+        if (oldUnavailableDataModel != null) {
             customPreferencesRepository.removeData(
                 oldUnavailableDataModel
-            )}
+            )
+        }
+    }
+
+    fun markUnavaialbleTimeSlots(unavailableDataModel: UnavailableDataModel){
+        if (customPreferencesDataModel != null && unavailableDataModel != null) {
+            var dataModelToDelete = findDataModelForSlots(unavailableDataModel)
+            var dataModelToInsert =
+                findDataModelForUnavailableSlots(dataModelToDelete, unavailableDataModel)
+            deleteCustomPreference(dataModelToDelete)
+            customPreferencesRepository.setData(dataModelToInsert)
+        }
+    }
+
+    private fun findDataModelForUnavailableSlots(
+        dataModelToDelete: UnavailableDataModel,
+        unavailableDataModel: UnavailableDataModel
+    ): UnavailableDataModel {
+        var copiedModel = dataModelToDelete.copyObject()
+        copiedModel.setUnavailaleSlots(unavailableDataModel)
+        return copiedModel
+    }
+
+    fun markAvailableTimeSlots(unavailableDataModel: UnavailableDataModel) {
+        if (customPreferencesDataModel != null && unavailableDataModel != null) {
+            var dataModelToDelete = findDataModelForSlots(unavailableDataModel)
+            var dataModelToInsert =
+                findDataModelForAvailableSlots(dataModelToDelete, unavailableDataModel)
+            deleteCustomPreference(dataModelToDelete)
+            customPreferencesRepository.setData(dataModelToInsert)
+        }
+    }
+
+    private fun findDataModelForAvailableSlots(
+        dataModelToDelete: UnavailableDataModel,
+        unavailableDataModel: UnavailableDataModel
+    ): UnavailableDataModel {
+        var copiedModel = dataModelToDelete.copyObject()
+        copiedModel.setAvailaleSlots(unavailableDataModel)
+        return copiedModel
+    }
+
+    private fun findDataModelForSlots(unavailableDataModel: UnavailableDataModel): UnavailableDataModel {
+        return unavailableDataModel.findDataModelForSlot(
+            customPreferencesDataModel.unavailable
+        )!!
     }
 }
