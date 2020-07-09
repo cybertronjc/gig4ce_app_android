@@ -570,6 +570,11 @@
         android:id="@+id/gigAttendancePageFragment"
         android:name="com.gigforce.app.modules.gigPage.GigAttendancePageFragment"
         android:label="GigAttendancePageFragment" />
+    <fragment
+        android:id="@+id/gigPageNavigationFragment"
+        android:name="com.gigforce.app.modules.gigPage.GigPageNavigationFragment"
+        android:label="fragment_gig_navigation"
+        tools:layout="@layout/fragment_gig_navigation" />
 
 </navigation>
 

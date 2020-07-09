@@ -44,7 +44,7 @@ class GigViewModel constructor(
 
         val currentDate = Date()
         val upcomingGigs = userGigs.filter {
-            it.startDate.toDate().time > currentDate.time
+            it.startDateTime!!.toDate().time > currentDate.time
         }
         _upcomingGigs.value = Lce.content(upcomingGigs)
     }

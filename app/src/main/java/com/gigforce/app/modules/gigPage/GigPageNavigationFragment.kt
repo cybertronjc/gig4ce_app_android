@@ -1,28 +1,24 @@
 package com.gigforce.app.modules.gigPage
 
-import android.annotation.SuppressLint
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.modules.gigPage.models.Gig
-import com.gigforce.app.modules.gigPage.models.GigDetails
-import com.gigforce.app.modules.roster.inflate
-import com.google.android.gms.common.GooglePlayServicesNotAvailableException
+import com.gigforce.app.utils.Lce
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.MapsInitializer
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
-import kotlinx.android.synthetic.main.fragment_gig_navigation.*
-import java.text.SimpleDateFormat
+import com.ncorti.slidetoact.SlideToActView
+import kotlinx.android.synthetic.main.fragment_gig_navigation_bottom_sheet.*
 import java.util.*
 
 
@@ -34,6 +30,7 @@ class GigPageNavigationFragment : BaseFragment() {
 
     private val viewModel: GigViewModel by viewModels()
     private var mGoogleMap: GoogleMap? = null
+    private var gig: Gig? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -57,28 +54,39 @@ class GigPageNavigationFragment : BaseFragment() {
 //                e.printStackTrace()
 //            }
 //        }
-    }
 
-    override fun onResume() {
-     //   mapView.onResume()
-        super.onResume()
-    }
 
-    override fun onPause() {
-       // mapView.onPause()
-        super.onPause()
-    }
+        startNavigationSliderBtn.onSlideCompleteListener =
+            object : SlideToActView.OnSlideCompleteListener {
 
-    override fun onDestroy() {
-       // mapView.onDestroy()
-        super.onDestroy()
+                override fun onSlideComplete(view: SlideToActView) {
+
+                    if (gig != null && gig!!.gigLocationDetails != null) {
+                        val location = gig!!.gigLocationDetails!!
+                        val intent = Intent(
+                            Intent.ACTION_VIEW,
+                            Uri.parse("http://maps.google.com/maps?daddr=${location.latitude},${location.longitude}")
+                        )
+                        startActivity(intent)
+                    }
+                }
+            }
     }
 
 
     private fun initViewModel(savedInstanceState: Bundle?) {
         viewModel.gigDetails
             .observe(viewLifecycleOwner, Observer {
+                when (it) {
+                    Lce.Loading -> {}
+                    is Lce.Content -> {
+                        this.gig = it.content
+                        setDatOnView(it.content)
+                    }
+                    is Lce.Error -> {
 
+                    }
+                }
             })
 
         val gigId = if (savedInstanceState != null) {
@@ -87,7 +95,12 @@ class GigPageNavigationFragment : BaseFragment() {
             arguments?.getString(INTENT_EXTRA_GIG_ID)
         }
 
-//        viewModel.getPresentGig(gigId!!)
+        viewModel.watchGig(gigId!!)
+    }
+
+    private fun setDatOnView(content: Gig) {
+        contactPersonTV.text = content.gigContactDetails?.contactName
+        toReachTV.text = "to reach : ${content.address}"
     }
 
     private fun addMarkerOnMap(

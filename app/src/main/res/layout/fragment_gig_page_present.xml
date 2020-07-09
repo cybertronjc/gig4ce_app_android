@@ -158,6 +158,7 @@
                 android:layout_marginTop="14dp"
                 android:layout_marginEnd="17dp"
                 android:text="Check In"
+                app:strokeColor="@color/lipstick"
                 app:layout_constraintTop_toBottomOf="@id/fetchingLocationTV" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -192,7 +193,7 @@
                 android:layout_height="17dp"
                 android:layout_marginStart="25dp"
                 android:layout_marginTop="14dp"
-                android:src="@drawable/ic_play_round_pink_bck"
+                android:src="@drawable/ic_calendar"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/detailsLabelTV" />
 
@@ -206,6 +207,7 @@
                 android:text="Duration "
                 android:textColor="#d9000000"
                 android:textSize="14sp"
+                android:letterSpacing="0"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/durationIconIV"
                 app:layout_constraintTop_toBottomOf="@id/detailsLabelTV" />
@@ -217,7 +219,7 @@
                 android:layout_height="17dp"
                 android:layout_marginStart="25dp"
                 android:layout_marginTop="14dp"
-                android:src="@drawable/ic_play_round_pink_bck"
+                android:src="@drawable/ic_clock_pink"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/durationTextTV" />
 
@@ -231,6 +233,7 @@
                 android:text="Shift "
                 android:textColor="#d9000000"
                 android:textSize="14sp"
+                android:letterSpacing="0"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/shiftIconIV"
                 app:layout_constraintTop_toBottomOf="@id/durationTextTV" />
@@ -241,7 +244,7 @@
                 android:layout_height="17dp"
                 android:layout_marginStart="25dp"
                 android:layout_marginTop="14dp"
-                android:src="@drawable/ic_play_round_pink_bck"
+                android:src="@drawable/ic_location"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/shiftTV" />
 
@@ -255,6 +258,7 @@
                 android:text="Address "
                 android:textColor="#d9000000"
                 android:textSize="14sp"
+                android:letterSpacing="0"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/addressIV"
                 app:layout_constraintTop_toBottomOf="@id/shiftTV" />
@@ -266,7 +270,7 @@
                 android:layout_height="17dp"
                 android:layout_marginStart="25dp"
                 android:layout_marginTop="14dp"
-                android:src="@drawable/ic_play_round_pink_bck"
+                android:src="@drawable/ic_credit_card"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/addressTV" />
 
@@ -280,6 +284,7 @@
                 android:text="Wage "
                 android:textColor="#d9000000"
                 android:textSize="14sp"
+                android:letterSpacing="0"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/wageIV"
                 app:layout_constraintTop_toBottomOf="@id/addressTV" />
@@ -415,6 +420,7 @@
                 android:layout_height="17dp"
                 android:layout_marginStart="25dp"
                 android:layout_marginTop="14dp"
+
                 android:src="@drawable/ic_play_round_pink_bck"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/gigLocationMapView" />
@@ -429,6 +435,7 @@
                 android:text="Gig - Km(s) Away From User"
                 android:textColor="#d9000000"
                 android:textSize="14sp"
+                android:letterSpacing="0"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/gigDistanceIV"
                 app:layout_constraintTop_toBottomOf="@id/gigLocationMapView" />
@@ -453,12 +460,37 @@
                 android:text="Address "
                 android:textColor="#d9000000"
                 android:textSize="14sp"
+                android:letterSpacing="0"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/fullMapAddresLabel"
                 app:layout_constraintTop_toBottomOf="@id/gigDistanceTV" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <View
+            android:id="@+id/separator6"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="#c0c0c0"
+            app:layout_constraintTop_toBottomOf="@id/gigLocationLayout" />
+
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/contactUsBtn"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="17dp"
+            android:layout_marginTop="14dp"
+            android:layout_marginEnd="17dp"
+            android:layout_marginBottom="82dp"
+            android:text="Contact us"
+            app:strokeColor="@color/lipstick"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/separator6"
+            tools:layout_editor_absoluteX="17dp" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

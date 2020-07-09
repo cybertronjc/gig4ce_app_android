@@ -105,8 +105,7 @@
                 android:layout_height="24dp"
                 android:scaleY="0.5"
                 android:scaleX="0.5"
-                android:tint="@color/lipstick"
-                android:src="@drawable/fui_ic_phone_white_24dp"
+                android:src="@drawable/ic_chat"
             />
 
         </androidx.cardview.widget.CardView>
@@ -119,6 +118,8 @@
             android:layout_marginTop="12dp"
             android:layout_marginRight="8dp"
             app:cardCornerRadius="12dp"
+            android:clickable="true"
+            android:focusable="true"
             app:layout_constraintRight_toLeftOf="@id/messageCardView"
             app:cardBackgroundColor="@color/light_pink"
             app:layout_constraintTop_toBottomOf="@id/seaprator1">
@@ -144,16 +145,16 @@
             android:text="Contact Person"
             android:textColor="@color/black_85"
             android:textSize="12sp"
-            app:layout_constraintEnd_toStartOf="@+id/callCardView"
-            app:layout_constraintStart_toStartOf="@+id/textView41"
-            app:layout_constraintTop_toBottomOf="@+id/contactPersonLabel" />
+            app:layout_constraintEnd_toStartOf="@id/callCardView"
+            app:layout_constraintStart_toStartOf="@id/textView41"
+            app:layout_constraintTop_toBottomOf="@id/contactPersonLabel" />
 
 
         <Space
             android:id="@+id/buttonSpace"
             android:layout_width="13dp"
             android:layout_height="10dp"
-            app:layout_constraintStart_toStartOf="@+id/textView41"
+            app:layout_constraintStart_toStartOf="@id/textView41"
             app:layout_constraintTop_toBottomOf="@id/contactPersonTV"
             app:layout_constraintEnd_toEndOf="parent"
             />
@@ -169,6 +170,8 @@
             android:letterSpacing="0"
             android:padding="10dp"
             android:text="Navigate"
+            android:clickable="true"
+            android:focusable="true"
             android:layout_marginBottom="10dp"
             android:textAlignment="center"
             android:textColor="@color/lipstick"
@@ -187,6 +190,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:background="@drawable/app_gradient_button"
             android:text="Check-In"
+            android:clickable="true"
+            android:focusable="true"
             android:layout_marginStart="7dp"
             android:letterSpacing="0"
             android:layout_marginTop="10dp"

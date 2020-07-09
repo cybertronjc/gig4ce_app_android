@@ -17,9 +17,9 @@
         <ImageView
             android:id="@+id/sheetEdge"
             android:layout_width="73dp"
-            android:layout_height="6dp"
+            android:layout_height="3dp"
             android:layout_marginTop="18dp"
-            android:background="@color/battle_ship_grey"
+            android:background="#cacbce"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -36,7 +36,7 @@
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/sheetEdge"
-            tools:text="1 Hour 20 Mins" />
+            android:text="1 Hour 20 Mins" />
 
 
         <TextView
@@ -49,7 +49,7 @@
             android:textSize="12sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/estimateTimeToReachTV"
-            tools:text="to reach : Tarang Shopping Complex " />
+            android:text="to reach : Tarang Shopping Complex " />
 
 
         <View

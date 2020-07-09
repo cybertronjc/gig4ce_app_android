@@ -5,7 +5,7 @@ import java.util.*
 
 @Keep
 data class GigLocationDetails(
-    var latitude: Double?,
-    var longitude: Double?,
-    var fullAddress: String?
+    var latitude: Double? = null,
+    var longitude: Double? = null,
+    var fullAddress: String? = ""
 )
