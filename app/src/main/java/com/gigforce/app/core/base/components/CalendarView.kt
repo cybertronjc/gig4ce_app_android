@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.SnapHelper
 import com.gigforce.app.R
 import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.app.core.genericadapter.RecyclerGenericAdapter
-import kotlinx.android.synthetic.main.calendar_home_screen.*
 import kotlinx.android.synthetic.main.calendar_view_layout.view.*
 import java.util.*
 import kotlin.collections.ArrayList
@@ -27,7 +26,7 @@ class CalendarView : LinearLayout {
     }
 
     companion object {
-        lateinit var changedMonthModelListener: MonthChangeListener
+        lateinit var changedMonthModelListener: MonthChangeAndDateClickedListener
         var arrlist = ArrayList<MonthModel>()
     }
 
@@ -45,11 +44,11 @@ class CalendarView : LinearLayout {
     }
 
 
-    fun setMonthChangeListener(changedMonthModelListener1: MonthChangeListener) {
+    fun setMonthChangeListener(changedMonthModelListener1: MonthChangeAndDateClickedListener) {
         changedMonthModelListener = changedMonthModelListener1
     }
 
-    open interface MonthChangeListener {
+    open interface MonthChangeAndDateClickedListener {
         fun onMonthChange(monthModel: MonthModel)
     }
 
@@ -63,6 +62,7 @@ class CalendarView : LinearLayout {
                     calendarDataAdapter.list = obj?.days!!
                     (viewHolder.getView(R.id.calendar_grid_view) as GridView).adapter =
                         calendarDataAdapter
+                    calendarDataAdapter.setDateClickedListener(dateClickListener)
                 })!!
         recyclerGenericAdapter.list = getDefaultItems()
         recyclerGenericAdapter.setLayout(R.layout.calendar_moth_data_item)
@@ -110,6 +110,14 @@ class CalendarView : LinearLayout {
         var month: Int = -1
         var year: Int = -1
         var currentMonth: Int = -1
+        constructor()
+        constructor(date: Int,
+                    month: Int,
+                    year: Int){
+            this.date = date
+            this.month = month
+            this.year = year
+        }
     }
 
     private fun getDefaultItems(): ArrayList<MonthModel>? {
@@ -245,5 +253,10 @@ class CalendarView : LinearLayout {
                 }
             }
         }
+    }
+
+    lateinit var dateClickListener: MonthChangeAndDateClickedListener
+    fun setOnDateClickListner(dateClickListener: MonthChangeAndDateClickedListener) {
+        this.dateClickListener = dateClickListener
     }
 }

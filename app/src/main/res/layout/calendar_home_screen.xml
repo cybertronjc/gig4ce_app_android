@@ -89,7 +89,7 @@
             app:layout_constraintTop_toBottomOf="@+id/month_year" />
 
         <ImageView
-            android:id="@+id/imageView13"
+            android:id="@+id/month_selector_arrow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
@@ -151,7 +151,7 @@
         >
 
         <ImageView
-            android:id="@+id/imageView34"
+            android:id="@+id/oval_gradient_iv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:elevation="10dp"
@@ -166,7 +166,7 @@
             android:layout_marginBottom="40dp"
             android:elevation="5dp"
             android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/imageView34" />
+            app:layout_constraintBottom_toBottomOf="@+id/oval_gradient_iv" />
 
         <View
             android:id="@+id/margin_40"
@@ -174,7 +174,7 @@
             android:layout_height="40dp"
             android:background="@color/white"
             android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/imageView34" />
+            app:layout_constraintBottom_toBottomOf="@+id/oval_gradient_iv" />
 
         <LinearLayout
             android:id="@+id/calendar_cv"

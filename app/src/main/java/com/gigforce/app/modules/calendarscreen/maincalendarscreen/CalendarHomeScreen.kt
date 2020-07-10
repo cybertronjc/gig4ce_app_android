@@ -123,7 +123,13 @@ class CalendarHomeScreen : BaseFragment(),
         calendar_dependent.setOnClickListener {
             changeVisibilityCalendarView()
         }
-        calendarView.setMonthChangeListener(object : CalendarView.MonthChangeListener {
+        month_selector_arrow.setOnClickListener{
+            changeVisibilityCalendarView()
+        }
+        oval_gradient_iv.setOnClickListener{
+            changeVisibilityCalendarView()
+        }
+        calendarView.setMonthChangeListener(object : CalendarView.MonthChangeAndDateClickedListener {
             override fun onMonthChange(monthModel: CalendarView.MonthModel) {
                 selectedMonthModel = monthModel
                 var calendar = Calendar.getInstance()
@@ -139,6 +145,13 @@ class CalendarHomeScreen : BaseFragment(),
                         )
                     )
                 }
+            }
+
+        })
+        calendarView.setOnDateClickListner(object : CalendarView.MonthChangeAndDateClickedListener {
+            override fun onMonthChange(monthModel: CalendarView.MonthModel) {
+                selectedMonthModel = monthModel
+                changeVisibilityCalendarView()
             }
 
         })
