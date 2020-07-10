@@ -88,6 +88,28 @@ class RosterDayFragment: RosterBaseFragment() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun initialize() {
+
+        rosterViewModel.currentDateTime.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+            rosterViewModel.gigsQuery.observe(viewLifecycleOwner, androidx.lifecycle.Observer { gigs ->
+                val fullDayGig = rosterViewModel.getFullDayGigForDate(it, gigs)
+
+                if (fullDayGig == null)
+                    top_bar.fullDayGigCard = null
+
+                fullDayGig ?.let { gig ->
+                    if (gig.gigStatus == "upcoming") {
+                        val widget = UpcomingGigCard(requireContext())
+                        widget.isFullDay = true
+                        top_bar.fullDayGigCard = widget
+                    } else if (gig.gigStatus == "completed") {
+                        val widget = CompletedGigCard(requireContext())
+                        widget.isFullDay = true
+                        top_bar.fullDayGigCard = widget
+                    }
+                }
+            })
+        })
+
         rosterViewModel.topBar = top_bar
         initializeBottomSheet()
         attachHourViewAdapter()

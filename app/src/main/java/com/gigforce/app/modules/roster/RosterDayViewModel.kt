@@ -22,6 +22,7 @@ import com.gigforce.app.modules.preferences.PreferencesRepository
 import com.gigforce.app.modules.preferences.prefdatamodel.PreferencesDataModel
 import com.gigforce.app.modules.roster.models.Gig
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.card.MaterialCardView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.gigs_today_warning_dialog.*
@@ -278,7 +279,7 @@ class RosterDayViewModel: ViewModel() {
         val format = SimpleDateFormat("yyyyMdd")
         for (gig in gigsQuery) {
             val idx = format.format(gig.startDateTime!!.toDate())
-            if (dayTag == idx && gig.gigStatus == "upcoming")
+            if (dayTag == idx && gig.gigStatus == "upcoming" && !gig.isFullDay)
                 filteredGigs.add(gig)
         }
         return filteredGigs
@@ -289,10 +290,23 @@ class RosterDayViewModel: ViewModel() {
         val format = SimpleDateFormat("yyyyMdd")
         for (gig in gigsQuery) {
             val idx = format.format(gig.startDateTime!!.toDate())
-            if (dayTag == idx && gig.gigStatus == "completed" )
+            if (dayTag == idx && gig.gigStatus == "completed" && !gig.isFullDay )
                 filteredGigs.add(gig)
         }
         return filteredGigs
+    }
+
+    fun getFullDayGigForDate(date: LocalDateTime, gigsQuery: ArrayList<Gig>): Gig? {
+        val format = SimpleDateFormat("yyyyMdd")
+        val dayTag = format.format(date.toDate)
+        for (gig in gigsQuery) {
+            val idx = format.format(gig.startDateTime!!.toDate())
+            if (dayTag == idx && gig.isFullDay) {
+                return gig
+            }
+        }
+        return null
+
     }
 
 }
