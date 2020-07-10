@@ -13,6 +13,7 @@ import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.modules.landingscreen.LandingScreenFragment
 import com.gigforce.app.modules.onboardingmain.OnboardingMainFragment
 import com.gigforce.app.core.popAllBackStates
+import com.google.firebase.firestore.FirebaseFirestore
 
 
 class MainActivity : AppCompatActivity() {
@@ -34,6 +35,8 @@ class MainActivity : AppCompatActivity() {
         navController = this.findNavController(R.id.nav_fragment)
         checkForAllAuthentication()
     }
+
+
 
     private fun checkForAllAuthentication() {
         navController.popAllBackStates()

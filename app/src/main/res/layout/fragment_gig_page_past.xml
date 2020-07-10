@@ -1,0 +1,590 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".modules.gigPage.PastGigPageFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?android:attr/actionBarSize"
+                android:background="@color/white"
+                app:navigationIcon="@drawable/ic_arrow_back_black"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                app:title="Retail Sales Executive"
+                app:titleTextColor="@color/black" />
+        </com.google.android.material.appbar.AppBarLayout>
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/gigOverViewLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="15dp"
+            android:visibility="visible"
+            app:layout_constraintTop_toBottomOf="@id/appBar">
+
+            <ImageView
+                android:id="@+id/gigBannerImageIV"
+                android:layout_width="match_parent"
+                android:layout_height="225dp"
+                android:src="@drawable/bg_gig_type"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <ImageView
+                android:id="@+id/companyLogoIV"
+                android:layout_width="50dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/gigBannerImageIV" />
+
+
+            <TextView
+                android:id="@+id/roleNameTV"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
+                android:fontFamily="@font/lato_bold"
+                android:letterSpacing="0"
+                android:text="Dyehfyhgef"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/companyLogoIV"
+                app:layout_constraintTop_toBottomOf="@+id/gigBannerImageIV" />
+
+
+            <TextView
+                android:id="@+id/companyNameTV"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="4dp"
+                android:fontFamily="@font/lato"
+                android:letterSpacing="0"
+                android:text="Dyehfyhgef"
+                android:textColor="@color/warm_grey"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/companyLogoIV"
+                app:layout_constraintTop_toBottomOf="@+id/roleNameTV" />
+
+            <TextView
+                android:id="@+id/gigTypeTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="6dp"
+                android:fontFamily="@font/lato"
+                android:letterSpacing="0"
+                android:text="On- Site"
+                android:textColor="#d9000000"
+                android:textSize="12sp"
+                app:layout_constraintStart_toEndOf="@+id/companyLogoIV"
+                app:layout_constraintTop_toBottomOf="@+id/companyNameTV" />
+
+            <TextView
+                android:id="@+id/gigIdTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:layout_marginEnd="17dp"
+                android:fontFamily="@font/lato"
+                android:letterSpacing="0"
+                android:text="Gig Id: 23930344"
+                android:textColor="@color/lipstick"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/companyNameTV" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/gigControlsLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            app:layout_constraintTop_toBottomOf="@id/gigOverViewLayout">
+
+
+            <View
+                android:id="@+id/seaprator1"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="31dp"
+                android:background="#c0c0c0"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/dateIV"
+                android:layout_width="17dp"
+                android:layout_height="17dp"
+                android:layout_marginStart="19dp"
+                android:layout_marginTop="14dp"
+                android:src="@drawable/ic_play_round_pink_bck"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/seaprator1" />
+
+            <TextView
+                android:id="@+id/dateTV"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="14dp"
+                android:fontFamily="@font/lato"
+                android:letterSpacing="0"
+                android:text="Gig 5 Km(s) Away From User"
+                android:textColor="#d9000000"
+                android:textSize="14sp"
+                app:layout_constraintStart_toEndOf="@id/dateIV"
+                app:layout_constraintTop_toBottomOf="@id/seaprator1" />
+
+            <TextView
+                android:id="@+id/invoiceStatusBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:layout_marginEnd="9dp"
+                android:background="@drawable/edittext_border_lipstick"
+                android:fontFamily="@font/lato"
+                android:letterSpacing="0"
+                android:paddingStart="17dp"
+                android:paddingTop="5dp"
+                android:paddingEnd="17dp"
+                android:paddingBottom="5dp"
+                android:text="Invoice Pending"
+                android:textColor="@color/lipstick"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/seaprator1" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/attendanceCardView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="@color/warm_grey"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginTop="16dp"
+                app:layout_constraintTop_toBottomOf="@id/invoiceStatusBtn">
+
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="12dp"
+                    android:paddingBottom="9dp">
+
+                    <View
+                        android:id="@+id/view4"
+                        android:layout_width="1dp"
+                        android:layout_height="0dp"
+                        android:background="#979797"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+
+                    <TextView
+                        android:id="@+id/punchInLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/lato"
+                        android:letterSpacing="0"
+                        android:text="Punch In :"
+                        android:textColor="@color/black_85"
+                        app:layout_constraintEnd_toStartOf="@+id/view4"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/punchInTimeTV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/lato"
+                        android:letterSpacing="0"
+                        android:text="00:00:00"
+                        android:textColor="@color/black_85"
+                        android:textSize="20sp"
+                        app:layout_constraintEnd_toStartOf="@+id/view4"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/punchInLabel" />
+
+
+
+                    <TextView
+                        android:id="@+id/punchOutLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/lato"
+                        android:letterSpacing="0"
+                        android:text="Punch Out :"
+                        android:textColor="@color/black_85"
+                        app:layout_constraintStart_toEndOf="@+id/view4"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/punchOutTimeTV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/lato"
+                        android:letterSpacing="0"
+                        android:text="00:00:00"
+                        android:textColor="@color/black_85"
+                        android:textSize="20sp"
+                        app:layout_constraintStart_toEndOf="@+id/view4"
+                       app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/punchOutLabel" />
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+
+            <View
+                android:id="@+id/separator2"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="31dp"
+                android:background="#c0c0c0"
+                app:layout_constraintTop_toBottomOf="@id/attendanceCardView" />
+
+
+            <TextView
+                android:id="@+id/whatsYourRateTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:letterSpacing="0"
+                android:textColor="@color/battle_ship_grey"
+                android:textSize="12sp"
+                android:layout_marginStart="19dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/separator2"
+                android:text="What’s your Rate ?" />
+
+
+            <RatingBar
+                android:id="@+id/ratingBar"
+                style="@style/Widget.AppCompat.RatingBar.Indicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="19dp"
+                android:layout_marginTop="17dp"
+                android:layout_marginBottom="22dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/whatsYourRateTv" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/gigDetailsLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="18dp"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@id/gigControlsLayout">
+
+            <TextView
+                android:id="@+id/detailsLabelTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:fontFamily="@font/lato_bold"
+                android:letterSpacing="0.02"
+                android:text="Details"
+                android:textColor="#d9000000"
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <ImageView
+                android:id="@+id/durationIconIV"
+                android:layout_width="17dp"
+                android:layout_height="17dp"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="14dp"
+                android:src="@drawable/ic_play_round_pink_bck"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/detailsLabelTV" />
+
+            <TextView
+                android:id="@+id/durationTextTV"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="14dp"
+                android:fontFamily="@font/lato"
+                android:text="Duration "
+                android:textColor="#d9000000"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/durationIconIV"
+                app:layout_constraintTop_toBottomOf="@id/detailsLabelTV" />
+
+
+            <ImageView
+                android:id="@+id/shiftIconIV"
+                android:layout_width="17dp"
+                android:layout_height="17dp"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="14dp"
+                android:src="@drawable/ic_play_round_pink_bck"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/durationTextTV" />
+
+            <TextView
+                android:id="@+id/shiftTV"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="14dp"
+                android:fontFamily="@font/lato"
+                android:text="Shift "
+                android:textColor="#d9000000"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/shiftIconIV"
+                app:layout_constraintTop_toBottomOf="@id/durationTextTV" />
+
+            <ImageView
+                android:id="@+id/addressIV"
+                android:layout_width="17dp"
+                android:layout_height="17dp"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="14dp"
+                android:src="@drawable/ic_play_round_pink_bck"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/shiftTV" />
+
+            <TextView
+                android:id="@+id/addressTV"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="14dp"
+                android:fontFamily="@font/lato"
+                android:text="Address "
+                android:textColor="#d9000000"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/addressIV"
+                app:layout_constraintTop_toBottomOf="@id/shiftTV" />
+
+
+            <ImageView
+                android:id="@+id/wageIV"
+                android:layout_width="17dp"
+                android:layout_height="17dp"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="14dp"
+                android:src="@drawable/ic_play_round_pink_bck"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/addressTV" />
+
+            <TextView
+                android:id="@+id/wageTV"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="14dp"
+                android:fontFamily="@font/lato"
+                android:text="Wage "
+                android:textColor="#d9000000"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/wageIV"
+                app:layout_constraintTop_toBottomOf="@id/addressTV" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/gigHighlightsLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="18dp"
+            app:layout_constraintTop_toBottomOf="@id/gigDetailsLayout">
+
+            <TextView
+                android:id="@+id/gigHighlightsLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:fontFamily="@font/lato_bold"
+                android:letterSpacing="0.02"
+                android:text="Gig Highlights"
+                android:textColor="#d9000000"
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <LinearLayout
+                android:id="@+id/gigHighlightsContainer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:orientation="vertical"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/gigHighlightsLabel" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/gigRequirementsLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="18dp"
+            app:layout_constraintTop_toBottomOf="@id/gigHighlightsLayout">
+
+            <TextView
+                android:id="@+id/gigRequirementsLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:fontFamily="@font/lato_bold"
+                android:letterSpacing="0.02"
+                android:text="Gig Requirements"
+                android:textColor="#d9000000"
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <LinearLayout
+                android:id="@+id/gigRequirementsContainer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:orientation="vertical"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/gigRequirementsLabel" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/gigLocationLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="18dp"
+            app:layout_constraintTop_toBottomOf="@id/gigRequirementsLayout">
+
+            <TextView
+                android:id="@+id/gigLocationLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:fontFamily="@font/lato_bold"
+                android:letterSpacing="0.02"
+                android:text="Location"
+                android:textColor="#d9000000"
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/mapCardView"
+                android:layout_width="match_parent"
+                android:layout_height="173dp"
+                android:layout_margin="16dp"
+                android:orientation="vertical"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/gigLocationLabel">
+
+                <com.google.android.gms.maps.MapView
+                    android:id="@+id/gigLocationMapView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+            </com.google.android.material.card.MaterialCardView>
+
+
+            <ImageView
+                android:id="@+id/gigDistanceIV"
+                android:layout_width="17dp"
+                android:layout_height="17dp"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="14dp"
+                android:src="@drawable/ic_play_round_pink_bck"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/mapCardView" />
+
+            <TextView
+                android:id="@+id/gigDistanceTV"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="14dp"
+                android:fontFamily="@font/lato"
+                android:text="Gig 5 Km(s) Away From User"
+                android:textColor="#d9000000"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/gigDistanceIV"
+                app:layout_constraintTop_toBottomOf="@id/mapCardView" />
+
+            <ImageView
+                android:id="@+id/fullMapAddresLabel"
+                android:layout_width="17dp"
+                android:layout_height="17dp"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="14dp"
+                android:src="@drawable/ic_play_round_pink_bck"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/gigDistanceTV" />
+
+            <TextView
+                android:id="@+id/fullMapAddresTV"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="14dp"
+                android:fontFamily="@font/lato"
+                android:text="Address "
+                android:textColor="#d9000000"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/fullMapAddresLabel"
+                app:layout_constraintTop_toBottomOf="@id/gigDistanceTV" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

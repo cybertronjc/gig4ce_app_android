@@ -60,10 +60,15 @@ class CustomPreferencesViewModel(var owner: LifecycleOwner) : ViewModel() {
     fun markUnavaialbleTimeSlots(unavailableDataModel: UnavailableDataModel){
         if (customPreferencesDataModel != null && unavailableDataModel != null) {
             var dataModelToDelete = findDataModelForSlots(unavailableDataModel)
-            var dataModelToInsert =
-                findDataModelForUnavailableSlots(dataModelToDelete, unavailableDataModel)
-            deleteCustomPreference(dataModelToDelete)
+            if(dataModelToDelete!=null) {
+                var dataModelToInsert =
+                    findDataModelForUnavailableSlots(dataModelToDelete, unavailableDataModel)
+                deleteCustomPreference(dataModelToDelete)
             customPreferencesRepository.setData(dataModelToInsert)
+            }
+            else{
+                customPreferencesRepository.setData(unavailableDataModel)
+            }
         }
     }
 

@@ -15,6 +15,7 @@
     <string name="intro_slide2_title">एक पेशेवर बनें</string>
     <string name="intro_slide2_subtitle">एक प्रोफ़ाइल बनाएं और अपने कौशल को अपग्रेड करने के लिए ट्रेन करें</string>
     <string name="intro_slide3_title">काम होने दो</string>
+
     <string name="intro_slide3_subtitle">अपनी प्राथमिकता तय करें और जिग्स आपको पाएंगे</string>
     <string name="ob_slide1_title">ज्ञानप्राप्ति</string>
     <string name="ob_slide1_subtitle">कैसे - १ </string>
@@ -82,7 +83,6 @@
     <string name="add_language_speaking_level">बोलने का स्तर</string>
     <string name="add_language_writing_level">लेखन स्तर</string>
     <string name="title_lang">भाषा चुनें</string>
-    <string name="login">लॉग इन करें</string>
     <string name="title_login">कृपया लॉगिन करें</string>
     <string name="mobile_login">मोबाइल नंबर दर्ज करें</string>
     <string name="confirm_login">पुष्टि करें</string>
@@ -101,7 +101,6 @@
     <string name="otp_hint">_ _ _ _ _ _ _</string>
     <string name="otp_verify">वेरिफाइ करें</string>
     <string name="otp_reenter_mobile">मोबाइल नंबर फिर से डालें</string>
-    <string name="otp_send_otp">OTP भेजें</string>
     <string name="add_experience_new_experience">नया अनुभव</string>
     <string name="add_experience_title">भूमिका *</string>
     <string name="add_experience_employment_type">रोजगार के प्रकार *</string>

@@ -85,6 +85,7 @@ class TimeSlotsDataModel {
         this.startTime = sDateTime
         this.endTime = eDateTime
     }
+    constructor(){}
     lateinit var startTime: Date
     lateinit var endTime: Date
 }
