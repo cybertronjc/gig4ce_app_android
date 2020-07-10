@@ -103,6 +103,14 @@ class CalendarView : LinearLayout {
         constructor(currentMonth: Int) {
             this.currentMonth = currentMonth
         }
+
+        override fun toString(): String {
+            var daySelected = ""
+            if(days.size>0){
+                daySelected = "  "+days.get(0).date + " "+days.get(0).month + " "+days.get(0).year
+            }
+            return ""+year + currentMonth +daySelected
+        }
     }
 
     class DayModel {
