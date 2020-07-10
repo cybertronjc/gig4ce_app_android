@@ -38,6 +38,8 @@ android {
     }
 
     compileOptions {
+        coreLibraryDesugaringEnabled true
+
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
@@ -49,6 +51,7 @@ android {
 }
 
 dependencies {
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.0.9'
 
     implementation 'androidx.coordinatorlayout:coordinatorlayout:1.1.0'
     //implementation 'com.android.support.constraint:constraint-layout:1.1.3'

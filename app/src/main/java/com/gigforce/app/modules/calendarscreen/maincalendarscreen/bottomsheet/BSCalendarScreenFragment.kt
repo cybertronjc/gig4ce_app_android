@@ -26,6 +26,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
@@ -37,7 +38,12 @@ import com.gigforce.app.modules.gigPage.PresentGigPageFragment
 import com.gigforce.app.modules.gigPage.models.Gig
 import com.gigforce.app.modules.landingscreen.LandingScreenFragment
 import com.gigforce.app.utils.Lce
+import com.google.firebase.storage.FirebaseStorage
+import kotlinx.android.synthetic.main.fragment_select_language.view.*
 import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.*
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.ZoneId
 import java.util.*
 
 class BSCalendarScreenFragment : BaseFragment() {
@@ -154,12 +160,33 @@ class BSCalendarScreenFragment : BaseFragment() {
                     getView(viewHolder, R.id.card_view).layoutParams = lp
                     getTextView(viewHolder, R.id.textView41).text = obj?.title
                     getTextView(viewHolder, R.id.contactPersonTV).text = obj?.gigContactDetails?.contactName
+                    getTextView(viewHolder,R.id.textView67).text = obj?.gigTiming
 
                     getView(viewHolder,R.id.navigateTV).setOnClickListener(NavigationClickListener(upcoming_gig_rv,position))
                     getView(viewHolder,R.id.checkInTV).setOnClickListener(CheckInClickListener(upcoming_gig_rv,position))
                     getView(viewHolder,R.id.callCardView).setOnClickListener(CallClickListener(upcoming_gig_rv,position))
                     getView(viewHolder,R.id.messageCardView).setOnClickListener(ChatClickListener(upcoming_gig_rv,position))
+                    val companyLogoIV = getImageView(viewHolder,R.id.companyLogoIV)
 
+                    if(obj?.startDateTime != null) {
+                        val gigDate = obj.startDateTime!!.toDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
+                        val currentDate = LocalDate.now()
+
+                        getView(viewHolder,R.id.checkInTV).isEnabled = currentDate.isEqual(gigDate)
+                    }
+
+                    if(obj?.companyLogo != null){
+                        FirebaseStorage.getInstance()
+                            .getReference("folder")
+                            .child(obj?.companyLogo!!)
+                            .downloadUrl
+                            .addOnSuccessListener {
+
+                                Glide.with(requireContext())
+                                    .load(it)
+                                    .into(companyLogoIV)
+                            }
+                    }
 
                 })!!
         recyclerGenericAdapter.setList(upcomingGigs)
