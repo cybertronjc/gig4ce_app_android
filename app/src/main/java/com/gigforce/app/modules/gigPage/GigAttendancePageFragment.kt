@@ -44,7 +44,7 @@ class GigAttendancePageFragment : BaseFragment() {
 
         callCardView.setOnClickListener {
 
-            if (gig != null) {
+            if (gig?.contactNo != null) {
                 val intent = Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", gig!!.contactNo, null))
                 startActivity(intent)
             }
@@ -81,8 +81,13 @@ class GigAttendancePageFragment : BaseFragment() {
         gigTypeTV.text = gig.gigType
         gigIdTV.text = gig.gigId
 
-        durationTextTV.text =
-            "${dateFormatter.format(gig.startDateTime!!.toDate())} - ${dateFormatter.format(gig.endDateTime!!.toDate())}"
+
+        if (gig.endDateTime != null)
+            durationTextTV.text =
+                "${dateFormatter.format(gig.startDateTime!!.toDate())} - ${dateFormatter.format(gig.endDateTime!!.toDate())}"
+        else
+            durationTextTV.text = "${dateFormatter.format(gig.startDateTime!!.toDate())} - "
+
         shiftTV.text = "${gig.duration} per Day "
         addressTV.text = gig.address
         wageTV.text = "${gig.gigAmount} per Day "
