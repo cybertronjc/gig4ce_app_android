@@ -41,6 +41,7 @@ import com.gigforce.app.utils.Lce
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.fragment_select_language.view.*
 import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.*
+import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -135,6 +136,8 @@ class BSCalendarScreenFragment : BaseFragment() {
         }
     }
 
+    private val timeFormatter = SimpleDateFormat("hh.mm aa")
+
     var width: Int = 0
     private fun initializeUpcomingGigBottomSheet(upcomingGigs: List<Gig>) {
         if(upcomingGigs.isNotEmpty()) {
@@ -165,7 +168,12 @@ class BSCalendarScreenFragment : BaseFragment() {
                         getTextView(viewHolder, R.id.textView41).text = obj?.title
                         getTextView(viewHolder, R.id.contactPersonTV).text =
                             obj?.gigContactDetails?.contactName
-                        getTextView(viewHolder, R.id.textView67).text = obj?.gigTiming
+
+                        val gigTiming = if(obj!!.endDateTime != null)
+                         "${timeFormatter.format(obj.startDateTime)} - ${timeFormatter.format(obj.endDateTime)}"
+                        else
+                            "${timeFormatter.format(obj.startDateTime)} - "
+                        getTextView(viewHolder, R.id.textView67).text = gigTiming
 
                         getView(viewHolder, R.id.navigateTV).setOnClickListener(
                             NavigationClickListener(upcoming_gig_rv, position)
