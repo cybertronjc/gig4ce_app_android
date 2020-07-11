@@ -11,7 +11,7 @@ import com.google.firebase.firestore.QuerySnapshot
 import java.util.*
 
 class GigViewModel constructor(
-        private val gigsRepository: GigsRepository = GigsRepository()
+    private val gigsRepository: GigsRepository = GigsRepository()
 ) : ViewModel() {
 
     private var mWatchUpcomingRepoRegistration: ListenerRegistration? = null
@@ -23,15 +23,15 @@ class GigViewModel constructor(
     fun watchUpcomingGigs() {
         _upcomingGigs.value = Lce.loading()
         mWatchUpcomingRepoRegistration = gigsRepository
-                .getCurrentUserGigs()
-                .addSnapshotListener { querySnapshot, firebaseFirestoreException ->
+            .getCurrentUserGigs()
+            .addSnapshotListener { querySnapshot, firebaseFirestoreException ->
 
-                    if (querySnapshot != null) {
-                        extractUpcomingGigs(querySnapshot)
-                    } else {
-                        _upcomingGigs.value = Lce.error(firebaseFirestoreException!!.message!!)
-                    }
+                if (querySnapshot != null) {
+                    extractUpcomingGigs(querySnapshot)
+                } else {
+                    _upcomingGigs.value = Lce.error(firebaseFirestoreException!!.message!!)
                 }
+            }
     }
     fun markAttendance(markAttendance : GigAttendance,gigId:String){
         gigsRepository.markAttendance(markAttendance,gigId)
@@ -63,24 +63,36 @@ class GigViewModel constructor(
     fun watchGig(gigId: String) {
         _gigDetails.value = Lce.loading()
         mWatchUpcomingRepoRegistration = gigsRepository
-                .getCollectionReference()
-                .document(gigId)
-                .addSnapshotListener { documentSnapshot, firebaseFirestoreException ->
+            .getCollectionReference()
+            .document(gigId)
+            .addSnapshotListener { documentSnapshot, firebaseFirestoreException ->
 
-                    if (documentSnapshot != null) {
-                        runCatching {
-                            documentSnapshot.toObject(Gig::class.java)
-                        }.onSuccess {
-                            _gigDetails.value = Lce.content(it!!)
-                        }.onFailure {
-                            _gigDetails.value = Lce.error(it.message!!)
-                        }
-                    } else {
-                        _gigDetails.value = Lce.error(firebaseFirestoreException!!.message!!)
+                if (documentSnapshot != null) {
+                    runCatching {
+                        documentSnapshot.toObject(Gig::class.java)
+                    }.onSuccess {
+                        _gigDetails.value = Lce.content(it!!)
+                    }.onFailure {
+                        _gigDetails.value = Lce.error(it.message!!)
                     }
+                } else {
+                    _gigDetails.value = Lce.error(firebaseFirestoreException!!.message!!)
                 }
+            }
     }
 
+    fun favoriteGig(gigId: String) {
+        gigsRepository.getCollectionReference()
+            .document(gigId)
+            .update("isFavourite", true)
+    }
+
+    fun unFavoriteGig(gigId: String) {
+        gigsRepository.getCollectionReference()
+            .document(gigId)
+            .update("isFavourite", false)
+
+    }
 
     override fun onCleared() {
         super.onCleared()

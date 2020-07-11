@@ -56,6 +56,19 @@
                 app:layout_constraintTop_toBottomOf="@+id/gigBannerImageIV" />
 
 
+            <CheckBox
+                android:id="@+id/favoriteCB"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginTop="16dp"
+
+                android:layout_marginEnd="20dp"
+                android:button="@drawable/sl_favorite_24_dp"
+                app:buttonTint="@color/lipstick"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/gigBannerImageIV" />
+
+
             <TextView
                 android:id="@+id/roleNameTV"
                 android:layout_width="0dp"
@@ -66,7 +79,7 @@
                 android:letterSpacing="0"
                 android:textColor="@color/black"
                 android:textSize="18sp"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/favoriteCB"
                 app:layout_constraintStart_toEndOf="@+id/companyLogoIV"
                 app:layout_constraintTop_toBottomOf="@+id/gigBannerImageIV"
                 tools:text="Role Name" />
@@ -83,7 +96,7 @@
                 android:text="Dyehfyhgef"
                 android:textColor="@color/warm_grey"
                 android:textSize="12sp"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/favoriteCB"
                 app:layout_constraintStart_toEndOf="@+id/companyLogoIV"
                 app:layout_constraintTop_toBottomOf="@+id/roleNameTV" />
 
@@ -158,8 +171,193 @@
                 android:layout_marginTop="14dp"
                 android:layout_marginEnd="17dp"
                 android:text="Check In"
-                app:strokeColor="@color/lipstick"
-                app:layout_constraintTop_toBottomOf="@id/fetchingLocationTV" />
+                app:layout_constraintTop_toBottomOf="@id/fetchingLocationTV"
+                app:strokeColor="@color/lipstick" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/completedGigControlsLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            app:layout_constraintTop_toBottomOf="@id/gigControlsLayout">
+
+
+            <View
+                android:id="@+id/seaprator10"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="31dp"
+                android:background="#c0c0c0"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/dateIV"
+                android:layout_width="17dp"
+                android:layout_height="17dp"
+                android:layout_marginStart="19dp"
+                android:layout_marginTop="14dp"
+                android:src="@drawable/ic_calendar"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/seaprator10" />
+
+            <TextView
+                android:id="@+id/dateTV"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="14dp"
+                android:fontFamily="@font/lato"
+                android:letterSpacing="0"
+                android:text="Gig date"
+                android:textColor="#d9000000"
+                android:textSize="14sp"
+                app:layout_constraintStart_toEndOf="@id/dateIV"
+                app:layout_constraintTop_toBottomOf="@id/seaprator10" />
+
+            <TextView
+                android:id="@+id/invoiceStatusBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:layout_marginEnd="9dp"
+                android:background="@drawable/edittext_border_lipstick"
+                android:fontFamily="@font/lato"
+                android:letterSpacing="0"
+                android:paddingStart="17dp"
+                android:paddingTop="5dp"
+                android:paddingEnd="17dp"
+                android:paddingBottom="5dp"
+                android:text="Invoice Pending"
+                android:textColor="@color/lipstick"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/seaprator10" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/attendanceCardView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                app:cardBackgroundColor="#e8e8e8"
+                app:layout_constraintTop_toBottomOf="@id/invoiceStatusBtn">
+
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="12dp"
+                    android:paddingBottom="9dp">
+
+                    <View
+                        android:id="@+id/view4"
+                        android:layout_width="1dp"
+                        android:layout_height="0dp"
+                        android:background="#979797"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+
+                    <TextView
+                        android:id="@+id/punchInLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/lato"
+                        android:letterSpacing="0"
+                        android:text="Punch In :"
+                        android:textColor="@color/black_85"
+                        app:layout_constraintEnd_toStartOf="@+id/view4"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/punchInTimeTV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/lato"
+                        android:letterSpacing="0"
+                        android:text="00:00:00"
+                        android:textColor="@color/black_85"
+                        android:textSize="20sp"
+                        app:layout_constraintEnd_toStartOf="@+id/view4"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/punchInLabel" />
+
+
+                    <TextView
+                        android:id="@+id/punchOutLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/lato"
+                        android:letterSpacing="0"
+                        android:text="Punch Out :"
+                        android:textColor="@color/black_85"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/view4"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/punchOutTimeTV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/lato"
+                        android:letterSpacing="0"
+                        android:text="00:00:00"
+                        android:textColor="@color/black_85"
+                        android:textSize="20sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/view4"
+                        app:layout_constraintTop_toBottomOf="@id/punchOutLabel" />
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+
+            <View
+                android:id="@+id/separator2"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="31dp"
+                android:background="#c0c0c0"
+                app:layout_constraintTop_toBottomOf="@id/attendanceCardView" />
+
+
+            <TextView
+                android:id="@+id/whatsYourRateTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="19dp"
+                android:letterSpacing="0"
+                android:text="What’s your Rate ?"
+                android:textColor="@color/battle_ship_grey"
+                android:textSize="12sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/separator2" />
+
+
+            <RatingBar
+                android:id="@+id/ratingBar"
+                style="@style/Widget.AppCompat.RatingBar.Indicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="19dp"
+                android:layout_marginTop="17dp"
+                android:layout_marginBottom="22dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/whatsYourRateTv" />
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -170,7 +368,7 @@
             android:layout_height="wrap_content"
             android:paddingBottom="18dp"
             android:visibility="visible"
-            app:layout_constraintTop_toBottomOf="@id/gigControlsLayout">
+            app:layout_constraintTop_toBottomOf="@id/completedGigControlsLayout">
 
             <TextView
                 android:id="@+id/detailsLabelTV"
@@ -204,10 +402,10 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="14dp"
                 android:fontFamily="@font/lato"
+                android:letterSpacing="0"
                 android:text="Duration "
                 android:textColor="#d9000000"
                 android:textSize="14sp"
-                android:letterSpacing="0"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/durationIconIV"
                 app:layout_constraintTop_toBottomOf="@id/detailsLabelTV" />
@@ -230,10 +428,10 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="14dp"
                 android:fontFamily="@font/lato"
+                android:letterSpacing="0"
                 android:text="Shift "
                 android:textColor="#d9000000"
                 android:textSize="14sp"
-                android:letterSpacing="0"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/shiftIconIV"
                 app:layout_constraintTop_toBottomOf="@id/durationTextTV" />
@@ -255,10 +453,12 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="14dp"
                 android:fontFamily="@font/lato"
+                android:letterSpacing="0"
                 android:text="Address "
+                android:clickable="true"
+                android:focusable="true"
                 android:textColor="#d9000000"
                 android:textSize="14sp"
-                android:letterSpacing="0"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/addressIV"
                 app:layout_constraintTop_toBottomOf="@id/shiftTV" />
@@ -281,10 +481,10 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="14dp"
                 android:fontFamily="@font/lato"
+                android:letterSpacing="0"
                 android:text="Wage "
                 android:textColor="#d9000000"
                 android:textSize="14sp"
-                android:letterSpacing="0"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/wageIV"
                 app:layout_constraintTop_toBottomOf="@id/addressTV" />
@@ -388,6 +588,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingBottom="18dp"
+
             app:layout_constraintTop_toBottomOf="@id/separator5">
 
             <TextView
@@ -414,16 +615,29 @@
                 app:layout_constraintTop_toBottomOf="@id/gigLocationLabel" />
 
 
+            <HorizontalScrollView
+                android:id="@+id/locationImageScrollView"
+                android:layout_width="match_parent"
+                android:layout_height="90dp"
+                app:layout_constraintTop_toBottomOf="@id/gigLocationMapView">
+
+                <LinearLayout
+                    android:id="@+id/locationImageContainer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="90dp"
+                    android:orientation="horizontal" />
+
+            </HorizontalScrollView>
+
             <ImageView
                 android:id="@+id/gigDistanceIV"
                 android:layout_width="17dp"
                 android:layout_height="17dp"
                 android:layout_marginStart="25dp"
                 android:layout_marginTop="14dp"
-
                 android:src="@drawable/ic_play_round_pink_bck"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/gigLocationMapView" />
+                app:layout_constraintTop_toBottomOf="@id/locationImageScrollView" />
 
             <TextView
                 android:id="@+id/gigDistanceTV"
@@ -432,13 +646,13 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="14dp"
                 android:fontFamily="@font/lato"
+                android:letterSpacing="0"
                 android:text="Gig - Km(s) Away From User"
                 android:textColor="#d9000000"
                 android:textSize="14sp"
-                android:letterSpacing="0"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/gigDistanceIV"
-                app:layout_constraintTop_toBottomOf="@id/gigLocationMapView" />
+                app:layout_constraintTop_toBottomOf="@id/locationImageScrollView" />
 
             <ImageView
                 android:id="@+id/fullMapAddresLabel"
@@ -457,10 +671,10 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="14dp"
                 android:fontFamily="@font/lato"
+                android:letterSpacing="0"
                 android:text="Address "
                 android:textColor="#d9000000"
                 android:textSize="14sp"
-                android:letterSpacing="0"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/fullMapAddresLabel"
                 app:layout_constraintTop_toBottomOf="@id/gigDistanceTV" />
@@ -487,9 +701,9 @@
             android:layout_marginEnd="17dp"
             android:layout_marginBottom="82dp"
             android:text="Contact us"
-            app:strokeColor="@color/lipstick"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/separator6"
+            app:strokeColor="@color/lipstick"
             tools:layout_editor_absoluteX="17dp" />
 
 

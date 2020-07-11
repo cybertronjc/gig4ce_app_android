@@ -8,12 +8,17 @@ import android.location.Location
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.text.SpannableString
+import android.text.style.ClickableSpan
+import android.text.style.ForegroundColorSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import com.bumptech.glide.Glide
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.gone
@@ -22,12 +27,25 @@ import com.gigforce.app.modules.gigPage.models.GigAttendance
 import com.gigforce.app.utils.Lce
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.google.firebase.storage.FirebaseStorage
 import com.ncorti.slidetoact.SlideToActView
 import kotlinx.android.synthetic.main.fragment_gig_navigation_bottom_sheet.*
 import kotlinx.android.synthetic.main.fragment_gig_page_attendance.*
+import kotlinx.android.synthetic.main.fragment_gig_page_attendance.addressTV
 import kotlinx.android.synthetic.main.fragment_gig_page_attendance.callCardView
+import kotlinx.android.synthetic.main.fragment_gig_page_attendance.companyLogoIV
+import kotlinx.android.synthetic.main.fragment_gig_page_attendance.companyNameTV
 import kotlinx.android.synthetic.main.fragment_gig_page_attendance.contactPersonTV
+import kotlinx.android.synthetic.main.fragment_gig_page_attendance.durationTextTV
+import kotlinx.android.synthetic.main.fragment_gig_page_attendance.gigIdTV
+import kotlinx.android.synthetic.main.fragment_gig_page_attendance.gigTypeTV
+import kotlinx.android.synthetic.main.fragment_gig_page_attendance.punchInTimeTV
+import kotlinx.android.synthetic.main.fragment_gig_page_attendance.punchOutTimeTV
+import kotlinx.android.synthetic.main.fragment_gig_page_attendance.roleNameTV
+import kotlinx.android.synthetic.main.fragment_gig_page_attendance.shiftTV
 import kotlinx.android.synthetic.main.fragment_gig_page_attendance.startNavigationSliderBtn
+import kotlinx.android.synthetic.main.fragment_gig_page_attendance.wageTV
+import kotlinx.android.synthetic.main.fragment_gig_page_present.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -76,7 +94,7 @@ class GigAttendancePageFragment : BaseFragment() {
 
         callCardView.setOnClickListener {
 
-            if (gig != null) {
+            if (gig?.contactNo != null) {
                 val intent = Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", gig!!.contactNo, null))
                 startActivity(intent)
             }
@@ -112,26 +130,56 @@ class GigAttendancePageFragment : BaseFragment() {
         companyNameTV.text = "@ ${gig.companyName}"
         gigTypeTV.text = gig.gigType
         gigIdTV.text = gig.gigId
-        try {
-            durationTextTV.text =
-                "${dateFormatter.format(gig.startDateTime!!.toDate())} - ${dateFormatter.format(gig.endDateTime!!.toDate())}"
-        } catch (e: Exception) {
+
+        if (gig.companyLogo != null) {
+            if (gig.companyLogo!!.startsWith("http", true)) {
+
+                Glide.with(requireContext())
+                    .load(gig.companyLogo)
+                    .into(companyLogoIV)
+            }else {
+                FirebaseStorage.getInstance()
+                    .getReference("companies_gigs_images")
+                    .child(gig.companyLogo!!)
+                    .downloadUrl
+                    .addOnSuccessListener { fileUri ->
+                        Glide.with(requireContext())
+                            .load(fileUri)
+                            .into(companyLogoIV)
+                    }
+            }
 
         }
+
+        if (gig.endDateTime != null)
+            durationTextTV.text =
+                "${dateFormatter.format(gig.startDateTime!!.toDate())} - ${dateFormatter.format(gig.endDateTime!!.toDate())}"
+        else
+            durationTextTV.text = "${dateFormatter.format(gig.startDateTime!!.toDate())} - "
+
         shiftTV.text = "${gig.duration} per Day "
         addressTV.text = gig.address
         wageTV.text = "${gig.gigAmount} per Day "
 
         contactPersonTV.text = gig.gigContactDetails?.contactName
 
-        if (gig.gigLocationDetails != null) {
-            //          fullMapAddresTV.text = gig.gigLocationDetails?.fullAddress
-//            addMarkerOnMap(
-//                latitude = gig.gigLocationDetails!!.latitude!!,
-//                longitude = gig.gigLocationDetails!!.longitude!!
-//            )
+        addressTV.setOnClickListener {
+
+            //Launch Map
+            val lat = gig?.latitude
+            val long = gig?.longitude
+
+            if(lat != null) {
+                val uri = "http://maps.google.com/maps?q=loc:$lat,$long (Gig Location)"
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
+                requireContext().startActivity(intent)
+            }
+        }
+
+        if (gig.latitude != null) {
+            addressTV.text = prepareAddress(gig.address)
         } else {
-            //make location layout invisivle
+            addressTV.text = gig.address
         }
         try {
             if (gig.attendance!!.checkInMarked) {
@@ -144,6 +192,19 @@ class GigAttendancePageFragment : BaseFragment() {
             }
         }catch (e:Exception){}
 
+    }
+
+    private fun prepareAddress(address: String): SpannableString {
+        if (address.isBlank())
+            return SpannableString("")
+
+        val string = SpannableString(address + PresentGigPageFragment.TEXT_VIEW_ON_MAP)
+
+
+
+        val colorLipstick = ResourcesCompat.getColor(resources, R.color.lipstick, null)
+        string.setSpan(ForegroundColorSpan(colorLipstick), address.length + 1, string.length - 1, 0)
+        return string
     }
 
 

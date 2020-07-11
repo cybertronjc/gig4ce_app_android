@@ -61,11 +61,11 @@ class GigPageNavigationFragment : BaseFragment() {
 
                 override fun onSlideComplete(view: SlideToActView) {
 
-                    if (gig != null && gig!!.gigLocationDetails != null) {
-                        val location = gig!!.gigLocationDetails!!
+                    if (gig != null && gig!!.latitude != null) {
+
                         val intent = Intent(
                             Intent.ACTION_VIEW,
-                            Uri.parse("http://maps.google.com/maps?daddr=${location.latitude},${location.longitude}")
+                            Uri.parse("http://maps.google.com/maps?daddr=${gig?.latitude},${gig?.longitude}")
                         )
                         startActivity(intent)
                     }
