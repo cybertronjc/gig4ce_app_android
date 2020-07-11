@@ -9,18 +9,33 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import com.gigforce.app.R
 
-class CalendarBaseAdapter : BaseAdapter (){
+class CalendarBaseAdapter : BaseAdapter() {
 
-    lateinit var list : ArrayList<CalendarView.DayModel>
+    lateinit var list: ArrayList<CalendarView.DayModel>
 
-    override fun getView(position:Int, convertView: View?, parent: ViewGroup?):View{
-        val inflater = parent?.context?.
-            getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val view = inflater.inflate(R.layout.calendar_view_layout_item,null)
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
+        val inflater =
+            parent?.context?.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val view = inflater.inflate(R.layout.calendar_view_layout_item, null)
         val tv = view.findViewById<TextView>(R.id.calendar_date)
         tv.text = list[position].date.toString()
-        if(list[position].currentMonth!=list[position].month)
-        tv.setTextColor(parent?.context.getColor(R.color.different_month_calendar_color))
+        if (list[position].currentMonth != list[position].month)
+            tv.setTextColor(parent?.context.getColor(R.color.different_month_calendar_color))
+        view.setOnClickListener {
+            var monthModel = CalendarView.MonthModel()
+            monthModel.year = list[position].year
+            monthModel.currentMonth = list[position].month
+            monthModel.days.add(
+                CalendarView.DayModel(
+                    list[position].date,
+                    list[position].month,
+                    list[position].year
+                )
+            )
+            if (this::dateClickListener.isInitialized) {
+                dateClickListener.onMonthChange(monthModel)
+            }
+        }
         return view
     }
 
@@ -30,11 +45,9 @@ class CalendarBaseAdapter : BaseAdapter (){
     }
 
 
-
     override fun getItemId(position: Int): Long {
         return position.toLong()
     }
-
 
 
     // Count the items
@@ -42,8 +55,13 @@ class CalendarBaseAdapter : BaseAdapter (){
         return list.size
     }
 
-    fun setCalendarData(list : ArrayList<CalendarView.DayModel>){
+    fun setCalendarData(list: ArrayList<CalendarView.DayModel>) {
         this.list = list
+    }
+
+    lateinit var dateClickListener: CalendarView.MonthChangeAndDateClickedListener
+    fun setDateClickedListener(dateClickListener: CalendarView.MonthChangeAndDateClickedListener) {
+        this.dateClickListener = dateClickListener
     }
 
 }

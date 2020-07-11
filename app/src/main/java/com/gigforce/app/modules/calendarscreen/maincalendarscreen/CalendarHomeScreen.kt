@@ -32,7 +32,6 @@ import com.gigforce.app.modules.calendarscreen.maincalendarscreen.verticalcalend
 import com.gigforce.app.modules.custom_gig_preferences.CustomPreferencesViewModel
 import com.gigforce.app.modules.custom_gig_preferences.ParamCustPreferViewModel
 import com.gigforce.app.modules.custom_gig_preferences.UnavailableDataModel
-import com.gigforce.app.modules.preferences.ParameterizedSharedPreferenceVM
 import com.gigforce.app.modules.preferences.PreferencesFragment
 import com.gigforce.app.modules.profile.ProfileViewModel
 import com.gigforce.app.utils.GlideApp
@@ -90,7 +89,6 @@ class CalendarHomeScreen : BaseFragment(),
         initializeViews()
         listener()
         observePreferenceData()
-//        viewModel.setGigData()
     }
 
 
@@ -122,7 +120,13 @@ class CalendarHomeScreen : BaseFragment(),
         calendar_dependent.setOnClickListener {
             changeVisibilityCalendarView()
         }
-        calendarView.setMonthChangeListener(object : CalendarView.MonthChangeListener {
+        month_selector_arrow.setOnClickListener{
+            changeVisibilityCalendarView()
+        }
+        oval_gradient_iv.setOnClickListener{
+            changeVisibilityCalendarView()
+        }
+        calendarView.setMonthChangeListener(object : CalendarView.MonthChangeAndDateClickedListener {
             override fun onMonthChange(monthModel: CalendarView.MonthModel) {
                 selectedMonthModel = monthModel
                 var calendar = Calendar.getInstance()
@@ -141,6 +145,14 @@ class CalendarHomeScreen : BaseFragment(),
             }
 
         })
+        calendarView.setOnDateClickListner(object : CalendarView.MonthChangeAndDateClickedListener {
+            override fun onMonthChange(monthModel: CalendarView.MonthModel) {
+                selectedMonthModel = monthModel
+                println(" date data1 "+selectedMonthModel.toString())
+                changeVisibilityCalendarView()
+            }
+
+        })
     }
 
     private fun changeVisibilityCalendarView() {
@@ -151,9 +163,62 @@ class CalendarHomeScreen : BaseFragment(),
             extendedBottomSheetBehavior.state = ExtendedBottomSheetBehavior.STATE_COLLAPSED
             extendedBottomSheetBehavior.isAllowUserDragging = false
         } else {
-            scrollVerticalCalendarToSelectedMonth()
+            if(selectedMonthModel.days!=null  && selectedMonthModel.days.size==1){
+                scrollVerticalCalendarToSelectedDate()
+            }
+            else {
+                scrollVerticalCalendarToSelectedMonth()
+            }
             hideDependentViews(true)
             extendedBottomSheetBehavior.isAllowUserDragging = true
+        }
+    }
+
+    private fun scrollVerticalCalendarToSelectedDate() {
+        var layoutManager: LinearLayoutManager? = null
+        if (layoutManager == null) {
+            layoutManager = rv_.layoutManager as LinearLayoutManager
+        }
+        val firstVisibleItem = layoutManager!!.findFirstVisibleItemPosition()
+        var dayModel = selectedMonthModel.days.get(0)
+        println(" date data2 "+ "first "+recyclerGenericAdapter.list.get(firstVisibleItem).year+" "+recyclerGenericAdapter.list.get(firstVisibleItem).month+" "+recyclerGenericAdapter.list.get(
+            firstVisibleItem
+        ).date)
+        println(" date data3 "+recyclerGenericAdapter.list.get(firstVisibleItem).month + " "+ dayModel.currentMonth+" "+(recyclerGenericAdapter.list.get(firstVisibleItem).month < dayModel.currentMonth))
+        if (recyclerGenericAdapter.list.get(firstVisibleItem).year < dayModel.year || (recyclerGenericAdapter.list.get(
+                firstVisibleItem
+            ).year == dayModel.year && recyclerGenericAdapter.list.get(firstVisibleItem).month < dayModel.month)
+        ) {
+            println(" date data "+ "second")
+
+            for (index in firstVisibleItem..recyclerGenericAdapter.list.size) {
+                println(" date data "+ index)
+
+                if (recyclerGenericAdapter.list.get(index).year == dayModel.year && recyclerGenericAdapter.list.get(
+                        index
+                    ).month == dayModel.month && recyclerGenericAdapter.list.get(
+                        index
+                    ).date == dayModel.date
+                ) {
+                    println(" date data "+ index)
+
+                    (rv_.layoutManager as LinearLayoutManager)?.scrollToPositionWithOffset(
+                        index,
+                        0
+                    )
+                    break
+                }
+            }
+        } else {
+            for (index in 0..firstVisibleItem) {
+                if (recyclerGenericAdapter.list.get(index).year == dayModel.year && recyclerGenericAdapter.list.get(index).month == dayModel.month && recyclerGenericAdapter.list.get(index).date == dayModel.date) {
+                    (rv_.layoutManager as LinearLayoutManager)?.scrollToPositionWithOffset(
+                        index,
+                        0
+                    )
+                    break
+                }
+            }
         }
     }
 

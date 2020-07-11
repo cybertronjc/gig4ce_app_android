@@ -1,244 +1,303 @@
 <resources>
-    <string name="app_name">Gigforce </string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">हैलो खाली टुकड़ा </string>
-    <string name="title_activity_profile"> ProfileActivity </string>
 
+    <string name="app_name">गिगफोसृ</string>
+    <string name="hello_blank_fragment">हैलो</string>
+    <string name="title_activity_profile">-</string>
+    <string name="english">अंग्रेज़ी</string>
+    <string name="hindi">हिंदी</string>
+    <string name="telugu">तेलुगू</string>
+    <string name="gujrati">गुजराती</string>
+    <string name="punjabi">पंजाबी</string>
+    <string name="francais">फ्रेंच</string>
+    <string name="marathi">मराठी</string>
     <string name="intro_slide1_title">आपका स्वागत है Gigforce में</string>
     <string name="intro_slide1_subtitle">एक नौकरी जो आपके पास हमेशा होती है</string>
-
     <string name="intro_slide2_title">एक पेशेवर बनें</string>
     <string name="intro_slide2_subtitle">एक प्रोफ़ाइल बनाएं और अपने कौशल को अपग्रेड करने के लिए ट्रेन करें</string>
-
     <string name="intro_slide3_title">काम होने दो</string>
-    <string name="intro_slide3_subtitle">अपनी प्राथमिकता निर्धारित करें और जिग्स आपको पाएंगे</string>
 
-    <string name="ob_slide1_title"> ज्ञानप्राप्ति</string>
-    <string name="ob_slide1_subtitle"> कैसे - १ </string>
-
-    <string name="ob_slide2_title"> ज्ञानप्राप्ति</string>
-    <string name="ob_slide2_subtitle"> कैसे - २ </string>
-
-    <string name="ob_slide3_title"> ज्ञानप्राप्ति</string>
-    <string name="ob_slide3_subtitle"> कैसे - ३ </string>
-    <!--
-    This string is used for square devices and overridden by hello_world in
-    values-round/strings.xml for round devices.
-    -->
-    <string name="hello_world"> हैलो स्क्वायर वर्ल्ड!</string>
-    <!-- Preference Titles -->
-    <string name="messages_header"> संदेश</string>
-    <string name="sync_header"> सिंक </string>
-
-    <!-- Messages Preferences -->
-    <string name="signature_title"> आपके हस्ताक्षर  </string>
-    <string name="reply_title"> डिफ़ॉल्ट उत्तर कार्रवाई </string>
-
-    <!-- Sync Preferences -->
-    <string name="sync_title"> ईमेल को समय-समय पर सिंक करें </string>
-    <string name="attachment_title">आने वाले अनुलग्नकों को डाउनलोड करें </string>
-    <string name="attachment_summary_on">Automatically download attachments for incoming emails
-    </string>
-    <string name="attachment_summary_off"> मैन्युअल रूप से अनुरोध किए जाने पर केवल अनुलग्नक डाउनलोड करें</string>
-
-    <!-- Profile main expanded page -->
-    <string name="rating_text"> रेटिंग  </string>
-    <string name="tasks_done_text"> कार्य किए गए </string>
-    <string name="connections_text">सम्बन्ध </string>
-    <string name="default_location_text">  स्थान \ n220KM दूर  </string>
-    <string name="education_card_education_text">  शिक्षा  </string>
-    <string name="education_card_content_placeholder"> शिक्षा सामग्री यहां डालनी है </string>
-    <string name="view_more_text"> और देखो </string>
-    <string name="empty_dash_string">  -</string>
-    <string name="about_card_about_text">  मेरे बारे में</string>
-    <string name="about_card_content_placeholder"> मेरे बारे में सामग्री यहाँ डाल दी जाए</string>
-    <string name="experience_card_experience_text"> अनुभव</string>
-
-    <!-- Profile experience expanded page -->
-    <string name="experience_expanded_add_experience_text"> अनुभव जोड़ें </string>
-
-    <!-- Profile education expanded page -->
-    <string name="education_expanded_Education_text">  शिक्षा  </string>
-    <string name="education_expanded_skills_text"> कौशल </string>
-    <string name="education_expanded_achievements_text">उपलब्धियां  </string>
-    <string name="education_expanded_add_education_text">  शिक्षा जोड़ें</string>
-    <string name="education_expanded_add_skill_text">  कौशल जोड़ें </string>
-    <string name="education_expanded_add_achievement_text"> उपलब्धि जोड़ें  </string>
-    <string name="education_expanded_user_name">उपयोगकर्ता नाम  </string>
-    <string name="nav_education_text"> शिक्षा  </string>
-    <string name="nav_about_text"> मेरे बारे में</string>
-    <string name="nav_gigs_text">  gigs </string>
-    <string name="nav_experience_text"> अनुभव</string>
-
-    <!-- Add New Skill Bottom Sheet -->
-    <string name="add_skill_sheet_new_skill">  नया कौशल </string>
-    <string name="add_skill_sheet_category">वर्ग </string>
-    <string name="add_skill_sheet_skill_name"> कौशल का नाम </string>
-
-    <!-- Add New Achievement Bottom Sheet -->
-    <string name="add_achievement_sheet_new_achievement">  नई उपलब्धि  </string>
-    <string name="add_achievement_sheet_title"> शीर्षक  </string>
-    <string name="add_achievement_sheet_issuing_authority"> जारी करने वाला प्राधिकरण </string>
-    <string name="add_achievement_sheet_location"> स्थान</string>
-    <string name="add_achievement_sheet_year"> साल *</string>
-
-    <!-- Add New Education Bottom Sheet -->
-    <string name="add_education_sheet_new_education">  नई शिक्षा</string>
-    <string name="add_education_sheet_institution"> संस्थान </string>
-    <string name="add_education_sheet_course"> कोर्स</string>
-    <string name="add_education_sheet_degree"> डिग्री  </string>
-    <string name="add_education_sheet_start_year"> शुरुवाती साल *  </string>
-    <string name="add_education_sheet_end_year">अंत वर्ष *  </string>
-
-    <!-- Add New Contact Bottom Sheet -->
-    <string name="add_contact_new_contact"> नया कॉन्ट्रैक्ट </string>
-    <string name="add_contact_phone">  फ़ोन </string>
-    <string name="add_contact_email">  ईमेल </string>
-
-    <!-- About expanded page -->
-    <string name="about_expanded_bio_text"> जैव </string>
-    <string name="about_expanded_language_text">भाषा ज्ञात  </string>
-    <string name="about_expanded_add_language_text">भाषा जोड़ें </string>
-    <string name="about_expanded_contact_text"> संपर्क विवरण </string>
-    <string name="about_expanded_add_contact_text"> संपर्क जोड़ें</string>
-
-    <!-- Add New Language Bottom Sheet -->
-    <string name="add_language_new_language">  नई भाषा </string>
-    <string name="add_language_name">  नाम </string>
-    <string name="add_language_speaking_level"> बोलने का स्तर</string>
-    <string name="add_language_writing_level"> लेखन स्तर</string>
-
-    <!--language select-->
-    <string name="title_lang"> भाषा का चयन करें </string>
-
-
-    <!--login fragment-->
-    <string name="login">लॉग इन करें</string>
-    <string name="title_login"> कृपया लॉगिन करें </string>
-    <string name="mobile_login">अपना मोबाइल नंबर दर्ज करें  </string>
-    <string name="confirm_login">  पुष्टि करें </string>
-
-    <!--video resume-->
-    <string name="guidelines_video_resume"> दिशा-निर्देश </string>
-    <string name="button_upload_video"> डालना</string>
-    <string name="title_video_resume"> वीडियो फिर से शुरू  </string>
-    <string name="why_video_resume">वीडियो फिर से शुरू छोटा सा भूत क्यों है? </string>
-    <string name="desc1_video_resume"> हमें आपके बारे में अधिक जानकारी दें </string>
-    <string name="desc2_video_resume"> कोई फिर से शुरू और कोई साक्षात्कार नहीं </string>
-
-    <!-- mobile otp -->
-    <string name="otp_sign_in_up"> प्रवेश या साइन अप</string>
-    <string name="otp_enter_mobile_num">अपना मोबाइल नंबर दर्ज करें  </string>
-    <string name="otp_will_send_otp">  हम आपको वन टाइम पासवर्ड (OTP) भेजेंगे</string>
-    <string name="otp_verify_account"> खाता सत्यापित करें  </string>
-    <string name="otp_sent_otp_account">हमने आपके नंबर पर OTP भेजा है \ n कृपया OTP दर्ज करें</string>
-    <string name="otp_hint">यहां ओटीपी डालें </string>
-    <string name="otp_verify"> सत्यापित करें</string>
-    <string name="otp_reenter_mobile"> मोबाइल नंबर फिर से डालें </string>
-    <string name="otp_send_otp">OTP भेजें</string>
-
-    <!-- Add New Experience Bottom Sheet -->
-    <string name="add_experience_new_experience">  नया अनुभव</string>
-    <string name="add_experience_title">शीर्षक  </string>
-    <string name="add_experience_employment_type"> रोजगार के प्रकार </string>
-    <string name="add_experience_location"> स्थान</string>
-    <string name="add_experience_start_date">  आरंभ करने की तिथि</string>
-    <string name="add_experience_end_date"> अंतिम तिथि  </string>
-    <string name="add_experience_currently_working">वर्तमान में यहां का म कर रहा है  </string>
-
-    <!--    Profile Picture Bottom Sheet-->
-    <string name="select_profile_picture">प्रोफ़ाइल चित्र का चयन करें</string>
-    <string name="update_profile_picture">प्रोफ़ाइल चित्र अपडेट करें</string>
-    <string name="remove_profile_picture">प्रोफ़ाइल चित्र निकालें</string>
-    <string name="profile_picture">प्रोफ़ाइल चित्र</string>
-
-    <!-- Generic strings -->
-    <string name="cancel_text"> रद्द करना</string>
-    <string name="save_text">  सहेजें  </string>
-    <string name="add_more_text">  अधिक जोड़ें </string>
-    <string name="verified_text">  सत्यापित </string>
-    <string name="tags_text">  उपयोगकर्ता का टैग</string>
-    <string name="about_me_text">  मेरे बारे में उपयोगकर्ता </string>
-    <string name="to_be_filled_from_profile_data"> प्रोफ़ाइल डेटा से भरा जा करने के लिए </string>
-
+    <string name="intro_slide3_subtitle">अपनी प्राथमिकता तय करें और जिग्स आपको पाएंगे</string>
+    <string name="ob_slide1_title">ज्ञानप्राप्ति</string>
+    <string name="ob_slide1_subtitle">कैसे - १ </string>
+    <string name="ob_slide2_title">ज्ञानप्राप्ति</string>
+    <string name="ob_slide2_subtitle">कैसे - २</string>
+    <string name="ob_slide3_title">ज्ञानप्राप्ति</string>
+    <string name="ob_slide3_subtitle">कैसे - ३</string>
+    <string name="hello_world">नमस्ते दुनिया!</string>
+    <string name="messages_header">संदेश</string>
+    <string name="sync_header">सिंक</string>
+    <string name="signature_title">आपके हस्ताक्षर</string>
+    <string name="reply_title">डिफ़ॉल्ट उत्तर कार्रवाई</string>
+    <string name="sync_title">ईमेल को समय-समय पर सिंक करें</string>
+    <string name="attachment_title">आने वाले अनुलग्नकों को डाउनलोड करें</string>
+    <string name="attachment_summary_on">आने वाले ईमेल के लिए स्वचालित रूप से संलग्नक डाउनलोड करें</string>
+    <string name="attachment_summary_off">मैन्युअल रूप से अनुरोध किए जाने पर केवल अनुलग्नक डाउनलोड करें</string>
+    <string name="rating_text">रेटिंग</string>
+    <string name="tasks_done_text">TASK किया</string>
+    <string name="connections_text">सम्बन्ध</string>
+    <string name="default_location_text">स्थान</string>
+    <string name="default_distance_text">220KM दूर है</string>
+    <string name="education_card_education_text">शिक्षा</string>
+    <string name="education_card_content_placeholder">शिक्षा सामग्री यहां डालनी है</string>
+    <string name="view_more_text">और देखें</string>
+    <string name="empty_dash_string">-</string>
+    <string name="about_card_about_text">मेरे बारे में</string>
+    <string name="about_card_content_placeholder">मेरे बारे में लिखें</string>
+    <string name="experience_card_experience_text">अनुभव</string>
+    <string name="experience_expanded_add_experience_text">+ अनुभव जोड़ें</string>
+    <string name="education_expanded_Education_text">शिक्षा</string>
+    <string name="education_expanded_skills_text">कौशल</string>
+    <string name="education_expanded_achievements_text">उपलब्धियां</string>
+    <string name="education_expanded_add_education_text">+ शिक्षा जोड़ें</string>
+    <string name="education_expanded_add_skill_text">+ कौशल जोड़ें</string>
+    <string name="education_expanded_add_achievement_text">+ उपलब्धि जोड़ें</string>
+    <string name="education_expanded_user_name">नाम</string>
+    <string name="nav_education_text">शिक्षा</string>
+    <string name="nav_about_text">मेरे बारे में</string>
+    <string name="nav_gigs_text">गिग</string>
+    <string name="nav_experience_text">अनुभव</string>
+    <string name="add_skill_sheet_new_skill">नया कौशल</string>
+    <string name="add_skill_sheet_category">वर्ग</string>
+    <string name="add_skill_sheet_skill_name">कौशल का नाम</string>
+    <string name="add_achievement_sheet_new_achievement">नई उपलब्धि</string>
+    <string name="add_achievement_sheet_title">शीर्षक *</string>
+    <string name="add_achievement_sheet_issuing_authority">जारी करने वाला प्राधिकरण *</string>
+    <string name="add_achievement_sheet_location">स्थान</string>
+    <string name="add_achievement_sheet_year">वर्ष * (उदा। 2011)</string>
+    <string name="add_education_sheet_new_education">नई शिक्षा</string>
+    <string name="add_education_sheet_institution">संस्थान *</string>
+    <string name="add_education_sheet_course">कोर्स *</string>
+    <string name="add_education_sheet_degree">डिग्री *</string>
+    <string name="add_education_sheet_start_year">आरंभ करने की तिथि *</string>
+    <string name="add_education_sheet_end_year">अंतिम तिथि *</string>
+    <string name="add_contact_new_contact">नया कॉन्ट्रैक्ट</string>
+    <string name="add_contact_phone">फ़ोन</string>
+    <string name="add_contact_email">ईमेल</string>
+    <string name="about_expanded_bio_text">जैव</string>
+    <string name="about_expanded_language_text">भाषा ज्ञात</string>
+    <string name="about_expanded_add_language_text">+ भाषा जोड़ें</string>
+    <string name="about_expanded_contact_text">संपर्क विवरण</string>
+    <string name="about_expanded_add_contact_text">+ संपर्क जोड़ें</string>
+    <string name="add_language_new_language">नई भाषा</string>
+    <string name="add_language_name">भाषा: हिन्दी *</string>
+    <string name="add_language_speaking_level">बोलने का स्तर</string>
+    <string name="add_language_writing_level">लेखन स्तर</string>
+    <string name="title_lang">भाषा चुनें</string>
+    <string name="title_login">कृपया लॉगिन करें</string>
+    <string name="mobile_login">मोबाइल नंबर दर्ज करें</string>
+    <string name="confirm_login">पुष्टि करें</string>
+    <string name="guidelines_video_resume">दिशा-निर्देश</string>
+    <string name="button_upload_video">डालें</string>
+    <string name="title_video_resume">वीडियो बायोडाटा</string>
+    <string name="why_video_resume">क्यों वीडियो बायोडाटा डालें?</string>
+    <string name="desc1_video_resume">आपके बारे में अधिक जानकारी दें</string>
+    <string name="desc2_video_resume">कोई बायोडाटा और कोई साक्षात्कार नहीं</string>
+    <string name="otp_sign_in_up">लॉग इन करें</string>
+    <string name="otp_enter_mobile_num">OTP वेरिफिकेशन के लिए अपना मोबाइल नंबर दर्ज करें</string>
+    <string name="otp_verify_account">खाता वेरिफिकेशन करें</string>
+    <string name="mobile_verified">मोबाइल वेरिफिकेशन सफल!</string>
+    <string name="otp_notcorrect">गलत पासवर्ड!</string>
+    <string name="otp_sent_otp_account">हमने नंबर पर OTP भेजा है \ n खेतों में ऑटो लागू होगा</string>
+    <string name="otp_hint">_ _ _ _ _ _ _</string>
+    <string name="otp_verify">वेरिफाइ करें</string>
+    <string name="otp_reenter_mobile">मोबाइल नंबर फिर से डालें</string>
+    <string name="add_experience_new_experience">नया अनुभव</string>
+    <string name="add_experience_title">भूमिका *</string>
+    <string name="add_experience_employment_type">रोजगार के प्रकार *</string>
+    <string name="add_experience_location">स्थान *</string>
+    <string name="add_experience_start_date">आरंभ तिथि *</string>
+    <string name="add_experience_end_date">अंतिम तिथि *</string>
+    <string name="add_experience_currently_working">वर्तमान काम</string>
+    <string name="cancel_text">रद्द करें</string>
+    <string name="save_text">सहेजें</string>
+    <string name="back_text">वापस</string>
+    <string name="okay_text">ठीक है</string>
+    <string name="okay_text_cap">ठीक है</string>
+    <string name="add_more_text">अधिक जोड़ें</string>
+    <string name="verified_text">वेरिफाइड</string>
+    <string name="tags_text">टैग</string>
+    <string name="about_me_text">उपयोगकर्ता के बारे में</string>
+    <string name="to_be_filled_from_profile_data">प्रोफ़ाइल डेटा से भरा जाऐ</string>
+    <string name="placeholder_image_view">छवि लोड होने के लिए</string>
+    <string name="institution">संस्थान</string>
+    <string name="course_name">कोर्स</string>
+    <string name="degree">डिग्री</string>
+    <string name="start_date">आरंभ तिथि</string>
+    <string name="end_date">अंतिम तिथि</string>
+    <string name="delete">हटाऐं</string>
+    <string name="edit_achievement">उपलब्धि एडिट करें</string>
+    <string name="title">शीर्षक</string>
+    <string name="authority">अधिकारी</string>
+    <string name="location">स्थान</string>
+    <string name="year">साल</string>
+    <string name="year_text">साल</string>
+    <string name="edit_skill">कौशल एडिट करें</string>
+    <string name="edit_experience">अनुभव एडिट करें</string>
+    <string name="employment_title">रोजगार शीर्षक</string>
+    <string name="employment_type">रोजगार के प्रकार</string>
+    <string name="new_tag_hint">नया टैग</string>
+    <string name="go_back">वापस जाओ</string>
+    <string name="add">जोड़ना</string>
+    <string name="veriScreenTitle">हैलो गिगर!</string>
+    <string name="veri_address_title">"चरण 1: कृपया अपना पता जोड़ें"</string>
+    <string name="veri_add_address">"पता"</string>
+    <string name="veri_add_doc_front">"सामने"</string>
+    <string name="veri_add_doc_back">"पिछला पक्ष"</string>
+    <string name="veri_pan_title">"चरण 5: अपना पैन अपलोड करें"</string>
+    <string name="veri_aadhaar_title">"चरण 2: अपना आधार अपलोड करें"</string>
+    <string name="veri_no_aadhaar">"आधार नहीं है! छोड़ो >>"</string>
+    <string name="veri_dl_title">"चरण 3: अपना ड्राइविंग लाइसेंस अपलोड करें"</string>
+    <string name="veri_bank_title">"चरण 4: कृपया अपना बैंक विवरण जोड़ें"</string>
+    <string name="veri_add_bank">"बैंक विवरण जोड़ें"</string>
+    <string name="veri_done">सही! \n दस्तावेज प्रस्तुत किए गए। \n हम आपको वेरिफिकेशन करने के बाद में बताएंगे।</string>
+    <string name="veri_hint_address_line1">"पता पंक्ति 1"</string>
+    <string name="veri_hint_address_line2">"पता पंक्ति नं. 2"</string>
+    <string name="veri_hint_city">शहर</string>
+    <string name="veri_hint_state">राज्य</string>
+    <string name="veri_hint_pin">पिन कोड</string>
+    <string name="veri_hint_account_name">खाता धारक का नाम</string>
+    <string name="veri_hint_account_no">खाता संख्या</string>
+    <string name="veri_hint_re_account_no">खाता संख्या दोबारा प्रविष्ट करें</string>
+    <string name="veri_hint_ifsc">IFSC कोड</string>
+    <string name="veri_hint_bank_name">बैंक का नाम</string>
+    <string name="select_document_picture">विकल्प चुनें</string>
+    <string name="update_document_picture">अद्यतन चित्र</string>
+    <string name="remove_document_picture">चित्र हटा दें</string>
+    <string name="document_picture">छवि विकल्प</string>
+    <string name="edit_education">शिक्षा एडिट करें</string>
+    <string name="bio_name">शीर्षक</string>
+    <string name="bio_hint_text">अपने आप को एक पंक्ति में बताएं</string>
+    <string name="add_tags">टैग लगा दो</string>
+    <string name="hs_rv_title">डंज़ो डेलीवरी</string>
+    <string name="hs_rv_subtitle">+2 और</string>
+    <string name="hs_rv_date">43831</string>
+    <string name="hs_rv_month">अप्रैल</string>
+    <string name="hs_rv_comment">पिछली बार डिलीवरी 20 मिनट पहले हुई थी</string>
+    <string name="homescreen_bs_alert">वेरिफिकेशन नहीं किया गया है। पूरा करने के लिए यहां क्लिक करें।</string>
+    <string name="homescreen_bs_features">विशेषताएं</string>
+    <string name="select_skill">कौशल का चयन करें</string>
+    <string name="add_mother_tongue_text">मेरी मातृभाषा </string>
+    <string name="edit_language">भाषा एडिट करें</string>
+    <string name="edit_aboutme_text">बायोडाटा</string>
+    <string name="add_address">पता जोड़ें</string>
+    <string name="add_current_address">वर्तमान पता जोड़ें</string>
+    <string name="around_current_address">वर्तमान पते के आसपास 20 किमी</string>
+    <string name="same_as_permanent_address">स्थायी पते के रूप में भी</string>
+    <string name="address_proof">पते का सबूत</string>
+    <string name="current_address">वर्तमान पता</string>
+    <string name="first_line">पहली पंक्ति</string>
+    <string name="second_line">दूसरी पंक्ति</string>
+    <string name="state">राज्य</string>
+    <string name="city">शहर</string>
+    <string name="pincode">पिन कोड</string>
+    <string name="area">क्षेत्र</string>
+    <string name="permanent_address">स्थाई पता</string>
+    <string name="address_proof_smalls">आधार कार्ड</string>
+    <string name="document_under_verification">वेरिफिकेशन के तहत दस्तावेज़</string>
+    <string name="cancel">रद्द करना</string>
+    <string name="save">सहेजें</string>
+    <string name="preferred_locations">पसंदीदा स्थान</string>
+    <string name="select_area">क्षेत्र का चयन करें</string>
+    <string name="empty_about_me_text">कृपया अपने बारे में हमें बताएं</string>
+    <string name="error_empty_mandatory_fields">* कृपया अनिवार्य फ़ील्ड भरें</string>
+    <string name="about_me_hint">हमें अपने बारे में विस्तार से बताएं</string>
+    <string name="delete_confirmation_text">क्या आप सुनिश्चित रूप से इस आइटम को मिटाना चाहते हैं?</string>
+    <string name="if_otp_not_received">"यदि आपने OTP प्राप्त नहीं किया है,"</string>
+    <string name="resend">पुन: भेजें</string>
+    <string name="upcoming_gig">आगामी गिग</string>
+    <string name="features">विशेषताएं</string>
+    <string name="learning">सीखना</string>
+    <string name="assessment">मूल्यांकन</string>
+    <string name="kyc_verification_not_done">वेरिफिकेशन नहीं किया गया है, पूरा करने के लिए यहां क्लिक करें।</string>
+    <string name="video_resume_pending">आपका वीडियो फिर से शुरू हो रहा है, पूरा करने के लिए यहां क्लिक करें।</string>
+    <string name="next">आगे</string>
+    <string name="cover_error_text">* पाठ 150 अक्षरों से अधिक नहीं होना चाहिए</string>
+    <string name="update_contact_details">संपर्क न. अपडेट करें</string>
+    <string name="change_contact_message">इन विवरणों को अपडेट करने के लिए गिगर को अपनी आधार कार्ड छवियों को फिर से अपलोड करना होगा और फिर से वेरिफिकेशन प्रक्रिया से गुजरना होगा। हम अनुशंसा करते हैं कि जब तक आवश्यक न हो आप नाम या पता विवरण न बदलें|</string>
+    <string name="okay">ठीक है</string>
+    <string name="w_my_wallet">मेरा बटुआ</string>
+    <string name="w_my_wallet_balance">मेरा बटुआ राशि</string>
+    <string name="w_rs">रुपये</string>
+    <string name="w_transfer">स्थानांतरण</string>
     <string name="settings">समायोजन</string>
-    <string name="submit_documents">Submit documents</string>
-    <string name="giger_verification_desc">We need to verify your information.please submit the documents below to process giger verification</string>
-    <string name="selfie_video">Selfie Video *</string>
-    <string name="tap_to_upload">Tap To Upload</string>
-    <string name="bank_details">Bank Details</string>
-    <string name="driving_license">Driving License</string>
-    <string name="aadhar_card">Aadhar Card *</string>
-    <string name="pan_card">PAN Card</string>
-    <string name="do_you_have_pan_card">Do you have PAN Card ?</string>
-    <string name="yes_i_have_pan_card">Yes, I have Pan Card.</string>
-    <string name="no_i_don_t_have_pan_card">No, I don\'t have Pan Card.</string>
-    <string name="please_upload_your_pan">Please upload your Pan Card for\nyour verification</string>
-    <string name="do_you_have_driving_license">Do you have Driving License ?</string>
-    <string name="yes_i_have_driving_license">Yes, I have Driving License</string>
-    <string name="no_i_don_t_have_driving_license">No, I don\'t have driving License</string>
-    <string name="upload_your_driving_license">Please upload your Driving License for\nyour verification.</string>
-    <string name="upload_driving_license_back_side">Upload Driving License (Back Side)</string>
-    <string name="upload_driving_license_front_side">Upload Driving License (Front Side)</string>
-    <string name="no_i_don_t_have_aadhar_card">No, I don\'t have Aadhar Card</string>
-    <string name="yes_i_have_aadhar_card">Yes, I have Aadhar Card</string>
-    <string name="do_you_have_aadhar_card">Do you have Aadhar Card ?</string>
-    <string name="upload_aadhar_card_front_side">Upload Aadhar Card(Front Side)</string>
-    <string name="upload_your_aadhar_card">Please upload your Aadhar Card for\nyour verification</string>
-    <string name="upload_aadhar_card_back_side">Upload Aadhar Card(Back Side)</string>
-    <string name="reupload">Reupload</string>
-    <string name="save_all_caps">SAVE</string>
-    <string name="upload_pan_card">Upload Pan Card</string>
-    <string name="please_confirm_the_following_information">Please Confirm the following information</string>
-    <string name="name_with_colon">Name :</string>
-    <string name="father_s_name_with_colon">Father\'s Name :</string>
-    <string name="date_of_birth">Date Of Birth :</string>
-    <string name="pan_with_colon">Permannent Account Number :</string>
-    <string name="yes_i_confirm_the_data_is_correct">Yes, I Confirm the data is correct.</string>
-    <string name="why_do_we_need_this">Why we need this ?</string>
-    <string name="license_number_with_colon">License Number :</string>
-    <string name="address_with_colon">Address :</string>
-    <string name="license_validity_with_colon">License Validity :</string>
-    <string name="gender_with_colon">Gender :</string>
-    <string name="aadhar_number_with_colon">Aadhar Number :</string>
-    <string name="bank_account_details">Bank Account Details</string>
-    <string name="do_you_have_bank_passbook">Do you have Bank Passbook ?</string>
-    <string name="yes_i_have_bank_passbook">Yes, I have bank Passbook</string>
-    <string name="no_i_dont_have_bank_passbook">No, I dont have Bank Passbook</string>
-    <string name="cif_number_with_colon">CIF Number :</string>
-    <string name="account_number_with_colon">Account Number :</string>
-    <string name="ifsc_with_colon">IFSC :</string>
-    <string name="upload_bank_passbook">Upload Bank Passbook (Front Page)</string>
-    <string name="upload_bank_passbook_sublabel">Please upload your Bank Passbook for your verification</string>
-    <string name="edit">Edit</string>
-    <string name="name">Name</string>
-    <string name="date_of_birth_without_colon">Date Of Birth</string>
-    <string name="gender_wo_colon">Gender</string>
-    <string name="address_line">Address Line</string>
-    <string name="father_s_name">Father\'s Name</string>
-    <string name="cif_number">CIF Number</string>
-    <string name="account_number">Account Number</string>
-    <string name="license_validity">License Validity</string>
-    <string name="permanent_account_number">Permanent Account Number</string>
-    <string name="upload_document">Upload Document</string>
-    <string name="from_camera">From Camera</string>
-    <string name="from_gallery">From Gallery</string>
-    <string name="update">UPDATE</string>
-    <string name="how_to_record_selfie_video">How to Record Selfie Video?</string>
-    <string name="learning">Learning</string>
-    <string name="why_learning_is_important">Why Learning is Important?</string>
-    <string name="increase_your_knowlegde">Increase Your Knowlegde</string>
-    <string name="anytime_anywhere">ANYTIME ANYWHERE</string>
-    <string name="learning_based_on_nroles_and_industry">Learning based on\nroles and industry</string>
-    <string name="recently_added">Recently Added</string>
-    <string name="assessment_based_on_learnings">Assessment based on learnings</string>
-    <string name="explore_learnings">Explore Learnings</string>
-    <string name="uploaded">Uploaded</string>
-    <string name="let_s_go">Let\'s Go</string>
-    <string name="thank_you">Thank You !</string>
-    <string name="documents_uploaded_long">As your documents will get verifed, you will be able to start your gigs.</string>
-    <string name="please_let_us_know_more_about_your_gig">Please let us know more about your Gig .</string>
-    <string name="gig_location">Gig Location</string>
-    <string name="pan_card_image">Pan Card Image</string>
+    <string name="weekend">सप्ताहांत</string>
+    <string name="addline1">पता पंक्ति 1</string>
+    <string name="addLine2">पता पंक्ति नं. 2</string>
+    <string name="preferred_distance">पसंदीदा दूरी</string>
+    <string name="earning">कमाई</string>
+    <string name="submit_documents">दस्तावेज जमा करें</string>
+    <string name="giger_verification_desc">हमें आपकी जानकारी को वेरिफिकेशन करने की आवश्यकता है। कृपया नीचे दिए गए दस्तावेजों को जमा करने के लिए प्रक्रिया करें</string>
+    <string name="selfie_video">सेल्फी वीडियो *</string>
+    <string name="tap_to_upload">अपलोड करें</string>
+    <string name="bank_details">बैंक विवरण</string>
+    <string name="driving_license">ड्राइविंग लाइसेंस</string>
+    <string name="aadhar_card">आधार कार्ड *</string>
+    <string name="pan_card">पैन कार्ड</string>
+    <string name="do_you_have_pan_card">क्या आपके पास पैन कार्ड है?</string>
+    <string name="yes_i_have_pan_card">हां, मेरे पास पैन कार्ड है।</string>
+    <string name="no_i_don_t_have_pan_card">नहीं, मेरे पास पैन कार्ड नहीं है।</string>
+    <string name="please_upload_your_pan">कृपया अपने पैन कार्ड को \nवेरिफिकेशन के लिए अपलोड करें</string>
+    <string name="do_you_have_driving_license">क्या आपके पास ड्राइविंग लाइसेंस है?</string>
+    <string name="yes_i_have_driving_license">हां, मेरे पास ड्राइविंग लाइसेंस है</string>
+    <string name="no_i_don_t_have_driving_license">नहीं, मेरे पास ड्राइविंग लाइसेंस नहीं है</string>
+    <string name="upload_your_driving_license">कृपया \nवेरिफिकेशन के लिए अपना ड्राइविंग लाइसेंस अपलोड करें।</string>
+    <string name="upload_driving_license_back_side">ड्राइविंग लाइसेंस (पिछला पक्ष) अपलोड करें</string>
+    <string name="upload_driving_license_front_side">ड्राइविंग लाइसेंस (सामने) अपलोड करें</string>
+    <string name="no_i_don_t_have_aadhar_card">नहीं, मेरे पास आधार कार्ड नहीं है</string>
+    <string name="yes_i_have_aadhar_card">हां, मेरे पास आधार कार्ड है</string>
+    <string name="do_you_have_aadhar_card">क्या आपके पास आधार कार्ड है?</string>
+    <string name="upload_aadhar_card_front_side">आधार कार्ड अपलोड करें (सामने)</string>
+    <string name="upload_your_aadhar_card">कृपया अपने आधार कार्ड को \n वेरिफिकेशन के लिए अपलोड करें</string>
+    <string name="upload_aadhar_card_back_side">आधार कार्ड अपलोड करें (पिछला पक्ष)</string>
+    <string name="reupload">पुन: अपलोड</string>
+    <string name="save_all_caps">सहेजें</string>
+    <string name="upload_pan_card">पैन कार्ड अपलोड करें</string>
+    <string name="please_confirm_the_following_information">कृपया निम्न जानकारी की पुष्टि करें</string>
+    <string name="name_with_colon">नाम:</string>
+    <string name="father_s_name_with_colon">पिता का नाम :</string>
+    <string name="date_of_birth">जन्म की तारीख :</string>
+    <string name="pan_with_colon">स्थायी खाता संख्या:</string>
+    <string name="yes_i_confirm_the_data_is_correct">हां, मैं पुष्टि करता हूं कि डेटा सही है।</string>
+    <string name="why_do_we_need_this">हमें इसकी आवश्यकता क्यों है?</string>
+    <string name="license_number_with_colon">लाइसेंस संख्या :</string>
+    <string name="address_with_colon">पता:</string>
+    <string name="license_validity_with_colon">लाइसेंस की वैधता:</string>
+    <string name="gender_with_colon">लिंग:</string>
+    <string name="aadhar_number_with_colon">आधार संख्या:</string>
+    <string name="bank_account_details">बैंक खाता विवरण</string>
+    <string name="do_you_have_bank_passbook">क्या आपके पास बैंक पासबुक है?</string>
+    <string name="yes_i_have_bank_passbook">हां, मेरे पास बैंक पासबुक है</string>
+    <string name="no_i_dont_have_bank_passbook">नहीं, मेरे पास बैंक पासबुक नहीं है</string>
+    <string name="cif_number_with_colon">CIF नंबर:</string>
+    <string name="account_number_with_colon">खाता संख्या :</string>
+    <string name="ifsc_with_colon">IFSC:</string>
+    <string name="upload_bank_passbook">बैंक पासबुक अपलोड करें (मुखपृष्ठ)</string>
+    <string name="upload_bank_passbook_sublabel">कृपया \ n वेरिफिकेशन के लिए अपनी बैंक पासबुक अपलोड करें</string>
+    <string name="edit">एडिट</string>
+    <string name="name">नाम</string>
+    <string name="date_of_birth_without_colon">जन्म तिथी</string>
+    <string name="gender_wo_colon">लिंग</string>
+    <string name="address_line">पता पंक्ति</string>
+    <string name="father_s_name">पिता का नाम</string>
+    <string name="cif_number">CIF नंबर</string>
+    <string name="account_number">खाता संख्या</string>
+    <string name="license_validity">लाइसेंस की वैधता</string>
+    <string name="permanent_account_number">स्थायी खाता संख्या</string>
+    <string name="upload_document">दस्तावेज़ अपलोड करें</string>
+    <string name="from_camera">कैमरा से</string>
+    <string name="from_gallery">गैलरी से</string>
+    <string name="update">अपडेट करें</string>
+    <string name="how_to_record_selfie_video">सेल्फी वीडियो कैसे रिकॉर्ड करें?</string>
+    <string name="why_learning_is_important">क्यों सीखना महत्वपूर्ण है?</string>
+    <string name="increase_your_knowlegde">अपने ज्ञान को बढ़ाएँ</string>
+    <string name="anytime_anywhere">कभी भी कहीं भी</string>
+    <string name="learning_based_on_nroles_and_industry">भूमिकाओं और उद्योग\nके आधार पर सीखना</string>
+    <string name="recently_added">नया कनेक्शन</string>
+    <string name="assessment_based_on_learnings">सीखने का आकलन</string>
+    <string name="explore_learnings">सीखने का अन्वेषण करें</string>
+    <string name="action_block">रोको</string>
+    <string name="action_report">रिपोर्ट</string>
+    <string name="action_invite_friends">दोस्तों को आमंत्रित करें</string>
+    <string name="action_refresh">ताज़ा करें</string>
 
 </resources>

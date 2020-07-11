@@ -103,13 +103,11 @@ class BSCalendarScreenFragment : BaseFragment() {
     }
 
     private fun initializeVerificationAlert() {
-        var clickhere: String = "Click here";
-        var content: SpannableString = SpannableString(clickhere);
+        var clickhere :String ="Click here";
+        var content :SpannableString= SpannableString(clickhere);
         content.setSpan(UnderlineSpan(), 0, content.length, 0);
-        kyc_tv.text =
-            Html.fromHtml("Kyc Verification is not done , <font color='#060606'><u>Click here</u></font> to  complete.")
-        video_resume_tv.text =
-            Html.fromHtml("Your Video resume is Pending , <font color='#060606'><u>Click here</u></font> to  complete.")
+        kyc_tv.text = Html.fromHtml( "Kyc Verification is not done , <font color='#060606'><u>Click here</u></font> to  complete.")
+        video_resume_tv.text = Html.fromHtml( "Your Video resume is Pending , <font color='#060606'><u>Click here</u></font> to  complete.")
     }
 
     private fun listener() {
@@ -335,21 +333,21 @@ class BSCalendarScreenFragment : BaseFragment() {
 
     private fun initializeFeaturesBottomSheet() {
         var datalist: ArrayList<FeatureModel> = ArrayList<FeatureModel>()
-        datalist.add(FeatureModel("My Gig", R.drawable.mygig, -1))
-        datalist.add(FeatureModel("Explore", R.drawable.ic_landinghome_search, -1))
-        datalist.add(FeatureModel("Wallet", R.drawable.wallet, R.id.walletBalancePage))
-        datalist.add(FeatureModel("Profile", R.drawable.profile, R.id.profileFragment))
-        datalist.add(FeatureModel("Learning", R.drawable.learning, R.id.mainLearningFragment))
-        datalist.add(FeatureModel("Settings", R.drawable.settings, R.id.settingFragment))
-        datalist.add(FeatureModel("Chat", R.drawable.chat, R.id.contactScreenFragment))
-        datalist.add(FeatureModel("Landing HS", R.drawable.chat, R.id.landinghomefragment))
+        datalist.add(FeatureModel("My Gig", R.drawable.mygig,-1))
+        datalist.add(FeatureModel("Explore", R.drawable.ic_landinghome_search,-1))
+        datalist.add(FeatureModel("Wallet", R.drawable.wallet,R.id.walletBalancePage))
+        datalist.add(FeatureModel("Profile", R.drawable.profile,R.id.profileFragment))
+        datalist.add(FeatureModel("Learning", R.drawable.learning,R.id.mainLearningFragment))
+        datalist.add(FeatureModel("Settings", R.drawable.settings,R.id.settingFragment))
+        datalist.add(FeatureModel("Chat", R.drawable.chat,R.id.contactScreenFragment))
+        datalist.add(FeatureModel("Landing HS", R.drawable.chat,R.id.landinghomefragment))
 
         val itemWidth = ((width / 7) * 1.6).toInt()
         val recyclerGenericAdapter: RecyclerGenericAdapter<FeatureModel> =
             RecyclerGenericAdapter<FeatureModel>(
                 activity?.applicationContext,
                 PFRecyclerViewAdapter.OnViewHolderClick<FeatureModel?> { view, position, item ->
-                    if (item?.navigationID != -1) navigate(item?.navigationID!!)
+                    if(item?.navigationID!=-1)navigate(item?.navigationID!!)
                 },
                 RecyclerGenericAdapter.ItemInterface<FeatureModel?> { obj, viewHolder, position ->
                     val lp = getView(viewHolder, R.id.card_view).layoutParams
@@ -388,8 +386,7 @@ class BSCalendarScreenFragment : BaseFragment() {
 
         val itemWidth = ((width / 3) * 2).toInt()
         // model will change when integrated with DB
-        var datalist: ArrayList<LandingScreenFragment.TitleSubtitleModel> =
-            ArrayList<LandingScreenFragment.TitleSubtitleModel>()
+        var datalist: ArrayList<LandingScreenFragment.TitleSubtitleModel> = ArrayList<LandingScreenFragment.TitleSubtitleModel>()
 
         datalist.add(
             LandingScreenFragment.TitleSubtitleModel(
@@ -422,8 +419,7 @@ class BSCalendarScreenFragment : BaseFragment() {
         val recyclerGenericAdapter: RecyclerGenericAdapter<LandingScreenFragment.TitleSubtitleModel> =
             RecyclerGenericAdapter<LandingScreenFragment.TitleSubtitleModel>(
                 activity?.applicationContext,
-                PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
-                    navigate(R.id.mainLearningFragment)
+                PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->navigate(R.id.mainLearningFragment)
                 },
                 RecyclerGenericAdapter.ItemInterface<LandingScreenFragment.TitleSubtitleModel?> { obj, viewHolder, position ->
                     var view = getView(viewHolder, R.id.card_view)
@@ -438,7 +434,7 @@ class BSCalendarScreenFragment : BaseFragment() {
                     var subtitle = getTextView(viewHolder, R.id.title)
                     subtitle.text = obj?.subtitle
 
-                    var img = getImageView(viewHolder, R.id.learning_img)
+                    var img = getImageView(viewHolder,R.id.learning_img)
                     img.setImageResource(obj?.imgIcon!!)
                 })!!
         recyclerGenericAdapter.setList(datalist)
@@ -451,7 +447,7 @@ class BSCalendarScreenFragment : BaseFragment() {
         learning_rv.adapter = recyclerGenericAdapter
     }
 
-    class Assessment(var title: String, var time: String, var status: Boolean) {
+    class Assessment(var title: String,var time:String, var status: Boolean) {
 
     }
 
@@ -499,30 +495,19 @@ class BSCalendarScreenFragment : BaseFragment() {
                     lp.height = lp.height
                     lp.width = itemWidth
                     getView(viewHolder, R.id.assessment_cl).layoutParams = lp
-                    getTextView(viewHolder, R.id.title).text = obj?.title
-                    getTextView(viewHolder, R.id.time).text = obj?.time
+                    getTextView(viewHolder,R.id.title).text = obj?.title
+                    getTextView(viewHolder,R.id.time).text = obj?.time
 
-                    if (obj?.status!!) {
+                    if(obj?.status!!) {
                         getTextView(viewHolder, R.id.status).text = "COMPLETED"
-                        getTextView(
-                            viewHolder,
-                            R.id.status
-                        ).setBackgroundResource(R.drawable.rect_assessment_status_completed)
-                        (getView(
-                            viewHolder,
-                            R.id.side_bar_status
-                        ) as CardView).setCardBackgroundColor(resources.getColor(R.color.status_bg_completed))
+                        getTextView(viewHolder, R.id.status).setBackgroundResource(R.drawable.rect_assessment_status_completed)
+                        (getView(viewHolder, R.id.side_bar_status) as CardView).setCardBackgroundColor(resources.getColor(R.color.status_bg_completed))
 
-                    } else {
+                    }
+                    else{
                         getTextView(viewHolder, R.id.status).text = "PENDING"
-                        getTextView(
-                            viewHolder,
-                            R.id.status
-                        ).setBackgroundResource(R.drawable.rect_assessment_status_pending)
-                        (getView(
-                            viewHolder,
-                            R.id.side_bar_status
-                        ) as CardView).setCardBackgroundColor(resources.getColor(R.color.status_bg_pending))
+                        getTextView(viewHolder, R.id.status).setBackgroundResource(R.drawable.rect_assessment_status_pending)
+                        (getView(viewHolder, R.id.side_bar_status) as CardView).setCardBackgroundColor(resources.getColor(R.color.status_bg_pending))
                     }
 
                 })!!

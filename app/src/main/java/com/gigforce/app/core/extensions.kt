@@ -1,14 +1,19 @@
 package com.gigforce.app.core
 
 import android.content.res.Resources
+import android.os.Build
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.gigforce.app.R
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.util.*
 
 
 val Int.dp: Int
@@ -55,3 +60,9 @@ fun View.visible() {
 fun View.invisible() {
     visibility = View.INVISIBLE
 }
+
+val LocalDateTime.toDate: Date
+    @RequiresApi(Build.VERSION_CODES.O)
+    get() {
+        return Date.from(this.atZone(ZoneId.systemDefault()).toInstant())
+    }

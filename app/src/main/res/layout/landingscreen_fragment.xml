@@ -988,7 +988,7 @@
     </ScrollView>
 
     <ImageView
-        android:id="@+id/imageView34"
+        android:id="@+id/oval_gradient_iv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_oval_top_landingscreen"

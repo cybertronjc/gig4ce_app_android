@@ -38,6 +38,9 @@
         android:name="com.gigforce.app.modules.auth.AuthFlowFragment" />
 
     <fragment
+        android:id="@+id/markAttendanceFragment"
+        android:name="com.gigforce.app.modules.markattendance.MarkAttendanceFragment" />
+    <fragment
         android:id="@+id/settingFragment"
         android:name="com.gigforce.app.modules.preferences.PreferencesFragment"
         tools:layout="@layout/fragment_auth_flow" />

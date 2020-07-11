@@ -7,14 +7,29 @@ apply plugin: 'com.google.firebase.crashlytics'
 apply plugin: 'com.google.gms.google-services'
 
 android {
+    signingConfigs {
+        debug {
+            storeFile file('/Users/apple/Documents/gigforceapp.jks')
+            storePassword 'gigforce'
+            keyAlias 'key0'
+            keyPassword 'gigforce'
+        }
+        production {
+            storeFile file('/Users/apple/Downloads/gigforceprodapp.jks')
+            storePassword 'gigforce'
+            keyAlias 'gigforce'
+            keyPassword 'gigforce'
+        }
+    }
+
     compileSdkVersion 29
 
     defaultConfig {
         applicationId "com.gigforce.app"
         minSdkVersion 23
         targetSdkVersion 29
-        versionCode 29
-        versionName "1.12.2"
+        versionCode 30
+        versionName "1.13.0"
 
         vectorDrawables.useSupportLibrary = true
 
@@ -23,12 +38,39 @@ android {
     }
 
     buildTypes {
+        debug {
+            minifyEnabled false
+            crunchPngs false
+            splits.abi.enable = false
+            splits.density.enable = false
+            signingConfig signingConfigs.debug
+        }
+
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.production
         }
     }
 
+    flavorDimensions "default"
+    productFlavors {
+
+        /**
+         * Google Play Store Build
+         */
+        production {
+            dimension "default"
+        }
+
+        /**
+         * development Build
+         */
+        development {
+            dimension "default"
+            versionNameSuffix '-Dev'
+        }
+    }
 
     lintOptions {
         checkReleaseBuilds false
@@ -202,6 +244,8 @@ dependencies {
     //Exo Player
     implementation 'com.google.android.exoplayer:exoplayer-core:2.11.5'
     implementation 'com.google.android.exoplayer:exoplayer-ui:2.11.5'
+
+    implementation 'com.google.android.gms:play-services-location:17.0.0'
 
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
 
