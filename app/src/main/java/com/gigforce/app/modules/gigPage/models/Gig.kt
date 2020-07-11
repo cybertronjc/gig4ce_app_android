@@ -10,6 +10,8 @@ data class Gig(
     var gigAmount: Double = 0.0,
     var title: String = "",
     var address: String = "",
+    var latitude: Double? = null,
+    var longitude: Double? = null,
     var startDateTime: Timestamp? = null,
     var endDateTime: Timestamp? = null,
     var gigStatus: String = "upcoming",
@@ -21,11 +23,11 @@ data class Gig(
     var isPaymentDone: Boolean = false,
     var duration: Float = 0.0F,
     var gigRating: Float = 0.0F,
+    var locationPictures: List<String> = emptyList(),
     var ratingUserReceived: Float = -1.0F,
     var gigType: String? = null,
     var gigHighLights: List<String> = emptyList(),
     var gigRequirements: List<String> = emptyList(),
-    var gigLocationDetails: GigLocationDetails? = null,
     var attendance: GigAttendance? = null,
     var gigContactDetails: GigContactDetails? = null
 )

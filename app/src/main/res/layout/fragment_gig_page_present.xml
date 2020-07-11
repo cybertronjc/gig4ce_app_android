@@ -455,6 +455,8 @@
                 android:fontFamily="@font/lato"
                 android:letterSpacing="0"
                 android:text="Address "
+                android:clickable="true"
+                android:focusable="true"
                 android:textColor="#d9000000"
                 android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"

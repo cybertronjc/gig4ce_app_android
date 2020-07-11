@@ -155,17 +155,26 @@ class PresentGigPageFragment : BaseFragment() {
         this.gig = gig
 
         if (gig.companyLogo != null) {
-            FirebaseStorage.getInstance()
-                    .getReference("folder")
+            if (gig.companyLogo!!.startsWith("http", true)) {
+
+                Glide.with(requireContext())
+                    .load(gig.companyLogo)
+                    .into(companyLogoIV)
+            }else {
+                FirebaseStorage.getInstance()
+                    .getReference("companies_gigs_images")
                     .child(gig.companyLogo!!)
                     .downloadUrl
-                    .addOnSuccessListener {
+                    .addOnSuccessListener { fileUri ->
                         Glide.with(requireContext())
-                                .load(it)
-                                .into(companyLogoIV)
+                            .load(fileUri)
+                            .into(companyLogoIV)
                     }
+            }
 
         }
+
+
 
         toolbar.title = gig.title
         roleNameTV.text = gig.title
@@ -190,14 +199,14 @@ class PresentGigPageFragment : BaseFragment() {
 
                 if (gig.attendance?.checkInTime != null)
                     punchInTimeTV.text =
-                            timeFormatter.format(gig.attendance!!.checkInTime!!.toDate())
+                            timeFormatter.format(gig.attendance!!.checkInTime!!)
                 else
                     punchInTimeTV.text = "--:--"
 
 
                 if (gig.attendance?.checkOutTime != null)
                     punchOutTimeTV.text =
-                            timeFormatter.format(gig.attendance!!.checkOutTime!!.toDate())
+                            timeFormatter.format(gig.attendance!!.checkOutTime!!)
                 else
                     punchOutTimeTV.text = "--:--"
 
@@ -245,63 +254,80 @@ class PresentGigPageFragment : BaseFragment() {
         gigRequirementsContainer.removeAllViews()
         inflateGigRequirements(gig.gigRequirements)
 
-        if (gig.gigLocationDetails?.latitude != null) {
+        addressTV.setOnClickListener {
+
+            //Launch Map
+            val lat = this.gig?.latitude
+            val long = this.gig?.longitude
+
+            if (lat != null && long != null) {
+
+                val uri = "http://maps.google.com/maps?q=loc:$lat,$long (Gig Location)"
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
+                requireContext().startActivity(intent)
+            }
+        }
+
+        if (gig.latitude != null) {
             addressTV.text = prepareAddress(gig.address)
         } else {
             addressTV.text = gig.address
         }
 
-        if (gig.gigLocationDetails != null) {
-            gigLocationLayout.visibility = View.VISIBLE
-
-            if (gig.address.isNotBlank()) {
-                if (gig.gigLocationDetails?.latitude != null)
-                    fullMapAddresTV.text = prepareAddress(gig.address)
-                else
-                    fullMapAddresTV.text = gig.address
-            }
-
-            if (gig.gigLocationDetails?.latitude != null) {
-
-                addMarkerOnMap(
-                        latitude = gig.gigLocationDetails!!.latitude!!,
-                        longitude = gig.gigLocationDetails!!.longitude!!
-                )
-            } else {
-                //Hide Map maybe
-            }
-
-            if (gig.gigLocationDetails!!.locationPictures.isNotEmpty()) {
-                //Inflate Pics
-                locationImageScrollView.visibility = View.VISIBLE
-                inflateLocationPics(gig.gigLocationDetails!!.locationPictures)
-            } else {
-                locationImageScrollView.visibility = View.GONE
-            }
-        } else {
-            gigLocationLayout.visibility = View.GONE
+        if (gig.address.isNotBlank()) {
+            if (gig.latitude != null)
+                fullMapAddresTV.text = prepareAddress(gig.address)
+            else
+                fullMapAddresTV.text = gig.address
         }
+
+        if (gig.latitude != null) {
+
+            addMarkerOnMap(
+                    latitude = gig.latitude!!,
+                    longitude = gig.longitude!!
+            )
+        } else {
+            //Hide Map maybe
+        }
+
+        if (gig.locationPictures.isNotEmpty()) {
+            //Inflate Pics
+            locationImageScrollView.visibility = View.VISIBLE
+            inflateLocationPics(gig.locationPictures)
+        } else {
+            locationImageScrollView.visibility = View.GONE
+        }
+
     }
 
     private fun inflateLocationPics(locationPictures: List<String>) = locationPictures.forEach {
-        locationImageContainer.inflate(R.layout.gig_details_item, true)
+        locationImageContainer.inflate(R.layout.layout_gig_location_picture_item, true)
         val gigItem: View =
                 locationImageContainer.getChildAt(locationImageContainer.childCount - 1) as View
 
         gigItem.setOnClickListener(locationImageItemClickListener)
 
         val locationImageView: ImageView = gigItem.findViewById(R.id.imageView)
-        FirebaseStorage.getInstance()
-                .getReference("folder")
+        if (it.startsWith("http", true)) {
+            gigItem.tag = it
+
+            Glide.with(requireContext())
+                .load(it)
+                .into(locationImageView)
+        }else {
+            FirebaseStorage.getInstance()
+                .getReference("companies_gigs_images")
                 .child(it)
                 .downloadUrl
                 .addOnSuccessListener { fileUri ->
                     Glide.with(requireContext())
-                            .load(fileUri)
-                            .into(locationImageView)
+                        .load(fileUri)
+                        .into(locationImageView)
 
                     (locationImageView.parent as View).tag = fileUri.toString()
                 }
+        }
 
     }
 
@@ -318,25 +344,9 @@ class PresentGigPageFragment : BaseFragment() {
 
         val string = SpannableString(address + TEXT_VIEW_ON_MAP)
 
-        val clickableSpan = object : ClickableSpan() {
-            override fun onClick(widget: View) {
-                //Launch Map
-                val lat = gig?.gigLocationDetails?.latitude
-                val long = gig?.gigLocationDetails?.longitude
-
-                if (lat != null && long != null) {
-
-                    val uri = "http://maps.google.com/maps?q=loc:$lat,$long (Gig Location)"
-                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
-                    requireContext().startActivity(intent)
-                }
-            }
-        }
-
-        string.setSpan(clickableSpan, address.length + 1, string.length - 1, 0)
-
         val colorLipstick = ResourcesCompat.getColor(resources, R.color.lipstick, null)
         string.setSpan(ForegroundColorSpan(colorLipstick), address.length + 1, string.length - 1, 0)
+
         return string
     }
 

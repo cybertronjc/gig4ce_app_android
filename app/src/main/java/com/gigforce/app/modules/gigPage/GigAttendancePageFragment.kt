@@ -11,9 +11,6 @@ import android.os.Bundle
 import android.text.SpannableString
 import android.text.style.ClickableSpan
 import android.text.style.ForegroundColorSpan
-import android.text.SpannableString
-import android.text.style.ClickableSpan
-import android.text.style.ForegroundColorSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,12 +27,25 @@ import com.gigforce.app.modules.gigPage.models.GigAttendance
 import com.gigforce.app.utils.Lce
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.google.firebase.storage.FirebaseStorage
 import com.ncorti.slidetoact.SlideToActView
 import kotlinx.android.synthetic.main.fragment_gig_navigation_bottom_sheet.*
 import kotlinx.android.synthetic.main.fragment_gig_page_attendance.*
+import kotlinx.android.synthetic.main.fragment_gig_page_attendance.addressTV
 import kotlinx.android.synthetic.main.fragment_gig_page_attendance.callCardView
+import kotlinx.android.synthetic.main.fragment_gig_page_attendance.companyLogoIV
+import kotlinx.android.synthetic.main.fragment_gig_page_attendance.companyNameTV
 import kotlinx.android.synthetic.main.fragment_gig_page_attendance.contactPersonTV
+import kotlinx.android.synthetic.main.fragment_gig_page_attendance.durationTextTV
+import kotlinx.android.synthetic.main.fragment_gig_page_attendance.gigIdTV
+import kotlinx.android.synthetic.main.fragment_gig_page_attendance.gigTypeTV
+import kotlinx.android.synthetic.main.fragment_gig_page_attendance.punchInTimeTV
+import kotlinx.android.synthetic.main.fragment_gig_page_attendance.punchOutTimeTV
+import kotlinx.android.synthetic.main.fragment_gig_page_attendance.roleNameTV
+import kotlinx.android.synthetic.main.fragment_gig_page_attendance.shiftTV
 import kotlinx.android.synthetic.main.fragment_gig_page_attendance.startNavigationSliderBtn
+import kotlinx.android.synthetic.main.fragment_gig_page_attendance.wageTV
+import kotlinx.android.synthetic.main.fragment_gig_page_present.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -122,15 +132,23 @@ class GigAttendancePageFragment : BaseFragment() {
         gigIdTV.text = gig.gigId
 
         if (gig.companyLogo != null) {
-            FirebaseStorage.getInstance()
-                .getReference("folder")
-                .child(gig.companyLogo!!)
-                .downloadUrl
-                .addOnSuccessListener {
-                    Glide.with(requireContext())
-                        .load(it)
-                        .into(companyLogoIV)
-                }
+            if (gig.companyLogo!!.startsWith("http", true)) {
+
+                Glide.with(requireContext())
+                    .load(gig.companyLogo)
+                    .into(companyLogoIV)
+            }else {
+                FirebaseStorage.getInstance()
+                    .getReference("companies_gigs_images")
+                    .child(gig.companyLogo!!)
+                    .downloadUrl
+                    .addOnSuccessListener { fileUri ->
+                        Glide.with(requireContext())
+                            .load(fileUri)
+                            .into(companyLogoIV)
+                    }
+            }
+
         }
 
         if (gig.endDateTime != null)
@@ -145,7 +163,20 @@ class GigAttendancePageFragment : BaseFragment() {
 
         contactPersonTV.text = gig.gigContactDetails?.contactName
 
-        if (gig.gigLocationDetails?.latitude != null) {
+        addressTV.setOnClickListener {
+
+            //Launch Map
+            val lat = gig?.latitude
+            val long = gig?.longitude
+
+            if(lat != null) {
+                val uri = "http://maps.google.com/maps?q=loc:$lat,$long (Gig Location)"
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
+                requireContext().startActivity(intent)
+            }
+        }
+
+        if (gig.latitude != null) {
             addressTV.text = prepareAddress(gig.address)
         } else {
             addressTV.text = gig.address
@@ -169,19 +200,7 @@ class GigAttendancePageFragment : BaseFragment() {
 
         val string = SpannableString(address + PresentGigPageFragment.TEXT_VIEW_ON_MAP)
 
-        val clickableSpan = object : ClickableSpan() {
-            override fun onClick(widget: View) {
-                //Launch Map
-                val lat = gig?.gigLocationDetails?.latitude
-                val long = gig?.gigLocationDetails?.longitude
 
-                val uri = "http://maps.google.com/maps?q=loc:$lat,$long (Gig Location)"
-                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
-                requireContext().startActivity(intent)
-            }
-        }
-
-        string.setSpan(clickableSpan, address.length + 1, string.length - 1, 0)
 
         val colorLipstick = ResourcesCompat.getColor(resources, R.color.lipstick, null)
         string.setSpan(ForegroundColorSpan(colorLipstick), address.length + 1, string.length - 1, 0)
