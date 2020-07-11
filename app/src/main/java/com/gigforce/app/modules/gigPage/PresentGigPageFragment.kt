@@ -48,8 +48,8 @@ class PresentGigPageFragment : BaseFragment() {
     private var gig: Gig? = null
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
     ) = inflateView(R.layout.fragment_gig_page_present, inflater, container)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -117,22 +117,22 @@ class PresentGigPageFragment : BaseFragment() {
 
     private fun initViewModel() {
         viewModel.gigDetails
-            .observe(viewLifecycleOwner, Observer {
-                when (it) {
-                    Lce.Loading -> {
+                .observe(viewLifecycleOwner, Observer {
+                    when (it) {
+                        Lce.Loading -> {
+                        }
+                        is Lce.Content -> setGigDetailsOnView(it.content)
+                        is Lce.Error -> {
+                        }
                     }
-                    is Lce.Content -> setGigDetailsOnView(it.content)
-                    is Lce.Error -> {
-                    }
-                }
-            })
+                })
 
         viewModel.watchGig(gigId)
     }
 
     private fun addMarkerOnMap(
-        latitude: Double,
-        longitude: Double
+            latitude: Double,
+            longitude: Double
     ) = mGoogleMap?.let {
 
         it.clear()
@@ -140,14 +140,14 @@ class PresentGigPageFragment : BaseFragment() {
         // create marker
         val marker = MarkerOptions()
         marker.position(LatLng(latitude, longitude))
-            .title(getString(R.string.gig_location))
+                .title(getString(R.string.gig_location))
 
         // adding marker
         it.addMarker(marker)
         val cameraPosition = CameraPosition.Builder()
-            .target(LatLng(latitude, longitude))
-            .zoom(15f)
-            .build()
+                .target(LatLng(latitude, longitude))
+                .zoom(15f)
+                .build()
         it.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
     }
 
@@ -156,14 +156,14 @@ class PresentGigPageFragment : BaseFragment() {
 
         if (gig.companyLogo != null) {
             FirebaseStorage.getInstance()
-                .getReference("folder")
-                .child(gig.companyLogo!!)
-                .downloadUrl
-                .addOnSuccessListener {
-                    Glide.with(requireContext())
-                        .load(it)
-                        .into(companyLogoIV)
-                }
+                    .getReference("folder")
+                    .child(gig.companyLogo!!)
+                    .downloadUrl
+                    .addOnSuccessListener {
+                        Glide.with(requireContext())
+                                .load(it)
+                                .into(companyLogoIV)
+                    }
 
         }
 
@@ -190,14 +190,14 @@ class PresentGigPageFragment : BaseFragment() {
 
                 if (gig.attendance?.checkInTime != null)
                     punchInTimeTV.text =
-                        timeFormatter.format(gig.attendance!!.checkInTime!!.toDate())
+                            timeFormatter.format(gig.attendance!!.checkInTime!!.toDate())
                 else
                     punchInTimeTV.text = "--:--"
 
 
                 if (gig.attendance?.checkOutTime != null)
                     punchOutTimeTV.text =
-                        timeFormatter.format(gig.attendance!!.checkOutTime!!.toDate())
+                            timeFormatter.format(gig.attendance!!.checkOutTime!!.toDate())
                 else
                     punchOutTimeTV.text = "--:--"
 
@@ -225,13 +225,13 @@ class PresentGigPageFragment : BaseFragment() {
 
                 checkInOrContactUsBtn.text = "Contact Us"
                 fetchingLocationTV.text =
-                    "Note :We are preparing your gig.It will start in next $daysLeft Days"
+                        "Note :We are preparing your gig.It will start in next $daysLeft Days"
             }
         }
 
         if (gig.endDateTime != null)
             durationTextTV.text =
-                "${dateFormatter.format(gig.startDateTime!!.toDate())} - ${dateFormatter.format(gig.endDateTime!!.toDate())}"
+                    "${dateFormatter.format(gig.startDateTime!!.toDate())} - ${dateFormatter.format(gig.endDateTime!!.toDate())}"
         else
             durationTextTV.text = "${dateFormatter.format(gig.startDateTime!!.toDate())} - "
 
@@ -264,8 +264,8 @@ class PresentGigPageFragment : BaseFragment() {
             if (gig.gigLocationDetails?.latitude != null) {
 
                 addMarkerOnMap(
-                    latitude = gig.gigLocationDetails!!.latitude!!,
-                    longitude = gig.gigLocationDetails!!.longitude!!
+                        latitude = gig.gigLocationDetails!!.latitude!!,
+                        longitude = gig.gigLocationDetails!!.longitude!!
                 )
             } else {
                 //Hide Map maybe
@@ -286,22 +286,22 @@ class PresentGigPageFragment : BaseFragment() {
     private fun inflateLocationPics(locationPictures: List<String>) = locationPictures.forEach {
         locationImageContainer.inflate(R.layout.gig_details_item, true)
         val gigItem: View =
-            locationImageContainer.getChildAt(locationImageContainer.childCount - 1) as View
+                locationImageContainer.getChildAt(locationImageContainer.childCount - 1) as View
 
         gigItem.setOnClickListener(locationImageItemClickListener)
 
         val locationImageView: ImageView = gigItem.findViewById(R.id.imageView)
         FirebaseStorage.getInstance()
-            .getReference("folder")
-            .child(it)
-            .downloadUrl
-            .addOnSuccessListener { fileUri ->
-                Glide.with(requireContext())
-                    .load(fileUri)
-                    .into(locationImageView)
+                .getReference("folder")
+                .child(it)
+                .downloadUrl
+                .addOnSuccessListener { fileUri ->
+                    Glide.with(requireContext())
+                            .load(fileUri)
+                            .into(locationImageView)
 
-                (locationImageView.parent as View).tag = fileUri.toString()
-            }
+                    (locationImageView.parent as View).tag = fileUri.toString()
+                }
 
     }
 
@@ -324,9 +324,12 @@ class PresentGigPageFragment : BaseFragment() {
                 val lat = gig?.gigLocationDetails?.latitude
                 val long = gig?.gigLocationDetails?.longitude
 
-                val uri = "http://maps.google.com/maps?q=loc:$lat,$long (Gig Location)"
-                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
-                requireContext().startActivity(intent)
+                if (lat != null && long != null) {
+
+                    val uri = "http://maps.google.com/maps?q=loc:$lat,$long (Gig Location)"
+                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
+                    requireContext().startActivity(intent)
+                }
             }
         }
 
@@ -340,7 +343,7 @@ class PresentGigPageFragment : BaseFragment() {
     private fun inflateGigRequirements(gigRequirements: List<String>) = gigRequirements.forEach {
         gigRequirementsContainer.inflate(R.layout.gig_details_item, true)
         val gigItem: LinearLayout =
-            gigRequirementsContainer.getChildAt(gigRequirementsContainer.childCount - 1) as LinearLayout
+                gigRequirementsContainer.getChildAt(gigRequirementsContainer.childCount - 1) as LinearLayout
         val gigTextTV: TextView = gigItem.findViewById(R.id.text)
         gigTextTV.text = it
     }
@@ -349,7 +352,7 @@ class PresentGigPageFragment : BaseFragment() {
     private fun inflateGigHighlights(gigHighLights: List<String>) = gigHighLights.forEach {
         gigHighlightsContainer.inflate(R.layout.gig_details_item, true)
         val gigItem: LinearLayout =
-            gigHighlightsContainer.getChildAt(gigHighlightsContainer.childCount - 1) as LinearLayout
+                gigHighlightsContainer.getChildAt(gigHighlightsContainer.childCount - 1) as LinearLayout
         val gigTextTV: TextView = gigItem.findViewById(R.id.text)
         gigTextTV.text = it
     }
@@ -363,7 +366,7 @@ class PresentGigPageFragment : BaseFragment() {
             return false
 
         val gigDate =
-            gig!!.startDateTime!!.toDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
+                gig!!.startDateTime!!.toDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
         val currentDate = LocalDate.now()
         return gigDate.isEqual(currentDate)
     }
@@ -373,7 +376,7 @@ class PresentGigPageFragment : BaseFragment() {
             return false
 
         val gigDate =
-            gig!!.startDateTime!!.toDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
+                gig!!.startDateTime!!.toDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
         val currentDate = LocalDate.now()
         return gigDate.isAfter(currentDate)
     }
@@ -383,7 +386,7 @@ class PresentGigPageFragment : BaseFragment() {
             return false
 
         val gigDate =
-            gig!!.startDateTime!!.toDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
+                gig!!.startDateTime!!.toDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
         val currentDate = LocalDate.now()
         return gigDate.isBefore(currentDate)
     }
