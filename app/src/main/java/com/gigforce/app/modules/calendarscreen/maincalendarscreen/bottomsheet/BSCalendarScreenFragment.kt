@@ -137,67 +137,92 @@ class BSCalendarScreenFragment : BaseFragment() {
 
     var width: Int = 0
     private fun initializeUpcomingGigBottomSheet(upcomingGigs: List<Gig>) {
-        val itemWidth = ((width / 5) * 4).toInt()
-        val recyclerGenericAdapter: RecyclerGenericAdapter<Gig> =
-            RecyclerGenericAdapter<Gig>(
-                activity?.applicationContext,
-                PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
-                    val gig = item as Gig
-                    navigate(R.id.presentGigPageFragment, Bundle().apply {
-                        this.putString(PresentGigPageFragment.INTENT_EXTRA_GIG_ID,gig.gigId)
-                    })
+        if(upcomingGigs.isNotEmpty()) {
+            upcoming_gig_rv.visibility = View.VISIBLE
+            upcoming_gig_title.visibility = View.VISIBLE
+
+            val itemWidth = ((width / 5) * 4).toInt()
+            val recyclerGenericAdapter: RecyclerGenericAdapter<Gig> =
+                RecyclerGenericAdapter<Gig>(
+                    activity?.applicationContext,
+                    PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
+                        val gig = item as Gig
+                        navigate(R.id.presentGigPageFragment, Bundle().apply {
+                            this.putString(PresentGigPageFragment.INTENT_EXTRA_GIG_ID, gig.gigId)
+                        })
 
 //                    showKYCAndHideUpcomingLayout(
 //                        true
 //                    )
-                },
-                RecyclerGenericAdapter.ItemInterface<Gig?> { obj, viewHolder, position ->
-                    val lp = getView(viewHolder, R.id.card_view).layoutParams
-                    lp.height = lp.height
-                    lp.width = itemWidth
-                    getView(viewHolder, R.id.card_view).layoutParams = lp
+                    },
+                    RecyclerGenericAdapter.ItemInterface<Gig?> { obj, viewHolder, position ->
+                        val lp = getView(viewHolder, R.id.card_view).layoutParams
+                        lp.height = lp.height
+                        lp.width = itemWidth
+                        getView(viewHolder, R.id.card_view).layoutParams = lp
 
-                    getView(viewHolder, R.id.card_view).layoutParams = lp
-                    getTextView(viewHolder, R.id.textView41).text = obj?.title
-                    getTextView(viewHolder, R.id.contactPersonTV).text = obj?.gigContactDetails?.contactName
-                    getTextView(viewHolder,R.id.textView67).text = obj?.gigTiming
+                        getView(viewHolder, R.id.card_view).layoutParams = lp
+                        getTextView(viewHolder, R.id.textView41).text = obj?.title
+                        getTextView(viewHolder, R.id.contactPersonTV).text =
+                            obj?.gigContactDetails?.contactName
+                        getTextView(viewHolder, R.id.textView67).text = obj?.gigTiming
 
-                    getView(viewHolder,R.id.navigateTV).setOnClickListener(NavigationClickListener(upcoming_gig_rv,position))
-                    getView(viewHolder,R.id.checkInTV).setOnClickListener(CheckInClickListener(upcoming_gig_rv,position))
-                    getView(viewHolder,R.id.callCardView).setOnClickListener(CallClickListener(upcoming_gig_rv,position))
-                    getView(viewHolder,R.id.messageCardView).setOnClickListener(ChatClickListener(upcoming_gig_rv,position))
-                    val companyLogoIV = getImageView(viewHolder,R.id.companyLogoIV)
+                        getView(viewHolder, R.id.navigateTV).setOnClickListener(
+                            NavigationClickListener(upcoming_gig_rv, position)
+                        )
+                        getView(viewHolder, R.id.checkInTV).setOnClickListener(
+                            CheckInClickListener(
+                                upcoming_gig_rv,
+                                position
+                            )
+                        )
+                        getView(viewHolder, R.id.callCardView).setOnClickListener(
+                            CallClickListener(
+                                upcoming_gig_rv,
+                                position
+                            )
+                        )
+                        getView(viewHolder, R.id.messageCardView).setOnClickListener(
+                            ChatClickListener(upcoming_gig_rv, position)
+                        )
+                        val companyLogoIV = getImageView(viewHolder, R.id.companyLogoIV)
 
-                    if(obj?.startDateTime != null) {
-                        val gigDate = obj.startDateTime!!.toDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
-                        val currentDate = LocalDate.now()
+                        if (obj?.startDateTime != null) {
+                            val gigDate = obj.startDateTime!!.toDate().toInstant()
+                                .atZone(ZoneId.systemDefault()).toLocalDate()
+                            val currentDate = LocalDate.now()
 
-                        getView(viewHolder,R.id.checkInTV).isEnabled = currentDate.isEqual(gigDate)
-                    }
+                            getView(viewHolder, R.id.checkInTV).isEnabled =
+                                currentDate.isEqual(gigDate)
+                        }
 
-                    if(obj?.companyLogo != null){
-                        FirebaseStorage.getInstance()
-                            .getReference("folder")
-                            .child(obj?.companyLogo!!)
-                            .downloadUrl
-                            .addOnSuccessListener {
+                        if (obj?.companyLogo != null) {
+                            FirebaseStorage.getInstance()
+                                .getReference("folder")
+                                .child(obj?.companyLogo!!)
+                                .downloadUrl
+                                .addOnSuccessListener {
 
-                                Glide.with(requireContext())
-                                    .load(it)
-                                    .into(companyLogoIV)
-                            }
-                    }
+                                    Glide.with(requireContext())
+                                        .load(it)
+                                        .into(companyLogoIV)
+                                }
+                        }
 
-                })!!
-        recyclerGenericAdapter.setList(upcomingGigs)
-        recyclerGenericAdapter.setLayout(R.layout.upcoming_gig_item)
-        upcoming_gig_rv.layoutManager = LinearLayoutManager(
-            activity?.applicationContext,
-            LinearLayoutManager.HORIZONTAL,
-            false
-        )
-        upcoming_gig_rv.adapter = recyclerGenericAdapter
-
+                    })!!
+            recyclerGenericAdapter.setList(upcomingGigs)
+            recyclerGenericAdapter.setLayout(R.layout.upcoming_gig_item)
+            upcoming_gig_rv.layoutManager = LinearLayoutManager(
+                activity?.applicationContext,
+                LinearLayoutManager.HORIZONTAL,
+                false
+            )
+            upcoming_gig_rv.adapter = recyclerGenericAdapter
+        }
+        else{
+            upcoming_gig_rv.visibility = View.GONE
+            upcoming_gig_title.visibility = View.GONE
+        }
     }
 
     inner class NavigationClickListener(val rv : RecyclerView,var position : Int) : View.OnClickListener{
