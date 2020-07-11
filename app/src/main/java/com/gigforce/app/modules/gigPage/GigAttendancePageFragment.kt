@@ -3,15 +3,21 @@ package com.gigforce.app.modules.gigPage
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.text.SpannableString
+import android.text.style.ClickableSpan
+import android.text.style.ForegroundColorSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import com.bumptech.glide.Glide
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.modules.gigPage.models.Gig
 import com.gigforce.app.utils.Lce
+import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.fragment_gig_page_attendance.*
 import java.text.SimpleDateFormat
 
@@ -81,6 +87,17 @@ class GigAttendancePageFragment : BaseFragment() {
         gigTypeTV.text = gig.gigType
         gigIdTV.text = gig.gigId
 
+        if (gig.companyLogo != null) {
+            FirebaseStorage.getInstance()
+                .getReference("folder")
+                .child(gig.companyLogo!!)
+                .downloadUrl
+                .addOnSuccessListener {
+                    Glide.with(requireContext())
+                        .load(it)
+                        .into(companyLogoIV)
+                }
+        }
 
         if (gig.endDateTime != null)
             durationTextTV.text =
@@ -94,15 +111,45 @@ class GigAttendancePageFragment : BaseFragment() {
 
         contactPersonTV.text = gig.gigContactDetails?.contactName
 
-        if (gig.gigLocationDetails != null) {
-            //          fullMapAddresTV.text = gig.gigLocationDetails?.fullAddress
-//            addMarkerOnMap(
-//                latitude = gig.gigLocationDetails!!.latitude!!,
-//                longitude = gig.gigLocationDetails!!.longitude!!
-//            )
+        if (gig.gigLocationDetails?.latitude != null) {
+            addressTV.text = prepareAddress(gig.address)
         } else {
-            //make location layout invisivle
+            addressTV.text = gig.address
         }
+
+        if (gig.attendance != null) {
+
+            if (gig.attendance!!.checkOutMarked) {
+
+            } else if (gig.attendance!!.checkInMarked) {
+
+            }
+        }
+    }
+
+    private fun prepareAddress(address: String): SpannableString {
+        if (address.isBlank())
+            return SpannableString("")
+
+        val string = SpannableString(address + PresentGigPageFragment.TEXT_VIEW_ON_MAP)
+
+        val clickableSpan = object : ClickableSpan() {
+            override fun onClick(widget: View) {
+                //Launch Map
+                val lat = gig?.gigLocationDetails?.latitude
+                val long = gig?.gigLocationDetails?.longitude
+
+                val uri = "http://maps.google.com/maps?q=loc:$lat,$long (Gig Location)"
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
+                requireContext().startActivity(intent)
+            }
+        }
+
+        string.setSpan(clickableSpan, address.length + 1, string.length - 1, 0)
+
+        val colorLipstick = ResourcesCompat.getColor(resources, R.color.lipstick, null)
+        string.setSpan(ForegroundColorSpan(colorLipstick), address.length + 1, string.length - 1, 0)
+        return string
     }
 
 
