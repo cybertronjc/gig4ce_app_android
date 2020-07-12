@@ -1,6 +1,7 @@
 package com.gigforce.app.modules.gigPage
 
 import android.Manifest
+import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Geocoder
@@ -24,10 +25,13 @@ import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.gone
 import com.gigforce.app.modules.gigPage.models.Gig
 import com.gigforce.app.modules.gigPage.models.GigAttendance
+import com.gigforce.app.modules.gigerVerfication.panCard.AddPanCardInfoFragment
+import com.gigforce.app.modules.photocrop.PhotoCrop
 import com.gigforce.app.utils.Lce
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import com.ncorti.slidetoact.SlideToActView
 import kotlinx.android.synthetic.main.fragment_gig_navigation_bottom_sheet.*
 import kotlinx.android.synthetic.main.fragment_gig_page_attendance.*
@@ -53,13 +57,14 @@ import java.util.*
 class GigAttendancePageFragment : BaseFragment() {
     companion object {
         const val INTENT_EXTRA_GIG_ID = "gig_id"
+        const val REQUEST_CODE_UPLOAD_SELFIE_IMAGE = 2333
     }
 
     var isGPSRequestCompleted = false
     lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     val PERMISSION_FINE_LOCATION = 100
     private val dateFormatter = SimpleDateFormat("dd/MM/yyyy")
-    private val timeFormatter = SimpleDateFormat("HH:MM:SS")
+    private val timeFormatter = SimpleDateFormat("HH:mm:ss")
 
     private val viewModel: GigViewModel by viewModels()
 
@@ -84,7 +89,8 @@ class GigAttendancePageFragment : BaseFragment() {
         startNavigationSliderBtn.onSlideCompleteListener =
             object : SlideToActView.OnSlideCompleteListener {
                 override fun onSlideComplete(view: SlideToActView) {
-                    updateAttendanceToDB()
+//                    updateAttendanceToDB()
+                    requestSelfie()
                 }
             }
     }
@@ -102,11 +108,13 @@ class GigAttendancePageFragment : BaseFragment() {
     }
 
     private fun getData(arguments: Bundle?, savedInstanceState: Bundle?) {
-        gigId = if (savedInstanceState != null) {
-            savedInstanceState.getString(INTENT_EXTRA_GIG_ID)!!
-        } else {
-            arguments?.getString(INTENT_EXTRA_GIG_ID)!!
-        }
+//        gigId = if (savedInstanceState != null) {
+//            savedInstanceState.getString(INTENT_EXTRA_GIG_ID)!!
+//        } else  {
+//            arguments?.getString(INTENT_EXTRA_GIG_ID)!!
+//
+//        }
+        gigId = "G1G00001"
     }
 
     private fun initViewModel(savedInstanceState: Bundle?) {
@@ -243,12 +251,24 @@ class GigAttendancePageFragment : BaseFragment() {
                 updateAttendanceOnDBCall(it)
             }
 
+
         } else {
             requestPermissionForGPS()
         }
 
     }
-
+    var selfieImg : String = ""
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_CODE_UPLOAD_SELFIE_IMAGE && resultCode == Activity.RESULT_OK) {
+            var imageName: String? = data?.getStringExtra("filename")
+            var profilePicRef: StorageReference =
+                FirebaseStorage.getInstance().reference.child("attendance").child(imageName.toString())
+            selfieImg = profilePicRef.toString()
+            updateAttendanceToDB()
+//            showToast(profilePicRef.toString())
+        }
+    }
     fun updateAttendanceOnDBCall(location: Location) {
         var geocoder = Geocoder(requireContext())
         var locationAddress = ""
@@ -264,19 +284,30 @@ class GigAttendancePageFragment : BaseFragment() {
                     Date(),
                     location.latitude,
                     location.longitude,
-                    "",
+                    selfieImg,
                     locationAddress
                 )
             viewModel.markAttendance(markAttendance, gigId)
         }
         else{
             gig!!.attendance!!.setCheckout(true,Date(),location.latitude,
-                location.longitude,"",
+                location.longitude,selfieImg,
                 locationAddress)
             viewModel.markAttendance(gig!!.attendance!!, gigId)
 
         }
 
+    }
+    fun requestSelfie(){
+        val photoCropIntent = Intent(requireContext(), PhotoCrop::class.java)
+        photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_PURPOSE, PhotoCrop.PURPOSE_UPLOAD_SELFIE_IMAGE)
+        photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_FIREBASE_FOLDER_NAME, "/attendance/")
+        photoCropIntent.putExtra("folder", "attendance")
+        photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_DETECT_FACE, 0)
+        photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_FIREBASE_FILE_NAME, "selfie.jpg")
+        startActivityForResult(photoCropIntent,
+            REQUEST_CODE_UPLOAD_SELFIE_IMAGE
+        )
     }
 
     override fun onRequestPermissionsResult(

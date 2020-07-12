@@ -71,7 +71,9 @@ class GigViewModel constructor(
                     runCatching {
                         documentSnapshot.toObject(Gig::class.java)
                     }.onSuccess {
-                        _gigDetails.value = Lce.content(it!!)
+                        try {
+                            _gigDetails.value = Lce.content(it!!)
+                        }catch (e:Exception){}
                     }.onFailure {
                         _gigDetails.value = Lce.error(it.message!!)
                     }

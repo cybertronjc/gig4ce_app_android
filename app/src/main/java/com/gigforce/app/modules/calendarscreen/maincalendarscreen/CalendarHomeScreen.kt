@@ -89,6 +89,7 @@ class CalendarHomeScreen : BaseFragment(),
         initializeViews()
         listener()
         observePreferenceData()
+        navigate(R.id.gigAttendancePageFragment)
     }
 
 

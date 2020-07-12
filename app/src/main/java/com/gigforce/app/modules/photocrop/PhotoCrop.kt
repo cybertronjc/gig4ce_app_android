@@ -56,6 +56,7 @@ class PhotoCrop : AppCompatActivity() {
         const val PURPOSE_UPLOAD_BANK_DETAILS_IMAGE = "bank_passbook_image"
         const val PURPOSE_UPLOAD_DL_BACK_IMAGE = "dl_back_image"
         const val PURPOSE_UPLOAD_DL_FRONT_IMAGE = "dl_front_image"
+        const val PURPOSE_UPLOAD_SELFIE_IMAGE = "upload_selfie_image"
     }
 
     private val CODE_IMG_GALLERY: Int = 1
