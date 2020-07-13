@@ -114,7 +114,6 @@
             android:layout_marginTop="24dp"
             android:textColor="@color/black"
             android:textSize="14sp"
-            android:textStyle="bold"
             android:layout_marginBottom="@dimen/mdtp_minimum_margin_top_bottom"
             android:fontFamily="@font/lato_bold"
             app:layout_constraintStart_toEndOf="@+id/signOutIcon"
