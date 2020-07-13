@@ -5,8 +5,8 @@ import com.gigforce.app.core.base.basefirestore.BaseFirestoreDataModel
 
 @Keep
 data class SelfieVideoDataModel(
-    val videoPath: String,
-    val verified : Boolean
+    val videoPath: String = "",
+    val verified: Boolean = false
 ) : BaseFirestoreDataModel(TABLE_NAME) {
 
     companion object {

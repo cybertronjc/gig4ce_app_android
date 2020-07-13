@@ -5,10 +5,10 @@ import com.gigforce.app.core.base.basefirestore.BaseFirestoreDataModel
 
 @Keep
 data class PanCardDataModel(
-    val userHasPanCard: Boolean?,
+    val userHasPanCard: Boolean? = null,
     val panCardImagePath: String?= null,
-    val verified: Boolean,
-    val panCardNo : String?
+    val verified: Boolean = false,
+    val panCardNo : String? = null
 ) : BaseFirestoreDataModel(TABLE_NAME){
 
     companion object {

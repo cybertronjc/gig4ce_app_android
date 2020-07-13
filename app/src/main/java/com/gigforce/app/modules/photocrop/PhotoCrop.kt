@@ -49,6 +49,7 @@ class PhotoCrop : AppCompatActivity() {
         const val INTENT_EXTRA_FIREBASE_FOLDER_NAME = "fbDir"
         const val INTENT_EXTRA_FIREBASE_FILE_NAME = "file"
         const val INTENT_EXTRA_DETECT_FACE = "detectFace"
+        const val INTENT_EXTRA_RESULTING_FILE_URI = "uri"
 
         const val PURPOSE_UPLOAD_PAN_IMAGE = "upload_pan_image"
         const val PURPOSE_UPLOAD_AADHAR_FRONT_IMAGE = "aadhar_front_image"
@@ -111,7 +112,11 @@ class PhotoCrop : AppCompatActivity() {
         var constLayout: ConstraintLayout = this.findViewById(R.id.constraintLayout)
         var linearLayoutBottomSheet: LinearLayout = findViewById(R.id.linear_layout_bottomsheet)
         bottomSheetBehavior = BottomSheetBehavior.from(linearLayoutBottomSheet)
-        purpose = intent.getStringExtra("purpose")
+        purpose = if (savedInstanceState != null)
+            savedInstanceState.getString("purpose")!!
+        else
+            intent.getStringExtra("purpose")
+
         Log.e("PHOTO_CROP", "purpose = " + purpose + " comparing with: profilePictureCrop")
         /**
          * Add new purpose call here.
@@ -124,6 +129,11 @@ class PhotoCrop : AppCompatActivity() {
         checkPermissions()
         imageView.setOnClickListener { toggleBottomSheet() }
         constLayout.setOnClickListener { toggleBottomSheet() }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString("purpose", purpose)
     }
 
     private fun profilePictureOptions() {
@@ -215,42 +225,59 @@ class PhotoCrop : AppCompatActivity() {
                 resultIntent.putExtra("uri", imageUriResultCrop)
                 Log.v("REQUEST CROP", requestCode.toString())
             }
-            var baos = ByteArrayOutputStream()
-            if (imageUriResultCrop == null) {
-                var bitmap = data.data as Bitmap
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
-            }
-            var fvImage = imageUriResultCrop?.let { FirebaseVisionImage.fromFilePath(this, it) }
 
-            //  Face detect - Check if face is present in the cropped image or not.
-            if (detectFace == 1) {
-                val result = detector.detectInImage(fvImage!!)
-                    .addOnSuccessListener { faces ->
-                        // Task completed successfully
-                        if (faces.size > 0) {
-                            Toast.makeText(
-                                this,
-                                "Face Detected. Uploading...",
-                                Toast.LENGTH_LONG
-                            ).show()
-                            upload(imageUriResultCrop, baos.toByteArray(), CLOUD_OUTPUT_FOLDER)
+            if (purpose == PURPOSE_UPLOAD_DL_FRONT_IMAGE ||
+                purpose == PURPOSE_UPLOAD_DL_BACK_IMAGE ||
+                purpose == PURPOSE_UPLOAD_PAN_IMAGE ||
+                purpose == PURPOSE_UPLOAD_BANK_DETAILS_IMAGE ||
+                purpose == PURPOSE_UPLOAD_AADHAR_FRONT_IMAGE ||
+                purpose == PURPOSE_UPLOAD_AADHAR_BACK_IMAGE
+            ) {
 
-                        } else {
-                            Toast.makeText(
-                                this,
-                                "Something seems off. Please take a smart selfie with good lights.",
-                                Toast.LENGTH_LONG
-                            ).show()
-                        }
-                    }
-                    .addOnFailureListener { e ->
-                        // Task failed with an exception
-                        Log.d("CStatus", "Face detection failed! still uploading the image")
-                        upload(imageUriResultCrop, baos.toByteArray(), CLOUD_OUTPUT_FOLDER)
-                    }
+                if (imageUriResultCrop != null)
+                    setResult(Activity.RESULT_OK, resultIntent)
+                else
+                    setResult(Activity.RESULT_CANCELED, resultIntent)
+                finish()
             } else {
-                //just upload wihtout face detection eg for pan, aadhar, other docs.
-                upload(imageUriResultCrop, baos.toByteArray(), CLOUD_OUTPUT_FOLDER)
+
+                var baos = ByteArrayOutputStream()
+                if (imageUriResultCrop == null) {
+                    var bitmap = data.data as Bitmap
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+                }
+                var fvImage = imageUriResultCrop?.let { FirebaseVisionImage.fromFilePath(this, it) }
+
+                //  Face detect - Check if face is present in the cropped image or not.
+                if (detectFace == 1) {
+                    val result = detector.detectInImage(fvImage!!)
+                        .addOnSuccessListener { faces ->
+                            // Task completed successfully
+                            if (faces.size > 0) {
+                                Toast.makeText(
+                                    this,
+                                    "Face Detected. Uploading...",
+                                    Toast.LENGTH_LONG
+                                ).show()
+                                upload(imageUriResultCrop, baos.toByteArray(), CLOUD_OUTPUT_FOLDER)
+
+                            } else {
+                                Toast.makeText(
+                                    this,
+                                    "Something seems off. Please take a smart selfie with good lights.",
+                                    Toast.LENGTH_LONG
+                                ).show()
+                            }
+                        }
+                        .addOnFailureListener { e ->
+                            // Task failed with an exception
+                            Log.d("CStatus", "Face detection failed! still uploading the image")
+                            upload(imageUriResultCrop, baos.toByteArray(), CLOUD_OUTPUT_FOLDER)
+                        }
+                } else {
+                    //just upload wihtout face detection eg for pan, aadhar, other docs.
+                    upload(imageUriResultCrop, baos.toByteArray(), CLOUD_OUTPUT_FOLDER)
+                }
             }
         }
         Log.d("CStatus", "completed result on activity")
@@ -304,17 +331,6 @@ class PhotoCrop : AppCompatActivity() {
     private fun upload(uri: Uri?, data: ByteArray, folder: String) {
         Log.v("Upload Image", "started")
         var mReference = mStorage.reference.child(folder).child(uri!!.lastPathSegment!!)
-
-//            when (purpose) {
-//            profilePictureCrop -> mStorage.reference.child("verification").child("${folder}/${uri!!.lastPathSegment!!}")
-//            PURPOSE_UPLOAD_PAN_IMAGE -> mStorage.reference.child("verification").child("${folder}/${uri!!.lastPathSegment!!}")
-//            PURPOSE_UPLOAD_BANK_DETAILS_IMAGE -> mStorage.reference.child("verification").child("${folder}/${uri!!.lastPathSegment!!}")
-//            PURPOSE_UPLOAD_AADHAR_FRONT_IMAGE -> mStorage.reference.child("verification").child("${folder}/${uri!!.lastPathSegment!!}")
-//            PURPOSE_UPLOAD_AADHAR_BACK_IMAGE -> mStorage.reference.child("verification").child("${folder}/${uri!!.lastPathSegment!!}")
-//            PURPOSE_UPLOAD_DL_FRONT_IMAGE -> mStorage.reference.child("verification").child("${folder}/${uri!!.lastPathSegment!!}")
-//            PURPOSE_UPLOAD_DL_BACK_IMAGE -> mStorage.reference.child("verification").child("${folder}/${uri!!.lastPathSegment!!}")
-//            else ->
-//        }
 
         /**
          * Uploading task created and initiated here.
@@ -378,43 +394,6 @@ class PhotoCrop : AppCompatActivity() {
     private fun updateViewModel(purpose: String, name: String) {
         when (purpose) {
             profilePictureCrop -> viewModel.setProfileAvatarName(name)
-            PURPOSE_UPLOAD_PAN_IMAGE -> gigerVerificationViewModel.updatePanImagePath(
-                userhasPan = true,
-                panPath = name,
-                panCardNo = null
-            )
-            PURPOSE_UPLOAD_BANK_DETAILS_IMAGE -> gigerVerificationViewModel.updateBankPassbookImagePath(
-                userHasPassBook = true,
-                passbookImagePath = name,
-                ifscCode = null,
-                accountNo = null
-            )
-            PURPOSE_UPLOAD_AADHAR_FRONT_IMAGE -> gigerVerificationViewModel.updateAadharData(
-                true,
-                name,
-                null,
-                null
-            )
-            PURPOSE_UPLOAD_AADHAR_BACK_IMAGE -> gigerVerificationViewModel.updateAadharData(
-                true,
-                null,
-                name,
-                null
-            )
-            PURPOSE_UPLOAD_DL_FRONT_IMAGE -> gigerVerificationViewModel.updateDLData(
-                userHasDL = true,
-                frontImagePath = name,
-                backImagePath = null,
-                dlState = null,
-                dlNo = null
-            )
-            PURPOSE_UPLOAD_DL_BACK_IMAGE -> gigerVerificationViewModel.updateDLData(
-                userHasDL = true,
-                frontImagePath = null,
-                backImagePath = name,
-                dlState = null,
-                dlNo = null
-            )
         }
     }
 

@@ -240,6 +240,15 @@ class AddAadharCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetAc
         startActivityForResult(photoCropIntent, REQUEST_CODE_UPLOAD_PAN_IMAGE)
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+
+
+
+
+    }
+
     private fun showAadharImageAndInfoLayout() {
         aadharBackImageHolder.visibility = View.VISIBLE
         aadharFrontImageHolder.visibility = View.VISIBLE

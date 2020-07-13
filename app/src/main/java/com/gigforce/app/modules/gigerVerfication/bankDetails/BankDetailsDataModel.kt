@@ -5,11 +5,11 @@ import com.gigforce.app.core.base.basefirestore.BaseFirestoreDataModel
 
 @Keep
 data class BankDetailsDataModel(
-    val userHasPassBook : Boolean?,
-    val passbookImagePath: String?,
-    val verified: Boolean,
-    val ifscCode: String?,
-    val accountNo: String?
+    val userHasPassBook : Boolean? = null,
+    val passbookImagePath: String? = null,
+    val verified: Boolean = false,
+    val ifscCode: String? = null,
+    val accountNo: String? = null
 ) : BaseFirestoreDataModel(TABLE_NAME) {
 
     companion object {

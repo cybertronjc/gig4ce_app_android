@@ -5,11 +5,11 @@ import com.gigforce.app.core.base.basefirestore.BaseFirestoreDataModel
 
 @Keep
 data class AadharCardDataModel(
-    val userHasAadharCard : Boolean?,
+    val userHasAadharCard : Boolean? = null,
     val frontImage: String? = null,
     val backImage: String? = null,
     val verified: Boolean = false,
-    val aadharCardNo : String?
+    val aadharCardNo : String? = null
 ) : BaseFirestoreDataModel(TABLE_NAME) {
 
     companion object {

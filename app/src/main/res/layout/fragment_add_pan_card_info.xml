@@ -93,29 +93,21 @@
 
                 <com.google.android.material.radiobutton.MaterialRadioButton
                     android:id="@+id/panYesRB"
+                    style="@style/Theme.RadioButtonLipstickPink"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/lato"
-                    style="@style/Theme.RadioButtonLipstickPink"
                     android:text="@string/yes_i_have_pan_card" />
 
                 <com.google.android.material.radiobutton.MaterialRadioButton
                     android:id="@+id/panNoRB"
+                    style="@style/Theme.RadioButtonLipstickPink"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/lato"
-                    style="@style/Theme.RadioButtonLipstickPink"
                     android:text="@string/no_i_don_t_have_pan_card" />
 
             </RadioGroup>
-
-            <include
-                android:id="@+id/panImageHolder"
-                layout="@layout/fragment_verification_image_holder"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                app:layout_constraintTop_toBottomOf="@id/panCardAvailaibilityOptionRG" />
 
             <LinearLayout
                 android:id="@+id/panInfoLayout"
@@ -123,22 +115,22 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:visibility="visible"
-                app:layout_constraintTop_toBottomOf="@id/panImageHolder">
+                app:layout_constraintTop_toBottomOf="@id/panCardAvailaibilityOptionRG">
 
                 <View
                     android:id="@+id/topSeaparator"
                     android:layout_width="match_parent"
                     android:layout_height="0.5dp"
-                    android:layout_marginTop="22dp"
+                    android:layout_marginTop="15dp"
                     android:background="#cdccd1" />
 
                 <LinearLayout
                     android:id="@+id/editPanInfoLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
                     android:clickable="true"
                     android:focusable="true"
+                    android:orientation="horizontal"
                     android:paddingBottom="12dp">
 
                     <TextView
@@ -149,7 +141,7 @@
                         android:layout_weight="1"
                         android:fontFamily="@font/lato"
                         android:letterSpacing="-0.01"
-                        android:text="@string/please_confirm_the_following_information"
+                        android:text="Please provide following information."
                         android:textColor="@color/black" />
 
                     <ImageView
@@ -157,8 +149,8 @@
                         android:layout_height="16dp"
                         android:layout_marginTop="16dp"
                         android:layout_marginEnd="16dp"
-                        android:visibility="gone"
-                        android:src="@drawable/ic_pencil_edit" />
+                        android:src="@drawable/ic_pencil_edit"
+                        android:visibility="gone" />
 
                 </LinearLayout>
 
@@ -166,9 +158,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingStart="16dp"
+                    android:paddingTop="4dp"
                     android:paddingEnd="16dp"
-                    android:paddingTop="8dp"
-                    android:paddingBottom="8dp">
+                    android:paddingBottom="4dp">
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/panCardNoTextInputLayout"
@@ -185,15 +177,20 @@
                             android:imeOptions="actionGo"
                             android:inputType="textNoSuggestions"
                             android:maxLength="10"
-                            android:maxLines="1" />
+                            android:maxLines="1"
+                            android:textSize="13sp" />
 
                     </com.google.android.material.textfield.TextInputLayout>
-
-
                 </RelativeLayout>
-
-
             </LinearLayout>
+
+            <include
+                android:id="@+id/panImageHolder"
+                layout="@layout/fragment_verification_image_holder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="visible"
+                app:layout_constraintTop_toBottomOf="@id/panInfoLayout" />
 
 
             <com.ncorti.slidetoact.SlideToActView
@@ -205,10 +202,10 @@
                 app:inner_color="#888888"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:outer_color="#dddddd"
-                app:slider_icon_color="@color/white"
                 app:slider_height="60dp"
                 app:slider_icon="@drawable/ic_arrow_forward_white"
-                app:text="SAVE"/>
+                app:slider_icon_color="@color/white"
+                app:text="SAVE" />
 
             <com.google.android.material.checkbox.MaterialCheckBox
                 android:id="@+id/panDataCorrectCB"

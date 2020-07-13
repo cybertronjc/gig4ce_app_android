@@ -18,7 +18,7 @@
       android:strokeColor="#00000000"/>
   <path
       android:pathData="M10.0403,8.8868L15.5696,12.0332L10.6107,15.7953L9.6399,9.2014C9.8072,9.0247 9.9248,8.9194 10.0403,8.8868L10.0403,8.8868Z"
-      android:strokeLineJoin="square"
+      android:strokeLineJoin="bevel"
       android:strokeWidth="0.5"
       android:fillColor="#FFFFFF"
       android:fillType="evenOdd">
@@ -37,7 +37,7 @@
   </path>
   <path
       android:pathData="M10.0403,8.8868L15.5696,12.0332L10.6107,15.7953L9.6399,9.2014C9.8072,9.0247 9.9248,8.9194 10.0403,8.8868L10.0403,8.8868Z"
-      android:strokeLineJoin="square"
+      android:strokeLineJoin="bevel"
       android:strokeWidth="0.5"
       android:fillColor="#00000000"
       android:fillType="evenOdd">
@@ -69,7 +69,7 @@
       android:strokeColor="#00000000"/>
   <path
       android:pathData="M10.0403,8.8868L15.5696,12.0332L10.6107,15.7953L9.6399,9.2014C9.8072,9.0247 9.9248,8.9194 10.0403,8.8868L10.0403,8.8868Z"
-      android:strokeLineJoin="square"
+      android:strokeLineJoin="bevel"
       android:strokeWidth="0.5"
       android:fillColor="#FFFFFF"
       android:fillType="evenOdd">
@@ -88,7 +88,7 @@
   </path>
   <path
       android:pathData="M10.0403,8.8868L15.5696,12.0332L10.6107,15.7953L9.6399,9.2014C9.8072,9.0247 9.9248,8.9194 10.0403,8.8868L10.0403,8.8868Z"
-      android:strokeLineJoin="square"
+      android:strokeLineJoin="bevel"
       android:strokeWidth="0.5"
       android:fillColor="#00000000"
       android:fillType="evenOdd">
