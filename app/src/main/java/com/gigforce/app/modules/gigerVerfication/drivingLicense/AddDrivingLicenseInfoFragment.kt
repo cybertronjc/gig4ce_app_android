@@ -36,8 +36,10 @@ class AddDrivingLicenseInfoFragment : BaseFragment() {
 
         const val REQUEST_CODE_UPLOAD_DL = 2333
 
-        const val INTENT_EXTRA_CLICKED_IMAGE_PATH = "clicked_image_path"
-        const val INTENT_EXTRA_PAN = "pan"
+        const val INTENT_EXTRA_CLICKED_IMAGE_FRONT = "front_image"
+        const val INTENT_EXTRA_CLICKED_IMAGE_BACK = "back_image"
+        const val INTENT_EXTRA_STATE = "state"
+        const val INTENT_EXTRA_DL_NO = "dl_no"
     }
 
     private val viewModel: GigVerificationViewModel by viewModels()
@@ -57,6 +59,29 @@ class AddDrivingLicenseInfoFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         initViews()
         initViewModel()
+
+        savedInstanceState?.let {
+
+            dlFrontImagePath = it.getParcelable(INTENT_EXTRA_CLICKED_IMAGE_FRONT)
+            if (dlFrontImagePath != null) showFrontDrivingLicense(dlFrontImagePath!!)
+
+            dlBackImagePath = it.getParcelable(INTENT_EXTRA_CLICKED_IMAGE_BACK)
+            if (dlBackImagePath != null) showBackDrivingLicense(dlBackImagePath!!)
+
+            drivingLicenseEditText.setText(it.getString(INTENT_EXTRA_DL_NO))
+
+            val index = it.getInt(INTENT_EXTRA_STATE)
+            if (index > 0)
+                stateSpinner.setSelection(index, true)
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putParcelable(INTENT_EXTRA_CLICKED_IMAGE_FRONT, dlFrontImagePath)
+        outState.putParcelable(INTENT_EXTRA_CLICKED_IMAGE_BACK, dlBackImagePath)
+        outState.putString(INTENT_EXTRA_DL_NO, drivingLicenseEditText.text.toString())
+        outState.putInt(INTENT_EXTRA_STATE, stateSpinner.selectedItemPosition)
     }
 
 
@@ -136,6 +161,16 @@ class AddDrivingLicenseInfoFragment : BaseFragment() {
 
                         if (drivingLicenseEditText.text!!.length != 15) {
                             drivingLicenseTextInputLayout.error = "Enter Valid Driving License"
+                            return
+                        }
+
+                        if (dlFrontImagePath == null || dlBackImagePath == null) {
+
+                            MaterialAlertDialogBuilder(requireContext())
+                                .setTitle("Alert")
+                                .setMessage("Select or capture both sides of Driving License")
+                                .setPositiveButton("OK") { _, _ -> }
+                                .show()
                             return
                         }
 
@@ -249,7 +284,7 @@ class AddDrivingLicenseInfoFragment : BaseFragment() {
                 }
             })
 
-        viewModel.startListeningForGigerVerificationStatusChanges()
+        viewModel.getVerificationStatus()
     }
 
     private fun errorOnUploadingDocuments(error: String) {

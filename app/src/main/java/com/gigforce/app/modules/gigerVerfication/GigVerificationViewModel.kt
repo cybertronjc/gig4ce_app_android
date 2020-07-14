@@ -95,6 +95,28 @@ open class GigVerificationViewModel constructor(
             }
     }
 
+    fun getVerificationStatus() = viewModelScope.launch {
+
+        try {
+            getVerificationModel().let {
+                _gigerVerificationStatus.value = GigerVerificationStatus(
+                    selfieVideoUploaded = it.selfie_video != null,
+                    selfieVideoDataModel = it.selfie_video,
+                    panCardDetailsUploaded = it.pan_card?.userHasPanCard != null,
+                    panCardDetails = it.pan_card,
+                    aadharCardDetailsUploaded = it.aadhar_card?.userHasAadharCard != null,
+                    aadharCardDataModel = it.aadhar_card,
+                    dlCardDetailsUploaded = it.driving_license?.userHasDL != null,
+                    drivingLicenseDataModel = it.driving_license,
+                    bankDetailsUploaded = it.bank_details?.userHasPassBook != null,
+                    bankUploadDetailsDataModel = it.bank_details,
+                    everyDocumentUploaded = false
+                )
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
 
 
     fun updatePanImagePath(
@@ -105,11 +127,11 @@ open class GigVerificationViewModel constructor(
         _documentUploadState.postValue(Lse.loading())
 
         try {
-            if(userHasPan)
-            uploadPanInfoToThirdParty(
-                panImage!!,
-                panCardNo!!
-            )
+            if (userHasPan)
+                uploadPanInfoToThirdParty(
+                    panImage!!,
+                    panCardNo!!
+                )
         } catch (e: Exception) {
             _documentUploadState.postValue(Lse.error("Unable to upload Document."))
             return@launch
@@ -153,12 +175,12 @@ open class GigVerificationViewModel constructor(
         _documentUploadState.postValue(Lse.loading())
 
         try {
-            if(userHasPassBook)
-            uploadBankInfoToThirdParty(
-                passbookImagePath,
-                ifscCode,
-                accountNo
-            )
+            if (userHasPassBook)
+                uploadBankInfoToThirdParty(
+                    passbookImagePath,
+                    ifscCode,
+                    accountNo
+                )
         } catch (e: Exception) {
             _documentUploadState.postValue(Lse.error("Unable to upload Document."))
             return@launch
@@ -203,11 +225,11 @@ open class GigVerificationViewModel constructor(
         _documentUploadState.postValue(Lse.loading())
 
         try {
-            if(userHasAadhar)
-            uploadAadharInfoToThirdParty(
-                frontImagePath,
-                aadharCardNumber
-            )
+            if (userHasAadhar)
+                uploadAadharInfoToThirdParty(
+                    frontImagePath,
+                    aadharCardNumber
+                )
         } catch (e: Exception) {
             _documentUploadState.postValue(Lse.error("Unable to upload Document."))
             return@launch
@@ -266,13 +288,13 @@ open class GigVerificationViewModel constructor(
         _documentUploadState.postValue(Lse.loading())
 
         try {
-            if(userHasDL)
-            uploadDLInfoToThirdParty(
-                frontImagePath,
-                backImagePath,
-                dlState,
-                dlNo
-            )
+            if (userHasDL)
+                uploadDLInfoToThirdParty(
+                    frontImagePath,
+                    backImagePath,
+                    dlState,
+                    dlNo
+                )
         } catch (e: Exception) {
             _documentUploadState.postValue(Lse.error("Unable to upload Document."))
             return@launch
@@ -327,7 +349,7 @@ open class GigVerificationViewModel constructor(
     }
 
 
-    private fun prepareUniqueImageName() : String {
+    private fun prepareUniqueImageName(): String {
         val timeStamp = SimpleDateFormat(
             "yyyyMMdd_HHmmss",
             Locale.getDefault()

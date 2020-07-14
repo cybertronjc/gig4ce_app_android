@@ -170,7 +170,7 @@ class AddPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetActio
                     }
                 })
 
-        viewModel.startListeningForGigerVerificationStatusChanges()
+        viewModel.getVerificationStatus()
     }
 
     private fun errorOnUploadingDocuments(error: String) {

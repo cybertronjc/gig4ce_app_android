@@ -223,7 +223,7 @@ class AddBankDetailsInfoFragment : BaseFragment() {
                 }
             })
 
-        viewModel.startListeningForGigerVerificationStatusChanges()
+        viewModel.getVerificationStatus()
     }
 
     private fun errorOnUploadingDocuments(error: String) {
