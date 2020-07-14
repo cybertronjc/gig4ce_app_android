@@ -30,7 +30,7 @@
         android:layout_height="match_parent">
 
         <include
-            android:id="@+id/bankPassbookMainLayout"
+            android:id="@+id/dlMainLayout"
             layout="@layout/fragment_add_driving_license_info_main"/>
 
         <ProgressBar

@@ -1,5 +1,6 @@
 package com.gigforce.app.modules.gigerVerfication.drivingLicense
 
+import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -14,29 +15,35 @@ import com.bumptech.glide.Glide
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
-import com.gigforce.app.modules.gigerVerfication.ImageSource
-import com.gigforce.app.modules.gigerVerfication.SelectImageSourceBottomSheetActionListener
-import com.gigforce.app.modules.gigerVerfication.aadharCard.AddAadharCardInfoFragment
+import com.gigforce.app.modules.gigerVerfication.panCard.AddPanCardInfoFragment
 import com.gigforce.app.modules.photocrop.PhotoCrop
+import com.gigforce.app.utils.Lse
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.storage.FirebaseStorage
 import com.ncorti.slidetoact.SlideToActView
 import kotlinx.android.synthetic.main.fragment_add_driving_license_info.*
 import kotlinx.android.synthetic.main.fragment_add_driving_license_info_main.*
 import kotlinx.android.synthetic.main.fragment_verification_image_holder.view.*
-import java.io.File
 
 enum class DrivingLicenseSides {
     FRONT_SIDE,
     BACK_SIDE
 }
 
-class AddDrivingLicenseInfoFragment : BaseFragment(), SelectImageSourceBottomSheetActionListener {
+class AddDrivingLicenseInfoFragment : BaseFragment() {
+
+    companion object {
+
+        const val REQUEST_CODE_UPLOAD_DL = 2333
+
+        const val INTENT_EXTRA_CLICKED_IMAGE_PATH = "clicked_image_path"
+        const val INTENT_EXTRA_PAN = "pan"
+    }
 
     private val viewModel: GigVerificationViewModel by viewModels()
 
-    private var dlFrontImagePath: File? = null
-    private var dlBackImagePath: File? = null
+    private var dlFrontImagePath: Uri? = null
+    private var dlBackImagePath: Uri? = null
     private var drivingLicenseDetail: DrivingLicenseDataModel? = null
     private var currentlyClickingImageOfSide: DrivingLicenseSides? = null
 
@@ -75,9 +82,8 @@ class AddDrivingLicenseInfoFragment : BaseFragment(), SelectImageSourceBottomShe
                 showDLImageAndInfoLayout()
 
                 if (confirmDLDataCB.isChecked
-                    && drivingLicenseDetail != null
-                    && drivingLicenseDetail?.frontImage != null
-                    && drivingLicenseDetail?.backImage != null
+                    && dlFrontImagePath != null
+                    && dlBackImagePath != null
                 ) {
                     enableSubmitButton()
                 }
@@ -93,14 +99,13 @@ class AddDrivingLicenseInfoFragment : BaseFragment(), SelectImageSourceBottomShe
             }
         }
 
-        confirmDLDataCB.setOnCheckedChangeListener { buttonView, isChecked ->
+        confirmDLDataCB.setOnCheckedChangeListener { _, isChecked ->
 
             if (isChecked) {
 
                 if (dlYesRB.isChecked
-                    && drivingLicenseDetail != null
-                    && drivingLicenseDetail?.frontImage != null
-                    && drivingLicenseDetail?.backImage != null
+                    && dlFrontImagePath != null
+                    && dlBackImagePath != null
                 )
                     enableSubmitButton()
                 else if (dlNoRB.isChecked)
@@ -138,8 +143,8 @@ class AddDrivingLicenseInfoFragment : BaseFragment(), SelectImageSourceBottomShe
                         val state = stateSpinner.selectedItem.toString()
                         viewModel.updateDLData(
                             true,
-                            null,
-                            null,
+                            dlFrontImagePath,
+                            dlBackImagePath,
                             state,
                             dlNo
                         )
@@ -151,7 +156,6 @@ class AddDrivingLicenseInfoFragment : BaseFragment(), SelectImageSourceBottomShe
                             null,
                             null
                         )
-                        navigate(R.id.addBankDetailsInfoFragment)
                     }
                 }
             }
@@ -236,17 +240,42 @@ class AddDrivingLicenseInfoFragment : BaseFragment(), SelectImageSourceBottomShe
 
             })
 
+        viewModel.documentUploadState
+            .observe(viewLifecycleOwner, Observer {
+                when (it) {
+                    Lse.Loading -> showLoadingState()
+                    Lse.Success -> documentUploaded()
+                    is Lse.Error -> errorOnUploadingDocuments(it.error)
+                }
+            })
+
         viewModel.startListeningForGigerVerificationStatusChanges()
     }
 
+    private fun errorOnUploadingDocuments(error: String) {
+        progressBar.visibility = View.GONE
+        dlMainLayout.visibility = View.VISIBLE
+        dlSubmitSliderBtn.resetSlider()
+
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle("Alert")
+            .setMessage(error)
+            .setPositiveButton("OK") { _, _ -> }
+            .show()
+    }
+
+    private fun documentUploaded() {
+        showToast("Driving License Details Uploaded")
+        navigate(R.id.addBankDetailsInfoFragment)
+    }
+
+    private fun showLoadingState() {
+        dlMainLayout.visibility = View.GONE
+        progressBar.visibility = View.VISIBLE
+    }
 
     private fun openCameraAndGalleryOptionForFrontSideImage() {
-//        currentlyClickingImageOfSide = DrivingLicenseSides.FRONT_SIDE
-//
-//        SelectImageSourceBottomSheet.launch(
-//            childFragmentManager = childFragmentManager,
-//            selectImageSourceBottomSheetActionListener = this
-//        )
+        currentlyClickingImageOfSide = DrivingLicenseSides.FRONT_SIDE
 
         val photoCropIntent = Intent(requireContext(), PhotoCrop::class.java)
         photoCropIntent.putExtra(
@@ -259,18 +288,13 @@ class AddDrivingLicenseInfoFragment : BaseFragment(), SelectImageSourceBottomShe
         photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_FIREBASE_FILE_NAME, "aadhar_card_front.jpg")
         startActivityForResult(
             photoCropIntent,
-            AddAadharCardInfoFragment.REQUEST_CODE_UPLOAD_PAN_IMAGE
+            REQUEST_CODE_UPLOAD_DL
         )
 
     }
 
     private fun openCameraAndGalleryOptionForBackSideImage() {
-//        currentlyClickingImageOfSide = DrivingLicenseSides.BACK_SIDE
-//
-//        SelectImageSourceBottomSheet.launch(
-//            childFragmentManager = childFragmentManager,
-//            selectImageSourceBottomSheetActionListener = this
-//        )
+        currentlyClickingImageOfSide = DrivingLicenseSides.BACK_SIDE
 
         val photoCropIntent = Intent(requireContext(), PhotoCrop::class.java)
         photoCropIntent.putExtra(
@@ -283,8 +307,33 @@ class AddDrivingLicenseInfoFragment : BaseFragment(), SelectImageSourceBottomShe
         photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_FIREBASE_FILE_NAME, "aadhar_card_back.jpg")
         startActivityForResult(
             photoCropIntent,
-            AddAadharCardInfoFragment.REQUEST_CODE_UPLOAD_PAN_IMAGE
+            REQUEST_CODE_UPLOAD_DL
         )
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == AddPanCardInfoFragment.REQUEST_CODE_UPLOAD_PAN_IMAGE) {
+
+            if (resultCode == Activity.RESULT_OK) {
+
+                if (DrivingLicenseSides.FRONT_SIDE == currentlyClickingImageOfSide) {
+                    dlFrontImagePath =
+                        data?.getParcelableExtra(PhotoCrop.INTENT_EXTRA_RESULTING_FILE_URI)
+                    showFrontDrivingLicense(dlFrontImagePath!!)
+                } else if (DrivingLicenseSides.BACK_SIDE == currentlyClickingImageOfSide) {
+                    dlBackImagePath =
+                        data?.getParcelableExtra(PhotoCrop.INTENT_EXTRA_RESULTING_FILE_URI)
+                    showBackDrivingLicense(dlBackImagePath!!)
+                }
+            } else {
+                MaterialAlertDialogBuilder(requireContext())
+                    .setTitle("Alert")
+                    .setMessage("Unable to Capture Image")
+                    .setPositiveButton("OK") { _, _ -> }
+                    .show()
+            }
+        }
     }
 
     private fun showDLImageAndInfoLayout() {
@@ -320,37 +369,6 @@ class AddDrivingLicenseInfoFragment : BaseFragment(), SelectImageSourceBottomShe
         dlInfoLayout.visibility = View.VISIBLE
     }
 
-    override fun onImageSourceSelected(source: ImageSource) {
-        showImageInfoLayout()
-
-        if (currentlyClickingImageOfSide == null)
-            return
-        else if (currentlyClickingImageOfSide == DrivingLicenseSides.BACK_SIDE) {
-            dlBackImagePath = File("ma")
-
-            if (confirmDLDataCB.isChecked)
-                enableSubmitButton()
-
-//            showBackDrivingLicense()
-        } else if (currentlyClickingImageOfSide == DrivingLicenseSides.FRONT_SIDE) {
-            dlFrontImagePath = File("ma")
-
-            if (confirmDLDataCB.isChecked)
-                enableSubmitButton()
-
-            //showFrontDrivingLicense()
-        }
-
-        setDLInfoOnView(
-            name = "Rahul Jain",
-            dob = "11/09/1990",
-            fathersName = "Male",
-            licenseNo = "DL234576249238",
-            licenseValidity = "10/2030",
-            address = "House no 3432, Preet Vihar, New Delhi, Delhi 112034"
-        )
-    }
-
     private fun showFrontDrivingLicense(aadharFrontImagePath: Uri) {
         dlFrontImageHolder.uploadDocumentCardView.visibility = View.GONE
         dlFrontImageHolder.uploadImageLayout.visibility = View.VISIBLE
@@ -367,23 +385,6 @@ class AddDrivingLicenseInfoFragment : BaseFragment(), SelectImageSourceBottomShe
         Glide.with(requireContext())
             .load(aadharBackImagePath)
             .into(dlBackImageHolder.uploadImageLayout.clickedImageIV)
-    }
-
-
-    private fun setDLInfoOnView(
-        name: String?,
-        fathersName: String?,
-        dob: String?,
-        licenseNo: String?,
-        licenseValidity: String?,
-        address: String?
-    ) {
-//        nameTV.text = name
-//        fathersNameTV.text = fathersName
-//        dobTV.text = dob
-//        licenseNoTV.text = licenseNo
-//        licenseValidityTV.text = licenseValidity
-//        addOnlicenseTV.text = address
     }
 
 }

@@ -253,7 +253,6 @@ open class GigVerificationViewModel constructor(
     }
 
     private fun uploadAadharInfoToThirdParty(frontImagePath: Uri?, aadharCardNumber: String?) {
-        TODO("Not yet implemented")
     }
 
     fun updateDLData(
@@ -304,7 +303,7 @@ open class GigVerificationViewModel constructor(
                     null
 
                 model.driving_license = DrivingLicenseDataModel(
-                    userHasDL = false,
+                    userHasDL = true,
                     verified = false,
                     frontImage = frontImageFileNameAtServer,
                     backImage = backImageFileNameAtServer,
@@ -325,7 +324,6 @@ open class GigVerificationViewModel constructor(
         dlState: String?,
         dlNo: String?
     ) {
-        TODO("Not yet implemented")
     }
 
 
