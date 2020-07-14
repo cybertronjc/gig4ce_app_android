@@ -38,7 +38,8 @@ data class GigerVerificationStatus(
 open class GigVerificationViewModel constructor(
     private val gigerVerificationRepository: GigerVerificationRepository = GigerVerificationRepository(),
     private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance(),
-    private val gigerVerification3rdPartyStatusRepository: GigerVerification3rdPartyStatusRepository = GigerVerification3rdPartyStatusRepository()
+    private val gigerVerification3rdPartyStatusRepository: GigerVerification3rdPartyStatusRepository = GigerVerification3rdPartyStatusRepository(),
+    private val verificationThirdPartyService: VerficationThirdPartyServices = RetrofitFactory.verificationThirdPartyService()
 ) : ViewModel() {
 
     private val _gigerVerificationStatus = MutableLiveData<GigerVerificationStatus>()
