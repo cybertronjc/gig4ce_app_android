@@ -12,14 +12,20 @@ import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.gigforce.app.R
+import com.gigforce.app.modules.custom_gig_preferences.CustomPreferencesViewModel
+import com.gigforce.app.modules.custom_gig_preferences.ParamCustPreferViewModel
 import com.gigforce.app.modules.roster.models.Gig
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.card.MaterialCardView
+import com.ncorti.slidetoact.SlideToActView
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog
 import kotlinx.android.synthetic.main.item_roster_day.view.*
 import kotlinx.android.synthetic.main.roster_day_hour_view.*
+import kotlinx.android.synthetic.main.unavailable_time_adjustment_bottom_sheet.*
 import kotlinx.android.synthetic.main.unavailable_time_adjustment_bottom_sheet.view.*
+import kotlinx.android.synthetic.main.unavailable_time_adjustment_bottom_sheet.view.start_day_time
 import kotlinx.android.synthetic.main.upcoming_gig_card.view.*
 import java.time.LocalDateTime
 import java.util.*
@@ -41,6 +47,8 @@ class HourViewFragment: RosterBaseFragment() {
 
     // This is used for card alignment of gig complete card
     var cardStartPadding = 16.px
+
+    lateinit var viewModelCustomPreference: CustomPreferencesViewModel
 
     // TODO: Figure out why last two items are needed to show 24
     val times = ArrayList<String>(listOf("01:00", "02:00", "03:00", "04:00", "05:00", "06:00", "07:00", "08:00", "09:00",
@@ -94,6 +102,10 @@ class HourViewFragment: RosterBaseFragment() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun initialize() {
+        viewModelCustomPreference =
+            ViewModelProvider(this, ParamCustPreferViewModel(viewLifecycleOwner)).get(
+                CustomPreferencesViewModel::class.java
+            )
 
         rosterViewModel.bsBehavior.state = BottomSheetBehavior.STATE_HIDDEN
 
@@ -285,6 +297,26 @@ class HourViewFragment: RosterBaseFragment() {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
+    private fun getDateTimeFromHourString(hourString: String): LocalDateTime {
+        // string in format HH:MM
+        var parts = hourString.split(":")
+        var hour = parts[0].toInt()
+        var minute = parts[1].toInt()
+
+        var resultDateTime = activeDateTime
+        resultDateTime = resultDateTime.minusHours(activeDateTime.hour.toLong())
+        resultDateTime = resultDateTime.minusMinutes(activeDateTime.minute.toLong())
+//
+        resultDateTime =  resultDateTime.plusHours(hour.toLong())
+        resultDateTime =  resultDateTime.plusMinutes(minute.toLong())
+
+        Log.d("HVF", "print resultDateTime " + resultDateTime.toString() + "hour $hour" + "minute $minute")
+
+        return resultDateTime
+
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun setAndShowBottomSheet(startIndex: Int, endIndex: Int) {
 
         // outline the selected Hour
@@ -304,11 +336,28 @@ class HourViewFragment: RosterBaseFragment() {
             day_times.removeView(day_times.findViewWithTag<HourOutline>("selected_time"))
         }
 
+        setOnSlideCompleteListener(object: SlideToActView.OnSlideCompleteListener {
+            override fun onSlideComplete(view: SlideToActView) {
+                var startTime = rosterViewModel.UnavailableBS.start_day_time.text
+                var endTime = rosterViewModel.UnavailableBS.end_day_time.text
+                rosterViewModel.toggleHourUnavailable(
+                        requireContext(), day_times, upcomingGigs, getDateTimeFromHourString(startTime.toString()),
+                        getDateTimeFromHourString(endTime.toString()), viewModelCustomPreference)
+
+                Log.d("HVF", "slide complete triggered")
+            }
+        })
+
+
         // show bottom sheet in collapsed mode
         rosterViewModel.bsBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
 
         // This is to stop hours covered by bottom sheet from receiving click
         rosterViewModel.UnavailableBS.setOnClickListener {  }
+    }
+
+    fun setOnSlideCompleteListener(listener: SlideToActView.OnSlideCompleteListener) {
+        rosterViewModel.UnavailableBS.unavailable_button.onSlideCompleteListener = listener
     }
 
     private fun getViewsByTag(
@@ -368,21 +417,11 @@ class HourViewFragment: RosterBaseFragment() {
         })
 
         rosterViewModel.UnavailableBS.toggle_button.setOnClickListener {
-            if (rosterViewModel.UnavailableBS.toggle_button.isChecked) {
-                if (upcomingGigs.size > 0)
-                    rosterViewModel.isDayAvailable.value = !showGigsTodayWarning(
-                            requireContext(), upcomingGigs, day_times
-                    )
-                else {
-                    rosterViewModel.isDayAvailable.value = false
-                    allHourInactive(day_times)
-                }
-            } else {
-                rosterViewModel.isDayAvailable.value = true
-                setHourVisibility(day_times, activeDateTime, actualDateTime)
-            }
+            rosterViewModel.toggleDayAvailability(
+                requireContext(), day_times, ArrayList<Gig>(),
+                rosterViewModel.isDayAvailable.value!!,  activeDateTime,
+                actualDateTime, viewModelCustomPreference)
         }
-
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

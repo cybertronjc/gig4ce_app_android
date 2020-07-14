@@ -6,8 +6,11 @@ import android.os.Build
 import android.util.AttributeSet
 import android.util.Log
 import android.view.View
+import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.annotation.RequiresApi
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.constraintlayout.widget.ConstraintSet
 import com.gigforce.app.R
 import com.gigforce.app.utils.DropdownAdapter
 import com.google.android.material.card.MaterialCardView
@@ -101,5 +104,47 @@ class RosterTopBar: MaterialCardView {
             field = value
             available_toggle.isChecked = isAvailable
 
+        }
+
+    var fullDayGigCard: MaterialCardView? = null
+        set(value) {
+            field = value
+            if (value == null)
+                full_day_gig.removeAllViews()
+            value?.let {
+                value.id = View.generateViewId()
+                value.layoutParams = ConstraintLayout.LayoutParams(0, value.height)
+                full_day_gig.addView(value)
+                val constraintSet = ConstraintSet()
+                constraintSet.clone(full_day_gig)
+                constraintSet.connect(
+                    value.id,
+                    ConstraintSet.START,
+                    ConstraintSet.PARENT_ID,
+                    ConstraintSet.START
+                )
+                constraintSet.connect(
+                    value.id,
+                    ConstraintSet.END,
+                    ConstraintSet.PARENT_ID,
+                    ConstraintSet.END
+                )
+                constraintSet.connect(
+                    value.id,
+                    ConstraintSet.TOP,
+                    ConstraintSet.PARENT_ID,
+                    ConstraintSet.TOP
+                )
+                constraintSet.connect(
+                    value.id,
+                    ConstraintSet.BOTTOM,
+                    ConstraintSet.PARENT_ID,
+                    ConstraintSet.BOTTOM
+                )
+
+                constraintSet.applyTo(full_day_gig)
+
+                full_day_gig.layoutParams.width = ViewGroup.LayoutParams.WRAP_CONTENT
+            }
         }
 }

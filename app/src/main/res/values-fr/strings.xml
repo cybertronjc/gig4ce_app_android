@@ -229,6 +229,8 @@
     <string name="let_s_go">Let\'s Go</string>
     <string name="thank_you">Thank You !</string>
     <string name="documents_uploaded_long">As your documents will get verifed, you will be able to start your gigs.</string>
+    <string name="please_let_us_know_more_about_your_gig">Please let us know more about your Gig .</string>
+    <string name="gig_location">Gig Location</string>
     <string name="pan_card_image">Pan Card Image</string>
     <string name="please_provide_following_details">Please provide following details.</string>
 </resources>

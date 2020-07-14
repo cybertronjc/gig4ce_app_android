@@ -44,4 +44,11 @@ class UpcomingGigCard: MaterialCardView {
                 String.format("%02d", startHour) + ":" + String.format("%02d", startMinute) +
                         "-" + String.format("%02d", endHour) + ":" + String.format("%02d", endMinute))
     }
+
+    var isFullDay: Boolean = false
+        set(value) {
+            field = value
+            gig_timing.text = ""
+            cardHeight = 40.px
+        }
 }

@@ -3,6 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.gigforce.app">
 
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
     <uses-permission android:name="android.permission.READ_PHONE_NUMBERS" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -39,6 +42,8 @@
         android:name="preloaded_fonts"
                app to run.
         -->
+
+        <meta-data android:name="com.google.android.geo.API_KEY" android:value="your API key"/>
 
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
