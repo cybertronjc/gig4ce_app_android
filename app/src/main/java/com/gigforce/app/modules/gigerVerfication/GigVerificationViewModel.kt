@@ -107,8 +107,8 @@ open class GigVerificationViewModel constructor(
         try {
             if(userHasPan)
             uploadPanInfoToThirdParty(
-                panImage,
-                panCardNo
+                panImage!!,
+                panCardNo!!
             )
         } catch (e: Exception) {
             _documentUploadState.postValue(Lse.error("Unable to upload Document."))
@@ -136,7 +136,10 @@ open class GigVerificationViewModel constructor(
         }
     }
 
-    private suspend fun uploadPanInfoToThirdParty(panImage: Uri?, panCardNo: String?) {
+    private suspend fun uploadPanInfoToThirdParty(
+        panImage: Uri,
+        panCardNo: String
+    ) {
 
     }
 
@@ -189,7 +192,6 @@ open class GigVerificationViewModel constructor(
         ifscCode: String?,
         accountNo: String?
     ) {
-        TODO("Not yet implemented")
     }
 
     fun updateAadharData(

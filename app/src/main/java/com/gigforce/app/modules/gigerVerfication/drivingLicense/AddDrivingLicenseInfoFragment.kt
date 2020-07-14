@@ -22,6 +22,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.storage.FirebaseStorage
 import com.ncorti.slidetoact.SlideToActView
 import kotlinx.android.synthetic.main.fragment_add_driving_license_info.*
+import kotlinx.android.synthetic.main.fragment_add_driving_license_info_main.*
 import kotlinx.android.synthetic.main.fragment_verification_image_holder.view.*
 import java.io.File
 
@@ -250,7 +251,7 @@ class AddDrivingLicenseInfoFragment : BaseFragment(), SelectImageSourceBottomShe
         val photoCropIntent = Intent(requireContext(), PhotoCrop::class.java)
         photoCropIntent.putExtra(
             PhotoCrop.INTENT_EXTRA_PURPOSE,
-            PhotoCrop.PURPOSE_UPLOAD_DL_FRONT_IMAGE
+            PhotoCrop.PURPOSE_VERIFICATION
         )
         photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_FIREBASE_FOLDER_NAME, "/verification/")
         photoCropIntent.putExtra("folder", "verification")
@@ -274,7 +275,7 @@ class AddDrivingLicenseInfoFragment : BaseFragment(), SelectImageSourceBottomShe
         val photoCropIntent = Intent(requireContext(), PhotoCrop::class.java)
         photoCropIntent.putExtra(
             PhotoCrop.INTENT_EXTRA_PURPOSE,
-            PhotoCrop.PURPOSE_UPLOAD_DL_BACK_IMAGE
+            PhotoCrop.PURPOSE_VERIFICATION
         )
         photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_FIREBASE_FOLDER_NAME, "/verification/")
         photoCropIntent.putExtra("folder", "verification")

@@ -210,7 +210,7 @@ class AddAadharCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetAc
         val photoCropIntent = Intent(requireContext(), PhotoCrop::class.java)
         photoCropIntent.putExtra(
             PhotoCrop.INTENT_EXTRA_PURPOSE,
-            PhotoCrop.PURPOSE_UPLOAD_AADHAR_FRONT_IMAGE
+            PhotoCrop.PURPOSE_VERIFICATION
         )
         photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_FIREBASE_FOLDER_NAME, "/verification/")
         photoCropIntent.putExtra("folder", "verification")
@@ -231,7 +231,7 @@ class AddAadharCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetAc
         val photoCropIntent = Intent(requireContext(), PhotoCrop::class.java)
         photoCropIntent.putExtra(
             PhotoCrop.INTENT_EXTRA_PURPOSE,
-            PhotoCrop.PURPOSE_UPLOAD_AADHAR_BACK_IMAGE
+            PhotoCrop.PURPOSE_VERIFICATION
         )
         photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_FIREBASE_FOLDER_NAME, "/verification/")
         photoCropIntent.putExtra("folder", "verification")

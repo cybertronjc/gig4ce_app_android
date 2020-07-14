@@ -51,12 +51,7 @@ class PhotoCrop : AppCompatActivity() {
         const val INTENT_EXTRA_DETECT_FACE = "detectFace"
         const val INTENT_EXTRA_RESULTING_FILE_URI = "uri"
 
-        const val PURPOSE_UPLOAD_PAN_IMAGE = "upload_pan_image"
-        const val PURPOSE_UPLOAD_AADHAR_FRONT_IMAGE = "aadhar_front_image"
-        const val PURPOSE_UPLOAD_AADHAR_BACK_IMAGE = "aadhar_back_image"
-        const val PURPOSE_UPLOAD_BANK_DETAILS_IMAGE = "bank_passbook_image"
-        const val PURPOSE_UPLOAD_DL_BACK_IMAGE = "dl_back_image"
-        const val PURPOSE_UPLOAD_DL_FRONT_IMAGE = "dl_front_image"
+        const val PURPOSE_VERIFICATION = "verification"
     }
 
     private val CODE_IMG_GALLERY: Int = 1
@@ -113,9 +108,9 @@ class PhotoCrop : AppCompatActivity() {
         var linearLayoutBottomSheet: LinearLayout = findViewById(R.id.linear_layout_bottomsheet)
         bottomSheetBehavior = BottomSheetBehavior.from(linearLayoutBottomSheet)
         purpose = if (savedInstanceState != null)
-            savedInstanceState.getString("purpose")!!
+            savedInstanceState.getString(INTENT_EXTRA_PURPOSE)!!
         else
-            intent.getStringExtra("purpose")
+            intent.getStringExtra(INTENT_EXTRA_PURPOSE)
 
         Log.e("PHOTO_CROP", "purpose = " + purpose + " comparing with: profilePictureCrop")
         /**
@@ -226,13 +221,7 @@ class PhotoCrop : AppCompatActivity() {
                 Log.v("REQUEST CROP", requestCode.toString())
             }
 
-            if (purpose == PURPOSE_UPLOAD_DL_FRONT_IMAGE ||
-                purpose == PURPOSE_UPLOAD_DL_BACK_IMAGE ||
-                purpose == PURPOSE_UPLOAD_PAN_IMAGE ||
-                purpose == PURPOSE_UPLOAD_BANK_DETAILS_IMAGE ||
-                purpose == PURPOSE_UPLOAD_AADHAR_FRONT_IMAGE ||
-                purpose == PURPOSE_UPLOAD_AADHAR_BACK_IMAGE
-            ) {
+            if (purpose == PURPOSE_VERIFICATION) {
 
                 if (imageUriResultCrop != null)
                     setResult(Activity.RESULT_OK, resultIntent)

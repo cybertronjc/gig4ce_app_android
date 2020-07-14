@@ -386,4 +386,5 @@
     <string name="invoice_generated_info"><b>Invoice generated:</b> The gig where a receipt of completion of a gig and acknowledgment of the payment to be made to the giger.</string>
     <string name="pending_invoice_info"><b>Pending invoice:</b> The gigs which are completed but the invoice is not generated.</string>
     <string name="pan_card_image">Pan Card Image</string>
+    <string name="please_provide_following_details">Please provide following details.</string>
 </resources>
