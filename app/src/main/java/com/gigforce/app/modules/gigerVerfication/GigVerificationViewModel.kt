@@ -372,7 +372,7 @@ open class GigVerificationViewModel constructor(
                 }
         }
 
-    private suspend fun getVerificationModel(): VerificationBaseModel =
+    suspend fun getVerificationModel(): VerificationBaseModel =
         suspendCoroutine { continuation ->
             gigerVerificationRepository.getDBCollection().get().addOnSuccessListener {
                 kotlin.runCatching {
