@@ -232,9 +232,11 @@ class AddDrivingLicenseInfoFragment : BaseFragment() {
                     this.drivingLicenseDetail = it.drivingLicenseDataModel
 
                     if (it.drivingLicenseDataModel.userHasDL != null) {
-                        if (it.drivingLicenseDataModel.userHasDL)
+                        if (it.drivingLicenseDataModel.userHasDL) {
+                            //stateAutoCompleteTV.setText(it.drivingLicenseDataModel.dlState)
+                            drivingLicenseEditText.setText(it.drivingLicenseDataModel.dlNo)
                             dlAvailaibilityOptionRG.check(R.id.dlYesRB)
-                        else
+                        } else
                             dlAvailaibilityOptionRG.check(R.id.dlNoRB)
                     } else {
                         //Uncheck both and hide capture layout

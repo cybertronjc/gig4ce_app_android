@@ -80,7 +80,7 @@ open class GigVerificationViewModel constructor(
                             && it.selfie_video != null
 
                     _gigerVerificationStatus.value = GigerVerificationStatus(
-                        selfieVideoUploaded = it.selfie_video != null,
+                        selfieVideoUploaded = it.selfie_video?.videoPath != null,
                         selfieVideoDataModel = it.selfie_video,
                         panCardDetailsUploaded = it.pan_card?.userHasPanCard != null,
                         panCardDetails = it.pan_card,
@@ -101,7 +101,7 @@ open class GigVerificationViewModel constructor(
         try {
             getVerificationModel().let {
                 _gigerVerificationStatus.value = GigerVerificationStatus(
-                    selfieVideoUploaded = it.selfie_video != null,
+                    selfieVideoUploaded = it.selfie_video?.videoPath != null,
                     selfieVideoDataModel = it.selfie_video,
                     panCardDetailsUploaded = it.pan_card?.userHasPanCard != null,
                     panCardDetails = it.pan_card,

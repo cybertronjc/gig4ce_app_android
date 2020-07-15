@@ -123,9 +123,9 @@ class AddBankDetailsInfoFragment : BaseFragment() {
                 disableSubmitButton()
         }
 
-        editBankDetailsLayout.setOnClickListener {
-            navigate(R.id.editBankDetailsInfoBottomSheet)
-        }
+//        editBankDetailsLayout.setOnClickListener {
+//            navigate(R.id.editBankDetailsInfoBottomSheet)
+//        }
 
         passbookSubmitSliderBtn.onSlideCompleteListener =
             object : SlideToActView.OnSlideCompleteListener {
@@ -239,7 +239,7 @@ class AddBankDetailsInfoFragment : BaseFragment() {
     }
 
     private fun panCardDocumentUploaded() {
-        showToast("Details Details Uploaded")
+        showToast("Bank Details Uploaded")
         findNavController().popBackStack(R.id.addSelfieVideoFragment, false)
         activity?.onBackPressed()
     }

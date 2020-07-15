@@ -167,11 +167,14 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:text="State"
+                    android:layout_marginLeft="4dp"
+                    android:textSize="12sp"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/dobET" />
 
                 <androidx.appcompat.widget.AppCompatSpinner
                     android:id="@+id/stateSpinner"
+                    style="@style/Widget.AppCompat.Spinner.Underlined"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:entries="@array/indian_states"
@@ -181,11 +184,17 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/genderLabel" />
 
+<!--                <View-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="2dp"-->
+<!--                    android:background="@android:color/darker_gray"/>-->
+
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/drivingLicenseTextInputLayout"
                     style="@style/Widget.Design.TextInputLayout"
                     android:layout_width="match_parent"
+                    android:layout_marginTop="4dp"
                     android:layout_height="wrap_content">
 
                     <com.google.android.material.textfield.TextInputEditText
