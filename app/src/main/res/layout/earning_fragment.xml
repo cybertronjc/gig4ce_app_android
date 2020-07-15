@@ -278,24 +278,12 @@
             app:layout_constraintStart_toStartOf="@+id/textView104"
             app:layout_constraintTop_toTopOf="@+id/textView104" />
 
-        <TextView
-            android:id="@+id/monthlyContractTV"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="17dp"
-            android:letterSpacing="0"
-            android:lineSpacingExtra="10sp"
-            android:text="Rs0 - Rs60000"
-            android:textColor="#979797"
-            android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="@+id/checkbox_monthly_constract"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/checkbox_monthly_constract" />
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/monthly_expectation_constraintlayout"
             android:layout_width="match_parent"
             android:layout_height="79dp"
-            android:visibility="gone"
+            android:visibility="visible"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView104">
 
@@ -337,6 +325,20 @@
                 android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/monthlyExpectationSB" />
+
+
+            <TextView
+                android:id="@+id/seekStartTV"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:layout_marginLeft="16dp"
+                android:letterSpacing="0"
+                android:textColor="#787993"
+                android:textSize="12sp"
+                android:text="Rs 0"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="@id/seekBarDependentCanvas4"
                 app:layout_constraintTop_toBottomOf="@+id/monthlyExpectationSB" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

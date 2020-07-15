@@ -96,7 +96,6 @@ class EarningFragment : BaseFragment() {
                     (progress * (seekBar.getWidth() - 2 * seekBar.getThumbOffset())) / seekBar.getMax()
                 seekBarDependentCanvas4.setX((seekBar.getX() + value + seekBar.getThumbOffset() / 2) - 35)
                 var progress1 = progress * 500
-                monthlyContractTV.text = "Rs 0 - Rs " + progress1
 
                 seekBarDependentCanvas4.text = "Rs " + progress1.toString()
             }
