@@ -25,7 +25,6 @@ abstract public class BaseFirestoreDBRepository {
 
     public fun <M : BaseFirestoreDataModel> setData(obj: M) {
         getDBCollection().update(obj.tableName, FieldValue.arrayUnion(obj))
-        getCollectionReference()
     }
 
     public fun <M : BaseFirestoreDataModel> setDataAsKeyValue(obj: M) {
