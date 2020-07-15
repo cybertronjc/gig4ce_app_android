@@ -73,7 +73,6 @@ class CalendarHomeScreen : BaseFragment(),
         return true
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(CalendarHomeScreenViewModel::class.java)
@@ -89,11 +88,10 @@ class CalendarHomeScreen : BaseFragment(),
         initializeViews()
         listener()
         observePreferenceData()
-        navigate(R.id.gigAttendancePageFragment)
     }
 
 
-    @RequiresApi(Build.VERSION_CODES.O)
+
     private fun initializeViews() {
         initializeExtendedBottomSheet()
         initializeMonthTV(Calendar.getInstance(), true)
@@ -154,6 +152,7 @@ class CalendarHomeScreen : BaseFragment(),
             }
 
         })
+
     }
 
     private fun changeVisibilityCalendarView() {
@@ -188,7 +187,11 @@ class CalendarHomeScreen : BaseFragment(),
         println(" date data3 "+recyclerGenericAdapter.list.get(firstVisibleItem).month + " "+ dayModel.currentMonth+" "+(recyclerGenericAdapter.list.get(firstVisibleItem).month < dayModel.currentMonth))
         if (recyclerGenericAdapter.list.get(firstVisibleItem).year < dayModel.year || (recyclerGenericAdapter.list.get(
                 firstVisibleItem
-            ).year == dayModel.year && recyclerGenericAdapter.list.get(firstVisibleItem).month < dayModel.month)
+            ).year == dayModel.year && recyclerGenericAdapter.list.get(firstVisibleItem).month < dayModel.month)||(recyclerGenericAdapter.list.get(
+                firstVisibleItem
+            ).year == dayModel.year && recyclerGenericAdapter.list.get(firstVisibleItem).month == dayModel.month&&recyclerGenericAdapter.list.get(
+                firstVisibleItem
+            ).date < dayModel.date)
         ) {
             println(" date data "+ "second")
 
@@ -233,12 +236,12 @@ class CalendarHomeScreen : BaseFragment(),
 
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun observePreferenceData() {
         viewModel.mainHomeLiveDataModel.observe(viewLifecycleOwner, Observer { homeDataModel ->
             if (homeDataModel != null) {
 //                viewModel.setDataModel(homeDataModel.all_gigs)
                 initializeViews()
+                calendarView.setGigData(viewModel.arrMainHomeDataModel!!)
             }
         })
 
@@ -281,7 +284,6 @@ class CalendarHomeScreen : BaseFragment(),
     lateinit var recyclerGenericAdapter: RecyclerGenericAdapter<VerticalCalendarDataItemModel>
     private val visibleThreshold = 20
     var isLoading: Boolean = false
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun initializeVerticalCalendarRV() {
         recyclerGenericAdapter =
             RecyclerGenericAdapter<VerticalCalendarDataItemModel>(

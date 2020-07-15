@@ -104,7 +104,7 @@
             android:fontFamily="@font/lato_bold"
             android:letterSpacing="-0.01"
             android:lineSpacingExtra="8sp"
-            android:text="Daily  Goals"
+            android:text="Daily Goal"
             android:textColor="#000000"
             android:textSize="14sp"
             app:layout_constraintStart_toStartOf="parent"
@@ -174,6 +174,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView102">
+
         <TextView
             android:id="@+id/textView7"
             android:layout_width="wrap_content"
@@ -183,7 +184,7 @@
             android:fontFamily="@font/lato_bold"
             android:letterSpacing="-0.01"
             android:lineSpacingExtra="8sp"
-            android:text="Monthy Goals"
+            android:text="Monthy Goal"
             android:textColor="#000000"
             android:textSize="14sp"
             app:layout_constraintStart_toStartOf="parent"
@@ -269,7 +270,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="36dp"
             android:letterSpacing="0"
-            android:paddingLeft="10dp"
+            android:paddingLeft="4dp"
             android:text="Willing to do Monthly Contract"
             android:textColor="@color/black"
             android:textSize="14sp"
