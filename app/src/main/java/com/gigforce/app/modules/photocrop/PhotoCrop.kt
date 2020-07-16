@@ -52,6 +52,7 @@ class PhotoCrop : AppCompatActivity() {
         const val INTENT_EXTRA_RESULTING_FILE_URI = "uri"
 
         const val PURPOSE_VERIFICATION = "verification"
+        const val PURPOSE_UPLOAD_SELFIE_IMAGE = "upload_selfie_image"
     }
 
     private val CODE_IMG_GALLERY: Int = 1
