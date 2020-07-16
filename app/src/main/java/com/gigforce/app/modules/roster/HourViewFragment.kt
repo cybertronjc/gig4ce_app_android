@@ -111,6 +111,8 @@ class HourViewFragment: RosterBaseFragment() {
 
         initializeHourViews()
 
+        rosterViewModel.switchHourAvailability(activeDateTime, day_times, viewModelCustomPreference)
+
         rosterViewModel.isDayAvailable.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
             if (it)
                 setHourVisibility(day_times, activeDateTime, actualDateTime)
@@ -358,6 +360,7 @@ class HourViewFragment: RosterBaseFragment() {
 
     fun setOnSlideCompleteListener(listener: SlideToActView.OnSlideCompleteListener) {
         rosterViewModel.UnavailableBS.unavailable_button.onSlideCompleteListener = listener
+        rosterViewModel.UnavailableBS.unavailable_button.resetSlider()
     }
 
     private fun getViewsByTag(

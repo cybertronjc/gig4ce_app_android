@@ -9,9 +9,9 @@
     android:background="@color/white"
     android:animateLayoutChanges="true"
     app:behavior_hideable="false"
-    app:behavior_peekHeight="200dp"
-    style="@style/Theme.MaterialComponents.BottomSheetDialog"
-    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+    app:halfOffset = "200dp"
+    app:peekHeight = "200dp"
+    app:layout_behavior="com.riningan.widget.ExtendedBottomSheetBehavior">
 
     <View
         android:id="@+id/bs_head"
