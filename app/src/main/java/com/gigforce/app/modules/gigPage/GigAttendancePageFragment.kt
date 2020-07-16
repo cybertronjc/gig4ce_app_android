@@ -108,13 +108,13 @@ class GigAttendancePageFragment : BaseFragment() {
     }
 
     private fun getData(arguments: Bundle?, savedInstanceState: Bundle?) {
-//        gigId = if (savedInstanceState != null) {
-//            savedInstanceState.getString(INTENT_EXTRA_GIG_ID)!!
-//        } else  {
-//            arguments?.getString(INTENT_EXTRA_GIG_ID)!!
-//
-//        }
-        gigId = "G1G00001"
+        gigId = if (savedInstanceState != null) {
+            savedInstanceState.getString(INTENT_EXTRA_GIG_ID)!!
+        } else  {
+            arguments?.getString(INTENT_EXTRA_GIG_ID)!!
+
+        }
+//        gigId = "G1G00001"
     }
 
     private fun initViewModel(savedInstanceState: Bundle?) {
