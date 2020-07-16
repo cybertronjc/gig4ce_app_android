@@ -10,6 +10,8 @@ import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
+import com.gigforce.app.core.gone
+import com.gigforce.app.core.visible
 import kotlinx.android.synthetic.main.fragment_giger_verification.*
 import kotlinx.android.synthetic.main.fragment_giger_verification_documents_submitted.*
 import kotlinx.android.synthetic.main.fragment_giger_verification_item.view.*
@@ -110,12 +112,12 @@ class GigerVerificationFragment : BaseFragment() {
             .observe(viewLifecycleOwner, Observer {
 
                 if (it.everyDocumentUploaded) {
-                    verificationMainLayout.visibility = View.GONE
-                    verificationDocSubmittedLayout.visibility = View.VISIBLE
+                    verificationMainLayout.gone()
+                    verificationDocSubmittedLayout.visible()
 
                 } else {
-                    verificationDocSubmittedLayout.visibility = View.GONE
-                    verificationMainLayout.visibility = View.VISIBLE
+                    verificationDocSubmittedLayout.gone()
+                    verificationMainLayout.visible()
 
                     if (it.selfieVideoUploaded) {
                         selfieVideoLayout.descTitleTV.text = getString(R.string.uploaded)

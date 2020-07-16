@@ -5,10 +5,12 @@ import com.gigforce.app.core.base.basefirestore.BaseFirestoreDataModel
 
 @Keep
 data class DrivingLicenseDataModel(
-    val userHasDL : Boolean?,
+    val userHasDL : Boolean? = null,
     val frontImage: String? = null,
     val backImage: String? = null,
-    val verified: Boolean = false
+    val verified: Boolean = false,
+    val dlState : String? = null,
+    val dlNo : String? = null
 ) : BaseFirestoreDataModel(TABLE_NAME) {
 
     companion object {
@@ -17,5 +19,7 @@ data class DrivingLicenseDataModel(
         const val KEY_NAME_FRONT_IMAGE = "frontImage"
         const val KEY_NAME_BACK_IMAGE = "backImage"
         const val KEY_NAME_VERIFIED = "verified"
+        const val KEY_DL_NO = "dlNo"
+        const val KEY_DL_STATE = "dlState"
     }
 }
