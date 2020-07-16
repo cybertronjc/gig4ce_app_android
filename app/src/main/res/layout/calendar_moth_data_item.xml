@@ -2,7 +2,8 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
     <TextView
         android:id="@+id/textView69"
         android:layout_width="50dp"
@@ -102,6 +103,7 @@
         android:numColumns="7"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView103">
+        app:layout_constraintTop_toBottomOf="@+id/textView103"
+        android:paddingBottom="30dp">
     </GridView>
 </androidx.constraintlayout.widget.ConstraintLayout>

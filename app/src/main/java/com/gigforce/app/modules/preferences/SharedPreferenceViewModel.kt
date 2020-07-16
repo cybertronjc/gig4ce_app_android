@@ -266,17 +266,15 @@ class SharedPreferenceViewModel : ViewModel {
 
     fun getDateTimeSubtitle(): String {
         var subTitle = ""
-        var daysStr = "day"
-        if (preferencesDataModelObj.selecteddays.size == 0) {
+        var weekDaysCount = if(preferencesDataModelObj.selecteddays.size == 6) (preferencesDataModelObj.selecteddays.size-1)else preferencesDataModelObj.selecteddays.size
+        var weekendCount =  if(preferencesDataModelObj.selectedweekends.size ==3) preferencesDataModelObj.selectedweekends.size-1 else preferencesDataModelObj.selectedweekends.size
+        var countNumberOfSelectedDays = weekDaysCount + weekendCount
+        if (countNumberOfSelectedDays == 0) {
             subTitle = "None"
-        } else if (preferencesDataModelObj.selecteddays.size > 1) {
-            var totalDays = preferencesDataModelObj.selecteddays.size
-            if (totalDays == 6)
-                totalDays -= 1
-            subTitle = totalDays.toString() + " days"
+        } else if (countNumberOfSelectedDays > 1) {
+            subTitle = countNumberOfSelectedDays.toString() + " days"
         } else if (preferencesDataModelObj.selecteddays.size == 1) {
-            subTitle = preferencesDataModelObj.selecteddays.size.toString() + " day"
-
+            subTitle = countNumberOfSelectedDays.toString() + " day"
         }
         return subTitle
     }
