@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<androidx.core.widget.NestedScrollView android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:fillViewport="true"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:animateLayoutChanges="true"
+            android:paddingTop="22dp">
+
+            <TextView
+                android:id="@+id/panCardLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:fontFamily="@font/lato_bold"
+                android:letterSpacing="0"
+                android:text="@string/pan_card"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/helpIconIV"
+                android:layout_width="14dp"
+                android:layout_height="14dp"
+                android:layout_marginEnd="13dp"
+                android:src="@drawable/ic_time"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="4dp"
+                android:letterSpacing="-0.01"
+                android:text="@string/why_do_we_need_this"
+                android:textColor="@color/battle_ship_grey"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toStartOf="@+id/helpIconIV"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/doYouHavePanCardLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="12dp"
+                android:fontFamily="@font/lato"
+                android:letterSpacing="-0.01"
+                android:text="@string/do_you_have_pan_card"
+                android:textColor="@color/black"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/panCardLabel" />
+
+            <RadioGroup
+                android:id="@+id/panCardAvailaibilityOptionRG"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="15dp"
+                app:layout_constraintTop_toBottomOf="@id/doYouHavePanCardLabel">
+
+                <com.google.android.material.radiobutton.MaterialRadioButton
+                    android:id="@+id/panYesRB"
+                    style="@style/Theme.RadioButtonLipstickPink"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/lato"
+                    android:text="@string/yes_i_have_pan_card" />
+
+                <com.google.android.material.radiobutton.MaterialRadioButton
+                    android:id="@+id/panNoRB"
+                    style="@style/Theme.RadioButtonLipstickPink"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/lato"
+                    android:text="@string/no_i_don_t_have_pan_card" />
+
+            </RadioGroup>
+
+            <LinearLayout
+                android:id="@+id/panInfoLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="visible"
+                app:layout_constraintTop_toBottomOf="@id/panCardAvailaibilityOptionRG">
+
+                <View
+                    android:id="@+id/topSeaparator"
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginTop="15dp"
+                    android:background="#cdccd1" />
+
+                <LinearLayout
+                    android:id="@+id/editPanInfoLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:orientation="horizontal"
+                    android:paddingBottom="12dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="12dp"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/lato"
+                        android:letterSpacing="-0.01"
+                        android:text="Please provide following information."
+                        android:textColor="@color/black" />
+
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:src="@drawable/ic_pencil_edit"
+                        android:visibility="gone" />
+
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="16dp"
+                    android:paddingTop="4dp"
+                    android:paddingEnd="16dp"
+                    android:paddingBottom="4dp">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/panCardNoTextInputLayout"
+                        style="@style/Widget.Design.TextInputLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/panCardEditText"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="PAN Card No"
+                            android:imeActionLabel="Done"
+                            android:imeOptions="actionGo"
+                            android:inputType="textNoSuggestions"
+                            android:maxLength="10"
+                            android:maxLines="1"
+                            android:textSize="13sp" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+                </RelativeLayout>
+            </LinearLayout>
+
+            <include
+                android:id="@+id/panImageHolder"
+                layout="@layout/fragment_verification_image_holder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="visible"
+                app:layout_constraintTop_toBottomOf="@id/panInfoLayout" />
+
+
+            <com.ncorti.slidetoact.SlideToActView
+                android:id="@+id/panSubmitSliderBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="30dp"
+                app:border_radius="8dp"
+                app:inner_color="#888888"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:outer_color="#dddddd"
+                app:slider_height="60dp"
+                app:slider_icon="@drawable/ic_arrow_forward_white"
+                app:slider_icon_color="@color/white"
+                app:text="SAVE" />
+
+            <com.google.android.material.checkbox.MaterialCheckBox
+                android:id="@+id/panDataCorrectCB"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="13dp"
+                android:layout_marginBottom="18dp"
+                android:text="@string/yes_i_confirm_the_data_is_correct"
+                app:layout_constraintBottom_toTopOf="@id/panSubmitSliderBtn"
+                app:layout_constraintTop_toBottomOf="@id/panImageHolder"
+                app:layout_constraintVertical_bias="0.98"
+                tools:layout_editor_absoluteX="0dp" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
