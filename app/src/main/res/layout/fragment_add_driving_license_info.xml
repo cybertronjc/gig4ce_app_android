@@ -25,7 +25,7 @@
             app:titleTextColor="@color/black" />
     </com.google.android.material.appbar.AppBarLayout>
 
-    <RelativeLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -37,9 +37,13 @@
             android:id="@+id/progressBar"
             android:layout_width="40dp"
             android:layout_height="40dp"
+            android:layout_centerInParent="true"
             android:visibility="gone"
-            android:layout_centerInParent="true"/>
+            app:layout_constraintBottom_toBottomOf="@+id/dlMainLayout"
+            app:layout_constraintEnd_toEndOf="@+id/dlMainLayout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
 
-    </RelativeLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </LinearLayout>

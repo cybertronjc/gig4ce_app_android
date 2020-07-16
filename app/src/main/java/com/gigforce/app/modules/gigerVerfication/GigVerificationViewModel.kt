@@ -37,9 +37,7 @@ data class GigerVerificationStatus(
 
 open class GigVerificationViewModel constructor(
     private val gigerVerificationRepository: GigerVerificationRepository = GigerVerificationRepository(),
-    private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance(),
-    private val gigerVerification3rdPartyStatusRepository: GigerVerification3rdPartyStatusRepository = GigerVerification3rdPartyStatusRepository(),
-    private val verificationThirdPartyService: VerficationThirdPartyServices = RetrofitFactory.verificationThirdPartyService()
+    private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance()
 ) : ViewModel() {
 
     private val _gigerVerificationStatus = MutableLiveData<GigerVerificationStatus>()
@@ -77,7 +75,7 @@ open class GigVerificationViewModel constructor(
                             && it.pan_card?.userHasPanCard != null
                             && it.bank_details?.userHasPassBook != null
                             && it.driving_license?.userHasDL != null
-                            && it.selfie_video != null
+                            && it.selfie_video?.videoPath != null
 
                     _gigerVerificationStatus.value = GigerVerificationStatus(
                         selfieVideoUploaded = it.selfie_video?.videoPath != null,
@@ -100,6 +98,13 @@ open class GigVerificationViewModel constructor(
 
         try {
             getVerificationModel().let {
+
+                val everyDocumentUploaded = it.aadhar_card?.userHasAadharCard != null
+                        && it.pan_card?.userHasPanCard != null
+                        && it.bank_details?.userHasPassBook != null
+                        && it.driving_license?.userHasDL != null
+                        && it.selfie_video?.videoPath != null
+
                 _gigerVerificationStatus.value = GigerVerificationStatus(
                     selfieVideoUploaded = it.selfie_video?.videoPath != null,
                     selfieVideoDataModel = it.selfie_video,
@@ -111,7 +116,7 @@ open class GigVerificationViewModel constructor(
                     drivingLicenseDataModel = it.driving_license,
                     bankDetailsUploaded = it.bank_details?.userHasPassBook != null,
                     bankUploadDetailsDataModel = it.bank_details,
-                    everyDocumentUploaded = false
+                    everyDocumentUploaded = everyDocumentUploaded
                 )
             }
         } catch (e: Exception) {
@@ -126,17 +131,6 @@ open class GigVerificationViewModel constructor(
         panCardNo: String?
     ) = viewModelScope.launch {
         _documentUploadState.postValue(Lse.loading())
-
-        try {
-            if (userHasPan)
-                uploadPanInfoToThirdParty(
-                    panImage!!,
-                    panCardNo!!
-                )
-        } catch (e: Exception) {
-            _documentUploadState.postValue(Lse.error("Unable to upload Document."))
-            return@launch
-        }
 
         try {
             val fileNameAtServer = if (userHasPan)
@@ -159,14 +153,6 @@ open class GigVerificationViewModel constructor(
         }
     }
 
-    private suspend fun uploadPanInfoToThirdParty(
-        panImage: Uri,
-        panCardNo: String
-    ) {
-
-    }
-
-
     fun updateBankPassbookImagePath(
         userHasPassBook: Boolean,
         passbookImagePath: Uri?,
@@ -174,18 +160,6 @@ open class GigVerificationViewModel constructor(
         accountNo: String?
     ) = viewModelScope.launch {
         _documentUploadState.postValue(Lse.loading())
-
-        try {
-            if (userHasPassBook)
-                uploadBankInfoToThirdParty(
-                    passbookImagePath,
-                    ifscCode,
-                    accountNo
-                )
-        } catch (e: Exception) {
-            _documentUploadState.postValue(Lse.error("Unable to upload Document."))
-            return@launch
-        }
 
         try {
             val fileNameAtServer = if (userHasPassBook)
@@ -210,13 +184,6 @@ open class GigVerificationViewModel constructor(
 
     }
 
-    private fun uploadBankInfoToThirdParty(
-        passbookImagePath: Uri?,
-        ifscCode: String?,
-        accountNo: String?
-    ) {
-    }
-
     fun updateAadharData(
         userHasAadhar: Boolean,
         frontImagePath: Uri?,
@@ -224,18 +191,6 @@ open class GigVerificationViewModel constructor(
         aadharCardNumber: String?
     ) = viewModelScope.launch {
         _documentUploadState.postValue(Lse.loading())
-
-        try {
-            if (userHasAadhar)
-                uploadAadharInfoToThirdParty(
-                    frontImagePath,
-                    aadharCardNumber
-                )
-        } catch (e: Exception) {
-            _documentUploadState.postValue(Lse.error("Unable to upload Document."))
-            return@launch
-        }
-
 
         try {
             val model = getVerificationModel()
@@ -275,9 +230,6 @@ open class GigVerificationViewModel constructor(
         }
     }
 
-    private fun uploadAadharInfoToThirdParty(frontImagePath: Uri?, aadharCardNumber: String?) {
-    }
-
     fun updateDLData(
         userHasDL: Boolean,
         frontImagePath: Uri?,
@@ -287,20 +239,6 @@ open class GigVerificationViewModel constructor(
     ) = viewModelScope.launch {
 
         _documentUploadState.postValue(Lse.loading())
-
-        try {
-            if (userHasDL)
-                uploadDLInfoToThirdParty(
-                    frontImagePath,
-                    backImagePath,
-                    dlState,
-                    dlNo
-                )
-        } catch (e: Exception) {
-            _documentUploadState.postValue(Lse.error("Unable to upload Document."))
-            return@launch
-        }
-
 
         try {
             val model = getVerificationModel()
@@ -341,13 +279,6 @@ open class GigVerificationViewModel constructor(
         }
     }
 
-    private fun uploadDLInfoToThirdParty(
-        frontImagePath: Uri?,
-        backImagePath: Uri?,
-        dlState: String?,
-        dlNo: String?
-    ) {
-    }
 
 
     private fun prepareUniqueImageName(): String {
@@ -376,7 +307,7 @@ open class GigVerificationViewModel constructor(
     suspend fun getVerificationModel(): VerificationBaseModel =
         suspendCoroutine { continuation ->
             gigerVerificationRepository.getDBCollection().get().addOnSuccessListener {
-                kotlin.runCatching {
+                runCatching {
                     if (it.data == null)
                         VerificationBaseModel()
                     else
