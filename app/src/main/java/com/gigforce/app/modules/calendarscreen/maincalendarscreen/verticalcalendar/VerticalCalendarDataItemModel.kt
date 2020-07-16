@@ -127,13 +127,13 @@ class VerticalCalendarDataItemModel (
 
         fun getDayOfWeek(dayofweek: Int): String {
             when (dayofweek) {
-                1 -> return "SUN"
-                2 -> return "MON"
-                3 -> return "TUE"
-                4 -> return "WED"
-                5 -> return "THU"
-                6 -> return "FRI"
-                7 -> return "SAT"
+                1 -> return "Sun"
+                2 -> return "Mon"
+                3 -> return "Tues"
+                4 -> return "Wed"
+                5 -> return "Thur"
+                6 -> return "Fri"
+                7 -> return "Sat"
             }
             return ""
         }

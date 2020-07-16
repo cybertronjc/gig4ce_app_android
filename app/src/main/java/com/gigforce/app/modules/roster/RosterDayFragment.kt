@@ -23,6 +23,8 @@ import com.gigforce.app.modules.custom_gig_preferences.ParamCustPreferViewModel
 import com.gigforce.app.modules.custom_gig_preferences.UnavailableDataModel
 import com.gigforce.app.modules.roster.models.Gig
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_HALF_EXPANDED
+import com.riningan.widget.ExtendedBottomSheetBehavior
 import kotlinx.android.synthetic.main.day_view_top_bar.*
 import kotlinx.android.synthetic.main.day_view_top_bar.view.*
 import kotlinx.android.synthetic.main.gigs_today_warning_dialog.*
@@ -232,41 +234,38 @@ class RosterDayFragment: RosterBaseFragment() {
     }
 
     private fun initializeBottomSheet() {
-        rosterViewModel.bsBehavior = BottomSheetBehavior.from(mark_unavailable_bs)
+        //rosterViewModel.bsBehavior = BottomSheetBehavior.from(mark_unavailable_bs)
+        rosterViewModel.bsBehavior = ExtendedBottomSheetBehavior.from(mark_unavailable_bs)
         rosterViewModel.UnavailableBS = mark_unavailable_bs
 
         rosterViewModel.bsBehavior.setPeekHeight(200.px)
-        rosterViewModel.bsBehavior.halfExpandedRatio = 0.65F
+//        rosterViewModel.bsBehavior.halfExpandedRatio = 0.65F
         rosterViewModel.bsBehavior.isHideable = true
 
 
-        rosterViewModel.bsBehavior.addBottomSheetCallback(object: BottomSheetBehavior.BottomSheetCallback() {
+
+        rosterViewModel.bsBehavior.setBottomSheetCallback(object: ExtendedBottomSheetBehavior.BottomSheetCallback() {
             override fun onSlide(bottomSheet: View, slideOffset: Float) {
                 //TODO("Not yet implemented")
             }
 
             override fun onStateChanged(bottomSheet: View, newState: Int) {
                 when(newState) {
-                    BottomSheetBehavior.STATE_COLLAPSED -> {
+                    ExtendedBottomSheetBehavior.STATE_COLLAPSED -> {
                         Log.d("BS", "Collapsed State")
-                        //time_expanded.visibility = View.GONE
-                        //time_collapsed.visibility = View.VISIBLE
+                        time_expanded.visibility = View.GONE
+                        time_collapsed.visibility = View.VISIBLE
                     }
-                    BottomSheetBehavior.STATE_EXPANDED -> {
+                    ExtendedBottomSheetBehavior.STATE_EXPANDED -> {
                         Log.d("BS", "Expanded State")
                         time_collapsed.visibility = View.GONE
                         time_expanded.visibility = View.VISIBLE
                     }
                     //BottomSheetBehavior.STATE_ANCHOR_POINT -> Log.d("BS", "Anchor Point State")
-                    BottomSheetBehavior.STATE_HIDDEN -> Log.d("BS", "Hidden State")
-                    BottomSheetBehavior.STATE_DRAGGING -> Log.d("BS", "Dragging State")
-                    BottomSheetBehavior.STATE_SETTLING -> {
+                    ExtendedBottomSheetBehavior.STATE_HIDDEN -> Log.d("BS", "Hidden State")
+                    ExtendedBottomSheetBehavior.STATE_DRAGGING -> Log.d("BS", "Dragging State")
+                    ExtendedBottomSheetBehavior.STATE_SETTLING -> {
                         Log.d("BS", "Settling State")
-                    }
-                    BottomSheetBehavior.STATE_HALF_EXPANDED -> {
-                        Log.d("BS", "Half Expanded State")
-//                        time_collapsed.visibility = View.GONE
-//                        time_expanded.visibility = View.VISIBLE
                     }
                 }
             }

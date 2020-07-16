@@ -25,6 +25,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.card.MaterialCardView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.riningan.widget.ExtendedBottomSheetBehavior
 import kotlinx.android.synthetic.main.gigs_today_warning_dialog.*
 import kotlinx.android.synthetic.main.reason_for_gig_cancel_dialog.*
 import kotlinx.android.synthetic.main.roster_day_fragment.*
@@ -51,7 +52,8 @@ class RosterDayViewModel: ViewModel() {
 
     var userGigs = HashMap<String, ArrayList<Gig>>()
 
-    lateinit var bsBehavior: BottomSheetBehavior<View>
+    //lateinit var bsBehavior: BottomSheetBehavior<View>
+    lateinit var bsBehavior: ExtendedBottomSheetBehavior<View>
     lateinit var UnavailableBS: View
 
     lateinit var topBar: RosterTopBar
@@ -93,10 +95,7 @@ class RosterDayViewModel: ViewModel() {
             // check if it was set from custom unavailable
             for (unavailable in viewModelCustomPreference.customPreferencesDataModel.unavailable) {
                 if (date.toDate == unavailable.date)
-                    if (unavailable.dayUnavailable)
-                        isDayAvailable.postValue(false)
-                    else
-                        isDayAvailable.postValue(true)
+                    isDayAvailable.postValue(unavailable.dayUnavailable)
             }
 
         }
@@ -108,8 +107,8 @@ class RosterDayViewModel: ViewModel() {
         Log.d("RDVM", currentDayAvailability.toString())
         if (currentDayAvailability) {
             // currently available, switch to unavailable
-            val confirmCancellation = showGigsTodayWarning(
-                context, upcomingGigs, parentView)
+            val confirmCancellation = if (upcomingGigs.size > 0) showGigsTodayWarning(
+                context, upcomingGigs, parentView) else true
 
             if (confirmCancellation) {
                 isDayAvailable.value = false
@@ -127,10 +126,15 @@ class RosterDayViewModel: ViewModel() {
             isDayAvailable.value = true
             setHourVisibility(parentView, activeDateTime, actualDateTime)
 
+            var available =
+                    UnavailableDataModel(
+                            Date.from(activeDateTime.atZone(ZoneId.systemDefault()).toInstant())
+                    )
+
+            available.dayUnavailable = true
+
             viewModelCustomPreference.updateCustomPreference(
-                UnavailableDataModel(
-                    Date.from(activeDateTime.atZone(ZoneId.systemDefault()).toInstant())
-                )
+                    available
             )
         }
 
@@ -141,6 +145,24 @@ class RosterDayViewModel: ViewModel() {
         startDateTime: LocalDateTime, endDateTime: LocalDateTime,
             viewModelCustomPreference: CustomPreferencesViewModel) {
         viewModelCustomPreference.markUnavaialbleTimeSlots(UnavailableDataModel(startDateTime.toDate, endDateTime.toDate))
+        selectedHourInactive(parentView, startDateTime.toDate, endDateTime.toDate)
+    }
+
+    fun switchHourAvailability(activeDateTime: LocalDateTime, parentView: ConstraintLayout, viewModelCustomPreference: CustomPreferencesViewModel) {
+//        viewModelCustomPreference.customPreferencesDataModel.unavailable.filter {
+//            it.date == activeDateTime.toDate
+//        }.forEach {
+//            it.timeSlots.forEach {
+//                selectedHourInactive(parentView, it.startTime, it.endTime)
+//            }
+//        }
+    }
+
+    fun selectedHourInactive(parentView: ConstraintLayout, startDateTime: Date, endDateTime: Date) {
+        for (idx in 1..24) {
+            var widget = parentView.findViewWithTag<HourRow>("hour_$idx")
+            widget.isDisabled = widget.hour <= endDateTime.hours && widget.hour >= startDateTime.hours
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
