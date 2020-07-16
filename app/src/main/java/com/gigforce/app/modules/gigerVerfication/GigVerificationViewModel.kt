@@ -1,15 +1,25 @@
 package com.gigforce.app.modules.gigerVerfication
 
+import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.gigforce.app.modules.gigerVerfication.aadharCard.AadharCardDataModel
 import com.gigforce.app.modules.gigerVerfication.bankDetails.BankDetailsDataModel
 import com.gigforce.app.modules.gigerVerfication.drivingLicense.DrivingLicenseDataModel
 import com.gigforce.app.modules.gigerVerfication.panCard.PanCardDataModel
 import com.gigforce.app.modules.gigerVerfication.selfieVideo.SelfieVideoDataModel
-import com.google.firebase.firestore.DocumentSnapshot
+import com.gigforce.app.utils.Lse
+import com.gigforce.app.utils.setOrThrow
 import com.google.firebase.firestore.ListenerRegistration
+import com.google.firebase.storage.FirebaseStorage
+import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
+import kotlin.coroutines.suspendCoroutine
 
 data class GigerVerificationStatus(
     val selfieVideoUploaded: Boolean,
@@ -26,11 +36,15 @@ data class GigerVerificationStatus(
 )
 
 open class GigVerificationViewModel constructor(
-    private val gigerVerificationRepository: GigerVerificationRepository = GigerVerificationRepository()
+    private val gigerVerificationRepository: GigerVerificationRepository = GigerVerificationRepository(),
+    private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance()
 ) : ViewModel() {
 
     private val _gigerVerificationStatus = MutableLiveData<GigerVerificationStatus>()
     val gigerVerificationStatus: LiveData<GigerVerificationStatus> get() = _gigerVerificationStatus
+
+    private val _documentUploadState = MutableLiveData<Lse>()
+    val documentUploadState: LiveData<Lse> get() = _documentUploadState
 
     private var verificationChangesListener: ListenerRegistration? = null
 
@@ -38,372 +52,275 @@ open class GigVerificationViewModel constructor(
         verificationChangesListener = gigerVerificationRepository
             .getDBCollection()
             .addSnapshotListener { documentSnapshot, firebaseFirestoreException ->
+
+                if (documentSnapshot?.data == null)
+                    _gigerVerificationStatus.value = GigerVerificationStatus(
+                        selfieVideoUploaded = false,
+                        selfieVideoDataModel = null,
+                        panCardDetailsUploaded = false,
+                        panCardDetails = null,
+                        aadharCardDetailsUploaded = false,
+                        aadharCardDataModel = null,
+                        dlCardDetailsUploaded = false,
+                        drivingLicenseDataModel = null,
+                        bankDetailsUploaded = false,
+                        bankUploadDetailsDataModel = null,
+                        everyDocumentUploaded = false
+                    )
+
                 val docSnap = documentSnapshot ?: return@addSnapshotListener
+                docSnap.toObject(VerificationBaseModel::class.java)?.let {
 
-                val selfieUploaded = docSnap.contains(SelfieVideoDataModel.TABLE_NAME)
-                val selfieVideoDetails = extractSelfieVideoInfo(selfieUploaded, docSnap)
+                    val everyDocumentUploaded = it.aadhar_card?.userHasAadharCard != null
+                            && it.pan_card?.userHasPanCard != null
+                            && it.bank_details?.userHasPassBook != null
+                            && it.driving_license?.userHasDL != null
+                            && it.selfie_video?.videoPath != null
 
-                val panDetailsUploaded = docSnap.contains(PanCardDataModel.TABLE_NAME)
-                val panCardDetails = extractPanCardInfo(panDetailsUploaded, docSnap)
+                    _gigerVerificationStatus.value = GigerVerificationStatus(
+                        selfieVideoUploaded = it.selfie_video?.videoPath != null,
+                        selfieVideoDataModel = it.selfie_video,
+                        panCardDetailsUploaded = it.pan_card?.userHasPanCard != null,
+                        panCardDetails = it.pan_card,
+                        aadharCardDetailsUploaded = it.aadhar_card?.userHasAadharCard != null,
+                        aadharCardDataModel = it.aadhar_card,
+                        dlCardDetailsUploaded = it.driving_license?.userHasDL != null,
+                        drivingLicenseDataModel = it.driving_license,
+                        bankDetailsUploaded = it.bank_details?.userHasPassBook != null,
+                        bankUploadDetailsDataModel = it.bank_details,
+                        everyDocumentUploaded = everyDocumentUploaded
+                    )
+                }
+            }
+    }
 
-                val dlDetailsUploaded =
-                    docSnap.contains(DrivingLicenseDataModel.TABLE_NAME)
-                val dlDetails = extractDlInfo(dlDetailsUploaded, docSnap)
+    fun getVerificationStatus() = viewModelScope.launch {
 
-                val aadharCardDetailsUploaded =
-                    docSnap.contains(AadharCardDataModel.TABLE_NAME)
-                val aadharInfo = extractAadharInfo(aadharCardDetailsUploaded, docSnap)
+        try {
+            getVerificationModel().let {
 
-                val bankDetailsUploaded =
-                    docSnap.contains(BankDetailsDataModel.TABLE_NAME)
-                val bankDetails = extractBankDetailsInfo(bankDetailsUploaded, docSnap)
-
-                val everyDocumentUploaded = selfieUploaded
-                        && panDetailsUploaded
-                        && dlDetailsUploaded
-                        && aadharCardDetailsUploaded
-                        && bankDetailsUploaded
+                val everyDocumentUploaded = it.aadhar_card?.userHasAadharCard != null
+                        && it.pan_card?.userHasPanCard != null
+                        && it.bank_details?.userHasPassBook != null
+                        && it.driving_license?.userHasDL != null
+                        && it.selfie_video?.videoPath != null
 
                 _gigerVerificationStatus.value = GigerVerificationStatus(
-                    selfieVideoUploaded = selfieUploaded,
-                    selfieVideoDataModel = selfieVideoDetails,
-                    panCardDetailsUploaded = panDetailsUploaded,
-                    panCardDetails = panCardDetails,
-                    aadharCardDetailsUploaded = aadharCardDetailsUploaded,
-                    aadharCardDataModel = aadharInfo,
-                    dlCardDetailsUploaded = dlDetailsUploaded,
-                    drivingLicenseDataModel = dlDetails,
-                    bankDetailsUploaded = bankDetailsUploaded,
-                    bankUploadDetailsDataModel = bankDetails,
+                    selfieVideoUploaded = it.selfie_video?.videoPath != null,
+                    selfieVideoDataModel = it.selfie_video,
+                    panCardDetailsUploaded = it.pan_card?.userHasPanCard != null,
+                    panCardDetails = it.pan_card,
+                    aadharCardDetailsUploaded = it.aadhar_card?.userHasAadharCard != null,
+                    aadharCardDataModel = it.aadhar_card,
+                    dlCardDetailsUploaded = it.driving_license?.userHasDL != null,
+                    drivingLicenseDataModel = it.driving_license,
+                    bankDetailsUploaded = it.bank_details?.userHasPassBook != null,
+                    bankUploadDetailsDataModel = it.bank_details,
                     everyDocumentUploaded = everyDocumentUploaded
                 )
             }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
-    private fun extractSelfieVideoInfo(
-        selfieVideoUploaded: Boolean,
-        docSnap: DocumentSnapshot
-    ): SelfieVideoDataModel {
-        var selfieVideoPath: String
-        var videoVerified: Boolean = false
 
+    fun updatePanImagePath(
+        userHasPan: Boolean,
+        panImage: Uri?,
+        panCardNo: String?
+    ) = viewModelScope.launch {
+        _documentUploadState.postValue(Lse.loading())
 
         try {
+            val fileNameAtServer = if (userHasPan)
+                uploadImage(panImage!!)
+            else
+                null
 
-            if (selfieVideoUploaded) {
-                val hashMap =
-                    docSnap.get(SelfieVideoDataModel.TABLE_NAME) as HashMap<String, Any?>
-                selfieVideoPath =
-                    hashMap[SelfieVideoDataModel.KEY_NAME_VIDEO_PATH] as String
-//                videoVerified =
-//                    hashMap[SelfieVideoDataModel.KEY_NAME_VERIFIED] as Boolean
-
-            } else {
-                selfieVideoPath = ""
-                videoVerified = false
-            }
-        } catch (e: Exception) {
-            selfieVideoPath = ""
-            videoVerified = false
-        }
-
-        return SelfieVideoDataModel(
-            videoPath = selfieVideoPath,
-            verified = videoVerified
-        )
-    }
-
-    private fun extractPanCardInfo(
-        panDetailsUploaded: Boolean,
-        docSnap: DocumentSnapshot
-    ): PanCardDataModel {
-        var panCardImageName: String?
-        var userHasPanCard: Boolean?
-        var panVerified: Boolean
-
-        try {
-
-            if (panDetailsUploaded) {
-                val hashMap =
-                    docSnap.get(PanCardDataModel.TABLE_NAME) as HashMap<String, Any?>
-                panCardImageName =
-                    hashMap[PanCardDataModel.KEY_NAME_PASSBOOK_IMAGE_PATH] as String?
-                userHasPanCard =
-                    hashMap[PanCardDataModel.KEY_NAME_USER_HAS_PAN_CARD] as Boolean?
-                panVerified =
-                    hashMap[PanCardDataModel.KEY_NAME_VERIFIED] as Boolean
-            } else {
-                panCardImageName = null
-                userHasPanCard = null
-                panVerified = false
-            }
-        } catch (e: Exception) {
-            panCardImageName = null
-            userHasPanCard = null
-            panVerified = false
-        }
-
-        val panCardDetails = PanCardDataModel(
-            panCardImagePath = panCardImageName,
-            userHasPanCard = userHasPanCard,
-            verified = panVerified
-        )
-        return panCardDetails
-    }
-
-
-    private fun extractDlInfo(
-        dlDetailsUploaded: Boolean,
-        docSnap: DocumentSnapshot
-    ): DrivingLicenseDataModel {
-        var dlFrontImageName: String?
-        var dlBackImageName: String?
-        var userHasDL: Boolean?
-        var dlVerified: Boolean
-
-        try {
-
-            if (dlDetailsUploaded) {
-                val hashMap =
-                    docSnap.get(DrivingLicenseDataModel.TABLE_NAME) as HashMap<String, Any?>
-                dlFrontImageName =
-                    hashMap[DrivingLicenseDataModel.KEY_NAME_FRONT_IMAGE] as String?
-                dlBackImageName =
-                    hashMap[DrivingLicenseDataModel.KEY_NAME_BACK_IMAGE] as String?
-                userHasDL =
-                    hashMap[DrivingLicenseDataModel.KEY_USER_HAS_DL] as Boolean?
-                dlVerified =
-                    hashMap[DrivingLicenseDataModel.KEY_NAME_VERIFIED] as Boolean
-            } else {
-                dlFrontImageName = null
-                dlBackImageName = null
-                userHasDL = null
-                dlVerified = false
-            }
-        } catch (e: Exception) {
-            dlFrontImageName = null
-            dlBackImageName = null
-            userHasDL = null
-            dlVerified = false
-        }
-
-        return DrivingLicenseDataModel(
-            userHasDL = userHasDL,
-            frontImage = dlFrontImageName,
-            backImage = dlBackImageName,
-            verified = dlVerified
-        )
-    }
-
-    private fun extractAadharInfo(
-        aadharDetailsUploaded: Boolean,
-        docSnap: DocumentSnapshot
-    ): AadharCardDataModel {
-        var aadharFrontImageName: String?
-        var aadharBackImageName: String?
-        var userHasAadhar: Boolean?
-        var aadharVerified: Boolean
-
-        try {
-
-            if (aadharDetailsUploaded) {
-                val hashMap =
-                    docSnap.get(AadharCardDataModel.TABLE_NAME) as HashMap<String, Any?>
-                aadharFrontImageName =
-                    hashMap[AadharCardDataModel.KEY_NAME_FRONT_IMAGE] as String?
-                aadharBackImageName =
-                    hashMap[AadharCardDataModel.KEY_NAME_BACK_IMAGE] as String?
-                userHasAadhar =
-                    hashMap[AadharCardDataModel.KEY_NAME_USER_HAS_AADHAR] as Boolean?
-                aadharVerified =
-                    hashMap[AadharCardDataModel.KEY_NAME_VERIFIED] as Boolean
-            } else {
-                aadharFrontImageName = null
-                aadharBackImageName = null
-                userHasAadhar = null
-                aadharVerified = false
-            }
-        } catch (e: Exception) {
-            aadharFrontImageName = null
-            aadharBackImageName = null
-            userHasAadhar = null
-            aadharVerified = false
-        }
-
-        return AadharCardDataModel(
-            userHasAadharCard = userHasAadhar,
-            frontImage = aadharFrontImageName,
-            backImage = aadharBackImageName,
-            verified = aadharVerified
-        )
-    }
-
-
-    private fun extractBankDetailsInfo(
-        bankDetailsUploaded: Boolean,
-        docSnap: DocumentSnapshot
-    ): BankDetailsDataModel {
-
-        var passbookImageName: String?
-        var userHasPassbook: Boolean?
-        var passbookVerified: Boolean
-
-        try {
-
-            if (bankDetailsUploaded) {
-                val hashMap =
-                    docSnap.get(BankDetailsDataModel.TABLE_NAME) as HashMap<String, Any?>
-                passbookImageName =
-                    hashMap[BankDetailsDataModel.KEY_NAME_PASSBOOK_IMAGE_PATH] as String?
-                userHasPassbook =
-                    hashMap[BankDetailsDataModel.KEY_USER_HAS_PASSBOOK] as Boolean?
-                passbookVerified =
-                    hashMap[BankDetailsDataModel.KEY_NAME_VERIFIED] as Boolean
-            } else {
-                passbookImageName = null
-                userHasPassbook = null
-                passbookVerified = false
-            }
-        } catch (e: Exception) {
-            passbookImageName = null
-            userHasPassbook = null
-            passbookVerified = false
-        }
-
-        return BankDetailsDataModel(
-            userHasPassBook = userHasPassbook,
-            passbookImagePath = passbookImageName,
-            verified = passbookVerified
-        )
-    }
-
-
-    fun updatePanImagePath(userhasPan: Boolean, panPath: String?) {
-        gigerVerificationRepository.setDataAsKeyValue(
-            PanCardDataModel(
-                userHasPanCard = userhasPan,
-                panCardImagePath = panPath,
-                verified = false
+            val model = getVerificationModel()
+            model.pan_card = PanCardDataModel(
+                userHasPanCard = userHasPan,
+                panCardImagePath = fileNameAtServer,
+                verified = false,
+                panCardNo = panCardNo
             )
-        )
+            gigerVerificationRepository.getDBCollection().setOrThrow(model)
+
+            _documentUploadState.postValue(Lse.success())
+        } catch (e: Exception) {
+            _documentUploadState.postValue(Lse.error("Unable to save document."))
+        }
     }
 
-    fun updateBankPassbookImagePath(userHasPassBook: Boolean, passbookImagePath: String?) {
-        gigerVerificationRepository.setDataAsKeyValue(
-            BankDetailsDataModel(
+    fun updateBankPassbookImagePath(
+        userHasPassBook: Boolean,
+        passbookImagePath: Uri?,
+        ifscCode: String?,
+        accountNo: String?
+    ) = viewModelScope.launch {
+        _documentUploadState.postValue(Lse.loading())
+
+        try {
+            val fileNameAtServer = if (userHasPassBook)
+                uploadImage(passbookImagePath!!)
+            else
+                null
+
+            val model = getVerificationModel()
+            model.bank_details = BankDetailsDataModel(
                 userHasPassBook = userHasPassBook,
-                passbookImagePath = passbookImagePath,
-                verified = false
+                passbookImagePath = fileNameAtServer,
+                verified = false,
+                ifscCode = ifscCode,
+                accountNo = accountNo
             )
-        )
+            gigerVerificationRepository.getDBCollection().setOrThrow(model)
+
+            _documentUploadState.postValue(Lse.success())
+        } catch (e: Exception) {
+            _documentUploadState.postValue(Lse.error("Unable to save document."))
+        }
+
     }
 
     fun updateAadharData(
         userHasAadhar: Boolean,
-        frontImagePath: String?,
-        backImagePath: String?
-    ) {
+        frontImagePath: Uri?,
+        backImagePath: Uri?,
+        aadharCardNumber: String?
+    ) = viewModelScope.launch {
+        _documentUploadState.postValue(Lse.loading())
 
-        if (!userHasAadhar) {
-            gigerVerificationRepository.setDataAsKeyValue(
-                AadharCardDataModel(
+        try {
+            val model = getVerificationModel()
+            if (!userHasAadhar) {
+                model.aadhar_card = AadharCardDataModel(
                     userHasAadharCard = false,
-                    verified = false
+                    frontImage = null,
+                    backImage = null,
+                    verified = false,
+                    aadharCardNo = null
                 )
-            )
-        } else {
-            gigerVerificationRepository.getDBCollection().get().addOnSuccessListener {
-                val containsAadharDocument = it?.contains(AadharCardDataModel.TABLE_NAME) ?: false
+            } else {
 
-                if (!containsAadharDocument) {
-                    gigerVerificationRepository.setDataAsKeyValue(
-                        AadharCardDataModel(
-                            userHasAadharCard = true,
-                            frontImage = frontImagePath,
-                            backImage = backImagePath,
-                            verified = false
-                        )
-                    )
-                } else {
-                    val frontImage =
-                        (it.get(AadharCardDataModel.TABLE_NAME) as HashMap<String, String?>).get(
-                            AadharCardDataModel.KEY_NAME_FRONT_IMAGE
-                        )
+                val frontImageFileNameAtServer = if (userHasAadhar)
+                    uploadImage(frontImagePath!!)
+                else
+                    null
 
-                    val backImage =
-                        (it.get(AadharCardDataModel.TABLE_NAME) as HashMap<String, String?>).get(
-                            AadharCardDataModel.KEY_NAME_BACK_IMAGE
-                        )
+                val backImageFileNameAtServer = if (userHasAadhar)
+                    uploadImage(backImagePath!!)
+                else
+                    null
 
-                    val newFrontImage = frontImagePath ?: frontImage
-                    val newBackImage = backImagePath ?: backImage
+                model.aadhar_card = AadharCardDataModel(
+                    userHasAadharCard = true,
+                    frontImage = frontImageFileNameAtServer,
+                    backImage = backImageFileNameAtServer,
+                    verified = false,
+                    aadharCardNo = aadharCardNumber
+                )
 
-                    gigerVerificationRepository.setDataAsKeyValue(
-                        AadharCardDataModel(
-                            userHasAadharCard = true,
-                            frontImage = newFrontImage,
-                            backImage = newBackImage,
-                            verified = false
-                        )
-                    )
-                }
             }
+            gigerVerificationRepository.getDBCollection().setOrThrow(model)
+            _documentUploadState.postValue(Lse.success())
+        } catch (e: Exception) {
+            _documentUploadState.postValue(Lse.error("Unable to save document."))
         }
     }
 
     fun updateDLData(
         userHasDL: Boolean,
-        frontImagePath: String?,
-        backImagePath: String?
-    ) {
+        frontImagePath: Uri?,
+        backImagePath: Uri?,
+        dlState: String?,
+        dlNo: String?
+    ) = viewModelScope.launch {
 
-        if (!userHasDL) {
-            gigerVerificationRepository.setDataAsKeyValue(
-                DrivingLicenseDataModel(
+        _documentUploadState.postValue(Lse.loading())
+
+        try {
+            val model = getVerificationModel()
+            if (!userHasDL) {
+                model.driving_license = DrivingLicenseDataModel(
                     userHasDL = false,
-                    verified = false
+                    verified = false,
+                    frontImage = null,
+                    backImage = null,
+                    dlState = null,
+                    dlNo = null
                 )
-            )
-        } else {
-            gigerVerificationRepository.getDBCollection().get().addOnSuccessListener {
-                val containsDlDocument = it?.contains(DrivingLicenseDataModel.TABLE_NAME) ?: false
+            } else {
 
-                if (!containsDlDocument) {
-                    gigerVerificationRepository.setDataAsKeyValue(
-                        DrivingLicenseDataModel(
-                            userHasDL = true,
-                            frontImage = frontImagePath,
-                            backImage = backImagePath,
-                            verified = false
-                        )
-                    )
-                } else {
-                    val frontImage =
-                        (it.get(DrivingLicenseDataModel.TABLE_NAME) as HashMap<String, String?>).get(
-                            DrivingLicenseDataModel.KEY_NAME_FRONT_IMAGE
-                        )
+                val frontImageFileNameAtServer = if (userHasDL)
+                    uploadImage(frontImagePath!!)
+                else
+                    null
 
-                    val backImage =
-                        (it.get(DrivingLicenseDataModel.TABLE_NAME) as HashMap<String, String?>).get(
-                            DrivingLicenseDataModel.KEY_NAME_BACK_IMAGE
-                        )
+                val backImageFileNameAtServer = if (userHasDL)
+                    uploadImage(backImagePath!!)
+                else
+                    null
 
-                    val newFrontImage = frontImagePath ?: frontImage
-                    val newBackImage = backImagePath ?: backImage
-
-                    gigerVerificationRepository.setDataAsKeyValue(
-                        DrivingLicenseDataModel(
-                            userHasDL = true,
-                            frontImage = newFrontImage,
-                            backImage = newBackImage,
-                            verified = false
-                        )
-                    )
-                }
+                model.driving_license = DrivingLicenseDataModel(
+                    userHasDL = true,
+                    verified = false,
+                    frontImage = frontImageFileNameAtServer,
+                    backImage = backImageFileNameAtServer,
+                    dlState = dlState,
+                    dlNo = dlNo
+                )
             }
+            gigerVerificationRepository.getDBCollection().setOrThrow(model)
+            _documentUploadState.postValue(Lse.success())
+        } catch (e: Exception) {
+            _documentUploadState.postValue(Lse.error("Unable to save document."))
         }
     }
 
+
+
+    private fun prepareUniqueImageName(): String {
+        val timeStamp = SimpleDateFormat(
+            "yyyyMMdd_HHmmss",
+            Locale.getDefault()
+        ).format(Date())
+        return gigerVerificationRepository.getUID() + timeStamp + ".jpg"
+    }
+
+    private suspend fun uploadImage(image: Uri) =
+        suspendCoroutine<String> { continuation ->
+            val fileNameAtServer = prepareUniqueImageName()
+            firebaseStorage.reference
+                .child("verification")
+                .child(fileNameAtServer)
+                .putFile(image)
+                .addOnSuccessListener {
+                    continuation.resume(fileNameAtServer)
+                }
+                .addOnFailureListener {
+                    continuation.resumeWithException(it)
+                }
+        }
+
+    suspend fun getVerificationModel(): VerificationBaseModel =
+        suspendCoroutine { continuation ->
+            gigerVerificationRepository.getDBCollection().get().addOnSuccessListener {
+                runCatching {
+                    if (it.data == null)
+                        VerificationBaseModel()
+                    else
+                        it.toObject(VerificationBaseModel::class.java)!!
+                }.onSuccess {
+                    continuation.resume(it)
+                }.onFailure {
+                    continuation.resumeWithException(it)
+                }
+            }.addOnFailureListener {
+                continuation.resumeWithException(it)
+            }
+        }
 
     override fun onCleared() {
         super.onCleared()

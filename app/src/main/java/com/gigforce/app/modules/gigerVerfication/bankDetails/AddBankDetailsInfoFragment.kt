@@ -1,5 +1,6 @@
 package com.gigforce.app.modules.gigerVerfication.bankDetails
 
+import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -14,23 +15,27 @@ import com.bumptech.glide.Glide
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
-import com.gigforce.app.modules.gigerVerfication.ImageSource
-import com.gigforce.app.modules.gigerVerfication.SelectImageSourceBottomSheetActionListener
 import com.gigforce.app.modules.photocrop.PhotoCrop
+import com.gigforce.app.utils.Lse
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.storage.FirebaseStorage
 import com.ncorti.slidetoact.SlideToActView
 import kotlinx.android.synthetic.main.fragment_add_bank_details_info.*
+import kotlinx.android.synthetic.main.fragment_add_bank_details_info_main.*
 import kotlinx.android.synthetic.main.fragment_verification_image_holder.view.*
-import java.io.File
 
-class AddBankDetailsInfoFragment : BaseFragment(), SelectImageSourceBottomSheetActionListener {
+class AddBankDetailsInfoFragment : BaseFragment() {
 
     companion object {
-        const val REQUEST_CODE_UPLOAD_PAN_IMAGE = 2333
+        const val REQUEST_CODE_CAPTURE_BANK_PHOTO = 2333
+
+        const val INTENT_EXTRA_CLICKED_IMAGE_PATH = "clicked_image_path"
+        const val INTENT_EXTRA_IFSC = "ifsc"
+        const val INTENT_EXTRA_ACC_NO = "acc_no"
     }
 
     private val viewModel: GigVerificationViewModel by viewModels()
-    private var clickedImagePath: File? = null
+    private var clickedImagePath: Uri? = null
     private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance()
 
     override fun onCreateView(
@@ -43,8 +48,22 @@ class AddBankDetailsInfoFragment : BaseFragment(), SelectImageSourceBottomSheetA
         super.onViewCreated(view, savedInstanceState)
         initViews()
         initViewModel()
+
+        savedInstanceState?.let {
+
+            clickedImagePath = it.getParcelable(INTENT_EXTRA_CLICKED_IMAGE_PATH)
+            if (clickedImagePath != null) showPassbookInfoCard(clickedImagePath!!)
+            ifscEditText.setText(it.getString(INTENT_EXTRA_IFSC))
+            accountNoEditText.setText(it.getString(INTENT_EXTRA_ACC_NO))
+        }
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putParcelable(INTENT_EXTRA_CLICKED_IMAGE_PATH, clickedImagePath)
+        outState.putString(INTENT_EXTRA_IFSC, ifscEditText.text.toString())
+        outState.putString(INTENT_EXTRA_ACC_NO, accountNoEditText.text.toString())
+    }
 
     private fun initViews() {
         passbookImageHolder.documentUploadLabelTV.text =
@@ -73,9 +92,9 @@ class AddBankDetailsInfoFragment : BaseFragment(), SelectImageSourceBottomSheetA
 
             if (checkedId == R.id.passbookYesRB) {
                 showPassbookImageLayout()
+                showPassbookInfoLayout()
 
-                if (bankDetailsDataConfirmationCB.isChecked) {
-                    //showPassbookInfoLayout()
+                if (bankDetailsDataConfirmationCB.isChecked && clickedImagePath != null) {
                     enableSubmitButton()
                 } else
                     disableSubmitButton()
@@ -104,25 +123,54 @@ class AddBankDetailsInfoFragment : BaseFragment(), SelectImageSourceBottomSheetA
                 disableSubmitButton()
         }
 
-        editBankDetailsLayout.setOnClickListener {
-            navigate(R.id.editBankDetailsInfoBottomSheet)
-        }
+//        editBankDetailsLayout.setOnClickListener {
+//            navigate(R.id.editBankDetailsInfoBottomSheet)
+//        }
 
         passbookSubmitSliderBtn.onSlideCompleteListener =
             object : SlideToActView.OnSlideCompleteListener {
                 override fun onSlideComplete(view: SlideToActView) {
 
                     if (passbookNoRB.isChecked) {
+
+
                         viewModel.updateBankPassbookImagePath(
                             userHasPassBook = false,
-                            passbookImagePath = null
+                            passbookImagePath = null,
+                            ifscCode = null,
+                            accountNo = null
                         )
-
-                        findNavController().popBackStack(R.id.addSelfieVideoFragment, false)
-                        activity?.onBackPressed()
                     } else {
-                        findNavController().popBackStack(R.id.addSelfieVideoFragment, false)
-                        activity?.onBackPressed()
+
+                        if (ifscEditText.text!!.length != 11) {
+                            ifscTextInputLayout.error = "Enter Valid IfSC Code"
+                            return
+                        }
+
+                        if (accountNoEditText.text.isNullOrBlank()) {
+                            accountNoTextInputLayout.error = "Enter Account No"
+                            return
+                        }
+
+                        if (clickedImagePath == null) {
+
+                            MaterialAlertDialogBuilder(requireContext())
+                                .setTitle("Alert")
+                                .setMessage("Click Or Select your Passbook Image first")
+                                .setPositiveButton("OK") { _, _ -> }
+                                .show()
+                            return
+                        }
+
+                        val ifsc = ifscEditText.text.toString()
+                        val accNo = accountNoEditText.text.toString()
+
+                        viewModel.updateBankPassbookImagePath(
+                            userHasPassBook = true,
+                            passbookImagePath = clickedImagePath,
+                            ifscCode = ifsc,
+                            accountNo = accNo
+                        )
                     }
                 }
             }
@@ -135,9 +183,11 @@ class AddBankDetailsInfoFragment : BaseFragment(), SelectImageSourceBottomSheetA
                 if (it.bankDetailsUploaded && it.bankUploadDetailsDataModel != null) {
 
                     if (it.bankUploadDetailsDataModel.userHasPassBook != null) {
-                        if (it.bankUploadDetailsDataModel.userHasPassBook)
+                        if (it.bankUploadDetailsDataModel.userHasPassBook) {
                             passbookAvailaibilityOptionRG.check(R.id.passbookYesRB)
-                        else
+                            ifscEditText.setText(it.bankUploadDetailsDataModel.ifscCode)
+                            accountNoEditText.setText(it.bankUploadDetailsDataModel.accountNo)
+                        } else
                             passbookAvailaibilityOptionRG.check(R.id.passbookNoRB)
                     } else {
                         //Uncheck both and hide capture layout
@@ -151,13 +201,11 @@ class AddBankDetailsInfoFragment : BaseFragment(), SelectImageSourceBottomSheetA
                             .child("verification")
                             .child(it.bankUploadDetailsDataModel.passbookImagePath)
 
-                        clickedImagePath = File(it.bankUploadDetailsDataModel.passbookImagePath)
                         if (bankDetailsDataConfirmationCB.isChecked)
                             passbookSubmitSliderBtn.isEnabled = true
 
-
                         imageRef.downloadUrl.addOnSuccessListener {
-                            showPanInfoCard(it)
+                            showPassbookInfoCard(it)
                         }.addOnFailureListener {
                             print("ee")
                         }
@@ -165,7 +213,40 @@ class AddBankDetailsInfoFragment : BaseFragment(), SelectImageSourceBottomSheetA
                 }
             })
 
-        viewModel.startListeningForGigerVerificationStatusChanges()
+
+        viewModel.documentUploadState
+            .observe(viewLifecycleOwner, Observer {
+                when (it) {
+                    Lse.Loading -> showLoadingState()
+                    Lse.Success -> panCardDocumentUploaded()
+                    is Lse.Error -> errorOnUploadingDocuments(it.error)
+                }
+            })
+
+        viewModel.getVerificationStatus()
+    }
+
+    private fun errorOnUploadingDocuments(error: String) {
+        progressBar.visibility = View.GONE
+        bankDetailsMainLayout.visibility = View.VISIBLE
+        passbookSubmitSliderBtn.resetSlider()
+
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle("Alert")
+            .setMessage(error)
+            .setPositiveButton("OK") { _, _ -> }
+            .show()
+    }
+
+    private fun panCardDocumentUploaded() {
+        showToast("Bank Details Uploaded")
+        findNavController().popBackStack(R.id.addSelfieVideoFragment, false)
+        activity?.onBackPressed()
+    }
+
+    private fun showLoadingState() {
+        bankDetailsMainLayout.visibility = View.GONE
+        progressBar.visibility = View.VISIBLE
     }
 
 
@@ -178,13 +259,31 @@ class AddBankDetailsInfoFragment : BaseFragment(), SelectImageSourceBottomSheetA
         val photoCropIntent = Intent(requireContext(), PhotoCrop::class.java)
         photoCropIntent.putExtra(
             PhotoCrop.INTENT_EXTRA_PURPOSE,
-            PhotoCrop.PURPOSE_UPLOAD_BANK_DETAILS_IMAGE
+            PhotoCrop.PURPOSE_VERIFICATION
         )
         photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_FIREBASE_FOLDER_NAME, "/verification/")
         photoCropIntent.putExtra("folder", "verification")
         photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_DETECT_FACE, 0)
         photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_FIREBASE_FILE_NAME, "pan_card.jpg")
-        startActivityForResult(photoCropIntent, REQUEST_CODE_UPLOAD_PAN_IMAGE)
+        startActivityForResult(photoCropIntent, REQUEST_CODE_CAPTURE_BANK_PHOTO)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_CODE_CAPTURE_BANK_PHOTO) {
+
+            if (resultCode == Activity.RESULT_OK) {
+                clickedImagePath =
+                    data?.getParcelableExtra(PhotoCrop.INTENT_EXTRA_RESULTING_FILE_URI)
+                showPassbookInfoCard(clickedImagePath!!)
+            } else {
+                MaterialAlertDialogBuilder(requireContext())
+                    .setTitle("Alert")
+                    .setMessage("Unable to Capture Image")
+                    .setPositiveButton("OK") { _, _ -> }
+                    .show()
+            }
+        }
     }
 
     private fun disableSubmitButton() {
@@ -218,23 +317,8 @@ class AddBankDetailsInfoFragment : BaseFragment(), SelectImageSourceBottomSheetA
             ResourcesCompat.getColor(resources, R.color.lipstick, null)
     }
 
-    override fun onImageSourceSelected(source: ImageSource) {
-//        showPassbookInfoLayout()
-//        bankDetailsDataConfirmationCB.visibility = View.VISIBLE
-//
-//        clickedImagePath = File("na")
-//        showPanInfoCard()
-//        setBankDetailsInfoOnView(
-//            name = "Rahul Jain",
-//            fathersName = "Sahil Jain",
-//            cifNumber = "TF-334",
-//            accountNumber = "PU23SDDLOJIJ",
-//            ifsc = "PKSSM09233",
-//            address = "House no 342, Preet Vihar,New Delhi, Delhi 113320"
-//        )
-    }
 
-    private fun showPanInfoCard(panInfoPath: Uri) {
+    private fun showPassbookInfoCard(panInfoPath: Uri) {
         passbookImageHolder.uploadDocumentCardView.visibility = View.GONE
         passbookImageHolder.uploadImageLayout.visibility = View.VISIBLE
 
@@ -243,21 +327,5 @@ class AddBankDetailsInfoFragment : BaseFragment(), SelectImageSourceBottomSheetA
             .into(passbookImageHolder.uploadImageLayout.clickedImageIV)
     }
 
-
-    private fun setBankDetailsInfoOnView(
-        name: String?,
-        fathersName: String?,
-        cifNumber: String?,
-        accountNumber: String?,
-        ifsc: String?,
-        address: String?
-    ) {
-        nameTV.text = name
-        fathersNameTV.text = fathersName
-        cifNumberTV.text = cifNumber
-        accNoTV.text = accountNumber
-        ifscTV.text = ifsc
-        addressTV.text = address
-    }
 
 }

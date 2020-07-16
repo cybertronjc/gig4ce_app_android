@@ -39,7 +39,7 @@ class AddSelfieVideoFragment : BaseFragment(), CaptureVideoFragmentEventListener
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViews()
-       // addCaptureVideoFragment()
+        // addCaptureVideoFragment()
         initViewModel()
     }
 
@@ -195,11 +195,17 @@ class AddSelfieVideoFragment : BaseFragment(), CaptureVideoFragmentEventListener
         showToast("Video Recorded")
         this.mCapturedVideoPath = file
         replaceCaptureFragmentWithPreviewFragment(file)
+
+        if (selfieVideoCorrectCB.isChecked)
+            enableSubmitButton()
     }
 
     override fun discardCurrentVideoAndStartRetakingVideo() {
         deleteExistingVideoIfExist()
         replacePlayVideoFragmentWithCaptureFragment()
+
+        selfieVideoCorrectCB.isChecked = false
+        disableSubmitButton()
     }
 
 
