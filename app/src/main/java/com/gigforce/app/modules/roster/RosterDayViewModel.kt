@@ -149,13 +149,13 @@ class RosterDayViewModel: ViewModel() {
     }
 
     fun switchHourAvailability(activeDateTime: LocalDateTime, parentView: ConstraintLayout, viewModelCustomPreference: CustomPreferencesViewModel) {
-//        viewModelCustomPreference.customPreferencesDataModel.unavailable.filter {
-//            it.date == activeDateTime.toDate
-//        }.forEach {
-//            it.timeSlots.forEach {
-//                selectedHourInactive(parentView, it.startTime, it.endTime)
-//            }
-//        }
+        viewModelCustomPreference.customPreferencesDataModel.unavailable.filter {
+            it.date == activeDateTime.toDate
+        }.forEach {
+            it.timeSlots.forEach {
+                selectedHourInactive(parentView, it.startTime, it.endTime)
+            }
+        }
     }
 
     fun selectedHourInactive(parentView: ConstraintLayout, startDateTime: Date, endDateTime: Date) {
