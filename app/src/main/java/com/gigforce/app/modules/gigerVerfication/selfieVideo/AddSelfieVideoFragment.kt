@@ -13,6 +13,8 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
+import com.gigforce.app.modules.gigerVerfication.panCard.AddPanCardInfoFragment
+import com.gigforce.app.utils.DateHelper
 import com.gigforce.app.utils.Lse
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.storage.FirebaseStorage
@@ -100,7 +102,13 @@ class AddSelfieVideoFragment : BaseFragment(), CaptureVideoFragmentEventListener
                     }
                     Lse.Success -> {
                         showToast("Video Uploaded")
-                        navigate(R.id.addPanCardInfoFragment)
+                        navigate(R.id.addPanCardInfoFragment, Bundle()
+                            .apply {
+                                this.putBoolean(
+                                    AddPanCardInfoFragment.CAME_FROM_SELFIE_SCREEN,
+                                    true
+                                )
+                            })
                     }
                     is Lse.Error -> {
                         playSelfieVideoFragment.showPlayVideoLayout()
@@ -156,7 +164,11 @@ class AddSelfieVideoFragment : BaseFragment(), CaptureVideoFragmentEventListener
             object : SlideToActView.OnSlideCompleteListener {
 
                 override fun onSlideComplete(view: SlideToActView) {
-                    viewModel.uploadSelfieVideo(mCapturedVideoPath!!)
+                    val transcodedFile = File(
+                        requireContext().filesDir,
+                        "vid_${DateHelper.getFullDateTimeStamp()}.mp4"
+                    )
+                    viewModel.uploadSelfieVideo(mCapturedVideoPath!!, transcodedFile)
                 }
             }
     }

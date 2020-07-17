@@ -11,6 +11,7 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
@@ -18,6 +19,7 @@ import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
 import com.gigforce.app.modules.gigerVerfication.GigerVerificationStatus
 import com.gigforce.app.modules.gigerVerfication.ImageSource
 import com.gigforce.app.modules.gigerVerfication.SelectImageSourceBottomSheetActionListener
+import com.gigforce.app.modules.gigerVerfication.aadharCard.AddAadharCardInfoFragment
 import com.gigforce.app.modules.photocrop.PhotoCrop
 import com.gigforce.app.utils.Lse
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -34,34 +36,41 @@ class AddPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetActio
 
         const val INTENT_EXTRA_CLICKED_IMAGE_PATH = "clicked_image_path"
         const val INTENT_EXTRA_PAN = "pan"
+        const val CAME_FROM_SELFIE_SCREEN = "came_from_selfie"
     }
+
 
     private val viewModel: GigVerificationViewModel by viewModels()
     private var clickedImagePath: Uri? = null
     private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance()
+    private var cameFromSelfieScreen: Boolean = false
 
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
             savedInstanceState: Bundle?
     ) = inflateView(R.layout.fragment_add_pan_card_info, inflater, container)
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putParcelable(INTENT_EXTRA_CLICKED_IMAGE_PATH, clickedImagePath)
-        outState.putString(INTENT_EXTRA_PAN, panCardEditText.text.toString())
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViews()
         initViewModel()
 
-        savedInstanceState?.let {
-
-            clickedImagePath = it.getParcelable(INTENT_EXTRA_CLICKED_IMAGE_PATH)
-            if (clickedImagePath != null) showPanInfoCard(clickedImagePath!!)
-            panCardEditText.setText(it.getString(INTENT_EXTRA_PAN))
+        arguments?.let {
+            cameFromSelfieScreen = it.getBoolean(CAME_FROM_SELFIE_SCREEN)
         }
+
+        savedInstanceState?.let {
+            cameFromSelfieScreen = it.getBoolean(CAME_FROM_SELFIE_SCREEN)
+
+//            clickedImagePath = it.getParcelable(INTENT_EXTRA_CLICKED_IMAGE_PATH)
+//            if (clickedImagePath != null) showPanInfoCard(clickedImagePath!!)
+//            panCardEditText.setText(it.getString(INTENT_EXTRA_PAN))
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean(CAME_FROM_SELFIE_SCREEN, cameFromSelfieScreen)
     }
 
     private fun initViews() {
@@ -70,7 +79,11 @@ class AddPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetActio
         panSubmitSliderBtn.isEnabled = false
 
         toolbar.setNavigationOnClickListener {
-            activity?.onBackPressed()
+
+            if (cameFromSelfieScreen)
+                findNavController().popBackStack(R.id.addSelfieVideoFragment, false)
+            else
+                activity?.onBackPressed()
         }
 
         panImageHolder.uploadDocumentCardView.setOnClickListener {
@@ -109,7 +122,7 @@ class AddPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetActio
 
             if (isChecked) {
 
-                if (panYesRB.isChecked && panCardDataModel != null && panCardDataModel?.panCardImagePath != null)
+                if (panYesRB.isChecked && clickedImagePath != null)
                     enableSubmitButton()
                 else if (panNoRB.isChecked)
                     enableSubmitButton()
@@ -137,10 +150,10 @@ class AddPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetActio
                             if (clickedImagePath == null) {
 
                                 MaterialAlertDialogBuilder(requireContext())
-                                    .setTitle("Alert")
-                                    .setMessage("Click Or Select your Pan card Image first")
-                                    .setPositiveButton("OK"){_,_ -> }
-                                    .show()
+                                        .setTitle("Alert")
+                                        .setMessage("Click Or Select your Pan card Image first")
+                                        .setPositiveButton("OK") { _, _ -> }
+                                        .show()
                                 return
                             }
 
@@ -180,13 +193,15 @@ class AddPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetActio
         MaterialAlertDialogBuilder(requireContext())
                 .setTitle("Alert")
                 .setMessage(error)
-                .setPositiveButton("OK"){_,_ -> }
+                .setPositiveButton("OK") { _, _ -> }
                 .show()
     }
 
     private fun panCardDocumentUploaded() {
         showToast("Pan Card Details Uploaded")
-        navigate(R.id.addAadharCardInfoFragment)
+        navigate(R.id.addAadharCardInfoFragment,Bundle().apply {
+            putBoolean(AddAadharCardInfoFragment.CAME_FROM_PAN_SCREEN,true)
+        })
     }
 
     private fun showLoadingState() {
@@ -194,6 +209,15 @@ class AddPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetActio
         progressBar.visibility = View.VISIBLE
     }
 
+    override fun onBackPressed(): Boolean {
+
+        if (cameFromSelfieScreen) {
+            findNavController().popBackStack(R.id.addSelfieVideoFragment, true)
+            return true
+        } else {
+           return super.onBackPressed()
+        }
+    }
 
     private var panCardDataModel: PanCardDataModel? = null
     private fun updatePanInfo(it: GigerVerificationStatus) {
@@ -254,7 +278,7 @@ class AddPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetActio
                 MaterialAlertDialogBuilder(requireContext())
                         .setTitle("Alert")
                         .setMessage("Unable to Capture Image")
-                        .setPositiveButton("OK"){_,_ -> }
+                        .setPositiveButton("OK") { _, _ -> }
                         .show()
             }
         }

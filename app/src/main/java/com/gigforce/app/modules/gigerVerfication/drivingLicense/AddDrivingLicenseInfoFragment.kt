@@ -11,10 +11,12 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
+import com.gigforce.app.modules.gigerVerfication.bankDetails.AddBankDetailsInfoFragment
 import com.gigforce.app.modules.gigerVerfication.panCard.AddPanCardInfoFragment
 import com.gigforce.app.modules.photocrop.PhotoCrop
 import com.gigforce.app.utils.Lse
@@ -40,6 +42,7 @@ class AddDrivingLicenseInfoFragment : BaseFragment() {
         const val INTENT_EXTRA_CLICKED_IMAGE_BACK = "back_image"
         const val INTENT_EXTRA_STATE = "state"
         const val INTENT_EXTRA_DL_NO = "dl_no"
+        const val CAME_FROM_AADHAR_SCREEN = "came_from_aadhar"
     }
 
     private val viewModel: GigVerificationViewModel by viewModels()
@@ -48,6 +51,8 @@ class AddDrivingLicenseInfoFragment : BaseFragment() {
     private var dlBackImagePath: Uri? = null
     private var drivingLicenseDetail: DrivingLicenseDataModel? = null
     private var currentlyClickingImageOfSide: DrivingLicenseSides? = null
+
+    private var cameFromAadharScreen: Boolean = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -60,28 +65,34 @@ class AddDrivingLicenseInfoFragment : BaseFragment() {
         initViews()
         initViewModel()
 
+        arguments?.let {
+            cameFromAadharScreen = it.getBoolean(CAME_FROM_AADHAR_SCREEN)
+        }
+
         savedInstanceState?.let {
+            cameFromAadharScreen = it.getBoolean(CAME_FROM_AADHAR_SCREEN)
 
-            dlFrontImagePath = it.getParcelable(INTENT_EXTRA_CLICKED_IMAGE_FRONT)
-            if (dlFrontImagePath != null) showFrontDrivingLicense(dlFrontImagePath!!)
-
-            dlBackImagePath = it.getParcelable(INTENT_EXTRA_CLICKED_IMAGE_BACK)
-            if (dlBackImagePath != null) showBackDrivingLicense(dlBackImagePath!!)
-
-            drivingLicenseEditText.setText(it.getString(INTENT_EXTRA_DL_NO))
-
-            val index = it.getInt(INTENT_EXTRA_STATE)
-            if (index > 0)
-                stateSpinner.setSelection(index, true)
+//            dlFrontImagePath = it.getParcelable(INTENT_EXTRA_CLICKED_IMAGE_FRONT)
+//            if (dlFrontImagePath != null) showFrontDrivingLicense(dlFrontImagePath!!)
+//
+//            dlBackImagePath = it.getParcelable(INTENT_EXTRA_CLICKED_IMAGE_BACK)
+//            if (dlBackImagePath != null) showBackDrivingLicense(dlBackImagePath!!)
+//
+//            drivingLicenseEditText.setText(it.getString(INTENT_EXTRA_DL_NO))
+//
+//            val index = it.getInt(INTENT_EXTRA_STATE)
+//            if (index > 0)
+//                stateSpinner.setSelection(index, true)
         }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putParcelable(INTENT_EXTRA_CLICKED_IMAGE_FRONT, dlFrontImagePath)
-        outState.putParcelable(INTENT_EXTRA_CLICKED_IMAGE_BACK, dlBackImagePath)
-        outState.putString(INTENT_EXTRA_DL_NO, drivingLicenseEditText.text.toString())
-        outState.putInt(INTENT_EXTRA_STATE, stateSpinner.selectedItemPosition)
+        outState.putBoolean(CAME_FROM_AADHAR_SCREEN, cameFromAadharScreen)
+//        outState.putParcelable(INTENT_EXTRA_CLICKED_IMAGE_FRONT, dlFrontImagePath)
+//        outState.putParcelable(INTENT_EXTRA_CLICKED_IMAGE_BACK, dlBackImagePath)
+//        outState.putString(INTENT_EXTRA_DL_NO, drivingLicenseEditText.text.toString())
+//        outState.putInt(INTENT_EXTRA_STATE, stateSpinner.selectedItemPosition)
     }
 
 
@@ -98,7 +109,10 @@ class AddDrivingLicenseInfoFragment : BaseFragment() {
         dlSubmitSliderBtn.isEnabled = false
 
         toolbar.setNavigationOnClickListener {
-            activity?.onBackPressed()
+            if (cameFromAadharScreen)
+                findNavController().popBackStack(R.id.gigerVerificationFragment, false)
+            else
+                activity?.onBackPressed()
         }
 
         dlAvailaibilityOptionRG.setOnCheckedChangeListener { _, checkedId ->
@@ -195,9 +209,9 @@ class AddDrivingLicenseInfoFragment : BaseFragment() {
                 }
             }
 
-        editDrivingLicenseInfoLayout.setOnClickListener {
-            navigate(R.id.editDrivingLicenseInfoBottomSheet)
-        }
+//        editDrivingLicenseInfoLayout.setOnClickListener {
+//            navigate(R.id.editDrivingLicenseInfoBottomSheet,Bundle().apply {  })
+//        }
 
         dlFrontImageHolder.uploadDocumentCardView.setOnClickListener {
             openCameraAndGalleryOptionForFrontSideImage()
@@ -219,6 +233,16 @@ class AddDrivingLicenseInfoFragment : BaseFragment() {
 
         dlBackImageHolder.uploadImageLayout.reuploadBtn.setOnClickListener {
             openCameraAndGalleryOptionForBackSideImage()
+        }
+    }
+
+    override fun onBackPressed(): Boolean {
+
+        if (cameFromAadharScreen) {
+            findNavController().popBackStack(R.id.gigerVerificationFragment, false)
+            return true
+        } else {
+            return super.onBackPressed()
         }
     }
 
@@ -303,7 +327,9 @@ class AddDrivingLicenseInfoFragment : BaseFragment() {
 
     private fun documentUploaded() {
         showToast("Driving License Details Uploaded")
-        navigate(R.id.addBankDetailsInfoFragment)
+        navigate(R.id.addBankDetailsInfoFragment, Bundle().apply {
+            putBoolean(AddBankDetailsInfoFragment.CAME_FROM_DRIVING_LICENSE_SCREEN, true)
+        })
     }
 
     private fun showLoadingState() {
@@ -376,6 +402,7 @@ class AddDrivingLicenseInfoFragment : BaseFragment() {
     private fun showDLImageAndInfoLayout() {
         dlBackImageHolder.visibility = View.VISIBLE
         dlFrontImageHolder.visibility = View.VISIBLE
+        showImageInfoLayout()
     }
 
     private fun hideDLImageAndInfoLayout() {

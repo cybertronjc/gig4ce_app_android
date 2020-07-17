@@ -10,7 +10,6 @@ import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
-import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import kotlinx.android.synthetic.main.fragment_giger_verification.*
 import kotlinx.android.synthetic.main.fragment_giger_verification_documents_submitted.*
@@ -22,6 +21,7 @@ import kotlinx.android.synthetic.main.fragment_giger_verification_main.view.*
 class GigerVerificationFragment : BaseFragment() {
 
     private val viewModel: GigVerificationViewModel by viewModels()
+    private var gigerVerificationStatus : GigerVerificationStatus? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -110,122 +110,120 @@ class GigerVerificationFragment : BaseFragment() {
     private fun initViewModel() {
         viewModel.gigerVerificationStatus
             .observe(viewLifecycleOwner, Observer {
+                verificationMainLayout.visible()
+                this.gigerVerificationStatus = it
 
-                if (it.everyDocumentUploaded) {
-                    verificationMainLayout.gone()
-                    verificationDocSubmittedLayout.visible()
-
+                if (it.selfieVideoUploaded) {
+                    selfieVideoLayout.descTitleTV.text = getString(R.string.uploaded)
+                    selfieVideoLayout.descTitleTV.setTextColor(
+                        ResourcesCompat.getColor(
+                            resources,
+                            R.color.green,
+                            null
+                        )
+                    )
                 } else {
-                    verificationDocSubmittedLayout.gone()
-                    verificationMainLayout.visible()
-
-                    if (it.selfieVideoUploaded) {
-                        selfieVideoLayout.descTitleTV.text = getString(R.string.uploaded)
-                        selfieVideoLayout.descTitleTV.setTextColor(
-                            ResourcesCompat.getColor(
-                                resources,
-                                R.color.green,
-                                null
-                            )
+                    selfieVideoLayout.descTitleTV.text = getString(R.string.tap_to_upload)
+                    selfieVideoLayout.descTitleTV.setTextColor(
+                        ResourcesCompat.getColor(
+                            resources,
+                            R.color.battle_ship_grey,
+                            null
                         )
-                    } else {
-                        selfieVideoLayout.descTitleTV.text = getString(R.string.tap_to_upload)
-                        selfieVideoLayout.descTitleTV.setTextColor(
-                            ResourcesCompat.getColor(
-                                resources,
-                                R.color.battle_ship_grey,
-                                null
-                            )
-                        )
-                    }
-
-                    if (it.panCardDetailsUploaded) {
-                        panLayout.descTitleTV.text = getString(R.string.uploaded)
-                        panLayout.descTitleTV.setTextColor(
-                            ResourcesCompat.getColor(
-                                resources,
-                                R.color.green,
-                                null
-                            )
-                        )
-                    } else {
-                        panLayout.descTitleTV.text = getString(R.string.tap_to_upload)
-                        panLayout.descTitleTV.setTextColor(
-                            ResourcesCompat.getColor(
-                                resources,
-                                R.color.battle_ship_grey,
-                                null
-                            )
-                        )
-                    }
-
-
-
-                    if (it.bankDetailsUploaded) {
-                        bankDetailsLayout.descTitleTV.text = getString(R.string.uploaded)
-                        bankDetailsLayout.descTitleTV.setTextColor(
-                            ResourcesCompat.getColor(
-                                resources,
-                                R.color.green,
-                                null
-                            )
-                        )
-                    } else {
-                        bankDetailsLayout.descTitleTV.text = getString(R.string.tap_to_upload)
-                        bankDetailsLayout.descTitleTV.setTextColor(
-                            ResourcesCompat.getColor(
-                                resources,
-                                R.color.battle_ship_grey,
-                                null
-                            )
-                        )
-                    }
-
-
-
-                    if (it.aadharCardDetailsUploaded) {
-                        aadharLayout.descTitleTV.text = getString(R.string.uploaded)
-                        aadharLayout.descTitleTV.setTextColor(
-                            ResourcesCompat.getColor(
-                                resources,
-                                R.color.green,
-                                null
-                            )
-                        )
-                    } else {
-                        aadharLayout.descTitleTV.text = getString(R.string.tap_to_upload)
-                        aadharLayout.descTitleTV.setTextColor(
-                            ResourcesCompat.getColor(
-                                resources,
-                                R.color.battle_ship_grey,
-                                null
-                            )
-                        )
-                    }
-
-
-
-                    if (it.dlCardDetailsUploaded) {
-                        drivingLayout.descTitleTV.text = getString(R.string.uploaded)
-                        drivingLayout.descTitleTV.setTextColor(
-                            ResourcesCompat.getColor(
-                                resources,
-                                R.color.green,
-                                null
-                            )
-                        )
-                    } else {
-                        drivingLayout.descTitleTV.text = getString(R.string.tap_to_upload)
-                        drivingLayout.descTitleTV.setTextColor(
-                            ResourcesCompat.getColor(
-                                resources,
-                                R.color.battle_ship_grey,
-                                null
-                            )
-                        )
-                    }
-
+                    )
                 }
+
+                if (it.panCardDetailsUploaded) {
+                    panLayout.descTitleTV.text = it.panCardDetails?.verifiedString
+
+                    panLayout.descTitleTV.setTextColor(
+                        ResourcesCompat.getColor(
+                            resources,
+                            it.getColorCodeForStatus(it.panCardDetails?.state ?: -1),
+                            null
+                        )
+                    )
+                } else {
+                    panLayout.descTitleTV.text = getString(R.string.tap_to_upload)
+                    panLayout.descTitleTV.setTextColor(
+                        ResourcesCompat.getColor(
+                            resources,
+                            R.color.battle_ship_grey,
+                            null
+                        )
+                    )
+                }
+
+
+
+                if (it.bankDetailsUploaded) {
+                    bankDetailsLayout.descTitleTV.text =
+                        it.bankUploadDetailsDataModel?.verifiedString
+                    bankDetailsLayout.descTitleTV.setTextColor(
+                        ResourcesCompat.getColor(
+                            resources,
+                            it.getColorCodeForStatus(
+                                it.bankUploadDetailsDataModel?.state ?: -1
+                            ),
+                            null
+                        )
+                    )
+                } else {
+                    bankDetailsLayout.descTitleTV.text = getString(R.string.tap_to_upload)
+                    bankDetailsLayout.descTitleTV.setTextColor(
+                        ResourcesCompat.getColor(
+                            resources,
+                            R.color.battle_ship_grey,
+                            null
+                        )
+                    )
+                }
+
+
+
+                if (it.aadharCardDetailsUploaded) {
+                    aadharLayout.descTitleTV.text = it.aadharCardDataModel?.verifiedString
+                    aadharLayout.descTitleTV.setTextColor(
+                        ResourcesCompat.getColor(
+                            resources,
+                            it.getColorCodeForStatus(it.aadharCardDataModel?.state ?: -1),
+                            null
+                        )
+                    )
+                } else {
+                    aadharLayout.descTitleTV.text = getString(R.string.tap_to_upload)
+                    aadharLayout.descTitleTV.setTextColor(
+                        ResourcesCompat.getColor(
+                            resources,
+                            R.color.battle_ship_grey,
+                            null
+                        )
+                    )
+                }
+
+
+
+                if (it.dlCardDetailsUploaded) {
+                    drivingLayout.descTitleTV.text = it.drivingLicenseDataModel?.verifiedString
+                    drivingLayout.descTitleTV.setTextColor(
+                        ResourcesCompat.getColor(
+                            resources,
+                            it.getColorCodeForStatus(it.drivingLicenseDataModel?.state ?: -1),
+                            null
+                        )
+                    )
+                } else {
+                    drivingLayout.descTitleTV.text = getString(R.string.tap_to_upload)
+                    drivingLayout.descTitleTV.setTextColor(
+                        ResourcesCompat.getColor(
+                            resources,
+                            R.color.battle_ship_grey,
+                            null
+                        )
+                    )
+                }
+
+
             })
 
         viewModel.startListeningForGigerVerificationStatusChanges()
