@@ -221,7 +221,8 @@ class RosterDayFragment: RosterBaseFragment() {
             top_bar.isCurrentDay = isSameDate(it, actualDateTime)
             top_bar.isFutureDate = isMoreDate(it, actualDateTime)
 
-            dayTag = "${activeDateTime.year}${activeDateTime.monthValue}${activeDateTime.dayOfMonth}"
+            //dayTag = "${activeDateTime.year}${activeDateTime.monthValue}${activeDateTime.dayOfMonth}"
+            dayTag = String.format("%4d", activeDateTime.year) + String.format("%02d", activeDateTime.monthValue) + String.format("%02d", activeDateTime.dayOfMonth)
 
 //            upcomingGigs.clear()
 //            upcomingGigs.addAll(rosterViewModel.getUpcomingGigsByDayTag(dayTag))

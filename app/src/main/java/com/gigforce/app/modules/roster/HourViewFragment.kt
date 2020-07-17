@@ -165,14 +165,17 @@ class HourViewFragment: RosterBaseFragment() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun addGigCards() {
-        dayTag = "${activeDateTime.year}${activeDateTime.monthValue.toString().format("%02c")}${activeDateTime.dayOfMonth}"
+        dayTag = String.format("%4d", activeDateTime.year) + String.format("%02d", activeDateTime.monthValue) + String.format("%02d", activeDateTime.dayOfMonth)
         rosterViewModel.gigsQuery.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
             upcomingGigs.addAll(rosterViewModel.getUpcomingGigsByDayTag(dayTag, it))
             for (gig in upcomingGigs)
                 addUpcomingGigCard(gig)
 
-            Log.d("DayDebug", upcomingGigs.toString())
-            Log.d("DayDebug", it.toString())
+//            Log.d("DayDebug", upcomingGigs.toString())
+//            it.forEach {
+//                Log.d("DayDebug", it.startDateTime!!.toDate().toString())
+//                Log.d("DayDebug", it.toString())
+//            }
 
             completedGigs.addAll(rosterViewModel.getCompletedGigsByDayTag(dayTag, it))
             for (gig in completedGigs)
