@@ -91,6 +91,7 @@ class GigAttendancePageFragment : BaseFragment() {
                 override fun onSlideComplete(view: SlideToActView) {
 //                    updateAttendanceToDB()
                     requestSelfie()
+
                 }
             }
     }
@@ -139,7 +140,7 @@ class GigAttendancePageFragment : BaseFragment() {
         gigTypeTV.text = gig.gigType
         gigIdTV.text = gig.gigId
 
-        if (gig.companyLogo != null) {
+        if (!gig.companyLogo.isNullOrBlank()) {
             if (gig.companyLogo!!.startsWith("http", true)) {
 
                 Glide.with(requireContext())
@@ -191,6 +192,10 @@ class GigAttendancePageFragment : BaseFragment() {
         }
         try {
             if (gig.attendance!!.checkInMarked) {
+                if (startNavigationSliderBtn.isCompleted()) {
+                    startNavigationSliderBtn.resetSlider()
+                }
+
                 startNavigationSliderBtn.text = "Check out"
                 punchInTimeTV.text = "${timeFormatter.format(gig.attendance?.checkInTime)}"
             }

@@ -58,17 +58,15 @@ class CustomPreferencesViewModel(var owner: LifecycleOwner) : ViewModel() {
     }
 
     fun markUnavaialbleTimeSlots(unavailableDataModel: UnavailableDataModel){
-        if (customPreferencesDataModel != null && unavailableDataModel != null) {
-            var dataModelToDelete = findDataModelForSlots(unavailableDataModel)
-            if(dataModelToDelete!=null) {
-                var dataModelToInsert =
-                    findDataModelForUnavailableSlots(dataModelToDelete, unavailableDataModel)
-                deleteCustomPreference(dataModelToDelete)
-            customPreferencesRepository.setData(dataModelToInsert)
-            }
-            else{
-                customPreferencesRepository.setData(unavailableDataModel)
-            }
+        var dataModelToDelete = findDataModelForSlots(unavailableDataModel)
+        if(dataModelToDelete!=null) {
+            var dataModelToInsert =
+                findDataModelForUnavailableSlots(dataModelToDelete, unavailableDataModel)
+            deleteCustomPreference(dataModelToDelete)
+        customPreferencesRepository.setData(dataModelToInsert)
+        }
+        else{
+            customPreferencesRepository.setData(unavailableDataModel)
         }
     }
 
@@ -84,10 +82,12 @@ class CustomPreferencesViewModel(var owner: LifecycleOwner) : ViewModel() {
     fun markAvailableTimeSlots(unavailableDataModel: UnavailableDataModel) {
         if (customPreferencesDataModel != null && unavailableDataModel != null) {
             var dataModelToDelete = findDataModelForSlots(unavailableDataModel)
-            var dataModelToInsert =
-                findDataModelForAvailableSlots(dataModelToDelete, unavailableDataModel)
-            deleteCustomPreference(dataModelToDelete)
-            customPreferencesRepository.setData(dataModelToInsert)
+            if (dataModelToDelete != null) {
+                var dataModelToInsert =
+                    findDataModelForAvailableSlots(dataModelToDelete, unavailableDataModel)
+                deleteCustomPreference(dataModelToDelete)
+                customPreferencesRepository.setData(dataModelToInsert)
+            }
         }
     }
 
@@ -100,9 +100,9 @@ class CustomPreferencesViewModel(var owner: LifecycleOwner) : ViewModel() {
         return copiedModel
     }
 
-    private fun findDataModelForSlots(unavailableDataModel: UnavailableDataModel): UnavailableDataModel {
+    private fun findDataModelForSlots(unavailableDataModel: UnavailableDataModel): UnavailableDataModel? {
         return unavailableDataModel.findDataModelForSlot(
             customPreferencesDataModel.unavailable
-        )!!
+        )
     }
 }

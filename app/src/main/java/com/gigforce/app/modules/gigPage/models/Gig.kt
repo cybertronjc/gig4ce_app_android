@@ -2,6 +2,8 @@ package com.gigforce.app.modules.gigPage.models
 
 import androidx.annotation.Keep
 import com.google.firebase.Timestamp
+import java.time.LocalDate
+import java.time.ZoneId
 
 @Keep
 data class Gig(
@@ -30,4 +32,29 @@ data class Gig(
     var gigRequirements: List<String> = emptyList(),
     var attendance: GigAttendance? = null,
     var gigContactDetails: GigContactDetails? = null
-)
+){
+
+    fun isGigOfToday(): Boolean {
+
+        val gigDate =
+            startDateTime!!.toDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
+        val currentDate = LocalDate.now()
+        return gigDate.isEqual(currentDate)
+    }
+
+    private fun isGigOfFuture(): Boolean {
+        val gigDate =
+            startDateTime!!.toDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
+        val currentDate = LocalDate.now()
+        return gigDate.isAfter(currentDate)
+    }
+
+    private fun isGigOfPast(): Boolean {
+
+        val gigDate =
+            startDateTime!!.toDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
+        val currentDate = LocalDate.now()
+        return gigDate.isBefore(currentDate)
+    }
+
+}
