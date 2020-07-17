@@ -532,6 +532,9 @@ class HourViewFragment: RosterBaseFragment() {
                 widget.startMinute = gig.startMinute
                 widget.duration = gig.duration
                 widget.cardHeight = 80.px
+                widget.gig_title.text = gig.title
+                widget.setTimings()
+
 
                 (widget.layoutParams as ViewGroup.MarginLayoutParams).setMargins(0, 16.px, 0, 0)
                 widget.requestLayout()
