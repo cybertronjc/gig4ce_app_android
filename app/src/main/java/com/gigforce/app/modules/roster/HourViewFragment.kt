@@ -101,6 +101,8 @@ class HourViewFragment: RosterBaseFragment() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun initialize() {
+
+        Log.d("ActiveDay", "Active Day in HourView $activeDateTime")
         viewModelCustomPreference =
             ViewModelProvider(this, ParamCustPreferViewModel(viewLifecycleOwner)).get(
                 CustomPreferencesViewModel::class.java
@@ -111,15 +113,21 @@ class HourViewFragment: RosterBaseFragment() {
         initializeHourViews()
 
         viewModelCustomPreference.customPreferencesLiveDataModel.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
-            rosterViewModel.switchHourAvailability(activeDateTime, day_times, viewModelCustomPreference)
+            rosterViewModel.switchHourAvailability(
+                activeDateTime,
+                day_times,
+                viewModelCustomPreference
+            )
+            rosterViewModel.isDayAvailable.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+                if (it)
+                    rosterViewModel.setHourVisibility(
+                        day_times, activeDateTime, actualDateTime, viewModelCustomPreference
+                    )
+                else
+                    allHourInactive(day_times)
+            })
         })
 
-        rosterViewModel.isDayAvailable.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
-            if (it)
-                setHourVisibility(day_times, activeDateTime, actualDateTime)
-            else
-                allHourInactive(day_times)
-        })
 
         if (isSameDate(activeDateTime, actualDateTime)) {
             setCurrentTimeDivider()

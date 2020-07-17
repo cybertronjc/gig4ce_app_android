@@ -68,7 +68,7 @@ class RosterDayFragment: RosterBaseFragment() {
     lateinit var  viewModelCustomPreference : CustomPreferencesViewModel
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        observer()
+        //observer()
         initialize()
         setListeners()
 
@@ -85,6 +85,10 @@ class RosterDayFragment: RosterBaseFragment() {
         rosterViewModel.currentDateTime.value = activeDateTime
         viewModelCustomPreference.customPreferencesLiveDataModel.observe(viewLifecycleOwner, Observer { data ->
             rosterViewModel.checkDayAvailable(activeDateTime, viewModelCustomPreference)
+//            rosterViewModel.switchHourAvailability(
+//                activeDateTime,
+//                hourview_viewpager.getChildAt(0)
+//                    .findViewWithTag<ConstraintLayout>("day_times"), viewModelCustomPreference)
         })
     }
 
@@ -92,6 +96,7 @@ class RosterDayFragment: RosterBaseFragment() {
     private fun initialize() {
 
         rosterViewModel.currentDateTime.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+            Log.d("ActiveDay", "Active Day in Day view ${it.toString()}")
             rosterViewModel.gigsQuery.observe(viewLifecycleOwner, androidx.lifecycle.Observer { gigs ->
                 val fullDayGig = rosterViewModel.getFullDayGigForDate(it, gigs)
 
@@ -113,6 +118,7 @@ class RosterDayFragment: RosterBaseFragment() {
         })
 
         rosterViewModel.topBar = top_bar
+        observer()
         initializeBottomSheet()
         attachHourViewAdapter()
         attachDayAvailabilityObserver()
