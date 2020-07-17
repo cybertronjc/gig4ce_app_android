@@ -37,6 +37,7 @@ import com.gigforce.app.modules.gigPage.GigViewModel
 import com.gigforce.app.modules.gigPage.PresentGigPageFragment
 import com.gigforce.app.modules.gigPage.models.Gig
 import com.gigforce.app.modules.landingscreen.LandingScreenFragment
+import com.gigforce.app.utils.DateHelper
 import com.gigforce.app.utils.Lce
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.*
@@ -169,23 +170,35 @@ class BSCalendarScreenFragment : BaseFragment() {
                         getTextView(viewHolder, R.id.contactPersonTV).text =
                             obj?.gigContactDetails?.contactName
 
-                        val gigTiming = if (obj!!.endDateTime != null)
-                            "${timeFormatter.format(obj.startDateTime!!.toDate())} - ${timeFormatter.format(
-                                obj.endDateTime!!.toDate()
-                            )}"
-                        else
-                            "${timeFormatter.format(obj.startDateTime!!.toDate())} - "
-                        getTextView(viewHolder, R.id.textView67).text = gigTiming
+                        if(obj!!.isGigOfToday()) {
+
+                            val gigTiming = if (obj.endDateTime != null)
+                                "${timeFormatter.format(obj.startDateTime!!.toDate())} - ${timeFormatter.format(
+                                    obj.endDateTime!!.toDate()
+                                )}"
+                            else
+                                "${timeFormatter.format(obj.startDateTime!!.toDate())} - "
+                            getTextView(viewHolder, R.id.textView67).text = gigTiming
+
+                            getView(viewHolder, R.id.checkInTV).setOnClickListener(
+                                CheckInClickListener(
+                                    upcoming_gig_rv,
+                                    position
+                                )
+                            )
+                            getView(viewHolder, R.id.checkInTV).isEnabled = true
+
+                        } else {
+                            getView(viewHolder, R.id.checkInTV).isEnabled = false
+
+                           val date =  DateHelper.getDateInDDMMYYYY(obj.startDateTime!!.toDate())
+                            getTextView(viewHolder, R.id.textView67).text = date
+                        }
 
                         getView(viewHolder, R.id.navigateTV).setOnClickListener(
                             NavigationClickListener(upcoming_gig_rv, position)
                         )
-                        getView(viewHolder, R.id.checkInTV).setOnClickListener(
-                            CheckInClickListener(
-                                upcoming_gig_rv,
-                                position
-                            )
-                        )
+
                         getView(viewHolder, R.id.callCardView).setOnClickListener(
                             CallClickListener(
                                 upcoming_gig_rv,
@@ -206,7 +219,7 @@ class BSCalendarScreenFragment : BaseFragment() {
                                 currentDate.isEqual(gigDate)
                         }
 
-                        if (obj.companyLogo != null && obj.companyLogo.toString().isNotEmpty()) {
+                        if (!obj.companyLogo.isNullOrBlank()) {
 
                             if (obj.companyLogo!!.startsWith("http", true)) {
 
@@ -215,18 +228,16 @@ class BSCalendarScreenFragment : BaseFragment() {
                                     .into(companyLogoIV)
 
                             } else {
-                                obj.companyLogo?.let { gig ->
-                                    FirebaseStorage.getInstance()
-                                        .getReference("companies_gigs_images")
-                                        .child(obj.companyLogo!!)
-                                        .downloadUrl
-                                        .addOnSuccessListener {
+                                FirebaseStorage.getInstance()
+                                    .getReference("companies_gigs_images")
+                                    .child(obj.companyLogo!!)
+                                    .downloadUrl
+                                    .addOnSuccessListener {
 
-                                            Glide.with(requireContext())
-                                                .load(it)
-                                                .into(companyLogoIV)
-                                        }
-                                }
+                                        Glide.with(requireContext())
+                                            .load(it)
+                                            .into(companyLogoIV)
+                                    }
                             }
                         }
 

@@ -33,9 +33,11 @@ class GigViewModel constructor(
                 }
             }
     }
-    fun markAttendance(markAttendance : GigAttendance,gigId:String){
-        gigsRepository.markAttendance(markAttendance,gigId)
+
+    fun markAttendance(markAttendance: GigAttendance, gigId: String) {
+        gigsRepository.markAttendance(markAttendance, gigId)
     }
+
     private fun extractUpcomingGigs(querySnapshot: QuerySnapshot) {
         val userGigs: MutableList<Gig> = mutableListOf()
         querySnapshot.documents.forEach { t ->
@@ -47,7 +49,13 @@ class GigViewModel constructor(
 
         val currentDate = Date()
         val upcomingGigs = userGigs.filter {
-            it.startDateTime!!.toDate().time > currentDate.time
+
+            if (it.endDateTime != null) {
+                it.endDateTime!!.toDate().time > currentDate.time
+            } else
+                it.startDateTime!!.toDate().time > currentDate.time
+        }.sortedBy {
+            it.startDateTime!!.seconds
         }
         _upcomingGigs.value = Lce.content(upcomingGigs)
     }
@@ -73,7 +81,8 @@ class GigViewModel constructor(
                     }.onSuccess {
                         try {
                             _gigDetails.value = Lce.content(it!!)
-                        }catch (e:Exception){}
+                        } catch (e: Exception) {
+                        }
                     }.onFailure {
                         _gigDetails.value = Lce.error(it.message!!)
                     }

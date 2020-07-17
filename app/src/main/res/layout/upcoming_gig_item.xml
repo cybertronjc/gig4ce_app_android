@@ -189,7 +189,7 @@
             app:layout_constraintTop_toBottomOf="@id/contactPersonTV"
             app:layout_constraintEnd_toEndOf="parent"
             android:text="Check-In"
-            android:background="@drawable/app_gradient_button"
+            android:background="@drawable/gradient_button"
             android:clickable="true"
             android:focusable="true"
             android:layout_marginStart="7dp"
