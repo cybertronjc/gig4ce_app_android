@@ -20,6 +20,7 @@ import com.gigforce.app.modules.roster.models.Gig
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.card.MaterialCardView
 import com.ncorti.slidetoact.SlideToActView
+import com.riningan.widget.ExtendedBottomSheetBehavior
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog
 import kotlinx.android.synthetic.main.item_roster_day.view.*
 import kotlinx.android.synthetic.main.roster_day_hour_view.*
@@ -107,11 +108,13 @@ class HourViewFragment: RosterBaseFragment() {
                 CustomPreferencesViewModel::class.java
             )
 
-        rosterViewModel.bsBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+        rosterViewModel.bsBehavior.state = ExtendedBottomSheetBehavior.STATE_HIDDEN
 
         initializeHourViews()
 
-        rosterViewModel.switchHourAvailability(activeDateTime, day_times, viewModelCustomPreference)
+        viewModelCustomPreference.customPreferencesLiveDataModel.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+            rosterViewModel.switchHourAvailability(activeDateTime, day_times, viewModelCustomPreference)
+        })
 
         rosterViewModel.isDayAvailable.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
             if (it)
@@ -162,11 +165,17 @@ class HourViewFragment: RosterBaseFragment() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun addGigCards() {
-        dayTag = "${activeDateTime.year}${activeDateTime.monthValue.toString().format("%02c")}${activeDateTime.dayOfMonth}"
+        dayTag = String.format("%4d", activeDateTime.year) + String.format("%02d", activeDateTime.monthValue) + String.format("%02d", activeDateTime.dayOfMonth)
         rosterViewModel.gigsQuery.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
             upcomingGigs.addAll(rosterViewModel.getUpcomingGigsByDayTag(dayTag, it))
             for (gig in upcomingGigs)
                 addUpcomingGigCard(gig)
+
+//            Log.d("DayDebug", upcomingGigs.toString())
+//            it.forEach {
+//                Log.d("DayDebug", it.startDateTime!!.toDate().toString())
+//                Log.d("DayDebug", it.toString())
+//            }
 
             completedGigs.addAll(rosterViewModel.getCompletedGigsByDayTag(dayTag, it))
             for (gig in completedGigs)
@@ -334,7 +343,7 @@ class HourViewFragment: RosterBaseFragment() {
         setBsExpandedUpcomingGigs(startIndex+1, endIndex+1)
 
         rosterViewModel.UnavailableBS.bs_close_button.setOnClickListener {
-            rosterViewModel.bsBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+            rosterViewModel.bsBehavior.state = ExtendedBottomSheetBehavior.STATE_HIDDEN
             day_times.removeView(day_times.findViewWithTag<HourOutline>("selected_time"))
         }
 
@@ -352,7 +361,7 @@ class HourViewFragment: RosterBaseFragment() {
 
 
         // show bottom sheet in collapsed mode
-        rosterViewModel.bsBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+        rosterViewModel.bsBehavior.state = ExtendedBottomSheetBehavior.STATE_COLLAPSED
 
         // This is to stop hours covered by bottom sheet from receiving click
         rosterViewModel.UnavailableBS.setOnClickListener {  }

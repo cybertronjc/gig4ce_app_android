@@ -221,7 +221,8 @@ class RosterDayFragment: RosterBaseFragment() {
             top_bar.isCurrentDay = isSameDate(it, actualDateTime)
             top_bar.isFutureDate = isMoreDate(it, actualDateTime)
 
-            dayTag = "${activeDateTime.year}${activeDateTime.monthValue}${activeDateTime.dayOfMonth}"
+            //dayTag = "${activeDateTime.year}${activeDateTime.monthValue}${activeDateTime.dayOfMonth}"
+            dayTag = String.format("%4d", activeDateTime.year) + String.format("%02d", activeDateTime.monthValue) + String.format("%02d", activeDateTime.dayOfMonth)
 
 //            upcomingGigs.clear()
 //            upcomingGigs.addAll(rosterViewModel.getUpcomingGigsByDayTag(dayTag))
@@ -253,8 +254,7 @@ class RosterDayFragment: RosterBaseFragment() {
         rosterViewModel.bsBehavior = ExtendedBottomSheetBehavior.from(mark_unavailable_bs)
         rosterViewModel.UnavailableBS = mark_unavailable_bs
 
-        rosterViewModel.bsBehavior.setPeekHeight(200.px)
-//        rosterViewModel.bsBehavior.halfExpandedRatio = 0.65F
+        //rosterViewModel.bsBehavior.halfExpandedRatio = 0.65F
         rosterViewModel.bsBehavior.isHideable = true
 
 
@@ -267,12 +267,17 @@ class RosterDayFragment: RosterBaseFragment() {
             override fun onStateChanged(bottomSheet: View, newState: Int) {
                 when(newState) {
                     ExtendedBottomSheetBehavior.STATE_COLLAPSED -> {
-                        Log.d("BS", "Collapsed State")
+                        showToast("Collapsed State")
                         time_expanded.visibility = View.GONE
                         time_collapsed.visibility = View.VISIBLE
+                        //rosterViewModel.bsBehavior.state = ExtendedBottomSheetBehavior.STATE_COLLAPSED
                     }
                     ExtendedBottomSheetBehavior.STATE_EXPANDED -> {
-                        Log.d("BS", "Expanded State")
+                        showToast("expanded state")
+                        time_collapsed.visibility = View.GONE
+                        time_expanded.visibility = View.VISIBLE
+                    }
+                    ExtendedBottomSheetBehavior.STATE_HALF -> {
                         time_collapsed.visibility = View.GONE
                         time_expanded.visibility = View.VISIBLE
                     }
