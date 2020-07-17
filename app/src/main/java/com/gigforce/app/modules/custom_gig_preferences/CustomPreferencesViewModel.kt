@@ -4,7 +4,7 @@ import androidx.lifecycle.*
 
 class CustomPreferencesViewModel(var owner: LifecycleOwner) : ViewModel() {
     var customPreferencesRepository = CustomPreferencesRepository()
-    lateinit var customPreferencesDataModel: CustomPreferencesDataModel
+    public lateinit var customPreferencesDataModel: CustomPreferencesDataModel
     var customPreferencesLiveDataModel: MutableLiveData<CustomPreferencesDataModel> =
         MutableLiveData<CustomPreferencesDataModel>()
 
@@ -12,7 +12,7 @@ class CustomPreferencesViewModel(var owner: LifecycleOwner) : ViewModel() {
         getAllData()
     }
 
-    private fun getAllData() {
+    public fun getAllData() {
         customPreferencesRepository.getDBCollection()
             .addSnapshotListener { value, e ->
                 if (e != null) {
