@@ -299,10 +299,13 @@ class RosterDayViewModel: ViewModel() {
     fun getUpcomingGigsByDayTag(dayTag: String, gigsQuery: ArrayList<Gig>): ArrayList<Gig> {
         val filteredGigs = ArrayList<Gig>()
         val format = SimpleDateFormat("yyyyMdd")
-        for (gig in gigsQuery) {
-            val idx = format.format(gig.startDateTime!!.toDate())
-            if (dayTag == idx && gig.gigStatus == "upcoming" && !gig.isFullDay)
-                filteredGigs.add(gig)
+
+        gigsQuery.filter {
+            dayTag == format.format(it.startDateTime!!.toDate())  &&
+                    it.gigStatus == "upcoming" &&
+                    !it.isFullDay
+        }.forEach {
+            filteredGigs.add(it)
         }
         return filteredGigs
     }
@@ -310,10 +313,13 @@ class RosterDayViewModel: ViewModel() {
     fun getCompletedGigsByDayTag(dayTag: String, gigsQuery: ArrayList<Gig>): ArrayList<Gig> {
         val filteredGigs = ArrayList<Gig>()
         val format = SimpleDateFormat("yyyyMdd")
-        for (gig in gigsQuery) {
-            val idx = format.format(gig.startDateTime!!.toDate())
-            if (dayTag == idx && gig.gigStatus == "completed" && !gig.isFullDay )
-                filteredGigs.add(gig)
+
+        gigsQuery.filter {
+            dayTag == format.format(it.startDateTime!!.toDate()) &&
+                    it.gigStatus == "completed" &&
+                    !it.isFullDay
+        }.forEach {
+            filteredGigs.add(it)
         }
         return filteredGigs
     }

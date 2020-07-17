@@ -171,6 +171,9 @@ class HourViewFragment: RosterBaseFragment() {
             for (gig in upcomingGigs)
                 addUpcomingGigCard(gig)
 
+            Log.d("DayDebug", upcomingGigs.toString())
+            Log.d("DayDebug", it.toString())
+
             completedGigs.addAll(rosterViewModel.getCompletedGigsByDayTag(dayTag, it))
             for (gig in completedGigs)
                 addCompletedGigCard(gig)
