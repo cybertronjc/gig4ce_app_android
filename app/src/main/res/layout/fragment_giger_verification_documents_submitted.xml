@@ -38,7 +38,7 @@
         android:textSize="14sp"
         android:text="@string/documents_uploaded_long" />
     
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/verificationCompletedBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -46,7 +46,8 @@
         android:layout_marginRight="15dp"
         android:layout_marginTop="37dp"
         android:padding="15dp"
-        android:background="@drawable/app_gradient_button"
+        android:textColor="@color/white"
+        android:background="@drawable/gradient_button"
         android:text="@string/let_s_go"
         android:layout_marginBottom="50dp"
         />
