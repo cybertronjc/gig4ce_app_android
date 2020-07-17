@@ -168,13 +168,17 @@ class AddDrivingLicenseInfoFragment : BaseFragment() {
 
                         if (stateSpinner.selectedItemPosition == 0) {
                             MaterialAlertDialogBuilder(requireContext())
-                                .setMessage("Please Select State")
+                                .setTitle("Alert")
+                                .setMessage("Select Driving License State")
+                                .setPositiveButton("OK") { _, _ -> }
                                 .show()
+                            dlSubmitSliderBtn.resetSlider()
                             return
                         }
 
                         if (drivingLicenseEditText.text!!.length != 15) {
                             drivingLicenseTextInputLayout.error = "Enter Valid Driving License"
+                            dlSubmitSliderBtn.resetSlider()
                             return
                         }
 
@@ -185,6 +189,7 @@ class AddDrivingLicenseInfoFragment : BaseFragment() {
                                 .setMessage("Select or capture both sides of Driving License")
                                 .setPositiveButton("OK") { _, _ -> }
                                 .show()
+                            dlSubmitSliderBtn.resetSlider()
                             return
                         }
 

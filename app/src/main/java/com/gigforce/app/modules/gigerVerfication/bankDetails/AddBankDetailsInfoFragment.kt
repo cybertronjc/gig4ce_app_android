@@ -4,9 +4,11 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -81,7 +83,7 @@ class AddBankDetailsInfoFragment : BaseFragment() {
 
         toolbar.setNavigationOnClickListener {
             if (cameFromDLScreen)
-                findNavController().popBackStack(R.id.addSelfieVideoFragment, false)
+                findNavController().popBackStack(R.id.gigerVerificationFragment, false)
             else
                 activity?.onBackPressed()
         }
@@ -155,11 +157,13 @@ class AddBankDetailsInfoFragment : BaseFragment() {
 
                         if (ifscEditText.text!!.length != 11) {
                             ifscTextInputLayout.error = "Enter Valid IfSC Code"
+                            passbookSubmitSliderBtn.resetSlider()
                             return
                         }
 
                         if (accountNoEditText.text.isNullOrBlank()) {
                             accountNoTextInputLayout.error = "Enter Account No"
+                            passbookSubmitSliderBtn.resetSlider()
                             return
                         }
 
@@ -170,6 +174,7 @@ class AddBankDetailsInfoFragment : BaseFragment() {
                                 .setMessage("Click Or Select your Passbook Image first")
                                 .setPositiveButton("OK") { _, _ -> }
                                 .show()
+                            passbookSubmitSliderBtn.resetSlider()
                             return
                         }
 
@@ -240,7 +245,7 @@ class AddBankDetailsInfoFragment : BaseFragment() {
     override fun onBackPressed(): Boolean {
 
         if (cameFromDLScreen) {
-            findNavController().popBackStack(R.id.addSelfieVideoFragment, false)
+            findNavController().popBackStack(R.id.gigerVerificationFragment, false)
             return true
         } else {
             return super.onBackPressed()
@@ -260,9 +265,19 @@ class AddBankDetailsInfoFragment : BaseFragment() {
     }
 
     private fun panCardDocumentUploaded() {
-        showToast("Bank Details Uploaded")
-        findNavController().popBackStack(R.id.addSelfieVideoFragment, false)
-        activity?.onBackPressed()
+
+        val view =
+            layoutInflater.inflate(R.layout.fragment_giger_verification_documents_submitted, null)
+
+        val dialog = AlertDialog.Builder(requireContext())
+            .setView(view)
+            .show()
+
+        view.findViewById<View>(R.id.verificationCompletedBtn)
+            .setOnClickListener {
+                dialog.dismiss()
+                findNavController().popBackStack(R.id.gigerVerificationFragment, false)
+            }
     }
 
     private fun showLoadingState() {

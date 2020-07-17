@@ -296,7 +296,9 @@ open class GigVerificationViewModel constructor(
                     frontImage = frontImageFileNameAtServer,
                     backImage = backImageFileNameAtServer,
                     dlState = dlState,
-                    dlNo = dlNo
+                    dlNo = dlNo,
+                    state = -1,
+                    verifiedString = "Under Verification"
                 )
             }
             gigerVerificationRepository.getDBCollection().setOrThrow(model)

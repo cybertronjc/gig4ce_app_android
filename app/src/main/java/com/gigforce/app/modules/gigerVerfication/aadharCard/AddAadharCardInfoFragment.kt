@@ -106,7 +106,7 @@ class AddAadharCardInfoFragment : BaseFragment() {
         toolbar.setNavigationOnClickListener {
 
             if (cameFromPanScreen)
-                findNavController().popBackStack(R.id.addSelfieVideoFragment, false)
+                findNavController().popBackStack(R.id.gigerVerificationFragment, false)
             else
                 activity?.onBackPressed()
         }
@@ -303,7 +303,7 @@ class AddAadharCardInfoFragment : BaseFragment() {
     override fun onBackPressed(): Boolean {
 
         if (cameFromPanScreen) {
-            findNavController().popBackStack(R.id.addSelfieVideoFragment, false)
+            findNavController().popBackStack(R.id.gigerVerificationFragment, false)
             return true
         } else {
             return super.onBackPressed()

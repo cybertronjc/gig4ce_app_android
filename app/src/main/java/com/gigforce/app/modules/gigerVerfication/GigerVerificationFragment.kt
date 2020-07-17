@@ -21,7 +21,7 @@ import kotlinx.android.synthetic.main.fragment_giger_verification_main.view.*
 class GigerVerificationFragment : BaseFragment() {
 
     private val viewModel: GigVerificationViewModel by viewModels()
-    private var gigerVerificationStatus : GigerVerificationStatus? = null
+    private var gigerVerificationStatus: GigerVerificationStatus? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -39,9 +39,6 @@ class GigerVerificationFragment : BaseFragment() {
     private fun initView() {
 
         toolbar.setNavigationOnClickListener {
-            activity?.onBackPressed()
-        }
-        verificationCompletedBtn.setOnClickListener {
             activity?.onBackPressed()
         }
 
@@ -87,23 +84,56 @@ class GigerVerificationFragment : BaseFragment() {
 
     private fun setListeners() {
         verificationMainLayout.panLayout.setOnClickListener {
-            navigate(R.id.addPanCardInfoFragment)
+
+            if(gigerVerificationStatus?.panCardDetails == null
+                || gigerVerificationStatus?.panCardDetails?.state == GigerVerificationStatus.STATUS_VERIFICATION_FAILED
+                || gigerVerificationStatus?.panCardDetails?.userHasPanCard!!.not()) {
+                navigate(R.id.addPanCardInfoFragment)
+            } else {
+
+            }
         }
 
         verificationMainLayout.drivingLayout.setOnClickListener {
-            navigate(R.id.addDrivingLicenseInfoFragment)
+            if(gigerVerificationStatus?.drivingLicenseDataModel == null
+                || gigerVerificationStatus?.drivingLicenseDataModel?.state == GigerVerificationStatus.STATUS_VERIFICATION_FAILED
+                || gigerVerificationStatus?.drivingLicenseDataModel?.userHasDL!!.not()) {
+                navigate(R.id.addDrivingLicenseInfoFragment)
+            } else {
+
+            }
+
         }
 
         verificationMainLayout.aadharLayout.setOnClickListener {
-            navigate(R.id.addAadharCardInfoFragment)
+
+
+            if(gigerVerificationStatus?.aadharCardDataModel == null
+                || gigerVerificationStatus?.aadharCardDataModel?.state == GigerVerificationStatus.STATUS_VERIFICATION_FAILED
+                || gigerVerificationStatus?.aadharCardDataModel?.userHasAadharCard!!.not()) {
+                navigate(R.id.addAadharCardInfoFragment)
+            } else {
+
+            }
+
         }
 
         verificationMainLayout.bankDetailsLayout.setOnClickListener {
-            navigate(R.id.addBankDetailsInfoFragment)
+
+            if(gigerVerificationStatus?.bankUploadDetailsDataModel == null
+                || gigerVerificationStatus?.bankUploadDetailsDataModel?.state == GigerVerificationStatus.STATUS_VERIFICATION_FAILED
+                || gigerVerificationStatus?.bankUploadDetailsDataModel?.userHasPassBook!!.not()) {
+                navigate(R.id.addBankDetailsInfoFragment)
+            } else {
+
+            }
         }
 
         verificationMainLayout.selfieVideoLayout.setOnClickListener {
-            navigate(R.id.addSelfieVideoFragment)
+
+            if(gigerVerificationStatus?.selfieVideoDataModel?.videoPath == null) {
+                navigate(R.id.addSelfieVideoFragment)
+            }
         }
     }
 
@@ -133,13 +163,13 @@ class GigerVerificationFragment : BaseFragment() {
                     )
                 }
 
-                if (it.panCardDetailsUploaded) {
-                    panLayout.descTitleTV.text = it.panCardDetails?.verifiedString
+                if (it.panCardDetails?.userHasPanCard != null && it.panCardDetails.userHasPanCard) {
+                    panLayout.descTitleTV.text = it.panCardDetails.verifiedString
 
                     panLayout.descTitleTV.setTextColor(
                         ResourcesCompat.getColor(
                             resources,
-                            it.getColorCodeForStatus(it.panCardDetails?.state ?: -1),
+                            it.getColorCodeForStatus(it.panCardDetails.state),
                             null
                         )
                     )
@@ -156,14 +186,14 @@ class GigerVerificationFragment : BaseFragment() {
 
 
 
-                if (it.bankDetailsUploaded) {
+                if (it.bankUploadDetailsDataModel?.userHasPassBook != null && it.bankUploadDetailsDataModel.userHasPassBook) {
                     bankDetailsLayout.descTitleTV.text =
-                        it.bankUploadDetailsDataModel?.verifiedString
+                        it.bankUploadDetailsDataModel.verifiedString
                     bankDetailsLayout.descTitleTV.setTextColor(
                         ResourcesCompat.getColor(
                             resources,
                             it.getColorCodeForStatus(
-                                it.bankUploadDetailsDataModel?.state ?: -1
+                                it.bankUploadDetailsDataModel.state
                             ),
                             null
                         )
@@ -181,12 +211,12 @@ class GigerVerificationFragment : BaseFragment() {
 
 
 
-                if (it.aadharCardDetailsUploaded) {
-                    aadharLayout.descTitleTV.text = it.aadharCardDataModel?.verifiedString
+                if (it.aadharCardDataModel?.userHasAadharCard != null && it.aadharCardDataModel.userHasAadharCard) {
+                    aadharLayout.descTitleTV.text = it.aadharCardDataModel.verifiedString
                     aadharLayout.descTitleTV.setTextColor(
                         ResourcesCompat.getColor(
                             resources,
-                            it.getColorCodeForStatus(it.aadharCardDataModel?.state ?: -1),
+                            it.getColorCodeForStatus(it.aadharCardDataModel.state),
                             null
                         )
                     )
@@ -203,12 +233,12 @@ class GigerVerificationFragment : BaseFragment() {
 
 
 
-                if (it.dlCardDetailsUploaded) {
-                    drivingLayout.descTitleTV.text = it.drivingLicenseDataModel?.verifiedString
+                if (it.drivingLicenseDataModel?.userHasDL != null && it.drivingLicenseDataModel.userHasDL) {
+                    drivingLayout.descTitleTV.text = it.drivingLicenseDataModel.verifiedString
                     drivingLayout.descTitleTV.setTextColor(
                         ResourcesCompat.getColor(
                             resources,
-                            it.getColorCodeForStatus(it.drivingLicenseDataModel?.state ?: -1),
+                            it.getColorCodeForStatus(it.drivingLicenseDataModel.state),
                             null
                         )
                     )
@@ -222,8 +252,6 @@ class GigerVerificationFragment : BaseFragment() {
                         )
                     )
                 }
-
-
             })
 
         viewModel.startListeningForGigerVerificationStatusChanges()

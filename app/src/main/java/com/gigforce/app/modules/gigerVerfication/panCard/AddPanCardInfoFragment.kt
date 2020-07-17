@@ -144,6 +144,7 @@ class AddPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetActio
                         if (panYesRB.isChecked) {
                             if (panCardEditText.text!!.length != 10) {
                                 panCardNoTextInputLayout.error = "Enter Valid PAN Card No"
+                                panSubmitSliderBtn.resetSlider()
                                 return
                             }
 
@@ -154,6 +155,7 @@ class AddPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetActio
                                         .setMessage("Click Or Select your Pan card Image first")
                                         .setPositiveButton("OK") { _, _ -> }
                                         .show()
+                                panSubmitSliderBtn.resetSlider()
                                 return
                             }
 
