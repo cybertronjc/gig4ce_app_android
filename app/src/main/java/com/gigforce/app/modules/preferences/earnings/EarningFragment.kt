@@ -96,6 +96,7 @@ class EarningFragment : BaseFragment() {
                     (progress * (seekBar.getWidth() - 2 * seekBar.getThumbOffset())) / seekBar.getMax()
                 seekBarDependentCanvas4.setX((seekBar.getX() + value + seekBar.getThumbOffset() / 2) - 35)
                 var progress1 = progress * 500
+                monthlyContractTV.text = "Rs 0 - Rs " + progress1
 
                 seekBarDependentCanvas4.text = "Rs " + progress1.toString()
             }
@@ -168,16 +169,16 @@ class EarningFragment : BaseFragment() {
             )[0]
         )
             return true
-        if (viewModel.getPreferenceDataModel().earning.perDayGoal != perDayGoalSB.progress) {
+        if (viewModel.getPreferenceDataModel().earning.perDayGoal/500 != perDayGoalSB.progress) {
             return true
         }
-        if (viewModel.getPreferenceDataModel().earning.perMonthGoal != permonthGoalSB.progress) {
+        if (viewModel.getPreferenceDataModel().earning.perMonthGoal/500 != permonthGoalSB.progress) {
             return true
         }
         if (viewModel.getPreferenceDataModel().earning.monthlyContractRequired != checkbox_monthly_constract.isChecked) {
             return true
         }
-        if (viewModel.getPreferenceDataModel().earning.monthlyExpectation != monthlyExpectationSB.progress) {
+        if (viewModel.getPreferenceDataModel().earning.monthlyExpectation/500 != monthlyExpectationSB.progress) {
             return true
         }
         return false

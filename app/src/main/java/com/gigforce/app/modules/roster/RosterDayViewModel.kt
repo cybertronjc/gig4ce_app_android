@@ -68,7 +68,10 @@ class RosterDayViewModel: ViewModel() {
                 val userGigs = ArrayList<Gig>()
                 querySnapshot?.documents?.forEach { t ->
                     Log.d("RosterViewModel", t.toString())
-                    t.toObject(Gig::class.java)?.let { userGigs.add(it) }
+                    t.toObject(Gig::class.java)?.let {
+                        it.gigId = t.id
+                        userGigs.add(it)
+                    }
                 }
                 gigsQuery.value = userGigs
             }
@@ -95,7 +98,7 @@ class RosterDayViewModel: ViewModel() {
             // check if it was set from custom unavailable
             for (unavailable in viewModelCustomPreference.customPreferencesDataModel.unavailable) {
                 if (date.toDate == unavailable.date)
-                    isDayAvailable.postValue(unavailable.dayUnavailable)
+                    isDayAvailable.postValue(!unavailable.dayUnavailable)
             }
 
         }
@@ -114,10 +117,12 @@ class RosterDayViewModel: ViewModel() {
                 isDayAvailable.value = false
                 allHourInactive(parentView)
 
+                var unavailable = UnavailableDataModel(
+                    Date.from(activeDateTime.atZone(ZoneId.systemDefault()).toInstant())
+                )
+                unavailable.dayUnavailable = true
                 viewModelCustomPreference.updateCustomPreference(
-                    UnavailableDataModel(
-                        Date.from(activeDateTime.atZone(ZoneId.systemDefault()).toInstant())
-                    )
+                    unavailable
                 )
             }
 
@@ -131,7 +136,7 @@ class RosterDayViewModel: ViewModel() {
                             Date.from(activeDateTime.atZone(ZoneId.systemDefault()).toInstant())
                     )
 
-            available.dayUnavailable = true
+            available.dayUnavailable = false
 
             viewModelCustomPreference.updateCustomPreference(
                     available
@@ -149,14 +154,22 @@ class RosterDayViewModel: ViewModel() {
     }
 
     fun switchHourAvailability(activeDateTime: LocalDateTime, parentView: ConstraintLayout, viewModelCustomPreference: CustomPreferencesViewModel) {
+        viewModelCustomPreference.customPreferencesDataModel.unavailable.filter {
+            it.date == activeDateTime.toDate
+        }.forEach {
+            it.timeSlots.forEach {
+                selectedHourInactive(parentView, it.startTime, it.endTime)
+            }
+        }
+    }
+
+//    fun updateHourAvailabilityForPreference(activeDateTime: LocalDateTime, parentView: ConstraintLayout, viewModelCustomPreference: CustomPreferencesViewModel) {
 //        viewModelCustomPreference.customPreferencesDataModel.unavailable.filter {
 //            it.date == activeDateTime.toDate
 //        }.forEach {
-//            it.timeSlots.forEach {
-//                selectedHourInactive(parentView, it.startTime, it.endTime)
-//            }
+//            it.time
 //        }
-    }
+//    }
 
     fun selectedHourInactive(parentView: ConstraintLayout, startDateTime: Date, endDateTime: Date) {
         for (idx in 1..24) {
@@ -298,28 +311,35 @@ class RosterDayViewModel: ViewModel() {
 
     fun getUpcomingGigsByDayTag(dayTag: String, gigsQuery: ArrayList<Gig>): ArrayList<Gig> {
         val filteredGigs = ArrayList<Gig>()
-        val format = SimpleDateFormat("yyyyMdd")
-        for (gig in gigsQuery) {
-            val idx = format.format(gig.startDateTime!!.toDate())
-            if (dayTag == idx && gig.gigStatus == "upcoming" && !gig.isFullDay)
-                filteredGigs.add(gig)
+        val format = SimpleDateFormat("yyyyMMdd")
+
+        gigsQuery.filter {
+            Log.d("DayDebug", "day times in getUpcoming " + dayTag + "  " +  format.format(it.startDateTime!!.toDate()))
+            dayTag == format.format(it.startDateTime!!.toDate())  &&
+                    it.gigStatus == "upcoming" &&
+                    !it.isFullDay
+        }.forEach {
+            filteredGigs.add(it)
         }
         return filteredGigs
     }
 
     fun getCompletedGigsByDayTag(dayTag: String, gigsQuery: ArrayList<Gig>): ArrayList<Gig> {
         val filteredGigs = ArrayList<Gig>()
-        val format = SimpleDateFormat("yyyyMdd")
-        for (gig in gigsQuery) {
-            val idx = format.format(gig.startDateTime!!.toDate())
-            if (dayTag == idx && gig.gigStatus == "completed" && !gig.isFullDay )
-                filteredGigs.add(gig)
+        val format = SimpleDateFormat("yyyyMMdd")
+
+        gigsQuery.filter {
+            dayTag == format.format(it.startDateTime!!.toDate()) &&
+                    it.gigStatus == "completed" &&
+                    !it.isFullDay
+        }.forEach {
+            filteredGigs.add(it)
         }
         return filteredGigs
     }
 
     fun getFullDayGigForDate(date: LocalDateTime, gigsQuery: ArrayList<Gig>): Gig? {
-        val format = SimpleDateFormat("yyyyMdd")
+        val format = SimpleDateFormat("yyyyMMdd")
         val dayTag = format.format(date.toDate)
         for (gig in gigsQuery) {
             val idx = format.format(gig.startDateTime!!.toDate())

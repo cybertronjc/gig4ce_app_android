@@ -1,18 +1,12 @@
 package com.gigforce.app.modules.roster
 
-import android.app.Dialog
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.Window
 import android.widget.AdapterView
-import android.widget.RadioButton
-import android.widget.RadioGroup
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.Observer
@@ -21,22 +15,13 @@ import androidx.viewpager2.widget.ViewPager2
 import com.gigforce.app.R
 import com.gigforce.app.modules.custom_gig_preferences.CustomPreferencesViewModel
 import com.gigforce.app.modules.custom_gig_preferences.ParamCustPreferViewModel
-import com.gigforce.app.modules.custom_gig_preferences.UnavailableDataModel
 import com.gigforce.app.modules.roster.models.Gig
-import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_HALF_EXPANDED
 import com.riningan.widget.ExtendedBottomSheetBehavior
 import kotlinx.android.synthetic.main.day_view_top_bar.*
 import kotlinx.android.synthetic.main.day_view_top_bar.view.*
-import kotlinx.android.synthetic.main.gigs_today_warning_dialog.*
-import kotlinx.android.synthetic.main.reason_for_gig_cancel_dialog.*
 import kotlinx.android.synthetic.main.roster_day_fragment.*
-import kotlinx.android.synthetic.main.roster_day_hour_view.*
 import kotlinx.android.synthetic.main.unavailable_time_adjustment_bottom_sheet.*
-import java.sql.Timestamp
 import java.time.LocalDateTime
-import java.time.ZoneId
-import java.util.*
 import kotlin.collections.ArrayList
 
 class RosterDayFragment: RosterBaseFragment() {
@@ -97,8 +82,8 @@ class RosterDayFragment: RosterBaseFragment() {
             viewModelCustomPreference.getAllData()
         }
 
+        rosterViewModel.currentDateTime.value = activeDateTime
         viewModelCustomPreference.customPreferencesLiveDataModel.observe(viewLifecycleOwner, Observer { data ->
-            rosterViewModel.currentDateTime.value = activeDateTime
             rosterViewModel.checkDayAvailable(activeDateTime, viewModelCustomPreference)
         })
     }
@@ -158,6 +143,7 @@ class RosterDayFragment: RosterBaseFragment() {
         hourview_viewpager.registerOnPageChangeCallback(hourviewPageChangeCallBack)
 
         top_bar.available_toggle.setOnClickListener {
+            Log.d("RosterDayFragment", "toggle availability called with " + rosterViewModel.isDayAvailable.value!! + " on date " + activeDateTime.toString())
             rosterViewModel.toggleDayAvailability(
                 requireContext(), hourview_viewpager.getChildAt(0).findViewWithTag<ConstraintLayout>("day_times"),
                 upcomingGigs, rosterViewModel.isDayAvailable.value!!, activeDateTime, actualDateTime, viewModelCustomPreference)
@@ -221,7 +207,8 @@ class RosterDayFragment: RosterBaseFragment() {
             top_bar.isCurrentDay = isSameDate(it, actualDateTime)
             top_bar.isFutureDate = isMoreDate(it, actualDateTime)
 
-            dayTag = "${activeDateTime.year}${activeDateTime.monthValue}${activeDateTime.dayOfMonth}"
+            //dayTag = "${activeDateTime.year}${activeDateTime.monthValue}${activeDateTime.dayOfMonth}"
+            dayTag = String.format("%4d", activeDateTime.year) + String.format("%02d", activeDateTime.monthValue) + String.format("%02d", activeDateTime.dayOfMonth)
 
 //            upcomingGigs.clear()
 //            upcomingGigs.addAll(rosterViewModel.getUpcomingGigsByDayTag(dayTag))
@@ -253,8 +240,7 @@ class RosterDayFragment: RosterBaseFragment() {
         rosterViewModel.bsBehavior = ExtendedBottomSheetBehavior.from(mark_unavailable_bs)
         rosterViewModel.UnavailableBS = mark_unavailable_bs
 
-        rosterViewModel.bsBehavior.setPeekHeight(200.px)
-//        rosterViewModel.bsBehavior.halfExpandedRatio = 0.65F
+        //rosterViewModel.bsBehavior.halfExpandedRatio = 0.65F
         rosterViewModel.bsBehavior.isHideable = true
 
 
@@ -267,12 +253,17 @@ class RosterDayFragment: RosterBaseFragment() {
             override fun onStateChanged(bottomSheet: View, newState: Int) {
                 when(newState) {
                     ExtendedBottomSheetBehavior.STATE_COLLAPSED -> {
-                        Log.d("BS", "Collapsed State")
+                        //showToast("Collapsed State")
                         time_expanded.visibility = View.GONE
                         time_collapsed.visibility = View.VISIBLE
+                        //rosterViewModel.bsBehavior.state = ExtendedBottomSheetBehavior.STATE_COLLAPSED
                     }
                     ExtendedBottomSheetBehavior.STATE_EXPANDED -> {
-                        Log.d("BS", "Expanded State")
+                        //showToast("expanded state")
+                        time_collapsed.visibility = View.GONE
+                        time_expanded.visibility = View.VISIBLE
+                    }
+                    ExtendedBottomSheetBehavior.STATE_HALF -> {
                         time_collapsed.visibility = View.GONE
                         time_expanded.visibility = View.VISIBLE
                     }

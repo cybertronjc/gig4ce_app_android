@@ -7,7 +7,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
@@ -16,14 +15,14 @@ import androidx.lifecycle.ViewModelProvider
 import com.gigforce.app.R
 import com.gigforce.app.modules.custom_gig_preferences.CustomPreferencesViewModel
 import com.gigforce.app.modules.custom_gig_preferences.ParamCustPreferViewModel
+import com.gigforce.app.modules.gigPage.PresentGigPageFragment
 import com.gigforce.app.modules.roster.models.Gig
-import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.card.MaterialCardView
 import com.ncorti.slidetoact.SlideToActView
+import com.riningan.widget.ExtendedBottomSheetBehavior
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog
 import kotlinx.android.synthetic.main.item_roster_day.view.*
 import kotlinx.android.synthetic.main.roster_day_hour_view.*
-import kotlinx.android.synthetic.main.unavailable_time_adjustment_bottom_sheet.*
 import kotlinx.android.synthetic.main.unavailable_time_adjustment_bottom_sheet.view.*
 import kotlinx.android.synthetic.main.unavailable_time_adjustment_bottom_sheet.view.start_day_time
 import kotlinx.android.synthetic.main.upcoming_gig_card.view.*
@@ -107,11 +106,13 @@ class HourViewFragment: RosterBaseFragment() {
                 CustomPreferencesViewModel::class.java
             )
 
-        rosterViewModel.bsBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+        rosterViewModel.bsBehavior.state = ExtendedBottomSheetBehavior.STATE_HIDDEN
 
         initializeHourViews()
 
-        rosterViewModel.switchHourAvailability(activeDateTime, day_times, viewModelCustomPreference)
+        viewModelCustomPreference.customPreferencesLiveDataModel.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+            rosterViewModel.switchHourAvailability(activeDateTime, day_times, viewModelCustomPreference)
+        })
 
         rosterViewModel.isDayAvailable.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
             if (it)
@@ -162,11 +163,17 @@ class HourViewFragment: RosterBaseFragment() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun addGigCards() {
-        dayTag = "${activeDateTime.year}${activeDateTime.monthValue.toString().format("%02c")}${activeDateTime.dayOfMonth}"
+        dayTag = String.format("%4d", activeDateTime.year) + String.format("%02d", activeDateTime.monthValue) + String.format("%02d", activeDateTime.dayOfMonth)
         rosterViewModel.gigsQuery.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
             upcomingGigs.addAll(rosterViewModel.getUpcomingGigsByDayTag(dayTag, it))
             for (gig in upcomingGigs)
                 addUpcomingGigCard(gig)
+
+//            Log.d("DayDebug", upcomingGigs.toString())
+//            it.forEach {
+//                Log.d("DayDebug", it.startDateTime!!.toDate().toString())
+//                Log.d("DayDebug", it.toString())
+//            }
 
             completedGigs.addAll(rosterViewModel.getCompletedGigsByDayTag(dayTag, it))
             for (gig in completedGigs)
@@ -177,7 +184,7 @@ class HourViewFragment: RosterBaseFragment() {
 
     private fun addUpcomingGigCard(gig: Gig) {
         Log.d("HourView", "Upcoming gig add")
-        Toast.makeText(requireContext(), "Add upcoming gig called", Toast.LENGTH_SHORT).show()
+        //Toast.makeText(requireContext(), "Add upcoming gig called", Toast.LENGTH_SHORT).show()
         val upcomingCard = UpcomingGigCard(requireContext())
 
         day_times.addView(upcomingCard)
@@ -204,8 +211,10 @@ class HourViewFragment: RosterBaseFragment() {
         constraintSet.applyTo(day_times)
 
         upcomingCard.setOnClickListener {
-            Toast.makeText(requireContext(), "Clicked on upcoming card", Toast.LENGTH_SHORT).show()
-            navigate(R.id.gigPageExpanded)
+            //Toast.makeText(requireContext(), "Clicked on upcoming card", Toast.LENGTH_SHORT).show()
+            navigate(R.id.presentGigPageFragment, Bundle().apply {
+                this.putString(PresentGigPageFragment.INTENT_EXTRA_GIG_ID, gig.gigId)
+            })
         }
     }
 
@@ -238,10 +247,11 @@ class HourViewFragment: RosterBaseFragment() {
         constraintSet.applyTo(day_times)
 
         completedGigCard.setOnClickListener {
-            Toast.makeText(requireContext(), "Clicked on completed card", Toast.LENGTH_SHORT).show()
-            navigate(R.id.gigPageExpanded)
+            //Toast.makeText(requireContext(), "Clicked on upcoming card", Toast.LENGTH_SHORT).show()
+            navigate(R.id.presentGigPageFragment, Bundle().apply {
+                this.putString(PresentGigPageFragment.INTENT_EXTRA_GIG_ID, gig.gigId)
+            })
         }
-
     }
 
 
@@ -334,7 +344,7 @@ class HourViewFragment: RosterBaseFragment() {
         setBsExpandedUpcomingGigs(startIndex+1, endIndex+1)
 
         rosterViewModel.UnavailableBS.bs_close_button.setOnClickListener {
-            rosterViewModel.bsBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+            rosterViewModel.bsBehavior.state = ExtendedBottomSheetBehavior.STATE_HIDDEN
             day_times.removeView(day_times.findViewWithTag<HourOutline>("selected_time"))
         }
 
@@ -352,7 +362,7 @@ class HourViewFragment: RosterBaseFragment() {
 
 
         // show bottom sheet in collapsed mode
-        rosterViewModel.bsBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+        rosterViewModel.bsBehavior.state = ExtendedBottomSheetBehavior.STATE_COLLAPSED
 
         // This is to stop hours covered by bottom sheet from receiving click
         rosterViewModel.UnavailableBS.setOnClickListener {  }
@@ -400,6 +410,7 @@ class HourViewFragment: RosterBaseFragment() {
         outline.endHour = endIndex + 1
         outline.endMinute = 0
 
+        outline.resetHeightAndTopMargin(itemHeight)
         day_times.addView(outline)
 
         // TODO: Check why adding the end constraint results in unexpected alignment
@@ -410,7 +421,6 @@ class HourViewFragment: RosterBaseFragment() {
 //      constraintSet.connect(outline.id, ConstraintSet.END, end_guideline.id, ConstraintSet.END)
         constraintSet.applyTo(day_times)
 
-        outline.resetHeightAndTopMargin(itemHeight)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
