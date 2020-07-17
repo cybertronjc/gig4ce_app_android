@@ -4,7 +4,6 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.text.SpannableString
-import android.text.style.ClickableSpan
 import android.text.style.ForegroundColorSpan
 import android.view.LayoutInflater
 import android.view.View
@@ -18,8 +17,11 @@ import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
+import com.gigforce.app.core.gone
+import com.gigforce.app.core.visible
 import com.gigforce.app.modules.gigPage.models.Gig
 import com.gigforce.app.modules.roster.inflate
+import com.gigforce.app.utils.DateHelper
 import com.gigforce.app.utils.Lce
 import com.gigforce.app.utils.ViewFullScreenImageDialogFragment
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -48,8 +50,8 @@ class PresentGigPageFragment : BaseFragment() {
     private var gig: Gig? = null
 
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
     ) = inflateView(R.layout.fragment_gig_page_present, inflater, container)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -117,22 +119,22 @@ class PresentGigPageFragment : BaseFragment() {
 
     private fun initViewModel() {
         viewModel.gigDetails
-                .observe(viewLifecycleOwner, Observer {
-                    when (it) {
-                        Lce.Loading -> {
-                        }
-                        is Lce.Content -> setGigDetailsOnView(it.content)
-                        is Lce.Error -> {
-                        }
+            .observe(viewLifecycleOwner, Observer {
+                when (it) {
+                    Lce.Loading -> {
                     }
-                })
+                    is Lce.Content -> setGigDetailsOnView(it.content)
+                    is Lce.Error -> {
+                    }
+                }
+            })
 
         viewModel.watchGig(gigId)
     }
 
     private fun addMarkerOnMap(
-            latitude: Double,
-            longitude: Double
+        latitude: Double,
+        longitude: Double
     ) = mGoogleMap?.let {
 
         it.clear()
@@ -140,14 +142,14 @@ class PresentGigPageFragment : BaseFragment() {
         // create marker
         val marker = MarkerOptions()
         marker.position(LatLng(latitude, longitude))
-                .title(getString(R.string.gig_location))
+            .title(getString(R.string.gig_location))
 
         // adding marker
         it.addMarker(marker)
         val cameraPosition = CameraPosition.Builder()
-                .target(LatLng(latitude, longitude))
-                .zoom(15f)
-                .build()
+            .target(LatLng(latitude, longitude))
+            .zoom(15f)
+            .build()
         it.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
     }
 
@@ -160,7 +162,7 @@ class PresentGigPageFragment : BaseFragment() {
                 Glide.with(requireContext())
                     .load(gig.companyLogo)
                     .into(companyLogoIV)
-            }else {
+            } else {
                 FirebaseStorage.getInstance()
                     .getReference("companies_gigs_images")
                     .child(gig.companyLogo!!)
@@ -199,14 +201,14 @@ class PresentGigPageFragment : BaseFragment() {
 
                 if (gig.attendance?.checkInTime != null)
                     punchInTimeTV.text =
-                            timeFormatter.format(gig.attendance!!.checkInTime!!)
+                        timeFormatter.format(gig.attendance!!.checkInTime!!)
                 else
                     punchInTimeTV.text = "--:--"
 
 
                 if (gig.attendance?.checkOutTime != null)
                     punchOutTimeTV.text =
-                            timeFormatter.format(gig.attendance!!.checkOutTime!!)
+                        timeFormatter.format(gig.attendance!!.checkOutTime!!)
                 else
                     punchOutTimeTV.text = "--:--"
 
@@ -221,8 +223,40 @@ class PresentGigPageFragment : BaseFragment() {
             gigControlsLayout.visibility = View.VISIBLE
 
             if (isGigOfToday()) {
-                checkInOrContactUsBtn.text = "Check In"
-                fetchingLocationTV.text = "Note :We are fetching your location to mark attendance."
+
+                if (gig.attendance != null) {
+                    if (gig.attendance?.checkInTime != null && gig.attendance?.checkOutTime != null) {
+                        gigControlsLayout.visibility = View.GONE
+                        completedGigControlsLayout.visibility = View.VISIBLE
+                        dateTV.text = DateHelper.getDateInDDMMYYYY(gig.startDateTime!!.toDate())
+
+                        if (gig.attendance?.checkInTime != null)
+                            punchInTimeTV.text =
+                                timeFormatter.format(gig.attendance!!.checkInTime!!)
+                        else
+                            punchInTimeTV.text = "--:--"
+
+                        if (gig.attendance?.checkOutTime != null)
+                            punchOutTimeTV.text =
+                                timeFormatter.format(gig.attendance!!.checkOutTime!!)
+                        else
+                            punchOutTimeTV.text = "--:--"
+
+                    } else if (gig.attendance?.checkInTime != null) {
+                        completedGigControlsLayout.gone()
+                        gigControlsLayout.visible()
+
+                        checkInOrContactUsBtn.text = "Check Out"
+                    }
+
+                } else {
+                    completedGigControlsLayout.gone()
+                    gigControlsLayout.visible()
+
+                    checkInOrContactUsBtn.text = "Check In"
+                    fetchingLocationTV.text =
+                        "Note :We are fetching your location to mark attendance."
+                }
             } else if (isGigOfPast()) {
                 //Past Gig which user did not attended
                 checkInOrContactUsBtn.text = "Contact Us"
@@ -234,13 +268,13 @@ class PresentGigPageFragment : BaseFragment() {
 
                 checkInOrContactUsBtn.text = "Contact Us"
                 fetchingLocationTV.text =
-                        "Note :We are preparing your gig.It will start in next $daysLeft Days"
+                    "Note :We are preparing your gig.It will start in next $daysLeft Days"
             }
         }
 
         if (gig.endDateTime != null)
             durationTextTV.text =
-                    "${dateFormatter.format(gig.startDateTime!!.toDate())} - ${dateFormatter.format(gig.endDateTime!!.toDate())}"
+                "${dateFormatter.format(gig.startDateTime!!.toDate())} - ${dateFormatter.format(gig.endDateTime!!.toDate())}"
         else
             durationTextTV.text = "${dateFormatter.format(gig.startDateTime!!.toDate())} - "
 
@@ -284,8 +318,8 @@ class PresentGigPageFragment : BaseFragment() {
         if (gig.latitude != null) {
 
             addMarkerOnMap(
-                    latitude = gig.latitude!!,
-                    longitude = gig.longitude!!
+                latitude = gig.latitude!!,
+                longitude = gig.longitude!!
             )
         } else {
             //Hide Map maybe
@@ -294,6 +328,7 @@ class PresentGigPageFragment : BaseFragment() {
         if (gig.locationPictures.isNotEmpty()) {
             //Inflate Pics
             locationImageScrollView.visibility = View.VISIBLE
+            locationImageContainer.removeAllViews()
             inflateLocationPics(gig.locationPictures)
         } else {
             locationImageScrollView.visibility = View.GONE
@@ -304,7 +339,7 @@ class PresentGigPageFragment : BaseFragment() {
     private fun inflateLocationPics(locationPictures: List<String>) = locationPictures.forEach {
         locationImageContainer.inflate(R.layout.layout_gig_location_picture_item, true)
         val gigItem: View =
-                locationImageContainer.getChildAt(locationImageContainer.childCount - 1) as View
+            locationImageContainer.getChildAt(locationImageContainer.childCount - 1) as View
 
         gigItem.setOnClickListener(locationImageItemClickListener)
 
@@ -315,7 +350,7 @@ class PresentGigPageFragment : BaseFragment() {
             Glide.with(requireContext())
                 .load(it)
                 .into(locationImageView)
-        }else {
+        } else {
             FirebaseStorage.getInstance()
                 .getReference("companies_gigs_images")
                 .child(it)
@@ -328,7 +363,6 @@ class PresentGigPageFragment : BaseFragment() {
                     (locationImageView.parent as View).tag = fileUri.toString()
                 }
         }
-
     }
 
     private val locationImageItemClickListener = View.OnClickListener { view ->
@@ -353,7 +387,7 @@ class PresentGigPageFragment : BaseFragment() {
     private fun inflateGigRequirements(gigRequirements: List<String>) = gigRequirements.forEach {
         gigRequirementsContainer.inflate(R.layout.gig_details_item, true)
         val gigItem: LinearLayout =
-                gigRequirementsContainer.getChildAt(gigRequirementsContainer.childCount - 1) as LinearLayout
+            gigRequirementsContainer.getChildAt(gigRequirementsContainer.childCount - 1) as LinearLayout
         val gigTextTV: TextView = gigItem.findViewById(R.id.text)
         gigTextTV.text = it
     }
@@ -362,7 +396,7 @@ class PresentGigPageFragment : BaseFragment() {
     private fun inflateGigHighlights(gigHighLights: List<String>) = gigHighLights.forEach {
         gigHighlightsContainer.inflate(R.layout.gig_details_item, true)
         val gigItem: LinearLayout =
-                gigHighlightsContainer.getChildAt(gigHighlightsContainer.childCount - 1) as LinearLayout
+            gigHighlightsContainer.getChildAt(gigHighlightsContainer.childCount - 1) as LinearLayout
         val gigTextTV: TextView = gigItem.findViewById(R.id.text)
         gigTextTV.text = it
     }
@@ -376,7 +410,7 @@ class PresentGigPageFragment : BaseFragment() {
             return false
 
         val gigDate =
-                gig!!.startDateTime!!.toDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
+            gig!!.startDateTime!!.toDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
         val currentDate = LocalDate.now()
         return gigDate.isEqual(currentDate)
     }
@@ -386,7 +420,7 @@ class PresentGigPageFragment : BaseFragment() {
             return false
 
         val gigDate =
-                gig!!.startDateTime!!.toDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
+            gig!!.startDateTime!!.toDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
         val currentDate = LocalDate.now()
         return gigDate.isAfter(currentDate)
     }
@@ -396,7 +430,7 @@ class PresentGigPageFragment : BaseFragment() {
             return false
 
         val gigDate =
-                gig!!.startDateTime!!.toDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
+            gig!!.startDateTime!!.toDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
         val currentDate = LocalDate.now()
         return gigDate.isBefore(currentDate)
     }

@@ -91,6 +91,7 @@ class GigAttendancePageFragment : BaseFragment() {
                 override fun onSlideComplete(view: SlideToActView) {
 //                    updateAttendanceToDB()
                     requestSelfie()
+
                 }
             }
     }
@@ -191,6 +192,10 @@ class GigAttendancePageFragment : BaseFragment() {
         }
         try {
             if (gig.attendance!!.checkInMarked) {
+                if (startNavigationSliderBtn.isCompleted()) {
+                    startNavigationSliderBtn.resetSlider()
+                }
+
                 startNavigationSliderBtn.text = "Check out"
                 punchInTimeTV.text = "${timeFormatter.format(gig.attendance?.checkInTime)}"
             }
