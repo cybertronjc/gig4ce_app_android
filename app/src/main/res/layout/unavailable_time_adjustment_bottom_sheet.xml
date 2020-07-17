@@ -155,7 +155,7 @@
 
             <Switch
                 android:id="@+id/toggle_button"
-                style="@style/Theme.switchButton"
+                android:theme="@style/Theme.switchButton"
                 android:layout_width="wrap_content"
                 android:layout_height="24dp"
                 android:layout_marginEnd="30dp"
