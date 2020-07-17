@@ -68,7 +68,10 @@ class RosterDayViewModel: ViewModel() {
                 val userGigs = ArrayList<Gig>()
                 querySnapshot?.documents?.forEach { t ->
                     Log.d("RosterViewModel", t.toString())
-                    t.toObject(Gig::class.java)?.let { userGigs.add(it) }
+                    t.toObject(Gig::class.java)?.let {
+                        it.gigId = t.id
+                        userGigs.add(it)
+                    }
                 }
                 gigsQuery.value = userGigs
             }

@@ -206,7 +206,7 @@ class BSCalendarScreenFragment : BaseFragment() {
                                 currentDate.isEqual(gigDate)
                         }
 
-                        if (obj.companyLogo != null) {
+                        if (obj.companyLogo != null && obj.companyLogo.toString().isNotEmpty()) {
 
                             if (obj.companyLogo!!.startsWith("http", true)) {
 
@@ -215,16 +215,18 @@ class BSCalendarScreenFragment : BaseFragment() {
                                     .into(companyLogoIV)
 
                             } else {
-                                FirebaseStorage.getInstance()
-                                    .getReference("companies_gigs_images")
-                                    .child(obj.companyLogo!!)
-                                    .downloadUrl
-                                    .addOnSuccessListener {
+                                obj.companyLogo?.let { gig ->
+                                    FirebaseStorage.getInstance()
+                                        .getReference("companies_gigs_images")
+                                        .child(obj.companyLogo!!)
+                                        .downloadUrl
+                                        .addOnSuccessListener {
 
-                                        Glide.with(requireContext())
-                                            .load(it)
-                                            .into(companyLogoIV)
-                                    }
+                                            Glide.with(requireContext())
+                                                .load(it)
+                                                .into(companyLogoIV)
+                                        }
+                                }
                             }
                         }
 

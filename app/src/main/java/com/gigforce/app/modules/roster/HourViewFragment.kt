@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.gigforce.app.R
 import com.gigforce.app.modules.custom_gig_preferences.CustomPreferencesViewModel
 import com.gigforce.app.modules.custom_gig_preferences.ParamCustPreferViewModel
+import com.gigforce.app.modules.gigPage.PresentGigPageFragment
 import com.gigforce.app.modules.roster.models.Gig
 import com.google.android.material.card.MaterialCardView
 import com.ncorti.slidetoact.SlideToActView
@@ -211,7 +212,9 @@ class HourViewFragment: RosterBaseFragment() {
 
         upcomingCard.setOnClickListener {
             //Toast.makeText(requireContext(), "Clicked on upcoming card", Toast.LENGTH_SHORT).show()
-            navigate(R.id.gigPageExpanded)
+            navigate(R.id.presentGigPageFragment, Bundle().apply {
+                this.putString(PresentGigPageFragment.INTENT_EXTRA_GIG_ID, gig.gigId)
+            })
         }
     }
 
@@ -244,10 +247,11 @@ class HourViewFragment: RosterBaseFragment() {
         constraintSet.applyTo(day_times)
 
         completedGigCard.setOnClickListener {
-            //Toast.makeText(requireContext(), "Clicked on completed card", Toast.LENGTH_SHORT).show()
-            navigate(R.id.gigPageExpanded)
+            //Toast.makeText(requireContext(), "Clicked on upcoming card", Toast.LENGTH_SHORT).show()
+            navigate(R.id.presentGigPageFragment, Bundle().apply {
+                this.putString(PresentGigPageFragment.INTENT_EXTRA_GIG_ID, gig.gigId)
+            })
         }
-
     }
 
 
@@ -406,6 +410,7 @@ class HourViewFragment: RosterBaseFragment() {
         outline.endHour = endIndex + 1
         outline.endMinute = 0
 
+        outline.resetHeightAndTopMargin(itemHeight)
         day_times.addView(outline)
 
         // TODO: Check why adding the end constraint results in unexpected alignment
@@ -416,7 +421,6 @@ class HourViewFragment: RosterBaseFragment() {
 //      constraintSet.connect(outline.id, ConstraintSet.END, end_guideline.id, ConstraintSet.END)
         constraintSet.applyTo(day_times)
 
-        outline.resetHeightAndTopMargin(itemHeight)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
