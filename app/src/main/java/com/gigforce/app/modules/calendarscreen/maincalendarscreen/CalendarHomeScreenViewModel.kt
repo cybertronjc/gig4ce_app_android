@@ -13,6 +13,7 @@ import com.gigforce.app.modules.custom_gig_preferences.UnavailableDataModel
 import com.gigforce.app.modules.roster.models.Gig
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.EventListener
+import com.google.firebase.firestore.ServerTimestamp
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -65,7 +66,9 @@ class CalendarHomeScreenViewModel : ViewModel() {
         var duration: Int = 0
         var gigStatus: String = ""
         var gigerId: String = ""
+        @ServerTimestamp
         lateinit var startDateTime: Date
+        @ServerTimestamp
         lateinit var endDateTime: Date
         var title: String = ""
 

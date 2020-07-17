@@ -96,7 +96,6 @@ class EarningFragment : BaseFragment() {
                     (progress * (seekBar.getWidth() - 2 * seekBar.getThumbOffset())) / seekBar.getMax()
                 seekBarDependentCanvas4.setX((seekBar.getX() + value + seekBar.getThumbOffset() / 2) - 35)
                 var progress1 = progress * 500
-                monthlyContractTV.text = "Rs 0 - Rs " + progress1
 
                 seekBarDependentCanvas4.text = "Rs " + progress1.toString()
             }
@@ -127,13 +126,13 @@ class EarningFragment : BaseFragment() {
         selected_pre_no_of_days.text =
             viewModel.getPreferenceDataModel().earning.preferredNoOfDays + " Days"
         perDayGoalSB.setProgress(0)
-        perDayGoalSB.setProgress(viewModel.getPreferenceDataModel().earning.perDayGoal)
+        perDayGoalSB.setProgress(viewModel.getPreferenceDataModel().earning.perDayGoal/500)
         permonthGoalSB.setProgress(0)
-        permonthGoalSB.setProgress(viewModel.getPreferenceDataModel().earning.perMonthGoal)
+        permonthGoalSB.setProgress(viewModel.getPreferenceDataModel().earning.perMonthGoal/500)
         checkbox_monthly_constract.isChecked =
             viewModel.getPreferenceDataModel().earning.monthlyContractRequired
         monthlyExpectationSB.setProgress(0)
-        monthlyExpectationSB.setProgress(viewModel.getPreferenceDataModel().earning.monthlyExpectation)
+        monthlyExpectationSB.setProgress(viewModel.getPreferenceDataModel().earning.monthlyExpectation/500)
 
         dailyGoalsTV.text = "Rs 0 - Rs " + viewModel.getPreferenceDataModel().earning.perDayGoal
         monthlyGoalsTV.text = "Rs 0 - Rs " + viewModel.getPreferenceDataModel().earning.perMonthGoal

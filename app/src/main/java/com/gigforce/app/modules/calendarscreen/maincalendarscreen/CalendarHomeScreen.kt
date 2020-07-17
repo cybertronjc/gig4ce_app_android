@@ -73,7 +73,6 @@ class CalendarHomeScreen : BaseFragment(),
         return true
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(CalendarHomeScreenViewModel::class.java)
@@ -92,7 +91,7 @@ class CalendarHomeScreen : BaseFragment(),
     }
 
 
-    @RequiresApi(Build.VERSION_CODES.O)
+
     private fun initializeViews() {
         initializeExtendedBottomSheet()
         initializeMonthTV(Calendar.getInstance(), true)
@@ -153,6 +152,7 @@ class CalendarHomeScreen : BaseFragment(),
             }
 
         })
+
     }
 
     private fun changeVisibilityCalendarView() {
@@ -181,27 +181,21 @@ class CalendarHomeScreen : BaseFragment(),
         }
         val firstVisibleItem = layoutManager!!.findFirstVisibleItemPosition()
         var dayModel = selectedMonthModel.days.get(0)
-        println(" date data2 "+ "first "+recyclerGenericAdapter.list.get(firstVisibleItem).year+" "+recyclerGenericAdapter.list.get(firstVisibleItem).month+" "+recyclerGenericAdapter.list.get(
-            firstVisibleItem
-        ).date)
-        println(" date data3 "+recyclerGenericAdapter.list.get(firstVisibleItem).month + " "+ dayModel.currentMonth+" "+(recyclerGenericAdapter.list.get(firstVisibleItem).month < dayModel.currentMonth))
         if (recyclerGenericAdapter.list.get(firstVisibleItem).year < dayModel.year || (recyclerGenericAdapter.list.get(
                 firstVisibleItem
-            ).year == dayModel.year && recyclerGenericAdapter.list.get(firstVisibleItem).month < dayModel.month)
+            ).year == dayModel.year && recyclerGenericAdapter.list.get(firstVisibleItem).month < dayModel.month)||(recyclerGenericAdapter.list.get(
+                firstVisibleItem
+            ).year == dayModel.year && recyclerGenericAdapter.list.get(firstVisibleItem).month == dayModel.month&&recyclerGenericAdapter.list.get(
+                firstVisibleItem
+            ).date < dayModel.date)
         ) {
-            println(" date data "+ "second")
-
             for (index in firstVisibleItem..recyclerGenericAdapter.list.size) {
-                println(" date data "+ index)
-
                 if (recyclerGenericAdapter.list.get(index).year == dayModel.year && recyclerGenericAdapter.list.get(
                         index
                     ).month == dayModel.month && recyclerGenericAdapter.list.get(
                         index
                     ).date == dayModel.date
                 ) {
-                    println(" date data "+ index)
-
                     (rv_.layoutManager as LinearLayoutManager)?.scrollToPositionWithOffset(
                         index,
                         0
@@ -232,12 +226,12 @@ class CalendarHomeScreen : BaseFragment(),
 
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun observePreferenceData() {
         viewModel.mainHomeLiveDataModel.observe(viewLifecycleOwner, Observer { homeDataModel ->
             if (homeDataModel != null) {
 //                viewModel.setDataModel(homeDataModel.all_gigs)
                 initializeViews()
+                calendarView.setGigData(viewModel.arrMainHomeDataModel!!)
             }
         })
 
@@ -280,7 +274,6 @@ class CalendarHomeScreen : BaseFragment(),
     lateinit var recyclerGenericAdapter: RecyclerGenericAdapter<VerticalCalendarDataItemModel>
     private val visibleThreshold = 20
     var isLoading: Boolean = false
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun initializeVerticalCalendarRV() {
         recyclerGenericAdapter =
             RecyclerGenericAdapter<VerticalCalendarDataItemModel>(

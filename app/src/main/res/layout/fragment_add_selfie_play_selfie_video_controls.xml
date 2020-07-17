@@ -34,12 +34,13 @@
         <ImageButton
             android:id="@id/exo_play"
             style="@style/ExoMediaButton.Play"
-            android:tint="@color/colorPrimary" />
+            android:src="@drawable/ic_play_square_border" />
 
         <ImageButton
             android:id="@id/exo_pause"
             style="@style/ExoMediaButton.Pause"
-            android:tint="@color/colorPrimary" />
+            android:src="@drawable/ic_pause_square_border"
+           />
 
         <View
             android:layout_width="0dp"

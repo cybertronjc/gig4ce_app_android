@@ -9,8 +9,8 @@ apply plugin: 'com.google.gms.google-services'
 android {
     signingConfigs {
         debug {
-            storeFile file('/home/yogesh/WORK/gig4ce/gig4ce_app_android/build/gigforceapp.jks')
-           // storeFile file('/Users/apple/Documents/gigforceapp.jks')
+//            storeFile file('/home/yogesh/WORK/gig4ce/gig4ce_app_android/build/gigforceapp.jks')
+            storeFile file('/Users/apple/Documents/gigforceapp.jks')
             storePassword 'gigforce'
             keyAlias 'key0'
             keyPassword 'gigforce'
@@ -29,8 +29,8 @@ android {
         applicationId "com.gigforce.app"
         minSdkVersion 23
         targetSdkVersion 29
-        versionCode 30
-        versionName "1.13.0"
+        versionCode 33
+        versionName "1.13.3"
 
         vectorDrawables.useSupportLibrary = true
 
@@ -206,8 +206,8 @@ dependencies {
     implementation 'com.github.yalantis:ucrop:2.2.4'
     // verification
     // https://github.com/square/retrofit
-    implementation 'com.squareup.retrofit2:retrofit:2.4.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
+    implementation 'com.squareup.retrofit2:retrofit:2.8.1'
+    implementation 'com.squareup.retrofit2:converter-gson:2.8.1'
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.4.0'
     implementation 'com.squareup.retrofit2:converter-scalars:2.3.0'
     // https://github.com/ReactiveX/RxAndroid

@@ -15,6 +15,7 @@ import android.widget.RadioGroup
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
 import com.gigforce.app.R
@@ -76,16 +77,30 @@ class RosterDayFragment: RosterBaseFragment() {
             ViewModelProvider(this, ParamCustPreferViewModel(viewLifecycleOwner)).get(
                 CustomPreferencesViewModel::class.java
             )
-        rosterViewModel.currentDateTime.value = activeDateTime
-        rosterViewModel.checkDayAvailable(activeDateTime, viewModelCustomPreference)
+
         return inflateView(R.layout.roster_day_fragment, inflater, container)
     }
     lateinit var  viewModelCustomPreference : CustomPreferencesViewModel
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        observer()
         initialize()
         setListeners()
 
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun observer() {
+        try {
+            viewModelCustomPreference.customPreferencesDataModel
+        }catch (e:UninitializedPropertyAccessException){
+            viewModelCustomPreference.getAllData()
+        }
+
+        viewModelCustomPreference.customPreferencesLiveDataModel.observe(viewLifecycleOwner, Observer { data ->
+            rosterViewModel.currentDateTime.value = activeDateTime
+            rosterViewModel.checkDayAvailable(activeDateTime, viewModelCustomPreference)
+        })
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
