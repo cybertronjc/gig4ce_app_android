@@ -24,8 +24,10 @@ import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.app.core.genericadapter.RecyclerGenericAdapter
+import com.gigforce.app.core.gone
+import com.gigforce.app.core.visible
 import com.gigforce.app.modules.profile.models.ProfileData
-import com.gigforce.app.utils.AppConstants
+import com.google.common.base.CaseFormat
 import kotlinx.android.synthetic.main.onboarding_main_fragment.*
 
 
@@ -56,7 +58,7 @@ class OnboardingMainFragment : BaseFragment() {
     private fun initializeViews() {
         onboarding_root_layout.getViewTreeObserver()
             .addOnGlobalLayoutListener(keyboardLayoutListener);
-        val onboardingCompleted = getSharedData(AppConstants.ON_BOARDING_COMPLETED, "")
+        val onboardingCompleted = isOnBoardingCompleted()
         if(onboardingCompleted!=null && onboardingCompleted.equals("true")){
             navigateToHomeScreen()
         }
@@ -82,6 +84,7 @@ class OnboardingMainFragment : BaseFragment() {
                             checkForAlreadyCompletedData()
                             setLiveDataListItems()
                             firstTimeLoad = false
+                            onboarding_progress_bar.gone()
                         } else {
                             if (nextPage())
                                 setLiveDataListItems()
@@ -243,7 +246,7 @@ class OnboardingMainFragment : BaseFragment() {
 
     private fun setOnboardingCompleteAndNavigate() {
         viewModel.setOnboardingCompleted()
-        saveSharedData(AppConstants.ON_BOARDING_COMPLETED, "true")
+        saveOnBoardingCompleted()
         navigateToHomeScreen()
     }
 
@@ -297,13 +300,31 @@ class OnboardingMainFragment : BaseFragment() {
                 var enteredName =
                     onboarding_pager.getChildAt(0).findViewById<EditText>(R.id.user_name)
                         .text.toString()
-                viewModel.saveUserName(enteredName)
+                var formattedString = getFormattedString(enteredName)
+                viewModel.saveUserName(formattedString.trim())
             }
             1 -> viewModel.saveAgeGroup(getSelectedDataFromRecycler(1))
             2 -> viewModel.selectYourGender(getSelectedDataFromRecycler(2))
             3 -> viewModel.saveHighestQualification(getSelectedDataFromRecycler(3))
             4 -> viewModel.saveWorkStatus(getSelectedDataFromRecycler(4))
         }
+    }
+
+    private fun getFormattedString(enteredName: String): String {
+        var formattedString = ""
+        var arr = enteredName.split(" ")
+        for(str in arr){
+            try {
+                formattedString += str.substring(
+                    0,
+                    1
+                ).toUpperCase() + str.substring(1).toLowerCase()
+            }catch (e:Exception){
+
+            }
+            formattedString += " "
+        }
+        return formattedString.trim()
     }
 
     private fun getSelectedDataFromRecycler(position: Int): String {
@@ -360,7 +381,8 @@ class OnboardingMainFragment : BaseFragment() {
                                 before: Int,
                                 count: Int
                             ) {
-                                if (s.toString().length >= 3) {
+                                var str = s.toString().trim()
+                                if (str.length >= 3) {
                                     enableNextButton(true)
                                 } else {
                                     enableNextButton(false)

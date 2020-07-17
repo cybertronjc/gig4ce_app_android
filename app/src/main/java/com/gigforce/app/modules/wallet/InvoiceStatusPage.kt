@@ -16,6 +16,8 @@ import com.gigforce.app.modules.wallet.models.Invoice
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.android.material.textview.MaterialTextView
 import kotlinx.android.synthetic.main.all_invoice_status_page.*
+import kotlinx.android.synthetic.main.all_invoice_status_page.back_button
+import kotlinx.android.synthetic.main.balance_expanded_page.*
 import kotlinx.android.synthetic.main.invoice_status_page.*
 
 class InvoiceStatusPage: WalletBaseFragment() {
@@ -27,8 +29,7 @@ class InvoiceStatusPage: WalletBaseFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        inflateView(R.layout.all_invoice_status_page, inflater, container)
-        return getFragmentView()
+        return inflateView(R.layout.all_invoice_status_page, inflater, container)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -48,6 +49,8 @@ class InvoiceStatusPage: WalletBaseFragment() {
         back_button.setOnClickListener {
             requireActivity().onBackPressed()
         }
+
+        help_ic.setOnClickListener { navigate(R.id.helpExpandedPage) }
     }
 
 }
@@ -73,8 +76,7 @@ class InvoicePageFragment: WalletBaseFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        inflateView(R.layout.invoice_status_page, inflater, container)
-        return getFragmentView()
+        return inflateView(R.layout.invoice_status_page, inflater, container)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -86,19 +88,21 @@ class InvoicePageFragment: WalletBaseFragment() {
                 // invoice generated
 
                 invoiceViewModel.generatedInvoice.observe(viewLifecycleOwner, Observer {invoices ->
-                    addInvoices(invoices_container, invoices)
+                    addInvoices(invoices_container, invoiceViewModel.getGeneratedInvoices(invoices))
                 })
             } else if (position == 1) {
                 // invoice pending
 
                 invoiceViewModel.pendingInvoices.observe(viewLifecycleOwner, Observer { invoices ->
-                    //addInvoices(invoices_container, invoices)
+                    addInvoices(invoices_container, invoiceViewModel.getPendingInvoices(invoices))
                 })
             }
         }
     }
 
-    private fun addInvoices(parentView: ConstraintLayout, invoices: ArrayList<Invoice>) {
+   private fun addInvoices(parentView: ConstraintLayout, invoices: ArrayList<Invoice>) {
+       if (invoices.size == 0)
+           return
         // clear constraint layout first in case invoice
         // changes and function is recalled
         parentView.removeAllViews()

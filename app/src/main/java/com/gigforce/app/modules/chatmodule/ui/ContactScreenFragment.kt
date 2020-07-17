@@ -65,6 +65,9 @@ class ContactScreenFragment : BaseFragment(),OnContactClickListener {
         iv_search.setOnClickListener {
             showToast("Search Operation...")
         }
+        back_arrow.setOnClickListener{
+            activity?.onBackPressed()
+        }
     }
 
     private fun subscribeViewModel(){
@@ -113,7 +116,7 @@ class ContactScreenFragment : BaseFragment(),OnContactClickListener {
             val bundle = Bundle()
             bundle.putSerializable(AppConstants.IMAGE_URL, url)
             bundle.putSerializable(AppConstants.CONTACT_NAME, name)
-            navController.navigate(R.id.chatScreenFragment, bundle)
+            navigate(R.id.chatScreenFragment, bundle)
         }
     }
 }

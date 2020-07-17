@@ -1,41 +1,37 @@
 package com.gigforce.app.core.base
 
 import android.app.Dialog
-import android.content.Context
-import android.content.SharedPreferences
 import android.content.pm.ActivityInfo
-import android.content.pm.PackageInfo
-import android.content.pm.PackageManager
-import android.content.res.Configuration
-import android.content.res.Resources
 import android.os.Bundle
-import android.text.TextUtils
-import android.util.Log
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.Window
 import android.widget.*
-import androidx.annotation.IdRes
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
-import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
 import com.bumptech.glide.request.RequestOptions
 import com.gigforce.app.R
-import com.gigforce.app.core.CoreConstants
+import com.gigforce.app.core.base.dialog.AppDialogsImp
+import com.gigforce.app.core.base.dialog.AppDialogsInterface
+import com.gigforce.app.core.base.dialog.ConfirmationDialogOnClickListener
+import com.gigforce.app.core.base.dialog.OptionSelected
+import com.gigforce.app.core.base.language.LanguageUtilImp
+import com.gigforce.app.core.base.language.LanguageUtilInterface
+import com.gigforce.app.core.base.navigation.NavigationImpl
+import com.gigforce.app.core.base.navigation.NavigationInterface
+import com.gigforce.app.core.base.shareddata.SharedDataImp
+import com.gigforce.app.core.base.shareddata.SharedDataInterface
+import com.gigforce.app.core.base.utilfeatures.UtilAndValidationImp
+import com.gigforce.app.core.base.utilfeatures.UtilAndValidationInterface
+import com.gigforce.app.core.base.viewsfromviews.ViewsFromViewsImpl
+import com.gigforce.app.core.base.viewsfromviews.ViewsFromViewsInterface
 import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
-import com.gigforce.app.modules.preferences.PreferencesRepository
-import com.gigforce.app.utils.AppConstants
 import com.gigforce.app.utils.configrepository.ConfigDataModel
 import com.gigforce.app.utils.configrepository.ConfigRepository
-import com.gigforce.app.utils.popAllBackStates
-import java.util.*
 
 // TODO: Rename parameter arguments, choose names that match
 /**
@@ -43,31 +39,27 @@ import java.util.*
  * Use the [BaseFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-abstract class BaseFragment : Fragment() {
-    //    abstract fun Activate(fragmentView: View?)
-    var mView: View? = null
+open class BaseFragment : Fragment(), ViewsFromViewsInterface, NavigationInterface,
+    SharedDataInterface, AppDialogsInterface, UtilAndValidationInterface,LanguageUtilInterface {
+
+    lateinit var viewsFromViewsInterface: ViewsFromViewsInterface
+    lateinit var navigationInterface: NavigationInterface
+    lateinit var sharedDataInterface: SharedDataInterface
+    lateinit var appDialogsInterface: AppDialogsInterface
+    lateinit var languageUtilInterface: LanguageUtilInterface
+    lateinit var utilAndValidationInterface: UtilAndValidationInterface
     lateinit var baseFragment: BaseFragment
-    lateinit var navController: NavController
-    lateinit var preferencesRepositoryForBaseFragment: PreferencesRepository
+    var mView: View? = null
+
     private var configrepositoryObj: ConfigRepository? = null;
-    private var requestOptions : RequestOptions? = null
-
-    companion object {
-        var englishCode = "en"
-        var hindiCode = "hi"
-        var telguCode = "te"
-        var gujratiCode = "gu"
-        var punjabiCode = "pa"
-        var françaisCode = "fr"
-        var marathiCode = "mr"
-    }
-
-    open fun activate(view: View?) {}
+    private var requestOptions: RequestOptions? = null
 
     open fun isConfigRequired(): Boolean {
         return false
     }
-
+    companion object{
+    var configDataModel: ConfigDataModel? = null
+    }
     open fun inflateView(
         resource: Int, inflater: LayoutInflater,
         container: ViewGroup?
@@ -77,323 +69,279 @@ abstract class BaseFragment : Fragment() {
         getActivity()?.setRequestedOrientation(
             ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         );
+        initializeDI()
         init()
-
-        activate(mView)
         try {
-            showDialogIfDeviceLanguageChanged()
+            if (isDeviceLanguageChangedDialogRequired())
+                showDialogIfDeviceLanguageChanged()
         } catch (e: Exception) {
 
         }
         return mView
     }
 
+    private fun initializeDI() {
+        // there will be no any requirement further after using DI
+        viewsFromViewsInterface = ViewsFromViewsImpl(requireActivity())
+        navigationInterface = NavigationImpl(requireActivity())
+        sharedDataInterface = SharedDataImp(requireActivity())
+        appDialogsInterface = AppDialogsImp(requireActivity())
+        languageUtilInterface = LanguageUtilImp(this)
+        utilAndValidationInterface = UtilAndValidationImp(requireActivity())
+    }
+
+    open fun getFragmentView(): View {
+        return mView!!
+    }
+
+    open fun isDeviceLanguageChangedDialogRequired(): Boolean {
+        return true
+    }
+
     private fun init() { // GPS=new GPSTracker(this);
-        navController = activity?.findNavController(R.id.nav_fragment)!!
-        SP = activity?.getSharedPreferences(
-            CoreConstants.SHARED_PREFERENCE_DB,
-            Context.MODE_PRIVATE
-        )!!
-        this.editor = SP.edit()
         if (isConfigRequired()) {
             configObserver()
         }
     }
 
-    var configDataModel: ConfigDataModel? = null
     private fun configObserver() {
-        this.configrepositoryObj = ConfigRepository.getInstance()
-        this.configrepositoryObj?.configCollectionListener()
+        this.configrepositoryObj = ConfigRepository()//ConfigRepository.getInstance()
         this.configrepositoryObj?.configLiveDataModel?.observe(
             viewLifecycleOwner,
-            androidx.lifecycle.Observer { configDataModel ->
-                this.configDataModel = configDataModel
+            androidx.lifecycle.Observer { configDataModel1 ->
+                configDataModel = configDataModel1
             })
-    }
-
-    private fun showDialogIfDeviceLanguageChanged() {
-        preferencesRepositoryForBaseFragment = PreferencesRepository()
-        var currentDeviceLanguageCode =
-            Resources.getSystem().getConfiguration().locale.getLanguage()
-        var currentDeviceLanguageName = getLanguageCodeToName(currentDeviceLanguageCode)
-        if (!currentDeviceLanguageName.equals("") && !currentDeviceLanguageCode.equals(
-                lastStoredDeviceLanguage()
-            )
-        ) {
-            confirmDialogForChangedLanguage(currentDeviceLanguageCode, currentDeviceLanguageName)
-        }
-    }
-
-    fun getLanguageCodeToName(currentDeviceLanguage: String): String {
-        when (currentDeviceLanguage) {
-            englishCode -> return getString(R.string.english)
-            hindiCode -> return getString(R.string.hindi)
-            telguCode -> return getString(R.string.telgu)
-            gujratiCode -> return getString(R.string.gujrati)
-            punjabiCode -> return getString(R.string.punjabi)
-            françaisCode -> return getString(R.string.francais)
-            marathiCode -> return getString(R.string.marathi)
-            else -> return ""
-        }
-    }
-
-    var languageSelectionDialog: Dialog? = null
-    private fun confirmDialogForChangedLanguage(
-        currentDeviceLanguageCode: String,
-        currentDeviceLanguageString: String
-    ) {
-        languageSelectionDialog = activity?.let { Dialog(it) }
-        languageSelectionDialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        languageSelectionDialog?.setCancelable(false)
-        languageSelectionDialog?.setContentView(R.layout.confirmation_custom_alert_type1)
-        val titleDialog = languageSelectionDialog?.findViewById(R.id.title) as TextView
-        titleDialog.text =
-            "Your device language changed to " + currentDeviceLanguageString + ". Do you want to continue with this language?"
-        val yesBtn = languageSelectionDialog?.findViewById(R.id.yes) as TextView
-        val noBtn = languageSelectionDialog?.findViewById(R.id.cancel) as TextView
-        yesBtn.setOnClickListener {
-
-            saveSharedData(AppConstants.DEVICE_LANGUAGE, currentDeviceLanguageCode)
-            saveSharedData(AppConstants.APP_LANGUAGE, currentDeviceLanguageCode)
-            saveSharedData(AppConstants.APP_LANGUAGE_NAME, currentDeviceLanguageString)
-            updateResources(currentDeviceLanguageCode)
-            preferencesRepositoryForBaseFragment.setDataAsKeyValue(
-                "languageName",
-                currentDeviceLanguageString
-            )
-            preferencesRepositoryForBaseFragment.setDataAsKeyValue(
-                "languageCode",
-                currentDeviceLanguageCode
-            )
-            languageSelectionDialog?.dismiss()
-        }
-        noBtn.setOnClickListener {
-            saveSharedData(AppConstants.DEVICE_LANGUAGE, currentDeviceLanguageCode)
-            languageSelectionDialog!!.dismiss()
-        }
-        languageSelectionDialog?.show()
-    }
-
-    //Confirmation dialog start
-    // this dialog having right side yes button with gradient. Need to create one having swipable functionality
-    fun showConfirmationDialogType1(
-        title: String,
-        buttonClickListener: ConfirmationDialogOnClickListener
-    ) {
-        var customialog: Dialog? = activity?.let { Dialog(it) }
-        customialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        customialog?.setCancelable(false)
-        customialog?.setContentView(R.layout.confirmation_custom_alert_type1)
-        val titleDialog = customialog?.findViewById(R.id.title) as TextView
-        titleDialog.text = title
-        val yesBtn = customialog?.findViewById(R.id.yes) as TextView
-        val noBtn = customialog?.findViewById(R.id.cancel) as TextView
-        yesBtn.setOnClickListener(View.OnClickListener {
-            buttonClickListener.clickedOnYes(customialog)
-        })
-        noBtn.setOnClickListener(View.OnClickListener { buttonClickListener.clickedOnNo(customialog) })
-        customialog?.show()
-    }
-
-    fun showConfirmationDialogType2(
-        title: String,
-        buttonClickListener: ConfirmationDialogOnClickListener
-    ) {
-        var customialog: Dialog? = activity?.let { Dialog(it) }
-        customialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        customialog?.setCancelable(false)
-        customialog?.setContentView(R.layout.confirmation_custom_alert_type2)
-        val titleDialog = customialog?.findViewById(R.id.title) as TextView
-        titleDialog.text = title
-        val yesBtn = customialog?.findViewById(R.id.yes) as TextView
-        val noBtn = customialog?.findViewById(R.id.cancel) as TextView
-        yesBtn.setOnClickListener(View.OnClickListener {
-            buttonClickListener.clickedOnYes(customialog)
-        })
-        noBtn.setOnClickListener(View.OnClickListener { buttonClickListener.clickedOnNo(customialog) })
-        customialog?.show()
-    }
-
-    interface ConfirmationDialogOnClickListener {
-        fun clickedOnYes(dialog: Dialog?)
-        fun clickedOnNo(dialog: Dialog?)
-    }
-    //Confirmation dialog end
-
-    fun updateResources(language: String) {
-        val locale = Locale(language)
-        val config2 = Configuration()
-        config2.locale = locale
-        // updating locale
-        context?.resources?.updateConfiguration(config2, null)
-        Locale.setDefault(locale)
-    }
-
-    private fun lastStoredDeviceLanguage(): String? {
-        return getSharedData(AppConstants.DEVICE_LANGUAGE, "")
-    }
-
-    lateinit var SP: SharedPreferences
-    // SP = this.getPreferences(Context.MODE_PRIVATELD_WRITEABLE);
-    var editor: SharedPreferences.Editor? = null
-
-
-    fun getFragmentView(): View {
-        return mView!!
-    }
-
-    open fun saveSharedData(Key: String?, Value: String?): Boolean {
-        return try {
-            editor?.putString(Key, Value)
-            editor?.commit()
-            true
-        } catch (ex: Exception) {
-            Log.e("Error:", ex.toString())
-            false
-        }
-    }
-
-    // for delete
-    fun removeSavedShareData(key: String?): Boolean {
-        return try {
-            editor?.remove(key)
-            editor?.commit()
-            true
-        } catch (ex: Exception) {
-            Log.e("Error:", ex.toString())
-            false
-        }
-    }
-
-    open fun getSharedData(key: String?, defValue: String?): String? {
-        return SP.getString(key, defValue)
-    }
-
-    open fun showToast(Message: String) {
-        if (isNullOrWhiteSpace(Message)) return
-        val toast = Toast.makeText(context, Message, Toast.LENGTH_SHORT)
-        toast.show()
-    }
-
-    // Toast Message
-    open fun isNullOrWhiteSpace(str: String): Boolean {
-        return if (TextUtils.isEmpty(str)) true else if (str.startsWith("null")) true else false
-    }
-
-    open fun showToastLong(Message: String, Duration: Int) {
-        if (isNullOrWhiteSpace(Message)) return
-        val toast = Toast.makeText(context, Message, Toast.LENGTH_LONG)
-        toast.show()
-    }
-
-    fun popFragmentFromStack(id: Int) {
-        navController.popBackStack(id, true)
-    }
-
-    open fun navigate(
-        @IdRes resId: Int, args: Bundle?,
-        navOptions: NavOptions?
-    ) {
-        navController
-            .navigate(resId, null, navOptions)
-    }
-
-    fun navigate(@IdRes resId: Int) {
-        navController.navigate(resId)
-    }
-
-    fun navigateWithAllPopupStack(@IdRes resId: Int) {
-        popAllBackStates()
-        navigate(resId)
-    }
-
-    fun popAllBackStates() {
-        navController.popAllBackStates()
-    }
-
-    fun popBackState() {
-        navController.popBackStack()
-    }
-
-    fun findViewById(id: Int): View? {
-        return this.mView!!.findViewById(id)
-    }
-
-    fun getTextView(view: PFRecyclerViewAdapter<Any?>.ViewHolder, id: Int): TextView {
-        return view.getView(id) as TextView
-    }
-
-    fun getEditText(view: PFRecyclerViewAdapter<Any?>.ViewHolder, id: Int): EditText {
-        return view.getView(id) as EditText
-    }
-
-    fun getTextView(view: View, id: Int): TextView {
-        return view.findViewById(id) as TextView
-    }
-
-    fun getImageView(view: PFRecyclerViewAdapter<Any?>.ViewHolder, id: Int): ImageView {
-        return view.getView(id) as ImageView
-    }
-
-    fun getImageView(view: View, id: Int): ImageView {
-        return view.findViewById(id) as ImageView
-    }
-
-    fun getRecyclerView(view: PFRecyclerViewAdapter<Any?>.ViewHolder, id: Int): RecyclerView {
-        return view.getView(id) as RecyclerView
-    }
-
-    fun getView(view: View, id: Int): View {
-        return view.findViewById(id)
-    }
-
-    open fun getView(view: PFRecyclerViewAdapter<Any?>.ViewHolder, id: Int): View {
-        return view.getView(id)
-    }
-
-    fun setTextViewColor(textView: TextView, color: Int) {
-        textView.setTextColor(ContextCompat.getColor(requireActivity().applicationContext, color))
-    }
-
-    fun setTextViewSize(textView: TextView, size: Float) {
-        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, size)
-    }
-
-    fun setViewBackgroundColor(view: View, color: Int) {
-        view.setBackgroundColor(ContextCompat.getColor(requireActivity().applicationContext, color))
+        this.configrepositoryObj?.configCollectionListener()
     }
 
     open fun onBackPressed(): Boolean {
         return false
     }
 
-    fun getCurrentVersion(): String {
-        try {
-            val pInfo: PackageInfo =
-                activity?.applicationContext!!.packageManager.getPackageInfo(
-                    requireActivity().getPackageName(),
-                    0
-                )
-            val version = pInfo.versionName
-            return version
-        } catch (e: PackageManager.NameNotFoundException) {
-            e.printStackTrace()
-        }
-        return ""
-    }
-
     override fun onDetach() {
-        if (languageSelectionDialog != null) languageSelectionDialog!!.dismiss()
+        if (this::languageUtilInterface.isInitialized && languageUtilInterface.getDeviceLanguageDialog() != null) languageUtilInterface.getDeviceLanguageDialog()!!.dismiss()
         super.onDetach()
     }
 
 
-    fun initGlide(): RequestManager?
-    {
-        if (requestOptions==null){
-            requestOptions= RequestOptions().placeholder(R.drawable.white_background).error(R.drawable.white_background)
+    fun initGlide(): RequestManager? {
+        if (requestOptions == null) {
+            requestOptions = RequestOptions().placeholder(R.drawable.white_background)
+                .error(R.drawable.white_background)
         }
         return Glide.with(this).setDefaultRequestOptions(requestOptions!!)
+    }
+
+
+    override fun getTextView(view: PFRecyclerViewAdapter<Any?>.ViewHolder, id: Int): TextView {
+        return viewsFromViewsInterface.getTextView(view, id)
+    }
+
+    override fun getTextView(view: View, id: Int): TextView {
+        return getTextView(view, id)
+    }
+
+    override fun getEditText(view: PFRecyclerViewAdapter<Any?>.ViewHolder, id: Int): EditText {
+        return viewsFromViewsInterface.getEditText(view, id)
+    }
+
+    override fun getImageView(view: PFRecyclerViewAdapter<Any?>.ViewHolder, id: Int): ImageView {
+        return viewsFromViewsInterface.getImageView(view, id)
+    }
+
+    override fun getImageView(view: View, id: Int): ImageView {
+        return viewsFromViewsInterface.getImageView(view, id)
+    }
+
+    override fun getRecyclerView(
+        view: PFRecyclerViewAdapter<Any?>.ViewHolder,
+        id: Int
+    ): RecyclerView {
+        return viewsFromViewsInterface.getRecyclerView(view, id)
+    }
+
+    override fun getView(view: PFRecyclerViewAdapter<Any?>.ViewHolder, id: Int): View {
+        return viewsFromViewsInterface.getView(view, id)
+    }
+
+    override fun getView(view: View, id: Int): View {
+        return viewsFromViewsInterface.getView(view, id)
+    }
+
+    override fun setTextViewColor(textView: TextView, color: Int) {
+        viewsFromViewsInterface.setTextViewColor(textView, color)
+    }
+
+    override fun setTextViewSize(textView: TextView, size: Float) {
+        viewsFromViewsInterface.setTextViewSize(textView, size)
+    }
+
+    override fun setViewBackgroundColor(view: View, color: Int) {
+        viewsFromViewsInterface.setViewBackgroundColor(view, color)
+    }
+
+    override fun getNavigationController(): NavController {
+        return navigationInterface.getNavigationController()
+    }
+
+
+    //Navigation
+    override fun popFragmentFromStack(id: Int) {
+        navigationInterface.popFragmentFromStack(id)
+    }
+
+    override fun navigate(resId: Int, args: Bundle?, navOptions: NavOptions?) {
+        navigationInterface.navigate(resId, args, navOptions)
+    }
+
+    override fun navigate(resId: Int) {
+        navigationInterface.navigate(resId)
+    }
+
+    override fun navigate(resId: Int, args: Bundle?) {
+        navigationInterface.navigate(resId, args)
+    }
+
+    override fun navigateWithAllPopupStack(resId: Int) {
+        navigationInterface.navigateWithAllPopupStack(resId)
+    }
+
+    override fun popAllBackStates() {
+        navigationInterface.popAllBackStates()
+    }
+
+    override fun popBackState() {
+        navigationInterface.popBackState()
+    }
+
+    //SharedPreference
+    override fun getLastStoredDeviceLanguage(): String? {
+        return sharedDataInterface.getLastStoredDeviceLanguage()
+    }
+
+    override fun saveDeviceLanguage(deviceLanguage: String) {
+        sharedDataInterface.saveDeviceLanguage(deviceLanguage)
+    }
+
+    override fun saveAppLanuageCode(appLanguage: String) {
+        sharedDataInterface.saveAppLanuageCode(appLanguage)
+    }
+
+    override fun getAppLanguageCode(): String? {
+        return sharedDataInterface.getAppLanguageCode()
+    }
+
+    override fun saveAppLanguageName(appLanguage: String) {
+        sharedDataInterface.saveAppLanguageName(appLanguage)
+    }
+
+    override fun getAppLanguageName(): String? {
+        return sharedDataInterface.getAppLanguageName()
+    }
+
+    override fun saveIntroCompleted() {
+        sharedDataInterface.saveIntroCompleted()
+    }
+
+    override fun getIntroCompleted(): String? {
+        return sharedDataInterface.getIntroCompleted()
+    }
+
+    override fun removeIntroComplete() {
+        sharedDataInterface.removeIntroComplete()
+    }
+
+    override fun saveOnBoardingCompleted() {
+        sharedDataInterface.saveOnBoardingCompleted()
+    }
+
+    override fun isOnBoardingCompleted(): Boolean? {
+        return sharedDataInterface.isOnBoardingCompleted()
+    }
+
+    override fun saveAllMobileNumber(allMobileNumber: String) {
+        sharedDataInterface.saveAllMobileNumber(allMobileNumber)
+    }
+
+    override fun getAllMobileNumber(): String? {
+        return sharedDataInterface.getAllMobileNumber()
+    }
+
+    override fun getChangedDeviceLanguageCode(deviceLanguage: String): String {
+        return languageUtilInterface.getChangedDeviceLanguageCode(deviceLanguage)
+
+    }
+
+    override fun confirmDialogForDeviceLanguageChanged(
+        currentDeviceLanguageCode: String,
+        buttonClickListener: ConfirmationDialogOnClickListener
+    ) {
+        languageUtilInterface.confirmDialogForDeviceLanguageChanged(
+            currentDeviceLanguageCode,
+            buttonClickListener
+        )
+    }
+
+    override fun showDialogIfDeviceLanguageChanged() {
+        languageUtilInterface.showDialogIfDeviceLanguageChanged()
+    }
+
+    override fun getDeviceLanguageDialog(): Dialog? {
+        return languageUtilInterface.getDeviceLanguageDialog()
+    }
+
+    override fun showConfirmationDialogType1(
+        title: String,
+        buttonClickListener: ConfirmationDialogOnClickListener
+    ) {
+        appDialogsInterface.showConfirmationDialogType1(title, buttonClickListener)
+    }
+
+    override fun showConfirmationDialogType2(
+        title: String,
+        buttonClickListener: ConfirmationDialogOnClickListener
+    ) {
+        appDialogsInterface.showConfirmationDialogType2(title, buttonClickListener)
+    }
+
+    override fun showConfirmationDialogType3(
+        title: String,
+        subTitle: String,
+        buttonClickListener: ConfirmationDialogOnClickListener
+    ) {
+        appDialogsInterface.showConfirmationDialogType3(title,subTitle,buttonClickListener)
+    }
+
+    override fun showConfirmationDialogType4(
+        title: String,
+        subTitle: String,
+        optionSelected: OptionSelected
+    ) {
+        appDialogsInterface.showConfirmationDialogType4(title,subTitle,optionSelected)
+    }
+
+    override fun getLanguageCodeToName(languageCode: String): String {
+        return languageUtilInterface.getLanguageCodeToName(languageCode)
+    }
+
+    override fun showToast(message: String) {
+        utilAndValidationInterface.showToast(message)
+    }
+
+    override fun isNullOrWhiteSpace(str: String): Boolean {
+        return utilAndValidationInterface.isNullOrWhiteSpace(str)
+    }
+
+    override fun showToastLong(message: String, duration: Int) {
+        utilAndValidationInterface.showToastLong(message, duration)
+    }
+
+    override fun getCurrentVersion(): String {
+        return utilAndValidationInterface.getCurrentVersion()
+    }
+
+    override fun updateResources(language: String) {
+        utilAndValidationInterface.updateResources(language)
     }
 
 }

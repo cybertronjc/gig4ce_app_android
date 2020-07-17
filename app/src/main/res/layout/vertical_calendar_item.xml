@@ -6,16 +6,65 @@
     android:layout_height="wrap_content"
     android:background="@color/white">
 
-
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/calendar_detail_item_cl"
+        android:id="@+id/action_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
+        android:layout_height="56dp"
+        android:background="#33e02020"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/title_calendar_action_item"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Marked not working"
+            android:layout_marginLeft="14dp"
+            android:textColor="#e02020"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/border_top"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#66e02020"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/border_bottom"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#66e02020"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <ImageView
+            android:id="@+id/flash_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_flash_off"
+            android:layout_marginRight="26dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/calendar_detail_item_cl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/action_layout"
+        app:layout_constraintEnd_toEndOf="@+id/action_layout"
+        app:layout_constraintStart_toStartOf="@+id/action_layout"
+        app:layout_constraintTop_toTopOf="@+id/action_layout">
 
         <View
             android:id="@+id/daydatecard"
@@ -111,11 +160,12 @@
             app:layout_constraintStart_toStartOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/calendar_month_cl"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:clickable="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

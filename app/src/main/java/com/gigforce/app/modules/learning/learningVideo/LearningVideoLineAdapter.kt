@@ -43,6 +43,7 @@ class LearningVideoLineAdapter(private val mFeedList: List<LearningVideo>) :
         holder.videoTitle.text = videoModel.title
         holder.videoTimeTV.text = videoModel.videoLength
         holder.lessonNameTV.text = videoModel.lessonName
+        holder.lessonsSeeMoreButton.text = videoModel.lessonsSeeMoreButton
         Glide.with(holder.videoThumbnailIV.context).load(videoModel.thumbnail)
             .into(holder.videoThumbnailIV)
     }
@@ -63,6 +64,7 @@ class LearningVideoLineAdapter(private val mFeedList: List<LearningVideo>) :
         val videoThumbnailIV = itemView.videoThumbnailIV
         val videoTitle = itemView.video_title
         val lessonNameTV = itemView.lessonNameTV
+        val lessonsSeeMoreButton = itemView.lessonsSeeMoreButton
         val videoTimeTV = itemView.video_time
         val timeline = itemView.timeline
 

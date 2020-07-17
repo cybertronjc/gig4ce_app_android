@@ -16,9 +16,6 @@ import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.modules.auth.ui.main.LoginViewModel.Companion.STATE_SIGNIN_FAILED
 import com.gigforce.app.modules.auth.ui.main.LoginViewModel.Companion.STATE_SIGNIN_SUCCESS
-import com.gigforce.app.utils.AppConstants
-import com.gigforce.app.utils.popAllBackStates
-import kotlinx.android.synthetic.main.login_frament.*
 import kotlinx.android.synthetic.main.otp_verification.*
 import kotlinx.android.synthetic.main.otp_verification.progressBar
 import java.util.regex.Matcher
@@ -60,6 +57,9 @@ class VerifyOTP: BaseFragment() {
         return layout
     }
 
+    override fun isDeviceLanguageChangedDialogRequired(): Boolean {
+        return false
+    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.activity = this.requireActivity()
@@ -72,14 +72,15 @@ class VerifyOTP: BaseFragment() {
 //            Toast.makeText(layout.context, "Too many invalid attempts, Try again later!", Toast.LENGTH_SHORT).show()
 //        }
     }
+
     private fun saveNewUsedMobileNumber() {
-        var oldData = getSharedData(AppConstants.ALL_MOBILE_NUMBERS_USED,"")
+        var oldData = getAllMobileNumber()
         if(oldData==null||oldData.equals("")) {
-            saveSharedData(AppConstants.ALL_MOBILE_NUMBERS_USED,mobile_number)
+            saveAllMobileNumber(mobile_number)
         }
         else if(!oldData.contains(mobile_number)){
             oldData += ","+mobile_number
-            saveSharedData(AppConstants.ALL_MOBILE_NUMBERS_USED,oldData)
+            saveAllMobileNumber(oldData)
 
         }
     }
@@ -149,8 +150,8 @@ class VerifyOTP: BaseFragment() {
 
     private fun navigateToLoginScreen() {
         var bundle = bundleOf("mobileno" to mobile_number)
-        navController.popAllBackStates()
-        navController.navigate(R.id.Login,bundle)
+        popAllBackStates()
+        navigate(R.id.Login,bundle)
 //        navigateWithAllPopupStack(R.id.Login)
     }
 

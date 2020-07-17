@@ -104,7 +104,7 @@
             android:fontFamily="@font/lato_bold"
             android:letterSpacing="-0.01"
             android:lineSpacingExtra="8sp"
-            android:text="Daily  Goals"
+            android:text="Daily Goal"
             android:textColor="#000000"
             android:textSize="14sp"
             app:layout_constraintStart_toStartOf="parent"
@@ -130,6 +130,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:letterSpacing="0"
+            android:visibility="gone"
             android:text="Per day goal"
             android:textColor="#000000"
             android:textSize="12sp"
@@ -143,7 +144,7 @@
             android:layout_marginLeft="45dp"
             android:layout_marginTop="20dp"
             android:layout_marginRight="35dp"
-            android:max="2000"
+            android:max="4"
             android:min="0"
             android:progressTint="@color/colorPrimary"
             android:thumbTint="@color/colorPrimary"
@@ -155,12 +156,13 @@
             android:id="@+id/seekBarDependentCanvas2"
             android:layout_width="match_parent"
             android:layout_height="20dp"
-            android:layout_marginLeft="30dp"
-            android:textSize="12sp"
-            android:textColor="#787993"
+            android:layout_marginLeft="15dp"
             android:letterSpacing="0"
+            android:textColor="#787993"
+            android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/perDayGoalSB" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -172,6 +174,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView102">
+
         <TextView
             android:id="@+id/textView7"
             android:layout_width="wrap_content"
@@ -181,7 +184,7 @@
             android:fontFamily="@font/lato_bold"
             android:letterSpacing="-0.01"
             android:lineSpacingExtra="8sp"
-            android:text="Monthy Goals"
+            android:text="Monthy Goal"
             android:textColor="#000000"
             android:textSize="14sp"
             app:layout_constraintStart_toStartOf="parent"
@@ -207,7 +210,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:letterSpacing="0"
-            android:text="Per Month goal"
+            android:visibility="gone"
+            android:text="Per month goal"
             android:textColor="#000000"
             android:textSize="12sp"
             app:layout_constraintStart_toStartOf="@+id/textView7"
@@ -220,7 +224,7 @@
             android:layout_marginLeft="45dp"
             android:layout_marginTop="20dp"
             android:layout_marginRight="35dp"
-            android:max="60000"
+            android:max="120"
             android:min="0"
             android:progressTint="@color/colorPrimary"
             android:thumbTint="@color/colorPrimary"
@@ -232,12 +236,13 @@
             android:id="@+id/seekBarDependentCanvas3"
             android:layout_width="match_parent"
             android:layout_height="20dp"
-            android:layout_marginLeft="30dp"
-            android:textSize="12sp"
-            android:textColor="#787993"
+            android:layout_marginLeft="15dp"
             android:letterSpacing="0"
+            android:textColor="#787993"
+            android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/permonthGoalSB" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
@@ -265,7 +270,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="36dp"
             android:letterSpacing="0"
-            android:paddingLeft="10dp"
+            android:paddingLeft="4dp"
             android:text="Willing to do Monthly Contract"
             android:textColor="@color/black"
             android:textSize="14sp"
@@ -274,11 +279,12 @@
             app:layout_constraintStart_toStartOf="@+id/textView104"
             app:layout_constraintTop_toTopOf="@+id/textView104" />
 
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/monthly_expectation_constraintlayout"
             android:layout_width="match_parent"
             android:layout_height="79dp"
-            android:visibility="gone"
+            android:visibility="visible"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView104">
 
@@ -290,7 +296,7 @@
                 android:layout_marginLeft="46dp"
                 android:letterSpacing="-0.01"
                 android:lineSpacingExtra="8sp"
-                android:text="Monthly Expectation"
+                android:text="Monthly contract earning goal"
                 android:textColor="#000000"
                 android:textSize="14sp"
                 app:layout_constraintStart_toStartOf="parent"
@@ -302,7 +308,7 @@
                 android:layout_marginLeft="45dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginRight="35dp"
-                android:max="60000"
+                android:max="120"
                 android:min="0"
                 android:progressTint="@color/colorPrimary"
                 android:thumbTint="@color/colorPrimary"
@@ -314,11 +320,26 @@
                 android:id="@+id/seekBarDependentCanvas4"
                 android:layout_width="match_parent"
                 android:layout_height="20dp"
-                android:layout_marginLeft="30dp"
-                android:textSize="12sp"
-                android:textColor="#787993"
+                android:layout_marginLeft="15dp"
                 android:letterSpacing="0"
+                android:textColor="#787993"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/monthlyExpectationSB" />
+
+
+            <TextView
+                android:id="@+id/seekStartTV"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:layout_marginLeft="16dp"
+                android:letterSpacing="0"
+                android:textColor="#787993"
+                android:textSize="12sp"
+                android:text="Rs 0"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="@id/seekBarDependentCanvas4"
                 app:layout_constraintTop_toBottomOf="@+id/monthlyExpectationSB" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

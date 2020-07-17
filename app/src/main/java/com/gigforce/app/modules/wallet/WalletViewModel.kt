@@ -5,9 +5,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.gigforce.app.modules.profile.ProfileFirebaseRepository
 import com.gigforce.app.modules.profile.models.ProfileData
+import com.gigforce.app.modules.roster.models.Gig
+import com.gigforce.app.modules.wallet.models.Invoice
 import com.gigforce.app.modules.wallet.models.Wallet
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.EventListener
+import com.google.firebase.firestore.FirebaseFirestore
 
 class WalletViewModel: ViewModel() {
 
@@ -41,25 +45,19 @@ class WalletViewModel: ViewModel() {
             })
     }
     init {
-        //getUserWallet()
+        getUserWallet()
         getProfileData()
-
-        userWallet.value = Wallet(
-            balance = 450,
-            isMonthlyGoalSet = true,
-            monthlyGoalLimit = 5000,
-            monthlyEarnedAmount = 4000
-        )
     }
 
     private fun getUserWallet() {
         walletRepository.getDBCollection().addSnapshotListener { value, e ->
             if (value!!.data == null) {
-                walletRepository.setDefaultData(Wallet(balance = 0))
+                walletRepository.setDefaultData(Wallet(balance = 0F))
             }
             else {
                 userWallet.postValue(value.toObject(Wallet::class.java))
             }
         }
     }
+
 }

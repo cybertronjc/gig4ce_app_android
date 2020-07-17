@@ -5,20 +5,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
-import com.gigforce.app.modules.auth.AuthFlowFragment
-import com.gigforce.app.modules.onboarding.utils.DepthPageTransformer
-import com.gigforce.app.utils.AppConstants
 import com.gigforce.app.utils.GlideApp
-import com.gigforce.app.utils.dp
+import com.gigforce.app.core.dp
 import kotlinx.android.synthetic.main.fragment_intro_slides.*
 
 /**
@@ -41,11 +36,14 @@ class IntroSlidesFragment : BaseFragment() {
         setupViewPager()
     }
 
+    override fun isDeviceLanguageChangedDialogRequired(): Boolean {
+        return false
+    }
     fun setupViewPager(){
         this.viewpager.adapter = IntroSlidesViewPagerAdapter(this.viewpager, object: OnIntroSlidesCompleted(){
 
             override fun invoke() {
-                saveSharedData(AppConstants.INTRO_COMPLETE, "true")
+                saveIntroCompleted()
                 navigate(R.id.authFlowFragment)
             }
         })
@@ -81,7 +79,7 @@ class IntroSlidesFragment : BaseFragment() {
 
     override fun onBackPressed(): Boolean {
         if(this.viewpager.currentItem==0){
-            removeSavedShareData(AppConstants.INTRO_COMPLETE)
+            removeIntroComplete()
             return false
         }
         else{
@@ -113,6 +111,14 @@ class IntroSlidesViewPagerAdapter(val viewpager:ViewPager2,
             right_arrow = this.itemView.findViewById<ImageView>(R.id.right_arrow)
 
             nextButton.setOnClickListener {
+                if(currentPosition < 2)
+                    viewpager.setCurrentItem(currentPosition+1, true)
+                else if (currentPosition == 2) {
+                    // on Final CA Executed
+                    onIntroSlidesCompleted.invoke()
+                }
+            }
+            right_arrow.setOnClickListener {
                 if(currentPosition < 2)
                     viewpager.setCurrentItem(currentPosition+1, true)
                 else if (currentPosition == 2) {

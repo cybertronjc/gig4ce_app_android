@@ -38,9 +38,9 @@ class AboutExpandedFragment: ProfileBaseFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        inflateView(R.layout.fragment_profile_about_expanded, inflater, container)
-        getFragmentView().nav_bar.about_me_active = true
-        return getFragmentView()
+        var view = inflateView(R.layout.fragment_profile_about_expanded, inflater, container)
+        view?.nav_bar?.about_me_active = true
+        return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

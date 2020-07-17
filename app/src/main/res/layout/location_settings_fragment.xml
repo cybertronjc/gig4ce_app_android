@@ -7,13 +7,16 @@
     android:background="@color/setting_bg"
     tools:context=".modules.preferences.location.LocationFragment">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout3"
+
+    <LinearLayout
+        android:id="@+id/toolbar_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="23dp"
         android:background="@color/white"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:gravity="center_vertical"
+        android:minHeight="56dp"
+        android:orientation="horizontal"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -22,12 +25,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="18dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginBottom="24dp"
+            android:tint="@color/black"
             android:src="@drawable/ic_baseline_arrow_back_24"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+             />
 
         <TextView
             android:id="@+id/textView46"
@@ -38,11 +38,10 @@
             android:text="Location"
             android:textColor="@color/black"
             android:textSize="20sp"
-            android:letterSpacing="0"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/back_arrow_iv"
-            app:layout_constraintTop_toTopOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            android:letterSpacing="0" />
+
+    </LinearLayout>
+
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -53,13 +52,13 @@
         android:background="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout3">
+        app:layout_constraintTop_toBottomOf="@id/toolbar_layout">
 
 
         <ImageView
             android:id="@+id/imageView22"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:layout_marginLeft="26dp"
             android:src="@drawable/ic_home_locationf"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -87,6 +86,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:letterSpacing="-0.01"
+            android:layout_marginTop="2dp"
             android:textColor="#6d7278"
             android:textSize="10sp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -119,8 +119,8 @@
 
         <ImageView
             android:id="@+id/imageView23"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:layout_marginLeft="26dp"
             android:src="@drawable/ic_museum_locationf"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -149,6 +149,7 @@
             android:layout_marginLeft="10dp"
             android:letterSpacing="-0.01"
             android:textColor="#6d7278"
+            android:layout_marginTop="2dp"
             android:textSize="10sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/imageView23"
@@ -178,8 +179,8 @@
         app:layout_constraintTop_toBottomOf="@+id/currentAddLayout">
         <ImageView
             android:id="@+id/imageView24"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:layout_marginLeft="26dp"
             android:src="@drawable/ic_send_locationf"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -238,8 +239,8 @@
 
         <ImageView
             android:id="@+id/imageView25"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:layout_marginLeft="26dp"
             android:src="@drawable/ic_chart_donut_locationf"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -269,6 +270,7 @@
             android:letterSpacing="-0.01"
             android:textColor="#6d7278"
             android:textSize="10sp"
+            android:layout_marginTop="2dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/imageView25"
             app:layout_constraintTop_toBottomOf="@+id/textView84"
@@ -309,8 +311,8 @@
 
         <ImageView
             android:id="@+id/imageView26"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:layout_marginLeft="26dp"
             android:src="@drawable/ic_poi_locationf"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -340,6 +342,7 @@
             android:letterSpacing="-0.01"
             android:textColor="#6d7278"
             android:textSize="10sp"
+            android:layout_marginTop="2dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/imageView26"
             app:layout_constraintTop_toBottomOf="@+id/textView86"
@@ -351,6 +354,7 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="30dp"
             android:src="@drawable/ic_baseline_add_24"
+            app:tint="@color/lipstick"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

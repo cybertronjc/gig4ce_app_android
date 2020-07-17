@@ -15,10 +15,16 @@ import android.widget.RadioGroup
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
 import com.gigforce.app.R
+import com.gigforce.app.modules.custom_gig_preferences.CustomPreferencesViewModel
+import com.gigforce.app.modules.custom_gig_preferences.ParamCustPreferViewModel
+import com.gigforce.app.modules.custom_gig_preferences.UnavailableDataModel
 import com.gigforce.app.modules.roster.models.Gig
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_HALF_EXPANDED
+import com.riningan.widget.ExtendedBottomSheetBehavior
 import kotlinx.android.synthetic.main.day_view_top_bar.*
 import kotlinx.android.synthetic.main.day_view_top_bar.view.*
 import kotlinx.android.synthetic.main.gigs_today_warning_dialog.*
@@ -26,7 +32,9 @@ import kotlinx.android.synthetic.main.reason_for_gig_cancel_dialog.*
 import kotlinx.android.synthetic.main.roster_day_fragment.*
 import kotlinx.android.synthetic.main.roster_day_hour_view.*
 import kotlinx.android.synthetic.main.unavailable_time_adjustment_bottom_sheet.*
+import java.sql.Timestamp
 import java.time.LocalDateTime
+import java.time.ZoneId
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -58,23 +66,23 @@ class RosterDayFragment: RosterBaseFragment() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        inflateView(R.layout.roster_day_fragment, inflater, container)
-
+        viewModelCustomPreference =
+            ViewModelProvider(this, ParamCustPreferViewModel(viewLifecycleOwner)).get(
+                CustomPreferencesViewModel::class.java
+            )
         rosterViewModel.currentDateTime.value = activeDateTime
-
-        return getFragmentView()
+        rosterViewModel.checkDayAvailable(activeDateTime, viewModelCustomPreference)
+        return inflateView(R.layout.roster_day_fragment, inflater, container)
     }
-
-
-
+    lateinit var  viewModelCustomPreference : CustomPreferencesViewModel
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
         initialize()
         setListeners()
 
@@ -82,6 +90,28 @@ class RosterDayFragment: RosterBaseFragment() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun initialize() {
+
+        rosterViewModel.currentDateTime.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+            rosterViewModel.gigsQuery.observe(viewLifecycleOwner, androidx.lifecycle.Observer { gigs ->
+                val fullDayGig = rosterViewModel.getFullDayGigForDate(it, gigs)
+
+                if (fullDayGig == null)
+                    top_bar.fullDayGigCard = null
+
+                fullDayGig ?.let { gig ->
+                    if (gig.gigStatus == "upcoming") {
+                        val widget = UpcomingGigCard(requireContext())
+                        widget.isFullDay = true
+                        top_bar.fullDayGigCard = widget
+                    } else if (gig.gigStatus == "completed") {
+                        val widget = CompletedGigCard(requireContext())
+                        widget.isFullDay = true
+                        top_bar.fullDayGigCard = widget
+                    }
+                }
+            })
+        })
+
         rosterViewModel.topBar = top_bar
         initializeBottomSheet()
         attachHourViewAdapter()
@@ -100,26 +130,22 @@ class RosterDayFragment: RosterBaseFragment() {
             @RequiresApi(Build.VERSION_CODES.O)
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
-                if (position < lastViewPosition) {
-                    rosterViewModel.currentDateTime.setValue(activeDateTime.minusDays(1))
-                } else if (position > lastViewPosition) {
-                    rosterViewModel.currentDateTime.setValue(activeDateTime.plusDays(1))
-                }
+                val newDateTime =  (
+                        if (position < lastViewPosition) activeDateTime.minusDays(1)
+                        else activeDateTime.plusDays(1)
+                        )
+                rosterViewModel.currentDateTime.value = newDateTime
                 lastViewPosition = position
+                rosterViewModel.checkDayAvailable(newDateTime, viewModelCustomPreference)
             }
         }
 
         hourview_viewpager.registerOnPageChangeCallback(hourviewPageChangeCallBack)
 
-
-
         top_bar.available_toggle.setOnClickListener {
-            if (top_bar.isAvailable)
-                toggleAvailability()
-            else {
-                rosterViewModel.isDayAvailable.value = true
-                setHourVisibility(hourview_viewpager.getChildAt(0).findViewWithTag<ConstraintLayout>("day_times"), activeDateTime, actualDateTime)
-            }
+            rosterViewModel.toggleDayAvailability(
+                requireContext(), hourview_viewpager.getChildAt(0).findViewWithTag<ConstraintLayout>("day_times"),
+                upcomingGigs, rosterViewModel.isDayAvailable.value!!, activeDateTime, actualDateTime, viewModelCustomPreference)
         }
     }
 
@@ -208,40 +234,38 @@ class RosterDayFragment: RosterBaseFragment() {
     }
 
     private fun initializeBottomSheet() {
-        rosterViewModel.bsBehavior = BottomSheetBehavior.from(mark_unavailable_bs)
+        //rosterViewModel.bsBehavior = BottomSheetBehavior.from(mark_unavailable_bs)
+        rosterViewModel.bsBehavior = ExtendedBottomSheetBehavior.from(mark_unavailable_bs)
         rosterViewModel.UnavailableBS = mark_unavailable_bs
 
         rosterViewModel.bsBehavior.setPeekHeight(200.px)
-        rosterViewModel.bsBehavior.halfExpandedRatio = 0.65F
+//        rosterViewModel.bsBehavior.halfExpandedRatio = 0.65F
         rosterViewModel.bsBehavior.isHideable = true
 
-        rosterViewModel.bsBehavior.addBottomSheetCallback(object: BottomSheetBehavior.BottomSheetCallback() {
+
+
+        rosterViewModel.bsBehavior.setBottomSheetCallback(object: ExtendedBottomSheetBehavior.BottomSheetCallback() {
             override fun onSlide(bottomSheet: View, slideOffset: Float) {
                 //TODO("Not yet implemented")
             }
 
             override fun onStateChanged(bottomSheet: View, newState: Int) {
                 when(newState) {
-                    BottomSheetBehavior.STATE_COLLAPSED -> {
+                    ExtendedBottomSheetBehavior.STATE_COLLAPSED -> {
                         Log.d("BS", "Collapsed State")
-                        //time_expanded.visibility = View.GONE
-                        //time_collapsed.visibility = View.VISIBLE
+                        time_expanded.visibility = View.GONE
+                        time_collapsed.visibility = View.VISIBLE
                     }
-                    BottomSheetBehavior.STATE_EXPANDED -> {
+                    ExtendedBottomSheetBehavior.STATE_EXPANDED -> {
                         Log.d("BS", "Expanded State")
                         time_collapsed.visibility = View.GONE
                         time_expanded.visibility = View.VISIBLE
                     }
                     //BottomSheetBehavior.STATE_ANCHOR_POINT -> Log.d("BS", "Anchor Point State")
-                    BottomSheetBehavior.STATE_HIDDEN -> Log.d("BS", "Hidden State")
-                    BottomSheetBehavior.STATE_DRAGGING -> Log.d("BS", "Dragging State")
-                    BottomSheetBehavior.STATE_SETTLING -> {
+                    ExtendedBottomSheetBehavior.STATE_HIDDEN -> Log.d("BS", "Hidden State")
+                    ExtendedBottomSheetBehavior.STATE_DRAGGING -> Log.d("BS", "Dragging State")
+                    ExtendedBottomSheetBehavior.STATE_SETTLING -> {
                         Log.d("BS", "Settling State")
-                    }
-                    BottomSheetBehavior.STATE_HALF_EXPANDED -> {
-                        Log.d("BS", "Half Expanded State")
-//                        time_collapsed.visibility = View.GONE
-//                        time_expanded.visibility = View.VISIBLE
                     }
                 }
             }
@@ -284,17 +308,17 @@ class RosterDayFragment: RosterBaseFragment() {
 //        }
 //    }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    fun toggleAvailability() {
-       if (upcomingGigs.size > 0) {
-           rosterViewModel.isDayAvailable.value = !showGigsTodayWarning(
-               requireContext(), upcomingGigs,
-               hourview_viewpager.getChildAt(0).findViewWithTag<ConstraintLayout>("day_times"))
-        } else {
-           rosterViewModel.isDayAvailable.value = false
-           allHourInactive(
-               hourview_viewpager.getChildAt(0).findViewWithTag<ConstraintLayout>("day_times"))
-        }
-    }
+//    @RequiresApi(Build.VERSION_CODES.O)
+//    fun toggleAvailability() {
+//       if (upcomingGigs.size > 0) {
+//           rosterViewModel.isDayAvailable.value = !showGigsTodayWarning(
+//               requireContext(), upcomingGigs,
+//               hourview_viewpager.getChildAt(0).findViewWithTag<ConstraintLayout>("day_times"))
+//        } else {
+//           rosterViewModel.isDayAvailable.value = false
+//           allHourInactive(
+//               hourview_viewpager.getChildAt(0).findViewWithTag<ConstraintLayout>("day_times"))
+//        }
+//    }
 
 }

@@ -21,6 +21,7 @@
                     android:text="dkfjdkfjdljfdf dkfjdlfj "
                     android:gravity="left|center_vertical"
                     android:textSize="18sp"
+                    android:letterSpacing="0"
                     android:fontFamily="@font/lato_bold"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"/>
@@ -47,6 +48,7 @@
             android:paddingRight="10dp"
             android:textColor="#313131"
             android:textSize="17sp"
+            android:letterSpacing="0"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -61,6 +63,7 @@
             android:fontFamily="@font/lato_bold"
             android:gravity="center"
             android:text="Yes"
+            android:letterSpacing="0"
             android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -79,6 +82,7 @@
             android:fontFamily="@font/lato_bold"
             android:gravity="center"
             android:text="No"
+            android:letterSpacing="0"
             android:textColor="@color/colorLightAccent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/yes"

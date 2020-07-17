@@ -1,14 +1,22 @@
 package com.gigforce.app.modules.landingscreen
 
+import android.app.Dialog
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import android.os.Handler
 import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
+import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import com.bumptech.glide.request.RequestOptions
@@ -18,8 +26,11 @@ import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.app.core.genericadapter.RecyclerGenericAdapter
 import com.gigforce.app.modules.calendarscreen.maincalendarscreen.bottomsheet.UpcomingGigModel
 import com.gigforce.app.modules.preferences.PreferencesFragment
+import com.gigforce.app.modules.preferences.prefdatamodel.PreferencesDataModel
 import com.gigforce.app.modules.profile.ProfileViewModel
 import com.gigforce.app.utils.GlideApp
+import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.EventListener
 import com.google.firebase.storage.StorageReference
 import kotlinx.android.synthetic.main.landingscreen_fragment.*
 import kotlinx.android.synthetic.main.landingscreen_fragment.chat_icon_iv
@@ -52,19 +63,109 @@ class LandingScreenFragment : BaseFragment() {
         initializeLearningModule()
         listener()
         observers()
+        broadcastReceiverForLanguageCahnge()
+//        checkforLanguagedSelectedForLastLogin()
     }
+
+    override fun onDetach() {
+        super.onDetach()
+//        LocalBroadcastManager.getInstance(activity?.applicationContext!!)
+//            .unregisterReceiver(broadCastReceiver)
+    }
+
+    private fun broadcastReceiverForLanguageCahnge() {
+        LocalBroadcastManager.getInstance(activity?.applicationContext!!)
+            .registerReceiver(broadCastReceiver, IntentFilter(Intent.ACTION_LOCALE_CHANGED))
+    }
+
+    val broadCastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(contxt: Context?, intent: Intent?) {
+            showToast("working")
+        }
+    }
+//    private fun checkforLanguagedSelectedForLastLogin() {
+//        if (preferencesRepositoryForBaseFragment != null)
+//            preferencesRepositoryForBaseFragment.getDBCollection()
+//                .addSnapshotListener(EventListener<DocumentSnapshot> { value, e ->
+//                    var preferencesDataModel: PreferencesDataModel? =
+//                        value!!.toObject(PreferencesDataModel::class.java)
+//                    if (preferencesDataModel != null) {
+//                        var languageCode = getAppLanguageCode()
+//                        if (preferencesDataModel.languageCode == null || preferencesDataModel.languageCode.equals(
+//                                ""
+//                            )
+//                        ) {
+//                            if (languageCode != null && !languageCode.equals("")) {
+//                                var languageName = getLanguageCodeToName(languageCode)
+//                                preferencesRepositoryForBaseFragment.setDataAsKeyValue(
+//                                    "languageName",
+//                                    languageName
+//                                )
+//                                preferencesRepositoryForBaseFragment.setDataAsKeyValue(
+//                                    "languageCode",
+//                                    languageCode
+//                                )
+//                            }
+//                        } else if (!languageCode.equals(preferencesDataModel.languageCode)) {
+//                            lastLoginSelectedLanguage(
+//                                preferencesDataModel.languageCode,
+//                                preferencesDataModel.languageName
+//                            )
+//                        }
+//                    }
+//                })
+//    }
+
+//    private fun lastLoginSelectedLanguage(
+//        lastLoginLanguageCode: String,
+//        lastLoginLanguageName: String
+//    ) {
+//        val languageSelectionDialog = activity?.let { Dialog(it) }
+//        languageSelectionDialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
+//        languageSelectionDialog?.setCancelable(false)
+//        languageSelectionDialog?.setContentView(R.layout.confirmation_custom_alert_type1)
+//        val titleDialog = languageSelectionDialog?.findViewById(R.id.title) as TextView
+//        titleDialog.text =
+//            "Your last login selected language was " + lastLoginLanguageName + ". Do you want to continue with this language?"
+//        val yesBtn = languageSelectionDialog?.findViewById(R.id.yes) as TextView
+//        val noBtn = languageSelectionDialog?.findViewById(R.id.cancel) as TextView
+//        yesBtn.setOnClickListener {
+//            saveAppLanuageCode(lastLoginLanguageCode)
+//            saveAppLanguageName(lastLoginLanguageName)
+//            updateResources(lastLoginLanguageCode)
+//            languageSelectionDialog?.dismiss()
+//        }
+//        noBtn.setOnClickListener {
+//            var currentLanguageCode = getAppLanguageCode()
+//            if (currentLanguageCode != null) {
+//                preferencesRepositoryForBaseFragment.setDataAsKeyValue(
+//                    "languageName",
+//                    getLanguageCodeToName(currentLanguageCode)
+//                )
+//
+//                preferencesRepositoryForBaseFragment.setDataAsKeyValue(
+//                    "languageCode",
+//                    currentLanguageCode
+//                )
+//            }
+//            languageSelectionDialog!!.dismiss()
+//        }
+//        languageSelectionDialog?.show()
+//    }
+
     lateinit var viewModelProfile: ProfileViewModel
     private fun observers() {
         // load user data
         viewModelProfile = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
         viewModelProfile.getProfileData().observe(viewLifecycleOwner, Observer { profile ->
             displayImage(profile.profileAvatarName)
-            if(profile.name!=null && !profile.name.equals(""))
+            if (profile.name != null && !profile.name.equals(""))
                 profile_name.text = profile.name
         })
     }
-    private fun displayImage(profileImg:String) {
-        if(profileImg!=null && !profileImg.equals("")) {
+
+    private fun displayImage(profileImg: String) {
+        if (profileImg != null && !profileImg.equals("")) {
             val profilePicRef: StorageReference =
                 PreferencesFragment.storage.reference.child("profile_pics").child(profileImg)
             GlideApp.with(this.requireContext())
@@ -73,7 +174,8 @@ class LandingScreenFragment : BaseFragment() {
                 .into(profile_image)
         }
     }
-    class TitleSubtitleModel(var title: String, var subtitle: String,var imgIcon:Int=0) {
+
+    class TitleSubtitleModel(var title: String, var subtitle: String, var imgIcon: Int = 0) {
 
     }
 
@@ -238,7 +340,7 @@ class LandingScreenFragment : BaseFragment() {
 
 
                     handler.postDelayed(this, SPLASH_TIME_OUT)
-                }catch (e:Exception){
+                } catch (e: Exception) {
 
                 }
 
@@ -251,18 +353,22 @@ class LandingScreenFragment : BaseFragment() {
         complete_now.setOnClickListener {
             navigate(R.id.gigerVerificationFragment)
         }
-        view_my_gig.setOnClickListener {
+        mygigs_cl.setOnClickListener {
             navigate(R.id.mainHomeScreen)
         }
         skip_about_intro.setOnClickListener {
             about_us_cl.visibility = View.GONE
         }
-        chat_icon_iv.setOnClickListener{
-        navigate(R.id.contactScreenFragment)
+        chat_icon_iv.setOnClickListener {
+            navigate(R.id.contactScreenFragment)
         }
 
-        profile_image.setOnClickListener{
+        profile_image.setOnClickListener {
             navigate(R.id.profileFragment)
+        }
+
+        textView119.setOnClickListener {
+            navigate(R.id.settingFragment)
         }
     }
 
@@ -275,7 +381,7 @@ class LandingScreenFragment : BaseFragment() {
         datalist.add(
             TitleSubtitleModel(
                 "Retail Sales Executive",
-                "Demonstrate products to customers",R.drawable.learning2
+                "Demonstrate products to customers", R.drawable.learning2
             )
         )
 
@@ -303,7 +409,8 @@ class LandingScreenFragment : BaseFragment() {
         val recyclerGenericAdapter: RecyclerGenericAdapter<TitleSubtitleModel> =
             RecyclerGenericAdapter<TitleSubtitleModel>(
                 activity?.applicationContext,
-                PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->navigate(R.id.mainLearningFragment)
+                PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
+                    navigate(R.id.mainLearningFragment)
                 },
                 RecyclerGenericAdapter.ItemInterface<TitleSubtitleModel?> { obj, viewHolder, position ->
                     var view = getView(viewHolder, R.id.card_view)
@@ -318,7 +425,7 @@ class LandingScreenFragment : BaseFragment() {
                     var subtitle = getTextView(viewHolder, R.id.title)
                     subtitle.text = obj?.subtitle
 
-                    var img = getImageView(viewHolder,R.id.learning_img)
+                    var img = getImageView(viewHolder, R.id.learning_img)
                     img.setImageResource(obj?.imgIcon!!)
                 })!!
         recyclerGenericAdapter.setList(datalist)
@@ -410,7 +517,8 @@ class LandingScreenFragment : BaseFragment() {
         datalist.add(
             TitleSubtitleModel(
                 "Driver",
-                "Welcome to Gigforce! Let's talk about what's a gig and how do you start working as a giger at Gigforce.",R.drawable.driver_img
+                "Welcome to Gigforce! Let's talk about what's a gig and how do you start working as a giger at Gigforce.",
+                R.drawable.driver_img
             )
         )
         datalist.add(

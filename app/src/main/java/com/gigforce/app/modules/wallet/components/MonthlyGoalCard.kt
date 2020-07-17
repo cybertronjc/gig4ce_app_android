@@ -43,16 +43,16 @@ class MonthlyGoalCard: MaterialCardView {
 
     private fun setSummaryText() {
         if (!isMonthlyGoalSet && avgMonthSalary == 0) {
-            avg_earning.text = Html.fromHtml("<font color='#060606'><u>Click here</u></font> here to set monthly goal")
+            avg_earning.text = Html.fromHtml("<font color='#a30674'><u>Click here</u></font> here to set monthly goal")
             progress_bar.progress = 5F
 
         } else if (!isMonthlyGoalSet && avgMonthSalary > 0){
             avg_earning.text = Html.fromHtml("Average earning per month is Rs $avgMonthSalary. <font color='#060606'><u>Click here</u></font> to set monthly goal.")
             progress_bar.progress = 5F
         } else if (isMonthlyGoalSet && avgMonthSalary == 0) {
-            avg_earning.text = "Monthly goal is Rs $monthlyGoalAmount"
+            avg_earning.text = Html.fromHtml("Monthly goal is <font color='#a30674'>Rs $monthlyGoalAmount</font>")
         } else {
-            avg_earning.text = "Average earning per month is Rs $avgMonthSalary"
+            avg_earning.text = Html.fromHtml("Average earning per month is <font color='#a30674'>Rs $avgMonthSalary</font>")
         }
     }
 
@@ -62,6 +62,6 @@ class MonthlyGoalCard: MaterialCardView {
         else if (!isMonthlyGoalSet)
             bonus_text.text = "You haven't set your monthly goal"
         else
-            bonus_text.text = ""
+            bonus_text.text = "Plan your gigs to get maximum \nout of them"
     }
 }

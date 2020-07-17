@@ -12,8 +12,7 @@ import androidx.annotation.RequiresApi
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
-import com.gigforce.app.utils.AppConstants
-import com.gigforce.app.utils.setDarkStatusBarTheme
+import com.gigforce.app.core.setDarkStatusBarTheme
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.*
 import com.google.firebase.storage.FirebaseStorage
@@ -90,7 +89,7 @@ class HomeScreenIcons : BaseFragment() {
         val noBtn = dialog?.findViewById(R.id.cancel) as TextView
         yesBtn.setOnClickListener {
             FirebaseAuth.getInstance().signOut()
-            removeSavedShareData(AppConstants.INTRO_COMPLETE)
+            removeIntroComplete()
             popFragmentFromStack(R.id.loginSuccessfulFragment)
             dialog?.dismiss()
         }

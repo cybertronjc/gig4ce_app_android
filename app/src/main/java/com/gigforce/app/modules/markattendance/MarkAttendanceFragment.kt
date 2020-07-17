@@ -1,0 +1,96 @@
+package com.gigforce.app.modules.markattendance
+
+import android.Manifest
+import android.content.pm.PackageManager
+import android.location.Geocoder
+import android.location.Location
+import android.os.Build
+import androidx.lifecycle.ViewModelProviders
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.Toast
+import androidx.core.app.ActivityCompat
+import com.gigforce.app.R
+import com.gigforce.app.core.base.BaseFragment
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
+import kotlinx.android.synthetic.main.mark_attendance_fragment.*
+import java.lang.Exception
+import java.util.*
+
+class MarkAttendanceFragment : BaseFragment() {
+    lateinit var fusedLocationProviderClient : FusedLocationProviderClient
+    val PERMISSION_FINE_LOCATION = 100
+
+    companion object {
+        fun newInstance() = MarkAttendanceFragment()
+    }
+
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        return inflateView(R.layout.mark_attendance_fragment,inflater , container)
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        // TODO: Use the ViewModel
+        updateGPS()
+    }
+    private fun updateGPS() {
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireActivity())
+        if(ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION)== PackageManager.PERMISSION_GRANTED){
+            fusedLocationProviderClient.lastLocation.addOnSuccessListener {
+                updateUI(it)
+            }
+        }
+        else{
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                requestPermissions(arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ),PERMISSION_FINE_LOCATION)
+            }
+        }
+    }
+    private fun updateUI(location: Location) {
+        lat.text = location.latitude.toString()
+        log.text = location.longitude.toString()
+        var geocoder = Geocoder(requireContext())
+        var locationAddress = ""
+        try {
+            var addressArr =  geocoder.getFromLocation(location.latitude,location.longitude,1)
+            address.text = addressArr.get(0).getAddressLine(0)
+            locationAddress = addressArr.get(0).getAddressLine(0)
+        }catch (e: Exception){
+            address.text = "Not Working"
+        }
+//        var gigsRepositoryTest = GigsRepositoryTest()
+//        var markAttendance = MarkAttendance(true, Date(),location.latitude,location.longitude,"",locationAddress)
+//        gigsRepositoryTest.markAttendance(markAttendance)
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when(requestCode){
+            PERMISSION_FINE_LOCATION -> {
+                if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                    updateGPS()
+                }
+                else{
+                    showToast("This app require GPS permission to work properly")
+                }
+            }
+        }
+    }
+
+}

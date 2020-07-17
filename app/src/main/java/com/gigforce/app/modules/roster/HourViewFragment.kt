@@ -12,26 +12,24 @@ import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.ViewModelProvider
 import com.gigforce.app.R
+import com.gigforce.app.modules.custom_gig_preferences.CustomPreferencesViewModel
+import com.gigforce.app.modules.custom_gig_preferences.ParamCustPreferViewModel
 import com.gigforce.app.modules.roster.models.Gig
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.card.MaterialCardView
+import com.ncorti.slidetoact.SlideToActView
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.completed_gig_card.view.*
-import kotlinx.android.synthetic.main.dropdown_spinner.*
 import kotlinx.android.synthetic.main.item_roster_day.view.*
 import kotlinx.android.synthetic.main.roster_day_hour_view.*
 import kotlinx.android.synthetic.main.unavailable_time_adjustment_bottom_sheet.*
 import kotlinx.android.synthetic.main.unavailable_time_adjustment_bottom_sheet.view.*
-import kotlinx.android.synthetic.main.unavailable_time_adjustment_bottom_sheet.view.day_text
+import kotlinx.android.synthetic.main.unavailable_time_adjustment_bottom_sheet.view.start_day_time
 import kotlinx.android.synthetic.main.upcoming_gig_card.view.*
-import kotlinx.android.synthetic.main.upcoming_gig_card.view.gig_title
 import java.time.LocalDateTime
 import java.util.*
 import kotlin.collections.ArrayList
-import kotlin.math.min
 
 class HourViewFragment: RosterBaseFragment() {
 
@@ -50,9 +48,12 @@ class HourViewFragment: RosterBaseFragment() {
     // This is used for card alignment of gig complete card
     var cardStartPadding = 16.px
 
+    lateinit var viewModelCustomPreference: CustomPreferencesViewModel
+
+    // TODO: Figure out why last two items are needed to show 24
     val times = ArrayList<String>(listOf("01:00", "02:00", "03:00", "04:00", "05:00", "06:00", "07:00", "08:00", "09:00",
     "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00",
-    "21:00", "22:00", "23:00", "24:00"))
+    "21:00", "22:00", "23:00", "24:00", "-"))
 
     var timeToHourMap = HashMap<String, Int>(
             hashMapOf(Pair("00:00", 0), Pair("01:00", 1), Pair("02:00", 2), Pair("03:00", 3),
@@ -86,11 +87,11 @@ class HourViewFragment: RosterBaseFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        inflateView(R.layout.roster_day_hour_view, inflater, container)
+
         activeDateTime = LocalDateTime.parse(arguments?.getSerializable("activeDate").toString())
         Log.d("HourView", "Entered Hourly view")
         Log.d("HourView", "Datetime received from Adapter is ${activeDateTime.toString()}")
-        return getFragmentView()
+        return inflateView(R.layout.roster_day_hour_view, inflater, container)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -101,12 +102,23 @@ class HourViewFragment: RosterBaseFragment() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun initialize() {
+        viewModelCustomPreference =
+            ViewModelProvider(this, ParamCustPreferViewModel(viewLifecycleOwner)).get(
+                CustomPreferencesViewModel::class.java
+            )
 
         rosterViewModel.bsBehavior.state = BottomSheetBehavior.STATE_HIDDEN
 
         initializeHourViews()
 
-        setHourVisibility(day_times, activeDateTime, actualDateTime)
+        rosterViewModel.switchHourAvailability(activeDateTime, day_times, viewModelCustomPreference)
+
+        rosterViewModel.isDayAvailable.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+            if (it)
+                setHourVisibility(day_times, activeDateTime, actualDateTime)
+            else
+                allHourInactive(day_times)
+        })
 
         if (isSameDate(activeDateTime, actualDateTime)) {
             setCurrentTimeDivider()
@@ -254,13 +266,12 @@ class HourViewFragment: RosterBaseFragment() {
             widget.requestLayout()
 
             widget.top_half.setOnClickListener {
-                //setAndShowBottomSheet(index-1, index)
+                setAndShowBottomSheet(index-1, index)
 
            }
 
             widget.bottom_half.setOnClickListener {
-                //setAndShowBottomSheet(index, index+1)
-
+                setAndShowBottomSheet(index, index+1)
             }
 
             hourIds.add(widget.id)
@@ -288,10 +299,30 @@ class HourViewFragment: RosterBaseFragment() {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
+    private fun getDateTimeFromHourString(hourString: String): LocalDateTime {
+        // string in format HH:MM
+        var parts = hourString.split(":")
+        var hour = parts[0].toInt()
+        var minute = parts[1].toInt()
+
+        var resultDateTime = activeDateTime
+        resultDateTime = resultDateTime.minusHours(activeDateTime.hour.toLong())
+        resultDateTime = resultDateTime.minusMinutes(activeDateTime.minute.toLong())
+//
+        resultDateTime =  resultDateTime.plusHours(hour.toLong())
+        resultDateTime =  resultDateTime.plusMinutes(minute.toLong())
+
+        Log.d("HVF", "print resultDateTime " + resultDateTime.toString() + "hour $hour" + "minute $minute")
+
+        return resultDateTime
+
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun setAndShowBottomSheet(startIndex: Int, endIndex: Int) {
 
         // outline the selected Hour
-        setHourOUtline(startIndex, endIndex)
+        setHourOutline(startIndex, endIndex)
 
         // set collapsed view elements
         setBsCollapsedDayTimeText(startIndex, endIndex)
@@ -307,6 +338,19 @@ class HourViewFragment: RosterBaseFragment() {
             day_times.removeView(day_times.findViewWithTag<HourOutline>("selected_time"))
         }
 
+        setOnSlideCompleteListener(object: SlideToActView.OnSlideCompleteListener {
+            override fun onSlideComplete(view: SlideToActView) {
+                var startTime = rosterViewModel.UnavailableBS.start_day_time.text
+                var endTime = rosterViewModel.UnavailableBS.end_day_time.text
+                rosterViewModel.toggleHourUnavailable(
+                        requireContext(), day_times, upcomingGigs, getDateTimeFromHourString(startTime.toString()),
+                        getDateTimeFromHourString(endTime.toString()), viewModelCustomPreference)
+
+                Log.d("HVF", "slide complete triggered")
+            }
+        })
+
+
         // show bottom sheet in collapsed mode
         rosterViewModel.bsBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
 
@@ -314,11 +358,35 @@ class HourViewFragment: RosterBaseFragment() {
         rosterViewModel.UnavailableBS.setOnClickListener {  }
     }
 
-    fun setHourOUtline(startIndex: Int, endIndex: Int) {
+    fun setOnSlideCompleteListener(listener: SlideToActView.OnSlideCompleteListener) {
+        rosterViewModel.UnavailableBS.unavailable_button.onSlideCompleteListener = listener
+        rosterViewModel.UnavailableBS.unavailable_button.resetSlider()
+    }
+
+    private fun getViewsByTag(
+        root: ViewGroup,
+        tag: String
+    ): ArrayList<View>? {
+        val views = ArrayList<View>()
+        val childCount = root.childCount
+        for (i in 0 until childCount) {
+            val child = root.getChildAt(i)
+            if (child is ViewGroup) {
+                views.addAll(getViewsByTag(child, tag)!!)
+            }
+            val tagObj = child.tag
+            if (tagObj != null && tagObj == tag) {
+                views.add(child)
+            }
+        }
+        return views
+    }
+
+    fun setHourOutline(startIndex: Int, endIndex: Int) {
         val bottom_sheet = rosterViewModel.UnavailableBS
 
         // remove existing outline if any
-        day_times.removeView(bottom_sheet.findViewWithTag<HourOutline>("selected_time"))
+        getViewsByTag(day_times, "selected_time")?.forEach { day_times.removeView(it) }
 
         // add new outline
         val outline = HourOutline(requireContext())
@@ -352,21 +420,11 @@ class HourViewFragment: RosterBaseFragment() {
         })
 
         rosterViewModel.UnavailableBS.toggle_button.setOnClickListener {
-            if (rosterViewModel.UnavailableBS.toggle_button.isChecked) {
-                if (upcomingGigs.size > 0)
-                    rosterViewModel.isDayAvailable.value = !showGigsTodayWarning(
-                            requireContext(), upcomingGigs, day_times
-                    )
-                else {
-                    rosterViewModel.isDayAvailable.value = false
-                    allHourInactive(day_times)
-                }
-            } else {
-                rosterViewModel.isDayAvailable.value = true
-                setHourVisibility(day_times, activeDateTime, actualDateTime)
-            }
+            rosterViewModel.toggleDayAvailability(
+                requireContext(), day_times, ArrayList<Gig>(),
+                rosterViewModel.isDayAvailable.value!!,  activeDateTime,
+                actualDateTime, viewModelCustomPreference)
         }
-
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -404,14 +462,14 @@ class HourViewFragment: RosterBaseFragment() {
         if (startIndex == 0)
             bottom_sheet.start_day_time.setText("00:00")
         else
-            bottom_sheet.start_day_time.setText("${times[startIndex]}")
+            bottom_sheet.start_day_time.setText(times[startIndex])
 
-        bottom_sheet.end_day_time.setText("${times[endIndex]}")
+        bottom_sheet.end_day_time.setText(times[endIndex])
 
         bottom_sheet.start_day_time.setOnClickListener {
             val cal = Calendar.getInstance()
             val timeSetListener = TimePickerDialog.OnTimeSetListener { timePicker, hour, minute, second ->
-                bottom_sheet.start_day_time.text = "$hour:$minute"
+                bottom_sheet.start_day_time.text = String.format("%02d:%02d", hour, minute)
 
                 // adjust outline as per changed time
                 val outline = day_times.findViewWithTag<HourOutline>("selected_time")
@@ -428,7 +486,7 @@ class HourViewFragment: RosterBaseFragment() {
             val cal = Calendar.getInstance()
 
             val timeSetListener = TimePickerDialog.OnTimeSetListener { timePicker, hour, minute, second ->
-                rosterViewModel.UnavailableBS.end_day_time.text = "$hour:$minute"
+                rosterViewModel.UnavailableBS.end_day_time.text = String.format("%02d:%02d", hour, minute)
                 var outline = day_times.findViewWithTag<HourOutline>("selected_time")
                 outline.endHour = hour
                 outline.endMinute = minute

@@ -13,8 +13,11 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.ViewModelProvider
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
+import com.gigforce.app.modules.custom_gig_preferences.CustomPreferencesViewModel
+import com.gigforce.app.modules.custom_gig_preferences.ParamCustPreferViewModel
 import com.gigforce.app.modules.roster.models.Gig
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import kotlinx.android.synthetic.main.gigs_today_warning_dialog.*
@@ -125,15 +128,15 @@ abstract class RosterBaseFragment: BaseFragment() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun setHourVisibility(parentView: ConstraintLayout, activeDateTime: LocalDateTime, actualDateTime: LocalDateTime) {
-        if (isSameDate(activeDateTime, actualDateTime)) {
-            todayHourActive(parentView, actualDateTime)
-        }
-        else if (isLessDate(activeDateTime, actualDateTime)) {
-            allHourInactive(parentView)
-        }
-        else if (isMoreDate(activeDateTime, actualDateTime)) {
-            allHourActive(parentView)
-        }
+            if (isSameDate(activeDateTime, actualDateTime)) {
+                todayHourActive(parentView, actualDateTime)
+            }
+            else if (isLessDate(activeDateTime, actualDateTime)) {
+                allHourInactive(parentView)
+            }
+            else if (isMoreDate(activeDateTime, actualDateTime)) {
+                allHourActive(parentView)
+            }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

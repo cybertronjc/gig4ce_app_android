@@ -156,7 +156,7 @@ class ChatScreenFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener {
 
     private fun manageBackIcon() {
         iv_backArrowInChat.setOnClickListener {
-            onBackPressed()
+            activity?.onBackPressed()
         }
     }
 

@@ -33,6 +33,10 @@
         <item name="buttonTint">@drawable/radio_button_drawable</item>
     </style>
 
+    <style name="Theme.CheckBoxLipstickPink" parent="Widget.AppCompat.CompoundButton.CheckBox">
+        <item name="buttonTint">@drawable/radio_button_drawable</item>
+    </style>
+
     <style name="FieldtextLatoRegularGrey12">
         <item name="android:textSize">12sp</item>
         <item name="android:letterSpacing">0.05</item>
@@ -298,6 +302,11 @@
         <item name="android:textColor">#222222</item>
     </style>
 
+    <style name="LatoRegular20Black">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">#d9000000</item>
+    </style>
+
     <style name="LatoRegular8">
         <item name="android:textSize">10sp</item>
         <item name="android:letterSpacing">0.14</item>
@@ -399,4 +408,16 @@
         <item name="android:textStyle">bold</item>
         <item name="textAllCaps">false</item>
     </style>
+
+    <style name="MultiSelectDialogStyle" parent="Theme.AppCompat.Light.Dialog">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorPrimary</item>
+    </style>
+
+    <style name="DialogAnimation">
+        <item name="android:windowEnterAnimation">@anim/anim_in</item>
+        <item name="android:windowExitAnimation">@anim/anim_out</item>
+    </style>
+
 </resources>

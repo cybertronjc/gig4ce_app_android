@@ -13,4 +13,7 @@ class TimeSlot {
     val start_time_slot: Date? = null
     val end_time_slot:Date? = null
     val time_slot_id : Int = 0
+    override fun toString(): String {
+        return time_slot_id.toString()
+    }
 }

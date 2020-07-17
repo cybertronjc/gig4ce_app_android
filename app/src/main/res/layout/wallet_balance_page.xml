@@ -86,7 +86,7 @@
                 <View
                     android:id="@+id/zero_divider1"
                     android:layout_width="match_parent"
-                    android:layout_height="5dp"
+                    android:layout_height="3dp"
                     android:background="#ebebeb"
                     android:layout_marginTop="32dp"
                     app:layout_constraintStart_toStartOf="parent"
@@ -225,34 +225,22 @@
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <com.gigforce.app.modules.wallet.components.TransactionCard
-                    android:id="@+id/transaction_1"
+
+                <LinearLayout
+                    android:id="@+id/transactions"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:orientation="vertical"
                     app:layout_constraintTop_toBottomOf="@id/transaction_head"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent" />
-                <com.gigforce.app.modules.wallet.components.TransactionCard
-                    android:id="@+id/transaction_2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintTop_toBottomOf="@id/transaction_1"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent" />
-                <com.gigforce.app.modules.wallet.components.TransactionCard
-                    android:id="@+id/transaction_3"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintTop_toBottomOf="@id/transaction_2"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent" />
 
                 <View
                     android:id="@+id/divider3"
                     android:layout_width="match_parent"
-                    android:layout_height="5dp"
+                    android:layout_height="3dp"
                     android:background="#ebebeb"
-                    app:layout_constraintTop_toBottomOf="@id/transaction_3"
+                    app:layout_constraintTop_toBottomOf="@id/transactions"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent" />
 
@@ -275,6 +263,8 @@
                     android:layout_marginStart="24dp"
                     android:layout_marginEnd="24dp"
                     app:cardCornerRadius="8dp"
+                    app:cardElevation="3dp"
+                    app:cardUseCompatPadding="true"
                     app:layout_constraintTop_toBottomOf="@id/monthly_goal_text"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent" />

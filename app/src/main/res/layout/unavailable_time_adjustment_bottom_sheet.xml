@@ -9,9 +9,9 @@
     android:background="@color/white"
     android:animateLayoutChanges="true"
     app:behavior_hideable="false"
-    app:behavior_peekHeight="200dp"
-    style="@style/Theme.MaterialComponents.BottomSheetDialog"
-    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+    app:halfOffset = "200dp"
+    app:peekHeight = "200dp"
+    app:layout_behavior="com.riningan.widget.ExtendedBottomSheetBehavior">
 
     <View
         android:id="@+id/bs_head"
@@ -150,9 +150,9 @@
             app:layout_constraintStart_toEndOf="@id/watch_icon"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <com.google.android.material.switchmaterial.SwitchMaterial
+        <Switch
             android:id="@+id/toggle_button"
-            style="@style/Widget.MaterialComponents.CompoundButton.Switch"
+            style="@style/Theme.switchButton"
             android:layout_width="wrap_content"
             android:layout_height="24dp"
             android:layout_marginEnd="30dp"
@@ -240,7 +240,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/barrier"
         app:outer_color="#ffd9e6"
-        app:slider_locked="true"
         app:text="UNAVAILABLE"
         app:text_style="bold" />
 

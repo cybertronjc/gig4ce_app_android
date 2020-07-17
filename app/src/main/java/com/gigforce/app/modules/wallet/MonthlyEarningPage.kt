@@ -12,7 +12,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.app.R
 import com.gigforce.app.modules.roster.inflate
+import com.gigforce.app.modules.wallet.adapters.InvoiceAdapter
 import com.gigforce.app.modules.wallet.models.Invoice
+import com.jay.widget.StickyHeadersLinearLayoutManager
 import kotlinx.android.synthetic.main.invoice_collapsed_card.view.*
 import kotlinx.android.synthetic.main.monthly_earning_page.*
 
@@ -31,25 +33,35 @@ class MonthlyEarningPage: WalletBaseFragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        month_transactions.apply {
-            layoutManager = LinearLayoutManager(requireContext())
-            adapter = MonthlyTransactionAdapter(invoiceViewModel.monthlyInvoice)
-        }
+        initialize()
+        setListeners()
+
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun initialize() {
         earning_graph.attachAdapter()
 
-        back_button.setOnClickListener { requireActivity().onBackPressed() }
+        earning_graph.month.observe(viewLifecycleOwner, Observer {
+            val mnth = it
+            val year = earning_graph.year
 
-        earning_graph.month.observe(viewLifecycleOwner, Observer { month ->
-            monthly_text.text = "$month 2020"
+            monthly_text.text = String.format("%02d / %04d", mnth, year)
 
-            if (month != "June") {
-                month_transactions.adapter = MonthlyTransactionAdapter(ArrayList<Invoice>())
-                (month_transactions.adapter as MonthlyTransactionAdapter).notifyDataSetChanged()
-            } else {
-                month_transactions.adapter = MonthlyTransactionAdapter(invoiceViewModel.monthlyInvoice)
-                (month_transactions.adapter as MonthlyTransactionAdapter).notifyDataSetChanged()
+            month_transactions.apply {
+                layoutManager = StickyHeadersLinearLayoutManager<InvoiceAdapter>(requireContext())
+                adapter = InvoiceAdapter(ArrayList(InvoiceAdapter.arrangeTransactions(invoiceViewModel.getMonthlyInvoices(
+                    invoiceViewModel.allInvoices.value, mnth, year))))
             }
+
         })
+
+    }
+
+    private fun setListeners() {
+        back_button.setOnClickListener { requireActivity().onBackPressed() }
+        help_ic.setOnClickListener { navigate(R.id.helpExpandedPage) }
+
     }
 }
 
