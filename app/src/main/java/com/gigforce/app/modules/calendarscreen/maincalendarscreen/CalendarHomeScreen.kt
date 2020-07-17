@@ -181,10 +181,6 @@ class CalendarHomeScreen : BaseFragment(),
         }
         val firstVisibleItem = layoutManager!!.findFirstVisibleItemPosition()
         var dayModel = selectedMonthModel.days.get(0)
-        println(" date data2 "+ "first "+recyclerGenericAdapter.list.get(firstVisibleItem).year+" "+recyclerGenericAdapter.list.get(firstVisibleItem).month+" "+recyclerGenericAdapter.list.get(
-            firstVisibleItem
-        ).date)
-        println(" date data3 "+recyclerGenericAdapter.list.get(firstVisibleItem).month + " "+ dayModel.currentMonth+" "+(recyclerGenericAdapter.list.get(firstVisibleItem).month < dayModel.currentMonth))
         if (recyclerGenericAdapter.list.get(firstVisibleItem).year < dayModel.year || (recyclerGenericAdapter.list.get(
                 firstVisibleItem
             ).year == dayModel.year && recyclerGenericAdapter.list.get(firstVisibleItem).month < dayModel.month)||(recyclerGenericAdapter.list.get(
@@ -193,19 +189,13 @@ class CalendarHomeScreen : BaseFragment(),
                 firstVisibleItem
             ).date < dayModel.date)
         ) {
-            println(" date data "+ "second")
-
             for (index in firstVisibleItem..recyclerGenericAdapter.list.size) {
-                println(" date data "+ index)
-
                 if (recyclerGenericAdapter.list.get(index).year == dayModel.year && recyclerGenericAdapter.list.get(
                         index
                     ).month == dayModel.month && recyclerGenericAdapter.list.get(
                         index
                     ).date == dayModel.date
                 ) {
-                    println(" date data "+ index)
-
                     (rv_.layoutManager as LinearLayoutManager)?.scrollToPositionWithOffset(
                         index,
                         0
