@@ -140,7 +140,7 @@ class GigAttendancePageFragment : BaseFragment() {
         gigTypeTV.text = gig.gigType
         gigIdTV.text = gig.gigId
 
-        if (gig.companyLogo != null) {
+        if (!gig.companyLogo.isNullOrBlank()) {
             if (gig.companyLogo!!.startsWith("http", true)) {
 
                 Glide.with(requireContext())

@@ -156,7 +156,7 @@ class PresentGigPageFragment : BaseFragment() {
     private fun setGigDetailsOnView(gig: Gig) {
         this.gig = gig
 
-        if (gig.companyLogo != null) {
+        if (!gig.companyLogo.isNullOrBlank()) {
             if (gig.companyLogo!!.startsWith("http", true)) {
 
                 Glide.with(requireContext())
