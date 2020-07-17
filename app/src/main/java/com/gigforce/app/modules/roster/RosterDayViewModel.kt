@@ -95,7 +95,7 @@ class RosterDayViewModel: ViewModel() {
             // check if it was set from custom unavailable
             for (unavailable in viewModelCustomPreference.customPreferencesDataModel.unavailable) {
                 if (date.toDate == unavailable.date)
-                    isDayAvailable.postValue(unavailable.dayUnavailable)
+                    isDayAvailable.postValue(!unavailable.dayUnavailable)
             }
 
         }
@@ -114,10 +114,12 @@ class RosterDayViewModel: ViewModel() {
                 isDayAvailable.value = false
                 allHourInactive(parentView)
 
+                var unavailable = UnavailableDataModel(
+                    Date.from(activeDateTime.atZone(ZoneId.systemDefault()).toInstant())
+                )
+                unavailable.dayUnavailable = true
                 viewModelCustomPreference.updateCustomPreference(
-                    UnavailableDataModel(
-                        Date.from(activeDateTime.atZone(ZoneId.systemDefault()).toInstant())
-                    )
+                    unavailable
                 )
             }
 
@@ -131,7 +133,7 @@ class RosterDayViewModel: ViewModel() {
                             Date.from(activeDateTime.atZone(ZoneId.systemDefault()).toInstant())
                     )
 
-            available.dayUnavailable = true
+            available.dayUnavailable = false
 
             viewModelCustomPreference.updateCustomPreference(
                     available
@@ -157,6 +159,14 @@ class RosterDayViewModel: ViewModel() {
             }
         }
     }
+
+//    fun updateHourAvailabilityForPreference(activeDateTime: LocalDateTime, parentView: ConstraintLayout, viewModelCustomPreference: CustomPreferencesViewModel) {
+//        viewModelCustomPreference.customPreferencesDataModel.unavailable.filter {
+//            it.date == activeDateTime.toDate
+//        }.forEach {
+//            it.time
+//        }
+//    }
 
     fun selectedHourInactive(parentView: ConstraintLayout, startDateTime: Date, endDateTime: Date) {
         for (idx in 1..24) {

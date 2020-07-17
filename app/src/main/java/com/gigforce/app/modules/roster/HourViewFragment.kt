@@ -7,7 +7,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
@@ -17,14 +16,12 @@ import com.gigforce.app.R
 import com.gigforce.app.modules.custom_gig_preferences.CustomPreferencesViewModel
 import com.gigforce.app.modules.custom_gig_preferences.ParamCustPreferViewModel
 import com.gigforce.app.modules.roster.models.Gig
-import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.card.MaterialCardView
 import com.ncorti.slidetoact.SlideToActView
 import com.riningan.widget.ExtendedBottomSheetBehavior
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog
 import kotlinx.android.synthetic.main.item_roster_day.view.*
 import kotlinx.android.synthetic.main.roster_day_hour_view.*
-import kotlinx.android.synthetic.main.unavailable_time_adjustment_bottom_sheet.*
 import kotlinx.android.synthetic.main.unavailable_time_adjustment_bottom_sheet.view.*
 import kotlinx.android.synthetic.main.unavailable_time_adjustment_bottom_sheet.view.start_day_time
 import kotlinx.android.synthetic.main.upcoming_gig_card.view.*
@@ -186,7 +183,7 @@ class HourViewFragment: RosterBaseFragment() {
 
     private fun addUpcomingGigCard(gig: Gig) {
         Log.d("HourView", "Upcoming gig add")
-        Toast.makeText(requireContext(), "Add upcoming gig called", Toast.LENGTH_SHORT).show()
+        //Toast.makeText(requireContext(), "Add upcoming gig called", Toast.LENGTH_SHORT).show()
         val upcomingCard = UpcomingGigCard(requireContext())
 
         day_times.addView(upcomingCard)
@@ -213,7 +210,7 @@ class HourViewFragment: RosterBaseFragment() {
         constraintSet.applyTo(day_times)
 
         upcomingCard.setOnClickListener {
-            Toast.makeText(requireContext(), "Clicked on upcoming card", Toast.LENGTH_SHORT).show()
+            //Toast.makeText(requireContext(), "Clicked on upcoming card", Toast.LENGTH_SHORT).show()
             navigate(R.id.gigPageExpanded)
         }
     }
@@ -247,7 +244,7 @@ class HourViewFragment: RosterBaseFragment() {
         constraintSet.applyTo(day_times)
 
         completedGigCard.setOnClickListener {
-            Toast.makeText(requireContext(), "Clicked on completed card", Toast.LENGTH_SHORT).show()
+            //Toast.makeText(requireContext(), "Clicked on completed card", Toast.LENGTH_SHORT).show()
             navigate(R.id.gigPageExpanded)
         }
 
