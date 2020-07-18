@@ -251,4 +251,7 @@ dependencies {
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
 
     implementation 'com.jsibbold:zoomage:1.3.1'
+
+    //Transcoder for compressing video files
+    implementation 'com.otaliastudios:transcoder:0.9.1'
 }
