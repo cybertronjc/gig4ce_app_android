@@ -13,7 +13,6 @@ import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.viewpager2.widget.ViewPager2
 import com.gigforce.app.R
 import com.gigforce.app.core.toDate
 import com.gigforce.app.modules.custom_gig_preferences.CustomPreferencesViewModel
@@ -21,20 +20,14 @@ import com.gigforce.app.modules.custom_gig_preferences.UnavailableDataModel
 import com.gigforce.app.modules.preferences.PreferencesRepository
 import com.gigforce.app.modules.preferences.prefdatamodel.PreferencesDataModel
 import com.gigforce.app.modules.roster.models.Gig
-import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.card.MaterialCardView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.riningan.widget.ExtendedBottomSheetBehavior
 import kotlinx.android.synthetic.main.gigs_today_warning_dialog.*
 import kotlinx.android.synthetic.main.reason_for_gig_cancel_dialog.*
-import kotlinx.android.synthetic.main.roster_day_fragment.*
-import kotlinx.android.synthetic.main.roster_day_hour_view.*
 import java.text.SimpleDateFormat
-import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
-import java.time.format.DateTimeFormatter
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
@@ -47,7 +40,7 @@ class RosterDayViewModel: ViewModel() {
     var isDayAvailable: MutableLiveData<Boolean> = MutableLiveData(true)
 
     var gigsQuery: MutableLiveData<ArrayList<Gig>> = MutableLiveData<ArrayList<Gig>>()
-    var userPref: MutableLiveData<PreferencesDataModel> = MutableLiveData<PreferencesDataModel>()
+    private var userPref: MutableLiveData<PreferencesDataModel> = MutableLiveData<PreferencesDataModel>()
     var preferencesRepository = PreferencesRepository()
 
     var userGigs = HashMap<String, ArrayList<Gig>>()
@@ -89,8 +82,8 @@ class RosterDayViewModel: ViewModel() {
         isDayAvailable.postValue(false)
         userPref.value ?.let {
             Log.d("RDVM", date.dayOfWeek.toString())
-            val weekDays = it.selecteddays.map { item -> item.toUpperCase() }
-            val weekEnds = it.selectedweekends.map { item -> item.toUpperCase() }
+            val weekDays = it.selecteddays.map { item -> item.toUpperCase(Locale.ROOT) }
+            val weekEnds = it.selectedweekends.map { item -> item.toUpperCase(Locale.ROOT) }
             Log.d("RDVM", weekDays.toString())
             isDayAvailable.postValue(
                 weekDays.contains(date.dayOfWeek.toString()) || weekEnds.contains(date.dayOfWeek.toString()))
@@ -117,7 +110,7 @@ class RosterDayViewModel: ViewModel() {
                 isDayAvailable.value = false
                 allHourInactive(parentView)
 
-                var unavailable = UnavailableDataModel(
+                val unavailable = UnavailableDataModel(
                     Date.from(activeDateTime.atZone(ZoneId.systemDefault()).toInstant())
                 )
                 unavailable.dayUnavailable = true
@@ -129,9 +122,9 @@ class RosterDayViewModel: ViewModel() {
         } else {
             // currently unavailable, switch to available
             isDayAvailable.value = true
-            setHourVisibility(parentView, activeDateTime, actualDateTime)
+            setHourVisibility(parentView, activeDateTime, actualDateTime, viewModelCustomPreference)
 
-            var available =
+            val available =
                     UnavailableDataModel(
                             Date.from(activeDateTime.atZone(ZoneId.systemDefault()).toInstant())
                     )
@@ -153,7 +146,9 @@ class RosterDayViewModel: ViewModel() {
         selectedHourInactive(parentView, startDateTime.toDate, endDateTime.toDate)
     }
 
-    fun switchHourAvailability(activeDateTime: LocalDateTime, parentView: ConstraintLayout, viewModelCustomPreference: CustomPreferencesViewModel) {
+    fun switchHourAvailability(
+        activeDateTime: LocalDateTime, parentView: ConstraintLayout,
+        viewModelCustomPreference: CustomPreferencesViewModel) {
         viewModelCustomPreference.customPreferencesDataModel.unavailable.filter {
             it.date == activeDateTime.toDate
         }.forEach {
@@ -173,8 +168,9 @@ class RosterDayViewModel: ViewModel() {
 
     fun selectedHourInactive(parentView: ConstraintLayout, startDateTime: Date, endDateTime: Date) {
         for (idx in 1..24) {
-            var widget = parentView.findViewWithTag<HourRow>("hour_$idx")
-            widget.isDisabled = widget.hour <= endDateTime.hours && widget.hour >= startDateTime.hours
+            val widget = parentView.findViewWithTag<HourRow>("hour_$idx")
+            if (widget.hour <= endDateTime.hours && widget.hour >= startDateTime.hours)
+                widget.isDisabled = true
         }
     }
 
@@ -243,7 +239,9 @@ class RosterDayViewModel: ViewModel() {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun setHourVisibility(parentView: ConstraintLayout, activeDateTime: LocalDateTime, actualDateTime: LocalDateTime) {
+    fun setHourVisibility(
+        parentView: ConstraintLayout, activeDateTime: LocalDateTime, actualDateTime: LocalDateTime,
+        viewModelCustomPreference: CustomPreferencesViewModel) {
         if (isSameDate(activeDateTime, actualDateTime)) {
             todayHourActive(parentView, actualDateTime)
         }
@@ -253,6 +251,8 @@ class RosterDayViewModel: ViewModel() {
         else if (isMoreDate(activeDateTime, actualDateTime)) {
             allHourActive(parentView)
         }
+
+        switchHourAvailability(activeDateTime, parentView, viewModelCustomPreference)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

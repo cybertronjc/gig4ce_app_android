@@ -101,6 +101,8 @@ class HourViewFragment: RosterBaseFragment() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun initialize() {
+
+        Log.d("ActiveDay", "Active Day in HourView $activeDateTime")
         viewModelCustomPreference =
             ViewModelProvider(this, ParamCustPreferViewModel(viewLifecycleOwner)).get(
                 CustomPreferencesViewModel::class.java
@@ -111,15 +113,21 @@ class HourViewFragment: RosterBaseFragment() {
         initializeHourViews()
 
         viewModelCustomPreference.customPreferencesLiveDataModel.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
-            rosterViewModel.switchHourAvailability(activeDateTime, day_times, viewModelCustomPreference)
+            rosterViewModel.switchHourAvailability(
+                activeDateTime,
+                day_times,
+                viewModelCustomPreference
+            )
+            rosterViewModel.isDayAvailable.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+                if (it)
+                    rosterViewModel.setHourVisibility(
+                        day_times, activeDateTime, actualDateTime, viewModelCustomPreference
+                    )
+                else
+                    allHourInactive(day_times)
+            })
         })
 
-        rosterViewModel.isDayAvailable.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
-            if (it)
-                setHourVisibility(day_times, activeDateTime, actualDateTime)
-            else
-                allHourInactive(day_times)
-        })
 
         if (isSameDate(activeDateTime, actualDateTime)) {
             setCurrentTimeDivider()
@@ -416,7 +424,7 @@ class HourViewFragment: RosterBaseFragment() {
         // TODO: Check why adding the end constraint results in unexpected alignment
         val constraintSet = ConstraintSet()
         constraintSet.clone(day_times)
-        constraintSet.connect(outline.id, ConstraintSet.TOP, day_times.id, ConstraintSet.TOP)
+        constraintSet.connect(outline.id, ConstraintSet.TOP, day_times.id, ConstraintSet.TOP, outline.marginTop)
         constraintSet.connect(outline.id, ConstraintSet.START, start_guideline.id, ConstraintSet.START, marginCardStart - cardStartPadding)
 //      constraintSet.connect(outline.id, ConstraintSet.END, end_guideline.id, ConstraintSet.END)
         constraintSet.applyTo(day_times)
@@ -480,14 +488,17 @@ class HourViewFragment: RosterBaseFragment() {
             val cal = Calendar.getInstance()
             val timeSetListener = TimePickerDialog.OnTimeSetListener { timePicker, hour, minute, second ->
                 bottom_sheet.start_day_time.text = String.format("%02d:%02d", hour, minute)
+                bottom_sheet.time_text.text = (
+                        String.format("%02d:%02d", hour, minute) + " - " +
+                                bottom_sheet.end_day_time.text)
 
                 // adjust outline as per changed time
                 val outline = day_times.findViewWithTag<HourOutline>("selected_time")
                 outline.startHour = hour
                 outline.startMinute = minute
                 outline.resetHeightAndTopMargin(itemHeight)
-//                (outline.layoutParams as ViewGroup.MarginLayoutParams).setMargins(marginCardStart-16.px, hour * 70.px + ((minute/60)*70).toInt().px, 0, 0)
-//                outline.requestLayout()
+                (outline.layoutParams as ViewGroup.MarginLayoutParams).topMargin = outline.marginTop
+                outline.requestLayout()
                 setBsExpandedUpcomingGigs(outline.startHour, outline.endHour)
             }
             TimePickerDialog.newInstance(timeSetListener, timeToHourMap[times[startIndex]]!!, 0, true).show(requireFragmentManager(), "DateTimePicker")
@@ -497,6 +508,9 @@ class HourViewFragment: RosterBaseFragment() {
 
             val timeSetListener = TimePickerDialog.OnTimeSetListener { timePicker, hour, minute, second ->
                 rosterViewModel.UnavailableBS.end_day_time.text = String.format("%02d:%02d", hour, minute)
+                bottom_sheet.time_text.text = (
+                        bottom_sheet.start_day_time.text.toString() + " - " +
+                                String.format("%02d:%02d", hour, minute))
                 var outline = day_times.findViewWithTag<HourOutline>("selected_time")
                 outline.endHour = hour
                 outline.endMinute = minute
@@ -518,6 +532,9 @@ class HourViewFragment: RosterBaseFragment() {
                 widget.startMinute = gig.startMinute
                 widget.duration = gig.duration
                 widget.cardHeight = 80.px
+                widget.gig_title.text = gig.title
+                widget.setTimings()
+
 
                 (widget.layoutParams as ViewGroup.MarginLayoutParams).setMargins(0, 16.px, 0, 0)
                 widget.requestLayout()
