@@ -83,7 +83,7 @@
     <color name="black_85">#d9000000</color>
     <color name="gig_found_color">#ca0071</color>
     <color name="current_date_indicator_color">#e94b81</color>
-
+    <color name="sec_pogress_assess_frag">#D1D3D5</color>
 
 
 </resources>

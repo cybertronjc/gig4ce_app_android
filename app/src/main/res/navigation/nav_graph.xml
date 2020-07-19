@@ -578,6 +578,10 @@
         android:name="com.gigforce.app.modules.gigPage.GigPageNavigationFragment"
         android:label="fragment_gig_navigation"
         tools:layout="@layout/fragment_gig_navigation" />
+    <fragment
+        android:id="@+id/assessment_fragment"
+        android:name="com.gigforce.app.modules.assessment.AssessmentFragment"
+        android:label="AssessmentFragment" />
 
 </navigation>
 

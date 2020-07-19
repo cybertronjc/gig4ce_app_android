@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="@dimen/size_8">
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/size_27">
+
+        <ImageView
+            android:id="@+id/iv_bg_top_assess_dialog"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/size_100"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/assessment_dialog_background"
+            android:scaleType="centerCrop"
+            android:src="@drawable/bg_dialog_top"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_message_assess_dialog"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/size_17"
+            android:text="@string/good_luck"
+            android:textColor="@color/black_85"
+            android:textSize="@dimen/font_24"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/iv_bg_top_assess_dialog" />
+
+        <TextView
+            android:id="@+id/tv_level_assess_dialog"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/size_12"
+            android:text="Level 1"
+            android:textColor="@color/darkish_pink_two"
+            android:textSize="@dimen/font_28"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_message_assess_dialog" />
+
+        <TextView
+            android:id="@+id/tv_assess_name_assess_dialog"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/size_27"
+            android:layout_marginTop="@dimen/size_24"
+            android:layout_marginEnd="@dimen/size_27"
+            android:gravity="start"
+            android:text="Assessement 1 : Retail sales Executive "
+            android:textColor="@color/black"
+            android:textSize="@dimen/font_16"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_level_assess_dialog" />
+
+        <TextView
+            android:id="@+id/tv_ques_count_assess_dialog"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/size_27"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="@dimen/size_27"
+            android:gravity="start"
+            android:text="Total Questions: 10"
+            android:textColor="@color/black_85"
+            android:textSize="@dimen/font_14"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_assess_name_assess_dialog" />
+
+        <TextView
+            android:id="@+id/tv_time_assess_dialog"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/size_27"
+            android:layout_marginTop="@dimen/size_12"
+            android:layout_marginEnd="@dimen/size_27"
+            android:gravity="start"
+            android:text="Time Duration : 10 mins"
+            android:textColor="@color/black_85"
+            android:textSize="@dimen/font_14"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_ques_count_assess_dialog" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/size_12"
+            android:layout_marginTop="@dimen/size_23"
+            android:layout_marginEnd="@dimen/size_12"
+            android:background="@drawable/pink_border"
+
+            android:gravity="center_horizontal"
+            android:padding="@dimen/size_15"
+            android:text="Start Assessment"
+            android:textColor="@color/lipstick"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_time_assess_dialog" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

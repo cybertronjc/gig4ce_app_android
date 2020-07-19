@@ -300,5 +300,7 @@
     <string name="action_invite_friends">दोस्तों को आमंत्रित करें</string>
     <string name="action_refresh">ताज़ा करें</string>
     <string name="please_provide_following_details">Please provide following details.</string>
+    <string name="good_luck">शुभ लाभ!!!</string>
+
 
 </resources>

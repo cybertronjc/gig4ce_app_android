@@ -170,7 +170,7 @@ class BSCalendarScreenFragment : BaseFragment() {
                         getTextView(viewHolder, R.id.contactPersonTV).text =
                             obj?.gigContactDetails?.contactName
 
-                        if(obj!!.isGigOfToday()) {
+                        if (obj!!.isGigOfToday()) {
 
                             val gigTiming = if (obj.endDateTime != null)
                                 "${timeFormatter.format(obj.startDateTime!!.toDate())} - ${timeFormatter.format(
@@ -191,7 +191,7 @@ class BSCalendarScreenFragment : BaseFragment() {
                         } else {
                             getView(viewHolder, R.id.checkInTV).isEnabled = false
 
-                           val date =  DateHelper.getDateInDDMMYYYY(obj.startDateTime!!.toDate())
+                            val date = DateHelper.getDateInDDMMYYYY(obj.startDateTime!!.toDate())
                             getTextView(viewHolder, R.id.textView67).text = date
                         }
 
@@ -552,6 +552,9 @@ class BSCalendarScreenFragment : BaseFragment() {
 
                 })!!
         recyclerGenericAdapter.setList(datalist)
+        recyclerGenericAdapter.setClickListener { view, position, item ->
+            navigate(R.id.assessment_fragment)
+        }
         recyclerGenericAdapter.setLayout(R.layout.assessment_bs_item)
         assessment_rv.layoutManager = LinearLayoutManager(
             activity?.applicationContext,
