@@ -5,20 +5,19 @@ import android.content.pm.PackageManager
 import android.location.Geocoder
 import android.location.Location
 import android.os.Build
-import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.otaliastudios.cameraview.CameraLogger
+import com.otaliastudios.cameraview.PictureResult
+import com.otaliastudios.cameraview.controls.Mode
 import kotlinx.android.synthetic.main.mark_attendance_fragment.*
-import java.lang.Exception
-import java.util.*
 
 class MarkAttendanceFragment : BaseFragment() {
     lateinit var fusedLocationProviderClient : FusedLocationProviderClient
@@ -39,8 +38,37 @@ class MarkAttendanceFragment : BaseFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         // TODO: Use the ViewModel
-        updateGPS()
+//        updateGPS()
+        CameraLogger.setLogLevel(CameraLogger.LEVEL_VERBOSE)
+        cameraView.setLifecycleOwner(this)
+        cameraView.addCameraListener(CameraListener())
+        listener()
     }
+    var mCaptureTime :Long = 0
+    private fun listener() {
+        button3.setOnClickListener(View.OnClickListener {
+            if (cameraView.getMode() == Mode.VIDEO) {
+                showToast("Can't take HQ pictures while in VIDEO mode.")
+
+            }else {
+                if (!cameraView.isTakingPicture()) {
+                    mCaptureTime = System.currentTimeMillis()
+                    showToast("Capturing picture...")
+                    cameraView.takePicture()
+                }
+            }
+        })
+
+
+    }
+
+    private inner class CameraListener : com.otaliastudios.cameraview.CameraListener() {
+        override fun onPictureTaken(result: PictureResult) {
+            super.onPictureTaken(result)
+
+        }
+    }
+
     private fun updateGPS() {
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireActivity())
         if(ActivityCompat.checkSelfPermission(
