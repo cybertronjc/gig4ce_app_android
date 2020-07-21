@@ -124,7 +124,4 @@ class GigPageNavigationFragment : BaseFragment() {
         it.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
     }
 
-    private fun isGigOfToday(startDate: Date): Boolean {
-        return true
-    }
 }

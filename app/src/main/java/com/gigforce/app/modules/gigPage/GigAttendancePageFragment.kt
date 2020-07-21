@@ -10,46 +10,30 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.text.SpannableString
-import android.text.style.ClickableSpan
 import android.text.style.ForegroundColorSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.res.ResourcesCompat
 import androidx.core.app.ActivityCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.gone
+import com.gigforce.app.core.visible
 import com.gigforce.app.modules.gigPage.models.Gig
 import com.gigforce.app.modules.gigPage.models.GigAttendance
-import com.gigforce.app.modules.gigerVerfication.panCard.AddPanCardInfoFragment
 import com.gigforce.app.modules.photocrop.PhotoCrop
 import com.gigforce.app.utils.Lce
+import com.gigforce.app.utils.TextDrawable
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.ncorti.slidetoact.SlideToActView
-import kotlinx.android.synthetic.main.fragment_gig_navigation_bottom_sheet.*
 import kotlinx.android.synthetic.main.fragment_gig_page_attendance.*
-import kotlinx.android.synthetic.main.fragment_gig_page_attendance.addressTV
-import kotlinx.android.synthetic.main.fragment_gig_page_attendance.callCardView
-import kotlinx.android.synthetic.main.fragment_gig_page_attendance.companyLogoIV
-import kotlinx.android.synthetic.main.fragment_gig_page_attendance.companyNameTV
-import kotlinx.android.synthetic.main.fragment_gig_page_attendance.contactPersonTV
-import kotlinx.android.synthetic.main.fragment_gig_page_attendance.durationTextTV
-import kotlinx.android.synthetic.main.fragment_gig_page_attendance.gigIdTV
-import kotlinx.android.synthetic.main.fragment_gig_page_attendance.gigTypeTV
-import kotlinx.android.synthetic.main.fragment_gig_page_attendance.punchInTimeTV
-import kotlinx.android.synthetic.main.fragment_gig_page_attendance.punchOutTimeTV
-import kotlinx.android.synthetic.main.fragment_gig_page_attendance.roleNameTV
-import kotlinx.android.synthetic.main.fragment_gig_page_attendance.shiftTV
-import kotlinx.android.synthetic.main.fragment_gig_page_attendance.startNavigationSliderBtn
-import kotlinx.android.synthetic.main.fragment_gig_page_attendance.wageTV
-import kotlinx.android.synthetic.main.fragment_gig_page_present.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -63,8 +47,8 @@ class GigAttendancePageFragment : BaseFragment() {
     var isGPSRequestCompleted = false
     lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     val PERMISSION_FINE_LOCATION = 100
-    private val dateFormatter = SimpleDateFormat("dd/MM/yyyy")
-    private val timeFormatter = SimpleDateFormat("HH:mm:ss")
+    private val dateFormatter = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+    private val timeFormatter = SimpleDateFormat("HH:mm:ss", Locale.getDefault())
 
     private val viewModel: GigViewModel by viewModels()
 
@@ -99,6 +83,21 @@ class GigAttendancePageFragment : BaseFragment() {
     private fun initView() {
         cross_btn.setOnClickListener { activity?.onBackPressed() }
 
+        seeMoreBtn.setOnClickListener {
+
+            navigate(R.id.presentGigPageFragment, Bundle().apply {
+                this.putString(GigPageFragment.INTENT_EXTRA_GIG_ID, gigId)
+                this.putBoolean(GigPageFragment.INTENT_EXTRA_COMING_FROM_CHECK_IN, true)
+            })
+        }
+
+        favoriteCB.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked && gig?.isFavourite!!.not())
+                viewModel.favoriteGig(gigId)
+            else if (!isChecked && gig?.isFavourite!!)
+                viewModel.unFavoriteGig(gigId)
+        }
+
         callCardView.setOnClickListener {
 
             if (gig?.contactNo != null) {
@@ -111,11 +110,9 @@ class GigAttendancePageFragment : BaseFragment() {
     private fun getData(arguments: Bundle?, savedInstanceState: Bundle?) {
         gigId = if (savedInstanceState != null) {
             savedInstanceState.getString(INTENT_EXTRA_GIG_ID)!!
-        } else  {
+        } else {
             arguments?.getString(INTENT_EXTRA_GIG_ID)!!
-
         }
-//        gigId = "G1G00001"
     }
 
     private fun initViewModel(savedInstanceState: Bundle?) {
@@ -146,7 +143,7 @@ class GigAttendancePageFragment : BaseFragment() {
                 Glide.with(requireContext())
                     .load(gig.companyLogo)
                     .into(companyLogoIV)
-            }else {
+            } else {
                 FirebaseStorage.getInstance()
                     .getReference("companies_gigs_images")
                     .child(gig.companyLogo!!)
@@ -157,7 +154,17 @@ class GigAttendancePageFragment : BaseFragment() {
                             .into(companyLogoIV)
                     }
             }
+        } else {
+            val companyInitials = if (gig.companyName.isNullOrBlank())
+                "C"
+            else
+                gig.companyName!![0].toString().toUpperCase()
+            val drawable = TextDrawable.builder().buildRound(
+                companyInitials,
+                ResourcesCompat.getColor(resources, R.color.lipstick, null)
+            )
 
+            companyLogoIV.setImageDrawable(drawable)
         }
 
         if (gig.endDateTime != null)
@@ -166,19 +173,25 @@ class GigAttendancePageFragment : BaseFragment() {
         else
             durationTextTV.text = "${dateFormatter.format(gig.startDateTime!!.toDate())} - "
 
-        shiftTV.text = "${gig.duration} per Day "
+        shiftTV.text = "${gig.duration} Hrs per Day "
         addressTV.text = gig.address
-        wageTV.text = "${gig.gigAmount} per Day "
+        wageTV.text = "Gross Payment : Rs ${gig.gigAmount} per Month"
+
+        if (gig.isFavourite && favoriteCB.isChecked.not()) {
+            favoriteCB.isChecked = true
+        } else if (gig.isFavourite.not() && favoriteCB.isChecked) {
+            favoriteCB.isChecked = false
+        }
 
         contactPersonTV.text = gig.gigContactDetails?.contactName
 
         addressTV.setOnClickListener {
 
             //Launch Map
-            val lat = gig?.latitude
-            val long = gig?.longitude
+            val lat = gig.latitude
+            val long = gig.longitude
 
-            if(lat != null) {
+            if (lat != null) {
                 val uri = "http://maps.google.com/maps?q=loc:$lat,$long (Gig Location)"
                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
                 requireContext().startActivity(intent)
@@ -190,29 +203,41 @@ class GigAttendancePageFragment : BaseFragment() {
         } else {
             addressTV.text = gig.address
         }
-        try {
-            if (gig.attendance!!.checkInMarked) {
-                if (startNavigationSliderBtn.isCompleted()) {
-                    startNavigationSliderBtn.resetSlider()
-                }
 
-                startNavigationSliderBtn.text = "Check out"
-                punchInTimeTV.text = "${timeFormatter.format(gig.attendance?.checkInTime)}"
+        if (gig.isCheckInMarked()) {
+            if (startNavigationSliderBtn.isCompleted()) {
+                startNavigationSliderBtn.resetSlider()
             }
-            if (gig.attendance!!.checkOutMarked) {
-                startNavigationSliderBtn.gone()
-                punchOutTimeTV.text = "${timeFormatter.format(gig.attendance?.checkOutTime)}"
-            }
-        }catch (e:Exception){}
 
+            attendanceCardView.setBackgroundColor(
+                ResourcesCompat.getColor(
+                    resources,
+                    R.color.light_pink,
+                    null
+                )
+            )
+            startNavigationSliderBtn.text = "Check out"
+            punchInTimeTV.text = "${timeFormatter.format(gig.attendance?.checkInTime)}"
+        } else{
+            startNavigationSliderBtn.text = "Check In"
+        }
+
+        if (gig.isCheckOutMarked()) {
+            startNavigationSliderBtn.gone()
+            punchOutTimeTV.text = "${timeFormatter.format(gig.attendance?.checkOutTime)}"
+        }
+
+        if (gig.isGigOfToday())
+            startNavigationSliderBtn.visible()
+        else
+            startNavigationSliderBtn.gone()
     }
 
     private fun prepareAddress(address: String): SpannableString {
         if (address.isBlank())
             return SpannableString("")
 
-        val string = SpannableString(address + PresentGigPageFragment.TEXT_VIEW_ON_MAP)
-
+        val string = SpannableString(address + GigPageFragment.TEXT_VIEW_ON_MAP)
 
 
         val colorLipstick = ResourcesCompat.getColor(resources, R.color.lipstick, null)
@@ -262,18 +287,21 @@ class GigAttendancePageFragment : BaseFragment() {
         }
 
     }
-    var selfieImg : String = ""
+
+    var selfieImg: String = ""
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_CODE_UPLOAD_SELFIE_IMAGE && resultCode == Activity.RESULT_OK) {
             var imageName: String? = data?.getStringExtra("filename")
             var profilePicRef: StorageReference =
-                FirebaseStorage.getInstance().reference.child("attendance").child(imageName.toString())
+                FirebaseStorage.getInstance().reference.child("attendance")
+                    .child(imageName.toString())
             selfieImg = profilePicRef.toString()
             updateAttendanceToDB()
 //            showToast(profilePicRef.toString())
         }
     }
+
     fun updateAttendanceOnDBCall(location: Location) {
         var geocoder = Geocoder(requireContext())
         var locationAddress = ""
@@ -282,7 +310,7 @@ class GigAttendancePageFragment : BaseFragment() {
             locationAddress = addressArr.get(0).getAddressLine(0)
         } catch (e: java.lang.Exception) {
         }
-        if (gig!!.attendance==null || !gig!!.attendance!!.checkInMarked) {
+        if (gig!!.attendance == null || !gig!!.attendance!!.checkInMarked) {
             var markAttendance =
                 GigAttendance(
                     true,
@@ -293,24 +321,30 @@ class GigAttendancePageFragment : BaseFragment() {
                     locationAddress
                 )
             viewModel.markAttendance(markAttendance, gigId)
-        }
-        else{
-            gig!!.attendance!!.setCheckout(true,Date(),location.latitude,
-                location.longitude,selfieImg,
-                locationAddress)
+        } else {
+            gig!!.attendance!!.setCheckout(
+                true, Date(), location.latitude,
+                location.longitude, selfieImg,
+                locationAddress
+            )
             viewModel.markAttendance(gig!!.attendance!!, gigId)
 
         }
 
     }
-    fun requestSelfie(){
+
+    fun requestSelfie() {
         val photoCropIntent = Intent(requireContext(), PhotoCrop::class.java)
-        photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_PURPOSE, PhotoCrop.PURPOSE_UPLOAD_SELFIE_IMAGE)
+        photoCropIntent.putExtra(
+            PhotoCrop.INTENT_EXTRA_PURPOSE,
+            PhotoCrop.PURPOSE_UPLOAD_SELFIE_IMAGE
+        )
         photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_FIREBASE_FOLDER_NAME, "/attendance/")
         photoCropIntent.putExtra("folder", "attendance")
         photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_DETECT_FACE, 0)
         photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_FIREBASE_FILE_NAME, "selfie.jpg")
-        startActivityForResult(photoCropIntent,
+        startActivityForResult(
+            photoCropIntent,
             REQUEST_CODE_UPLOAD_SELFIE_IMAGE
         )
     }

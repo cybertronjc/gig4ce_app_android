@@ -21,6 +21,7 @@ import androidx.annotation.ColorRes
 import androidx.annotation.DimenRes
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
@@ -34,11 +35,12 @@ import com.gigforce.app.core.genericadapter.RecyclerGenericAdapter
 import com.gigforce.app.modules.gigPage.GigAttendancePageFragment
 import com.gigforce.app.modules.gigPage.GigPageNavigationFragment
 import com.gigforce.app.modules.gigPage.GigViewModel
-import com.gigforce.app.modules.gigPage.PresentGigPageFragment
+import com.gigforce.app.modules.gigPage.GigPageFragment
 import com.gigforce.app.modules.gigPage.models.Gig
 import com.gigforce.app.modules.landingscreen.LandingScreenFragment
 import com.gigforce.app.utils.DateHelper
 import com.gigforce.app.utils.Lce
+import com.gigforce.app.utils.TextDrawable
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.*
 import java.text.SimpleDateFormat
@@ -152,7 +154,7 @@ class BSCalendarScreenFragment : BaseFragment() {
                     PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
                         val gig = item as Gig
                         navigate(R.id.presentGigPageFragment, Bundle().apply {
-                            this.putString(PresentGigPageFragment.INTENT_EXTRA_GIG_ID, gig.gigId)
+                            this.putString(GigPageFragment.INTENT_EXTRA_GIG_ID, gig.gigId)
                         })
 
 //                    showKYCAndHideUpcomingLayout(
@@ -239,6 +241,17 @@ class BSCalendarScreenFragment : BaseFragment() {
                                             .into(companyLogoIV)
                                     }
                             }
+                        } else{
+                            val companyInitials = if (obj.companyName.isNullOrBlank())
+                                "C"
+                            else
+                                obj.companyName!![0].toString().toUpperCase()
+                            val drawable = TextDrawable.builder().buildRound(
+                                companyInitials,
+                                ResourcesCompat.getColor(resources, R.color.lipstick, null)
+                            )
+
+                            companyLogoIV.setImageDrawable(drawable)
                         }
 
                     })!!

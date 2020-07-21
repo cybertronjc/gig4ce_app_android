@@ -20,15 +20,15 @@ data class Gig(
     var companyLogo: String? = null,
     var companyName: String? = null,
     var contactNo: String? = null,
-    var isFavourite: Boolean = false,
-    var isGigCompleted: Boolean = false,
-    var isPaymentDone: Boolean = false,
+    @field:JvmField var isFavourite: Boolean = false,
+    @field:JvmField var isGigCompleted: Boolean = false,
+    @field:JvmField var isPaymentDone: Boolean = false,
     var duration: Float = 0.0F,
     var gigRating: Float = 0.0F,
     var locationPictures: List<String> = emptyList(),
     var ratingUserReceived: Float = -1.0F,
     var gigType: String? = null,
-    var gigHighLights: List<String> = emptyList(),
+    var gigHighlights: List<String> = emptyList(),
     var gigRequirements: List<String> = emptyList(),
     var attendance: GigAttendance? = null,
     var gigContactDetails: GigContactDetails? = null
@@ -42,19 +42,35 @@ data class Gig(
         return gigDate.isEqual(currentDate)
     }
 
-    private fun isGigOfFuture(): Boolean {
+     fun isGigOfFuture(): Boolean {
         val gigDate =
             startDateTime!!.toDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
         val currentDate = LocalDate.now()
         return gigDate.isAfter(currentDate)
     }
 
-    private fun isGigOfPast(): Boolean {
+    fun isGigOfPast(): Boolean {
 
         val gigDate =
             startDateTime!!.toDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
         val currentDate = LocalDate.now()
         return gigDate.isBefore(currentDate)
+    }
+
+    fun isCheckInAndCheckOutMarked(): Boolean {
+        return isCheckInMarked() && isCheckOutMarked()
+    }
+
+    fun isCheckInOrCheckOutMarked(): Boolean {
+        return isCheckInMarked() || isCheckOutMarked()
+    }
+
+    fun isCheckInMarked() : Boolean {
+        return attendance?.checkInTime != null
+    }
+
+    fun isCheckOutMarked() : Boolean {
+        return attendance?.checkOutTime != null
     }
 
 }

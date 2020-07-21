@@ -560,7 +560,7 @@
         tools:layout="@layout/help_expanded_page" />
     <fragment
         android:id="@+id/presentGigPageFragment"
-        android:name="com.gigforce.app.modules.gigPage.PresentGigPageFragment"
+        android:name="com.gigforce.app.modules.gigPage.GigPageFragment"
         android:label="fragment_gig_page_present"
         tools:layout="@layout/fragment_gig_page_present">
 

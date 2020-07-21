@@ -77,12 +77,11 @@ class GigViewModel constructor(
 
                 if (documentSnapshot != null) {
                     runCatching {
-                        documentSnapshot.toObject(Gig::class.java)
+                        val gig = documentSnapshot.toObject(Gig::class.java)
+                        gig?.gigId = documentSnapshot.id
+                        gig!!
                     }.onSuccess {
-                        try {
-                            _gigDetails.value = Lce.content(it!!)
-                        } catch (e: Exception) {
-                        }
+                            _gigDetails.value = Lce.content(it)
                     }.onFailure {
                         _gigDetails.value = Lce.error(it.message!!)
                     }

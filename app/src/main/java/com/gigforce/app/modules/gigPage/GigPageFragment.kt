@@ -23,6 +23,7 @@ import com.gigforce.app.modules.gigPage.models.Gig
 import com.gigforce.app.modules.roster.inflate
 import com.gigforce.app.utils.DateHelper
 import com.gigforce.app.utils.Lce
+import com.gigforce.app.utils.TextDrawable
 import com.gigforce.app.utils.ViewFullScreenImageDialogFragment
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -32,22 +33,24 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.fragment_gig_page_present.*
 import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.ZoneId
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 
-class PresentGigPageFragment : BaseFragment() {
+class GigPageFragment : BaseFragment() {
 
     companion object {
         const val INTENT_EXTRA_GIG_ID = "gig_id"
+        const val INTENT_EXTRA_COMING_FROM_CHECK_IN = "coming_from_checkin"
         const val TEXT_VIEW_ON_MAP = "(View On Map)"
+
     }
 
     private val viewModel: GigViewModel by viewModels()
     private var mGoogleMap: GoogleMap? = null
     private lateinit var gigId: String
     private var gig: Gig? = null
+    private var comingFromCheckInScreen = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -62,10 +65,13 @@ class PresentGigPageFragment : BaseFragment() {
     }
 
     private fun getData(arguments: Bundle?, savedInstanceState: Bundle?) {
-        gigId = if (savedInstanceState != null) {
-            savedInstanceState.getString(INTENT_EXTRA_GIG_ID)!!
+        if (savedInstanceState != null) {
+            gigId = savedInstanceState.getString(INTENT_EXTRA_GIG_ID)!!
+            comingFromCheckInScreen =
+                savedInstanceState.getBoolean(INTENT_EXTRA_COMING_FROM_CHECK_IN)
         } else {
-            arguments?.getString(INTENT_EXTRA_GIG_ID)!!
+            gigId = arguments?.getString(INTENT_EXTRA_GIG_ID)!!
+            comingFromCheckInScreen = arguments.getBoolean(INTENT_EXTRA_COMING_FROM_CHECK_IN)
         }
     }
 
@@ -85,33 +91,40 @@ class PresentGigPageFragment : BaseFragment() {
             activity?.onBackPressed()
         }
 
-        checkInOrContactUsBtn.setOnClickListener {
-            if (gig == null)
-                return@setOnClickListener
+        checkInOrContactUsBtn.setOnClickListener {view ->
+            gig?.let {
 
-            if (isGigOfToday() || isGigOfFuture()) {
+                if (it.isGigOfToday()) {
 
-                navigate(R.id.gigAttendancePageFragment, Bundle().apply {
-                    this.putString(GigAttendancePageFragment.INTENT_EXTRA_GIG_ID, gigId)
-                })
-            } else {
-                val intent = Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", gig!!.contactNo, null))
-                startActivity(intent)
+                    if (comingFromCheckInScreen) {
+                        activity?.onBackPressed()
+                    } else {
+                        navigate(R.id.gigAttendancePageFragment, Bundle().apply {
+                            this.putString(GigAttendancePageFragment.INTENT_EXTRA_GIG_ID, it.gigId)
+                        })
+                    }
+                } else {
+                    if (it.contactNo != null) {
+                        val intent =
+                            Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", it.contactNo, null))
+                        startActivity(intent)
+                    } else {}
+                }
             }
         }
 
         contactUsBtn.setOnClickListener {
+            gig?.contactNo?.let {
 
-            if (gig != null) {
-                val intent = Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", gig!!.contactNo, null))
+                val intent = Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", it, null))
                 startActivity(intent)
             }
         }
 
         favoriteCB.setOnCheckedChangeListener { buttonView, isChecked ->
-            if (isChecked)
+            if (isChecked && gig?.isFavourite!!.not())
                 viewModel.favoriteGig(gigId)
-            else
+            else if (!isChecked && gig?.isFavourite!!)
                 viewModel.unFavoriteGig(gigId)
         }
     }
@@ -173,7 +186,17 @@ class PresentGigPageFragment : BaseFragment() {
                             .into(companyLogoIV)
                     }
             }
+        } else {
+            val companyInitials = if (gig.companyName.isNullOrBlank())
+                "C"
+            else
+                gig.companyName!![0].toString().toUpperCase()
+            val drawable = TextDrawable.builder().buildRound(
+                companyInitials,
+                ResourcesCompat.getColor(resources, R.color.lipstick, null)
+            )
 
+            companyLogoIV.setImageDrawable(drawable)
         }
 
 
@@ -184,91 +207,85 @@ class PresentGigPageFragment : BaseFragment() {
         gigTypeTV.text = gig.gigType
         gigIdTV.text = gig.gigId
 
-        favoriteCB.isChecked = gig.isFavourite
+        if (gig.isFavourite && favoriteCB.isChecked.not()) {
+            favoriteCB.isChecked = true
+        } else if (gig.isFavourite.not() && favoriteCB.isChecked) {
+            favoriteCB.isChecked = false
+        }
 
-        if (gig.isGigCompleted) {
-            gigControlsLayout.visibility = View.GONE
-            completedGigControlsLayout.visibility = View.VISIBLE
+        if (gig.isGigOfToday()) {
 
-            if (gig.startDateTime != null)
-                dateTV.text = dateFormatter.format(gig.startDateTime!!.toDate())
-            else
-                dateTV.text = "-"
+            if (gig.isCheckInAndCheckOutMarked()) {
+                //Attendance have been marked show it
+                gigControlsLayout.gone()
+                completedGigControlsLayout.visible()
+                dateTV.text = DateHelper.getDateInDDMMYYYY(gig.startDateTime!!.toDate())
 
-            invoiceStatusBtn.text = gig.gigStatus
-
-            if (gig.attendance != null) {
-
-                if (gig.attendance?.checkInTime != null)
+                if (gig.isCheckInMarked())
                     punchInTimeTV.text =
                         timeFormatter.format(gig.attendance!!.checkInTime!!)
                 else
                     punchInTimeTV.text = "--:--"
 
-
-                if (gig.attendance?.checkOutTime != null)
+                if (gig.isCheckOutMarked())
                     punchOutTimeTV.text =
                         timeFormatter.format(gig.attendance!!.checkOutTime!!)
                 else
                     punchOutTimeTV.text = "--:--"
-
             } else {
-                punchInTimeTV.text = "--:--"
-                punchOutTimeTV.text = "--:--"
-            }
+                //Show Check In Controls
+                completedGigControlsLayout.gone()
+                gigControlsLayout.visible()
 
-
-        } else {
-            completedGigControlsLayout.visibility = View.GONE
-            gigControlsLayout.visibility = View.VISIBLE
-
-            if (isGigOfToday()) {
-
-                if (gig.attendance != null) {
-                    if (gig.attendance?.checkInTime != null && gig.attendance?.checkOutTime != null) {
-                        gigControlsLayout.visibility = View.GONE
-                        completedGigControlsLayout.visibility = View.VISIBLE
-                        dateTV.text = DateHelper.getDateInDDMMYYYY(gig.startDateTime!!.toDate())
-
-                        if (gig.attendance?.checkInTime != null)
-                            punchInTimeTV.text =
-                                timeFormatter.format(gig.attendance!!.checkInTime!!)
-                        else
-                            punchInTimeTV.text = "--:--"
-
-                        if (gig.attendance?.checkOutTime != null)
-                            punchOutTimeTV.text =
-                                timeFormatter.format(gig.attendance!!.checkOutTime!!)
-                        else
-                            punchOutTimeTV.text = "--:--"
-
-                    } else if (gig.attendance?.checkInTime != null) {
-                        completedGigControlsLayout.gone()
-                        gigControlsLayout.visible()
-
-                        checkInOrContactUsBtn.text = "Check Out"
-                    }
-
-                } else {
-                    completedGigControlsLayout.gone()
-                    gigControlsLayout.visible()
+                if (!gig.isCheckInMarked()) {
 
                     checkInOrContactUsBtn.text = "Check In"
                     fetchingLocationTV.text =
                         "Note :We are fetching your location to mark attendance."
+                } else if (!gig.isCheckOutMarked()) {
+
+                    checkInOrContactUsBtn.text = "Check Out"
+                    fetchingLocationTV.text =
+                        "Note :We are fetching your location to mark attendance."
                 }
-            } else if (isGigOfPast()) {
+            }
+        } else if (gig.isGigOfFuture()) {
+            completedGigControlsLayout.gone()
+            gigControlsLayout.visible()
+
+            val timeLeft = gig.startDateTime!!.toDate().time - Date().time
+            val daysLeft = TimeUnit.MILLISECONDS.toDays(timeLeft)
+
+            checkInOrContactUsBtn.text = "Contact Us"
+            fetchingLocationTV.text =
+                "Note :We are preparing your gig.It will start in next $daysLeft Days"
+        } else if (gig.isGigOfPast()) {
+
+            if (gig.isCheckInOrCheckOutMarked()) {
+
+                gigControlsLayout.gone()
+                completedGigControlsLayout.visible()
+
+                dateTV.text = DateHelper.getDateInDDMMYYYY(gig.startDateTime!!.toDate())
+
+                if (gig.isCheckInMarked())
+                    punchInTimeTV.text =
+                        timeFormatter.format(gig.attendance!!.checkInTime!!)
+                else
+                    punchInTimeTV.text = "--:--"
+
+                if (gig.isCheckOutMarked())
+                    punchOutTimeTV.text =
+                        timeFormatter.format(gig.attendance!!.checkOutTime!!)
+                else
+                    punchOutTimeTV.text = "--:--"
+            } else {
+                completedGigControlsLayout.gone()
+                gigControlsLayout.visible()
+
                 //Past Gig which user did not attended
                 checkInOrContactUsBtn.text = "Contact Us"
                 fetchingLocationTV.text = "Note :You did not attended this gig."
-            } else {
-                //Future Gig
-                val timeLeft = gig.startDateTime!!.toDate().time - java.util.Date().time
-                val daysLeft = TimeUnit.MILLISECONDS.toDays(timeLeft)
-
-                checkInOrContactUsBtn.text = "Contact Us"
-                fetchingLocationTV.text =
-                    "Note :We are preparing your gig.It will start in next $daysLeft Days"
             }
         }
 
@@ -283,7 +300,7 @@ class PresentGigPageFragment : BaseFragment() {
         wageTV.text = "${gig.gigAmount} per Day "
 
         gigHighlightsContainer.removeAllViews()
-        inflateGigHighlights(gig.gigHighLights)
+        inflateGigHighlights(gig.gigHighlights)
 
         gigRequirementsContainer.removeAllViews()
         inflateGigRequirements(gig.gigRequirements)
@@ -401,37 +418,6 @@ class PresentGigPageFragment : BaseFragment() {
         gigTextTV.text = it
     }
 
-    private val dateFormatter = SimpleDateFormat("dd/MM/yyyy")
-    private val timeFormatter = SimpleDateFormat("hh.mm aa")
-
-
-    private fun isGigOfToday(): Boolean {
-        if (gig == null)
-            return false
-
-        val gigDate =
-            gig!!.startDateTime!!.toDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
-        val currentDate = LocalDate.now()
-        return gigDate.isEqual(currentDate)
-    }
-
-    private fun isGigOfFuture(): Boolean {
-        if (gig == null)
-            return false
-
-        val gigDate =
-            gig!!.startDateTime!!.toDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
-        val currentDate = LocalDate.now()
-        return gigDate.isAfter(currentDate)
-    }
-
-    private fun isGigOfPast(): Boolean {
-        if (gig == null)
-            return false
-
-        val gigDate =
-            gig!!.startDateTime!!.toDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
-        val currentDate = LocalDate.now()
-        return gigDate.isBefore(currentDate)
-    }
+    private val dateFormatter = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+    private val timeFormatter = SimpleDateFormat("hh.mm aa", Locale.getDefault())
 }
