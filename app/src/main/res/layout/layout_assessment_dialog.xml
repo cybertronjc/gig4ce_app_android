@@ -9,6 +9,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/parent_access_dialog"
         android:layout_marginBottom="@dimen/size_27">
 
         <ImageView
@@ -57,12 +58,28 @@
             android:layout_marginTop="@dimen/size_24"
             android:layout_marginEnd="@dimen/size_27"
             android:gravity="start"
-            android:text="Assessement 1 : Retail sales Executive "
+            android:text="Assessment 1 : Retail sales Executive "
             android:textColor="@color/black"
             android:textSize="@dimen/font_16"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_level_assess_dialog" />
+
+
+        <TextView
+            android:id="@+id/tv_assessment_result__assess_dialog"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/size_27"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="@dimen/size_27"
+            android:gravity="start"
+            android:textColor="@color/black_85"
+            android:textSize="@dimen/font_16"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_assess_name_assess_dialog" />
 
         <TextView
             android:id="@+id/tv_ques_count_assess_dialog"
@@ -96,6 +113,7 @@
             app:layout_constraintTop_toBottomOf="@+id/tv_ques_count_assess_dialog" />
 
         <TextView
+            android:id="@+id/tv_action_assess_dialog"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginStart="@dimen/size_12"
@@ -105,7 +123,7 @@
 
             android:gravity="center_horizontal"
             android:padding="@dimen/size_15"
-            android:text="Start Assessment"
+            android:text="@string/start_assessment"
             android:textColor="@color/lipstick"
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"

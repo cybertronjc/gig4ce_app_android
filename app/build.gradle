@@ -10,7 +10,7 @@ android {
     signingConfigs {
         debug {
 //            storeFile file('/home/yogesh/WORK/gig4ce/gig4ce_app_android/build/gigforceapp.jks')
-            storeFile file('D:\\gig_keystore\\gigforceapp.jks')
+            storeFile file('D:\\rohit\\gigforceapp.jks')
             storePassword 'gigforce'
             keyAlias 'key0'
             keyPassword 'gigforce'
@@ -31,7 +31,7 @@ android {
         targetSdkVersion 29
         versionCode 34
         versionName "1.13.4"
-
+        multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
