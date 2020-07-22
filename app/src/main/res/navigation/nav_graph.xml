@@ -578,6 +578,11 @@
         android:name="com.gigforce.app.modules.gigPage.GigPageNavigationFragment"
         android:label="fragment_gig_navigation"
         tools:layout="@layout/fragment_gig_navigation" />
+    <fragment
+        android:id="@+id/rateGigDialogFragment"
+        android:name="com.gigforce.app.modules.gigPage.RateGigDialogFragment"
+        android:label="fragment_rate_gig_dialog"
+        tools:layout="@layout/fragment_rate_gig_dialog" />
 
 </navigation>
 

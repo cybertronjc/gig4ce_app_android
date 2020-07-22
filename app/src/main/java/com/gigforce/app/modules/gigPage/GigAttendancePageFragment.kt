@@ -22,6 +22,7 @@ import com.bumptech.glide.Glide
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.gone
+import com.gigforce.app.core.toDate
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.gigPage.models.Gig
 import com.gigforce.app.modules.gigPage.models.GigAttendance
@@ -35,6 +36,7 @@ import com.google.firebase.storage.StorageReference
 import com.ncorti.slidetoact.SlideToActView
 import kotlinx.android.synthetic.main.fragment_gig_page_attendance.*
 import java.text.SimpleDateFormat
+import java.time.LocalDateTime
 import java.util.*
 
 
@@ -92,10 +94,13 @@ class GigAttendancePageFragment : BaseFragment() {
         }
 
         favoriteCB.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked && gig?.isFavourite!!.not())
+            if (isChecked && gig?.isFavourite!!.not()) {
                 viewModel.favoriteGig(gigId)
-            else if (!isChecked && gig?.isFavourite!!)
+                showToast("Marked As Favourite")
+            } else if (!isChecked && gig?.isFavourite!!) {
                 viewModel.unFavoriteGig(gigId)
+                showToast("Unmarked As Favourite")
+            }
         }
 
         callCardView.setOnClickListener {
@@ -173,7 +178,12 @@ class GigAttendancePageFragment : BaseFragment() {
         else
             durationTextTV.text = "${dateFormatter.format(gig.startDateTime!!.toDate())} - "
 
-        shiftTV.text = "${gig.duration} Hrs per Day "
+        val durationText = if (gig.duration == 0.0f)
+            "--"
+        else
+            "${gig.duration} Hrs per Day "
+        shiftTV.text = durationText
+
         addressTV.text = gig.address
         wageTV.text = "Gross Payment : Rs ${gig.gigAmount} per Month"
 
@@ -204,33 +214,59 @@ class GigAttendancePageFragment : BaseFragment() {
             addressTV.text = gig.address
         }
 
-        if (gig.isCheckInMarked()) {
-            if (startNavigationSliderBtn.isCompleted()) {
-                startNavigationSliderBtn.resetSlider()
+        if (gig.isGigOfToday()) {
+
+            val minTime = LocalDateTime.now().plusHours(1).toDate.time
+            val shouldEnableCheckInOrCheckOutBtn = gig.startDateTime!!.toDate().time <= minTime
+
+            if (!shouldEnableCheckInOrCheckOutBtn) {
+                startNavigationSliderBtn.gone()
+            } else if (gig.isCheckInAndCheckOutMarked()) {
+                //Attendance have been marked show it
+                startNavigationSliderBtn.gone()
+
+                if (gig.isCheckInMarked())
+                    punchInTimeTV.text =
+                        timeFormatter.format(gig.attendance!!.checkInTime!!)
+                else
+                    punchInTimeTV.text = "--:--"
+
+                if (gig.isCheckOutMarked())
+                    punchOutTimeTV.text =
+                        timeFormatter.format(gig.attendance!!.checkOutTime!!)
+                else
+                    punchOutTimeTV.text = "--:--"
+            } else {
+                //Show Check In Controls
+                startNavigationSliderBtn.visible()
+
+                if (!gig.isCheckInMarked()) {
+
+                    if (startNavigationSliderBtn.isCompleted()) {
+                        startNavigationSliderBtn.resetSlider()
+                    }
+
+                    attendanceCardView.setBackgroundColor(
+                        ResourcesCompat.getColor(
+                            resources,
+                            R.color.light_pink,
+                            null
+                        )
+                    )
+                    startNavigationSliderBtn.text = "Check In"
+                } else if (!gig.isCheckOutMarked()) {
+
+                    if (gig.isCheckInMarked())
+                        punchInTimeTV.text =
+                            timeFormatter.format(gig.attendance!!.checkInTime!!)
+                    else
+                        punchInTimeTV.text = "--:--"
+
+                    startNavigationSliderBtn.text = "Check Out"
+                }
             }
-
-            attendanceCardView.setBackgroundColor(
-                ResourcesCompat.getColor(
-                    resources,
-                    R.color.light_pink,
-                    null
-                )
-            )
-            startNavigationSliderBtn.text = "Check out"
-            punchInTimeTV.text = "${timeFormatter.format(gig.attendance?.checkInTime)}"
-        } else{
-            startNavigationSliderBtn.text = "Check In"
         }
 
-        if (gig.isCheckOutMarked()) {
-            startNavigationSliderBtn.gone()
-            punchOutTimeTV.text = "${timeFormatter.format(gig.attendance?.checkOutTime)}"
-        }
-
-        if (gig.isGigOfToday())
-            startNavigationSliderBtn.visible()
-        else
-            startNavigationSliderBtn.gone()
     }
 
     private fun prepareAddress(address: String): SpannableString {

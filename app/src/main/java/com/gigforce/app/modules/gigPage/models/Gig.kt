@@ -20,11 +20,13 @@ data class Gig(
     var companyLogo: String? = null,
     var companyName: String? = null,
     var contactNo: String? = null,
+    @field:JvmField var isGigActivated: Boolean = true, //TODO change this
     @field:JvmField var isFavourite: Boolean = false,
     @field:JvmField var isGigCompleted: Boolean = false,
     @field:JvmField var isPaymentDone: Boolean = false,
     var duration: Float = 0.0F,
     var gigRating: Float = 0.0F,
+    var gigUserFeedback: String? = null,
     var locationPictures: List<String> = emptyList(),
     var ratingUserReceived: Float = -1.0F,
     var gigType: String? = null,

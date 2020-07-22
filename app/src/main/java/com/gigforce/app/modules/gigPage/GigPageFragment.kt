@@ -12,12 +12,14 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.gone
+import com.gigforce.app.core.toDate
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.gigPage.models.Gig
 import com.gigforce.app.modules.roster.inflate
@@ -33,6 +35,7 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.fragment_gig_page_present.*
 import java.text.SimpleDateFormat
+import java.time.LocalDateTime
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -91,26 +94,27 @@ class GigPageFragment : BaseFragment() {
             activity?.onBackPressed()
         }
 
-        checkInOrContactUsBtn.setOnClickListener {view ->
-            gig?.let {
+        contactUsLayout.setOnClickListener {
+            navigate(R.id.contactScreenFragment)
+        }
 
-                if (it.isGigOfToday()) {
+        ratingBar.setOnRatingBarChangeListener { ratingBar, rating, fromUser ->
+            if (gig == null)
+                return@setOnRatingBarChangeListener
 
-                    if (comingFromCheckInScreen) {
-                        activity?.onBackPressed()
-                    } else {
-                        navigate(R.id.gigAttendancePageFragment, Bundle().apply {
-                            this.putString(GigAttendancePageFragment.INTENT_EXTRA_GIG_ID, it.gigId)
-                        })
-                    }
-                } else {
-                    if (it.contactNo != null) {
-                        val intent =
-                            Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", it.contactNo, null))
-                        startActivity(intent)
-                    } else {}
-                }
+            if (fromUser) {
+                viewModel.updateWhatRatingYourReceived(
+                    gig!!
+                    , rating
+                )
+            } else {
+
             }
+
+        }
+
+        provide_feedback.setOnClickListener {
+            RateGigDialogFragment.launch(gigId,childFragmentManager)
         }
 
         contactUsBtn.setOnClickListener {
@@ -121,11 +125,14 @@ class GigPageFragment : BaseFragment() {
             }
         }
 
-        favoriteCB.setOnCheckedChangeListener { buttonView, isChecked ->
-            if (isChecked && gig?.isFavourite!!.not())
+        favoriteCB.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked && gig?.isFavourite!!.not()) {
                 viewModel.favoriteGig(gigId)
-            else if (!isChecked && gig?.isFavourite!!)
+                showToast("Marked As Favourite")
+            } else if (!isChecked && gig?.isFavourite!!) {
                 viewModel.unFavoriteGig(gigId)
+                showToast("Unmarked As Favourite")
+            }
         }
     }
 
@@ -199,13 +206,11 @@ class GigPageFragment : BaseFragment() {
             companyLogoIV.setImageDrawable(drawable)
         }
 
-
-
         toolbar.title = gig.title
         roleNameTV.text = gig.title
         companyNameTV.text = "@ ${gig.companyName}"
         gigTypeTV.text = gig.gigType
-        gigIdTV.text = gig.gigId
+        gigIdTV.text = "Gig Id : ${gig.gigId}"
 
         if (gig.isFavourite && favoriteCB.isChecked.not()) {
             favoriteCB.isChecked = true
@@ -213,57 +218,24 @@ class GigPageFragment : BaseFragment() {
             favoriteCB.isChecked = false
         }
 
-        if (gig.isGigOfToday()) {
-
-            if (gig.isCheckInAndCheckOutMarked()) {
-                //Attendance have been marked show it
-                gigControlsLayout.gone()
-                completedGigControlsLayout.visible()
-                dateTV.text = DateHelper.getDateInDDMMYYYY(gig.startDateTime!!.toDate())
-
-                if (gig.isCheckInMarked())
-                    punchInTimeTV.text =
-                        timeFormatter.format(gig.attendance!!.checkInTime!!)
-                else
-                    punchInTimeTV.text = "--:--"
-
-                if (gig.isCheckOutMarked())
-                    punchOutTimeTV.text =
-                        timeFormatter.format(gig.attendance!!.checkOutTime!!)
-                else
-                    punchOutTimeTV.text = "--:--"
-            } else {
-                //Show Check In Controls
-                completedGigControlsLayout.gone()
-                gigControlsLayout.visible()
-
-                if (!gig.isCheckInMarked()) {
-
-                    checkInOrContactUsBtn.text = "Check In"
-                    fetchingLocationTV.text =
-                        "Note :We are fetching your location to mark attendance."
-                } else if (!gig.isCheckOutMarked()) {
-
-                    checkInOrContactUsBtn.text = "Check Out"
-                    fetchingLocationTV.text =
-                        "Note :We are fetching your location to mark attendance."
-                }
-            }
+        if (!gig.isGigActivated) {
+            showNotActivatedGigDetails(gig)
+        } else if (gig.isGigOfToday()) {
+            showTodaysGigDetails(gig)
         } else if (gig.isGigOfFuture()) {
             completedGigControlsLayout.gone()
-            gigControlsLayout.visible()
+            checkInCheckOutSliderBtn.gone()
 
             val timeLeft = gig.startDateTime!!.toDate().time - Date().time
             val daysLeft = TimeUnit.MILLISECONDS.toDays(timeLeft)
 
-            checkInOrContactUsBtn.text = "Contact Us"
             fetchingLocationTV.text =
                 "Note :We are preparing your gig.It will start in next $daysLeft Days"
         } else if (gig.isGigOfPast()) {
 
             if (gig.isCheckInOrCheckOutMarked()) {
 
-                gigControlsLayout.gone()
+                checkInCheckOutSliderBtn.gone()
                 completedGigControlsLayout.visible()
 
                 dateTV.text = DateHelper.getDateInDDMMYYYY(gig.startDateTime!!.toDate())
@@ -281,10 +253,9 @@ class GigPageFragment : BaseFragment() {
                     punchOutTimeTV.text = "--:--"
             } else {
                 completedGigControlsLayout.gone()
-                gigControlsLayout.visible()
+                checkInCheckOutSliderBtn.gone()
 
                 //Past Gig which user did not attended
-                checkInOrContactUsBtn.text = "Contact Us"
                 fetchingLocationTV.text = "Note :You did not attended this gig."
             }
         }
@@ -353,6 +324,51 @@ class GigPageFragment : BaseFragment() {
 
     }
 
+    private fun showTodaysGigDetails(gig: Gig) {
+        val minTime = LocalDateTime.now().plusHours(1).toDate.time
+        val shouldEnableCheckInOrCheckOutBtn = gig.startDateTime!!.toDate().time <= minTime
+
+        if (!shouldEnableCheckInOrCheckOutBtn) {
+            checkInCheckOutSliderBtn.gone()
+        } else if (gig.isCheckInAndCheckOutMarked()) {
+            //Attendance have been marked show it
+            completedGigControlsLayout.visible()
+            dateTV.text = DateHelper.getDateInDDMMYYYY(gig.startDateTime!!.toDate())
+
+            if (gig.isCheckInMarked())
+                punchInTimeTV.text =
+                    timeFormatter.format(gig.attendance!!.checkInTime!!)
+            else
+                punchInTimeTV.text = "--:--"
+
+            if (gig.isCheckOutMarked())
+                punchOutTimeTV.text =
+                    timeFormatter.format(gig.attendance!!.checkOutTime!!)
+            else
+                punchOutTimeTV.text = "--:--"
+        } else {
+            //Show Check In Controls
+            completedGigControlsLayout.gone()
+            checkInCheckOutSliderBtn.visible()
+
+            if (!gig.isCheckInMarked()) {
+
+                checkInCheckOutSliderBtn.text = "Check In"
+                fetchingLocationTV.text =
+                    "Note :We are fetching your location to mark attendance."
+            } else if (!gig.isCheckOutMarked()) {
+
+                checkInCheckOutSliderBtn.text = "Check Out"
+                fetchingLocationTV.text =
+                    "Note :We are fetching your location to mark attendance."
+            }
+        }
+    }
+
+    private fun showNotActivatedGigDetails(gig: Gig) {
+
+    }
+
     private fun inflateLocationPics(locationPictures: List<String>) = locationPictures.forEach {
         locationImageContainer.inflate(R.layout.layout_gig_location_picture_item, true)
         val gigItem: View =
@@ -402,11 +418,26 @@ class GigPageFragment : BaseFragment() {
     }
 
     private fun inflateGigRequirements(gigRequirements: List<String>) = gigRequirements.forEach {
-        gigRequirementsContainer.inflate(R.layout.gig_details_item, true)
-        val gigItem: LinearLayout =
-            gigRequirementsContainer.getChildAt(gigRequirementsContainer.childCount - 1) as LinearLayout
-        val gigTextTV: TextView = gigItem.findViewById(R.id.text)
-        gigTextTV.text = it
+
+        if (it.contains(":")) {
+            gigRequirementsContainer.inflate(R.layout.gig_requirement_item, true)
+            val gigItem: LinearLayout =
+                gigRequirementsContainer.getChildAt(gigRequirementsContainer.childCount - 1) as LinearLayout
+            val gigTitleTV: TextView = gigItem.findViewById(R.id.title)
+            val contentTV: TextView = gigItem.findViewById(R.id.content)
+
+            val title = it.substringBefore(":").trim()
+            val content = it.substringAfter(":").trim()
+
+            gigTitleTV.text = title
+            contentTV.text = content.replace("\\n", "\n")
+        } else {
+            gigRequirementsContainer.inflate(R.layout.gig_details_item, true)
+            val gigItem: LinearLayout =
+                gigRequirementsContainer.getChildAt(gigRequirementsContainer.childCount - 1) as LinearLayout
+            val gigTextTV: TextView = gigItem.findViewById(R.id.text)
+            gigTextTV.text = it
+        }
     }
 
 

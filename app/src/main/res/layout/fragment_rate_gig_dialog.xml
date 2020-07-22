@@ -47,6 +47,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="22dp"
+            android:progressTint="#ffc107"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/titleLayout" />
@@ -58,6 +59,7 @@
             android:layout_height="wrap_content"
             android:textColor="#313131"
             android:textSize="14sp"
+            android:letterSpacing="0"
             android:layout_marginStart="24dp"
             android:layout_marginTop="18dp"
             app:layout_constraintStart_toStartOf="parent"
@@ -72,6 +74,7 @@
             android:minHeight="76dp"
             android:textColor="#313131"
             android:textSize="14sp"
+            android:inputType="textMultiLine"
             android:background="@drawable/edittext_border_lipstick"
             android:layout_marginStart="24dp"
             android:layout_marginEnd="24dp"
@@ -90,6 +93,7 @@
             android:orientation="horizontal"
             android:layout_marginStart="24dp"
             android:layout_marginEnd="24dp"
+            android:visibility="gone"
             app:layout_constraintTop_toBottomOf="@id/reviewET">
 
 
@@ -123,18 +127,18 @@
         </LinearLayout>
 
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/submitBtn"
             android:layout_width="match_parent"
-            android:layout_height="36dp"
-            android:orientation="horizontal"
+            android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
             android:layout_marginEnd="24dp"
+            android:layout_marginTop="12dp"
             android:fontFamily="@font/lato_bold"
             android:text="SUBMIT"
             android:gravity="center"
+            android:background="@drawable/gradient_button"
             android:textColor="@color/white"
-            android:background="@drawable/app_gradient_button"
             app:layout_constraintTop_toBottomOf="@id/attachmentContainer"/>
 
 
