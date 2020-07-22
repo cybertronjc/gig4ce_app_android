@@ -32,10 +32,10 @@ class Login : BaseFragment() {
     }
 
     lateinit var viewModel: LoginViewModel
-    private val INDIAN_MOBILE_NUMBER =
-        Pattern.compile("^[+][9][1][7-9][0-9]{9}\$")
-//        private val INDIAN_MOBILE_NUMBER =
-//        Pattern.compile("^[+][0-9]{12}\$")
+//    private val INDIAN_MOBILE_NUMBER =
+//        Pattern.compile("^[+][9][1][7-9][0-9]{9}\$")
+        private val INDIAN_MOBILE_NUMBER =
+        Pattern.compile("^[+][0-9]{12}\$")
     lateinit var match: Matcher;
     private var mobile_number: String = ""
 
@@ -61,7 +61,7 @@ class Login : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if (getIntroCompleted() == null) {
+        if (getIntroCompleted() == null || getIntroCompleted().equals("")) {
             navigateWithAllPopupStack(R.id.authFlowFragment)
         } else {
             viewModel.activity = this.requireActivity()
