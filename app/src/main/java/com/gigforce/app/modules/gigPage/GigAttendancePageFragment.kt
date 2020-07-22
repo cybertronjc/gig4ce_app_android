@@ -15,6 +15,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -26,13 +27,12 @@ import com.gigforce.app.core.toDate
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.gigPage.models.Gig
 import com.gigforce.app.modules.gigPage.models.GigAttendance
-import com.gigforce.app.modules.photocrop.PhotoCrop
+import com.gigforce.app.modules.markattendance.ImageCaptureActivity
 import com.gigforce.app.utils.Lce
 import com.gigforce.app.utils.TextDrawable
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.StorageReference
 import com.ncorti.slidetoact.SlideToActView
 import kotlinx.android.synthetic.main.fragment_gig_page_attendance.*
 import java.text.SimpleDateFormat
@@ -67,19 +67,34 @@ class GigAttendancePageFragment : BaseFragment() {
         getData(arguments, savedInstanceState)
         initView()
         initViewModel(savedInstanceState)
+
         requestPermissionForGPS()
         listener()
     }
+
+
 
     private fun listener() {
         startNavigationSliderBtn.onSlideCompleteListener =
             object : SlideToActView.OnSlideCompleteListener {
                 override fun onSlideComplete(view: SlideToActView) {
-//                    updateAttendanceToDB()
-                    requestSelfie()
+                    if (ContextCompat.checkSelfPermission(
+                            requireActivity(),
+                            android.Manifest.permission.ACCESS_COARSE_LOCATION
+                        ) == PackageManager.PERMISSION_GRANTED
+                    ) {
+                        var intent  = Intent(context,ImageCaptureActivity::class.java)
+                        startActivityForResult(intent,REQUEST_CODE_UPLOAD_SELFIE_IMAGE)
+
+//                        camera_cl.visible()
+                    } else {
+                        requestPermissionForGPS()
+                        startNavigationSliderBtn.resetSlider()
+                    }
 
                 }
             }
+
     }
 
     private fun initView() {
@@ -265,6 +280,7 @@ class GigAttendancePageFragment : BaseFragment() {
                     startNavigationSliderBtn.text = "Check Out"
                 }
             }
+        } catch (e: Exception) {
         }
 
     }
@@ -281,17 +297,9 @@ class GigAttendancePageFragment : BaseFragment() {
         return string
     }
 
-
-    private fun updateGPS() {
+    private fun initializeGPS() {
         fusedLocationProviderClient =
             LocationServices.getFusedLocationProviderClient(requireActivity())
-        if (ActivityCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            requestPermissionForGPS()
-        }
     }
 
     fun requestPermissionForGPS() {
@@ -304,14 +312,14 @@ class GigAttendancePageFragment : BaseFragment() {
         }
     }
 
-    private fun updateAttendanceToDB() {
+    private fun checkAndUpdateAttendance() {
         if (ActivityCompat.checkSelfPermission(
                 requireContext(),
                 Manifest.permission.ACCESS_FINE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED
         ) {
             if (!isGPSRequestCompleted) {
-                updateGPS()
+                initializeGPS()
             }
             fusedLocationProviderClient.lastLocation.addOnSuccessListener {
                 updateAttendanceOnDBCall(it)
@@ -325,18 +333,6 @@ class GigAttendancePageFragment : BaseFragment() {
     }
 
     var selfieImg: String = ""
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_CODE_UPLOAD_SELFIE_IMAGE && resultCode == Activity.RESULT_OK) {
-            var imageName: String? = data?.getStringExtra("filename")
-            var profilePicRef: StorageReference =
-                FirebaseStorage.getInstance().reference.child("attendance")
-                    .child(imageName.toString())
-            selfieImg = profilePicRef.toString()
-            updateAttendanceToDB()
-//            showToast(profilePicRef.toString())
-        }
-    }
 
     fun updateAttendanceOnDBCall(location: Location) {
         var geocoder = Geocoder(requireContext())
@@ -357,6 +353,7 @@ class GigAttendancePageFragment : BaseFragment() {
                     locationAddress
                 )
             viewModel.markAttendance(markAttendance, gigId)
+
         } else {
             gig!!.attendance!!.setCheckout(
                 true, Date(), location.latitude,
@@ -366,24 +363,29 @@ class GigAttendancePageFragment : BaseFragment() {
             viewModel.markAttendance(gig!!.attendance!!, gigId)
 
         }
-
     }
 
-    fun requestSelfie() {
-        val photoCropIntent = Intent(requireContext(), PhotoCrop::class.java)
-        photoCropIntent.putExtra(
-            PhotoCrop.INTENT_EXTRA_PURPOSE,
-            PhotoCrop.PURPOSE_UPLOAD_SELFIE_IMAGE
-        )
-        photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_FIREBASE_FOLDER_NAME, "/attendance/")
-        photoCropIntent.putExtra("folder", "attendance")
-        photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_DETECT_FACE, 0)
-        photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_FIREBASE_FILE_NAME, "selfie.jpg")
-        startActivityForResult(
-            photoCropIntent,
-            REQUEST_CODE_UPLOAD_SELFIE_IMAGE
-        )
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        startNavigationSliderBtn.resetSlider()
+        if(resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE_UPLOAD_SELFIE_IMAGE){
+            if(data!=null)
+            selfieImg = data.getStringExtra("image_name")
+            checkAndUpdateAttendance()
+        }
     }
+
+//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+//        super.onActivityResult(requestCode, resultCode, data)
+//        if (requestCode == REQUEST_CODE_UPLOAD_SELFIE_IMAGE && resultCode == Activity.RESULT_OK) {
+//            selfieImg = data?.getStringExtra("filename")
+//            var profilePicRef: StorageReference =
+//                FirebaseStorage.getInstance().reference.child("attendance").child(imageName.toString())
+//            selfieImg = profilePicRef.toString()
+//            updateAttendanceToDB()
+//            showToast(profilePicRef.toString())
+//        }
+//    }
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
@@ -395,7 +397,7 @@ class GigAttendancePageFragment : BaseFragment() {
             PERMISSION_FINE_LOCATION -> {
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     isGPSRequestCompleted = true
-                    updateGPS()
+                    initializeGPS()
                 } else {
                     showToast("This APP require GPS permission to work properly")
                 }

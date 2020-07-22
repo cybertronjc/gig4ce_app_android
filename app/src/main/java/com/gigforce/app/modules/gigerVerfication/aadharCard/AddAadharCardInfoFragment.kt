@@ -11,11 +11,13 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
 import com.gigforce.app.modules.gigerVerfication.drivingLicense.AddDrivingLicenseInfoFragment
+import com.gigforce.app.modules.gigerVerfication.panCard.AddPanCardInfoFragment
 import com.gigforce.app.modules.photocrop.PhotoCrop
 import com.gigforce.app.utils.Lse
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -39,6 +41,8 @@ class AddAadharCardInfoFragment : BaseFragment() {
         const val INTENT_EXTRA_CLICKED_IMAGE_FRONT = "front_image"
         const val INTENT_EXTRA_CLICKED_IMAGE_BACK = "back_image"
         const val INTENT_EXTRA_AADHAR_CARD = "aadhar_card"
+
+        const val CAME_FROM_PAN_SCREEN = "came_from_pan_screen"
     }
 
     private val viewModel: GigVerificationViewModel by viewModels()
@@ -47,6 +51,8 @@ class AddAadharCardInfoFragment : BaseFragment() {
     private var aadharFrontImagePath: Uri? = null
     private var aadharBackImagePath: Uri? = null
     private var currentlyClickingImageOfSide: AadharCardSides? = null
+
+    private var cameFromPanScreen: Boolean = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -58,23 +64,30 @@ class AddAadharCardInfoFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         initViews()
         initViewModel()
+
+        arguments?.let {
+            cameFromPanScreen = it.getBoolean(CAME_FROM_PAN_SCREEN)
+        }
+
         savedInstanceState?.let {
+            cameFromPanScreen = it.getBoolean(CAME_FROM_PAN_SCREEN)
 
-            aadharFrontImagePath = it.getParcelable(INTENT_EXTRA_CLICKED_IMAGE_FRONT)
-            if (aadharFrontImagePath != null) showFrontAadharCard(aadharFrontImagePath!!)
-
-            aadharBackImagePath = it.getParcelable(INTENT_EXTRA_CLICKED_IMAGE_BACK)
-            if (aadharBackImagePath != null) showBackAadharCard(aadharBackImagePath!!)
-
-            aadharCardET.setText(it.getString(INTENT_EXTRA_AADHAR_CARD))
+//            aadharFrontImagePath = it.getParcelable(INTENT_EXTRA_CLICKED_IMAGE_FRONT)
+//            if (aadharFrontImagePath != null) showFrontAadharCard(aadharFrontImagePath!!)
+//
+//            aadharBackImagePath = it.getParcelable(INTENT_EXTRA_CLICKED_IMAGE_BACK)
+//            if (aadharBackImagePath != null) showBackAadharCard(aadharBackImagePath!!)
+//
+//            aadharCardET.setText(it.getString(INTENT_EXTRA_AADHAR_CARD))
         }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putParcelable(INTENT_EXTRA_CLICKED_IMAGE_FRONT, aadharFrontImagePath)
-        outState.putParcelable(INTENT_EXTRA_CLICKED_IMAGE_BACK, aadharBackImagePath)
-        outState.putString(INTENT_EXTRA_AADHAR_CARD, aadharCardET.text.toString())
+        outState.putBoolean(CAME_FROM_PAN_SCREEN, cameFromPanScreen)
+//        outState.putParcelable(INTENT_EXTRA_CLICKED_IMAGE_FRONT, aadharFrontImagePath)
+//        outState.putParcelable(INTENT_EXTRA_CLICKED_IMAGE_BACK, aadharBackImagePath)
+//        outState.putString(INTENT_EXTRA_AADHAR_CARD, aadharCardET.text.toString())
     }
 
     private fun initViews() {
@@ -91,7 +104,11 @@ class AddAadharCardInfoFragment : BaseFragment() {
         aadharSubmitSliderBtn.isEnabled = false
 
         toolbar.setNavigationOnClickListener {
-            activity?.onBackPressed()
+
+            if (cameFromPanScreen)
+                findNavController().popBackStack(R.id.gigerVerificationFragment, false)
+            else
+                activity?.onBackPressed()
         }
 
         aadharAvailaibilityOptionRG.setOnCheckedChangeListener { _, checkedId ->
@@ -164,6 +181,7 @@ class AddAadharCardInfoFragment : BaseFragment() {
                     if (aadharYesRB.isChecked) {
                         if (aadharCardET.text!!.length != 12) {
                             aadharCardLayout.error = "Enter Valid Aadhar Card No"
+                            aadharSubmitSliderBtn.resetSlider()
                             return
                         }
 
@@ -174,6 +192,7 @@ class AddAadharCardInfoFragment : BaseFragment() {
                                 .setMessage("Select or capture both sides of Aadhar Card")
                                 .setPositiveButton("OK") { _, _ -> }
                                 .show()
+                            aadharSubmitSliderBtn.resetSlider()
                             return
                         }
 
@@ -271,12 +290,24 @@ class AddAadharCardInfoFragment : BaseFragment() {
 
     private fun documentUploaded() {
         showToast("Driving License Details Uploaded")
-        navigate(R.id.addDrivingLicenseInfoFragment)
+        navigate(R.id.addDrivingLicenseInfoFragment,Bundle().apply {
+            putBoolean(AddDrivingLicenseInfoFragment.CAME_FROM_AADHAR_SCREEN,true)
+        })
     }
 
     private fun showLoadingState() {
         aadharMainLayout.visibility = View.GONE
         progressBar.visibility = View.VISIBLE
+    }
+
+    override fun onBackPressed(): Boolean {
+
+        if (cameFromPanScreen) {
+            findNavController().popBackStack(R.id.gigerVerificationFragment, false)
+            return true
+        } else {
+            return super.onBackPressed()
+        }
     }
 
 

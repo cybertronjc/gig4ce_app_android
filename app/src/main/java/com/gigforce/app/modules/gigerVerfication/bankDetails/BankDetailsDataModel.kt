@@ -9,7 +9,9 @@ data class BankDetailsDataModel(
     val passbookImagePath: String? = null,
     val verified: Boolean = false,
     val ifscCode: String? = null,
-    val accountNo: String? = null
+    val accountNo: String? = null,
+    val state :Int = -1,
+    val verifiedString : String? = null
 ) : BaseFirestoreDataModel(TABLE_NAME) {
 
     companion object {

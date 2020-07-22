@@ -48,11 +48,16 @@ class HourOutline: MaterialCardView {
             .toInt().px
         main_card.requestLayout()
 
-        val marginTop = (itemHeight * startHour + (startMinute/60.0F) * itemHeight).toInt().px
-        (main_card.layoutParams as MarginLayoutParams).setMargins(0, marginTop, 0, 0)
-
-        main_card.requestLayout()
+        marginTop = (itemHeight * startHour + (startMinute/60.0F) * itemHeight).toInt().px
+//        (main_card.layoutParams as MarginLayoutParams).setMargins(0, marginTop, 0, 0)
+//
+//        main_card.requestLayout()
 
         Log.d("HourOutline", "height margin changed")
     }
+
+    var marginTop: Int = 0
+        set(value) {
+            field = value
+        }
 }

@@ -4,9 +4,11 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -32,11 +34,14 @@ class AddBankDetailsInfoFragment : BaseFragment() {
         const val INTENT_EXTRA_CLICKED_IMAGE_PATH = "clicked_image_path"
         const val INTENT_EXTRA_IFSC = "ifsc"
         const val INTENT_EXTRA_ACC_NO = "acc_no"
+        const val CAME_FROM_DRIVING_LICENSE_SCREEN = "came_from_dl_screen"
     }
 
     private val viewModel: GigVerificationViewModel by viewModels()
     private var clickedImagePath: Uri? = null
     private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance()
+
+    private var cameFromDLScreen = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -49,20 +54,25 @@ class AddBankDetailsInfoFragment : BaseFragment() {
         initViews()
         initViewModel()
 
-        savedInstanceState?.let {
+        arguments?.let {
+            cameFromDLScreen = it.getBoolean(CAME_FROM_DRIVING_LICENSE_SCREEN)
+        }
 
-            clickedImagePath = it.getParcelable(INTENT_EXTRA_CLICKED_IMAGE_PATH)
-            if (clickedImagePath != null) showPassbookInfoCard(clickedImagePath!!)
-            ifscEditText.setText(it.getString(INTENT_EXTRA_IFSC))
-            accountNoEditText.setText(it.getString(INTENT_EXTRA_ACC_NO))
+        savedInstanceState?.let {
+            cameFromDLScreen = it.getBoolean(CAME_FROM_DRIVING_LICENSE_SCREEN)
+//            clickedImagePath = it.getParcelable(INTENT_EXTRA_CLICKED_IMAGE_PATH)
+//            if (clickedImagePath != null) showPassbookInfoCard(clickedImagePath!!)
+//            ifscEditText.setText(it.getString(INTENT_EXTRA_IFSC))
+//            accountNoEditText.setText(it.getString(INTENT_EXTRA_ACC_NO))
         }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putParcelable(INTENT_EXTRA_CLICKED_IMAGE_PATH, clickedImagePath)
-        outState.putString(INTENT_EXTRA_IFSC, ifscEditText.text.toString())
-        outState.putString(INTENT_EXTRA_ACC_NO, accountNoEditText.text.toString())
+        outState.putBoolean(CAME_FROM_DRIVING_LICENSE_SCREEN, cameFromDLScreen)
+//        outState.putParcelable(INTENT_EXTRA_CLICKED_IMAGE_PATH, clickedImagePath)
+//        outState.putString(INTENT_EXTRA_IFSC, ifscEditText.text.toString())
+//        outState.putString(INTENT_EXTRA_ACC_NO, accountNoEditText.text.toString())
     }
 
     private fun initViews() {
@@ -72,7 +82,10 @@ class AddBankDetailsInfoFragment : BaseFragment() {
             getString(R.string.upload_bank_passbook_sublabel)
 
         toolbar.setNavigationOnClickListener {
-            activity?.onBackPressed()
+            if (cameFromDLScreen)
+                findNavController().popBackStack(R.id.gigerVerificationFragment, false)
+            else
+                activity?.onBackPressed()
         }
 
         passbookSubmitSliderBtn.isEnabled = false
@@ -144,11 +157,13 @@ class AddBankDetailsInfoFragment : BaseFragment() {
 
                         if (ifscEditText.text!!.length != 11) {
                             ifscTextInputLayout.error = "Enter Valid IfSC Code"
+                            passbookSubmitSliderBtn.resetSlider()
                             return
                         }
 
                         if (accountNoEditText.text.isNullOrBlank()) {
                             accountNoTextInputLayout.error = "Enter Account No"
+                            passbookSubmitSliderBtn.resetSlider()
                             return
                         }
 
@@ -159,6 +174,7 @@ class AddBankDetailsInfoFragment : BaseFragment() {
                                 .setMessage("Click Or Select your Passbook Image first")
                                 .setPositiveButton("OK") { _, _ -> }
                                 .show()
+                            passbookSubmitSliderBtn.resetSlider()
                             return
                         }
 
@@ -226,6 +242,16 @@ class AddBankDetailsInfoFragment : BaseFragment() {
         viewModel.getVerificationStatus()
     }
 
+    override fun onBackPressed(): Boolean {
+
+        if (cameFromDLScreen) {
+            findNavController().popBackStack(R.id.gigerVerificationFragment, false)
+            return true
+        } else {
+            return super.onBackPressed()
+        }
+    }
+
     private fun errorOnUploadingDocuments(error: String) {
         progressBar.visibility = View.GONE
         bankDetailsMainLayout.visibility = View.VISIBLE
@@ -239,9 +265,19 @@ class AddBankDetailsInfoFragment : BaseFragment() {
     }
 
     private fun panCardDocumentUploaded() {
-        showToast("Bank Details Uploaded")
-        findNavController().popBackStack(R.id.addSelfieVideoFragment, false)
-        activity?.onBackPressed()
+
+        val view =
+            layoutInflater.inflate(R.layout.fragment_giger_verification_documents_submitted, null)
+
+        val dialog = AlertDialog.Builder(requireContext())
+            .setView(view)
+            .show()
+
+        view.findViewById<View>(R.id.verificationCompletedBtn)
+            .setOnClickListener {
+                dialog.dismiss()
+                findNavController().popBackStack(R.id.gigerVerificationFragment, false)
+            }
     }
 
     private fun showLoadingState() {

@@ -10,7 +10,9 @@ data class DrivingLicenseDataModel(
     val backImage: String? = null,
     val verified: Boolean = false,
     val dlState : String? = null,
-    val dlNo : String? = null
+    val dlNo : String? = null,
+    val state :Int = -1,
+    val verifiedString : String? = null
 ) : BaseFirestoreDataModel(TABLE_NAME) {
 
     companion object {
