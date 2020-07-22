@@ -4,14 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:clipToPadding="false"
     tools:context=".modules.assessment.AssessmentFragment">
 
     <include layout="@layout/toolbar" />
 
-    <ScrollView
+
+    <com.gigforce.app.utils.widgets.CustomScrollView
         android:id="@+id/sv_assess_frag"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:paddingBottom="@dimen/size_24"
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/bt_next_assess_frag"
         app:layout_constraintEnd_toEndOf="parent"
@@ -171,8 +174,9 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_ques_assess_frag" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </ScrollView>
+    </com.gigforce.app.utils.widgets.CustomScrollView>
 
     <Button
         android:id="@+id/bt_next_assess_frag"
@@ -187,6 +191,50 @@
         android:text="@string/next"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+    <TextView
+        android:id="@+id/tv_scenario_label_header_assess_frag"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:paddingStart="@dimen/size_16"
+        android:paddingTop="@dimen/size_4"
+        android:paddingEnd="@dimen/size_16"
+        android:text="Scenario1 : "
+        android:textColor="@color/black"
+        android:textSize="@dimen/font_18"
+        android:textStyle="bold"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tb" />
+
+    <TextView
+        android:id="@+id/tv_scenario_value_header_assess_frag"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:paddingStart="@dimen/size_16"
+        android:paddingTop="@dimen/size_4"
+        android:paddingEnd="@dimen/size_16"
+        android:paddingBottom="@dimen/size_4"
+        android:text="A lady enters the store apparently trying to search for something. You notice her from a short distance."
+        android:textColor="@color/black"
+        android:textSize="@dimen/font_18"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_scenario_label_header_assess_frag" />
+
+    <ImageView
+        android:id="@+id/iv_scroll_more_access_frag"
+        android:layout_width="@dimen/size_24"
+        android:layout_height="@dimen/size_24"
+        android:src="@drawable/ic_baseline_arrow_downward_24"
+        app:layout_constraintBottom_toTopOf="@+id/bt_next_assess_frag"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 

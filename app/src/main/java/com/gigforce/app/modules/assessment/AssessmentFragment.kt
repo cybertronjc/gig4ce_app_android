@@ -1,16 +1,20 @@
 package com.gigforce.app.modules.assessment
 
+import android.graphics.Rect
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import android.widget.PopupMenu
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.firebase.ui.auth.AuthUI.getApplicationContext
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.utils.ItemOffsetDecoration
 import com.gigforce.app.utils.openPopupMenu
+import com.gigforce.app.utils.widgets.CustomScrollView
 import kotlinx.android.synthetic.main.fragment_assessment.*
 import kotlinx.android.synthetic.main.toolbar.*
 
@@ -52,14 +56,16 @@ class AssessmentFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
     }
 
     private fun setupRecycler() {
-
-        rv_options_assess_frag.adapter = AssessmentAnswersAdapter()
+        var adapter = AssessmentAnswersAdapter()
+        rv_options_assess_frag.adapter = adapter
         rv_options_assess_frag.layoutManager = LinearLayoutManager(activity)
         rv_options_assess_frag.addItemDecoration(
             ItemOffsetDecoration(
                 context, R.dimen.size_16
             )
         )
+        adapter.addData(ArrayList(listOf("", "", "", "")))
+
     }
 
     private fun initClicks() {
@@ -72,18 +78,45 @@ class AssessmentFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
     private fun initUI() {
         sv_assess_frag.visibility = View.VISIBLE
         bt_next_assess_frag.visibility = View.VISIBLE
+        sv_assess_frag.setScrollerListener(object : CustomScrollView.onScrollListener {
+            override fun onBottomReached(isBottom: Boolean) {
+                iv_scroll_more_access_frag.visibility = if (isBottom) View.GONE else View.VISIBLE
+                if (!isBottom) {
+                    iv_scroll_more_access_frag.startAnimation(
+                        AnimationUtils.loadAnimation(
+                            activity,
+                            R.anim.swipe_down_animation
+                        )
+                    )
+                }
+            }
+
+            override fun onScrollChanged() {
+                var isVisible = isQuestionVisible(tv_scenario_label_assess_frag)
+                tv_scenario_label_header_assess_frag.visibility =
+                    if (isVisible) View.GONE else View.VISIBLE
+                tv_scenario_value_header_assess_frag.visibility =
+                    if (isVisible) View.GONE else View.VISIBLE
+            }
+
+        })
+        iv_scroll_more_access_frag.startAnimation(
+            AnimationUtils.loadAnimation(
+                activity,
+                R.anim.swipe_down_animation
+            )
+        )
+
 
     }
 
     private fun showDialog(state: Int) {
         when (state) {
             AssessmentDialog.STATE_INIT -> {
-
-                val dialog: AssessmentDialog = AssessmentDialog.newInstance(AssessmentDialog.STATE_PASS);
+                val dialog: AssessmentDialog =
+                    AssessmentDialog.newInstance(AssessmentDialog.STATE_INIT);
                 dialog.setCallbacks(this)
                 dialog.show(parentFragmentManager, AssessmentDialog::class.java.name)
-
-
             }
         }
 
@@ -96,6 +129,14 @@ class AssessmentFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
     override fun initAssessment() {
         initialize()
 
+    }
+
+    private fun isQuestionVisible(view: View): Boolean {
+        val scrollBounds = Rect()
+        sv_assess_frag.getDrawingRect(scrollBounds)
+        val top = view.y
+        val bottom = top + view.height
+        return scrollBounds.top < top && scrollBounds.bottom > bottom
     }
 
 

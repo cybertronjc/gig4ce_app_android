@@ -396,6 +396,7 @@
     <string name="congrats">Congrats</string>
     <string name="assess_complete">Assessment Completed Successfully</string>
     <string name="scorecard">ScoreCard</string>
+    <string name="oops">Oops!!!</string>
 
 
 </resources>

@@ -53,7 +53,45 @@ class AssessmentDialog : DialogFragment() {
     }
 
     private fun stateReappear() {
-
+        tv_ques_count_assess_dialog.visibility = View.GONE
+        tv_time_assess_dialog.visibility = View.GONE
+        tv_assessment_result__assess_dialog.visibility = View.VISIBLE
+        val builder = SpannableStringBuilder()
+        val spannableString = SpannableString(
+            "You attempt 10 questions"
+        )
+        spannableString.setSpan(
+            ForegroundColorSpan(Color.parseColor("#e94b81")),
+            11,
+            24,
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+        builder.append(spannableString)
+        val spanable2 = SpannableString(
+            " and from \n" +
+                    "that 7 answer is correct."
+        )
+        spanable2.setSpan(
+            ForegroundColorSpan(Color.parseColor("#e94b81")),
+            15,
+            24,
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+        builder.append(spanable2)
+        tv_assessment_result__assess_dialog.setText(builder, TextView.BufferType.SPANNABLE)
+        tv_message_assess_dialog.text = getString(R.string.oops)
+        tv_assess_name_assess_dialog.text = getString(R.string.assess_complete)
+        tv_action_assess_dialog.text = getString(R.string.scorecard)
+        val constraintSet = ConstraintSet()
+        constraintSet.clone(parent_access_dialog)
+        constraintSet.connect(
+            R.id.tv_action_assess_dialog,
+            ConstraintSet.TOP,
+            R.id.tv_assessment_result__assess_dialog,
+            ConstraintSet.BOTTOM,
+            resources.getDimensionPixelSize(R.dimen.size_25)
+        )
+        constraintSet.applyTo(parent_access_dialog)
 
     }
 
