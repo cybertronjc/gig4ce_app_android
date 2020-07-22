@@ -25,6 +25,7 @@ import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.app.core.genericadapter.RecyclerGenericAdapter
 import com.gigforce.app.modules.profile.models.ProfileData
+import kotlinx.android.synthetic.main.calendar_home_screen.*
 import kotlinx.android.synthetic.main.onboarding_main_fragment.*
 
 
@@ -55,12 +56,13 @@ class OnboardingMainFragment : BaseFragment() {
     private fun initializeViews() {
         onboarding_root_layout.getViewTreeObserver()
             .addOnGlobalLayoutListener(keyboardLayoutListener);
-            next.getLocationInWindow(originalLocation)
-            initializePager()
-            initializeTitleAsName()
-            listeners()
-            observer()
+        next.getLocationInWindow(originalLocation)
+        initializePager()
+        initializeTitleAsName()
+        listeners()
+        observer()
     }
+
     var singleTimeDBCall = true
     private fun observer() {
         viewModel.userProfileData.observe(viewLifecycleOwner, Observer { profile ->
@@ -70,7 +72,7 @@ class OnboardingMainFragment : BaseFragment() {
                 if (profile.status) {
                     if (profileData.isonboardingdone) {
                         navigateToHomeScreen()
-                    }else {
+                    } else {
                         if (firstTimeLoad) {
                             checkForAlreadyCompletedData()
                             setLiveDataListItems()
@@ -94,6 +96,7 @@ class OnboardingMainFragment : BaseFragment() {
     }
 
     private fun checkForAlreadyCompletedData() {
+
         if (checkNullOrBlank(profileData.name)) {
             // will keep pager to first page
             showBackIcon(false)
@@ -101,22 +104,22 @@ class OnboardingMainFragment : BaseFragment() {
             showBackIcon(true)
             onboarding_pager.setCurrentItem(1)
             setPagerData(onboarding_pager.currentItem)
-//            enableNextButton(false)
+            enableNextButton(true)
         } else if (checkNullOrBlank(profileData.gender)) {
             showBackIcon(true)
             onboarding_pager.setCurrentItem(2)
             setPagerData(onboarding_pager.currentItem)
-//            enableNextButton(false)
+            enableNextButton(true)
         } else if (checkNullOrBlank(profileData.highestEducation)) {
             showBackIcon(true)
             onboarding_pager.setCurrentItem(3)
             setPagerData(onboarding_pager.currentItem)
-//            enableNextButton(false)
+            enableNextButton(true)
         } else if (checkNullOrBlank(profileData.workStatus)) {
             showBackIcon(true)
             onboarding_pager.setCurrentItem(4)
             setPagerData(onboarding_pager.currentItem)
-//            enableNextButton(false)
+            enableNextButton(true)
         } else {
             setOnboardingCompleteAndNavigate()
         }
@@ -124,11 +127,11 @@ class OnboardingMainFragment : BaseFragment() {
 
     private fun setLiveDataListItems() {
         when (onboarding_pager.currentItem) {
-            0 -> if(profileData.name!=null && !profileData.name.equals("")) {
-                    onboarding_pager.getChildAt(0).findViewById<EditText>(R.id.user_name)
-                        .setText(profileData.name)
-                    enableNextButton(true)
-                }
+            0 -> if (profileData.name != null && !profileData.name.equals("")) {
+                onboarding_pager.getChildAt(0).findViewById<EditText>(R.id.user_name)
+                    .setText(profileData.name)
+                enableNextButton(true)
+            }
             1 -> if (profileData.ageGroup != null && !profileData.ageGroup.equals("")) {
                 setRecyclerItemFromDB(
                     profileData.ageGroup
@@ -304,13 +307,13 @@ class OnboardingMainFragment : BaseFragment() {
     private fun getFormattedString(enteredName: String): String {
         var formattedString = ""
         var arr = enteredName.split(" ")
-        for(str in arr){
+        for (str in arr) {
             try {
                 formattedString += str.substring(
                     0,
                     1
                 ).toUpperCase() + str.substring(1).toLowerCase()
-            }catch (e:Exception){
+            } catch (e: Exception) {
 
             }
             formattedString += " "
@@ -333,25 +336,30 @@ class OnboardingMainFragment : BaseFragment() {
     var allRecyclerViews = ArrayList<RecyclerView>()
     private fun initializePager() {
         disableViewPagerScroll()
-        val recyclerGenericAdapter: RecyclerGenericAdapter<ArrayList<String>> =
-            RecyclerGenericAdapter<ArrayList<String>>(
+        val recyclerGenericAdapter: RecyclerGenericAdapter<OnboardingMainViewModel.OnboardingData> =
+            RecyclerGenericAdapter<OnboardingMainViewModel.OnboardingData>(
                 activity?.applicationContext,
-                PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item -> showToast("") },
-                RecyclerGenericAdapter.ItemInterface<ArrayList<String>?> { obj, viewHolder, position ->
+                PFRecyclerViewAdapter.OnViewHolderClick<OnboardingMainViewModel.OnboardingData?> { view, position, item ->
+//                    showToast(
+//                        ""
+//                    )
+                },
+                RecyclerGenericAdapter.ItemInterface<OnboardingMainViewModel.OnboardingData?> { obj, viewHolder, position ->
                     if (position != 0) {
                         getView(viewHolder, R.id.user_name).visibility = View.GONE
                         getView(viewHolder, R.id.first_item_indicator).visibility = View.VISIBLE
                         var param = viewHolder.getView(R.id.first_item_indicator).layoutParams
                         setRecylerData(
                             getRecyclerView(viewHolder, R.id.onboarding_rv),
-                            obj,
+                            obj?.data,
                             position,
-                            param.height
+                            param.height,
+                            obj?.defaultValue!!
                         )
 
                     } else {
                         usernameEditText = getEditText(viewHolder, R.id.user_name)
-                        if(usernameEditText.text.toString().length<=3){
+                        if (usernameEditText.text.toString().length <= 3) {
                             enableNextButton(false)
                         }
                         usernameEditText?.addTextChangedListener(object :
@@ -394,7 +402,8 @@ class OnboardingMainFragment : BaseFragment() {
         recyclerView: RecyclerView,
         dataArr: ArrayList<String>?,
         pagerPosition: Int,
-        heightPagerItem: Int
+        heightPagerItem: Int,
+        defaultValue: Int
     ) {
         recyclerView.setOnTouchListener(CustomTouchListener(next, requireActivity()))
         val params: ViewGroup.LayoutParams = recyclerView.getLayoutParams()
@@ -456,6 +465,7 @@ class OnboardingMainFragment : BaseFragment() {
                     }
                 })!!
         recyclerGenericAdapter.setList(dataArr)
+
         recyclerGenericAdapter.setLayout(R.layout.onboarding_list_item)
         recyclerView.layoutManager = LinearLayoutManager(
             activity?.applicationContext,
@@ -463,6 +473,10 @@ class OnboardingMainFragment : BaseFragment() {
             false
         )
         recyclerView.adapter = recyclerGenericAdapter
+        (recyclerView.layoutManager as LinearLayoutManager)?.scrollToPositionWithOffset(
+            defaultValue,
+            0
+        )
         recyclerView.stopScroll()
         var scrollListener = object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {

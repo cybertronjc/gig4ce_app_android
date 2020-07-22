@@ -40,14 +40,17 @@ class OnboardingMainViewModel : ViewModel() {
 
 
 
-    fun getOnboardingData():ArrayList<ArrayList<String>>{
-        var datalist: ArrayList<ArrayList<String>> = ArrayList<ArrayList<String>>()
-        datalist.add(ArrayList<String>())
-        datalist.add(getAgeOptions())
-        datalist.add(getGenderOptions())
-        datalist.add(getEducationOption())
-        datalist.add(getWorkStatusOptions())
+    fun getOnboardingData():ArrayList<OnboardingData>{
+        var datalist: ArrayList<OnboardingData> = ArrayList<OnboardingData>()
+        datalist.add(OnboardingData(ArrayList<String>(),0))
+        datalist.add(OnboardingData(getAgeOptions(),1))
+        datalist.add(OnboardingData(getGenderOptions(),0))
+        datalist.add(OnboardingData(getEducationOption(),5))
+        datalist.add(OnboardingData(getWorkStatusOptions(),0))
         return datalist
+    }
+    class OnboardingData(var data : ArrayList<String>,var defaultValue : Int = 0){
+
     }
     fun getAgeOptions():ArrayList<String>{
         var ageOptions = ArrayList<String>()
