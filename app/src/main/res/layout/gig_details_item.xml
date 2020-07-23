@@ -2,25 +2,28 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="10dp"
-    android:orientation="horizontal">
-    
+    android:orientation="horizontal"
+    android:paddingStart="10dp"
+    android:paddingTop="6dp"
+    android:paddingEnd="10dp"
+    android:paddingBottom="6dp">
+
     <ImageView
         android:layout_width="10dp"
         android:layout_height="10dp"
         android:layout_marginTop="4dp"
-        android:background="@drawable/round_pink"/>
+        android:background="@drawable/round_pink" />
 
     <TextView
         android:id="@+id/text"
         android:layout_width="0dp"
-        android:layout_weight="1"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
+        android:layout_weight="1"
         android:fontFamily="@font/lato"
-        android:textColor="@color/black_85"
         android:letterSpacing="0"
         android:text="Somre Rellassy ssoedoed dede d deed"
-        android:layout_height="wrap_content"/>
-    
+        android:textColor="@color/black_85" />
+
 
 </LinearLayout>
