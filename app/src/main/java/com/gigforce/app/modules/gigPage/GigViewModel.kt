@@ -117,13 +117,6 @@ class GigViewModel constructor(
         mWatchSingleGigRegistration?.remove()
     }
 
-    fun updateWhatRatingYourReceived(gig: Gig, rating: Float) {
-
-        gig.ratingUserReceived = rating
-        gigsRepository.getCollectionReference()
-            .document(gig.gigId)
-            .set(gig)
-    }
 
     fun submitGigFeedback(
         gigId: String,
