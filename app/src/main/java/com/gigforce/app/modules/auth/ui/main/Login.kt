@@ -61,7 +61,7 @@ class Login : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if (getIntroCompleted() == null) {
+        if (getIntroCompleted() == null || getIntroCompleted().equals("")) {
             navigateWithAllPopupStack(R.id.authFlowFragment)
         } else {
             viewModel.activity = this.requireActivity()

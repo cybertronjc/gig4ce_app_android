@@ -53,7 +53,10 @@
         android:id="@+id/onboardingfragment"
         android:name="com.gigforce.app.modules.onboardingmain.OnboardingMainFragment"
         tools:layout="@layout/onboarding_main_fragment" />
-
+    <fragment
+        android:id="@+id/onboardingLoaderfragment"
+        android:name="com.gigforce.app.modules.onboardingmain.OnboardingLoaderFragment"
+        tools:layout="@layout/onboarding_loader_fragment" />
     <fragment
         android:id="@+id/chatScreenFragment"
         android:name="com.abhijai.gigschatdemo.contacts_module.ui.ChatScreenFragment"

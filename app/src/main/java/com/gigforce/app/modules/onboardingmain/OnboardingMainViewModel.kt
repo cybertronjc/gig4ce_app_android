@@ -121,7 +121,7 @@ class OnboardingMainViewModel : ViewModel() {
     }
 
     fun setOnboardingCompleted() {
-        profileFirebaseRepository.setDataAsKeyValue("isOnboardingCompletedOnce","true")
+        profileFirebaseRepository.setDataAsKeyValue("isonboardingdone",true)
     }
 
 
