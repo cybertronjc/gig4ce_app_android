@@ -9,7 +9,9 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import com.gigforce.app.R
+import com.gigforce.app.utils.Lce
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.android.synthetic.main.fragment_rate_gig_dialog.*
 
@@ -47,6 +49,28 @@ class RateGigDialogFragment : DialogFragment() {
             gigId = it.getString(INTENT_EXTRA_GIG_ID) ?: return@let
         }
         initView()
+        initViewModel()
+    }
+
+    private fun initViewModel() {
+        viewModel.gigDetails.observe(viewLifecycleOwner, Observer {
+
+            when (it) {
+                Lce.Loading -> {}
+                is Lce.Content -> {
+
+                    val rating = it.content.gigRating
+                    val feedback = it.content.gigUserFeedback
+                    ratingBar.rating = rating
+                    reviewET.setText(feedback)
+                }
+                is Lce.Error -> {
+
+                }
+            }
+        })
+
+        viewModel.watchGig(gigId)
     }
 
     override fun onStart() {

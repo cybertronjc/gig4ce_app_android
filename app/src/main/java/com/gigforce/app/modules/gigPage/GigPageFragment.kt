@@ -345,6 +345,7 @@ class GigPageFragment : BaseFragment() {
         gigTypeTV.text = gig.gigType
         gigIdTV.text = "Gig Id : ${gig.gigId}"
         paymentAmountTV.text = "Rs. ${gig.gigAmount}"
+        ratingBar.rating = gig.ratingUserReceived
 
         if (gig.isFavourite && favoriteCB.isChecked.not()) {
             favoriteCB.isChecked = true
