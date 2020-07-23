@@ -2,8 +2,12 @@ package com.abhijai.gigschatdemo.contacts_module.ui
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.*
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.abhijai.gigschatdemo.contacts_module.ui.adapters.ContactRecyclerAdapter
@@ -11,6 +15,8 @@ import com.abhijai.gigschatdemo.contacts_module.ui.adapters.OnContactClickListen
 import com.abhijai.gigschatdemo.contacts_module.viewModels.ContactViewModel
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
+import com.gigforce.app.modules.chatmodule.viewModels.ChatViewModel
+import com.gigforce.app.modules.preferences.SharedPreferenceViewModel
 import com.gigforce.app.utils.AppConstants
 import com.gigforce.app.utils.VerticalItemDecorator
 import com.google.android.material.snackbar.Snackbar
@@ -31,8 +37,10 @@ class ContactScreenFragment : BaseFragment(),OnContactClickListener {
     ): View? {
         return inflateView(R.layout.contact_screen_fragment, inflater, container)
     }
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initialize()
         attachListeners()
 
         viewModel = ViewModelProviders.of(this).get(ContactViewModel::class.java)
@@ -44,6 +52,23 @@ class ContactScreenFragment : BaseFragment(),OnContactClickListener {
         subscribeViewModel()
         viewModel.prepareList()
         initRecycler()
+    }
+
+    fun initialize() {
+        val chatViewModel: ChatViewModel by activityViewModels<ChatViewModel>()
+
+        chatViewModel.chatHeaders.observe(viewLifecycleOwner, Observer {
+            it.forEach {
+                Log.d("CHAT", it.toString())
+                chatViewModel.getChatMsgs(it.id)
+            }
+        })
+
+        chatViewModel.chatMsgs.observe(viewLifecycleOwner, Observer {
+            it.forEach {
+                Log.d("CHAT", "MSG " + it.toString())
+            }
+        })
     }
 //    override fun onCreate(savedInstanceState: Bundle?)
 //    {
