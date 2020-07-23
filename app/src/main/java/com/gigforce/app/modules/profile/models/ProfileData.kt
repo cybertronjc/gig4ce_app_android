@@ -27,7 +27,7 @@ data class ProfileData(
     var gender : String = "",
     var highestEducation:String = "",
     var workStatus : String = "",
-    var isOnboardingCompleted : Boolean = false
+    var isonboardingdone : Boolean = false
     ) {
 
 }

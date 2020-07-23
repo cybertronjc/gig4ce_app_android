@@ -24,10 +24,7 @@ import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.app.core.genericadapter.RecyclerGenericAdapter
-import com.gigforce.app.core.gone
-import com.gigforce.app.core.visible
 import com.gigforce.app.modules.profile.models.ProfileData
-import com.google.common.base.CaseFormat
 import kotlinx.android.synthetic.main.onboarding_main_fragment.*
 
 
@@ -58,17 +55,11 @@ class OnboardingMainFragment : BaseFragment() {
     private fun initializeViews() {
         onboarding_root_layout.getViewTreeObserver()
             .addOnGlobalLayoutListener(keyboardLayoutListener);
-        val onboardingCompleted = isOnBoardingCompleted()
-        if(onboardingCompleted!=null && onboardingCompleted.equals("true")){
-            navigateToHomeScreen()
-        }
-        else {
             next.getLocationInWindow(originalLocation)
             initializePager()
             initializeTitleAsName()
             listeners()
             observer()
-        }
     }
     var singleTimeDBCall = true
     private fun observer() {
@@ -77,14 +68,13 @@ class OnboardingMainFragment : BaseFragment() {
                 singleTimeDBCall = false
                 profileData = profile
                 if (profile.status) {
-                    if (profileData.isOnboardingCompleted) {
+                    if (profileData.isonboardingdone) {
                         navigateToHomeScreen()
                     }else {
                         if (firstTimeLoad) {
                             checkForAlreadyCompletedData()
                             setLiveDataListItems()
                             firstTimeLoad = false
-                            onboarding_progress_bar.gone()
                         } else {
                             if (nextPage())
                                 setLiveDataListItems()
@@ -111,22 +101,22 @@ class OnboardingMainFragment : BaseFragment() {
             showBackIcon(true)
             onboarding_pager.setCurrentItem(1)
             setPagerData(onboarding_pager.currentItem)
-            enableNextButton(false)
+//            enableNextButton(false)
         } else if (checkNullOrBlank(profileData.gender)) {
             showBackIcon(true)
             onboarding_pager.setCurrentItem(2)
             setPagerData(onboarding_pager.currentItem)
-            enableNextButton(false)
+//            enableNextButton(false)
         } else if (checkNullOrBlank(profileData.highestEducation)) {
             showBackIcon(true)
             onboarding_pager.setCurrentItem(3)
             setPagerData(onboarding_pager.currentItem)
-            enableNextButton(false)
+//            enableNextButton(false)
         } else if (checkNullOrBlank(profileData.workStatus)) {
             showBackIcon(true)
             onboarding_pager.setCurrentItem(4)
             setPagerData(onboarding_pager.currentItem)
-            enableNextButton(false)
+//            enableNextButton(false)
         } else {
             setOnboardingCompleteAndNavigate()
         }
@@ -221,7 +211,7 @@ class OnboardingMainFragment : BaseFragment() {
             return setPagerData(onboarding_pager.adapter?.itemCount!!)
         else
             onboarding_pager.setCurrentItem(onboarding_pager.currentItem + 1)
-        enableNextButton(false)
+//        enableNextButton(false)
         showBackIcon(true)
         return setPagerData(onboarding_pager.currentItem)
     }
@@ -253,7 +243,8 @@ class OnboardingMainFragment : BaseFragment() {
     private fun navigateToHomeScreen() {
         popFragmentFromStack(R.id.onboardingfragment)
 //        navigateWithAllPopupStack(R.id.mainHomeScreen)
-        navigate(R.id.authFlowFragment)
+//        navigate(R.id.authFlowFragment)
+        navigate(R.id.landinghomefragment)
     }
 
     private fun showBackIcon(show: Boolean) {
