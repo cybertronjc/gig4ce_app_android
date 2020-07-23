@@ -6,20 +6,24 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import com.bumptech.glide.Glide
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.modules.gigPage.models.Gig
+import com.gigforce.app.modules.roster.inflate
 import com.gigforce.app.utils.Lce
+import com.gigforce.app.utils.ViewFullScreenImageDialogFragment
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.firebase.storage.FirebaseStorage
 import com.ncorti.slidetoact.SlideToActView
 import kotlinx.android.synthetic.main.fragment_gig_navigation_bottom_sheet.*
-import java.util.*
 
 
 class GigPageNavigationFragment : BaseFragment() {
@@ -55,6 +59,19 @@ class GigPageNavigationFragment : BaseFragment() {
 //            }
 //        }
 
+        callCardView.setOnClickListener {
+
+            gig?.contactNo?.let {
+
+                val intent = Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", it, null))
+                startActivity(intent)
+            }
+        }
+
+        messageCardView.setOnClickListener {
+            navigate(R.id.contactScreenFragment)
+        }
+
 
         startNavigationSliderBtn.onSlideCompleteListener =
             object : SlideToActView.OnSlideCompleteListener {
@@ -78,7 +95,8 @@ class GigPageNavigationFragment : BaseFragment() {
         viewModel.gigDetails
             .observe(viewLifecycleOwner, Observer {
                 when (it) {
-                    Lce.Loading -> {}
+                    Lce.Loading -> {
+                    }
                     is Lce.Content -> {
                         this.gig = it.content
                         setDatOnView(it.content)
@@ -98,9 +116,21 @@ class GigPageNavigationFragment : BaseFragment() {
         viewModel.watchGig(gigId!!)
     }
 
-    private fun setDatOnView(content: Gig) {
-        contactPersonTV.text = content.gigContactDetails?.contactName
-        toReachTV.text = "to reach : ${content.address}"
+    private fun setDatOnView(gig: Gig) {
+        contactPersonTV.text = gig.gigContactDetails?.contactName
+        toReachTV.text = "to reach : ${gig.address}"
+
+        if (gig.locationPictures.isNotEmpty()) {
+            //Inflate Pics
+            gigLocationLabel.visibility = View.VISIBLE
+            locationImageScrollView.visibility = View.VISIBLE
+            locationImageContainer.removeAllViews()
+            inflateLocationPics(gig.locationPictures)
+
+        } else {
+            locationImageScrollView.visibility = View.GONE
+            gigLocationLabel.visibility = View.GONE
+        }
     }
 
     private fun addMarkerOnMap(
@@ -122,6 +152,43 @@ class GigPageNavigationFragment : BaseFragment() {
             .zoom(15f)
             .build()
         it.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
+    }
+
+
+    private fun inflateLocationPics(locationPictures: List<String>) = locationPictures.forEach {
+        locationImageContainer.inflate(R.layout.layout_gig_location_picture_item, true)
+        val gigItem: View =
+            locationImageContainer.getChildAt(locationImageContainer.childCount - 1) as View
+
+        gigItem.setOnClickListener(locationImageItemClickListener)
+
+        val locationImageView: ImageView = gigItem.findViewById(R.id.imageView)
+        if (it.startsWith("http", true)) {
+            gigItem.tag = it
+
+            Glide.with(requireContext())
+                .load(it)
+                .into(locationImageView)
+        } else {
+            FirebaseStorage.getInstance()
+                .getReference("companies_gigs_images")
+                .child(it)
+                .downloadUrl
+                .addOnSuccessListener { fileUri ->
+                    Glide.with(requireContext())
+                        .load(fileUri)
+                        .into(locationImageView)
+
+                    (locationImageView.parent as View).tag = fileUri.toString()
+                }
+        }
+    }
+
+    private val locationImageItemClickListener = View.OnClickListener { view ->
+        val imageUri = view.tag?.toString()
+
+        if (imageUri != null)
+            ViewFullScreenImageDialogFragment.showImage(childFragmentManager, Uri.parse(imageUri))
     }
 
 }

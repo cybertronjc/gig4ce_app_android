@@ -1,7 +1,13 @@
 package com.gigforce.app.modules.gigPage
 
+import android.Manifest
+import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.location.Geocoder
+import android.location.Location
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
@@ -11,6 +17,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
@@ -22,18 +30,35 @@ import com.gigforce.app.core.gone
 import com.gigforce.app.core.toDate
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.gigPage.models.Gig
+import com.gigforce.app.modules.gigPage.models.GigAttendance
+import com.gigforce.app.modules.markattendance.ImageCaptureActivity
 import com.gigforce.app.modules.roster.inflate
 import com.gigforce.app.utils.DateHelper
 import com.gigforce.app.utils.Lce
 import com.gigforce.app.utils.TextDrawable
 import com.gigforce.app.utils.ViewFullScreenImageDialogFragment
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.storage.FirebaseStorage
+import com.ncorti.slidetoact.SlideToActView
 import kotlinx.android.synthetic.main.fragment_gig_page_present.*
+import kotlinx.android.synthetic.main.fragment_gig_page_present.addressTV
+import kotlinx.android.synthetic.main.fragment_gig_page_present.companyLogoIV
+import kotlinx.android.synthetic.main.fragment_gig_page_present.companyNameTV
+import kotlinx.android.synthetic.main.fragment_gig_page_present.durationTextTV
+import kotlinx.android.synthetic.main.fragment_gig_page_present.favoriteCB
+import kotlinx.android.synthetic.main.fragment_gig_page_present.gigIdTV
+import kotlinx.android.synthetic.main.fragment_gig_page_present.gigTypeTV
+import kotlinx.android.synthetic.main.fragment_gig_page_present.punchInTimeTV
+import kotlinx.android.synthetic.main.fragment_gig_page_present.punchOutTimeTV
+import kotlinx.android.synthetic.main.fragment_gig_page_present.roleNameTV
+import kotlinx.android.synthetic.main.fragment_gig_page_present.shiftTV
+import kotlinx.android.synthetic.main.fragment_gig_page_present.wageTV
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.util.*
@@ -47,6 +72,8 @@ class GigPageFragment : BaseFragment() {
         const val INTENT_EXTRA_COMING_FROM_CHECK_IN = "coming_from_checkin"
         const val TEXT_VIEW_ON_MAP = "(View On Map)"
 
+        const val PERMISSION_FINE_LOCATION = 100
+        const val REQUEST_CODE_UPLOAD_SELFIE_IMAGE = 2333
     }
 
     private val viewModel: GigViewModel by viewModels()
@@ -54,6 +81,7 @@ class GigPageFragment : BaseFragment() {
     private lateinit var gigId: String
     private var gig: Gig? = null
     private var comingFromCheckInScreen = false
+    var selfieImg: String = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -134,6 +162,27 @@ class GigPageFragment : BaseFragment() {
                 showToast("Unmarked As Favourite")
             }
         }
+
+        checkInCheckOutSliderBtn.onSlideCompleteListener = object  : SlideToActView.OnSlideCompleteListener{
+
+            override fun onSlideComplete(view: SlideToActView) {
+
+                if (ContextCompat.checkSelfPermission(
+                        requireActivity(),
+                        android.Manifest.permission.ACCESS_COARSE_LOCATION
+                    ) == PackageManager.PERMISSION_GRANTED
+                ) {
+                    var intent  = Intent(context, ImageCaptureActivity::class.java)
+                    startActivityForResult(intent,
+                        REQUEST_CODE_UPLOAD_SELFIE_IMAGE
+                    )
+
+                } else {
+                    requestPermissionForGPS()
+                    checkInCheckOutSliderBtn.resetSlider()
+                }
+            }
+        }
     }
 
 
@@ -150,6 +199,102 @@ class GigPageFragment : BaseFragment() {
             })
 
         viewModel.watchGig(gigId)
+    }
+
+    fun requestPermissionForGPS() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            requestPermissions(
+                arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ), PERMISSION_FINE_LOCATION
+            )
+        }
+    }
+
+    var isGPSRequestCompleted = false
+    lateinit var fusedLocationProviderClient: FusedLocationProviderClient
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            PERMISSION_FINE_LOCATION -> {
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    isGPSRequestCompleted = true
+                    initializeGPS()
+                } else {
+                    showToast("This APP require GPS permission to work properly")
+                }
+            }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        checkInCheckOutSliderBtn.resetSlider()
+        if(resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE_UPLOAD_SELFIE_IMAGE){
+            if(data!=null)
+                selfieImg = data.getStringExtra("image_name")
+            checkAndUpdateAttendance()
+        }
+    }
+
+    private fun initializeGPS() {
+        fusedLocationProviderClient =
+            LocationServices.getFusedLocationProviderClient(requireActivity())
+    }
+
+    private fun checkAndUpdateAttendance() {
+        if (ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            if (!isGPSRequestCompleted) {
+                initializeGPS()
+            }
+            fusedLocationProviderClient.lastLocation.addOnSuccessListener {
+                updateAttendanceOnDBCall(it)
+            }
+
+
+        } else {
+            requestPermissionForGPS()
+        }
+    }
+
+    fun updateAttendanceOnDBCall(location: Location) {
+        var geocoder = Geocoder(requireContext())
+        var locationAddress = ""
+        try {
+            var addressArr = geocoder.getFromLocation(location.latitude, location.longitude, 1)
+            locationAddress = addressArr.get(0).getAddressLine(0)
+        } catch (e: java.lang.Exception) {
+        }
+        if (gig!!.attendance == null || !gig!!.attendance!!.checkInMarked) {
+            var markAttendance =
+                GigAttendance(
+                    true,
+                    Date(),
+                    location.latitude,
+                    location.longitude,
+                    selfieImg,
+                    locationAddress
+                )
+            viewModel.markAttendance(markAttendance, gigId)
+
+        } else {
+            gig!!.attendance!!.setCheckout(
+                true, Date(), location.latitude,
+                location.longitude, selfieImg,
+                locationAddress
+            )
+            viewModel.markAttendance(gig!!.attendance!!, gigId)
+
+        }
     }
 
     private fun addMarkerOnMap(
@@ -332,7 +477,7 @@ class GigPageFragment : BaseFragment() {
             checkInCheckOutSliderBtn.gone()
         } else if (gig.isCheckInAndCheckOutMarked()) {
             //Attendance have been marked show it
-            completedGigControlsLayout.visible()
+            completedGigControlsLayout.gone()
             dateTV.text = DateHelper.getDateInDDMMYYYY(gig.startDateTime!!.toDate())
 
             if (gig.isCheckInMarked())

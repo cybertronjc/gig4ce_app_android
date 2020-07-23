@@ -305,9 +305,10 @@ class BSCalendarScreenFragment : BaseFragment() {
         }
     }
 
-    class ChatClickListener(val rv: RecyclerView, var position: Int) : View.OnClickListener {
+    inner class ChatClickListener(val rv: RecyclerView, var position: Int) : View.OnClickListener {
         override fun onClick(v: View?) {
             val gig = (rv.adapter as RecyclerGenericAdapter<Gig>).list.get(position)
+            navigate(R.id.contactScreenFragment)
         }
     }
 

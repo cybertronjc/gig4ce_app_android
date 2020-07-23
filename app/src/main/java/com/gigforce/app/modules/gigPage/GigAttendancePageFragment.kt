@@ -280,7 +280,6 @@ class GigAttendancePageFragment : BaseFragment() {
                     startNavigationSliderBtn.text = "Check Out"
                 }
             }
-        } catch (e: Exception) {
         }
 
     }
