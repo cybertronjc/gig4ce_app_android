@@ -14,7 +14,7 @@
         android:id="@+id/sv_assess_frag"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:paddingBottom="@dimen/size_24"
+
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/bt_next_assess_frag"
         app:layout_constraintEnd_toEndOf="parent"
@@ -40,7 +40,7 @@
                 android:paddingBottom="@dimen/size_17"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tb">
+                app:layout_constraintTop_toTopOf="parent">
 
                 <TextView
                     android:id="@+id/tv_level_assess_frag"
@@ -233,7 +233,9 @@
         android:id="@+id/iv_scroll_more_access_frag"
         android:layout_width="@dimen/size_24"
         android:layout_height="@dimen/size_24"
+        android:alpha="0.6"
         android:src="@drawable/ic_baseline_arrow_downward_24"
+        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/bt_next_assess_frag"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

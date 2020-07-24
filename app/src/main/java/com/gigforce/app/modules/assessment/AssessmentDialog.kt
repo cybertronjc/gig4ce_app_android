@@ -141,7 +141,12 @@ class AssessmentDialog : DialogFragment() {
     private fun initClicks() {
         PushDownAnim.setPushDownAnimTo(tv_action_assess_dialog)
             .setOnClickListener(View.OnClickListener {
-                assessmentDialogCallbacks?.initAssessment()
+                assessmentDialogCallbacks?.assessmentState(
+                    arguments?.getInt(
+                        StringConstants.ASSESSMENT_DIALOG_STATE.value,
+                        0
+                    )!!
+                )
                 dismiss()
             })
     }
@@ -174,7 +179,8 @@ class AssessmentDialog : DialogFragment() {
     }
 
     interface AssessmentDialogCallbacks {
-        fun initAssessment()
+        fun assessmentState(state: Int)
+
     }
 
 }

@@ -582,6 +582,10 @@
         android:id="@+id/assessment_fragment"
         android:name="com.gigforce.app.modules.assessment.AssessmentFragment"
         android:label="AssessmentFragment" />
+    <fragment
+        android:id="@+id/assessment_result_fragment"
+        android:name="com.gigforce.app.modules.assessment.AssessmentResultFragment"
+        android:label="AssessmentResultFragment" />
 
 </navigation>
 
