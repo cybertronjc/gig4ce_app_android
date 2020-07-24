@@ -93,12 +93,7 @@ class AssessmentFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
             override fun onBottomReached(reached: Boolean) {
                 iv_scroll_more_access_frag.visibility = if (reached) View.GONE else View.VISIBLE
                 if (!reached) {
-                    iv_scroll_more_access_frag.startAnimation(
-                        AnimationUtils.loadAnimation(
-                            activity,
-                            R.anim.swipe_down_animation
-                        )
-                    )
+                    swipeDownAnim()
                 }
             }
 
@@ -114,14 +109,16 @@ class AssessmentFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
             }
 
         })
+        swipeDownAnim()
+    }
+
+    private fun swipeDownAnim() {
         iv_scroll_more_access_frag.startAnimation(
             AnimationUtils.loadAnimation(
                 activity,
                 R.anim.swipe_down_animation
             )
         )
-
-
     }
 
     private fun showDialog(state: Int) {
