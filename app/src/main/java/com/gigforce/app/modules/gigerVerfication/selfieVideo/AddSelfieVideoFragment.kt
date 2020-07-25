@@ -125,6 +125,7 @@ class AddSelfieVideoFragment : BaseFragment(), CaptureVideoFragmentEventListener
                 if (it.selfieVideoUploaded) {
                     selfieVideoSubmitSliderBtn.text = getString(R.string.update)
                     selfieVideoSubmitSliderBtn.gone()
+                    selfieVideoCorrectCB.gone()
 
                     if (::captureSelfieVideoFragment.isInitialized) {
                         //Video Just Got Uploaded
@@ -250,7 +251,9 @@ class AddSelfieVideoFragment : BaseFragment(), CaptureVideoFragmentEventListener
         this.mCapturedVideoPath = file
         replaceCaptureFragmentWithPreviewFragment(file)
 
+        selfieVideoCorrectCB.visible()
         selfieVideoSubmitSliderBtn.visible()
+
         if (selfieVideoCorrectCB.isChecked)
             enableSubmitButton()
     }
