@@ -26,7 +26,7 @@ import kotlinx.android.synthetic.main.toolbar.*
 class AssessmentFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
     AssessmentDialog.AssessmentDialogCallbacks,
     AssessmentAnswersAdapter.AssessAdapterCallbacks {
-    val viewModelAssessmentFragment by lazy {
+    private val viewModelAssessmentFragment by lazy {
         ViewModelProvider(this).get(ViewModelAssessmentFragment::class.java)
     }
 
@@ -41,7 +41,7 @@ class AssessmentFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initTb()
-        showDialog(AssessmentDialog.STATE_INIT)
+        showDialog(AssessmentDialog.STATE_REAPPEAR)
         initObservers();
 
     }
@@ -53,6 +53,22 @@ class AssessmentFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
         viewModelAssessmentFragment.observableDialogInit.observe(viewLifecycleOwner, Observer {
             initialize()
         })
+        viewModelAssessmentFragment.observableShowHideSwipeDownIcon.observe(
+            viewLifecycleOwner,
+            Observer {
+                iv_scroll_more_access_frag.visibility = it
+            })
+        viewModelAssessmentFragment.observableRunSwipeDownAnim.observe(
+            viewLifecycleOwner,
+            Observer {
+                swipeDownAnim()
+            })
+        viewModelAssessmentFragment.observableShowHideQuestionHeader.observe(
+            viewLifecycleOwner,
+            Observer {
+                tv_scenario_label_header_assess_frag.visibility = it
+                tv_scenario_value_header_assess_frag.visibility = it
+            })
     }
 
     private fun initTb() {
@@ -91,25 +107,19 @@ class AssessmentFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
         bt_next_assess_frag.visibility = View.VISIBLE
         sv_assess_frag.setScrollerListener(object : CustomScrollView.onScrollListener {
             override fun onBottomReached(reached: Boolean) {
-                iv_scroll_more_access_frag.visibility = if (reached) View.GONE else View.VISIBLE
-                if (!reached) {
-                    swipeDownAnim()
-                }
+                viewModelAssessmentFragment.bottomReached(reached)
             }
 
             override fun onScrollChanged() {
-                val isVisible = viewModelAssessmentFragment.isQuestionVisible(
+                viewModelAssessmentFragment.shouldQuestionHeaderBeVisible(
                     tv_scenario_label_assess_frag,
                     sv_assess_frag
                 )
-                tv_scenario_label_header_assess_frag.visibility =
-                    if (isVisible) View.GONE else View.VISIBLE
-                tv_scenario_value_header_assess_frag.visibility =
-                    if (isVisible) View.GONE else View.VISIBLE
             }
 
         })
         swipeDownAnim()
+
     }
 
     private fun swipeDownAnim() {

@@ -15,14 +15,23 @@ class ViewModelAssessmentFragment : ViewModel() {
     internal val observableDialogInit: MutableLiveData<Nothing> by lazy {
         MutableLiveData<Nothing>();
     }
+    internal val observableRunSwipeDownAnim: MutableLiveData<Nothing> by lazy {
+        MutableLiveData<Nothing>();
+    }
+    internal val observableShowHideSwipeDownIcon: MutableLiveData<Int> by lazy {
+        MutableLiveData<Int>();
+    }
+    internal val observableShowHideQuestionHeader: MutableLiveData<Int> by lazy {
+        MutableLiveData<Int>();
+    }
 
 
-    fun isQuestionVisible(view: View, scrollView: CustomScrollView): Boolean {
+    fun shouldQuestionHeaderBeVisible(view: View, scrollView: CustomScrollView) {
         val scrollBounds = Rect()
         scrollView.getDrawingRect(scrollBounds)
         val top = view.y
         val bottom = top + view.height
-        return scrollBounds.top < top && scrollBounds.bottom > bottom
+        observableShowHideQuestionHeader.value = if (scrollBounds.top < top && scrollBounds.bottom > bottom) View.GONE else View.VISIBLE
     }
 
     fun switchAsPerState(state: Int) {
@@ -31,6 +40,13 @@ class ViewModelAssessmentFragment : ViewModel() {
             AssessmentDialog.STATE_PASS -> observableDialogResult.value = true
             AssessmentDialog.STATE_REAPPEAR -> observableDialogResult.value = false
         }
+    }
+
+    fun bottomReached(reached: Boolean) {
+        if (!reached) {
+            observableRunSwipeDownAnim.value = null
+        }
+        observableShowHideSwipeDownIcon.value = if (reached) View.GONE else View.VISIBLE
     }
 
 }

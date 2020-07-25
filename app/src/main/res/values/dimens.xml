@@ -60,4 +60,10 @@
     <dimen name="size_25">25dp</dimen>
     <dimen name="size_30">30dp</dimen>
     <dimen name="font_20">20sp</dimen>
+    <dimen name="size_96">96dp</dimen>
+    <dimen name="size_5">5dp</dimen>
+    <dimen name="size_19">19dp</dimen>
+    <dimen name="size_87">87dp</dimen>
+    <dimen name="size_7">7dp</dimen>
+    <dimen name="size_43">43dp</dimen>
 </resources>

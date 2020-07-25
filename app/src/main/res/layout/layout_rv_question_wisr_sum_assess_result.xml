@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/parent_rv_question_wise_sum_assess_result"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+    <com.gigforce.app.utils.widgets.CircularTextView
+        android:id="@+id/tv_q_no_rv_ques_sum_assess_result"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+
+        android:gravity="center"
+
+        android:padding="@dimen/size_12"
+
+        android:textSize="@dimen/size_16" />
+
+</FrameLayout>
