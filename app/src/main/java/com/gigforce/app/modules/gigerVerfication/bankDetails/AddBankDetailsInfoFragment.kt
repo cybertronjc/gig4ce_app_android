@@ -129,12 +129,19 @@ class AddBankDetailsInfoFragment : BaseFragment() {
                             userHasPassBook = false,
                             passbookImagePath = null,
                             ifscCode = null,
+                            bankName = null,
                             accountNo = null
                         )
                     } else {
 
                         if (ifscEditText.text!!.length != 11) {
                             ifscTextInputLayout.error = "Enter Valid IfSC Code"
+                            passbookSubmitSliderBtn.resetSlider()
+                            return
+                        }
+
+                        if (bankNameEditText.text.isNullOrBlank()) {
+                            bankNameTextInputLayout.error = "Enter Bank Name"
                             passbookSubmitSliderBtn.resetSlider()
                             return
                         }
@@ -158,6 +165,7 @@ class AddBankDetailsInfoFragment : BaseFragment() {
 
                         val ifsc = ifscEditText.text.toString()
                         val accNo = accountNoEditText.text.toString()
+                        val bankName = bankNameEditText.text.toString()
 
                         if (passbookSubmitSliderBtn.text.toString() == getString(R.string.update)) {
 
@@ -170,6 +178,7 @@ class AddBankDetailsInfoFragment : BaseFragment() {
                                         userHasPassBook = true,
                                         passbookImagePath = clickedImagePath,
                                         ifscCode = ifsc,
+                                        bankName = bankName,
                                         accountNo = accNo
                                     )
                                 }
@@ -181,6 +190,7 @@ class AddBankDetailsInfoFragment : BaseFragment() {
                                 userHasPassBook = true,
                                 passbookImagePath = clickedImagePath,
                                 ifscCode = ifsc,
+                                bankName = bankName,
                                 accountNo = accNo
                             )
                         }
@@ -205,6 +215,7 @@ class AddBankDetailsInfoFragment : BaseFragment() {
                             passbookAvailaibilityOptionRG.check(R.id.passbookYesRB)
                             ifscEditText.setText(it.bankUploadDetailsDataModel.ifscCode)
                             accountNoEditText.setText(it.bankUploadDetailsDataModel.accountNo)
+                            bankNameEditText.setText(it.bankUploadDetailsDataModel.bankName)
                         } else
                             passbookAvailaibilityOptionRG.check(R.id.passbookNoRB)
                     } else {

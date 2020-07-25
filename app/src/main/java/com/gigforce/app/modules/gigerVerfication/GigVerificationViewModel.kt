@@ -178,6 +178,7 @@ open class GigVerificationViewModel constructor(
         userHasPassBook: Boolean,
         passbookImagePath: Uri?,
         ifscCode: String?,
+        bankName : String?,
         accountNo: String?
     ) = viewModelScope.launch {
         _documentUploadState.postValue(Lse.loading())
@@ -194,6 +195,7 @@ open class GigVerificationViewModel constructor(
                 passbookImagePath = fileNameAtServer,
                 verified = false,
                 ifscCode = ifscCode,
+                bankName = bankName,
                 accountNo = accountNo,
                 state = -1,
                 verifiedString = "Under Verification"
