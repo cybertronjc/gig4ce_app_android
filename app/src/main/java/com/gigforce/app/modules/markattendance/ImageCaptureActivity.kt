@@ -52,7 +52,7 @@ class ImageCaptureActivity : AppCompatActivity() {
         showToast("Uploading Image")
         progress_circular.visible()
         var compressByteArray =
-            bitmapToByteArray(getResizedBitmap(byteArrayToBitmap(pictureResult!!.data), 800))
+            bitmapToByteArray(getResizedBitmap(rotateImageIfRequire(byteArrayToBitmap(pictureResult!!.data)), 800))
 
         var selfieImg = getTimeStampAsName() + getTimeStampAsName() + ".jpg"
         var mReference = FirebaseStorage.getInstance().reference
