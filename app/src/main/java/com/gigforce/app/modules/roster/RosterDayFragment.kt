@@ -43,6 +43,7 @@ class RosterDayFragment: RosterBaseFragment() {
     var unavailableCards: ArrayList<String> = ArrayList()
 
     lateinit var hourviewPageChangeCallBack: ViewPager2.OnPageChangeCallback
+    lateinit var  viewModelCustomPreference : CustomPreferencesViewModel
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,13 +66,12 @@ class RosterDayFragment: RosterBaseFragment() {
 
         return inflateView(R.layout.roster_day_fragment, inflater, container)
     }
-    lateinit var  viewModelCustomPreference : CustomPreferencesViewModel
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         //observer()
         initialize()
         setListeners()
-
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -94,6 +94,16 @@ class RosterDayFragment: RosterBaseFragment() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun initialize() {
+        rosterViewModel.topBar = top_bar
+
+        rosterViewModel.currentDateTime.observe(viewLifecycleOwner, Observer {
+            //rosterViewModel.resetAvailability(it, viewModelCustomPreference)
+            // rosterViewModel.setFullDayGigs()
+        })
+
+        rosterViewModel.gigsQuery.observe(viewLifecycleOwner, Observer {
+            // rosterViewModel.setFullDayGigs()
+        })
 
         rosterViewModel.currentDateTime.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
             Log.d("ActiveDay", "Active Day in Day view ${it.toString()}")

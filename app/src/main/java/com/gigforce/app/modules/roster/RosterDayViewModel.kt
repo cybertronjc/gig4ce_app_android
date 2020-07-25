@@ -351,4 +351,14 @@ class RosterDayViewModel: ViewModel() {
 
     }
 
+    fun setFullDayGigs() {
+        var currentDate = currentDateTime.value!!
+        var gigs = gigsQuery.value!!
+
+        var fullDayGig = getFullDayGigForDate(currentDate, gigs)
+
+        fullDayGig ?.let {
+        }
+    }
+
 }
