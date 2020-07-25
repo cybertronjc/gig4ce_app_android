@@ -20,7 +20,6 @@ import android.widget.TextView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
-import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
@@ -46,6 +45,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.storage.FirebaseStorage
 import com.ncorti.slidetoact.SlideToActView
+import kotlinx.android.synthetic.main.fragment_gig_page_attendance.*
 import kotlinx.android.synthetic.main.fragment_gig_page_present.*
 import kotlinx.android.synthetic.main.fragment_gig_page_present.addressTV
 import kotlinx.android.synthetic.main.fragment_gig_page_present.companyLogoIV
@@ -126,23 +126,9 @@ class GigPageFragment : BaseFragment() {
             navigate(R.id.contactScreenFragment)
         }
 
-        ratingBar.setOnRatingBarChangeListener { ratingBar, rating, fromUser ->
-            if (gig == null)
-                return@setOnRatingBarChangeListener
-
-            if (fromUser) {
-                viewModel.updateWhatRatingYourReceived(
-                    gig!!
-                    , rating
-                )
-            } else {
-
-            }
-
-        }
 
         provide_feedback.setOnClickListener {
-            RateGigDialogFragment.launch(gigId,childFragmentManager)
+            RateGigDialogFragment.launch(gigId, childFragmentManager)
         }
 
         contactUsBtn.setOnClickListener {
@@ -163,26 +149,28 @@ class GigPageFragment : BaseFragment() {
             }
         }
 
-        checkInCheckOutSliderBtn.onSlideCompleteListener = object  : SlideToActView.OnSlideCompleteListener{
+        checkInCheckOutSliderBtn.onSlideCompleteListener =
+            object : SlideToActView.OnSlideCompleteListener {
 
-            override fun onSlideComplete(view: SlideToActView) {
+                override fun onSlideComplete(view: SlideToActView) {
 
-                if (ContextCompat.checkSelfPermission(
-                        requireActivity(),
-                        android.Manifest.permission.ACCESS_COARSE_LOCATION
-                    ) == PackageManager.PERMISSION_GRANTED
-                ) {
-                    var intent  = Intent(context, ImageCaptureActivity::class.java)
-                    startActivityForResult(intent,
-                        REQUEST_CODE_UPLOAD_SELFIE_IMAGE
-                    )
+                    if (ContextCompat.checkSelfPermission(
+                            requireActivity(),
+                            android.Manifest.permission.ACCESS_COARSE_LOCATION
+                        ) == PackageManager.PERMISSION_GRANTED
+                    ) {
+                        var intent = Intent(context, ImageCaptureActivity::class.java)
+                        startActivityForResult(
+                            intent,
+                            REQUEST_CODE_UPLOAD_SELFIE_IMAGE
+                        )
 
-                } else {
-                    requestPermissionForGPS()
-                    checkInCheckOutSliderBtn.resetSlider()
+                    } else {
+                        requestPermissionForGPS()
+                        checkInCheckOutSliderBtn.resetSlider()
+                    }
                 }
             }
-        }
     }
 
 
@@ -235,8 +223,8 @@ class GigPageFragment : BaseFragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         checkInCheckOutSliderBtn.resetSlider()
-        if(resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE_UPLOAD_SELFIE_IMAGE){
-            if(data!=null)
+        if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE_UPLOAD_SELFIE_IMAGE) {
+            if (data != null)
                 selfieImg = data.getStringExtra("image_name")
             checkAndUpdateAttendance()
         }
@@ -356,6 +344,8 @@ class GigPageFragment : BaseFragment() {
         companyNameTV.text = "@ ${gig.companyName}"
         gigTypeTV.text = gig.gigType
         gigIdTV.text = "Gig Id : ${gig.gigId}"
+        paymentAmountTV.text = "Rs. ${gig.gigAmount}"
+        ratingBar.rating = gig.ratingUserReceived
 
         if (gig.isFavourite && favoriteCB.isChecked.not()) {
             favoriteCB.isChecked = true
@@ -365,9 +355,38 @@ class GigPageFragment : BaseFragment() {
 
         if (!gig.isGigActivated) {
             showNotActivatedGigDetails(gig)
-        } else if (gig.isGigOfToday()) {
-            showTodaysGigDetails(gig)
-        } else if (gig.isGigOfFuture()) {
+        } else if (gig.isPresentGig()) {
+            showPresentGigDetails(gig)
+        } else if (gig.isPastGig()) {
+
+            checkInCheckOutSliderBtn.gone()
+            completedGigControlsLayout.visible()
+            fetchingLocationTV.gone()
+
+            if(gig.isCheckInAndCheckOutMarked())
+            {
+                gigRatingAndAmountLayout.visible()
+                invoiceStatusBtn.visible()
+            }else{
+                gigRatingAndAmountLayout.gone()
+                invoiceStatusBtn.gone()
+            }
+
+            dateTV.text = DateHelper.getDateInDDMMYYYY(gig.startDateTime!!.toDate())
+
+            if (gig.isCheckInMarked())
+                punchInTimeTV.text =
+                    timeFormatter.format(gig.attendance!!.checkInTime!!)
+            else
+                punchInTimeTV.text = "--:--"
+
+            if (gig.isCheckOutMarked())
+                punchOutTimeTV.text =
+                    timeFormatter.format(gig.attendance!!.checkOutTime!!)
+            else
+                punchOutTimeTV.text = "--:--"
+
+        } else if (gig.isUpcomingGig()) {
             completedGigControlsLayout.gone()
             checkInCheckOutSliderBtn.gone()
 
@@ -376,33 +395,6 @@ class GigPageFragment : BaseFragment() {
 
             fetchingLocationTV.text =
                 "Note :We are preparing your gig.It will start in next $daysLeft Days"
-        } else if (gig.isGigOfPast()) {
-
-            if (gig.isCheckInOrCheckOutMarked()) {
-
-                checkInCheckOutSliderBtn.gone()
-                completedGigControlsLayout.visible()
-
-                dateTV.text = DateHelper.getDateInDDMMYYYY(gig.startDateTime!!.toDate())
-
-                if (gig.isCheckInMarked())
-                    punchInTimeTV.text =
-                        timeFormatter.format(gig.attendance!!.checkInTime!!)
-                else
-                    punchInTimeTV.text = "--:--"
-
-                if (gig.isCheckOutMarked())
-                    punchOutTimeTV.text =
-                        timeFormatter.format(gig.attendance!!.checkOutTime!!)
-                else
-                    punchOutTimeTV.text = "--:--"
-            } else {
-                completedGigControlsLayout.gone()
-                checkInCheckOutSliderBtn.gone()
-
-                //Past Gig which user did not attended
-                fetchingLocationTV.text = "Note :You did not attended this gig."
-            }
         }
 
         if (gig.endDateTime != null)
@@ -412,8 +404,17 @@ class GigPageFragment : BaseFragment() {
             durationTextTV.text = "${dateFormatter.format(gig.startDateTime!!.toDate())} - "
 
 
-        shiftTV.text = "${gig.duration} per Day "
-        wageTV.text = "${gig.gigAmount} per Day "
+        val durationText = if (gig.duration == 0.0f)
+            "--"
+        else
+            "${gig.duration} Hrs per Day "
+        shiftTV.text = durationText
+
+        val gigAmountText = if(gig.gigAmount == 0.0)
+            "--"
+        else
+            "Gross Payment : Rs ${gig.gigAmount} per Month"
+        wageTV.text = gigAmountText
 
         gigHighlightsContainer.removeAllViews()
         inflateGigHighlights(gig.gigHighlights)
@@ -469,13 +470,9 @@ class GigPageFragment : BaseFragment() {
 
     }
 
-    private fun showTodaysGigDetails(gig: Gig) {
-        val minTime = LocalDateTime.now().plusHours(1).toDate.time
-        val shouldEnableCheckInOrCheckOutBtn = gig.startDateTime!!.toDate().time <= minTime
+    private fun showPresentGigDetails(gig: Gig) {
 
-        if (!shouldEnableCheckInOrCheckOutBtn) {
-            checkInCheckOutSliderBtn.gone()
-        } else if (gig.isCheckInAndCheckOutMarked()) {
+        if (gig.isCheckInAndCheckOutMarked()) {
             //Attendance have been marked show it
             completedGigControlsLayout.gone()
             dateTV.text = DateHelper.getDateInDDMMYYYY(gig.startDateTime!!.toDate())

@@ -218,10 +218,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="20dp"
                     android:layout_marginEnd="16dp"
                     app:cardBackgroundColor="#e8e8e8"
-                    app:layout_constraintTop_toBottomOf="@id/invoiceStatusBtn">
+                    app:layout_constraintTop_toBottomOf="@id/dateTV">
 
 
                     <androidx.constraintlayout.widget.ConstraintLayout
@@ -309,34 +309,127 @@
                     app:layout_constraintTop_toBottomOf="@id/attendanceCardView" />
 
 
-                <TextView
-                    android:id="@+id/whatsYourRateTv"
-                    android:layout_width="wrap_content"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/gigRatingAndAmountLayout"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="19dp"
-                    android:letterSpacing="0"
-                    android:text="What’s your Rate ?"
-                    android:textColor="@color/battle_ship_grey"
-                    android:textSize="12sp"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp"
                     android:visibility="visible"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/separator2" />
+                    app:layout_constraintTop_toBottomOf="@id/separator2">
+
+                    <TextView
+                        android:id="@+id/payment_details_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="19dp"
+                        android:letterSpacing="0"
+                        android:text="Payment Details"
+                        android:layout_marginTop="4dp"
+                        android:textColor="@color/black"
+                        android:fontFamily="@font/lato_bold"
+                        android:textSize="16sp"
+                        android:visibility="visible"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
 
-                <RatingBar
-                    android:id="@+id/ratingBar"
-                    style="@style/Widget.AppCompat.RatingBar.Indicator"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="19dp"
-                    android:layout_marginTop="17dp"
-                    android:layout_marginBottom="22dp"
-                    android:visibility="visible"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/whatsYourRateTv" />
+                    <TextView
+                        android:id="@+id/invoice_generation_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="19dp"
+                        android:letterSpacing="0"
+                        android:text="Invoice Generated : 16 Apr 2020"
+                        android:layout_marginTop="4dp"
+                        android:textColor="@color/black"
+                        android:fontFamily="@font/lato"
+                        android:textSize="12sp"
+                        android:visibility="visible"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/payment_details_label" />
 
 
+                    <TextView
+                        android:id="@+id/paymentAmountTV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:fontFamily="@font/lato_bold"
+                        android:letterSpacing="0"
+                        android:text="Rs 20000"
+                        android:layout_marginRight="19dp"
+                        android:textColor="@color/black"
+                        android:textSize="18sp"
+                        android:visibility="visible"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/processingLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:fontFamily="@font/lato_bold"
+                        android:letterSpacing="0"
+                        android:text="Processing"
+                        android:layout_marginRight="19dp"
+                        android:textColor="@color/yellow"
+                        android:textSize="12sp"
+                        android:visibility="visible"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/paymentAmountTV" />
+
+                    <View
+                        android:id="@+id/separator2_1"
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:layout_marginStart="25dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginEnd="31dp"
+                        android:background="#c0c0c0"
+                        app:layout_constraintTop_toBottomOf="@id/processingLabel" />
+
+
+                    <TextView
+                        android:id="@+id/whatsYourRateTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="19dp"
+                        android:letterSpacing="0"
+                        android:text="Rating your received"
+                        android:layout_marginTop="10dp"
+                        android:textColor="@color/battle_ship_grey"
+                        android:textSize="12sp"
+                        android:visibility="visible"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/separator2_1" />
+
+
+                    <RatingBar
+                        android:id="@+id/ratingBar"
+                        style="@style/Widget.AppCompat.RatingBar.Indicator"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="19dp"
+                        android:layout_marginTop="5dp"
+                        android:visibility="visible"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/whatsYourRateTv" />
+
+
+                    <View
+                        android:id="@+id/separator2_2"
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:layout_marginStart="25dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginEnd="31dp"
+                        android:background="#c0c0c0"
+                        app:layout_constraintTop_toBottomOf="@id/ratingBar" />
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
 
 
@@ -352,8 +445,8 @@
                     android:id="@+id/detailsLabelTV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginStart="19dp"
+                    android:layout_marginTop="10dp"
                     android:fontFamily="@font/lato_bold"
                     android:letterSpacing="0.02"
                     android:text="Details"
@@ -488,7 +581,7 @@
                     android:id="@+id/gigHighlightsLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
+                    android:layout_marginStart="19dp"
                     android:layout_marginTop="16dp"
                     android:fontFamily="@font/lato_bold"
                     android:letterSpacing="0.02"
@@ -531,7 +624,7 @@
                     android:id="@+id/gigRequirementsLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
+                    android:layout_marginStart="19dp"
                     android:layout_marginTop="16dp"
                     android:fontFamily="@font/lato_bold"
                     android:letterSpacing="0.02"
@@ -573,7 +666,7 @@
                     android:id="@+id/gigLocationLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
+                    android:layout_marginStart="19dp"
                     android:layout_marginTop="16dp"
                     android:fontFamily="@font/lato_bold"
                     android:letterSpacing="0.02"
@@ -814,6 +907,17 @@
                     android:background="@color/shadow_color"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/provide_feedback" />
+
+                <TextView
+                    android:id="@+id/contact_supervisor"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="Please contact the supervisor in case there’s an issue with marking attendance."
+                    android:textColor="#99000000"
+                    app:layout_constraintEnd_toEndOf="@+id/right_arrow2"
+                    app:layout_constraintStart_toStartOf="@+id/contact_icon"
+                    app:layout_constraintTop_toBottomOf="@+id/grayline3" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

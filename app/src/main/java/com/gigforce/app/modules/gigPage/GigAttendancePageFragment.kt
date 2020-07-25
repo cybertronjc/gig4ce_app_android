@@ -108,6 +108,10 @@ class GigAttendancePageFragment : BaseFragment() {
             })
         }
 
+        messageCardView.setOnClickListener {
+            navigate(R.id.contactScreenFragment)
+        }
+
         favoriteCB.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked && gig?.isFavourite!!.not()) {
                 viewModel.favoriteGig(gigId)
@@ -199,8 +203,15 @@ class GigAttendancePageFragment : BaseFragment() {
             "${gig.duration} Hrs per Day "
         shiftTV.text = durationText
 
+        val gigAmountText = if(gig.gigAmount == 0.0)
+            "--"
+        else
+            "Gross Payment : Rs ${gig.gigAmount} per Month"
+        wageTV.text = gigAmountText
+
+
         addressTV.text = gig.address
-        wageTV.text = "Gross Payment : Rs ${gig.gigAmount} per Month"
+
 
         if (gig.isFavourite && favoriteCB.isChecked.not()) {
             favoriteCB.isChecked = true
