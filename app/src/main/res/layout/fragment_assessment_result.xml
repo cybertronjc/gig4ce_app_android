@@ -14,12 +14,13 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+
         app:layout_constraintTop_toBottomOf="@+id/tb">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/size_16">
 
             <RelativeLayout
                 android:id="@+id/rv_remarks_assess_result"
@@ -72,6 +73,7 @@
                     android:layout_marginStart="@dimen/size_18"
                     android:layout_marginTop="@dimen/size_8"
                     android:layout_marginEnd="@dimen/size_16"
+                    android:layout_marginBottom="@dimen/size_16"
                     android:layout_toEndOf="@+id/ic_remarks_assess_result"
                     android:textColor="@color/black_85"
                     android:textSize="@dimen/font_16" />
@@ -143,7 +145,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/tv_question_wise_sum_label_assess_frag" />
 
             <RelativeLayout
-                android:id="@+id/rv_new_certificate_assess_result"
+                android:id="@+id/rl_new_certificate_assess_result"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/size_16"
@@ -179,6 +181,29 @@
                     android:textSize="@dimen/font_16" />
 
             </RelativeLayout>
+
+            <TextView
+                android:id="@+id/tv_sug_learnings_label_assess_frag"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/size_16"
+                android:layout_marginTop="@dimen/size_24"
+                android:layout_marginEnd="@dimen/size_16"
+                android:text="@string/suggested_learnings"
+                android:textColor="@color/black"
+                android:textSize="@dimen/font_18"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/rl_new_certificate_assess_result" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_sug_learnings_assess_result"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_sug_learnings_label_assess_frag" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

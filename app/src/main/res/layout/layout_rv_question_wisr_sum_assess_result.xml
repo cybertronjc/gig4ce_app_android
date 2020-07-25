@@ -5,16 +5,24 @@
     android:layout_height="wrap_content">
 
 
-    <com.gigforce.app.utils.widgets.CircularTextView
-        android:id="@+id/tv_q_no_rv_ques_sum_assess_result"
+    <com.gigforce.app.utils.widgets.CircularView
+        android:id="@+id/fl_rv_question_wise_sum_assess_result"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:padding="@dimen/size_10">
 
-        android:gravity="center"
+        <TextView
+            android:id="@+id/tv_q_no_rv_ques_sum_assess_result"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:ellipsize="marquee"
+            android:fadingEdge="horizontal"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:scrollHorizontally="true"
+            android:singleLine="true"
+            android:textSize="@dimen/font_16" />
 
-        android:padding="@dimen/size_12"
-
-        android:textSize="@dimen/size_16" />
-
+    </com.gigforce.app.utils.widgets.CircularView>
 </FrameLayout>

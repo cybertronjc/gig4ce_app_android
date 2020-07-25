@@ -66,4 +66,7 @@
     <dimen name="size_87">87dp</dimen>
     <dimen name="size_7">7dp</dimen>
     <dimen name="size_43">43dp</dimen>
+    <dimen name="size_2">2dp</dimen>
+    <dimen name="size_168">168dp</dimen>
+    <dimen name="font_10">10sp</dimen>
 </resources>

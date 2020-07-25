@@ -8,10 +8,12 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.app.core.genericadapter.RecyclerGenericAdapter
+import com.gigforce.app.utils.HorizontaltemDecoration
 import com.gigforce.app.utils.ItemDecor
 import kotlinx.android.synthetic.main.fragment_assessment_result.*
 import kotlinx.android.synthetic.main.layout_rv_question_wisr_sum_assess_result.view.*
@@ -55,9 +57,8 @@ class AssessmentResultFragment : BaseFragment() {
 
                 viewHolder.itemView.tv_q_no_rv_ques_sum_assess_result.text = "" + (position + 1)
                 viewHolder.itemView.tv_q_no_rv_ques_sum_assess_result.isSelected = true
-                viewHolder.itemView.tv_q_no_rv_ques_sum_assess_result.setSolidColor(
-                    if (obj) "#ffd9e6" else "#888888"
-                )
+                viewHolder.itemView.fl_rv_question_wise_sum_assess_result.setSolidColor(if (obj) "#ffd9e6" else "#888888")
+
                 viewHolder.itemView.tv_q_no_rv_ques_sum_assess_result.setTextColor(
                     if (obj) activity?.getColor(R.color.darkish_pink_100)!! else activity?.getColor(
                         R.color.black_85
@@ -76,6 +77,15 @@ class AssessmentResultFragment : BaseFragment() {
         )
         rv_question_wise_sum_assess_frag.adapter = adapter
         viewModelAssessmentResult.getQuestionWiseSumData()
+        rv_sug_learnings_assess_result.adapter = AdapterSuggestedLearning()
+        rv_sug_learnings_assess_result.layoutManager =
+            LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
+        rv_sug_learnings_assess_result.addItemDecoration(
+            HorizontaltemDecoration(
+                activity,
+                R.dimen.size_16
+            )
+        )
 
 
     }

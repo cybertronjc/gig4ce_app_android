@@ -24,17 +24,13 @@ import kotlinx.android.synthetic.main.toolbar.*
  * date - 19/07/2020
  */
 class AssessmentFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
-    AssessmentDialog.AssessmentDialogCallbacks,
-    AssessmentAnswersAdapter.AssessAdapterCallbacks {
+        AssessmentDialog.AssessmentDialogCallbacks,
+        AssessmentAnswersAdapter.AssessAdapterCallbacks {
     private val viewModelAssessmentFragment by lazy {
         ViewModelProvider(this).get(ViewModelAssessmentFragment::class.java)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflateView(R.layout.fragment_assessment, inflater, container)
     }
 
@@ -43,39 +39,32 @@ class AssessmentFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
         initTb()
         showDialog(AssessmentDialog.STATE_REAPPEAR)
         initObservers();
-
     }
 
     private fun initObservers() {
-        viewModelAssessmentFragment.observableDialogResult.observe(viewLifecycleOwner, Observer {
-            navigate(R.id.assessment_result_fragment)
-        })
-        viewModelAssessmentFragment.observableDialogInit.observe(viewLifecycleOwner, Observer {
-            initialize()
-        })
-        viewModelAssessmentFragment.observableShowHideSwipeDownIcon.observe(
-            viewLifecycleOwner,
-            Observer {
+        with(viewModelAssessmentFragment) {
+            observableDialogResult.observe(viewLifecycleOwner, Observer {
+                navigate(R.id.assessment_result_fragment)
+            })
+            observableDialogInit.observe(viewLifecycleOwner, Observer {
+                initialize()
+            })
+            observableShowHideSwipeDownIcon.observe(viewLifecycleOwner, Observer {
                 iv_scroll_more_access_frag.visibility = it
             })
-        viewModelAssessmentFragment.observableRunSwipeDownAnim.observe(
-            viewLifecycleOwner,
-            Observer {
+            observableRunSwipeDownAnim.observe(viewLifecycleOwner, Observer {
                 swipeDownAnim()
             })
-        viewModelAssessmentFragment.observableShowHideQuestionHeader.observe(
-            viewLifecycleOwner,
-            Observer {
+            observableShowHideQuestionHeader.observe(viewLifecycleOwner, Observer {
                 tv_scenario_label_header_assess_frag.visibility = it
                 tv_scenario_value_header_assess_frag.visibility = it
             })
+        }
     }
 
     private fun initTb() {
         iv_options_menu_tb.visibility = View.VISIBLE
         tv_title_toolbar.text = getString(R.string.assessment)
-
-
     }
 
     private fun initialize() {
@@ -98,7 +87,6 @@ class AssessmentFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
         iv_options_menu_tb.setOnClickListener {
             openPopupMenu(it, R.menu.menu_assessment, this, activity)
         }
-
     }
 
     private fun initUI() {
@@ -111,24 +99,14 @@ class AssessmentFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
             }
 
             override fun onScrollChanged() {
-                viewModelAssessmentFragment.shouldQuestionHeaderBeVisible(
-                    tv_scenario_label_assess_frag,
-                    sv_assess_frag
-                )
+                viewModelAssessmentFragment.shouldQuestionHeaderBeVisible(tv_scenario_label_assess_frag, sv_assess_frag)
             }
-
         })
         swipeDownAnim()
-
     }
 
     private fun swipeDownAnim() {
-        iv_scroll_more_access_frag.startAnimation(
-            AnimationUtils.loadAnimation(
-                activity,
-                R.anim.swipe_down_animation
-            )
-        )
+        iv_scroll_more_access_frag.startAnimation(AnimationUtils.loadAnimation(activity, R.anim.swipe_down_animation))
     }
 
     private fun showDialog(state: Int) {
@@ -145,12 +123,9 @@ class AssessmentFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
         viewModelAssessmentFragment.switchAsPerState(state)
     }
 
-
     override fun submitAnswer() {
         sv_assess_frag.post {
             sv_assess_frag.fullScroll(View.FOCUS_DOWN)
         }
     }
-
-
 }
