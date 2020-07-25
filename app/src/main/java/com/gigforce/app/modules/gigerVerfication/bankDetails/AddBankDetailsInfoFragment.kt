@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,6 +16,7 @@ import com.bumptech.glide.Glide
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
+import com.gigforce.app.modules.gigerVerfication.GigerVerificationStatus
 import com.gigforce.app.modules.photocrop.PhotoCrop
 import com.gigforce.app.utils.Lse
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -34,14 +34,13 @@ class AddBankDetailsInfoFragment : BaseFragment() {
         const val INTENT_EXTRA_CLICKED_IMAGE_PATH = "clicked_image_path"
         const val INTENT_EXTRA_IFSC = "ifsc"
         const val INTENT_EXTRA_ACC_NO = "acc_no"
-        const val CAME_FROM_DRIVING_LICENSE_SCREEN = "came_from_dl_screen"
     }
 
     private val viewModel: GigVerificationViewModel by viewModels()
     private var clickedImagePath: Uri? = null
     private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance()
+    private var gigerVerificationStatus: GigerVerificationStatus? = null
 
-    private var cameFromDLScreen = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -53,26 +52,6 @@ class AddBankDetailsInfoFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         initViews()
         initViewModel()
-
-        arguments?.let {
-            cameFromDLScreen = it.getBoolean(CAME_FROM_DRIVING_LICENSE_SCREEN)
-        }
-
-        savedInstanceState?.let {
-            cameFromDLScreen = it.getBoolean(CAME_FROM_DRIVING_LICENSE_SCREEN)
-//            clickedImagePath = it.getParcelable(INTENT_EXTRA_CLICKED_IMAGE_PATH)
-//            if (clickedImagePath != null) showPassbookInfoCard(clickedImagePath!!)
-//            ifscEditText.setText(it.getString(INTENT_EXTRA_IFSC))
-//            accountNoEditText.setText(it.getString(INTENT_EXTRA_ACC_NO))
-        }
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putBoolean(CAME_FROM_DRIVING_LICENSE_SCREEN, cameFromDLScreen)
-//        outState.putParcelable(INTENT_EXTRA_CLICKED_IMAGE_PATH, clickedImagePath)
-//        outState.putString(INTENT_EXTRA_IFSC, ifscEditText.text.toString())
-//        outState.putString(INTENT_EXTRA_ACC_NO, accountNoEditText.text.toString())
     }
 
     private fun initViews() {
@@ -82,10 +61,7 @@ class AddBankDetailsInfoFragment : BaseFragment() {
             getString(R.string.upload_bank_passbook_sublabel)
 
         toolbar.setNavigationOnClickListener {
-            if (cameFromDLScreen)
                 findNavController().popBackStack(R.id.gigerVerificationFragment, false)
-            else
-                activity?.onBackPressed()
         }
 
         passbookSubmitSliderBtn.isEnabled = false
@@ -196,6 +172,7 @@ class AddBankDetailsInfoFragment : BaseFragment() {
         viewModel.gigerVerificationStatus
             .observe(viewLifecycleOwner, Observer {
 
+                this.gigerVerificationStatus = it
                 if (it.bankDetailsUploaded && it.bankUploadDetailsDataModel != null) {
 
                     if (it.bankUploadDetailsDataModel.userHasPassBook != null) {
@@ -234,7 +211,7 @@ class AddBankDetailsInfoFragment : BaseFragment() {
             .observe(viewLifecycleOwner, Observer {
                 when (it) {
                     Lse.Loading -> showLoadingState()
-                    Lse.Success -> panCardDocumentUploaded()
+                    Lse.Success -> documentsUploaded()
                     is Lse.Error -> errorOnUploadingDocuments(it.error)
                 }
             })
@@ -244,13 +221,9 @@ class AddBankDetailsInfoFragment : BaseFragment() {
 
     override fun onBackPressed(): Boolean {
 
-        if (cameFromDLScreen) {
             findNavController().popBackStack(R.id.gigerVerificationFragment, false)
             return true
-        } else {
-            return super.onBackPressed()
-        }
-    }
+           }
 
     private fun errorOnUploadingDocuments(error: String) {
         progressBar.visibility = View.GONE
@@ -264,8 +237,26 @@ class AddBankDetailsInfoFragment : BaseFragment() {
             .show()
     }
 
-    private fun panCardDocumentUploaded() {
+    private fun documentsUploaded() {
+        showToast("Bank details Uploaded")
 
+        gigerVerificationStatus?.let {
+
+            if (!it.dlCardDetailsUploaded) {
+                navigate(R.id.addDrivingLicenseInfoFragment)
+            } else if (!it.selfieVideoUploaded) {
+                navigate(R.id.addSelfieVideoFragment)
+            } else if (!it.panCardDetailsUploaded) {
+                navigate(R.id.addPanCardInfoFragment)
+            } else if (!it.aadharCardDetailsUploaded) {
+                navigate(R.id.addDrivingLicenseInfoFragment)
+            } else {
+                showDetailsUploaded()
+            }
+        }
+    }
+
+    private fun showDetailsUploaded() {
         val view =
             layoutInflater.inflate(R.layout.fragment_giger_verification_documents_submitted, null)
 
@@ -279,6 +270,7 @@ class AddBankDetailsInfoFragment : BaseFragment() {
                 findNavController().popBackStack(R.id.gigerVerificationFragment, false)
             }
     }
+
 
     private fun showLoadingState() {
         bankDetailsMainLayout.visibility = View.GONE

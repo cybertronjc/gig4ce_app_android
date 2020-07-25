@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.viewModels
@@ -16,7 +17,7 @@ import com.bumptech.glide.Glide
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
-import com.gigforce.app.modules.gigerVerfication.bankDetails.AddBankDetailsInfoFragment
+import com.gigforce.app.modules.gigerVerfication.GigerVerificationStatus
 import com.gigforce.app.modules.gigerVerfication.panCard.AddPanCardInfoFragment
 import com.gigforce.app.modules.photocrop.PhotoCrop
 import com.gigforce.app.utils.Lse
@@ -42,7 +43,6 @@ class AddDrivingLicenseInfoFragment : BaseFragment() {
         const val INTENT_EXTRA_CLICKED_IMAGE_BACK = "back_image"
         const val INTENT_EXTRA_STATE = "state"
         const val INTENT_EXTRA_DL_NO = "dl_no"
-        const val CAME_FROM_AADHAR_SCREEN = "came_from_aadhar"
     }
 
     private val viewModel: GigVerificationViewModel by viewModels()
@@ -51,8 +51,7 @@ class AddDrivingLicenseInfoFragment : BaseFragment() {
     private var dlBackImagePath: Uri? = null
     private var drivingLicenseDetail: DrivingLicenseDataModel? = null
     private var currentlyClickingImageOfSide: DrivingLicenseSides? = null
-
-    private var cameFromAadharScreen: Boolean = false
+    private var gigerVerificationStatus: GigerVerificationStatus? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -64,37 +63,7 @@ class AddDrivingLicenseInfoFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         initViews()
         initViewModel()
-
-        arguments?.let {
-            cameFromAadharScreen = it.getBoolean(CAME_FROM_AADHAR_SCREEN)
-        }
-
-        savedInstanceState?.let {
-            cameFromAadharScreen = it.getBoolean(CAME_FROM_AADHAR_SCREEN)
-
-//            dlFrontImagePath = it.getParcelable(INTENT_EXTRA_CLICKED_IMAGE_FRONT)
-//            if (dlFrontImagePath != null) showFrontDrivingLicense(dlFrontImagePath!!)
-//
-//            dlBackImagePath = it.getParcelable(INTENT_EXTRA_CLICKED_IMAGE_BACK)
-//            if (dlBackImagePath != null) showBackDrivingLicense(dlBackImagePath!!)
-//
-//            drivingLicenseEditText.setText(it.getString(INTENT_EXTRA_DL_NO))
-//
-//            val index = it.getInt(INTENT_EXTRA_STATE)
-//            if (index > 0)
-//                stateSpinner.setSelection(index, true)
-        }
     }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putBoolean(CAME_FROM_AADHAR_SCREEN, cameFromAadharScreen)
-//        outState.putParcelable(INTENT_EXTRA_CLICKED_IMAGE_FRONT, dlFrontImagePath)
-//        outState.putParcelable(INTENT_EXTRA_CLICKED_IMAGE_BACK, dlBackImagePath)
-//        outState.putString(INTENT_EXTRA_DL_NO, drivingLicenseEditText.text.toString())
-//        outState.putInt(INTENT_EXTRA_STATE, stateSpinner.selectedItemPosition)
-    }
-
 
     private fun initViews() {
         dlFrontImageHolder.documentUploadLabelTV.text =
@@ -109,10 +78,7 @@ class AddDrivingLicenseInfoFragment : BaseFragment() {
         dlSubmitSliderBtn.isEnabled = false
 
         toolbar.setNavigationOnClickListener {
-            if (cameFromAadharScreen)
-                findNavController().popBackStack(R.id.gigerVerificationFragment, false)
-            else
-                activity?.onBackPressed()
+            findNavController().popBackStack(R.id.gigerVerificationFragment, false)
         }
 
         dlAvailaibilityOptionRG.setOnCheckedChangeListener { _, checkedId ->
@@ -243,12 +209,8 @@ class AddDrivingLicenseInfoFragment : BaseFragment() {
 
     override fun onBackPressed(): Boolean {
 
-        if (cameFromAadharScreen) {
-            findNavController().popBackStack(R.id.gigerVerificationFragment, false)
-            return true
-        } else {
-            return super.onBackPressed()
-        }
+        findNavController().popBackStack(R.id.gigerVerificationFragment, false)
+        return true
     }
 
     private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance()
@@ -257,6 +219,7 @@ class AddDrivingLicenseInfoFragment : BaseFragment() {
         viewModel.gigerVerificationStatus
             .observe(viewLifecycleOwner, Observer {
 
+                this.gigerVerificationStatus = it
                 if (it.dlCardDetailsUploaded && it.drivingLicenseDataModel != null) {
                     this.drivingLicenseDetail = it.drivingLicenseDataModel
 
@@ -332,9 +295,35 @@ class AddDrivingLicenseInfoFragment : BaseFragment() {
 
     private fun documentUploaded() {
         showToast("Driving License Details Uploaded")
-        navigate(R.id.addBankDetailsInfoFragment, Bundle().apply {
-            putBoolean(AddBankDetailsInfoFragment.CAME_FROM_DRIVING_LICENSE_SCREEN, true)
-        })
+        gigerVerificationStatus?.let {
+
+            if (!it.bankDetailsUploaded) {
+                navigate(R.id.addBankDetailsInfoFragment)
+            } else if (!it.selfieVideoUploaded) {
+                navigate(R.id.addSelfieVideoFragment)
+            } else if (!it.panCardDetailsUploaded) {
+                navigate(R.id.addPanCardInfoFragment)
+            } else if (!it.aadharCardDetailsUploaded) {
+                navigate(R.id.addDrivingLicenseInfoFragment)
+            } else {
+                showDetailsUploaded()
+            }
+        }
+    }
+
+    private fun showDetailsUploaded() {
+        val view =
+            layoutInflater.inflate(R.layout.fragment_giger_verification_documents_submitted, null)
+
+        val dialog = AlertDialog.Builder(requireContext())
+            .setView(view)
+            .show()
+
+        view.findViewById<View>(R.id.verificationCompletedBtn)
+            .setOnClickListener {
+                dialog.dismiss()
+                findNavController().popBackStack(R.id.gigerVerificationFragment, false)
+            }
     }
 
     private fun showLoadingState() {
