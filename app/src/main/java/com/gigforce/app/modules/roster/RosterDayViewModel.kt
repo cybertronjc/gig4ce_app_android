@@ -20,6 +20,7 @@ import com.gigforce.app.modules.custom_gig_preferences.UnavailableDataModel
 import com.gigforce.app.modules.preferences.PreferencesRepository
 import com.gigforce.app.modules.preferences.prefdatamodel.PreferencesDataModel
 import com.gigforce.app.modules.roster.models.Gig
+import com.google.android.material.card.MaterialCardView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.riningan.widget.ExtendedBottomSheetBehavior
@@ -78,25 +79,107 @@ class RosterDayViewModel: ViewModel() {
         }
     }
 
-    fun checkDayAvailable(date: LocalDateTime, viewModelCustomPreference: CustomPreferencesViewModel) {
-        isDayAvailable.postValue(false)
+    fun resetDayTimeAvailability(
+        viewModelCustomPreference: CustomPreferencesViewModel, parentView: ConstraintLayout) {
+        val date = currentDateTime.value!!
+
+        try {
+            viewModelCustomPreference.customPreferencesDataModel
+        } catch (e:UninitializedPropertyAccessException) {
+            return
+        }
+
+        setDayAvailability(date, viewModelCustomPreference)
+        setHourAvailability(parentView, viewModelCustomPreference)
+    }
+
+    private fun setDayAvailability(
+        date: LocalDateTime, viewModelCustomPreference: CustomPreferencesViewModel) {
+        // check from preferences
         userPref.value ?.let {
-            Log.d("RDVM", date.dayOfWeek.toString())
             val weekDays = it.selecteddays.map { item -> item.toUpperCase(Locale.ROOT) }
             val weekEnds = it.selectedweekends.map { item -> item.toUpperCase(Locale.ROOT) }
-            Log.d("RDVM", weekDays.toString())
+
+            // set availability if day present in preferences
             isDayAvailable.postValue(
-                weekDays.contains(date.dayOfWeek.toString()) || weekEnds.contains(date.dayOfWeek.toString()))
+                weekDays.contains(date.dayOfWeek.toString()) ||
+                        weekEnds.contains(date.dayOfWeek.toString()))
+        }
 
-            // check if it was set from custom unavailable
-            for (unavailable in viewModelCustomPreference.customPreferencesDataModel.unavailable) {
-                if (date.toDate == unavailable.date)
-                    isDayAvailable.postValue(!unavailable.dayUnavailable)
-            }
-
+        // check from custom preferences
+        for (unavailable in viewModelCustomPreference.customPreferencesDataModel.unavailable) {
+            if (date.toDate == unavailable.date)
+                isDayAvailable.postValue(!unavailable.dayUnavailable)
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun setHourAvailability(
+        parentView: ConstraintLayout, viewModelCustomPreference: CustomPreferencesViewModel) {
+        val activeDateTime = currentDateTime.value!!
+        val actualDateTime = LocalDateTime.now()
+        if (isSameDate(activeDateTime, actualDateTime)) {
+            todayHourActive(parentView, actualDateTime)
+        }
+        else if (isLessDate(activeDateTime, actualDateTime)) {
+            allHourInactive(parentView)
+        }
+        else if (isMoreDate(activeDateTime, actualDateTime)) {
+            allHourActive(parentView)
+        }
+
+        switchHourAvailability(activeDateTime, parentView, viewModelCustomPreference)
+    }
+
+     private fun switchHourAvailability(
+        activeDateTime: LocalDateTime, parentView: ConstraintLayout,
+        viewModelCustomPreference: CustomPreferencesViewModel) {
+        viewModelCustomPreference.customPreferencesDataModel.unavailable.filter {
+            it.date == activeDateTime.toDate
+        }.forEach {
+            it.timeSlots.forEach {
+                selectedHourInactive(parentView, it.startTime, it.endTime)
+            }
+        }
+    }
+
+
+    fun switchDayAvailability(
+        context: Context, parentView: ConstraintLayout, upcomingGigs: ArrayList<Gig>,
+        currentDayAvailability: Boolean, viewModelCustomPreference: CustomPreferencesViewModel) {
+        try {
+            viewModelCustomPreference.customPreferencesDataModel
+        } catch (e:UninitializedPropertyAccessException) {
+            return
+        }
+
+        var activeDateTime = currentDateTime.value!!
+
+        if (currentDayAvailability) {
+            // today is active
+            // make inactive
+            val confirmCancellation = if (upcomingGigs.size > 0) showGigsTodayWarning(
+                context, upcomingGigs, parentView) else true
+
+            if (confirmCancellation) {
+                isDayAvailable.postValue(false)
+
+                val unavailable = UnavailableDataModel(activeDateTime.toDate)
+                unavailable.dayUnavailable = true
+
+                viewModelCustomPreference.updateCustomPreference(unavailable)
+            }
+        } else {
+            // today is inactive
+            // make active
+            isDayAvailable.value = true
+
+            val available = UnavailableDataModel(activeDateTime.toDate)
+            available.dayUnavailable = false
+
+            viewModelCustomPreference.updateCustomPreference(available)
+        }
+    }
     fun toggleDayAvailability(
         context: Context, parentView: ConstraintLayout, upcomingGigs: ArrayList<Gig>, currentDayAvailability: Boolean,
             activeDateTime: LocalDateTime, actualDateTime: LocalDateTime, viewModelCustomPreference: CustomPreferencesViewModel) {
@@ -122,7 +205,7 @@ class RosterDayViewModel: ViewModel() {
         } else {
             // currently unavailable, switch to available
             isDayAvailable.value = true
-            setHourVisibility(parentView, activeDateTime, actualDateTime, viewModelCustomPreference)
+            //setHourVisibility(parentView, activeDateTime, actualDateTime, viewModelCustomPreference)
 
             val available =
                     UnavailableDataModel(
@@ -142,31 +225,12 @@ class RosterDayViewModel: ViewModel() {
         context: Context, parentView: ConstraintLayout, upcomingGigs: ArrayList<Gig>,
         startDateTime: LocalDateTime, endDateTime: LocalDateTime,
             viewModelCustomPreference: CustomPreferencesViewModel) {
-        viewModelCustomPreference.markUnavaialbleTimeSlots(UnavailableDataModel(startDateTime.toDate, endDateTime.toDate))
-        selectedHourInactive(parentView, startDateTime.toDate, endDateTime.toDate)
+        viewModelCustomPreference.markUnavaialbleTimeSlots(
+            UnavailableDataModel(startDateTime.toDate, endDateTime.toDate))
     }
 
-    fun switchHourAvailability(
-        activeDateTime: LocalDateTime, parentView: ConstraintLayout,
-        viewModelCustomPreference: CustomPreferencesViewModel) {
-        viewModelCustomPreference.customPreferencesDataModel.unavailable.filter {
-            it.date == activeDateTime.toDate
-        }.forEach {
-            it.timeSlots.forEach {
-                selectedHourInactive(parentView, it.startTime, it.endTime)
-            }
-        }
-    }
 
-//    fun updateHourAvailabilityForPreference(activeDateTime: LocalDateTime, parentView: ConstraintLayout, viewModelCustomPreference: CustomPreferencesViewModel) {
-//        viewModelCustomPreference.customPreferencesDataModel.unavailable.filter {
-//            it.date == activeDateTime.toDate
-//        }.forEach {
-//            it.time
-//        }
-//    }
-
-    fun selectedHourInactive(parentView: ConstraintLayout, startDateTime: Date, endDateTime: Date) {
+    private fun selectedHourInactive(parentView: ConstraintLayout, startDateTime: Date, endDateTime: Date) {
         for (idx in 1..24) {
             val widget = parentView.findViewWithTag<HourRow>("hour_$idx")
             if (widget.hour <= endDateTime.hours && widget.hour >= startDateTime.hours)
@@ -184,7 +248,8 @@ class RosterDayViewModel: ViewModel() {
         dialog.setContentView(R.layout.gigs_today_warning_dialog)
 
         dialog.dialog_content.setText(
-            "You have " + upcomingGigs.size.toString() + " Gig(s) active on the day. Please cancel them individually."
+            "You have " + upcomingGigs.size.toString() +
+                    " Gig(s) active on the day. Please cancel them individually."
         )
 
         dialog.cancel.setOnClickListener {
@@ -193,8 +258,8 @@ class RosterDayViewModel: ViewModel() {
         }
 
         dialog.yes.setOnClickListener {
-            Toast.makeText(context, "Clicked on Yes", Toast.LENGTH_SHORT).show()
-            flag = if (upcomingGigs.size > 0) showReasonForGigCancel(context, upcomingGigs, gigParentView) else true
+            //flag = if (upcomingGigs.size > 0) showReasonForGigCancel(context, upcomingGigs, gigParentView) else true
+            flag = true
             dialog .dismiss()
         }
 
@@ -238,22 +303,6 @@ class RosterDayViewModel: ViewModel() {
         return flag
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    fun setHourVisibility(
-        parentView: ConstraintLayout, activeDateTime: LocalDateTime, actualDateTime: LocalDateTime,
-        viewModelCustomPreference: CustomPreferencesViewModel) {
-        if (isSameDate(activeDateTime, actualDateTime)) {
-            todayHourActive(parentView, actualDateTime)
-        }
-        else if (isLessDate(activeDateTime, actualDateTime)) {
-            allHourInactive(parentView)
-        }
-        else if (isMoreDate(activeDateTime, actualDateTime)) {
-            allHourActive(parentView)
-        }
-
-        switchHourAvailability(activeDateTime, parentView, viewModelCustomPreference)
-    }
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun todayHourActive(parentView: ConstraintLayout, activeDateTime: LocalDateTime) {
@@ -348,17 +397,31 @@ class RosterDayViewModel: ViewModel() {
             }
         }
         return null
-
     }
 
-    fun setFullDayGigs() {
-        var currentDate = currentDateTime.value!!
-        var gigs = gigsQuery.value!!
+    fun setFullDayGigs(context: Context) {
+        val currentDate = currentDateTime.value!!
+        val gigs = gigsQuery.value!!
 
-        var fullDayGig = getFullDayGigForDate(currentDate, gigs)
+        val fullDayGig = getFullDayGigForDate(currentDate, gigs)
+
+        if (fullDayGig == null)
+            topBar.fullDayGigCard = null
 
         fullDayGig ?.let {
+            if(it.isPastGig()) {
+                val widget = CompletedGigCard(context)
+                widget.isFullDay = true
+                topBar.fullDayGigCard = widget
+            } else if (it.isPresentGig()) {
+                // TODO: Implement current day gig card
+            } else if (it.isUpcomingGig()) {
+                val widget = UpcomingGigCard(context)
+                widget.isFullDay = true
+                topBar.fullDayGigCard = widget
+            } else {
+                // TODO: Raise Error
+            }
         }
     }
-
 }

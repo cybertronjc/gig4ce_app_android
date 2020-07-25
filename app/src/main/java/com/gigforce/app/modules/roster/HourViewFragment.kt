@@ -11,6 +11,7 @@ import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.gigforce.app.R
 import com.gigforce.app.modules.custom_gig_preferences.CustomPreferencesViewModel
@@ -30,6 +31,7 @@ import kotlinx.android.synthetic.main.upcoming_gig_card.view.*
 import java.time.LocalDateTime
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 class HourViewFragment: RosterBaseFragment() {
 
@@ -81,16 +83,22 @@ class HourViewFragment: RosterBaseFragment() {
         }
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        activeDateTime = LocalDateTime.parse(arguments?.getSerializable("activeDate").toString())
+    }
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        viewModelCustomPreference =
+            ViewModelProvider(this, ParamCustPreferViewModel(viewLifecycleOwner)).get(
+                CustomPreferencesViewModel::class.java
+            )
 
-        activeDateTime = LocalDateTime.parse(arguments?.getSerializable("activeDate").toString())
-        Log.d("HourView", "Entered Hourly view")
-        Log.d("HourView", "Datetime received from Adapter is ${activeDateTime.toString()}")
         return inflateView(R.layout.roster_day_hour_view, inflater, container)
     }
 
@@ -100,35 +108,30 @@ class HourViewFragment: RosterBaseFragment() {
         initialize()
     }
 
+    private fun setCustomPreference() {
+        try {
+            viewModelCustomPreference.customPreferencesDataModel
+        }catch (e:UninitializedPropertyAccessException){
+            viewModelCustomPreference.getAllData()
+        }
+    }
+
     @RequiresApi(Build.VERSION_CODES.O)
     private fun initialize() {
-
-        Log.d("ActiveDay", "Active Day in HourView $activeDateTime")
-        viewModelCustomPreference =
-            ViewModelProvider(this, ParamCustPreferViewModel(viewLifecycleOwner)).get(
-                CustomPreferencesViewModel::class.java
-            )
-
+        // initialize view model members
         rosterViewModel.bsBehavior.state = ExtendedBottomSheetBehavior.STATE_HIDDEN
+
+        // fetch user custom preference model
+        setCustomPreference()
 
         initializeHourViews()
 
-        viewModelCustomPreference.customPreferencesLiveDataModel.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
-            rosterViewModel.switchHourAvailability(
-                activeDateTime,
-                day_times,
-                viewModelCustomPreference
-            )
-            rosterViewModel.isDayAvailable.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
-                if (it)
-                    rosterViewModel.setHourVisibility(
-                        day_times, activeDateTime, actualDateTime, viewModelCustomPreference
-                    )
-                else
-                    allHourInactive(day_times)
-            })
+        viewModelCustomPreference.customPreferencesLiveDataModel.observe(
+            viewLifecycleOwner, Observer {
+                rosterViewModel.resetDayTimeAvailability(
+                    viewModelCustomPreference, day_times
+                )
         })
-
 
         if (isSameDate(activeDateTime, actualDateTime)) {
             setCurrentTimeDivider()
@@ -299,7 +302,6 @@ class HourViewFragment: RosterBaseFragment() {
 
             widget.top_half.setOnClickListener {
                 setAndShowBottomSheet(index-1, index)
-
            }
 
             widget.bottom_half.setOnClickListener {
@@ -307,8 +309,6 @@ class HourViewFragment: RosterBaseFragment() {
             }
 
             hourIds.add(widget.id)
-            Log.d("PreviousID", widget.id.toString())
-
         }
 
         // Adding constraints for hourly widgets
@@ -322,12 +322,8 @@ class HourViewFragment: RosterBaseFragment() {
             }
             constraintSet.connect(idx, ConstraintSet.START, start_guideline.id, ConstraintSet.START)
             constraintSet.connect(idx, ConstraintSet.END, end_guideline.id, ConstraintSet.START)
-
-            Log.d("Constraint", "applied")
         }
         constraintSet.applyTo(timeViewGroup)
-
-        viewInitialized = true
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -343,8 +339,6 @@ class HourViewFragment: RosterBaseFragment() {
 //
         resultDateTime =  resultDateTime.plusHours(hour.toLong())
         resultDateTime =  resultDateTime.plusMinutes(minute.toLong())
-
-        Log.d("HVF", "print resultDateTime " + resultDateTime.toString() + "hour $hour" + "minute $minute")
 
         return resultDateTime
 
@@ -378,10 +372,8 @@ class HourViewFragment: RosterBaseFragment() {
                         requireContext(), day_times, upcomingGigs, getDateTimeFromHourString(startTime.toString()),
                         getDateTimeFromHourString(endTime.toString()), viewModelCustomPreference)
 
-                Log.d("HVF", "slide complete triggered")
             }
         })
-
 
         // show bottom sheet in collapsed mode
         rosterViewModel.bsBehavior.state = ExtendedBottomSheetBehavior.STATE_COLLAPSED
@@ -452,10 +444,9 @@ class HourViewFragment: RosterBaseFragment() {
         })
 
         rosterViewModel.UnavailableBS.toggle_button.setOnClickListener {
-            rosterViewModel.toggleDayAvailability(
-                requireContext(), day_times, ArrayList<Gig>(),
-                rosterViewModel.isDayAvailable.value!!,  activeDateTime,
-                actualDateTime, viewModelCustomPreference)
+            rosterViewModel.switchDayAvailability(
+                requireContext(), day_times, ArrayList(),
+                rosterViewModel.isDayAvailable.value!!, viewModelCustomPreference)
         }
     }
 
