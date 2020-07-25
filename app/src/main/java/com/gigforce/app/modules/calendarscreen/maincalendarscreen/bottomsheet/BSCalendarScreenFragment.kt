@@ -189,10 +189,7 @@ class BSCalendarScreenFragment : BaseFragment() {
                                 )
                             )
 
-                            val minTime = LocalDateTime.now().plusHours(1).toDate.time
-                            val shouldEnableCheckInOrCheckOutBtn = obj.startDateTime!!.toDate().time <= minTime
-
-                            if (!shouldEnableCheckInOrCheckOutBtn) {
+                            if (!obj.isPresentGig()) {
                                 getView(viewHolder, R.id.checkInTV).isEnabled = false
                             } else if (obj.isCheckInAndCheckOutMarked()) {
                                 getView(viewHolder, R.id.checkInTV).isEnabled = false

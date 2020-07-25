@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.gigforce.app.R
 import com.gigforce.app.modules.custom_gig_preferences.CustomPreferencesViewModel
 import com.gigforce.app.modules.custom_gig_preferences.ParamCustPreferViewModel
+import com.gigforce.app.modules.gigPage.GigAttendancePageFragment
 import com.gigforce.app.modules.gigPage.GigPageFragment
 import com.gigforce.app.modules.roster.models.Gig
 import com.google.android.material.card.MaterialCardView
@@ -220,9 +221,15 @@ class HourViewFragment: RosterBaseFragment() {
 
         upcomingCard.setOnClickListener {
             //Toast.makeText(requireContext(), "Clicked on upcoming card", Toast.LENGTH_SHORT).show()
-            navigate(R.id.presentGigPageFragment, Bundle().apply {
-                this.putString(GigPageFragment.INTENT_EXTRA_GIG_ID, gig.gigId)
-            })
+            if(gig.isPresentGig()){
+                navigate(R.id.gigAttendancePageFragment, Bundle().apply {
+                    this.putString(GigAttendancePageFragment.INTENT_EXTRA_GIG_ID, gig.gigId)
+                })
+            }else {
+                navigate(R.id.presentGigPageFragment, Bundle().apply {
+                    this.putString(GigPageFragment.INTENT_EXTRA_GIG_ID, gig.gigId)
+                })
+            }
         }
     }
 
@@ -256,9 +263,16 @@ class HourViewFragment: RosterBaseFragment() {
 
         completedGigCard.setOnClickListener {
             //Toast.makeText(requireContext(), "Clicked on upcoming card", Toast.LENGTH_SHORT).show()
-            navigate(R.id.presentGigPageFragment, Bundle().apply {
-                this.putString(GigPageFragment.INTENT_EXTRA_GIG_ID, gig.gigId)
-            })
+
+            if(gig.isPresentGig()){
+                navigate(R.id.gigAttendancePageFragment, Bundle().apply {
+                    this.putString(GigAttendancePageFragment.INTENT_EXTRA_GIG_ID, gig.gigId)
+                })
+            }else {
+                navigate(R.id.presentGigPageFragment, Bundle().apply {
+                    this.putString(GigPageFragment.INTENT_EXTRA_GIG_ID, gig.gigId)
+                })
+            }
         }
     }
 
