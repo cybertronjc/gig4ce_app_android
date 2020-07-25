@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.view.isGone
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -16,6 +17,8 @@ import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
+import com.gigforce.app.core.gone
+import com.gigforce.app.core.visible
 import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
 import com.gigforce.app.modules.gigerVerfication.GigerVerificationStatus
 import com.gigforce.app.modules.photocrop.PhotoCrop
@@ -166,12 +169,31 @@ class AddAadharCardInfoFragment : BaseFragment() {
                         }
 
                         val aadharNo = aadharCardET.text.toString()
-                        viewModel.updateAadharData(
-                            true,
-                            aadharFrontImagePath,
-                            aadharBackImagePath,
-                            aadharNo
-                        )
+                        if (aadharSubmitSliderBtn.text.toString() == getString(R.string.update)) {
+
+                            MaterialAlertDialogBuilder(requireContext())
+                                .setTitle("Alert")
+                                .setMessage("You are re-uploading your Aadhaar details, they will be verified once again, that can take up to 7 days")
+                                .setPositiveButton("OK") { _, _ ->
+
+                                    viewModel.updateAadharData(
+                                        true,
+                                        aadharFrontImagePath,
+                                        aadharBackImagePath,
+                                        aadharNo
+                                    )
+                                }
+                                .show()
+
+                        } else {
+
+                            viewModel.updateAadharData(
+                                true,
+                                aadharFrontImagePath,
+                                aadharBackImagePath,
+                                aadharNo
+                            )
+                        }
                     } else if (aadharNoRB.isChecked) {
                         viewModel.updateAadharData(false, null, null, null)
                     }
@@ -192,6 +214,10 @@ class AddAadharCardInfoFragment : BaseFragment() {
 
                     if (it.aadharCardDataModel.userHasAadharCard != null) {
                         if (it.aadharCardDataModel.userHasAadharCard) {
+                            aadharSubmitSliderBtn.text = getString(R.string.update)
+                            aadharSubmitSliderBtn.gone()
+                            aadharDataCorrectCB.gone()
+
                             aadharAvailaibilityOptionRG.check(R.id.aadharYesRB)
                             aadharCardET.setText(it.aadharCardDataModel.aadharCardNo)
                         } else
@@ -266,12 +292,12 @@ class AddAadharCardInfoFragment : BaseFragment() {
 
             if (!it.dlCardDetailsUploaded) {
                 navigate(R.id.addDrivingLicenseInfoFragment)
+            } else if (!it.bankDetailsUploaded) {
+                navigate(R.id.addBankDetailsInfoFragment)
             } else if (!it.selfieVideoUploaded) {
                 navigate(R.id.addSelfieVideoFragment)
             } else if (!it.panCardDetailsUploaded) {
                 navigate(R.id.addPanCardInfoFragment)
-            } else if (!it.bankDetailsUploaded) {
-                navigate(R.id.addBankDetailsInfoFragment)
             } else {
                 showDetailsUploaded()
             }
@@ -350,6 +376,12 @@ class AddAadharCardInfoFragment : BaseFragment() {
                         data?.getParcelableExtra(PhotoCrop.INTENT_EXTRA_RESULTING_FILE_URI)
                     showBackAadharCard(aadharBackImagePath!!)
                 }
+
+                if (aadharFrontImagePath != null && aadharBackImagePath != null && aadharSubmitSliderBtn.isGone) {
+                    aadharSubmitSliderBtn.visible()
+                    aadharDataCorrectCB.visible()
+                }
+
             } else {
                 MaterialAlertDialogBuilder(requireContext())
                     .setTitle("Alert")

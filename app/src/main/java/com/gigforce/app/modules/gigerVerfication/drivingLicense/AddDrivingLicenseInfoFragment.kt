@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.view.isGone
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -16,6 +17,8 @@ import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
+import com.gigforce.app.core.gone
+import com.gigforce.app.core.visible
 import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
 import com.gigforce.app.modules.gigerVerfication.GigerVerificationStatus
 import com.gigforce.app.modules.gigerVerfication.panCard.AddPanCardInfoFragment
@@ -161,13 +164,34 @@ class AddDrivingLicenseInfoFragment : BaseFragment() {
 
                         val dlNo = drivingLicenseEditText.text.toString()
                         val state = stateSpinner.selectedItem.toString()
-                        viewModel.updateDLData(
-                            true,
-                            dlFrontImagePath,
-                            dlBackImagePath,
-                            state,
-                            dlNo
-                        )
+
+                        if (dlSubmitSliderBtn.text.toString() == getString(R.string.update)) {
+
+                            MaterialAlertDialogBuilder(requireContext())
+                                .setTitle("Alert")
+                                .setMessage("You are re-uploading your Driving License details, they will be verified once again, that can take up to 7 days")
+                                .setPositiveButton("OK") { _, _ ->
+
+                                    viewModel.updateDLData(
+                                        true,
+                                        dlFrontImagePath,
+                                        dlBackImagePath,
+                                        state,
+                                        dlNo
+                                    )
+                                }
+                                .show()
+
+                        } else {
+
+                            viewModel.updateDLData(
+                                true,
+                                dlFrontImagePath,
+                                dlBackImagePath,
+                                state,
+                                dlNo
+                            )
+                        }
                     } else if (dlNoRB.isChecked) {
                         viewModel.updateDLData(
                             false,
@@ -225,6 +249,10 @@ class AddDrivingLicenseInfoFragment : BaseFragment() {
 
                     if (it.drivingLicenseDataModel.userHasDL != null) {
                         if (it.drivingLicenseDataModel.userHasDL) {
+                            dlSubmitSliderBtn.text = getString(R.string.update)
+                            dlSubmitSliderBtn.gone()
+                            confirmDLDataCB.gone()
+
                             //stateAutoCompleteTV.setText(it.drivingLicenseDataModel.dlState)
                             drivingLicenseEditText.setText(it.drivingLicenseDataModel.dlNo)
                             dlAvailaibilityOptionRG.check(R.id.dlYesRB)
@@ -382,6 +410,11 @@ class AddDrivingLicenseInfoFragment : BaseFragment() {
                     dlBackImagePath =
                         data?.getParcelableExtra(PhotoCrop.INTENT_EXTRA_RESULTING_FILE_URI)
                     showBackDrivingLicense(dlBackImagePath!!)
+                }
+
+                if (dlFrontImagePath != null && dlBackImagePath != null && dlSubmitSliderBtn.isGone) {
+                    dlSubmitSliderBtn.visible()
+                    confirmDLDataCB.visible()
                 }
             } else {
                 MaterialAlertDialogBuilder(requireContext())

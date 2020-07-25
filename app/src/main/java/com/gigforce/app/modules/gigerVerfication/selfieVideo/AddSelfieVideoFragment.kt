@@ -15,6 +15,8 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
+import com.gigforce.app.core.gone
+import com.gigforce.app.core.visible
 import com.gigforce.app.modules.gigerVerfication.GigerVerificationStatus
 import com.gigforce.app.utils.DateHelper
 import com.gigforce.app.utils.Lse
@@ -121,6 +123,9 @@ class AddSelfieVideoFragment : BaseFragment(), CaptureVideoFragmentEventListener
 
                 this.gigerVerificationStatus = it
                 if (it.selfieVideoUploaded) {
+                    selfieVideoSubmitSliderBtn.text = getString(R.string.update)
+                    selfieVideoSubmitSliderBtn.gone()
+
                     if (::captureSelfieVideoFragment.isInitialized) {
                         //Video Just Got Uploaded
                     } else {
@@ -149,14 +154,14 @@ class AddSelfieVideoFragment : BaseFragment(), CaptureVideoFragmentEventListener
         showToast("Video Uploaded")
         gigerVerificationStatus?.let {
 
-            if (!it.bankDetailsUploaded) {
-                navigate(R.id.addBankDetailsInfoFragment)
-            } else if (!it.selfieVideoUploaded) {
-                navigate(R.id.addSelfieVideoFragment)
-            } else if (!it.dlCardDetailsUploaded) {
-                navigate(R.id.addDrivingLicenseInfoFragment)
+            if (!it.panCardDetailsUploaded) {
+                navigate(R.id.addPanCardInfoFragment)
             } else if (!it.aadharCardDetailsUploaded) {
                 navigate(R.id.addDrivingLicenseInfoFragment)
+            } else if (!it.dlCardDetailsUploaded) {
+                navigate(R.id.addDrivingLicenseInfoFragment)
+            } else if (!it.bankDetailsUploaded) {
+                navigate(R.id.addBankDetailsInfoFragment)
             } else {
                 showDetailsUploaded()
             }
@@ -179,7 +184,9 @@ class AddSelfieVideoFragment : BaseFragment(), CaptureVideoFragmentEventListener
     }
 
     private fun initViews() {
-        toolbar.setNavigationOnClickListener { activity?.onBackPressed() }
+        toolbar.setNavigationOnClickListener {
+            findNavController().popBackStack(R.id.gigerVerificationFragment, false)
+        }
 
         selfieVideoCorrectCB.setOnCheckedChangeListener { buttonView, isChecked ->
 
@@ -200,6 +207,12 @@ class AddSelfieVideoFragment : BaseFragment(), CaptureVideoFragmentEventListener
                     viewModel.uploadSelfieVideo(mCapturedVideoPath!!, transcodedFile)
                 }
             }
+    }
+
+    override fun onBackPressed(): Boolean {
+
+        findNavController().popBackStack(R.id.gigerVerificationFragment, false)
+        return true
     }
 
 
@@ -237,6 +250,7 @@ class AddSelfieVideoFragment : BaseFragment(), CaptureVideoFragmentEventListener
         this.mCapturedVideoPath = file
         replaceCaptureFragmentWithPreviewFragment(file)
 
+        selfieVideoSubmitSliderBtn.visible()
         if (selfieVideoCorrectCB.isChecked)
             enableSubmitButton()
     }

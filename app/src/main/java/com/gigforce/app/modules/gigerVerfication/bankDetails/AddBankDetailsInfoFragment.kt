@@ -9,12 +9,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.view.isGone
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
+import com.gigforce.app.core.gone
+import com.gigforce.app.core.visible
 import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
 import com.gigforce.app.modules.gigerVerfication.GigerVerificationStatus
 import com.gigforce.app.modules.photocrop.PhotoCrop
@@ -61,7 +64,7 @@ class AddBankDetailsInfoFragment : BaseFragment() {
             getString(R.string.upload_bank_passbook_sublabel)
 
         toolbar.setNavigationOnClickListener {
-                findNavController().popBackStack(R.id.gigerVerificationFragment, false)
+            findNavController().popBackStack(R.id.gigerVerificationFragment, false)
         }
 
         passbookSubmitSliderBtn.isEnabled = false
@@ -122,7 +125,6 @@ class AddBankDetailsInfoFragment : BaseFragment() {
 
                     if (passbookNoRB.isChecked) {
 
-
                         viewModel.updateBankPassbookImagePath(
                             userHasPassBook = false,
                             passbookImagePath = null,
@@ -157,12 +159,31 @@ class AddBankDetailsInfoFragment : BaseFragment() {
                         val ifsc = ifscEditText.text.toString()
                         val accNo = accountNoEditText.text.toString()
 
-                        viewModel.updateBankPassbookImagePath(
-                            userHasPassBook = true,
-                            passbookImagePath = clickedImagePath,
-                            ifscCode = ifsc,
-                            accountNo = accNo
-                        )
+                        if (passbookSubmitSliderBtn.text.toString() == getString(R.string.update)) {
+
+                            MaterialAlertDialogBuilder(requireContext())
+                                .setTitle("Alert")
+                                .setMessage("You are re-uploading your Bank details, they will be verified once again, that can take up to 7 days")
+                                .setPositiveButton("OK") { _, _ ->
+
+                                    viewModel.updateBankPassbookImagePath(
+                                        userHasPassBook = true,
+                                        passbookImagePath = clickedImagePath,
+                                        ifscCode = ifsc,
+                                        accountNo = accNo
+                                    )
+                                }
+                                .show()
+
+                        } else {
+
+                            viewModel.updateBankPassbookImagePath(
+                                userHasPassBook = true,
+                                passbookImagePath = clickedImagePath,
+                                ifscCode = ifsc,
+                                accountNo = accNo
+                            )
+                        }
                     }
                 }
             }
@@ -177,6 +198,10 @@ class AddBankDetailsInfoFragment : BaseFragment() {
 
                     if (it.bankUploadDetailsDataModel.userHasPassBook != null) {
                         if (it.bankUploadDetailsDataModel.userHasPassBook) {
+                            passbookSubmitSliderBtn.text = getString(R.string.update)
+                            bankDetailsDataConfirmationCB.gone()
+                            passbookSubmitSliderBtn.gone()
+
                             passbookAvailaibilityOptionRG.check(R.id.passbookYesRB)
                             ifscEditText.setText(it.bankUploadDetailsDataModel.ifscCode)
                             accountNoEditText.setText(it.bankUploadDetailsDataModel.accountNo)
@@ -221,9 +246,9 @@ class AddBankDetailsInfoFragment : BaseFragment() {
 
     override fun onBackPressed(): Boolean {
 
-            findNavController().popBackStack(R.id.gigerVerificationFragment, false)
-            return true
-           }
+        findNavController().popBackStack(R.id.gigerVerificationFragment, false)
+        return true
+    }
 
     private fun errorOnUploadingDocuments(error: String) {
         progressBar.visibility = View.GONE
@@ -242,15 +267,15 @@ class AddBankDetailsInfoFragment : BaseFragment() {
 
         gigerVerificationStatus?.let {
 
-            if (!it.dlCardDetailsUploaded) {
-                navigate(R.id.addDrivingLicenseInfoFragment)
-            } else if (!it.selfieVideoUploaded) {
+            if (!it.selfieVideoUploaded) {
                 navigate(R.id.addSelfieVideoFragment)
             } else if (!it.panCardDetailsUploaded) {
                 navigate(R.id.addPanCardInfoFragment)
             } else if (!it.aadharCardDetailsUploaded) {
                 navigate(R.id.addDrivingLicenseInfoFragment)
-            } else {
+            } else if (!it.dlCardDetailsUploaded) {
+                navigate(R.id.addDrivingLicenseInfoFragment)
+            } else   {
                 showDetailsUploaded()
             }
         }
@@ -304,6 +329,12 @@ class AddBankDetailsInfoFragment : BaseFragment() {
                 clickedImagePath =
                     data?.getParcelableExtra(PhotoCrop.INTENT_EXTRA_RESULTING_FILE_URI)
                 showPassbookInfoCard(clickedImagePath!!)
+
+                if (clickedImagePath != null && passbookSubmitSliderBtn.isGone) {
+                    bankDetailsDataConfirmationCB.visible()
+                    passbookSubmitSliderBtn.visible()
+                }
+
             } else {
                 MaterialAlertDialogBuilder(requireContext())
                     .setTitle("Alert")
