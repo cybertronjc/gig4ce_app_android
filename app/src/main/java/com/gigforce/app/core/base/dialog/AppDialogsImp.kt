@@ -82,7 +82,30 @@ open class AppDialogsImp(var activity: Activity) : AppDialogsInterface {
         noBtn.setOnClickListener(View.OnClickListener { buttonClickListener.clickedOnNo(customialog) })
         customialog?.show()
     }
-
+    override fun showConfirmationDialogType5(
+        title: String,
+        buttonClickListener: ConfirmationDialogOnClickListener
+    ) {
+        var customialog: Dialog? = activity?.let { Dialog(it) }
+        customialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        customialog?.setCancelable(false)
+        customialog?.setContentView(R.layout.confirmation_custom_alert_type5)
+        val displayMetrics = DisplayMetrics()
+        activity?.windowManager?.getDefaultDisplay()?.getMetrics(displayMetrics)
+        var width = displayMetrics.widthPixels
+        var parentLayout = customialog?.findViewById<ConstraintLayout>(R.id.parent_cl)
+        var lp = parentLayout?.layoutParams
+        lp?.width = width-32
+        val titleDialog = customialog?.findViewById(R.id.title) as TextView
+        titleDialog.text = title
+        val yesBtn = customialog?.findViewById(R.id.yes) as TextView
+        val noBtn = customialog?.findViewById(R.id.cancel) as TextView
+        yesBtn.setOnClickListener(View.OnClickListener {
+            buttonClickListener.clickedOnYes(customialog)
+        })
+        noBtn.setOnClickListener(View.OnClickListener { buttonClickListener.clickedOnNo(customialog) })
+        customialog?.show()
+    }
     override fun showConfirmationDialogType4(
         title: String,
         subTitle:String,

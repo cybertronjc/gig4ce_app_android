@@ -501,6 +501,16 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/attendanceCardView" />
 
+            <TextView
+                android:id="@+id/contact_supervisor"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Please contact the supervisor in case there’s an issue with marking attendance."
+                app:layout_constraintEnd_toEndOf="@+id/attendanceCardView"
+                app:layout_constraintStart_toStartOf="@+id/attendanceCardView"
+                app:layout_constraintTop_toBottomOf="@+id/noteTV"
+                android:textColor="#99000000"/>
             <com.ncorti.slidetoact.SlideToActView
                 android:id="@+id/startNavigationSliderBtn"
                 android:layout_width="match_parent"
@@ -508,12 +518,14 @@
                 android:layout_marginTop="20dp"
                 app:border_radius="8dp"
                 app:inner_color="@color/lipstick"
-                app:layout_constraintTop_toBottomOf="@+id/noteTV"
+                app:layout_constraintTop_toBottomOf="@+id/contact_supervisor"
                 app:outer_color="@color/light_pink"
                 app:slider_height="60dp"
                 app:slider_icon="@drawable/ic_arrow_forward_white"
                 app:slider_icon_color="@color/white"
                 app:text="Check - in" />
+
+
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
