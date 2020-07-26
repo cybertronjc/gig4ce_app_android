@@ -13,12 +13,14 @@ import androidx.appcompat.app.AppCompatActivity
 import com.gigforce.app.R
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
-import com.gigforce.app.modules.gigPage.GigAttendancePageFragment
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.UploadTask
 import com.otaliastudios.cameraview.BitmapCallback
 import com.otaliastudios.cameraview.CameraLogger
+import com.otaliastudios.cameraview.CameraUtils
+import com.otaliastudios.cameraview.CameraUtils.decodeBitmap
 import com.otaliastudios.cameraview.PictureResult
+import com.otaliastudios.cameraview.controls.PictureFormat
 import kotlinx.android.synthetic.main.activity_picture_preview.*
 import java.io.ByteArrayOutputStream
 import java.text.SimpleDateFormat
@@ -40,6 +42,8 @@ class ImageCaptureActivity : AppCompatActivity() {
         }
 
         upload_img.setOnClickListener {
+            retake_image.isEnabled = false
+            upload_img.isEnabled = false
             uploadImage()
         }
         retake_image.setOnClickListener {
@@ -47,13 +51,13 @@ class ImageCaptureActivity : AppCompatActivity() {
         }
     }
 
+
     var resultIntent: Intent = Intent()
     private fun uploadImage() {
         showToast("Uploading Image")
         progress_circular.visible()
         var compressByteArray =
-            bitmapToByteArray(getResizedBitmap(rotateImageIfRequire(byteArrayToBitmap(pictureResult!!.data)), 800))
-
+            bitmapToByteArray(getResizedBitmap(byteArrayToBitmap(pictureResult!!.data), 750))
         var selfieImg = getTimeStampAsName() + getTimeStampAsName() + ".jpg"
         var mReference = FirebaseStorage.getInstance().reference
             .child("attendance")
@@ -79,8 +83,8 @@ class ImageCaptureActivity : AppCompatActivity() {
 //                updateAttendanceToDB()
         }
         uploadTask.addOnFailureListener {
-            resultIntent.putExtra("image_name", selfieImg)
-            setResult(Activity.RESULT_OK, resultIntent)
+            showToast("Error "+it.message)
+            setResult(Activity.RESULT_CANCELED, resultIntent)
             finish()
 //                    startNavigationSliderBtn.resetSlider()
 //                    showToast("Error " + it.message)
@@ -172,7 +176,7 @@ class ImageCaptureActivity : AppCompatActivity() {
     private fun rotateImage(img: Bitmap, degree: Float): Bitmap {
         val matrix = Matrix()
         matrix.postRotate(degree)
-        val rotatedImg = Bitmap.createBitmap(img, 0, 0, img.height, img.width, matrix, true)
+        val rotatedImg = Bitmap.createBitmap(img, 0, 0, img.height, img.width, null, true)
         img.recycle()
         return rotatedImg
     }
