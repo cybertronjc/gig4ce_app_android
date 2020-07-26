@@ -131,13 +131,6 @@ class HourViewFragment: RosterBaseFragment() {
 
         initializeHourViews()
 
-//        viewModelCustomPreference.customPreferencesLiveDataModel.observe(
-//            viewLifecycleOwner, Observer {
-//                rosterViewModel.resetDayTimeAvailability(
-//                    viewModelCustomPreference, day_times
-//                )
-//        })
-
         if (isSameDate(activeDateTime, actualDateTime)) {
             setCurrentTimeDivider()
             scheduleCurrentTimerUpdate()
@@ -169,12 +162,9 @@ class HourViewFragment: RosterBaseFragment() {
                     addGigCards(upcomingGigs, "upcoming")
                     addGigCards(completedGigs, "completed")
                     addGigCards(currentGigs, "current")
-
-
                 }
             }
         })
-        //addGigCards()
 
     }
 
@@ -296,92 +286,6 @@ class HourViewFragment: RosterBaseFragment() {
         constraintSet.connect(card.id, ConstraintSet.TOP, day_times.id, ConstraintSet.TOP, marginTop)
         constraintSet.applyTo(day_times)
     }
-
-//    private fun addUpcomingGigCard(gig: Gig) {
-//        Log.d("HourView", "Upcoming gig add")
-//        //Toast.makeText(requireContext(), "Add upcoming gig called", Toast.LENGTH_SHORT).show()
-//        val upcomingCard = UpcomingGigCard(requireContext())
-//
-//        day_times.addView(upcomingCard)
-//
-//        upcomingCard.id = View.generateViewId()
-//        upcomingCard.startHour = gig.startHour
-//        upcomingCard.startMinute = gig.startMinute
-//        upcomingCard.duration = gig.duration
-//        upcomingCard.gig_title.text = gig.title
-//        upcomingCard.cardHeight = (itemHeight * gig.duration).toInt().px
-//        upcomingCard.setTimings()
-//
-//        val params = ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.WRAP_CONTENT)
-//        upcomingCard.setLayoutParams(params)
-//
-//        upcomingCard.tag = gig.tag
-//        val marginTop = (upcomingCard.startHour * itemHeight + ((upcomingCard.startMinute/60.0F)*itemHeight).toInt()).px
-//
-//        val constraintSet = ConstraintSet()
-//        constraintSet.clone(day_times)
-//        constraintSet.connect(upcomingCard.id, ConstraintSet.START, start_guideline.id, ConstraintSet.START, marginCardStart)
-//        constraintSet.connect(upcomingCard.id, ConstraintSet.END, end_guideline.id, ConstraintSet.START, marginCardEnd)
-//        constraintSet.connect(upcomingCard.id, ConstraintSet.TOP, day_times.id, ConstraintSet.TOP, marginTop)
-//        constraintSet.applyTo(day_times)
-//
-//        upcomingCard.setOnClickListener {
-//            //Toast.makeText(requireContext(), "Clicked on upcoming card", Toast.LENGTH_SHORT).show()
-//            if(gig.isPresentGig()){
-//                navigate(R.id.gigAttendancePageFragment, Bundle().apply {
-//                    this.putString(GigAttendancePageFragment.INTENT_EXTRA_GIG_ID, gig.gigId)
-//                })
-//            }else {
-//                navigate(R.id.presentGigPageFragment, Bundle().apply {
-//                    this.putString(GigPageFragment.INTENT_EXTRA_GIG_ID, gig.gigId)
-//                })
-//            }
-//        }
-//    }
-//
-//    private fun addCompletedGigCard(gig: Gig) {
-//        val completedGigCard = CompletedGigCard(requireContext())
-//        completedGigCard.gigStartHour = gig.startHour
-//        completedGigCard.gigStartMinute = gig.startMinute
-//        completedGigCard.gigDuration = gig.duration
-//        completedGigCard.gig_title.text = gig.title
-//        completedGigCard.cardHeight = (itemHeight * gig.duration).toInt().px
-//        completedGigCard.id = View.generateViewId()
-//        completedGigCard.gigSuccess = gig.isGigCompleted
-//        completedGigCard.paymentSuccess = gig.isPaymentDone
-//        completedGigCard.gigRating = gig.gigRating
-//        completedGigCard.gigAmount = gig.gigAmount
-//        completedGigCard.setTimings()
-//
-//        val params = ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.WRAP_CONTENT)
-//        completedGigCard.setLayoutParams(params)
-//        completedGigCard.tag = gig.tag
-//        val marginTop = (completedGigCard.gigStartHour * itemHeight + ((completedGigCard.gigStartMinute/60.0F)*itemHeight).toInt()).px
-//
-//        day_times.addView(completedGigCard)
-//
-//        val constraintSet = ConstraintSet()
-//        constraintSet.clone(day_times)
-//        constraintSet.connect(completedGigCard.id, ConstraintSet.START, start_guideline.id, ConstraintSet.START, marginCardStart - 16.px)
-//        constraintSet.connect(completedGigCard.id, ConstraintSet.END, end_guideline.id, ConstraintSet.START, marginCardEnd)
-//        constraintSet.connect(completedGigCard.id, ConstraintSet.TOP, day_times.id, ConstraintSet.TOP, marginTop)
-//        constraintSet.applyTo(day_times)
-//
-//        completedGigCard.setOnClickListener {
-//            //Toast.makeText(requireContext(), "Clicked on upcoming card", Toast.LENGTH_SHORT).show()
-//
-//            if(gig.isPresentGig()){
-//                navigate(R.id.gigAttendancePageFragment, Bundle().apply {
-//                    this.putString(GigAttendancePageFragment.INTENT_EXTRA_GIG_ID, gig.gigId)
-//                })
-//            }else {
-//                navigate(R.id.presentGigPageFragment, Bundle().apply {
-//                    this.putString(GigPageFragment.INTENT_EXTRA_GIG_ID, gig.gigId)
-//                })
-//            }
-//        }
-//    }
-//
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun initializeHourViews() {
@@ -647,15 +551,6 @@ class HourViewFragment: RosterBaseFragment() {
                 (widget.layoutParams as ViewGroup.MarginLayoutParams).setMargins(0, 16.px, 0, 0)
                 widget.requestLayout()
             }
-        }
-    }
-
-    fun removeUpcomingGigCards() {
-        for (gig in upcomingGigs) {
-            var card = day_times.findViewWithTag<UpcomingGigCard>(gig.tag)
-            day_times.removeView(card)
-            Log.d("RosterViewModel", "gig card removed")
-
         }
     }
 
