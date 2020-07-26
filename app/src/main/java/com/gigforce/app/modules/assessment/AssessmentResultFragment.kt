@@ -63,6 +63,10 @@ class AssessmentResultFragment : BaseFragment(), PopupMenu.OnMenuItemClickListen
             Observer {
                 adapter?.addAll(it)
             })
+        viewModelAssessmentResult.observableIsUserPassed.observe(viewLifecycleOwner, Observer {
+            tv_sug_learnings_label_assess_frag.visibility = it
+            rv_sug_learnings_assess_result.visibility = it
+        })
     }
 
     private fun setupRecycler() {
@@ -78,7 +82,7 @@ class AssessmentResultFragment : BaseFragment(), PopupMenu.OnMenuItemClickListen
                         R.color.black_85
                     )!!
                 )
-                viewHolder.itemView.tv_q_no_rv_ques_sum_assess_result.setSelected(true)
+                viewHolder.itemView.tv_q_no_rv_ques_sum_assess_result.isSelected = true
 
             })
 
@@ -120,6 +124,7 @@ class AssessmentResultFragment : BaseFragment(), PopupMenu.OnMenuItemClickListen
         tv_score_assess_result.text = Html.fromHtml("You have scored <b>70%</b> in your assessment")
         tv_new_cert_asses_frag.text =
             Html.fromHtml("<u>New certificate has been added to profile .</u>")
+        viewModelAssessmentResult.checkIfUserPassed(arguments?.getBoolean(StringConstants.ASSESSMENT_PASSED.value))
     }
 
     override fun onMenuItemClick(item: MenuItem?): Boolean {

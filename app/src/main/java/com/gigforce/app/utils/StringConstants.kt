@@ -7,6 +7,8 @@ package com.gigforce.app.utils
 enum class StringConstants(val value: String) {
     //Assessment Module Constants
     ASSESSMENT_DIALOG_STATE("ASSESS_STATE"),
-    CERTIFICATE_SSC("CERTIFICATE_SSC.png")
+    CERTIFICATE_SSC("CERTIFICATE_SSC.png"),
+    ASSESSMENT_PASSED("ASSESSMENT_PASSED")
+
 
 }

@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.utils.ItemOffsetDecoration
+import com.gigforce.app.utils.StringConstants
 import com.gigforce.app.utils.openPopupMenu
 import com.gigforce.app.utils.widgets.CustomScrollView
 import kotlinx.android.synthetic.main.fragment_assessment.*
@@ -24,27 +25,33 @@ import kotlinx.android.synthetic.main.toolbar.*
  * date - 19/07/2020
  */
 class AssessmentFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
-        AssessmentDialog.AssessmentDialogCallbacks,
-        AssessmentAnswersAdapter.AssessAdapterCallbacks {
+    AssessmentDialog.AssessmentDialogCallbacks,
+    AssessmentAnswersAdapter.AssessAdapterCallbacks {
     private val viewModelAssessmentFragment by lazy {
         ViewModelProvider(this).get(ViewModelAssessmentFragment::class.java)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflateView(R.layout.fragment_assessment, inflater, container)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initTb()
-        showDialog(AssessmentDialog.STATE_REAPPEAR)
+        showDialog(AssessmentDialog.STATE_PASS)
         initObservers();
     }
 
     private fun initObservers() {
         with(viewModelAssessmentFragment) {
             observableDialogResult.observe(viewLifecycleOwner, Observer {
-                navigate(R.id.assessment_result_fragment)
+                val bundle = Bundle()
+                bundle.putBoolean(StringConstants.ASSESSMENT_PASSED.value, it)
+                navigate(R.id.assessment_result_fragment, bundle)
             })
             observableDialogInit.observe(viewLifecycleOwner, Observer {
                 initialize()
@@ -99,14 +106,22 @@ class AssessmentFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
             }
 
             override fun onScrollChanged() {
-                viewModelAssessmentFragment.shouldQuestionHeaderBeVisible(tv_scenario_label_assess_frag, sv_assess_frag)
+                viewModelAssessmentFragment.shouldQuestionHeaderBeVisible(
+                    tv_scenario_label_assess_frag,
+                    sv_assess_frag
+                )
             }
         })
         swipeDownAnim()
     }
 
     private fun swipeDownAnim() {
-        iv_scroll_more_access_frag.startAnimation(AnimationUtils.loadAnimation(activity, R.anim.swipe_down_animation))
+        iv_scroll_more_access_frag.startAnimation(
+            AnimationUtils.loadAnimation(
+                activity,
+                R.anim.swipe_down_animation
+            )
+        )
     }
 
     private fun showDialog(state: Int) {
