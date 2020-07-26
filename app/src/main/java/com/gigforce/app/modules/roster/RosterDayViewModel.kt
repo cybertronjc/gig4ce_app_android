@@ -22,6 +22,7 @@ import com.gigforce.app.modules.preferences.prefdatamodel.PreferencesDataModel
 import com.gigforce.app.modules.roster.models.Gig
 import com.google.android.material.card.MaterialCardView
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.FirebaseFirestore
 import com.riningan.widget.ExtendedBottomSheetBehavior
 import kotlinx.android.synthetic.main.gigs_today_warning_dialog.*
@@ -51,6 +52,50 @@ class RosterDayViewModel: ViewModel() {
     lateinit var UnavailableBS: View
 
     lateinit var topBar: RosterTopBar
+
+    var allGigs: MutableLiveData<HashMap<String, ArrayList<Gig>>> = MutableLiveData(hashMapOf())
+
+    fun getGigs(datetime: Date) {
+        val db = FirebaseFirestore.getInstance()
+        val uid = FirebaseAuth.getInstance().currentUser?.uid
+        val collection = "Gigs"
+
+        val c = Calendar.getInstance()
+        c.time = datetime
+        c.add(Calendar.DAY_OF_MONTH, 1)
+
+        // if date already has snapshot listener, return
+        if (getTagFromDate(datetime) in allGigs.value!!.keys)
+            return
+        else
+            allGigs.value!!.put(
+                getTagFromDate(datetime),
+                ArrayList<Gig>())
+
+        db.collection(collection)
+            .whereEqualTo("gigerId", uid)
+            .whereGreaterThanOrEqualTo("startDateTime", datetime)
+            .whereLessThanOrEqualTo("startDateTime", c.time )
+            .addSnapshotListener { querySnapshot, firebaseFirestoreException ->
+                querySnapshot?.documentChanges?.forEach {
+                    when (it.type) {
+                        DocumentChange.Type.ADDED -> {
+                            var gig = it.document.toObject(Gig::class.java)
+                            allGigs.value!![getTagFromDate(gig.startDateTime!!.toDate())]!!.add(gig)
+                            allGigs.value = allGigs.value
+                        }
+                        DocumentChange.Type.REMOVED -> {
+                            var gig = it.document.toObject(Gig::class.java)
+                            allGigs.value!![getTagFromDate(gig.startDateTime!!.toDate())]!!.remove(gig)
+                            allGigs.value = allGigs.value
+                        }
+                        DocumentChange.Type.MODIFIED -> {
+                            // TODO: See if needed to implement
+                        }
+                    }
+                }
+            }
+    }
 
     fun queryGigs() {
         val db = FirebaseFirestore.getInstance()
@@ -86,6 +131,7 @@ class RosterDayViewModel: ViewModel() {
         try {
             viewModelCustomPreference.customPreferencesDataModel
         } catch (e:UninitializedPropertyAccessException) {
+            Log.d("DEBUG", "Returning from day time availability reset without performing action")
             return
         }
 
@@ -358,6 +404,11 @@ class RosterDayViewModel: ViewModel() {
         preferenceListener()
     }
 
+    fun getTagFromDate(date: Date): String {
+        val format = SimpleDateFormat("yyyyMMdd")
+        return format.format(date)
+    }
+
     fun getUpcomingGigsByDayTag(dayTag: String, gigsQuery: ArrayList<Gig>): ArrayList<Gig> {
         val filteredGigs = ArrayList<Gig>()
         val format = SimpleDateFormat("yyyyMMdd")
@@ -371,6 +422,25 @@ class RosterDayViewModel: ViewModel() {
             filteredGigs.add(it)
         }
         return filteredGigs
+    }
+
+    fun getFilteredGigs(date: Date, filter: String): ArrayList<Gig> {
+        val tag = getTagFromDate(date)
+        val result = ArrayList<Gig>()
+
+        if (tag in allGigs.value!!.keys) {
+            allGigs.value!![tag]?.forEach {
+                if (it.isUpcomingGig() && filter == "upcoming")
+                    result.add(it)
+                if (it.isPresentGig() && filter == "current")
+                    result.add(it)
+                if (it.isPastGig() && filter == "completed")
+                    result.add(it)
+                if (it.isFullDay && filter == "fullday")
+                    result.add(it)
+            }
+        }
+        return result
     }
 
     fun getCompletedGigsByDayTag(dayTag: String, gigsQuery: ArrayList<Gig>): ArrayList<Gig> {

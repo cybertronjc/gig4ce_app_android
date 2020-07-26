@@ -58,7 +58,7 @@
                         android:id="@+id/gig_rating"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="4.3"
+                        android:text="-"
                         android:layout_toEndOf="@id/star_icon"
                         android:layout_marginStart="8dp"/>
                     <ImageView
