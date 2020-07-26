@@ -402,6 +402,7 @@
     <string name="time_taken">Time Taken :</string>
     <string name="question_wise_summary">Question wise Summary</string>
     <string name="suggested_learnings">Suggested learnings</string>
+    <string name="share">Share</string>
 
 
 </resources>

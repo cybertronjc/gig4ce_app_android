@@ -1,7 +1,11 @@
 package com.gigforce.app.modules.assessment
 
+import android.graphics.Bitmap
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import java.io.File
+import java.io.FileOutputStream
+
 
 class ViewModelAssessmentResult : ViewModel() {
     internal val observableQuestionWiseSumList: MutableLiveData<List<Boolean>> by lazy {
@@ -26,6 +30,20 @@ class ViewModelAssessmentResult : ViewModel() {
         list.add(false)
         list.add(true)
         return list
+    }
+
+    fun store(bm: Bitmap?, fileName: String, dirPath: String) {
+        val dir = File(dirPath)
+        if (!dir.exists()) dir.mkdirs()
+        val file = File(dirPath, fileName)
+        try {
+            val fOut = FileOutputStream(file)
+            bm?.compress(Bitmap.CompressFormat.PNG, 85, fOut)
+            fOut.flush()
+            fOut.close()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
 }

@@ -26,7 +26,7 @@ fun openPopupMenu(
 ) {
     val popUp = PopupMenu(activity?.applicationContext, view)
     popUp.setOnMenuItemClickListener(click)
-    popUp.inflate(R.menu.menu_chat)
+    popUp.inflate(menuId)
     popUp.show()
 }
 

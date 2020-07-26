@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     package="com.gigforce.app">
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -12,14 +11,14 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
-    <uses-permission android:name="android.permission.CAMERA"  />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:requiredFeature="true" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:requiredFeature="true"/>
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
     <uses-feature android:name="android.hardware.camera" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <application
         android:allowBackup="false"
@@ -43,36 +42,40 @@
                app to run.
         -->
 
-        <meta-data android:name="com.google.android.geo.API_KEY" android:value="your API key"/>
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="your API key" />
 
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/PhotoCrop"/>
+            android:theme="@style/PhotoCrop" />
         <activity
             android:name="com.gigforce.app.modules.photocrop.PhotoCrop"
             android:screenOrientation="portrait"
-            android:theme="@style/PhotoCrop"/>
+            android:theme="@style/PhotoCrop" />
 
         <activity
             android:name=".SplashScreen"
-            android:theme="@style/SplashTheme"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <activity android:name=".MainActivity"
-            android:configChanges="layoutDirection|locale|orientation|screenSize|keyboardHidden"
-            >
+        <activity
+            android:name=".MainActivity"
+            android:configChanges="layoutDirection|locale|orientation|screenSize|keyboardHidden">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"
-                        android:resource="@array/preloaded_fonts"
-                        android:windowSoftInputMode="adjustResize"/>
+                <action
+                    android:name="android.intent.action.MAIN"
+                    android:resource="@array/preloaded_fonts"
+                    android:windowSoftInputMode="adjustResize" />
             </intent-filter>
         </activity>
+
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
@@ -80,21 +83,22 @@
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"
             android:exported="false"
-            android:grantUriPermissions="true"
-            tools:ignore="WrongManifestParent">
+            android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
         </provider>
-<!--        <receiver android:name=".core.base.language.LanguageChangeReceiver">-->
-<!--            <intent-filter><action android:name="android.intent.action.ACTION_LOCALE_CHANGED"/>-->
-<!--            </intent-filter>-->
-<!--        </receiver>-->
-<!--        <service android:name="com.gigforce.app.modules.notifications.Notification">-->
-<!--            <intent-filter>-->
-<!--                <action android:name="com.google.firebase.MESSAGING_EVENT" />-->
-<!--            </intent-filter>-->
-<!--        </service>-->
+        <!--        <receiver android:name=".core.base.language.LanguageChangeReceiver">-->
+        <!--            <intent-filter><action android:name="android.intent.action.ACTION_LOCALE_CHANGED"/>-->
+        <!--            </intent-filter>-->
+        <!--        </receiver>-->
+        <!--        <service android:name="com.gigforce.app.modules.notifications.Notification">-->
+        <!--            <intent-filter>-->
+        <!--                <action android:name="com.google.firebase.MESSAGING_EVENT" />-->
+        <!--            </intent-filter>-->
+        <!--        </service>-->
+
+
     </application>
 
 </manifest>

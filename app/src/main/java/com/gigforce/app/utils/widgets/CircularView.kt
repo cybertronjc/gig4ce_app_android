@@ -12,13 +12,21 @@ class CircularView : FrameLayout {
     var strokeColor = 0
     var bgColor = Color.parseColor("#d9000000")
 
-    constructor(context: Context) : super(context)
-    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
+    constructor(context: Context) : super(context) {
+        setLayerType(LAYER_TYPE_SOFTWARE, null);
+    }
+
+    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {
+        setLayerType(LAYER_TYPE_SOFTWARE, null);
+    }
+
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(
         context,
         attrs,
         defStyleAttr
-    )
+    ) {
+        setLayerType(LAYER_TYPE_SOFTWARE, null);
+    }
 
     constructor(
         context: Context,
@@ -39,8 +47,10 @@ class CircularView : FrameLayout {
         val w = this.width
         val diameter = if (h > w) h else w
         val radius = diameter / 2
-        this.minimumHeight = diameter
-        this.minimumWidth = diameter
+        val lp = layoutParams
+        lp.width = diameter
+        lp.height = diameter
+        layoutParams = lp
         canvas.drawCircle(
             diameter / 2.toFloat(),
             diameter / 2.toFloat(),
