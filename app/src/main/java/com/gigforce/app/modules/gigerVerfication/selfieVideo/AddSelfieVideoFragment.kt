@@ -251,9 +251,6 @@ class AddSelfieVideoFragment : BaseFragment(), CaptureVideoFragmentEventListener
         this.mCapturedVideoPath = file
         replaceCaptureFragmentWithPreviewFragment(file)
 
-        selfieVideoCorrectCB.visible()
-        selfieVideoSubmitSliderBtn.visible()
-
         if (selfieVideoCorrectCB.isChecked)
             enableSubmitButton()
     }
@@ -261,6 +258,9 @@ class AddSelfieVideoFragment : BaseFragment(), CaptureVideoFragmentEventListener
     override fun discardCurrentVideoAndStartRetakingVideo() {
         deleteExistingVideoIfExist()
         replacePlayVideoFragmentWithCaptureFragment()
+
+        selfieVideoCorrectCB.visible()
+        selfieVideoSubmitSliderBtn.visible()
 
         selfieVideoCorrectCB.isChecked = false
         disableSubmitButton()
