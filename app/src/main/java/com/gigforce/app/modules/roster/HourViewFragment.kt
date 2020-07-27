@@ -136,8 +136,23 @@ class HourViewFragment: RosterBaseFragment() {
             scheduleCurrentTimerUpdate()
         }
 
-        rosterViewModel.allGigs.observe(viewLifecycleOwner, Observer { gigsMap ->
+        // DEBUG
+        rosterViewModel.currentDateTime.observe(viewLifecycleOwner, Observer { activeDateTime ->
             val tag = rosterViewModel.getTagFromDate(activeDateTime.toDate)
+
+            val gigsMap = rosterViewModel.allGigs.value!!
+
+            Log.d("HourViewFragment", "\nNew date " + activeDateTime.toString())
+            if (tag !in gigsMap.keys)
+                Log.d("HourViewFragment", "No entry found for day (this should not happen)")
+            else
+                Log.d("HourViewFragment", gigsMap[tag].toString())
+        })
+
+        rosterViewModel.currentDateTime.observe(viewLifecycleOwner, Observer { activeDateTime ->
+            val tag = rosterViewModel.getTagFromDate(activeDateTime.toDate)
+
+            val gigsMap = rosterViewModel.allGigs.value!!
 
             gigsMap[tag]?.let { dayGigs ->
                 if (
@@ -230,6 +245,7 @@ class HourViewFragment: RosterBaseFragment() {
                         })
                     }
 
+                    day_times.addView(upcomingCard)
                     setGigCardInView(upcomingCard, "upcoming")
                 }
             }
@@ -254,6 +270,7 @@ class HourViewFragment: RosterBaseFragment() {
                         this.putString(GigPageFragment.INTENT_EXTRA_GIG_ID, gig.gigId)
                     })
 
+                    day_times.addView(completedCard)
                     setGigCardInView(completedCard, "completed")
                 }
             }
@@ -264,6 +281,7 @@ class HourViewFragment: RosterBaseFragment() {
     }
 
     private fun setGigCardInView(card: MaterialCardView, type: String) {
+        Log.d("HourViewFragment", "Even this is called ")
         var marginTop: Int = 0
         if (type == "upcoming" ) {
             val gigCard = card as UpcomingGigCard

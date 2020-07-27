@@ -31,6 +31,7 @@ class CompletedGigCard(
         setGigRating(rating)
         setGigAmount(amount)
         gig_title.text = title
+        setTimings()
     }
 
     fun setGigSuccess() {
