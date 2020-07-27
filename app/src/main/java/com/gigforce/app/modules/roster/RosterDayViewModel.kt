@@ -176,7 +176,7 @@ class RosterDayViewModel: ViewModel() {
         try {
             viewModelCustomPreference.customPreferencesDataModel
         } catch (e:UninitializedPropertyAccessException) {
-            Toast.makeText(context, "UNINITIALIZED", Toast.LENGTH_SHORT).show()
+//            Toast.makeText(context, "UNINITIALIZED", Toast.LENGTH_SHORT).show()
             return
         }
 

@@ -93,12 +93,8 @@ class RosterDayFragment: RosterBaseFragment() {
         attachDayAvailabilityObserver()
         attachCurrentDateTimeChangeObserver()
         attachTopBarMonthChangeListener()
-        var count = 0
 
         rosterViewModel.currentDateTime.observe(viewLifecycleOwner, Observer {
-            Log.d("RosterDayFragment", count.toString())
-            Log.d("RosterDayFragment", it.toString())
-            count += 1
             getDayTimesChild()?.let {
                     rosterViewModel.resetDayTimeAvailability(
                         viewModelCustomPreference,
@@ -189,6 +185,9 @@ class RosterDayFragment: RosterBaseFragment() {
                 val monthGap = position - (activeDateTime.monthValue - 1)
                 val newDateTime: LocalDateTime
                 val dateDifference: Int
+
+                if (monthGap == 0)
+                    return
 
                 newDateTime = if (monthGap < 0) {
                     activeDateTime.minusMonths((-1*monthGap).toLong())
