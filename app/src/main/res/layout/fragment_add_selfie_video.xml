@@ -100,6 +100,7 @@
         android:layout_marginStart="13dp"
         android:layout_marginBottom="18dp"
         android:fontFamily="@font/lato"
+        style="@style/Theme.CheckBoxLipstickPink"
         android:text="@string/yes_i_confirm_the_data_is_correct"
         app:layout_constraintBottom_toTopOf="@id/selfieVideoSubmitSliderBtn"
         app:layout_constraintVertical_bias="0.98"

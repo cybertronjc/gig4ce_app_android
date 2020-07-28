@@ -195,6 +195,7 @@
                 android:layout_marginBottom="18dp"
                 android:fontFamily="@font/lato"
                 android:letterSpacing="0"
+                style="@style/Theme.CheckBoxLipstickPink"
                 android:text="@string/yes_i_confirm_the_data_is_correct"
                 app:layout_constraintBottom_toTopOf="@id/panSubmitSliderBtn"
                 app:layout_constraintTop_toBottomOf="@id/panImageHolder"
