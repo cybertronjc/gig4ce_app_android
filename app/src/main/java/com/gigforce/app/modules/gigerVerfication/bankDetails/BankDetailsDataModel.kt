@@ -9,6 +9,7 @@ data class BankDetailsDataModel(
     val passbookImagePath: String? = null,
     val verified: Boolean = false,
     val ifscCode: String? = null,
+    val bankName: String? = null,
     val accountNo: String? = null,
     val state :Int = -1,
     val verifiedString : String? = null

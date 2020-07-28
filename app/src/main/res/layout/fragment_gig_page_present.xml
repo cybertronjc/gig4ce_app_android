@@ -908,6 +908,17 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/provide_feedback" />
 
+                <TextView
+                    android:id="@+id/contact_supervisor"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="Please contact the supervisor in case there’s an issue with marking attendance."
+                    android:textColor="#99000000"
+                    app:layout_constraintEnd_toEndOf="@+id/right_arrow2"
+                    app:layout_constraintStart_toStartOf="@+id/contact_icon"
+                    app:layout_constraintTop_toBottomOf="@+id/grayline3" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
 

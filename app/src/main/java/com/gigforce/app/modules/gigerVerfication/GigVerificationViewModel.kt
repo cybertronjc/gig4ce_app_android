@@ -166,6 +166,8 @@ open class GigVerificationViewModel constructor(
                 state = -1,
                 verifiedString = "Under Verification"
             )
+            model.sync_status = false
+
             gigerVerificationRepository.getDBCollection().setOrThrow(model)
 
             _documentUploadState.postValue(Lse.success())
@@ -178,6 +180,7 @@ open class GigVerificationViewModel constructor(
         userHasPassBook: Boolean,
         passbookImagePath: Uri?,
         ifscCode: String?,
+        bankName : String?,
         accountNo: String?
     ) = viewModelScope.launch {
         _documentUploadState.postValue(Lse.loading())
@@ -194,10 +197,13 @@ open class GigVerificationViewModel constructor(
                 passbookImagePath = fileNameAtServer,
                 verified = false,
                 ifscCode = ifscCode,
+                bankName = bankName,
                 accountNo = accountNo,
                 state = -1,
                 verifiedString = "Under Verification"
             )
+            model.sync_status = false
+
             gigerVerificationRepository.getDBCollection().setOrThrow(model)
 
             _documentUploadState.postValue(Lse.success())
@@ -248,6 +254,7 @@ open class GigVerificationViewModel constructor(
                     state = -1,
                     verifiedString = "Under Verification"
                 )
+                model.sync_status = false
 
             }
             gigerVerificationRepository.getDBCollection().setOrThrow(model)
@@ -300,6 +307,7 @@ open class GigVerificationViewModel constructor(
                     state = -1,
                     verifiedString = "Under Verification"
                 )
+                model.sync_status = false
             }
             gigerVerificationRepository.getDBCollection().setOrThrow(model)
             _documentUploadState.postValue(Lse.success())

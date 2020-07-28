@@ -12,7 +12,6 @@ import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.visible
 import kotlinx.android.synthetic.main.fragment_giger_verification.*
-import kotlinx.android.synthetic.main.fragment_giger_verification_documents_submitted.*
 import kotlinx.android.synthetic.main.fragment_giger_verification_item.view.*
 import kotlinx.android.synthetic.main.fragment_giger_verification_main.*
 import kotlinx.android.synthetic.main.fragment_giger_verification_main.view.*
@@ -84,56 +83,24 @@ class GigerVerificationFragment : BaseFragment() {
 
     private fun setListeners() {
         verificationMainLayout.panLayout.setOnClickListener {
+            navigate(R.id.addPanCardInfoFragment)
 
-            if(gigerVerificationStatus?.panCardDetails == null
-                || gigerVerificationStatus?.panCardDetails?.state == GigerVerificationStatus.STATUS_VERIFICATION_FAILED
-                || gigerVerificationStatus?.panCardDetails?.userHasPanCard!!.not()) {
-                navigate(R.id.addPanCardInfoFragment)
-            } else {
-
-            }
         }
 
         verificationMainLayout.drivingLayout.setOnClickListener {
-            if(gigerVerificationStatus?.drivingLicenseDataModel == null
-                || gigerVerificationStatus?.drivingLicenseDataModel?.state == GigerVerificationStatus.STATUS_VERIFICATION_FAILED
-                || gigerVerificationStatus?.drivingLicenseDataModel?.userHasDL!!.not()) {
-                navigate(R.id.addDrivingLicenseInfoFragment)
-            } else {
-
-            }
-
+            navigate(R.id.addDrivingLicenseInfoFragment)
         }
 
         verificationMainLayout.aadharLayout.setOnClickListener {
-
-
-            if(gigerVerificationStatus?.aadharCardDataModel == null
-                || gigerVerificationStatus?.aadharCardDataModel?.state == GigerVerificationStatus.STATUS_VERIFICATION_FAILED
-                || gigerVerificationStatus?.aadharCardDataModel?.userHasAadharCard!!.not()) {
-                navigate(R.id.addAadharCardInfoFragment)
-            } else {
-
-            }
-
+            navigate(R.id.addAadharCardInfoFragment)
         }
 
         verificationMainLayout.bankDetailsLayout.setOnClickListener {
-
-            if(gigerVerificationStatus?.bankUploadDetailsDataModel == null
-                || gigerVerificationStatus?.bankUploadDetailsDataModel?.state == GigerVerificationStatus.STATUS_VERIFICATION_FAILED
-                || gigerVerificationStatus?.bankUploadDetailsDataModel?.userHasPassBook!!.not()) {
-                navigate(R.id.addBankDetailsInfoFragment)
-            } else {
-
-            }
+            navigate(R.id.addBankDetailsInfoFragment)
         }
 
         verificationMainLayout.selfieVideoLayout.setOnClickListener {
-
-            if(gigerVerificationStatus?.selfieVideoDataModel?.videoPath == null) {
-                navigate(R.id.addSelfieVideoFragment)
-            }
+            navigate(R.id.addSelfieVideoFragment)
         }
     }
 

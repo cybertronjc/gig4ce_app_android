@@ -125,7 +125,6 @@ class PreferencesFragment : BaseFragment() {
         arrPrefrancesList.clear()
         arrPrefrancesList.addAll(viewModel.getPrefrencesData())
         recyclerGenericAdapter.notifyDataSetChanged()
-
     }
 
     private fun observePreferenceData() {

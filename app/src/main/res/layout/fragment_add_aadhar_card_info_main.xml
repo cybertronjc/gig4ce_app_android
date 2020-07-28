@@ -51,6 +51,7 @@
             android:text="@string/why_do_we_need_this"
             android:textColor="@color/battle_ship_grey"
             android:textSize="12sp"
+            android:fontFamily="@font/lato"
             app:layout_constraintEnd_toStartOf="@+id/helpIconIV"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -81,6 +82,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/lato"
+                android:letterSpacing="0"
+                android:textColor="@color/black"
                 android:text="@string/yes_i_have_aadhar_card" />
 
             <com.google.android.material.radiobutton.MaterialRadioButton
@@ -89,6 +92,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/lato"
+                android:letterSpacing="0"
                 android:text="@string/no_i_don_t_have_aadhar_card" />
 
         </RadioGroup>
@@ -208,6 +212,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="13dp"
             android:layout_marginBottom="18dp"
+            android:letterSpacing="0"
+            android:fontFamily="@font/lato"
             android:text="@string/yes_i_confirm_the_data_is_correct"
             app:layout_constraintBottom_toTopOf="@id/aadharSubmitSliderBtn"
             app:layout_constraintTop_toBottomOf="@id/aadharInfoLayout"
