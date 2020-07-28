@@ -318,6 +318,12 @@ class HourViewFragment: RosterBaseFragment() {
                     (gigCard.startMinute/60.0F)*itemHeight).toInt()).px
         }
 
+        if (type == "current") {
+            val gigCard = card as CurrentGigCard
+            marginTop = (gigCard.startHour*itemHeight + (
+                    (gigCard.startMinute/60.0F)*itemHeight).toInt()).px
+        }
+
         val params = ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.WRAP_CONTENT)
         card.setLayoutParams(params)
 
