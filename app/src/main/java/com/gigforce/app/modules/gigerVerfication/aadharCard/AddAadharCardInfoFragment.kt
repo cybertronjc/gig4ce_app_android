@@ -89,17 +89,34 @@ class AddAadharCardInfoFragment : BaseFragment() {
                 showAadharImageAndInfoLayout()
                 showImageInfoLayout()
 
+                if (aadharCardDataModel?.userHasAadharCard != null &&
+                    aadharCardDataModel?.userHasAadharCard!! &&
+                    (aadharFrontImagePath == null || aadharBackImagePath == null)
+                ) {
+                    aadharSubmitSliderBtn.gone()
+                    aadharDataCorrectCB.gone()
+                }
+
                 if (aadharDataCorrectCB.isChecked
                     && aadharFrontImagePath != null
                     && aadharBackImagePath != null
                 ) {
                     enableSubmitButton()
+                } else {
+                    disableSubmitButton()
                 }
+
             } else if (checkedId == R.id.aadharNoRB) {
                 hideAadharImageAndInfoLayout()
 
+                aadharSubmitSliderBtn.visible()
+                aadharDataCorrectCB.visible()
+
                 if (aadharDataCorrectCB.isChecked)
                     enableSubmitButton()
+                else
+                    disableSubmitButton()
+
             } else {
                 hideAadharImageAndInfoLayout()
                 disableSubmitButton()
@@ -375,6 +392,15 @@ class AddAadharCardInfoFragment : BaseFragment() {
                     aadharBackImagePath =
                         data?.getParcelableExtra(PhotoCrop.INTENT_EXTRA_RESULTING_FILE_URI)
                     showBackAadharCard(aadharBackImagePath!!)
+                }
+
+                if (aadharDataCorrectCB.isChecked
+                    && aadharFrontImagePath != null
+                    && aadharBackImagePath != null
+                ) {
+                    enableSubmitButton()
+                } else {
+                    disableSubmitButton()
                 }
 
                 if (aadharFrontImagePath != null && aadharBackImagePath != null && aadharSubmitSliderBtn.isGone) {

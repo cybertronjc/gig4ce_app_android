@@ -154,7 +154,7 @@
                     android:id="@+id/stateLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="IFSC"
+                    android:text="IFSC * "
                     android:textSize="12sp"
                     android:fontFamily="@font/lato" />
 
@@ -184,7 +184,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="Account No"
+                    android:text="Bank Name *"
                     android:textSize="12sp"
                     android:fontFamily="@font/lato" />
 
@@ -213,7 +213,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="Account No"
+                    android:text="Account No *"
                     android:textSize="12sp"
                     android:fontFamily="@font/lato" />
 
