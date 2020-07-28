@@ -238,7 +238,7 @@ class HourViewFragment: RosterBaseFragment() {
                     )
                     upcomingCard.id = View.generateViewId()
                     upcomingCard.tag = gig.tag
-                    // TODO: Ask if this navigation is correct
+
                     upcomingCard.setOnClickListener {
                         navigate(R.id.presentGigPageFragment, Bundle().apply {
                             this.putString(GigPageFragment.INTENT_EXTRA_GIG_ID, gig.gigId)
@@ -290,10 +290,10 @@ class HourViewFragment: RosterBaseFragment() {
                     )
                     currentCard.id = View.generateViewId()
                     currentCard.tag = gig.tag
-                    // TODO: Ask if this navigation is correct
+
                     currentCard.setOnClickListener {
-                        navigate(R.id.presentGigPageFragment, Bundle().apply {
-                            this.putString(GigPageFragment.INTENT_EXTRA_GIG_ID, gig.gigId)
+                        navigate(R.id.gigAttendancePageFragment, Bundle().apply {
+                            this.putString(GigAttendancePageFragment.INTENT_EXTRA_GIG_ID, gig.gigId)
                         })
                     }
 
