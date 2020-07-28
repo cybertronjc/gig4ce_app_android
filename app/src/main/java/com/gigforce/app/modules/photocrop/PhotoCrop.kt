@@ -280,7 +280,7 @@ class PhotoCrop : AppCompatActivity() {
         val bytes = ByteArrayOutputStream()
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
         val path =
-            MediaStore.Images.Media.insertImage(context.contentResolver, bitmap, "Title", null)
+            MediaStore.Images.Media.insertImage(context.contentResolver, bitmap, System.currentTimeMillis().toString(), null)
         return Uri.parse(path.toString())
     }
 

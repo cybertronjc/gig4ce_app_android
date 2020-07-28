@@ -41,7 +41,7 @@ class AddPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetActio
         const val INTENT_EXTRA_PAN = "pan"
     }
 
-
+    private var panCardDataModel: PanCardDataModel? = null
     private val viewModel: GigVerificationViewModel by viewModels()
     private var clickedImagePath: Uri? = null
     private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance()
@@ -87,13 +87,28 @@ class AddPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetActio
                 showPanImageLayout()
                 showImageInfoLayout()
 
+                if (panCardDataModel?.userHasPanCard != null &&
+                    panCardDataModel?.userHasPanCard!! &&
+                    clickedImagePath == null
+                ) {
+                    panSubmitSliderBtn.gone()
+                    panDataCorrectCB.gone()
+                }
+
                 if (clickedImagePath != null && panDataCorrectCB.isChecked) {
                     enableSubmitButton()
                 } else
                     disableSubmitButton()
-            } else if (panDataCorrectCB.isChecked) {
+            } else if (checkedId == R.id.panNoRB) {
                 hidePanImageAndInfoLayout()
-                enableSubmitButton()
+
+                panDataCorrectCB.visible()
+                panSubmitSliderBtn.visible()
+
+                if (panDataCorrectCB.isChecked)
+                    enableSubmitButton()
+                else
+                    disableSubmitButton()
             } else {
                 hidePanImageAndInfoLayout()
             }
@@ -205,7 +220,7 @@ class AddPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetActio
                 navigate(R.id.addBankDetailsInfoFragment)
             } else if (!it.selfieVideoUploaded) {
                 navigate(R.id.addSelfieVideoFragment)
-            } else  {
+            } else {
                 showDetailsUploaded()
             }
         }
@@ -236,7 +251,7 @@ class AddPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetActio
         return true
     }
 
-    private var panCardDataModel: PanCardDataModel? = null
+
     private fun updatePanInfo(it: GigerVerificationStatus) {
         if (it.panCardDetailsUploaded && it.panCardDetails != null) {
             this.panCardDataModel = it.panCardDetails
@@ -297,7 +312,10 @@ class AddPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetActio
                     data?.getParcelableExtra(PhotoCrop.INTENT_EXTRA_RESULTING_FILE_URI)
                 showPanInfoCard(clickedImagePath!!)
 
-                if (clickedImagePath != null  && panSubmitSliderBtn.isGone) {
+                if (panDataCorrectCB.isChecked)
+                    enableSubmitButton()
+
+                if (clickedImagePath != null && panSubmitSliderBtn.isGone) {
                     panSubmitSliderBtn.visible()
                     panDataCorrectCB.visible()
                 }
