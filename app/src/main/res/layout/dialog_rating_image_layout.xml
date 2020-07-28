@@ -9,9 +9,9 @@
 
     <ImageView
         android:id="@+id/clip_image_view"
-        android:layout_width="16dp"
-        android:layout_height="16dp"
-        android:layout_marginLeft="25dp"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginLeft="10dp"
         android:layout_marginRight="5dp"
         android:layout_marginBottom="5dp"
         android:tint="@color/black"
@@ -29,11 +29,12 @@
 
     <ImageView
         android:id="@+id/ic_delete_btn"
-        android:layout_width="16dp"
-        android:layout_height="16dp"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
         android:clickable="true"
         android:focusable="true"
-        android:layout_marginRight="25dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:padding="2dp"
         android:src="@drawable/ic_delete"
          />
