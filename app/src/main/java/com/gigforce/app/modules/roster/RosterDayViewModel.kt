@@ -52,6 +52,11 @@ class RosterDayViewModel: ViewModel() {
 
     lateinit var topBar: RosterTopBar
 
+    var upcomingGigs = ArrayList<Gig>()
+    var completedGigs = ArrayList<Gig>()
+    var currentGigs = ArrayList<Gig>()
+    var fulldayGigs = ArrayList<Gig>()
+
     var allGigs: HashMap<String, MutableLiveData<ArrayList<Gig>>> = hashMapOf()
 
     fun getGigs(datetime: Date) {
@@ -63,22 +68,12 @@ class RosterDayViewModel: ViewModel() {
         c.time = datetime
         c.add(Calendar.DAY_OF_MONTH, 1)
 
-        // if date already has snapshot listener, return
-//        if (getTagFromDate(datetime) in allGigs.keys)
-//            return
-//        else
-//            allGigs.put(
-//                getTagFromDate(datetime),
-//                MutableLiveData(ArrayList<Gig>()))
-
         db.collection(collection)
             .whereEqualTo("gigerId", uid)
             .whereGreaterThanOrEqualTo("startDateTime", datetime)
             .whereLessThanOrEqualTo("startDateTime", c.time )
             .addSnapshotListener { querySnapshot, firebaseFirestoreException ->
                 val tag = getTagFromDate(datetime)
-                val gigsToAdd = ArrayList<Gig>()
-                val gigsToRemove = ArrayList<Gig>()
                 querySnapshot?.documentChanges?.forEach {
                     when (it.type) {
                         DocumentChange.Type.ADDED -> {
@@ -119,34 +114,37 @@ class RosterDayViewModel: ViewModel() {
             return
         }
 
-        setDayAvailability(date, viewModelCustomPreference)
-        setHourAvailability(parentView, viewModelCustomPreference)
+        var dayAvailable = setDayAvailability(date, viewModelCustomPreference)
+        setHourAvailability(date, dayAvailable, parentView, viewModelCustomPreference)
     }
 
-    private fun setDayAvailability(
-        date: LocalDateTime, viewModelCustomPreference: CustomPreferencesViewModel) {
+    private fun setDayAvailability (
+        date: LocalDateTime, viewModelCustomPreference: CustomPreferencesViewModel): Boolean {
+        var dayAvailable = false
         // check from preferences
         userPref.value ?.let {
             val weekDays = it.selecteddays.map { item -> item.toUpperCase(Locale.ROOT) }
             val weekEnds = it.selectedweekends.map { item -> item.toUpperCase(Locale.ROOT) }
 
             // set availability if day present in preferences
-            isDayAvailable.postValue(
-                weekDays.contains(date.dayOfWeek.toString()) ||
-                        weekEnds.contains(date.dayOfWeek.toString()))
+            dayAvailable =  weekDays.contains(date.dayOfWeek.toString()) ||
+                    weekEnds.contains(date.dayOfWeek.toString())
         }
 
         // check from custom preferences
         for (unavailable in viewModelCustomPreference.customPreferencesDataModel.unavailable) {
             if (date.toDate == unavailable.date)
-                isDayAvailable.postValue(!unavailable.dayUnavailable)
+                dayAvailable = !unavailable.dayUnavailable
         }
+
+        isDayAvailable.postValue(dayAvailable)
+        return dayAvailable
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun setHourAvailability(
-        parentView: ConstraintLayout, viewModelCustomPreference: CustomPreferencesViewModel) {
-        val activeDateTime = currentDateTime.value!!
+        activeDateTime: LocalDateTime, dayAvailable: Boolean, parentView: ConstraintLayout,
+            viewModelCustomPreference: CustomPreferencesViewModel) {
         val actualDateTime = LocalDateTime.now()
         if (isSameDate(activeDateTime, actualDateTime)) {
             todayHourActive(parentView, actualDateTime)
@@ -159,6 +157,10 @@ class RosterDayViewModel: ViewModel() {
         }
 
         switchHourAvailability(activeDateTime, parentView, viewModelCustomPreference)
+
+        if (!dayAvailable) {
+            allHourInactive(parentView)
+        }
     }
 
      private fun switchHourAvailability(
@@ -174,8 +176,8 @@ class RosterDayViewModel: ViewModel() {
     }
 
     fun switchDayAvailability(
-        context: Context, parentView: ConstraintLayout, upcomingGigs: ArrayList<Gig>,
-        currentDayAvailability: Boolean, viewModelCustomPreference: CustomPreferencesViewModel) {
+        context: Context, parentView: ConstraintLayout, currentDayAvailability: Boolean,
+        viewModelCustomPreference: CustomPreferencesViewModel) {
         try {
             viewModelCustomPreference.customPreferencesDataModel
         } catch (e:UninitializedPropertyAccessException) {
@@ -386,6 +388,9 @@ class RosterDayViewModel: ViewModel() {
                 topBar.fullDayGigCard = widget
             } else if (it.isPresentGig()) {
                 // TODO: Implement current day gig card
+                val widget = CurrentGigCard(context)
+                widget.isFullDay = true
+                topBar.fullDayGigCard = widget
             } else if (it.isUpcomingGig()) {
                 val widget = UpcomingGigCard(context)
                 widget.isFullDay = true

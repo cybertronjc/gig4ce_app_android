@@ -67,7 +67,7 @@ class CompletedGigCard(
 
     fun setGigAmount(value: Int) {
         amount = value
-        rupee_value.text = value.toString()
+        rupee_value.text = "Rs. $value"
     }
 
     fun setTimings() {

@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
+import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -99,6 +100,7 @@ class RosterDayFragment: RosterBaseFragment() {
         attachDayAvailabilityObserver()
         attachCurrentDateTimeChangeObserver()
         attachTopBarMonthChangeListener()
+        attachTopBarMenu()
 
         rosterViewModel.currentDateTime.observe(viewLifecycleOwner, Observer {
 //            dayTag = rosterViewModel.getTagFromDate(it.toDate)
@@ -134,6 +136,28 @@ class RosterDayFragment: RosterBaseFragment() {
         )
     }
 
+    private fun attachTopBarMenu() {
+        top_bar.more_bottom.setOnClickListener {
+            val popupMenu: PopupMenu = PopupMenu(requireContext(), more_bottom)
+            popupMenu.menuInflater.inflate(R.menu.roster_menu, popupMenu.menu)
+            popupMenu.setOnMenuItemClickListener {
+                when(it.itemId) {
+                    R.id.location_card -> {
+
+                    }
+                    R.id.settings -> {
+
+                    }
+                    R.id.help -> {
+
+                    }
+                }
+                true
+            }
+            popupMenu.show()
+        }
+    }
+
     private fun getDayTimesChild(): ConstraintLayout? {
         return hourview_viewpager.getChildAt(0).findViewWithTag("day_times")
     }
@@ -160,9 +184,8 @@ class RosterDayFragment: RosterBaseFragment() {
         hourview_viewpager.registerOnPageChangeCallback(hourviewPageChangeCallBack)
 
         top_bar.available_toggle.setOnClickListener {
-            Toast.makeText(requireContext(), "CLICKED ON TOGGLE", Toast.LENGTH_SHORT).show()
             rosterViewModel.switchDayAvailability(
-                requireContext(), getDayTimesChild()!!, upcomingGigs,
+                requireContext(), getDayTimesChild()!!,
                 rosterViewModel.isDayAvailable.value!!, viewModelCustomPreference)
         }
     }
@@ -232,7 +255,7 @@ class RosterDayFragment: RosterBaseFragment() {
             top_bar.isCurrentDay = isSameDate(it, actualDateTime)
             top_bar.isFutureDate = isMoreDate(it, actualDateTime)
 
-            top_bar.toggleActive = !isLessDate(it, actualDateTime)
+            top_bar.toggleInactive = isLessDate(it, actualDateTime)
 
             //dayTag = "${activeDateTime.year}${activeDateTime.monthValue}${activeDateTime.dayOfMonth}"
             dayTag = String.format("%4d", activeDateTime.year) +
@@ -268,6 +291,7 @@ class RosterDayFragment: RosterBaseFragment() {
 
         //rosterViewModel.bsBehavior.halfExpandedRatio = 0.65F
         rosterViewModel.bsBehavior.isHideable = true
+        rosterViewModel.bsBehavior.state = ExtendedBottomSheetBehavior.STATE_HIDDEN
 
         rosterViewModel.bsBehavior.setBottomSheetCallback(object: ExtendedBottomSheetBehavior.BottomSheetCallback() {
             override fun onSlide(bottomSheet: View, slideOffset: Float) {

@@ -173,15 +173,13 @@ class HourViewFragment: RosterBaseFragment() {
                 addGigCards(upcomingGigs, "upcoming")
                 addGigCards(completedGigs, "completed")
                 addGigCards(currentGigs, "current")
+
+                rosterViewModel.upcomingGigs = upcomingGigs
+                rosterViewModel.currentGigs = currentGigs
+                rosterViewModel.completedGigs = completedGigs
+                rosterViewModel.setFullDayGigs(requireContext())
             }
         })
-
-//        rosterViewModel.currentDateTime.observe(viewLifecycleOwner, Observer { activeDateTime ->
-//            val tag = rosterViewModel.getTagFromDate(activeDateTime.toDate)
-//
-//            rosterViewModel.allGigs[tag]!!.value?.let { dayGigs ->
-//            }
-//        })
 
     }
 
@@ -281,6 +279,27 @@ class HourViewFragment: RosterBaseFragment() {
             }
             "current" -> {
                 // add current gigs
+                gigs.forEach { gig ->
+                    val currentCard = CurrentGigCard(
+                        requireContext(),
+                        startHour = gig.startHour,
+                        startMinute = gig.startMinute,
+                        duration = gig.duration,
+                        title = gig.title,
+                        cardHeight = (itemHeight * gig.duration).toInt().px
+                    )
+                    currentCard.id = View.generateViewId()
+                    currentCard.tag = gig.tag
+                    // TODO: Ask if this navigation is correct
+                    currentCard.setOnClickListener {
+                        navigate(R.id.presentGigPageFragment, Bundle().apply {
+                            this.putString(GigPageFragment.INTENT_EXTRA_GIG_ID, gig.gigId)
+                        })
+                    }
+
+                    day_times.addView(currentCard)
+                    setGigCardInView(currentCard, "current")
+                }
             }
         }
     }
@@ -475,7 +494,7 @@ class HourViewFragment: RosterBaseFragment() {
 
         rosterViewModel.UnavailableBS.toggle_button.setOnClickListener {
             rosterViewModel.switchDayAvailability(
-                requireContext(), day_times, ArrayList(),
+                requireContext(), day_times,
                 rosterViewModel.isDayAvailable.value!!, viewModelCustomPreference)
         }
     }
