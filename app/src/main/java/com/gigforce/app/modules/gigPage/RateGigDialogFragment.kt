@@ -7,8 +7,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
@@ -16,7 +16,6 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
-import com.bumptech.glide.Glide
 import com.gigforce.app.R
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.invisible
@@ -97,10 +96,11 @@ class RateGigDialogFragment : DialogFragment() {
                     progressBar.visible()
                 }
                 Lse.Success -> {
-                    Toast.makeText(requireContext(), "Feedback Submitted", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Feedback Submitted", Toast.LENGTH_SHORT)
+                        .show()
                     dismiss()
                 }
-                is Lse.Error ->{
+                is Lse.Error -> {
                     MaterialAlertDialogBuilder(requireContext())
                         .setTitle("Alert")
                         .setMessage("Unable to Submit Gig Feedback, ${it.error}")
@@ -212,8 +212,11 @@ class RateGigDialogFragment : DialogFragment() {
 
         inflatedImageView.tag = imageFile.toString()
 
-        val imageView = inflatedImageView.findViewById<ImageView>(R.id.select_image_imageview)
-        Glide.with(this).load(imageFile).placeholder(getCircularProgressDrawable()).into(imageView)
+        val imageNameTV = inflatedImageView.findViewById<TextView>(R.id.imageNameTV)
+        imageNameTV.text = if (imageFile.lastPathSegment!!.contains("/")) {
+            imageFile.lastPathSegment!!.substringAfterLast("/")
+        } else
+            imageFile.lastPathSegment!!
     }
 
     private fun getCircularProgressDrawable(): CircularProgressDrawable {
