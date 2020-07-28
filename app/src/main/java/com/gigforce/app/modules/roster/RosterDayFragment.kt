@@ -10,6 +10,7 @@ import android.widget.AdapterView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
@@ -82,10 +83,15 @@ class RosterDayFragment: RosterBaseFragment() {
     private fun initialize() {
         // initialize view model properties
         rosterViewModel.topBar = top_bar
-        rosterViewModel.currentDateTime.postValue(activeDateTime)
+        rosterViewModel.currentDateTime.value = activeDateTime
 
         // set custom preference variable
         setCustomPreference()
+//
+//        dayTag = rosterViewModel.getTagFromDate(activeDateTime.toDate)
+//        if (dayTag !in rosterViewModel.allGigs.keys)
+//            rosterViewModel.allGigs.put(dayTag, MutableLiveData(ArrayList<Gig>()))
+//        rosterViewModel.getGigs(activeDateTime.toDate)
 
         //observer()
         initializeBottomSheet()
@@ -95,20 +101,26 @@ class RosterDayFragment: RosterBaseFragment() {
         attachTopBarMonthChangeListener()
 
         rosterViewModel.currentDateTime.observe(viewLifecycleOwner, Observer {
+//            dayTag = rosterViewModel.getTagFromDate(it.toDate)
+//            // get gigs for the day
+//            if (dayTag !in rosterViewModel.allGigs)
+//                rosterViewModel.allGigs.put(dayTag, MutableLiveData(ArrayList<Gig>()))
+//            rosterViewModel.getGigs(it.toDate)
+
             getDayTimesChild()?.let {
                     rosterViewModel.resetDayTimeAvailability(
                         viewModelCustomPreference,
                         getDayTimesChild()!!
                     )
             }
-            rosterViewModel.allGigs.value?.let{
-                rosterViewModel.setFullDayGigs(requireContext())
-            }
+//            rosterViewModel.allGigs[dayTag].let{
+//                rosterViewModel.setFullDayGigs(requireContext())
+//            }
         })
 
-        rosterViewModel.allGigs.observe(viewLifecycleOwner, Observer {
-            rosterViewModel.setFullDayGigs(requireContext())
-        })
+//        rosterViewModel.allGigs[dayTag]!!.observe(viewLifecycleOwner, Observer {
+//            rosterViewModel.setFullDayGigs(requireContext())
+//        })
 
         viewModelCustomPreference.customPreferencesLiveDataModel.observe(
             viewLifecycleOwner, Observer {
@@ -227,20 +239,20 @@ class RosterDayFragment: RosterBaseFragment() {
                     String.format("%02d", activeDateTime.monthValue) +
                     String.format("%02d", activeDateTime.dayOfMonth)
 
-            rosterViewModel.allGigs.value ?.let {
-                upcomingGigs = rosterViewModel.getFilteredGigs(
-                    activeDateTime.toDate, "upcoming")
-                completedGigs = rosterViewModel.getFilteredGigs(
-                    activeDateTime.toDate, "completed")
-            }
+//            rosterViewModel.allGigs[dayTag]?.let {
+//                upcomingGigs = rosterViewModel.getFilteredGigs(
+//                    activeDateTime.toDate, "upcoming")
+//                completedGigs = rosterViewModel.getFilteredGigs(
+//                    activeDateTime.toDate, "completed")
+//            }
 
         })
-        rosterViewModel.allGigs.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
-            upcomingGigs = rosterViewModel.getFilteredGigs(
-                activeDateTime.toDate, "upcoming")
-            completedGigs = rosterViewModel.getFilteredGigs(
-                activeDateTime.toDate, "completed")
-        })
+//        rosterViewModel.allGigs[dayTag]!!.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+//            upcomingGigs = rosterViewModel.getFilteredGigs(
+//                activeDateTime.toDate, "upcoming")
+//            completedGigs = rosterViewModel.getFilteredGigs(
+//                activeDateTime.toDate, "completed")
+//        })
     }
 
     private fun attachHourViewAdapter() {

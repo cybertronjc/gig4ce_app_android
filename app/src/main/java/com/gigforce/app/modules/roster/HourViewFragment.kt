@@ -11,6 +11,7 @@ import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.gigforce.app.R
@@ -29,6 +30,7 @@ import kotlinx.android.synthetic.main.roster_day_hour_view.*
 import kotlinx.android.synthetic.main.unavailable_time_adjustment_bottom_sheet.view.*
 import kotlinx.android.synthetic.main.unavailable_time_adjustment_bottom_sheet.view.start_day_time
 import kotlinx.android.synthetic.main.upcoming_gig_card.view.*
+import kotlinx.android.synthetic.main.vertical_calendar_item.*
 import java.time.LocalDateTime
 import java.util.*
 import kotlin.collections.ArrayList
@@ -86,9 +88,17 @@ class HourViewFragment: RosterBaseFragment() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         activeDateTime = LocalDateTime.parse(arguments?.getSerializable("activeDate").toString())
+        dayTag = rosterViewModel.getTagFromDate(activeDateTime.toDate)
+        if (dayTag !in rosterViewModel.allGigs.keys) {
+            rosterViewModel.allGigs.put(
+                dayTag, MutableLiveData(ArrayList())
+            )
+            rosterViewModel.getGigs(activeDateTime.toDate)
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -124,7 +134,7 @@ class HourViewFragment: RosterBaseFragment() {
         // initialize view model members
         rosterViewModel.bsBehavior.state = ExtendedBottomSheetBehavior.STATE_HIDDEN
 
-        rosterViewModel.getGigs(activeDateTime.toDate)
+        //rosterViewModel.getGigs(activeDateTime.toDate)
 
         // fetch user custom preference model
         setCustomPreference()
@@ -136,50 +146,42 @@ class HourViewFragment: RosterBaseFragment() {
             scheduleCurrentTimerUpdate()
         }
 
-        // DEBUG
-        rosterViewModel.currentDateTime.observe(viewLifecycleOwner, Observer { activeDateTime ->
-            val tag = rosterViewModel.getTagFromDate(activeDateTime.toDate)
+        rosterViewModel.allGigs[dayTag]!!.observe(viewLifecycleOwner, Observer {dayGigs ->
 
-            val gigsMap = rosterViewModel.allGigs.value!!
+            Log.d("HourViewFragment", "Day Gigs for " + activeDateTime.toString())
+            Log.d("HourViewFragment", dayGigs.toString())
 
-            Log.d("HourViewFragment", "\nNew date " + activeDateTime.toString())
-            if (tag !in gigsMap.keys)
-                Log.d("HourViewFragment", "No entry found for day (this should not happen)")
-            else
-                Log.d("HourViewFragment", gigsMap[tag].toString())
-        })
+            if (
+                (upcomingGigs.size + completedGigs.size +
+                        currentGigs.size + fullDayGigs.size) != dayGigs.size) {
+                // at least one gig is updated
+                // remove currently added gig cards and add the new ones
+                removeGigs(upcomingGigs)
+                removeGigs(completedGigs)
+                removeGigs(currentGigs)
 
-        rosterViewModel.currentDateTime.observe(viewLifecycleOwner, Observer { activeDateTime ->
-            val tag = rosterViewModel.getTagFromDate(activeDateTime.toDate)
+                val date = activeDateTime.toDate
+                upcomingGigs = rosterViewModel.getFilteredGigs(
+                    date, "upcoming")
+                completedGigs = rosterViewModel.getFilteredGigs(
+                    date, "completed")
+                currentGigs = rosterViewModel.getFilteredGigs(
+                    date, "current")
+                fullDayGigs = rosterViewModel.getFilteredGigs(
+                    date, "fullday")
 
-            val gigsMap = rosterViewModel.allGigs.value!!
-
-            gigsMap[tag]?.let { dayGigs ->
-                if (
-                    (upcomingGigs.size + completedGigs.size +
-                            currentGigs.size + fullDayGigs.size) != dayGigs.size) {
-                    // at least one gig is updated
-                    // remove currently added gig cards and add the new ones
-                    removeGigs(upcomingGigs)
-                    removeGigs(completedGigs)
-                    removeGigs(currentGigs)
-
-                    val date = activeDateTime.toDate
-                    upcomingGigs = rosterViewModel.getFilteredGigs(
-                        date, "upcoming")
-                    completedGigs = rosterViewModel.getFilteredGigs(
-                        date, "completed")
-                    currentGigs = rosterViewModel.getFilteredGigs(
-                        date, "current")
-                    fullDayGigs = rosterViewModel.getFilteredGigs(
-                        date, "fullday")
-
-                    addGigCards(upcomingGigs, "upcoming")
-                    addGigCards(completedGigs, "completed")
-                    addGigCards(currentGigs, "current")
-                }
+                addGigCards(upcomingGigs, "upcoming")
+                addGigCards(completedGigs, "completed")
+                addGigCards(currentGigs, "current")
             }
         })
+
+//        rosterViewModel.currentDateTime.observe(viewLifecycleOwner, Observer { activeDateTime ->
+//            val tag = rosterViewModel.getTagFromDate(activeDateTime.toDate)
+//
+//            rosterViewModel.allGigs[tag]!!.value?.let { dayGigs ->
+//            }
+//        })
 
     }
 
@@ -262,13 +264,16 @@ class HourViewFragment: RosterBaseFragment() {
                         rating = gig.gigRating,
                         gigSuccess = gig.isGigCompleted,
                         paymentSuccess = gig.isPaymentDone,
-                        cardHeight = (itemHeight * gig.duration).toInt().px)
+                        cardHeight = (itemHeight * gig.duration).toInt().px
+                    )
                     completedCard.id = View.generateViewId()
                     completedCard.tag = gig.tag
                     // TODO ask if navigation is correct
-                    navigate(R.id.presentGigPageFragment, Bundle().apply {
-                        this.putString(GigPageFragment.INTENT_EXTRA_GIG_ID, gig.gigId)
-                    })
+                    completedCard.setOnClickListener {
+                        navigate(R.id.presentGigPageFragment, Bundle().apply {
+                            this.putString(GigPageFragment.INTENT_EXTRA_GIG_ID, gig.gigId)
+                        })
+                    }
 
                     day_times.addView(completedCard)
                     setGigCardInView(completedCard, "completed")

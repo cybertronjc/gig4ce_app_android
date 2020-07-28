@@ -52,7 +52,7 @@ class RosterDayViewModel: ViewModel() {
 
     lateinit var topBar: RosterTopBar
 
-    var allGigs: MutableLiveData<HashMap<String, ArrayList<Gig>>> = MutableLiveData(hashMapOf())
+    var allGigs: HashMap<String, MutableLiveData<ArrayList<Gig>>> = hashMapOf()
 
     fun getGigs(datetime: Date) {
         val db = FirebaseFirestore.getInstance()
@@ -64,29 +64,32 @@ class RosterDayViewModel: ViewModel() {
         c.add(Calendar.DAY_OF_MONTH, 1)
 
         // if date already has snapshot listener, return
-        if (getTagFromDate(datetime) in allGigs.value!!.keys)
-            return
-        else
-            allGigs.value!!.put(
-                getTagFromDate(datetime),
-                ArrayList<Gig>())
+//        if (getTagFromDate(datetime) in allGigs.keys)
+//            return
+//        else
+//            allGigs.put(
+//                getTagFromDate(datetime),
+//                MutableLiveData(ArrayList<Gig>()))
 
         db.collection(collection)
             .whereEqualTo("gigerId", uid)
             .whereGreaterThanOrEqualTo("startDateTime", datetime)
             .whereLessThanOrEqualTo("startDateTime", c.time )
             .addSnapshotListener { querySnapshot, firebaseFirestoreException ->
+                val tag = getTagFromDate(datetime)
+                val gigsToAdd = ArrayList<Gig>()
+                val gigsToRemove = ArrayList<Gig>()
                 querySnapshot?.documentChanges?.forEach {
                     when (it.type) {
                         DocumentChange.Type.ADDED -> {
-                            var gig = it.document.toObject(Gig::class.java)
-                            allGigs.value!![getTagFromDate(gig.startDateTime!!.toDate())]!!.add(gig)
-                            allGigs.value = allGigs.value
+                            val gig = it.document.toObject(Gig::class.java)
+                            allGigs[tag]!!.value!!.add(gig)
+                            allGigs[tag]!!.value = allGigs[tag]!!.value
                         }
                         DocumentChange.Type.REMOVED -> {
-                            var gig = it.document.toObject(Gig::class.java)
-                            allGigs.value!![getTagFromDate(gig.startDateTime!!.toDate())]!!.remove(gig)
-                            allGigs.value = allGigs.value
+                            val gig = it.document.toObject(Gig::class.java)
+                            allGigs[tag]!!.value!!.remove(gig)
+                            allGigs[tag]!!.value = allGigs[tag]!!.value
                         }
                         DocumentChange.Type.MODIFIED -> {
                             // TODO: See if needed to implement
@@ -353,8 +356,8 @@ class RosterDayViewModel: ViewModel() {
         val tag = getTagFromDate(date)
         val result = ArrayList<Gig>()
 
-        if (tag in allGigs.value!!.keys) {
-            allGigs.value!![tag]?.forEach {
+        if (tag in allGigs.keys) {
+            allGigs[tag]!!.value?.forEach {
                 if (it.isUpcomingGig() && filter == "upcoming")
                     result.add(it)
                 if (it.isPresentGig() && filter == "current")
