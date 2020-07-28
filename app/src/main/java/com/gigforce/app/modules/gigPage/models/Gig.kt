@@ -28,6 +28,7 @@ data class Gig(
     var duration: Float = 0.0F,
     var gigRating: Float = 0.0F,
     var gigUserFeedback: String? = null,
+    var gigUserFeedbackAttachments: List<String> = emptyList(),
     var locationPictures: List<String> = emptyList(),
     var ratingUserReceived: Float = -1.0F,
     var gigType: String? = null,
