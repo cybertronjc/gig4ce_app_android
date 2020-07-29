@@ -19,10 +19,7 @@ import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
-import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
-import com.gigforce.app.modules.gigerVerfication.GigerVerificationStatus
-import com.gigforce.app.modules.gigerVerfication.ImageSource
-import com.gigforce.app.modules.gigerVerfication.SelectImageSourceBottomSheetActionListener
+import com.gigforce.app.modules.gigerVerfication.*
 import com.gigforce.app.modules.photocrop.PhotoCrop
 import com.gigforce.app.utils.Lse
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -65,6 +62,15 @@ class AddPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetActio
 
         toolbar.setNavigationOnClickListener {
             findNavController().popBackStack(R.id.gigerVerificationFragment, false)
+        }
+
+        whyWeNeedThisTV.setOnClickListener {
+
+            WhyWeNeedThisBottomSheet.launch(
+                childFragmentManager = childFragmentManager,
+                title = "Why we need this?",
+                content = "A PAN card is mandatory for profile verification. It helps verify your name and date of birth and also helps with payments to your wallet."
+            )
         }
 
         panImageHolder.uploadDocumentCardView.setOnClickListener {

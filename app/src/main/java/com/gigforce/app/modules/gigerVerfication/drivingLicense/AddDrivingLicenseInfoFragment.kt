@@ -21,6 +21,7 @@ import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
 import com.gigforce.app.modules.gigerVerfication.GigerVerificationStatus
+import com.gigforce.app.modules.gigerVerfication.WhyWeNeedThisBottomSheet
 import com.gigforce.app.modules.gigerVerfication.panCard.AddPanCardInfoFragment
 import com.gigforce.app.modules.photocrop.PhotoCrop
 import com.gigforce.app.utils.Lse
@@ -29,6 +30,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.ncorti.slidetoact.SlideToActView
 import kotlinx.android.synthetic.main.fragment_add_driving_license_info.*
 import kotlinx.android.synthetic.main.fragment_add_driving_license_info_main.*
+import kotlinx.android.synthetic.main.fragment_add_driving_license_info_main.whyWeNeedThisTV
 import kotlinx.android.synthetic.main.fragment_verification_image_holder.view.*
 
 enum class DrivingLicenseSides {
@@ -82,6 +84,15 @@ class AddDrivingLicenseInfoFragment : BaseFragment() {
 
         toolbar.setNavigationOnClickListener {
             findNavController().popBackStack(R.id.gigerVerificationFragment, false)
+        }
+
+        whyWeNeedThisTV.setOnClickListener {
+
+            WhyWeNeedThisBottomSheet.launch(
+                childFragmentManager = childFragmentManager,
+                title = "Why we need this?",
+                content = "Uploading either Driver’s license or Aadhar card is mandatory for profile verification. A Driver’s license helps verify your name, date of birth, address, and other details."
+            )
         }
 
         dlAvailaibilityOptionRG.setOnCheckedChangeListener { _, checkedId ->

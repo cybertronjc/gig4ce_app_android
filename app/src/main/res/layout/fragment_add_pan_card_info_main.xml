@@ -13,7 +13,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:animateLayoutChanges="true"
-            android:paddingTop="22dp">
+            >
 
             <TextView
                 android:id="@+id/panCardLabel"
@@ -25,6 +25,7 @@
                 android:text="@string/pan_card"
                 android:textColor="@color/black"
                 android:textSize="16sp"
+                android:layout_marginTop="22dp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -33,20 +34,25 @@
                 android:layout_width="14dp"
                 android:layout_height="14dp"
                 android:layout_marginEnd="13dp"
+                android:layout_marginTop="22dp"
                 android:src="@drawable/ic_time"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
 
             <TextView
+                android:id="@+id/whyWeNeedThisTV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="4dp"
+                android:layout_marginEnd="4dp"
+                android:fontFamily="@font/lato"
                 android:letterSpacing="-0.01"
+                android:paddingTop="10dp"
+                android:layout_marginTop="12dp"
+                android:paddingBottom="10dp"
                 android:text="@string/why_do_we_need_this"
                 android:textColor="@color/battle_ship_grey"
                 android:textSize="12sp"
-                android:fontFamily="@font/lato"
                 app:layout_constraintEnd_toStartOf="@+id/helpIconIV"
                 app:layout_constraintTop_toTopOf="parent" />
 

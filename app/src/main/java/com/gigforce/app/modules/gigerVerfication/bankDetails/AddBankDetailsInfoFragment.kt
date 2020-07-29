@@ -20,6 +20,7 @@ import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
 import com.gigforce.app.modules.gigerVerfication.GigerVerificationStatus
+import com.gigforce.app.modules.gigerVerfication.WhyWeNeedThisBottomSheet
 import com.gigforce.app.modules.gigerVerfication.panCard.PanCardDataModel
 import com.gigforce.app.modules.photocrop.PhotoCrop
 import com.gigforce.app.utils.Lse
@@ -28,7 +29,6 @@ import com.google.firebase.storage.FirebaseStorage
 import com.ncorti.slidetoact.SlideToActView
 import kotlinx.android.synthetic.main.fragment_add_bank_details_info.*
 import kotlinx.android.synthetic.main.fragment_add_bank_details_info_main.*
-import kotlinx.android.synthetic.main.fragment_add_pan_card_info_main.*
 import kotlinx.android.synthetic.main.fragment_verification_image_holder.view.*
 
 class AddBankDetailsInfoFragment : BaseFragment() {
@@ -67,6 +67,15 @@ class AddBankDetailsInfoFragment : BaseFragment() {
 
         toolbar.setNavigationOnClickListener {
             findNavController().popBackStack(R.id.gigerVerificationFragment, false)
+        }
+
+        whyWeNeedThisTV.setOnClickListener {
+
+            WhyWeNeedThisBottomSheet.launch(
+                childFragmentManager = childFragmentManager,
+                title = "Why we need this?",
+                content = "The bank details are mandatory to approve and send payments from gigs to your account. It also helps verify your name, address, date of birth, and other details."
+            )
         }
 
         passbookSubmitSliderBtn.isEnabled = false
