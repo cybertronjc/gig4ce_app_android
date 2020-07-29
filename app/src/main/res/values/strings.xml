@@ -315,7 +315,7 @@
     <string name="upload_aadhar_card_front_side">Upload Aadhar Card(Front Side)</string>
     <string name="upload_your_aadhar_card">Please upload your Aadhar Card for\nyour verification</string>
     <string name="upload_aadhar_card_back_side">Upload Aadhar Card(Back Side)</string>
-    <string name="reupload">Reupload</string>
+    <string name="reupload"><u>Reupload</u></string>
     <string name="save_all_caps">SAVE</string>
     <string name="upload_pan_card">Upload Pan Card</string>
     <string name="please_confirm_the_following_information">Please Confirm the following information</string>
