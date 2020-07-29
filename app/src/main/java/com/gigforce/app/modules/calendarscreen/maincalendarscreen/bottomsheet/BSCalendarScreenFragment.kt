@@ -568,6 +568,9 @@ class BSCalendarScreenFragment : BaseFragment() {
 
                 })!!
         recyclerGenericAdapter.setList(datalist)
+        recyclerGenericAdapter.setClickListener { view, position, item ->
+            navigate(R.id.assessment_fragment)
+        }
         recyclerGenericAdapter.setLayout(R.layout.assessment_bs_item)
         assessment_rv.layoutManager = LinearLayoutManager(
             activity?.applicationContext,

@@ -15,12 +15,12 @@ android {
             keyAlias 'key0'
             keyPassword 'gigforce'
         }
-//        production {
-//            storeFile file('/Users/apple/Downloads/gigforceprodapp.jks')
-//            storePassword 'gigforce'
-//            keyAlias 'gigforce'
-//            keyPassword 'gigforce'
-//        }
+        production {
+            storeFile file('/Users/apple/Downloads/gigforceprodapp.jks')
+            storePassword 'gigforce'
+            keyAlias 'gigforce'
+            keyPassword 'gigforce'
+        }
     }
 
     compileSdkVersion 29
@@ -30,8 +30,8 @@ android {
         minSdkVersion 23
         targetSdkVersion 29
         versionCode 37
-        versionName "1.14.1"
-
+        versionName "1.13.4"
+        multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
