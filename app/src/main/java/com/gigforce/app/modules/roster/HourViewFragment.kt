@@ -11,8 +11,11 @@ import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.gigforce.app.R
+import com.gigforce.app.core.toDate
 import com.gigforce.app.modules.custom_gig_preferences.CustomPreferencesViewModel
 import com.gigforce.app.modules.custom_gig_preferences.ParamCustPreferViewModel
 import com.gigforce.app.modules.gigPage.GigAttendancePageFragment
@@ -27,9 +30,11 @@ import kotlinx.android.synthetic.main.roster_day_hour_view.*
 import kotlinx.android.synthetic.main.unavailable_time_adjustment_bottom_sheet.view.*
 import kotlinx.android.synthetic.main.unavailable_time_adjustment_bottom_sheet.view.start_day_time
 import kotlinx.android.synthetic.main.upcoming_gig_card.view.*
+import kotlinx.android.synthetic.main.vertical_calendar_item.*
 import java.time.LocalDateTime
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 class HourViewFragment: RosterBaseFragment() {
 
@@ -68,6 +73,8 @@ class HourViewFragment: RosterBaseFragment() {
 
     var upcomingGigs = ArrayList<Gig>()
     var completedGigs = ArrayList<Gig>()
+    var currentGigs = ArrayList<Gig>()
+    var fullDayGigs = ArrayList<Gig>()
 
     companion object {
         @RequiresApi(Build.VERSION_CODES.O)
@@ -82,15 +89,29 @@ class HourViewFragment: RosterBaseFragment() {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        activeDateTime = LocalDateTime.parse(arguments?.getSerializable("activeDate").toString())
+        dayTag = rosterViewModel.getTagFromDate(activeDateTime.toDate)
+        if (dayTag !in rosterViewModel.allGigs.keys) {
+            rosterViewModel.allGigs.put(
+                dayTag, MutableLiveData(ArrayList())
+            )
+            rosterViewModel.getGigs(activeDateTime.toDate)
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        viewModelCustomPreference =
+            ViewModelProvider(this, ParamCustPreferViewModel(viewLifecycleOwner)).get(
+                CustomPreferencesViewModel::class.java
+            )
 
-        activeDateTime = LocalDateTime.parse(arguments?.getSerializable("activeDate").toString())
-        Log.d("HourView", "Entered Hourly view")
-        Log.d("HourView", "Datetime received from Adapter is ${activeDateTime.toString()}")
         return inflateView(R.layout.roster_day_hour_view, inflater, container)
     }
 
@@ -100,44 +121,76 @@ class HourViewFragment: RosterBaseFragment() {
         initialize()
     }
 
+    private fun setCustomPreference() {
+        try {
+            viewModelCustomPreference.customPreferencesDataModel
+        }catch (e:UninitializedPropertyAccessException){
+            viewModelCustomPreference.getAllData()
+        }
+    }
+
     @RequiresApi(Build.VERSION_CODES.O)
     private fun initialize() {
-
-        Log.d("ActiveDay", "Active Day in HourView $activeDateTime")
-        viewModelCustomPreference =
-            ViewModelProvider(this, ParamCustPreferViewModel(viewLifecycleOwner)).get(
-                CustomPreferencesViewModel::class.java
-            )
-
+        // initialize view model members
         rosterViewModel.bsBehavior.state = ExtendedBottomSheetBehavior.STATE_HIDDEN
 
+        //rosterViewModel.getGigs(activeDateTime.toDate)
+
+        // fetch user custom preference model
+        setCustomPreference()
+
         initializeHourViews()
-
-        viewModelCustomPreference.customPreferencesLiveDataModel.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
-            rosterViewModel.switchHourAvailability(
-                activeDateTime,
-                day_times,
-                viewModelCustomPreference
-            )
-            rosterViewModel.isDayAvailable.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
-                if (it)
-                    rosterViewModel.setHourVisibility(
-                        day_times, activeDateTime, actualDateTime, viewModelCustomPreference
-                    )
-                else
-                    allHourInactive(day_times)
-            })
-        })
-
 
         if (isSameDate(activeDateTime, actualDateTime)) {
             setCurrentTimeDivider()
             scheduleCurrentTimerUpdate()
         }
 
-        addGigCards()
+        rosterViewModel.allGigs[dayTag]!!.observe(viewLifecycleOwner, Observer {dayGigs ->
+
+            Log.d("HourViewFragment", "Day Gigs for " + activeDateTime.toString())
+            Log.d("HourViewFragment", dayGigs.toString())
+
+            if (
+                (upcomingGigs.size + completedGigs.size +
+                        currentGigs.size + fullDayGigs.size) != dayGigs.size) {
+                // at least one gig is updated
+                // remove currently added gig cards and add the new ones
+                removeGigs(upcomingGigs)
+                removeGigs(completedGigs)
+                removeGigs(currentGigs)
+
+                val date = activeDateTime.toDate
+                upcomingGigs = rosterViewModel.getFilteredGigs(
+                    date, "upcoming")
+                completedGigs = rosterViewModel.getFilteredGigs(
+                    date, "completed")
+                currentGigs = rosterViewModel.getFilteredGigs(
+                    date, "current")
+                fullDayGigs = rosterViewModel.getFilteredGigs(
+                    date, "fullday")
+
+                addGigCards(upcomingGigs, "upcoming")
+                addGigCards(completedGigs, "completed")
+                addGigCards(currentGigs, "current")
+
+                rosterViewModel.upcomingGigs = upcomingGigs
+                rosterViewModel.currentGigs = currentGigs
+                rosterViewModel.completedGigs = completedGigs
+                rosterViewModel.setFullDayGigs(requireContext())
+            }
+        })
 
     }
+
+    private fun removeGigs(gigs: ArrayList<Gig>) {
+        gigs.forEach { gig ->
+            getViewsByTag(day_times, gig.tag)?.forEach {
+                day_times.removeView(it)
+            }
+        }
+    }
+
     @RequiresApi(Build.VERSION_CODES.O)
     private fun scheduleCurrentTimerUpdate() {
         val handler = Handler() { msg ->
@@ -170,112 +223,117 @@ class HourViewFragment: RosterBaseFragment() {
         current_time_divider.requestLayout()
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun addGigCards() {
-        dayTag = String.format("%4d", activeDateTime.year) + String.format("%02d", activeDateTime.monthValue) + String.format("%02d", activeDateTime.dayOfMonth)
-        rosterViewModel.gigsQuery.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
-            upcomingGigs.addAll(rosterViewModel.getUpcomingGigsByDayTag(dayTag, it))
-            for (gig in upcomingGigs)
-                addUpcomingGigCard(gig)
+    private fun addGigCards(gigs: ArrayList<Gig>, type: String) {
+        when (type) {
+            "upcoming" -> {
+                // add upcoming gigs
+                gigs.forEach { gig ->
+                    val upcomingCard = UpcomingGigCard(
+                        requireContext(),
+                        startHour = gig.startHour,
+                        startMinute = gig.startMinute,
+                        duration = gig.duration,
+                        title = gig.title,
+                        cardHeight = (itemHeight * gig.duration).toInt().px
+                    )
+                    upcomingCard.id = View.generateViewId()
+                    upcomingCard.tag = gig.tag
 
-//            Log.d("DayDebug", upcomingGigs.toString())
-//            it.forEach {
-//                Log.d("DayDebug", it.startDateTime!!.toDate().toString())
-//                Log.d("DayDebug", it.toString())
-//            }
+                    upcomingCard.setOnClickListener {
+                        navigate(R.id.presentGigPageFragment, Bundle().apply {
+                            this.putString(GigPageFragment.INTENT_EXTRA_GIG_ID, gig.gigId)
+                        })
+                    }
 
-            completedGigs.addAll(rosterViewModel.getCompletedGigsByDayTag(dayTag, it))
-            for (gig in completedGigs)
-                addCompletedGigCard(gig)
-        })
+                    day_times.addView(upcomingCard)
+                    setGigCardInView(upcomingCard, "upcoming")
+                }
+            }
+            "completed" -> {
+                // add completed gigs
+                gigs.forEach { gig ->
+                    val completedCard = CompletedGigCard(
+                        requireContext(),
+                        startHour = gig.startHour,
+                        startMinute = gig.startMinute,
+                        duration = gig.duration,
+                        title = gig.title,
+                        amount = gig.gigAmount,
+                        rating = gig.gigRating,
+                        gigSuccess = gig.isGigCompleted,
+                        paymentSuccess = gig.isPaymentDone,
+                        cardHeight = (itemHeight * gig.duration).toInt().px
+                    )
+                    completedCard.id = View.generateViewId()
+                    completedCard.tag = gig.tag
+                    // TODO ask if navigation is correct
+                    completedCard.setOnClickListener {
+                        navigate(R.id.presentGigPageFragment, Bundle().apply {
+                            this.putString(GigPageFragment.INTENT_EXTRA_GIG_ID, gig.gigId)
+                        })
+                    }
 
-    }
+                    day_times.addView(completedCard)
+                    setGigCardInView(completedCard, "completed")
+                }
+            }
+            "current" -> {
+                // add current gigs
+                gigs.forEach { gig ->
+                    val currentCard = CurrentGigCard(
+                        requireContext(),
+                        startHour = gig.startHour,
+                        startMinute = gig.startMinute,
+                        duration = gig.duration,
+                        title = gig.title,
+                        cardHeight = (itemHeight * gig.duration).toInt().px
+                    )
+                    currentCard.id = View.generateViewId()
+                    currentCard.tag = gig.tag
 
-    private fun addUpcomingGigCard(gig: Gig) {
-        Log.d("HourView", "Upcoming gig add")
-        //Toast.makeText(requireContext(), "Add upcoming gig called", Toast.LENGTH_SHORT).show()
-        val upcomingCard = UpcomingGigCard(requireContext())
+                    currentCard.setOnClickListener {
+                        navigate(R.id.gigAttendancePageFragment, Bundle().apply {
+                            this.putString(GigAttendancePageFragment.INTENT_EXTRA_GIG_ID, gig.gigId)
+                        })
+                    }
 
-        day_times.addView(upcomingCard)
-
-        upcomingCard.id = View.generateViewId()
-        upcomingCard.startHour = gig.startHour
-        upcomingCard.startMinute = gig.startMinute
-        upcomingCard.duration = gig.duration
-        upcomingCard.gig_title.text = gig.title
-        upcomingCard.cardHeight = (itemHeight * gig.duration).toInt().px
-        upcomingCard.setTimings()
-
-        val params = ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.WRAP_CONTENT)
-        upcomingCard.setLayoutParams(params)
-
-        upcomingCard.tag = gig.tag
-        val marginTop = (upcomingCard.startHour * itemHeight + ((upcomingCard.startMinute/60.0F)*itemHeight).toInt()).px
-
-        val constraintSet = ConstraintSet()
-        constraintSet.clone(day_times)
-        constraintSet.connect(upcomingCard.id, ConstraintSet.START, start_guideline.id, ConstraintSet.START, marginCardStart)
-        constraintSet.connect(upcomingCard.id, ConstraintSet.END, end_guideline.id, ConstraintSet.START, marginCardEnd)
-        constraintSet.connect(upcomingCard.id, ConstraintSet.TOP, day_times.id, ConstraintSet.TOP, marginTop)
-        constraintSet.applyTo(day_times)
-
-        upcomingCard.setOnClickListener {
-            //Toast.makeText(requireContext(), "Clicked on upcoming card", Toast.LENGTH_SHORT).show()
-            if(gig.isPresentGig()){
-                navigate(R.id.gigAttendancePageFragment, Bundle().apply {
-                    this.putString(GigAttendancePageFragment.INTENT_EXTRA_GIG_ID, gig.gigId)
-                })
-            }else {
-                navigate(R.id.presentGigPageFragment, Bundle().apply {
-                    this.putString(GigPageFragment.INTENT_EXTRA_GIG_ID, gig.gigId)
-                })
+                    day_times.addView(currentCard)
+                    setGigCardInView(currentCard, "current")
+                }
             }
         }
     }
 
-    private fun addCompletedGigCard(gig: Gig) {
-        val completedGigCard = CompletedGigCard(requireContext())
-        completedGigCard.gigStartHour = gig.startHour
-        completedGigCard.gigStartMinute = gig.startMinute
-        completedGigCard.gigDuration = gig.duration
-        completedGigCard.gig_title.text = gig.title
-        completedGigCard.cardHeight = (itemHeight * gig.duration).toInt().px
-        completedGigCard.id = View.generateViewId()
-        completedGigCard.gigSuccess = gig.isGigCompleted
-        completedGigCard.paymentSuccess = gig.isPaymentDone
-        completedGigCard.gigRating = gig.gigRating
-        completedGigCard.gigAmount = gig.gigAmount
-        completedGigCard.setTimings()
+    private fun setGigCardInView(card: MaterialCardView, type: String) {
+        Log.d("HourViewFragment", "Even this is called ")
+        var marginTop: Int = 0
+        if (type == "upcoming" ) {
+            val gigCard = card as UpcomingGigCard
+            marginTop = (gigCard.startHour*itemHeight + (
+                    (gigCard.startMinute/60.0F)*itemHeight).toInt()).px
+        }
+        if (type == "completed") {
+            val gigCard = card as CompletedGigCard
+            marginTop = (gigCard.startHour*itemHeight + (
+                    (gigCard.startMinute/60.0F)*itemHeight).toInt()).px
+        }
+
+        if (type == "current") {
+            val gigCard = card as CurrentGigCard
+            marginTop = (gigCard.startHour*itemHeight + (
+                    (gigCard.startMinute/60.0F)*itemHeight).toInt()).px
+        }
 
         val params = ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.WRAP_CONTENT)
-        completedGigCard.setLayoutParams(params)
-        completedGigCard.tag = gig.tag
-        val marginTop = (completedGigCard.gigStartHour * itemHeight + ((completedGigCard.gigStartMinute/60.0F)*itemHeight).toInt()).px
-
-        day_times.addView(completedGigCard)
+        card.setLayoutParams(params)
 
         val constraintSet = ConstraintSet()
         constraintSet.clone(day_times)
-        constraintSet.connect(completedGigCard.id, ConstraintSet.START, start_guideline.id, ConstraintSet.START, marginCardStart - 16.px)
-        constraintSet.connect(completedGigCard.id, ConstraintSet.END, end_guideline.id, ConstraintSet.START, marginCardEnd)
-        constraintSet.connect(completedGigCard.id, ConstraintSet.TOP, day_times.id, ConstraintSet.TOP, marginTop)
+        constraintSet.connect(card.id, ConstraintSet.START, start_guideline.id, ConstraintSet.START, marginCardStart)
+        constraintSet.connect(card.id, ConstraintSet.END, end_guideline.id, ConstraintSet.START, marginCardEnd)
+        constraintSet.connect(card.id, ConstraintSet.TOP, day_times.id, ConstraintSet.TOP, marginTop)
         constraintSet.applyTo(day_times)
-
-        completedGigCard.setOnClickListener {
-            //Toast.makeText(requireContext(), "Clicked on upcoming card", Toast.LENGTH_SHORT).show()
-
-            if(gig.isPresentGig()){
-                navigate(R.id.gigAttendancePageFragment, Bundle().apply {
-                    this.putString(GigAttendancePageFragment.INTENT_EXTRA_GIG_ID, gig.gigId)
-                })
-            }else {
-                navigate(R.id.presentGigPageFragment, Bundle().apply {
-                    this.putString(GigPageFragment.INTENT_EXTRA_GIG_ID, gig.gigId)
-                })
-            }
-        }
     }
-
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun initializeHourViews() {
@@ -299,7 +357,6 @@ class HourViewFragment: RosterBaseFragment() {
 
             widget.top_half.setOnClickListener {
                 setAndShowBottomSheet(index-1, index)
-
            }
 
             widget.bottom_half.setOnClickListener {
@@ -307,8 +364,6 @@ class HourViewFragment: RosterBaseFragment() {
             }
 
             hourIds.add(widget.id)
-            Log.d("PreviousID", widget.id.toString())
-
         }
 
         // Adding constraints for hourly widgets
@@ -322,12 +377,8 @@ class HourViewFragment: RosterBaseFragment() {
             }
             constraintSet.connect(idx, ConstraintSet.START, start_guideline.id, ConstraintSet.START)
             constraintSet.connect(idx, ConstraintSet.END, end_guideline.id, ConstraintSet.START)
-
-            Log.d("Constraint", "applied")
         }
         constraintSet.applyTo(timeViewGroup)
-
-        viewInitialized = true
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -343,8 +394,6 @@ class HourViewFragment: RosterBaseFragment() {
 //
         resultDateTime =  resultDateTime.plusHours(hour.toLong())
         resultDateTime =  resultDateTime.plusMinutes(minute.toLong())
-
-        Log.d("HVF", "print resultDateTime " + resultDateTime.toString() + "hour $hour" + "minute $minute")
 
         return resultDateTime
 
@@ -378,10 +427,8 @@ class HourViewFragment: RosterBaseFragment() {
                         requireContext(), day_times, upcomingGigs, getDateTimeFromHourString(startTime.toString()),
                         getDateTimeFromHourString(endTime.toString()), viewModelCustomPreference)
 
-                Log.d("HVF", "slide complete triggered")
             }
         })
-
 
         // show bottom sheet in collapsed mode
         rosterViewModel.bsBehavior.state = ExtendedBottomSheetBehavior.STATE_COLLAPSED
@@ -452,10 +499,9 @@ class HourViewFragment: RosterBaseFragment() {
         })
 
         rosterViewModel.UnavailableBS.toggle_button.setOnClickListener {
-            rosterViewModel.toggleDayAvailability(
-                requireContext(), day_times, ArrayList<Gig>(),
-                rosterViewModel.isDayAvailable.value!!,  activeDateTime,
-                actualDateTime, viewModelCustomPreference)
+            rosterViewModel.switchDayAvailability(
+                requireContext(), day_times,
+                rosterViewModel.isDayAvailable.value!!, viewModelCustomPreference)
         }
     }
 
@@ -553,15 +599,6 @@ class HourViewFragment: RosterBaseFragment() {
                 (widget.layoutParams as ViewGroup.MarginLayoutParams).setMargins(0, 16.px, 0, 0)
                 widget.requestLayout()
             }
-        }
-    }
-
-    fun removeUpcomingGigCards() {
-        for (gig in upcomingGigs) {
-            var card = day_times.findViewWithTag<UpcomingGigCard>(gig.tag)
-            day_times.removeView(card)
-            Log.d("RosterViewModel", "gig card removed")
-
         }
     }
 

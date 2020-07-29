@@ -13,5 +13,6 @@ data class VerificationBaseModel(
     var aadhar_card: AadharCardDataModel? = null,
     var bank_details: BankDetailsDataModel? = null,
     var driving_license: DrivingLicenseDataModel? = null,
-    var selfie_video: SelfieVideoDataModel? = null
+    var selfie_video: SelfieVideoDataModel? = null,
+    var sync_status : Boolean = false
 )

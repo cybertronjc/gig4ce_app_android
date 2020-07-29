@@ -166,6 +166,8 @@ open class GigVerificationViewModel constructor(
                 state = -1,
                 verifiedString = "Under Verification"
             )
+            model.sync_status = false
+
             gigerVerificationRepository.getDBCollection().setOrThrow(model)
 
             _documentUploadState.postValue(Lse.success())
@@ -200,6 +202,8 @@ open class GigVerificationViewModel constructor(
                 state = -1,
                 verifiedString = "Under Verification"
             )
+            model.sync_status = false
+
             gigerVerificationRepository.getDBCollection().setOrThrow(model)
 
             _documentUploadState.postValue(Lse.success())
@@ -250,6 +254,7 @@ open class GigVerificationViewModel constructor(
                     state = -1,
                     verifiedString = "Under Verification"
                 )
+                model.sync_status = false
 
             }
             gigerVerificationRepository.getDBCollection().setOrThrow(model)
@@ -302,6 +307,7 @@ open class GigVerificationViewModel constructor(
                     state = -1,
                     verifiedString = "Under Verification"
                 )
+                model.sync_status = false
             }
             gigerVerificationRepository.getDBCollection().setOrThrow(model)
             _documentUploadState.postValue(Lse.success())
