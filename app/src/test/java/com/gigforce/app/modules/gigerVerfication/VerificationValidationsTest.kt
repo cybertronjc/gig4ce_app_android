@@ -59,37 +59,37 @@ class VerificationValidationsTest {
         dl = "AAAAA" //Less numbe - all letters
         assertFalse(VerificationValidations.isDLNumberValid(dl))
 
-        dl = "133337676767676" //More numbers - all letters
+        dl = "13333767456767676" //More numbers - all letters
         assertFalse(VerificationValidations.isDLNumberValid(dl))
 
-        dl = "1333376767676" // 13 but all digit
+        dl = "133337676767654" // 15 but all digit
         assertFalse(VerificationValidations.isDLNumberValid(dl))
 
-        dl = "ABCDEFGHIJKLM" // 13 but all Alphabets
+        dl = "ABCDEFGHIJKLMAD" // 15 but all Alphabets
         assertFalse(VerificationValidations.isDLNumberValid(dl))
 
         dl = "AAAAAAAAAAAAAAA" //More number - all Alphabet
         assertFalse(VerificationValidations.isDLNumberValid(dl))
 
-        dl = "UK0133434343334" // Correct Format but more numbers than 13
+        dl = "UK013343434332334" // Correct Format but more numbers than 15
         assertFalse(VerificationValidations.isDLNumberValid(dl))
 
-        dl = "1K01334343434" // Starts With Number In State
+        dl = "1K0133434343434" // Starts With Number In State
         assertFalse(VerificationValidations.isDLNumberValid(dl))
 
-        dl = "U101334343334" // Ends With Number In State
+        dl = "U10133434343334" // Ends With Number In State
         assertFalse(VerificationValidations.isDLNumberValid(dl))
 
-        dl = "UKA1334343334" // Letter in 3rd Place
+        dl = "UKA133434343334" // Alpha in 3rd Place
         assertFalse(VerificationValidations.isDLNumberValid(dl))
 
-        dl = "UK1133A343334" // Letter in MID
+        dl = "UK1133A34334334" // Alpha in MID
         assertFalse(VerificationValidations.isDLNumberValid(dl))
 
-        dl = "UK1133344333A" // Ends With Number In State
+        dl = "UK113334344333A" // Ends With alphabet
         assertFalse(VerificationValidations.isDLNumberValid(dl))
 
-        dl = "UK12345678901" // Valid
+        dl = "UK1234567890123" // Valid
         assertTrue(VerificationValidations.isDLNumberValid(dl))
     }
 }

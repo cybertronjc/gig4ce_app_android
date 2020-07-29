@@ -12,7 +12,7 @@ object VerificationValidations {
     }
 
     //https://www.quora.com/What-is-the-format-of-a-driver%E2%80%99s-License-number-in-India
-    private const val DL_REGEX = "[A-Z]{2}[0-9]{11}"
+    private const val DL_REGEX = "[A-Z]{2}[0-9]{13}"
     fun isDLNumberValid(panNo : String) : Boolean{
         return Pattern.compile(DL_REGEX).matcher(panNo).matches()
     }
