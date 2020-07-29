@@ -175,7 +175,6 @@ class RateGigDialogFragment : DialogFragment() {
             }
 
             viewModel.submitGigFeedback(gigId, rating, feedback, attachmentsList)
-            Toast.makeText(requireContext(), "Feedback Submitted", Toast.LENGTH_SHORT).show()
         }
     }
 

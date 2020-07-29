@@ -91,15 +91,7 @@ class GigViewModel constructor(
             .addSnapshotListener { documentSnapshot, firebaseFirestoreException ->
 
                 if (documentSnapshot != null) {
-                    runCatching {
-                        val gig = documentSnapshot.toObject(Gig::class.java)
-                        gig?.gigId = documentSnapshot.id
-                        gig!!
-                    }.onSuccess {
-                        _gigDetails.value = Lce.content(it)
-                    }.onFailure {
-                        _gigDetails.value = Lce.error(it.message!!)
-                    }
+                        extractGigData(documentSnapshot)
                 } else {
                     _gigDetails.value = Lce.error(firebaseFirestoreException!!.message!!)
                 }
