@@ -28,6 +28,7 @@ import com.ncorti.slidetoact.SlideToActView
 import kotlinx.android.synthetic.main.fragment_add_pan_card_info.*
 import kotlinx.android.synthetic.main.fragment_add_pan_card_info_main.*
 import kotlinx.android.synthetic.main.fragment_verification_image_holder.view.*
+import java.util.*
 
 class AddPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetActionListener {
 
@@ -82,10 +83,6 @@ class AddPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetActio
         }
 
         panImageHolder.uploadImageLayout.imageLabelTV.text = getString(R.string.pan_card_image)
-
-        panCardEditText.doOnTextChanged { text, start, count, after ->
-            panCardNoTextInputLayout.error = null
-        }
 
         panCardAvailaibilityOptionRG.setOnCheckedChangeListener { _, checkedId ->
 
@@ -144,8 +141,15 @@ class AddPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetActio
                 override fun onSlideComplete(view: SlideToActView) {
 
                     if (panYesRB.isChecked) {
-                        if (panCardEditText.text!!.length != 10) {
-                            panCardNoTextInputLayout.error = "Enter Valid PAN Card No"
+                        val panCardNo = panCardEditText.text.toString().toUpperCase(Locale.getDefault())
+                        if (!VerificationValidations.isPanCardValid(panCardNo)) {
+
+                            MaterialAlertDialogBuilder(requireContext())
+                                .setTitle("Alert")
+                                .setMessage("Enter Valid PAN Card No")
+                                .setPositiveButton("OK") { _, _ -> }
+                                .show()
+
                             panSubmitSliderBtn.resetSlider()
                             return
                         }
@@ -161,18 +165,17 @@ class AddPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetActio
                             return
                         }
 
-                        val panNo = panCardEditText.text.toString()
                         if (panSubmitSliderBtn.text.toString() == getString(R.string.update)) {
 
                             MaterialAlertDialogBuilder(requireContext())
                                 .setTitle("Alert")
                                 .setMessage("You are re-uploading your Pan Card details, they will be verified once again, that can take up to 7 days")
                                 .setPositiveButton("OK") { _, _ ->
-                                    viewModel.updatePanImagePath(true, clickedImagePath, panNo)
+                                    viewModel.updatePanImagePath(true, clickedImagePath, panCardNo)
                                 }
                                 .show()
                         } else {
-                            viewModel.updatePanImagePath(true, clickedImagePath, panNo)
+                            viewModel.updatePanImagePath(true, clickedImagePath, panCardNo)
                         }
 
                     } else if (panNoRB.isChecked) {
