@@ -21,6 +21,7 @@ import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
 import com.gigforce.app.modules.gigerVerfication.GigerVerificationStatus
+import com.gigforce.app.modules.gigerVerfication.VerificationValidations
 import com.gigforce.app.modules.gigerVerfication.WhyWeNeedThisBottomSheet
 import com.gigforce.app.modules.gigerVerfication.panCard.AddPanCardInfoFragment
 import com.gigforce.app.modules.photocrop.PhotoCrop
@@ -32,6 +33,7 @@ import kotlinx.android.synthetic.main.fragment_add_driving_license_info.*
 import kotlinx.android.synthetic.main.fragment_add_driving_license_info_main.*
 import kotlinx.android.synthetic.main.fragment_add_driving_license_info_main.whyWeNeedThisTV
 import kotlinx.android.synthetic.main.fragment_verification_image_holder.view.*
+import java.util.*
 
 enum class DrivingLicenseSides {
     FRONT_SIDE,
@@ -150,10 +152,6 @@ class AddDrivingLicenseInfoFragment : BaseFragment() {
                 disableSubmitButton()
         }
 
-        drivingLicenseEditText.doOnTextChanged { text, start, count, after ->
-            drivingLicenseTextInputLayout.error = null
-        }
-
         dlSubmitSliderBtn.onSlideCompleteListener =
             object : SlideToActView.OnSlideCompleteListener {
 
@@ -171,8 +169,15 @@ class AddDrivingLicenseInfoFragment : BaseFragment() {
                             return
                         }
 
-                        if (drivingLicenseEditText.text!!.length != 15) {
-                            drivingLicenseTextInputLayout.error = "Enter Valid Driving License"
+                        val dlNo = drivingLicenseEditText.text.toString().toUpperCase(Locale.getDefault())
+                        if (!VerificationValidations.isDLNumberValid(dlNo)) {
+
+                            MaterialAlertDialogBuilder(requireContext())
+                                .setTitle("Alert")
+                                .setMessage("Enter Valid Driving License")
+                                .setPositiveButton("OK") { _, _ -> }
+                                .show()
+
                             dlSubmitSliderBtn.resetSlider()
                             return
                         }
@@ -188,7 +193,6 @@ class AddDrivingLicenseInfoFragment : BaseFragment() {
                             return
                         }
 
-                        val dlNo = drivingLicenseEditText.text.toString()
                         val state = stateSpinner.selectedItem.toString()
 
                         if (dlSubmitSliderBtn.text.toString() == getString(R.string.update)) {
