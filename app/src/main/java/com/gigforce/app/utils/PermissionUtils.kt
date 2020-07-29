@@ -8,13 +8,14 @@ import android.os.Build
 import android.preference.PreferenceManager
 import android.provider.Settings
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 
 /**
  * @author Rohit
  * This class consists all permission related methods
  */
 object PermissionUtils {
-    private var reqCodePerm = 0
+    var reqCodePerm = 1109
 
     /**
      * method to check whether we need to show the permission dialog or not
@@ -72,6 +73,18 @@ object PermissionUtils {
     ) {
         if (useRunTimePermissions()) {
             activity.requestPermissions(permission!!, requestCode)
+
+        }
+    }
+
+    fun requestPermissionsFragment(
+        fragment: Fragment,
+        permission: Array<out String?>,
+        requestCode: Int
+    ) {
+        if (useRunTimePermissions()) {
+            fragment.requestPermissions(permission, requestCode)
+
         }
     }
 
@@ -209,6 +222,54 @@ object PermissionUtils {
                 }
                 if (allPermissions) {
                     requestPermissions(
+                        context, permissions,
+                        reqCode
+                    )
+                }
+            }
+        }
+        return false
+    }
+
+    fun checkForPermissionFragment(
+        context: Fragment,
+        reqCode: Int,
+        vararg permissions: String?
+    ): Boolean {
+        reqCodePerm = reqCode
+        if (hasPermissions(context.requireActivity(), *permissions)) {
+            return true
+        } else {
+            if (shouldShowRationals(
+                    context.requireActivity(),
+                    *permissions
+                )
+            ) {
+                // Display UI and wait for user interaction
+                requestPermissionsFragment(
+                    context, permissions,
+                    reqCode
+                )
+                for (permission in permissions) markedPermissionAsAsked(
+                    context.requireActivity(),
+                    permission
+                )
+            } else {
+                var allPermissions = true
+                for (permission in permissions) {
+                    if (hasAskedForPermission(context.requireActivity(), permission)) {
+                        Toast.makeText(
+                            context.requireContext(),
+                            "you need to provide permissions to proceed further",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        goToAppSettings(context.requireActivity())
+                        allPermissions = false
+                        break
+                    }
+                }
+                if (allPermissions) {
+                    requestPermissionsFragment(
                         context, permissions,
                         reqCode
                     )

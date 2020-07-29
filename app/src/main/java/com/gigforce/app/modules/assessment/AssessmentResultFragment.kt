@@ -1,5 +1,6 @@
 package com.gigforce.app.modules.assessment
 
+import android.Manifest
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.graphics.Bitmap
@@ -23,10 +24,7 @@ import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.app.core.genericadapter.RecyclerGenericAdapter
-import com.gigforce.app.utils.HorizontaltemDecoration
-import com.gigforce.app.utils.ItemDecor
-import com.gigforce.app.utils.StringConstants
-import com.gigforce.app.utils.openPopupMenu
+import com.gigforce.app.utils.*
 import kotlinx.android.synthetic.main.fragment_assessment_result.*
 import kotlinx.android.synthetic.main.layout_rv_question_wisr_sum_assess_result.view.*
 import kotlinx.android.synthetic.main.toolbar.*
@@ -67,6 +65,26 @@ class AssessmentResultFragment : BaseFragment(), PopupMenu.OnMenuItemClickListen
             tv_sug_learnings_label_assess_frag.visibility = it
             rv_sug_learnings_assess_result.visibility = it
         })
+        viewModelAssessmentResult.observablePermResultsGranted.observe(
+            viewLifecycleOwner,
+            Observer {
+                initShareImage()
+            })
+        viewModelAssessmentResult.observablePermResultsNotGranted.observe(
+            viewLifecycleOwner,
+            Observer {
+                checkForRequiredPermissions()
+            })
+        viewModelAssessmentResult.observablePermAlReadyGranted.observe(
+            viewLifecycleOwner,
+            Observer {
+                initShareImage()
+            })
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        viewModelAssessmentResult.onActivityResultCalled(requestCode, resultCode, data)
     }
 
     private fun setupRecycler() {
@@ -130,15 +148,29 @@ class AssessmentResultFragment : BaseFragment(), PopupMenu.OnMenuItemClickListen
     override fun onMenuItemClick(item: MenuItem?): Boolean {
         when (item?.itemId) {
             R.id.action_share -> {
-                viewModelAssessmentResult.store(
-                    getScreenShot(cl_sv_nested_assess_result),
-                    StringConstants.CERTIFICATE_SSC.value, context?.filesDir?.absolutePath!!
-                )
-                shareImage(File(context?.filesDir?.absolutePath + "/" + StringConstants.CERTIFICATE_SSC.value))
-                return true
+                viewModelAssessmentResult.checkForPermissionsAndInitSharing(
+                    checkForRequiredPermissions()
+                ); return true
             }
         }
         return false
+    }
+
+    private fun checkForRequiredPermissions(): Boolean {
+        return PermissionUtils.checkForPermissionFragment(
+            this,
+            PermissionUtils.reqCodePerm,
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+        )
+    }
+
+    fun initShareImage() {
+        viewModelAssessmentResult.store(
+            getScreenShot(cl_sv_nested_assess_result),
+            StringConstants.CERTIFICATE_SSC.value, context?.filesDir?.absolutePath!!
+        )
+        shareImage(File(context?.filesDir?.absolutePath + "/" + StringConstants.CERTIFICATE_SSC.value))
     }
 
     private fun shareImage(file: File) {
@@ -169,5 +201,15 @@ class AssessmentResultFragment : BaseFragment(), PopupMenu.OnMenuItemClickListen
         view.draw(canvas)
         return returnedBitmap
     }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        viewModelAssessmentResult.checkIfPermGranted(requestCode, grantResults)
+    }
+
 
 }
