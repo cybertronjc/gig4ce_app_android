@@ -48,8 +48,8 @@ object PermissionUtils {
     fun hasPermissions(activity: Activity, vararg permission: String?): Boolean {
         var allPermissionsGranted = true
         if (useRunTimePermissions()) {
-            for (i in 0 until permission.size) {
-                if (activity.checkSelfPermission(permission[i]!!) != PackageManager.PERMISSION_GRANTED) {
+            for (element in permission) {
+                if (activity.checkSelfPermission(element!!) != PackageManager.PERMISSION_GRANTED) {
                     allPermissionsGranted = false
                     break
                 }
