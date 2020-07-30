@@ -18,6 +18,7 @@ import com.bumptech.glide.Glide
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.gone
+import com.gigforce.app.core.selectItemWithText
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
 import com.gigforce.app.modules.gigerVerfication.GigerVerificationStatus
@@ -285,6 +286,10 @@ class AddDrivingLicenseInfoFragment : BaseFragment() {
 
                             //stateAutoCompleteTV.setText(it.drivingLicenseDataModel.dlState)
                             drivingLicenseEditText.setText(it.drivingLicenseDataModel.dlNo)
+
+                            if(it.drivingLicenseDataModel.dlState != null)
+                            stateSpinner.selectItemWithText(it.drivingLicenseDataModel.dlState)
+
                             dlAvailaibilityOptionRG.check(R.id.dlYesRB)
                         } else
                             dlAvailaibilityOptionRG.check(R.id.dlNoRB)
