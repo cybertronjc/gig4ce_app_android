@@ -297,6 +297,7 @@ class BSCalendarScreenFragment : BaseFragment() {
         override fun onClick(v: View?) {
             val gig = (rv.adapter as RecyclerGenericAdapter<Gig>).list.get(position)
 
+            if(gig.contactNo.isNullOrBlank()) return
             val intent = Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", gig.contactNo, null))
             startActivity(intent)
         }

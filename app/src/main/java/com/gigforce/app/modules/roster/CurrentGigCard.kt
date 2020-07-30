@@ -1,13 +1,12 @@
 package com.gigforce.app.modules.roster
 
 import android.content.Context
-import android.util.AttributeSet
 import android.view.View
 import com.gigforce.app.R
 import com.google.android.material.card.MaterialCardView
 import kotlinx.android.synthetic.main.upcoming_gig_card.view.*
 
-class UpcomingGigCard(
+class CurrentGigCard(
     context: Context,
     var startHour: Int = 0,
     var startMinute: Int = 0,
@@ -19,7 +18,7 @@ class UpcomingGigCard(
     var isFullDay: Boolean = false
 ): MaterialCardView(context) {
     init {
-        View.inflate(context, R.layout.upcoming_gig_card, this)
+        View.inflate(context, R.layout.current_gig_card, this)
         setCardHeight()
         setTimings()
         setTitle()
@@ -44,7 +43,7 @@ class UpcomingGigCard(
     }
 
     fun setFullDay() {
-            gig_timing.text = ""
-            cardHeight = 40.px
-        }
+        gig_timing.text = ""
+        cardHeight = 40.px
+    }
 }

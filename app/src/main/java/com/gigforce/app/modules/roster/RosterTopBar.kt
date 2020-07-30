@@ -103,7 +103,12 @@ class RosterTopBar: MaterialCardView {
         set(value) {
             field = value
             available_toggle.isChecked = isAvailable
+        }
 
+    var toggleInactive: Boolean = false
+        set(value) {
+            field = value
+            available_toggle.isClickable = !value
         }
 
     var fullDayGigCard: MaterialCardView? = null

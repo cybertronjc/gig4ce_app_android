@@ -103,16 +103,16 @@
         android:id="@+id/upcoming_gig_rv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="14dp"
+        android:paddingTop="14dp"
         android:nestedScrollingEnabled="false"
         android:clipToPadding="false"
+        android:paddingBottom="15dp"
         android:paddingRight="20dp"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="15dp"
         android:fontFamily="@font/lato_bold"
         android:text="@string/features"
         android:letterSpacing="0"

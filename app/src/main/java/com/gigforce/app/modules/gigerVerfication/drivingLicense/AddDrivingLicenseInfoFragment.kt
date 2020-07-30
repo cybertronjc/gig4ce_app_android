@@ -89,18 +89,33 @@ class AddDrivingLicenseInfoFragment : BaseFragment() {
             if (checkedId == R.id.dlYesRB) {
                 showDLImageAndInfoLayout()
 
+                if (drivingLicenseDetail?.userHasDL != null &&
+                    drivingLicenseDetail?.userHasDL!! &&
+                    (dlFrontImagePath == null || dlBackImagePath == null)
+                ) {
+                    dlSubmitSliderBtn.gone()
+                    confirmDLDataCB.gone()
+                }
+
                 if (confirmDLDataCB.isChecked
                     && dlFrontImagePath != null
                     && dlBackImagePath != null
                 ) {
                     enableSubmitButton()
-                }
+                } else
+                    disableSubmitButton()
 
             } else if (checkedId == R.id.dlNoRB) {
                 hideDLImageAndInfoLayout()
 
+                dlSubmitSliderBtn.visible()
+                confirmDLDataCB.visible()
+
                 if (confirmDLDataCB.isChecked)
                     enableSubmitButton()
+                else
+                    disableSubmitButton()
+
             } else {
                 hideDLImageAndInfoLayout()
                 disableSubmitButton()
@@ -410,6 +425,13 @@ class AddDrivingLicenseInfoFragment : BaseFragment() {
                     dlBackImagePath =
                         data?.getParcelableExtra(PhotoCrop.INTENT_EXTRA_RESULTING_FILE_URI)
                     showBackDrivingLicense(dlBackImagePath!!)
+                }
+
+                if (confirmDLDataCB.isChecked
+                    && dlFrontImagePath != null
+                    && dlBackImagePath != null
+                ) {
+                    enableSubmitButton()
                 }
 
                 if (dlFrontImagePath != null && dlBackImagePath != null && dlSubmitSliderBtn.isGone) {
