@@ -32,6 +32,7 @@ class HomeFragment: Fragment(), View.OnClickListener {
         btn.setOnClickListener() {
             findNavController().navigate(R.id.sampleOB)
         }*/
+
         return  view
     }
 
@@ -59,6 +60,7 @@ class HomeFragment: Fragment(), View.OnClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
 
 
 //        this.pager_home.reduceDragSensitivity()

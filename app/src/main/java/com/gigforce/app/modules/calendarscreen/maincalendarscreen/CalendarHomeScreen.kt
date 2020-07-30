@@ -1,6 +1,7 @@
 package com.gigforce.app.modules.calendarscreen.maincalendarscreen
 
 import android.app.Dialog
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.view.LayoutInflater
@@ -20,7 +21,6 @@ import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.base.components.CalendarView
 import com.gigforce.app.core.base.dialog.ConfirmationDialogOnClickListener
-import com.gigforce.app.core.base.dialog.OptionSelected
 import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.app.core.genericadapter.RecyclerGenericAdapter
 import com.gigforce.app.core.gone
@@ -30,6 +30,8 @@ import com.gigforce.app.modules.calendarscreen.maincalendarscreen.verticalcalend
 import com.gigforce.app.modules.custom_gig_preferences.CustomPreferencesViewModel
 import com.gigforce.app.modules.custom_gig_preferences.ParamCustPreferViewModel
 import com.gigforce.app.modules.custom_gig_preferences.UnavailableDataModel
+import com.gigforce.app.modules.gigPage.GigAttendancePageFragment
+import com.gigforce.app.modules.markattendance.ImageCaptureActivity
 import com.gigforce.app.modules.preferences.PreferencesFragment
 import com.gigforce.app.modules.profile.ProfileViewModel
 import com.gigforce.app.utils.GlideApp
@@ -615,12 +617,12 @@ class CalendarHomeScreen : BaseFragment(),
                                 object : ConfirmationDialogOnClickListener {
                                     override fun clickedOnYes(dialog: Dialog?) {
                                         showToast("Screen is pending to show List of gigs on this day.")
-                                        makeChangesToCalendarItem(position,true)
+                                        makeChangesToCalendarItem(position, true)
                                         dialog?.dismiss()
                                     }
 
                                     override fun clickedOnNo(dialog: Dialog?) {
-                                        makeChangesToCalendarItem(position,true)
+                                        makeChangesToCalendarItem(position, true)
                                         dialog?.dismiss()
                                     }
 
@@ -636,13 +638,14 @@ class CalendarHomeScreen : BaseFragment(),
                     })
             }
         } else if (temporaryData.isUnavailable) {
-            makeChangesToCalendarItem(position,false)
+            makeChangesToCalendarItem(position, false)
         } else {
-            makeChangesToCalendarItem(position,true)
+            makeChangesToCalendarItem(position, true)
             showSnackbar(position)
         }
     }
-    fun makeChangesToCalendarItem(position: Int,status:Boolean){
+
+    fun makeChangesToCalendarItem(position: Int, status: Boolean) {
         temporaryData.isUnavailable = status
         var data = UnavailableDataModel(temporaryData.getDateObj())
         data.dayUnavailable = status
@@ -652,6 +655,7 @@ class CalendarHomeScreen : BaseFragment(),
         )
         recyclerGenericAdapter.notifyItemChanged(position)
     }
+
     class OnSnackBarUndoClickListener(
         var position: Int,
         var recyclerGenericAdapter: RecyclerGenericAdapter<VerticalCalendarDataItemModel>,

@@ -8,14 +8,22 @@ import androidx.lifecycle.viewModelScope
 import com.gigforce.app.modules.gigPage.models.Gig
 import com.gigforce.app.modules.gigPage.models.GigAttendance
 import com.gigforce.app.utils.Lce
+import com.gigforce.app.utils.Lse
+import com.gigforce.app.utils.setOrThrow
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.QuerySnapshot
+import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
 class GigViewModel constructor(
-    private val gigsRepository: GigsRepository = GigsRepository()
+    private val gigsRepository: GigsRepository = GigsRepository(),
+    private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance()
 ) : ViewModel() {
 
     private var mWatchUpcomingRepoRegistration: ListenerRegistration? = null
@@ -75,7 +83,7 @@ class GigViewModel constructor(
     private val _gigDetails = MutableLiveData<Lce<Gig>>()
     val gigDetails: LiveData<Lce<Gig>> get() = _gigDetails
 
-    fun watchGig(gigId: String) {
+    fun watchGig(gigId: String, shouldConvertToDownloadLink: Boolean = false) {
         _gigDetails.value = Lce.loading()
         mWatchUpcomingRepoRegistration = gigsRepository
             .getCollectionReference()
@@ -83,19 +91,61 @@ class GigViewModel constructor(
             .addSnapshotListener { documentSnapshot, firebaseFirestoreException ->
 
                 if (documentSnapshot != null) {
-                    runCatching {
-                        val gig = documentSnapshot.toObject(Gig::class.java)
-                        gig?.gigId = documentSnapshot.id
-                        gig!!
-                    }.onSuccess {
-                        _gigDetails.value = Lce.content(it)
-                    }.onFailure {
-                        _gigDetails.value = Lce.error(it.message!!)
-                    }
+                        extractGigData(documentSnapshot)
                 } else {
                     _gigDetails.value = Lce.error(firebaseFirestoreException!!.message!!)
                 }
             }
+    }
+
+    private fun extractGigData(documentSnapshot: DocumentSnapshot) = viewModelScope.launch {
+        runCatching {
+            val gig = documentSnapshot.toObject(Gig::class.java) ?: throw IllegalArgumentException()
+            gig.gigId = documentSnapshot.id
+
+            val gigAttachmentWithLinks = gig.gigUserFeedbackAttachments.map {
+                getDownloadLinkFor("gig_feedback_images", it)
+            }
+            gig.gigUserFeedbackAttachments = gigAttachmentWithLinks
+            gig
+        }.onSuccess {
+            _gigDetails.value = Lce.content(it)
+        }.onFailure {
+            _gigDetails.value = Lce.error(it.message!!)
+        }
+    }
+
+    suspend fun getDownloadLinkFor(folder: String, file: String) =
+        suspendCoroutine<String> { cont ->
+            firebaseStorage
+                .getReference(folder)
+                .child(file)
+                .downloadUrl
+                .addOnSuccessListener {
+                    cont.resume(it.toString())
+                }
+                .addOnFailureListener {
+                    cont.resumeWithException(it)
+                }
+        }
+
+
+    fun getGig(gigId: String) {
+        _gigDetails.value = Lce.loading()
+        gigsRepository
+            .getCollectionReference()
+            .document(gigId)
+            .get()
+            .addOnSuccessListener { snap ->
+
+                if (snap != null) {
+                    extractGigData(snap)
+                }
+            }
+            .addOnFailureListener {
+                _gigDetails.value = Lce.error(it.message!!)
+            }
+
     }
 
     fun favoriteGig(gigId: String) {
@@ -118,24 +168,65 @@ class GigViewModel constructor(
     }
 
 
+    private val _submitGigRatingState = MutableLiveData<Lse>()
+    val submitGigRatingState: LiveData<Lse> get() = _submitGigRatingState
+
     fun submitGigFeedback(
         gigId: String,
         rating: Float,
         feedback: String,
         files: List<Uri>
     ) = viewModelScope.launch {
+        _submitGigRatingState.value = Lse.loading()
 
         try {
             val gig = gigsRepository.getGig(gigId)
             gig.gigRating = rating
             gig.gigUserFeedback = feedback
 
-            //TODO upload gig feedback files
+            gig.gigUserFeedbackAttachments = uploadFilesAndReturnNamesOnServer(files)
             gigsRepository.getCollectionReference()
                 .document(gigId)
-                .set(gig)
+                .setOrThrow(gig)
+
+            _submitGigRatingState.value = Lse.success()
         } catch (e: Exception) {
-            //Error while submitting feedback
+            _submitGigRatingState.value = Lse.error(e.message!!)
         }
     }
+
+
+    private suspend fun uploadFilesAndReturnNamesOnServer(files: List<Uri>): List<String> {
+        return files.map {
+            if (it.toString().startsWith("http", true)) {
+                it.lastPathSegment!!.substringAfterLast("/")
+            } else {
+                uploadImage(it)
+            }
+        }
+    }
+
+
+    private fun prepareUniqueImageName(): String {
+        val timeStamp = SimpleDateFormat(
+            "yyyyMMdd_HHmmss",
+            Locale.getDefault()
+        ).format(Date())
+        return gigsRepository.getUID() + timeStamp + ".jpg"
+    }
+
+    private suspend fun uploadImage(image: Uri) =
+        suspendCoroutine<String> { continuation ->
+            val fileNameAtServer = prepareUniqueImageName()
+            firebaseStorage.reference
+                .child("gig_feedback_images")
+                .child(fileNameAtServer)
+                .putFile(image)
+                .addOnSuccessListener {
+                    continuation.resume(fileNameAtServer)
+                }
+                .addOnFailureListener {
+                    continuation.resumeWithException(it)
+                }
+        }
 }

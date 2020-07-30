@@ -29,8 +29,8 @@ android {
         applicationId "com.gigforce.app"
         minSdkVersion 23
         targetSdkVersion 29
-        versionCode 38
-        versionName "1.14.2"
+        versionCode 39
+        versionName "1.14.3"
 
         vectorDrawables.useSupportLibrary = true
 
@@ -237,7 +237,7 @@ dependencies {
     implementation 'com.github.vipulasri:timelineview:1.1.5'
 
     //Camera View
-    implementation 'com.otaliastudios:cameraview:2.6.2'
+    implementation 'com.otaliastudios:cameraview:2.6.3'
 
     // Sticky header
     implementation 'com.github.qiujayen:sticky-layoutmanager:1.0.1'

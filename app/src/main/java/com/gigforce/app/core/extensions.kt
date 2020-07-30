@@ -6,6 +6,7 @@ import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import android.widget.Spinner
+import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
@@ -61,6 +62,7 @@ fun View.visible() {
 fun View.invisible() {
     visibility = View.INVISIBLE
 }
+
 
 val LocalDateTime.toDate: Date
     @RequiresApi(Build.VERSION_CODES.O)
