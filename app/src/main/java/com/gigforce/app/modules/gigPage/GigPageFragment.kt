@@ -524,9 +524,9 @@ class GigPageFragment : BaseFragment() {
 
         presentFutureGigNoteTV.text =
             if (daysLeft > 0)
-                "Note :We are preparing your gig.It will start in next $daysLeft Days"
+                "We are preparing your gig.It will start in next $daysLeft Days"
             else
-                "Note :We are preparing your gig.It will start in next $hoursLeft Hours"
+                "We are preparing your gig.It will start in next $hoursLeft Hours"
     }
 
     private fun showUserReceivedRating(gig: Gig) {
