@@ -534,7 +534,7 @@ class BSCalendarScreenFragment : BaseFragment() {
         val recyclerGenericAdapter: RecyclerGenericAdapter<Assessment> =
             RecyclerGenericAdapter<Assessment>(
                 activity?.applicationContext,
-                PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item -> showToast("") },
+                PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item -> navigate(R.id.assessment_fragment) },
                 RecyclerGenericAdapter.ItemInterface<Assessment?> { obj, viewHolder, position ->
                     val lp = getView(viewHolder, R.id.assessment_cl).layoutParams
                     lp.height = lp.height
@@ -568,9 +568,6 @@ class BSCalendarScreenFragment : BaseFragment() {
 
                 })!!
         recyclerGenericAdapter.setList(datalist)
-        recyclerGenericAdapter.setClickListener { view, position, item ->
-            navigate(R.id.assessment_fragment)
-        }
         recyclerGenericAdapter.setLayout(R.layout.assessment_bs_item)
         assessment_rv.layoutManager = LinearLayoutManager(
             activity?.applicationContext,

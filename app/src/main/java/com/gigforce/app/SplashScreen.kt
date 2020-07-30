@@ -19,7 +19,7 @@ class SplashScreen : AppCompatActivity() {
             return;
         }
         super.onCreate(savedInstanceState)
-        val intent = Intent(this, ImageCaptureActivity::class.java)
+        val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
         finish()
     }
