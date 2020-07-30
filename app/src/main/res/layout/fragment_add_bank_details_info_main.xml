@@ -163,24 +163,19 @@
                     android:fontFamily="@font/lato" />
 
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/ifscTextInputLayout"
-                    style="@style/Widget.Design.TextInputLayout"
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/ifscEditText"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/ifscEditText"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textSize="13sp"
-                        android:imeActionLabel="Done"
-                        android:imeOptions="actionNext"
-                        android:inputType="textNoSuggestions"
-                        android:maxLength="11"
-                        android:maxLines="1" />
-
-                </com.google.android.material.textfield.TextInputLayout>
+                    android:layout_height="wrap_content"
+                    android:imeActionLabel="Done"
+                    android:imeOptions="actionNext"
+                    android:inputType="textNoSuggestions"
+                    android:maxLength="11"
+                    android:textAllCaps="true"
+                    android:layout_marginTop="5dp"
+                    android:maxLines="1"
+                    app:backgroundTint="@color/colorPrimary"
+                    android:textSize="13sp" />
 
 
                 <TextView
@@ -193,24 +188,22 @@
                     android:fontFamily="@font/lato" />
 
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/bankNameTextInputLayout"
-                    style="@style/Widget.Design.TextInputLayout"
+
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/bankNameEditText"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:imeActionLabel="Done"
+                    android:imeOptions="actionGo"
+                    android:inputType="textNoSuggestions"
+                    android:maxLength="60"
+                    android:textAllCaps="true"
+                    android:layout_marginTop="5dp"
+                    android:maxLines="1"
+                    app:backgroundTint="@color/colorPrimary"
+                    android:textSize="13sp" />
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/bankNameEditText"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:imeActionLabel="Done"
-                        android:imeOptions="actionNext"
-                        android:inputType="textNoSuggestions"
-                        android:maxLength="60"
-                        android:textSize="13sp"
-                        android:maxLines="1" />
-
-                </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
                     android:id="@+id/accNoLabel"
@@ -222,24 +215,20 @@
                     android:fontFamily="@font/lato" />
 
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/accountNoTextInputLayout"
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/accountNoEditText"
                     android:layout_width="match_parent"
-                    style="@style/Widget.Design.TextInputLayout"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:imeActionLabel="Done"
+                    android:imeOptions="actionNext"
+                    android:inputType="textNoSuggestions"
+                    android:maxLength="30"
+                    android:textAllCaps="true"
+                    android:layout_marginTop="5dp"
+                    android:maxLines="1"
+                    app:backgroundTint="@color/colorPrimary"
+                    android:textSize="13sp" />
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/accountNoEditText"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:imeActionLabel="Done"
-                        android:imeOptions="actionGo"
-                        android:inputType="textNoSuggestions"
-                        android:maxLength="30"
-                        android:textSize="13sp"
-                        android:maxLines="1" />
-
-                </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
         </LinearLayout>
 

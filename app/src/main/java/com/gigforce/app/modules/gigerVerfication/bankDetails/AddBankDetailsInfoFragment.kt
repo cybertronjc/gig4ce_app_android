@@ -20,6 +20,7 @@ import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
 import com.gigforce.app.modules.gigerVerfication.GigerVerificationStatus
+import com.gigforce.app.modules.gigerVerfication.VerificationValidations
 import com.gigforce.app.modules.gigerVerfication.WhyWeNeedThisBottomSheet
 import com.gigforce.app.modules.gigerVerfication.panCard.PanCardDataModel
 import com.gigforce.app.modules.photocrop.PhotoCrop
@@ -30,6 +31,7 @@ import com.ncorti.slidetoact.SlideToActView
 import kotlinx.android.synthetic.main.fragment_add_bank_details_info.*
 import kotlinx.android.synthetic.main.fragment_add_bank_details_info_main.*
 import kotlinx.android.synthetic.main.fragment_verification_image_holder.view.*
+import java.util.*
 
 class AddBankDetailsInfoFragment : BaseFragment() {
 
@@ -160,26 +162,51 @@ class AddBankDetailsInfoFragment : BaseFragment() {
                         )
                     } else {
 
-                        if (ifscEditText.text!!.length != 11) {
-                            ifscTextInputLayout.error = "Enter Valid IfSC Code"
+                        val ifsc = ifscEditText.text.toString().toUpperCase(Locale.getDefault())
+                        if (VerificationValidations.isIfSCValid(ifsc)) {
+
+                            MaterialAlertDialogBuilder(requireContext())
+                                .setTitle("Alert")
+                                .setMessage("Enter Valid IfSC Code")
+                                .setPositiveButton("OK") { _, _ -> }
+                                .show()
+
                             passbookSubmitSliderBtn.resetSlider()
                             return
                         }
 
                         if (bankNameEditText.text.isNullOrBlank()) {
-                            bankNameTextInputLayout.error = "Enter Bank Name"
+
+                            MaterialAlertDialogBuilder(requireContext())
+                                .setTitle("Alert")
+                                .setMessage("Enter Bank Name")
+                                .setPositiveButton("OK") { _, _ -> }
+                                .show()
+
                             passbookSubmitSliderBtn.resetSlider()
                             return
                         }
 
                         if (bankNameEditText.text.toString().length < 6) {
-                            bankNameTextInputLayout.error = "Bank name is too short"
+
+                            MaterialAlertDialogBuilder(requireContext())
+                                .setTitle("Alert")
+                                .setMessage("Bank name is too short")
+                                .setPositiveButton("OK") { _, _ -> }
+                                .show()
+
                             passbookSubmitSliderBtn.resetSlider()
                             return
                         }
 
                         if (accountNoEditText.text.toString().length < 4) {
-                            accountNoTextInputLayout.error = "Enter A Valid Account No"
+
+                            MaterialAlertDialogBuilder(requireContext())
+                                .setTitle("Alert")
+                                .setMessage("Enter A Valid Account No")
+                                .setPositiveButton("OK") { _, _ -> }
+                                .show()
+
                             passbookSubmitSliderBtn.resetSlider()
                             return
                         }
@@ -195,7 +222,6 @@ class AddBankDetailsInfoFragment : BaseFragment() {
                             return
                         }
 
-                        val ifsc = ifscEditText.text.toString()
                         val accNo = accountNoEditText.text.toString()
                         val bankName = bankNameEditText.text.toString()
 
