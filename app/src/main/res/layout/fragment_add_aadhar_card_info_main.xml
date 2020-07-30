@@ -99,23 +99,6 @@
 
         </RadioGroup>
 
-        <include
-            android:id="@+id/aadharFrontImageHolder"
-            layout="@layout/fragment_verification_image_holder"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            app:layout_constraintTop_toBottomOf="@id/aadharAvailaibilityOptionRG" />
-
-
-        <include
-            android:id="@+id/aadharBackImageHolder"
-            layout="@layout/fragment_verification_image_holder"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            app:layout_constraintTop_toBottomOf="@id/aadharFrontImageHolder" />
-
 
         <LinearLayout
             android:id="@+id/aadharInfoLayout"
@@ -123,13 +106,13 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:visibility="gone"
-            app:layout_constraintTop_toBottomOf="@id/aadharBackImageHolder">
+            app:layout_constraintTop_toBottomOf="@id/aadharAvailaibilityOptionRG">
 
             <View
                 android:id="@+id/topSeaparator"
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:layout_marginTop="22dp"
+                android:layout_marginTop="8dp"
                 android:background="#cdccd1" />
 
             <LinearLayout
@@ -149,7 +132,7 @@
                     android:layout_weight="1"
                     android:fontFamily="@font/lato"
                     android:letterSpacing="-0.01"
-                    android:text="@string/please_confirm_the_following_information"
+                    android:text="Please provide the following information."
                     android:textColor="@color/black" />
 
                 <ImageView
@@ -170,28 +153,54 @@
                 android:paddingEnd="16dp"
                 android:paddingBottom="4dp">
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/aadharCardLayout"
-                    style="@style/Widget.Design.TextInputLayout"
+                <TextView
+                    android:id="@+id/aadharNoLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Aadhar Number *"
+                    android:textSize="12sp"
+                    android:layout_marginLeft="2dp"
+                    android:fontFamily="@font/lato" />
+
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/aadharCardET"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/aadharCardET"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Aadhar Card No *"
-                        android:imeActionLabel="Done"
-                        android:imeOptions="actionGo"
-                        android:inputType="number"
-                        android:maxLength="12"
-                        android:maxLines="1" />
-
-                </com.google.android.material.textfield.TextInputLayout>
+                    android:layout_height="wrap_content"
+                    android:imeActionLabel="Done"
+                    android:imeOptions="actionGo"
+                    android:inputType="number"
+                    android:maxLength="12"
+                    android:layout_below="@id/aadharNoLabel"
+                    android:layout_marginTop="5dp"
+                    android:maxLines="1"
+                    app:backgroundTint="@color/colorPrimary" />
 
 
             </RelativeLayout>
         </LinearLayout>
+
+
+        <include
+            android:id="@+id/aadharFrontImageHolder"
+            layout="@layout/fragment_verification_image_holder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@id/aadharInfoLayout" />
+
+
+        <include
+            android:id="@+id/aadharBackImageHolder"
+            layout="@layout/fragment_verification_image_holder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@id/aadharFrontImageHolder" />
+
+
+
 
 
         <com.ncorti.slidetoact.SlideToActView
@@ -219,7 +228,7 @@
             android:letterSpacing="0"
             android:text="@string/yes_i_confirm_the_data_is_correct"
             app:layout_constraintBottom_toTopOf="@id/aadharSubmitSliderBtn"
-            app:layout_constraintTop_toBottomOf="@id/aadharInfoLayout"
+            app:layout_constraintTop_toBottomOf="@id/aadharBackImageHolder"
             app:layout_constraintVertical_bias="0.98"
             tools:layout_editor_absoluteX="0dp" />
 

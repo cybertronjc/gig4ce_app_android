@@ -168,10 +168,6 @@ class AddAadharCardInfoFragment : BaseFragment() {
         aadharEditLayout.setOnClickListener {
         }
 
-        aadharCardET.doOnTextChanged { text, start, count, after ->
-            aadharCardLayout.error = null
-        }
-
         aadharSubmitSliderBtn.onSlideCompleteListener =
             object : SlideToActView.OnSlideCompleteListener {
 
@@ -179,7 +175,12 @@ class AddAadharCardInfoFragment : BaseFragment() {
 
                     if (aadharYesRB.isChecked) {
                         if (aadharCardET.text!!.length != 12) {
-                            aadharCardLayout.error = "Enter Valid Aadhar Card No"
+
+                            MaterialAlertDialogBuilder(requireContext())
+                                .setTitle("Alert")
+                                .setMessage("Enter Valid Aadhar Card No")
+                                .setPositiveButton("OK") { _, _ -> }
+                                .show()
                             aadharSubmitSliderBtn.resetSlider()
                             return
                         }
