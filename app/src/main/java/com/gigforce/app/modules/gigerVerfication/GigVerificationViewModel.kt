@@ -72,7 +72,7 @@ open class GigVerificationViewModel constructor(
             .getDBCollection()
             .addSnapshotListener { documentSnapshot, firebaseFirestoreException ->
 
-                if (documentSnapshot?.data == null)
+                if (documentSnapshot?.data == null && firebaseFirestoreException == null) {
                     _gigerVerificationStatus.value = GigerVerificationStatus(
                         selfieVideoUploaded = false,
                         selfieVideoDataModel = null,
@@ -86,6 +86,7 @@ open class GigVerificationViewModel constructor(
                         bankUploadDetailsDataModel = null,
                         everyDocumentUploaded = false
                     )
+                }
 
                 val docSnap = documentSnapshot ?: return@addSnapshotListener
                 docSnap.toObject(VerificationBaseModel::class.java)?.let {
