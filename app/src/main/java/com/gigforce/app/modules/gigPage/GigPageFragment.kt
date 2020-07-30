@@ -227,6 +227,8 @@ class GigPageFragment : BaseFragment() {
             if (data != null)
                 selfieImg = data.getStringExtra("image_name")
             checkAndUpdateAttendance()
+        }else{
+            showToast("Error in uploading - Try again")
         }
     }
 

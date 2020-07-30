@@ -76,6 +76,7 @@ class ImageCaptureActivity : AppCompatActivity() {
             progress_circular.progress = progress.toInt()
         }
         uploadTask.addOnSuccessListener {
+            showToast("Successfully uploaded - Selfie & geolocation")
             resultIntent.putExtra("image_name", selfieImg)
             setResult(Activity.RESULT_OK, resultIntent)
             finish()

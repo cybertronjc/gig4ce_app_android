@@ -138,6 +138,7 @@
             android:layout_height="wrap_content"
             android:src="@drawable/warning_icon_"
             android:layout_marginTop="31dp"
+            android:visibility="gone"
             app:layout_constraintStart_toStartOf="@+id/state"
             app:layout_constraintTop_toBottomOf="@+id/state" />
 
@@ -150,6 +151,7 @@
             android:text="To Update Permanent address , you have to upload new address proofs. Click Here  "
             android:textColor="#181717"
             android:textSize="12sp"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/imageView27"
             app:layout_constraintEnd_toEndOf="@+id/pincode"
             app:layout_constraintStart_toEndOf="@+id/imageView27"
