@@ -2,6 +2,8 @@ package com.gigforce.app.modules.gigPage.models
 
 import androidx.annotation.Keep
 import com.google.firebase.Timestamp
+import com.google.firebase.encoders.annotations.Encodable
+import com.google.firebase.firestore.Exclude
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -42,6 +44,7 @@ data class Gig(
     var gigContactDetails: GigContactDetails? = null
 ) {
 
+    @Exclude
     fun isGigOfToday(): Boolean {
 
         val gigDate =
@@ -50,6 +53,7 @@ data class Gig(
         return gigDate.isEqual(currentDate)
     }
 
+    @Exclude
     fun isGigOfFuture(): Boolean {
         val gigDate =
             startDateTime!!.toDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
@@ -57,6 +61,7 @@ data class Gig(
         return gigDate.isAfter(currentDate)
     }
 
+    @Exclude
     fun isGigOfPast(): Boolean {
 
         val gigDate =
@@ -65,22 +70,27 @@ data class Gig(
         return gigDate.isBefore(currentDate)
     }
 
+    @Exclude
     fun isCheckInAndCheckOutMarked(): Boolean {
         return isCheckInMarked() && isCheckOutMarked()
     }
 
+    @Exclude
     fun isCheckInOrCheckOutMarked(): Boolean {
         return isCheckInMarked() || isCheckOutMarked()
     }
 
+    @Exclude
     fun isCheckInMarked(): Boolean {
         return attendance?.checkInTime != null
     }
 
+    @Exclude
     fun isCheckOutMarked(): Boolean {
         return attendance?.checkOutTime != null
     }
 
+    @Exclude
     fun isPastGig(): Boolean {
         if (isGigOfPast())
             return true
@@ -103,6 +113,7 @@ data class Gig(
         } else return false
     }
 
+    @Exclude
     fun isPresentGig(): Boolean {
 
         if (isCheckInAndCheckOutMarked())
@@ -132,6 +143,7 @@ data class Gig(
         }
     }
 
+    @Exclude
     fun isUpcomingGig(): Boolean {
 
         val gigCheckInTime =
