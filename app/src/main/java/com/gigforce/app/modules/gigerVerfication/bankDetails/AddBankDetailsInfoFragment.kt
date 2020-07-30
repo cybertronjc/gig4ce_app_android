@@ -163,7 +163,7 @@ class AddBankDetailsInfoFragment : BaseFragment() {
                     } else {
 
                         val ifsc = ifscEditText.text.toString().toUpperCase(Locale.getDefault())
-                        if (VerificationValidations.isIfSCValid(ifsc)) {
+                        if (!VerificationValidations.isIfSCValid(ifsc)) {
 
                             MaterialAlertDialogBuilder(requireContext())
                                 .setTitle("Alert")
