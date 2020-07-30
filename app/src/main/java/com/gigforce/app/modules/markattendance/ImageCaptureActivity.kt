@@ -5,7 +5,6 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
-import android.graphics.Matrix
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.widget.Toast
@@ -17,14 +16,12 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.UploadTask
 import com.otaliastudios.cameraview.BitmapCallback
 import com.otaliastudios.cameraview.CameraLogger
-import com.otaliastudios.cameraview.CameraUtils
-import com.otaliastudios.cameraview.CameraUtils.decodeBitmap
 import com.otaliastudios.cameraview.PictureResult
-import com.otaliastudios.cameraview.controls.PictureFormat
 import kotlinx.android.synthetic.main.activity_picture_preview.*
 import java.io.ByteArrayOutputStream
 import java.text.SimpleDateFormat
 import java.util.*
+
 
 class ImageCaptureActivity : AppCompatActivity() {
     var pictureResult: PictureResult? = null
@@ -49,6 +46,8 @@ class ImageCaptureActivity : AppCompatActivity() {
         retake_image.setOnClickListener {
             show_img_cl.gone()
         }
+
+
     }
 
 
@@ -72,8 +71,8 @@ class ImageCaptureActivity : AppCompatActivity() {
         uploadTask.addOnProgressListener { taskSnapshot ->
             val progress = (100.0 * taskSnapshot.bytesTransferred) / taskSnapshot.totalByteCount
 //            showToast("Uploading in progress :${progress.toInt()}% done")
-            if(progress_circular!=null)
-            progress_circular.progress = progress.toInt()
+            if (progress_circular != null)
+                progress_circular.progress = progress.toInt()
         }
         uploadTask.addOnSuccessListener {
             showToast("Successfully uploaded - Selfie & geolocation")
@@ -84,7 +83,7 @@ class ImageCaptureActivity : AppCompatActivity() {
 //                updateAttendanceToDB()
         }
         uploadTask.addOnFailureListener {
-            showToast("Error "+it.message)
+            showToast("Error " + it.message)
             setResult(Activity.RESULT_CANCELED, resultIntent)
             finish()
 //                    startNavigationSliderBtn.resetSlider()
@@ -96,7 +95,9 @@ class ImageCaptureActivity : AppCompatActivity() {
         super.onBackPressed()
         setResult(Activity.RESULT_CANCELED)
     }
+
     private fun initCamera() {
+
         CameraLogger.setLogLevel(CameraLogger.LEVEL_VERBOSE)
         cameraView.setLifecycleOwner(this)
         cameraView.addCameraListener(CameraListener())
@@ -117,9 +118,11 @@ class ImageCaptureActivity : AppCompatActivity() {
         private fun previewImage(result: PictureResult) {
             show_img_cl.visible()
             try {
-                result.toBitmap(1000, 1000, BitmapCallback {
+
+
+                result.toBitmap(BitmapCallback {
                     show_pic.setImageBitmap(it)
-                    show_pic_bg.setImageBitmap(it)
+//                    show_pic_bg.setImageBitmap(it)
                 });
             } catch (e: UnsupportedOperationException) {
                 show_pic.setImageDrawable(ColorDrawable(Color.GREEN));
@@ -166,19 +169,19 @@ class ImageCaptureActivity : AppCompatActivity() {
         return stream.toByteArray();
     }
 
-    fun rotateImageIfRequire(bitmap: Bitmap): Bitmap {
-        if (bitmap.width > bitmap.height) {
-            return rotateImage(bitmap, -90.0F);
-        } else {
-            return bitmap
-        }
-    }
+//    fun rotateImageIfRequire(bitmap: Bitmap): Bitmap {
+//        if (bitmap.width > bitmap.height) {
+//            return rotateImage(bitmap, -90.0F);
+//        } else {
+//            return bitmap
+//        }
+//    }
 
-    private fun rotateImage(img: Bitmap, degree: Float): Bitmap {
-        val matrix = Matrix()
-        matrix.postRotate(degree)
-        val rotatedImg = Bitmap.createBitmap(img, 0, 0, img.height, img.width, null, true)
-        img.recycle()
-        return rotatedImg
-    }
+//    private fun rotateImage(img: Bitmap, degree: Float): Bitmap {
+//        val matrix = Matrix()
+//        matrix.postRotate(degree)
+//        val rotatedImg = Bitmap.createBitmap(img, 0, 0, img.height, img.width, null, true)
+//        img.recycle()
+//        return rotatedImg
+//    }
 }

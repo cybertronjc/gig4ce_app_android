@@ -3,6 +3,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.gigforce.app.MainActivity
+import com.gigforce.app.modules.markattendance.ImageCaptureActivity
 
 class SplashScreen : AppCompatActivity() {
 

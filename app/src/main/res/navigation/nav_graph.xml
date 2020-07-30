@@ -586,6 +586,14 @@
         android:name="com.gigforce.app.modules.gigPage.RateGigDialogFragment"
         android:label="fragment_rate_gig_dialog"
         tools:layout="@layout/fragment_rate_gig_dialog" />
+    <fragment
+        android:id="@+id/assessment_fragment"
+        android:name="com.gigforce.app.modules.assessment.AssessmentFragment"
+        android:label="AssessmentFragment" />
+    <fragment
+        android:id="@+id/assessment_result_fragment"
+        android:name="com.gigforce.app.modules.assessment.AssessmentResultFragment"
+        android:label="AssessmentResultFragment" />
 
 </navigation>
 
