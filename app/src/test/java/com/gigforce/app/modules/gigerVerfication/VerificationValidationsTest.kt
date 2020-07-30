@@ -44,6 +44,9 @@ class VerificationValidationsTest {
 
         pan = "ABCDE1234A" // Correct PAN
         assertTrue(VerificationValidations.isPanCardValid(pan))
+
+        pan = "abcde1234a" // Correct PAN
+        assertTrue(VerificationValidations.isPanCardValid(pan))
     }
 
 
@@ -91,5 +94,54 @@ class VerificationValidationsTest {
 
         dl = "UK1234567890123" // Valid
         assertTrue(VerificationValidations.isDLNumberValid(dl))
+
+        dl = "uk1234567890123" // Valid
+        assertTrue(VerificationValidations.isDLNumberValid(dl))
+    }
+
+
+    @Test
+    fun isIfscValid() {
+
+        var ifsc = ""
+        assertFalse(VerificationValidations.isIfSCValid(ifsc))
+
+        ifsc = "13333" //Less numbe - all letters
+        assertFalse(VerificationValidations.isIfSCValid(ifsc))
+
+        ifsc = "AAAAA" //Less numbe - all letters
+        assertFalse(VerificationValidations.isIfSCValid(ifsc))
+
+        ifsc = "13333767456767676" //More numbers - all letters
+        assertFalse(VerificationValidations.isIfSCValid(ifsc))
+
+        ifsc = "13333767767" // 15 but all digit
+        assertFalse(VerificationValidations.isIfSCValid(ifsc))
+
+        ifsc = "ABCDEFGHIJK" // 15 but all Alphabets
+        assertFalse(VerificationValidations.isIfSCValid(ifsc))
+
+        ifsc = "AAAAAAAAAAAAAAA" //More number - all Alphabet
+        assertFalse(VerificationValidations.isIfSCValid(ifsc))
+
+        ifsc = "PUNB00938000" // Correct Format but more numbers than 11
+        assertFalse(VerificationValidations.isIfSCValid(ifsc))
+
+        ifsc = "1UNB00938000" // Starts With Number In State
+        assertFalse(VerificationValidations.isIfSCValid(ifsc))
+
+        ifsc = "PU1B00938000" // Ends With Number In State
+        assertFalse(VerificationValidations.isIfSCValid(ifsc))
+
+        ifsc = "PUNB60938000" // 6 in 5th place
+        assertFalse(VerificationValidations.isIfSCValid(ifsc))
+
+        //Correct Ones
+
+        ifsc = "PUNB0093800" // Valid
+        assertTrue(VerificationValidations.isIfSCValid(ifsc))
+
+        ifsc = "PUNB0ABCDEF" // Valid
+        assertTrue(VerificationValidations.isIfSCValid(ifsc))
     }
 }
