@@ -1,14 +1,12 @@
 package com.gigforce.app.modules.calendarscreen.maincalendarscreen
 
 import android.app.Dialog
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.annotation.RequiresApi
 import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -55,6 +53,8 @@ class CalendarHomeScreen : BaseFragment(),
         lateinit var temporaryData: VerticalCalendarDataItemModel
     }
 
+    var swipedToupdateGig = false
+
     lateinit var selectedMonthModel: CalendarView.MonthModel
 
     lateinit var arrCalendarDependent: Array<View>
@@ -87,9 +87,8 @@ class CalendarHomeScreen : BaseFragment(),
         selectedMonthModel = CalendarView.MonthModel(Calendar.getInstance().get(Calendar.MONTH))
         initializeViews()
         listener()
-        observePreferenceData()
+        observers()
     }
-
 
 
     private fun initializeViews() {
@@ -119,13 +118,14 @@ class CalendarHomeScreen : BaseFragment(),
         calendar_dependent.setOnClickListener {
             changeVisibilityCalendarView()
         }
-        month_selector_arrow.setOnClickListener{
+        month_selector_arrow.setOnClickListener {
             changeVisibilityCalendarView()
         }
-        oval_gradient_iv.setOnClickListener{
+        oval_gradient_iv.setOnClickListener {
             changeVisibilityCalendarView()
         }
-        calendarView.setMonthChangeListener(object : CalendarView.MonthChangeAndDateClickedListener {
+        calendarView.setMonthChangeListener(object :
+            CalendarView.MonthChangeAndDateClickedListener {
             override fun onMonthChange(monthModel: CalendarView.MonthModel) {
                 selectedMonthModel = monthModel
                 var calendar = Calendar.getInstance()
@@ -147,7 +147,7 @@ class CalendarHomeScreen : BaseFragment(),
         calendarView.setOnDateClickListner(object : CalendarView.MonthChangeAndDateClickedListener {
             override fun onMonthChange(monthModel: CalendarView.MonthModel) {
                 selectedMonthModel = monthModel
-                println(" date data1 "+selectedMonthModel.toString())
+                println(" date data1 " + selectedMonthModel.toString())
                 changeVisibilityCalendarView()
             }
 
@@ -163,10 +163,9 @@ class CalendarHomeScreen : BaseFragment(),
             extendedBottomSheetBehavior.state = ExtendedBottomSheetBehavior.STATE_COLLAPSED
             extendedBottomSheetBehavior.isAllowUserDragging = false
         } else {
-            if(selectedMonthModel.days!=null  && selectedMonthModel.days.size==1){
+            if (selectedMonthModel.days != null && selectedMonthModel.days.size == 1) {
                 scrollVerticalCalendarToSelectedDate()
-            }
-            else {
+            } else {
                 scrollVerticalCalendarToSelectedMonth()
             }
             hideDependentViews(true)
@@ -181,31 +180,21 @@ class CalendarHomeScreen : BaseFragment(),
         }
         val firstVisibleItem = layoutManager!!.findFirstVisibleItemPosition()
         var dayModel = selectedMonthModel.days.get(0)
-        println(" date data2 "+ "first "+recyclerGenericAdapter.list.get(firstVisibleItem).year+" "+recyclerGenericAdapter.list.get(firstVisibleItem).month+" "+recyclerGenericAdapter.list.get(
-            firstVisibleItem
-        ).date)
-        println(" date data3 "+recyclerGenericAdapter.list.get(firstVisibleItem).month + " "+ dayModel.currentMonth+" "+(recyclerGenericAdapter.list.get(firstVisibleItem).month < dayModel.currentMonth))
         if (recyclerGenericAdapter.list.get(firstVisibleItem).year < dayModel.year || (recyclerGenericAdapter.list.get(
                 firstVisibleItem
-            ).year == dayModel.year && recyclerGenericAdapter.list.get(firstVisibleItem).month < dayModel.month)||(recyclerGenericAdapter.list.get(
+            ).year == dayModel.year && recyclerGenericAdapter.list.get(firstVisibleItem).month < dayModel.month) || (recyclerGenericAdapter.list.get(
                 firstVisibleItem
-            ).year == dayModel.year && recyclerGenericAdapter.list.get(firstVisibleItem).month == dayModel.month&&recyclerGenericAdapter.list.get(
+            ).year == dayModel.year && recyclerGenericAdapter.list.get(firstVisibleItem).month == dayModel.month && recyclerGenericAdapter.list.get(
                 firstVisibleItem
             ).date < dayModel.date)
         ) {
-            println(" date data "+ "second")
-
             for (index in firstVisibleItem..recyclerGenericAdapter.list.size) {
-                println(" date data "+ index)
-
                 if (recyclerGenericAdapter.list.get(index).year == dayModel.year && recyclerGenericAdapter.list.get(
                         index
                     ).month == dayModel.month && recyclerGenericAdapter.list.get(
                         index
                     ).date == dayModel.date
                 ) {
-                    println(" date data "+ index)
-
                     (rv_.layoutManager as LinearLayoutManager)?.scrollToPositionWithOffset(
                         index,
                         0
@@ -215,7 +204,10 @@ class CalendarHomeScreen : BaseFragment(),
             }
         } else {
             for (index in 0..firstVisibleItem) {
-                if (recyclerGenericAdapter.list.get(index).year == dayModel.year && recyclerGenericAdapter.list.get(index).month == dayModel.month && recyclerGenericAdapter.list.get(index).date == dayModel.date) {
+                if (recyclerGenericAdapter.list.get(index).year == dayModel.year && recyclerGenericAdapter.list.get(
+                        index
+                    ).month == dayModel.month && recyclerGenericAdapter.list.get(index).date == dayModel.date
+                ) {
                     (rv_.layoutManager as LinearLayoutManager)?.scrollToPositionWithOffset(
                         index,
                         0
@@ -236,7 +228,7 @@ class CalendarHomeScreen : BaseFragment(),
 
     }
 
-    private fun observePreferenceData() {
+    private fun observers() {
         viewModel.mainHomeLiveDataModel.observe(viewLifecycleOwner, Observer { homeDataModel ->
             if (homeDataModel != null) {
 //                viewModel.setDataModel(homeDataModel.all_gigs)
@@ -256,8 +248,18 @@ class CalendarHomeScreen : BaseFragment(),
             viewLifecycleOwner,
             Observer { data ->
                 viewModel.setCustomPreferenceData(viewModelCustomPreference.getCustomPreferenceData())
-                initializeViews()
+                if (swipedToupdateGig) {
+//                    swipedToupdateGig = false
+                } else
+                    initializeViews()
             })
+
+        viewModel.preferenceDataModel.observe(viewLifecycleOwner, Observer { preferenceData ->
+            if (preferenceData != null) {
+                viewModel.setPreferenceDataModel(preferenceData)
+                initializeViews()
+            }
+        })
     }
 
     private fun displayImage(profileImg: String) {
@@ -379,6 +381,7 @@ class CalendarHomeScreen : BaseFragment(),
                         } else {
                             if (obj!!.isUnavailable) {
                                 getTextView(viewHolder, R.id.title).text = "Not working"
+                                getTextView(viewHolder, R.id.subtitle).gone()
                                 setTextViewColor(
                                     getTextView(viewHolder, R.id.title),
                                     R.color.gray_color_day_date_calendar
@@ -508,7 +511,7 @@ class CalendarHomeScreen : BaseFragment(),
                     layoutManager = recyclerView.layoutManager as LinearLayoutManager
                 }
                 val firstVisibleItem = layoutManager!!.findFirstVisibleItemPosition()
-                if(firstVisibleItem==0)return;
+                if (firstVisibleItem == 0) return;
                 var calendar = Calendar.getInstance()
 
                 calendar.set(
@@ -551,7 +554,10 @@ class CalendarHomeScreen : BaseFragment(),
             }
         } else {
             for (index in 0..firstVisibleItem) {
-                if (recyclerGenericAdapter.list.get(index).year == selectedMonthModel.year && recyclerGenericAdapter.list.get(index).month == selectedMonthModel.currentMonth) {
+                if (recyclerGenericAdapter.list.get(index).year == selectedMonthModel.year && recyclerGenericAdapter.list.get(
+                        index
+                    ).month == selectedMonthModel.currentMonth
+                ) {
                     (rv_.layoutManager as LinearLayoutManager)?.scrollToPositionWithOffset(
                         index + 1,
                         0
@@ -589,34 +595,33 @@ class CalendarHomeScreen : BaseFragment(),
         if (temporaryData.isGigAssign) {
             if (temporaryData.isUnavailable) {
                 temporaryData.isUnavailable = false
+                swipedToupdateGig = true
+                var data = UnavailableDataModel(temporaryData.getDateObj())
+                data.dayUnavailable = false
+                viewModelCustomPreference.updateCustomPreference(
+                    data
+                )
+
                 recyclerGenericAdapter.notifyItemChanged(position)
             } else {
-                var subTitle =
-                    "You have " + temporaryData.title + " Gig \non the day. These gig will get " +
-                            "cancelled as well."
-                showConfirmationDialogType3(
-                    " Are sure you want to change availablilty ?",
-                    subTitle,
+                showConfirmationDialogType1(
+                    "Are you sure you want to not work on this day?",
                     object : ConfirmationDialogOnClickListener {
                         override fun clickedOnYes(dialog: Dialog?) {
-                            showConfirmationDialogType4(
-                                "Cancelling out on a gig !",
-                                "Please let us know your reason, to mark 'not Working' ?",
-                                object : OptionSelected {
-                                    override fun optionSelected(dialog: Dialog?, option: String) {
-                                        if (option.equals("")) {
-                                            showToast("Please select one option.")
-                                        } else {
-                                            temporaryData.isUnavailable = true
-                                            temporaryData.isGigAssign = false
-                                            temporaryData.title = "No gigs assigned"
-                                            temporaryData.reason = option
-                                            viewModelCustomPreference.updateCustomPreference(
-                                                UnavailableDataModel(temporaryData.getDateObj())
-                                            )
-                                            recyclerGenericAdapter.notifyItemChanged(position)
-                                            dialog?.dismiss()
-                                        }
+                            var title =
+                                "Alright, no new gigs will be assigned to you on this day. However, you have \"" + temporaryData.title + "\" is assigned to you. If you want to decline it please do it separately."
+                            showConfirmationDialogType5(
+                                title,
+                                object : ConfirmationDialogOnClickListener {
+                                    override fun clickedOnYes(dialog: Dialog?) {
+                                        showToast("Screen is pending to show List of gigs on this day.")
+                                        makeChangesToCalendarItem(position,true)
+                                        dialog?.dismiss()
+                                    }
+
+                                    override fun clickedOnNo(dialog: Dialog?) {
+                                        makeChangesToCalendarItem(position,true)
+                                        dialog?.dismiss()
                                     }
 
                                 })
@@ -631,27 +636,22 @@ class CalendarHomeScreen : BaseFragment(),
                     })
             }
         } else if (temporaryData.isUnavailable) {
-            temporaryData.isUnavailable = false
-            viewModelCustomPreference.deleteCustomPreference(
-                UnavailableDataModel(temporaryData.getDateObj())
-            )
-            recyclerGenericAdapter.notifyItemChanged(position)
+            makeChangesToCalendarItem(position,false)
         } else {
-            temporaryData.isUnavailable = true
-            viewModelCustomPreference.updateCustomPreference(
-                UnavailableDataModel(temporaryData.getDateObj())
-            )
-            recyclerGenericAdapter.notifyItemChanged(position)
+            makeChangesToCalendarItem(position,true)
             showSnackbar(position)
         }
-//        val snackbar = Snackbar
-//            .make(coodinate_layout, "Item was removed from the list.", Snackbar.LENGTH_LONG)
-//        snackbar.setAction("UNDO", View.OnClickListener {
-//        })
-//        snackbar.setActionTextColor(resources.getColor(R.color.snakbar_action_color))
-//        snackbar.show()
     }
-
+    fun makeChangesToCalendarItem(position: Int,status:Boolean){
+        temporaryData.isUnavailable = status
+        var data = UnavailableDataModel(temporaryData.getDateObj())
+        data.dayUnavailable = status
+        swipedToupdateGig = true
+        viewModelCustomPreference.updateCustomPreference(
+            data
+        )
+        recyclerGenericAdapter.notifyItemChanged(position)
+    }
     class OnSnackBarUndoClickListener(
         var position: Int,
         var recyclerGenericAdapter: RecyclerGenericAdapter<VerticalCalendarDataItemModel>,
@@ -660,8 +660,10 @@ class CalendarHomeScreen : BaseFragment(),
     ) : View.OnClickListener {
         override fun onClick(v: View?) {
             temporaryData.isUnavailable = false
-            viewModelCustomPreference.deleteCustomPreference(
-                UnavailableDataModel(temporaryData.getDateObj())
+            var data = UnavailableDataModel(temporaryData.getDateObj())
+            data.dayUnavailable = false
+            viewModelCustomPreference.updateCustomPreference(
+                data
             )
             recyclerGenericAdapter.notifyItemChanged(position)
             snackbar.dismiss()
@@ -695,7 +697,8 @@ class CalendarHomeScreen : BaseFragment(),
         // Show the Snackbar
         snackbar.show();
         Handler().postDelayed({
-            nsv.visibility = View.VISIBLE
+            if (nsv != null)
+                nsv.visibility = View.VISIBLE
         }, SNACKBAR_TIMEOUT)
 
     }

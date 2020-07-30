@@ -53,7 +53,10 @@
         android:id="@+id/onboardingfragment"
         android:name="com.gigforce.app.modules.onboardingmain.OnboardingMainFragment"
         tools:layout="@layout/onboarding_main_fragment" />
-
+    <fragment
+        android:id="@+id/onboardingLoaderfragment"
+        android:name="com.gigforce.app.modules.onboardingmain.OnboardingLoaderFragment"
+        tools:layout="@layout/onboarding_loader_fragment" />
     <fragment
         android:id="@+id/chatScreenFragment"
         android:name="com.abhijai.gigschatdemo.contacts_module.ui.ChatScreenFragment"
@@ -560,7 +563,7 @@
         tools:layout="@layout/help_expanded_page" />
     <fragment
         android:id="@+id/presentGigPageFragment"
-        android:name="com.gigforce.app.modules.gigPage.PresentGigPageFragment"
+        android:name="com.gigforce.app.modules.gigPage.GigPageFragment"
         android:label="fragment_gig_page_present"
         tools:layout="@layout/fragment_gig_page_present">
 
@@ -578,6 +581,11 @@
         android:name="com.gigforce.app.modules.gigPage.GigPageNavigationFragment"
         android:label="fragment_gig_navigation"
         tools:layout="@layout/fragment_gig_navigation" />
+    <fragment
+        android:id="@+id/rateGigDialogFragment"
+        android:name="com.gigforce.app.modules.gigPage.RateGigDialogFragment"
+        android:label="fragment_rate_gig_dialog"
+        tools:layout="@layout/fragment_rate_gig_dialog" />
 
 </navigation>
 

@@ -50,6 +50,7 @@
             android:text="@string/why_do_we_need_this"
             android:textColor="@color/battle_ship_grey"
             android:textSize="12sp"
+            android:fontFamily="@font/lato"
             app:layout_constraintEnd_toStartOf="@+id/helpIconIV"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -153,11 +154,9 @@
                     android:id="@+id/stateLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="IFSC"
+                    android:text="IFSC * "
                     android:textSize="12sp"
-                    android:fontFamily="@font/lato"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/dobET" />
+                    android:fontFamily="@font/lato" />
 
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -172,9 +171,39 @@
                         android:layout_height="wrap_content"
                         android:textSize="13sp"
                         android:imeActionLabel="Done"
-                        android:imeOptions="actionGo"
+                        android:imeOptions="actionNext"
                         android:inputType="textNoSuggestions"
                         android:maxLength="11"
+                        android:maxLines="1" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+                <TextView
+                    android:id="@+id/bankNameLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Bank Name *"
+                    android:textSize="12sp"
+                    android:fontFamily="@font/lato" />
+
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/bankNameTextInputLayout"
+                    style="@style/Widget.Design.TextInputLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/bankNameEditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:imeActionLabel="Done"
+                        android:imeOptions="actionNext"
+                        android:inputType="textNoSuggestions"
+                        android:maxLength="60"
+                        android:textSize="13sp"
                         android:maxLines="1" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -184,17 +213,15 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="Account No"
+                    android:text="Account No *"
                     android:textSize="12sp"
-                    android:fontFamily="@font/lato"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/dobET" />
+                    android:fontFamily="@font/lato" />
 
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/accountNoTextInputLayout"
-                    style="@style/Widget.Design.TextInputLayout"
                     android:layout_width="match_parent"
+                    style="@style/Widget.Design.TextInputLayout"
                     android:layout_height="wrap_content">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -241,6 +268,9 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="13dp"
             android:layout_marginBottom="18dp"
+            android:fontFamily="@font/lato"
+            android:letterSpacing="0"
+            style="@style/Theme.CheckBoxLipstickPink"
             android:text="@string/yes_i_confirm_the_data_is_correct"
             app:layout_constraintBottom_toTopOf="@id/passbookSubmitSliderBtn"
             app:layout_constraintTop_toBottomOf="@id/passbookImageHolder"

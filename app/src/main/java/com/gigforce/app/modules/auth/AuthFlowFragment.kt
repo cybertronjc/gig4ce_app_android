@@ -54,11 +54,13 @@ class AuthFlowFragment : BaseFragment() {
         } else {
             var fragments = getFragmentManager()?.getFragments()
             if (fragments != null && fragments?.size == 1) {
-                val onboardingCompleted = isOnBoardingCompleted()
-                if (!onboardingCompleted!!)
-                    navigateWithAllPopupStack(R.id.onboardingfragment)
-                else
-                    navigateWithAllPopupStack(R.id.landinghomefragment)
+                    navigateWithAllPopupStack(R.id.onboardingLoaderfragment)
+//                val onboardingCompleted = isOnBoardingCompleted()
+//                if (!onboardingCompleted!!) {
+//                    navigateWithAllPopupStack(R.id.onboardingfragment)
+//                }
+//                else
+//                    navigateWithAllPopupStack(R.id.landinghomefragment)
             } else {
                 navigateWithAllPopupStack(R.id.loginSuccessfulFragment)
             }

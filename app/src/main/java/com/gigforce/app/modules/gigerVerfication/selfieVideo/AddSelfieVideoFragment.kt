@@ -6,13 +6,19 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.net.toUri
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
+import com.gigforce.app.core.gone
+import com.gigforce.app.core.visible
+import com.gigforce.app.modules.gigerVerfication.GigerVerificationStatus
+import com.gigforce.app.utils.DateHelper
 import com.gigforce.app.utils.Lse
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.storage.FirebaseStorage
@@ -30,6 +36,7 @@ class AddSelfieVideoFragment : BaseFragment(), CaptureVideoFragmentEventListener
     private lateinit var captureSelfieVideoFragment: CaptureSelfieVideoFragment
     private lateinit var playSelfieVideoFragment: PlaySelfieVideoFragment
     private val firebaseStorage = FirebaseStorage.getInstance()
+    private var gigerVerificationStatus: GigerVerificationStatus? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -99,8 +106,7 @@ class AddSelfieVideoFragment : BaseFragment(), CaptureVideoFragmentEventListener
                         playSelfieVideoFragment.showVideoUploadingProgress()
                     }
                     Lse.Success -> {
-                        showToast("Video Uploaded")
-                        navigate(R.id.addPanCardInfoFragment)
+                        documentUploaded()
                     }
                     is Lse.Error -> {
                         playSelfieVideoFragment.showPlayVideoLayout()
@@ -115,7 +121,12 @@ class AddSelfieVideoFragment : BaseFragment(), CaptureVideoFragmentEventListener
         viewModel.gigerVerificationStatus
             .observe(viewLifecycleOwner, Observer {
 
+                this.gigerVerificationStatus = it
                 if (it.selfieVideoUploaded) {
+                    selfieVideoSubmitSliderBtn.text = getString(R.string.update)
+                    selfieVideoSubmitSliderBtn.gone()
+                    selfieVideoCorrectCB.gone()
+
                     if (::captureSelfieVideoFragment.isInitialized) {
                         //Video Just Got Uploaded
                     } else {
@@ -140,9 +151,43 @@ class AddSelfieVideoFragment : BaseFragment(), CaptureVideoFragmentEventListener
         viewModel.startListeningForGigerVerificationStatusChanges()
     }
 
+    private fun documentUploaded() {
+        showToast("Video Uploaded")
+        gigerVerificationStatus?.let {
+
+            if (!it.panCardDetailsUploaded) {
+                navigate(R.id.addPanCardInfoFragment)
+            } else if (!it.aadharCardDetailsUploaded) {
+                navigate(R.id.addDrivingLicenseInfoFragment)
+            } else if (!it.dlCardDetailsUploaded) {
+                navigate(R.id.addDrivingLicenseInfoFragment)
+            } else if (!it.bankDetailsUploaded) {
+                navigate(R.id.addBankDetailsInfoFragment)
+            } else {
+                showDetailsUploaded()
+            }
+        }
+    }
+
+    private fun showDetailsUploaded() {
+        val view =
+            layoutInflater.inflate(R.layout.fragment_giger_verification_documents_submitted, null)
+
+        val dialog = AlertDialog.Builder(requireContext())
+            .setView(view)
+            .show()
+
+        view.findViewById<View>(R.id.verificationCompletedBtn)
+            .setOnClickListener {
+                dialog.dismiss()
+                findNavController().popBackStack(R.id.gigerVerificationFragment, false)
+            }
+    }
 
     private fun initViews() {
-        toolbar.setNavigationOnClickListener { activity?.onBackPressed() }
+        toolbar.setNavigationOnClickListener {
+            findNavController().popBackStack(R.id.gigerVerificationFragment, false)
+        }
 
         selfieVideoCorrectCB.setOnCheckedChangeListener { buttonView, isChecked ->
 
@@ -156,9 +201,19 @@ class AddSelfieVideoFragment : BaseFragment(), CaptureVideoFragmentEventListener
             object : SlideToActView.OnSlideCompleteListener {
 
                 override fun onSlideComplete(view: SlideToActView) {
-                    viewModel.uploadSelfieVideo(mCapturedVideoPath!!)
+                    val transcodedFile = File(
+                        requireContext().filesDir,
+                        "vid_${DateHelper.getFullDateTimeStamp()}.mp4"
+                    )
+                    viewModel.uploadSelfieVideo(mCapturedVideoPath!!, transcodedFile)
                 }
             }
+    }
+
+    override fun onBackPressed(): Boolean {
+
+        findNavController().popBackStack(R.id.gigerVerificationFragment, false)
+        return true
     }
 
 
@@ -203,6 +258,9 @@ class AddSelfieVideoFragment : BaseFragment(), CaptureVideoFragmentEventListener
     override fun discardCurrentVideoAndStartRetakingVideo() {
         deleteExistingVideoIfExist()
         replacePlayVideoFragmentWithCaptureFragment()
+
+        selfieVideoCorrectCB.visible()
+        selfieVideoSubmitSliderBtn.visible()
 
         selfieVideoCorrectCB.isChecked = false
         disableSubmitButton()

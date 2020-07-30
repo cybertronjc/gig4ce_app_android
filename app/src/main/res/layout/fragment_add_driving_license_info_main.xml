@@ -50,6 +50,7 @@
             android:text="@string/why_do_we_need_this"
             android:textColor="@color/battle_ship_grey"
             android:textSize="12sp"
+            android:fontFamily="@font/lato"
             app:layout_constraintEnd_toStartOf="@+id/helpIconIV"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -114,7 +115,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:visibility="visible"
+            android:visibility="gone"
             app:layout_constraintTop_toBottomOf="@id/dlBackImageHolder">
 
             <View
@@ -235,6 +236,9 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="13dp"
             android:layout_marginBottom="18dp"
+            android:fontFamily="@font/lato"
+            android:letterSpacing="0"
+            style="@style/Theme.CheckBoxLipstickPink"
             android:text="@string/yes_i_confirm_the_data_is_correct"
             app:layout_constraintBottom_toTopOf="@id/dlSubmitSliderBtn"
             app:layout_constraintTop_toBottomOf="@id/dlInfoLayout"

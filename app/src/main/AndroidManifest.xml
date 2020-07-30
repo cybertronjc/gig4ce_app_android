@@ -49,6 +49,8 @@
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"
             android:theme="@style/PhotoCrop"/>
+        <activity android:name=".modules.markattendance.ImageCaptureActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name="com.gigforce.app.modules.photocrop.PhotoCrop"
             android:screenOrientation="portrait"

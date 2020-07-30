@@ -1,14 +1,18 @@
 package com.gigforce.app.modules.gigPage
 
+import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.gigforce.app.modules.gigPage.models.Gig
 import com.gigforce.app.modules.gigPage.models.GigAttendance
 import com.gigforce.app.utils.Lce
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.QuerySnapshot
+import kotlinx.coroutines.launch
 import java.util.*
+import kotlin.coroutines.suspendCoroutine
 
 class GigViewModel constructor(
     private val gigsRepository: GigsRepository = GigsRepository()
@@ -33,9 +37,12 @@ class GigViewModel constructor(
                 }
             }
     }
-    fun markAttendance(markAttendance : GigAttendance,gigId:String){
-        gigsRepository.markAttendance(markAttendance,gigId)
+
+
+    fun markAttendance(markAttendance: GigAttendance, gigId: String) {
+        gigsRepository.markAttendance(markAttendance, gigId)
     }
+
     private fun extractUpcomingGigs(querySnapshot: QuerySnapshot) {
         val userGigs: MutableList<Gig> = mutableListOf()
         querySnapshot.documents.forEach { t ->
@@ -47,7 +54,15 @@ class GigViewModel constructor(
 
         val currentDate = Date()
         val upcomingGigs = userGigs.filter {
-            it.startDateTime!!.toDate().time > currentDate.time
+
+            if (it.endDateTime != null) {
+                it.endDateTime!!.toDate().time > currentDate.time
+            } else {
+
+                it.startDateTime!!.toDate().time > currentDate.time
+            }
+        }.sortedBy {
+            it.startDateTime!!.seconds
         }
         _upcomingGigs.value = Lce.content(upcomingGigs)
     }
@@ -69,11 +84,11 @@ class GigViewModel constructor(
 
                 if (documentSnapshot != null) {
                     runCatching {
-                        documentSnapshot.toObject(Gig::class.java)
+                        val gig = documentSnapshot.toObject(Gig::class.java)
+                        gig?.gigId = documentSnapshot.id
+                        gig!!
                     }.onSuccess {
-                        try {
-                            _gigDetails.value = Lce.content(it!!)
-                        }catch (e:Exception){}
+                        _gigDetails.value = Lce.content(it)
                     }.onFailure {
                         _gigDetails.value = Lce.error(it.message!!)
                     }
@@ -100,5 +115,27 @@ class GigViewModel constructor(
         super.onCleared()
         mWatchUpcomingRepoRegistration?.remove()
         mWatchSingleGigRegistration?.remove()
+    }
+
+
+    fun submitGigFeedback(
+        gigId: String,
+        rating: Float,
+        feedback: String,
+        files: List<Uri>
+    ) = viewModelScope.launch {
+
+        try {
+            val gig = gigsRepository.getGig(gigId)
+            gig.gigRating = rating
+            gig.gigUserFeedback = feedback
+
+            //TODO upload gig feedback files
+            gigsRepository.getCollectionReference()
+                .document(gigId)
+                .set(gig)
+        } catch (e: Exception) {
+            //Error while submitting feedback
+        }
     }
 }

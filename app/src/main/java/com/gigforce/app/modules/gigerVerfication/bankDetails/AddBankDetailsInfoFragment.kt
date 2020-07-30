@@ -7,14 +7,20 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.view.isGone
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
+import com.gigforce.app.core.gone
+import com.gigforce.app.core.visible
 import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
+import com.gigforce.app.modules.gigerVerfication.GigerVerificationStatus
+import com.gigforce.app.modules.gigerVerfication.panCard.PanCardDataModel
 import com.gigforce.app.modules.photocrop.PhotoCrop
 import com.gigforce.app.utils.Lse
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -22,6 +28,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.ncorti.slidetoact.SlideToActView
 import kotlinx.android.synthetic.main.fragment_add_bank_details_info.*
 import kotlinx.android.synthetic.main.fragment_add_bank_details_info_main.*
+import kotlinx.android.synthetic.main.fragment_add_pan_card_info_main.*
 import kotlinx.android.synthetic.main.fragment_verification_image_holder.view.*
 
 class AddBankDetailsInfoFragment : BaseFragment() {
@@ -37,6 +44,8 @@ class AddBankDetailsInfoFragment : BaseFragment() {
     private val viewModel: GigVerificationViewModel by viewModels()
     private var clickedImagePath: Uri? = null
     private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance()
+    private var gigerVerificationStatus: GigerVerificationStatus? = null
+    private var bankDetailsDataModel: BankDetailsDataModel? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -48,21 +57,6 @@ class AddBankDetailsInfoFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         initViews()
         initViewModel()
-
-        savedInstanceState?.let {
-
-            clickedImagePath = it.getParcelable(INTENT_EXTRA_CLICKED_IMAGE_PATH)
-            if (clickedImagePath != null) showPassbookInfoCard(clickedImagePath!!)
-            ifscEditText.setText(it.getString(INTENT_EXTRA_IFSC))
-            accountNoEditText.setText(it.getString(INTENT_EXTRA_ACC_NO))
-        }
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putParcelable(INTENT_EXTRA_CLICKED_IMAGE_PATH, clickedImagePath)
-        outState.putString(INTENT_EXTRA_IFSC, ifscEditText.text.toString())
-        outState.putString(INTENT_EXTRA_ACC_NO, accountNoEditText.text.toString())
     }
 
     private fun initViews() {
@@ -72,7 +66,7 @@ class AddBankDetailsInfoFragment : BaseFragment() {
             getString(R.string.upload_bank_passbook_sublabel)
 
         toolbar.setNavigationOnClickListener {
-            activity?.onBackPressed()
+            findNavController().popBackStack(R.id.gigerVerificationFragment, false)
         }
 
         passbookSubmitSliderBtn.isEnabled = false
@@ -94,14 +88,29 @@ class AddBankDetailsInfoFragment : BaseFragment() {
                 showPassbookImageLayout()
                 showPassbookInfoLayout()
 
+                if (bankDetailsDataModel?.userHasPassBook != null &&
+                    bankDetailsDataModel?.userHasPassBook!! &&
+                    clickedImagePath == null
+                ) {
+                    passbookSubmitSliderBtn.gone()
+                    bankDetailsDataConfirmationCB.gone()
+                }
+
                 if (bankDetailsDataConfirmationCB.isChecked && clickedImagePath != null) {
                     enableSubmitButton()
                 } else
                     disableSubmitButton()
 
-            } else if (checkedId == R.id.passbookNoRB && bankDetailsDataConfirmationCB.isChecked) {
+            } else if (checkedId == R.id.passbookNoRB ) {
                 hidePassbookImageAndInfoLayout()
-                enableSubmitButton()
+
+                passbookSubmitSliderBtn.visible()
+                bankDetailsDataConfirmationCB.visible()
+
+                if (bankDetailsDataConfirmationCB.isChecked)
+                    enableSubmitButton()
+                else
+                    disableSubmitButton()
             } else {
                 hidePassbookImageAndInfoLayout()
                 disableSubmitButton()
@@ -133,22 +142,36 @@ class AddBankDetailsInfoFragment : BaseFragment() {
 
                     if (passbookNoRB.isChecked) {
 
-
                         viewModel.updateBankPassbookImagePath(
                             userHasPassBook = false,
                             passbookImagePath = null,
                             ifscCode = null,
+                            bankName = null,
                             accountNo = null
                         )
                     } else {
 
                         if (ifscEditText.text!!.length != 11) {
                             ifscTextInputLayout.error = "Enter Valid IfSC Code"
+                            passbookSubmitSliderBtn.resetSlider()
                             return
                         }
 
-                        if (accountNoEditText.text.isNullOrBlank()) {
-                            accountNoTextInputLayout.error = "Enter Account No"
+                        if (bankNameEditText.text.isNullOrBlank()) {
+                            bankNameTextInputLayout.error = "Enter Bank Name"
+                            passbookSubmitSliderBtn.resetSlider()
+                            return
+                        }
+
+                        if (bankNameEditText.text.toString().length < 6) {
+                            bankNameTextInputLayout.error = "Bank name is too short"
+                            passbookSubmitSliderBtn.resetSlider()
+                            return
+                        }
+
+                        if (accountNoEditText.text.toString().length < 4) {
+                            accountNoTextInputLayout.error = "Enter A Valid Account No"
+                            passbookSubmitSliderBtn.resetSlider()
                             return
                         }
 
@@ -159,18 +182,41 @@ class AddBankDetailsInfoFragment : BaseFragment() {
                                 .setMessage("Click Or Select your Passbook Image first")
                                 .setPositiveButton("OK") { _, _ -> }
                                 .show()
+                            passbookSubmitSliderBtn.resetSlider()
                             return
                         }
 
                         val ifsc = ifscEditText.text.toString()
                         val accNo = accountNoEditText.text.toString()
+                        val bankName = bankNameEditText.text.toString()
 
-                        viewModel.updateBankPassbookImagePath(
-                            userHasPassBook = true,
-                            passbookImagePath = clickedImagePath,
-                            ifscCode = ifsc,
-                            accountNo = accNo
-                        )
+                        if (passbookSubmitSliderBtn.text.toString() == getString(R.string.update)) {
+
+                            MaterialAlertDialogBuilder(requireContext())
+                                .setTitle("Alert")
+                                .setMessage("You are re-uploading your Bank details, they will be verified once again, that can take up to 7 days")
+                                .setPositiveButton("OK") { _, _ ->
+
+                                    viewModel.updateBankPassbookImagePath(
+                                        userHasPassBook = true,
+                                        passbookImagePath = clickedImagePath,
+                                        ifscCode = ifsc,
+                                        bankName = bankName,
+                                        accountNo = accNo
+                                    )
+                                }
+                                .show()
+
+                        } else {
+
+                            viewModel.updateBankPassbookImagePath(
+                                userHasPassBook = true,
+                                passbookImagePath = clickedImagePath,
+                                ifscCode = ifsc,
+                                bankName = bankName,
+                                accountNo = accNo
+                            )
+                        }
                     }
                 }
             }
@@ -180,13 +226,21 @@ class AddBankDetailsInfoFragment : BaseFragment() {
         viewModel.gigerVerificationStatus
             .observe(viewLifecycleOwner, Observer {
 
+                this.gigerVerificationStatus = it
                 if (it.bankDetailsUploaded && it.bankUploadDetailsDataModel != null) {
 
                     if (it.bankUploadDetailsDataModel.userHasPassBook != null) {
                         if (it.bankUploadDetailsDataModel.userHasPassBook) {
+                            this.bankDetailsDataModel = it.bankUploadDetailsDataModel
+
+                            passbookSubmitSliderBtn.text = getString(R.string.update)
+                            bankDetailsDataConfirmationCB.gone()
+                            passbookSubmitSliderBtn.gone()
+
                             passbookAvailaibilityOptionRG.check(R.id.passbookYesRB)
                             ifscEditText.setText(it.bankUploadDetailsDataModel.ifscCode)
                             accountNoEditText.setText(it.bankUploadDetailsDataModel.accountNo)
+                            bankNameEditText.setText(it.bankUploadDetailsDataModel.bankName)
                         } else
                             passbookAvailaibilityOptionRG.check(R.id.passbookNoRB)
                     } else {
@@ -218,12 +272,18 @@ class AddBankDetailsInfoFragment : BaseFragment() {
             .observe(viewLifecycleOwner, Observer {
                 when (it) {
                     Lse.Loading -> showLoadingState()
-                    Lse.Success -> panCardDocumentUploaded()
+                    Lse.Success -> documentsUploaded()
                     is Lse.Error -> errorOnUploadingDocuments(it.error)
                 }
             })
 
         viewModel.getVerificationStatus()
+    }
+
+    override fun onBackPressed(): Boolean {
+
+        findNavController().popBackStack(R.id.gigerVerificationFragment, false)
+        return true
     }
 
     private fun errorOnUploadingDocuments(error: String) {
@@ -238,11 +298,40 @@ class AddBankDetailsInfoFragment : BaseFragment() {
             .show()
     }
 
-    private fun panCardDocumentUploaded() {
-        showToast("Bank Details Uploaded")
-        findNavController().popBackStack(R.id.addSelfieVideoFragment, false)
-        activity?.onBackPressed()
+    private fun documentsUploaded() {
+        showToast("Bank details Uploaded")
+
+        gigerVerificationStatus?.let {
+
+            if (!it.selfieVideoUploaded) {
+                navigate(R.id.addSelfieVideoFragment)
+            } else if (!it.panCardDetailsUploaded) {
+                navigate(R.id.addPanCardInfoFragment)
+            } else if (!it.aadharCardDetailsUploaded) {
+                navigate(R.id.addDrivingLicenseInfoFragment)
+            } else if (!it.dlCardDetailsUploaded) {
+                navigate(R.id.addDrivingLicenseInfoFragment)
+            } else   {
+                showDetailsUploaded()
+            }
+        }
     }
+
+    private fun showDetailsUploaded() {
+        val view =
+            layoutInflater.inflate(R.layout.fragment_giger_verification_documents_submitted, null)
+
+        val dialog = AlertDialog.Builder(requireContext())
+            .setView(view)
+            .show()
+
+        view.findViewById<View>(R.id.verificationCompletedBtn)
+            .setOnClickListener {
+                dialog.dismiss()
+                findNavController().popBackStack(R.id.gigerVerificationFragment, false)
+            }
+    }
+
 
     private fun showLoadingState() {
         bankDetailsMainLayout.visibility = View.GONE
@@ -276,6 +365,15 @@ class AddBankDetailsInfoFragment : BaseFragment() {
                 clickedImagePath =
                     data?.getParcelableExtra(PhotoCrop.INTENT_EXTRA_RESULTING_FILE_URI)
                 showPassbookInfoCard(clickedImagePath!!)
+
+                if (bankDetailsDataConfirmationCB.isChecked)
+                    enableSubmitButton()
+
+                if (clickedImagePath != null && passbookSubmitSliderBtn.isGone) {
+                    bankDetailsDataConfirmationCB.visible()
+                    passbookSubmitSliderBtn.visible()
+                }
+
             } else {
                 MaterialAlertDialogBuilder(requireContext())
                     .setTitle("Alert")

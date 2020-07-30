@@ -8,7 +8,9 @@ data class PanCardDataModel(
     val userHasPanCard: Boolean? = null,
     val panCardImagePath: String?= null,
     val verified: Boolean = false,
-    val panCardNo : String? = null
+    val panCardNo : String? = null,
+    val state :Int = -1,
+    val verifiedString : String? = null
 ) : BaseFirestoreDataModel(TABLE_NAME){
 
     companion object {

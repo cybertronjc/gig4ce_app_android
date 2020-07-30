@@ -17,10 +17,12 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.annotation.ColorRes
 import androidx.annotation.DimenRes
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
@@ -31,18 +33,20 @@ import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.app.core.genericadapter.RecyclerGenericAdapter
+import com.gigforce.app.core.toDate
 import com.gigforce.app.modules.gigPage.GigAttendancePageFragment
+import com.gigforce.app.modules.gigPage.GigPageFragment
 import com.gigforce.app.modules.gigPage.GigPageNavigationFragment
 import com.gigforce.app.modules.gigPage.GigViewModel
-import com.gigforce.app.modules.gigPage.PresentGigPageFragment
 import com.gigforce.app.modules.gigPage.models.Gig
 import com.gigforce.app.modules.landingscreen.LandingScreenFragment
+import com.gigforce.app.utils.DateHelper
 import com.gigforce.app.utils.Lce
+import com.gigforce.app.utils.TextDrawable
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.*
 import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.ZoneId
+import java.time.LocalDateTime
 import java.util.*
 
 class BSCalendarScreenFragment : BaseFragment() {
@@ -151,7 +155,7 @@ class BSCalendarScreenFragment : BaseFragment() {
                     PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
                         val gig = item as Gig
                         navigate(R.id.presentGigPageFragment, Bundle().apply {
-                            this.putString(PresentGigPageFragment.INTENT_EXTRA_GIG_ID, gig.gigId)
+                            this.putString(GigPageFragment.INTENT_EXTRA_GIG_ID, gig.gigId)
                         })
 
 //                    showKYCAndHideUpcomingLayout(
@@ -169,23 +173,45 @@ class BSCalendarScreenFragment : BaseFragment() {
                         getTextView(viewHolder, R.id.contactPersonTV).text =
                             obj?.gigContactDetails?.contactName
 
-                        val gigTiming = if (obj!!.endDateTime != null)
-                            "${timeFormatter.format(obj.startDateTime!!.toDate())} - ${timeFormatter.format(
-                                obj.endDateTime!!.toDate()
-                            )}"
-                        else
-                            "${timeFormatter.format(obj.startDateTime!!.toDate())} - "
-                        getTextView(viewHolder, R.id.textView67).text = gigTiming
+                        if (obj!!.isGigOfToday()) {
+
+                            val gigTiming = if (obj.endDateTime != null)
+                                "${timeFormatter.format(obj.startDateTime!!.toDate())} - ${timeFormatter.format(
+                                    obj.endDateTime!!.toDate()
+                                )}"
+                            else
+                                "${timeFormatter.format(obj.startDateTime!!.toDate())} - "
+                            getTextView(viewHolder, R.id.textView67).text = gigTiming
+                            getView(viewHolder, R.id.checkInTV).setOnClickListener(
+                                CheckInClickListener(
+                                    upcoming_gig_rv,
+                                    position
+                                )
+                            )
+
+                            if (!obj.isPresentGig()) {
+                                getView(viewHolder, R.id.checkInTV).isEnabled = false
+                            } else if (obj.isCheckInAndCheckOutMarked()) {
+                                getView(viewHolder, R.id.checkInTV).isEnabled = false
+                            } else if (obj.isCheckInMarked()) {
+                                getView(viewHolder, R.id.checkInTV).isEnabled = true
+                                (getView(viewHolder, R.id.checkInTV) as Button).text = "Check Out"
+                            } else {
+                                getView(viewHolder, R.id.checkInTV).isEnabled = true
+                                (getView(viewHolder, R.id.checkInTV) as Button).text = "Check In"
+                            }
+
+                        } else {
+                            getView(viewHolder, R.id.checkInTV).isEnabled = false
+
+                            val date = DateHelper.getDateInDDMMYYYY(obj.startDateTime!!.toDate())
+                            getTextView(viewHolder, R.id.textView67).text = date
+                        }
 
                         getView(viewHolder, R.id.navigateTV).setOnClickListener(
                             NavigationClickListener(upcoming_gig_rv, position)
                         )
-                        getView(viewHolder, R.id.checkInTV).setOnClickListener(
-                            CheckInClickListener(
-                                upcoming_gig_rv,
-                                position
-                            )
-                        )
+
                         getView(viewHolder, R.id.callCardView).setOnClickListener(
                             CallClickListener(
                                 upcoming_gig_rv,
@@ -197,16 +223,7 @@ class BSCalendarScreenFragment : BaseFragment() {
                         )
                         val companyLogoIV = getImageView(viewHolder, R.id.companyLogoIV)
 
-                        if (obj?.startDateTime != null) {
-                            val gigDate = obj.startDateTime!!.toDate().toInstant()
-                                .atZone(ZoneId.systemDefault()).toLocalDate()
-                            val currentDate = LocalDate.now()
-
-                            getView(viewHolder, R.id.checkInTV).isEnabled =
-                                currentDate.isEqual(gigDate)
-                        }
-
-                        if (obj.companyLogo != null) {
+                        if (!obj.companyLogo.isNullOrBlank()) {
 
                             if (obj.companyLogo!!.startsWith("http", true)) {
 
@@ -226,6 +243,17 @@ class BSCalendarScreenFragment : BaseFragment() {
                                             .into(companyLogoIV)
                                     }
                             }
+                        } else {
+                            val companyInitials = if (obj.companyName.isNullOrBlank())
+                                "C"
+                            else
+                                obj.companyName!![0].toString().toUpperCase()
+                            val drawable = TextDrawable.builder().buildRound(
+                                companyInitials,
+                                ResourcesCompat.getColor(resources, R.color.lipstick, null)
+                            )
+
+                            companyLogoIV.setImageDrawable(drawable)
                         }
 
                     })!!
@@ -274,9 +302,10 @@ class BSCalendarScreenFragment : BaseFragment() {
         }
     }
 
-    class ChatClickListener(val rv: RecyclerView, var position: Int) : View.OnClickListener {
+    inner class ChatClickListener(val rv: RecyclerView, var position: Int) : View.OnClickListener {
         override fun onClick(v: View?) {
             val gig = (rv.adapter as RecyclerGenericAdapter<Gig>).list.get(position)
+            navigate(R.id.contactScreenFragment)
         }
     }
 

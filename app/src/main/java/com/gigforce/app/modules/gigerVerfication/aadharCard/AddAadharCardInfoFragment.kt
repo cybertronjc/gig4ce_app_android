@@ -7,15 +7,20 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.view.isGone
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
+import com.gigforce.app.core.gone
+import com.gigforce.app.core.visible
 import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
-import com.gigforce.app.modules.gigerVerfication.drivingLicense.AddDrivingLicenseInfoFragment
+import com.gigforce.app.modules.gigerVerfication.GigerVerificationStatus
 import com.gigforce.app.modules.photocrop.PhotoCrop
 import com.gigforce.app.utils.Lse
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -23,7 +28,6 @@ import com.google.firebase.storage.FirebaseStorage
 import com.ncorti.slidetoact.SlideToActView
 import kotlinx.android.synthetic.main.fragment_add_aadhar_card_info.*
 import kotlinx.android.synthetic.main.fragment_add_aadhar_card_info_main.*
-import kotlinx.android.synthetic.main.fragment_add_driving_license_info_main.*
 import kotlinx.android.synthetic.main.fragment_verification_image_holder.view.*
 
 enum class AadharCardSides {
@@ -43,10 +47,12 @@ class AddAadharCardInfoFragment : BaseFragment() {
 
     private val viewModel: GigVerificationViewModel by viewModels()
 
+    private var gigerVerificationStatus: GigerVerificationStatus? = null
     private var aadharCardDataModel: AadharCardDataModel? = null
     private var aadharFrontImagePath: Uri? = null
     private var aadharBackImagePath: Uri? = null
     private var currentlyClickingImageOfSide: AadharCardSides? = null
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -58,23 +64,6 @@ class AddAadharCardInfoFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         initViews()
         initViewModel()
-        savedInstanceState?.let {
-
-            aadharFrontImagePath = it.getParcelable(INTENT_EXTRA_CLICKED_IMAGE_FRONT)
-            if (aadharFrontImagePath != null) showFrontAadharCard(aadharFrontImagePath!!)
-
-            aadharBackImagePath = it.getParcelable(INTENT_EXTRA_CLICKED_IMAGE_BACK)
-            if (aadharBackImagePath != null) showBackAadharCard(aadharBackImagePath!!)
-
-            aadharCardET.setText(it.getString(INTENT_EXTRA_AADHAR_CARD))
-        }
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putParcelable(INTENT_EXTRA_CLICKED_IMAGE_FRONT, aadharFrontImagePath)
-        outState.putParcelable(INTENT_EXTRA_CLICKED_IMAGE_BACK, aadharBackImagePath)
-        outState.putString(INTENT_EXTRA_AADHAR_CARD, aadharCardET.text.toString())
     }
 
     private fun initViews() {
@@ -91,7 +80,7 @@ class AddAadharCardInfoFragment : BaseFragment() {
         aadharSubmitSliderBtn.isEnabled = false
 
         toolbar.setNavigationOnClickListener {
-            activity?.onBackPressed()
+            findNavController().popBackStack(R.id.gigerVerificationFragment, false)
         }
 
         aadharAvailaibilityOptionRG.setOnCheckedChangeListener { _, checkedId ->
@@ -100,17 +89,34 @@ class AddAadharCardInfoFragment : BaseFragment() {
                 showAadharImageAndInfoLayout()
                 showImageInfoLayout()
 
+                if (aadharCardDataModel?.userHasAadharCard != null &&
+                    aadharCardDataModel?.userHasAadharCard!! &&
+                    (aadharFrontImagePath == null || aadharBackImagePath == null)
+                ) {
+                    aadharSubmitSliderBtn.gone()
+                    aadharDataCorrectCB.gone()
+                }
+
                 if (aadharDataCorrectCB.isChecked
                     && aadharFrontImagePath != null
                     && aadharBackImagePath != null
                 ) {
                     enableSubmitButton()
+                } else {
+                    disableSubmitButton()
                 }
+
             } else if (checkedId == R.id.aadharNoRB) {
                 hideAadharImageAndInfoLayout()
 
+                aadharSubmitSliderBtn.visible()
+                aadharDataCorrectCB.visible()
+
                 if (aadharDataCorrectCB.isChecked)
                     enableSubmitButton()
+                else
+                    disableSubmitButton()
+
             } else {
                 hideAadharImageAndInfoLayout()
                 disableSubmitButton()
@@ -164,6 +170,7 @@ class AddAadharCardInfoFragment : BaseFragment() {
                     if (aadharYesRB.isChecked) {
                         if (aadharCardET.text!!.length != 12) {
                             aadharCardLayout.error = "Enter Valid Aadhar Card No"
+                            aadharSubmitSliderBtn.resetSlider()
                             return
                         }
 
@@ -174,16 +181,36 @@ class AddAadharCardInfoFragment : BaseFragment() {
                                 .setMessage("Select or capture both sides of Aadhar Card")
                                 .setPositiveButton("OK") { _, _ -> }
                                 .show()
+                            aadharSubmitSliderBtn.resetSlider()
                             return
                         }
 
                         val aadharNo = aadharCardET.text.toString()
-                        viewModel.updateAadharData(
-                            true,
-                            aadharFrontImagePath,
-                            aadharBackImagePath,
-                            aadharNo
-                        )
+                        if (aadharSubmitSliderBtn.text.toString() == getString(R.string.update)) {
+
+                            MaterialAlertDialogBuilder(requireContext())
+                                .setTitle("Alert")
+                                .setMessage("You are re-uploading your Aadhaar details, they will be verified once again, that can take up to 7 days")
+                                .setPositiveButton("OK") { _, _ ->
+
+                                    viewModel.updateAadharData(
+                                        true,
+                                        aadharFrontImagePath,
+                                        aadharBackImagePath,
+                                        aadharNo
+                                    )
+                                }
+                                .show()
+
+                        } else {
+
+                            viewModel.updateAadharData(
+                                true,
+                                aadharFrontImagePath,
+                                aadharBackImagePath,
+                                aadharNo
+                            )
+                        }
                     } else if (aadharNoRB.isChecked) {
                         viewModel.updateAadharData(false, null, null, null)
                     }
@@ -196,12 +223,18 @@ class AddAadharCardInfoFragment : BaseFragment() {
     private fun initViewModel() {
         viewModel.gigerVerificationStatus
             .observe(viewLifecycleOwner, Observer {
+                this.gigerVerificationStatus = it
 
                 if (it.aadharCardDetailsUploaded && it.aadharCardDataModel != null) {
                     this.aadharCardDataModel = it.aadharCardDataModel
 
+
                     if (it.aadharCardDataModel.userHasAadharCard != null) {
                         if (it.aadharCardDataModel.userHasAadharCard) {
+                            aadharSubmitSliderBtn.text = getString(R.string.update)
+                            aadharSubmitSliderBtn.gone()
+                            aadharDataCorrectCB.gone()
+
                             aadharAvailaibilityOptionRG.check(R.id.aadharYesRB)
                             aadharCardET.setText(it.aadharCardDataModel.aadharCardNo)
                         } else
@@ -270,13 +303,47 @@ class AddAadharCardInfoFragment : BaseFragment() {
     }
 
     private fun documentUploaded() {
-        showToast("Driving License Details Uploaded")
-        navigate(R.id.addDrivingLicenseInfoFragment)
+        showToast("Aadhaar Card Details Uploaded")
+
+        gigerVerificationStatus?.let {
+
+            if (!it.dlCardDetailsUploaded) {
+                navigate(R.id.addDrivingLicenseInfoFragment)
+            } else if (!it.bankDetailsUploaded) {
+                navigate(R.id.addBankDetailsInfoFragment)
+            } else if (!it.selfieVideoUploaded) {
+                navigate(R.id.addSelfieVideoFragment)
+            } else if (!it.panCardDetailsUploaded) {
+                navigate(R.id.addPanCardInfoFragment)
+            } else {
+                showDetailsUploaded()
+            }
+        }
+    }
+
+    private fun showDetailsUploaded() {
+        val view =
+            layoutInflater.inflate(R.layout.fragment_giger_verification_documents_submitted, null)
+
+        val dialog = AlertDialog.Builder(requireContext())
+            .setView(view)
+            .show()
+
+        view.findViewById<View>(R.id.verificationCompletedBtn)
+            .setOnClickListener {
+                dialog.dismiss()
+                findNavController().popBackStack(R.id.gigerVerificationFragment, false)
+            }
     }
 
     private fun showLoadingState() {
         aadharMainLayout.visibility = View.GONE
         progressBar.visibility = View.VISIBLE
+    }
+
+    override fun onBackPressed(): Boolean {
+        findNavController().popBackStack(R.id.gigerVerificationFragment, false)
+        return true
     }
 
 
@@ -326,6 +393,21 @@ class AddAadharCardInfoFragment : BaseFragment() {
                         data?.getParcelableExtra(PhotoCrop.INTENT_EXTRA_RESULTING_FILE_URI)
                     showBackAadharCard(aadharBackImagePath!!)
                 }
+
+                if (aadharDataCorrectCB.isChecked
+                    && aadharFrontImagePath != null
+                    && aadharBackImagePath != null
+                ) {
+                    enableSubmitButton()
+                } else {
+                    disableSubmitButton()
+                }
+
+                if (aadharFrontImagePath != null && aadharBackImagePath != null && aadharSubmitSliderBtn.isGone) {
+                    aadharSubmitSliderBtn.visible()
+                    aadharDataCorrectCB.visible()
+                }
+
             } else {
                 MaterialAlertDialogBuilder(requireContext())
                     .setTitle("Alert")

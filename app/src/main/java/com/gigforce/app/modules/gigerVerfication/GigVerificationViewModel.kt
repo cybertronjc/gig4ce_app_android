@@ -5,12 +5,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.gigforce.app.R
 import com.gigforce.app.modules.gigerVerfication.aadharCard.AadharCardDataModel
 import com.gigforce.app.modules.gigerVerfication.bankDetails.BankDetailsDataModel
 import com.gigforce.app.modules.gigerVerfication.drivingLicense.DrivingLicenseDataModel
 import com.gigforce.app.modules.gigerVerfication.panCard.PanCardDataModel
 import com.gigforce.app.modules.gigerVerfication.selfieVideo.SelfieVideoDataModel
 import com.gigforce.app.utils.Lse
+import com.gigforce.app.utils.SingleLiveEvent2
 import com.gigforce.app.utils.setOrThrow
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.storage.FirebaseStorage
@@ -33,7 +35,24 @@ data class GigerVerificationStatus(
     val bankDetailsUploaded: Boolean,
     val bankUploadDetailsDataModel: BankDetailsDataModel?,
     val everyDocumentUploaded: Boolean
-)
+) {
+    fun getColorCodeForStatus(statusCode: Int): Int {
+        return when (statusCode) {
+            STATUS_DOCUMENT_RECEIVED_BY_3RD_PARTY, STATUS_DOCUMENT_UPLOADED, STATUS_DOCUMENT_PROCESSING -> R.color.yellow
+            STATUS_VERIFIED -> R.color.green
+            STATUS_VERIFICATION_FAILED -> R.color.app_red
+            else -> R.color.yellow
+        }
+    }
+
+    companion object {
+        const val STATUS_VERIFIED = 2
+        const val STATUS_VERIFICATION_FAILED = 3
+        const val STATUS_DOCUMENT_RECEIVED_BY_3RD_PARTY = 0
+        const val STATUS_DOCUMENT_PROCESSING = 1
+        const val STATUS_DOCUMENT_UPLOADED = -1
+    }
+}
 
 open class GigVerificationViewModel constructor(
     private val gigerVerificationRepository: GigerVerificationRepository = GigerVerificationRepository(),
@@ -43,7 +62,7 @@ open class GigVerificationViewModel constructor(
     private val _gigerVerificationStatus = MutableLiveData<GigerVerificationStatus>()
     val gigerVerificationStatus: LiveData<GigerVerificationStatus> get() = _gigerVerificationStatus
 
-    private val _documentUploadState = MutableLiveData<Lse>()
+    private val _documentUploadState = SingleLiveEvent2<Lse>()
     val documentUploadState: LiveData<Lse> get() = _documentUploadState
 
     private var verificationChangesListener: ListenerRegistration? = null
@@ -143,8 +162,12 @@ open class GigVerificationViewModel constructor(
                 userHasPanCard = userHasPan,
                 panCardImagePath = fileNameAtServer,
                 verified = false,
-                panCardNo = panCardNo
+                panCardNo = panCardNo,
+                state = -1,
+                verifiedString = "Under Verification"
             )
+            model.sync_status = false
+
             gigerVerificationRepository.getDBCollection().setOrThrow(model)
 
             _documentUploadState.postValue(Lse.success())
@@ -157,6 +180,7 @@ open class GigVerificationViewModel constructor(
         userHasPassBook: Boolean,
         passbookImagePath: Uri?,
         ifscCode: String?,
+        bankName : String?,
         accountNo: String?
     ) = viewModelScope.launch {
         _documentUploadState.postValue(Lse.loading())
@@ -173,8 +197,13 @@ open class GigVerificationViewModel constructor(
                 passbookImagePath = fileNameAtServer,
                 verified = false,
                 ifscCode = ifscCode,
-                accountNo = accountNo
+                bankName = bankName,
+                accountNo = accountNo,
+                state = -1,
+                verifiedString = "Under Verification"
             )
+            model.sync_status = false
+
             gigerVerificationRepository.getDBCollection().setOrThrow(model)
 
             _documentUploadState.postValue(Lse.success())
@@ -200,7 +229,9 @@ open class GigVerificationViewModel constructor(
                     frontImage = null,
                     backImage = null,
                     verified = false,
-                    aadharCardNo = null
+                    aadharCardNo = null,
+                    state = -1,
+                    verifiedString = "Under Verification"
                 )
             } else {
 
@@ -219,8 +250,11 @@ open class GigVerificationViewModel constructor(
                     frontImage = frontImageFileNameAtServer,
                     backImage = backImageFileNameAtServer,
                     verified = false,
-                    aadharCardNo = aadharCardNumber
+                    aadharCardNo = aadharCardNumber,
+                    state = -1,
+                    verifiedString = "Under Verification"
                 )
+                model.sync_status = false
 
             }
             gigerVerificationRepository.getDBCollection().setOrThrow(model)
@@ -269,8 +303,11 @@ open class GigVerificationViewModel constructor(
                     frontImage = frontImageFileNameAtServer,
                     backImage = backImageFileNameAtServer,
                     dlState = dlState,
-                    dlNo = dlNo
+                    dlNo = dlNo,
+                    state = -1,
+                    verifiedString = "Under Verification"
                 )
+                model.sync_status = false
             }
             gigerVerificationRepository.getDBCollection().setOrThrow(model)
             _documentUploadState.postValue(Lse.success())
@@ -278,7 +315,6 @@ open class GigVerificationViewModel constructor(
             _documentUploadState.postValue(Lse.error("Unable to save document."))
         }
     }
-
 
 
     private fun prepareUniqueImageName(): String {
