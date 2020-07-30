@@ -5,6 +5,7 @@ import android.os.Build
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
+import android.widget.Spinner
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
@@ -66,3 +67,22 @@ val LocalDateTime.toDate: Date
     get() {
         return Date.from(this.atZone(ZoneId.systemDefault()).toInstant())
     }
+
+fun Spinner.selectItemWithText(text: String) {
+
+    if (this.count == 0)
+        return
+
+    for (i in 0..this.adapter.count) {
+        val item = this.adapter.getItem(i)
+
+        item ?: continue
+        val stringDisplayed = item.toString().toLowerCase().trim()
+        val targetString = text.toLowerCase().trim()
+
+        if (stringDisplayed.equals(targetString)) {
+            this.setSelection(i)
+            return
+        }
+    }
+}
