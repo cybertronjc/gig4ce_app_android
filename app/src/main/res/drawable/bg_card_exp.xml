@@ -3,12 +3,12 @@
     android:height="200dp"
     android:viewportWidth="361"
     android:viewportHeight="139">
-  <path
-      android:pathData="M7,4L344,4A3,3 0,0 1,347 7L347,122A3,3 0,0 1,344 125L7,125A3,3 0,0 1,4 122L4,7A3,3 0,0 1,7 4z"
-      android:fillColor="#66e9e9e9"
-      android:fillType="evenOdd"/>
-  <path
-      android:pathData="M7,4L344,4A3,3 0,0 1,347 7L347,122A3,3 0,0 1,344 125L7,125A3,3 0,0 1,4 122L4,7A3,3 0,0 1,7 4z"
-      android:fillColor="#66e9e9e9"
-      android:fillType="evenOdd"/>
+    <path
+        android:pathData="M7,4L344,4A3,3 0,0 1,347 7L347,122A3,3 0,0 1,344 125L7,125A3,3 0,0 1,4 122L4,7A3,3 0,0 1,7 4z"
+        android:fillColor="#66e9e9e9"
+        android:fillType="evenOdd" />
+    <path
+        android:pathData="M7,4L344,4A3,3 0,0 1,347 7L347,122A3,3 0,0 1,344 125L7,125A3,3 0,0 1,4 122L4,7A3,3 0,0 1,7 4z"
+        android:fillColor="#66e9e9e9"
+        android:fillType="evenOdd" />
 </vector>

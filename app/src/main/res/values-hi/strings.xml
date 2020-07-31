@@ -300,7 +300,17 @@
     <string name="action_invite_friends">दोस्तों को आमंत्रित करें</string>
     <string name="action_refresh">ताज़ा करें</string>
     <string name="please_provide_following_details">Please provide following details.</string>
-    <string name="help">Help</string>
+    <string name="good_luck">शुभ लाभ!!!</string>
+    <string name="start_assessment">मूल्यांकन शुरू करें</string>
+    <string name="congrats">बधाई</string>
+    <string name="assess_complete">मूल्यांकन सफलतापूर्वक पूरा हुआ</string>
+    <string name="scorecard">स्कोरकार्ड</string>
+    <string name="oops">Oops!!!</string>
+    <string name="keep_it_up">Keep It Up</string>
+    <string name="you_ll_soon_be_sent_invites_for_best_gigs_around_for_you">You\'ll soon be sent invites for best gigs around for you</string>
+    <string name="time_taken">Time Taken :</string>
+    <string name="question_wise_summary">Question wise Summary</string>
+    <string name="suggested_learnings">Suggested learnings</string>
     <string name="share">Share</string>
 
 </resources>

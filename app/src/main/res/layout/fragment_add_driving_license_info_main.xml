@@ -42,15 +42,18 @@
 
 
         <TextView
+            android:id="@+id/whyWeNeedThisTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="22dp"
             android:layout_marginEnd="4dp"
+            android:fontFamily="@font/lato"
             android:letterSpacing="-0.01"
+            android:paddingTop="10dp"
+            android:layout_marginTop="12dp"
+            android:paddingBottom="10dp"
             android:text="@string/why_do_we_need_this"
             android:textColor="@color/battle_ship_grey"
             android:textSize="12sp"
-            android:fontFamily="@font/lato"
             app:layout_constraintEnd_toStartOf="@+id/helpIconIV"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -93,22 +96,6 @@
 
         </RadioGroup>
 
-        <include
-            android:id="@+id/dlFrontImageHolder"
-            layout="@layout/fragment_verification_image_holder"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            app:layout_constraintTop_toBottomOf="@id/dlAvailaibilityOptionRG" />
-
-
-        <include
-            android:id="@+id/dlBackImageHolder"
-            layout="@layout/fragment_verification_image_holder"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            app:layout_constraintTop_toBottomOf="@id/dlFrontImageHolder" />
 
         <LinearLayout
             android:id="@+id/dlInfoLayout"
@@ -116,7 +103,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:visibility="gone"
-            app:layout_constraintTop_toBottomOf="@id/dlBackImageHolder">
+            app:layout_constraintTop_toBottomOf="@id/dlAvailaibilityOptionRG">
 
             <View
                 android:id="@+id/topSeaparator"
@@ -140,7 +127,7 @@
                     android:layout_weight="1"
                     android:fontFamily="@font/lato"
                     android:letterSpacing="-0.01"
-                    android:text="@string/please_confirm_the_following_information"
+                    android:text="Please provide following information"
                     android:textColor="@color/black" />
 
                 <ImageView
@@ -185,35 +172,60 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/genderLabel" />
 
-<!--                <View-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="2dp"-->
-<!--                    android:background="@android:color/darker_gray"/>-->
+                <!--                <View-->
+                <!--                    android:layout_width="match_parent"-->
+                <!--                    android:layout_height="2dp"-->
+                <!--                    android:background="@android:color/darker_gray"/>-->
 
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/drivingLicenseTextInputLayout"
-                    style="@style/Widget.Design.TextInputLayout"
+
+                <TextView
+                    android:id="@+id/dlNoLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Driving License Number *"
+                    android:textSize="12sp"
+                    android:layout_marginLeft="2dp"
+                    android:fontFamily="@font/lato" />
+
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/drivingLicenseEditText"
                     android:layout_width="match_parent"
-                    android:layout_marginTop="4dp"
-                    android:layout_height="wrap_content">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/drivingLicenseEditText"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Driving License No"
-                        android:imeActionLabel="Done"
-                        android:imeOptions="actionGo"
-                        android:inputType="textNoSuggestions"
-                        android:maxLength="15"
-                        android:maxLines="1" />
-
-                </com.google.android.material.textfield.TextInputLayout>
+                    android:layout_height="wrap_content"
+                    android:imeActionLabel="Done"
+                    android:imeOptions="actionGo"
+                    android:inputType="textNoSuggestions"
+                    android:maxLength="15"
+                    android:textAllCaps="true"
+                    android:layout_marginTop="5dp"
+                    android:maxLines="1"
+                    app:backgroundTint="@color/colorPrimary"
+                    android:textSize="13sp" />
 
 
             </LinearLayout>
         </LinearLayout>
+
+
+        <include
+            android:id="@+id/dlFrontImageHolder"
+            layout="@layout/fragment_verification_image_holder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@id/dlInfoLayout" />
+
+
+        <include
+            android:id="@+id/dlBackImageHolder"
+            layout="@layout/fragment_verification_image_holder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@id/dlFrontImageHolder" />
+
 
 
         <com.ncorti.slidetoact.SlideToActView
@@ -241,7 +253,7 @@
             style="@style/Theme.CheckBoxLipstickPink"
             android:text="@string/yes_i_confirm_the_data_is_correct"
             app:layout_constraintBottom_toTopOf="@id/dlSubmitSliderBtn"
-            app:layout_constraintTop_toBottomOf="@id/dlInfoLayout"
+            app:layout_constraintTop_toBottomOf="@id/dlBackImageHolder"
             app:layout_constraintVertical_bias="0.98"
             tools:layout_editor_absoluteX="0dp" />
 
