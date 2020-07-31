@@ -68,13 +68,29 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@id/panCardLabel" />
 
+
+        <TextView
+            android:id="@+id/panEditOverallErrorMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="2dp"
+            android:fontFamily="@font/lato"
+            android:letterSpacing="0"
+            android:textColor="@color/app_red"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/doYouHavePanCardLabel"
+            tools:text="Error : Uploaded Image is not a Driving License Image" />
+
+
         <RadioGroup
             android:id="@+id/panCardAvailaibilityOptionRG"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="15dp"
-            app:layout_constraintTop_toBottomOf="@id/doYouHavePanCardLabel">
+            app:layout_constraintTop_toBottomOf="@id/panEditOverallErrorMessage">
 
             <com.google.android.material.radiobutton.MaterialRadioButton
                 android:id="@+id/panYesRB"
@@ -99,89 +115,105 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:visibility="gone"
+            android:visibility="visible"
             app:layout_constraintTop_toBottomOf="@id/panCardAvailaibilityOptionRG">
 
             <View
                 android:id="@+id/topSeaparator"
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="12dp"
                 android:background="#cdccd1" />
 
-            <LinearLayout
-                android:id="@+id/editPanInfoLayout"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="12dp"
+                android:fontFamily="@font/lato"
+                android:letterSpacing="-0.01"
+                android:text="Please provide following information."
+                android:textColor="@color/black" />
+
+
+            <TextView
+                android:id="@+id/panNoLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginRight="16dp"
+                android:fontFamily="@font/lato"
+                android:text="PAN number*"
+                android:textSize="12sp" />
+
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/panCardEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:clickable="true"
-                android:focusable="true"
-                android:orientation="horizontal"
-                android:paddingBottom="12dp">
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:imeActionLabel="Done"
+                android:imeOptions="actionGo"
+                android:inputType="textNoSuggestions"
+                android:maxLength="10"
+                android:maxLines="1"
+                android:textAllCaps="true"
+                app:backgroundTint="@color/colorPrimary" />
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="12dp"
-                    android:layout_weight="1"
-                    android:fontFamily="@font/lato"
-                    android:letterSpacing="-0.01"
-                    android:text="Please provide following information."
-                    android:textColor="@color/black" />
 
-                <ImageView
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="16dp"
-                    android:src="@drawable/ic_pencil_edit"
-                    android:visibility="gone" />
-
-            </LinearLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/panNoEditErrorMessage"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingStart="16dp"
-                android:paddingTop="4dp"
-                android:paddingEnd="16dp"
-                android:paddingBottom="4dp">
-
-                <TextView
-                    android:id="@+id/panNoLabel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:text="PAN number*"
-                    android:textSize="12sp"
-                    android:layout_marginLeft="2dp"
-                    android:fontFamily="@font/lato" />
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginRight="16dp"
+                android:fontFamily="@font/lato"
+                android:letterSpacing="0"
+                android:textColor="@color/app_red"
+                android:textSize="12sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/panCardEditText"
+                tools:text="Error : Uploaded Image is not a Driving License Image" />
 
 
-                <androidx.appcompat.widget.AppCompatEditText
-                    android:id="@+id/panCardEditText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/panNoLabel"
-                    android:imeActionLabel="Done"
-                    android:imeOptions="actionGo"
-                    android:inputType="textNoSuggestions"
-                    android:maxLength="10"
-                    android:textAllCaps="true"
-                    android:maxLines="1"
-                    app:backgroundTint="@color/colorPrimary"
-                    android:textSize="13sp" />
-
-            </RelativeLayout>
         </LinearLayout>
+
+
+        <View
+            android:id="@+id/topSeaparator2"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginTop="8dp"
+            android:background="#cdccd1"
+            app:layout_constraintTop_toBottomOf="@id/panInfoLayout"
+            />
 
         <include
             android:id="@+id/panImageHolder"
             layout="@layout/fragment_verification_image_holder"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone"
-            app:layout_constraintTop_toBottomOf="@id/panInfoLayout" />
+            android:visibility="visible"
+            app:layout_constraintTop_toBottomOf="@id/topSeaparator2" />
+
+        <TextView
+            android:id="@+id/panImageEditErrorMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:fontFamily="@font/lato"
+            android:letterSpacing="0"
+            android:layout_marginStart="18dp"
+            android:textColor="@color/app_red"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/panImageHolder"
+            android:textSize="12sp"
+            tools:text="Error : Uploaded Image is not a Driving License Image" />
+
+
 
 
         <com.ncorti.slidetoact.SlideToActView
@@ -209,7 +241,7 @@
             android:letterSpacing="0"
             android:text="@string/yes_i_confirm_the_data_is_correct"
             app:layout_constraintBottom_toTopOf="@id/panSubmitSliderBtn"
-            app:layout_constraintTop_toBottomOf="@id/panImageHolder"
+            app:layout_constraintTop_toBottomOf="@id/panImageEditErrorMessage"
             app:layout_constraintVertical_bias="0.98"
             tools:layout_editor_absoluteX="0dp" />
 
