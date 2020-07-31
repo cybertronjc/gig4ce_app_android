@@ -376,7 +376,7 @@ class BSCalendarScreenFragment : BaseFragment() {
 
     private fun initializeFeaturesBottomSheet() {
         var datalist: ArrayList<FeatureModel> = ArrayList<FeatureModel>()
-        datalist.add(FeatureModel("My Gig", R.drawable.mygig, -1))
+        datalist.add(FeatureModel("My Gig", R.drawable.mygig, R.id.gig_history_fragment))
         datalist.add(FeatureModel("Explore", R.drawable.ic_landinghome_search, -1))
         datalist.add(FeatureModel("Wallet", R.drawable.wallet, R.id.walletBalancePage))
         datalist.add(FeatureModel("Profile", R.drawable.profile, R.id.profileFragment))

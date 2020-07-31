@@ -1,14 +1,110 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".modules.earn.GigHistoryFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/tb_gig_history"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content"
+        android:contentInsetStart="0dp"
+        android:contentInsetLeft="0dp"
+        app:contentInsetLeft="0dp"
+        app:contentInsetStart="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-</FrameLayout>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/size_4">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cv_profile_image_gig_his"
+                android:layout_width="@dimen/size_48"
+                android:layout_height="@dimen/size_48"
+                android:layout_marginTop="@dimen/size_8"
+                android:layout_marginEnd="@dimen/size_16"
+                android:layout_marginBottom="@dimen/size_8"
+                app:cardCornerRadius="@dimen/size_24"
+
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/iv_profile_image_gig_his"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:contentDescription="@string/profile_image_gig_history"
+                    android:src="@drawable/profile" />
+            </androidx.cardview.widget.CardView>
+
+            <ImageView
+                android:id="@+id/iv_chat_gig_his"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/size_8"
+                android:src="@drawable/ic_home_chat"
+                app:layout_constraintBottom_toBottomOf="@+id/cv_profile_image_gig_his"
+                app:layout_constraintEnd_toStartOf="@+id/cv_profile_image_gig_his"
+                app:layout_constraintTop_toTopOf="@+id/cv_profile_image_gig_his" />
+
+            <ImageView
+                android:id="@+id/iv_search_gig_his"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/size_8"
+                android:src="@drawable/ic_landinghome_search"
+                app:layout_constraintBottom_toBottomOf="@+id/iv_chat_gig_his"
+                app:layout_constraintEnd_toStartOf="@+id/iv_chat_gig_his"
+                app:layout_constraintTop_toTopOf="@+id/iv_chat_gig_his" />
+
+            <ImageView
+                android:id="@+id/iv_back_tb_gig_history"
+                android:layout_width="@dimen/size_32"
+                android:layout_height="@dimen/size_32"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="@dimen/size_12"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/back_button"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_arrow_back_24"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_title_toolbar_gig_history"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="@dimen/size_16"
+                android:layout_marginEnd="@dimen/size_16"
+                android:ellipsize="end"
+                android:text="@string/my_gigs"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/font_16"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/iv_search_gig_his"
+                app:layout_constraintStart_toEndOf="@+id/iv_back_tb_gig_history"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.appcompat.widget.Toolbar>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_gigs_gig_history"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tb_gig_history" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

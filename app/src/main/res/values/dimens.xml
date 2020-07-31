@@ -69,4 +69,10 @@
     <dimen name="size_2">2dp</dimen>
     <dimen name="size_168">168dp</dimen>
     <dimen name="font_10">10sp</dimen>
+    <dimen name="size_48">48dp</dimen>
+    <dimen name="size_36">36dp</dimen>
+    <dimen name="size_33">33dp</dimen>
+    <dimen name="size_6">6dp</dimen>
+    <dimen name="size_50">50dp</dimen>
+    <dimen name="size_45">45dp</dimen>
 </resources>

@@ -6,7 +6,7 @@ import android.view.View
 import androidx.annotation.DimenRes
 import androidx.recyclerview.widget.RecyclerView
 
-class HorizontaltemDecoration(private val mItemOffset: Int) : RecyclerView.ItemDecoration() {
+class GigHistoryItemDecorator(private val mItemOffset: Int) : RecyclerView.ItemDecoration() {
 
     constructor(
         context: Context?,
@@ -18,9 +18,13 @@ class HorizontaltemDecoration(private val mItemOffset: Int) : RecyclerView.ItemD
         state: RecyclerView.State
     ) {
         super.getItemOffsets(outRect, view, parent, state)
-
-        outRect[mItemOffset / 2, mItemOffset, mItemOffset / 2] = mItemOffset / 2
-
+        if (parent.getChildAdapterPosition(view) == 0) {
+            outRect[mItemOffset, mItemOffset * 2, mItemOffset] = mItemOffset / 2
+        } else if (parent.getChildAdapterPosition(view) == 1) {
+            outRect[0, mItemOffset / 2, 0] = mItemOffset / 2
+        } else {
+            outRect[mItemOffset, mItemOffset / 2, mItemOffset] = mItemOffset / 2
+        }
     }
 
 }

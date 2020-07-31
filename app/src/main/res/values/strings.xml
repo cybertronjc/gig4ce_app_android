@@ -403,6 +403,11 @@
     <string name="question_wise_summary">Question wise Summary</string>
     <string name="suggested_learnings">Suggested learnings</string>
     <string name="share">Share</string>
+    <string name="profile_image_gig_history">profile image gig history</string>
+    <string name="my_gigs">My Gigs</string>
+    <string name="punch_in">Punch In</string>
+    <string name="past">Past</string>
+    <string name="upcoming">Upcoming</string>
 
 
 </resources>

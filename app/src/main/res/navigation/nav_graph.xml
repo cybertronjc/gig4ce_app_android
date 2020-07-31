@@ -595,5 +595,10 @@
         android:name="com.gigforce.app.modules.assessment.AssessmentResultFragment"
         android:label="AssessmentResultFragment" />
 
+    <fragment
+        android:id="@+id/gig_history_fragment"
+        android:name="com.gigforce.app.modules.earn.GigHistoryFragment"
+        android:label="GigHistoryFragment" />
+
 </navigation>
 

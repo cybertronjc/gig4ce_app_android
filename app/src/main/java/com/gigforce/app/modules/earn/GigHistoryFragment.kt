@@ -1,60 +1,51 @@
 package com.gigforce.app.modules.earn
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.gigforce.app.R
+import com.gigforce.app.core.base.BaseFragment
+import com.gigforce.app.utils.GigHistoryItemDecorator
+import com.gigforce.app.utils.ItemOffsetDecoration
+import kotlinx.android.synthetic.main.fragment_gig_history.*
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
 /**
  * A simple [Fragment] subclass.
  * Use the [GigHistoryFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class GigHistoryFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+class GigHistoryFragment : BaseFragment() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_gig_history, container, false)
+        return inflateView(R.layout.fragment_gig_history, inflater, container)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        rv_gigs_gig_history.adapter = AdapterGigHistory()
+        rv_gigs_gig_history.layoutManager = LinearLayoutManager(activity)
+        rv_gigs_gig_history.addItemDecoration(
+            GigHistoryItemDecorator(
+                requireContext().resources.getDimensionPixelOffset(
+                    R.dimen.size_16
+                )
+            )
+        )
     }
 
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment GigHistoryFragment.
-         */
-        // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            GigHistoryFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+        fun newInstance() =
+            GigHistoryFragment()
     }
+
 }
