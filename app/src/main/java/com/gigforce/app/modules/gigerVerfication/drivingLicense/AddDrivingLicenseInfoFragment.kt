@@ -424,7 +424,7 @@ class AddDrivingLicenseInfoFragment : BaseFragment() {
             } else if (!it.panCardDetailsUploaded) {
                 navigate(R.id.addPanCardInfoFragment)
             } else if (!it.aadharCardDetailsUploaded) {
-                navigate(R.id.addDrivingLicenseInfoFragment)
+                navigate(R.id.addAadharCardInfoFragment)
             } else {
                 showDetailsUploaded()
             }

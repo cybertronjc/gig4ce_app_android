@@ -22,7 +22,6 @@ import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
 import com.gigforce.app.modules.gigerVerfication.GigerVerificationStatus
 import com.gigforce.app.modules.gigerVerfication.VerificationValidations
 import com.gigforce.app.modules.gigerVerfication.WhyWeNeedThisBottomSheet
-import com.gigforce.app.modules.gigerVerfication.panCard.PanCardDataModel
 import com.gigforce.app.modules.photocrop.PhotoCrop
 import com.gigforce.app.utils.Lse
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -30,9 +29,11 @@ import com.google.firebase.storage.FirebaseStorage
 import com.ncorti.slidetoact.SlideToActView
 import kotlinx.android.synthetic.main.fragment_add_bank_details_info.*
 import kotlinx.android.synthetic.main.fragment_add_bank_details_info_main.*
+import kotlinx.android.synthetic.main.fragment_add_bank_details_info_view.*
 import kotlinx.android.synthetic.main.fragment_verification_image_holder.view.*
 import java.util.*
 
+@ExperimentalStdlibApi
 class AddBankDetailsInfoFragment : BaseFragment() {
 
     companion object {
@@ -99,20 +100,12 @@ class AddBankDetailsInfoFragment : BaseFragment() {
                 showPassbookImageLayout()
                 showPassbookInfoLayout()
 
-                if (bankDetailsDataModel?.userHasPassBook != null &&
-                    bankDetailsDataModel?.userHasPassBook!! &&
-                    clickedImagePath == null
-                ) {
-                    passbookSubmitSliderBtn.gone()
-                    bankDetailsDataConfirmationCB.gone()
-                }
-
                 if (bankDetailsDataConfirmationCB.isChecked && clickedImagePath != null) {
                     enableSubmitButton()
                 } else
                     disableSubmitButton()
 
-            } else if (checkedId == R.id.passbookNoRB ) {
+            } else if (checkedId == R.id.passbookNoRB) {
                 hidePassbookImageAndInfoLayout()
 
                 passbookSubmitSliderBtn.visible()
@@ -223,82 +216,66 @@ class AddBankDetailsInfoFragment : BaseFragment() {
                         }
 
                         val accNo = accountNoEditText.text.toString()
-                        val bankName = bankNameEditText.text.toString()
+                        val bankName =
+                            bankNameEditText.text.toString().capitalize(Locale.getDefault())
 
-                        if (passbookSubmitSliderBtn.text.toString() == getString(R.string.update)) {
+                        viewModel.updateBankPassbookImagePath(
+                            userHasPassBook = true,
+                            passbookImagePath = clickedImagePath,
+                            ifscCode = ifsc,
+                            bankName = bankName,
+                            accountNo = accNo
+                        )
 
-                            MaterialAlertDialogBuilder(requireContext())
-                                .setTitle("Alert")
-                                .setMessage("You are re-uploading your Bank details, they will be verified once again, that can take up to 7 days")
-                                .setPositiveButton("OK") { _, _ ->
-
-                                    viewModel.updateBankPassbookImagePath(
-                                        userHasPassBook = true,
-                                        passbookImagePath = clickedImagePath,
-                                        ifscCode = ifsc,
-                                        bankName = bankName,
-                                        accountNo = accNo
-                                    )
-                                }
-                                .show()
-
-                        } else {
-
-                            viewModel.updateBankPassbookImagePath(
-                                userHasPassBook = true,
-                                passbookImagePath = clickedImagePath,
-                                ifscCode = ifsc,
-                                bankName = bankName,
-                                accountNo = accNo
-                            )
-                        }
                     }
                 }
             }
+
+        editLayout.setOnClickListener {
+
+            MaterialAlertDialogBuilder(requireContext())
+                .setTitle("Alert")
+                .setMessage("You are re-uploading your Bank details, they will be verified once again, that can take up to 7 days")
+                .setPositiveButton("OK") { _, _ ->
+
+                    bankViewLayout.gone()
+                    bankEditLayout.visible()
+
+                    setDataOnEditLayout(bankDetailsDataModel)
+                }
+                .setNegativeButton("Cancel") { _, _ -> }
+                .show()
+        }
+
     }
 
     private fun initViewModel() {
         viewModel.gigerVerificationStatus
             .observe(viewLifecycleOwner, Observer {
-
                 this.gigerVerificationStatus = it
+                this.bankDetailsDataModel = it.bankUploadDetailsDataModel
+                progressBar.gone()
+
                 if (it.bankDetailsUploaded && it.bankUploadDetailsDataModel != null) {
 
                     if (it.bankUploadDetailsDataModel.userHasPassBook != null) {
                         if (it.bankUploadDetailsDataModel.userHasPassBook) {
-                            this.bankDetailsDataModel = it.bankUploadDetailsDataModel
-
-                            passbookSubmitSliderBtn.text = getString(R.string.update)
-                            bankDetailsDataConfirmationCB.gone()
-                            passbookSubmitSliderBtn.gone()
-
-                            passbookAvailaibilityOptionRG.check(R.id.passbookYesRB)
-                            ifscEditText.setText(it.bankUploadDetailsDataModel.ifscCode)
-                            accountNoEditText.setText(it.bankUploadDetailsDataModel.accountNo)
-                            bankNameEditText.setText(it.bankUploadDetailsDataModel.bankName)
-                        } else
+                            setDataOnViewLayout(it)
+                        } else {
+                            setDataOnEditLayout(null)
                             passbookAvailaibilityOptionRG.check(R.id.passbookNoRB)
+                        }
                     } else {
                         //Uncheck both and hide capture layout
+                        setDataOnEditLayout(null)
                         passbookAvailaibilityOptionRG.clearCheck()
-                        passbookImageHolder.visibility = View.GONE
+                        hidePassbookImageAndInfoLayout()
                     }
+                } else {
 
-                    if (it.bankUploadDetailsDataModel.passbookImagePath != null) {
-                        val imageRef = firebaseStorage
-                            .reference
-                            .child("verification")
-                            .child(it.bankUploadDetailsDataModel.passbookImagePath)
-
-                        if (bankDetailsDataConfirmationCB.isChecked)
-                            passbookSubmitSliderBtn.isEnabled = true
-
-                        imageRef.downloadUrl.addOnSuccessListener {
-                            showPassbookInfoCard(it)
-                        }.addOnFailureListener {
-                            print("ee")
-                        }
-                    }
+                    setDataOnEditLayout(null)
+                    passbookAvailaibilityOptionRG.clearCheck()
+                    hidePassbookImageAndInfoLayout()
                 }
             })
 
@@ -315,15 +292,98 @@ class AddBankDetailsInfoFragment : BaseFragment() {
         viewModel.getVerificationStatus()
     }
 
-    override fun onBackPressed(): Boolean {
+    private fun setDataOnViewLayout(gigVerificationStatus: GigerVerificationStatus) {
+        bankEditLayout.gone()
+        bankViewLayout.visible()
+        //TODO handle error message when process is ready
 
+        val bankDetails = gigVerificationStatus.bankUploadDetailsDataModel ?: return
+
+        statusTV.text = bankDetails.verifiedString
+        statusTV.setTextColor(
+            ResourcesCompat.getColor(
+                resources,
+                gigVerificationStatus.getColorCodeForStatus(bankDetails.state),
+                null
+            )
+        )
+
+        if (bankDetails.passbookImagePath != null) {
+            firebaseStorage
+                .reference
+                .child("verification")
+                .child(bankDetails.passbookImagePath)
+                .downloadUrl.addOnSuccessListener {
+                    Glide.with(requireContext())
+                        .load(it)
+                        .placeholder(getCircularProgressDrawable())
+                        .into(bankViewImageIV)
+                }.addOnFailureListener {
+                    print("ee")
+                }
+        }
+        bankViewImageErrorMessage.gone()
+
+
+        ifscNoTV.text = bankDetails.ifscCode
+        ifscErrorMessage.gone()
+
+        bankNameTV.text = bankDetails.bankName
+        bankNameErrorMessage.gone()
+
+        bankAccountNoTV.text = bankDetails.accountNo
+        bankAccountNoErrorMessage.gone()
+    }
+
+
+    private fun setDataOnEditLayout(it: BankDetailsDataModel?) {
+        bankViewLayout.gone()
+        bankEditLayout.visible()
+
+        if (it != null) {
+            //Fill previous data
+            passbookAvailaibilityOptionRG.gone()
+            doYouHavePassbookLabel.gone()
+        } else {
+            passbookAvailaibilityOptionRG.visible()
+            doYouHavePassbookLabel.visible()
+
+            bankEditOverallErrorMessage.gone()
+            bankIfscEditErrorMessage.gone()
+            bankNameEditErrorMessage.gone()
+            bankAccNoEditErrorMessage.gone()
+            bankImageEditErrorMessage.gone()
+        }
+
+        val bankData = it ?: return
+        passbookSubmitSliderBtn.text = getString(R.string.update)
+        ifscEditText.setText(bankData.ifscCode)
+        bankNameEditText.setText(bankData.bankName)
+        accountNoEditText.setText(bankData.accountNo)
+
+        if (bankData.passbookImagePath != null) {
+            firebaseStorage
+                .reference
+                .child("verification")
+                .child(bankData.passbookImagePath)
+                .downloadUrl.addOnSuccessListener {
+                    showPassbookInfoCard(it)
+                }.addOnFailureListener {
+                    print("ee")
+                }
+        }
+
+    }
+
+    override fun onBackPressed(): Boolean {
         findNavController().popBackStack(R.id.gigerVerificationFragment, false)
         return true
     }
 
     private fun errorOnUploadingDocuments(error: String) {
         progressBar.visibility = View.GONE
-        bankDetailsMainLayout.visibility = View.VISIBLE
+        bankViewLayout.visibility = View.GONE
+        bankEditLayout.visibility = View.VISIBLE
         passbookSubmitSliderBtn.resetSlider()
 
         MaterialAlertDialogBuilder(requireContext())
@@ -343,10 +403,10 @@ class AddBankDetailsInfoFragment : BaseFragment() {
             } else if (!it.panCardDetailsUploaded) {
                 navigate(R.id.addPanCardInfoFragment)
             } else if (!it.aadharCardDetailsUploaded) {
-                navigate(R.id.addDrivingLicenseInfoFragment)
+                navigate(R.id.addAadharCardInfoFragment)
             } else if (!it.dlCardDetailsUploaded) {
                 navigate(R.id.addDrivingLicenseInfoFragment)
-            } else   {
+            } else {
                 showDetailsUploaded()
             }
         }
@@ -369,7 +429,8 @@ class AddBankDetailsInfoFragment : BaseFragment() {
 
 
     private fun showLoadingState() {
-        bankDetailsMainLayout.visibility = View.GONE
+        bankViewLayout.visibility = View.GONE
+        bankEditLayout.visibility = View.GONE
         progressBar.visibility = View.VISIBLE
     }
 
@@ -457,6 +518,7 @@ class AddBankDetailsInfoFragment : BaseFragment() {
 
         Glide.with(requireContext())
             .load(panInfoPath)
+            .placeholder(getCircularProgressDrawable())
             .into(passbookImageHolder.uploadImageLayout.clickedImageIV)
     }
 

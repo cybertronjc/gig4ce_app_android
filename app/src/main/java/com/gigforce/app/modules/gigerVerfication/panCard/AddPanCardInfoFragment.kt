@@ -310,7 +310,7 @@ class AddPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetActio
         gigerVerificationStatus?.let {
 
             if (!it.aadharCardDetailsUploaded) {
-                navigate(R.id.addDrivingLicenseInfoFragment)
+                navigate(R.id.addAadharCardInfoFragment)
             } else if (!it.dlCardDetailsUploaded) {
                 navigate(R.id.addDrivingLicenseInfoFragment)
             } else if (!it.bankDetailsUploaded) {
