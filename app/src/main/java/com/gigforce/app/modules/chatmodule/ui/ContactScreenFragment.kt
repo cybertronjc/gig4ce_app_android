@@ -21,10 +21,11 @@ import com.gigforce.app.utils.AppConstants
 import com.gigforce.app.utils.VerticalItemDecorator
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.contact_screen_fragment.*
+import kotlinx.android.synthetic.main.hour_selected_outline.*
 
 class ContactScreenFragment : BaseFragment(),OnContactClickListener {
 
-    private lateinit var viewModel : ContactViewModel
+    private lateinit var viewModel : ChatViewModel
     private lateinit var mAdapter : ContactRecyclerAdapter
 
     companion object {
@@ -43,14 +44,14 @@ class ContactScreenFragment : BaseFragment(),OnContactClickListener {
         initialize()
         attachListeners()
 
-        viewModel = ViewModelProviders.of(this).get(ContactViewModel::class.java)
+        val tempviewModel: ChatViewModel by activityViewModels<ChatViewModel>()
+        viewModel = tempviewModel
         mAdapter =
             ContactRecyclerAdapter(
                 initGlide()!!,
                 this
             )
         subscribeViewModel()
-        viewModel.prepareList()
         initRecycler()
     }
 
@@ -96,7 +97,7 @@ class ContactScreenFragment : BaseFragment(),OnContactClickListener {
     }
 
     private fun subscribeViewModel(){
-        viewModel.getContactsLiveData().observe(viewLifecycleOwner, Observer {
+        viewModel.chatHeaders.observe(viewLifecycleOwner, Observer {
             if (it!=null){
                 mAdapter.setData(it)
             }
@@ -130,7 +131,7 @@ class ContactScreenFragment : BaseFragment(),OnContactClickListener {
         }
     }
 
-    override fun contactClick(url: String, name: String) {
+    override fun contactClick(url: String, name: String, chatHeaderId: String) {
 //        val intent = Intent(activity?.applicationContext,ChatScreenFragment::class.java)
 //        intent.putExtra(AppConstants.IMAGE_URL,url)
 //        intent.putExtra(AppConstants.CONTACT_NAME,name)
@@ -141,6 +142,7 @@ class ContactScreenFragment : BaseFragment(),OnContactClickListener {
             val bundle = Bundle()
             bundle.putSerializable(AppConstants.IMAGE_URL, url)
             bundle.putSerializable(AppConstants.CONTACT_NAME, name)
+            bundle.putSerializable("chatHeaderId", chatHeaderId)
             navigate(R.id.chatScreenFragment, bundle)
         }
     }

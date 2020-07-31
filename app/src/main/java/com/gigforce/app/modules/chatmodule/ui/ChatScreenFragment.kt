@@ -9,6 +9,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,6 +18,7 @@ import com.abhijai.gigschatdemo.contacts_module.ui.adapters.ChatRecyclerAdapter
 import com.abhijai.gigschatdemo.contacts_module.viewModels.ContactViewModel
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
+import com.gigforce.app.modules.chatmodule.viewModels.ChatViewModel
 import com.gigforce.app.utils.AppConstants
 import com.gigforce.app.utils.VerticalItemDecorator
 import kotlinx.android.synthetic.main.fragment_chat_screen.*
@@ -26,10 +28,11 @@ import java.time.format.DateTimeFormatter
 
 class ChatScreenFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener {
 
-    private lateinit var viewModel: ContactViewModel
+    private lateinit var viewModel: ChatViewModel
     private lateinit var mAdapter: ChatRecyclerAdapter
     lateinit var imageUrl: String
     lateinit var username: String
+    var chatHeaderId = ""
 
     companion object {
         fun newInstance() = ChatScreenFragment()
@@ -40,6 +43,7 @@ class ChatScreenFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener {
         arguments?.let {
             imageUrl = it.getSerializable(AppConstants.IMAGE_URL).toString()
             username = it.getSerializable(AppConstants.CONTACT_NAME).toString()
+            chatHeaderId = it.getSerializable("chatHeaderId").toString()
 
         }
     }
@@ -56,7 +60,7 @@ class ChatScreenFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener {
         init()
         manageTime()
         subscribeViewModel()
-        viewModel.prepareChatList(username)
+        viewModel.getChatMsgs(chatHeaderId)
         manageNewMessageToContact()
         manageBackIcon()
     }
@@ -66,7 +70,8 @@ class ChatScreenFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener {
         initIntent()
         initListeners()
         initRecycler()
-        viewModel = ViewModelProviders.of(this).get(ContactViewModel::class.java)
+        val tempViewModel:ChatViewModel by activityViewModels<ChatViewModel>()
+        viewModel = tempViewModel
     }
 
     private fun initRecycler() {
@@ -76,9 +81,9 @@ class ChatScreenFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener {
     }
 
     private fun subscribeViewModel() {
-        viewModel.getChatLiveData().observe(viewLifecycleOwner, Observer {
+        viewModel.chatMsgs.observe(viewLifecycleOwner, Observer {
             if (it != null) {
-                mAdapter.setData(it as ArrayList<ChatModel>)
+                mAdapter.setData(it)
                 rv_chats.scrollToPosition(it.size - 1)
             }
         })
@@ -141,7 +146,7 @@ class ChatScreenFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener {
             if (validateNewMessageTask()) {
                 val message = et_typedMessageValue.text.toString()
                 val msgTime = manageTime()
-                viewModel.addNewMessageToTheList(message, msgTime)
+                //viewModel.addNewMessageToTheList(message, msgTime)
                 et_typedMessageValue.setText("")
             }
         }
