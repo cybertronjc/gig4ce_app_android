@@ -4,39 +4,43 @@
     android:height="24dp"
     android:viewportWidth="24"
     android:viewportHeight="24">
-  <path
-      android:pathData="M12,12m-12,0a12,12 0,1 1,24 0a12,12 0,1 1,-24 0"
-      android:strokeWidth="1"
-      android:fillType="evenOdd"
-      android:strokeColor="#00000000">
-    <aapt:attr name="android:fillColor">
-      <gradient 
-          android:startY="25.03641"
-          android:startX="-1.2233434"
-          android:endY="-5.8440953E-16"
-          android:endX="26.324024"
-          android:type="linear">
-        <item android:offset="0" android:color="#FFE42C64"/>
-        <item android:offset="1" android:color="#FF990077"/>
-      </gradient>
-    </aapt:attr>
-  </path>
-  <path
-      android:pathData="M12,14.8711m-1,0a1,1 0,1 1,2 0a1,1 0,1 1,-2 0"
-      android:strokeWidth="1"
-      android:fillColor="#FFFFFF"
-      android:fillType="nonZero"
-      android:strokeColor="#00000000"/>
-  <path
-      android:pathData="M12,6C8.684,6 6,8.6835 6,12C6,15.316 8.6835,18 12,18C15.316,18 18,15.3165 18,12C18,8.684 15.3165,6 12,6ZM12,17.0625C9.2021,17.0625 6.9375,14.7983 6.9375,12C6.9375,9.2021 9.2017,6.9375 12,6.9375C14.7979,6.9375 17.0625,9.2017 17.0625,12C17.0625,14.7979 14.7983,17.0625 12,17.0625Z"
-      android:strokeWidth="1"
-      android:fillColor="#FFFFFF"
-      android:fillType="nonZero"
-      android:strokeColor="#00000000"/>
-  <path
-      android:pathData="M12,9.0117C10.9661,9.0117 10.125,9.8528 10.125,10.8867C10.125,11.1456 10.3349,11.3555 10.5938,11.3555C10.8526,11.3555 11.0625,11.1456 11.0625,10.8867C11.0625,10.3698 11.4831,9.9492 12,9.9492C12.5169,9.9492 12.9375,10.3698 12.9375,10.8867C12.9375,11.4037 12.5169,11.8242 12,11.8242C11.7411,11.8242 11.5313,12.0341 11.5313,12.293L11.5313,13.4648C11.5313,13.7237 11.7411,13.9336 12,13.9336C12.2589,13.9336 12.4688,13.7237 12.4688,13.4648L12.4688,12.7024C13.2765,12.4937 13.875,11.7588 13.875,10.8867C13.875,9.8528 13.0339,9.0117 12,9.0117Z"
-      android:strokeWidth="1"
-      android:fillColor="#FFFFFF"
-      android:fillType="nonZero"
-      android:strokeColor="#00000000"/>
+    <path
+        android:pathData="M12,12m-12,0a12,12 0,1 1,24 0a12,12 0,1 1,-24 0"
+        android:strokeWidth="1"
+        android:fillType="evenOdd"
+        android:strokeColor="#00000000">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startY="25.03641"
+                android:startX="-1.2233434"
+                android:endY="-5.8440953E-16"
+                android:endX="26.324024"
+                android:type="linear">
+                <item
+                    android:offset="0"
+                    android:color="#FFE42C64" />
+                <item
+                    android:offset="1"
+                    android:color="#FF990077" />
+            </gradient>
+        </aapt:attr>
+    </path>
+    <path
+        android:pathData="M12,14.8711m-1,0a1,1 0,1 1,2 0a1,1 0,1 1,-2 0"
+        android:strokeWidth="1"
+        android:fillColor="#FFFFFF"
+        android:fillType="nonZero"
+        android:strokeColor="#00000000" />
+    <path
+        android:pathData="M12,6C8.684,6 6,8.6835 6,12C6,15.316 8.6835,18 12,18C15.316,18 18,15.3165 18,12C18,8.684 15.3165,6 12,6ZM12,17.0625C9.2021,17.0625 6.9375,14.7983 6.9375,12C6.9375,9.2021 9.2017,6.9375 12,6.9375C14.7979,6.9375 17.0625,9.2017 17.0625,12C17.0625,14.7979 14.7983,17.0625 12,17.0625Z"
+        android:strokeWidth="1"
+        android:fillColor="#FFFFFF"
+        android:fillType="nonZero"
+        android:strokeColor="#00000000" />
+    <path
+        android:pathData="M12,9.0117C10.9661,9.0117 10.125,9.8528 10.125,10.8867C10.125,11.1456 10.3349,11.3555 10.5938,11.3555C10.8526,11.3555 11.0625,11.1456 11.0625,10.8867C11.0625,10.3698 11.4831,9.9492 12,9.9492C12.5169,9.9492 12.9375,10.3698 12.9375,10.8867C12.9375,11.4037 12.5169,11.8242 12,11.8242C11.7411,11.8242 11.5313,12.0341 11.5313,12.293L11.5313,13.4648C11.5313,13.7237 11.7411,13.9336 12,13.9336C12.2589,13.9336 12.4688,13.7237 12.4688,13.4648L12.4688,12.7024C13.2765,12.4937 13.875,11.7588 13.875,10.8867C13.875,9.8528 13.0339,9.0117 12,9.0117Z"
+        android:strokeWidth="1"
+        android:fillColor="#FFFFFF"
+        android:fillType="nonZero"
+        android:strokeColor="#00000000" />
 </vector>
