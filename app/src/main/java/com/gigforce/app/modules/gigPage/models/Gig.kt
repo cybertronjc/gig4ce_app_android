@@ -1,8 +1,8 @@
 package com.gigforce.app.modules.gigPage.models
 
 import androidx.annotation.Keep
+import com.gigforce.app.core.toLocalDateTime
 import com.google.firebase.Timestamp
-import com.google.firebase.encoders.annotations.Encodable
 import com.google.firebase.firestore.Exclude
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -62,7 +62,7 @@ data class Gig(
     }
 
     @Exclude
-    fun isGigOfPast(): Boolean {
+    fun isGigOfPastDay(): Boolean {
 
         val gigDate =
             startDateTime!!.toDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
@@ -92,12 +92,19 @@ data class Gig(
 
     @Exclude
     fun isPastGig(): Boolean {
-        if (isGigOfPast())
+        if (isGigOfPastDay())
             return true
 
         if (isGigOfToday()) {
             if (isCheckInAndCheckOutMarked())
                 return true
+
+            val gigCheckInTime = startDateTime!!.toLocalDateTime()
+            val maxCheckInTime = gigCheckInTime.plusHours(1)
+            if(LocalDateTime.now().isAfter(maxCheckInTime) && isCheckInMarked().not()){
+                //User Has Exceeded max check in time and hasn't marked check-in yet
+                return true
+            }
 
             return if (endDateTime != null) {
 
@@ -105,7 +112,7 @@ data class Gig(
                     endDateTime!!.toDate().toInstant().atZone(ZoneId.systemDefault())
                         .toLocalDateTime()
                 val maxCheckOutTime =
-                    gigCheckOutTime.plusHours(4) //4 Hour window for checkout after gig time expires
+                    gigCheckOutTime.plusHours(1) //1 Hour window for checkout after gig time expires
                 LocalDateTime.now().isAfter(maxCheckOutTime)
             } else {
                 false // If end time not given gig will be considered full day gig (present gig)
@@ -123,8 +130,9 @@ data class Gig(
             startDateTime!!.toDate().toInstant().atZone(ZoneId.systemDefault())
                 .toLocalDateTime()
         val minCheckInTime = gigCheckInTime.minusHours(1)
+        val maxCheckInTime = gigCheckInTime.plusHours(1)
         val currentTime = LocalDateTime.now()
-        val validCheckInTime = minCheckInTime.isBefore(currentTime)
+        val validCheckInTime =  currentTime.isAfter(minCheckInTime) && currentTime.isBefore(maxCheckInTime)
 
         return if (endDateTime != null) {
 
@@ -136,7 +144,7 @@ data class Gig(
                 return false
             }
 
-            val maxCheckOutTime = gigCheckOutTime.plusHours(4)
+            val maxCheckOutTime = gigCheckOutTime.plusHours(1)
             currentTime.isBefore(maxCheckOutTime) && validCheckInTime
         } else {
             isGigOfToday() && validCheckInTime
