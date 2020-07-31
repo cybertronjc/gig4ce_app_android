@@ -144,16 +144,7 @@ class AddBankDetailsInfoFragment : BaseFragment() {
             object : SlideToActView.OnSlideCompleteListener {
                 override fun onSlideComplete(view: SlideToActView) {
 
-                    if (passbookNoRB.isChecked) {
-
-                        viewModel.updateBankPassbookImagePath(
-                            userHasPassBook = false,
-                            passbookImagePath = null,
-                            ifscCode = null,
-                            bankName = null,
-                            accountNo = null
-                        )
-                    } else {
+                    if (passbookYesRB.isChecked || passbookSubmitSliderBtn.text == getString(R.string.update)) {
 
                         val ifsc = ifscEditText.text.toString().toUpperCase(Locale.getDefault())
                         if (!VerificationValidations.isIfSCValid(ifsc)) {
@@ -227,6 +218,15 @@ class AddBankDetailsInfoFragment : BaseFragment() {
                             accountNo = accNo
                         )
 
+                    } else if(passbookNoRB.isChecked) {
+
+                        viewModel.updateBankPassbookImagePath(
+                            userHasPassBook = false,
+                            passbookImagePath = null,
+                            ifscCode = null,
+                            bankName = null,
+                            accountNo = null
+                        )
                     }
                 }
             }

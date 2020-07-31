@@ -144,7 +144,7 @@ class AddPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetActio
 
                 override fun onSlideComplete(view: SlideToActView) {
 
-                    if (panYesRB.isChecked) {
+                    if (panYesRB.isChecked || panSubmitSliderBtn.text == getString(R.string.update)) {
                         val panCardNo =
                             panCardEditText.text.toString().toUpperCase(Locale.getDefault())
                         if (!VerificationValidations.isPanCardValid(panCardNo)) {
@@ -169,11 +169,10 @@ class AddPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetActio
                             panSubmitSliderBtn.resetSlider()
                             return
                         }
-                        viewModel.updatePanImagePath(true, clickedImagePath, panCardNo)
 
+                        viewModel.updatePanImagePath(true, clickedImagePath, panCardNo)
                     } else if (panNoRB.isChecked) {
                         viewModel.updatePanImagePath(false, null, null)
-
                     }
                 }
             }
@@ -271,8 +270,10 @@ class AddPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetActio
             panEditOverallErrorMessage.gone()
             panNoEditErrorMessage.gone()
             panImageEditErrorMessage.gone()
-
         }
+
+        panInfoLayout.visible()
+        panImageHolder.visible()
 
         val panData = it ?: return
         panSubmitSliderBtn.text = getString(R.string.update)
@@ -347,42 +348,6 @@ class AddPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetActio
     override fun onBackPressed(): Boolean {
         findNavController().popBackStack(R.id.gigerVerificationFragment, false)
         return true
-    }
-
-
-    private fun updatePanInfo(it: GigerVerificationStatus) {
-        if (it.panCardDetailsUploaded && it.panCardDetails != null) {
-
-            if (it.panCardDetails.userHasPanCard != null) {
-                if (it.panCardDetails.userHasPanCard) {
-
-                    panSubmitSliderBtn.text = getString(R.string.update)
-                    panSubmitSliderBtn.gone()
-                    panDataCorrectCB.gone()
-
-                    panCardAvailaibilityOptionRG.check(R.id.panYesRB)
-                    panCardEditText.setText(it.panCardDetails.panCardNo)
-                } else
-                    panCardAvailaibilityOptionRG.check(R.id.panNoRB)
-            } else {
-                //Uncheck both and hide capture layout
-                panCardAvailaibilityOptionRG.clearCheck()
-                panImageHolder.visibility = View.GONE
-            }
-
-            if (it.panCardDetails.panCardImagePath != null) {
-                val imageRef = firebaseStorage
-                    .reference
-                    .child("verification")
-                    .child(it.panCardDetails.panCardImagePath)
-
-                imageRef.downloadUrl.addOnSuccessListener {
-                    showPanInfoCard(it)
-                }.addOnFailureListener {
-                    print("ee")
-                }
-            }
-        }
     }
 
 

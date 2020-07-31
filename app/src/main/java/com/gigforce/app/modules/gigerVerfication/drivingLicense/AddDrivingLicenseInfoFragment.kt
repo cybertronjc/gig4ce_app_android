@@ -149,7 +149,7 @@ class AddDrivingLicenseInfoFragment : BaseFragment() {
 
                 override fun onSlideComplete(view: SlideToActView) {
 
-                    if (dlYesRB.isChecked) {
+                    if (dlYesRB.isChecked || dlSubmitSliderBtn.text == getString(R.string.update)) {
 
                         if (stateSpinner.selectedItemPosition == 0) {
                             MaterialAlertDialogBuilder(requireContext())
@@ -318,7 +318,8 @@ class AddDrivingLicenseInfoFragment : BaseFragment() {
                 .child("verification")
                 .child(dlDetails.frontImage)
                 .downloadUrl.addOnSuccessListener {
-                    Glide.with(requireContext()).load(it).placeholder(getCircularProgressDrawable()).into(dlFrontImageIV)
+                    Glide.with(requireContext()).load(it).placeholder(getCircularProgressDrawable())
+                        .into(dlFrontImageIV)
                 }.addOnFailureListener {
                     print("ee")
                 }
@@ -331,7 +332,8 @@ class AddDrivingLicenseInfoFragment : BaseFragment() {
                 .child("verification")
                 .child(dlDetails.backImage)
                 .downloadUrl.addOnSuccessListener {
-                    Glide.with(requireContext()).load(it).placeholder(getCircularProgressDrawable()).into(dlBackImageIV)
+                    Glide.with(requireContext()).load(it).placeholder(getCircularProgressDrawable())
+                        .into(dlBackImageIV)
                 }.addOnFailureListener {
                     print("ee")
                 }

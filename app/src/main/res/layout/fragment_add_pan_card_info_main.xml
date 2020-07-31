@@ -79,6 +79,7 @@
             android:letterSpacing="0"
             android:textColor="@color/app_red"
             android:textSize="12sp"
+            android:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/doYouHavePanCardLabel"
             tools:text="Error : Uploaded Image is not a Driving License Image" />
@@ -115,7 +116,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:visibility="visible"
+            android:visibility="gone"
             app:layout_constraintTop_toBottomOf="@id/panCardAvailaibilityOptionRG">
 
             <View
@@ -174,6 +175,7 @@
                 android:letterSpacing="0"
                 android:textColor="@color/app_red"
                 android:textSize="12sp"
+                android:visibility="gone"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/panCardEditText"
                 tools:text="Error : Uploaded Image is not a Driving License Image" />
@@ -196,7 +198,7 @@
             layout="@layout/fragment_verification_image_holder"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="visible"
+            android:visibility="gone"
             app:layout_constraintTop_toBottomOf="@id/topSeaparator2" />
 
         <TextView
@@ -206,6 +208,7 @@
             android:layout_marginTop="5dp"
             android:fontFamily="@font/lato"
             android:letterSpacing="0"
+            android:visibility="gone"
             android:layout_marginStart="18dp"
             android:textColor="@color/app_red"
             app:layout_constraintStart_toStartOf="parent"
