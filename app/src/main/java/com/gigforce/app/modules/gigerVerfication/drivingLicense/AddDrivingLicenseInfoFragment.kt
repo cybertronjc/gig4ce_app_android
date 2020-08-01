@@ -18,9 +18,12 @@ import com.bumptech.glide.Glide
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.gone
+import com.gigforce.app.core.selectItemWithText
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
 import com.gigforce.app.modules.gigerVerfication.GigerVerificationStatus
+import com.gigforce.app.modules.gigerVerfication.VerificationValidations
+import com.gigforce.app.modules.gigerVerfication.WhyWeNeedThisBottomSheet
 import com.gigforce.app.modules.gigerVerfication.panCard.AddPanCardInfoFragment
 import com.gigforce.app.modules.photocrop.PhotoCrop
 import com.gigforce.app.utils.Lse
@@ -29,7 +32,9 @@ import com.google.firebase.storage.FirebaseStorage
 import com.ncorti.slidetoact.SlideToActView
 import kotlinx.android.synthetic.main.fragment_add_driving_license_info.*
 import kotlinx.android.synthetic.main.fragment_add_driving_license_info_main.*
+import kotlinx.android.synthetic.main.fragment_add_driving_license_info_main.whyWeNeedThisTV
 import kotlinx.android.synthetic.main.fragment_verification_image_holder.view.*
+import java.util.*
 
 enum class DrivingLicenseSides {
     FRONT_SIDE,
@@ -84,23 +89,47 @@ class AddDrivingLicenseInfoFragment : BaseFragment() {
             findNavController().popBackStack(R.id.gigerVerificationFragment, false)
         }
 
+        whyWeNeedThisTV.setOnClickListener {
+
+            WhyWeNeedThisBottomSheet.launch(
+                childFragmentManager = childFragmentManager,
+                title = "Why we need this?",
+                content = "Uploading either Driver’s license or Aadhar card is mandatory for profile verification. A Driver’s license helps verify your name, date of birth, address, and other details."
+            )
+        }
+
         dlAvailaibilityOptionRG.setOnCheckedChangeListener { _, checkedId ->
 
             if (checkedId == R.id.dlYesRB) {
                 showDLImageAndInfoLayout()
+
+                if (drivingLicenseDetail?.userHasDL != null &&
+                    drivingLicenseDetail?.userHasDL!! &&
+                    (dlFrontImagePath == null || dlBackImagePath == null)
+                ) {
+                    dlSubmitSliderBtn.gone()
+                    confirmDLDataCB.gone()
+                }
 
                 if (confirmDLDataCB.isChecked
                     && dlFrontImagePath != null
                     && dlBackImagePath != null
                 ) {
                     enableSubmitButton()
-                }
+                } else
+                    disableSubmitButton()
 
             } else if (checkedId == R.id.dlNoRB) {
                 hideDLImageAndInfoLayout()
 
+                dlSubmitSliderBtn.visible()
+                confirmDLDataCB.visible()
+
                 if (confirmDLDataCB.isChecked)
                     enableSubmitButton()
+                else
+                    disableSubmitButton()
+
             } else {
                 hideDLImageAndInfoLayout()
                 disableSubmitButton()
@@ -124,10 +153,6 @@ class AddDrivingLicenseInfoFragment : BaseFragment() {
                 disableSubmitButton()
         }
 
-        drivingLicenseEditText.doOnTextChanged { text, start, count, after ->
-            drivingLicenseTextInputLayout.error = null
-        }
-
         dlSubmitSliderBtn.onSlideCompleteListener =
             object : SlideToActView.OnSlideCompleteListener {
 
@@ -145,8 +170,15 @@ class AddDrivingLicenseInfoFragment : BaseFragment() {
                             return
                         }
 
-                        if (drivingLicenseEditText.text!!.length != 15) {
-                            drivingLicenseTextInputLayout.error = "Enter Valid Driving License"
+                        val dlNo = drivingLicenseEditText.text.toString().toUpperCase(Locale.getDefault())
+                        if (!VerificationValidations.isDLNumberValid(dlNo)) {
+
+                            MaterialAlertDialogBuilder(requireContext())
+                                .setTitle("Alert")
+                                .setMessage("Enter Valid Driving License")
+                                .setPositiveButton("OK") { _, _ -> }
+                                .show()
+
                             dlSubmitSliderBtn.resetSlider()
                             return
                         }
@@ -162,7 +194,6 @@ class AddDrivingLicenseInfoFragment : BaseFragment() {
                             return
                         }
 
-                        val dlNo = drivingLicenseEditText.text.toString()
                         val state = stateSpinner.selectedItem.toString()
 
                         if (dlSubmitSliderBtn.text.toString() == getString(R.string.update)) {
@@ -255,6 +286,10 @@ class AddDrivingLicenseInfoFragment : BaseFragment() {
 
                             //stateAutoCompleteTV.setText(it.drivingLicenseDataModel.dlState)
                             drivingLicenseEditText.setText(it.drivingLicenseDataModel.dlNo)
+
+                            if(it.drivingLicenseDataModel.dlState != null)
+                            stateSpinner.selectItemWithText(it.drivingLicenseDataModel.dlState)
+
                             dlAvailaibilityOptionRG.check(R.id.dlYesRB)
                         } else
                             dlAvailaibilityOptionRG.check(R.id.dlNoRB)
@@ -410,6 +445,13 @@ class AddDrivingLicenseInfoFragment : BaseFragment() {
                     dlBackImagePath =
                         data?.getParcelableExtra(PhotoCrop.INTENT_EXTRA_RESULTING_FILE_URI)
                     showBackDrivingLicense(dlBackImagePath!!)
+                }
+
+                if (confirmDLDataCB.isChecked
+                    && dlFrontImagePath != null
+                    && dlBackImagePath != null
+                ) {
+                    enableSubmitButton()
                 }
 
                 if (dlFrontImagePath != null && dlBackImagePath != null && dlSubmitSliderBtn.isGone) {

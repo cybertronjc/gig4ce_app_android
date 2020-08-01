@@ -20,6 +20,7 @@ import kotlin.collections.ArrayList
 
 class CalendarView : LinearLayout {
     var visibleOnce = false
+    val TOTAL_YEAR = 3
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
 
@@ -42,6 +43,7 @@ class CalendarView : LinearLayout {
         inflater.inflate(R.layout.calendar_view_layout, this)
         calendarData = Calendar.getInstance()
         calendarData.set(Calendar.DATE, 1)
+        calendarData.set(Calendar.YEAR,2019)
         initializeGridView()
     }
 
@@ -139,22 +141,9 @@ class CalendarView : LinearLayout {
 
     private fun getDefaultItems(): ArrayList<MonthModel>? {
         arrlist = ArrayList<MonthModel>()
-        arrlist.add(getMonthData())
-        arrlist.add(getMonthData())
-        arrlist.add(getMonthData())
-        arrlist.add(getMonthData())
-        arrlist.add(getMonthData())
-        arrlist.add(getMonthData())
-        arrlist.add(getMonthData())
-        arrlist.add(getMonthData())
-        arrlist.add(getMonthData())
-        arrlist.add(getMonthData())
-        arrlist.add(getMonthData())
-        arrlist.add(getMonthData())
-        arrlist.add(getMonthData())
-        arrlist.add(getMonthData())
-        arrlist.add(getMonthData())
-        arrlist.add(getMonthData())
+        for(i in 0..TOTAL_YEAR*12){
+            arrlist.add(getMonthData())
+        }
         return arrlist
     }
 
@@ -293,6 +282,7 @@ class CalendarView : LinearLayout {
         this.arrMainHomeDataModel = arrMainHomeDataModel
         calendarData = Calendar.getInstance()
         calendarData.set(Calendar.DATE, 1)
+        calendarData.set(Calendar.YEAR,2019)
         recyclerGenericAdapter.list = getDefaultItems()
         recyclerGenericAdapter.notifyDataSetChanged()
     }

@@ -1,30 +1,24 @@
-package com.abhijai.gigschatdemo.contacts_module.ui
+package com.gigforce.app.modules.chatmodule.ui
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.*
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.abhijai.gigschatdemo.contacts_module.ui.adapters.ContactRecyclerAdapter
-import com.abhijai.gigschatdemo.contacts_module.ui.adapters.OnContactClickListener
-import com.abhijai.gigschatdemo.contacts_module.viewModels.ContactViewModel
+import com.gigforce.app.modules.chatmodule.ui.adapters.ContactRecyclerAdapter
+import com.gigforce.app.modules.chatmodule.ui.adapters.OnContactClickListener
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.modules.chatmodule.viewModels.ChatViewModel
-import com.gigforce.app.modules.preferences.SharedPreferenceViewModel
 import com.gigforce.app.utils.AppConstants
 import com.gigforce.app.utils.VerticalItemDecorator
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.contact_screen_fragment.*
 
-class ContactScreenFragment : BaseFragment(),OnContactClickListener {
+class ContactScreenFragment : BaseFragment(), OnContactClickListener {
 
-    private lateinit var viewModel : ContactViewModel
+    private lateinit var viewModel : ChatViewModel
     private lateinit var mAdapter : ContactRecyclerAdapter
 
     companion object {
@@ -43,14 +37,14 @@ class ContactScreenFragment : BaseFragment(),OnContactClickListener {
         initialize()
         attachListeners()
 
-        viewModel = ViewModelProviders.of(this).get(ContactViewModel::class.java)
+        val tempviewModel: ChatViewModel by activityViewModels<ChatViewModel>()
+        viewModel = tempviewModel
         mAdapter =
             ContactRecyclerAdapter(
                 initGlide()!!,
                 this
             )
         subscribeViewModel()
-        viewModel.prepareList()
         initRecycler()
     }
 
@@ -96,7 +90,7 @@ class ContactScreenFragment : BaseFragment(),OnContactClickListener {
     }
 
     private fun subscribeViewModel(){
-        viewModel.getContactsLiveData().observe(viewLifecycleOwner, Observer {
+        viewModel.chatHeaders.observe(viewLifecycleOwner, Observer {
             if (it!=null){
                 mAdapter.setData(it)
             }
@@ -130,7 +124,7 @@ class ContactScreenFragment : BaseFragment(),OnContactClickListener {
         }
     }
 
-    override fun contactClick(url: String, name: String) {
+    override fun contactClick(url: String, name: String, chatHeaderId: String) {
 //        val intent = Intent(activity?.applicationContext,ChatScreenFragment::class.java)
 //        intent.putExtra(AppConstants.IMAGE_URL,url)
 //        intent.putExtra(AppConstants.CONTACT_NAME,name)
@@ -141,6 +135,7 @@ class ContactScreenFragment : BaseFragment(),OnContactClickListener {
             val bundle = Bundle()
             bundle.putSerializable(AppConstants.IMAGE_URL, url)
             bundle.putSerializable(AppConstants.CONTACT_NAME, name)
+            bundle.putSerializable("chatHeaderId", chatHeaderId)
             navigate(R.id.chatScreenFragment, bundle)
         }
     }

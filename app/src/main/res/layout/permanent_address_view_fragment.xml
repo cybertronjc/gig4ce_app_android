@@ -156,6 +156,7 @@
         android:textColor="@color/gray_color"
         android:textSize="12sp"
         android:letterSpacing="0"
+        android:visibility="gone"
         app:layout_constraintStart_toStartOf="@+id/preferredNoOfDays"
         app:layout_constraintTop_toBottomOf="@+id/preferredNoOfDays" />
 
@@ -167,6 +168,7 @@
         android:layout_height="68dp"
         android:layout_marginTop="13dp"
         android:background="@color/white"
+        android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@+id/textView106"
         tools:layout_editor_absoluteX="-16dp" />
 
@@ -182,6 +184,7 @@
         android:textColor="@color/black"
         android:textSize="12sp"
         android:letterSpacing="0"
+        android:visibility="gone"
         app:layout_constraintStart_toStartOf="@+id/textView110"
         app:layout_constraintTop_toTopOf="@+id/textView110" />
 
@@ -196,6 +199,7 @@
         android:textColor="@color/gray_color"
         android:letterSpacing="0"
         android:textSize="12sp"
+        android:visibility="gone"
         app:layout_constraintStart_toStartOf="@+id/preferredNoOfDays"
         app:layout_constraintTop_toBottomOf="@+id/textView111" />
     
@@ -204,6 +208,7 @@
         android:layout_height="19dp"
         android:layout_marginEnd="23dp"
         android:src="@drawable/ic_warning"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/textView110"
         app:layout_constraintTop_toTopOf="@+id/textView110"
         app:layout_constraintEnd_toEndOf="@+id/textView110"/>

@@ -258,7 +258,7 @@
     <string name="if_otp_not_received">"If you didn’t receive the OTP, "</string>
     <string name="resend">परत द्या</string>
     <string name="submit_documents">Submit documents</string>
-    <string name="giger_verification_desc">We need to verify your information.please submit the documents below to process giger verification</string>
+    <string name="giger_verification_desc">We need to verify your information. Please submit the documents below to process giger verification</string>
     <string name="selfie_video">Selfie Video *</string>
     <string name="tap_to_upload">Tap To Upload</string>
     <string name="bank_details">Bank Details</string>
@@ -337,5 +337,4 @@
     <string name="pan_card_image">Pan Card Image</string>
     <string name="please_provide_following_details">Please provide following details.</string>
     <string name="good_luck">शुभेच्छा!!!</string>
-
 </resources>

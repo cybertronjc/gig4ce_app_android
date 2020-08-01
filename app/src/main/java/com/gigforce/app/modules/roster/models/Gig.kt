@@ -7,6 +7,7 @@ import androidx.annotation.RequiresApi
 import com.gigforce.app.core.base.basefirestore.BaseFirestoreDataModel
 import com.gigforce.app.modules.gigPage.models.GigAttendance
 import com.google.firebase.Timestamp
+import com.google.firebase.firestore.DocumentId
 import java.math.RoundingMode.valueOf
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -16,6 +17,7 @@ import java.util.concurrent.TimeUnit
 @Keep
 data class Gig (
     var tag: String = "",
+    @DocumentId
     var gigId: String = "",
     var gigerId: String = "",
     var gigAmount: Int = 0,

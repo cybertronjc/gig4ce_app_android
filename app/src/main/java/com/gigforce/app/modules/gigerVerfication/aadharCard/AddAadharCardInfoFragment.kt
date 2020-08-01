@@ -21,6 +21,7 @@ import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
 import com.gigforce.app.modules.gigerVerfication.GigerVerificationStatus
+import com.gigforce.app.modules.gigerVerfication.WhyWeNeedThisBottomSheet
 import com.gigforce.app.modules.photocrop.PhotoCrop
 import com.gigforce.app.utils.Lse
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -83,23 +84,49 @@ class AddAadharCardInfoFragment : BaseFragment() {
             findNavController().popBackStack(R.id.gigerVerificationFragment, false)
         }
 
+        whyWeNeedThisTV.setOnClickListener {
+
+            WhyWeNeedThisBottomSheet.launch(
+                childFragmentManager = childFragmentManager,
+                title = "Why we need this?",
+                content = "Uploading either Aadhar or Driver’s license is mandatory for profile verification. Aadhar card helps verify your name, date of birth, address, and other details."
+            )
+        }
+
         aadharAvailaibilityOptionRG.setOnCheckedChangeListener { _, checkedId ->
 
             if (checkedId == R.id.aadharYesRB) {
                 showAadharImageAndInfoLayout()
                 showImageInfoLayout()
 
+                if (aadharCardDataModel?.userHasAadharCard != null &&
+                    aadharCardDataModel?.userHasAadharCard!! &&
+                    (aadharFrontImagePath == null || aadharBackImagePath == null)
+                ) {
+                    aadharSubmitSliderBtn.gone()
+                    aadharDataCorrectCB.gone()
+                }
+
                 if (aadharDataCorrectCB.isChecked
                     && aadharFrontImagePath != null
                     && aadharBackImagePath != null
                 ) {
                     enableSubmitButton()
+                } else {
+                    disableSubmitButton()
                 }
+
             } else if (checkedId == R.id.aadharNoRB) {
                 hideAadharImageAndInfoLayout()
 
+                aadharSubmitSliderBtn.visible()
+                aadharDataCorrectCB.visible()
+
                 if (aadharDataCorrectCB.isChecked)
                     enableSubmitButton()
+                else
+                    disableSubmitButton()
+
             } else {
                 hideAadharImageAndInfoLayout()
                 disableSubmitButton()
@@ -141,10 +168,6 @@ class AddAadharCardInfoFragment : BaseFragment() {
         aadharEditLayout.setOnClickListener {
         }
 
-        aadharCardET.doOnTextChanged { text, start, count, after ->
-            aadharCardLayout.error = null
-        }
-
         aadharSubmitSliderBtn.onSlideCompleteListener =
             object : SlideToActView.OnSlideCompleteListener {
 
@@ -152,7 +175,12 @@ class AddAadharCardInfoFragment : BaseFragment() {
 
                     if (aadharYesRB.isChecked) {
                         if (aadharCardET.text!!.length != 12) {
-                            aadharCardLayout.error = "Enter Valid Aadhar Card No"
+
+                            MaterialAlertDialogBuilder(requireContext())
+                                .setTitle("Alert")
+                                .setMessage("Enter Valid Aadhar Card No")
+                                .setPositiveButton("OK") { _, _ -> }
+                                .show()
                             aadharSubmitSliderBtn.resetSlider()
                             return
                         }
@@ -375,6 +403,15 @@ class AddAadharCardInfoFragment : BaseFragment() {
                     aadharBackImagePath =
                         data?.getParcelableExtra(PhotoCrop.INTENT_EXTRA_RESULTING_FILE_URI)
                     showBackAadharCard(aadharBackImagePath!!)
+                }
+
+                if (aadharDataCorrectCB.isChecked
+                    && aadharFrontImagePath != null
+                    && aadharBackImagePath != null
+                ) {
+                    enableSubmitButton()
+                } else {
+                    disableSubmitButton()
                 }
 
                 if (aadharFrontImagePath != null && aadharBackImagePath != null && aadharSubmitSliderBtn.isGone) {

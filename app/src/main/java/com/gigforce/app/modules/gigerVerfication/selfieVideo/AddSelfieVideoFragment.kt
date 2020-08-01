@@ -1,5 +1,7 @@
 package com.gigforce.app.modules.gigerVerfication.selfieVideo
 
+import android.content.ActivityNotFoundException
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -25,6 +27,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.ncorti.slidetoact.SlideToActView
 import kotlinx.android.synthetic.main.fragment_add_selfie_video.*
 import java.io.File
+
 
 class AddSelfieVideoFragment : BaseFragment(), CaptureVideoFragmentEventListener,
     PlaySelfieVideoFragmentEventListener {
@@ -208,6 +211,22 @@ class AddSelfieVideoFragment : BaseFragment(), CaptureVideoFragmentEventListener
                     viewModel.uploadSelfieVideo(mCapturedVideoPath!!, transcodedFile)
                 }
             }
+
+        howToRecordVideoBtn.setOnClickListener {
+
+            val id = "usZgFZga7xE"
+            val appIntent =
+                Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:$id"))
+            val webIntent = Intent(
+                Intent.ACTION_VIEW,
+                Uri.parse("http://www.youtube.com/watch?v=$id")
+            )
+            try {
+                requireContext().startActivity(appIntent)
+            } catch (ex: ActivityNotFoundException) {
+                requireContext().startActivity(webIntent)
+            }
+        }
     }
 
     override fun onBackPressed(): Boolean {
@@ -251,9 +270,6 @@ class AddSelfieVideoFragment : BaseFragment(), CaptureVideoFragmentEventListener
         this.mCapturedVideoPath = file
         replaceCaptureFragmentWithPreviewFragment(file)
 
-        selfieVideoCorrectCB.visible()
-        selfieVideoSubmitSliderBtn.visible()
-
         if (selfieVideoCorrectCB.isChecked)
             enableSubmitButton()
     }
@@ -261,6 +277,9 @@ class AddSelfieVideoFragment : BaseFragment(), CaptureVideoFragmentEventListener
     override fun discardCurrentVideoAndStartRetakingVideo() {
         deleteExistingVideoIfExist()
         replacePlayVideoFragmentWithCaptureFragment()
+
+        selfieVideoCorrectCB.visible()
+        selfieVideoSubmitSliderBtn.visible()
 
         selfieVideoCorrectCB.isChecked = false
         disableSubmitButton()

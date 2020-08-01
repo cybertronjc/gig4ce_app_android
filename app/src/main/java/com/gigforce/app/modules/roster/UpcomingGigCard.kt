@@ -7,35 +7,33 @@ import com.gigforce.app.R
 import com.google.android.material.card.MaterialCardView
 import kotlinx.android.synthetic.main.upcoming_gig_card.view.*
 
-class UpcomingGigCard: MaterialCardView {
-    constructor(context: Context): super(context)
-    constructor(context: Context, attrs: AttributeSet): super(context, attrs)
-
+class UpcomingGigCard(
+    context: Context,
+    var startHour: Int = 0,
+    var startMinute: Int = 0,
+    var endHour: Int = 0,
+    var endMinute: Int = 0,
+    var duration: Float = 0.0F,
+    var title: String = "",
+    var cardHeight: Int = 0,
+    var isFullDay: Boolean = false
+): MaterialCardView(context) {
     init {
         View.inflate(context, R.layout.upcoming_gig_card, this)
+        setCardHeight()
+        setTimings()
+        setTitle()
+        if (isFullDay) setFullDay()
     }
 
-    var startHour: Int = 0
-        set(value) {
-            field = value
-        }
+    fun setTitle() {
+        gig_title.text = title
+    }
 
-    var startMinute: Int = 0
-        set(value) {
-            field = value
-        }
-
-    var duration: Float = 0.0F
-        set(value) {
-            field = value
-        }
-
-    var cardHeight: Int = 0
-        set(value) {
-            field = value
-            upcoming_card.layoutParams.height = value
-            upcoming_card.requestLayout()
-        }
+    fun setCardHeight() {
+        upcoming_card.layoutParams.height = cardHeight
+        upcoming_card.requestLayout()
+    }
 
     fun setTimings() {
         var endHour = startHour + duration.toInt()
@@ -45,9 +43,7 @@ class UpcomingGigCard: MaterialCardView {
                         "-" + String.format("%02d", endHour) + ":" + String.format("%02d", endMinute))
     }
 
-    var isFullDay: Boolean = false
-        set(value) {
-            field = value
+    fun setFullDay() {
             gig_timing.text = ""
             cardHeight = 40.px
         }

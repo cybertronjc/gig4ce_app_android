@@ -28,8 +28,13 @@ data class Gig(
     var duration: Float = 0.0F,
     var gigRating: Float = 0.0F,
     var gigUserFeedback: String? = null,
+    var gigUserFeedbackAttachments: List<String> = emptyList(),
     var locationPictures: List<String> = emptyList(),
+
     var ratingUserReceived: Float = -1.0F,
+    var feedbackUserReceived: String? = null,
+    var ratingUserReceivedAttachments: List<String> = emptyList(),
+
     var gigType: String? = null,
     var gigHighlights: List<String> = emptyList(),
     var gigRequirements: List<String> = emptyList(),
@@ -89,7 +94,8 @@ data class Gig(
                 val gigCheckOutTime =
                     endDateTime!!.toDate().toInstant().atZone(ZoneId.systemDefault())
                         .toLocalDateTime()
-                val maxCheckOutTime = gigCheckOutTime.plusHours(4) //4 Hour window for checkout after gig time expires
+                val maxCheckOutTime =
+                    gigCheckOutTime.plusHours(4) //4 Hour window for checkout after gig time expires
                 LocalDateTime.now().isAfter(maxCheckOutTime)
             } else {
                 false // If end time not given gig will be considered full day gig (present gig)
@@ -114,6 +120,11 @@ data class Gig(
             val gigCheckOutTime =
                 endDateTime!!.toDate().toInstant().atZone(ZoneId.systemDefault())
                     .toLocalDateTime()
+
+            if (gigCheckOutTime.isBefore(currentTime)) {
+                return false
+            }
+
             val maxCheckOutTime = gigCheckOutTime.plusHours(4)
             currentTime.isBefore(maxCheckOutTime) && validCheckInTime
         } else {

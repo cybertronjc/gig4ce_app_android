@@ -19,10 +19,7 @@ import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
-import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
-import com.gigforce.app.modules.gigerVerfication.GigerVerificationStatus
-import com.gigforce.app.modules.gigerVerfication.ImageSource
-import com.gigforce.app.modules.gigerVerfication.SelectImageSourceBottomSheetActionListener
+import com.gigforce.app.modules.gigerVerfication.*
 import com.gigforce.app.modules.photocrop.PhotoCrop
 import com.gigforce.app.utils.Lse
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -31,6 +28,7 @@ import com.ncorti.slidetoact.SlideToActView
 import kotlinx.android.synthetic.main.fragment_add_pan_card_info.*
 import kotlinx.android.synthetic.main.fragment_add_pan_card_info_main.*
 import kotlinx.android.synthetic.main.fragment_verification_image_holder.view.*
+import java.util.*
 
 class AddPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetActionListener {
 
@@ -41,7 +39,7 @@ class AddPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetActio
         const val INTENT_EXTRA_PAN = "pan"
     }
 
-
+    private var panCardDataModel: PanCardDataModel? = null
     private val viewModel: GigVerificationViewModel by viewModels()
     private var clickedImagePath: Uri? = null
     private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance()
@@ -67,6 +65,15 @@ class AddPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetActio
             findNavController().popBackStack(R.id.gigerVerificationFragment, false)
         }
 
+        whyWeNeedThisTV.setOnClickListener {
+
+            WhyWeNeedThisBottomSheet.launch(
+                childFragmentManager = childFragmentManager,
+                title = "Why we need this?",
+                content = "A PAN card is mandatory for profile verification. It helps verify your name and date of birth and also helps with payments to your wallet."
+            )
+        }
+
         panImageHolder.uploadDocumentCardView.setOnClickListener {
             launchSelectImageSourceDialog()
         }
@@ -77,23 +84,34 @@ class AddPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetActio
 
         panImageHolder.uploadImageLayout.imageLabelTV.text = getString(R.string.pan_card_image)
 
-        panCardEditText.doOnTextChanged { text, start, count, after ->
-            panCardNoTextInputLayout.error = null
-        }
-
         panCardAvailaibilityOptionRG.setOnCheckedChangeListener { _, checkedId ->
 
             if (checkedId == R.id.panYesRB) {
                 showPanImageLayout()
                 showImageInfoLayout()
 
+                if (panCardDataModel?.userHasPanCard != null &&
+                    panCardDataModel?.userHasPanCard!! &&
+                    clickedImagePath == null
+                ) {
+                    panSubmitSliderBtn.gone()
+                    panDataCorrectCB.gone()
+                }
+
                 if (clickedImagePath != null && panDataCorrectCB.isChecked) {
                     enableSubmitButton()
                 } else
                     disableSubmitButton()
-            } else if (panDataCorrectCB.isChecked) {
+            } else if (checkedId == R.id.panNoRB) {
                 hidePanImageAndInfoLayout()
-                enableSubmitButton()
+
+                panDataCorrectCB.visible()
+                panSubmitSliderBtn.visible()
+
+                if (panDataCorrectCB.isChecked)
+                    enableSubmitButton()
+                else
+                    disableSubmitButton()
             } else {
                 hidePanImageAndInfoLayout()
             }
@@ -123,8 +141,15 @@ class AddPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetActio
                 override fun onSlideComplete(view: SlideToActView) {
 
                     if (panYesRB.isChecked) {
-                        if (panCardEditText.text!!.length != 10) {
-                            panCardNoTextInputLayout.error = "Enter Valid PAN Card No"
+                        val panCardNo = panCardEditText.text.toString().toUpperCase(Locale.getDefault())
+                        if (!VerificationValidations.isPanCardValid(panCardNo)) {
+
+                            MaterialAlertDialogBuilder(requireContext())
+                                .setTitle("Alert")
+                                .setMessage("Enter Valid PAN Card No")
+                                .setPositiveButton("OK") { _, _ -> }
+                                .show()
+
                             panSubmitSliderBtn.resetSlider()
                             return
                         }
@@ -140,18 +165,17 @@ class AddPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetActio
                             return
                         }
 
-                        val panNo = panCardEditText.text.toString()
                         if (panSubmitSliderBtn.text.toString() == getString(R.string.update)) {
 
                             MaterialAlertDialogBuilder(requireContext())
                                 .setTitle("Alert")
                                 .setMessage("You are re-uploading your Pan Card details, they will be verified once again, that can take up to 7 days")
                                 .setPositiveButton("OK") { _, _ ->
-                                    viewModel.updatePanImagePath(true, clickedImagePath, panNo)
+                                    viewModel.updatePanImagePath(true, clickedImagePath, panCardNo)
                                 }
                                 .show()
                         } else {
-                            viewModel.updatePanImagePath(true, clickedImagePath, panNo)
+                            viewModel.updatePanImagePath(true, clickedImagePath, panCardNo)
                         }
 
                     } else if (panNoRB.isChecked) {
@@ -205,7 +229,7 @@ class AddPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetActio
                 navigate(R.id.addBankDetailsInfoFragment)
             } else if (!it.selfieVideoUploaded) {
                 navigate(R.id.addSelfieVideoFragment)
-            } else  {
+            } else {
                 showDetailsUploaded()
             }
         }
@@ -236,7 +260,7 @@ class AddPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetActio
         return true
     }
 
-    private var panCardDataModel: PanCardDataModel? = null
+
     private fun updatePanInfo(it: GigerVerificationStatus) {
         if (it.panCardDetailsUploaded && it.panCardDetails != null) {
             this.panCardDataModel = it.panCardDetails
@@ -297,7 +321,10 @@ class AddPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetActio
                     data?.getParcelableExtra(PhotoCrop.INTENT_EXTRA_RESULTING_FILE_URI)
                 showPanInfoCard(clickedImagePath!!)
 
-                if (clickedImagePath != null  && panSubmitSliderBtn.isGone) {
+                if (panDataCorrectCB.isChecked)
+                    enableSubmitButton()
+
+                if (clickedImagePath != null && panSubmitSliderBtn.isGone) {
                     panSubmitSliderBtn.visible()
                     panDataCorrectCB.visible()
                 }
