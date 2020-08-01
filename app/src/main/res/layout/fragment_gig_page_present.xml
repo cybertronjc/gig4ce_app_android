@@ -280,7 +280,6 @@
                     android:id="@+id/presentFutureGigNoteTV"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-
                     android:layout_marginEnd="17dp"
                     android:letterSpacing="0"
                     android:textColor="#d9000000"
@@ -308,7 +307,7 @@
                 android:id="@+id/completedGigControlsLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
+                android:visibility="visible"
                 app:layout_constraintTop_toBottomOf="@id/presentOrFutureGigControls">
 
                 <ImageView
@@ -461,6 +460,36 @@
                 </com.google.android.material.card.MaterialCardView>
 
 
+
+                <TextView
+                    android:id="@+id/pastGigNoteLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="17dp"
+                    android:layout_marginTop="14dp"
+                    android:layout_marginEnd="17dp"
+                    android:letterSpacing="0"
+                    android:text="Note : "
+                    android:fontFamily="@font/lato_bold"
+                    android:textColor="#d9000000"
+                    android:textSize="12sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/attendanceCardView" />
+
+                <TextView
+                    android:id="@+id/pastGigNoteTV"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="17dp"
+                    android:letterSpacing="0"
+                    android:textColor="#d9000000"
+                    android:textSize="12sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/pastGigNoteLabel"
+                    app:layout_constraintTop_toTopOf="@id/pastGigNoteLabel"
+                    tools:text="Note :We are fetching your location to mark attendance. " />
+
+
                 <View
                     android:id="@+id/separator2"
                     android:layout_width="match_parent"
@@ -469,7 +498,7 @@
                     android:layout_marginTop="15dp"
                     android:layout_marginEnd="31dp"
                     android:background="#c0c0c0"
-                    app:layout_constraintTop_toBottomOf="@id/attendanceCardView" />
+                    app:layout_constraintTop_toBottomOf="@id/pastGigNoteTV" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/gigPaymentLayout"
