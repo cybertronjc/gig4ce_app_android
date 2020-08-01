@@ -20,6 +20,7 @@ import android.widget.TextView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
@@ -44,14 +45,18 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.storage.FirebaseStorage
 import com.ncorti.slidetoact.SlideToActView
+import kotlinx.android.synthetic.main.fragment_gig_page_attendance.*
 import kotlinx.android.synthetic.main.fragment_gig_page_present.*
 import kotlinx.android.synthetic.main.fragment_gig_page_present.addressTV
+import kotlinx.android.synthetic.main.fragment_gig_page_present.callCardView
 import kotlinx.android.synthetic.main.fragment_gig_page_present.companyLogoIV
 import kotlinx.android.synthetic.main.fragment_gig_page_present.companyNameTV
+import kotlinx.android.synthetic.main.fragment_gig_page_present.contactPersonTV
 import kotlinx.android.synthetic.main.fragment_gig_page_present.durationTextTV
 import kotlinx.android.synthetic.main.fragment_gig_page_present.favoriteCB
 import kotlinx.android.synthetic.main.fragment_gig_page_present.gigIdTV
 import kotlinx.android.synthetic.main.fragment_gig_page_present.gigTypeTV
+import kotlinx.android.synthetic.main.fragment_gig_page_present.messageCardView
 import kotlinx.android.synthetic.main.fragment_gig_page_present.roleNameTV
 import kotlinx.android.synthetic.main.fragment_gig_page_present.shiftTV
 import kotlinx.android.synthetic.main.fragment_gig_page_present.wageTV
@@ -132,8 +137,8 @@ class GigPageFragment : BaseFragment() {
 
         callCardView.setOnClickListener {
 
-            gig?.contactNo?.let {
-                val intent = Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", it, null))
+            gig?.gigContactDetails?.contactNumber?.let {
+                val intent = Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", it.toString(), null))
                 startActivity(intent)
             }
         }
@@ -351,6 +356,7 @@ class GigPageFragment : BaseFragment() {
         gigIdTV.text = "Gig Id : ${gig.gigId}"
         paymentAmountTV.text = "Rs. ${gig.gigAmount}"
         contactPersonTV.text = gig.gigContactDetails?.contactName
+        callCardView.isVisible = gig.gigContactDetails?.contactNumber != 0L
 
         if (gig.isFavourite && favoriteCB.isChecked.not()) {
             favoriteCB.isChecked = true

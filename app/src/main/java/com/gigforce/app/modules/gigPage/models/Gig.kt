@@ -22,7 +22,6 @@ data class Gig(
     var gigStatus: String = "upcoming",
     var companyLogo: String? = null,
     var companyName: String? = null,
-    var contactNo: String? = null,
     @field:JvmField var isGigActivated: Boolean = true, //TODO change this
     @field:JvmField var isFavourite: Boolean = false,
     @field:JvmField var isGigCompleted: Boolean = false,
