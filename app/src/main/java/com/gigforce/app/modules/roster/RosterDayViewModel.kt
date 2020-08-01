@@ -11,6 +11,7 @@ import android.widget.RadioGroup
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.gigforce.app.R
@@ -27,6 +28,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.riningan.widget.ExtendedBottomSheetBehavior
 import kotlinx.android.synthetic.main.gigs_today_warning_dialog.*
 import kotlinx.android.synthetic.main.reason_for_gig_cancel_dialog.*
+import kotlinx.android.synthetic.main.roster_day_fragment.*
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -45,6 +47,11 @@ class RosterDayViewModel: ViewModel() {
     var preferencesRepository = PreferencesRepository()
 
     var userGigs = HashMap<String, ArrayList<Gig>>()
+
+    var isLoadedFirstTime = true
+
+    var itemHeight = 70
+    lateinit var nestedScrollView: NestedScrollView
 
     //lateinit var bsBehavior: BottomSheetBehavior<View>
     lateinit var bsBehavior: ExtendedBottomSheetBehavior<View>
@@ -175,25 +182,46 @@ class RosterDayViewModel: ViewModel() {
         }
     }
 
+    private fun confirmCancellation(activeDateTime: LocalDateTime, viewModelCustomPreference: CustomPreferencesViewModel) {
+
+        Log.d("SwitchDayAvailability", "Cancellation is confirmed")
+        isDayAvailable.postValue(false)
+
+        val unavailable = UnavailableDataModel(activeDateTime.toDate)
+        unavailable.dayUnavailable = true
+
+        viewModelCustomPreference.updateCustomPreference(unavailable)
+    }
+
     fun switchDayAvailability(
         context: Context, parentView: ConstraintLayout, currentDayAvailability: Boolean,
         viewModelCustomPreference: CustomPreferencesViewModel) {
-        try {
-            viewModelCustomPreference.customPreferencesDataModel
-        } catch (e:UninitializedPropertyAccessException) {
-//            Toast.makeText(context, "UNINITIALIZED", Toast.LENGTH_SHORT).show()
-            return
-        }
+//        try {
+//            viewModelCustomPreference.customPreferencesDataModel
+//        } catch (e:UninitializedPropertyAccessException) {
+////            Toast.makeText(context, "UNINITIALIZED", Toast.LENGTH_SHORT).show()
+//            return
+//        }
+
+        Log.d("SwitchDayAvailability", "Entered")
+        Log.d("SwitchDayAvailability", "Day availability is " + currentDayAvailability.toString())
 
         val activeDateTime = currentDateTime.value!!
+
+
+        Log.d("SwitchDayAvailability", "Active date time is " + activeDateTime.toString())
 
         if (currentDayAvailability) {
             // today is active
             // make inactive
+
+            Log.d("SwitchDayAvailability", "Trying to mark inactive")
             val confirmCancellation = if (upcomingGigs.size > 0) showGigsTodayWarning(
-                context, upcomingGigs, parentView) else true
+                context, upcomingGigs, parentView, activeDateTime, viewModelCustomPreference) else true
 
             if (confirmCancellation) {
+
+                Log.d("SwitchDayAvailability", "Cancellation is confirmed")
                 isDayAvailable.postValue(false)
 
                 val unavailable = UnavailableDataModel(activeDateTime.toDate)
@@ -204,6 +232,7 @@ class RosterDayViewModel: ViewModel() {
         } else {
             // today is inactive
             // make active
+            Log.d("SwitchDayAvailability", "Marking day available ")
             isDayAvailable.value = true
 
             val available = UnavailableDataModel(activeDateTime.toDate)
@@ -231,8 +260,14 @@ class RosterDayViewModel: ViewModel() {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun showGigsTodayWarning(context: Context, upcomingGigs: ArrayList<Gig>, gigParentView: ConstraintLayout): Boolean {
+    fun showGigsTodayWarning(
+        context: Context, upcomingGigs: ArrayList<Gig>, gigParentView: ConstraintLayout,
+        activeDateTime: LocalDateTime, viewModelCustomPreference: CustomPreferencesViewModel
+    ): Boolean {
         var flag = false
+
+
+        Log.d("SwitchDayAvailability", "Entered ShowGigsTodayWarning")
 
         val dialog = Dialog(context)
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -251,7 +286,7 @@ class RosterDayViewModel: ViewModel() {
 
         dialog.yes.setOnClickListener {
             //flag = if (upcomingGigs.size > 0) showReasonForGigCancel(context, upcomingGigs, gigParentView) else true
-            flag = true
+            confirmCancellation(activeDateTime, viewModelCustomPreference)
             dialog .dismiss()
         }
 
@@ -360,11 +395,11 @@ class RosterDayViewModel: ViewModel() {
 
         if (tag in allGigs.keys) {
             allGigs[tag]!!.value?.forEach {
-                if (it.isUpcomingGig() && filter == "upcoming")
+                if (it.isUpcomingGig() && filter == "upcoming" && !it.isFullDay)
                     result.add(it)
-                if (it.isPresentGig() && filter == "current")
+                if (it.isPresentGig() && filter == "current" && !it.isFullDay)
                     result.add(it)
-                if (it.isPastGig() && filter == "completed")
+                if (it.isPastGig() && filter == "completed" && !it.isFullDay)
                     result.add(it)
                 if (it.isFullDay && filter == "fullday")
                     result.add(it)
@@ -398,6 +433,21 @@ class RosterDayViewModel: ViewModel() {
             } else {
                 // TODO: Raise Error
             }
+        }
+    }
+
+    fun scrollToPosition(date: Date) {
+        Log.d("RosterDayFragment", "called")
+
+        val gigs = getFilteredGigs(date, "upcoming")
+
+        if (gigs.size != 0) {
+            val sortedUpcomingGigs = gigs.sortedBy { gig -> gig.startHour }
+
+//            nestedScrollView.scrollTo(0, (8 * itemHeight).px)
+            nestedScrollView.scrollTo(0, ((sortedUpcomingGigs[0].startHour - 4) * itemHeight).px)
+        } else {
+            nestedScrollView.scrollTo(0, (8 * itemHeight).px)
         }
     }
 }

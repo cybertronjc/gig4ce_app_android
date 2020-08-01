@@ -211,10 +211,14 @@ class GigAttendancePageFragment : BaseFragment(), PopupMenu.OnMenuItemClickListe
 
         val gigAmountText = if (gig.gigAmount == 0.0)
             "--"
-        else
-            "Gross Payment : Rs ${gig.gigAmount} per Month"
-        wageTV.text = gigAmountText
+        else {
+            if (gig.isMonthlyGig)
+                "Gross Payment : Rs ${gig.gigAmount} per Month"
+            else
+                "Gross Payment : Rs ${gig.gigAmount} per Hour"
+        }
 
+        wageTV.text = gigAmountText
         addressTV.text = gig.address
 
         if (gig.isFavourite && favoriteCB.isChecked.not()) {
