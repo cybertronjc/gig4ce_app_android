@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.gigforce.app.R
 import com.google.firebase.Timestamp
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.util.*
@@ -92,4 +93,8 @@ fun Spinner.selectItemWithText(text: String) {
 
 fun Timestamp.toLocalDateTime() : LocalDateTime{
    return this.toDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime()
+}
+
+fun Timestamp.toLocalDate() : LocalDate{
+    return this.toDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
 }
