@@ -5,12 +5,21 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.gigforce.app.R
+import com.gigforce.app.modules.gigPage.models.Gig
 import com.gigforce.app.utils.HorizontaltemDecoration
 import kotlinx.android.synthetic.main.layout_rv_gig_details_gig_history.view.*
 import kotlinx.android.synthetic.main.layout_rv_ongoing_gigs_gig_hist.view.*
+import java.text.SimpleDateFormat
 
 class AdapterGigHistory : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    private var onGoingGigs: List<Gig>? = null
+    private var scheduledGigs: List<Gig>? = null
+    private val timeFormatter = SimpleDateFormat("hh.mm aa")
+    private val dateFormatter = SimpleDateFormat("dd MMM yyyy")
+
+
     inner class ViewHolderOnGoingGigs(itemView: View) : RecyclerView.ViewHolder(itemView)
     inner class ViewHolderGigEvents(itemView: View) : RecyclerView.ViewHolder(itemView)
     inner class ViewHolderGigDetails(itemView: View) : RecyclerView.ViewHolder(itemView)
@@ -35,14 +44,20 @@ class AdapterGigHistory : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     override fun getItemCount(): Int {
-        return 12;
+        return if (scheduledGigs != null) scheduledGigs?.size!! + 2 else 2;
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+    fun addScheduledGigs(scheduledGigs: List<Gig>?) {
+        this.scheduledGigs = scheduledGigs;
+        notifyItemRangeInserted(2, scheduledGigs?.size!!)
+    }
+
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) =
         when (getItemViewType(position)) {
             TYPE_ONGOING -> {
                 val viewHolderOnGoings = holder as ViewHolderOnGoingGigs
-                viewHolderOnGoings.itemView.rv_on_going_gigs_gig_hist.adapter = AdapterOnGoingGigs()
+                val adapter = AdapterOnGoingGigs()
+                viewHolderOnGoings.itemView.rv_on_going_gigs_gig_hist.adapter = adapter
                 viewHolderOnGoings.itemView.rv_on_going_gigs_gig_hist.addItemDecoration(
                     HorizontaltemDecoration(holder.itemView.resources.getDimensionPixelOffset(R.dimen.size_8))
                 )
@@ -52,31 +67,65 @@ class AdapterGigHistory : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                         LinearLayoutManager.HORIZONTAL,
                         false
                     )
+                adapter.addData(onGoingGigs)
             }
             TYPE_EVENTS -> {
 
             }
             else -> {
                 val viewHolderGigDetails = holder as ViewHolderGigDetails
+                val gig = onGoingGigs?.get(position - 2)
                 if (position == 2) {
                     viewHolderGigDetails.itemView.tv_gig_day_rv_gig_his.visibility = View.VISIBLE
                 } else {
                     viewHolderGigDetails.itemView.tv_gig_day_rv_gig_his.visibility = View.GONE
                 }
-                viewHolderGigDetails.itemView.tv_date_gig_hist.isSelected=true
+                viewHolderGigDetails.itemView.tv_date_gig_hist.isSelected = true
                 viewHolderGigDetails.itemView.rl_on_going_gig_hist.visibility = View.GONE
                 viewHolderGigDetails.itemView.rl_scheduled_gig_hist.visibility = View.VISIBLE
+                holder.itemView.tv_designation_rv_gig_hist.text = gig?.title
+                holder.itemView.tv_gig_venue_rv_gig_his.text = gig?.address
+                holder.itemView.tv_gig_venue_rv_gig_his.isSelected = true
+                holder.itemView.tv_rating_rv_gig_hist.text = gig?.gigRating.toString()
+                holder.itemView.tv_time_rv_gig_hist.text = ""
+                gig?.startDateTime?.toDate()?.let {
+                    holder.itemView.tv_date_gig_hist.text = dateFormatter.format(it)
+                }
+                gig?.endDateTime?.let { endDateTimeStamp ->
+                    gig.startDateTime?.let {
+                        val durationCalculated = endDateTimeStamp.toDate().time - it.toDate().time
+                        val hours = (durationCalculated / (1000 * 60 * 60))
+                        val mins = (durationCalculated / (1000 * 60)).toInt() % 60
+                        holder.itemView.tv_time_rv_gig_hist.text =
+                            "${hours}${viewHolderGigDetails.itemView.context.getString(R.string.hours)} : ${mins}${viewHolderGigDetails.itemView.context.getString(
+                                R.string.mins
+                            )}"
+                    }
+                }
+                Glide.with(viewHolderGigDetails.itemView).load(gig?.companyLogo)
+                    .placeholder(R.drawable.profile)
+                    .into(viewHolderGigDetails.itemView.iv_brand_rv_gig_hist)
+
+                holder.itemView.tv_timing_rv_gig_hist.text = if (gig?.endDateTime != null)
+                    "${timeFormatter.format(gig.startDateTime!!.toDate())} - ${timeFormatter.format(
+                        gig?.endDateTime!!.toDate()
+                    )}"
+                else
+                    "${timeFormatter.format(gig?.startDateTime!!.toDate())} - "
+
 
             }
         }
-    }
 
     companion object {
         const val TYPE_ONGOING = 1
         const val TYPE_EVENTS = 2
         const val TYPE_GIG_DETAILS = 3
+    }
 
-
+    fun addOnGoingGigs(onGoingGigs: List<Gig>?) {
+        this.onGoingGigs = onGoingGigs;
+        notifyItemChanged(0)
     }
 
     override fun getItemViewType(position: Int): Int {

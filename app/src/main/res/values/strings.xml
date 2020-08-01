@@ -408,6 +408,9 @@
     <string name="punch_in">Punch In</string>
     <string name="past">Past</string>
     <string name="upcoming">Upcoming</string>
+    <string name="punch_out">Punch Out</string>
+    <string name="hours">hrs</string>
+    <string name="mins">mins</string>
 
 
 </resources>

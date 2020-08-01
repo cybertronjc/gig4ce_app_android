@@ -75,4 +75,6 @@
     <dimen name="size_6">6dp</dimen>
     <dimen name="size_50">50dp</dimen>
     <dimen name="size_45">45dp</dimen>
+    <dimen name="font_12">12sp</dimen>
+    <dimen name="size_35">35dp</dimen>
 </resources>
