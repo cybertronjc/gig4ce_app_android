@@ -367,11 +367,11 @@ class RosterDayViewModel: ViewModel() {
 
         if (tag in allGigs.keys) {
             allGigs[tag]!!.value?.forEach {
-                if (it.isUpcomingGig() && filter == "upcoming")
+                if (it.isUpcomingGig() && filter == "upcoming" && !it.isFullDay)
                     result.add(it)
-                if (it.isPresentGig() && filter == "current")
+                if (it.isPresentGig() && filter == "current" && !it.isFullDay)
                     result.add(it)
-                if (it.isPastGig() && filter == "completed")
+                if (it.isPastGig() && filter == "completed" && !it.isFullDay)
                     result.add(it)
                 if (it.isFullDay && filter == "fullday")
                     result.add(it)
