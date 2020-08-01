@@ -9,7 +9,6 @@ import com.google.firebase.firestore.QuerySnapshot
 
 class GigHistoryViewModel(private val repositoryCallbacks: DataCallbacks) :
     ViewModel(), DataCallbacks.ResponseCallbacks {
-
     private val _observableOnGoingGigs: MutableLiveData<GigsResponse> by lazy {
         MutableLiveData<GigsResponse>();
     }
@@ -17,10 +16,11 @@ class GigHistoryViewModel(private val repositoryCallbacks: DataCallbacks) :
     private val _observableScheduledGigs: MutableLiveData<GigsResponse> by lazy {
         MutableLiveData<GigsResponse>();
     }
+    private var pageNumber: Int = 0;
     val observableScheduledGigs: MutableLiveData<GigsResponse> get() = _observableScheduledGigs
     fun getData() {
         repositoryCallbacks.getOnGoingGigs(this)
-        repositoryCallbacks.getPastGigs(this)
+        repositoryCallbacks.getPastGigs(this, pageNumber)
     }
 
     override fun onGoingGigsResponse(

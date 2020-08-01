@@ -74,7 +74,7 @@ class AdapterGigHistory : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             }
             else -> {
                 val viewHolderGigDetails = holder as ViewHolderGigDetails
-                val gig = onGoingGigs?.get(position - 2)
+                val gig = scheduledGigs?.get(position - 2)
                 if (position == 2) {
                     viewHolderGigDetails.itemView.tv_gig_day_rv_gig_his.visibility = View.VISIBLE
                 } else {
