@@ -99,7 +99,7 @@
                     android:layout_marginTop="4dp"
                     android:fontFamily="@font/lato"
                     android:letterSpacing="0"
-                    android:text="Dyehfyhgef"
+                    tools:text="Company"
                     android:textColor="@color/warm_grey"
                     android:textSize="12sp"
                     app:layout_constraintEnd_toStartOf="@+id/favoriteCB"
@@ -114,7 +114,7 @@
                     android:layout_marginTop="6dp"
                     android:fontFamily="@font/lato"
                     android:letterSpacing="0"
-                    android:text="On- Site"
+                    tools:text="On- Site"
                     android:textColor="#d9000000"
                     android:textSize="12sp"
                     app:layout_constraintStart_toEndOf="@+id/companyLogoIV"
@@ -128,7 +128,7 @@
                     android:layout_marginEnd="17dp"
                     android:fontFamily="@font/lato"
                     android:letterSpacing="0"
-                    android:text="Gig Id: 23930344"
+                    tools:text="Gig Id: 23930344"
                     android:textColor="@color/lipstick"
                     android:textSize="12sp"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -149,8 +149,8 @@
                 android:id="@+id/presentOrFutureGigControls"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
                 android:paddingBottom="10dp"
+                android:visibility="gone"
                 app:layout_constraintTop_toBottomOf="@id/separator30">
 
 
@@ -268,9 +268,9 @@
                     android:layout_marginStart="17dp"
                     android:layout_marginTop="14dp"
                     android:layout_marginEnd="17dp"
+                    android:fontFamily="@font/lato_bold"
                     android:letterSpacing="0"
                     android:text="Note : "
-                    android:fontFamily="@font/lato_bold"
                     android:textColor="#d9000000"
                     android:textSize="12sp"
                     app:layout_constraintStart_toStartOf="parent"
@@ -294,8 +294,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
-                    android:layout_marginEnd="16dp"
                     android:layout_marginTop="14dp"
+                    android:layout_marginEnd="16dp"
                     android:text="Download ID"
                     app:layout_constraintTop_toBottomOf="@id/presentFutureGigNoteTV"
                     app:strokeColor="@color/lipstick" />
@@ -328,7 +328,7 @@
                     android:layout_marginTop="14dp"
                     android:fontFamily="@font/lato"
                     android:letterSpacing="0"
-                    android:text="Gig date"
+                    tools:text="Gig date"
                     android:textColor="#d9000000"
                     android:textSize="14sp"
                     app:layout_constraintStart_toEndOf="@id/dateIV"
@@ -347,7 +347,7 @@
                     android:paddingTop="5dp"
                     android:paddingEnd="17dp"
                     android:paddingBottom="5dp"
-                    android:text="Invoice Pending"
+                    tools:text="Invoice Pending"
                     android:textColor="@color/lipstick"
                     android:textSize="12sp"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -460,7 +460,6 @@
                 </com.google.android.material.card.MaterialCardView>
 
 
-
                 <TextView
                     android:id="@+id/pastGigNoteLabel"
                     android:layout_width="wrap_content"
@@ -468,9 +467,9 @@
                     android:layout_marginStart="17dp"
                     android:layout_marginTop="14dp"
                     android:layout_marginEnd="17dp"
+                    android:fontFamily="@font/lato_bold"
                     android:letterSpacing="0"
                     android:text="Note : "
-                    android:fontFamily="@font/lato_bold"
                     android:textColor="#d9000000"
                     android:textSize="12sp"
                     app:layout_constraintStart_toStartOf="parent"
@@ -481,6 +480,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="17dp"
+                    android:paddingBottom="10dp"
                     android:letterSpacing="0"
                     android:textColor="#d9000000"
                     android:textSize="12sp"
@@ -490,31 +490,31 @@
                     tools:text="Note :We are fetching your location to mark attendance. " />
 
 
-                <View
-                    android:id="@+id/separator2"
-                    android:layout_width="match_parent"
-                    android:layout_height="0.5dp"
-                    android:layout_marginStart="25dp"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginEnd="31dp"
-                    android:background="#c0c0c0"
-                    app:layout_constraintTop_toBottomOf="@id/pastGigNoteTV" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/gigPaymentLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingTop="10dp"
                     android:paddingBottom="10dp"
                     android:visibility="visible"
-                    app:layout_constraintTop_toBottomOf="@id/separator2">
+                    app:layout_constraintTop_toBottomOf="@id/pastGigNoteTV">
+
+                    <View
+                        android:id="@+id/separator2"
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:background="#c0c0c0"
+                        app:layout_constraintTop_toTopOf="parent" />
+
 
                     <TextView
                         android:id="@+id/payment_details_label"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="19dp"
-                        android:layout_marginTop="4dp"
+                        android:layout_marginTop="10dp"
                         android:fontFamily="@font/lato_bold"
                         android:letterSpacing="0"
                         android:text="Payment Details"
@@ -522,7 +522,7 @@
                         android:textSize="16sp"
                         android:visibility="visible"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toBottomOf="@id/separator2" />
 
 
                     <TextView
@@ -533,7 +533,7 @@
                         android:layout_marginTop="4dp"
                         android:fontFamily="@font/lato"
                         android:letterSpacing="0"
-                        android:text="Invoice Generated : 16 Apr 2020"
+                        tools:text="Invoice Generated : 16 Apr 2020"
                         android:textColor="@color/black"
                         android:textSize="12sp"
                         android:visibility="visible"
@@ -545,16 +545,17 @@
                         android:id="@+id/paymentAmountTV"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
+                        android:layout_marginTop="10dp"
                         android:layout_marginRight="19dp"
                         android:fontFamily="@font/lato_bold"
                         android:letterSpacing="0"
-                        android:text="Rs 20000"
+                        tools:text="Rs 20000"
                         android:textColor="@color/black"
                         android:textSize="18sp"
+                        app:layout_goneMarginTop="10dp"
                         android:visibility="visible"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toBottomOf="@id/separator2" />
 
                     <TextView
                         android:id="@+id/processingLabel"
@@ -571,17 +572,6 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/paymentAmountTV" />
 
-                    <View
-                        android:id="@+id/separator2_1"
-                        android:layout_width="match_parent"
-                        android:layout_height="0.5dp"
-                        android:layout_marginStart="25dp"
-                        android:layout_marginTop="15dp"
-                        android:layout_marginEnd="31dp"
-                        android:background="#c0c0c0"
-                        app:layout_constraintTop_toBottomOf="@id/processingLabel" />
-
-
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
 
@@ -589,128 +579,155 @@
                     android:id="@+id/gigRatingLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="10dp"
                     android:visibility="visible"
                     app:layout_constraintTop_toBottomOf="@id/gigPaymentLayout">
 
 
-                    <TextView
-                        android:id="@+id/whatsYourRateTv"
-                        android:layout_width="wrap_content"
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/userFeedbackRatingLayout"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="19dp"
-                        android:layout_marginTop="10dp"
-                        android:fontFamily="@font/lato"
-                        android:letterSpacing="0"
-                        android:text="You have rated this gig as"
-                        android:textColor="@color/black"
+                        android:paddingBottom="10dp"
                         android:visibility="visible"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="parent">
 
-                    <RatingBar
-                        android:id="@+id/userFeedbackRatingBar"
-                        style="@style/Widget.AppCompat.RatingBar.Indicator"
-                        android:layout_width="wrap_content"
+
+                        <View
+                            android:id="@+id/separator2_1"
+                            android:layout_width="match_parent"
+                            android:layout_height="0.5dp"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginEnd="16dp"
+                            android:background="#c0c0c0"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/whatsYourRateTv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="19dp"
+                            android:layout_marginTop="10dp"
+                            android:fontFamily="@font/lato"
+                            android:letterSpacing="0"
+                            android:text="You have rated this gig as"
+                            android:textColor="@color/black"
+                            android:visibility="visible"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/separator2_1" />
+
+                        <RatingBar
+                            android:id="@+id/userFeedbackRatingBar"
+                            style="@style/Widget.AppCompat.RatingBar.Indicator"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="19dp"
+                            android:layout_marginTop="12dp"
+                            android:progressTint="#ffc107"
+                            android:secondaryProgressTint="@android:color/transparent"
+                            android:visibility="visible"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/whatsYourRateTv" />
+
+
+                        <TextView
+                            android:id="@+id/usersFeedbackTV"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="23dp"
+                            android:layout_marginTop="12dp"
+                            android:layout_marginEnd="16dp"
+                            android:fontFamily="@font/lato_italic"
+                            android:letterSpacing="0"
+                            android:textColor="@color/warm_grey"
+                            android:textSize="14sp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/userFeedbackRatingBar"
+                            tools:text="“Nunc justo eros, vehicula vel vehicula ut, lacinia a erat.Nam fringilla ero “" />
+
+                        <LinearLayout
+                            android:id="@+id/userFeedbackAttachmentsContainer"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="19dp"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginEnd="19dp"
+                            android:orientation="vertical"
+                            app:layout_constraintTop_toBottomOf="@id/usersFeedbackTV" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/userReceviedFeedbackRatingLayout"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="19dp"
-                        android:layout_marginTop="12dp"
+                        android:paddingBottom="10dp"
                         android:visibility="visible"
-                        android:progressTint="#ffc107"
-                        android:secondaryProgressTint="@android:color/transparent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/whatsYourRateTv" />
+                        app:layout_constraintTop_toBottomOf="@id/userFeedbackRatingLayout">
+
+                        <View
+                            android:id="@+id/separator2_2"
+                            android:layout_width="match_parent"
+                            android:layout_height="0.5dp"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginEnd="16dp"
+                            android:background="#c0c0c0"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/userReceivedRateTv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="19dp"
+                            android:layout_marginTop="10dp"
+                            android:fontFamily="@font/lato"
+                            android:letterSpacing="0"
+                            android:text="What rating you received"
+                            android:textColor="@color/black"
+                            android:visibility="visible"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/separator2_2" />
 
 
-                    <TextView
-                        android:id="@+id/usersFeedbackTV"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="23dp"
-                        android:layout_marginTop="12dp"
-                        android:layout_marginEnd="16dp"
-                        android:letterSpacing="0"
-                        android:textColor="@color/warm_grey"
-                        android:textSize="14sp"
-                        android:fontFamily="@font/lato_italic"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/userFeedbackRatingBar"
-                        tools:text="“Nunc justo eros, vehicula vel vehicula ut, lacinia a erat.Nam fringilla ero “" />
-
-                    <LinearLayout
-                        android:id="@+id/userFeedbackAttachmentsContainer"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:layout_marginTop="5dp"
-                        android:layout_marginStart="19dp"
-                        android:layout_marginEnd="19dp"
-                        app:layout_constraintTop_toBottomOf="@id/usersFeedbackTV"/>
+                        <RatingBar
+                            android:id="@+id/userReceivedRatingBar"
+                            style="@style/Widget.AppCompat.RatingBar.Indicator"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="19dp"
+                            android:layout_marginTop="12dp"
+                            android:progressTint="#ffc107"
+                            android:secondaryProgressTint="@android:color/transparent"
+                            android:visibility="visible"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/userReceivedRateTv" />
 
 
-                    <View
-                        android:id="@+id/separator2_2"
-                        android:layout_width="match_parent"
-                        android:layout_height="0.5dp"
-                        android:layout_marginStart="25dp"
-                        android:layout_marginTop="15dp"
-                        android:layout_marginEnd="31dp"
-                        android:background="#c0c0c0"
-                        app:layout_constraintTop_toBottomOf="@id/userFeedbackAttachmentsContainer" />
-
-                    <TextView
-                        android:id="@+id/userReceivedRateTv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="19dp"
-                        android:layout_marginTop="10dp"
-                        android:fontFamily="@font/lato"
-                        android:letterSpacing="0"
-                        android:text="What rating you received"
-                        android:textColor="@color/black"
-                        android:visibility="visible"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/separator2_2" />
+                        <TextView
+                            android:id="@+id/userReceivedRatingFeedbackTV"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="19dp"
+                            android:layout_marginTop="12dp"
+                            android:layout_marginEnd="16dp"
+                            android:fontFamily="@font/lato_italic"
+                            android:letterSpacing="0"
+                            android:textColor="@color/warm_grey"
+                            android:textSize="14sp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/userReceivedRatingBar"
+                            tools:text="“Nunc justo eros, vehicula vel vehicula ut, lacinia a erat.Nam fringilla ero “" />
 
 
-                    <RatingBar
-                        android:id="@+id/userReceivedRatingBar"
-                        style="@style/Widget.AppCompat.RatingBar.Indicator"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="19dp"
-                        android:layout_marginTop="12dp"
-                        android:secondaryProgressTint="@android:color/transparent"
-                        android:visibility="visible"
-                        android:progressTint="#ffc107"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/userReceivedRateTv" />
+                        <LinearLayout
+                            android:id="@+id/userReceivedRatingAttachmentsContainer"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:orientation="vertical"
+                            app:layout_constraintTop_toBottomOf="@id/userReceivedRatingFeedbackTV" />
 
-
-                    <TextView
-                        android:id="@+id/userReceivedRatingFeedbackTV"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="19dp"
-                        android:layout_marginTop="12dp"
-                        android:layout_marginEnd="16dp"
-                        android:letterSpacing="0"
-                        android:textColor="@color/warm_grey"
-                        android:textSize="14sp"
-                        android:fontFamily="@font/lato_italic"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/userReceivedRatingBar"
-                        tools:text="“Nunc justo eros, vehicula vel vehicula ut, lacinia a erat.Nam fringilla ero “" />
-
-
-                    <LinearLayout
-                        android:id="@+id/userReceivedRatingAttachmentsContainer"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:layout_marginTop="5dp"
-                        app:layout_constraintTop_toBottomOf="@id/userReceivedRatingFeedbackTV"/>
-
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -818,7 +835,6 @@
                         android:src="@drawable/ic_chat" />
 
                 </androidx.cardview.widget.CardView>
-
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -1067,6 +1083,7 @@
                     android:layout_marginTop="16dp"
                     android:fontFamily="@font/lato_bold"
                     android:letterSpacing="0.02"
+                    android:paddingBottom="16dp"
                     android:text="Location"
                     android:textColor="#d9000000"
                     android:textSize="16sp"
@@ -1078,7 +1095,10 @@
                     android:id="@+id/gigLocationMapView"
                     android:layout_width="match_parent"
                     android:layout_height="173dp"
-                    android:layout_margin="16dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="16dp"
+
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/gigLocationLabel" />
 
@@ -1279,7 +1299,6 @@
                     android:background="@color/shadow_color"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/provide_feedback" />
-
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
