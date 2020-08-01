@@ -19,7 +19,7 @@ import com.gigforce.app.R
 import com.gigforce.app.core.toDate
 import com.gigforce.app.modules.custom_gig_preferences.CustomPreferencesViewModel
 import com.gigforce.app.modules.custom_gig_preferences.ParamCustPreferViewModel
-import com.gigforce.app.modules.roster.models.Gig
+import com.gigforce.app.modules.gigPage.models.Gig
 import com.google.android.gms.tasks.Tasks.await
 import com.riningan.widget.ExtendedBottomSheetBehavior
 import kotlinx.android.synthetic.main.day_view_top_bar.*

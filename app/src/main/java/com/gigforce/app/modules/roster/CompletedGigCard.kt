@@ -17,7 +17,7 @@ class CompletedGigCard(
     var duration: Float = 0.0F,
     var cardHeight: Int = 0,
     var rating: Float = 0.0F,
-    var amount: Int = 0,
+    var amount: Double = 0.0,
     var title: String = ""
 ): MaterialCardView(context) {
     //constructor(context: Context): super(context)
@@ -65,7 +65,7 @@ class CompletedGigCard(
         }
     }
 
-    fun setGigAmount(value: Int) {
+    fun setGigAmount(value: Double) {
         amount = value
         rupee_value.text = "Rs. $value"
     }

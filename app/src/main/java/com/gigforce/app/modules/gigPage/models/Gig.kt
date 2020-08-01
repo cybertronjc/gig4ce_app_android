@@ -3,22 +3,32 @@ package com.gigforce.app.modules.gigPage.models
 import androidx.annotation.Keep
 import com.gigforce.app.core.toLocalDateTime
 import com.google.firebase.Timestamp
+import com.google.firebase.firestore.DocumentId
 import com.google.firebase.firestore.Exclude
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
+import java.util.concurrent.TimeUnit
+
 
 @Keep
 data class Gig(
-    var gigId: String = "",
+    var tag: String = "",
+    @DocumentId var gigId: String = "",
     var gigerId: String = "",
     var gigAmount: Double = 0.0,
     var title: String = "",
     var address: String = "",
     var latitude: Double? = null,
     var longitude: Double? = null,
+
     var startDateTime: Timestamp? = null,
     var endDateTime: Timestamp? = null,
+
+    var date: Int = 0,
+    var month: Int = 0,
+    var year: Int = 0,
+
     var gigStatus: String = "upcoming",
     var companyLogo: String? = null,
     var companyName: String? = null,
@@ -27,8 +37,8 @@ data class Gig(
     @field:JvmField var isGigCompleted: Boolean = false,
     @field:JvmField var isPaymentDone: Boolean = false,
     @field:JvmField var isMonthlyGig: Boolean = false,
+    @field:JvmField var isFullDay: Boolean = false,
 
-    var duration: Float = 0.0F,
     var gigRating: Float = 0.0F,
     var gigUserFeedback: String? = null,
     var gigUserFeedbackAttachments: List<String> = emptyList(),
@@ -44,6 +54,24 @@ data class Gig(
     var attendance: GigAttendance? = null,
     var gigContactDetails: GigContactDetails? = null
 ) {
+
+    @Exclude
+    var startHour: Int = 0
+        get() = startDateTime!!.toLocalDateTime().hour
+
+    @Exclude
+    var startMinute: Int = 0
+        get() = startDateTime!!.toLocalDateTime().minute
+
+    @Exclude
+    var duration: Float = 0.0F
+        get() {
+            val diffInMilliSecs = endDateTime!!.toDate().time - startDateTime!!.toDate().time
+            val minutes = TimeUnit.MINUTES.convert(diffInMilliSecs, TimeUnit.MILLISECONDS)
+            val hours = TimeUnit.HOURS.convert(diffInMilliSecs, TimeUnit.MILLISECONDS)
+
+            return (hours + (minutes - 60*hours) / 60.0).toFloat()
+        }
 
     @Exclude
     fun isGigOfToday(): Boolean {
