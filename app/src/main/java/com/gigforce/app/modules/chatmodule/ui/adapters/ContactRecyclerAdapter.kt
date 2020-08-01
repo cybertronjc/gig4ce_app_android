@@ -1,4 +1,4 @@
-package com.abhijai.gigschatdemo.contacts_module.ui.adapters
+package com.gigforce.app.modules.chatmodule.ui.adapters
 
 import android.graphics.Color
 import android.net.Uri
@@ -8,13 +8,13 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.abhijai.gigschatdemo.contacts_module.models.ContactModel
 import com.bumptech.glide.RequestManager
 import com.gigforce.app.R
+import com.gigforce.app.modules.chatmodule.models.ChatHeader
 
 class ContactRecyclerAdapter(private val requestManager: RequestManager,private val onContactClickListener: OnContactClickListener) : RecyclerView.Adapter<ContactRecyclerAdapter.ContactViewHolder>()
 {
-    private var contactsList : List<ContactModel>? = ArrayList()
+    private var contactsList : ArrayList<ChatHeader>? = ArrayList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ContactViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.chat_contact_item,parent,false)
@@ -33,8 +33,8 @@ class ContactRecyclerAdapter(private val requestManager: RequestManager,private 
         holder.bindValues(contactsList?.get(position))
     }
 
-    fun setData(list : List<ContactModel>){
-        contactsList = list
+    fun setData(chatHeaders : ArrayList<ChatHeader>){
+        contactsList = chatHeaders
         notifyDataSetChanged()
     }
 
@@ -48,24 +48,24 @@ class ContactRecyclerAdapter(private val requestManager: RequestManager,private 
         private var textViewDate : TextView = itemView.findViewById(R.id.tv_dateValue)
         private var textViewTime : TextView = itemView.findViewById(R.id.tv_timeValue)
         private var viewPinkCircle : View = itemView.findViewById(R.id.view_pinkCircle)
-        fun bindValues(contactModel : ContactModel?){
-            val uri = Uri.parse("android.resource://com.gigforce.app/drawable/" + contactModel?.imageUrl)
+        fun bindValues(chatHeader : ChatHeader?){
+            val uri = Uri.parse(
+                "android.resource://com.gigforce.app/drawable/" +
+                        chatHeader?.otherUser!!.profilePic)
             requestManager.load(uri).into(circleImageView)
-            if (contactModel?.name.equals("Help")){
+            if (chatHeader?.otherUser!!.name == "Help"){
                 textViewName.setTextColor(Color.parseColor("#E91E63"))
                 viewPinkCircle.visibility = View.GONE
             }
-            textViewName.text = contactModel?.name?:""
-            textViewDate.text = contactModel?.date?:""
-            textViewTime.text = contactModel?.time?:""
+            textViewName.text = chatHeader?.otherUser?.name?:""
+            textViewDate.text = chatHeader?.lastMsgTimestamp?.toDate()?.date.toString() ?:""
+            textViewTime.text = chatHeader?.lastMsgTimestamp?.toDate()?.time.toString() ?:""
 
             itemView.setOnClickListener {
-                contactModel?.let {
-                    onContactClickListener.contactClick(it.imageUrl,it.name)
-                }?:onContactClickListener.contactClick("","NA")
+                chatHeader.let {
+                    onContactClickListener.contactClick(it.otherUser!!.profilePic,it.otherUser!!.name, it.id)
+                }
             }
         }
     }
-
-
 }
