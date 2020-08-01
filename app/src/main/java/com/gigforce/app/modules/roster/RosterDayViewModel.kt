@@ -11,6 +11,7 @@ import android.widget.RadioGroup
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.gigforce.app.R
@@ -27,6 +28,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.riningan.widget.ExtendedBottomSheetBehavior
 import kotlinx.android.synthetic.main.gigs_today_warning_dialog.*
 import kotlinx.android.synthetic.main.reason_for_gig_cancel_dialog.*
+import kotlinx.android.synthetic.main.roster_day_fragment.*
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -45,6 +47,11 @@ class RosterDayViewModel: ViewModel() {
     var preferencesRepository = PreferencesRepository()
 
     var userGigs = HashMap<String, ArrayList<Gig>>()
+
+    var isLoadedFirstTime = true
+
+    var itemHeight = 70
+    lateinit var nestedScrollView: NestedScrollView
 
     //lateinit var bsBehavior: BottomSheetBehavior<View>
     lateinit var bsBehavior: ExtendedBottomSheetBehavior<View>
@@ -398,6 +405,21 @@ class RosterDayViewModel: ViewModel() {
             } else {
                 // TODO: Raise Error
             }
+        }
+    }
+
+    fun scrollToPosition(date: Date) {
+        Log.d("RosterDayFragment", "called")
+
+        val gigs = getFilteredGigs(date, "upcoming")
+
+        if (gigs.size != 0) {
+            val sortedUpcomingGigs = gigs.sortedBy { gig -> gig.startHour }
+
+//            nestedScrollView.scrollTo(0, (8 * itemHeight).px)
+            nestedScrollView.scrollTo(0, ((sortedUpcomingGigs[0].startHour - 4) * itemHeight).px)
+        } else {
+            nestedScrollView.scrollTo(0, (8 * itemHeight).px)
         }
     }
 }
