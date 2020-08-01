@@ -27,6 +27,7 @@ class ChatViewModel: ViewModel() {
                     when (it.type) {
                         com.google.firebase.firestore.DocumentChange.Type.ADDED -> {
                             chatHeaders.value!!.add(it.document.toObject(ChatHeader::class.java))
+                            chatHeaders.value = chatHeaders.value
                         }
                         // TODO: See how to handled modified document
                         com.google.firebase.firestore.DocumentChange.Type.MODIFIED -> {
@@ -34,6 +35,7 @@ class ChatViewModel: ViewModel() {
                         }
                         com.google.firebase.firestore.DocumentChange.Type.REMOVED -> {
                             chatHeaders.value!!.remove(it.document.toObject(ChatHeader::class.java))
+                            chatHeaders.value = chatHeaders.value
                         }
                     }
                 }
@@ -41,6 +43,7 @@ class ChatViewModel: ViewModel() {
     }
 
     fun getChatMsgs(chatHeaderId: String) {
+        chatMsgs.value = ArrayList()
         chatFirebaseRepository.getChatMsgs(chatHeaderId)
             .addSnapshotListener { querySnapshot, firebaseFirestoreException ->
                 querySnapshot?.documentChanges?.forEach {
