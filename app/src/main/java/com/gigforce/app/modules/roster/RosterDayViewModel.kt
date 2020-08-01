@@ -182,25 +182,46 @@ class RosterDayViewModel: ViewModel() {
         }
     }
 
+    private fun confirmCancellation(activeDateTime: LocalDateTime, viewModelCustomPreference: CustomPreferencesViewModel) {
+
+        Log.d("SwitchDayAvailability", "Cancellation is confirmed")
+        isDayAvailable.postValue(false)
+
+        val unavailable = UnavailableDataModel(activeDateTime.toDate)
+        unavailable.dayUnavailable = true
+
+        viewModelCustomPreference.updateCustomPreference(unavailable)
+    }
+
     fun switchDayAvailability(
         context: Context, parentView: ConstraintLayout, currentDayAvailability: Boolean,
         viewModelCustomPreference: CustomPreferencesViewModel) {
-        try {
-            viewModelCustomPreference.customPreferencesDataModel
-        } catch (e:UninitializedPropertyAccessException) {
-//            Toast.makeText(context, "UNINITIALIZED", Toast.LENGTH_SHORT).show()
-            return
-        }
+//        try {
+//            viewModelCustomPreference.customPreferencesDataModel
+//        } catch (e:UninitializedPropertyAccessException) {
+////            Toast.makeText(context, "UNINITIALIZED", Toast.LENGTH_SHORT).show()
+//            return
+//        }
+
+        Log.d("SwitchDayAvailability", "Entered")
+        Log.d("SwitchDayAvailability", "Day availability is " + currentDayAvailability.toString())
 
         val activeDateTime = currentDateTime.value!!
+
+
+        Log.d("SwitchDayAvailability", "Active date time is " + activeDateTime.toString())
 
         if (currentDayAvailability) {
             // today is active
             // make inactive
+
+            Log.d("SwitchDayAvailability", "Trying to mark inactive")
             val confirmCancellation = if (upcomingGigs.size > 0) showGigsTodayWarning(
-                context, upcomingGigs, parentView) else true
+                context, upcomingGigs, parentView, activeDateTime, viewModelCustomPreference) else true
 
             if (confirmCancellation) {
+
+                Log.d("SwitchDayAvailability", "Cancellation is confirmed")
                 isDayAvailable.postValue(false)
 
                 val unavailable = UnavailableDataModel(activeDateTime.toDate)
@@ -211,6 +232,7 @@ class RosterDayViewModel: ViewModel() {
         } else {
             // today is inactive
             // make active
+            Log.d("SwitchDayAvailability", "Marking day available ")
             isDayAvailable.value = true
 
             val available = UnavailableDataModel(activeDateTime.toDate)
@@ -238,8 +260,14 @@ class RosterDayViewModel: ViewModel() {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun showGigsTodayWarning(context: Context, upcomingGigs: ArrayList<Gig>, gigParentView: ConstraintLayout): Boolean {
+    fun showGigsTodayWarning(
+        context: Context, upcomingGigs: ArrayList<Gig>, gigParentView: ConstraintLayout,
+        activeDateTime: LocalDateTime, viewModelCustomPreference: CustomPreferencesViewModel
+    ): Boolean {
         var flag = false
+
+
+        Log.d("SwitchDayAvailability", "Entered ShowGigsTodayWarning")
 
         val dialog = Dialog(context)
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -258,7 +286,7 @@ class RosterDayViewModel: ViewModel() {
 
         dialog.yes.setOnClickListener {
             //flag = if (upcomingGigs.size > 0) showReasonForGigCancel(context, upcomingGigs, gigParentView) else true
-            flag = true
+            confirmCancellation(activeDateTime, viewModelCustomPreference)
             dialog .dismiss()
         }
 

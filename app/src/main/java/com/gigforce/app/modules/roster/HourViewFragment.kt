@@ -141,6 +141,11 @@ class HourViewFragment: RosterBaseFragment() {
 
         initializeHourViews()
 
+        rosterViewModel.upcomingGigs = upcomingGigs
+        rosterViewModel.completedGigs = completedGigs
+        rosterViewModel.currentGigs = currentGigs
+        rosterViewModel.fulldayGigs = fullDayGigs
+
 //        loadFirstTime()
 
         if (isSameDate(activeDateTime, actualDateTime)) {

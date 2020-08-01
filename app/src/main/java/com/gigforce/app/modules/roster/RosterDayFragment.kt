@@ -182,6 +182,9 @@ class RosterDayFragment: RosterBaseFragment() {
             rosterViewModel.switchDayAvailability(
                 requireContext(), getDayTimesChild()!!,
                 rosterViewModel.isDayAvailable.value!!, viewModelCustomPreference)
+
+            rosterViewModel.resetDayTimeAvailability(
+                viewModelCustomPreference, getDayTimesChild()!!)
         }
     }
 
