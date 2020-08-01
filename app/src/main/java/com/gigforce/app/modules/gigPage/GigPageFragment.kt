@@ -370,8 +370,13 @@ class GigPageFragment : BaseFragment() {
 
         val gigAmountText = if (gig.gigAmount == 0.0)
             "--"
-        else
-            "Gross Payment : Rs ${gig.gigAmount} per Month"
+        else {
+            if (gig.isMonthlyGig)
+                "Gross Payment : Rs ${gig.gigAmount} per Month"
+            else
+                "Gross Payment : Rs ${gig.gigAmount} per Hour"
+
+        }
         wageTV.text = gigAmountText
 
         gigHighlightsContainer.removeAllViews()
