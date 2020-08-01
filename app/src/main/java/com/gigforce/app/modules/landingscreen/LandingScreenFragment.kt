@@ -43,6 +43,7 @@ class LandingScreenFragment : BaseFragment() {
         private const val INTENT_EXTRA_SCREEN = "scrren"
 
         private const val SCREEN_VERIFICATION = 10
+        private const val SCREEN_GIG = 11
     }
 
     private lateinit var viewModel: LandingScreenViewModel
@@ -82,6 +83,9 @@ class LandingScreenFragment : BaseFragment() {
 
         when (comingFromOrGoingToScreen) {
             SCREEN_VERIFICATION -> landingScrollView.post {
+                landingScrollView.scrollTo(0, exploreByIndustryLayout.y.toInt())
+            }
+            SCREEN_GIG -> landingScrollView.post {
                 landingScrollView.scrollTo(0, exploreByIndustryLayout.y.toInt())
             }
             else -> {
@@ -377,6 +381,7 @@ class LandingScreenFragment : BaseFragment() {
             navigate(R.id.gigerVerificationFragment)
         }
         mygigs_cl.setOnClickListener {
+            comingFromOrGoingToScreen = SCREEN_GIG
             navigate(R.id.mainHomeScreen)
         }
         skip_about_intro.setOnClickListener {
