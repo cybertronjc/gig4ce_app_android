@@ -1,4 +1,4 @@
-package com.abhijai.gigschatdemo.contacts_module.ui.adapters
+package com.gigforce.app.modules.chatmodule.ui.adapters
 
 import android.graphics.Color
 import android.net.Uri
@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.abhijai.gigschatdemo.contacts_module.models.ContactModel
 import com.bumptech.glide.RequestManager
 import com.gigforce.app.R
 import com.gigforce.app.modules.chatmodule.models.ChatHeader
@@ -69,6 +68,4 @@ class ContactRecyclerAdapter(private val requestManager: RequestManager,private 
             }
         }
     }
-
-
 }

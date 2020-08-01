@@ -32,6 +32,22 @@
                     android:src="@drawable/ic_cross_grey"
                     android:tint="@color/black" />
 
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="10dp"
+                    android:layout_weight="1"/>
+
+
+                <ImageView
+                    android:id="@+id/ellipses_btn"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_marginEnd="20dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:src="@drawable/ic_ellipses"
+                    android:tint="@color/black" />
+
 
             </LinearLayout>
 
@@ -45,27 +61,27 @@
                 app:layout_constraintTop_toBottomOf="@id/appBar">
 
 
-            <ImageView
-                android:id="@+id/companyLogoIV"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="6dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/gigBannerImageIV"
-                app:layout_constraintTop_toTopOf="parent" />
+                <ImageView
+                    android:id="@+id/companyLogoIV"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="6dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/gigBannerImageIV"
+                    app:layout_constraintTop_toTopOf="parent" />
 
 
-            <CheckBox
-                android:id="@+id/favoriteCB"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_marginTop="4dp"
-                android:layout_marginEnd="20dp"
-                android:button="@drawable/sl_favorite_24_dp"
-                app:buttonTint="@color/lipstick"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                <CheckBox
+                    android:id="@+id/favoriteCB"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginEnd="20dp"
+                    android:button="@drawable/sl_favorite_24_dp"
+                    app:buttonTint="@color/lipstick"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
 
                 <TextView
@@ -212,62 +228,67 @@
                     app:layout_constraintStart_toEndOf="@id/addressIV"
                     app:layout_constraintTop_toBottomOf="@id/separator2" />
 
-            <TextView
-                android:id="@+id/contactPersonTV"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="7dp"
-                android:layout_marginStart="8dp"
-                android:letterSpacing="0"
-                android:text="Contact Person"
-                android:textColor="@color/black_85"
-                android:textSize="14sp"
-                app:layout_constraintStart_toEndOf="@id/addressIV"
-                app:layout_constraintTop_toBottomOf="@id/contactPersonLabel" />
+                <TextView
+                    android:id="@+id/contactPersonTV"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="7dp"
+                    android:letterSpacing="0"
+                    android:text="Contact Person"
+                    android:textColor="@color/black_85"
+                    android:textSize="14sp"
+                    app:layout_constraintStart_toEndOf="@id/addressIV"
+                    app:layout_constraintTop_toBottomOf="@id/contactPersonLabel" />
 
 
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/messageCardView"
-                    android:layout_width="26dp"
-                    android:layout_height="26dp"
-                    android:layout_marginEnd="17dp"
-                    android:padding="1dp"
+                    android:id="@+id/callCardView"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+
+                    android:layout_marginRight="12dp"
                     android:clickable="true"
                     android:focusable="true"
+                    android:scaleX="0.9"
+                    android:scaleY="0.9"
                     app:cardBackgroundColor="@color/light_pink"
                     app:cardCornerRadius="20dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/contactPersonLabel">
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent">
 
                     <ImageView
-                        android:layout_width="26dp"
-                        android:layout_height="26dp"
-                        android:scaleX="0.5"
-                        android:scaleY="0.5"
-                        android:src="@drawable/ic_chat" />
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:scaleX="0.4"
+                        android:scaleY="0.4"
+                        android:src="@drawable/fui_ic_phone_white_24dp"
+                        android:tint="@color/lipstick" />
 
                 </androidx.cardview.widget.CardView>
 
 
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/callCardView"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_marginRight="8dp"
+                    android:id="@+id/messageCardView"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_marginRight="12dp"
                     android:clickable="true"
                     android:focusable="true"
+                    android:padding="1dp"
+                    android:scaleX="0.9"
+                    android:scaleY="0.9"
                     app:cardBackgroundColor="@color/light_pink"
                     app:cardCornerRadius="20dp"
-                    app:layout_constraintRight_toLeftOf="@id/messageCardView"
-                    app:layout_constraintTop_toBottomOf="@id/contactPersonLabel">
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/callCardView">
 
                     <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:scaleX="0.5"
-                        android:scaleY="0.5"
-                        android:src="@drawable/fui_ic_phone_white_24dp"
-                        android:tint="@color/lipstick" />
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:scaleX="0.4"
+                        android:scaleY="0.4"
+                        android:src="@drawable/ic_chat" />
 
                 </androidx.cardview.widget.CardView>
 
@@ -284,11 +305,11 @@
                 app:layout_constraintTop_toBottomOf="@id/gigControlsLayout" />
 
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/gigDetailsLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/separator3">
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/gigDetailsLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/separator3">
 
                 <TextView
                     android:id="@+id/detailsLabelTV"
@@ -382,16 +403,18 @@
                     app:layout_constraintStart_toEndOf="@id/wageIV"
                     app:layout_constraintTop_toBottomOf="@id/shiftTV" />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/seeMoreBtn"
-                style="@style/Widget.MaterialComponents.Button.TextButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/wageTV"
-                android:text="See More"
-                app:layout_constraintEnd_toEndOf="@+id/durationTextTV" />
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/seeMoreBtn"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minHeight="0dp"
+                    android:text="See More"
+                    android:textSize="12sp"
+                    app:layout_constraintEnd_toEndOf="@+id/durationTextTV"
+                    app:layout_constraintTop_toBottomOf="@id/wageTV" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
 
             <View
@@ -410,6 +433,7 @@
                 android:layout_marginEnd="16dp"
                 app:cardBackgroundColor="#e8e8e8"
                 app:cardElevation="0dp"
+                app:cardCornerRadius="6dp"
                 app:layout_constraintTop_toBottomOf="@id/separator4">
 
 
@@ -429,18 +453,28 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
+                    <ImageView
+                        android:id="@+id/checkInIV"
+                        android:layout_width="24dp"
+                        android:layout_height="28dp"
+                        android:src="@drawable/ic_check_in_green"
+                        android:layout_marginStart="18dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"/>
+                    
 
-                <TextView
-                    android:id="@+id/punchInLabel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/lato"
-                    android:letterSpacing="0"
-                    android:text="Check In :"
-                    android:textColor="@color/black_85"
-                    app:layout_constraintEnd_toStartOf="@+id/view4"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    <TextView
+                        android:id="@+id/punchInLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/lato"
+                        android:letterSpacing="0"
+                        android:text="Check In :"
+                        android:textColor="@color/black_85"
+                        app:layout_constraintEnd_toStartOf="@+id/view4"
+                        app:layout_constraintStart_toEndOf="@id/checkInIV"
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
                         android:id="@+id/punchInTimeTV"
@@ -452,21 +486,32 @@
                         android:textColor="@color/black_85"
                         android:textSize="20sp"
                         app:layout_constraintEnd_toStartOf="@+id/view4"
-                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/checkInIV"
                         app:layout_constraintTop_toBottomOf="@id/punchInLabel" />
 
 
-                <TextView
-                    android:id="@+id/punchOutLabel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/lato"
-                    android:letterSpacing="0"
-                    android:text="Check Out :"
-                    android:textColor="@color/black_85"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/view4"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    <ImageView
+                        android:id="@+id/checkOutIV"
+                        android:layout_width="24dp"
+                        android:layout_height="28dp"
+                        android:src="@drawable/ic_checkout"
+                        android:layout_marginEnd="18dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"/>
+
+
+                    <TextView
+                        android:id="@+id/punchOutLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/lato"
+                        android:letterSpacing="0"
+                        android:text="Check Out :"
+                        android:textColor="@color/black_85"
+                        app:layout_constraintEnd_toStartOf="@id/checkOutIV"
+                        app:layout_constraintStart_toEndOf="@+id/view4"
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
                         android:id="@+id/punchOutTimeTV"
@@ -477,7 +522,7 @@
                         android:text="00:00:00"
                         android:textColor="@color/black_85"
                         android:textSize="20sp"
-                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/checkOutIV"
                         app:layout_constraintStart_toEndOf="@+id/view4"
                         app:layout_constraintTop_toBottomOf="@id/punchOutLabel" />
 
@@ -494,10 +539,9 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="11dp"
                 android:gravity="center_horizontal"
-                android:text="Note : You need to click your selfie to mark attendance. "
+                android:text="Note :"
                 android:textColor="#d9000000"
                 android:textSize="12sp"
-                android:visibility="gone"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/attendanceCardView" />
 
@@ -505,27 +549,31 @@
                 android:id="@+id/contact_supervisor"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="11dp"
                 android:text="Please contact the supervisor in case there’s an issue with marking attendance."
-                app:layout_constraintEnd_toEndOf="@+id/attendanceCardView"
-                app:layout_constraintStart_toStartOf="@+id/attendanceCardView"
-                app:layout_constraintTop_toBottomOf="@+id/noteTV"
-                android:textColor="#99000000"/>
+                android:textColor="@color/black"
+                android:letterSpacing="0"
+                android:fontFamily="@font/lato"
+                android:textSize="12sp"
+                app:layout_constraintStart_toEndOf="@+id/noteTV"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/attendanceCardView" />
+
             <com.ncorti.slidetoact.SlideToActView
                 android:id="@+id/startNavigationSliderBtn"
                 android:layout_width="match_parent"
                 android:layout_height="69dp"
                 android:layout_marginTop="20dp"
                 app:border_radius="8dp"
+                android:layout_marginBottom="24dp"
                 app:inner_color="@color/lipstick"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/contact_supervisor"
                 app:outer_color="@color/light_pink"
                 app:slider_height="60dp"
                 app:slider_icon="@drawable/ic_arrow_forward_white"
                 app:slider_icon_color="@color/white"
                 app:text="Check - in" />
-
-
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

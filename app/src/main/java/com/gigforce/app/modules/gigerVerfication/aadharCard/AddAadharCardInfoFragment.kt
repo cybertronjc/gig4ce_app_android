@@ -21,6 +21,7 @@ import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
 import com.gigforce.app.modules.gigerVerfication.GigerVerificationStatus
+import com.gigforce.app.modules.gigerVerfication.WhyWeNeedThisBottomSheet
 import com.gigforce.app.modules.photocrop.PhotoCrop
 import com.gigforce.app.utils.Lse
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -81,6 +82,15 @@ class AddAadharCardInfoFragment : BaseFragment() {
 
         toolbar.setNavigationOnClickListener {
             findNavController().popBackStack(R.id.gigerVerificationFragment, false)
+        }
+
+        whyWeNeedThisTV.setOnClickListener {
+
+            WhyWeNeedThisBottomSheet.launch(
+                childFragmentManager = childFragmentManager,
+                title = "Why we need this?",
+                content = "Uploading either Aadhar or Driver’s license is mandatory for profile verification. Aadhar card helps verify your name, date of birth, address, and other details."
+            )
         }
 
         aadharAvailaibilityOptionRG.setOnCheckedChangeListener { _, checkedId ->
@@ -158,10 +168,6 @@ class AddAadharCardInfoFragment : BaseFragment() {
         aadharEditLayout.setOnClickListener {
         }
 
-        aadharCardET.doOnTextChanged { text, start, count, after ->
-            aadharCardLayout.error = null
-        }
-
         aadharSubmitSliderBtn.onSlideCompleteListener =
             object : SlideToActView.OnSlideCompleteListener {
 
@@ -169,7 +175,12 @@ class AddAadharCardInfoFragment : BaseFragment() {
 
                     if (aadharYesRB.isChecked) {
                         if (aadharCardET.text!!.length != 12) {
-                            aadharCardLayout.error = "Enter Valid Aadhar Card No"
+
+                            MaterialAlertDialogBuilder(requireContext())
+                                .setTitle("Alert")
+                                .setMessage("Enter Valid Aadhar Card No")
+                                .setPositiveButton("OK") { _, _ -> }
+                                .show()
                             aadharSubmitSliderBtn.resetSlider()
                             return
                         }

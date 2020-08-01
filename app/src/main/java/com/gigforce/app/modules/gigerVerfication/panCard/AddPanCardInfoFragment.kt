@@ -19,10 +19,7 @@ import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
-import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
-import com.gigforce.app.modules.gigerVerfication.GigerVerificationStatus
-import com.gigforce.app.modules.gigerVerfication.ImageSource
-import com.gigforce.app.modules.gigerVerfication.SelectImageSourceBottomSheetActionListener
+import com.gigforce.app.modules.gigerVerfication.*
 import com.gigforce.app.modules.photocrop.PhotoCrop
 import com.gigforce.app.utils.Lse
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -31,6 +28,7 @@ import com.ncorti.slidetoact.SlideToActView
 import kotlinx.android.synthetic.main.fragment_add_pan_card_info.*
 import kotlinx.android.synthetic.main.fragment_add_pan_card_info_main.*
 import kotlinx.android.synthetic.main.fragment_verification_image_holder.view.*
+import java.util.*
 
 class AddPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetActionListener {
 
@@ -67,6 +65,15 @@ class AddPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetActio
             findNavController().popBackStack(R.id.gigerVerificationFragment, false)
         }
 
+        whyWeNeedThisTV.setOnClickListener {
+
+            WhyWeNeedThisBottomSheet.launch(
+                childFragmentManager = childFragmentManager,
+                title = "Why we need this?",
+                content = "A PAN card is mandatory for profile verification. It helps verify your name and date of birth and also helps with payments to your wallet."
+            )
+        }
+
         panImageHolder.uploadDocumentCardView.setOnClickListener {
             launchSelectImageSourceDialog()
         }
@@ -76,10 +83,6 @@ class AddPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetActio
         }
 
         panImageHolder.uploadImageLayout.imageLabelTV.text = getString(R.string.pan_card_image)
-
-        panCardEditText.doOnTextChanged { text, start, count, after ->
-            panCardNoTextInputLayout.error = null
-        }
 
         panCardAvailaibilityOptionRG.setOnCheckedChangeListener { _, checkedId ->
 
@@ -138,8 +141,15 @@ class AddPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetActio
                 override fun onSlideComplete(view: SlideToActView) {
 
                     if (panYesRB.isChecked) {
-                        if (panCardEditText.text!!.length != 10) {
-                            panCardNoTextInputLayout.error = "Enter Valid PAN Card No"
+                        val panCardNo = panCardEditText.text.toString().toUpperCase(Locale.getDefault())
+                        if (!VerificationValidations.isPanCardValid(panCardNo)) {
+
+                            MaterialAlertDialogBuilder(requireContext())
+                                .setTitle("Alert")
+                                .setMessage("Enter Valid PAN Card No")
+                                .setPositiveButton("OK") { _, _ -> }
+                                .show()
+
                             panSubmitSliderBtn.resetSlider()
                             return
                         }
@@ -155,18 +165,17 @@ class AddPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetActio
                             return
                         }
 
-                        val panNo = panCardEditText.text.toString()
                         if (panSubmitSliderBtn.text.toString() == getString(R.string.update)) {
 
                             MaterialAlertDialogBuilder(requireContext())
                                 .setTitle("Alert")
                                 .setMessage("You are re-uploading your Pan Card details, they will be verified once again, that can take up to 7 days")
                                 .setPositiveButton("OK") { _, _ ->
-                                    viewModel.updatePanImagePath(true, clickedImagePath, panNo)
+                                    viewModel.updatePanImagePath(true, clickedImagePath, panCardNo)
                                 }
                                 .show()
                         } else {
-                            viewModel.updatePanImagePath(true, clickedImagePath, panNo)
+                            viewModel.updatePanImagePath(true, clickedImagePath, panCardNo)
                         }
 
                     } else if (panNoRB.isChecked) {

@@ -1,4 +1,4 @@
-package com.abhijai.gigschatdemo.contacts_module.ui.adapters
+package com.gigforce.app.modules.chatmodule.ui.adapters
 
 import android.graphics.Color
 import android.view.Gravity
@@ -9,7 +9,6 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
-import com.abhijai.gigschatdemo.contacts_module.models.ChatModel
 import com.gigforce.app.R
 import com.gigforce.app.modules.chatmodule.models.Message
 

@@ -297,6 +297,7 @@ class BSCalendarScreenFragment : BaseFragment() {
         override fun onClick(v: View?) {
             val gig = (rv.adapter as RecyclerGenericAdapter<Gig>).list.get(position)
 
+            if(gig.contactNo.isNullOrBlank()) return
             val intent = Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", gig.contactNo, null))
             startActivity(intent)
         }
@@ -534,7 +535,7 @@ class BSCalendarScreenFragment : BaseFragment() {
         val recyclerGenericAdapter: RecyclerGenericAdapter<Assessment> =
             RecyclerGenericAdapter<Assessment>(
                 activity?.applicationContext,
-                PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item -> showToast("") },
+                PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item -> navigate(R.id.assessment_fragment) },
                 RecyclerGenericAdapter.ItemInterface<Assessment?> { obj, viewHolder, position ->
                     val lp = getView(viewHolder, R.id.assessment_cl).layoutParams
                     lp.height = lp.height

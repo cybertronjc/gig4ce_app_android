@@ -52,14 +52,19 @@
 
 
     <TextView
+        android:id="@+id/howToRecordVideoBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="14dp"
         android:layout_marginRight="4dp"
         android:letterSpacing="-0.01"
         android:text="@string/how_to_record_selfie_video"
         android:textColor="@color/battle_ship_grey"
         android:textSize="12sp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:clickable="true"
+        android:focusable="true"
         android:fontFamily="@font/lato"
         app:layout_constraintEnd_toStartOf="@+id/helpIconIV"
         app:layout_constraintTop_toBottomOf="@id/appBar" />

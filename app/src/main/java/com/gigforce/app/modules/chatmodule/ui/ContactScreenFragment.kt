@@ -1,29 +1,22 @@
-package com.abhijai.gigschatdemo.contacts_module.ui
+package com.gigforce.app.modules.chatmodule.ui
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.*
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.abhijai.gigschatdemo.contacts_module.ui.adapters.ContactRecyclerAdapter
-import com.abhijai.gigschatdemo.contacts_module.ui.adapters.OnContactClickListener
-import com.abhijai.gigschatdemo.contacts_module.viewModels.ContactViewModel
+import com.gigforce.app.modules.chatmodule.ui.adapters.ContactRecyclerAdapter
+import com.gigforce.app.modules.chatmodule.ui.adapters.OnContactClickListener
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.modules.chatmodule.viewModels.ChatViewModel
-import com.gigforce.app.modules.preferences.SharedPreferenceViewModel
 import com.gigforce.app.utils.AppConstants
 import com.gigforce.app.utils.VerticalItemDecorator
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.contact_screen_fragment.*
-import kotlinx.android.synthetic.main.hour_selected_outline.*
 
-class ContactScreenFragment : BaseFragment(),OnContactClickListener {
+class ContactScreenFragment : BaseFragment(), OnContactClickListener {
 
     private lateinit var viewModel : ChatViewModel
     private lateinit var mAdapter : ContactRecyclerAdapter
