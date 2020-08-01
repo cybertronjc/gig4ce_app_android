@@ -16,18 +16,17 @@ data class Gig(
     var tag: String = "",
     @DocumentId var gigId: String = "",
     var gigerId: String = "",
-    var gigAmount: Double = 0.0,
     var title: String = "",
     var address: String = "",
     var latitude: Double? = null,
     var longitude: Double? = null,
 
+    var gigAmount: Double = 0.0,
+    var invoiceGenerationDate : Timestamp? = null,
+    var paymentStatus : String = "Processing",
+
     var startDateTime: Timestamp? = null,
     var endDateTime: Timestamp? = null,
-
-    var date: Int = 0,
-    var month: Int = 0,
-    var year: Int = 0,
 
     var gigStatus: String = "upcoming",
     var companyLogo: String? = null,
@@ -55,15 +54,18 @@ data class Gig(
     var gigContactDetails: GigContactDetails? = null
 ) {
 
-    @Exclude
+    @get:Exclude
+    @set:Exclude
     var startHour: Int = 0
         get() = startDateTime!!.toLocalDateTime().hour
 
-    @Exclude
+    @get:Exclude
+    @set:Exclude
     var startMinute: Int = 0
         get() = startDateTime!!.toLocalDateTime().minute
 
-    @Exclude
+    @get:Exclude
+    @set:Exclude
     var duration: Float = 0.0F
         get() {
             val diffInMilliSecs = endDateTime!!.toDate().time - startDateTime!!.toDate().time
@@ -161,7 +163,7 @@ data class Gig(
         val minCheckInTime = gigCheckInTime.minusHours(1)
         val maxCheckInTime = gigCheckInTime.plusHours(1)
         val currentTime = LocalDateTime.now()
-        val validCheckInTime =  currentTime.isAfter(minCheckInTime) && currentTime.isBefore(maxCheckInTime)
+        val validCheckInTime =  (currentTime.isAfter(minCheckInTime) && currentTime.isBefore(maxCheckInTime)) || isCheckInMarked()
 
         return if (endDateTime != null) {
 
