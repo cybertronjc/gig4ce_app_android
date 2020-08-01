@@ -510,6 +510,7 @@ class GigPageFragment : BaseFragment() {
             invoiceStatusBtn.gone()
         }
 
+        pastGigNoteTV.text = "Please contact the supervisor in case there’s an issue with marking attendance."
         dateTV.text = DateHelper.getDateInDDMMYYYY(gig.startDateTime!!.toDate())
 
         if (gig.isCheckInMarked())
@@ -694,7 +695,7 @@ class GigPageFragment : BaseFragment() {
             val content = it.substringAfter(":").trim()
 
             gigTitleTV.text = title
-            contentTV.text = content.replace("\\n", "\n")
+            contentTV.text = content.replace("<>", "\n")
         } else {
             gigRequirementsContainer.inflate(R.layout.gig_details_item, true)
             val gigItem: LinearLayout =
