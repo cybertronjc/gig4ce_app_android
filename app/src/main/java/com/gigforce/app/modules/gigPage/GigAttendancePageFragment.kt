@@ -19,6 +19,7 @@ import android.widget.PopupMenu
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
@@ -89,7 +90,6 @@ class GigAttendancePageFragment : BaseFragment(), PopupMenu.OnMenuItemClickListe
                         requestPermissionForGPS()
                         startNavigationSliderBtn.resetSlider()
                     }
-
                 }
             }
 
@@ -132,8 +132,8 @@ class GigAttendancePageFragment : BaseFragment(), PopupMenu.OnMenuItemClickListe
 
         callCardView.setOnClickListener {
 
-            if (gig?.contactNo != null) {
-                val intent = Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", gig!!.contactNo, null))
+            if (gig?.gigContactDetails?.contactNumber != 0L) {
+                val intent = Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", gig!!.gigContactDetails?.contactNumber?.toString(), null))
                 startActivity(intent)
             }
         }
@@ -228,6 +228,7 @@ class GigAttendancePageFragment : BaseFragment(), PopupMenu.OnMenuItemClickListe
         }
 
         contactPersonTV.text = gig.gigContactDetails?.contactName
+        callCardView.isVisible = gig.gigContactDetails?.contactNumber != 0L
 
         addressTV.setOnClickListener {
 

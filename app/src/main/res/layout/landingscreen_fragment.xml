@@ -114,6 +114,7 @@
         app:layout_constraintTop_toTopOf="@+id/relativeLayout" />
 
     <ScrollView
+        android:id="@+id/landingScrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="144dp"
@@ -295,6 +296,7 @@
                 android:background="@color/app_gray_color_38" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/exploreByIndustryLayout"
                 android:layout_width="match_parent"
                 android:layout_height="215dp">
 
@@ -383,6 +385,7 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/competedVerficationLayout"
                 android:layout_width="match_parent"
                 android:layout_height="129dp"
                 android:background="#30e5e5e5">
