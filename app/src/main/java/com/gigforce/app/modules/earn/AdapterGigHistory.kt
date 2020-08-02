@@ -19,15 +19,17 @@ import java.text.SimpleDateFormat
 class AdapterGigHistory : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var callbacks: AdapterGigHistoryCallbacks? = null
     private var onGoingGigs: List<Gig>? = null
-    private var scheduledGigs: MutableList<Gig>? = ArrayList<Gig>()
+
+    var scheduledGigs: MutableList<Gig>? = ArrayList<Gig>()
     private val timeFormatter = SimpleDateFormat("hh.mm aa")
     private val dateFormatter = SimpleDateFormat("dd MMM yyyy")
+    private val headerDateFormatter = SimpleDateFormat("MMM yyyy")
 
+    private var horizontalItemDecoration: HorizontaltemDecoration? = null
 
     inner class ViewHolderOnGoingGigs(itemView: View) : RecyclerView.ViewHolder(itemView)
     inner class ViewHolderGigEvents(itemView: View) : RecyclerView.ViewHolder(itemView)
     inner class ViewHolderGigDetails(itemView: View) : RecyclerView.ViewHolder(itemView)
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
@@ -69,12 +71,19 @@ class AdapterGigHistory : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                         if (it) View.VISIBLE else View.GONE
                     viewHolderOnGoings.itemView.tv_on_going_gigs_gig_hist.visibility =
                         if (it) View.GONE else View.VISIBLE
-
                 }
                 val adapter = AdapterOnGoingGigs()
                 viewHolderOnGoings.itemView.rv_on_going_gigs_gig_hist.adapter = adapter
+                if (horizontalItemDecoration == null) {
+                    horizontalItemDecoration =
+                        HorizontaltemDecoration(holder.itemView.resources.getDimensionPixelOffset(R.dimen.size_8))
+                } else {
+                    viewHolderOnGoings.itemView.rv_on_going_gigs_gig_hist.removeItemDecoration(
+                        horizontalItemDecoration!!
+                    )
+                }
                 viewHolderOnGoings.itemView.rv_on_going_gigs_gig_hist.addItemDecoration(
-                    HorizontaltemDecoration(holder.itemView.resources.getDimensionPixelOffset(R.dimen.size_8))
+                    horizontalItemDecoration!!
                 )
                 viewHolderOnGoings.itemView.rv_on_going_gigs_gig_hist.layoutManager =
                     LinearLayoutManager(
@@ -83,6 +92,12 @@ class AdapterGigHistory : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                         false
                     )
                 adapter.addData(onGoingGigs)
+                adapter.setCallbacks(object : AdapterOnGoingGigs.AdapterOnGoingGigCallbacks {
+                    override fun openGigDetails(gig: Gig) {
+                        callbacks?.openGigDetails(gig)
+                    }
+
+                })
             }
             TYPE_EVENTS -> {
                 val viewHolderGigEvents = holder as ViewHolderGigEvents
@@ -92,10 +107,38 @@ class AdapterGigHistory : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             else -> {
                 val viewHolderGigDetails = holder as ViewHolderGigDetails
                 val gig = scheduledGigs?.get(position - 2)
+                holder.itemView.tv_completed_gig_hist.text =
+                    holder.itemView.context.getString(R.string.pending)
+                holder.itemView.tv_completed_gig_hist.setCompoundDrawablesWithIntrinsicBounds(
+                    R.drawable.bg_circle_yellow,
+                    0,
+                    0,
+                    0
+                )
+                gig?.attendance?.checkInMarked?.let { checkInMarked ->
+                    {
+                        gig.attendance?.checkOutMarked?.let {
+                            if (checkInMarked && it) {
+                                holder.itemView.tv_completed_gig_hist.text =
+                                    holder.itemView.context.getString(R.string.completed)
+                                holder.itemView.tv_completed_gig_hist.setCompoundDrawablesWithIntrinsicBounds(
+                                    R.drawable.bg_circle_468800,
+                                    0,
+                                    0,
+                                    0
+                                )
+                            }
+                        }
+                    }
+                }
+                val currentDate = headerDateFormatter.format(gig?.startDateTime?.toDate()!!)
+                viewHolderGigDetails.itemView.tv_gig_day_rv_gig_his.text = currentDate
                 if (position == 2) {
                     viewHolderGigDetails.itemView.tv_gig_day_rv_gig_his.visibility = View.VISIBLE
                 } else {
-                    viewHolderGigDetails.itemView.tv_gig_day_rv_gig_his.visibility = View.GONE
+
+                    viewHolderGigDetails.itemView.tv_gig_day_rv_gig_his.visibility =
+                        if (currentDate == headerDateFormatter.format(scheduledGigs!![position - 3].startDateTime?.toDate()!!)) View.GONE else View.VISIBLE
                 }
                 viewHolderGigDetails.itemView.tv_date_gig_hist.isSelected = true
                 viewHolderGigDetails.itemView.rl_on_going_gig_hist.visibility = View.GONE
@@ -122,7 +165,10 @@ class AdapterGigHistory : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 Glide.with(viewHolderGigDetails.itemView).load(gig?.companyLogo)
                     .placeholder(R.drawable.profile)
                     .into(viewHolderGigDetails.itemView.iv_brand_rv_gig_hist)
-
+                PushDownAnim.setPushDownAnimTo(holder.itemView)
+                    .setOnClickListener(View.OnClickListener {
+                        callbacks?.openGigDetails(onGoingGigs!![holder.adapterPosition])
+                    })
                 holder.itemView.tv_timing_rv_gig_hist.text = if (gig?.endDateTime != null)
                     "${timeFormatter.format(gig.startDateTime!!.toDate())} - ${timeFormatter.format(
                         gig?.endDateTime!!.toDate()
@@ -135,6 +181,7 @@ class AdapterGigHistory : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private fun pushDown(viewHolderGigEvents: ViewHolderGigEvents) {
         PushDownAnim.setPushDownAnimTo(viewHolderGigEvents.itemView.tv_past_events_rv_gig_hist)
             .setOnClickListener(View.OnClickListener {
+                callbacks?.getPastGigs()
                 viewHolderGigEvents.itemView.tv_past_events_rv_gig_hist.setBackgroundResource(
                     R.drawable.bg_selected_event_rv_gig_hist
                 )
@@ -168,6 +215,7 @@ class AdapterGigHistory : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             })
         PushDownAnim.setPushDownAnimTo(viewHolderGigEvents.itemView.tv_upcoming_events_rv_gig_hist)
             .setOnClickListener(View.OnClickListener {
+                callbacks?.getUpcomingGigs()
                 viewHolderGigEvents.itemView.tv_past_events_rv_gig_hist.setBackgroundResource(
                     R.drawable.bg_unselected_event_rv_gig_hist
                 )
@@ -224,7 +272,16 @@ class AdapterGigHistory : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         this.callbacks = adapterGigHistoryCallbacks;
     }
 
+    fun clearData() {
+        scheduledGigs?.size?.let { notifyItemRangeRemoved(2, it) }
+        scheduledGigs?.clear()
+
+    }
+
     public interface AdapterGigHistoryCallbacks {
         fun showNoGigExists(int: Int)
+        fun getPastGigs()
+        fun getUpcomingGigs()
+        fun openGigDetails(gig: Gig)
     }
 }

@@ -351,4 +351,5 @@ open class BaseFragment : Fragment(), ViewsFromViewsInterface, NavigationInterfa
         utilAndValidationInterface.updateResources(language)
     }
 
+
 }

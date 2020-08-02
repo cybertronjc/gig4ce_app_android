@@ -178,7 +178,6 @@
                     android:marqueeRepeatLimit="marquee_forever"
                     android:scrollHorizontally="true"
                     android:singleLine="true"
-                    android:text="Today , 09 July 2020"
                     android:textColor="@color/warm_grey"
                     android:textSize="@dimen/font_14" />
 
@@ -191,7 +190,6 @@
                     android:drawableStart="@drawable/bg_circle_468800"
                     android:drawablePadding="@dimen/size_4"
                     android:gravity="center"
-                    android:text="Completed"
                     android:textColor="@color/black_85"
                     android:textSize="@dimen/font_12" />
 
@@ -201,7 +199,6 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/tv_date_gig_hist"
                     android:layout_marginTop="@dimen/size_4"
-                    android:text="08hrs : 20 mins"
                     android:textColor="@color/black_85"
                     android:textSize="@dimen/font_20" />
 
@@ -213,7 +210,6 @@
                     android:layout_marginTop="@dimen/size_4"
                     android:drawablePadding="@dimen/size_4"
                     android:gravity="center"
-                    android:text="08:00 AM -  04:20 PM "
                     android:textColor="@color/warm_grey"
                     android:textSize="@dimen/font_16" />
 

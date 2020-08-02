@@ -7,10 +7,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.gigforce.app.R
 import com.gigforce.app.modules.gigPage.models.Gig
+import com.gigforce.app.utils.PushDownAnim
 import kotlinx.android.synthetic.main.layout_rv_gig_details_gig_history.view.*
 import java.text.SimpleDateFormat
 
 class AdapterOnGoingGigs : RecyclerView.Adapter<AdapterOnGoingGigs.ViewHolder>() {
+    private lateinit var callbacks: AdapterOnGoingGigCallbacks
     private var onGoingGigs: List<Gig>? = null
     private val timeFormatter = SimpleDateFormat("hh.mm aa")
 
@@ -44,11 +46,22 @@ class AdapterOnGoingGigs : RecyclerView.Adapter<AdapterOnGoingGigs.ViewHolder>()
         }
         Glide.with(holder.itemView).load(gig?.companyLogo).placeholder(R.drawable.profile)
             .into(holder.itemView.iv_brand_rv_gig_hist)
+        PushDownAnim.setPushDownAnimTo(holder.itemView).setOnClickListener(View.OnClickListener {
+            callbacks.openGigDetails(onGoingGigs!![holder.adapterPosition])
+        })
 
+    }
+
+    fun setCallbacks(callbacks: AdapterOnGoingGigCallbacks) {
+        this.callbacks = callbacks
     }
 
     fun addData(onGoingGigs: List<Gig>?) {
         this.onGoingGigs = onGoingGigs;
         notifyDataSetChanged()
+    }
+
+    interface AdapterOnGoingGigCallbacks {
+        fun openGigDetails(gig: Gig)
     }
 }
