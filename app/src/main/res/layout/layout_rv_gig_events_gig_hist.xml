@@ -13,38 +13,50 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/tv_past_events_rv_gig_hist"
-        android:layout_width="wrap_content"
+    <HorizontalScrollView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/size_16"
-        android:layout_marginTop="@dimen/size_30"
-        android:background="@drawable/bg_selected_event_rv_gig_hist"
-        android:paddingStart="@dimen/size_27"
-        android:paddingTop="@dimen/size_6"
-        android:paddingEnd="@dimen/size_27"
-        android:paddingBottom="@dimen/size_6"
-        android:text="@string/past"
-        android:textColor="#a30674"
-        android:textSize="@dimen/font_14"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view_top_bg_events_rv_gig_hist" />
+        app:layout_constraintTop_toBottomOf="@+id/view_top_bg_events_rv_gig_hist">
 
-    <TextView
-        android:id="@+id/tv_upcoming_events_rv_gig_hist"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/size_8"
-        android:layout_marginTop="@dimen/size_30"
-        android:background="@drawable/bg_unselected_event_rv_gig_hist"
-        android:paddingStart="@dimen/size_27"
-        android:paddingTop="@dimen/size_6"
-        android:paddingEnd="@dimen/size_27"
-        android:paddingBottom="@dimen/size_6"
-        android:text="@string/upcoming"
-        android:textColor="#222222"
-        android:textSize="@dimen/font_14"
-        app:layout_constraintStart_toEndOf="@id/tv_past_events_rv_gig_hist"
-        app:layout_constraintTop_toBottomOf="@+id/view_top_bg_events_rv_gig_hist" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tv_past_events_rv_gig_hist"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/size_16"
+                android:layout_marginTop="@dimen/size_30"
+                android:background="@drawable/bg_selected_event_rv_gig_hist"
+                android:paddingStart="@dimen/size_27"
+                android:paddingTop="@dimen/size_6"
+                android:paddingEnd="@dimen/size_27"
+                android:paddingBottom="@dimen/size_6"
+                android:text="@string/past"
+                android:textColor="@color/vertical_calendar_today"
+                android:textSize="@dimen/font_14" />
+
+            <TextView
+                android:id="@+id/tv_upcoming_events_rv_gig_hist"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/size_8"
+                android:layout_marginTop="@dimen/size_30"
+                android:background="@drawable/bg_unselected_event_rv_gig_hist"
+                android:paddingStart="@dimen/size_27"
+                android:paddingTop="@dimen/size_6"
+                android:paddingEnd="@dimen/size_27"
+                android:paddingBottom="@dimen/size_6"
+                android:text="@string/upcoming"
+                android:textColor="@color/black_2222"
+                android:textSize="@dimen/font_14"
+                app:layout_constraintStart_toEndOf="@id/tv_past_events_rv_gig_hist"
+                app:layout_constraintTop_toBottomOf="@+id/view_top_bg_events_rv_gig_hist" />
+        </LinearLayout>
+
+    </HorizontalScrollView>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -9,6 +9,12 @@ import com.google.firebase.firestore.QuerySnapshot
 
 class GigHistoryViewModel(private val repositoryCallbacks: DataCallbacks) :
     ViewModel(), DataCallbacks.ResponseCallbacks {
+    var isLastPage: Boolean = false
+
+
+    var isLoading: Boolean = true
+
+
     private val _observableOnGoingGigs: MutableLiveData<GigsResponse> by lazy {
         MutableLiveData<GigsResponse>();
     }
@@ -53,6 +59,10 @@ class GigHistoryViewModel(private val repositoryCallbacks: DataCallbacks) :
         error: FirebaseFirestoreException?
     ) {
 
+    }
+
+    fun getMoreItems() {
+        repositoryCallbacks.getPastGigs(this, ++pageNumber)
     }
 
 

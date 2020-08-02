@@ -29,6 +29,7 @@ class AdapterOnGoingGigs : RecyclerView.Adapter<AdapterOnGoingGigs.ViewHolder>()
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val gig = onGoingGigs?.get(position)
+
         holder.itemView.tv_designation_rv_gig_hist.text = gig?.title
         holder.itemView.tv_gig_venue_rv_gig_his.text = gig?.address
         holder.itemView.tv_gig_venue_rv_gig_his.isSelected = true

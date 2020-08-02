@@ -18,10 +18,10 @@ class GigHistoryRepository : BaseFirestoreDBRepository(), DataCallbacks {
 
 
     override fun getPastGigs(responseCallbacks: DataCallbacks.ResponseCallbacks, page: Int) {
-        getCollectionReference().whereEqualTo("gigerId", getUID()).orderBy("startDateTime").startAfter(page * 10)
-            .limit(10)
-//            .whereGreaterThanOrEqualTo("startDateTime", getStartOfDayInMillis().toString())
-//            .whereLessThanOrEqualTo("startDateTime", getEndOfDayInMillis().toString())
+        getCollectionReference().whereEqualTo("gigerId", getUID())
+            .whereLessThan("startDateTime", getStartOfDay()).orderBy("startDateTime")
+//            .startAfter(page * 10)
+//            .limit(10)
             .addSnapshotListener { querySnapshot, firebaseFirestoreException ->
                 responseCallbacks.pastGigsResponse(querySnapshot, firebaseFirestoreException);
             }

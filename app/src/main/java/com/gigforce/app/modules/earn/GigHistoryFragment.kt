@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.utils.GigHistoryItemDecorator
+import com.gigforce.app.utils.PaginationScrollListener
 import com.gigforce.app.utils.ViewModelProviderFactory
 import kotlinx.android.synthetic.main.fragment_gig_history.*
 
@@ -20,7 +21,7 @@ import kotlinx.android.synthetic.main.fragment_gig_history.*
  * Use the [GigHistoryFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class GigHistoryFragment : BaseFragment() {
+class GigHistoryFragment : BaseFragment(), AdapterGigHistory.AdapterGigHistoryCallbacks {
     private val viewModelFactory by lazy {
         ViewModelProviderFactory(GigHistoryViewModel(GigHistoryRepository()))
     }
@@ -42,7 +43,9 @@ class GigHistoryFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         rv_gigs_gig_history.adapter = adapter
-        rv_gigs_gig_history.layoutManager = LinearLayoutManager(activity)
+        adapter.setCallbacks(this)
+        val layoutManager = LinearLayoutManager(activity)
+        rv_gigs_gig_history.layoutManager = layoutManager
         rv_gigs_gig_history.addItemDecoration(
             GigHistoryItemDecorator(
                 requireContext().resources.getDimensionPixelOffset(
@@ -50,6 +53,22 @@ class GigHistoryFragment : BaseFragment() {
                 )
             )
         )
+        rv_gigs_gig_history?.addOnScrollListener(object :
+            PaginationScrollListener(layoutManager) {
+            override fun isLastPage(): Boolean {
+                return viewModel.isLastPage
+            }
+
+            override fun isLoading(): Boolean {
+                return viewModel.isLoading
+            }
+
+            override fun loadMoreItems() {
+                viewModel.isLoading = true
+                //you have to call loadmore items to get more data
+                viewModel.getMoreItems()
+            }
+        })
         initObservers()
         viewModel.getData()
     }
@@ -62,6 +81,7 @@ class GigHistoryFragment : BaseFragment() {
         viewModel.observableScheduledGigs.observe(viewLifecycleOwner, Observer {
             showToast(it.message)
             adapter.addScheduledGigs(it.data)
+            viewModel.isLoading=false
         })
     }
 
@@ -69,6 +89,10 @@ class GigHistoryFragment : BaseFragment() {
         @JvmStatic
         fun newInstance() =
             GigHistoryFragment()
+    }
+
+    override fun showNoGigExists(int: Int) {
+        tv_no_gigs_gig_hist.visibility = int
     }
 
 }
