@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
@@ -61,9 +62,9 @@ class GigPageNavigationFragment : BaseFragment() {
 
         callCardView.setOnClickListener {
 
-            gig?.contactNo?.let {
+            gig?.gigContactDetails?.contactNumber?.let {
 
-                val intent = Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", it, null))
+                val intent = Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", it.toString(), null))
                 startActivity(intent)
             }
         }
@@ -119,6 +120,7 @@ class GigPageNavigationFragment : BaseFragment() {
     private fun setDatOnView(gig: Gig) {
         contactPersonTV.text = gig.gigContactDetails?.contactName
         toReachTV.text = "to reach : ${gig.address}"
+        callCardView.isVisible = gig.gigContactDetails?.contactNumber != 0L
 
         if (gig.locationPictures.isNotEmpty()) {
             //Inflate Pics

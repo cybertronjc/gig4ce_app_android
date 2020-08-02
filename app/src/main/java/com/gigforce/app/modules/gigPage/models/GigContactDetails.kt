@@ -5,5 +5,5 @@ import androidx.annotation.Keep
 @Keep
 data class GigContactDetails(
     var contactName: String? = null,
-    var mobileNo: String? = null
+    var contactNumber: Long = 0
 )

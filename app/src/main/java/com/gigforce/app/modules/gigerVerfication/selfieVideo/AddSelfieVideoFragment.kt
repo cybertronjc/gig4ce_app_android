@@ -161,7 +161,7 @@ class AddSelfieVideoFragment : BaseFragment(), CaptureVideoFragmentEventListener
             if (!it.panCardDetailsUploaded) {
                 navigate(R.id.addPanCardInfoFragment)
             } else if (!it.aadharCardDetailsUploaded) {
-                navigate(R.id.addDrivingLicenseInfoFragment)
+                navigate(R.id.addAadharCardInfoFragment)
             } else if (!it.dlCardDetailsUploaded) {
                 navigate(R.id.addDrivingLicenseInfoFragment)
             } else if (!it.bankDetailsUploaded) {

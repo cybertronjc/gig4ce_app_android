@@ -33,7 +33,9 @@ import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.app.core.genericadapter.RecyclerGenericAdapter
+import com.gigforce.app.core.gone
 import com.gigforce.app.core.toDate
+import com.gigforce.app.core.visible
 import com.gigforce.app.modules.gigPage.GigAttendancePageFragment
 import com.gigforce.app.modules.gigPage.GigPageFragment
 import com.gigforce.app.modules.gigPage.GigPageNavigationFragment
@@ -212,12 +214,21 @@ class BSCalendarScreenFragment : BaseFragment() {
                             NavigationClickListener(upcoming_gig_rv, position)
                         )
 
-                        getView(viewHolder, R.id.callCardView).setOnClickListener(
-                            CallClickListener(
-                                upcoming_gig_rv,
-                                position
+                        val callView = getView(viewHolder, R.id.callCardView)
+                        if(obj.gigContactDetails?.contactNumber != 0L) {
+
+
+                            callView.visible()
+                            callView.setOnClickListener(
+                                    CallClickListener(
+                                            upcoming_gig_rv,
+                                            position
+                                    )
                             )
-                        )
+                        }else{
+                            callView.gone()
+                        }
+
                         getView(viewHolder, R.id.messageCardView).setOnClickListener(
                             ChatClickListener(upcoming_gig_rv, position)
                         )
@@ -297,8 +308,8 @@ class BSCalendarScreenFragment : BaseFragment() {
         override fun onClick(v: View?) {
             val gig = (rv.adapter as RecyclerGenericAdapter<Gig>).list.get(position)
 
-            if(gig.contactNo.isNullOrBlank()) return
-            val intent = Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", gig.contactNo, null))
+            if(gig.gigContactDetails?.contactNumber == 0L) return
+            val intent = Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", gig.gigContactDetails?.contactNumber?.toString(), null))
             startActivity(intent)
         }
     }

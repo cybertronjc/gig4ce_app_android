@@ -16,10 +16,16 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
 import com.gigforce.app.R
 import com.gigforce.app.core.base.components.CalendarView
+import com.gigforce.app.core.toDate
 import com.gigforce.app.modules.calendarscreen.maincalendarscreen.verticalcalendar.AllotedGigDataModel
 import com.gigforce.app.modules.custom_gig_preferences.CustomPreferencesViewModel
 import com.gigforce.app.modules.custom_gig_preferences.ParamCustPreferViewModel
-import com.gigforce.app.modules.roster.models.Gig
+//<<<<<<< HEAD
+//import com.gigforce.app.modules.roster.models.Gig
+//=======
+import com.gigforce.app.modules.gigPage.models.Gig
+import com.google.android.gms.tasks.Tasks.await
+//>>>>>>> 5b103f2363ddf1904533e6ad0249f4da092463eb
 import com.riningan.widget.ExtendedBottomSheetBehavior
 import kotlinx.android.synthetic.main.calendar_home_screen.*
 import kotlinx.android.synthetic.main.day_view_top_bar.*
@@ -42,6 +48,7 @@ class RosterDayFragment : RosterBaseFragment() {
     // and start from 5000
     var lastViewPosition = 5000
 
+
     private var dayTag: String = ""
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -54,7 +61,6 @@ class RosterDayFragment : RosterBaseFragment() {
     private var completedGigs: ArrayList<Gig> = ArrayList<Gig>()
     var unavailableCards: ArrayList<String> = ArrayList()
     lateinit var arrCalendarDependent: Array<View>
-
     lateinit var hourviewPageChangeCallBack: ViewPager2.OnPageChangeCallback
     lateinit var viewModelCustomPreference: CustomPreferencesViewModel
     companion object {
@@ -63,6 +69,7 @@ class RosterDayFragment : RosterBaseFragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        //super.onCreate(savedInstanceState)
         arguments?.let {
             activeDateTime = LocalDateTime.parse(it.getSerializable("active_date").toString())
         }
@@ -78,6 +85,10 @@ class RosterDayFragment : RosterBaseFragment() {
             ViewModelProvider(this, ParamCustPreferViewModel(viewLifecycleOwner)).get(
                 CustomPreferencesViewModel::class.java
             )
+        //attachHourViewAdapter()
+        rosterViewModel.currentDateTime.value = rosterViewModel.currentDateTime.value
+        Log.d("RosterDayFragment", rosterViewModel.currentDateTime.value.toString())
+//        rosterViewModel.currentDateTime.value = rosterViewModel.currentDateTime.value
 
         return inflateView(R.layout.roster_day_fragment, inflater, container)
     }
@@ -112,7 +123,9 @@ class RosterDayFragment : RosterBaseFragment() {
 
 
         rosterViewModel.topBar = top_bar
+        rosterViewModel.nestedScrollView = nested_scroll_view
         rosterViewModel.currentDateTime.value = activeDateTime
+       // rosterViewModel.scrollToPosition(activeDateTime.toDate)
 
         // set custom preference variable
         setCustomPreference()
@@ -143,14 +156,9 @@ class RosterDayFragment : RosterBaseFragment() {
                     getDayTimesChild()!!
                 )
             }
-//            rosterViewModel.allGigs[dayTag].let{
-//                rosterViewModel.setFullDayGigs(requireContext())
-//            }
-        })
 
-//        rosterViewModel.allGigs[dayTag]!!.observe(viewLifecycleOwner, Observer {
-//            rosterViewModel.setFullDayGigs(requireContext())
-//        })
+            rosterViewModel.scrollToPosition(it.toDate)
+        })
 
         viewModelCustomPreference.customPreferencesLiveDataModel.observe(
             viewLifecycleOwner, Observer {
@@ -163,7 +171,6 @@ class RosterDayFragment : RosterBaseFragment() {
             }
         )
         calendarView.setGigData(arrMainHomeDataModel!!)
-
     }
 
     private fun attachTopBarMenu() {
@@ -228,8 +235,10 @@ class RosterDayFragment : RosterBaseFragment() {
         top_bar.available_toggle.setOnClickListener {
             rosterViewModel.switchDayAvailability(
                 requireContext(), getDayTimesChild()!!,
-                rosterViewModel.isDayAvailable.value!!, viewModelCustomPreference
-            )
+
+                    rosterViewModel.isDayAvailable.value!!, viewModelCustomPreference)
+            rosterViewModel.resetDayTimeAvailability(
+                viewModelCustomPreference, getDayTimesChild()!!)
         }
     }
 
@@ -347,20 +356,7 @@ class RosterDayFragment : RosterBaseFragment() {
                     String.format("%02d", activeDateTime.monthValue) +
                     String.format("%02d", activeDateTime.dayOfMonth)
 
-//            rosterViewModel.allGigs[dayTag]?.let {
-//                upcomingGigs = rosterViewModel.getFilteredGigs(
-//                    activeDateTime.toDate, "upcoming")
-//                completedGigs = rosterViewModel.getFilteredGigs(
-//                    activeDateTime.toDate, "completed")
-//            }
-
         })
-//        rosterViewModel.allGigs[dayTag]!!.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
-//            upcomingGigs = rosterViewModel.getFilteredGigs(
-//                activeDateTime.toDate, "upcoming")
-//            completedGigs = rosterViewModel.getFilteredGigs(
-//                activeDateTime.toDate, "completed")
-//        })
     }
 
     private fun attachHourViewAdapter() {
@@ -371,11 +367,9 @@ class RosterDayFragment : RosterBaseFragment() {
     }
 
     private fun initializeBottomSheet() {
-        //rosterViewModel.bsBehavior = BottomSheetBehavior.from(mark_unavailable_bs)
         rosterViewModel.bsBehavior = ExtendedBottomSheetBehavior.from(mark_unavailable_bs)
         rosterViewModel.UnavailableBS = mark_unavailable_bs
 
-        //rosterViewModel.bsBehavior.halfExpandedRatio = 0.65F
         rosterViewModel.bsBehavior.isHideable = true
         rosterViewModel.bsBehavior.state = ExtendedBottomSheetBehavior.STATE_HIDDEN
 
@@ -414,10 +408,6 @@ class RosterDayFragment : RosterBaseFragment() {
         })
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        hourview_viewpager.unregisterOnPageChangeCallback(hourviewPageChangeCallBack)
-    }
 
 //    private fun addUnAvailableCard(startHour: Int, duration: Float) {
 //        // Sample attachment of unavailable card

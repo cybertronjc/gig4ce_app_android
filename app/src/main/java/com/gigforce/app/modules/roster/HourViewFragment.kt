@@ -20,7 +20,7 @@ import com.gigforce.app.modules.custom_gig_preferences.CustomPreferencesViewMode
 import com.gigforce.app.modules.custom_gig_preferences.ParamCustPreferViewModel
 import com.gigforce.app.modules.gigPage.GigAttendancePageFragment
 import com.gigforce.app.modules.gigPage.GigPageFragment
-import com.gigforce.app.modules.roster.models.Gig
+import com.gigforce.app.modules.gigPage.models.Gig
 import com.google.android.material.card.MaterialCardView
 import com.ncorti.slidetoact.SlideToActView
 import com.riningan.widget.ExtendedBottomSheetBehavior
@@ -117,7 +117,7 @@ class HourViewFragment: RosterBaseFragment() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+        //super.onViewCreated(view, savedInstanceState)
         initialize()
     }
 
@@ -140,6 +140,13 @@ class HourViewFragment: RosterBaseFragment() {
         setCustomPreference()
 
         initializeHourViews()
+
+        rosterViewModel.upcomingGigs = upcomingGigs
+        rosterViewModel.completedGigs = completedGigs
+        rosterViewModel.currentGigs = currentGigs
+        rosterViewModel.fulldayGigs = fullDayGigs
+
+//        loadFirstTime()
 
         if (isSameDate(activeDateTime, actualDateTime)) {
             setCurrentTimeDivider()
@@ -183,6 +190,7 @@ class HourViewFragment: RosterBaseFragment() {
 
     }
 
+
     private fun removeGigs(gigs: ArrayList<Gig>) {
         gigs.forEach { gig ->
             getViewsByTag(day_times, gig.tag)?.forEach {
@@ -190,6 +198,7 @@ class HourViewFragment: RosterBaseFragment() {
             }
         }
     }
+
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun scheduleCurrentTimerUpdate() {
@@ -379,6 +388,18 @@ class HourViewFragment: RosterBaseFragment() {
             constraintSet.connect(idx, ConstraintSet.END, end_guideline.id, ConstraintSet.START)
         }
         constraintSet.applyTo(timeViewGroup)
+
+        while (true) {
+            Log.d("RosterDayFragment", "trying")
+            if (day_times.findViewWithTag<HourRow>("hour_23") == null)
+                continue
+            if (rosterViewModel.isLoadedFirstTime) {
+                rosterViewModel.scrollToPosition(activeDateTime.toDate)
+                rosterViewModel.isLoadedFirstTime = false
+            } else {
+                break
+            }
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

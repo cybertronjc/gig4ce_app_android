@@ -40,15 +40,30 @@ class LandingScreenFragment : BaseFragment() {
 
     companion object {
         fun newInstance() = LandingScreenFragment()
+        private const val INTENT_EXTRA_SCREEN = "scrren"
+
+        private const val SCREEN_VERIFICATION = 10
+        private const val SCREEN_GIG = 11
     }
 
     private lateinit var viewModel: LandingScreenViewModel
     var width: Int = 0
+    private var comingFromOrGoingToScreen = -1
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+        savedInstanceState?.let {
+            comingFromOrGoingToScreen = it.getInt(INTENT_EXTRA_SCREEN)
+        }
         return inflateView(R.layout.landingscreen_fragment, inflater, container)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putInt(INTENT_EXTRA_SCREEN,comingFromOrGoingToScreen)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -65,6 +80,17 @@ class LandingScreenFragment : BaseFragment() {
         observers()
         broadcastReceiverForLanguageCahnge()
 //        checkforLanguagedSelectedForLastLogin()
+
+        when (comingFromOrGoingToScreen) {
+            SCREEN_VERIFICATION -> landingScrollView.post {
+                landingScrollView.scrollTo(0, exploreByIndustryLayout.y.toInt())
+            }
+            SCREEN_GIG -> landingScrollView.post {
+                landingScrollView.scrollTo(0, exploreByIndustryLayout.y.toInt())
+            }
+            else -> {
+            }
+        }
     }
 
     override fun onDetach() {
@@ -351,9 +377,11 @@ class LandingScreenFragment : BaseFragment() {
 
     private fun listener() {
         complete_now.setOnClickListener {
+            comingFromOrGoingToScreen = SCREEN_VERIFICATION
             navigate(R.id.gigerVerificationFragment)
         }
         mygigs_cl.setOnClickListener {
+            comingFromOrGoingToScreen = SCREEN_GIG
             navigate(R.id.mainHomeScreen)
         }
         skip_about_intro.setOnClickListener {
