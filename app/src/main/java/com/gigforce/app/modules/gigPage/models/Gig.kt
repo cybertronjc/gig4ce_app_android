@@ -25,6 +25,8 @@ data class Gig(
     @field:JvmField var isFavourite: Boolean = false,
     @field:JvmField var isGigCompleted: Boolean = false,
     @field:JvmField var isPaymentDone: Boolean = false,
+    @field:JvmField var isMonthlyGig: Boolean = false,
+
     var duration: Float = 0.0F,
     var gigRating: Float = 0.0F,
     var gigUserFeedback: String? = null,

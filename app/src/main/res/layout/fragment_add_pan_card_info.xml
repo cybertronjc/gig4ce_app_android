@@ -30,8 +30,15 @@
         android:layout_height="match_parent">
 
         <include
-            android:id="@+id/panCardMainLayout"
+            android:id="@+id/panEditLayout"
+            android:visibility="gone"
             layout="@layout/fragment_add_pan_card_info_main"/>
+
+        <include
+            android:id="@+id/panViewLayout"
+            android:visibility="gone"
+            layout="@layout/fragment_add_pan_card_info_view"/>
+
 
         <ProgressBar
             android:id="@+id/progressBar"

@@ -10,7 +10,6 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isGone
-import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
@@ -32,7 +31,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.ncorti.slidetoact.SlideToActView
 import kotlinx.android.synthetic.main.fragment_add_driving_license_info.*
 import kotlinx.android.synthetic.main.fragment_add_driving_license_info_main.*
-import kotlinx.android.synthetic.main.fragment_add_driving_license_info_main.whyWeNeedThisTV
+import kotlinx.android.synthetic.main.fragment_add_driving_license_info_view.*
 import kotlinx.android.synthetic.main.fragment_verification_image_holder.view.*
 import java.util.*
 
@@ -103,14 +102,6 @@ class AddDrivingLicenseInfoFragment : BaseFragment() {
             if (checkedId == R.id.dlYesRB) {
                 showDLImageAndInfoLayout()
 
-                if (drivingLicenseDetail?.userHasDL != null &&
-                    drivingLicenseDetail?.userHasDL!! &&
-                    (dlFrontImagePath == null || dlBackImagePath == null)
-                ) {
-                    dlSubmitSliderBtn.gone()
-                    confirmDLDataCB.gone()
-                }
-
                 if (confirmDLDataCB.isChecked
                     && dlFrontImagePath != null
                     && dlBackImagePath != null
@@ -158,7 +149,7 @@ class AddDrivingLicenseInfoFragment : BaseFragment() {
 
                 override fun onSlideComplete(view: SlideToActView) {
 
-                    if (dlYesRB.isChecked) {
+                    if (dlYesRB.isChecked || dlSubmitSliderBtn.text == getString(R.string.update)) {
 
                         if (stateSpinner.selectedItemPosition == 0) {
                             MaterialAlertDialogBuilder(requireContext())
@@ -170,7 +161,8 @@ class AddDrivingLicenseInfoFragment : BaseFragment() {
                             return
                         }
 
-                        val dlNo = drivingLicenseEditText.text.toString().toUpperCase(Locale.getDefault())
+                        val dlNo =
+                            drivingLicenseEditText.text.toString().toUpperCase(Locale.getDefault())
                         if (!VerificationValidations.isDLNumberValid(dlNo)) {
 
                             MaterialAlertDialogBuilder(requireContext())
@@ -196,33 +188,14 @@ class AddDrivingLicenseInfoFragment : BaseFragment() {
 
                         val state = stateSpinner.selectedItem.toString()
 
-                        if (dlSubmitSliderBtn.text.toString() == getString(R.string.update)) {
+                        viewModel.updateDLData(
+                            true,
+                            dlFrontImagePath,
+                            dlBackImagePath,
+                            state,
+                            dlNo
+                        )
 
-                            MaterialAlertDialogBuilder(requireContext())
-                                .setTitle("Alert")
-                                .setMessage("You are re-uploading your Driving License details, they will be verified once again, that can take up to 7 days")
-                                .setPositiveButton("OK") { _, _ ->
-
-                                    viewModel.updateDLData(
-                                        true,
-                                        dlFrontImagePath,
-                                        dlBackImagePath,
-                                        state,
-                                        dlNo
-                                    )
-                                }
-                                .show()
-
-                        } else {
-
-                            viewModel.updateDLData(
-                                true,
-                                dlFrontImagePath,
-                                dlBackImagePath,
-                                state,
-                                dlNo
-                            )
-                        }
                     } else if (dlNoRB.isChecked) {
                         viewModel.updateDLData(
                             false,
@@ -235,9 +208,22 @@ class AddDrivingLicenseInfoFragment : BaseFragment() {
                 }
             }
 
-//        editDrivingLicenseInfoLayout.setOnClickListener {
-//            navigate(R.id.editDrivingLicenseInfoBottomSheet,Bundle().apply {  })
-//        }
+
+        editLayout.setOnClickListener {
+
+            MaterialAlertDialogBuilder(requireContext())
+                .setTitle("Alert")
+                .setMessage("You are re-uploading your Driving License details, they will be verified once again, that can take up to 7 days")
+                .setPositiveButton("OK") { _, _ ->
+
+                    dlViewLayout.gone()
+                    dlMainLayout.visible()
+
+                    setDataOnEditLayout(drivingLicenseDetail)
+                }
+                .setNegativeButton("Cancel") { _, _ -> }
+                .show()
+        }
 
         dlFrontImageHolder.uploadDocumentCardView.setOnClickListener {
             openCameraAndGalleryOptionForFrontSideImage()
@@ -263,7 +249,6 @@ class AddDrivingLicenseInfoFragment : BaseFragment() {
     }
 
     override fun onBackPressed(): Boolean {
-
         findNavController().popBackStack(R.id.gigerVerificationFragment, false)
         return true
     }
@@ -273,63 +258,30 @@ class AddDrivingLicenseInfoFragment : BaseFragment() {
     private fun initViewModel() {
         viewModel.gigerVerificationStatus
             .observe(viewLifecycleOwner, Observer {
-
                 this.gigerVerificationStatus = it
-                if (it.dlCardDetailsUploaded && it.drivingLicenseDataModel != null) {
-                    this.drivingLicenseDetail = it.drivingLicenseDataModel
+                this.drivingLicenseDetail = it.drivingLicenseDataModel
+                progressBar.gone()
 
+                if (it.dlCardDetailsUploaded && it.drivingLicenseDataModel != null) {
                     if (it.drivingLicenseDataModel.userHasDL != null) {
                         if (it.drivingLicenseDataModel.userHasDL) {
-                            dlSubmitSliderBtn.text = getString(R.string.update)
-                            dlSubmitSliderBtn.gone()
-                            confirmDLDataCB.gone()
-
-                            //stateAutoCompleteTV.setText(it.drivingLicenseDataModel.dlState)
-                            drivingLicenseEditText.setText(it.drivingLicenseDataModel.dlNo)
-
-                            if(it.drivingLicenseDataModel.dlState != null)
-                            stateSpinner.selectItemWithText(it.drivingLicenseDataModel.dlState)
-
-                            dlAvailaibilityOptionRG.check(R.id.dlYesRB)
-                        } else
+                            setDataOnViewLayout(it)
+                        } else {
+                            setDataOnEditLayout(null)
                             dlAvailaibilityOptionRG.check(R.id.dlNoRB)
+                        }
                     } else {
                         //Uncheck both and hide capture layout
+                        setDataOnEditLayout(null)
                         dlAvailaibilityOptionRG.clearCheck()
                         hideDLImageAndInfoLayout()
                     }
-
-                    if (it.drivingLicenseDataModel.frontImage != null) {
-                        val imageRef = firebaseStorage
-                            .reference
-                            .child("verification")
-                            .child(it.drivingLicenseDataModel.frontImage)
-
-                        imageRef.downloadUrl.addOnSuccessListener {
-                            showFrontDrivingLicense(it)
-                        }.addOnFailureListener {
-                            print("ee")
-                        }
-                    }
-
-                    if (it.drivingLicenseDataModel.backImage != null) {
-                        val imageRef = firebaseStorage
-                            .reference
-                            .child("verification")
-                            .child(it.drivingLicenseDataModel.backImage)
-
-                        imageRef.downloadUrl.addOnSuccessListener {
-                            showBackDrivingLicense(it)
-                        }.addOnFailureListener {
-                            print("ee")
-                        }
-                    }
-
-                    if (confirmDLDataCB.isChecked && it.drivingLicenseDataModel.frontImage != null && it.drivingLicenseDataModel.backImage != null) {
-                        enableSubmitButton()
-                    }
+                } else {
+                    //Uncheck both and hide capture layout
+                    setDataOnEditLayout(null)
+                    dlAvailaibilityOptionRG.clearCheck()
+                    hideDLImageAndInfoLayout()
                 }
-
             })
 
         viewModel.documentUploadState
@@ -342,6 +294,113 @@ class AddDrivingLicenseInfoFragment : BaseFragment() {
             })
 
         viewModel.getVerificationStatus()
+    }
+
+    private fun setDataOnViewLayout(gigVerificationStatus: GigerVerificationStatus) {
+        dlMainLayout.gone()
+        dlViewLayout.visible()
+        //TODO handle error message when process is ready
+
+        val dlDetails = gigVerificationStatus.drivingLicenseDataModel ?: return
+
+        statusTV.text = dlDetails.verifiedString
+        statusTV.setTextColor(
+            ResourcesCompat.getColor(
+                resources,
+                gigVerificationStatus.getColorCodeForStatus(dlDetails.state),
+                null
+            )
+        )
+
+        if (dlDetails.frontImage != null) {
+            firebaseStorage
+                .reference
+                .child("verification")
+                .child(dlDetails.frontImage)
+                .downloadUrl.addOnSuccessListener {
+                    Glide.with(requireContext()).load(it).placeholder(getCircularProgressDrawable())
+                        .into(dlFrontImageIV)
+                }.addOnFailureListener {
+                    print("ee")
+                }
+        }
+        dlFrontErrorMessage.gone()
+
+        if (dlDetails.backImage != null) {
+            firebaseStorage
+                .reference
+                .child("verification")
+                .child(dlDetails.backImage)
+                .downloadUrl.addOnSuccessListener {
+                    Glide.with(requireContext()).load(it).placeholder(getCircularProgressDrawable())
+                        .into(dlBackImageIV)
+                }.addOnFailureListener {
+                    print("ee")
+                }
+        }
+        dlBackErrorMessage.gone()
+
+        dlNoTV.text = dlDetails.dlNo
+        dlNoErrorMessage.gone()
+
+        dlStateTV.text = dlDetails.dlState
+        dlStateErrorMessage.gone()
+    }
+
+
+    private fun setDataOnEditLayout(it: DrivingLicenseDataModel?) {
+        dlViewLayout.gone()
+        dlMainLayout.visible()
+
+        if (it != null) {
+            //Fill previous data
+            dlAvailaibilityOptionRG.gone()
+            doYouHaveDLLabel.gone()
+        } else {
+            dlAvailaibilityOptionRG.visible()
+            doYouHaveDLLabel.visible()
+
+            dlEditOverallErrorMessage.gone()
+            dlStateEditErrorMessage.gone()
+            dlNoEditErrorMessage.gone()
+            dlFrontEditErrorMessage.gone()
+            dlBackEditErrorMessage.gone()
+        }
+
+        val dlData = it ?: return
+        dlSubmitSliderBtn.text = getString(R.string.update)
+
+        drivingLicenseEditText.setText(dlData.dlNo)
+        if (dlData.dlState != null) stateSpinner.selectItemWithText(dlData.dlState)
+
+        dlAvailaibilityOptionRG.check(R.id.dlYesRB)
+
+
+        if (dlData.frontImage != null) {
+            val imageRef = firebaseStorage
+                .reference
+                .child("verification")
+                .child(dlData.frontImage)
+
+            imageRef.downloadUrl.addOnSuccessListener {
+                showFrontDrivingLicense(it)
+            }.addOnFailureListener {
+                print("ee")
+            }
+        }
+
+        if (dlData.backImage != null) {
+            val imageRef = firebaseStorage
+                .reference
+                .child("verification")
+                .child(dlData.backImage)
+
+            imageRef.downloadUrl.addOnSuccessListener {
+                showBackDrivingLicense(it)
+            }.addOnFailureListener {
+                print("ee")
+            }
+        }
     }
 
     private fun errorOnUploadingDocuments(error: String) {
@@ -367,7 +426,7 @@ class AddDrivingLicenseInfoFragment : BaseFragment() {
             } else if (!it.panCardDetailsUploaded) {
                 navigate(R.id.addPanCardInfoFragment)
             } else if (!it.aadharCardDetailsUploaded) {
-                navigate(R.id.addDrivingLicenseInfoFragment)
+                navigate(R.id.addAadharCardInfoFragment)
             } else {
                 showDetailsUploaded()
             }
@@ -508,6 +567,7 @@ class AddDrivingLicenseInfoFragment : BaseFragment() {
 
         Glide.with(requireContext())
             .load(aadharFrontImagePath)
+            .placeholder(getCircularProgressDrawable())
             .into(dlFrontImageHolder.uploadImageLayout.clickedImageIV)
     }
 
@@ -517,6 +577,7 @@ class AddDrivingLicenseInfoFragment : BaseFragment() {
 
         Glide.with(requireContext())
             .load(aadharBackImagePath)
+            .placeholder(getCircularProgressDrawable())
             .into(dlBackImageHolder.uploadImageLayout.clickedImageIV)
     }
 
