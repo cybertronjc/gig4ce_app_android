@@ -34,6 +34,7 @@ import com.gigforce.app.modules.gigPage.GigAttendancePageFragment
 import com.gigforce.app.modules.markattendance.ImageCaptureActivity
 import com.gigforce.app.modules.preferences.PreferencesFragment
 import com.gigforce.app.modules.profile.ProfileViewModel
+import com.gigforce.app.modules.roster.RosterDayFragment
 import com.gigforce.app.utils.GlideApp
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.storage.StorageReference
@@ -152,7 +153,6 @@ class CalendarHomeScreen : BaseFragment(),
                 println(" date data1 " + selectedMonthModel.toString())
                 changeVisibilityCalendarView()
             }
-
         })
 
     }
@@ -298,6 +298,7 @@ class CalendarHomeScreen : BaseFragment(),
                     val activeDateTime =
                         LocalDateTime.of(item?.year!!, item.month + 1, item.date, 0, 0, 0)
 
+                    RosterDayFragment.arrMainHomeDataModel = viewModel.arrMainHomeDataModel!!
                     val bundle = Bundle()
                     bundle.putSerializable("active_date", activeDateTime)
                     findNavController().navigate(R.id.rosterDayFragment, bundle)

@@ -5,6 +5,7 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.GridView
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -21,6 +22,7 @@ import kotlin.collections.ArrayList
 class CalendarView : LinearLayout {
     var visibleOnce = false
     val TOTAL_YEAR = 3
+
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
 
@@ -29,9 +31,10 @@ class CalendarView : LinearLayout {
     }
 
     companion object {
-        lateinit var changedMonthModelListener: MonthChangeAndDateClickedListener
         var arrlist = ArrayList<MonthModel>()
     }
+
+    lateinit var changedMonthModelListener: MonthChangeAndDateClickedListener
 
     lateinit var calendarData: Calendar
 
@@ -43,7 +46,7 @@ class CalendarView : LinearLayout {
         inflater.inflate(R.layout.calendar_view_layout, this)
         calendarData = Calendar.getInstance()
         calendarData.set(Calendar.DATE, 1)
-        calendarData.set(Calendar.YEAR,2019)
+        calendarData.set(Calendar.YEAR, 2019)
         initializeGridView()
     }
 
@@ -66,7 +69,8 @@ class CalendarView : LinearLayout {
                     calendarDataAdapter.list = obj?.days!!
                     (viewHolder.getView(R.id.calendar_grid_view) as GridView).adapter =
                         calendarDataAdapter
-                    calendarDataAdapter.setDateClickedListener(dateClickListener)
+                    if (this::dateClickListener.isInitialized)
+                        calendarDataAdapter.setDateClickedListener(dateClickListener)
                 })!!
 //        recyclerGenericAdapter.list = getDefaultItems()
         recyclerGenericAdapter.setLayout(R.layout.calendar_moth_data_item)
@@ -82,11 +86,14 @@ class CalendarView : LinearLayout {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 var currentVisiblePosition =
                     (calendar_rv.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
-                changedMonthModelListener.onMonthChange(
-                    recyclerGenericAdapter.list.get(
-                        currentVisiblePosition
-                    )
-                )
+                try {
+                    if (changedMonthModelListener != null)
+                        changedMonthModelListener.onMonthChange(
+                            recyclerGenericAdapter.list.get(
+                                currentVisiblePosition
+                            )
+                        )
+                }catch (e:Exception){}
 //                if(newState == RecyclerView.SCROLL_STATE_IDLE)
 //                Toast.makeText(context,"working scrolled state changed "+currentVisiblePosition,Toast.LENGTH_LONG).show()
 
@@ -116,10 +123,11 @@ class CalendarView : LinearLayout {
 
         override fun toString(): String {
             var daySelected = ""
-            if(days.size>0){
-                daySelected = "  "+days.get(0).date + " "+days.get(0).month + " "+days.get(0).year
+            if (days.size > 0) {
+                daySelected =
+                    "  " + days.get(0).date + " " + days.get(0).month + " " + days.get(0).year
             }
-            return ""+year + currentMonth +daySelected
+            return "" + year + currentMonth + daySelected
         }
     }
 
@@ -128,11 +136,14 @@ class CalendarView : LinearLayout {
         var month: Int = -1
         var year: Int = -1
         var currentMonth: Int = -1
-        var gigData  : ArrayList<AllotedGigDataModel>? = ArrayList<AllotedGigDataModel>()
+        var gigData: ArrayList<AllotedGigDataModel>? = ArrayList<AllotedGigDataModel>()
+
         constructor()
-        constructor(date: Int,
-                    month: Int,
-                    year: Int){
+        constructor(
+            date: Int,
+            month: Int,
+            year: Int
+        ) {
             this.date = date
             this.month = month
             this.year = year
@@ -141,7 +152,7 @@ class CalendarView : LinearLayout {
 
     private fun getDefaultItems(): ArrayList<MonthModel>? {
         arrlist = ArrayList<MonthModel>()
-        for(i in 0..TOTAL_YEAR*12){
+        for (i in 0..TOTAL_YEAR * 12) {
             arrlist.add(getMonthData())
         }
         return arrlist
@@ -190,7 +201,8 @@ class CalendarView : LinearLayout {
         }
         return arrListDays
     }
-    fun getCalendarCurrentMonthData():ArrayList<DayModel>{
+
+    fun getCalendarCurrentMonthData(): ArrayList<DayModel> {
         var arrListDays = ArrayList<DayModel>()
         for (x in 1..calendarData.getActualMaximum(Calendar.DATE)) {
             var dayModel = DayModel()
@@ -198,9 +210,9 @@ class CalendarView : LinearLayout {
             dayModel.month = calendarData.get(Calendar.MONTH)
             dayModel.year = calendarData.get(Calendar.YEAR)
             dayModel.currentMonth = calendarData.get(Calendar.MONTH)
-            if(arrMainHomeDataModel!=null)
-                for(allotedGig in arrMainHomeDataModel){
-                    if(allotedGig.date == dayModel.date && allotedGig.month == dayModel.month && allotedGig.year == dayModel.year){
+            if (arrMainHomeDataModel != null)
+                for (allotedGig in arrMainHomeDataModel) {
+                    if (allotedGig.date == dayModel.date && allotedGig.month == dayModel.month && allotedGig.year == dayModel.year) {
                         dayModel.gigData?.add(allotedGig)
                     }
                 }
@@ -208,6 +220,7 @@ class CalendarView : LinearLayout {
         }
         return arrListDays
     }
+
     private fun getNextMonth(): Calendar {
         var calendar1: Calendar = Calendar.getInstance();
         calendar1.set(Calendar.MONTH, calendarData.get(Calendar.MONTH) + 1)
@@ -246,7 +259,7 @@ class CalendarView : LinearLayout {
                     firstVisibleItem
                 ).currentMonth)
             ) {
-                for (index in firstVisibleItem..arrlist.size-1) {
+                for (index in firstVisibleItem..arrlist.size - 1) {
                     if (arrlist.get(index).currentMonth == calendar.get(Calendar.MONTH) && arrlist.get(
                             index
                         ).year == calendar.get(Calendar.YEAR)
@@ -277,12 +290,13 @@ class CalendarView : LinearLayout {
     fun setOnDateClickListner(dateClickListener: MonthChangeAndDateClickedListener) {
         this.dateClickListener = dateClickListener
     }
+
     var arrMainHomeDataModel: ArrayList<AllotedGigDataModel> = ArrayList<AllotedGigDataModel>()
     fun setGigData(arrMainHomeDataModel: ArrayList<AllotedGigDataModel>) {
         this.arrMainHomeDataModel = arrMainHomeDataModel
         calendarData = Calendar.getInstance()
         calendarData.set(Calendar.DATE, 1)
-        calendarData.set(Calendar.YEAR,2019)
+//        calendarData.set(Calendar.YEAR, 2019)
         recyclerGenericAdapter.list = getDefaultItems()
         recyclerGenericAdapter.notifyDataSetChanged()
     }
