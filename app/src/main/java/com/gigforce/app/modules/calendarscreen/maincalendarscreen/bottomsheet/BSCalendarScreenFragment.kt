@@ -389,13 +389,13 @@ class BSCalendarScreenFragment : BaseFragment() {
     private fun initializeFeaturesBottomSheet() {
         var datalist: ArrayList<FeatureModel> = ArrayList<FeatureModel>()
         datalist.add(FeatureModel("My Gig", R.drawable.mygig, -1))
-        datalist.add(FeatureModel("Profile", R.drawable.profile, R.id.profileFragment))
-        datalist.add(FeatureModel("Settings", R.drawable.settings, R.id.settingFragment))
-        datalist.add(FeatureModel("Landing HS", R.drawable.chat, R.id.landinghomefragment))
-
         datalist.add(FeatureModel("Wallet", R.drawable.wallet, -1/*R.id.walletBalancePage*/))
+        datalist.add(FeatureModel("Profile", R.drawable.profile, R.id.profileFragment))
         datalist.add(FeatureModel("Learning", R.drawable.learning, -1/*R.id.mainLearningFragment*/))
+
+        datalist.add(FeatureModel("Settings", R.drawable.settings, R.id.settingFragment))
         datalist.add(FeatureModel("Chat", R.drawable.chat, -1/*R.id.contactScreenFragment*/))
+        datalist.add(FeatureModel("Landing HS", R.drawable.chat, R.id.landinghomefragment))
         datalist.add(FeatureModel("Explore", R.drawable.ic_landinghome_search, -1))
 
         val itemWidth = ((width / 7) * 1.6).toInt()
