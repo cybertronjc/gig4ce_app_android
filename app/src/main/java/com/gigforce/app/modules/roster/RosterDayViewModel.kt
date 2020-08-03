@@ -55,8 +55,8 @@ class RosterDayViewModel: ViewModel() {
     lateinit var nestedScrollView: NestedScrollView
 
     //lateinit var bsBehavior: BottomSheetBehavior<View>
-    lateinit var bsBehavior: ExtendedBottomSheetBehavior<View>
-    lateinit var UnavailableBS: View
+//    lateinit var bsBehavior: ExtendedBottomSheetBehavior<View>
+//    lateinit var UnavailableBS: View
 
     lateinit var topBar: RosterTopBar
 

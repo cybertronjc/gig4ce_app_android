@@ -132,7 +132,7 @@ class HourViewFragment: RosterBaseFragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun initialize() {
         // initialize view model members
-        rosterViewModel.bsBehavior.state = ExtendedBottomSheetBehavior.STATE_HIDDEN
+//        rosterViewModel.bsBehavior.state = ExtendedBottomSheetBehavior.STATE_HIDDEN
 
         //rosterViewModel.getGigs(activeDateTime.toDate)
 
@@ -364,13 +364,13 @@ class HourViewFragment: RosterBaseFragment() {
             widget.layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT
             widget.requestLayout()
 
-            widget.top_half.setOnClickListener {
-                setAndShowBottomSheet(index-1, index)
-           }
-
-            widget.bottom_half.setOnClickListener {
-                setAndShowBottomSheet(index, index+1)
-            }
+//            widget.top_half.setOnClickListener {
+//                setAndShowBottomSheet(index-1, index)
+//           }
+//
+//            widget.bottom_half.setOnClickListener {
+//                setAndShowBottomSheet(index, index+1)
+//            }
 
             hourIds.add(widget.id)
         }
@@ -420,48 +420,48 @@ class HourViewFragment: RosterBaseFragment() {
 
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun setAndShowBottomSheet(startIndex: Int, endIndex: Int) {
-
-        // outline the selected Hour
-        setHourOutline(startIndex, endIndex)
-
-        // set collapsed view elements
-        setBsCollapsedDayTimeText(startIndex, endIndex)
-        // set expanded view elements
-        setBsExpandedDayTimeText(startIndex, endIndex)
-        // make day availability toggle work in bottom sheet
-        setBsExpandedAvailabilityToggle()
-        // set upcoming cards for expanded bottom sheet
-        setBsExpandedUpcomingGigs(startIndex+1, endIndex+1)
-
-        rosterViewModel.UnavailableBS.bs_close_button.setOnClickListener {
-            rosterViewModel.bsBehavior.state = ExtendedBottomSheetBehavior.STATE_HIDDEN
-            day_times.removeView(day_times.findViewWithTag<HourOutline>("selected_time"))
-        }
-
-        setOnSlideCompleteListener(object: SlideToActView.OnSlideCompleteListener {
-            override fun onSlideComplete(view: SlideToActView) {
-                var startTime = rosterViewModel.UnavailableBS.start_day_time.text
-                var endTime = rosterViewModel.UnavailableBS.end_day_time.text
-                rosterViewModel.toggleHourUnavailable(
-                        requireContext(), day_times, upcomingGigs, getDateTimeFromHourString(startTime.toString()),
-                        getDateTimeFromHourString(endTime.toString()), viewModelCustomPreference)
-
-            }
-        })
-
-        // show bottom sheet in collapsed mode
-        rosterViewModel.bsBehavior.state = ExtendedBottomSheetBehavior.STATE_COLLAPSED
-
-        // This is to stop hours covered by bottom sheet from receiving click
-        rosterViewModel.UnavailableBS.setOnClickListener {  }
-    }
-
-    fun setOnSlideCompleteListener(listener: SlideToActView.OnSlideCompleteListener) {
-        rosterViewModel.UnavailableBS.unavailable_button.onSlideCompleteListener = listener
-        rosterViewModel.UnavailableBS.unavailable_button.resetSlider()
-    }
+//    @RequiresApi(Build.VERSION_CODES.O)
+//    private fun setAndShowBottomSheet(startIndex: Int, endIndex: Int) {
+//
+//        // outline the selected Hour
+//        setHourOutline(startIndex, endIndex)
+//
+//        // set collapsed view elements
+//        setBsCollapsedDayTimeText(startIndex, endIndex)
+//        // set expanded view elements
+//        setBsExpandedDayTimeText(startIndex, endIndex)
+//        // make day availability toggle work in bottom sheet
+//        setBsExpandedAvailabilityToggle()
+//        // set upcoming cards for expanded bottom sheet
+//        setBsExpandedUpcomingGigs(startIndex+1, endIndex+1)
+//
+//        rosterViewModel.UnavailableBS.bs_close_button.setOnClickListener {
+//            rosterViewModel.bsBehavior.state = ExtendedBottomSheetBehavior.STATE_HIDDEN
+//            day_times.removeView(day_times.findViewWithTag<HourOutline>("selected_time"))
+//        }
+//
+//        setOnSlideCompleteListener(object: SlideToActView.OnSlideCompleteListener {
+//            override fun onSlideComplete(view: SlideToActView) {
+//                var startTime = rosterViewModel.UnavailableBS.start_day_time.text
+//                var endTime = rosterViewModel.UnavailableBS.end_day_time.text
+//                rosterViewModel.toggleHourUnavailable(
+//                        requireContext(), day_times, upcomingGigs, getDateTimeFromHourString(startTime.toString()),
+//                        getDateTimeFromHourString(endTime.toString()), viewModelCustomPreference)
+//
+//            }
+//        })
+//
+//        // show bottom sheet in collapsed mode
+//        rosterViewModel.bsBehavior.state = ExtendedBottomSheetBehavior.STATE_COLLAPSED
+//
+//        // This is to stop hours covered by bottom sheet from receiving click
+//        rosterViewModel.UnavailableBS.setOnClickListener {  }
+//    }
+//
+//    fun setOnSlideCompleteListener(listener: SlideToActView.OnSlideCompleteListener) {
+//        rosterViewModel.UnavailableBS.unavailable_button.onSlideCompleteListener = listener
+//        rosterViewModel.UnavailableBS.unavailable_button.resetSlider()
+//    }
 
     private fun getViewsByTag(
         root: ViewGroup,
@@ -482,146 +482,146 @@ class HourViewFragment: RosterBaseFragment() {
         return views
     }
 
-    fun setHourOutline(startIndex: Int, endIndex: Int) {
-        val bottom_sheet = rosterViewModel.UnavailableBS
-
-        // remove existing outline if any
-        getViewsByTag(day_times, "selected_time")?.forEach { day_times.removeView(it) }
-
-        // add new outline
-        val outline = HourOutline(requireContext())
-        outline.id = View.generateViewId()
-        outline.tag = "selected_time"
-
-        // initialize outline attrs
-        // The minimum selectable unit is hour right now.
-        outline.startHour = startIndex + 1
-        outline.startMinute = 0
-        outline.endHour = endIndex + 1
-        outline.endMinute = 0
-
-        outline.resetHeightAndTopMargin(itemHeight)
-        day_times.addView(outline)
-
-        // TODO: Check why adding the end constraint results in unexpected alignment
-        val constraintSet = ConstraintSet()
-        constraintSet.clone(day_times)
-        constraintSet.connect(outline.id, ConstraintSet.TOP, day_times.id, ConstraintSet.TOP, outline.marginTop)
-        constraintSet.connect(outline.id, ConstraintSet.START, start_guideline.id, ConstraintSet.START, marginCardStart - cardStartPadding)
-//      constraintSet.connect(outline.id, ConstraintSet.END, end_guideline.id, ConstraintSet.END)
-        constraintSet.applyTo(day_times)
-
-    }
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun setBsExpandedAvailabilityToggle() {
-        rosterViewModel.isDayAvailable.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
-            rosterViewModel.UnavailableBS.toggle_button.isChecked = it
-        })
-
-        rosterViewModel.UnavailableBS.toggle_button.setOnClickListener {
-            rosterViewModel.switchDayAvailability(
-                requireContext(), day_times,
-                rosterViewModel.isDayAvailable.value!!, viewModelCustomPreference)
-        }
-    }
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun setBsCollapsedDayTimeText(startIndex: Int, endIndex: Int) {
-        // set day text
-        if (isSameDate(activeDateTime, actualDateTime))
-            rosterViewModel.UnavailableBS.day_text.setText("Today")
-        else if (isSameDate(activeDateTime.plusDays(1), actualDateTime))
-            rosterViewModel.UnavailableBS.day_text.setText("Yesterday")
-        else if (isSameDate(activeDateTime.minusDays(1), actualDateTime))
-            rosterViewModel.UnavailableBS.day_text.setText("Tomorrow")
-        else
-            rosterViewModel.UnavailableBS.day_text.setText(activeDateTime.dayOfWeek.toString())
-
-        // set day time
-        if (endIndex == 0)
-            rosterViewModel.UnavailableBS.time_text.setText("00:00 - ${times[endIndex]}")
-        else
-            rosterViewModel.UnavailableBS.time_text.setText("${times[startIndex]} - ${times[endIndex]}")
-    }
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun setBsExpandedDayTimeText(startIndex: Int, endIndex: Int) {
-        val bottom_sheet = rosterViewModel.UnavailableBS
-
-        // for expanded state
-        bottom_sheet.start_day_text.setText(
-            "${activeDateTime.dayOfWeek.toString().capitalize()}, ${activeDateTime.dayOfMonth} " +
-                    "${activeDateTime.month}, ${activeDateTime.year}")
-
-        bottom_sheet.end_day_text.setText(
-            "${activeDateTime.dayOfWeek.toString().capitalize()}, ${activeDateTime.dayOfMonth } " +
-                    "${activeDateTime.month}, ${activeDateTime.year}")
-
-        if (startIndex == 0)
-            bottom_sheet.start_day_time.setText("00:00")
-        else
-            bottom_sheet.start_day_time.setText(times[startIndex])
-
-        bottom_sheet.end_day_time.setText(times[endIndex])
-
-        bottom_sheet.start_day_time.setOnClickListener {
-            val cal = Calendar.getInstance()
-            val timeSetListener = TimePickerDialog.OnTimeSetListener { timePicker, hour, minute, second ->
-                bottom_sheet.start_day_time.text = String.format("%02d:%02d", hour, minute)
-                bottom_sheet.time_text.text = (
-                        String.format("%02d:%02d", hour, minute) + " - " +
-                                bottom_sheet.end_day_time.text)
-
-                // adjust outline as per changed time
-                val outline = day_times.findViewWithTag<HourOutline>("selected_time")
-                outline.startHour = hour
-                outline.startMinute = minute
-                outline.resetHeightAndTopMargin(itemHeight)
-                (outline.layoutParams as ViewGroup.MarginLayoutParams).topMargin = outline.marginTop
-                outline.requestLayout()
-                setBsExpandedUpcomingGigs(outline.startHour, outline.endHour)
-            }
-            TimePickerDialog.newInstance(timeSetListener, timeToHourMap[times[startIndex]]!!, 0, true).show(requireFragmentManager(), "DateTimePicker")
-        }
-        rosterViewModel.UnavailableBS.end_day_time.setOnClickListener {
-            val cal = Calendar.getInstance()
-
-            val timeSetListener = TimePickerDialog.OnTimeSetListener { timePicker, hour, minute, second ->
-                rosterViewModel.UnavailableBS.end_day_time.text = String.format("%02d:%02d", hour, minute)
-                bottom_sheet.time_text.text = (
-                        bottom_sheet.start_day_time.text.toString() + " - " +
-                                String.format("%02d:%02d", hour, minute))
-                var outline = day_times.findViewWithTag<HourOutline>("selected_time")
-                outline.endHour = hour
-                outline.endMinute = minute
-                outline.resetHeightAndTopMargin(itemHeight)
-                setBsExpandedUpcomingGigs(outline.startHour, outline.endHour)
-            }
-            TimePickerDialog.newInstance(timeSetListener, timeToHourMap[times[endIndex]]!!, 0, true).show(requireFragmentManager(), "DateTimePicker")
-        }
-    }
-
-    private fun setBsExpandedUpcomingGigs(startHour: Int, endHour: Int) {
-        rosterViewModel.UnavailableBS.assigned_gigs.removeAllViews()
-        for (gig in upcomingGigs) {
-            if (gig.startHour in startHour..endHour) {
-                val widget = UpcomingGigCard(requireContext())
-                rosterViewModel.UnavailableBS.assigned_gigs.addView(widget)
-                widget.id = View.generateViewId()
-                widget.startHour = gig.startHour
-                widget.startMinute = gig.startMinute
-                widget.duration = gig.duration
-                widget.cardHeight = 80.px
-                widget.gig_title.text = gig.title
-                widget.setTimings()
-
-
-                (widget.layoutParams as ViewGroup.MarginLayoutParams).setMargins(0, 16.px, 0, 0)
-                widget.requestLayout()
-            }
-        }
-    }
+//    fun setHourOutline(startIndex: Int, endIndex: Int) {
+//        val bottom_sheet = rosterViewModel.UnavailableBS
+//
+//        // remove existing outline if any
+//        getViewsByTag(day_times, "selected_time")?.forEach { day_times.removeView(it) }
+//
+//        // add new outline
+//        val outline = HourOutline(requireContext())
+//        outline.id = View.generateViewId()
+//        outline.tag = "selected_time"
+//
+//        // initialize outline attrs
+//        // The minimum selectable unit is hour right now.
+//        outline.startHour = startIndex + 1
+//        outline.startMinute = 0
+//        outline.endHour = endIndex + 1
+//        outline.endMinute = 0
+//
+//        outline.resetHeightAndTopMargin(itemHeight)
+//        day_times.addView(outline)
+//
+//        // TODO: Check why adding the end constraint results in unexpected alignment
+//        val constraintSet = ConstraintSet()
+//        constraintSet.clone(day_times)
+//        constraintSet.connect(outline.id, ConstraintSet.TOP, day_times.id, ConstraintSet.TOP, outline.marginTop)
+//        constraintSet.connect(outline.id, ConstraintSet.START, start_guideline.id, ConstraintSet.START, marginCardStart - cardStartPadding)
+////      constraintSet.connect(outline.id, ConstraintSet.END, end_guideline.id, ConstraintSet.END)
+//        constraintSet.applyTo(day_times)
+//
+//    }
+//
+//    @RequiresApi(Build.VERSION_CODES.O)
+//    private fun setBsExpandedAvailabilityToggle() {
+//        rosterViewModel.isDayAvailable.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+//            rosterViewModel.UnavailableBS.toggle_button.isChecked = it
+//        })
+//
+//        rosterViewModel.UnavailableBS.toggle_button.setOnClickListener {
+//            rosterViewModel.switchDayAvailability(
+//                requireContext(), day_times,
+//                rosterViewModel.isDayAvailable.value!!, viewModelCustomPreference)
+//        }
+//    }
+//
+//    @RequiresApi(Build.VERSION_CODES.O)
+//    private fun setBsCollapsedDayTimeText(startIndex: Int, endIndex: Int) {
+//        // set day text
+//        if (isSameDate(activeDateTime, actualDateTime))
+//            rosterViewModel.UnavailableBS.day_text.setText("Today")
+//        else if (isSameDate(activeDateTime.plusDays(1), actualDateTime))
+//            rosterViewModel.UnavailableBS.day_text.setText("Yesterday")
+//        else if (isSameDate(activeDateTime.minusDays(1), actualDateTime))
+//            rosterViewModel.UnavailableBS.day_text.setText("Tomorrow")
+//        else
+//            rosterViewModel.UnavailableBS.day_text.setText(activeDateTime.dayOfWeek.toString())
+//
+//        // set day time
+//        if (endIndex == 0)
+//            rosterViewModel.UnavailableBS.time_text.setText("00:00 - ${times[endIndex]}")
+//        else
+//            rosterViewModel.UnavailableBS.time_text.setText("${times[startIndex]} - ${times[endIndex]}")
+//    }
+//
+//    @RequiresApi(Build.VERSION_CODES.O)
+//    private fun setBsExpandedDayTimeText(startIndex: Int, endIndex: Int) {
+//        val bottom_sheet = rosterViewModel.UnavailableBS
+//
+//        // for expanded state
+//        bottom_sheet.start_day_text.setText(
+//            "${activeDateTime.dayOfWeek.toString().capitalize()}, ${activeDateTime.dayOfMonth} " +
+//                    "${activeDateTime.month}, ${activeDateTime.year}")
+//
+//        bottom_sheet.end_day_text.setText(
+//            "${activeDateTime.dayOfWeek.toString().capitalize()}, ${activeDateTime.dayOfMonth } " +
+//                    "${activeDateTime.month}, ${activeDateTime.year}")
+//
+//        if (startIndex == 0)
+//            bottom_sheet.start_day_time.setText("00:00")
+//        else
+//            bottom_sheet.start_day_time.setText(times[startIndex])
+//
+//        bottom_sheet.end_day_time.setText(times[endIndex])
+//
+//        bottom_sheet.start_day_time.setOnClickListener {
+//            val cal = Calendar.getInstance()
+//            val timeSetListener = TimePickerDialog.OnTimeSetListener { timePicker, hour, minute, second ->
+//                bottom_sheet.start_day_time.text = String.format("%02d:%02d", hour, minute)
+//                bottom_sheet.time_text.text = (
+//                        String.format("%02d:%02d", hour, minute) + " - " +
+//                                bottom_sheet.end_day_time.text)
+//
+//                // adjust outline as per changed time
+//                val outline = day_times.findViewWithTag<HourOutline>("selected_time")
+//                outline.startHour = hour
+//                outline.startMinute = minute
+//                outline.resetHeightAndTopMargin(itemHeight)
+//                (outline.layoutParams as ViewGroup.MarginLayoutParams).topMargin = outline.marginTop
+//                outline.requestLayout()
+//                setBsExpandedUpcomingGigs(outline.startHour, outline.endHour)
+//            }
+//            TimePickerDialog.newInstance(timeSetListener, timeToHourMap[times[startIndex]]!!, 0, true).show(requireFragmentManager(), "DateTimePicker")
+//        }
+//        rosterViewModel.UnavailableBS.end_day_time.setOnClickListener {
+//            val cal = Calendar.getInstance()
+//
+//            val timeSetListener = TimePickerDialog.OnTimeSetListener { timePicker, hour, minute, second ->
+//                rosterViewModel.UnavailableBS.end_day_time.text = String.format("%02d:%02d", hour, minute)
+//                bottom_sheet.time_text.text = (
+//                        bottom_sheet.start_day_time.text.toString() + " - " +
+//                                String.format("%02d:%02d", hour, minute))
+//                var outline = day_times.findViewWithTag<HourOutline>("selected_time")
+//                outline.endHour = hour
+//                outline.endMinute = minute
+//                outline.resetHeightAndTopMargin(itemHeight)
+//                setBsExpandedUpcomingGigs(outline.startHour, outline.endHour)
+//            }
+//            TimePickerDialog.newInstance(timeSetListener, timeToHourMap[times[endIndex]]!!, 0, true).show(requireFragmentManager(), "DateTimePicker")
+//        }
+//    }
+//
+//    private fun setBsExpandedUpcomingGigs(startHour: Int, endHour: Int) {
+//        rosterViewModel.UnavailableBS.assigned_gigs.removeAllViews()
+//        for (gig in upcomingGigs) {
+//            if (gig.startHour in startHour..endHour) {
+//                val widget = UpcomingGigCard(requireContext())
+//                rosterViewModel.UnavailableBS.assigned_gigs.addView(widget)
+//                widget.id = View.generateViewId()
+//                widget.startHour = gig.startHour
+//                widget.startMinute = gig.startMinute
+//                widget.duration = gig.duration
+//                widget.cardHeight = 80.px
+//                widget.gig_title.text = gig.title
+//                widget.setTimings()
+//
+//
+//                (widget.layoutParams as ViewGroup.MarginLayoutParams).setMargins(0, 16.px, 0, 0)
+//                widget.requestLayout()
+//            }
+//        }
+//    }
 
     override fun onDestroy() {
         super.onDestroy()
