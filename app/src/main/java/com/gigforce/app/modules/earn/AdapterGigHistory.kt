@@ -133,6 +133,9 @@ class AdapterGigHistory : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 }
                 val currentDate = headerDateFormatter.format(gig?.startDateTime?.toDate()!!)
                 viewHolderGigDetails.itemView.tv_gig_day_rv_gig_his.text = currentDate
+                viewHolderGigDetails.itemView.v_car_left_bg_rv_gig_hist.setBackgroundColor(
+                    viewHolderGigDetails.itemView.resources.getColor(R.color.lipstick)
+                )
                 if (position == 2) {
                     viewHolderGigDetails.itemView.tv_gig_day_rv_gig_his.visibility = View.VISIBLE
                 } else {
@@ -143,15 +146,15 @@ class AdapterGigHistory : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 viewHolderGigDetails.itemView.tv_date_gig_hist.isSelected = true
                 viewHolderGigDetails.itemView.rl_on_going_gig_hist.visibility = View.GONE
                 viewHolderGigDetails.itemView.rl_scheduled_gig_hist.visibility = View.VISIBLE
-                holder.itemView.tv_designation_rv_gig_hist.text = gig?.title
-                holder.itemView.tv_gig_venue_rv_gig_his.text = gig?.address
+                holder.itemView.tv_designation_rv_gig_hist.text = gig.title
+                holder.itemView.tv_gig_venue_rv_gig_his.text = gig.address
                 holder.itemView.tv_gig_venue_rv_gig_his.isSelected = true
-                holder.itemView.tv_rating_rv_gig_hist.text = gig?.gigRating.toString()
+                holder.itemView.tv_rating_rv_gig_hist.text = gig.gigRating.toString()
                 holder.itemView.tv_time_rv_gig_hist.text = ""
-                gig?.startDateTime?.toDate()?.let {
+                gig.startDateTime?.toDate()?.let {
                     holder.itemView.tv_date_gig_hist.text = dateFormatter.format(it)
                 }
-                gig?.endDateTime?.let { endDateTimeStamp ->
+                gig.endDateTime?.let { endDateTimeStamp ->
                     gig.startDateTime?.let {
                         val durationCalculated = endDateTimeStamp.toDate().time - it.toDate().time
                         val hours = (durationCalculated / (1000 * 60 * 60))
@@ -162,19 +165,19 @@ class AdapterGigHistory : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                             )}"
                     }
                 }
-                Glide.with(viewHolderGigDetails.itemView).load(gig?.companyLogo)
+                Glide.with(viewHolderGigDetails.itemView).load(gig.companyLogo)
                     .placeholder(R.drawable.profile)
                     .into(viewHolderGigDetails.itemView.iv_brand_rv_gig_hist)
                 PushDownAnim.setPushDownAnimTo(holder.itemView)
                     .setOnClickListener(View.OnClickListener {
-                        callbacks?.openGigDetails(onGoingGigs!![holder.adapterPosition])
+                        callbacks?.openGigDetails(scheduledGigs!![holder.adapterPosition - 2])
                     })
-                holder.itemView.tv_timing_rv_gig_hist.text = if (gig?.endDateTime != null)
+                holder.itemView.tv_timing_rv_gig_hist.text = if (gig.endDateTime != null)
                     "${timeFormatter.format(gig.startDateTime!!.toDate())} - ${timeFormatter.format(
-                        gig?.endDateTime!!.toDate()
+                        gig.endDateTime!!.toDate()
                     )}"
                 else
-                    "${timeFormatter.format(gig?.startDateTime!!.toDate())} - "
+                    "${timeFormatter.format(gig.startDateTime!!.toDate())} - "
             }
         }
 

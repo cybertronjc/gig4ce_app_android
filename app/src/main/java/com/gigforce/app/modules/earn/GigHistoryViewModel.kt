@@ -29,7 +29,7 @@ class GigHistoryViewModel(private val repositoryCallbacks: DataCallbacks) :
     private val _observableScheduledGigs: MutableLiveData<GigsResponse> by lazy {
         MutableLiveData<GigsResponse>();
     }
-    private var pageNumber: Int = 0;
+
     val observableScheduledGigs: MutableLiveData<GigsResponse> get() = _observableScheduledGigs
 
 
@@ -106,7 +106,7 @@ class GigHistoryViewModel(private val repositoryCallbacks: DataCallbacks) :
         this.pastGigs = pastGigs;
         if (resetPageCount) {
             isLastPage = false
-            isLoading = false
+            isLoading = true
             lastVisibleItem = null
 
         }
