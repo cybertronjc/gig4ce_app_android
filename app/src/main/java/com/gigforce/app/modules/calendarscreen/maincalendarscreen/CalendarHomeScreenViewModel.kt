@@ -89,7 +89,7 @@ class CalendarHomeScreenViewModel : ViewModel() {
         @ServerTimestamp
         lateinit var startDateTime: Date
         @ServerTimestamp
-        lateinit var endDateTime: Date
+        var endDateTime: Date? = null
         var title: String = ""
 
         constructor(
@@ -97,7 +97,7 @@ class CalendarHomeScreenViewModel : ViewModel() {
             gigStatus: String,
             gigerId: String,
             startDateTime: Date,
-            endDateTime: Date,
+            endDateTime: Date?,
             title: String
         ) {
             this.duration = duration
