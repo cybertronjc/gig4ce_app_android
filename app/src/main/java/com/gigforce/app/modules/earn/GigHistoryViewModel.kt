@@ -5,14 +5,18 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.gigforce.app.modules.earn.models.GigsResponse
 import com.gigforce.app.modules.gigPage.models.Gig
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.QuerySnapshot
 
 class GigHistoryViewModel(private val repositoryCallbacks: DataCallbacks) :
     ViewModel(), DataCallbacks.ResponseCallbacks {
+    private var lastVisibleItem: DocumentSnapshot? = null
     var isLastPage: Boolean = false
     var isLoading: Boolean = true
     var pastGigs: Boolean = true
+    private val limit: Long = 10
+
     private val _observerProgress: MutableLiveData<Int> by lazy {
         MutableLiveData<Int>();
     }
@@ -37,7 +41,7 @@ class GigHistoryViewModel(private val repositoryCallbacks: DataCallbacks) :
         showProgress(true)
         repositoryCallbacks.checkGigsCount(this)
         repositoryCallbacks.getOnGoingGigs(this)
-        repositoryCallbacks.getPastGigs(this, pageNumber)
+        repositoryCallbacks.getPastGigs(this, null, limit)
     }
 
     override fun onGoingGigsResponse(
@@ -56,12 +60,17 @@ class GigHistoryViewModel(private val repositoryCallbacks: DataCallbacks) :
         querySnapshot: QuerySnapshot?,
         error: FirebaseFirestoreException?
     ) {
-        observableScheduledGigs.value = if (querySnapshot != null) GigsResponse(
-            true,
-            "Past Gigs Loaded Successfully",
-            querySnapshot.toObjects(Gig::class.java)
-        ) else
-            GigsResponse(false, error?.message!!)
+        if (querySnapshot != null) {
+            if (querySnapshot.documents.isNotEmpty())
+                lastVisibleItem = querySnapshot.documents[querySnapshot.size() - 1]
+            isLastPage = querySnapshot.documents.size < limit
+            observableScheduledGigs.value = GigsResponse(
+                true,
+                "Past Gigs Loaded Successfully",
+                querySnapshot.toObjects(Gig::class.java)
+            )
+        } else
+            observableScheduledGigs.value = GigsResponse(false, error?.message!!)
 
     }
 
@@ -69,12 +78,17 @@ class GigHistoryViewModel(private val repositoryCallbacks: DataCallbacks) :
         querySnapshot: QuerySnapshot?,
         error: FirebaseFirestoreException?
     ) {
-        observableScheduledGigs.value = if (querySnapshot != null) GigsResponse(
-            true,
-            "Upcoming Gigs Loaded Successfully",
-            querySnapshot.toObjects(Gig::class.java)
-        ) else
-            GigsResponse(false, error?.message!!)
+        if (querySnapshot != null) {
+            if (querySnapshot.documents.isNotEmpty())
+                lastVisibleItem = querySnapshot.documents[querySnapshot.size() - 1]
+            isLastPage = querySnapshot.documents.size < limit
+            observableScheduledGigs.value = GigsResponse(
+                true,
+                "Upcoming Gigs Loaded Successfully",
+                querySnapshot.toObjects(Gig::class.java)
+            )
+        } else
+            observableScheduledGigs.value = GigsResponse(false, error?.message!!)
     }
 
     override fun gigsCountResponse(
@@ -86,9 +100,6 @@ class GigHistoryViewModel(private val repositoryCallbacks: DataCallbacks) :
         }
     }
 
-    override fun isLastReached(last: Boolean) {
-        isLastPage = last
-    }
 
     fun getGigs(pastGigs: Boolean, resetPageCount: Boolean) {
         showProgress(true)
@@ -96,19 +107,15 @@ class GigHistoryViewModel(private val repositoryCallbacks: DataCallbacks) :
         if (resetPageCount) {
             isLastPage = false
             isLoading = false
-            pageNumber = 0
-            if (pastGigs) {
-                repositoryCallbacks.getPastGigs(this, pageNumber)
-            } else {
-                repositoryCallbacks.getUpComingGigs(this, pageNumber)
-            }
-        } else {
-            if (pastGigs) {
-                repositoryCallbacks.getPastGigs(this, ++pageNumber)
-            } else {
-                repositoryCallbacks.getUpComingGigs(this, ++pageNumber)
-            }
+            lastVisibleItem = null
+
         }
+        if (pastGigs) {
+            repositoryCallbacks.getPastGigs(this, lastVisibleItem, limit)
+        } else {
+            repositoryCallbacks.getUpComingGigs(this, lastVisibleItem, limit)
+        }
+
 
     }
 
