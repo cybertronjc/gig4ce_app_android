@@ -12,4 +12,9 @@
     <string name="no_i_don_t_have_driving_license">ના, મારી પાસે ડ્રાઇવિંગ લાઇસન્સ નથી</string>
     <string name="please_provide_following_details">Please provide following details.</string>
     <string name="good_luck">સારા નસીબ!!!</string>
+    <string name="complete_now">Complete Now</string>
+    <string name="completed">Completed</string>
+    <string name="complete_your_verification">Complete Your Verification</string>
+    <string name="verification">Verification</string>
+    <string name="verified_giger_s_get_recruited_first">Verified giger\'s get recruited first</string>
 </resources>

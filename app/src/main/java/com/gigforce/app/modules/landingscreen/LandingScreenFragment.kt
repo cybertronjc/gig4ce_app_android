@@ -13,6 +13,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.widget.TextView
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
@@ -25,6 +26,7 @@ import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.app.core.genericadapter.RecyclerGenericAdapter
 import com.gigforce.app.modules.calendarscreen.maincalendarscreen.bottomsheet.UpcomingGigModel
+import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
 import com.gigforce.app.modules.preferences.PreferencesFragment
 import com.gigforce.app.modules.preferences.prefdatamodel.PreferencesDataModel
 import com.gigforce.app.modules.profile.ProfileViewModel
@@ -49,6 +51,7 @@ class LandingScreenFragment : BaseFragment() {
     private lateinit var viewModel: LandingScreenViewModel
     var width: Int = 0
     private var comingFromOrGoingToScreen = -1
+    private val verificationViewModel : GigVerificationViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -187,6 +190,20 @@ class LandingScreenFragment : BaseFragment() {
             displayImage(profile.profileAvatarName)
             if (profile.name != null && !profile.name.equals(""))
                 profile_name.text = profile.name
+        })
+
+        verificationViewModel
+            .gigerVerificationStatus
+            .observe(viewLifecycleOwner, Observer {
+
+                if(it.everyDocumentUploaded){
+                    complete_now.text = getString(R.string.completed)
+                    title.text = getString(R.string.verification)
+                }else{
+                    complete_now.text = getString(R.string.complete_now)
+                    title.text = getString(R.string.complete_your_verification)
+                }
+
         })
     }
 
