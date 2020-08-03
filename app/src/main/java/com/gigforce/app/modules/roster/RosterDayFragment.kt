@@ -118,6 +118,8 @@ class RosterDayFragment : RosterBaseFragment() {
         calendar.set(Calendar.MONTH, activeDateTime.monthValue - 1)
         calendar.set(Calendar.YEAR, activeDateTime.year)
         initializeMonthTV(calendar, false)
+
+        rosterViewModel.dayContext = requireContext()
 //        arrCalendarDependent =
 //            arrayOf(calendar_top_cl, mark_unavailable_bs)
 
@@ -158,7 +160,17 @@ class RosterDayFragment : RosterBaseFragment() {
             }
 
             rosterViewModel.scrollToPosition(it.toDate)
+
+            rosterViewModel.setFullDayGigs()
         })
+
+//        dayTag = String.format("%4d", activeDateTime.year) +
+//                String.format("%02d", activeDateTime.monthValue) +
+//                String.format("%02d", activeDateTime.dayOfMonth)
+//
+//        rosterViewModel.allGigs[dayTag]?.observe(viewLifecycleOwner, Observer {
+//            rosterViewModel.setFullDayGigs(requireContext())
+//        })
 
         viewModelCustomPreference.customPreferencesLiveDataModel.observe(
             viewLifecycleOwner, Observer {

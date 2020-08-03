@@ -99,6 +99,7 @@ class HourViewFragment: RosterBaseFragment() {
             )
             rosterViewModel.getGigs(activeDateTime.toDate)
         }
+//        rosterViewModel.topBar.fullDayGigCard = null
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -145,6 +146,7 @@ class HourViewFragment: RosterBaseFragment() {
         rosterViewModel.completedGigs = completedGigs
         rosterViewModel.currentGigs = currentGigs
         rosterViewModel.fulldayGigs = fullDayGigs
+        rosterViewModel.topBar.fullDayGigCard = null
 
 //        loadFirstTime()
 
@@ -158,14 +160,15 @@ class HourViewFragment: RosterBaseFragment() {
             Log.d("HourViewFragment", "Day Gigs for " + activeDateTime.toString())
             Log.d("HourViewFragment", dayGigs.toString())
 
-            if (
-                (upcomingGigs.size + completedGigs.size +
-                        currentGigs.size + fullDayGigs.size) != dayGigs.size) {
+//            if (
+//                (upcomingGigs.size + completedGigs.size +
+//                        currentGigs.size + fullDayGigs.size) != dayGigs.size) {
                 // at least one gig is updated
                 // remove currently added gig cards and add the new ones
                 removeGigs(upcomingGigs)
                 removeGigs(completedGigs)
                 removeGigs(currentGigs)
+                //rosterViewModel.topBar.fullDayGigCard = null
 
                 val date = activeDateTime.toDate
                 upcomingGigs = rosterViewModel.getFilteredGigs(
@@ -184,8 +187,8 @@ class HourViewFragment: RosterBaseFragment() {
                 rosterViewModel.upcomingGigs = upcomingGigs
                 rosterViewModel.currentGigs = currentGigs
                 rosterViewModel.completedGigs = completedGigs
-                rosterViewModel.setFullDayGigs(requireContext())
-            }
+                rosterViewModel.setFullDayGigs(rosterViewModel.dayContext)
+//            }
         })
 
     }

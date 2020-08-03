@@ -114,12 +114,11 @@ class RosterTopBar: MaterialCardView {
     var fullDayGigCard: MaterialCardView? = null
         set(value) {
             field = value
-            if (value == null)
-                full_day_gig.removeAllViews()
+            full_day_gig.removeAllViews()
             value?.let {
                 value.id = View.generateViewId()
-                value.layoutParams = ConstraintLayout.LayoutParams(0, value.height)
                 full_day_gig.addView(value)
+                value.layoutParams = ConstraintLayout.LayoutParams(LayoutParams.MATCH_PARENT, value.height)
                 val constraintSet = ConstraintSet()
                 constraintSet.clone(full_day_gig)
                 constraintSet.connect(
