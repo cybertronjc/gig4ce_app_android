@@ -71,7 +71,7 @@ class GigHistoryViewModel(private val repositoryCallbacks: DataCallbacks) :
     ) {
         observableScheduledGigs.value = if (querySnapshot != null) GigsResponse(
             true,
-            "Past Gigs Loaded Successfully",
+            "Upcoming Gigs Loaded Successfully",
             querySnapshot.toObjects(Gig::class.java)
         ) else
             GigsResponse(false, error?.message!!)
@@ -86,6 +86,10 @@ class GigHistoryViewModel(private val repositoryCallbacks: DataCallbacks) :
         }
     }
 
+    override fun isLastReached(last: Boolean) {
+        isLastPage = last
+    }
+
     fun getGigs(pastGigs: Boolean, resetPageCount: Boolean) {
         showProgress(true)
         this.pastGigs = pastGigs;
@@ -93,12 +97,19 @@ class GigHistoryViewModel(private val repositoryCallbacks: DataCallbacks) :
             isLastPage = false
             isLoading = false
             pageNumber = 0
-        }
-        if (pastGigs) {
-            repositoryCallbacks.getPastGigs(this, ++pageNumber)
+            if (pastGigs) {
+                repositoryCallbacks.getPastGigs(this, pageNumber)
+            } else {
+                repositoryCallbacks.getUpComingGigs(this, pageNumber)
+            }
         } else {
-            repositoryCallbacks.getUpComingGigs(this, ++pageNumber)
+            if (pastGigs) {
+                repositoryCallbacks.getPastGigs(this, ++pageNumber)
+            } else {
+                repositoryCallbacks.getUpComingGigs(this, ++pageNumber)
+            }
         }
+
     }
 
     fun showProgress(show: Boolean) {
