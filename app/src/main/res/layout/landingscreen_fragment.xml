@@ -410,13 +410,12 @@
                     app:layout_constraintTop_toBottomOf="@+id/top_align_gray_line" />
 
                 <TextView
-                    android:id="@+id/title"
+                    android:id="@+id/verificationTitleTV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
                     android:fontFamily="@font/lato_bold"
                     android:letterSpacing="0"
-                    android:text="@string/complete_your_verification"
                     android:textColor="#000000"
                     android:textSize="16sp"
                     app:layout_constraintBottom_toBottomOf="@+id/icon"
@@ -433,8 +432,8 @@
                     android:text="@string/verified_giger_s_get_recruited_first"
                     android:textColor="#424242"
                     android:textSize="14sp"
-                    app:layout_constraintStart_toStartOf="@+id/title"
-                    app:layout_constraintTop_toBottomOf="@+id/title" />
+                    app:layout_constraintStart_toStartOf="@id/verificationTitleTV"
+                    app:layout_constraintTop_toBottomOf="@id/verificationTitleTV" />
 
                 <TextView
                     android:id="@+id/complete_now"

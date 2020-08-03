@@ -8,6 +8,7 @@ import android.content.IntentFilter
 import android.os.Bundle
 import android.os.Handler
 import android.util.DisplayMetrics
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -198,13 +199,15 @@ class LandingScreenFragment : BaseFragment() {
 
                 if(it.everyDocumentUploaded){
                     complete_now.text = getString(R.string.completed)
-                    title.text = getString(R.string.verification)
+                    verificationTitleTV.text = getString(R.string.verification)
                 }else{
                     complete_now.text = getString(R.string.complete_now)
-                    title.text = getString(R.string.complete_your_verification)
+                    verificationTitleTV.text = getString(R.string.complete_your_verification)
                 }
 
         })
+
+        verificationViewModel.startListeningForGigerVerificationStatusChanges()
     }
 
     private fun displayImage(profileImg: String) {
