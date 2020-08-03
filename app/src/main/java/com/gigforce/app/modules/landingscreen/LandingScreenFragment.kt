@@ -1,10 +1,8 @@
 package com.gigforce.app.modules.landingscreen
 
 import android.app.Dialog
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
+import android.content.*
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.util.DisplayMetrics
@@ -21,6 +19,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
+import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
@@ -28,6 +27,8 @@ import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.app.core.genericadapter.RecyclerGenericAdapter
 import com.gigforce.app.modules.calendarscreen.maincalendarscreen.bottomsheet.UpcomingGigModel
 import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
+import com.gigforce.app.modules.help.HelpVideo
+import com.gigforce.app.modules.help.HelpViewModel
 import com.gigforce.app.modules.preferences.PreferencesFragment
 import com.gigforce.app.modules.preferences.prefdatamodel.PreferencesDataModel
 import com.gigforce.app.modules.profile.ProfileViewModel
@@ -53,6 +54,7 @@ class LandingScreenFragment : BaseFragment() {
     var width: Int = 0
     private var comingFromOrGoingToScreen = -1
     private val verificationViewModel : GigVerificationViewModel by viewModels()
+    private val helpViewModel : HelpViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -208,6 +210,66 @@ class LandingScreenFragment : BaseFragment() {
         })
 
         verificationViewModel.startListeningForGigerVerificationStatusChanges()
+
+
+        helpViewModel
+            .helpVideos
+            .observe(viewLifecycleOwner, Observer {
+                setHelpVideosOnView(it)
+            })
+
+        helpViewModel.getTopHelpVideos()
+    }
+
+    private fun setHelpVideosOnView(helpVideos: List<HelpVideo>?) {
+
+        val recyclerGenericAdapter: RecyclerGenericAdapter<HelpVideo> =
+            RecyclerGenericAdapter<HelpVideo>(
+                activity?.applicationContext,
+                PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
+                    val id = (item as HelpVideo).videoYoutubeId
+                    val appIntent =
+                        Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:$id"))
+                    val webIntent = Intent(
+                        Intent.ACTION_VIEW,
+                        Uri.parse("http://www.youtube.com/watch?v=$id")
+                    )
+                    try {
+                        requireContext().startActivity(appIntent)
+                    } catch (ex: ActivityNotFoundException) {
+                        requireContext().startActivity(webIntent)
+                    }
+                },
+                RecyclerGenericAdapter.ItemInterface<HelpVideo?> { obj, viewHolder, position ->
+
+                    var iconIV = getImageView(viewHolder, R.id.help_first_card_img)
+                    Glide.with(requireContext()).load(obj?.getThumbNailUrl()).into(iconIV)
+
+                    var titleTV = getTextView(viewHolder, R.id.titleTV)
+                    titleTV.text = obj?.videoTitle
+
+                    var timeTV = getTextView(viewHolder, R.id.time_text)
+                    timeTV.text = if(obj!!.videoLength >= 60){
+                            val minutes = obj!!.videoLength / 60
+                            val secs = obj!!.videoLength % 60
+                           "$minutes:$secs"
+                     }else{
+                        "00:${obj.videoLength}"
+                      }
+
+
+
+//                    var img = getImageView(viewHolder, R.id.learning_img)
+//                    img.setImageResource(obj?.imgIcon!!)
+                })!!
+        recyclerGenericAdapter.setList(helpVideos)
+        recyclerGenericAdapter.setLayout(R.layout.item_help_video)
+        helpVideoRV.layoutManager = LinearLayoutManager(
+            activity?.applicationContext,
+            LinearLayoutManager.VERTICAL,
+            false
+        )
+        helpVideoRV.adapter = recyclerGenericAdapter
     }
 
     private fun displayImage(profileImg: String) {
@@ -417,6 +479,10 @@ class LandingScreenFragment : BaseFragment() {
 
         textView119.setOnClickListener {
             navigate(R.id.settingFragment)
+        }
+
+        seeMoreBtn.setOnClickListener {
+            navigate(R.id.helpVideosFragment)
         }
     }
 
