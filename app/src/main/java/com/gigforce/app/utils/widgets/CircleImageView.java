@@ -8,6 +8,7 @@ import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.ColorFilter;
+import android.graphics.DashPathEffect;
 import android.graphics.Matrix;
 import android.graphics.Outline;
 import android.graphics.Paint;
@@ -73,6 +74,7 @@ public class CircleImageView extends androidx.appcompat.widget.AppCompatImageVie
 
     private boolean mBorderOverlay;
     private boolean mDisableCircularTransformation;
+    private boolean mDashedBorder;
 
     public CircleImageView(Context context) {
         super(context);
@@ -93,6 +95,8 @@ public class CircleImageView extends androidx.appcompat.widget.AppCompatImageVie
         mBorderColor = a.getColor(R.styleable.CircleImageView_civ_border_color, DEFAULT_BORDER_COLOR);
         mBorderOverlay = a.getBoolean(R.styleable.CircleImageView_civ_border_overlay, DEFAULT_BORDER_OVERLAY);
         mCircleBackgroundColor = a.getColor(R.styleable.CircleImageView_civ_circle_background_color, DEFAULT_CIRCLE_BACKGROUND_COLOR);
+        mDashedBorder = a.getBoolean(R.styleable.CircleImageView_civ_dashed_border, false);
+
 
         a.recycle();
 
@@ -114,6 +118,13 @@ public class CircleImageView extends androidx.appcompat.widget.AppCompatImageVie
         mBorderPaint.setAntiAlias(true);
         mBorderPaint.setColor(mBorderColor);
         mBorderPaint.setStrokeWidth(mBorderWidth);
+        if (mDashedBorder) {
+            DashPathEffect dashPath = new DashPathEffect(new float[]{20, 15}, (float) 1.0);
+            mBorderPaint.setPathEffect(dashPath);
+
+            mBorderPaint.setStyle(Paint.Style.STROKE);
+        }
+
 
         mCircleBackgroundPaint.setStyle(Paint.Style.FILL);
         mCircleBackgroundPaint.setAntiAlias(true);
@@ -171,7 +182,10 @@ public class CircleImageView extends androidx.appcompat.widget.AppCompatImageVie
         }
 
         if (mBorderWidth > 0) {
+
             canvas.drawCircle(mBorderRect.centerX(), mBorderRect.centerY(), mBorderRadius, mBorderPaint);
+
+
         }
     }
 

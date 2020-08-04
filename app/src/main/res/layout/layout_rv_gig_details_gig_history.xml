@@ -10,9 +10,8 @@
         android:layout_height="wrap_content"
         android:paddingEnd="@dimen/size_16"
         android:paddingBottom="@dimen/size_16"
-        android:text="JUNE 2020"
         android:textColor="@color/black_85"
-        android:textSize="@dimen/font_14"
+        android:textSize="@dimen/font_12"
         android:textStyle="bold"
         android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
@@ -59,7 +58,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/size_8"
                 android:textColor="@color/black_85"
-                android:textSize="@dimen/font_16"
+                android:textSize="@dimen/font_14"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toStartOf="@+id/tv_rating_rv_gig_hist"
                 app:layout_constraintStart_toEndOf="@+id/iv_brand_rv_gig_hist"
@@ -76,7 +75,7 @@
                 android:scrollHorizontally="true"
                 android:singleLine="true"
                 android:textColor="@color/warm_grey"
-                android:textSize="@dimen/font_14"
+                android:textSize="@dimen/font_12"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/iv_brand_rv_gig_hist"
                 app:layout_constraintTop_toBottomOf="@+id/tv_designation_rv_gig_hist" />
@@ -100,7 +99,7 @@
                 android:drawableStart="@drawable/ic_star"
                 android:drawablePadding="@dimen/size_4"
                 android:gravity="center"
-                android:textSize="@dimen/font_14"
+                android:textSize="@dimen/font_12"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -122,7 +121,7 @@
                     android:layout_marginTop="@dimen/size_4"
                     android:text="@string/punch_in"
                     android:textColor="@color/warm_grey"
-                    android:textSize="@dimen/font_14" />
+                    android:textSize="@dimen/font_12" />
 
                 <TextView
                     android:id="@+id/tv_punch_in_time_rv_gig_hist"
@@ -142,7 +141,7 @@
                     android:layout_toEndOf="@+id/tv_punch_in_rv_gig_hist"
                     android:text="@string/punch_out"
                     android:textColor="@color/warm_grey"
-                    android:textSize="@dimen/font_14" />
+                    android:textSize="@dimen/font_12" />
 
                 <TextView
                     android:id="@+id/tv_punch_out_time_rv_gig_hist"
@@ -180,7 +179,7 @@
                     android:scrollHorizontally="true"
                     android:singleLine="true"
                     android:textColor="@color/warm_grey"
-                    android:textSize="@dimen/font_14" />
+                    android:textSize="@dimen/font_12" />
 
                 <TextView
                     android:id="@+id/tv_completed_gig_hist"
@@ -212,7 +211,7 @@
                     android:drawablePadding="@dimen/size_4"
                     android:gravity="center"
                     android:textColor="@color/warm_grey"
-                    android:textSize="@dimen/font_16" />
+                    android:textSize="@dimen/font_12" />
 
 
             </RelativeLayout>

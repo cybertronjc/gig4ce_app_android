@@ -82,4 +82,6 @@
     <dimen name="size_104">104dp</dimen>
     <dimen name="size_37">37dp</dimen>
     <dimen name="size_22">22sp</dimen>
+    <dimen name="size_53">53dp</dimen>
+    <dimen name="size_177">177dp</dimen>
 </resources>
