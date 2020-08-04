@@ -216,7 +216,7 @@ class RosterDayFragment : RosterBaseFragment() {
         back_button.setOnClickListener {
             activity?.onBackPressed()
         }
-        top_bar.setOnClickListener {
+        top_bar.month_year.setOnClickListener {
             changeMonthCalendarVisibility()
 
         }

@@ -1,9 +1,12 @@
 package com.gigforce.app.modules.roster
 
 import android.content.Context
+import android.os.Bundle
 import android.util.AttributeSet
 import android.view.View
+import androidx.navigation.findNavController
 import com.gigforce.app.R
+import com.gigforce.app.modules.gigPage.GigPageFragment
 import com.google.android.material.card.MaterialCardView
 import kotlinx.android.synthetic.main.completed_gig_card.view.*
 import kotlinx.android.synthetic.main.completed_gig_card.view.gig_timing
@@ -19,7 +22,8 @@ class CompletedGigCard(
     var rating: Float = 0.0F,
     var amount: Double = 0.0,
     var title: String = "",
-    var isFullDay: Boolean = false
+    var isFullDay: Boolean = false,
+    var gigId: String = ""
 ): MaterialCardView(context) {
     //constructor(context: Context): super(context)
     //constructor(context: Context, attrs: AttributeSet): super(context, attrs)
@@ -83,5 +87,11 @@ class CompletedGigCard(
     fun setFullDay() {
             gig_timing.text = ""
             cardHeight = 70.px
+
+        this.setOnClickListener {
+            findNavController().navigate(R.id.presentGigPageFragment, Bundle().apply {
+                this.putString(GigPageFragment.INTENT_EXTRA_GIG_ID, gigId)
+            })
         }
+    }
 }
