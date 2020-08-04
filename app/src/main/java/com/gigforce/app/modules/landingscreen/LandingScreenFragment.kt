@@ -287,7 +287,7 @@ class LandingScreenFragment : BaseFragment() {
 
     }
 
-    private val SPLASH_TIME_OUT: Long = 5000 // 5 sec
+    private val SPLASH_TIME_OUT: Long = 10_000 // 10 sec
     var forward = true
     private fun initializeGigforceTip() {
         // model will change when integrated with DB
