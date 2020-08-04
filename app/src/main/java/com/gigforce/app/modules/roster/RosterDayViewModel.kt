@@ -3,6 +3,7 @@ package com.gigforce.app.modules.roster
 import android.app.Dialog
 import android.content.Context
 import android.os.Build
+import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.view.Window
@@ -19,6 +20,7 @@ import com.gigforce.app.core.toDate
 import com.gigforce.app.modules.calendarscreen.maincalendarscreen.verticalcalendar.MainHomeCompleteGigModel
 import com.gigforce.app.modules.custom_gig_preferences.CustomPreferencesViewModel
 import com.gigforce.app.modules.custom_gig_preferences.UnavailableDataModel
+import com.gigforce.app.modules.gigPage.GigPageFragment
 import com.gigforce.app.modules.preferences.PreferencesRepository
 import com.gigforce.app.modules.preferences.prefdatamodel.PreferencesDataModel
 import com.gigforce.app.modules.gigPage.models.Gig
@@ -461,7 +463,8 @@ class RosterDayViewModel: ViewModel() {
                     amount = it.gigAmount,
                     duration = 0.0F,
                     cardHeight = itemHeight.px,
-                    isFullDay = true
+                    isFullDay = true,
+                    gigId = it.gigId
                 )
                 topBar.fullDayGigCard = widget
             } else if (it.isPresentGig()) {
@@ -473,7 +476,8 @@ class RosterDayViewModel: ViewModel() {
                     startMinute = it.startMinute,
                     duration = 0.0F,
                     cardHeight = itemHeight.px,
-                    isFullDay = true
+                    isFullDay = true,
+                    gigId = it.gigId
                 )
                 topBar.fullDayGigCard = widget
             } else if (it.isUpcomingGig()) {
@@ -484,7 +488,8 @@ class RosterDayViewModel: ViewModel() {
                     startMinute = it.startMinute,
                     duration = 0.0F,
                     cardHeight = itemHeight.px,
-                    isFullDay = true
+                    isFullDay = true,
+                    gigId = it.gigId
                 )
                 topBar.fullDayGigCard = widget
             } else {
