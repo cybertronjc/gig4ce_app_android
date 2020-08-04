@@ -21,8 +21,9 @@ class UpcomingGigCard(
     init {
         View.inflate(context, R.layout.upcoming_gig_card, this)
         setCardHeight()
-        setTimings()
         setTitle()
+        if (duration != 0.0F)
+            setTimings()
         if (isFullDay) setFullDay()
     }
 

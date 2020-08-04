@@ -47,6 +47,8 @@ class RosterDayViewModel: ViewModel() {
     private var userPref: MutableLiveData<PreferencesDataModel> = MutableLiveData<PreferencesDataModel>()
     var preferencesRepository = PreferencesRepository()
 
+    lateinit var dayContext: Context
+
     var userGigs = HashMap<String, ArrayList<Gig>>()
 
     var isLoadedFirstTime = true
@@ -55,8 +57,8 @@ class RosterDayViewModel: ViewModel() {
     lateinit var nestedScrollView: NestedScrollView
 
     //lateinit var bsBehavior: BottomSheetBehavior<View>
-    lateinit var bsBehavior: ExtendedBottomSheetBehavior<View>
-    lateinit var UnavailableBS: View
+//    lateinit var bsBehavior: ExtendedBottomSheetBehavior<View>
+//    lateinit var UnavailableBS: View
 
     lateinit var topBar: RosterTopBar
 
@@ -72,33 +74,64 @@ class RosterDayViewModel: ViewModel() {
         val uid = FirebaseAuth.getInstance().currentUser?.uid
         val collection = "Gigs"
 
-        val c = Calendar.getInstance()
-        c.time = datetime
-        c.add(Calendar.DAY_OF_MONTH, 1)
+        // we get the given date at 00:00 hours
+        // get the next date at 00:00 hours
+        // fetch all gigs for user between these date
+        var cal = Calendar.getInstance()
+        cal.time = datetime
+        cal.set(Calendar.HOUR_OF_DAY, 0)
+        cal.set(Calendar.MINUTE, 0)
+        cal.set(Calendar.SECOND, 0)
+        cal.set(Calendar.MILLISECOND, 0)
+
+        var startDate = cal.time
+
+        cal.add(Calendar.DAY_OF_MONTH, 1)
+
+        var endDate = cal.time
 
         db.collection(collection)
             .whereEqualTo("gigerId", uid)
-            .whereGreaterThanOrEqualTo("startDateTime", datetime)
-            .whereLessThanOrEqualTo("startDateTime", c.time )
+            .whereGreaterThanOrEqualTo("startDateTime", startDate)
+            .whereLessThanOrEqualTo("startDateTime", endDate )
             .addSnapshotListener { querySnapshot, firebaseFirestoreException ->
                 val tag = getTagFromDate(datetime)
+                var added = ArrayList<Gig>()
+                var removed = ArrayList<Gig>()
+                var modified = ArrayList<Gig>()
+
                 querySnapshot?.documentChanges?.forEach {
                     when (it.type) {
                         DocumentChange.Type.ADDED -> {
                             val gig = it.document.toObject(Gig::class.java)
-                            allGigs[tag]!!.value!!.add(gig)
-                            allGigs[tag]!!.value = allGigs[tag]!!.value
+                            added.add(gig)
+//                            allGigs[tag]!!.value!!.add(gig)
+//                            allGigs[tag]!!.value = allGigs[tag]!!.value
                         }
                         DocumentChange.Type.REMOVED -> {
                             val gig = it.document.toObject(Gig::class.java)
-                            allGigs[tag]!!.value!!.remove(gig)
-                            allGigs[tag]!!.value = allGigs[tag]!!.value
+                            removed.add(gig)
+//                            allGigs[tag]!!.value!!.remove(gig)
+//                            allGigs[tag]!!.value = allGigs[tag]!!.value
                         }
                         DocumentChange.Type.MODIFIED -> {
-                            // TODO: See if needed to implement
+                            val gig = it.document.toObject(Gig::class.java)
+                            modified.add(gig)
                         }
                     }
                 }
+                allGigs[tag]!!.value!!.addAll(added)
+                allGigs[tag]!!.value!!.removeAll(removed)
+
+                var modifiedKeys = ArrayList<String>()
+                modified.forEach {
+                    modifiedKeys.add(it.gigId) }
+                allGigs[tag]!!.value!!.removeIf {
+                    modifiedKeys.contains(it.gigId) }
+                allGigs[tag]!!.value!!.addAll(modified)
+
+                allGigs[tag]!!.value = allGigs[tag]!!.value
+
             }
     }
 
@@ -410,7 +443,7 @@ class RosterDayViewModel: ViewModel() {
     }
 
 
-    fun setFullDayGigs(context: Context) {
+    fun setFullDayGigs(context: Context? = null) {
         val currentDate = currentDateTime.value!!
         val fullDayGig = getFilteredGigs(currentDate.toDate, "fullday")
 
@@ -419,17 +452,40 @@ class RosterDayViewModel: ViewModel() {
 
         fullDayGig.forEach {
             if(it.isPastGig()) {
-                val widget = CompletedGigCard(context)
-                widget.isFullDay = true
+                val widget = CompletedGigCard(
+                    topBar.context,
+                    title = it.title,
+                    gigSuccess = it.isGigCompleted,
+                    paymentSuccess = it.isPaymentDone,
+                    rating = it.gigRating,
+                    amount = it.gigAmount,
+                    duration = 0.0F,
+                    cardHeight = itemHeight.px,
+                    isFullDay = true
+                )
                 topBar.fullDayGigCard = widget
             } else if (it.isPresentGig()) {
                 // TODO: Implement current day gig card
-                val widget = CurrentGigCard(context)
-                widget.isFullDay = true
+                val widget = CurrentGigCard(
+                    topBar.context,
+                    title = it.title,
+                    startHour = it.startHour,
+                    startMinute = it.startMinute,
+                    duration = 0.0F,
+                    cardHeight = itemHeight.px,
+                    isFullDay = true
+                )
                 topBar.fullDayGigCard = widget
             } else if (it.isUpcomingGig()) {
-                val widget = UpcomingGigCard(context)
-                widget.isFullDay = true
+                val widget = UpcomingGigCard(
+                    topBar.context,
+                    title = it.title,
+                    startHour = it.startHour,
+                    startMinute = it.startMinute,
+                    duration = 0.0F,
+                    cardHeight = itemHeight.px,
+                    isFullDay = true
+                )
                 topBar.fullDayGigCard = widget
             } else {
                 // TODO: Raise Error

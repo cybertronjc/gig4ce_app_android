@@ -18,24 +18,27 @@ class CompletedGigCard(
     var cardHeight: Int = 0,
     var rating: Float = 0.0F,
     var amount: Double = 0.0,
-    var title: String = ""
+    var title: String = "",
+    var isFullDay: Boolean = false
 ): MaterialCardView(context) {
     //constructor(context: Context): super(context)
     //constructor(context: Context, attrs: AttributeSet): super(context, attrs)
 
     init {
         View.inflate(context, R.layout.completed_gig_card, this)
-        if (gigSuccess) setGigSuccess()
-        if (paymentSuccess) setPaymentSuccess()
+        setGigSuccess()
+        setPaymentSuccess()
         setHeightCard(cardHeight)
         setGigRating(rating)
         setGigAmount(amount)
         gig_title.text = title
-        setTimings()
+        if (duration != 0.0F)
+            setTimings()
+
+        if (isFullDay) setFullDay()
     }
 
     fun setGigSuccess() {
-        gigSuccess = true
         if (gigSuccess) {
             gig_success_icon.setImageResource(R.drawable.ic_gig_success_icon)
         } else {
@@ -44,7 +47,6 @@ class CompletedGigCard(
     }
 
     fun setPaymentSuccess() {
-        paymentSuccess = true
         if (paymentSuccess) {
             rupee_icon.setImageResource(R.drawable.ic_payment_success)
         } else {
@@ -78,9 +80,7 @@ class CompletedGigCard(
                         "-" + String.format("%02d", endHour) + ":" + String.format("%02d", endMinute))
     }
 
-    var isFullDay: Boolean = false
-        set(value) {
-            field = value
+    fun setFullDay() {
             gig_timing.text = ""
             cardHeight = 70.px
         }
