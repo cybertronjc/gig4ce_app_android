@@ -149,8 +149,8 @@
                 android:id="@+id/presentOrFutureGigControls"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
                 android:paddingBottom="10dp"
+                android:visibility="gone"
                 app:layout_constraintTop_toBottomOf="@id/separator30">
 
 
@@ -268,9 +268,9 @@
                     android:layout_marginStart="17dp"
                     android:layout_marginTop="14dp"
                     android:layout_marginEnd="17dp"
+                    android:fontFamily="@font/lato_bold"
                     android:letterSpacing="0"
                     android:text="Note : "
-                    android:fontFamily="@font/lato_bold"
                     android:textColor="#d9000000"
                     android:textSize="12sp"
                     app:layout_constraintStart_toStartOf="parent"
@@ -291,12 +291,13 @@
                     tools:text="Note :We are fetching your location to mark attendance. " />
 
                 <com.google.android.material.button.MaterialButton
+                    android:id="@+id/bt_download_id_gig_page"
                     style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
-                    android:layout_marginEnd="16dp"
                     android:layout_marginTop="14dp"
+                    android:layout_marginEnd="16dp"
                     android:text="Download ID"
                     app:layout_constraintTop_toBottomOf="@id/presentFutureGigNoteTV"
                     app:strokeColor="@color/lipstick" />
@@ -586,9 +587,9 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="19dp"
                         android:layout_marginTop="12dp"
-                        android:visibility="visible"
                         android:progressTint="#ffc107"
                         android:secondaryProgressTint="@android:color/transparent"
+                        android:visibility="visible"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/whatsYourRateTv" />
 
@@ -600,10 +601,10 @@
                         android:layout_marginStart="23dp"
                         android:layout_marginTop="12dp"
                         android:layout_marginEnd="16dp"
+                        android:fontFamily="@font/lato_italic"
                         android:letterSpacing="0"
                         android:textColor="@color/warm_grey"
                         android:textSize="14sp"
-                        android:fontFamily="@font/lato_italic"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/userFeedbackRatingBar"
                         tools:text="“Nunc justo eros, vehicula vel vehicula ut, lacinia a erat.Nam fringilla ero “" />
@@ -612,11 +613,11 @@
                         android:id="@+id/userFeedbackAttachmentsContainer"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:layout_marginTop="5dp"
                         android:layout_marginStart="19dp"
+                        android:layout_marginTop="5dp"
                         android:layout_marginEnd="19dp"
-                        app:layout_constraintTop_toBottomOf="@id/usersFeedbackTV"/>
+                        android:orientation="vertical"
+                        app:layout_constraintTop_toBottomOf="@id/usersFeedbackTV" />
 
 
                     <View
@@ -651,9 +652,9 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="19dp"
                         android:layout_marginTop="12dp"
+                        android:progressTint="#ffc107"
                         android:secondaryProgressTint="@android:color/transparent"
                         android:visibility="visible"
-                        android:progressTint="#ffc107"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/userReceivedRateTv" />
 
@@ -665,10 +666,10 @@
                         android:layout_marginStart="19dp"
                         android:layout_marginTop="12dp"
                         android:layout_marginEnd="16dp"
+                        android:fontFamily="@font/lato_italic"
                         android:letterSpacing="0"
                         android:textColor="@color/warm_grey"
                         android:textSize="14sp"
-                        android:fontFamily="@font/lato_italic"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/userReceivedRatingBar"
                         tools:text="“Nunc justo eros, vehicula vel vehicula ut, lacinia a erat.Nam fringilla ero “" />
@@ -678,9 +679,9 @@
                         android:id="@+id/userReceivedRatingAttachmentsContainer"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
                         android:layout_marginTop="5dp"
-                        app:layout_constraintTop_toBottomOf="@id/userReceivedRatingFeedbackTV"/>
+                        android:orientation="vertical"
+                        app:layout_constraintTop_toBottomOf="@id/userReceivedRatingFeedbackTV" />
 
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -789,7 +790,6 @@
                         android:src="@drawable/ic_chat" />
 
                 </androidx.cardview.widget.CardView>
-
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -1250,7 +1250,6 @@
                     android:background="@color/shadow_color"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/provide_feedback" />
-
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>

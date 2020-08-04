@@ -1,4 +1,4 @@
-package com.gigforce.app.modules.earn
+package com.gigforce.app.modules.earn.gighistory
 
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable

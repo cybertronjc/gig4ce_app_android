@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".modules.earn.GigHistoryFragment">
+    tools:context=".modules.earn.gighistory.GigHistoryFragment">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/tb_gig_history"

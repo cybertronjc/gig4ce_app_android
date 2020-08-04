@@ -1,4 +1,4 @@
-package com.gigforce.app.modules.earn
+package com.gigforce.app.modules.earn.gighistory
 
 import com.gigforce.app.core.base.basefirestore.BaseFirestoreDBRepository
 import com.gigforce.app.utils.getEndOfDay
@@ -21,9 +21,9 @@ class GigHistoryRepository : BaseFirestoreDBRepository(), DataCallbacks {
 
 
     override fun getPastGigs(
-        responseCallbacks: DataCallbacks.ResponseCallbacks,
-        lastVisible: DocumentSnapshot?,
-        limit: Long
+            responseCallbacks: DataCallbacks.ResponseCallbacks,
+            lastVisible: DocumentSnapshot?,
+            limit: Long
     ) {
         val gigQuery =
             if (lastVisible != null) getCollectionReference().whereEqualTo("gigerId", getUID())
@@ -42,9 +42,9 @@ class GigHistoryRepository : BaseFirestoreDBRepository(), DataCallbacks {
 
 
     override fun getUpComingGigs(
-        responseCallbacks: DataCallbacks.ResponseCallbacks,
-        lastVisible: DocumentSnapshot?,
-        limit: Long
+            responseCallbacks: DataCallbacks.ResponseCallbacks,
+            lastVisible: DocumentSnapshot?,
+            limit: Long
     ) {
         val gigQuery =
             if (lastVisible != null) getCollectionReference().whereEqualTo("gigerId", getUID())
@@ -71,7 +71,8 @@ class GigHistoryRepository : BaseFirestoreDBRepository(), DataCallbacks {
     }
 
 
-    override fun getCollectionName() = COLLECTION_NAME
+    override fun getCollectionName() =
+        COLLECTION_NAME
 
     companion object {
         private const val COLLECTION_NAME = "Gigs"

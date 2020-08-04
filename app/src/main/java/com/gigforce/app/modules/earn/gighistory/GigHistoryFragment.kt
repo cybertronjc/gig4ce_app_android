@@ -1,4 +1,4 @@
-package com.gigforce.app.modules.earn
+package com.gigforce.app.modules.earn.gighistory
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -30,7 +30,7 @@ import kotlinx.android.synthetic.main.fragment_gig_history.*
  * create an instance of this fragment.
  */
 class GigHistoryFragment : BaseFragment(), AdapterGigHistory.AdapterGigHistoryCallbacks,
-    NoGigsDialog.NoGigsDialogCallbacks {
+        NoGigsDialog.NoGigsDialogCallbacks {
     private val viewModelFactory by lazy {
         ViewModelProviderFactory(GigHistoryViewModel(GigHistoryRepository()))
     }
@@ -133,7 +133,7 @@ class GigHistoryFragment : BaseFragment(), AdapterGigHistory.AdapterGigHistoryCa
     companion object {
         @JvmStatic
         fun newInstance() =
-            GigHistoryFragment()
+                GigHistoryFragment()
     }
 
     override fun showNoGigExists(int: Int) {

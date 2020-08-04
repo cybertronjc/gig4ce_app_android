@@ -1,4 +1,4 @@
-package com.gigforce.app.modules.earn
+package com.gigforce.app.modules.earn.gighistory
 
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestoreException
@@ -8,15 +8,15 @@ interface DataCallbacks {
     fun getOnGoingGigs(responseCallbacks: ResponseCallbacks)
 
     fun getPastGigs(
-        responseCallbacks: ResponseCallbacks,
-        query: DocumentSnapshot?,
-        limit: Long
+            responseCallbacks: ResponseCallbacks,
+            query: DocumentSnapshot?,
+            limit: Long
     )
 
     fun getUpComingGigs(
-        responseCallbacks: ResponseCallbacks,
-        lastVisible: DocumentSnapshot?,
-        limit: Long
+            responseCallbacks: ResponseCallbacks,
+            lastVisible: DocumentSnapshot?,
+            limit: Long
     )
 
     fun checkGigsCount(responseCallbacks: ResponseCallbacks)

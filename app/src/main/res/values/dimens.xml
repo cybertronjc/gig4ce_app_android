@@ -77,4 +77,9 @@
     <dimen name="size_45">45dp</dimen>
     <dimen name="font_12">12sp</dimen>
     <dimen name="size_35">35dp</dimen>
+    <dimen name="size_21">21dp</dimen>
+    <dimen name="size_20">20dp</dimen>
+    <dimen name="size_104">104dp</dimen>
+    <dimen name="size_37">37dp</dimen>
+    <dimen name="size_22">22sp</dimen>
 </resources>

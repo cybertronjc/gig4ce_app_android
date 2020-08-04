@@ -45,16 +45,6 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.storage.FirebaseStorage
 import com.ncorti.slidetoact.SlideToActView
 import kotlinx.android.synthetic.main.fragment_gig_page_present.*
-import kotlinx.android.synthetic.main.fragment_gig_page_present.addressTV
-import kotlinx.android.synthetic.main.fragment_gig_page_present.companyLogoIV
-import kotlinx.android.synthetic.main.fragment_gig_page_present.companyNameTV
-import kotlinx.android.synthetic.main.fragment_gig_page_present.durationTextTV
-import kotlinx.android.synthetic.main.fragment_gig_page_present.favoriteCB
-import kotlinx.android.synthetic.main.fragment_gig_page_present.gigIdTV
-import kotlinx.android.synthetic.main.fragment_gig_page_present.gigTypeTV
-import kotlinx.android.synthetic.main.fragment_gig_page_present.roleNameTV
-import kotlinx.android.synthetic.main.fragment_gig_page_present.shiftTV
-import kotlinx.android.synthetic.main.fragment_gig_page_present.wageTV
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -88,6 +78,14 @@ class GigPageFragment : BaseFragment() {
         getData(arguments, savedInstanceState)
         initUi()
         initViewModel()
+        iniClicks();
+    }
+
+    private fun iniClicks() {
+
+        bt_download_id_gig_page.setOnClickListener {
+            navigate(R.id.giger_id_fragment)
+        }
     }
 
     private fun getData(arguments: Bundle?, savedInstanceState: Bundle?) {
@@ -230,7 +228,7 @@ class GigPageFragment : BaseFragment() {
             if (data != null)
                 selfieImg = data.getStringExtra("image_name")
             checkAndUpdateAttendance()
-        }else{
+        } else {
             showToast("Error in uploading - Try again")
         }
     }
@@ -361,9 +359,9 @@ class GigPageFragment : BaseFragment() {
         if (gig.endDateTime != null) {
             durationTextTV.text =
                 "${dateFormatter.format(gig.startDateTime!!.toDate())} - ${dateFormatter.format(gig.endDateTime!!.toDate())}"
-            shiftTV.text = "${timeFormatter.format(gig.startDateTime!!.toDate())} - ${timeFormatter.format(gig.endDateTime!!.toDate())}"
-        }
-        else {
+            shiftTV.text =
+                "${timeFormatter.format(gig.startDateTime!!.toDate())} - ${timeFormatter.format(gig.endDateTime!!.toDate())}"
+        } else {
             durationTextTV.text = "${dateFormatter.format(gig.startDateTime!!.toDate())} - "
             shiftTV.text = "${timeFormatter.format(gig.startDateTime!!.toDate())} - "
         }
@@ -608,7 +606,6 @@ class GigPageFragment : BaseFragment() {
             userFeedbackAttachmentsContainer.gone()
         }
     }
-
 
 
     private fun showNotActivatedGigDetails(gig: Gig) {

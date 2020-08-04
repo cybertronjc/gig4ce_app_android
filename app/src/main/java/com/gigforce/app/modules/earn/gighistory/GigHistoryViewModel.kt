@@ -1,9 +1,9 @@
-package com.gigforce.app.modules.earn
+package com.gigforce.app.modules.earn.gighistory
 
 import android.view.View
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.gigforce.app.modules.earn.models.GigsResponse
+import com.gigforce.app.modules.earn.gighistory.models.GigsResponse
 import com.gigforce.app.modules.gigPage.models.Gig
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestoreException
