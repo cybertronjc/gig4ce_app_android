@@ -51,7 +51,7 @@ class GigHistoryViewModel(private val repositoryCallbacks: DataCallbacks) :
         observableOnGoingGigs.value = if (querySnapshot != null) GigsResponse(
             true,
             "On Going Gigs Loaded Successfully",
-            querySnapshot.toObjects(Gig::class.java)
+            getGigsWithId(querySnapshot)
         ) else
             GigsResponse(false, error?.message!!)
     }
@@ -67,7 +67,7 @@ class GigHistoryViewModel(private val repositoryCallbacks: DataCallbacks) :
             observableScheduledGigs.value = GigsResponse(
                 true,
                 "Past Gigs Loaded Successfully",
-                querySnapshot.toObjects(Gig::class.java)
+                getGigsWithId(querySnapshot)
             )
         } else
             observableScheduledGigs.value = GigsResponse(false, error?.message!!)
@@ -85,7 +85,7 @@ class GigHistoryViewModel(private val repositoryCallbacks: DataCallbacks) :
             observableScheduledGigs.value = GigsResponse(
                 true,
                 "Upcoming Gigs Loaded Successfully",
-                querySnapshot.toObjects(Gig::class.java)
+                getGigsWithId(querySnapshot)
             )
         } else
             observableScheduledGigs.value = GigsResponse(false, error?.message!!)
@@ -121,6 +121,17 @@ class GigHistoryViewModel(private val repositoryCallbacks: DataCallbacks) :
 
     fun showProgress(show: Boolean) {
         observerShowProgress.value = if (show) View.VISIBLE else View.GONE
+    }
+
+    private fun getGigsWithId(querySnapshot: QuerySnapshot): List<Gig> {
+        val userGigs: MutableList<Gig> = mutableListOf()
+        querySnapshot.documents.forEach { t ->
+            t.toObject(Gig::class.java)?.let {
+                it.gigId = t.id
+                userGigs.add(it)
+            }
+        }
+        return userGigs
     }
 
 
