@@ -98,9 +98,9 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <include
-        android:id="@+id/mark_unavailable_bs"
-        layout="@layout/unavailable_time_adjustment_bottom_sheet" />
+<!--    <include-->
+<!--        android:id="@+id/mark_unavailable_bs"-->
+<!--        layout="@layout/unavailable_time_adjustment_bottom_sheet" />-->
 
 
 </com.google.android.material.circularreveal.coordinatorlayout.CircularRevealCoordinatorLayout>

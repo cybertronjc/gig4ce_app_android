@@ -20,7 +20,8 @@ class CurrentGigCard(
     init {
         View.inflate(context, R.layout.current_gig_card, this)
         setCardHeight()
-        setTimings()
+        if (duration != 0.0F)
+            setTimings()
         setTitle()
         if (isFullDay) setFullDay()
     }

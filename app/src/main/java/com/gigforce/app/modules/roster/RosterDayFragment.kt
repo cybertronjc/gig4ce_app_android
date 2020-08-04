@@ -118,8 +118,10 @@ class RosterDayFragment : RosterBaseFragment() {
         calendar.set(Calendar.MONTH, activeDateTime.monthValue - 1)
         calendar.set(Calendar.YEAR, activeDateTime.year)
         initializeMonthTV(calendar, false)
-        arrCalendarDependent =
-            arrayOf(calendar_top_cl, mark_unavailable_bs)
+
+        rosterViewModel.dayContext = requireContext()
+//        arrCalendarDependent =
+//            arrayOf(calendar_top_cl, mark_unavailable_bs)
 
 
         rosterViewModel.topBar = top_bar
@@ -136,7 +138,7 @@ class RosterDayFragment : RosterBaseFragment() {
 //        rosterViewModel.getGigs(activeDateTime.toDate)
 
         //observer()
-        initializeBottomSheet()
+        //initializeBottomSheet()
         attachHourViewAdapter()
         attachDayAvailabilityObserver()
         attachCurrentDateTimeChangeObserver()
@@ -158,7 +160,17 @@ class RosterDayFragment : RosterBaseFragment() {
             }
 
             rosterViewModel.scrollToPosition(it.toDate)
+
+            rosterViewModel.setFullDayGigs()
         })
+
+//        dayTag = String.format("%4d", activeDateTime.year) +
+//                String.format("%02d", activeDateTime.monthValue) +
+//                String.format("%02d", activeDateTime.dayOfMonth)
+//
+//        rosterViewModel.allGigs[dayTag]?.observe(viewLifecycleOwner, Observer {
+//            rosterViewModel.setFullDayGigs(requireContext())
+//        })
 
         viewModelCustomPreference.customPreferencesLiveDataModel.observe(
             viewLifecycleOwner, Observer {
@@ -366,48 +378,48 @@ class RosterDayFragment : RosterBaseFragment() {
         hourview_viewpager.setCurrentItem(lastViewPosition, false)
     }
 
-    private fun initializeBottomSheet() {
-        rosterViewModel.bsBehavior = ExtendedBottomSheetBehavior.from(mark_unavailable_bs)
-        rosterViewModel.UnavailableBS = mark_unavailable_bs
-
-        rosterViewModel.bsBehavior.isHideable = true
-        rosterViewModel.bsBehavior.state = ExtendedBottomSheetBehavior.STATE_HIDDEN
-
-        rosterViewModel.bsBehavior.setBottomSheetCallback(object :
-            ExtendedBottomSheetBehavior.BottomSheetCallback() {
-            override fun onSlide(bottomSheet: View, slideOffset: Float) {
-                //TODO("Not yet implemented")
-            }
-
-            override fun onStateChanged(bottomSheet: View, newState: Int) {
-                when (newState) {
-                    ExtendedBottomSheetBehavior.STATE_COLLAPSED -> {
-                        //showToast("Collapsed State")
-                        time_expanded.visibility = View.GONE
-                        time_collapsed.visibility = View.VISIBLE
-                        //rosterViewModel.bsBehavior.state = ExtendedBottomSheetBehavior.STATE_COLLAPSED
-                    }
-                    ExtendedBottomSheetBehavior.STATE_EXPANDED -> {
-                        //showToast("expanded state")
-                        time_collapsed.visibility = View.GONE
-                        time_expanded.visibility = View.VISIBLE
-                    }
-                    ExtendedBottomSheetBehavior.STATE_HALF -> {
-                        time_collapsed.visibility = View.GONE
-                        time_expanded.visibility = View.VISIBLE
-                    }
-                    //BottomSheetBehavior.STATE_ANCHOR_POINT -> Log.d("BS", "Anchor Point State")
-                    ExtendedBottomSheetBehavior.STATE_HIDDEN -> Log.d("BS", "Hidden State")
-                    ExtendedBottomSheetBehavior.STATE_DRAGGING -> Log.d("BS", "Dragging State")
-                    ExtendedBottomSheetBehavior.STATE_SETTLING -> {
-                        Log.d("BS", "Settling State")
-                    }
-                }
-            }
-
-        })
-    }
-
+//    private fun initializeBottomSheet() {
+//        rosterViewModel.bsBehavior = ExtendedBottomSheetBehavior.from(mark_unavailable_bs)
+//        rosterViewModel.UnavailableBS = mark_unavailable_bs
+//
+//        rosterViewModel.bsBehavior.isHideable = true
+//        rosterViewModel.bsBehavior.state = ExtendedBottomSheetBehavior.STATE_HIDDEN
+//
+//        rosterViewModel.bsBehavior.setBottomSheetCallback(object :
+//            ExtendedBottomSheetBehavior.BottomSheetCallback() {
+//            override fun onSlide(bottomSheet: View, slideOffset: Float) {
+//                //TODO("Not yet implemented")
+//            }
+//
+//            override fun onStateChanged(bottomSheet: View, newState: Int) {
+//                when (newState) {
+//                    ExtendedBottomSheetBehavior.STATE_COLLAPSED -> {
+//                        //showToast("Collapsed State")
+//                        time_expanded.visibility = View.GONE
+//                        time_collapsed.visibility = View.VISIBLE
+//                        //rosterViewModel.bsBehavior.state = ExtendedBottomSheetBehavior.STATE_COLLAPSED
+//                    }
+//                    ExtendedBottomSheetBehavior.STATE_EXPANDED -> {
+//                        //showToast("expanded state")
+//                        time_collapsed.visibility = View.GONE
+//                        time_expanded.visibility = View.VISIBLE
+//                    }
+//                    ExtendedBottomSheetBehavior.STATE_HALF -> {
+//                        time_collapsed.visibility = View.GONE
+//                        time_expanded.visibility = View.VISIBLE
+//                    }
+//                    //BottomSheetBehavior.STATE_ANCHOR_POINT -> Log.d("BS", "Anchor Point State")
+//                    ExtendedBottomSheetBehavior.STATE_HIDDEN -> Log.d("BS", "Hidden State")
+//                    ExtendedBottomSheetBehavior.STATE_DRAGGING -> Log.d("BS", "Dragging State")
+//                    ExtendedBottomSheetBehavior.STATE_SETTLING -> {
+//                        Log.d("BS", "Settling State")
+//                    }
+//                }
+//            }
+//
+//        })
+//    }
+//
 
 //    private fun addUnAvailableCard(startHour: Int, duration: Float) {
 //        // Sample attachment of unavailable card
