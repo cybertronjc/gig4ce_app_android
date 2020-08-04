@@ -1,8 +1,11 @@
 package com.gigforce.app.modules.roster
 
 import android.content.Context
+import android.os.Bundle
 import android.view.View
+import androidx.navigation.findNavController
 import com.gigforce.app.R
+import com.gigforce.app.modules.gigPage.GigAttendancePageFragment
 import com.google.android.material.card.MaterialCardView
 import kotlinx.android.synthetic.main.upcoming_gig_card.view.*
 
@@ -15,7 +18,8 @@ class CurrentGigCard(
     var duration: Float = 0.0F,
     var title: String = "",
     var cardHeight: Int = 0,
-    var isFullDay: Boolean = false
+    var isFullDay: Boolean = false,
+    var gigId: String = ""
 ): MaterialCardView(context) {
     init {
         View.inflate(context, R.layout.current_gig_card, this)
@@ -46,5 +50,11 @@ class CurrentGigCard(
     fun setFullDay() {
         gig_timing.text = ""
         cardHeight = 40.px
+
+        this.setOnClickListener {
+            findNavController().navigate(R.id.gigAttendancePageFragment, Bundle().apply {
+                this.putString(GigAttendancePageFragment.INTENT_EXTRA_GIG_ID, gigId)
+            })
+        }
     }
 }
