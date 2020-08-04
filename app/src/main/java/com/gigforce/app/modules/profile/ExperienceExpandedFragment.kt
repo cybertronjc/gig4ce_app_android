@@ -8,6 +8,8 @@ import androidx.activity.addCallback
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
+import com.gigforce.app.modules.landingscreen.LandingPageConstants
+import com.gigforce.app.modules.landingscreen.LandingPageConstants.INTENT_EXTRA_CAME_FROM_LANDING_SCREEN
 import kotlinx.android.synthetic.main.fragment_profile_experience_expanded.*
 import kotlinx.android.synthetic.main.fragment_profile_experience_expanded.view.*
 import kotlinx.android.synthetic.main.profile_card_background.view.*
@@ -18,6 +20,8 @@ class ExperienceExpandedFragment: ProfileBaseFragment() {
 
     companion object {
         fun newInstance() = ExperienceExpandedFragment()
+
+        const val ACTION_OPEN_EDIT_EXPERIENCE_BOTTOM_SHEET = 21
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,15 +32,36 @@ class ExperienceExpandedFragment: ProfileBaseFragment() {
 //        }
     }
 
+    private var cameFromLandingPage = false
+    private var action : Int  = -1
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+        arguments?.let {
+            cameFromLandingPage = it.getBoolean(INTENT_EXTRA_CAME_FROM_LANDING_SCREEN)
+            action = it.getInt(LandingPageConstants.INTENT_EXTRA_ACTION)
+        }
+
+        savedInstanceState?.let {
+            cameFromLandingPage = it.getBoolean(INTENT_EXTRA_CAME_FROM_LANDING_SCREEN)
+            action = it.getInt(LandingPageConstants.INTENT_EXTRA_ACTION)
+        }
+
         var view = inflateView(R.layout.fragment_profile_experience_expanded, inflater, container)
         view?.nav_bar?.experience_active = true
         return view
     }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean(INTENT_EXTRA_CAME_FROM_LANDING_SCREEN, cameFromLandingPage)
+        outState.putInt(LandingPageConstants.INTENT_EXTRA_ACTION, action)
+    }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -68,6 +93,15 @@ class ExperienceExpandedFragment: ProfileBaseFragment() {
             experience_top_profile.imageName = profile.profileAvatarName
             experience_top_profile.userName = profile.name
         })
+
+        if(cameFromLandingPage)
+            profileViewModel.getProfileData()
+
+        when (action) {
+            ACTION_OPEN_EDIT_EXPERIENCE_BOTTOM_SHEET -> {
+                this.findNavController().navigate(R.id.addExperienceBottomSheet)
+            }
+        }
     }
 
     private fun setListeners() {

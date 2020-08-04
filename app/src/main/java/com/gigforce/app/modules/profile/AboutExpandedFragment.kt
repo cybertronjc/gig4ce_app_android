@@ -12,6 +12,8 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.afollestad.materialdialogs.MaterialDialog
 import com.gigforce.app.R
+import com.gigforce.app.modules.landingscreen.LandingPageConstants.INTENT_EXTRA_ACTION
+import com.gigforce.app.modules.landingscreen.LandingPageConstants.INTENT_EXTRA_CAME_FROM_LANDING_SCREEN
 import kotlinx.android.synthetic.main.card_row.view.*
 import kotlinx.android.synthetic.main.contact_edit_warning_dialog.*
 import kotlinx.android.synthetic.main.delete_confirmation_dialog.*
@@ -23,6 +25,9 @@ import kotlinx.android.synthetic.main.profile_card_background.view.*
 class AboutExpandedFragment: ProfileBaseFragment() {
     companion object {
         fun newInstance() = AboutExpandedFragment()
+
+        const val ACTION_OPEN_EDIT_ABOUT_ME_BOTTOM_SHEET = 31
+        const val ACTION_OPEN_EDIT_LANGUAGE_BOTTOM_SHEET = 32
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,14 +38,33 @@ class AboutExpandedFragment: ProfileBaseFragment() {
 //        }
     }
 
+    private var cameFromLandingPage = false
+    private var action : Int  = -1
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        arguments?.let {
+            cameFromLandingPage = it.getBoolean(INTENT_EXTRA_CAME_FROM_LANDING_SCREEN)
+            action = it.getInt(INTENT_EXTRA_ACTION)
+        }
+
+        savedInstanceState?.let {
+            cameFromLandingPage = it.getBoolean(INTENT_EXTRA_CAME_FROM_LANDING_SCREEN)
+            action = it.getInt(INTENT_EXTRA_ACTION)
+        }
+
         var view = inflateView(R.layout.fragment_profile_about_expanded, inflater, container)
         view?.nav_bar?.about_me_active = true
         return view
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean(INTENT_EXTRA_CAME_FROM_LANDING_SCREEN, cameFromLandingPage)
+        outState.putInt(INTENT_EXTRA_ACTION, action)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -95,6 +119,18 @@ class AboutExpandedFragment: ProfileBaseFragment() {
             about_top_profile.userName = profile.name
             about_top_profile.imageName = profile.profileAvatarName
         })
+
+        if(cameFromLandingPage)
+            profileViewModel.getProfileData()
+
+        when (action) {
+            ACTION_OPEN_EDIT_ABOUT_ME_BOTTOM_SHEET -> {
+                this.findNavController().navigate(R.id.addAboutMeBottomSheet)
+            }
+            ACTION_OPEN_EDIT_LANGUAGE_BOTTOM_SHEET ->{
+                this.findNavController().navigate(R.id.addLanguageBottomSheetFragment)
+            }
+        }
     }
 
     private fun setListeners() {

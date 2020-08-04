@@ -9,6 +9,8 @@ import androidx.activity.addCallback
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
+import com.gigforce.app.modules.landingscreen.LandingPageConstants
+import com.gigforce.app.modules.landingscreen.LandingPageConstants.INTENT_EXTRA_CAME_FROM_LANDING_SCREEN
 import kotlinx.android.synthetic.main.fragment_profile_education_expanded.*
 import kotlinx.android.synthetic.main.fragment_profile_education_expanded.view.*
 import kotlinx.android.synthetic.main.fragment_profile_education_expanded.view.nav_bar
@@ -19,6 +21,10 @@ class EducationExpandedFragment: ProfileBaseFragment() {
 
     companion object {
         fun newInstance() = EducationExpandedFragment()
+
+        const val ACTION_OPEN_EDIT_EDUCATION_BOTTOM_SHEET = 11
+        const val ACTION_OPEN_EDIT_SKILLS_BOTTOM_SHEET = 12
+        const val ACTION_OPEN_EDIT_ACHIEVEMENTS_BOTTOM_SHEET = 13
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,14 +35,34 @@ class EducationExpandedFragment: ProfileBaseFragment() {
 //        }
     }
 
+    private var cameFromLandingPage = false
+    private var action : Int  = -1
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+        arguments?.let {
+            cameFromLandingPage = it.getBoolean(INTENT_EXTRA_CAME_FROM_LANDING_SCREEN)
+            action = it.getInt(LandingPageConstants.INTENT_EXTRA_ACTION)
+        }
+
+        savedInstanceState?.let {
+            cameFromLandingPage = it.getBoolean(INTENT_EXTRA_CAME_FROM_LANDING_SCREEN)
+            action = it.getInt(LandingPageConstants.INTENT_EXTRA_ACTION)
+        }
+
         Log.d("DEBUG", "ENTERED Profile Education Expanded VIEW")
         var view =inflateView(R.layout.fragment_profile_education_expanded, inflater, container)
         view?.nav_bar?.education_active = true
         return view
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean(INTENT_EXTRA_CAME_FROM_LANDING_SCREEN, cameFromLandingPage)
+        outState.putInt(LandingPageConstants.INTENT_EXTRA_ACTION, action)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -96,6 +122,21 @@ class EducationExpandedFragment: ProfileBaseFragment() {
             education_top_profile.userName = profile.name
             education_top_profile.imageName = profile.profileAvatarName
         })
+
+        if(cameFromLandingPage)
+            profileViewModel.getProfileData()
+
+        when (action) {
+            ACTION_OPEN_EDIT_EDUCATION_BOTTOM_SHEET -> {
+                this.findNavController().navigate(R.id.addEducationBottomSheetFragment)
+            }
+            ACTION_OPEN_EDIT_SKILLS_BOTTOM_SHEET -> {
+                this.findNavController().navigate(R.id.addSkillBottomSheetFragment)
+            }
+            ACTION_OPEN_EDIT_ACHIEVEMENTS_BOTTOM_SHEET -> {
+                this.findNavController().navigate(R.id.addAchievementBottomSheetFragment)
+            }
+        }
 
     }
 
