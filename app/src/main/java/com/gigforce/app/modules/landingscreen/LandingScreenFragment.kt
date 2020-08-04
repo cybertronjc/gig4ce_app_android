@@ -243,7 +243,7 @@ class LandingScreenFragment : BaseFragment() {
                 RecyclerGenericAdapter.ItemInterface<HelpVideo?> { obj, viewHolder, position ->
 
                     var iconIV = getImageView(viewHolder, R.id.help_first_card_img)
-                    Glide.with(requireContext()).load(obj?.getThumbNailUrl()).into(iconIV)
+                    Glide.with(requireContext()).load(obj?.getThumbNailUrl()).placeholder(getCircularProgressDrawable()).into(iconIV)
 
                     var titleTV = getTextView(viewHolder, R.id.titleTV)
                     titleTV.text = obj?.videoTitle
@@ -287,7 +287,7 @@ class LandingScreenFragment : BaseFragment() {
 
     }
 
-    private val SPLASH_TIME_OUT: Long = 2000 // 1 sec
+    private val SPLASH_TIME_OUT: Long = 5000 // 5 sec
     var forward = true
     private fun initializeGigforceTip() {
         // model will change when integrated with DB
