@@ -8,7 +8,7 @@ data class HelpVideo(
 ) {
 
     fun getThumbNailUrl() : String{
-        return "http://i3.ytimg.com/vi/$videoYoutubeId/hqdefault.jpg"
+        return "https://i3.ytimg.com/vi/$videoYoutubeId/hqdefault.jpg"
     }
 
     fun getFullVideoPath () : String{
