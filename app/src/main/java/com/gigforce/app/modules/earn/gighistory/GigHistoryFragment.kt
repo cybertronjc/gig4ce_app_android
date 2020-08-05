@@ -30,7 +30,7 @@ import kotlinx.android.synthetic.main.fragment_gig_history.*
  * create an instance of this fragment.
  */
 class GigHistoryFragment : BaseFragment(), AdapterGigHistory.AdapterGigHistoryCallbacks,
-        NoGigsDialog.NoGigsDialogCallbacks {
+    NoGigsDialog.NoGigsDialogCallbacks {
     private val viewModelFactory by lazy {
         ViewModelProviderFactory(GigHistoryViewModel(GigHistoryRepository()))
     }
@@ -122,6 +122,9 @@ class GigHistoryFragment : BaseFragment(), AdapterGigHistory.AdapterGigHistoryCa
             dialog.setCallbacks(this)
             dialog.show(parentFragmentManager, NoGigsDialog::class.java.name)
         })
+        viewModel.observableError.observe(viewLifecycleOwner, Observer {
+            showToast(it)
+        })
         //TODO : Correct this afterwards
         var viewModelProfile = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
         viewModelProfile.getProfileData().observe(viewLifecycleOwner, Observer { profile ->
@@ -133,7 +136,7 @@ class GigHistoryFragment : BaseFragment(), AdapterGigHistory.AdapterGigHistoryCa
     companion object {
         @JvmStatic
         fun newInstance() =
-                GigHistoryFragment()
+            GigHistoryFragment()
     }
 
     override fun showNoGigExists(int: Int) {

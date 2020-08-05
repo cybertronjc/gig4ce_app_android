@@ -29,10 +29,11 @@ class GigHistoryViewModel(private val repositoryCallbacks: DataCallbacks) :
     private val _observableScheduledGigs: MutableLiveData<GigsResponse> by lazy {
         MutableLiveData<GigsResponse>();
     }
-
     val observableScheduledGigs: MutableLiveData<GigsResponse> get() = _observableScheduledGigs
-
-
+    private val _observableError: MutableLiveData<String> by lazy {
+        MutableLiveData<String>();
+    }
+    val observableError: MutableLiveData<String> get() = _observableError
     private val _observableShowExplore: MutableLiveData<Boolean> by lazy {
         MutableLiveData<Boolean>();
     }
@@ -48,12 +49,14 @@ class GigHistoryViewModel(private val repositoryCallbacks: DataCallbacks) :
         querySnapshot: QuerySnapshot?,
         error: FirebaseFirestoreException?
     ) {
-        observableOnGoingGigs.value = if (querySnapshot != null) GigsResponse(
+        if (querySnapshot != null) observableOnGoingGigs.value = GigsResponse(
             true,
             "On Going Gigs Loaded Successfully",
             getGigsWithId(querySnapshot)
         ) else
-            GigsResponse(false, error?.message!!)
+            error?.message?.let {
+                observableError.value = it
+            }
     }
 
     override fun pastGigsResponse(
@@ -70,7 +73,9 @@ class GigHistoryViewModel(private val repositoryCallbacks: DataCallbacks) :
                 getGigsWithId(querySnapshot)
             )
         } else
-            observableScheduledGigs.value = GigsResponse(false, error?.message!!)
+            error?.message?.let {
+                observableError.value = it
+            }
 
     }
 
@@ -88,15 +93,22 @@ class GigHistoryViewModel(private val repositoryCallbacks: DataCallbacks) :
                 getGigsWithId(querySnapshot)
             )
         } else
-            observableScheduledGigs.value = GigsResponse(false, error?.message!!)
+            error?.message?.let {
+                observableError.value = it
+            }
     }
 
     override fun gigsCountResponse(
         querySnapshot: QuerySnapshot?,
         error: FirebaseFirestoreException?
     ) {
-        if (querySnapshot != null && querySnapshot.isEmpty) {
-            observableShowExplore.value = querySnapshot.isEmpty
+        if (querySnapshot != null) {
+            if (querySnapshot.isEmpty) {
+                observableShowExplore.value = querySnapshot.isEmpty
+            }
+        } else {
+            observableError.value = error?.message
+
         }
     }
 
