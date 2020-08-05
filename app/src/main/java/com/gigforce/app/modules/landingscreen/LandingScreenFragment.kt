@@ -24,7 +24,9 @@ import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.app.core.genericadapter.RecyclerGenericAdapter
+import com.gigforce.app.core.gone
 import com.gigforce.app.core.toBundle
+import com.gigforce.app.core.visible
 import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
 import com.gigforce.app.modules.help.HelpVideo
 import com.gigforce.app.modules.help.HelpViewModel
@@ -227,75 +229,82 @@ class LandingScreenFragment : BaseFragment() {
 
     private fun setTipsOnView(tips: List<Tip>) {
 
+        if(tips.isEmpty()){
+            gigforce_tip.gone()
+        }else {
+            gigforce_tip.visible()
 
-        val recyclerGenericAdapter: RecyclerGenericAdapter<Tip> =
-            RecyclerGenericAdapter<Tip>(
-                activity?.applicationContext,
-                PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
-                    val tip = (item as Tip)
-                    navigate(
-                    resId = tip.whereToRedirect,
-                    args = tip.intentExtraMap.toBundle()
-                    )
-                },
-                RecyclerGenericAdapter.ItemInterface<Tip?> { obj, viewHolder, position ->
-                    var title = getTextView(viewHolder, R.id.gigtip_title)
-                    var subtitle = getTextView(viewHolder, R.id.gigtip_subtitle)
+            val recyclerGenericAdapter: RecyclerGenericAdapter<Tip> =
+                RecyclerGenericAdapter<Tip>(
+                    activity?.applicationContext,
+                    PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
+                        val tip = (item as Tip)
+                        navigate(
+                            resId = tip.whereToRedirect,
+                            args = tip.intentExtraMap.toBundle()
+                        )
 
-                    val lp = title.layoutParams
-                    lp.height = lp.height
-                    lp.width = width
-                    title.layoutParams = lp
-                    title.text = obj?.title
-                    subtitle.text = obj?.subTitle
+
+                    },
+                    RecyclerGenericAdapter.ItemInterface<Tip?> { obj, viewHolder, position ->
+                        var title = getTextView(viewHolder, R.id.gigtip_title)
+                        var subtitle = getTextView(viewHolder, R.id.gigtip_subtitle)
+
+                        val lp = title.layoutParams
+                        lp.height = lp.height
+                        lp.width = width
+                        title.layoutParams = lp
+                        title.text = obj?.title
+                        subtitle.text = obj?.subTitle
 
 //                    getTextView(viewHolder, R.id.skip).setOnClickListener{
 //                        datalist.removeAt(position)
 //                        gigforce_tip.adapter?.notifyItemChanged(position+1)
 //                    }
-                })!!
-        recyclerGenericAdapter.setList(tips)
-        recyclerGenericAdapter.setLayout(R.layout.gigforce_tips_item)
-        gigforce_tip.layoutManager = LinearLayoutManager(
-            activity?.applicationContext,
-            LinearLayoutManager.HORIZONTAL,
-            false
-        )
-        gigforce_tip.adapter = recyclerGenericAdapter
-        var pagerHelper = PagerSnapHelper()
-        pagerHelper.attachToRecyclerView(gigforce_tip)
-        var handler = Handler()
+                    })!!
+            recyclerGenericAdapter.setList(tips)
+            recyclerGenericAdapter.setLayout(R.layout.gigforce_tips_item)
+            gigforce_tip.layoutManager = LinearLayoutManager(
+                activity?.applicationContext,
+                LinearLayoutManager.HORIZONTAL,
+                false
+            )
+            gigforce_tip.adapter = recyclerGenericAdapter
+            var pagerHelper = PagerSnapHelper()
+            pagerHelper.attachToRecyclerView(gigforce_tip)
+            var handler = Handler()
 //        val runnable = Runnable {
 //            var currentVisiblePosition = (gigforce_tip.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
 //            gigforce_tip.scrollToPosition(currentVisiblePosition+1)
 //            handler.postDelayed(runnable,SPLASH_TIME_OUT)
 //        }
 
-        val runnableCode = object : Runnable {
-            override fun run() {
-                try {
-                    var currentVisiblePosition =
-                        (gigforce_tip.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
-                    if ((gigforce_tip.adapter as RecyclerGenericAdapter<TitleSubtitleModel>).list.size == currentVisiblePosition + 1) {
-                        forward = false
-                    }
-                    if (currentVisiblePosition == 0) {
-                        forward = true
-                    }
-                    if (!forward) {
-                        gigforce_tip.smoothScrollToPosition(currentVisiblePosition - 1)
-                    } else
-                        gigforce_tip.smoothScrollToPosition(currentVisiblePosition + 1)
+            val runnableCode = object : Runnable {
+                override fun run() {
+                    try {
+                        var currentVisiblePosition =
+                            (gigforce_tip.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+                        if ((gigforce_tip.adapter as RecyclerGenericAdapter<TitleSubtitleModel>).list.size == currentVisiblePosition + 1) {
+                            forward = false
+                        }
+                        if (currentVisiblePosition == 0) {
+                            forward = true
+                        }
+                        if (!forward) {
+                            gigforce_tip.smoothScrollToPosition(currentVisiblePosition - 1)
+                        } else
+                            gigforce_tip.smoothScrollToPosition(currentVisiblePosition + 1)
 
 
-                    handler.postDelayed(this, SPLASH_TIME_OUT)
-                } catch (e: Exception) {
+                        handler.postDelayed(this, SPLASH_TIME_OUT)
+                    } catch (e: Exception) {
+
+                    }
 
                 }
-
             }
+            handler.postDelayed(runnableCode, SPLASH_TIME_OUT)
         }
-        handler.postDelayed(runnableCode, SPLASH_TIME_OUT)
     }
 
     private fun setHelpVideosOnView(helpVideos: List<HelpVideo>?) {
