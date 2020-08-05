@@ -53,7 +53,6 @@ class AboutExpandedFragment: ProfileBaseFragment() {
 
         savedInstanceState?.let {
             cameFromLandingPage = it.getBoolean(INTENT_EXTRA_CAME_FROM_LANDING_SCREEN)
-            action = it.getInt(INTENT_EXTRA_ACTION)
         }
 
         var view = inflateView(R.layout.fragment_profile_about_expanded, inflater, container)
@@ -64,7 +63,6 @@ class AboutExpandedFragment: ProfileBaseFragment() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putBoolean(INTENT_EXTRA_CAME_FROM_LANDING_SCREEN, cameFromLandingPage)
-        outState.putInt(INTENT_EXTRA_ACTION, action)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

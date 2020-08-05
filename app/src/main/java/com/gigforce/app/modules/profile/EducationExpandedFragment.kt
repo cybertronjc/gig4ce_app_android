@@ -50,7 +50,6 @@ class EducationExpandedFragment: ProfileBaseFragment() {
 
         savedInstanceState?.let {
             cameFromLandingPage = it.getBoolean(INTENT_EXTRA_CAME_FROM_LANDING_SCREEN)
-            action = it.getInt(LandingPageConstants.INTENT_EXTRA_ACTION)
         }
 
         Log.d("DEBUG", "ENTERED Profile Education Expanded VIEW")
@@ -62,7 +61,6 @@ class EducationExpandedFragment: ProfileBaseFragment() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putBoolean(INTENT_EXTRA_CAME_FROM_LANDING_SCREEN, cameFromLandingPage)
-        outState.putInt(LandingPageConstants.INTENT_EXTRA_ACTION, action)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
