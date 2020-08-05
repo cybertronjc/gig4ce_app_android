@@ -1,48 +1,52 @@
 package com.gigforce.app.modules.earn.gighistory
 
 import android.view.View
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.gigforce.app.modules.earn.gighistory.models.GigsResponse
 import com.gigforce.app.modules.gigPage.models.Gig
+import com.gigforce.app.utils.SingleLiveEvent
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.QuerySnapshot
 
 class GigHistoryViewModel(private val repositoryCallbacks: DataCallbacks) :
     ViewModel(), DataCallbacks.ResponseCallbacks {
+    var eventState: Int = AdapterGigHistory.EVENT_PAST
     private var lastVisibleItem: DocumentSnapshot? = null
     var isLastPage: Boolean = false
     var isLoading: Boolean = true
     var pastGigs: Boolean = true
+    var isInitialDataLoaded = false;
     private val limit: Long = 10
 
-    private val _observerProgress: MutableLiveData<Int> by lazy {
-        MutableLiveData<Int>();
+    private val _observerProgress: SingleLiveEvent<Int> by lazy {
+        SingleLiveEvent<Int>();
     }
-    val observerShowProgress: MutableLiveData<Int> get() = _observerProgress
+    val observerShowProgress: SingleLiveEvent<Int> get() = _observerProgress
 
-    private val _observableOnGoingGigs: MutableLiveData<GigsResponse> by lazy {
-        MutableLiveData<GigsResponse>();
+    private val _observableOnGoingGigs: SingleLiveEvent<GigsResponse> by lazy {
+        SingleLiveEvent<GigsResponse>();
     }
-    val observableOnGoingGigs: MutableLiveData<GigsResponse> get() = _observableOnGoingGigs
-    private val _observableScheduledGigs: MutableLiveData<GigsResponse> by lazy {
-        MutableLiveData<GigsResponse>();
+    val observableOnGoingGigs: SingleLiveEvent<GigsResponse> get() = _observableOnGoingGigs
+    private val _observableScheduledGigs: SingleLiveEvent<GigsResponse> by lazy {
+        SingleLiveEvent<GigsResponse>();
     }
-    val observableScheduledGigs: MutableLiveData<GigsResponse> get() = _observableScheduledGigs
-    private val _observableError: MutableLiveData<String> by lazy {
-        MutableLiveData<String>();
+    val observableScheduledGigs: SingleLiveEvent<GigsResponse> get() = _observableScheduledGigs
+    private val _observableError: SingleLiveEvent<String> by lazy {
+        SingleLiveEvent<String>();
     }
-    val observableError: MutableLiveData<String> get() = _observableError
-    private val _observableShowExplore: MutableLiveData<Boolean> by lazy {
-        MutableLiveData<Boolean>();
+    val observableError: SingleLiveEvent<String> get() = _observableError
+    private val _observableShowExplore: SingleLiveEvent<Boolean> by lazy {
+        SingleLiveEvent<Boolean>();
     }
-    val observableShowExplore: MutableLiveData<Boolean> get() = _observableShowExplore
+    val observableShowExplore: SingleLiveEvent<Boolean> get() = _observableShowExplore
     fun getData() {
+        if (isInitialDataLoaded) return
         showProgress(true)
         repositoryCallbacks.checkGigsCount(this)
         repositoryCallbacks.getOnGoingGigs(this)
         repositoryCallbacks.getPastGigs(this, null, limit)
+        isInitialDataLoaded = true
     }
 
     override fun onGoingGigsResponse(
