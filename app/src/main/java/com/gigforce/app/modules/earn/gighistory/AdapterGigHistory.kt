@@ -20,7 +20,7 @@ class AdapterGigHistory : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var callbacks: AdapterGigHistoryCallbacks? = null
     private var onGoingGigs: List<Gig>? = null
 
-    var scheduledGigs: MutableList<Gig>? = ArrayList<Gig>()
+    private var scheduledGigs: MutableList<Gig>? = ArrayList<Gig>()
     private val timeFormatter = SimpleDateFormat("hh.mm aa")
     private val dateFormatter = SimpleDateFormat("dd MMM yyyy")
     private val headerDateFormatter = SimpleDateFormat("MMM yyyy")
