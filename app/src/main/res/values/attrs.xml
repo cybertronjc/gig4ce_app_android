@@ -82,5 +82,6 @@
         <attr name="civ_border_overlay" format="boolean" />
         <attr name="civ_circle_background_color" format="color" />
         <attr name="civ_dashed_border" format="boolean" />
+        <attr name="civ_is_qr" format="boolean" />
     </declare-styleable>
 </resources>

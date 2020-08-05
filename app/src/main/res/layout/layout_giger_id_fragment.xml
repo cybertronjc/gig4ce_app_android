@@ -144,13 +144,14 @@
                 android:id="@+id/iv_qr_code_giger_id"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                app:civ_is_qr="true"
                 app:civ_border_color="@color/black_85"
                 app:civ_border_width="@dimen/size_5"
                 app:civ_dashed_border="true" />
 
             <com.gigforce.app.utils.widgets.CircleImageView
                 android:layout_width="@dimen/size_24"
-                android:layout_height="@dimen/size_24"
+                android:layout_height="19dp"
 
                 android:layout_gravity="center"
                 android:src="@drawable/giglogo"
