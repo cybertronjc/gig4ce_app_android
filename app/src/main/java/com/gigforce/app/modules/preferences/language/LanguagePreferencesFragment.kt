@@ -7,11 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.RadioButton
 import android.widget.RadioGroup
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.modules.preferences.SharedPreferenceViewModel
 import com.gigforce.app.utils.AppConstants
+import com.gigforce.app.utils.configrepository.ConfigViewModel
 import kotlinx.android.synthetic.main.fragment_language_preferences.*
 import kotlinx.android.synthetic.main.fragment_select_language.groupradio
 
@@ -26,6 +29,7 @@ class LanguagePreferencesFragment : BaseFragment() {
         fun newInstance() = LanguagePreferencesFragment()
     }
     private lateinit var viewModel: SharedPreferenceViewModel
+    private val appConfigViewModel : ConfigViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,6 +45,27 @@ class LanguagePreferencesFragment : BaseFragment() {
         initializer()
         setDefaultLanguage()
         listener()
+        initViewModel()
+    }
+
+    private fun initViewModel() {
+        appConfigViewModel
+            .activeLanguages
+            .observe(viewLifecycleOwner, Observer {activeLangs ->
+
+                activeLangs.forEach {
+
+                    when (it) {
+                        "en" -> groupradio.findViewById<RadioButton>(R.id.en).isEnabled = true
+                        "hi" -> groupradio.findViewById<RadioButton>(R.id.hi).isEnabled = true
+                        "te" -> groupradio.findViewById<RadioButton>(R.id.te).isEnabled = true
+                        "gu" -> groupradio.findViewById<RadioButton>(R.id.gu).isEnabled = true
+                        "pa" -> groupradio.findViewById<RadioButton>(R.id.pu).isEnabled = true
+                        "fr" -> groupradio.findViewById<RadioButton>(R.id.fr).isEnabled = true
+                        "mr" -> groupradio.findViewById<RadioButton>(R.id.mr).isEnabled = true
+                    }
+                }
+        })
     }
 
     private fun listener() {

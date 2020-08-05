@@ -48,6 +48,7 @@
             android:text="English"
             android:textSize="14sp"
             android:letterSpacing="0"
+            android:enabled="false"
             style="@style/Theme.RadioButtonLipstickPink"
             android:paddingLeft="16dp"
             android:layout_marginLeft="16dp"/>
@@ -64,6 +65,7 @@
             android:letterSpacing="0"
             android:textSize="14sp"
             android:paddingLeft="16dp"
+            android:enabled="false"
             style="@style/Theme.RadioButtonLipstickPink"
             android:layout_marginLeft="16dp"/>
         <View

@@ -63,6 +63,7 @@
             android:layout_marginLeft="15dp"
             android:paddingLeft="11dp"
             android:hint="en"
+            android:enabled="false"
             style="@style/Theme.RadioButtonLipstickPink"
             android:text="English"
             android:textSize="14sp" />
@@ -79,6 +80,7 @@
             android:layout_marginLeft="15dp"
             android:paddingLeft="11dp"
             android:hint="hi"
+            android:enabled="false"
             style="@style/Theme.RadioButtonLipstickPink"
             android:text="हिंदी"
             android:textSize="14sp" />
