@@ -107,7 +107,9 @@ class GigHistoryViewModel(private val repositoryCallbacks: DataCallbacks) :
                 observableShowExplore.value = querySnapshot.isEmpty
             }
         } else {
-            observableError.value = error?.message
+            error?.message?.let {
+                observableError.value = it
+            }
 
         }
     }
