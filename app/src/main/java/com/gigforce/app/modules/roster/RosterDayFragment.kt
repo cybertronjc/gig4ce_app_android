@@ -7,20 +7,26 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
+import android.widget.PopupMenu
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
 import com.gigforce.app.R
+import com.gigforce.app.core.toDate
 import com.gigforce.app.modules.custom_gig_preferences.CustomPreferencesViewModel
 import com.gigforce.app.modules.custom_gig_preferences.ParamCustPreferViewModel
 import com.gigforce.app.modules.roster.models.Gig
+import com.google.android.gms.tasks.Tasks.await
 import com.riningan.widget.ExtendedBottomSheetBehavior
 import kotlinx.android.synthetic.main.day_view_top_bar.*
 import kotlinx.android.synthetic.main.day_view_top_bar.view.*
 import kotlinx.android.synthetic.main.roster_day_fragment.*
 import kotlinx.android.synthetic.main.unavailable_time_adjustment_bottom_sheet.*
+import kotlinx.android.synthetic.main.vertical_calendar_item.*
 import java.time.LocalDateTime
 import kotlin.collections.ArrayList
 
@@ -43,6 +49,7 @@ class RosterDayFragment: RosterBaseFragment() {
     var unavailableCards: ArrayList<String> = ArrayList()
 
     lateinit var hourviewPageChangeCallBack: ViewPager2.OnPageChangeCallback
+    lateinit var  viewModelCustomPreference : CustomPreferencesViewModel
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,65 +72,94 @@ class RosterDayFragment: RosterBaseFragment() {
 
         return inflateView(R.layout.roster_day_fragment, inflater, container)
     }
-    lateinit var  viewModelCustomPreference : CustomPreferencesViewModel
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         //observer()
         initialize()
         setListeners()
-
-    }
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun observer() {
-        try {
-            viewModelCustomPreference.customPreferencesDataModel
-        }catch (e:UninitializedPropertyAccessException){
-            viewModelCustomPreference.getAllData()
-        }
-
-        rosterViewModel.currentDateTime.value = activeDateTime
-        viewModelCustomPreference.customPreferencesLiveDataModel.observe(viewLifecycleOwner, Observer { data ->
-            rosterViewModel.checkDayAvailable(activeDateTime, viewModelCustomPreference)
-//            rosterViewModel.switchHourAvailability(
-//                activeDateTime,
-//                hourview_viewpager.getChildAt(0)
-//                    .findViewWithTag<ConstraintLayout>("day_times"), viewModelCustomPreference)
-        })
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun initialize() {
-
-        rosterViewModel.currentDateTime.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
-            Log.d("ActiveDay", "Active Day in Day view ${it.toString()}")
-            rosterViewModel.gigsQuery.observe(viewLifecycleOwner, androidx.lifecycle.Observer { gigs ->
-                val fullDayGig = rosterViewModel.getFullDayGigForDate(it, gigs)
-
-                if (fullDayGig == null)
-                    top_bar.fullDayGigCard = null
-
-                fullDayGig ?.let { gig ->
-                    if (gig.gigStatus == "upcoming") {
-                        val widget = UpcomingGigCard(requireContext())
-                        widget.isFullDay = true
-                        top_bar.fullDayGigCard = widget
-                    } else if (gig.gigStatus == "completed") {
-                        val widget = CompletedGigCard(requireContext())
-                        widget.isFullDay = true
-                        top_bar.fullDayGigCard = widget
-                    }
-                }
-            })
-        })
-
+        // initialize view model properties
         rosterViewModel.topBar = top_bar
-        observer()
+        rosterViewModel.currentDateTime.value = activeDateTime
+
+        // set custom preference variable
+        setCustomPreference()
+//
+//        dayTag = rosterViewModel.getTagFromDate(activeDateTime.toDate)
+//        if (dayTag !in rosterViewModel.allGigs.keys)
+//            rosterViewModel.allGigs.put(dayTag, MutableLiveData(ArrayList<Gig>()))
+//        rosterViewModel.getGigs(activeDateTime.toDate)
+
+        //observer()
         initializeBottomSheet()
         attachHourViewAdapter()
         attachDayAvailabilityObserver()
         attachCurrentDateTimeChangeObserver()
         attachTopBarMonthChangeListener()
+        attachTopBarMenu()
+
+        rosterViewModel.currentDateTime.observe(viewLifecycleOwner, Observer {
+//            dayTag = rosterViewModel.getTagFromDate(it.toDate)
+//            // get gigs for the day
+//            if (dayTag !in rosterViewModel.allGigs)
+//                rosterViewModel.allGigs.put(dayTag, MutableLiveData(ArrayList<Gig>()))
+//            rosterViewModel.getGigs(it.toDate)
+
+            getDayTimesChild()?.let {
+                    rosterViewModel.resetDayTimeAvailability(
+                        viewModelCustomPreference,
+                        getDayTimesChild()!!
+                    )
+            }
+//            rosterViewModel.allGigs[dayTag].let{
+//                rosterViewModel.setFullDayGigs(requireContext())
+//            }
+        })
+
+//        rosterViewModel.allGigs[dayTag]!!.observe(viewLifecycleOwner, Observer {
+//            rosterViewModel.setFullDayGigs(requireContext())
+//        })
+
+        viewModelCustomPreference.customPreferencesLiveDataModel.observe(
+            viewLifecycleOwner, Observer {
+                getDayTimesChild()?.let {
+                    rosterViewModel.resetDayTimeAvailability(
+                        viewModelCustomPreference,
+                        getDayTimesChild()!!
+                    )
+                }
+            }
+        )
+    }
+
+    private fun attachTopBarMenu() {
+        top_bar.more_bottom.setOnClickListener {
+            val popupMenu: PopupMenu = PopupMenu(requireContext(), more_bottom)
+            popupMenu.menuInflater.inflate(R.menu.roster_menu, popupMenu.menu)
+            popupMenu.setOnMenuItemClickListener {
+                when(it.itemId) {
+                    R.id.location_card -> {
+
+                    }
+                    R.id.settings -> {
+
+                    }
+                    R.id.help -> {
+
+                    }
+                }
+                true
+            }
+            popupMenu.show()
+        }
+    }
+
+    private fun getDayTimesChild(): ConstraintLayout? {
+        return hourview_viewpager.getChildAt(0).findViewWithTag("day_times")
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -131,8 +167,8 @@ class RosterDayFragment: RosterBaseFragment() {
         back_button.setOnClickListener{
             activity?.onBackPressed()
         }
-        hourviewPageChangeCallBack = object: ViewPager2.OnPageChangeCallback() {
 
+        hourviewPageChangeCallBack = object: ViewPager2.OnPageChangeCallback() {
             @RequiresApi(Build.VERSION_CODES.O)
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
@@ -142,20 +178,25 @@ class RosterDayFragment: RosterBaseFragment() {
                         )
                 rosterViewModel.currentDateTime.value = newDateTime
                 lastViewPosition = position
-                rosterViewModel.checkDayAvailable(newDateTime, viewModelCustomPreference)
             }
         }
 
         hourview_viewpager.registerOnPageChangeCallback(hourviewPageChangeCallBack)
 
         top_bar.available_toggle.setOnClickListener {
-            Log.d("RosterDayFragment", "toggle availability called with " + rosterViewModel.isDayAvailable.value!! + " on date " + activeDateTime.toString())
-            rosterViewModel.toggleDayAvailability(
-                requireContext(), hourview_viewpager.getChildAt(0).findViewWithTag<ConstraintLayout>("day_times"),
-                upcomingGigs, rosterViewModel.isDayAvailable.value!!, activeDateTime, actualDateTime, viewModelCustomPreference)
+            rosterViewModel.switchDayAvailability(
+                requireContext(), getDayTimesChild()!!,
+                rosterViewModel.isDayAvailable.value!!, viewModelCustomPreference)
         }
     }
 
+    private fun setCustomPreference() {
+        try {
+            viewModelCustomPreference.customPreferencesDataModel
+        }catch (e:UninitializedPropertyAccessException){
+            viewModelCustomPreference.getAllData()
+        }
+    }
     private fun attachDayAvailabilityObserver() {
         rosterViewModel.isDayAvailable.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
            top_bar.isAvailable = it
@@ -180,6 +221,9 @@ class RosterDayFragment: RosterBaseFragment() {
                 val newDateTime: LocalDateTime
                 val dateDifference: Int
 
+                if (monthGap == 0)
+                    return
+
                 newDateTime = if (monthGap < 0) {
                     activeDateTime.minusMonths((-1*monthGap).toLong())
                 } else {
@@ -201,38 +245,37 @@ class RosterDayFragment: RosterBaseFragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun attachCurrentDateTimeChangeObserver() {
 
-        rosterViewModel.currentDateTime.observe( viewLifecycleOwner, androidx.lifecycle.Observer { it ->
+        rosterViewModel.currentDateTime.observe( viewLifecycleOwner, Observer { it ->
             activeDateTime = it
-            if (it.year != top_bar.year)
-                top_bar.year = it.year
-            if (it.monthValue - 1 != top_bar.month)
-                top_bar.month = it.monthValue - 1
+            top_bar.year = it.year
+            top_bar.month = it.monthValue - 1
             top_bar.date = it.dayOfMonth
             top_bar.day = it.dayOfWeek.value - 1
 
             top_bar.isCurrentDay = isSameDate(it, actualDateTime)
             top_bar.isFutureDate = isMoreDate(it, actualDateTime)
 
+            top_bar.toggleInactive = isLessDate(it, actualDateTime)
+
             //dayTag = "${activeDateTime.year}${activeDateTime.monthValue}${activeDateTime.dayOfMonth}"
-            dayTag = String.format("%4d", activeDateTime.year) + String.format("%02d", activeDateTime.monthValue) + String.format("%02d", activeDateTime.dayOfMonth)
+            dayTag = String.format("%4d", activeDateTime.year) +
+                    String.format("%02d", activeDateTime.monthValue) +
+                    String.format("%02d", activeDateTime.dayOfMonth)
 
-//            upcomingGigs.clear()
-//            upcomingGigs.addAll(rosterViewModel.getUpcomingGigsByDayTag(dayTag))
-            rosterViewModel.gigsQuery.value ?.let {
-                upcomingGigs.clear()
-                upcomingGigs.addAll(rosterViewModel.getUpcomingGigsByDayTag(dayTag, it))
-                completedGigs.clear()
-                completedGigs.addAll(rosterViewModel.getCompletedGigsByDayTag(dayTag, it))
-            }
+//            rosterViewModel.allGigs[dayTag]?.let {
+//                upcomingGigs = rosterViewModel.getFilteredGigs(
+//                    activeDateTime.toDate, "upcoming")
+//                completedGigs = rosterViewModel.getFilteredGigs(
+//                    activeDateTime.toDate, "completed")
+//            }
 
         })
-        rosterViewModel.gigsQuery.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
-            upcomingGigs.clear()
-            upcomingGigs.addAll(rosterViewModel.getUpcomingGigsByDayTag(dayTag, it))
-
-            completedGigs.clear()
-            completedGigs.addAll(rosterViewModel.getCompletedGigsByDayTag(dayTag, it))
-        })
+//        rosterViewModel.allGigs[dayTag]!!.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+//            upcomingGigs = rosterViewModel.getFilteredGigs(
+//                activeDateTime.toDate, "upcoming")
+//            completedGigs = rosterViewModel.getFilteredGigs(
+//                activeDateTime.toDate, "completed")
+//        })
     }
 
     private fun attachHourViewAdapter() {
@@ -248,8 +291,7 @@ class RosterDayFragment: RosterBaseFragment() {
 
         //rosterViewModel.bsBehavior.halfExpandedRatio = 0.65F
         rosterViewModel.bsBehavior.isHideable = true
-
-
+        rosterViewModel.bsBehavior.state = ExtendedBottomSheetBehavior.STATE_HIDDEN
 
         rosterViewModel.bsBehavior.setBottomSheetCallback(object: ExtendedBottomSheetBehavior.BottomSheetCallback() {
             override fun onSlide(bottomSheet: View, slideOffset: Float) {
@@ -317,19 +359,6 @@ class RosterDayFragment: RosterBaseFragment() {
 //
 //        unavailableCard.setOnClickListener {
 //            Toast.makeText(requireContext(), "Clicked on unavailable card", Toast.LENGTH_SHORT).show()
-//        }
-//    }
-
-//    @RequiresApi(Build.VERSION_CODES.O)
-//    fun toggleAvailability() {
-//       if (upcomingGigs.size > 0) {
-//           rosterViewModel.isDayAvailable.value = !showGigsTodayWarning(
-//               requireContext(), upcomingGigs,
-//               hourview_viewpager.getChildAt(0).findViewWithTag<ConstraintLayout>("day_times"))
-//        } else {
-//           rosterViewModel.isDayAvailable.value = false
-//           allHourInactive(
-//               hourview_viewpager.getChildAt(0).findViewWithTag<ConstraintLayout>("day_times"))
 //        }
 //    }
 

@@ -1,147 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginLeft="20dp"
+    android:layout_marginRight="20dp"
     app:cardBackgroundColor="@color/white"
+    app:cardCornerRadius="3dp"
     tools:context=".modules.gigPage.RateGigDialogFragment">
 
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingBottom="16dp">
+    <include
+        android:id="@+id/ratingMainLayout"
+        android:visibility="invisible"
+        layout="@layout/fragment_rate_gig_dialog_main"/>
 
-        <LinearLayout
-            android:id="@+id/titleLayout"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:background="@color/lipstick"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            app:layout_constraintTop_toTopOf="parent">
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="30dp"
+        android:layout_centerInParent="true"
+        android:layout_height="30dp"/>
 
 
-            <ImageView
-                android:id="@+id/warningIconIV"
-                android:layout_width="22dp"
-                android:layout_height="22dp"
-                android:layout_marginStart="22dp"
-                android:src="@drawable/ic_warning" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:fontFamily="@font/lato"
-                android:letterSpacing="0"
-                android:text="Rate your Gig"
-                android:textColor="@color/white"
-                android:textSize="16sp" />
-        </LinearLayout>
-
-
-        <RatingBar
-            android:id="@+id/ratingBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="22dp"
-            android:progressTint="#ffc107"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/titleLayout" />
-
-
-        <TextView
-            android:id="@+id/tellAboutGigLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="#313131"
-            android:textSize="14sp"
-            android:letterSpacing="0"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="18dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/ratingBar"
-            android:text="@string/please_let_us_know_more_about_your_gig" />
-
-
-        <EditText
-            android:id="@+id/reviewET"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:minHeight="76dp"
-            android:textColor="#313131"
-            android:textSize="14sp"
-            android:inputType="textMultiLine"
-            android:background="@drawable/edittext_border_lipstick"
-            android:layout_marginStart="24dp"
-            android:layout_marginEnd="24dp"
-            android:layout_marginTop="12dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tellAboutGigLabel" />
-
-
-        <LinearLayout
-            android:id="@+id/addAttachmentLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:paddingTop="8dp"
-            android:paddingBottom="12dp"
-            android:orientation="horizontal"
-            android:layout_marginStart="24dp"
-            android:layout_marginEnd="24dp"
-            android:visibility="gone"
-            app:layout_constraintTop_toBottomOf="@id/reviewET">
-
-
-            <ImageView
-                android:layout_width="22dp"
-                android:layout_height="22dp"
-                android:layout_marginStart="5dp"
-                android:src="@drawable/ic_add_pink" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:fontFamily="@font/lato"
-                android:letterSpacing="0"
-                android:text="Add Attachment"
-                android:textColor="@color/lipstick"
-                android:textSize="12sp" />
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:id="@+id/attachmentContainer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginStart="24dp"
-            android:layout_marginEnd="24dp"
-            app:layout_constraintTop_toBottomOf="@id/addAttachmentLayout">
-
-        </LinearLayout>
-
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/submitBtn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginEnd="24dp"
-            android:layout_marginTop="12dp"
-            android:fontFamily="@font/lato_bold"
-            android:text="SUBMIT"
-            android:gravity="center"
-            android:background="@drawable/gradient_button"
-            android:textColor="@color/white"
-            app:layout_constraintTop_toBottomOf="@id/attachmentContainer"/>
-
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-</com.google.android.material.card.MaterialCardView>
+</RelativeLayout>
