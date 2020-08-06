@@ -150,7 +150,7 @@ class AdapterGigHistory : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 viewHolderGigDetails.itemView.rl_on_going_gig_hist.visibility = View.GONE
                 viewHolderGigDetails.itemView.rl_scheduled_gig_hist.visibility = View.VISIBLE
                 holder.itemView.tv_designation_rv_gig_hist.text = gig.title
-                holder.itemView.tv_gig_venue_rv_gig_his.text = gig.address
+                holder.itemView.tv_gig_venue_rv_gig_his.text = "@${gig?.companyName}"
                 holder.itemView.tv_gig_venue_rv_gig_his.isSelected = true
                 holder.itemView.tv_rating_rv_gig_hist.text = gig.gigRating.toString()
                 holder.itemView.tv_time_rv_gig_hist.text = ""
