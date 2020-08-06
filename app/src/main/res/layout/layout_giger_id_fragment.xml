@@ -100,9 +100,9 @@
                 android:ellipsize="end"
                 android:singleLine="true"
                 android:text="Hyderabad, India"
-                app:layout_constraintEnd_toEndOf="@+id/tv_giger_name_giger_id"
                 android:textColor="@color/white"
                 android:textSize="@dimen/font_14"
+                app:layout_constraintEnd_toEndOf="@+id/tv_giger_name_giger_id"
                 app:layout_constraintStart_toEndOf="@+id/cv_profile_pic"
                 app:layout_constraintTop_toBottomOf="@+id/tv_designation_giger_id" />
 
@@ -133,9 +133,9 @@
                 android:ellipsize="end"
                 android:singleLine="true"
                 android:text="Dustin.putnam@gmail.com"
-                app:layout_constraintEnd_toEndOf="@+id/tv_giger_name_giger_id"
                 android:textColor="@color/white"
                 android:textSize="@dimen/font_12"
+                app:layout_constraintEnd_toEndOf="@+id/tv_giger_name_giger_id"
                 app:layout_constraintStart_toEndOf="@+id/cv_profile_pic"
                 app:layout_constraintTop_toBottomOf="@+id/tv_contact_giger_id" />
 
@@ -155,14 +155,17 @@
             app:layout_constraintTop_toBottomOf="@+id/cv_profile_giger_id" />
 
         <FrameLayout
+            android:id="@+id/fl_qr_code_giger_id"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/size_10"
             android:background="@drawable/bg_circle_dashed"
+            android:layerType="software"
             android:padding="@dimen/size_17"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_gig_since_giger_id">
+
 
             <com.gigforce.app.utils.widgets.CircleImageView
                 android:id="@+id/iv_qr_code_giger_id"
@@ -174,12 +177,52 @@
             <com.gigforce.app.utils.widgets.CircleImageView
                 android:layout_width="@dimen/size_24"
                 android:layout_height="19dp"
-
                 android:layout_gravity="center"
                 android:src="@drawable/giglogo"
                 app:civ_border_color="@color/white"
                 app:civ_border_width="@dimen/size_4" />
         </FrameLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_gig_details_giger_id"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/size_27"
+            android:background="@color/warm_grey"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/fl_qr_code_giger_id">
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/size_33"
+                android:layout_marginTop="@dimen/size_11"
+                android:orientation="vertical"
+
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <com.gigforce.app.utils.widgets.CircleImageView
+                    android:id="@+id/iv_brand_logo_giger_id"
+                    android:layout_width="@dimen/size_60"
+                    android:layout_height="@dimen/size_60"
+                    android:layout_gravity="center_horizontal"
+                    android:src="@drawable/p_g_logo" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/size_7"
+                    android:gravity="center_horizontal"
+                    android:text="\ufeff@ Procter &amp; Gamble"
+                    android:textColor="@color/black_85"
+                    android:textSize="@dimen/font_12" />
+            </LinearLayout>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
