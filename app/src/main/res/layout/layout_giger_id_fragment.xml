@@ -185,22 +185,25 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_gig_details_giger_id"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/size_27"
             android:background="@color/warm_grey"
+            android:paddingBottom="@dimen/size_12"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/fl_qr_code_giger_id">
 
 
             <LinearLayout
+                android:id="@+id/ll_brand_details_giger_id"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:layout_marginStart="@dimen/size_33"
                 android:layout_marginTop="@dimen/size_11"
+                android:gravity="bottom"
                 android:orientation="vertical"
-
+                app:layout_constraintBottom_toBottomOf="@+id/ll_gig_time_details_giger_id"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
@@ -215,11 +218,78 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/size_7"
-                    android:gravity="center_horizontal"
+
+                    android:gravity="center_horizontal|bottom"
                     android:text="\ufeff@ Procter &amp; Gamble"
                     android:textColor="@color/black_85"
                     android:textSize="@dimen/font_12" />
             </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_gig_time_details_giger_id"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/size_33"
+                android:layout_marginTop="@dimen/size_11"
+                android:orientation="vertical"
+
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/ll_brand_details_giger_id"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:id="@+id/tv_gig_id_giger_id"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:gravity="center_horizontal"
+                    android:text="Gig Id : GG00001"
+                    android:textColor="@color/lipstick"
+                    android:textSize="@dimen/font_14" />
+
+                <View
+                    android:id="@+id/view_one"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/size_1"
+                    android:layout_marginTop="@dimen/size_12"
+                    android:layout_marginEnd="@dimen/size_8"
+                    android:background="@color/warm_grey_two" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/size_7"
+                    android:gravity="center_horizontal"
+                    android:text="@string/valid_upto"
+                    android:textColor="@color/warm_grey_two"
+                    android:textSize="@dimen/font_14" />
+
+                <TextView
+                    android:id="@+id/tv_gig_date_giger_id"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/size_1"
+                    android:ellipsize="marquee"
+                    android:gravity="center_horizontal"
+                    android:marqueeRepeatLimit="marquee_forever"
+                    android:scrollHorizontally="true"
+                    android:singleLine="true"
+                    android:text="13 May 2020"
+                    android:textColor="@color/black_85"
+                    android:textSize="@dimen/font_24" />
+
+            </LinearLayout>
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/size_20"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cl_gig_details_giger_id"
+                app:srcCompat="@drawable/ic_logo_color" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

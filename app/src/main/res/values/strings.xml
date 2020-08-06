@@ -419,5 +419,6 @@
     <string name="completed">Completed</string>
     <string name="pending">Pending</string>
     <string name="explore_by_role">Explore By Role</string>
+    <string name="valid_upto">Valid Upto :</string>
 
 </resources>

@@ -24,12 +24,19 @@ class GigerIdFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         genQrCode()
+        initClicks()
+    }
+
+    private fun initClicks() {
+
+        tv_gig_date_giger_id.isSelected = true
     }
 
 
     fun genQrCode() {
 
-        val content = "Hello Gigerssflaj'pgj'lsawdjg[ljawd[gi';lawdjf'jap'oWDUFOPWEufphwE;FHPIhfhew;FH;ewhf;EWH;FHe;fh;PQIEWYF;Ihefoi;hE;OIFH;eyfoi;EYOIFHGOIewfh;EWHFJHGEWfjhgljwEGFLEWTFLEWGFJGWE,ftE2LOBFQ23Y3P9;"
+        val content =
+            "Hello Gigerssflaj'pgj'lsawdjg[ljawd[gi';lawdjf'jap'oWDUFOPWEufphwE;FHPIhfhew;FH;ewhf;EWH;FHe;fh;PQIEWYF;Ihefoi;hE;OIFH;eyfoi;EYOIFHGOIewfh;EWHFJHGEWfjhgljwEGFLEWTFLEWGFJGWE,ftE2LOBFQ23Y3P9;"
 
         val writer = QRCodeWriter()
         val bitMatrix = writer.encode(content, BarcodeFormat.QR_CODE, 512, 512)
