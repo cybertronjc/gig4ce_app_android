@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun checkForAllAuthentication() {
         navController.popAllBackStates()
-        navController.navigate(R.id.giger_id_fragment)
+        navController.navigate(R.id.authFlowFragment)
 //        navController.navigate(R.id.languageSelectFragment)
     }
 

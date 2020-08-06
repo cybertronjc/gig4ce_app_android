@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:width="@dimen/size_16"
-        android:height="@dimen/size_16"
-
-        android:drawable="@drawable/ic_baseline_location_on_24"
-        android:right="@dimen/size_8" />
+        android:width="@dimen/size_10"
+        android:height="@dimen/size_13"
+        android:drawable="@drawable/ic_place_"
+        android:right="@dimen/size_11" />
 </layer-list>
