@@ -33,7 +33,7 @@ class AdapterOnGoingGigs : RecyclerView.Adapter<AdapterOnGoingGigs.ViewHolder>()
         val gig = onGoingGigs?.get(position)
 
         holder.itemView.tv_designation_rv_gig_hist.text = gig?.title
-        holder.itemView.tv_gig_venue_rv_gig_his.text = gig?.address
+        holder.itemView.tv_gig_venue_rv_gig_his.text = "@${gig?.companyName}"
         holder.itemView.tv_gig_venue_rv_gig_his.isSelected = true
         holder.itemView.tv_rating_rv_gig_hist.text = gig?.gigRating.toString()
         holder.itemView.tv_punch_in_time_rv_gig_hist.text = "--:--"
