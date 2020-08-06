@@ -65,7 +65,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:fontFamily="@font/lato"
-                android:text="Edit"
+                android:text="@string/edit"
                 android:textColor="@color/black" />
 
 
@@ -82,7 +82,7 @@
             android:textColor="@color/black"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/statusTV"
-            android:text="Driving License (Front Image)" />
+            android:text="@string/driving_license_front_image" />
 
         <ImageView
             android:id="@+id/dlFrontImageIV"
@@ -118,7 +118,7 @@
             android:textColor="@color/black"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/dlFrontErrorMessage"
-            android:text="Driving License (Back Image)" />
+            android:text="@string/driving_license_back_image" />
 
         <ImageView
             android:id="@+id/dlBackImageIV"
@@ -158,7 +158,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/lato_bold"
                 android:letterSpacing="0"
-                android:text="DL No : "
+                android:text="@string/dl_no_w_colon"
                 android:textColor="@color/black"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -197,7 +197,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/lato_bold"
                 android:letterSpacing="0"
-                android:text="DL State : "
+                android:text="@string/dl_state_w_colon"
                 android:textColor="@color/black"
                 android:layout_marginTop="15dp"
                 app:layout_constraintStart_toStartOf="parent"

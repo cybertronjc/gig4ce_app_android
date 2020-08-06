@@ -92,8 +92,8 @@ class AddDrivingLicenseInfoFragment : BaseFragment() {
 
             WhyWeNeedThisBottomSheet.launch(
                 childFragmentManager = childFragmentManager,
-                title = "Why we need this?",
-                content = "Uploading either Driver’s license or Aadhar card is mandatory for profile verification. A Driver’s license helps verify your name, date of birth, address, and other details."
+                title = getString(R.string.why_do_we_need_this),
+                content = getString(R.string.why_we_need_this_dl)
             )
         }
 
@@ -153,9 +153,9 @@ class AddDrivingLicenseInfoFragment : BaseFragment() {
 
                         if (stateSpinner.selectedItemPosition == 0) {
                             MaterialAlertDialogBuilder(requireContext())
-                                .setTitle("Alert")
-                                .setMessage("Select Driving License State")
-                                .setPositiveButton("OK") { _, _ -> }
+                                .setTitle(getString(R.string.alert))
+                                .setMessage(getString(R.string.select_dl_state))
+                                .setPositiveButton(getString(R.string.okay)) { _, _ -> }
                                 .show()
                             dlSubmitSliderBtn.resetSlider()
                             return
@@ -166,9 +166,9 @@ class AddDrivingLicenseInfoFragment : BaseFragment() {
                         if (!VerificationValidations.isDLNumberValid(dlNo)) {
 
                             MaterialAlertDialogBuilder(requireContext())
-                                .setTitle("Alert")
-                                .setMessage("Enter Valid Driving License")
-                                .setPositiveButton("OK") { _, _ -> }
+                                .setTitle(getString(R.string.alert))
+                                .setMessage(getString(R.string.enter_valid_dl))
+                                .setPositiveButton(getString(R.string.okay)) { _, _ -> }
                                 .show()
 
                             dlSubmitSliderBtn.resetSlider()
@@ -178,9 +178,9 @@ class AddDrivingLicenseInfoFragment : BaseFragment() {
                         if (dlFrontImagePath == null || dlBackImagePath == null) {
 
                             MaterialAlertDialogBuilder(requireContext())
-                                .setTitle("Alert")
-                                .setMessage("Select or capture both sides of Driving License")
-                                .setPositiveButton("OK") { _, _ -> }
+                                .setTitle(getString(R.string.alert))
+                                .setMessage(getString(R.string.capture_both_sides_dl))
+                                .setPositiveButton(getString(R.string.okay)) { _, _ -> }
                                 .show()
                             dlSubmitSliderBtn.resetSlider()
                             return
@@ -212,16 +212,16 @@ class AddDrivingLicenseInfoFragment : BaseFragment() {
         editLayout.setOnClickListener {
 
             MaterialAlertDialogBuilder(requireContext())
-                .setTitle("Alert")
-                .setMessage("You are re-uploading your Driving License details, they will be verified once again, that can take up to 7 days")
-                .setPositiveButton("OK") { _, _ ->
+                .setTitle(getString(R.string.alert))
+                .setMessage(getString(R.string.reuploading_driving_license))
+                .setPositiveButton(getString(R.string.okay)) { _, _ ->
 
                     dlViewLayout.gone()
                     dlMainLayout.visible()
 
                     setDataOnEditLayout(drivingLicenseDetail)
                 }
-                .setNegativeButton("Cancel") { _, _ -> }
+                .setNegativeButton(getString(R.string.cancel)) { _, _ -> }
                 .show()
         }
 
@@ -234,10 +234,10 @@ class AddDrivingLicenseInfoFragment : BaseFragment() {
         }
 
         dlFrontImageHolder.uploadImageLayout.imageLabelTV.text =
-            "Driving License (Front Side)"
+            getString(R.string.dl_image_front_side)
 
         dlBackImageHolder.uploadImageLayout.imageLabelTV.text =
-            "Driving License (Back Side)"
+            getString(R.string.dl_image_back_side)
 
         dlFrontImageHolder.uploadImageLayout.reuploadBtn.setOnClickListener {
             openCameraAndGalleryOptionForFrontSideImage()
@@ -409,14 +409,14 @@ class AddDrivingLicenseInfoFragment : BaseFragment() {
         dlSubmitSliderBtn.resetSlider()
 
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Alert")
+            .setTitle(getString(R.string.alert))
             .setMessage(error)
-            .setPositiveButton("OK") { _, _ -> }
+            .setPositiveButton(getString(R.string.okay)) { _, _ -> }
             .show()
     }
 
     private fun documentUploaded() {
-        showToast("Driving License Details Uploaded")
+        showToast(getString(R.string.dl_details_uploaded))
         gigerVerificationStatus?.let {
 
             if (!it.bankDetailsUploaded) {
@@ -519,9 +519,9 @@ class AddDrivingLicenseInfoFragment : BaseFragment() {
                 }
             } else {
                 MaterialAlertDialogBuilder(requireContext())
-                    .setTitle("Alert")
-                    .setMessage("Unable to Capture Image")
-                    .setPositiveButton("OK") { _, _ -> }
+                    .setTitle(getString(R.string.alert))
+                    .setMessage(getString(R.string.unable_to_capture_image))
+                    .setPositiveButton(getString(R.string.okay)) { _, _ -> }
                     .show()
             }
         }

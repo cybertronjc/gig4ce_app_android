@@ -43,10 +43,6 @@ class AddAadharCardInfoFragment : BaseFragment() {
 
     companion object {
         const val REQUEST_CODE_UPLOAD_AADHAR_IMAGE = 2333
-
-        const val INTENT_EXTRA_CLICKED_IMAGE_FRONT = "front_image"
-        const val INTENT_EXTRA_CLICKED_IMAGE_BACK = "back_image"
-        const val INTENT_EXTRA_AADHAR_CARD = "aadhar_card"
     }
 
     private val viewModel: GigVerificationViewModel by viewModels()
@@ -91,8 +87,8 @@ class AddAadharCardInfoFragment : BaseFragment() {
 
             WhyWeNeedThisBottomSheet.launch(
                 childFragmentManager = childFragmentManager,
-                title = "Why we need this?",
-                content = "Uploading either Aadhar or Driver’s license is mandatory for profile verification. Aadhar card helps verify your name, date of birth, address, and other details."
+                title = getString(R.string.why_do_we_need_this),
+                content = getString(R.string.why_we_need_this_aadhar)
             )
         }
 
@@ -128,7 +124,7 @@ class AddAadharCardInfoFragment : BaseFragment() {
             }
         }
 
-        aadharDataCorrectCB.setOnCheckedChangeListener { buttonView, isChecked ->
+        aadharDataCorrectCB.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
 
                 if (aadharYesRB.isChecked
@@ -172,9 +168,9 @@ class AddAadharCardInfoFragment : BaseFragment() {
                         if (aadharCardET.text!!.length != 12) {
 
                             MaterialAlertDialogBuilder(requireContext())
-                                .setTitle("Alert")
-                                .setMessage("Enter Valid Aadhar Card No")
-                                .setPositiveButton("OK") { _, _ -> }
+                                .setTitle(getString(R.string.alert))
+                                .setMessage(getString(R.string.enter_valid_aadhar_no))
+                                .setPositiveButton(getString(R.string.okay)) { _, _ -> }
                                 .show()
                             aadharSubmitSliderBtn.resetSlider()
                             return
@@ -183,9 +179,9 @@ class AddAadharCardInfoFragment : BaseFragment() {
                         if (aadharFrontImagePath == null || aadharBackImagePath == null) {
 
                             MaterialAlertDialogBuilder(requireContext())
-                                .setTitle("Alert")
-                                .setMessage("Select or capture both sides of Aadhar Card")
-                                .setPositiveButton("OK") { _, _ -> }
+                                .setTitle(getString(R.string.alert))
+                                .setMessage(getString(R.string.select_or_capture_both_sides_of_aadhar))
+                                .setPositiveButton(getString(R.string.okay)) { _, _ -> }
                                 .show()
                             aadharSubmitSliderBtn.resetSlider()
                             return
@@ -210,16 +206,16 @@ class AddAadharCardInfoFragment : BaseFragment() {
         editLayout.setOnClickListener {
 
             MaterialAlertDialogBuilder(requireContext())
-                .setTitle("Alert")
-                .setMessage("You are re-uploading your Aadhar details, they will be verified once again, that can take up to 7 days")
-                .setPositiveButton("OK") { _, _ ->
+                .setTitle(getString(R.string.alert))
+                .setMessage(getString(R.string.you_are_reuploading_aadhar))
+                .setPositiveButton(getString(R.string.okay)) { _, _ ->
 
                     aadharViewLayout.gone()
                     aadharEditLayout.visible()
 
                     setDataOnEditLayout(aadharCardDataModel)
                 }
-                .setNegativeButton("Cancel") { _, _ -> }
+                .setNegativeButton(getString(R.string.cancel)) { _, _ -> }
                 .show()
         }
     }
@@ -372,14 +368,14 @@ class AddAadharCardInfoFragment : BaseFragment() {
         aadharSubmitSliderBtn.resetSlider()
 
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Alert")
+            .setTitle(getString(R.string.alert))
             .setMessage(error)
-            .setPositiveButton("OK") { _, _ -> }
+            .setPositiveButton(getString(R.string.okay)) { _, _ -> }
             .show()
     }
 
     private fun documentUploaded() {
-        showToast("Aadhaar Card Details Uploaded")
+        showToast(getString(R.string.aadhar_card_details_uploaded))
 
         gigerVerificationStatus?.let {
 
@@ -487,9 +483,9 @@ class AddAadharCardInfoFragment : BaseFragment() {
 
             } else {
                 MaterialAlertDialogBuilder(requireContext())
-                    .setTitle("Alert")
-                    .setMessage("Unable to Capture Image")
-                    .setPositiveButton("OK") { _, _ -> }
+                    .setTitle(getString(R.string.alert))
+                    .setMessage(getString(R.string.unable_to_capture_image))
+                    .setPositiveButton(getString(R.string.okay)) { _, _ -> }
                     .show()
             }
         }
@@ -534,7 +530,7 @@ class AddAadharCardInfoFragment : BaseFragment() {
         aadharFrontImageHolder.uploadDocumentCardView.visibility = View.GONE
         aadharFrontImageHolder.uploadImageLayout.visibility = View.VISIBLE
         aadharFrontImageHolder.uploadImageLayout.imageLabelTV.text =
-            "Aadhar Card (Front Side)"
+            getString(R.string.aadhar_card_front_image)
 
         Glide.with(requireContext())
             .load(aadharFrontImagePath)
@@ -546,7 +542,7 @@ class AddAadharCardInfoFragment : BaseFragment() {
         aadharBackImageHolder.uploadDocumentCardView.visibility = View.GONE
         aadharBackImageHolder.uploadImageLayout.visibility = View.VISIBLE
         aadharBackImageHolder.uploadImageLayout.imageLabelTV.text =
-            "Aadhar Card (Back Side)"
+            getString(R.string.aadhar_card_back_image)
 
         Glide.with(requireContext())
             .load(aadharBackImagePath)

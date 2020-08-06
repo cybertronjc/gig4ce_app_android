@@ -38,10 +38,6 @@ class AddBankDetailsInfoFragment : BaseFragment() {
 
     companion object {
         const val REQUEST_CODE_CAPTURE_BANK_PHOTO = 2333
-
-        const val INTENT_EXTRA_CLICKED_IMAGE_PATH = "clicked_image_path"
-        const val INTENT_EXTRA_IFSC = "ifsc"
-        const val INTENT_EXTRA_ACC_NO = "acc_no"
     }
 
     private val viewModel: GigVerificationViewModel by viewModels()
@@ -76,8 +72,8 @@ class AddBankDetailsInfoFragment : BaseFragment() {
 
             WhyWeNeedThisBottomSheet.launch(
                 childFragmentManager = childFragmentManager,
-                title = "Why we need this?",
-                content = "The bank details are mandatory to approve and send payments from gigs to your account. It also helps verify your name, address, date of birth, and other details."
+                title = getString(R.string.why_do_we_need_this),
+                content = getString(R.string.why_we_need_this_bank)
             )
         }
 
@@ -91,7 +87,7 @@ class AddBankDetailsInfoFragment : BaseFragment() {
         }
 
         passbookImageHolder.uploadImageLayout.imageLabelTV.text =
-            "Bank Passbook (Front Page)"
+            getString(R.string.bank_passbook_front_image)
 
         passbookAvailaibilityOptionRG.setOnCheckedChangeListener { _, checkedId ->
             passbookSubmitSliderBtn.resetSlider()
@@ -150,9 +146,9 @@ class AddBankDetailsInfoFragment : BaseFragment() {
                         if (!VerificationValidations.isIfSCValid(ifsc)) {
 
                             MaterialAlertDialogBuilder(requireContext())
-                                .setTitle("Alert")
-                                .setMessage("Enter Valid IfSC Code")
-                                .setPositiveButton("OK") { _, _ -> }
+                                .setTitle(getString(R.string.alert))
+                                .setMessage(getString(R.string.enter_valid_ifsc))
+                                .setPositiveButton(getString(R.string.okay)) { _, _ -> }
                                 .show()
 
                             passbookSubmitSliderBtn.resetSlider()
@@ -162,9 +158,9 @@ class AddBankDetailsInfoFragment : BaseFragment() {
                         if (bankNameEditText.text.isNullOrBlank()) {
 
                             MaterialAlertDialogBuilder(requireContext())
-                                .setTitle("Alert")
-                                .setMessage("Enter Bank Name")
-                                .setPositiveButton("OK") { _, _ -> }
+                                .setTitle(getString(R.string.alert))
+                                .setMessage(getString(R.string.enter_bank_name))
+                                .setPositiveButton(getString(R.string.okay)) { _, _ -> }
                                 .show()
 
                             passbookSubmitSliderBtn.resetSlider()
@@ -174,9 +170,9 @@ class AddBankDetailsInfoFragment : BaseFragment() {
                         if (bankNameEditText.text.toString().length < 6) {
 
                             MaterialAlertDialogBuilder(requireContext())
-                                .setTitle("Alert")
-                                .setMessage("Bank name is too short")
-                                .setPositiveButton("OK") { _, _ -> }
+                                .setTitle(getString(R.string.alert))
+                                .setMessage(getString(R.string.bank_name_too_short))
+                                .setPositiveButton(getString(R.string.okay)) { _, _ -> }
                                 .show()
 
                             passbookSubmitSliderBtn.resetSlider()
@@ -186,9 +182,9 @@ class AddBankDetailsInfoFragment : BaseFragment() {
                         if (accountNoEditText.text.toString().length < 4) {
 
                             MaterialAlertDialogBuilder(requireContext())
-                                .setTitle("Alert")
-                                .setMessage("Enter A Valid Account No")
-                                .setPositiveButton("OK") { _, _ -> }
+                                .setTitle(getString(R.string.alert))
+                                .setMessage(getString(R.string.enter_valid_acc_no))
+                                .setPositiveButton(getString(R.string.okay)) { _, _ -> }
                                 .show()
 
                             passbookSubmitSliderBtn.resetSlider()
@@ -198,9 +194,9 @@ class AddBankDetailsInfoFragment : BaseFragment() {
                         if (clickedImagePath == null) {
 
                             MaterialAlertDialogBuilder(requireContext())
-                                .setTitle("Alert")
-                                .setMessage("Click Or Select your Passbook Image first")
-                                .setPositiveButton("OK") { _, _ -> }
+                                .setTitle(getString(R.string.alert))
+                                .setMessage(getString(R.string.click_or_select_bank_passbook))
+                                .setPositiveButton(getString(R.string.okay)) { _, _ -> }
                                 .show()
                             passbookSubmitSliderBtn.resetSlider()
                             return
@@ -234,16 +230,16 @@ class AddBankDetailsInfoFragment : BaseFragment() {
         editLayout.setOnClickListener {
 
             MaterialAlertDialogBuilder(requireContext())
-                .setTitle("Alert")
-                .setMessage("You are re-uploading your Bank details, they will be verified once again, that can take up to 7 days")
-                .setPositiveButton("OK") { _, _ ->
+                .setTitle(getString(R.string.alert))
+                .setMessage(getString(R.string.your_are_reuploading_bank_details))
+                .setPositiveButton(getString(R.string.okay)) { _, _ ->
 
                     bankViewLayout.gone()
                     bankEditLayout.visible()
 
                     setDataOnEditLayout(bankDetailsDataModel)
                 }
-                .setNegativeButton("Cancel") { _, _ -> }
+                .setNegativeButton(getString(R.string.cancel)) { _, _ -> }
                 .show()
         }
 
@@ -387,14 +383,14 @@ class AddBankDetailsInfoFragment : BaseFragment() {
         passbookSubmitSliderBtn.resetSlider()
 
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Alert")
+            .setTitle(getString(R.string.alert))
             .setMessage(error)
-            .setPositiveButton("OK") { _, _ -> }
+            .setPositiveButton(getString(R.string.okay)) { _, _ -> }
             .show()
     }
 
     private fun documentsUploaded() {
-        showToast("Bank details Uploaded")
+        showToast(getString(R.string.bank_details_uploaded))
 
         gigerVerificationStatus?.let {
 
@@ -472,9 +468,9 @@ class AddBankDetailsInfoFragment : BaseFragment() {
 
             } else {
                 MaterialAlertDialogBuilder(requireContext())
-                    .setTitle("Alert")
-                    .setMessage("Unable to Capture Image")
-                    .setPositiveButton("OK") { _, _ -> }
+                    .setTitle(getString(R.string.alert))
+                    .setMessage(getString(R.string.unable_to_capture_image))
+                    .setPositiveButton(getString(R.string.okay)) { _, _ -> }
                     .show()
             }
         }
