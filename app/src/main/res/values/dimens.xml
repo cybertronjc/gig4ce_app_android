@@ -86,4 +86,5 @@
     <dimen name="size_177">177dp</dimen>
     <dimen name="size_52">52dp</dimen>
     <dimen name="size_60">60dp</dimen>
+    <dimen name="size_44">44dp</dimen>
 </resources>

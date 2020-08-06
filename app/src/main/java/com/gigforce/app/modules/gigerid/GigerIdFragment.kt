@@ -36,7 +36,7 @@ class GigerIdFragment : BaseFragment() {
     fun genQrCode() {
 
         val content =
-            "Hello Gigerssflaj'pgj'lsawdjg[ljawd[gi';lawdjf'jap'oWDUFOPWEufphwE;FHPIhfhew;FH;ewhf;EWH;FHe;fh;PQIEWYF;Ihefoi;hE;OIFH;eyfoi;EYOIFHGOIewfh;EWHFJHGEWfjhgljwEGFLEWTFLEWGFJGWE,ftE2LOBFQ23Y3P9;"
+            "Jai Shree Ram"
 
         val writer = QRCodeWriter()
         val bitMatrix = writer.encode(content, BarcodeFormat.QR_CODE, 512, 512)
