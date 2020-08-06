@@ -31,8 +31,14 @@
         android:layout_height="match_parent">
 
         <include
-            android:id="@+id/bankDetailsMainLayout"
+            android:id="@+id/bankEditLayout"
+            android:visibility="gone"
             layout="@layout/fragment_add_bank_details_info_main"/>
+
+        <include
+            android:id="@+id/bankViewLayout"
+            android:visibility="gone"
+            layout="@layout/fragment_add_bank_details_info_view"/>
 
         <ProgressBar
             android:id="@+id/progressBar"

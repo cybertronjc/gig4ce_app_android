@@ -1,31 +1,43 @@
 package com.gigforce.app.modules.gigPage.models
 
 import androidx.annotation.Keep
+import com.gigforce.app.core.toLocalDateTime
 import com.google.firebase.Timestamp
+import com.google.firebase.firestore.DocumentId
+import com.google.firebase.firestore.Exclude
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
+import java.util.concurrent.TimeUnit
+
 
 @Keep
 data class Gig(
-    var gigId: String = "",
+    var tag: String = "",
+    @DocumentId var gigId: String = "",
     var gigerId: String = "",
-    var gigAmount: Double = 0.0,
     var title: String = "",
     var address: String = "",
     var latitude: Double? = null,
     var longitude: Double? = null,
+
+    var gigAmount: Double = 0.0,
+    var invoiceGenerationDate : Timestamp? = null,
+    var paymentStatus : String = "Processing",
+
     var startDateTime: Timestamp? = null,
     var endDateTime: Timestamp? = null,
+
     var gigStatus: String = "upcoming",
     var companyLogo: String? = null,
     var companyName: String? = null,
-    var contactNo: String? = null,
     @field:JvmField var isGigActivated: Boolean = true, //TODO change this
     @field:JvmField var isFavourite: Boolean = false,
     @field:JvmField var isGigCompleted: Boolean = false,
     @field:JvmField var isPaymentDone: Boolean = false,
-    var duration: Float = 0.0F,
+    @field:JvmField var isMonthlyGig: Boolean = false,
+    @field:JvmField var isFullDay: Boolean = false,
+
     var gigRating: Float = 0.0F,
     var gigUserFeedback: String? = null,
     var gigUserFeedbackAttachments: List<String> = emptyList(),
@@ -42,6 +54,28 @@ data class Gig(
     var gigContactDetails: GigContactDetails? = null
 ) {
 
+    @get:Exclude
+    @set:Exclude
+    var startHour: Int = 0
+        get() = startDateTime!!.toLocalDateTime().hour
+
+    @get:Exclude
+    @set:Exclude
+    var startMinute: Int = 0
+        get() = startDateTime!!.toLocalDateTime().minute
+
+    @get:Exclude
+    @set:Exclude
+    var duration: Float = 0.0F
+        get() {
+            val diffInMilliSecs = endDateTime!!.toDate().time - startDateTime!!.toDate().time
+            val minutes = TimeUnit.MINUTES.convert(diffInMilliSecs, TimeUnit.MILLISECONDS)
+            val hours = TimeUnit.HOURS.convert(diffInMilliSecs, TimeUnit.MILLISECONDS)
+
+            return (hours + (minutes - 60*hours) / 60.0).toFloat()
+        }
+
+    @Exclude
     fun isGigOfToday(): Boolean {
 
         val gigDate =
@@ -50,6 +84,7 @@ data class Gig(
         return gigDate.isEqual(currentDate)
     }
 
+    @Exclude
     fun isGigOfFuture(): Boolean {
         val gigDate =
             startDateTime!!.toDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
@@ -57,7 +92,8 @@ data class Gig(
         return gigDate.isAfter(currentDate)
     }
 
-    fun isGigOfPast(): Boolean {
+    @Exclude
+    fun isGigOfPastDay(): Boolean {
 
         val gigDate =
             startDateTime!!.toDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
@@ -65,29 +101,41 @@ data class Gig(
         return gigDate.isBefore(currentDate)
     }
 
+    @Exclude
     fun isCheckInAndCheckOutMarked(): Boolean {
         return isCheckInMarked() && isCheckOutMarked()
     }
 
+    @Exclude
     fun isCheckInOrCheckOutMarked(): Boolean {
         return isCheckInMarked() || isCheckOutMarked()
     }
 
+    @Exclude
     fun isCheckInMarked(): Boolean {
         return attendance?.checkInTime != null
     }
 
+    @Exclude
     fun isCheckOutMarked(): Boolean {
         return attendance?.checkOutTime != null
     }
 
+    @Exclude
     fun isPastGig(): Boolean {
-        if (isGigOfPast())
+        if (isGigOfPastDay())
             return true
 
         if (isGigOfToday()) {
             if (isCheckInAndCheckOutMarked())
                 return true
+
+            val gigCheckInTime = startDateTime!!.toLocalDateTime()
+            val maxCheckInTime = gigCheckInTime.plusHours(1)
+            if(LocalDateTime.now().isAfter(maxCheckInTime) && isCheckInMarked().not()){
+                //User Has Exceeded max check in time and hasn't marked check-in yet
+                return true
+            }
 
             return if (endDateTime != null) {
 
@@ -95,7 +143,7 @@ data class Gig(
                     endDateTime!!.toDate().toInstant().atZone(ZoneId.systemDefault())
                         .toLocalDateTime()
                 val maxCheckOutTime =
-                    gigCheckOutTime.plusHours(4) //4 Hour window for checkout after gig time expires
+                    gigCheckOutTime.plusHours(1) //1 Hour window for checkout after gig time expires
                 LocalDateTime.now().isAfter(maxCheckOutTime)
             } else {
                 false // If end time not given gig will be considered full day gig (present gig)
@@ -103,6 +151,7 @@ data class Gig(
         } else return false
     }
 
+    @Exclude
     fun isPresentGig(): Boolean {
 
         if (isCheckInAndCheckOutMarked())
@@ -112,8 +161,9 @@ data class Gig(
             startDateTime!!.toDate().toInstant().atZone(ZoneId.systemDefault())
                 .toLocalDateTime()
         val minCheckInTime = gigCheckInTime.minusHours(1)
+        val maxCheckInTime = gigCheckInTime.plusHours(1)
         val currentTime = LocalDateTime.now()
-        val validCheckInTime = minCheckInTime.isBefore(currentTime)
+        val validCheckInTime =  (currentTime.isAfter(minCheckInTime) && currentTime.isBefore(maxCheckInTime)) || isCheckInMarked()
 
         return if (endDateTime != null) {
 
@@ -125,13 +175,14 @@ data class Gig(
                 return false
             }
 
-            val maxCheckOutTime = gigCheckOutTime.plusHours(4)
+            val maxCheckOutTime = gigCheckOutTime.plusHours(1)
             currentTime.isBefore(maxCheckOutTime) && validCheckInTime
         } else {
             isGigOfToday() && validCheckInTime
         }
     }
 
+    @Exclude
     fun isUpcomingGig(): Boolean {
 
         val gigCheckInTime =

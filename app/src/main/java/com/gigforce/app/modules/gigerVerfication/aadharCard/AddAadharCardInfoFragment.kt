@@ -10,7 +10,6 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isGone
-import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
@@ -28,7 +27,11 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.storage.FirebaseStorage
 import com.ncorti.slidetoact.SlideToActView
 import kotlinx.android.synthetic.main.fragment_add_aadhar_card_info.*
+import kotlinx.android.synthetic.main.fragment_add_aadhar_card_info.progressBar
+import kotlinx.android.synthetic.main.fragment_add_aadhar_card_info.toolbar
 import kotlinx.android.synthetic.main.fragment_add_aadhar_card_info_main.*
+import kotlinx.android.synthetic.main.fragment_add_aadhar_card_info_main.whyWeNeedThisTV
+import kotlinx.android.synthetic.main.fragment_add_aadhar_card_view.*
 import kotlinx.android.synthetic.main.fragment_verification_image_holder.view.*
 
 enum class AadharCardSides {
@@ -99,14 +102,6 @@ class AddAadharCardInfoFragment : BaseFragment() {
                 showAadharImageAndInfoLayout()
                 showImageInfoLayout()
 
-                if (aadharCardDataModel?.userHasAadharCard != null &&
-                    aadharCardDataModel?.userHasAadharCard!! &&
-                    (aadharFrontImagePath == null || aadharBackImagePath == null)
-                ) {
-                    aadharSubmitSliderBtn.gone()
-                    aadharDataCorrectCB.gone()
-                }
-
                 if (aadharDataCorrectCB.isChecked
                     && aadharFrontImagePath != null
                     && aadharBackImagePath != null
@@ -173,7 +168,7 @@ class AddAadharCardInfoFragment : BaseFragment() {
 
                 override fun onSlideComplete(view: SlideToActView) {
 
-                    if (aadharYesRB.isChecked) {
+                    if (aadharYesRB.isChecked || aadharSubmitSliderBtn.text == getString(R.string.update)) {
                         if (aadharCardET.text!!.length != 12) {
 
                             MaterialAlertDialogBuilder(requireContext())
@@ -197,36 +192,36 @@ class AddAadharCardInfoFragment : BaseFragment() {
                         }
 
                         val aadharNo = aadharCardET.text.toString()
-                        if (aadharSubmitSliderBtn.text.toString() == getString(R.string.update)) {
 
-                            MaterialAlertDialogBuilder(requireContext())
-                                .setTitle("Alert")
-                                .setMessage("You are re-uploading your Aadhaar details, they will be verified once again, that can take up to 7 days")
-                                .setPositiveButton("OK") { _, _ ->
+                        viewModel.updateAadharData(
+                            true,
+                            aadharFrontImagePath,
+                            aadharBackImagePath,
+                            aadharNo
+                        )
 
-                                    viewModel.updateAadharData(
-                                        true,
-                                        aadharFrontImagePath,
-                                        aadharBackImagePath,
-                                        aadharNo
-                                    )
-                                }
-                                .show()
-
-                        } else {
-
-                            viewModel.updateAadharData(
-                                true,
-                                aadharFrontImagePath,
-                                aadharBackImagePath,
-                                aadharNo
-                            )
-                        }
                     } else if (aadharNoRB.isChecked) {
                         viewModel.updateAadharData(false, null, null, null)
                     }
                 }
             }
+
+
+        editLayout.setOnClickListener {
+
+            MaterialAlertDialogBuilder(requireContext())
+                .setTitle("Alert")
+                .setMessage("You are re-uploading your Aadhar details, they will be verified once again, that can take up to 7 days")
+                .setPositiveButton("OK") { _, _ ->
+
+                    aadharViewLayout.gone()
+                    aadharEditLayout.visible()
+
+                    setDataOnEditLayout(aadharCardDataModel)
+                }
+                .setNegativeButton("Cancel") { _, _ -> }
+                .show()
+        }
     }
 
     private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance()
@@ -235,58 +230,30 @@ class AddAadharCardInfoFragment : BaseFragment() {
         viewModel.gigerVerificationStatus
             .observe(viewLifecycleOwner, Observer {
                 this.gigerVerificationStatus = it
+                this.aadharCardDataModel = it.aadharCardDataModel
+                progressBar.gone()
 
                 if (it.aadharCardDetailsUploaded && it.aadharCardDataModel != null) {
-                    this.aadharCardDataModel = it.aadharCardDataModel
-
 
                     if (it.aadharCardDataModel.userHasAadharCard != null) {
                         if (it.aadharCardDataModel.userHasAadharCard) {
-                            aadharSubmitSliderBtn.text = getString(R.string.update)
-                            aadharSubmitSliderBtn.gone()
-                            aadharDataCorrectCB.gone()
-
-                            aadharAvailaibilityOptionRG.check(R.id.aadharYesRB)
-                            aadharCardET.setText(it.aadharCardDataModel.aadharCardNo)
-                        } else
+                            setDataOnViewLayout(it)
+                        } else{
+                            setDataOnEditLayout(null)
                             aadharAvailaibilityOptionRG.check(R.id.aadharNoRB)
+                        }
+
                     } else {
                         //Uncheck both and hide capture layout
+                        setDataOnEditLayout(null)
                         aadharAvailaibilityOptionRG.clearCheck()
                         hideAadharImageAndInfoLayout()
                     }
-
-                    if (it.aadharCardDataModel.frontImage != null) {
-                        val imageRef = firebaseStorage
-                            .reference
-                            .child("verification")
-                            .child(it.aadharCardDataModel.frontImage)
-
-                        imageRef.downloadUrl.addOnSuccessListener {
-                            showFrontAadharCard(it)
-                        }.addOnFailureListener {
-                            print("ee")
-                        }
-                    }
-
-                    if (it.aadharCardDataModel.backImage != null) {
-                        val imageRef = firebaseStorage
-                            .reference
-                            .child("verification")
-                            .child(it.aadharCardDataModel.backImage)
-
-                        imageRef.downloadUrl.addOnSuccessListener {
-                            showBackAadharCard(it)
-                        }.addOnFailureListener {
-                            print("ee")
-                        }
-                    }
-
-                    if (aadharDataCorrectCB.isChecked && it.aadharCardDataModel.frontImage != null && it.aadharCardDataModel.backImage != null) {
-                        enableSubmitButton()
-                    }
+                } else{
+                    setDataOnEditLayout(null)
+                    aadharAvailaibilityOptionRG.clearCheck()
+                    hideAadharImageAndInfoLayout()
                 }
-
             })
 
         viewModel.documentUploadState
@@ -301,9 +268,107 @@ class AddAadharCardInfoFragment : BaseFragment() {
         viewModel.getVerificationStatus()
     }
 
+    private fun setDataOnViewLayout(gigVerificationStatus: GigerVerificationStatus) {
+        aadharEditLayout.gone()
+        aadharViewLayout.visible()
+        //TODO handle error message when process is ready
+
+        val aadharDetails = gigVerificationStatus.aadharCardDataModel ?: return
+
+        statusTV.text = aadharDetails.verifiedString
+        statusTV.setTextColor(
+            ResourcesCompat.getColor(
+                resources,
+                gigVerificationStatus.getColorCodeForStatus(aadharDetails.state),
+                null
+            )
+        )
+
+        if (aadharDetails.frontImage != null) {
+            firebaseStorage
+                .reference
+                .child("verification")
+                .child(aadharDetails.frontImage)
+                .downloadUrl.addOnSuccessListener {
+                    Glide.with(requireContext()).load(it).placeholder(getCircularProgressDrawable()).into(aadharViewFrontImageIV)
+                }.addOnFailureListener {
+                    print("ee")
+                }
+        }
+        aadharViewFrontErrorMessage.gone()
+
+        if (aadharDetails.backImage != null) {
+            firebaseStorage
+                .reference
+                .child("verification")
+                .child(aadharDetails.backImage)
+                .downloadUrl.addOnSuccessListener {
+                    Glide.with(requireContext()).load(it).placeholder(getCircularProgressDrawable()).into(aadharViewBackImageIV)
+                }.addOnFailureListener {
+                    print("ee")
+                }
+        }
+        aadharViewBackErrorMessageTV.gone()
+
+        aadharNoTV.text = aadharDetails.aadharCardNo
+        aadharNumberViewErrorMessage.gone()
+    }
+
+
+    private fun setDataOnEditLayout(it: AadharCardDataModel?) {
+        aadharViewLayout.gone()
+        aadharEditLayout.visible()
+
+        if (it != null) {
+            //Fill previous data
+            aadharAvailaibilityOptionRG.gone()
+            doYouHaveAadharLabel.gone()
+        } else {
+            aadharAvailaibilityOptionRG.visible()
+            doYouHaveAadharLabel.visible()
+
+            aadharEditOverallErrorMessage.gone()
+            aadharNoEditErrorMessage.gone()
+            aadharFrontImageEditErrorMessage.gone()
+            aadharBackImageEditErrorMessage.gone()
+        }
+
+        val aadharData = it ?: return
+        aadharSubmitSliderBtn.text = getString(R.string.update)
+
+        aadharCardET.setText(aadharData.aadharCardNo)
+
+        if (aadharData.frontImage != null) {
+            val imageRef = firebaseStorage
+                .reference
+                .child("verification")
+                .child(aadharData.frontImage)
+
+            imageRef.downloadUrl.addOnSuccessListener {
+                showFrontAadharCard(it)
+            }.addOnFailureListener {
+                print("ee")
+            }
+        }
+
+        if (aadharData.backImage != null) {
+            val imageRef = firebaseStorage
+                .reference
+                .child("verification")
+                .child(aadharData.backImage)
+
+            imageRef.downloadUrl.addOnSuccessListener {
+                showBackAadharCard(it)
+            }.addOnFailureListener {
+                print("ee")
+            }
+        }
+    }
+
     private fun errorOnUploadingDocuments(error: String) {
         progressBar.visibility = View.GONE
-        aadharMainLayout.visibility = View.VISIBLE
+        aadharViewLayout.gone()
+        aadharEditLayout.visibility = View.VISIBLE
         aadharSubmitSliderBtn.resetSlider()
 
         MaterialAlertDialogBuilder(requireContext())
@@ -348,7 +413,8 @@ class AddAadharCardInfoFragment : BaseFragment() {
     }
 
     private fun showLoadingState() {
-        aadharMainLayout.visibility = View.GONE
+        aadharViewLayout.gone()
+        aadharEditLayout.visibility = View.GONE
         progressBar.visibility = View.VISIBLE
     }
 
@@ -472,6 +538,7 @@ class AddAadharCardInfoFragment : BaseFragment() {
 
         Glide.with(requireContext())
             .load(aadharFrontImagePath)
+            .placeholder(getCircularProgressDrawable())
             .into(aadharFrontImageHolder.uploadImageLayout.clickedImageIV)
     }
 
@@ -483,6 +550,7 @@ class AddAadharCardInfoFragment : BaseFragment() {
 
         Glide.with(requireContext())
             .load(aadharBackImagePath)
+            .placeholder(getCircularProgressDrawable())
             .into(aadharBackImageHolder.uploadImageLayout.clickedImageIV)
     }
 

@@ -81,6 +81,7 @@
             android:minHeight="76dp"
             android:textColor="#313131"
             android:textSize="14sp"
+            android:padding="5dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tellAboutGigLabel" />
 

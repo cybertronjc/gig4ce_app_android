@@ -20,12 +20,14 @@ import android.widget.TextView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.gone
+import com.gigforce.app.core.toLocalDate
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.gigPage.models.Gig
 import com.gigforce.app.modules.gigPage.models.GigAttendance
@@ -46,6 +48,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.ncorti.slidetoact.SlideToActView
 import kotlinx.android.synthetic.main.fragment_gig_page_present.*
 import java.text.SimpleDateFormat
+import java.time.LocalDate
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -130,8 +133,8 @@ class GigPageFragment : BaseFragment() {
 
         callCardView.setOnClickListener {
 
-            gig?.contactNo?.let {
-                val intent = Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", it, null))
+            gig?.gigContactDetails?.contactNumber?.let {
+                val intent = Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", it.toString(), null))
                 startActivity(intent)
             }
         }
@@ -349,6 +352,7 @@ class GigPageFragment : BaseFragment() {
         gigIdTV.text = "Gig Id : ${gig.gigId}"
         paymentAmountTV.text = "Rs. ${gig.gigAmount}"
         contactPersonTV.text = gig.gigContactDetails?.contactName
+        callCardView.isVisible = gig.gigContactDetails?.contactNumber != 0L
 
         if (gig.isFavourite && favoriteCB.isChecked.not()) {
             favoriteCB.isChecked = true
@@ -368,8 +372,13 @@ class GigPageFragment : BaseFragment() {
 
         val gigAmountText = if (gig.gigAmount == 0.0)
             "--"
-        else
-            "Gross Payment : Rs ${gig.gigAmount} per Month"
+        else {
+            if (gig.isMonthlyGig)
+                "Gross Payment : Rs ${gig.gigAmount} per Month"
+            else
+                "Gross Payment : Rs ${gig.gigAmount} per Hour"
+
+        }
         wageTV.text = gigAmountText
 
         gigHighlightsContainer.removeAllViews()
@@ -406,13 +415,13 @@ class GigPageFragment : BaseFragment() {
         }
 
         if (gig.latitude != null) {
-
+            gigLocationMapView.visible()
             addMarkerOnMap(
                 latitude = gig.latitude!!,
                 longitude = gig.longitude!!
             )
         } else {
-            //Hide Map maybe
+            gigLocationMapView.gone()
         }
 
         if (gig.locationPictures.isNotEmpty()) {
@@ -492,11 +501,32 @@ class GigPageFragment : BaseFragment() {
         if (gig.isCheckInAndCheckOutMarked()) {
             gigPaymentLayout.visible()
             invoiceStatusBtn.visible()
+
+            processingLabel.text = gig.paymentStatus
+
+            if (gig.invoiceGenerationDate != null) {
+                val invoiceGenDate = gig.invoiceGenerationDate!!.toLocalDate()
+
+                val invoiceDateTime = if (invoiceGenDate.equals(LocalDate.now())) {
+                    timeFormatter.format(gig.invoiceGenerationDate!!.toDate())
+                } else {
+                    dateFormatter.format(gig.invoiceGenerationDate!!.toDate())
+                }
+
+                invoiceStatusBtn.text = "Invoice Generated"
+                invoice_generation_date.text = "Invoice Generated : $invoiceDateTime"
+            } else {
+                invoice_generation_date.text = "Invoice Generated : --"
+                invoiceStatusBtn.text = "Invoice Pending"
+            }
+
         } else {
             gigPaymentLayout.gone()
             invoiceStatusBtn.gone()
         }
 
+        pastGigNoteTV.text =
+            "Please contact the supervisor in case there’s an issue with marking attendance."
         dateTV.text = DateHelper.getDateInDDMMYYYY(gig.startDateTime!!.toDate())
 
         if (gig.isCheckInMarked())
@@ -524,86 +554,102 @@ class GigPageFragment : BaseFragment() {
 
         presentFutureGigNoteTV.text =
             if (daysLeft > 0)
-                "Note :We are preparing your gig.It will start in next $daysLeft Days"
+                "We are preparing your gig.It will start in next $daysLeft Days"
             else
-                "Note :We are preparing your gig.It will start in next $hoursLeft Hours"
+                "We are preparing your gig.It will start in next $hoursLeft Hours"
     }
 
     private fun showUserReceivedRating(gig: Gig) {
-        userReceivedRatingBar.rating = gig.ratingUserReceived
-        if (gig.feedbackUserReceived != null) {
-            userReceivedRatingFeedbackTV.visible()
-            userReceivedRatingFeedbackTV.text = gig.feedbackUserReceived
-        } else
-            userReceivedRatingFeedbackTV.gone()
 
-        if (gig.ratingUserReceivedAttachments.isNotEmpty()) {
-            userReceivedRatingAttachmentsContainer.visible()
+        if (gig.ratingUserReceived > 0) {
+            userReceviedFeedbackRatingLayout.visible()
 
-            gig.ratingUserReceivedAttachments.map {
-                Uri.parse(it)
-            }.forEach {
-                layoutInflater.inflate(
-                    R.layout.dialog_rating_image_layout,
-                    userReceivedRatingAttachmentsContainer,
-                    true
-                )
-                val inflatedImageView = userReceivedRatingAttachmentsContainer.getChildAt(
-                    userReceivedRatingAttachmentsContainer.childCount - 1
-                )
+            userReceivedRatingBar.rating = gig.ratingUserReceived
+            if (gig.feedbackUserReceived != null) {
+                userReceivedRatingFeedbackTV.visible()
+                userReceivedRatingFeedbackTV.text = "“ ${gig.feedbackUserReceived} “"
+            } else
+                userReceivedRatingFeedbackTV.gone()
 
-                inflatedImageView.setOnClickListener(onClickImageListener)
-                // inflatedImageView.findViewById<View>(R.id.ic_delete_btn).setOnClickListener(onDeleteImageClickImageListener)
+            userReceivedRatingAttachmentsContainer.removeAllViews()
+            if (gig.ratingUserReceivedAttachments.isNotEmpty()) {
 
-                inflatedImageView.tag = it.toString()
+                userReceivedRatingAttachmentsContainer.visible()
+                gig.ratingUserReceivedAttachments.map {
+                    Uri.parse(it)
+                }.forEach {
+                    layoutInflater.inflate(
+                        R.layout.dialog_rating_image_layout,
+                        userReceivedRatingAttachmentsContainer,
+                        true
+                    )
+                    val inflatedImageView = userReceivedRatingAttachmentsContainer.getChildAt(
+                        userReceivedRatingAttachmentsContainer.childCount - 1
+                    )
 
-                val imageNameTV = inflatedImageView.findViewById<TextView>(R.id.imageNameTV)
-                imageNameTV.text = if (it.lastPathSegment!!.contains("/")) {
-                    it.lastPathSegment!!.substringAfterLast("/")
-                } else
-                    it.lastPathSegment!!
+                    inflatedImageView.setOnClickListener(onClickImageListener)
+                    // inflatedImageView.findViewById<View>(R.id.ic_delete_btn).setOnClickListener(onDeleteImageClickImageListener)
+
+                    inflatedImageView.tag = it.toString()
+
+                    val imageNameTV = inflatedImageView.findViewById<TextView>(R.id.imageNameTV)
+                    imageNameTV.text = if (it.lastPathSegment!!.contains("/")) {
+                        it.lastPathSegment!!.substringAfterLast("/")
+                    } else
+                        it.lastPathSegment!!
+                }
+            } else {
+                userReceivedRatingAttachmentsContainer.gone()
             }
         } else {
-            userReceivedRatingAttachmentsContainer.gone()
+            userReceviedFeedbackRatingLayout.gone()
         }
     }
 
     private fun showUserFeedbackRating(gig: Gig) {
-        userFeedbackRatingBar.rating = gig.gigRating
-        if (gig.gigUserFeedback != null) {
-            usersFeedbackTV.visible()
-            usersFeedbackTV.text = gig.gigUserFeedback
-        } else
-            usersFeedbackTV.gone()
 
-        if (gig.gigUserFeedbackAttachments.isNotEmpty()) {
-            userFeedbackAttachmentsContainer.visible()
+        if (gig.gigRating > 0) {
+            userFeedbackRatingLayout.visible()
 
-            gig.gigUserFeedbackAttachments.map {
-                Uri.parse(it)
-            }.forEach {
-                layoutInflater.inflate(
-                    R.layout.dialog_rating_image_layout,
-                    userFeedbackAttachmentsContainer,
-                    true
-                )
-                val inflatedImageView = userFeedbackAttachmentsContainer.getChildAt(
-                    userFeedbackAttachmentsContainer.childCount - 1
-                )
+            userFeedbackRatingBar.rating = gig.gigRating
+            if (gig.gigUserFeedback != null) {
+                usersFeedbackTV.visible()
+                usersFeedbackTV.text = "“ ${gig.gigUserFeedback} “"
+            } else
+                usersFeedbackTV.gone()
 
-                inflatedImageView.setOnClickListener(onClickImageListener)
-                // inflatedImageView.findViewById<View>(R.id.ic_delete_btn).setOnClickListener(onDeleteImageClickImageListener)
+            userFeedbackAttachmentsContainer.removeAllViews()
+            if (gig.gigUserFeedbackAttachments.isNotEmpty()) {
+                userFeedbackAttachmentsContainer.visible()
 
-                inflatedImageView.tag = it.toString()
+                gig.gigUserFeedbackAttachments.map {
+                    Uri.parse(it)
+                }.forEach {
+                    layoutInflater.inflate(
+                        R.layout.dialog_rating_image_layout,
+                        userFeedbackAttachmentsContainer,
+                        true
+                    )
+                    val inflatedImageView = userFeedbackAttachmentsContainer.getChildAt(
+                        userFeedbackAttachmentsContainer.childCount - 1
+                    )
 
-                val imageNameTV = inflatedImageView.findViewById<TextView>(R.id.imageNameTV)
-                imageNameTV.text = if (it.lastPathSegment!!.contains("/")) {
-                    it.lastPathSegment!!.substringAfterLast("/")
-                } else
-                    it.lastPathSegment!!
+                    inflatedImageView.setOnClickListener(onClickImageListener)
+                    // inflatedImageView.findViewById<View>(R.id.ic_delete_btn).setOnClickListener(onDeleteImageClickImageListener)
+
+                    inflatedImageView.tag = it.toString()
+
+                    val imageNameTV = inflatedImageView.findViewById<TextView>(R.id.imageNameTV)
+                    imageNameTV.text = if (it.lastPathSegment!!.contains("/")) {
+                        it.lastPathSegment!!.substringAfterLast("/")
+                    } else
+                        it.lastPathSegment!!
+                }
+            } else {
+                userFeedbackAttachmentsContainer.gone()
             }
         } else {
-            userFeedbackAttachmentsContainer.gone()
+            userFeedbackRatingLayout.gone()
         }
     }
 
@@ -680,7 +726,7 @@ class GigPageFragment : BaseFragment() {
             val content = it.substringAfter(":").trim()
 
             gigTitleTV.text = title
-            contentTV.text = content.replace("\\n", "\n")
+            contentTV.text = content.replace("<>", "\n")
         } else {
             gigRequirementsContainer.inflate(R.layout.gig_details_item, true)
             val gigItem: LinearLayout =

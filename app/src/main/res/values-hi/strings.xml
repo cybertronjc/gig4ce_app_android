@@ -324,5 +324,10 @@
     <string name="pending">Pending</string>
     <string name="explore_by_role">Explore By Role</string>
 
+    <string name="complete_now">Complete Now</string>
+    <string name="complete_your_verification">Complete Your Verification</string>
+    <string name="verification">Verification</string>
+    <string name="verified_giger_s_get_recruited_first">Verified giger\'s get recruited first</string>
+    <string name="my_calendar">My Calendar</string>
 
 </resources>

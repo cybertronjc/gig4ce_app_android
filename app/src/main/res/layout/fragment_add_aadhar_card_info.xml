@@ -31,8 +31,14 @@
         android:layout_height="match_parent">
 
         <include
-            android:id="@+id/aadharMainLayout"
+            android:id="@+id/aadharEditLayout"
+            android:visibility="gone"
             layout="@layout/fragment_add_aadhar_card_info_main" />
+
+        <include
+            android:id="@+id/aadharViewLayout"
+            android:visibility="gone"
+            layout="@layout/fragment_add_aadhar_card_view" />
 
         <ProgressBar
             android:id="@+id/progressBar"
