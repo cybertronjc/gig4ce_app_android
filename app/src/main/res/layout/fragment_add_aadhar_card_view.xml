@@ -65,7 +65,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:fontFamily="@font/lato"
-                android:text="Edit"
+                android:text="@string/edit"
                 android:textColor="@color/black" />
 
 
@@ -82,7 +82,7 @@
             android:textColor="@color/black"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/statusTV"
-            android:text="Aadhar Card (Front Image)" />
+            android:text="@string/aadhar_card_front_image" />
 
         <ImageView
             android:id="@+id/aadharViewFrontImageIV"
@@ -118,7 +118,7 @@
             android:textColor="@color/black"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/aadharViewFrontErrorMessage"
-            android:text="Aadhar Card (Back Image)" />
+            android:text="@string/aadhar_card_back_image" />
 
         <ImageView
             android:id="@+id/aadharViewBackImageIV"
@@ -158,7 +158,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/lato_bold"
                 android:letterSpacing="0"
-                android:text="Aadhar No : "
+                android:text="@string/aadhar_number_with_colon"
                 android:textColor="@color/black"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"

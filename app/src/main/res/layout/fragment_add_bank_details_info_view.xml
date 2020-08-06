@@ -65,7 +65,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:fontFamily="@font/lato"
-                android:text="Edit"
+                android:text="@string/edit"
                 android:textColor="@color/black" />
 
 
@@ -82,7 +82,7 @@
             android:textColor="@color/black"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/statusTV"
-            android:text="Bank Passbook (Front Image)" />
+            android:text="@string/bank_passbook_front_image" />
 
         <ImageView
             android:id="@+id/bankViewImageIV"
@@ -122,7 +122,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/lato_bold"
                 android:letterSpacing="0"
-                android:text="IFSC Code : "
+                android:text="@string/ifsc_code"
                 android:textColor="@color/black"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -161,7 +161,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/lato_bold"
                 android:letterSpacing="0"
-                android:text="Bank Name : "
+                android:text="@string/bank_name_with_colon"
                 android:layout_marginTop="15dp"
                 android:textColor="@color/black"
                 app:layout_constraintStart_toStartOf="parent"
@@ -202,7 +202,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/lato_bold"
                 android:letterSpacing="0"
-                android:text="Bank Account No : "
+                android:text="@string/bank_account_no"
                 android:layout_marginTop="15dp"
                 android:textColor="@color/black"
                 app:layout_constraintStart_toStartOf="parent"
