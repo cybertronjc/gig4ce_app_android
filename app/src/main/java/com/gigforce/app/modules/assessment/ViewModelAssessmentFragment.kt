@@ -4,7 +4,6 @@ import android.graphics.Rect
 import android.view.View
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.gigforce.app.utils.widgets.CustomScrollView
 
 class ViewModelAssessmentFragment : ViewModel() {
 
@@ -26,12 +25,9 @@ class ViewModelAssessmentFragment : ViewModel() {
     }
 
 
-    fun shouldQuestionHeaderBeVisible(view: View, scrollView: CustomScrollView) {
-        val scrollBounds = Rect()
-        scrollView.getDrawingRect(scrollBounds)
-        val top = view.y
-        val bottom = top + view.height
-        observableShowHideQuestionHeader.value = if (scrollBounds.top < top && scrollBounds.bottom > bottom) View.GONE else View.VISIBLE
+    fun shouldQuestionHeaderBeVisible(top: Float?, bottom: Float?, scrollBounds: Rect) {
+        observableShowHideQuestionHeader.value =
+            if (scrollBounds.top < top!! && scrollBounds.bottom > bottom!!) View.GONE else View.VISIBLE
     }
 
     fun switchAsPerState(state: Int) {

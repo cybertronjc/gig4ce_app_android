@@ -1,5 +1,6 @@
 package com.gigforce.app.modules.assessment
 
+import android.graphics.Rect
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -106,10 +107,11 @@ class AssessmentFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
             }
 
             override fun onScrollChanged() {
-                viewModelAssessmentFragment.shouldQuestionHeaderBeVisible(
-                    tv_scenario_label_assess_frag,
-                    sv_assess_frag
-                )
+                val scrollBounds = Rect()
+                sv_assess_frag.getDrawingRect(scrollBounds)
+                val top = view?.y
+                val bottom = top?.plus(view?.height!!)
+                viewModelAssessmentFragment.shouldQuestionHeaderBeVisible(top, bottom, scrollBounds)
             }
         })
         swipeDownAnim()

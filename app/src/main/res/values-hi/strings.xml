@@ -1,5 +1,4 @@
 <resources>
-
     <string name="app_name">गिगफोसृ</string>
     <string name="hello_blank_fragment">हैलो</string>
     <string name="title_activity_profile">-</string>
@@ -305,6 +304,17 @@
     <string name="congrats">बधाई</string>
     <string name="assess_complete">मूल्यांकन सफलतापूर्वक पूरा हुआ</string>
     <string name="scorecard">स्कोरकार्ड</string>
+
+    <string name="my_gigs">My Gigs</string>
+    <string name="punch_in">Punch In</string>
+    <string name="past">Past</string>
+    <string name="upcoming">Upcoming</string>
+    <string name="punch_out">Punch Out</string>
+    <string name="hours">hrs</string>
+    <string name="mins">mins</string>
+    <string name="no_on_going_gigs">No On Going Gigs</string>
+    <string name="pending">Pending</string>
+    <string name="explore_by_role">Explore By Role</string>
     <string name="oops">उफ़ !!!</string>
     <string name="keep_it_up">इसे बनाए रखें</string>
     <string name="you_ll_soon_be_sent_invites_for_best_gigs_around_for_you">आप \\\ &amp;#x27;जल्द ही आप के लिए सबसे अच्छा gigs के लिए आमंत्रित किया जाएगा</string>

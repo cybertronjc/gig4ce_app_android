@@ -9,8 +9,8 @@ apply plugin: 'com.google.gms.google-services'
 android {
     signingConfigs {
         debug {
-            storeFile file('/home/yogesh/WORK/gig4ce/gig4ce_app_android/build/gigforceapp.jks')
-//            storeFile file('/Users/apple/Documents/gigforceapp.jks')
+            //storeFile file('/home/yogesh/WORK/gig4ce/gig4ce_app_android/build/gigforceapp.jks')
+            storeFile file('/Users/apple/Documents/gigforceapp.jks')
             storePassword 'gigforce'
             keyAlias 'key0'
             keyPassword 'gigforce'
@@ -29,9 +29,9 @@ android {
         applicationId "com.gigforce.app"
         minSdkVersion 23
         targetSdkVersion 29
-        versionCode 41
-        versionName "1.15.0"
-
+        versionCode 37
+        versionName "1.13.4"
+        multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -47,11 +47,11 @@ android {
             signingConfig signingConfigs.debug
         }
 
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.production
-        }
+//        release {
+//            minifyEnabled false
+//            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+//            signingConfig signingConfigs.production
+//        }
     }
 
     flavorDimensions "default"
@@ -254,4 +254,6 @@ dependencies {
 
     //Transcoder for compressing video files
     implementation 'com.otaliastudios:transcoder:0.9.1'
+
+
 }

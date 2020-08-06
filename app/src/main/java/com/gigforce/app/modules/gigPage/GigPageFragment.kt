@@ -81,6 +81,14 @@ class GigPageFragment : BaseFragment() {
         getData(arguments, savedInstanceState)
         initUi()
         initViewModel()
+        iniClicks();
+    }
+
+    private fun iniClicks() {
+
+//        bt_download_id_gig_page.setOnClickListener {
+//            navigate(R.id.giger_id_fragment)
+//        }
     }
 
     private fun getData(arguments: Bundle?, savedInstanceState: Bundle?) {

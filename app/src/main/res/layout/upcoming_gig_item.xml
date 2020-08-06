@@ -52,18 +52,18 @@
             app:layout_constraintStart_toEndOf="@+id/companyLogoIV"
             app:layout_constraintTop_toTopOf="parent" />
 
+
         <TextView
             android:id="@+id/textView67"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
             android:letterSpacing="0.03"
+            android:text="10:00 AM — 10:30 AM"
             android:textColor="@color/upcoming_gig_time"
             android:textSize="12sp"
             app:layout_constraintStart_toStartOf="@+id/textView41"
-            app:layout_constraintTop_toBottomOf="@+id/textView41"
-            android:text="10:00 AM — 10:30 AM" />
-
+            app:layout_constraintTop_toBottomOf="@+id/textView41" />
 
         <View
             android:id="@+id/seaprator1"

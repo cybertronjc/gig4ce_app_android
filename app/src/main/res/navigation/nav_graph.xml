@@ -600,5 +600,15 @@
         android:label="fragment_help_video"
         tools:layout="@layout/fragment_help_video" />
 
+    <fragment
+        android:id="@+id/gig_history_fragment"
+        android:name="com.gigforce.app.modules.earn.gighistory.GigHistoryFragment"
+        android:label="GigHistoryFragment" />
+    <fragment
+        android:id="@+id/giger_id_fragment"
+        android:name="com.gigforce.app.modules.gigerid.GigerIdFragment"
+        android:label="GigerIdFragment" />
+
+
 </navigation>
 
