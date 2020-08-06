@@ -63,6 +63,7 @@
             android:layout_marginLeft="15dp"
             android:paddingLeft="11dp"
             android:hint="en"
+            android:enabled="false"
             style="@style/Theme.RadioButtonLipstickPink"
             android:text="English"
             android:textSize="14sp" />
@@ -79,6 +80,7 @@
             android:layout_marginLeft="15dp"
             android:paddingLeft="11dp"
             android:hint="hi"
+            android:enabled="false"
             style="@style/Theme.RadioButtonLipstickPink"
             android:text="हिंदी"
             android:textSize="14sp" />
@@ -96,6 +98,7 @@
             android:paddingLeft="11dp"
             android:hint="te"
             android:text="తెలుగు"
+            android:enabled="false"
             style="@style/Theme.RadioButtonLipstickPink"
             android:textSize="14sp" />
 
@@ -112,6 +115,7 @@
             android:hint="gu"
             android:paddingLeft="11dp"
             android:text="ગુજરતી"
+            android:enabled="false"
             style="@style/Theme.RadioButtonLipstickPink"
             android:textSize="14sp" />
 
@@ -128,6 +132,7 @@
             android:paddingLeft="11dp"
             android:hint="pa"
             android:text="ਪੰਜਾਬੀ"
+            android:enabled="false"
             style="@style/Theme.RadioButtonLipstickPink"
             android:textSize="14sp" />
 
@@ -145,6 +150,7 @@
             android:paddingLeft="11dp"
             android:hint="fr"
             android:text="français"
+            android:enabled="false"
             style="@style/Theme.RadioButtonLipstickPink"
             android:textSize="14sp" />
 
@@ -161,6 +167,7 @@
             android:paddingLeft="11dp"
             android:hint="mr"
             android:text="मराठी"
+            android:enabled="false"
             style="@style/Theme.RadioButtonLipstickPink"
             android:textSize="14sp" />
 

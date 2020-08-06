@@ -594,6 +594,11 @@
         android:id="@+id/assessment_result_fragment"
         android:name="com.gigforce.app.modules.assessment.AssessmentResultFragment"
         android:label="AssessmentResultFragment" />
+    <fragment
+        android:id="@+id/helpVideosFragment"
+        android:name="com.gigforce.app.modules.help.HelpVideosFragment"
+        android:label="fragment_help_video"
+        tools:layout="@layout/fragment_help_video" />
 
 </navigation>
 

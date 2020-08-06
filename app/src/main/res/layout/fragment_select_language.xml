@@ -48,6 +48,7 @@
             android:text="English"
             android:textSize="14sp"
             android:letterSpacing="0"
+            android:enabled="false"
             style="@style/Theme.RadioButtonLipstickPink"
             android:paddingLeft="16dp"
             android:layout_marginLeft="16dp"/>
@@ -64,6 +65,7 @@
             android:letterSpacing="0"
             android:textSize="14sp"
             android:paddingLeft="16dp"
+            android:enabled="false"
             style="@style/Theme.RadioButtonLipstickPink"
             android:layout_marginLeft="16dp"/>
         <View
@@ -76,6 +78,7 @@
             android:layout_height="@dimen/height_select_lang_item"
             android:hint="te"
             android:text="తెలుగు"
+            android:enabled="false"
             android:textSize="14sp"
             android:paddingLeft="16dp"
             android:letterSpacing="0"
@@ -91,6 +94,7 @@
             android:layout_height="@dimen/height_select_lang_item"
             android:hint="gu"
             android:text="ગુજરતી"
+            android:enabled="false"
             android:textSize="14sp"
             android:letterSpacing="0"
             android:paddingLeft="16dp"
@@ -106,6 +110,7 @@
             android:layout_height="@dimen/height_select_lang_item"
             android:hint="pa"
             android:text="ਪੰਜਾਬੀ"
+            android:enabled="false"
             android:letterSpacing="0"
             android:textSize="14sp"
             android:paddingLeft="16dp"
@@ -123,6 +128,7 @@
             android:text="français"
             android:letterSpacing="0"
             android:textSize="14sp"
+            android:enabled="false"
             style="@style/Theme.RadioButtonLipstickPink"
             android:paddingLeft="16dp"
             android:layout_marginLeft="16dp"/>
@@ -140,6 +146,7 @@
             android:textSize="14sp"
             style="@style/Theme.RadioButtonLipstickPink"
             android:paddingLeft="16dp"
+            android:enabled="false"
             android:layout_marginLeft="16dp"/>
         <View
             android:layout_width="match_parent"

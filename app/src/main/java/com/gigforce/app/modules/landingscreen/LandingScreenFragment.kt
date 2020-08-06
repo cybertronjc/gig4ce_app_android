@@ -1,36 +1,40 @@
 package com.gigforce.app.modules.landingscreen
 
 import android.app.Dialog
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
+import android.content.*
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.util.DisplayMetrics
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.Window
-import android.widget.TextView
+import androidx.core.os.bundleOf
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
+import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.app.core.genericadapter.RecyclerGenericAdapter
-import com.gigforce.app.modules.calendarscreen.maincalendarscreen.bottomsheet.UpcomingGigModel
+import com.gigforce.app.core.gone
+import com.gigforce.app.core.toBundle
+import com.gigforce.app.core.visible
+import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
+import com.gigforce.app.modules.help.HelpVideo
+import com.gigforce.app.modules.help.HelpViewModel
+import com.gigforce.app.modules.landingscreen.models.Tip
 import com.gigforce.app.modules.preferences.PreferencesFragment
-import com.gigforce.app.modules.preferences.prefdatamodel.PreferencesDataModel
+import com.gigforce.app.modules.profile.AboutExpandedFragment
 import com.gigforce.app.modules.profile.ProfileViewModel
 import com.gigforce.app.utils.GlideApp
-import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.EventListener
 import com.google.firebase.storage.StorageReference
 import kotlinx.android.synthetic.main.landingscreen_fragment.*
 import kotlinx.android.synthetic.main.landingscreen_fragment.chat_icon_iv
@@ -49,6 +53,9 @@ class LandingScreenFragment : BaseFragment() {
     private lateinit var viewModel: LandingScreenViewModel
     var width: Int = 0
     private var comingFromOrGoingToScreen = -1
+    private val verificationViewModel : GigVerificationViewModel by viewModels()
+    private val helpViewModel : HelpViewModel by viewModels()
+    private val landingScreenViewModel : LandingScreenViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -72,7 +79,6 @@ class LandingScreenFragment : BaseFragment() {
         val displayMetrics = DisplayMetrics()
         activity?.windowManager?.getDefaultDisplay()?.getMetrics(displayMetrics)
         width = displayMetrics.widthPixels
-        initializeGigforceTip()
         initializeExploreByRole()
         initializeExploreByIndustry()
         initializeLearningModule()
@@ -188,6 +194,168 @@ class LandingScreenFragment : BaseFragment() {
             if (profile.name != null && !profile.name.equals(""))
                 profile_name.text = profile.name
         })
+
+        verificationViewModel
+            .gigerVerificationStatus
+            .observe(viewLifecycleOwner, Observer {
+
+                if(it.everyDocumentUploaded){
+                    complete_now.text = getString(R.string.completed)
+                    verificationTitleTV.text = getString(R.string.verification)
+                }else{
+                    complete_now.text = getString(R.string.complete_now)
+                    verificationTitleTV.text = getString(R.string.complete_your_verification)
+                }
+
+        })
+
+        verificationViewModel.startListeningForGigerVerificationStatusChanges()
+
+
+        landingScreenViewModel
+            .tips
+            .observe(viewLifecycleOwner, Observer {
+                    setTipsOnView(it)
+            })
+
+        helpViewModel
+            .helpVideos
+            .observe(viewLifecycleOwner, Observer {
+                setHelpVideosOnView(it)
+            })
+
+        helpViewModel.getTopHelpVideos()
+    }
+
+    private fun setTipsOnView(tips: List<Tip>) {
+
+        if(tips.isEmpty()){
+            gigforce_tip.gone()
+        }else {
+            gigforce_tip.visible()
+
+            val recyclerGenericAdapter: RecyclerGenericAdapter<Tip> =
+                RecyclerGenericAdapter<Tip>(
+                    activity?.applicationContext,
+                    PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
+                        val tip = (item as Tip)
+                        navigate(
+                            resId = tip.whereToRedirect,
+                            args = tip.intentExtraMap.toBundle()
+                        )
+
+
+                    },
+                    RecyclerGenericAdapter.ItemInterface<Tip?> { obj, viewHolder, position ->
+                        var title = getTextView(viewHolder, R.id.gigtip_title)
+                        var subtitle = getTextView(viewHolder, R.id.gigtip_subtitle)
+
+                        val lp = title.layoutParams
+                        lp.height = lp.height
+                        lp.width = width
+                        title.layoutParams = lp
+                        title.text = obj?.title
+                        subtitle.text = obj?.subTitle
+
+//                    getTextView(viewHolder, R.id.skip).setOnClickListener{
+//                        datalist.removeAt(position)
+//                        gigforce_tip.adapter?.notifyItemChanged(position+1)
+//                    }
+                    })!!
+            recyclerGenericAdapter.setList(tips)
+            recyclerGenericAdapter.setLayout(R.layout.gigforce_tips_item)
+            gigforce_tip.layoutManager = LinearLayoutManager(
+                activity?.applicationContext,
+                LinearLayoutManager.HORIZONTAL,
+                false
+            )
+            gigforce_tip.adapter = recyclerGenericAdapter
+            var pagerHelper = PagerSnapHelper()
+            pagerHelper.attachToRecyclerView(gigforce_tip)
+            var handler = Handler()
+//        val runnable = Runnable {
+//            var currentVisiblePosition = (gigforce_tip.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+//            gigforce_tip.scrollToPosition(currentVisiblePosition+1)
+//            handler.postDelayed(runnable,SPLASH_TIME_OUT)
+//        }
+
+            val runnableCode = object : Runnable {
+                override fun run() {
+                    try {
+                        var currentVisiblePosition =
+                            (gigforce_tip.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+                        if ((gigforce_tip.adapter as RecyclerGenericAdapter<TitleSubtitleModel>).list.size == currentVisiblePosition + 1) {
+                            forward = false
+                        }
+                        if (currentVisiblePosition == 0) {
+                            forward = true
+                        }
+                        if (!forward) {
+                            gigforce_tip.smoothScrollToPosition(currentVisiblePosition - 1)
+                        } else
+                            gigforce_tip.smoothScrollToPosition(currentVisiblePosition + 1)
+
+
+                        handler.postDelayed(this, SPLASH_TIME_OUT)
+                    } catch (e: Exception) {
+
+                    }
+
+                }
+            }
+            handler.postDelayed(runnableCode, SPLASH_TIME_OUT)
+        }
+    }
+
+    private fun setHelpVideosOnView(helpVideos: List<HelpVideo>?) {
+
+        val recyclerGenericAdapter: RecyclerGenericAdapter<HelpVideo> =
+            RecyclerGenericAdapter<HelpVideo>(
+                activity?.applicationContext,
+                PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
+                    val id = (item as HelpVideo).videoYoutubeId
+                    val appIntent =
+                        Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:$id"))
+                    val webIntent = Intent(
+                        Intent.ACTION_VIEW,
+                        Uri.parse("http://www.youtube.com/watch?v=$id")
+                    )
+                    try {
+                        requireContext().startActivity(appIntent)
+                    } catch (ex: ActivityNotFoundException) {
+                        requireContext().startActivity(webIntent)
+                    }
+                },
+                RecyclerGenericAdapter.ItemInterface<HelpVideo?> { obj, viewHolder, position ->
+
+                    var iconIV = getImageView(viewHolder, R.id.help_first_card_img)
+                    Glide.with(requireContext()).load(obj?.getThumbNailUrl()).placeholder(getCircularProgressDrawable()).into(iconIV)
+
+                    var titleTV = getTextView(viewHolder, R.id.titleTV)
+                    titleTV.text = obj?.videoTitle
+
+                    var timeTV = getTextView(viewHolder, R.id.time_text)
+                    timeTV.text = if(obj!!.videoLength >= 60){
+                            val minutes = obj!!.videoLength / 60
+                            val secs = obj!!.videoLength % 60
+                           "$minutes:$secs"
+                     }else{
+                        "00:${obj.videoLength}"
+                      }
+
+
+
+//                    var img = getImageView(viewHolder, R.id.learning_img)
+//                    img.setImageResource(obj?.imgIcon!!)
+                })!!
+        recyclerGenericAdapter.setList(helpVideos)
+        recyclerGenericAdapter.setLayout(R.layout.item_help_video)
+        helpVideoRV.layoutManager = LinearLayoutManager(
+            activity?.applicationContext,
+            LinearLayoutManager.VERTICAL,
+            false
+        )
+        helpVideoRV.adapter = recyclerGenericAdapter
     }
 
     private fun displayImage(profileImg: String) {
@@ -205,175 +373,9 @@ class LandingScreenFragment : BaseFragment() {
 
     }
 
-    private val SPLASH_TIME_OUT: Long = 2000 // 1 sec
+    private val SPLASH_TIME_OUT: Long = 10_000 // 10 sec
     var forward = true
-    private fun initializeGigforceTip() {
-        // model will change when integrated with DB
-        var datalist: ArrayList<TitleSubtitleModel> = ArrayList<TitleSubtitleModel>()
 
-        datalist.add(
-            TitleSubtitleModel(
-                "Gigforce Tip ",
-                "Your education details help build your profile."
-            )
-        )
-        datalist.add(
-            TitleSubtitleModel(
-                "Gigforce Tip ",
-                "Your work experience helps find similar gigs for you."
-            )
-        )
-        datalist.add(
-            TitleSubtitleModel(
-                "Gigforce Tip ",
-                "Adding your skills helps recommend suitable gigs."
-            )
-        )
-
-        datalist.add(
-            TitleSubtitleModel(
-                "Gigforce Tip ",
-                "Adding a profile photo shows off your personality."
-            )
-        )
-
-        datalist.add(
-            TitleSubtitleModel(
-                "Gigforce Tip ",
-                "How many languages can you speak in?"
-            )
-        )
-
-
-        datalist.add(
-            TitleSubtitleModel(
-                "Gigforce Tip ",
-                "Tell me 2 lines that best describe your."
-            )
-        )
-        datalist.add(
-            TitleSubtitleModel(
-                "Gigforce Tip ",
-                "Sharing your past achievements highlights your profile."
-            )
-        )
-        datalist.add(
-            TitleSubtitleModel(
-                "Gigforce Tip ",
-                "Add your permanent address to complete verification?"
-            )
-        )
-        datalist.add(
-            TitleSubtitleModel(
-                "Gigforce Tip ",
-                "Have you shared where you are looking for work?"
-            )
-        )
-        datalist.add(
-            TitleSubtitleModel(
-                "Gigforce Tip ",
-                "What are your preferred areas to work from?"
-            )
-        )
-        datalist.add(
-            TitleSubtitleModel(
-                "Gigforce Tip ",
-                "How far are you willing to travel for work daily?"
-            )
-        )
-        datalist.add(
-            TitleSubtitleModel(
-                "Gigforce Tip ",
-                "What is your daily earning expectation?"
-            )
-        )
-
-
-        datalist.add(
-            TitleSubtitleModel(
-                "Gigforce Tip ",
-                "How many days during the week are you willing to work?"
-            )
-        )
-        datalist.add(
-            TitleSubtitleModel(
-                "Gigforce Tip ",
-                "Are you willing to work during the weekends?"
-            )
-        )
-
-        datalist.add(
-            TitleSubtitleModel(
-                "Gigforce Tip ",
-                "Would you want to work from home?"
-            )
-        )
-
-        val recyclerGenericAdapter: RecyclerGenericAdapter<TitleSubtitleModel> =
-            RecyclerGenericAdapter<TitleSubtitleModel>(
-                activity?.applicationContext,
-                PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
-                    navigate(R.id.explore_by_role)
-                },
-                RecyclerGenericAdapter.ItemInterface<TitleSubtitleModel?> { obj, viewHolder, position ->
-                    var title = getTextView(viewHolder, R.id.gigtip_title)
-                    var subtitle = getTextView(viewHolder, R.id.gigtip_subtitle)
-
-                    val lp = title.layoutParams
-                    lp.height = lp.height
-                    lp.width = width
-                    title.layoutParams = lp
-                    title.text = obj?.title
-                    subtitle.text = obj?.subtitle
-
-//                    getTextView(viewHolder, R.id.skip).setOnClickListener{
-//                        datalist.removeAt(position)
-//                        gigforce_tip.adapter?.notifyItemChanged(position+1)
-//                    }
-                })!!
-        recyclerGenericAdapter.setList(datalist)
-        recyclerGenericAdapter.setLayout(R.layout.gigforce_tips_item)
-        gigforce_tip.layoutManager = LinearLayoutManager(
-            activity?.applicationContext,
-            LinearLayoutManager.HORIZONTAL,
-            false
-        )
-        gigforce_tip.adapter = recyclerGenericAdapter
-        var pagerHelper = PagerSnapHelper()
-        pagerHelper.attachToRecyclerView(gigforce_tip)
-        var handler = Handler()
-//        val runnable = Runnable {
-//            var currentVisiblePosition = (gigforce_tip.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
-//            gigforce_tip.scrollToPosition(currentVisiblePosition+1)
-//            handler.postDelayed(runnable,SPLASH_TIME_OUT)
-//        }
-
-        val runnableCode = object : Runnable {
-            override fun run() {
-                try {
-                    var currentVisiblePosition =
-                        (gigforce_tip.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
-                    if ((gigforce_tip.adapter as RecyclerGenericAdapter<TitleSubtitleModel>).list.size == currentVisiblePosition + 1) {
-                        forward = false
-                    }
-                    if (currentVisiblePosition == 0) {
-                        forward = true
-                    }
-                    if (!forward) {
-                        gigforce_tip.smoothScrollToPosition(currentVisiblePosition - 1)
-                    } else
-                        gigforce_tip.smoothScrollToPosition(currentVisiblePosition + 1)
-
-
-                    handler.postDelayed(this, SPLASH_TIME_OUT)
-                } catch (e: Exception) {
-
-                }
-
-            }
-        }
-        handler.postDelayed(runnableCode, SPLASH_TIME_OUT)
-    }
 
     private fun listener() {
         complete_now.setOnClickListener {
@@ -391,12 +393,20 @@ class LandingScreenFragment : BaseFragment() {
             navigate(R.id.contactScreenFragment)
         }
 
+        invite_contact.setOnClickListener {
+            showToast("This is not functional, Please check later")
+        }
+
         profile_image.setOnClickListener {
             navigate(R.id.profileFragment)
         }
 
         textView119.setOnClickListener {
             navigate(R.id.settingFragment)
+        }
+
+        seeMoreBtn.setOnClickListener {
+            navigate(R.id.helpVideosFragment)
         }
     }
 

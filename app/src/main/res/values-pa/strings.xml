@@ -234,5 +234,11 @@
     <string name="pan_card_image">Pan Card Image</string>
     <string name="please_provide_following_details">Please provide following details.</string>
     <string name="good_luck">ਖੁਸ਼ਕਿਸਮਤੀ!!!</string>
+    <string name="complete_now">Complete Now</string>
+    <string name="completed">Completed</string>
+    <string name="complete_your_verification">Complete Your Verification</string>
+    <string name="verification">Verification</string>
+    <string name="verified_giger_s_get_recruited_first">Verified giger\'s get recruited first</string>
+    <string name="my_calendar">My Calendar</string>
 
 </resources>
