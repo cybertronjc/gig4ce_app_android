@@ -69,8 +69,8 @@ class AddPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetActio
 
             WhyWeNeedThisBottomSheet.launch(
                 childFragmentManager = childFragmentManager,
-                title = "Why we need this?",
-                content = "A PAN card is mandatory for profile verification. It helps verify your name and date of birth and also helps with payments to your wallet."
+                title = getString(R.string.why_do_we_need_this),
+                content = getString(R.string.why_do_we_need_this_pan)
             )
         }
 
@@ -126,16 +126,16 @@ class AddPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetActio
         editLayout.setOnClickListener {
 
             MaterialAlertDialogBuilder(requireContext())
-                .setTitle("Alert")
-                .setMessage("You are re-uploading your PAN details, they will be verified once again, that can take up to 7 days")
-                .setPositiveButton("OK") { _, _ ->
+                .setTitle(getString(R.string.alert))
+                .setMessage(getString(R.string.you_are_reuploading_pan_card))
+                .setPositiveButton(getString(R.string.okay)) { _, _ ->
 
                     panViewLayout.gone()
                     panEditLayout.visible()
 
                     setDataOnEditLayout(panCardDataModel)
                 }
-                .setNegativeButton("Cancel") { _, _ -> }
+                .setNegativeButton(getString(R.string.cancel)) { _, _ -> }
                 .show()
         }
 
@@ -150,9 +150,9 @@ class AddPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetActio
                         if (!VerificationValidations.isPanCardValid(panCardNo)) {
 
                             MaterialAlertDialogBuilder(requireContext())
-                                .setTitle("Alert")
-                                .setMessage("Enter Valid PAN Card No")
-                                .setPositiveButton("OK") { _, _ -> }
+                                .setTitle(getString(R.string.alert))
+                                .setMessage(getString(R.string.enter_valid_pan))
+                                .setPositiveButton(getString(R.string.okay)) { _, _ -> }
                                 .show()
 
                             panSubmitSliderBtn.resetSlider()
@@ -162,9 +162,9 @@ class AddPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetActio
                         if (clickedImagePath == null) {
 
                             MaterialAlertDialogBuilder(requireContext())
-                                .setTitle("Alert")
-                                .setMessage("Click Or Select your Pan card Image first")
-                                .setPositiveButton("OK") { _, _ -> }
+                                .setTitle(getString(R.string.alert))
+                                .setMessage(getString(R.string.click_select_pan_image))
+                                .setPositiveButton(getString(R.string.okay)) { _, _ -> }
                                 .show()
                             panSubmitSliderBtn.resetSlider()
                             return
@@ -300,14 +300,14 @@ class AddPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetActio
         panEditLayout.visibility = View.VISIBLE
 
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Alert")
+            .setTitle(getString(R.string.alert))
             .setMessage(error)
-            .setPositiveButton("OK") { _, _ -> }
+            .setPositiveButton(getString(R.string.okay)) { _, _ -> }
             .show()
     }
 
     private fun panCardDocumentUploaded() {
-        showToast("Pan Card Details Uploaded")
+        showToast(getString(R.string.pan_details_uploaded))
         gigerVerificationStatus?.let {
 
             if (!it.aadharCardDetailsUploaded) {
@@ -385,9 +385,9 @@ class AddPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetActio
 
             } else {
                 MaterialAlertDialogBuilder(requireContext())
-                    .setTitle("Alert")
-                    .setMessage("Unable to Capture Image")
-                    .setPositiveButton("OK") { _, _ -> }
+                    .setTitle(getString(R.string.alert))
+                    .setMessage(getString(R.string.unable_to_capture_image))
+                    .setPositiveButton(getString(R.string.alert)) { _, _ -> }
                     .show()
             }
         }
