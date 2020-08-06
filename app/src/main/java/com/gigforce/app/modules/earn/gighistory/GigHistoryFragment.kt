@@ -41,6 +41,7 @@ class GigHistoryFragment : BaseFragment(), AdapterGigHistory.AdapterGigHistoryCa
         AdapterGigHistory()
     }
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -49,6 +50,7 @@ class GigHistoryFragment : BaseFragment(), AdapterGigHistory.AdapterGigHistoryCa
         return inflateView(R.layout.fragment_gig_history, inflater, container)
     }
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupRecycler()
@@ -56,6 +58,7 @@ class GigHistoryFragment : BaseFragment(), AdapterGigHistory.AdapterGigHistoryCa
         initObservers()
         viewModel.getData()
     }
+
 
     private fun initClicks() {
 
@@ -106,15 +109,15 @@ class GigHistoryFragment : BaseFragment(), AdapterGigHistory.AdapterGigHistoryCa
 
     private fun initObservers() {
         viewModel.observerShowProgress.observe(viewLifecycleOwner, Observer {
-            pb_gig_hist.visibility = it
+            pb_gig_hist.visibility = it!!
         })
         viewModel.observableOnGoingGigs.observe(viewLifecycleOwner, Observer {
             viewModel.showProgress(false)
-            adapter.addOnGoingGigs(it.data)
+            adapter.addOnGoingGigs(it?.data)
         })
         viewModel.observableScheduledGigs.observe(viewLifecycleOwner, Observer {
             viewModel.showProgress(false)
-            adapter.addScheduledGigs(it.data)
+            adapter.addScheduledGigs(it?.data)
             viewModel.isLoading = false
         })
         viewModel.observableShowExplore.observe(viewLifecycleOwner, Observer {
@@ -123,7 +126,7 @@ class GigHistoryFragment : BaseFragment(), AdapterGigHistory.AdapterGigHistoryCa
             dialog.show(parentFragmentManager, NoGigsDialog::class.java.name)
         })
         viewModel.observableError.observe(viewLifecycleOwner, Observer {
-            showToast(it)
+            showToast(it!!)
         })
         //TODO : Correct this afterwards
         var viewModelProfile = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
@@ -159,6 +162,15 @@ class GigHistoryFragment : BaseFragment(), AdapterGigHistory.AdapterGigHistoryCa
             this.putString(GigPageFragment.INTENT_EXTRA_GIG_ID, gig.gigId)
         })
 
+    }
+
+
+    override fun getEventState(): Int {
+        return viewModel.eventState
+    }
+
+    override fun setEventState(state: Int) {
+        viewModel.eventState = state
     }
 
     override fun navigateToExploreByRole() {

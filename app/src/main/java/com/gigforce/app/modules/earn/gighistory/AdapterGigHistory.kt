@@ -27,6 +27,7 @@ class AdapterGigHistory : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var horizontalItemDecoration: HorizontaltemDecoration? = null
 
+
     inner class ViewHolderOnGoingGigs(itemView: View) : RecyclerView.ViewHolder(itemView)
     inner class ViewHolderGigEvents(itemView: View) : RecyclerView.ViewHolder(itemView)
     inner class ViewHolderGigDetails(itemView: View) : RecyclerView.ViewHolder(itemView)
@@ -100,7 +101,9 @@ class AdapterGigHistory : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 })
             }
             TYPE_EVENTS -> {
+
                 val viewHolderGigEvents = holder as ViewHolderGigEvents
+
                 pushDown(viewHolderGigEvents)
 
             }
@@ -185,6 +188,7 @@ class AdapterGigHistory : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         PushDownAnim.setPushDownAnimTo(viewHolderGigEvents.itemView.tv_past_events_rv_gig_hist)
             .setOnClickListener(View.OnClickListener {
                 callbacks?.getPastGigs()
+                callbacks?.setEventState(EVENT_PAST);
                 viewHolderGigEvents.itemView.tv_past_events_rv_gig_hist.setBackgroundResource(
                     R.drawable.bg_selected_event_rv_gig_hist
                 )
@@ -218,44 +222,56 @@ class AdapterGigHistory : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             })
         PushDownAnim.setPushDownAnimTo(viewHolderGigEvents.itemView.tv_upcoming_events_rv_gig_hist)
             .setOnClickListener(View.OnClickListener {
-                callbacks?.getUpcomingGigs()
-                viewHolderGigEvents.itemView.tv_past_events_rv_gig_hist.setBackgroundResource(
-                    R.drawable.bg_unselected_event_rv_gig_hist
-                )
-                viewHolderGigEvents.itemView.tv_upcoming_events_rv_gig_hist.setBackgroundResource(
-                    R.drawable.bg_selected_event_rv_gig_hist
-                )
-                viewHolderGigEvents.itemView.tv_past_events_rv_gig_hist.setTextColor(
-                    viewHolderGigEvents.itemView.context.getColor(R.color.black_2222)
-                )
-                viewHolderGigEvents.itemView.tv_upcoming_events_rv_gig_hist.setTextColor(
-                    viewHolderGigEvents.itemView.context.getColor(R.color.vertical_calendar_today)
-                )
-                val size27 =
-                    viewHolderGigEvents.itemView.context.resources.getDimensionPixelSize(R.dimen.size_27)
-                val size6 =
-                    viewHolderGigEvents.itemView.context.resources.getDimensionPixelSize(R.dimen.size_6)
-
-                viewHolderGigEvents.itemView.tv_past_events_rv_gig_hist.setPadding(
-                    size27,
-                    size6,
-                    size27,
-                    size6
-                )
-                viewHolderGigEvents.itemView.tv_upcoming_events_rv_gig_hist.setPadding(
-                    size27,
-                    size6,
-                    size27,
-                    size6
-                )
+                clickUpComing(viewHolderGigEvents, true)
 
             })
+        if (callbacks?.getEventState() == EVENT_UPCOMING) {
+            clickUpComing(viewHolderGigEvents, false)
+        }
+    }
+
+    private fun clickUpComing(viewHolderGigEvents: ViewHolderGigEvents, refreshList: Boolean) {
+        if (refreshList) {
+            callbacks?.getUpcomingGigs()
+        }
+        callbacks?.setEventState(EVENT_UPCOMING)
+        viewHolderGigEvents.itemView.tv_past_events_rv_gig_hist.setBackgroundResource(
+            R.drawable.bg_unselected_event_rv_gig_hist
+        )
+        viewHolderGigEvents.itemView.tv_upcoming_events_rv_gig_hist.setBackgroundResource(
+            R.drawable.bg_selected_event_rv_gig_hist
+        )
+        viewHolderGigEvents.itemView.tv_past_events_rv_gig_hist.setTextColor(
+            viewHolderGigEvents.itemView.context.getColor(R.color.black_2222)
+        )
+        viewHolderGigEvents.itemView.tv_upcoming_events_rv_gig_hist.setTextColor(
+            viewHolderGigEvents.itemView.context.getColor(R.color.vertical_calendar_today)
+        )
+        val size27 =
+            viewHolderGigEvents.itemView.context.resources.getDimensionPixelSize(R.dimen.size_27)
+        val size6 =
+            viewHolderGigEvents.itemView.context.resources.getDimensionPixelSize(R.dimen.size_6)
+
+        viewHolderGigEvents.itemView.tv_past_events_rv_gig_hist.setPadding(
+            size27,
+            size6,
+            size27,
+            size6
+        )
+        viewHolderGigEvents.itemView.tv_upcoming_events_rv_gig_hist.setPadding(
+            size27,
+            size6,
+            size27,
+            size6
+        )
     }
 
     companion object {
         const val TYPE_ONGOING = 1
         const val TYPE_EVENTS = 2
         const val TYPE_GIG_DETAILS = 3
+        const val EVENT_PAST = 4;
+        const val EVENT_UPCOMING = 5;
     }
 
     fun addOnGoingGigs(onGoingGigs: List<Gig>?) {
@@ -281,10 +297,13 @@ class AdapterGigHistory : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     }
 
+
     public interface AdapterGigHistoryCallbacks {
         fun showNoGigExists(int: Int)
         fun getPastGigs()
         fun getUpcomingGigs()
         fun openGigDetails(gig: Gig)
+        fun getEventState(): Int
+        fun setEventState(state: Int)
     }
 }
