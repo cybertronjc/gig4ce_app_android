@@ -19,7 +19,7 @@ import androidx.appcompat.widget.AppCompatImageView
 import com.gigforce.app.R
 
 open class CircleImageView : AppCompatImageView {
-    private var isQR: Boolean? = null
+    private var isQr: Boolean? = null
     private val mDrawableRect = RectF()
     private val mBorderRect = RectF()
     private val mShaderMatrix = Matrix()
@@ -75,7 +75,8 @@ open class CircleImageView : AppCompatImageView {
             DEFAULT_CIRCLE_BACKGROUND_COLOR
         )
         mDashedBorder = a.getBoolean(R.styleable.CircleImageView_civ_dashed_border, false)
-        isQR = a.getBoolean(R.styleable.CircleImageView_civ_is_qr, false)
+        isQr = a.getBoolean(R.styleable.CircleImageView_civ_is_qr, false)
+
 
         a.recycle()
         init()
@@ -122,6 +123,7 @@ open class CircleImageView : AppCompatImageView {
 
     @SuppressLint("CanvasSize")
     override fun onDraw(canvas: Canvas) {
+
         if (mDisableCircularTransformation) {
             super.onDraw(canvas)
             return
@@ -151,7 +153,7 @@ open class CircleImageView : AppCompatImageView {
             canvas.drawCircle(
                 mDrawableRect.centerX(),
                 mDrawableRect.centerY(),
-                mDrawableRadius,
+                if (isQr!!) mDrawableRadius + resources.getDimensionPixelSize(R.dimen.size_8) else mDrawableRadius,
                 mBitmapPaint
             )
         }
@@ -159,11 +161,13 @@ open class CircleImageView : AppCompatImageView {
             canvas.drawCircle(
                 mBorderRect.centerX(),
                 mBorderRect.centerY(),
-                mBorderRadius+20,
+                mBorderRadius,
                 mBorderPaint
             )
         }
+
     }
+
 
     override fun invalidateDrawable(dr: Drawable) {
         mDrawableDirty = true
@@ -391,6 +395,7 @@ open class CircleImageView : AppCompatImageView {
         val sideLength = Math.min(availableWidth, availableHeight)
         val left = paddingLeft + (availableWidth - sideLength) / 2f
         val top = paddingTop + (availableHeight - sideLength) / 2f
+        val spacing = resources.getDimensionPixelSize(R.dimen.size_16)
         return RectF(left, top, left + sideLength, top + sideLength)
     }
 
@@ -462,4 +467,6 @@ open class CircleImageView : AppCompatImageView {
         private const val DEFAULT_IMAGE_ALPHA = 255
         private const val DEFAULT_BORDER_OVERLAY = false
     }
+
+
 }

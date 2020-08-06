@@ -4,6 +4,7 @@
     <stroke
         android:width="@dimen/size_5"
         android:color="@color/black_85"
+
         android:dashWidth="@dimen/size_10"
         android:dashGap="@dimen/size_10" />
 
