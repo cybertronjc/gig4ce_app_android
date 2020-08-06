@@ -416,7 +416,6 @@
     <string name="no_on_going_gigs">No On Going Gigs</string>
     <string name="on_going_gigs">On Going Gigs</string>
     <string name="no_gigs_present">No Gigs Present</string>
-    <string name="completed">Completed</string>
     <string name="pending">Pending</string>
     <string name="explore_by_role">Explore By Role</string>
     <string name="complete_now">Complete Now</string>
