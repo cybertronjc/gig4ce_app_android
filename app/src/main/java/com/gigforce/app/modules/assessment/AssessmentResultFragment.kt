@@ -1,12 +1,7 @@
 package com.gigforce.app.modules.assessment
 
 import android.Manifest
-import android.content.ActivityNotFoundException
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.Color
-import android.net.Uri
 import android.os.Bundle
 import android.text.Html
 import android.view.LayoutInflater
@@ -14,8 +9,6 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
-import android.widget.Toast
-import androidx.core.content.FileProvider
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
@@ -166,41 +159,19 @@ class AssessmentResultFragment : BaseFragment(), PopupMenu.OnMenuItemClickListen
     }
 
     fun initShareImage() {
-        viewModelAssessmentResult.store(
+        storeImage(
             getScreenShot(cl_sv_nested_assess_result),
             StringConstants.CERTIFICATE_SSC.value, context?.filesDir?.absolutePath!!
         )
-        shareImage(File(context?.filesDir?.absolutePath + "/" + StringConstants.CERTIFICATE_SSC.value))
-    }
-
-    private fun shareImage(file: File) {
-        val uri: Uri = FileProvider.getUriForFile(
+        shareFile(
+            File(context?.filesDir?.absolutePath + "/" + StringConstants.CERTIFICATE_SSC.value),
             requireContext(),
-            requireContext().packageName + ".provider",
-            file
+            "image/*"
         )
-        val intent = Intent()
-        intent.action = Intent.ACTION_SEND
-        intent.type = "image/*"
-        intent.putExtra(Intent.EXTRA_SUBJECT, "")
-        intent.putExtra(Intent.EXTRA_TEXT, "")
-        intent.putExtra(Intent.EXTRA_STREAM, uri)
-        try {
-            startActivity(Intent.createChooser(intent, "Share Certificate"))
-        } catch (e: ActivityNotFoundException) {
-            Toast.makeText(context, "No App Available", Toast.LENGTH_SHORT).show()
-        }
     }
 
-    private fun getScreenShot(view: View): Bitmap {
-        val returnedBitmap = Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888)
-        val canvas = Canvas(returnedBitmap)
-        val bgDrawable = view.background
-        if (bgDrawable != null) bgDrawable.draw(canvas)
-        else canvas.drawColor(Color.WHITE)
-        view.draw(canvas)
-        return returnedBitmap
-    }
+
+
 
     override fun onRequestPermissionsResult(
         requestCode: Int,

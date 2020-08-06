@@ -1,322 +1,346 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/lipstick">
 
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/ic_close_giger_id"
+        android:layout_width="@dimen/size_21"
+        android:layout_height="@dimen/size_20"
+        android:layout_marginStart="@dimen/size_16"
+        android:layout_marginTop="@dimen/size_16"
+        android:adjustViewBounds="true"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_close"
+        android:tint="@android:color/white"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/iv_share_giger_id"
+        android:layout_width="@dimen/size_21"
+        android:layout_height="@dimen/size_20"
+        android:layout_marginTop="@dimen/size_16"
+        android:layout_marginEnd="@dimen/size_16"
+        android:adjustViewBounds="true"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_baseline_share_24"
+        android:tint="@android:color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ScrollView
+        android:id="@+id/sv_giger_id"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="0dp"
+        android:background="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ic_close_giger_id">
+
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cv_profile_giger_id"
+            android:id="@+id/cl_parent_giger_id"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/lipstick"
-            android:paddingBottom="@dimen/size_53"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:layout_height="wrap_content">
 
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/ic_close_giger_id"
-                android:layout_width="@dimen/size_21"
-                android:layout_height="@dimen/size_20"
-                android:layout_marginStart="@dimen/size_16"
-                android:layout_marginTop="@dimen/size_16"
-                android:adjustViewBounds="true"
-                android:scaleType="centerCrop"
-                android:src="@drawable/ic_close"
-                android:tint="@android:color/white"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:layout_width="@dimen/size_21"
-                android:layout_height="@dimen/size_20"
-                android:layout_marginTop="@dimen/size_16"
-                android:layout_marginEnd="@dimen/size_16"
-                android:adjustViewBounds="true"
-                android:scaleType="centerCrop"
-                android:src="@drawable/ic_baseline_share_24"
-                android:tint="@android:color/white"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cv_profile_giger_id"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/lipstick"
+                android:paddingBottom="@dimen/size_53"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-
-            <com.gigforce.app.utils.widgets.CircleImageView
-                android:id="@+id/cv_profile_pic"
-                android:layout_width="@dimen/size_104"
-                android:layout_height="@dimen/size_104"
-                android:layout_marginStart="@dimen/size_37"
-                android:layout_marginTop="@dimen/size_36"
-                android:src="@drawable/ankita"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ic_close_giger_id" />
-
-            <TextView
-                android:id="@+id/tv_giger_name_giger_id"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/size_19"
-                android:layout_marginEnd="@dimen/size_16"
-                android:ellipsize="end"
-                android:singleLine="true"
-                android:text="Dustin Putnam"
-                android:textColor="@android:color/white"
-                android:textSize="@dimen/size_22"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/cv_profile_pic"
-                app:layout_constraintTop_toTopOf="@+id/cv_profile_pic" />
-
-            <TextView
-                android:id="@+id/tv_designation_giger_id"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/size_19"
-                android:layout_marginTop="@dimen/size_4"
-                android:background="@drawable/bg_capsule_shape_ffd9e6"
-                android:ellipsize="end"
-                android:paddingStart="@dimen/size_14"
-                android:paddingTop="@dimen/size_5"
-                android:paddingEnd="@dimen/size_14"
-                android:paddingBottom="@dimen/size_5"
-                android:singleLine="true"
-                android:text="Retail Sales Executive"
-                android:textColor="@color/lipstick"
-                android:textSize="@dimen/font_12"
-                app:layout_constraintStart_toEndOf="@+id/cv_profile_pic"
-                app:layout_constraintTop_toBottomOf="@+id/tv_giger_name_giger_id" />
-
-            <TextView
-                android:id="@+id/tv_giger_location_giger_id"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/size_19"
-                android:layout_marginTop="@dimen/size_8"
-                android:drawableStart="@drawable/ic_location_giger_id"
-                android:ellipsize="end"
-                android:singleLine="true"
-                android:text="Hyderabad, India"
-                android:textColor="@color/white"
-                android:textSize="@dimen/font_14"
-                app:layout_constraintEnd_toEndOf="@+id/tv_giger_name_giger_id"
-                app:layout_constraintStart_toEndOf="@+id/cv_profile_pic"
-                app:layout_constraintTop_toBottomOf="@+id/tv_designation_giger_id" />
-
-            <TextView
-                android:id="@+id/tv_contact_giger_id"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/size_19"
-                android:layout_marginTop="@dimen/size_12"
-                android:drawableStart="@drawable/ic_call_giger_id"
-                android:ellipsize="end"
-                android:singleLine="true"
-                android:text="+91- 9878913403"
-                android:textColor="@color/white"
-                android:textSize="@dimen/font_14"
-                app:layout_constraintEnd_toEndOf="@+id/tv_giger_name_giger_id"
-
-                app:layout_constraintStart_toEndOf="@+id/cv_profile_pic"
-                app:layout_constraintTop_toBottomOf="@+id/tv_giger_location_giger_id" />
-
-            <TextView
-                android:id="@+id/tv_email_giger_id"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/size_19"
-                android:layout_marginTop="@dimen/size_12"
-                android:drawableStart="@drawable/ic_email_giger_id"
-                android:ellipsize="end"
-                android:singleLine="true"
-                android:text="Dustin.putnam@gmail.com"
-                android:textColor="@color/white"
-                android:textSize="@dimen/font_12"
-                app:layout_constraintEnd_toEndOf="@+id/tv_giger_name_giger_id"
-                app:layout_constraintStart_toEndOf="@+id/cv_profile_pic"
-                app:layout_constraintTop_toBottomOf="@+id/tv_contact_giger_id" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <TextView
-            android:id="@+id/tv_gig_since_giger_id"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/size_17"
-            android:text="Giger since May 2020"
-            android:textColor="@color/warm_grey"
-            android:textSize="@dimen/font_12"
-
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cv_profile_giger_id" />
-
-        <FrameLayout
-            android:id="@+id/fl_qr_code_giger_id"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/size_10"
-            android:background="@drawable/bg_circle_dashed"
-            android:layerType="software"
-            android:padding="@dimen/size_17"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_gig_since_giger_id">
-
-
-            <com.gigforce.app.utils.widgets.CircleImageView
-                android:id="@+id/iv_qr_code_giger_id"
-                android:layout_width="@dimen/size_177"
-                android:layout_height="@dimen/size_177"
-                app:civ_border_color="@color/black_85"
-                app:civ_is_qr="true" />
-
-            <com.gigforce.app.utils.widgets.CircleImageView
-                android:layout_width="@dimen/size_24"
-                android:layout_height="19dp"
-                android:layout_gravity="center"
-                android:src="@drawable/giglogo"
-                app:civ_border_color="@color/white"
-                app:civ_border_width="@dimen/size_4" />
-        </FrameLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cl_gig_details_giger_id"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/size_27"
-            android:background="@color/warm_grey"
-            android:paddingBottom="@dimen/size_12"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/fl_qr_code_giger_id">
-
-
-            <LinearLayout
-                android:id="@+id/ll_brand_details_giger_id"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_marginStart="@dimen/size_33"
-                android:layout_marginTop="@dimen/size_11"
-                android:gravity="bottom"
-                android:orientation="vertical"
-                app:layout_constraintBottom_toBottomOf="@+id/ll_gig_time_details_giger_id"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
+
 
                 <com.gigforce.app.utils.widgets.CircleImageView
-                    android:id="@+id/iv_brand_logo_giger_id"
-                    android:layout_width="@dimen/size_60"
-                    android:layout_height="@dimen/size_60"
-                    android:layout_gravity="center_horizontal"
-                    android:src="@drawable/p_g_logo" />
+                    android:id="@+id/cv_profile_pic"
+                    android:layout_width="@dimen/size_104"
+                    android:layout_height="@dimen/size_104"
+                    android:layout_marginStart="@dimen/size_37"
+                    android:layout_marginTop="@dimen/size_36"
+                    android:src="@drawable/ankita"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
+                    android:id="@+id/tv_giger_name_giger_id"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/size_19"
+                    android:layout_marginEnd="@dimen/size_16"
+                    android:ellipsize="end"
+                    android:singleLine="true"
+                    android:text="Dustin Putnam"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/size_22"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/cv_profile_pic"
+                    app:layout_constraintTop_toTopOf="@+id/cv_profile_pic" />
+
+                <TextView
+                    android:id="@+id/tv_designation_giger_id"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/size_7"
+                    android:layout_marginStart="@dimen/size_19"
+                    android:layout_marginTop="@dimen/size_4"
+                    android:background="@drawable/bg_capsule_shape_ffd9e6"
+                    android:ellipsize="end"
+                    android:paddingStart="@dimen/size_14"
+                    android:paddingTop="@dimen/size_5"
+                    android:paddingEnd="@dimen/size_14"
+                    android:paddingBottom="@dimen/size_5"
+                    android:singleLine="true"
+                    android:text="Retail Sales Executive"
+                    android:textColor="@color/lipstick"
+                    android:textSize="@dimen/font_12"
+                    app:layout_constraintStart_toEndOf="@+id/cv_profile_pic"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_giger_name_giger_id" />
 
-                    android:gravity="center_horizontal|bottom"
-                    android:text="\ufeff@ Procter &amp; Gamble"
-                    android:textColor="@color/black_85"
-                    android:textSize="@dimen/font_12" />
-            </LinearLayout>
+                <TextView
+                    android:id="@+id/tv_giger_location_giger_id"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/size_19"
+                    android:layout_marginTop="@dimen/size_8"
+                    android:drawableStart="@drawable/ic_location_giger_id"
+                    android:ellipsize="end"
+                    android:singleLine="true"
+                    android:text="Hyderabad, India"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/font_14"
+                    app:layout_constraintEnd_toEndOf="@+id/tv_giger_name_giger_id"
+                    app:layout_constraintStart_toEndOf="@+id/cv_profile_pic"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_designation_giger_id" />
 
-            <LinearLayout
-                android:id="@+id/ll_gig_time_details_giger_id"
-                android:layout_width="0dp"
+                <TextView
+                    android:id="@+id/tv_contact_giger_id"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/size_19"
+                    android:layout_marginTop="@dimen/size_12"
+                    android:drawableStart="@drawable/ic_call_giger_id"
+                    android:ellipsize="end"
+                    android:singleLine="true"
+                    android:text="+91- 9878913403"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/font_14"
+                    app:layout_constraintEnd_toEndOf="@+id/tv_giger_name_giger_id"
+
+                    app:layout_constraintStart_toEndOf="@+id/cv_profile_pic"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_giger_location_giger_id" />
+
+                <TextView
+                    android:id="@+id/tv_email_giger_id"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/size_19"
+                    android:layout_marginTop="@dimen/size_12"
+                    android:drawableStart="@drawable/ic_email_giger_id"
+                    android:ellipsize="end"
+                    android:singleLine="true"
+                    android:text="Dustin.putnam@gmail.com"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/font_12"
+                    app:layout_constraintEnd_toEndOf="@+id/tv_giger_name_giger_id"
+                    app:layout_constraintStart_toEndOf="@+id/cv_profile_pic"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_contact_giger_id" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:id="@+id/tv_gig_since_giger_id"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/size_33"
-                android:layout_marginTop="@dimen/size_11"
-                android:orientation="vertical"
+                android:layout_marginTop="@dimen/size_17"
+                android:text="Giger since May 2020"
+                android:textColor="@color/warm_grey"
+                android:textSize="@dimen/font_12"
 
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/ll_brand_details_giger_id"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cv_profile_giger_id" />
 
-                <TextView
-                    android:id="@+id/tv_gig_id_giger_id"
+            <FrameLayout
+                android:id="@+id/fl_qr_code_giger_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/size_10"
+                android:background="@drawable/bg_circle_dashed"
+                android:layerType="software"
+                android:padding="@dimen/size_17"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_gig_since_giger_id">
+
+
+                <com.gigforce.app.utils.widgets.CircleImageView
+                    android:id="@+id/iv_qr_code_giger_id"
+                    android:layout_width="@dimen/size_177"
+                    android:layout_height="@dimen/size_177"
+                    app:civ_border_color="@color/black_85"
+                    app:civ_is_qr="true" />
+
+                <com.gigforce.app.utils.widgets.CircleImageView
+                    android:layout_width="@dimen/size_24"
+                    android:layout_height="19dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/giglogo"
+                    app:civ_border_color="@color/white"
+                    app:civ_border_width="@dimen/size_4" />
+            </FrameLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_gig_details_giger_id"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/size_27"
+                android:background="@color/warm_grey"
+                android:paddingBottom="@dimen/size_12"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/fl_qr_code_giger_id">
+
+
+                <LinearLayout
+                    android:id="@+id/ll_brand_details_giger_id"
                     android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_marginStart="@dimen/size_33"
+                    android:layout_marginTop="@dimen/size_11"
+                    android:gravity="bottom"
+                    android:orientation="vertical"
+                    app:layout_constraintBottom_toBottomOf="@+id/ll_gig_time_details_giger_id"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <com.gigforce.app.utils.widgets.CircleImageView
+                        android:id="@+id/iv_brand_logo_giger_id"
+                        android:layout_width="@dimen/size_60"
+                        android:layout_height="@dimen/size_60"
+                        android:layout_gravity="center_horizontal"
+                        android:src="@drawable/p_g_logo" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/size_7"
+
+                        android:gravity="center_horizontal|bottom"
+                        android:text="\ufeff@ Procter &amp; Gamble"
+                        android:textColor="@color/black_85"
+                        android:textSize="@dimen/font_12" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_gig_time_details_giger_id"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:gravity="center_horizontal"
-                    android:text="Gig Id : GG00001"
-                    android:textColor="@color/lipstick"
-                    android:textSize="@dimen/font_14" />
+                    android:layout_marginStart="@dimen/size_33"
+                    android:layout_marginTop="@dimen/size_11"
+                    android:orientation="vertical"
 
-                <View
-                    android:id="@+id/view_one"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/size_1"
-                    android:layout_marginTop="@dimen/size_12"
-                    android:layout_marginEnd="@dimen/size_8"
-                    android:background="@color/warm_grey_two" />
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/ll_brand_details_giger_id"
+                    app:layout_constraintTop_toTopOf="parent">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="@dimen/size_7"
-                    android:gravity="center_horizontal"
-                    android:text="@string/valid_upto"
-                    android:textColor="@color/warm_grey_two"
-                    android:textSize="@dimen/font_14" />
+                    <TextView
+                        android:id="@+id/tv_gig_id_giger_id"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:gravity="center_horizontal"
+                        android:text="Gig Id : GG00001"
+                        android:textColor="@color/lipstick"
+                        android:textSize="@dimen/font_14" />
 
-                <TextView
-                    android:id="@+id/tv_gig_date_giger_id"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="@dimen/size_1"
-                    android:ellipsize="marquee"
-                    android:gravity="center_horizontal"
-                    android:marqueeRepeatLimit="marquee_forever"
-                    android:scrollHorizontally="true"
-                    android:singleLine="true"
-                    android:text="13 May 2020"
-                    android:textColor="@color/black_85"
-                    android:textSize="@dimen/font_24" />
+                    <View
+                        android:id="@+id/view_one"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/size_1"
+                        android:layout_marginTop="@dimen/size_12"
+                        android:layout_marginEnd="@dimen/size_8"
+                        android:background="@color/warm_grey_two" />
 
-            </LinearLayout>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="@dimen/size_7"
+                        android:gravity="center_horizontal"
+                        android:text="@string/valid_upto"
+                        android:textColor="@color/warm_grey_two"
+                        android:textSize="@dimen/font_14" />
+
+                    <TextView
+                        android:id="@+id/tv_gig_date_giger_id"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="@dimen/size_1"
+                        android:ellipsize="marquee"
+                        android:gravity="center_horizontal"
+                        android:marqueeRepeatLimit="marquee_forever"
+                        android:scrollHorizontally="true"
+                        android:singleLine="true"
+                        android:text="13 May 2020"
+                        android:textColor="@color/black_85"
+                        android:textSize="@dimen/font_24" />
+
+                </LinearLayout>
 
 
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/iv_logo_giger_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/size_20"
+                android:src="@drawable/ic_logo_color"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cl_gig_details_giger_id" />
+
+            <TextView
+                android:id="@+id/iv_issued_date_giger_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/size_8"
+                android:gravity="center_horizontal"
+                android:text="Issued On 12 May 2020  "
+                android:textColor="@color/warm_grey"
+                android:textSize="@dimen/font_12"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/iv_logo_giger_id" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/size_44"
+                android:text="Gigforce Pvt. Ltd."
+                android:textColor="@color/black_color_future_date"
+                android:textSize="@dimen/font_12"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/iv_issued_date_giger_id" />
         </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/iv_logo_giger_id"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/size_20"
-            android:src="@drawable/ic_logo_color"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cl_gig_details_giger_id" />
-
-        <TextView
-            android:id="@+id/iv_issued_date_giger_id"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/size_8"
-            android:gravity="center_horizontal"
-            android:text="Issued On 12 May 2020  "
-            android:textColor="@color/warm_grey"
-            android:textSize="@dimen/font_12"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/iv_logo_giger_id" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/size_44"
-            android:text="Gigforce Pvt. Ltd."
-            android:textColor="@color/black_color_future_date"
-            android:textSize="@dimen/font_12"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/iv_issued_date_giger_id" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</ScrollView>
+    <ProgressBar
+        android:id="@+id/pb_giger_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

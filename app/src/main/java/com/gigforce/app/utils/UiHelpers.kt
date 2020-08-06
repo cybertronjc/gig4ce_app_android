@@ -2,13 +2,15 @@ package com.gigforce.app.utils
 
 import android.app.Activity
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
 import android.graphics.Point
 import android.util.DisplayMetrics
 import android.util.Size
 import android.view.View
 import android.view.WindowManager
 import android.widget.PopupMenu
-import com.gigforce.app.R
 
 
 fun getScreenWidth(ctx: Activity): Size {
@@ -66,3 +68,27 @@ fun getViewWidth(view: View): Int {
     view.measure(widthMeasureSpec, heightMeasureSpec)
     return view.measuredWidth //        view.getMeasuredWidth();
 }
+
+fun getScreenShot(view: View): Bitmap {
+    val returnedBitmap = Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888)
+    val canvas = Canvas(returnedBitmap)
+    val bgDrawable = view.background
+    if (bgDrawable != null) bgDrawable.draw(canvas)
+    else canvas.drawColor(Color.WHITE)
+    view.draw(canvas)
+    return returnedBitmap
+}
+
+fun getBitmapFromView(view: View, height: Int, width: Int): Bitmap {
+    val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+    val canvas = Canvas(bitmap);
+    val bgDrawable = view.background;
+    if (bgDrawable != null)
+        bgDrawable.draw(canvas);
+    else
+        canvas.drawColor(Color.WHITE);
+    view.draw(canvas);
+    return bitmap;
+}
+
+

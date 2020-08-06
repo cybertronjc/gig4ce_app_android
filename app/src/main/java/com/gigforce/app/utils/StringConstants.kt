@@ -8,6 +8,7 @@ enum class StringConstants(val value: String) {
     //Assessment Module Constants
     ASSESSMENT_DIALOG_STATE("ASSESS_STATE"),
     CERTIFICATE_SSC("CERTIFICATE_SSC.png"),
+    GIGER_ID("GIGER_ID.png"),
     ASSESSMENT_PASSED("ASSESSMENT_PASSED"),
     EVENT_STATE_GIG_HISTORY("EVENT_STATE_GIG_HISTORY")
 

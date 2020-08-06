@@ -257,5 +257,9 @@ dependencies {
     //Qr Code Library
     implementation 'com.google.zxing:core:3.4.0'
 
+    // https://mvnrepository.com/artifact/com.itextpdf/itextpdf
+    implementation group: 'com.itextpdf', name: 'itextpdf', version: '5.0.6'
+
+
 
 }
