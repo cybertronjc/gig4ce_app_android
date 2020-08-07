@@ -8,6 +8,7 @@
         android:id="@+id/tv_on_going_gigs_gig_hist"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:paddingStart="@dimen/size_16"
         android:paddingEnd="@dimen/size_16"
         android:paddingBottom="@dimen/size_16"
         android:text="@string/on_going_gigs"

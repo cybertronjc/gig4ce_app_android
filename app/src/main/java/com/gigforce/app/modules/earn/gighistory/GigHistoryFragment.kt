@@ -16,7 +16,6 @@ import com.gigforce.app.modules.gigPage.GigPageFragment
 import com.gigforce.app.modules.gigPage.models.Gig
 import com.gigforce.app.modules.preferences.PreferencesFragment
 import com.gigforce.app.modules.profile.ProfileViewModel
-import com.gigforce.app.utils.GigHistoryItemDecorator
 import com.gigforce.app.utils.GlideApp
 import com.gigforce.app.utils.PaginationScrollListener
 import com.gigforce.app.utils.ViewModelProviderFactory
@@ -78,13 +77,13 @@ class GigHistoryFragment : BaseFragment(), AdapterGigHistory.AdapterGigHistoryCa
         adapter.setCallbacks(this)
         val layoutManager = LinearLayoutManager(activity)
         rv_gigs_gig_history.layoutManager = layoutManager
-        rv_gigs_gig_history.addItemDecoration(
-            GigHistoryItemDecorator(
-                requireContext().resources.getDimensionPixelOffset(
-                    R.dimen.size_16
-                )
-            )
-        )
+//        rv_gigs_gig_history.addItemDecoration(
+//            GigHistoryItemDecorator(
+//                requireContext().resources.getDimensionPixelOffset(
+//                    R.dimen.size_16
+//                )
+//            )
+//        )
         rv_gigs_gig_history?.addOnScrollListener(object :
             PaginationScrollListener(layoutManager) {
             override fun isLastPage(): Boolean {

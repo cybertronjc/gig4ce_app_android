@@ -75,17 +75,17 @@ class AdapterGigHistory : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 }
                 val adapter = AdapterOnGoingGigs()
                 viewHolderOnGoings.itemView.rv_on_going_gigs_gig_hist.adapter = adapter
-                if (horizontalItemDecoration == null) {
-                    horizontalItemDecoration =
-                        HorizontaltemDecoration(holder.itemView.resources.getDimensionPixelOffset(R.dimen.size_8))
-                } else {
-                    viewHolderOnGoings.itemView.rv_on_going_gigs_gig_hist.removeItemDecoration(
-                        horizontalItemDecoration!!
-                    )
-                }
-                viewHolderOnGoings.itemView.rv_on_going_gigs_gig_hist.addItemDecoration(
-                    horizontalItemDecoration!!
-                )
+//                if (horizontalItemDecoration == null) {
+//                    horizontalItemDecoration =
+//                        HorizontaltemDecoration(holder.itemView.resources.getDimensionPixelOffset(R.dimen.size_8))
+//                } else {
+//                    viewHolderOnGoings.itemView.rv_on_going_gigs_gig_hist.removeItemDecoration(
+//                        horizontalItemDecoration!!
+//                    )
+//                }
+//                viewHolderOnGoings.itemView.rv_on_going_gigs_gig_hist.addItemDecoration(
+//                    horizontalItemDecoration!!
+//                )
                 viewHolderOnGoings.itemView.rv_on_going_gigs_gig_hist.layoutManager =
                     LinearLayoutManager(
                         holder.itemView.context,

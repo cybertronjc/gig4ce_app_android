@@ -3,6 +3,7 @@ package com.gigforce.app.modules.earn.gighistory
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.gigforce.app.R
@@ -21,7 +22,7 @@ class AdapterOnGoingGigs : RecyclerView.Adapter<AdapterOnGoingGigs.ViewHolder>()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
             LayoutInflater.from(parent.context)
-                .inflate(R.layout.layout_rv_gig_details_gig_history, parent, false)
+                .inflate(R.layout.layout_rv_on_going_inner_gig_hist, parent, false)
         )
     }
 
@@ -49,6 +50,14 @@ class AdapterOnGoingGigs : RecyclerView.Adapter<AdapterOnGoingGigs.ViewHolder>()
         PushDownAnim.setPushDownAnimTo(holder.itemView).setOnClickListener(View.OnClickListener {
             callbacks.openGigDetails(onGoingGigs!![holder.adapterPosition])
         })
+        val params: ConstraintLayout.LayoutParams =
+            holder.itemView.cv_gig_details_gig_hist.layoutParams as ConstraintLayout.LayoutParams
+        val resources = holder.itemView.context.resources
+        val size16 = resources.getDimensionPixelSize(R.dimen.size_16)
+        val size_8 = resources.getDimensionPixelSize(R.dimen.size_8)
+        val size_1 = resources.getDimensionPixelSize(R.dimen.size_1)
+        params.setMargins(0, size_1, size_8, size16)
+        holder.itemView.cv_gig_details_gig_hist.layoutParams = params
 
     }
 
