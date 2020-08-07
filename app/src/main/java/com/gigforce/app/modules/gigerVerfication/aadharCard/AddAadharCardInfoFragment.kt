@@ -83,6 +83,15 @@ class AddAadharCardInfoFragment : BaseFragment() {
             findNavController().popBackStack(R.id.gigerVerificationFragment, false)
         }
 
+        helpIconIV.setOnClickListener {
+
+            WhyWeNeedThisBottomSheet.launch(
+                childFragmentManager = childFragmentManager,
+                title = getString(R.string.why_do_we_need_this),
+                content = getString(R.string.why_we_need_this_aadhar)
+            )
+        }
+
         whyWeNeedThisTV.setOnClickListener {
 
             WhyWeNeedThisBottomSheet.launch(

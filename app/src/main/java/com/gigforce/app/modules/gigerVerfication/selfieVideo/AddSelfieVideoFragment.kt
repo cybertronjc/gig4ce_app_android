@@ -212,6 +212,22 @@ class AddSelfieVideoFragment : BaseFragment(), CaptureVideoFragmentEventListener
                 }
             }
 
+        helpIconIV.setOnClickListener {
+
+            val id = "usZgFZga7xE"
+            val appIntent =
+                Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:$id"))
+            val webIntent = Intent(
+                Intent.ACTION_VIEW,
+                Uri.parse("http://www.youtube.com/watch?v=$id")
+            )
+            try {
+                requireContext().startActivity(appIntent)
+            } catch (ex: ActivityNotFoundException) {
+                requireContext().startActivity(webIntent)
+            }
+        }
+
         howToRecordVideoBtn.setOnClickListener {
 
             val id = "usZgFZga7xE"
