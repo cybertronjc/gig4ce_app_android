@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:paddingStart="@dimen/size_16"
         android:paddingEnd="@dimen/size_16"
-        android:paddingBottom="@dimen/size_16"
+        android:paddingBottom="@dimen/size_12"
         android:text="@string/on_going_gigs"
         android:textColor="@color/black_85"
         android:textSize="@dimen/font_14"

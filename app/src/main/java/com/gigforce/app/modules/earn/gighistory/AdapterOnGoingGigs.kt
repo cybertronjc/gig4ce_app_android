@@ -1,5 +1,6 @@
 package com.gigforce.app.modules.earn.gighistory
 
+import android.app.Activity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +10,7 @@ import com.bumptech.glide.Glide
 import com.gigforce.app.R
 import com.gigforce.app.modules.gigPage.models.Gig
 import com.gigforce.app.utils.PushDownAnim
+import com.gigforce.app.utils.getScreenWidth
 import kotlinx.android.synthetic.main.layout_rv_gig_details_gig_history.view.*
 import java.text.SimpleDateFormat
 
@@ -17,12 +19,19 @@ class AdapterOnGoingGigs : RecyclerView.Adapter<AdapterOnGoingGigs.ViewHolder>()
     private var onGoingGigs: List<Gig>? = null
     private val timeFormatter = SimpleDateFormat("hh.mm aa")
 
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val resources = itemView.context.resources
+        val size16 = resources.getDimensionPixelSize(R.dimen.size_16)
+        val size32 = resources.getDimensionPixelSize(R.dimen.size_32)
+        val size4 = resources.getDimensionPixelSize(R.dimen.size_4)
+        val size8 = resources.getDimensionPixelSize(R.dimen.size_8)
+
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
             LayoutInflater.from(parent.context)
-                .inflate(R.layout.layout_rv_on_going_inner_gig_hist, parent, false)
+                .inflate(R.layout.layout_rv_gig_details_gig_history, parent, false)
         )
     }
 
@@ -31,6 +40,17 @@ class AdapterOnGoingGigs : RecyclerView.Adapter<AdapterOnGoingGigs.ViewHolder>()
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val params: ConstraintLayout.LayoutParams =
+            holder.itemView.cv_gig_details_gig_hist.layoutParams as ConstraintLayout.LayoutParams
+
+        params.topMargin = holder.size4;
+        params.leftMargin = 0
+        params.rightMargin = 0
+        params.bottomMargin = holder.size16
+        params.width = getScreenWidth(holder.itemView.context as Activity).width - holder.size32
+        params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+        holder.itemView.cv_gig_details_gig_hist.layoutParams = params
+
         val gig = onGoingGigs?.get(position)
 
         holder.itemView.tv_designation_rv_gig_hist.text = gig?.title
@@ -47,17 +67,11 @@ class AdapterOnGoingGigs : RecyclerView.Adapter<AdapterOnGoingGigs.ViewHolder>()
         }
         Glide.with(holder.itemView).load(gig?.companyLogo).placeholder(R.drawable.profile)
             .into(holder.itemView.iv_brand_rv_gig_hist)
-        PushDownAnim.setPushDownAnimTo(holder.itemView).setOnClickListener(View.OnClickListener {
-            callbacks.openGigDetails(onGoingGigs!![holder.adapterPosition])
-        })
-        val params: ConstraintLayout.LayoutParams =
-            holder.itemView.cv_gig_details_gig_hist.layoutParams as ConstraintLayout.LayoutParams
-        val resources = holder.itemView.context.resources
-        val size16 = resources.getDimensionPixelSize(R.dimen.size_16)
-        val size_8 = resources.getDimensionPixelSize(R.dimen.size_8)
-        val size_1 = resources.getDimensionPixelSize(R.dimen.size_1)
-        params.setMargins(0, size_1, size_8, size16)
-        holder.itemView.cv_gig_details_gig_hist.layoutParams = params
+        PushDownAnim.setPushDownAnimTo(holder.itemView)
+            .setOnClickListener(View.OnClickListener {
+                callbacks.openGigDetails(onGoingGigs!![holder.adapterPosition])
+            })
+
 
     }
 

@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.gigforce.app.R
 import com.gigforce.app.modules.gigPage.models.Gig
-import com.gigforce.app.utils.HorizontaltemDecoration
+import com.gigforce.app.utils.ItemDecorationOnGoingGigs
 import com.gigforce.app.utils.PushDownAnim
 import kotlinx.android.synthetic.main.layout_rv_gig_details_gig_history.view.*
 import kotlinx.android.synthetic.main.layout_rv_gig_events_gig_hist.view.*
@@ -25,7 +25,7 @@ class AdapterGigHistory : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val dateFormatter = SimpleDateFormat("dd MMM yyyy")
     private val headerDateFormatter = SimpleDateFormat("MMM yyyy")
 
-    private var horizontalItemDecoration: HorizontaltemDecoration? = null
+    private var horizontalItemDecoration: ItemDecorationOnGoingGigs? = null
 
 
     inner class ViewHolderOnGoingGigs(itemView: View) : RecyclerView.ViewHolder(itemView)
@@ -77,7 +77,11 @@ class AdapterGigHistory : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 viewHolderOnGoings.itemView.rv_on_going_gigs_gig_hist.adapter = adapter
 //                if (horizontalItemDecoration == null) {
 //                    horizontalItemDecoration =
-//                        HorizontaltemDecoration(holder.itemView.resources.getDimensionPixelOffset(R.dimen.size_8))
+//                        ItemDecorationOnGoingGigs(
+//                            holder.itemView.resources.getDimensionPixelOffset(
+//                                R.dimen.size_32
+//                            )
+//                        )
 //                } else {
 //                    viewHolderOnGoings.itemView.rv_on_going_gigs_gig_hist.removeItemDecoration(
 //                        horizontalItemDecoration!!
