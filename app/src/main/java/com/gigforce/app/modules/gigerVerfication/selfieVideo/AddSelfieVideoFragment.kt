@@ -155,7 +155,7 @@ class AddSelfieVideoFragment : BaseFragment(), CaptureVideoFragmentEventListener
     }
 
     private fun documentUploaded() {
-        showToast("Video Uploaded")
+        showToast(getString(R.string.video_uploaded))
         gigerVerificationStatus?.let {
 
             if (!it.panCardDetailsUploaded) {
@@ -266,7 +266,7 @@ class AddSelfieVideoFragment : BaseFragment(), CaptureVideoFragmentEventListener
     }
 
     override fun videoCaptured(file: File) {
-        showToast("Video Recorded")
+        showToast(getString(R.string.video_recorded))
         this.mCapturedVideoPath = file
         replaceCaptureFragmentWithPreviewFragment(file)
 

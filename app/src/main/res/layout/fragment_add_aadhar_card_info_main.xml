@@ -139,7 +139,7 @@
 
                 android:fontFamily="@font/lato"
                 android:letterSpacing="-0.01"
-                android:text="Please provide the following information."
+                android:text="@string/please_provide_the_following_information"
                 android:textColor="@color/black" />
 
 
@@ -158,7 +158,7 @@
                     android:layout_marginLeft="2dp"
                     android:layout_marginTop="8dp"
                     android:fontFamily="@font/lato"
-                    android:text="Aadhar Number *"
+                    android:text="@string/aadhar_number"
                     android:textSize="12sp" />
 
 
@@ -257,7 +257,7 @@
             app:slider_height="60dp"
             app:slider_icon="@drawable/ic_arrow_forward_white"
             app:slider_icon_color="@color/white"
-            app:text="SAVE" />
+            app:text="@string/save_all_caps" />
 
         <com.google.android.material.checkbox.MaterialCheckBox
             android:id="@+id/aadharDataCorrectCB"

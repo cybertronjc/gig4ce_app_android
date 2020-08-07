@@ -133,7 +133,7 @@
                 android:layout_marginTop="12dp"
                 android:fontFamily="@font/lato"
                 android:letterSpacing="-0.01"
-                android:text="Please provide following information."
+                android:text="@string/please_provide_following_details"
                 android:textColor="@color/black" />
 
 
@@ -145,7 +145,7 @@
                 android:layout_marginTop="12dp"
                 android:layout_marginRight="16dp"
                 android:fontFamily="@font/lato"
-                android:text="PAN number*"
+                android:text="@string/pan_number"
                 android:textSize="12sp" />
 
 
@@ -231,7 +231,7 @@
             app:slider_height="60dp"
             app:slider_icon="@drawable/ic_arrow_forward_white"
             app:slider_icon_color="@color/white"
-            app:text="SAVE" />
+            app:text="@string/save_all_caps" />
 
         <com.google.android.material.checkbox.MaterialCheckBox
             android:id="@+id/panDataCorrectCB"
