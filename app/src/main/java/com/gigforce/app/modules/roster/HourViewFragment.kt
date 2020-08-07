@@ -274,7 +274,8 @@ class HourViewFragment: RosterBaseFragment() {
                         rating = gig.gigRating,
                         gigSuccess = gig.isGigCompleted,
                         paymentSuccess = gig.isPaymentDone,
-                        cardHeight = (itemHeight * gig.duration).toInt().px
+                        cardHeight = (itemHeight * gig.duration).toInt().px,
+                        isMonthlyGig = gig.isMonthlyGig
                     )
                     completedCard.id = View.generateViewId()
                     completedCard.tag = gig.tag
