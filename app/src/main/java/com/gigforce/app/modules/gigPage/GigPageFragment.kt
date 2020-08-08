@@ -20,6 +20,7 @@ import android.widget.TextView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
@@ -31,10 +32,7 @@ import com.gigforce.app.modules.gigPage.models.Gig
 import com.gigforce.app.modules.gigPage.models.GigAttendance
 import com.gigforce.app.modules.markattendance.ImageCaptureActivity
 import com.gigforce.app.modules.roster.inflate
-import com.gigforce.app.utils.DateHelper
-import com.gigforce.app.utils.Lce
-import com.gigforce.app.utils.TextDrawable
-import com.gigforce.app.utils.ViewFullScreenImageDialogFragment
+import com.gigforce.app.utils.*
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -50,7 +48,7 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 
 
-class GigPageFragment : BaseFragment() {
+class GigPageFragment : BaseFragment(), View.OnClickListener {
 
     companion object {
         const val INTENT_EXTRA_GIG_ID = "gig_id"
@@ -77,15 +75,14 @@ class GigPageFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         getData(arguments, savedInstanceState)
         initUi()
-        initViewModel()
-        iniClicks();
+        initViewModel(view)
+
     }
 
-    private fun iniClicks() {
+    private fun initClicks(gig: Gig?) {
+        bt_download_id_gig_past_gigs.setOnClickListener(this)
+        bt_download_id_gig_past_gigs.setOnClickListener(this)
 
-        bt_download_id_gig_page.setOnClickListener {
-            navigate(R.id.giger_id_fragment)
-        }
     }
 
     private fun getData(arguments: Bundle?, savedInstanceState: Bundle?) {
@@ -175,13 +172,16 @@ class GigPageFragment : BaseFragment() {
     }
 
 
-    private fun initViewModel() {
+    private fun initViewModel(view: View) {
         viewModel.gigDetails
             .observe(viewLifecycleOwner, Observer {
                 when (it) {
                     Lce.Loading -> {
                     }
-                    is Lce.Content -> setGigDetailsOnView(it.content)
+                    is Lce.Content -> {
+                        setGigDetailsOnView(it.content, view)
+                        initClicks(it.content)
+                    }
                     is Lce.Error -> {
                     }
                 }
@@ -189,6 +189,7 @@ class GigPageFragment : BaseFragment() {
 
         viewModel.watchGig(gigId)
     }
+
 
     fun requestPermissionForGPS() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -309,7 +310,7 @@ class GigPageFragment : BaseFragment() {
         it.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
     }
 
-    private fun setGigDetailsOnView(gig: Gig) {
+    private fun setGigDetailsOnView(gig: Gig, view: View) {
         this.gig = gig
 
         if (!gig.companyLogo.isNullOrBlank()) {
@@ -432,6 +433,8 @@ class GigPageFragment : BaseFragment() {
             showPastgigDetails(gig)
         } else if (gig.isUpcomingGig()) {
             showUpcomingGigDetails(gig)
+        }else{
+            showPastgigDetails(gig)
         }
 
     }
@@ -483,9 +486,12 @@ class GigPageFragment : BaseFragment() {
         checkInCheckOutSliderBtn.gone()
         presentOrFutureGigControls.gone()
 
+
         completedGigControlsLayout.visible()
+        bt_download_id_gig_past_gigs.visible()
 
         gigRatingLayout.visible()
+
         showUserReceivedRating(gig)
         showUserFeedbackRating(gig)
 
@@ -610,6 +616,7 @@ class GigPageFragment : BaseFragment() {
 
     private fun showNotActivatedGigDetails(gig: Gig) {
 
+
     }
 
     private val onClickImageListener = View.OnClickListener { imageView ->
@@ -701,4 +708,20 @@ class GigPageFragment : BaseFragment() {
 
     private val dateFormatter = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
     private val timeFormatter = SimpleDateFormat("hh.mm aa", Locale.getDefault())
+    override fun onClick(v: View?) {
+        when (v?.id) {
+            R.id.bt_download_id_gig_page->{
+                navigate(
+                    R.id.giger_id_fragment,
+                    bundleOf(Pair(StringConstants.GIG_DETAILS.value, gig))
+                )
+            }
+            R.id.bt_download_id_gig_past_gigs -> {
+                navigate(
+                    R.id.giger_id_fragment,
+                    bundleOf(Pair(StringConstants.GIG_DETAILS.value, gig))
+                )
+            }
+        }
+    }
 }

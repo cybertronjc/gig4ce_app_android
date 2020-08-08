@@ -2,6 +2,7 @@ package com.gigforce.app.modules.gigPage.models
 
 import androidx.annotation.Keep
 import com.google.firebase.Timestamp
+import java.io.Serializable
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -40,7 +41,7 @@ data class Gig(
     var gigRequirements: List<String> = emptyList(),
     var attendance: GigAttendance? = null,
     var gigContactDetails: GigContactDetails? = null
-) {
+) : Serializable {
 
     fun isGigOfToday(): Boolean {
 

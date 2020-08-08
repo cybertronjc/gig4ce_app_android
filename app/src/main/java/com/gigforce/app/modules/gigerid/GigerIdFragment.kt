@@ -12,8 +12,12 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.bumptech.glide.request.RequestOptions
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
+import com.gigforce.app.modules.earn.gighistory.GigHistoryRepository
+import com.gigforce.app.modules.earn.gighistory.GigHistoryViewModel
+import com.gigforce.app.modules.gigPage.models.Gig
 import com.gigforce.app.utils.*
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.qrcode.QRCodeWriter
@@ -28,8 +32,11 @@ import java.io.FileOutputStream
 
 
 class GigerIdFragment : BaseFragment() {
-    private val viewModelGigerID by lazy {
-        ViewModelProvider(this).get(ViewModelGigerIDFragment::class.java)
+    private val viewModelFactory by lazy {
+        ViewModelProviderFactory(ViewModelGigerIDFragment(GigerIdRepository()))
+    }
+    private val viewModelGigerID: ViewModelGigerIDFragment by lazy {
+        ViewModelProvider(this, viewModelFactory).get(ViewModelGigerIDFragment::class.java)
     }
 
     override fun onCreateView(
@@ -45,8 +52,9 @@ class GigerIdFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         genQrCode()
         initClicks()
-        initUi()
+        initUi(arguments?.getSerializable(StringConstants.GIG_DETAILS.value) as Gig)
         initObservers()
+        viewModelGigerID.getProfileData()
     }
 
     fun iniFileSharing() = runBlocking<Unit> {
@@ -68,8 +76,6 @@ class GigerIdFragment : BaseFragment() {
         viewModelGigerID.observablePermGranted.observe(viewLifecycleOwner, Observer {
             iniFileSharing()
         })
-
-
         viewModelGigerID.observablePermResultsNotGranted.observe(
             viewLifecycleOwner,
             Observer {
@@ -80,9 +86,21 @@ class GigerIdFragment : BaseFragment() {
             Observer {
                 pb_giger_id.visibility = it!!
             })
+        viewModelGigerID.observableUserProfileDataFailure.observe(viewLifecycleOwner, Observer {
+            showToast(it!!)
+        })
+        viewModelGigerID.observableUserProfileDataSuccess.observe(viewLifecycleOwner, Observer {
+            viewModelGigerID.getProfilePicture(it?.profileAvatarName ?: "")
+        })
+        viewModelGigerID.observableProfilePic.observe(viewLifecycleOwner, Observer {
+            GlideApp.with(this.requireContext())
+                .load(it)
+                .apply(RequestOptions().circleCrop())
+                .into(cv_profile_pic)
+        })
     }
 
-    private fun initUi() {
+    private fun initUi(gig: Gig) {
         tv_gig_date_giger_id.isSelected = true
     }
 
