@@ -246,7 +246,6 @@ class AddSelfieVideoFragment : BaseFragment(), CaptureVideoFragmentEventListener
     }
 
     override fun onBackPressed(): Boolean {
-
         findNavController().popBackStack(R.id.gigerVerificationFragment, false)
         return true
     }

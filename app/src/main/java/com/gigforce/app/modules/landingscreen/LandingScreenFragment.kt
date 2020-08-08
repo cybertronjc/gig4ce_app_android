@@ -28,6 +28,7 @@ import com.gigforce.app.core.gone
 import com.gigforce.app.core.toBundle
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
+import com.gigforce.app.modules.gigerVerfication.GigerVerificationStatus.Companion.STATUS_VERIFIED
 import com.gigforce.app.modules.help.HelpVideo
 import com.gigforce.app.modules.help.HelpViewModel
 import com.gigforce.app.modules.landingscreen.models.Tip
@@ -199,12 +200,25 @@ class LandingScreenFragment : BaseFragment() {
             .gigerVerificationStatus
             .observe(viewLifecycleOwner, Observer {
 
-                if(it.everyDocumentUploaded){
-                    complete_now.text = getString(R.string.completed)
+                val requiredDocsVerified = it.selfieVideoDataModel?.videoPath != null
+                        && it.panCardDetails?.state == STATUS_VERIFIED
+                        && it.bankUploadDetailsDataModel?.state == STATUS_VERIFIED
+                        && (it.aadharCardDataModel?.state == STATUS_VERIFIED || it.drivingLicenseDataModel?.state == STATUS_VERIFIED)
+
+                val requiredDocsUploaded = it.selfieVideoDataModel?.videoPath != null
+                        && it.panCardDetails?.panCardImagePath != null
+                        && it.bankUploadDetailsDataModel?.passbookImagePath != null
+                        && (it.aadharCardDataModel?.frontImage != null || it.drivingLicenseDataModel?.backImage != null)
+
+                if (requiredDocsVerified) {
                     verificationTitleTV.text = getString(R.string.verification)
-                }else{
-                    complete_now.text = getString(R.string.complete_now)
+                    complete_now.text = getString(R.string.completed)
+                } else if (requiredDocsUploaded) {
+                    verificationTitleTV.text = getString(R.string.verification)
+                    complete_now.text = getString(R.string.under_verification)
+                } else {
                     verificationTitleTV.text = getString(R.string.complete_your_verification)
+                    complete_now.text = getString(R.string.complete_now)
                 }
 
         })

@@ -143,6 +143,7 @@ class AddPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetActio
                     panEditLayout.visible()
 
                     setDataOnEditLayout(panCardDataModel)
+                    panCardAvailaibilityOptionRG.check(R.id.panYesRB)
                 }
                 .setNegativeButton(getString(R.string.cancel)) { _, _ -> }
                 .show()
@@ -248,15 +249,21 @@ class AddPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetActio
         )
 
         if (panDetails.panCardImagePath != null) {
-            firebaseStorage
-                .reference
-                .child("verification")
-                .child(panDetails.panCardImagePath)
-                .downloadUrl.addOnSuccessListener {
-                    Glide.with(requireContext()).load(it).placeholder(getCircularProgressDrawable()).into(panViewImageIV)
-                }.addOnFailureListener {
-                    print("ee")
-                }
+
+            if(panDetails.panCardImagePath.startsWith("http", true)){
+                Glide.with(requireContext()).load(panDetails.panCardImagePath).placeholder(getCircularProgressDrawable()).into(panViewImageIV)
+            }else {
+                firebaseStorage
+                    .reference
+                    .child("verification")
+                    .child(panDetails.panCardImagePath)
+                    .downloadUrl.addOnSuccessListener {
+                        Glide.with(requireContext()).load(it)
+                            .placeholder(getCircularProgressDrawable()).into(panViewImageIV)
+                    }.addOnFailureListener {
+                        print("ee")
+                    }
+            }
         }
         panViewImageErrorMessage.gone()
 
@@ -290,15 +297,18 @@ class AddPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetActio
         panCardEditText.setText(panData.panCardNo)
 
         if (panData.panCardImagePath != null) {
-            val imageRef = firebaseStorage
-                .reference
-                .child("verification")
-                .child(panData.panCardImagePath)
-
-            imageRef.downloadUrl.addOnSuccessListener {
-                showPanInfoCard(it)
-            }.addOnFailureListener {
-                print("ee")
+            if(panData.panCardImagePath.startsWith("http", true)){
+                showPanInfoCard(Uri.parse(panData.panCardImagePath))
+            }else {
+                firebaseStorage
+                    .reference
+                    .child("verification")
+                    .child(panData.panCardImagePath)
+                    .downloadUrl.addOnSuccessListener {
+                        showPanInfoCard(it)
+                    }.addOnFailureListener {
+                        print("ee")
+                    }
             }
         }
     }
@@ -380,8 +390,7 @@ class AddPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetActio
         if (requestCode == REQUEST_CODE_UPLOAD_PAN_IMAGE) {
 
             if (resultCode == Activity.RESULT_OK) {
-                clickedImagePath =
-                    data?.getParcelableExtra(PhotoCrop.INTENT_EXTRA_RESULTING_FILE_URI)
+                clickedImagePath = data?.getParcelableExtra(PhotoCrop.INTENT_EXTRA_RESULTING_FILE_URI)
                 showPanInfoCard(clickedImagePath!!)
 
                 if (panDataCorrectCB.isChecked)
