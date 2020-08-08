@@ -1,11 +1,15 @@
 package com.gigforce.app.core.base.basefirestore
 
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.*
+import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.FirebaseFirestore
 
 
 abstract public class BaseFirestoreDBRepository {
     private var firebaseDB = FirebaseFirestore.getInstance()
+    val db: FirebaseFirestore get() = firebaseDB
     private var uid = FirebaseAuth.getInstance().currentUser?.uid!!
 
     abstract public fun getCollectionName(): String
@@ -103,9 +107,11 @@ abstract public class BaseFirestoreDBRepository {
     fun getCollectionReference(): CollectionReference {
         return firebaseDB.collection(getCollectionName())
     }
-    fun getUID():String{
+
+    fun getUID(): String {
         return uid
     }
+
     fun getDBCollection(): DocumentReference {
         return firebaseDB.collection(getCollectionName())
             .document(uid)

@@ -324,6 +324,9 @@
     <string name="pending">Pending</string>
     <string name="explore_by_role">Explore By Role</string>
     <string name="valid_upto">Valid Upto :</string>
-
+    <string name="giger_since">Giger Since</string>
+    <string name="gig_id">Gig Id :</string>
+    <string name="gigforce_pvt_ltd">Gigforce Pvt. Ltd.</string>
+    <string name="issued_on">Issued On</string>
 
 </resources>

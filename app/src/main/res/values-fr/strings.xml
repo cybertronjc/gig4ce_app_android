@@ -236,4 +236,7 @@
     <string name="good_luck">Good Luck!!!</string>
     <string name="help">Help</string>
     <string name="share">Share</string>
+    <string name="gig_id">Gig Id :</string>
+    <string name="gigforce_pvt_ltd">Gigforce Pvt. Ltd.</string>
+    <string name="issued_on">Issued On</string>
 </resources>

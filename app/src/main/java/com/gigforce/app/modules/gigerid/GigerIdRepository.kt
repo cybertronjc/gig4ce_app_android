@@ -4,7 +4,7 @@ import com.gigforce.app.core.base.basefirestore.BaseFirestoreDBRepository
 import com.gigforce.app.modules.preferences.PreferencesFragment
 
 class GigerIdRepository : BaseFirestoreDBRepository(), GigerIDCallbacks {
-    var COLLECTION_NAME = "Profiles"
+
 
     override fun getProfileData(responseCallbacks: GigerIDCallbacks.ResponseCallbacks) {
         getDBCollection()
@@ -25,9 +25,27 @@ class GigerIdRepository : BaseFirestoreDBRepository(), GigerIDCallbacks {
 
     }
 
+    override fun getGigDetails(
+        gigId: String,
+        responseCallbacks: GigerIDCallbacks.ResponseCallbacks
+    ) {
+
+        db.collection("Gigs")
+            .document(gigId)
+            .addSnapshotListener { documentSnapshot, error ->
+
+                responseCallbacks.getGigDetailsResponse(documentSnapshot, error)
+            }
+    }
+
 
     override fun getCollectionName(): String {
         return COLLECTION_NAME
+    }
+
+
+    companion object {
+        private const val COLLECTION_NAME = "Profiles"
     }
 
 }

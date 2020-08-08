@@ -20,7 +20,6 @@ import android.widget.TextView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
-import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
@@ -32,7 +31,10 @@ import com.gigforce.app.modules.gigPage.models.Gig
 import com.gigforce.app.modules.gigPage.models.GigAttendance
 import com.gigforce.app.modules.markattendance.ImageCaptureActivity
 import com.gigforce.app.modules.roster.inflate
-import com.gigforce.app.utils.*
+import com.gigforce.app.utils.DateHelper
+import com.gigforce.app.utils.Lce
+import com.gigforce.app.utils.TextDrawable
+import com.gigforce.app.utils.ViewFullScreenImageDialogFragment
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -433,7 +435,7 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
             showPastgigDetails(gig)
         } else if (gig.isUpcomingGig()) {
             showUpcomingGigDetails(gig)
-        }else{
+        } else {
             showPastgigDetails(gig)
         }
 
@@ -710,17 +712,15 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
     private val timeFormatter = SimpleDateFormat("hh.mm aa", Locale.getDefault())
     override fun onClick(v: View?) {
         when (v?.id) {
-            R.id.bt_download_id_gig_page->{
-                navigate(
-                    R.id.giger_id_fragment,
-                    bundleOf(Pair(StringConstants.GIG_DETAILS.value, gig))
-                )
+            R.id.bt_download_id_gig_page -> {
+                navigate(R.id.giger_id_fragment, Bundle().apply {
+                    this.putString(INTENT_EXTRA_GIG_ID, gig?.gigId)
+                })
             }
             R.id.bt_download_id_gig_past_gigs -> {
-                navigate(
-                    R.id.giger_id_fragment,
-                    bundleOf(Pair(StringConstants.GIG_DETAILS.value, gig))
-                )
+                navigate(R.id.giger_id_fragment, Bundle().apply {
+                    this.putString(INTENT_EXTRA_GIG_ID, gig?.gigId)
+                })
             }
         }
     }

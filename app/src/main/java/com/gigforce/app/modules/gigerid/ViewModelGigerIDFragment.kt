@@ -2,6 +2,7 @@ package com.gigforce.app.modules.gigerid
 
 import android.view.View
 import androidx.lifecycle.ViewModel
+import com.gigforce.app.modules.gigPage.models.Gig
 import com.gigforce.app.modules.profile.models.ProfileData
 import com.gigforce.app.utils.PermissionUtils
 import com.gigforce.app.utils.SingleLiveEvent
@@ -11,6 +12,10 @@ import com.google.firebase.storage.StorageReference
 
 class ViewModelGigerIDFragment(private val gigerIDCallbacks: GigerIDCallbacks) : ViewModel(),
     GigerIDCallbacks.ResponseCallbacks {
+    private val _observableGigDetails: SingleLiveEvent<Gig> by lazy {
+        SingleLiveEvent<Gig>();
+    }
+    val observableGigDetails: SingleLiveEvent<Gig> get() = _observableGigDetails
     private val _observableProfilePic: SingleLiveEvent<StorageReference> by lazy {
         SingleLiveEvent<StorageReference>();
     }
@@ -98,6 +103,20 @@ class ViewModelGigerIDFragment(private val gigerIDCallbacks: GigerIDCallbacks) :
 
     override fun getProfilePic(reference: StorageReference) {
         observableProfilePic.value = reference
+    }
+
+    override fun getGigDetailsResponse(
+        querySnapshot: DocumentSnapshot?,
+        error: FirebaseFirestoreException?
+    ) {
+        if (error != null) {
+        } else {
+            observableGigDetails.value = querySnapshot?.toObject(Gig::class.java)
+        }
+    }
+
+    fun getGigDetails(string: String?) {
+        gigerIDCallbacks.getGigDetails(string!!, this)
     }
 
 }

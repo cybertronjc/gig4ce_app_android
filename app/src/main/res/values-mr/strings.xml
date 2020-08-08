@@ -335,5 +335,8 @@
     <string name="pan_card_image">Pan Card Image</string>
     <string name="please_provide_following_details">Please provide following details.</string>
     <string name="good_luck">Good Luck!!!</string>
+    <string name="gig_id">Gig Id :</string>
+    <string name="gigforce_pvt_ltd">Gigforce Pvt. Ltd.</string>
+    <string name="issued_on">Issued On</string>
 
 </resources>
