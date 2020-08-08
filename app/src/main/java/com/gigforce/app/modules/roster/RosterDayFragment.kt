@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.PopupMenu
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.Observer
@@ -20,20 +19,14 @@ import com.gigforce.app.core.toDate
 import com.gigforce.app.modules.calendarscreen.maincalendarscreen.verticalcalendar.AllotedGigDataModel
 import com.gigforce.app.modules.custom_gig_preferences.CustomPreferencesViewModel
 import com.gigforce.app.modules.custom_gig_preferences.ParamCustPreferViewModel
-//<<<<<<< HEAD
-//import com.gigforce.app.modules.roster.models.Gig
-//=======
 import com.gigforce.app.modules.gigPage.models.Gig
-import com.google.android.gms.tasks.Tasks.await
-//>>>>>>> 5b103f2363ddf1904533e6ad0249f4da092463eb
-import com.riningan.widget.ExtendedBottomSheetBehavior
 import kotlinx.android.synthetic.main.calendar_home_screen.*
 import kotlinx.android.synthetic.main.day_view_top_bar.*
 import kotlinx.android.synthetic.main.day_view_top_bar.month_year
 import kotlinx.android.synthetic.main.day_view_top_bar.view.*
 import kotlinx.android.synthetic.main.roster_day_fragment.*
 import kotlinx.android.synthetic.main.roster_day_fragment.calendarView
-import kotlinx.android.synthetic.main.unavailable_time_adjustment_bottom_sheet.*
+import kotlinx.android.synthetic.main.roster_day_fragment.calendar_cv
 import java.text.SimpleDateFormat
 import java.time.Instant
 import java.time.LocalDateTime
@@ -63,9 +56,11 @@ class RosterDayFragment : RosterBaseFragment() {
     lateinit var arrCalendarDependent: Array<View>
     lateinit var hourviewPageChangeCallBack: ViewPager2.OnPageChangeCallback
     lateinit var viewModelCustomPreference: CustomPreferencesViewModel
+
     companion object {
         var arrMainHomeDataModel: ArrayList<AllotedGigDataModel>? = ArrayList<AllotedGigDataModel>()
     }
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -127,7 +122,7 @@ class RosterDayFragment : RosterBaseFragment() {
         rosterViewModel.topBar = top_bar
         rosterViewModel.nestedScrollView = nested_scroll_view
         rosterViewModel.currentDateTime.value = activeDateTime
-       // rosterViewModel.scrollToPosition(activeDateTime.toDate)
+        // rosterViewModel.scrollToPosition(activeDateTime.toDate)
 
         // set custom preference variable
         setCustomPreference()
@@ -211,13 +206,41 @@ class RosterDayFragment : RosterBaseFragment() {
         return hourview_viewpager.getChildAt(0).findViewWithTag("day_times")
     }
 
+    override fun onBackPressed(): Boolean {
+        if (calendar_top_cl.visibility == View.VISIBLE){
+            calendar_top_cl.visibility = View.GONE
+            return true
+        }else {
+            return false
+        }
+    }
+    var curSelectedMonthFromMonthCalendar : CalendarView.MonthModel? = null
     @RequiresApi(Build.VERSION_CODES.O)
     private fun setListeners() {
         back_button.setOnClickListener {
-            activity?.onBackPressed()
+            if (calendar_top_cl.visibility == View.VISIBLE){
+                calendar_top_cl.visibility = View.GONE
+                if(curSelectedMonthFromMonthCalendar!=null)
+                scrollToSelectedDate(curSelectedMonthFromMonthCalendar!!)
+            }else {
+                activity?.onBackPressed()
+            }
         }
+
+        calendar_cv.setOnClickListener{
+            if (calendar_top_cl.visibility == View.VISIBLE){
+                calendar_top_cl.visibility = View.GONE
+                if(curSelectedMonthFromMonthCalendar!=null)
+                scrollToSelectedDate(curSelectedMonthFromMonthCalendar!!)
+            }else{
+                calendar_top_cl.visibility = View.VISIBLE
+            }
+        }
+
         top_bar.month_year.setOnClickListener {
             changeMonthCalendarVisibility()
+            if(calendar_top_cl.visibility == View.GONE && curSelectedMonthFromMonthCalendar!=null)
+            scrollToSelectedDate(curSelectedMonthFromMonthCalendar!!)
 
         }
 
@@ -225,6 +248,31 @@ class RosterDayFragment : RosterBaseFragment() {
             override fun onMonthChange(monthModel: CalendarView.MonthModel) {
                 changeMonthCalendarVisibility()
                 scrollToSelectedDate(monthModel)
+            }
+
+        })
+
+        calendarView.setMonthChangeListener(object :
+            CalendarView.MonthChangeAndDateClickedListener {
+            override fun onMonthChange(monthModel: CalendarView.MonthModel) {
+                var calendar = Calendar.getInstance()
+                calendar.set(Calendar.MONTH, monthModel.currentMonth)
+                calendar.set(Calendar.YEAR, monthModel.year)
+                calendar.set(Calendar.DATE, 1)
+                var day = monthModel.days.get(0)
+                day.month = calendar.get(Calendar.MONTH)
+                day.year = calendar.get(Calendar.YEAR)
+                day.date = 1
+                curSelectedMonthFromMonthCalendar = monthModel
+                initializeMonthTV(calendar, false)
+//                if (!isLoading) {
+//                    recyclerGenericAdapter.list.addAll(
+//                        viewModel.getVerticalCalendarData(
+//                            recyclerGenericAdapter.list.get(recyclerGenericAdapter.list.size - 1),
+//                            false
+//                        )
+//                    )
+//                }
             }
 
         })
@@ -248,21 +296,24 @@ class RosterDayFragment : RosterBaseFragment() {
             rosterViewModel.switchDayAvailability(
                 requireContext(), getDayTimesChild()!!,
 
-                    rosterViewModel.isDayAvailable.value!!, viewModelCustomPreference)
+                rosterViewModel.isDayAvailable.value!!, viewModelCustomPreference
+            )
             rosterViewModel.resetDayTimeAvailability(
-                viewModelCustomPreference, getDayTimesChild()!!)
+                viewModelCustomPreference, getDayTimesChild()!!
+            )
         }
     }
 
     private fun scrollToSelectedDate(monthModel: CalendarView.MonthModel) {
-
+        if(monthModel==null)return
         var millisecond = activeDateTime.atOffset(ZoneOffset.UTC).toInstant().toEpochMilli();
-        var activeDateTimeClone = LocalDateTime.ofInstant(Instant.ofEpochMilli(millisecond),ZoneId.systemDefault())
+        var activeDateTimeClone =
+            LocalDateTime.ofInstant(Instant.ofEpochMilli(millisecond), ZoneId.systemDefault())
         var selectedDay = monthModel.days.get(0)
-        if (activeDateTimeClone.year < monthModel.year || (activeDateTimeClone.year == selectedDay.year && activeDateTimeClone.monthValue < selectedDay.month+1) || (activeDateTimeClone.year == selectedDay.year && activeDateTimeClone.monthValue == selectedDay.month+1 && activeDateTimeClone.dayOfMonth < selectedDay.date)) {
+        if (activeDateTimeClone.year < monthModel.year || (activeDateTimeClone.year == selectedDay.year && activeDateTimeClone.monthValue < selectedDay.month + 1) || (activeDateTimeClone.year == selectedDay.year && activeDateTimeClone.monthValue == selectedDay.month + 1 && activeDateTimeClone.dayOfMonth < selectedDay.date)) {
             for (index in 1..365) {
                 activeDateTimeClone = activeDateTimeClone.plusDays(1)
-                if(activeDateTimeClone.year == selectedDay.year && activeDateTimeClone.monthValue == selectedDay.month+1 && activeDateTimeClone.dayOfMonth == selectedDay.date){
+                if (activeDateTimeClone.year == selectedDay.year && activeDateTimeClone.monthValue == selectedDay.month + 1 && activeDateTimeClone.dayOfMonth == selectedDay.date) {
                     hourview_viewpager.setCurrentItem(
                         hourview_viewpager.currentItem + index
                     )
@@ -271,11 +322,11 @@ class RosterDayFragment : RosterBaseFragment() {
                     break
                 }
             }
-        }
-        else{
+        } else {
             for (index in 1..365) {
                 activeDateTimeClone = activeDateTimeClone.minusDays(1)
-                if(activeDateTimeClone.year == selectedDay.year && activeDateTimeClone.monthValue == selectedDay.month+1 && activeDateTimeClone.dayOfMonth == selectedDay.date){
+                if (activeDateTimeClone.year == selectedDay.year && activeDateTimeClone.monthValue == selectedDay.month + 1 && activeDateTimeClone.dayOfMonth == selectedDay.date) {
+                    activeDateTimeClone = activeDateTimeClone.plusDays(1)
                     activeDateTime = activeDateTimeClone
                     rosterViewModel.currentDateTime.setValue(activeDateTime)
                     hourview_viewpager.setCurrentItem(
@@ -307,8 +358,6 @@ class RosterDayFragment : RosterBaseFragment() {
     }
 
     private fun attachTopBarMonthChangeListener() {
-
-
         top_bar.month_selector.onItemSelectedListener =
             object : AdapterView.OnItemSelectedListener {
                 override fun onNothingSelected(parent: AdapterView<*>?) {
