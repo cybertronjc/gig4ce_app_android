@@ -27,6 +27,7 @@ import com.gigforce.app.core.genericadapter.RecyclerGenericAdapter
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.toBundle
 import com.gigforce.app.core.visible
+import com.gigforce.app.modules.calendarscreen.maincalendarscreen.CalendarHomeScreen
 import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
 import com.gigforce.app.modules.help.HelpVideo
 import com.gigforce.app.modules.help.HelpViewModel
@@ -362,6 +363,7 @@ class LandingScreenFragment : BaseFragment() {
         if (profileImg != null && !profileImg.equals("")) {
             val profilePicRef: StorageReference =
                 PreferencesFragment.storage.reference.child("profile_pics").child(profileImg)
+            if(profile_image!=null)
             GlideApp.with(this.requireContext())
                 .load(profilePicRef)
                 .apply(RequestOptions().circleCrop())
@@ -384,6 +386,7 @@ class LandingScreenFragment : BaseFragment() {
         }
         mygigs_cl.setOnClickListener {
             comingFromOrGoingToScreen = SCREEN_GIG
+            CalendarHomeScreen.fistvisibleItemOnclick = -1
             navigate(R.id.mainHomeScreen)
         }
         skip_about_intro.setOnClickListener {

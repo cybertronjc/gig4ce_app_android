@@ -382,6 +382,7 @@ class ProfileFragment : BaseFragment() {
     private fun loadImage(Path: String) {
         var profilePicRef: StorageReference =
             storage.reference.child(PROFILE_PICTURE_FOLDER).child(Path)
+        if(layout.profile_avatar!=null)
         GlideApp.with(this.requireContext())
             .load(profilePicRef)
             .into(layout.profile_avatar)
