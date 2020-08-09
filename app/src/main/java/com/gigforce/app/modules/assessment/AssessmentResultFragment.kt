@@ -161,7 +161,9 @@ class AssessmentResultFragment : BaseFragment(), PopupMenu.OnMenuItemClickListen
     fun initShareImage() {
         storeImage(
             getScreenShot(cl_sv_nested_assess_result),
-            StringConstants.CERTIFICATE_SSC.value, context?.filesDir?.absolutePath!!
+            StringConstants.CERTIFICATE_SSC.value,
+            context?.filesDir?.absolutePath!!
+
         )
         shareFile(
             File(context?.filesDir?.absolutePath + "/" + StringConstants.CERTIFICATE_SSC.value),
@@ -169,8 +171,6 @@ class AssessmentResultFragment : BaseFragment(), PopupMenu.OnMenuItemClickListen
             "image/*"
         )
     }
-
-
 
 
     override fun onRequestPermissionsResult(

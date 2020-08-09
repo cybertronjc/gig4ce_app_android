@@ -10,26 +10,33 @@ import androidx.core.content.FileProvider
 import java.io.File
 import java.io.FileOutputStream
 
-fun shareFile(file: File, ctx: Context, mimeType: String) {
-    val uri: Uri = FileProvider.getUriForFile(
-        ctx,
-        ctx.packageName + ".provider",
-        file
-    )
-    val intent = Intent()
-    intent.action = Intent.ACTION_SEND
-    intent.type = mimeType
-    intent.putExtra(Intent.EXTRA_SUBJECT, "")
-    intent.putExtra(Intent.EXTRA_TEXT, "")
-    intent.putExtra(Intent.EXTRA_STREAM, uri)
-    try {
-        ctx.startActivity(Intent.createChooser(intent, "Share Certificate"))
-    } catch (e: ActivityNotFoundException) {
-        Toast.makeText(ctx, "No App Available", Toast.LENGTH_SHORT).show()
+fun shareFile(file: File?, ctx: Context, mimeType: String) {
+    file?.let {
+        val uri: Uri = FileProvider.getUriForFile(
+            ctx,
+            ctx.packageName + ".provider",
+            it
+        )
+        val intent = Intent()
+        intent.action = Intent.ACTION_SEND
+        intent.type = mimeType
+        intent.putExtra(Intent.EXTRA_SUBJECT, "")
+        intent.putExtra(Intent.EXTRA_TEXT, "")
+        intent.putExtra(Intent.EXTRA_STREAM, uri)
+        try {
+            ctx.startActivity(Intent.createChooser(intent, "Share Certificate"))
+        } catch (e: ActivityNotFoundException) {
+            Toast.makeText(ctx, "No App Available", Toast.LENGTH_SHORT).show()
+        }
     }
+
 }
 
-fun storeImage(bm: Bitmap?, fileName: String, dirPath: String): String {
+fun storeImage(
+    bm: Bitmap?,
+    fileName: String,
+    dirPath: String
+): String {
     val dir = File(dirPath)
     if (!dir.exists()) dir.mkdirs()
     val file = File(dirPath, fileName)

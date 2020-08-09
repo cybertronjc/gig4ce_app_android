@@ -11,7 +11,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.storage.StorageReference
 
 class ViewModelGigerIDFragment(private val gigerIDCallbacks: GigerIDCallbacks) : ViewModel(),
-    GigerIDCallbacks.ResponseCallbacks {
+        GigerIDCallbacks.ResponseCallbacks {
     private val _observableGigDetails: SingleLiveEvent<Gig> by lazy {
         SingleLiveEvent<Gig>();
     }
@@ -36,10 +36,10 @@ class ViewModelGigerIDFragment(private val gigerIDCallbacks: GigerIDCallbacks) :
     }
     val observableUserProfileDataSuccess: SingleLiveEvent<ProfileData> get() = _observableUserProfileDataSuccess
 
-    private val _observableUserProfileDataFailure: SingleLiveEvent<String> by lazy {
+    private val _observableError: SingleLiveEvent<String> by lazy {
         SingleLiveEvent<String>();
     }
-    val observableUserProfileDataFailure: SingleLiveEvent<String> get() = _observableUserProfileDataFailure
+    val observableError: SingleLiveEvent<String> get() = _observableError
 
 
     private val _observableProgress: SingleLiveEvent<Int> by lazy {
@@ -60,12 +60,12 @@ class ViewModelGigerIDFragment(private val gigerIDCallbacks: GigerIDCallbacks) :
     }
 
     fun checkIfPermGranted(
-        requestCode: Int,
-        grantResults: IntArray?
+            requestCode: Int,
+            grantResults: IntArray?
     ) {
         if (requestCode == PermissionUtils.reqCodePerm && PermissionUtils.permissionsGrantedCheck(
-                grantResults!!
-            )
+                        grantResults!!
+                )
         ) {
             observablePermGranted.value = true
         } else {
@@ -89,14 +89,14 @@ class ViewModelGigerIDFragment(private val gigerIDCallbacks: GigerIDCallbacks) :
     }
 
     override fun getProfileSuccess(
-        querySnapshot: DocumentSnapshot?,
-        error: FirebaseFirestoreException?
+            querySnapshot: DocumentSnapshot?,
+            error: FirebaseFirestoreException?
     ) {
         if (error != null) {
-            observableUserProfileDataFailure.value = error.message
+            observableError.value = error.message
         } else {
             observableUserProfileDataSuccess.value =
-                querySnapshot?.toObject(ProfileData::class.java)
+                    querySnapshot?.toObject(ProfileData::class.java)
         }
 
     }
@@ -106,10 +106,11 @@ class ViewModelGigerIDFragment(private val gigerIDCallbacks: GigerIDCallbacks) :
     }
 
     override fun getGigDetailsResponse(
-        querySnapshot: DocumentSnapshot?,
-        error: FirebaseFirestoreException?
+            querySnapshot: DocumentSnapshot?,
+            error: FirebaseFirestoreException?
     ) {
         if (error != null) {
+            observableError.value = error.message
         } else {
             observableGigDetails.value = querySnapshot?.toObject(Gig::class.java)
         }
