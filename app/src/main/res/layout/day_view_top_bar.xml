@@ -35,12 +35,36 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+            <TextView
+                android:id="@+id/month_year"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:paddingBottom="2dp"
+                android:text="April 2020"
+                android:textColor="#333333"
+                android:textSize="14sp"
+                android:letterSpacing="0"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/back_button"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/month_selector_arrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                app:layout_constraintBottom_toBottomOf="@+id/month_year"
+                app:layout_constraintStart_toEndOf="@+id/month_year"
+                app:layout_constraintTop_toTopOf="@+id/month_year"
+                app:srcCompat="@drawable/homescreen_month_dropdown" />
 
             <Spinner
                 android:id="@+id/month_selector"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 style="@style/BsHeadingBold12"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@id/back_button"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -122,6 +146,7 @@
                 android:id="@+id/full_day_gig"
                 android:layout_weight="1"
                 android:layout_width="0dp"
+                android:elevation="10dp"
                 android:layout_height="70dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="32dp"

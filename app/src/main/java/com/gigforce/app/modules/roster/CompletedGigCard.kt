@@ -1,9 +1,12 @@
 package com.gigforce.app.modules.roster
 
 import android.content.Context
+import android.os.Bundle
 import android.util.AttributeSet
 import android.view.View
+import androidx.navigation.findNavController
 import com.gigforce.app.R
+import com.gigforce.app.modules.gigPage.GigPageFragment
 import com.google.android.material.card.MaterialCardView
 import kotlinx.android.synthetic.main.completed_gig_card.view.*
 import kotlinx.android.synthetic.main.completed_gig_card.view.gig_timing
@@ -17,25 +20,29 @@ class CompletedGigCard(
     var duration: Float = 0.0F,
     var cardHeight: Int = 0,
     var rating: Float = 0.0F,
-    var amount: Int = 0,
-    var title: String = ""
+    var amount: Double = 0.0,
+    var title: String = "",
+    var isFullDay: Boolean = false,
+    var gigId: String = ""
 ): MaterialCardView(context) {
     //constructor(context: Context): super(context)
     //constructor(context: Context, attrs: AttributeSet): super(context, attrs)
 
     init {
         View.inflate(context, R.layout.completed_gig_card, this)
-        if (gigSuccess) setGigSuccess()
-        if (paymentSuccess) setPaymentSuccess()
+        setGigSuccess()
+        setPaymentSuccess()
         setHeightCard(cardHeight)
         setGigRating(rating)
         setGigAmount(amount)
         gig_title.text = title
-        setTimings()
+        if (duration != 0.0F)
+            setTimings()
+
+        if (isFullDay) setFullDay()
     }
 
     fun setGigSuccess() {
-        gigSuccess = true
         if (gigSuccess) {
             gig_success_icon.setImageResource(R.drawable.ic_gig_success_icon)
         } else {
@@ -44,7 +51,6 @@ class CompletedGigCard(
     }
 
     fun setPaymentSuccess() {
-        paymentSuccess = true
         if (paymentSuccess) {
             rupee_icon.setImageResource(R.drawable.ic_payment_success)
         } else {
@@ -65,7 +71,7 @@ class CompletedGigCard(
         }
     }
 
-    fun setGigAmount(value: Int) {
+    fun setGigAmount(value: Double) {
         amount = value
         rupee_value.text = "Rs. $value"
     }
@@ -78,10 +84,14 @@ class CompletedGigCard(
                         "-" + String.format("%02d", endHour) + ":" + String.format("%02d", endMinute))
     }
 
-    var isFullDay: Boolean = false
-        set(value) {
-            field = value
+    fun setFullDay() {
             gig_timing.text = ""
             cardHeight = 70.px
+
+        this.setOnClickListener {
+            findNavController().navigate(R.id.presentGigPageFragment, Bundle().apply {
+                this.putString(GigPageFragment.INTENT_EXTRA_GIG_ID, gigId)
+            })
         }
+    }
 }

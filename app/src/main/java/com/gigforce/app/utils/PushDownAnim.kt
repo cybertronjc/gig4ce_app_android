@@ -200,8 +200,11 @@ open class PushDownAnim private constructor(view: View) : PushDown {
             }
         })
         scaleX.addUpdateListener {
-            val p = view.parent as View
-            p?.invalidate()
+            if(view.parent!=null){
+                val p = view.parent as View
+                p?.invalidate()
+            }
+
         }
         scaleAnimSet!!.start()
     }
@@ -237,7 +240,7 @@ open class PushDownAnim private constructor(view: View) : PushDown {
     @kotlin.annotation.Retention(AnnotationRetention.SOURCE)
     @IntDef(MODE_SCALE, MODE_STATIC_DP)
     annotation class Mode
-    companion object myObj{
+    companion object myObj {
         const val DEFAULT_PUSH_SCALE = 0.94f
         const val DEFAULT_PUSH_STATIC = 2f
         const val DEFAULT_PUSH_DURATION: Long = 50

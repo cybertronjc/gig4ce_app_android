@@ -19,6 +19,7 @@ class NavigationImpl :NavigationInterface {
         return navController
     }
 
+
     override fun popFragmentFromStack(id: Int) {
         navController.popBackStack(id, true)
     }

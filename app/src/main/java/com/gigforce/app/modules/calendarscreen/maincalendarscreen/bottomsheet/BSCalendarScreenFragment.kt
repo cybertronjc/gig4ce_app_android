@@ -33,7 +33,9 @@ import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.app.core.genericadapter.RecyclerGenericAdapter
+import com.gigforce.app.core.gone
 import com.gigforce.app.core.toDate
+import com.gigforce.app.core.visible
 import com.gigforce.app.modules.gigPage.GigAttendancePageFragment
 import com.gigforce.app.modules.gigPage.GigPageFragment
 import com.gigforce.app.modules.gigPage.GigPageNavigationFragment
@@ -212,12 +214,21 @@ class BSCalendarScreenFragment : BaseFragment() {
                             NavigationClickListener(upcoming_gig_rv, position)
                         )
 
-                        getView(viewHolder, R.id.callCardView).setOnClickListener(
-                            CallClickListener(
-                                upcoming_gig_rv,
-                                position
+                        val callView = getView(viewHolder, R.id.callCardView)
+                        if(obj.gigContactDetails?.contactNumber != 0L) {
+
+
+                            callView.visible()
+                            callView.setOnClickListener(
+                                    CallClickListener(
+                                            upcoming_gig_rv,
+                                            position
+                                    )
                             )
-                        )
+                        }else{
+                            callView.gone()
+                        }
+
                         getView(viewHolder, R.id.messageCardView).setOnClickListener(
                             ChatClickListener(upcoming_gig_rv, position)
                         )
@@ -297,8 +308,8 @@ class BSCalendarScreenFragment : BaseFragment() {
         override fun onClick(v: View?) {
             val gig = (rv.adapter as RecyclerGenericAdapter<Gig>).list.get(position)
 
-            if(gig.contactNo.isNullOrBlank()) return
-            val intent = Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", gig.contactNo, null))
+            if(gig.gigContactDetails?.contactNumber == 0L) return
+            val intent = Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", gig.gigContactDetails?.contactNumber?.toString(), null))
             startActivity(intent)
         }
     }
@@ -377,21 +388,26 @@ class BSCalendarScreenFragment : BaseFragment() {
 
     private fun initializeFeaturesBottomSheet() {
         var datalist: ArrayList<FeatureModel> = ArrayList<FeatureModel>()
-        datalist.add(FeatureModel("My Gig", R.drawable.mygig, -1))
-        datalist.add(FeatureModel("Explore", R.drawable.ic_landinghome_search, -1))
-        datalist.add(FeatureModel("Wallet", R.drawable.wallet, R.id.walletBalancePage))
+        datalist.add(FeatureModel("My Gig", R.drawable.mygig, R.id.gig_history_fragment))
+        datalist.add(FeatureModel("Wallet", R.drawable.wallet, -1/*R.id.walletBalancePage*/))
         datalist.add(FeatureModel("Profile", R.drawable.profile, R.id.profileFragment))
-        datalist.add(FeatureModel("Learning", R.drawable.learning, R.id.mainLearningFragment))
+        datalist.add(FeatureModel("Learning", R.drawable.learning, -1/*R.id.mainLearningFragment*/))
+
         datalist.add(FeatureModel("Settings", R.drawable.settings, R.id.settingFragment))
-        datalist.add(FeatureModel("Chat", R.drawable.chat, R.id.contactScreenFragment))
+        datalist.add(FeatureModel("Chat", R.drawable.chat, -1/*R.id.contactScreenFragment*/))
         datalist.add(FeatureModel("Landing HS", R.drawable.chat, R.id.landinghomefragment))
+        datalist.add(FeatureModel("Explore", R.drawable.ic_landinghome_search, -1))
 
         val itemWidth = ((width / 7) * 1.6).toInt()
         val recyclerGenericAdapter: RecyclerGenericAdapter<FeatureModel> =
             RecyclerGenericAdapter<FeatureModel>(
                 activity?.applicationContext,
                 PFRecyclerViewAdapter.OnViewHolderClick<FeatureModel?> { view, position, item ->
-                    if (item?.navigationID != -1) navigate(item?.navigationID!!)
+                    if (item?.navigationID != -1) {
+                        navigate(item?.navigationID!!)
+                    }else{
+                        showToast("This page are inactive. We’ll activate it in a few weeks")
+                    }
                 },
                 RecyclerGenericAdapter.ItemInterface<FeatureModel?> { obj, viewHolder, position ->
                     val lp = getView(viewHolder, R.id.card_view).layoutParams

@@ -21,7 +21,7 @@
             android:background="@color/white"
             app:navigationIcon="@drawable/ic_arrow_back_black"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-            app:title="Giger Verification"
+            app:title="@string/giger_verification"
             app:titleTextColor="@color/black" />
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -31,14 +31,19 @@
 
         <include
             android:id="@+id/dlMainLayout"
+            android:visibility="gone"
             layout="@layout/fragment_add_driving_license_info_main"/>
+
+        <include
+            android:id="@+id/dlViewLayout"
+            android:visibility="gone"
+            layout="@layout/fragment_add_driving_license_info_view"/>
 
         <ProgressBar
             android:id="@+id/progressBar"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_centerInParent="true"
-            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/dlMainLayout"
             app:layout_constraintEnd_toEndOf="@+id/dlMainLayout"
             app:layout_constraintStart_toStartOf="parent"

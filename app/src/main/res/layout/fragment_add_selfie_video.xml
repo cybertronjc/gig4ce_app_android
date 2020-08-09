@@ -21,7 +21,7 @@
             android:background="@color/white"
             app:navigationIcon="@drawable/ic_arrow_back_black"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-            app:title="Giger Verification"
+            app:title="@string/giger_verification"
             app:titleTextColor="@color/black" />
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -47,19 +47,26 @@
         android:layout_marginTop="24dp"
         android:layout_marginEnd="13dp"
         android:src="@drawable/ic_time"
+        android:clickable="true"
+        android:focusable="true"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/appBar" />
 
 
     <TextView
+        android:id="@+id/howToRecordVideoBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="14dp"
         android:layout_marginRight="4dp"
         android:letterSpacing="-0.01"
         android:text="@string/how_to_record_selfie_video"
         android:textColor="@color/battle_ship_grey"
         android:textSize="12sp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:clickable="true"
+        android:focusable="true"
         android:fontFamily="@font/lato"
         app:layout_constraintEnd_toStartOf="@+id/helpIconIV"
         app:layout_constraintTop_toBottomOf="@id/appBar" />
@@ -91,7 +98,7 @@
         app:slider_height="60dp"
         app:slider_icon="@drawable/ic_arrow_forward_white"
         app:slider_icon_color="@color/white"
-        app:text="SAVE" />
+        app:text="@string/save_all_caps" />
 
     <com.google.android.material.checkbox.MaterialCheckBox
         android:id="@+id/selfieVideoCorrectCB"

@@ -14,7 +14,7 @@ import com.gigforce.app.modules.custom_gig_preferences.UnavailableDataModel
 import com.gigforce.app.modules.preferences.PreferencesRepository
 import com.gigforce.app.modules.preferences.SharedPreferenceViewModel
 import com.gigforce.app.modules.preferences.prefdatamodel.PreferencesDataModel
-import com.gigforce.app.modules.roster.models.Gig
+import com.gigforce.app.modules.gigPage.models.Gig
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.ServerTimestamp
@@ -89,7 +89,7 @@ class CalendarHomeScreenViewModel : ViewModel() {
         @ServerTimestamp
         lateinit var startDateTime: Date
         @ServerTimestamp
-        lateinit var endDateTime: Date
+        var endDateTime: Date? = null
         var title: String = ""
 
         constructor(
@@ -97,7 +97,7 @@ class CalendarHomeScreenViewModel : ViewModel() {
             gigStatus: String,
             gigerId: String,
             startDateTime: Date,
-            endDateTime: Date,
+            endDateTime: Date?,
             title: String
         ) {
             this.duration = duration
@@ -127,7 +127,7 @@ class CalendarHomeScreenViewModel : ViewModel() {
         } else {
             temp = calendar.get(Calendar.MONTH)
         }
-        for (x in 0..60) {
+        for (x in 0..180) {
             if ((calendar.get(Calendar.MONTH) - temp) != 0) {
                 if (isPreviousDay) {
                     var newcalendar: Calendar = Calendar.getInstance();

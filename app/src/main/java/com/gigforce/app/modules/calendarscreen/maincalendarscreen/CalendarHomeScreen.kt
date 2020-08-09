@@ -34,12 +34,18 @@ import com.gigforce.app.modules.gigPage.GigAttendancePageFragment
 import com.gigforce.app.modules.markattendance.ImageCaptureActivity
 import com.gigforce.app.modules.preferences.PreferencesFragment
 import com.gigforce.app.modules.profile.ProfileViewModel
+import com.gigforce.app.modules.roster.RosterDayFragment
 import com.gigforce.app.utils.GlideApp
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.storage.StorageReference
 import com.riningan.widget.ExtendedBottomSheetBehavior
 import com.riningan.widget.ExtendedBottomSheetBehavior.STATE_COLLAPSED
 import kotlinx.android.synthetic.main.calendar_home_screen.*
+import kotlinx.android.synthetic.main.calendar_home_screen.cardView
+import kotlinx.android.synthetic.main.calendar_home_screen.chat_icon_iv
+import kotlinx.android.synthetic.main.calendar_home_screen.oval_gradient_iv
+import kotlinx.android.synthetic.main.calendar_home_screen.profile_image
+import kotlinx.android.synthetic.main.landingscreen_fragment.*
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.util.*
@@ -53,6 +59,7 @@ class CalendarHomeScreen : BaseFragment(),
             CalendarHomeScreen()
 
         lateinit var temporaryData: VerticalCalendarDataItemModel
+        var fistvisibleItemOnclick = -1
     }
 
     var swipedToupdateGig = false
@@ -152,7 +159,6 @@ class CalendarHomeScreen : BaseFragment(),
                 println(" date data1 " + selectedMonthModel.toString())
                 changeVisibilityCalendarView()
             }
-
         })
 
     }
@@ -268,10 +274,11 @@ class CalendarHomeScreen : BaseFragment(),
         if (profileImg != null && !profileImg.equals("")) {
             val profilePicRef: StorageReference =
                 PreferencesFragment.storage.reference.child("profile_pics").child(profileImg)
-            GlideApp.with(this.requireContext())
-                .load(profilePicRef)
-                .apply(RequestOptions().circleCrop())
-                .into(profile_image)
+            if (profile_image != null)
+                GlideApp.with(this.requireContext())
+                    .load(profilePicRef)
+                    .apply(RequestOptions().circleCrop())
+                    .into(profile_image)
         }
     }
 
@@ -294,10 +301,13 @@ class CalendarHomeScreen : BaseFragment(),
                 activity?.applicationContext,
                 PFRecyclerViewAdapter.OnViewHolderClick<VerticalCalendarDataItemModel?> { view, position, item ->
                     //item?.year, item?.month, item?.date
+                    var layoutManager = rv_.layoutManager as LinearLayoutManager
+                    fistvisibleItemOnclick = layoutManager.findFirstVisibleItemPosition()
 
                     val activeDateTime =
                         LocalDateTime.of(item?.year!!, item.month + 1, item.date, 0, 0, 0)
 
+                    RosterDayFragment.arrMainHomeDataModel = viewModel.arrMainHomeDataModel!!
                     val bundle = Bundle()
                     bundle.putSerializable("active_date", activeDateTime)
                     findNavController().navigate(R.id.rosterDayFragment, bundle)
@@ -457,7 +467,11 @@ class CalendarHomeScreen : BaseFragment(),
             false
         )
         rv_.adapter = recyclerGenericAdapter
-        rv_.scrollToPosition((recyclerGenericAdapter.list.size / 2) - 2)
+        if (fistvisibleItemOnclick == -1) {
+            rv_.scrollToPosition((recyclerGenericAdapter.list.size / 2) - 2)
+        } else {
+            rv_.scrollToPosition(fistvisibleItemOnclick)
+        }
 
         var scrollListener = object : RecyclerView.OnScrollListener() {
 

@@ -59,7 +59,7 @@
         tools:layout="@layout/onboarding_loader_fragment" />
     <fragment
         android:id="@+id/chatScreenFragment"
-        android:name="com.abhijai.gigschatdemo.contacts_module.ui.ChatScreenFragment"
+        android:name="com.gigforce.app.modules.chatmodule.ui.ChatScreenFragment"
         tools:layout="@layout/fragment_chat_screen" />
 
     <fragment
@@ -69,7 +69,7 @@
 
     <fragment
         android:id="@+id/contactScreenFragment"
-        android:name="com.abhijai.gigschatdemo.contacts_module.ui.ContactScreenFragment"
+        android:name="com.gigforce.app.modules.chatmodule.ui.ContactScreenFragment"
         tools:layout="@layout/contact_screen_fragment" />
 
     <fragment
@@ -594,6 +594,21 @@
         android:id="@+id/assessment_result_fragment"
         android:name="com.gigforce.app.modules.assessment.AssessmentResultFragment"
         android:label="AssessmentResultFragment" />
+    <fragment
+        android:id="@+id/helpVideosFragment"
+        android:name="com.gigforce.app.modules.help.HelpVideosFragment"
+        android:label="fragment_help_video"
+        tools:layout="@layout/fragment_help_video" />
+
+    <fragment
+        android:id="@+id/gig_history_fragment"
+        android:name="com.gigforce.app.modules.earn.gighistory.GigHistoryFragment"
+        android:label="GigHistoryFragment" />
+    <fragment
+        android:id="@+id/giger_id_fragment"
+        android:name="com.gigforce.app.modules.gigerid.GigerIdFragment"
+        android:label="GigerIdFragment" />
+
 
 </navigation>
 

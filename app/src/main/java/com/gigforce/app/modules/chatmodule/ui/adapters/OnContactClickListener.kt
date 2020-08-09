@@ -1,5 +1,5 @@
-package com.abhijai.gigschatdemo.contacts_module.ui.adapters
+package com.gigforce.app.modules.chatmodule.ui.adapters
 
 interface OnContactClickListener {
-    fun contactClick(url:String, name:String)
+    fun contactClick(url:String, name:String, chatHeaderId: String)
 }

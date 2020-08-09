@@ -52,18 +52,18 @@
             app:layout_constraintStart_toEndOf="@+id/companyLogoIV"
             app:layout_constraintTop_toTopOf="parent" />
 
+
         <TextView
             android:id="@+id/textView67"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
             android:letterSpacing="0.03"
+            android:text="10:00 AM — 10:30 AM"
             android:textColor="@color/upcoming_gig_time"
             android:textSize="12sp"
             app:layout_constraintStart_toStartOf="@+id/textView41"
-            app:layout_constraintTop_toBottomOf="@+id/textView41"
-            android:text="10:00 AM — 10:30 AM" />
-
+            app:layout_constraintTop_toBottomOf="@+id/textView41" />
 
         <View
             android:id="@+id/seaprator1"
@@ -96,10 +96,11 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_marginTop="12dp"
-            android:layout_marginEnd="17dp"
+            android:layout_marginRight="8dp"
             app:cardCornerRadius="12dp"
+            app:layout_constraintRight_toLeftOf="@id/callCardView"
             app:cardBackgroundColor="@color/light_pink"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:visibility="gone"
             app:layout_constraintTop_toBottomOf="@id/seaprator1">
 
             <ImageView
@@ -118,12 +119,14 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_marginTop="12dp"
-            android:layout_marginRight="8dp"
+
+            android:layout_marginEnd="17dp"
             app:cardCornerRadius="12dp"
             android:clickable="true"
             android:focusable="true"
-            app:layout_constraintRight_toLeftOf="@id/messageCardView"
+
             app:cardBackgroundColor="@color/light_pink"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/seaprator1">
 
             <ImageView

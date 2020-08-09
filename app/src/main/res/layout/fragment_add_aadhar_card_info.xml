@@ -21,7 +21,7 @@
             android:background="@color/white"
             app:navigationIcon="@drawable/ic_arrow_back_black"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-            app:title="Giger Verification"
+            app:title="@string/giger_verification"
             app:titleTextColor="@color/black" />
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -31,8 +31,14 @@
         android:layout_height="match_parent">
 
         <include
-            android:id="@+id/aadharMainLayout"
+            android:id="@+id/aadharEditLayout"
+            android:visibility="gone"
             layout="@layout/fragment_add_aadhar_card_info_main" />
+
+        <include
+            android:id="@+id/aadharViewLayout"
+            android:visibility="gone"
+            layout="@layout/fragment_add_aadhar_card_view" />
 
         <ProgressBar
             android:id="@+id/progressBar"

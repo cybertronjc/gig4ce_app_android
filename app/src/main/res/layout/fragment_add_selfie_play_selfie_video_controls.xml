@@ -34,7 +34,7 @@
         <ImageButton
             android:id="@id/exo_play"
             style="@style/ExoMediaButton.Play"
-            android:src="@drawable/ic_play_square_border" />
+            android:src="@drawable/ic_play_sq" />
 
         <ImageButton
             android:id="@id/exo_pause"
