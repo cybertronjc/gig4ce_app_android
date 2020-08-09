@@ -125,6 +125,7 @@
             android:padding="1dp"
             android:scaleX="0.9"
             android:scaleY="0.9"
+            android:visibility="gone"
             app:cardBackgroundColor="@color/light_pink"
             app:cardCornerRadius="20dp"
             app:layout_constraintTop_toBottomOf="@id/seaprator1"

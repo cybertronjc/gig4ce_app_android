@@ -181,7 +181,7 @@ open class GigVerificationViewModel constructor(
         userHasPassBook: Boolean,
         passbookImagePath: Uri?,
         ifscCode: String?,
-        bankName : String?,
+        bankName: String?,
         accountNo: String?
     ) = viewModelScope.launch {
         _documentUploadState.postValue(Lse.loading())
@@ -327,17 +327,26 @@ open class GigVerificationViewModel constructor(
     }
 
     private suspend fun uploadImage(image: Uri) =
-        suspendCoroutine<String> { continuation ->
+        suspendCoroutine<String> { cont ->
             val fileNameAtServer = prepareUniqueImageName()
-            firebaseStorage.reference
+            val filePathOnServer = firebaseStorage.reference
                 .child("verification")
                 .child(fileNameAtServer)
+
+            filePathOnServer
                 .putFile(image)
                 .addOnSuccessListener {
-                    continuation.resume(fileNameAtServer)
+                    filePathOnServer
+                        .downloadUrl
+                        .addOnSuccessListener {
+                            cont.resume(it.toString())
+
+                        }.addOnFailureListener {
+                            cont.resumeWithException(it)
+                        }
                 }
                 .addOnFailureListener {
-                    continuation.resumeWithException(it)
+                    cont.resumeWithException(it)
                 }
         }
 
