@@ -86,7 +86,7 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
     }
 
     private fun initClicks() {
-        bt_download_id_gig_past_gigs.setOnClickListener(this)
+        bt_download_id_gig_page.setOnClickListener(this)
         bt_download_id_gig_past_gigs.setOnClickListener(this)
 
     }
