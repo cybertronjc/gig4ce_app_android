@@ -202,6 +202,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/size_27"
                 android:background="@color/warm_grey"
+                android:alpha=""
                 android:paddingBottom="@dimen/size_12"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
