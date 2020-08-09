@@ -100,12 +100,12 @@
                     android:layout_marginTop="4dp"
                     android:fontFamily="@font/lato"
                     android:letterSpacing="0"
-                    tools:text="Company"
                     android:textColor="@color/warm_grey"
                     android:textSize="12sp"
                     app:layout_constraintEnd_toStartOf="@+id/favoriteCB"
                     app:layout_constraintStart_toEndOf="@+id/companyLogoIV"
-                    app:layout_constraintTop_toBottomOf="@+id/roleNameTV" />
+                    app:layout_constraintTop_toBottomOf="@+id/roleNameTV"
+                    tools:text="Company" />
 
                 <TextView
                     android:id="@+id/gigTypeTV"
@@ -115,11 +115,11 @@
                     android:layout_marginTop="6dp"
                     android:fontFamily="@font/lato"
                     android:letterSpacing="0"
-                    tools:text="On- Site"
                     android:textColor="#d9000000"
                     android:textSize="12sp"
                     app:layout_constraintStart_toEndOf="@+id/companyLogoIV"
-                    app:layout_constraintTop_toBottomOf="@+id/companyNameTV" />
+                    app:layout_constraintTop_toBottomOf="@+id/companyNameTV"
+                    tools:text="On- Site" />
 
                 <TextView
                     android:id="@+id/gigIdTV"
@@ -129,11 +129,11 @@
                     android:layout_marginEnd="17dp"
                     android:fontFamily="@font/lato"
                     android:letterSpacing="0"
-                    tools:text="Gig Id: 23930344"
                     android:textColor="@color/lipstick"
                     android:textSize="12sp"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/companyNameTV" />
+                    app:layout_constraintTop_toBottomOf="@+id/companyNameTV"
+                    tools:text="Gig Id: 23930344" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -292,12 +292,12 @@
                     tools:text="Note :We are fetching your location to mark attendance. " />
 
                 <com.google.android.material.button.MaterialButton
+                    android:id="@+id/bt_download_id_gig_page"
                     style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="14dp"
-
                     android:layout_marginEnd="16dp"
                     android:text="Download ID"
                     app:layout_constraintTop_toBottomOf="@id/presentFutureGigNoteTV"
@@ -331,11 +331,11 @@
                     android:layout_marginTop="14dp"
                     android:fontFamily="@font/lato"
                     android:letterSpacing="0"
-                    tools:text="Gig date"
                     android:textColor="#d9000000"
                     android:textSize="14sp"
                     app:layout_constraintStart_toEndOf="@id/dateIV"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="Gig date" />
 
                 <TextView
                     android:id="@+id/invoiceStatusBtn"
@@ -350,11 +350,11 @@
                     android:paddingTop="5dp"
                     android:paddingEnd="17dp"
                     android:paddingBottom="5dp"
-                    tools:text="Invoice Pending"
                     android:textColor="@color/lipstick"
                     android:textSize="12sp"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="Invoice Pending" />
 
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/attendanceCardView"
@@ -483,15 +483,14 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="17dp"
-                    android:paddingBottom="10dp"
                     android:letterSpacing="0"
+                    android:paddingBottom="10dp"
                     android:textColor="#d9000000"
                     android:textSize="12sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/pastGigNoteLabel"
                     app:layout_constraintTop_toTopOf="@id/pastGigNoteLabel"
                     tools:text="Note :We are fetching your location to mark attendance. " />
-
 
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -536,12 +535,12 @@
                         android:layout_marginTop="4dp"
                         android:fontFamily="@font/lato"
                         android:letterSpacing="0"
-                        tools:text="Invoice Generated : 16 Apr 2020"
                         android:textColor="@color/black"
                         android:textSize="12sp"
                         android:visibility="visible"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/payment_details_label" />
+                        app:layout_constraintTop_toBottomOf="@id/payment_details_label"
+                        tools:text="Invoice Generated : 16 Apr 2020" />
 
 
                     <TextView
@@ -552,13 +551,13 @@
                         android:layout_marginRight="19dp"
                         android:fontFamily="@font/lato_bold"
                         android:letterSpacing="0"
-                        tools:text="Rs 20000"
                         android:textColor="@color/black"
                         android:textSize="18sp"
-                        app:layout_goneMarginTop="10dp"
                         android:visibility="visible"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/separator2" />
+                        app:layout_constraintTop_toBottomOf="@id/separator2"
+                        app:layout_goneMarginTop="10dp"
+                        tools:text="Rs 20000" />
 
                     <TextView
                         android:id="@+id/processingLabel"

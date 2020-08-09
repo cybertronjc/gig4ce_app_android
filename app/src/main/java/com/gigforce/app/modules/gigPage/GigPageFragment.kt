@@ -81,10 +81,11 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
         getData(arguments, savedInstanceState)
         initUi()
         initViewModel(view)
+        initClicks()
 
     }
 
-    private fun initClicks(gig: Gig?) {
+    private fun initClicks() {
         bt_download_id_gig_past_gigs.setOnClickListener(this)
         bt_download_id_gig_past_gigs.setOnClickListener(this)
 
@@ -185,7 +186,7 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
                     }
                     is Lce.Content -> {
                         setGigDetailsOnView(it.content, view)
-                        initClicks(it.content)
+
                     }
                     is Lce.Error -> {
                     }
