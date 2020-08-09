@@ -72,7 +72,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="21dp"
         android:layout_marginBottom="15dp"
-        android:text="Got it"
+        android:text="@string/got_it"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/contentTV"
         app:strokeColor="@color/colorPrimary"

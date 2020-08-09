@@ -215,14 +215,14 @@ class SharedPreferenceViewModel : ViewModel {
 
     fun getPrefrencesData(): ArrayList<PreferencesScreenItem> {
         val prefrencesItems = ArrayList<PreferencesScreenItem>()
-        prefrencesItems.add(PreferencesScreenItem(R.drawable.ic_link_black,"Category",""))
-        prefrencesItems.add(PreferencesScreenItem(R.drawable.ic_group_black,"Roles","At atm"))
+       // prefrencesItems.add(PreferencesScreenItem(R.drawable.ic_link_black,"Category",""))
+       // prefrencesItems.add(PreferencesScreenItem(R.drawable.ic_group_black,"Roles","At atm"))
         prefrencesItems.add(PreferencesScreenItem(R.drawable.ic_clock_black,"Day and Time",getDateTimeSubtitle()))
         prefrencesItems.add(PreferencesScreenItem(R.drawable.ic_location_pin_black,"Location",getLocation()))
         prefrencesItems.add(PreferencesScreenItem(R.drawable.ic_credit_card_black,"Earning",getEarning()))
         prefrencesItems.add(PreferencesScreenItem(0,"OTHERS",""))
         prefrencesItems.add(PreferencesScreenItem(R.drawable.ic_language_black,"App Language",getLanguage()))
-        prefrencesItems.add(PreferencesScreenItem(R.drawable.ic_notifications_on_black,"Notification",""))
+       // prefrencesItems.add(PreferencesScreenItem(R.drawable.ic_notifications_on_black,"Notification",""))
         prefrencesItems.add(PreferencesScreenItem(R.drawable.ic_power_button_black,"Sign out",""))
         return prefrencesItems
     }

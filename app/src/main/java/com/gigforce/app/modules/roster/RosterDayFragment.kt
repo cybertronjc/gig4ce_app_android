@@ -8,29 +8,34 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.PopupMenu
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
 import com.gigforce.app.R
+import com.gigforce.app.core.base.components.CalendarView
 import com.gigforce.app.core.toDate
+import com.gigforce.app.modules.calendarscreen.maincalendarscreen.verticalcalendar.AllotedGigDataModel
 import com.gigforce.app.modules.custom_gig_preferences.CustomPreferencesViewModel
 import com.gigforce.app.modules.custom_gig_preferences.ParamCustPreferViewModel
-import com.gigforce.app.modules.roster.models.Gig
-import com.google.android.gms.tasks.Tasks.await
-import com.riningan.widget.ExtendedBottomSheetBehavior
+import com.gigforce.app.modules.gigPage.models.Gig
+import kotlinx.android.synthetic.main.calendar_home_screen.*
 import kotlinx.android.synthetic.main.day_view_top_bar.*
+import kotlinx.android.synthetic.main.day_view_top_bar.month_year
 import kotlinx.android.synthetic.main.day_view_top_bar.view.*
 import kotlinx.android.synthetic.main.roster_day_fragment.*
-import kotlinx.android.synthetic.main.unavailable_time_adjustment_bottom_sheet.*
-import kotlinx.android.synthetic.main.vertical_calendar_item.*
+import kotlinx.android.synthetic.main.roster_day_fragment.calendarView
+import kotlinx.android.synthetic.main.roster_day_fragment.calendar_cv
+import java.text.SimpleDateFormat
+import java.time.Instant
 import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.ZoneOffset
+import java.util.*
 import kotlin.collections.ArrayList
 
-class RosterDayFragment: RosterBaseFragment() {
+class RosterDayFragment : RosterBaseFragment() {
 
     // To fake infinite scroll on day view. We set the adapter array size to 10000
     // and start from 5000
@@ -45,8 +50,16 @@ class RosterDayFragment: RosterBaseFragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     var actualDateTime = LocalDateTime.now()
 
+    private var upcomingGigs: ArrayList<Gig> = ArrayList<Gig>()
+    private var completedGigs: ArrayList<Gig> = ArrayList<Gig>()
+    var unavailableCards: ArrayList<String> = ArrayList()
+    lateinit var arrCalendarDependent: Array<View>
     lateinit var hourviewPageChangeCallBack: ViewPager2.OnPageChangeCallback
-    lateinit var  viewModelCustomPreference : CustomPreferencesViewModel
+    lateinit var viewModelCustomPreference: CustomPreferencesViewModel
+
+    companion object {
+        var arrMainHomeDataModel: ArrayList<AllotedGigDataModel>? = ArrayList<AllotedGigDataModel>()
+    }
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -78,17 +91,38 @@ class RosterDayFragment: RosterBaseFragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         //observer()
+
         initialize()
         setListeners()
+    }
+
+    private fun initializeMonthTV(calendar: Calendar, needaction: Boolean) {
+        val pattern = "MMMM YYYY"
+        val simpleDateFormat = SimpleDateFormat(pattern)
+        val date: String = simpleDateFormat.format(calendar.time)
+        month_year.text = date
+        if (needaction)
+            calendarView.setVerticalMonthChanged(calendar)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun initialize() {
         // initialize view model properties
+        var calendar = Calendar.getInstance()
+        calendar.set(Calendar.DATE, activeDateTime.dayOfMonth)
+        calendar.set(Calendar.MONTH, activeDateTime.monthValue - 1)
+        calendar.set(Calendar.YEAR, activeDateTime.year)
+        initializeMonthTV(calendar, false)
+
+        rosterViewModel.dayContext = requireContext()
+//        arrCalendarDependent =
+//            arrayOf(calendar_top_cl, mark_unavailable_bs)
+
+
         rosterViewModel.topBar = top_bar
         rosterViewModel.nestedScrollView = nested_scroll_view
         rosterViewModel.currentDateTime.value = activeDateTime
-       // rosterViewModel.scrollToPosition(activeDateTime.toDate)
+        // rosterViewModel.scrollToPosition(activeDateTime.toDate)
 
         // set custom preference variable
         setCustomPreference()
@@ -99,7 +133,7 @@ class RosterDayFragment: RosterBaseFragment() {
 //        rosterViewModel.getGigs(activeDateTime.toDate)
 
         //observer()
-        initializeBottomSheet()
+        //initializeBottomSheet()
         attachHourViewAdapter()
         attachDayAvailabilityObserver()
         attachCurrentDateTimeChangeObserver()
@@ -107,16 +141,31 @@ class RosterDayFragment: RosterBaseFragment() {
         attachTopBarMenu()
 
         rosterViewModel.currentDateTime.observe(viewLifecycleOwner, Observer {
+            //            dayTag = rosterViewModel.getTagFromDate(it.toDate)
+//            // get gigs for the day
+//            if (dayTag !in rosterViewModel.allGigs)
+//                rosterViewModel.allGigs.put(dayTag, MutableLiveData(ArrayList<Gig>()))
+//            rosterViewModel.getGigs(it.toDate)
 
             getDayTimesChild()?.let {
-                    rosterViewModel.resetDayTimeAvailability(
-                        viewModelCustomPreference,
-                        getDayTimesChild()!!
-                    )
+                rosterViewModel.resetDayTimeAvailability(
+                    viewModelCustomPreference,
+                    getDayTimesChild()!!
+                )
             }
 
             rosterViewModel.scrollToPosition(it.toDate)
+
+            rosterViewModel.setFullDayGigs()
         })
+
+//        dayTag = String.format("%4d", activeDateTime.year) +
+//                String.format("%02d", activeDateTime.monthValue) +
+//                String.format("%02d", activeDateTime.dayOfMonth)
+//
+//        rosterViewModel.allGigs[dayTag]?.observe(viewLifecycleOwner, Observer {
+//            rosterViewModel.setFullDayGigs(requireContext())
+//        })
 
         viewModelCustomPreference.customPreferencesLiveDataModel.observe(
             viewLifecycleOwner, Observer {
@@ -128,7 +177,7 @@ class RosterDayFragment: RosterBaseFragment() {
                 }
             }
         )
-
+        calendarView.setGigData(arrMainHomeDataModel!!)
     }
 
     private fun attachTopBarMenu() {
@@ -136,7 +185,7 @@ class RosterDayFragment: RosterBaseFragment() {
             val popupMenu: PopupMenu = PopupMenu(requireContext(), more_bottom)
             popupMenu.menuInflater.inflate(R.menu.roster_menu, popupMenu.menu)
             popupMenu.setOnMenuItemClickListener {
-                when(it.itemId) {
+                when (it.itemId) {
                     R.id.location_card -> {
 
                     }
@@ -157,17 +206,82 @@ class RosterDayFragment: RosterBaseFragment() {
         return hourview_viewpager.getChildAt(0).findViewWithTag("day_times")
     }
 
+    override fun onBackPressed(): Boolean {
+        if (calendar_top_cl.visibility == View.VISIBLE){
+            calendar_top_cl.visibility = View.GONE
+            return true
+        }else {
+            return false
+        }
+    }
+    var curSelectedMonthFromMonthCalendar : CalendarView.MonthModel? = null
     @RequiresApi(Build.VERSION_CODES.O)
     private fun setListeners() {
-        back_button.setOnClickListener{
-            activity?.onBackPressed()
+        back_button.setOnClickListener {
+            if (calendar_top_cl.visibility == View.VISIBLE){
+                calendar_top_cl.visibility = View.GONE
+                if(curSelectedMonthFromMonthCalendar!=null)
+                scrollToSelectedDate(curSelectedMonthFromMonthCalendar!!)
+            }else {
+                activity?.onBackPressed()
+            }
         }
 
-        hourviewPageChangeCallBack = object: ViewPager2.OnPageChangeCallback() {
+        calendar_cv.setOnClickListener{
+            if (calendar_top_cl.visibility == View.VISIBLE){
+                calendar_top_cl.visibility = View.GONE
+                if(curSelectedMonthFromMonthCalendar!=null)
+                scrollToSelectedDate(curSelectedMonthFromMonthCalendar!!)
+            }else{
+                calendar_top_cl.visibility = View.VISIBLE
+            }
+        }
+
+        top_bar.month_year.setOnClickListener {
+            changeMonthCalendarVisibility()
+            if(calendar_top_cl.visibility == View.GONE && curSelectedMonthFromMonthCalendar!=null)
+            scrollToSelectedDate(curSelectedMonthFromMonthCalendar!!)
+
+        }
+
+        calendarView.setOnDateClickListner(object : CalendarView.MonthChangeAndDateClickedListener {
+            override fun onMonthChange(monthModel: CalendarView.MonthModel) {
+                changeMonthCalendarVisibility()
+                scrollToSelectedDate(monthModel)
+            }
+
+        })
+
+        calendarView.setMonthChangeListener(object :
+            CalendarView.MonthChangeAndDateClickedListener {
+            override fun onMonthChange(monthModel: CalendarView.MonthModel) {
+                var calendar = Calendar.getInstance()
+                calendar.set(Calendar.MONTH, monthModel.currentMonth)
+                calendar.set(Calendar.YEAR, monthModel.year)
+                calendar.set(Calendar.DATE, 1)
+                var day = monthModel.days.get(0)
+                day.month = calendar.get(Calendar.MONTH)
+                day.year = calendar.get(Calendar.YEAR)
+                day.date = 1
+                curSelectedMonthFromMonthCalendar = monthModel
+                initializeMonthTV(calendar, false)
+//                if (!isLoading) {
+//                    recyclerGenericAdapter.list.addAll(
+//                        viewModel.getVerticalCalendarData(
+//                            recyclerGenericAdapter.list.get(recyclerGenericAdapter.list.size - 1),
+//                            false
+//                        )
+//                    )
+//                }
+            }
+
+        })
+
+        hourviewPageChangeCallBack = object : ViewPager2.OnPageChangeCallback() {
             @RequiresApi(Build.VERSION_CODES.O)
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
-                val newDateTime =  (
+                val newDateTime = (
                         if (position < lastViewPosition) activeDateTime.minusDays(1)
                         else activeDateTime.plusDays(1)
                         )
@@ -181,69 +295,112 @@ class RosterDayFragment: RosterBaseFragment() {
         top_bar.available_toggle.setOnClickListener {
             rosterViewModel.switchDayAvailability(
                 requireContext(), getDayTimesChild()!!,
-                rosterViewModel.isDayAvailable.value!!, viewModelCustomPreference)
 
+                rosterViewModel.isDayAvailable.value!!, viewModelCustomPreference
+            )
             rosterViewModel.resetDayTimeAvailability(
-                viewModelCustomPreference, getDayTimesChild()!!)
+                viewModelCustomPreference, getDayTimesChild()!!
+            )
         }
+    }
+
+    private fun scrollToSelectedDate(monthModel: CalendarView.MonthModel) {
+        if(monthModel==null)return
+        var millisecond = activeDateTime.atOffset(ZoneOffset.UTC).toInstant().toEpochMilli();
+        var activeDateTimeClone =
+            LocalDateTime.ofInstant(Instant.ofEpochMilli(millisecond), ZoneId.systemDefault())
+        var selectedDay = monthModel.days.get(0)
+        if (activeDateTimeClone.year < monthModel.year || (activeDateTimeClone.year == selectedDay.year && activeDateTimeClone.monthValue < selectedDay.month + 1) || (activeDateTimeClone.year == selectedDay.year && activeDateTimeClone.monthValue == selectedDay.month + 1 && activeDateTimeClone.dayOfMonth < selectedDay.date)) {
+            for (index in 1..365) {
+                activeDateTimeClone = activeDateTimeClone.plusDays(1)
+                if (activeDateTimeClone.year == selectedDay.year && activeDateTimeClone.monthValue == selectedDay.month + 1 && activeDateTimeClone.dayOfMonth == selectedDay.date) {
+                    hourview_viewpager.setCurrentItem(
+                        hourview_viewpager.currentItem + index
+                    )
+                    activeDateTime = activeDateTimeClone
+                    rosterViewModel.currentDateTime.setValue(activeDateTime)
+                    break
+                }
+            }
+        } else {
+            for (index in 1..365) {
+                activeDateTimeClone = activeDateTimeClone.minusDays(1)
+                if (activeDateTimeClone.year == selectedDay.year && activeDateTimeClone.monthValue == selectedDay.month + 1 && activeDateTimeClone.dayOfMonth == selectedDay.date) {
+                    activeDateTimeClone = activeDateTimeClone.plusDays(1)
+                    activeDateTime = activeDateTimeClone
+                    rosterViewModel.currentDateTime.setValue(activeDateTime)
+                    hourview_viewpager.setCurrentItem(
+                        (hourview_viewpager.currentItem - index)
+                    )
+                    break
+                }
+            }
+        }
+    }
+
+    private fun changeMonthCalendarVisibility() {
+        calendar_top_cl.visibility =
+            if (calendar_top_cl.visibility == View.VISIBLE) View.GONE else View.VISIBLE
     }
 
     private fun setCustomPreference() {
         try {
             viewModelCustomPreference.customPreferencesDataModel
-        }catch (e:UninitializedPropertyAccessException){
+        } catch (e: UninitializedPropertyAccessException) {
             viewModelCustomPreference.getAllData()
         }
     }
+
     private fun attachDayAvailabilityObserver() {
         rosterViewModel.isDayAvailable.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
-           top_bar.isAvailable = it
+            top_bar.isAvailable = it
         })
     }
 
     private fun attachTopBarMonthChangeListener() {
-
-        top_bar.month_selector.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-               // TODO("Not yet implemented")
-            }
-
-            @RequiresApi(Build.VERSION_CODES.O)
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                val monthGap = position - (activeDateTime.monthValue - 1)
-                val newDateTime: LocalDateTime
-                val dateDifference: Int
-
-                if (monthGap == 0)
-                    return
-
-                newDateTime = if (monthGap < 0) {
-                    activeDateTime.minusMonths((-1*monthGap).toLong())
-                } else {
-                    activeDateTime.plusMonths(monthGap.toLong())
+        top_bar.month_selector.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onNothingSelected(parent: AdapterView<*>?) {
+                    // TODO("Not yet implemented")
                 }
 
-                dateDifference =
-                    java.time.Duration.between(activeDateTime, newDateTime).toDays().toInt()
+                @RequiresApi(Build.VERSION_CODES.O)
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    val monthGap = position - (activeDateTime.monthValue - 1)
+                    val newDateTime: LocalDateTime
+                    val dateDifference: Int
 
-                hourview_viewpager.setCurrentItem(
-                    (hourview_viewpager.currentItem + dateDifference)
-                )
-                activeDateTime = newDateTime
-                rosterViewModel.currentDateTime.setValue(activeDateTime)
+                    if (monthGap == 0)
+                        return
+
+                    newDateTime = if (monthGap < 0) {
+                        activeDateTime.minusMonths((-1 * monthGap).toLong())
+                    } else {
+                        activeDateTime.plusMonths(monthGap.toLong())
+                    }
+
+                    dateDifference =
+                        java.time.Duration.between(activeDateTime, newDateTime).toDays().toInt()
+
+                    hourview_viewpager.setCurrentItem(
+                        (hourview_viewpager.currentItem + dateDifference)
+                    )
+                    activeDateTime = newDateTime
+
+                    rosterViewModel.currentDateTime.setValue(activeDateTime)
+                }
             }
-        }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun attachCurrentDateTimeChangeObserver() {
 
-        rosterViewModel.currentDateTime.observe( viewLifecycleOwner, Observer { it ->
+        rosterViewModel.currentDateTime.observe(viewLifecycleOwner, Observer { it ->
             activeDateTime = it
             top_bar.year = it.year
             top_bar.month = it.monthValue - 1
@@ -264,52 +421,54 @@ class RosterDayFragment: RosterBaseFragment() {
     }
 
     private fun attachHourViewAdapter() {
+        getChildFragmentManager()
         val hourViewAdapter = HourViewAdapter(requireActivity(), 10000, activeDateTime)
-        hourview_viewpager .adapter = hourViewAdapter
+        hourview_viewpager.adapter = hourViewAdapter
         hourview_viewpager.setCurrentItem(lastViewPosition, false)
     }
 
-    private fun initializeBottomSheet() {
-        rosterViewModel.bsBehavior = ExtendedBottomSheetBehavior.from(mark_unavailable_bs)
-        rosterViewModel.UnavailableBS = mark_unavailable_bs
-
-        rosterViewModel.bsBehavior.isHideable = true
-        rosterViewModel.bsBehavior.state = ExtendedBottomSheetBehavior.STATE_HIDDEN
-
-        rosterViewModel.bsBehavior.setBottomSheetCallback(object: ExtendedBottomSheetBehavior.BottomSheetCallback() {
-            override fun onSlide(bottomSheet: View, slideOffset: Float) {
-                //TODO("Not yet implemented")
-            }
-
-            override fun onStateChanged(bottomSheet: View, newState: Int) {
-                when(newState) {
-                    ExtendedBottomSheetBehavior.STATE_COLLAPSED -> {
-                        //showToast("Collapsed State")
-                        time_expanded.visibility = View.GONE
-                        time_collapsed.visibility = View.VISIBLE
-                        //rosterViewModel.bsBehavior.state = ExtendedBottomSheetBehavior.STATE_COLLAPSED
-                    }
-                    ExtendedBottomSheetBehavior.STATE_EXPANDED -> {
-                        //showToast("expanded state")
-                        time_collapsed.visibility = View.GONE
-                        time_expanded.visibility = View.VISIBLE
-                    }
-                    ExtendedBottomSheetBehavior.STATE_HALF -> {
-                        time_collapsed.visibility = View.GONE
-                        time_expanded.visibility = View.VISIBLE
-                    }
-                    //BottomSheetBehavior.STATE_ANCHOR_POINT -> Log.d("BS", "Anchor Point State")
-                    ExtendedBottomSheetBehavior.STATE_HIDDEN -> Log.d("BS", "Hidden State")
-                    ExtendedBottomSheetBehavior.STATE_DRAGGING -> Log.d("BS", "Dragging State")
-                    ExtendedBottomSheetBehavior.STATE_SETTLING -> {
-                        Log.d("BS", "Settling State")
-                    }
-                }
-            }
-
-        })
-    }
-
+//    private fun initializeBottomSheet() {
+//        rosterViewModel.bsBehavior = ExtendedBottomSheetBehavior.from(mark_unavailable_bs)
+//        rosterViewModel.UnavailableBS = mark_unavailable_bs
+//
+//        rosterViewModel.bsBehavior.isHideable = true
+//        rosterViewModel.bsBehavior.state = ExtendedBottomSheetBehavior.STATE_HIDDEN
+//
+//        rosterViewModel.bsBehavior.setBottomSheetCallback(object :
+//            ExtendedBottomSheetBehavior.BottomSheetCallback() {
+//            override fun onSlide(bottomSheet: View, slideOffset: Float) {
+//                //TODO("Not yet implemented")
+//            }
+//
+//            override fun onStateChanged(bottomSheet: View, newState: Int) {
+//                when (newState) {
+//                    ExtendedBottomSheetBehavior.STATE_COLLAPSED -> {
+//                        //showToast("Collapsed State")
+//                        time_expanded.visibility = View.GONE
+//                        time_collapsed.visibility = View.VISIBLE
+//                        //rosterViewModel.bsBehavior.state = ExtendedBottomSheetBehavior.STATE_COLLAPSED
+//                    }
+//                    ExtendedBottomSheetBehavior.STATE_EXPANDED -> {
+//                        //showToast("expanded state")
+//                        time_collapsed.visibility = View.GONE
+//                        time_expanded.visibility = View.VISIBLE
+//                    }
+//                    ExtendedBottomSheetBehavior.STATE_HALF -> {
+//                        time_collapsed.visibility = View.GONE
+//                        time_expanded.visibility = View.VISIBLE
+//                    }
+//                    //BottomSheetBehavior.STATE_ANCHOR_POINT -> Log.d("BS", "Anchor Point State")
+//                    ExtendedBottomSheetBehavior.STATE_HIDDEN -> Log.d("BS", "Hidden State")
+//                    ExtendedBottomSheetBehavior.STATE_DRAGGING -> Log.d("BS", "Dragging State")
+//                    ExtendedBottomSheetBehavior.STATE_SETTLING -> {
+//                        Log.d("BS", "Settling State")
+//                    }
+//                }
+//            }
+//
+//        })
+//    }
+//
 
 //    private fun addUnAvailableCard(startHour: Int, duration: Float) {
 //        // Sample attachment of unavailable card

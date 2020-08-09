@@ -19,7 +19,7 @@ class HorizontaltemDecoration(private val mItemOffset: Int) : RecyclerView.ItemD
     ) {
         super.getItemOffsets(outRect, view, parent, state)
 
-        outRect[mItemOffset / 2, mItemOffset, mItemOffset / 2] = mItemOffset / 2
+        outRect[mItemOffset / 2, mItemOffset / 2, mItemOffset / 2] = mItemOffset / 2
 
     }
 

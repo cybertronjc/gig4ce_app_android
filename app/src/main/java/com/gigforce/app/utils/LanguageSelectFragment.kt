@@ -4,15 +4,21 @@ import android.content.res.Resources
 import android.os.Bundle
 import android.view.*
 import android.widget.RadioButton
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import com.franmontiel.localechanger.LocaleChanger
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
+import com.gigforce.app.modules.preferences.SharedPreferenceViewModel
+import com.gigforce.app.utils.configrepository.ConfigViewModel
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_select_language.*
 import java.util.*
 
 
 class LanguageSelectFragment : BaseFragment() {
+
+    private val viewModel: ConfigViewModel by viewModels()
 
     val SUPPORTED_LOCALES =
         Arrays.asList(
@@ -40,6 +46,27 @@ class LanguageSelectFragment : BaseFragment() {
         initializer()
         setDefaultLanguage()
         listener()
+        initViewModel()
+    }
+
+    private fun initViewModel() {
+        viewModel
+            .activeLanguages
+            .observe(viewLifecycleOwner, Observer {activeLangs ->
+
+                activeLangs.forEach {
+
+                    when (it) {
+                        "en" -> groupradio.findViewById<RadioButton>(R.id.en).isEnabled = true
+                        "hi" -> groupradio.findViewById<RadioButton>(R.id.hi).isEnabled = true
+                        "te" -> groupradio.findViewById<RadioButton>(R.id.te).isEnabled = true
+                        "gu" -> groupradio.findViewById<RadioButton>(R.id.gu).isEnabled = true
+                        "pa" -> groupradio.findViewById<RadioButton>(R.id.pu).isEnabled = true
+                        "fr" -> groupradio.findViewById<RadioButton>(R.id.fr).isEnabled = true
+                        "mr" -> groupradio.findViewById<RadioButton>(R.id.mr).isEnabled = true
+                    }
+                }
+            })
     }
 
     override fun isDeviceLanguageChangedDialogRequired(): Boolean {
