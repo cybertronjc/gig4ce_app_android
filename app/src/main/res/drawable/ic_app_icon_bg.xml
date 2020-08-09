@@ -6,7 +6,5 @@
         android:endColor="#e42c64"
         android:startColor="#930077"
         android:type="linear" />
-    <size
-        android:width="108dp"
-        android:height="108dp" />
+
 </shape>
