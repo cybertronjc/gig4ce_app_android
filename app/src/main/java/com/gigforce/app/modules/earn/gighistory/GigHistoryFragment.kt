@@ -56,6 +56,7 @@ class GigHistoryFragment : BaseFragment(), AdapterGigHistory.AdapterGigHistoryCa
         initClicks()
         initObservers()
         viewModel.getData()
+
     }
 
 

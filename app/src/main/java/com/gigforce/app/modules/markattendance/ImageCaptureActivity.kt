@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.gigforce.app.R
@@ -121,6 +122,8 @@ class ImageCaptureActivity : AppCompatActivity() {
 
 
                 result.toBitmap(BitmapCallback {
+                    show_pic.scaleType =
+                        if (it?.width!! > it.height) ImageView.ScaleType.FIT_CENTER else ImageView.ScaleType.CENTER_CROP
                     show_pic.setImageBitmap(it)
 //                    show_pic_bg.setImageBitmap(it)
                 });

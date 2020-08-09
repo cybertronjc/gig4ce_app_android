@@ -12,6 +12,9 @@
     <string name="no_i_don_t_have_driving_license">No, I don\'t have Driving License</string>
     <string name="please_provide_following_details">Please provide following details.</string>
     <string name="good_luck">நல்ல அதிர்ஷ்டம்!!!</string>
+    <string name="gig_id">Gig Id :</string>
+    <string name="gigforce_pvt_ltd">Gigforce Pvt. Ltd.</string>
+    <string name="issued_on">Issued On</string>
     <string name="complete_now">Complete Now</string>
     <string name="completed">Completed</string>
     <string name="complete_your_verification">Complete Your Verification</string>

@@ -70,4 +70,7 @@
     <string name="bank_details_uploaded">Bank details Uploaded</string>
     <string name="under_verification">Under Verification</string>
     <string name="verifying">Verifying</string>
+    <string name="gig_id">Gig Id :</string>
+    <string name="gigforce_pvt_ltd">Gigforce Pvt. Ltd.</string>
+    <string name="issued_on">Issued On</string>
 </resources>

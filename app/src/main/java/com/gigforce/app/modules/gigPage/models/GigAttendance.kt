@@ -2,33 +2,34 @@ package com.gigforce.app.modules.gigPage.models
 
 import androidx.annotation.Keep
 import com.gigforce.app.core.base.basefirestore.BaseFirestoreDataModel
+import java.io.Serializable
 import java.util.*
 
 @Keep
-class GigAttendance : BaseFirestoreDataModel{
+class GigAttendance : BaseFirestoreDataModel, Serializable {
 
     var checkInMarked: Boolean = false
     var checkInTime: Date? = null
     var checkInLat: Double? = null
     var checkInLong: Double? = null
     var checkInImage: String? = null
-    var checkInAddress : String = ""
+    var checkInAddress: String = ""
     var checkOutMarked: Boolean = false
-    var checkOutTime : Date? = null
+    var checkOutTime: Date? = null
     var checkOutLat: Double? = null
     var checkOutLong: Double? = null
     var checkOutImage: String? = null
-    var checkOutAddress : String = ""
+    var checkOutAddress: String = ""
 
-    constructor():super("attendance"){}
+    constructor() : super("attendance") {}
 
     constructor(
         checkInMarked: Boolean = false,
-        checkInTime : Date,
-        checkInLat: Double ,
+        checkInTime: Date,
+        checkInLat: Double,
         checkInLong: Double,
         checkInImage: String,
-        checkInAddress : String
+        checkInAddress: String
     ) : super("attendance") {
         this.checkInMarked = checkInMarked
         this.checkInTime = checkInTime
@@ -37,13 +38,14 @@ class GigAttendance : BaseFirestoreDataModel{
         this.checkInImage = checkInImage
         this.checkInAddress = checkInAddress
     }
+
     fun setCheckout(
         checkOutMarked: Boolean,
-        checkOutTime : Date,
+        checkOutTime: Date,
         checkOutLat: Double,
         checkOutLong: Double,
         checkOutImage: String,
-        checkOutAddress:String
+        checkOutAddress: String
     ) {
         this.checkOutMarked = checkOutMarked
         this.checkOutTime = checkOutTime
