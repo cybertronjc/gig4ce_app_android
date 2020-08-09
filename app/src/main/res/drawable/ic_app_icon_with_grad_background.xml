@@ -1,17 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<<<<<<< HEAD
-<shape xmlns:android="http://schemas.android.com/apk/res/android"
-    android:shape="rectangle">
-    <gradient
-        android:angle="225"
-        android:endColor="#e42c64"
-        android:startColor="#930077"
-        android:type="linear" />
-    <size
-        android:width="108dp"
-        android:height="108dp" />
-</shape>
-=======
 <vector
     android:height="108dp"
     android:width="108dp"
@@ -85,4 +72,4 @@
     <path android:fillColor="@android:color/transparent" android:pathData="M79,19L79,89"
           android:strokeColor="@android:color/transparent" android:strokeWidth="0.8"/>
 </vector>
->>>>>>> 96f80287bba592493f9472217f81b437476858e6
+
