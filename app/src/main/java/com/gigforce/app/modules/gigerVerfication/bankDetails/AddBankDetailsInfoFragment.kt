@@ -30,6 +30,9 @@ import com.ncorti.slidetoact.SlideToActView
 import kotlinx.android.synthetic.main.fragment_add_bank_details_info.*
 import kotlinx.android.synthetic.main.fragment_add_bank_details_info_main.*
 import kotlinx.android.synthetic.main.fragment_add_bank_details_info_view.*
+import kotlinx.android.synthetic.main.fragment_add_bank_details_info_view.editLayout
+import kotlinx.android.synthetic.main.fragment_add_bank_details_info_view.statusTV
+import kotlinx.android.synthetic.main.fragment_add_pan_card_info_view.*
 import kotlinx.android.synthetic.main.fragment_verification_image_holder.view.*
 import java.util.*
 
@@ -66,6 +69,16 @@ class AddBankDetailsInfoFragment : BaseFragment() {
 
         toolbar.setNavigationOnClickListener {
             findNavController().popBackStack(R.id.gigerVerificationFragment, false)
+        }
+
+
+        helpIconIV.setOnClickListener {
+
+            WhyWeNeedThisBottomSheet.launch(
+                childFragmentManager = childFragmentManager,
+                title = getString(R.string.why_do_we_need_this),
+                content = getString(R.string.why_we_need_this_bank)
+            )
         }
 
         whyWeNeedThisTV.setOnClickListener {
@@ -238,6 +251,7 @@ class AddBankDetailsInfoFragment : BaseFragment() {
                     bankEditLayout.visible()
 
                     setDataOnEditLayout(bankDetailsDataModel)
+                    passbookAvailaibilityOptionRG.check(R.id.passbookYesRB)
                 }
                 .setNegativeButton(getString(R.string.cancel)) { _, _ -> }
                 .show()
@@ -304,19 +318,25 @@ class AddBankDetailsInfoFragment : BaseFragment() {
             )
         )
 
+
         if (bankDetails.passbookImagePath != null) {
-            firebaseStorage
-                .reference
-                .child("verification")
-                .child(bankDetails.passbookImagePath)
-                .downloadUrl.addOnSuccessListener {
-                    Glide.with(requireContext())
-                        .load(it)
-                        .placeholder(getCircularProgressDrawable())
-                        .into(bankViewImageIV)
-                }.addOnFailureListener {
-                    print("ee")
-                }
+
+            if(bankDetails.passbookImagePath.startsWith("http", true)){
+                Glide.with(requireContext()).load(bankDetails.passbookImagePath).placeholder(getCircularProgressDrawable()).into(bankViewImageIV)
+            }else {
+                firebaseStorage
+                    .reference
+                    .child("verification")
+                    .child(bankDetails.passbookImagePath)
+                    .downloadUrl.addOnSuccessListener {
+                        Glide.with(requireContext())
+                            .load(it)
+                            .placeholder(getCircularProgressDrawable())
+                            .into(bankViewImageIV)
+                    }.addOnFailureListener {
+                        print("ee")
+                    }
+            }
         }
         bankViewImageErrorMessage.gone()
 
@@ -358,17 +378,21 @@ class AddBankDetailsInfoFragment : BaseFragment() {
         accountNoEditText.setText(bankData.accountNo)
 
         if (bankData.passbookImagePath != null) {
-            firebaseStorage
-                .reference
-                .child("verification")
-                .child(bankData.passbookImagePath)
-                .downloadUrl.addOnSuccessListener {
-                    showPassbookInfoCard(it)
-                }.addOnFailureListener {
-                    print("ee")
-                }
-        }
 
+            if(bankData.passbookImagePath.startsWith("http", true)){
+                showPassbookInfoCard(Uri.parse(bankData.passbookImagePath))
+            }else {
+                firebaseStorage
+                    .reference
+                    .child("verification")
+                    .child(bankData.passbookImagePath)
+                    .downloadUrl.addOnSuccessListener {
+                        showPassbookInfoCard(it)
+                    }.addOnFailureListener {
+                        print("ee")
+                    }
+            }
+        }
     }
 
     override fun onBackPressed(): Boolean {

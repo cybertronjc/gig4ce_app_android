@@ -31,12 +31,12 @@ class PreferencesFragment : BaseFragment() {
         fun newInstance() =
             PreferencesFragment()
 
-        const val DAY_TIME = 2
-        const val LOCATION = 3
-        const val EARNING = 4
-        const val TITLE_OTHER = 5
-        const val LANGUAGE = 6
-        const val TITLE_SIGNOUT = 8
+        const val DAY_TIME = 0
+        const val LOCATION = 1
+        const val EARNING = 2
+        const val TITLE_OTHER = 3
+        const val LANGUAGE = 4
+        const val TITLE_SIGNOUT = 5
         var storage = FirebaseStorage.getInstance()
 
     }

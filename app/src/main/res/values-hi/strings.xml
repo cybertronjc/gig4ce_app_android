@@ -383,5 +383,7 @@
     <string name="let_s_go">Let \\\ &amp;#x27;s जाओ</string>
     <string name="thank_you">धन्यवाद!</string>
     <string name="documents_uploaded_long">जैसे-जैसे आपके दस्तावेज़ सत्यापित होते जाएंगे, आप अपने गिग्स को शुरू कर पाएंगे।</string>
+    <string name="under_verification">Under Verification</string>
+    <string name="verifying">Verifying</string>
 
 </resources>
