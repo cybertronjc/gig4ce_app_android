@@ -65,6 +65,8 @@
     <color name="lipstick">#d72467</color>
     <color name="light_pink">#ffd9e6</color>
     <color name="warm_grey">#888888</color>
+    <color name="warm_grey_20">#33888888</color>
+
     <color name="light_grey">#dddddd</color>
     <color name="darkish_pink_two">#e94b81</color>
     <color name="greyish_brown">#444444</color>
@@ -86,6 +88,7 @@
     <color name="sec_pogress_assess_frag">#D1D3D5</color>
     <color name="darkish_pink_100">#e14c6c</color>
     <color name="black_2222">#222222</color>
+    <color name="warm_grey_two">#979797</color>
 
 
 </resources>

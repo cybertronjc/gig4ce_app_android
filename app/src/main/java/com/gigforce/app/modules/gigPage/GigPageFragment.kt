@@ -53,7 +53,7 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 
 
-class GigPageFragment : BaseFragment() {
+class GigPageFragment : BaseFragment(), View.OnClickListener {
 
     companion object {
         const val INTENT_EXTRA_GIG_ID = "gig_id"
@@ -80,15 +80,15 @@ class GigPageFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         getData(arguments, savedInstanceState)
         initUi()
-        initViewModel()
-        iniClicks();
+        initViewModel(view)
+        initClicks()
+
     }
 
-    private fun iniClicks() {
+    private fun initClicks() {
+        bt_download_id_gig_page.setOnClickListener(this)
+        bt_download_id_gig_past_gigs.setOnClickListener(this)
 
-//        bt_download_id_gig_page.setOnClickListener {
-//            navigate(R.id.giger_id_fragment)
-//        }
     }
 
     private fun getData(arguments: Bundle?, savedInstanceState: Bundle?) {
@@ -178,13 +178,16 @@ class GigPageFragment : BaseFragment() {
     }
 
 
-    private fun initViewModel() {
+    private fun initViewModel(view: View) {
         viewModel.gigDetails
             .observe(viewLifecycleOwner, Observer {
                 when (it) {
                     Lce.Loading -> {
                     }
-                    is Lce.Content -> setGigDetailsOnView(it.content)
+                    is Lce.Content -> {
+                        setGigDetailsOnView(it.content, view)
+
+                    }
                     is Lce.Error -> {
                     }
                 }
@@ -192,6 +195,7 @@ class GigPageFragment : BaseFragment() {
 
         viewModel.watchGig(gigId)
     }
+
 
     fun requestPermissionForGPS() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -312,7 +316,7 @@ class GigPageFragment : BaseFragment() {
         it.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
     }
 
-    private fun setGigDetailsOnView(gig: Gig) {
+    private fun setGigDetailsOnView(gig: Gig, view: View) {
         this.gig = gig
 
         if (!gig.companyLogo.isNullOrBlank()) {
@@ -441,6 +445,8 @@ class GigPageFragment : BaseFragment() {
             showPastgigDetails(gig)
         } else if (gig.isUpcomingGig()) {
             showUpcomingGigDetails(gig)
+        } else {
+            showPastgigDetails(gig)
         }
 
     }
@@ -492,9 +498,12 @@ class GigPageFragment : BaseFragment() {
         checkInCheckOutSliderBtn.gone()
         presentOrFutureGigControls.gone()
 
+
         completedGigControlsLayout.visible()
+        bt_download_id_gig_past_gigs.visible()
 
         gigRatingLayout.visible()
+
         showUserReceivedRating(gig)
         showUserFeedbackRating(gig)
 
@@ -656,6 +665,7 @@ class GigPageFragment : BaseFragment() {
 
     private fun showNotActivatedGigDetails(gig: Gig) {
 
+
     }
 
     private val onClickImageListener = View.OnClickListener { imageView ->
@@ -747,4 +757,18 @@ class GigPageFragment : BaseFragment() {
 
     private val dateFormatter = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
     private val timeFormatter = SimpleDateFormat("hh.mm aa", Locale.getDefault())
+    override fun onClick(v: View?) {
+        when (v?.id) {
+            R.id.bt_download_id_gig_page -> {
+                navigate(R.id.giger_id_fragment, Bundle().apply {
+                    this.putString(INTENT_EXTRA_GIG_ID, gig?.gigId)
+                })
+            }
+            R.id.bt_download_id_gig_past_gigs -> {
+                navigate(R.id.giger_id_fragment, Bundle().apply {
+                    this.putString(INTENT_EXTRA_GIG_ID, gig?.gigId)
+                })
+            }
+        }
+    }
 }

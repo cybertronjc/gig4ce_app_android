@@ -1,13 +1,10 @@
 package com.gigforce.app.modules.assessment
 
 import android.content.Intent
-import android.graphics.Bitmap
 import android.view.View
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.gigforce.app.utils.PermissionUtils
-import java.io.File
-import java.io.FileOutputStream
 
 
 class ViewModelAssessmentResult : ViewModel() {
@@ -45,20 +42,6 @@ class ViewModelAssessmentResult : ViewModel() {
         list.add(false)
         list.add(true)
         return list
-    }
-
-    fun store(bm: Bitmap?, fileName: String, dirPath: String) {
-        val dir = File(dirPath)
-        if (!dir.exists()) dir.mkdirs()
-        val file = File(dirPath, fileName)
-        try {
-            val fOut = FileOutputStream(file)
-            bm?.compress(Bitmap.CompressFormat.PNG, 85, fOut)
-            fOut.flush()
-            fOut.close()
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
     }
 
     fun checkIfUserPassed(passed: Boolean?) {
