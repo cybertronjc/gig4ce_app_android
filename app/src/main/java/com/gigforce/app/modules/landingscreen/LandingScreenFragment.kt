@@ -425,6 +425,9 @@ class LandingScreenFragment : BaseFragment() {
         seeMoreBtn.setOnClickListener {
             navigate(R.id.helpVideosFragment)
         }
+        help_topic.setOnClickListener{
+            showToast("This is under development. Please check again in a few days.")
+        }
     }
 
     private fun initializeLearningModule() {
@@ -537,7 +540,7 @@ class LandingScreenFragment : BaseFragment() {
             RecyclerGenericAdapter<TitleSubtitleModel>(
                 activity?.applicationContext,
                 PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
-
+                    showToast("This is under development. Please check again in a few days.")
                 },
                 RecyclerGenericAdapter.ItemInterface<TitleSubtitleModel?> { obj, viewHolder, position ->
                     var view = getView(viewHolder, R.id.card_view)
@@ -604,7 +607,8 @@ class LandingScreenFragment : BaseFragment() {
             RecyclerGenericAdapter<TitleSubtitleModel>(
                 activity?.applicationContext,
                 PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
-                    navigate(R.id.explore_by_role)
+                    showToast("This is under development. Please check again in a few days.")
+//                    navigate(R.id.explore_by_role)
                 },
                 RecyclerGenericAdapter.ItemInterface<TitleSubtitleModel?> { obj, viewHolder, position ->
                     var view = getView(viewHolder, R.id.card_view)
