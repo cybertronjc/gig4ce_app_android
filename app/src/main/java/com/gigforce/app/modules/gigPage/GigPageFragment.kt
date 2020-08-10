@@ -119,7 +119,7 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
         }
 
         contactUsLayout.setOnClickListener {
-            navigate(R.id.contactScreenFragment)
+            navigate(R.id.fakeGigContactScreenFragment)
         }
 
 
