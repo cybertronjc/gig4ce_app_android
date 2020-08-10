@@ -23,7 +23,8 @@ class CompletedGigCard(
     var amount: Double = 0.0,
     var title: String = "",
     var isFullDay: Boolean = false,
-    var gigId: String = ""
+    var gigId: String = "",
+    var isMonthlyGig: Boolean = false
 ): MaterialCardView(context) {
     //constructor(context: Context): super(context)
     //constructor(context: Context, attrs: AttributeSet): super(context, attrs)
@@ -73,7 +74,7 @@ class CompletedGigCard(
 
     fun setGigAmount(value: Double) {
         amount = value
-        rupee_value.text = "Rs. $value"
+        rupee_value.text = if (isMonthlyGig) "Rs. $value / month" else "Rs. $value / hour"
     }
 
     fun setTimings() {
