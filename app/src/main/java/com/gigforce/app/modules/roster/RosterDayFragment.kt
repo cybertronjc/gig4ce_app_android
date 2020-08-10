@@ -150,7 +150,8 @@ class RosterDayFragment : RosterBaseFragment() {
             getDayTimesChild()?.let {
                 rosterViewModel.resetDayTimeAvailability(
                     viewModelCustomPreference,
-                    getDayTimesChild()!!
+                    getDayTimesChild()!!,
+                    configDataModel
                 )
             }
 
@@ -172,7 +173,8 @@ class RosterDayFragment : RosterBaseFragment() {
                 getDayTimesChild()?.let {
                     rosterViewModel.resetDayTimeAvailability(
                         viewModelCustomPreference,
-                        getDayTimesChild()!!
+                        getDayTimesChild()!!,
+                        configDataModel
                     )
                 }
             }
@@ -299,8 +301,7 @@ class RosterDayFragment : RosterBaseFragment() {
                 rosterViewModel.isDayAvailable.value!!, viewModelCustomPreference
             )
             rosterViewModel.resetDayTimeAvailability(
-                viewModelCustomPreference, getDayTimesChild()!!
-            )
+                viewModelCustomPreference, getDayTimesChild()!!, configDataModel)
         }
     }
 
@@ -421,10 +422,10 @@ class RosterDayFragment : RosterBaseFragment() {
     }
 
     private fun attachHourViewAdapter() {
-        getChildFragmentManager()
         val hourViewAdapter = HourViewAdapter(requireActivity(), 10000, activeDateTime)
         hourview_viewpager.adapter = hourViewAdapter
         hourview_viewpager.setCurrentItem(lastViewPosition, false)
+        hourview_viewpager.offscreenPageLimit = 5
     }
 
 //    private fun initializeBottomSheet() {
