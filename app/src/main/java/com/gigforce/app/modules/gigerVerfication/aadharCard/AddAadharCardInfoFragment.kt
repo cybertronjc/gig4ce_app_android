@@ -83,6 +83,15 @@ class AddAadharCardInfoFragment : BaseFragment() {
             findNavController().popBackStack(R.id.gigerVerificationFragment, false)
         }
 
+        helpIconIV.setOnClickListener {
+
+            WhyWeNeedThisBottomSheet.launch(
+                childFragmentManager = childFragmentManager,
+                title = getString(R.string.why_do_we_need_this),
+                content = getString(R.string.why_we_need_this_aadhar)
+            )
+        }
+
         whyWeNeedThisTV.setOnClickListener {
 
             WhyWeNeedThisBottomSheet.launch(
@@ -156,8 +165,6 @@ class AddAadharCardInfoFragment : BaseFragment() {
             openCameraAndGalleryOptionForBackSideImage()
         }
 
-        aadharEditLayout.setOnClickListener {
-        }
 
         aadharSubmitSliderBtn.onSlideCompleteListener =
             object : SlideToActView.OnSlideCompleteListener {
@@ -214,6 +221,7 @@ class AddAadharCardInfoFragment : BaseFragment() {
                     aadharEditLayout.visible()
 
                     setDataOnEditLayout(aadharCardDataModel)
+                    aadharAvailaibilityOptionRG.check(R.id.aadharYesRB)
                 }
                 .setNegativeButton(getString(R.string.cancel)) { _, _ -> }
                 .show()
@@ -281,28 +289,36 @@ class AddAadharCardInfoFragment : BaseFragment() {
         )
 
         if (aadharDetails.frontImage != null) {
-            firebaseStorage
-                .reference
-                .child("verification")
-                .child(aadharDetails.frontImage)
-                .downloadUrl.addOnSuccessListener {
-                    Glide.with(requireContext()).load(it).placeholder(getCircularProgressDrawable()).into(aadharViewFrontImageIV)
-                }.addOnFailureListener {
-                    print("ee")
-                }
+            if(aadharDetails.frontImage.startsWith("http", true)){
+                Glide.with(requireContext()).load(aadharDetails.frontImage).placeholder(getCircularProgressDrawable()).into(aadharViewFrontImageIV)
+            }else {
+                firebaseStorage
+                    .reference
+                    .child("verification")
+                    .child(aadharDetails.frontImage)
+                    .downloadUrl.addOnSuccessListener {
+                        Glide.with(requireContext()).load(it).placeholder(getCircularProgressDrawable()).into(aadharViewFrontImageIV)
+                    }.addOnFailureListener {
+                        print("ee")
+                    }
+            }
         }
         aadharViewFrontErrorMessage.gone()
 
         if (aadharDetails.backImage != null) {
-            firebaseStorage
-                .reference
-                .child("verification")
-                .child(aadharDetails.backImage)
-                .downloadUrl.addOnSuccessListener {
-                    Glide.with(requireContext()).load(it).placeholder(getCircularProgressDrawable()).into(aadharViewBackImageIV)
-                }.addOnFailureListener {
-                    print("ee")
-                }
+            if(aadharDetails.backImage.startsWith("http", true)){
+                Glide.with(requireContext()).load(aadharDetails.backImage).placeholder(getCircularProgressDrawable()).into(aadharViewBackImageIV)
+            }else {
+                firebaseStorage
+                    .reference
+                    .child("verification")
+                    .child(aadharDetails.backImage)
+                    .downloadUrl.addOnSuccessListener {
+                        Glide.with(requireContext()).load(it).placeholder(getCircularProgressDrawable()).into(aadharViewBackImageIV)
+                    }.addOnFailureListener {
+                        print("ee")
+                    }
+            }
         }
         aadharViewBackErrorMessageTV.gone()
 
@@ -334,29 +350,36 @@ class AddAadharCardInfoFragment : BaseFragment() {
 
         aadharCardET.setText(aadharData.aadharCardNo)
 
-        if (aadharData.frontImage != null) {
-            val imageRef = firebaseStorage
-                .reference
-                .child("verification")
-                .child(aadharData.frontImage)
 
-            imageRef.downloadUrl.addOnSuccessListener {
-                showFrontAadharCard(it)
-            }.addOnFailureListener {
-                print("ee")
+        if (aadharData.frontImage != null) {
+            if(aadharData.frontImage.startsWith("http", true)){
+                showFrontAadharCard(Uri.parse(aadharData.frontImage))
+            }else {
+                firebaseStorage
+                    .reference
+                    .child("verification")
+                    .child(aadharData.frontImage)
+                    .downloadUrl.addOnSuccessListener {
+                        showFrontAadharCard(it)
+                    }.addOnFailureListener {
+                        print("ee")
+                    }
             }
         }
 
         if (aadharData.backImage != null) {
-            val imageRef = firebaseStorage
-                .reference
-                .child("verification")
-                .child(aadharData.backImage)
-
-            imageRef.downloadUrl.addOnSuccessListener {
-                showBackAadharCard(it)
-            }.addOnFailureListener {
-                print("ee")
+            if(aadharData.backImage.startsWith("http", true)){
+                showBackAadharCard(Uri.parse(aadharData.backImage))
+            }else {
+                firebaseStorage
+                    .reference
+                    .child("verification")
+                    .child(aadharData.backImage)
+                    .downloadUrl.addOnSuccessListener {
+                        showBackAadharCard(it)
+                    }.addOnFailureListener {
+                        print("ee")
+                    }
             }
         }
     }

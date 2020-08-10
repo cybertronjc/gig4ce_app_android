@@ -68,4 +68,9 @@
     <string name="click_or_select_bank_passbook">Click Or Select your Passbook Image first</string>
     <string name="your_are_reuploading_bank_details">You are re-uploading your Bank details, they will be verified once again, that can take up to 7 days</string>
     <string name="bank_details_uploaded">Bank details Uploaded</string>
+    <string name="under_verification">Under Verification</string>
+    <string name="verifying">Verifying</string>
+    <string name="gig_id">Gig Id :</string>
+    <string name="gigforce_pvt_ltd">Gigforce Pvt. Ltd.</string>
+    <string name="issued_on">Issued On</string>
 </resources>

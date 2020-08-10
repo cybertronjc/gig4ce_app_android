@@ -1,4 +1,5 @@
 <resources>
+
     <string name="app_name">गिगफोसृ</string>
     <string name="hello_blank_fragment">हैलो</string>
     <string name="title_activity_profile">-</string>
@@ -260,16 +261,16 @@
     <string name="why_do_we_need_this">हमें इसकी आवश्यकता क्यों है?</string>
     <string name="license_number_with_colon">लाइसेंस संख्या :</string>
     <string name="address_with_colon">पता:</string>
-    <string name="license_validity_with_colon">लाइसेंस की वैधता :</string>
+    <string name="license_validity_with_colon">लाइसेंस की वैधता:</string>
     <string name="gender_with_colon">लिंग:</string>
-    <string name="aadhar_number_with_colon">आधार संख्या :</string>
+    <string name="aadhar_number_with_colon">आधार संख्या:</string>
     <string name="bank_account_details">बैंक खाता विवरण</string>
     <string name="do_you_have_bank_passbook">क्या आपके पास बैंक पासबुक है?</string>
     <string name="yes_i_have_bank_passbook">हां, मेरे पास बैंक पासबुक है</string>
     <string name="no_i_dont_have_bank_passbook">नहीं, मेरे पास बैंक पासबुक नहीं है</string>
-    <string name="cif_number_with_colon">CIF नंबर :</string>
+    <string name="cif_number_with_colon">CIF नंबर:</string>
     <string name="account_number_with_colon">खाता संख्या :</string>
-    <string name="ifsc_with_colon">IFSC :</string>
+    <string name="ifsc_with_colon">IFSC:</string>
     <string name="upload_bank_passbook">बैंक पासबुक अपलोड करें (मुखपृष्ठ)</string>
     <string name="upload_bank_passbook_sublabel">कृपया \ n वेरिफिकेशन के लिए अपनी बैंक पासबुक अपलोड करें</string>
     <string name="edit">एडिट</string>
@@ -313,6 +314,7 @@
     <string name="hours">hrs</string>
     <string name="mins">mins</string>
     <string name="no_on_going_gigs">No On Going Gigs</string>
+
     <string name="pending">Pending</string>
     <string name="explore_by_role">Explore By Role</string>
     <string name="oops">उफ़ !!!</string>
@@ -383,5 +385,13 @@
     <string name="let_s_go">Let \\\ &amp;#x27;s जाओ</string>
     <string name="thank_you">धन्यवाद!</string>
     <string name="documents_uploaded_long">जैसे-जैसे आपके दस्तावेज़ सत्यापित होते जाएंगे, आप अपने गिग्स को शुरू कर पाएंगे।</string>
+    <string name="under_verification">Under Verification</string>
+    <string name="verifying">Verifying</string>
+
+    <string name="valid_upto">Valid Upto :</string>
+    <string name="giger_since">Giger Since</string>
+    <string name="gig_id">Gig Id :</string>
+    <string name="gigforce_pvt_ltd">Gigforce Pvt. Ltd.</string>
+    <string name="issued_on">Issued On</string>
 
 </resources>

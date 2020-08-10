@@ -88,6 +88,15 @@ class AddDrivingLicenseInfoFragment : BaseFragment() {
             findNavController().popBackStack(R.id.gigerVerificationFragment, false)
         }
 
+        helpIconIV.setOnClickListener {
+
+            WhyWeNeedThisBottomSheet.launch(
+                childFragmentManager = childFragmentManager,
+                title = getString(R.string.why_do_we_need_this),
+                content = getString(R.string.why_we_need_this_dl)
+            )
+        }
+
         whyWeNeedThisTV.setOnClickListener {
 
             WhyWeNeedThisBottomSheet.launch(
@@ -313,30 +322,49 @@ class AddDrivingLicenseInfoFragment : BaseFragment() {
         )
 
         if (dlDetails.frontImage != null) {
-            firebaseStorage
-                .reference
-                .child("verification")
-                .child(dlDetails.frontImage)
-                .downloadUrl.addOnSuccessListener {
-                    Glide.with(requireContext()).load(it).placeholder(getCircularProgressDrawable())
-                        .into(dlFrontImageIV)
-                }.addOnFailureListener {
-                    print("ee")
-                }
+
+            if (dlDetails.frontImage.startsWith("http", true)) {
+                Glide.with(requireContext())
+                    .load(dlDetails.frontImage)
+                    .placeholder(getCircularProgressDrawable())
+                    .into(dlFrontImageIV)
+            } else {
+
+                firebaseStorage
+                    .reference
+                    .child("verification")
+                    .child(dlDetails.frontImage)
+                    .downloadUrl.addOnSuccessListener {
+                        Glide.with(requireContext()).load(it)
+                            .placeholder(getCircularProgressDrawable())
+                            .into(dlFrontImageIV)
+                    }.addOnFailureListener {
+                        print("ee")
+                    }
+            }
         }
         dlFrontErrorMessage.gone()
 
         if (dlDetails.backImage != null) {
-            firebaseStorage
-                .reference
-                .child("verification")
-                .child(dlDetails.backImage)
-                .downloadUrl.addOnSuccessListener {
-                    Glide.with(requireContext()).load(it).placeholder(getCircularProgressDrawable())
-                        .into(dlBackImageIV)
-                }.addOnFailureListener {
-                    print("ee")
-                }
+            if (dlDetails.backImage.startsWith("http", true)) {
+                Glide.with(requireContext())
+                    .load(dlDetails.backImage)
+                    .placeholder(getCircularProgressDrawable())
+                    .into(dlBackImageIV)
+            } else {
+
+                firebaseStorage
+                    .reference
+                    .child("verification")
+                    .child(dlDetails.backImage)
+                    .downloadUrl.addOnSuccessListener {
+                        Glide.with(requireContext()).load(it)
+                            .placeholder(getCircularProgressDrawable())
+                            .into(dlBackImageIV)
+                    }.addOnFailureListener {
+                        print("ee")
+                    }
+            }
         }
         dlBackErrorMessage.gone()
 
@@ -377,28 +405,40 @@ class AddDrivingLicenseInfoFragment : BaseFragment() {
 
 
         if (dlData.frontImage != null) {
-            val imageRef = firebaseStorage
-                .reference
-                .child("verification")
-                .child(dlData.frontImage)
 
-            imageRef.downloadUrl.addOnSuccessListener {
-                showFrontDrivingLicense(it)
-            }.addOnFailureListener {
-                print("ee")
+            if (dlData.frontImage.startsWith("http", true)) {
+                showFrontDrivingLicense(Uri.parse(dlData.frontImage))
+            } else {
+
+                val imageRef = firebaseStorage
+                    .reference
+                    .child("verification")
+                    .child(dlData.frontImage)
+
+                imageRef.downloadUrl.addOnSuccessListener {
+                    showFrontDrivingLicense(it)
+                }.addOnFailureListener {
+                    print("ee")
+                }
             }
         }
 
         if (dlData.backImage != null) {
-            val imageRef = firebaseStorage
-                .reference
-                .child("verification")
-                .child(dlData.backImage)
 
-            imageRef.downloadUrl.addOnSuccessListener {
-                showBackDrivingLicense(it)
-            }.addOnFailureListener {
-                print("ee")
+            if (dlData.backImage.startsWith("http", true)) {
+                showBackDrivingLicense(Uri.parse(dlData.backImage))
+            } else {
+
+                val imageRef = firebaseStorage
+                    .reference
+                    .child("verification")
+                    .child(dlData.backImage)
+
+                imageRef.downloadUrl.addOnSuccessListener {
+                    showBackDrivingLicense(it)
+                }.addOnFailureListener {
+                    print("ee")
+                }
             }
         }
     }

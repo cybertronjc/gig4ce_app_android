@@ -30,15 +30,16 @@
 
     <TextView
         android:id="@+id/gigtip_subtitle"
-        android:layout_width="330dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="55dp"
         android:layout_marginTop="9dp"
         android:fontFamily="@font/lato"
         android:text="Having an experience can help you start earning fast"
         android:textColor="#000000"
         android:textSize="14sp"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginEnd="5dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/gigtip_title"
         app:layout_constraintTop_toBottomOf="@+id/gigtip_title" />
 
     <TextView

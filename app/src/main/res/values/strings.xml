@@ -372,7 +372,7 @@
     <string name="uploaded">Uploaded</string>
     <string name="let_s_go">Let\'s Go</string>
     <string name="thank_you">Thank You !</string>
-    <string name="documents_uploaded_long">As your documents will get verified, you will be able to start your gigs.</string>
+    <string name="documents_uploaded_long">As your documents will get verifed, you will be able to start your gigs.</string>
 
 
     // terminologies
@@ -413,8 +413,8 @@
     <string name="punch_out">Punch Out</string>
     <string name="hours">hrs</string>
     <string name="mins">mins</string>
-    <string name="no_on_going_gigs">No On Going Gigs</string>
-    <string name="on_going_gigs">On Going Gigs</string>
+    <string name="no_on_going_gigs">No Ongoing Gigs</string>
+    <string name="on_going_gigs">Ongoing Gigs</string>
     <string name="no_gigs_present">No Gigs Present</string>
     <string name="pending">Pending</string>
     <string name="explore_by_role">Explore By Role</string>
@@ -474,5 +474,11 @@
     <string name="click_or_select_bank_passbook">Click Or Select your Passbook Image first</string>
     <string name="your_are_reuploading_bank_details">You are re-uploading your Bank details, they will be verified once again, that can take up to 7 days</string>
     <string name="bank_details_uploaded">Bank details Uploaded</string>
-
+    <string name="under_verification">Under Verification</string>
+    <string name="verifying">Verifying</string>
+    <string name="valid_upto">Valid Upto :</string>
+    <string name="giger_since">Giger Since</string>
+    <string name="gig_id">Gig Id :</string>
+    <string name="gigforce_pvt_ltd">Gigforce Pvt. Ltd.</string>
+    <string name="issued_on">Issued On</string>
 </resources>
