@@ -20,14 +20,7 @@ import com.gigforce.app.core.toDate
 import com.gigforce.app.modules.calendarscreen.maincalendarscreen.verticalcalendar.AllotedGigDataModel
 import com.gigforce.app.modules.custom_gig_preferences.CustomPreferencesViewModel
 import com.gigforce.app.modules.custom_gig_preferences.ParamCustPreferViewModel
-//<<<<<<< HEAD
-//import com.gigforce.app.modules.roster.models.Gig
-//=======
 import com.gigforce.app.modules.gigPage.models.Gig
-import com.google.android.gms.tasks.Tasks.await
-//>>>>>>> 5b103f2363ddf1904533e6ad0249f4da092463eb
-import com.riningan.widget.ExtendedBottomSheetBehavior
-import kotlinx.android.synthetic.main.calendar_home_screen.*
 import kotlinx.android.synthetic.main.day_view_top_bar.*
 import kotlinx.android.synthetic.main.day_view_top_bar.month_year
 import kotlinx.android.synthetic.main.day_view_top_bar.view.*
@@ -155,7 +148,8 @@ class RosterDayFragment : RosterBaseFragment() {
             getDayTimesChild()?.let {
                 rosterViewModel.resetDayTimeAvailability(
                     viewModelCustomPreference,
-                    getDayTimesChild()!!
+                    getDayTimesChild()!!,
+                    configDataModel
                 )
             }
 
@@ -177,7 +171,8 @@ class RosterDayFragment : RosterBaseFragment() {
                 getDayTimesChild()?.let {
                     rosterViewModel.resetDayTimeAvailability(
                         viewModelCustomPreference,
-                        getDayTimesChild()!!
+                        getDayTimesChild()!!,
+                        configDataModel
                     )
                 }
             }
@@ -250,7 +245,7 @@ class RosterDayFragment : RosterBaseFragment() {
 
                     rosterViewModel.isDayAvailable.value!!, viewModelCustomPreference)
             rosterViewModel.resetDayTimeAvailability(
-                viewModelCustomPreference, getDayTimesChild()!!)
+                viewModelCustomPreference, getDayTimesChild()!!, configDataModel)
         }
     }
 
@@ -372,10 +367,10 @@ class RosterDayFragment : RosterBaseFragment() {
     }
 
     private fun attachHourViewAdapter() {
-        getChildFragmentManager()
         val hourViewAdapter = HourViewAdapter(requireActivity(), 10000, activeDateTime)
         hourview_viewpager.adapter = hourViewAdapter
         hourview_viewpager.setCurrentItem(lastViewPosition, false)
+        hourview_viewpager.offscreenPageLimit = 5
     }
 
 //    private fun initializeBottomSheet() {

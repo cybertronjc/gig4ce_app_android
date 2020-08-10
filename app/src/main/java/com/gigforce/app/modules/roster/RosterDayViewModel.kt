@@ -24,6 +24,7 @@ import com.gigforce.app.modules.gigPage.GigPageFragment
 import com.gigforce.app.modules.preferences.PreferencesRepository
 import com.gigforce.app.modules.preferences.prefdatamodel.PreferencesDataModel
 import com.gigforce.app.modules.gigPage.models.Gig
+import com.gigforce.app.utils.configrepository.ConfigDataModel
 import com.google.android.material.card.MaterialCardView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentChange
@@ -147,7 +148,9 @@ class RosterDayViewModel: ViewModel() {
     }
 
     fun resetDayTimeAvailability(
-        viewModelCustomPreference: CustomPreferencesViewModel, parentView: ConstraintLayout) {
+        viewModelCustomPreference: CustomPreferencesViewModel, parentView: ConstraintLayout,
+        config: ConfigDataModel?
+    ) {
         val date = currentDateTime.value!!
 
         try {
@@ -158,7 +161,7 @@ class RosterDayViewModel: ViewModel() {
         }
 
         var dayAvailable = setDayAvailability(date, viewModelCustomPreference)
-        setHourAvailability(date, dayAvailable, parentView, viewModelCustomPreference)
+        setHourAvailability(date, dayAvailable, parentView, viewModelCustomPreference, config)
     }
 
     private fun setDayAvailability (
@@ -187,7 +190,7 @@ class RosterDayViewModel: ViewModel() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun setHourAvailability(
         activeDateTime: LocalDateTime, dayAvailable: Boolean, parentView: ConstraintLayout,
-            viewModelCustomPreference: CustomPreferencesViewModel) {
+            viewModelCustomPreference: CustomPreferencesViewModel, config: ConfigDataModel?) {
         val actualDateTime = LocalDateTime.now()
         if (isSameDate(activeDateTime, actualDateTime)) {
             todayHourActive(parentView, actualDateTime)
@@ -200,6 +203,7 @@ class RosterDayViewModel: ViewModel() {
         }
 
         switchHourAvailability(activeDateTime, parentView, viewModelCustomPreference)
+        switchDefaultHourAvailability(parentView, config)
 
         if (!dayAvailable) {
             allHourInactive(parentView)
@@ -214,6 +218,29 @@ class RosterDayViewModel: ViewModel() {
         }.forEach {
             it.timeSlots.forEach {
                 selectedHourInactive(parentView, it.startTime, it.endTime)
+            }
+        }
+    }
+
+    private fun switchDefaultHourAvailability(parentView: ConstraintLayout, config: ConfigDataModel?) {
+        var selectedSlots: ArrayList<Int> = ArrayList()
+        config ?.let {
+            userPref.value?.let { pref ->
+                pref.selectedslots.forEach { slot ->
+                    var slotId = slot.toInt()
+                    selectedSlots.add(slotId)
+                }
+            }
+
+            for (idx in 0 until it.time_slots.size) {
+                Log.d("RosterDayViewModel", idx.toString())
+                if (!selectedSlots.contains(idx+1)) {
+                    selectedHourInactive(
+                        parentView,
+                        it.time_slots[idx].start_time_slot!!,
+                        it.time_slots[idx].end_time_slot!!)
+                }
+
             }
         }
     }

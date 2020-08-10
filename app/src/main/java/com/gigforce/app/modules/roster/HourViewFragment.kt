@@ -486,6 +486,15 @@ class HourViewFragment: RosterBaseFragment() {
         return views
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    override fun onResume() {
+        super.onResume()
+        rosterViewModel.resetDayTimeAvailability(
+                viewModelCustomPreference, day_times, configDataModel
+        )
+        rosterViewModel.scrollToPosition(activeDateTime.toDate)
+    }
+
 //    fun setHourOutline(startIndex: Int, endIndex: Int) {
 //        val bottom_sheet = rosterViewModel.UnavailableBS
 //
