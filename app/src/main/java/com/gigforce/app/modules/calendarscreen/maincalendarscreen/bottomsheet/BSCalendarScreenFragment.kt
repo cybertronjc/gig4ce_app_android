@@ -285,11 +285,13 @@ class BSCalendarScreenFragment : BaseFragment() {
     inner class NavigationClickListener(val rv: RecyclerView, var position: Int) :
         View.OnClickListener {
         override fun onClick(v: View?) {
-            val gig = (rv.adapter as RecyclerGenericAdapter<Gig>).list.get(position)
+            //val gig = (rv.adapter as RecyclerGenericAdapter<Gig>).list.get(position)
 
-            navigate(R.id.gigPageNavigationFragment, Bundle().apply {
-                this.putString(GigPageNavigationFragment.INTENT_EXTRA_GIG_ID, gig.gigId)
-            })
+            showToast("This is work in progress. Please check again in a few days")
+
+//            navigate(R.id.gigPageNavigationFragment, Bundle().apply {
+//                this.putString(GigPageNavigationFragment.INTENT_EXTRA_GIG_ID, gig.gigId)
+//            })
         }
     }
 
