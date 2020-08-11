@@ -33,10 +33,7 @@ import com.gigforce.app.modules.gigPage.models.Gig
 import com.gigforce.app.modules.gigPage.models.GigAttendance
 import com.gigforce.app.modules.markattendance.ImageCaptureActivity
 import com.gigforce.app.modules.roster.inflate
-import com.gigforce.app.utils.DateHelper
-import com.gigforce.app.utils.Lce
-import com.gigforce.app.utils.TextDrawable
-import com.gigforce.app.utils.ViewFullScreenImageDialogFragment
+import com.gigforce.app.utils.*
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -323,8 +320,9 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
         if (!gig.companyLogo.isNullOrBlank()) {
             if (gig.companyLogo!!.startsWith("http", true)) {
 
-                Glide.with(requireContext())
+                GlideApp.with(requireContext())
                     .load(gig.companyLogo)
+                    .placeholder(getCircularProgressDrawable())
                     .into(companyLogoIV)
             } else {
                 FirebaseStorage.getInstance()
@@ -332,8 +330,10 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
                     .child(gig.companyLogo!!)
                     .downloadUrl
                     .addOnSuccessListener { fileUri ->
-                        Glide.with(requireContext())
+
+                        GlideApp.with(requireContext())
                             .load(fileUri)
+                            .placeholder(getCircularProgressDrawable())
                             .into(companyLogoIV)
                     }
             }
@@ -456,6 +456,7 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
         completedGigControlsLayout.gone()
         presentGigAttendanceCardView.visible()
         presentOrFutureGigControls.visible()
+        hideFeedbackOption()
 
         if (gig.isCheckInAndCheckOutMarked()) {
             //Attendance have been marked show it
@@ -498,7 +499,7 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
     private fun showPastgigDetails(gig: Gig) {
         checkInCheckOutSliderBtn.gone()
         presentOrFutureGigControls.gone()
-
+        showFeedBackOption()
 
         completedGigControlsLayout.visible()
         bt_download_id_gig_past_gigs.visible()
@@ -556,6 +557,7 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
         checkInCheckOutSliderBtn.gone()
         completedGigControlsLayout.gone()
         presentGigAttendanceCardView.gone()
+        hideFeedbackOption()
         presentOrFutureGigControls.visible()
 
         val timeLeft = gig.startDateTime!!.toDate().time - Date().time
@@ -721,8 +723,9 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
         if (it.startsWith("http", true)) {
             gigItem.tag = it
 
-            Glide.with(requireContext())
+            GlideApp.with(requireContext())
                 .load(it)
+                .placeholder(getCircularProgressDrawable())
                 .into(locationImageView)
         } else {
             FirebaseStorage.getInstance()
@@ -730,8 +733,10 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
                 .child(it)
                 .downloadUrl
                 .addOnSuccessListener { fileUri ->
-                    Glide.with(requireContext())
+
+                    GlideApp.with(requireContext())
                         .load(fileUri)
+                        .placeholder(getCircularProgressDrawable())
                         .into(locationImageView)
 
                     (locationImageView.parent as View).tag = fileUri.toString()
@@ -788,6 +793,22 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
             gigHighlightsContainer.getChildAt(gigHighlightsContainer.childCount - 1) as LinearLayout
         val gigTextTV: TextView = gigItem.findViewById(R.id.text)
         gigTextTV.text = it
+    }
+
+    private fun hideFeedbackOption(){
+        right_arrow2.gone()
+        provide_fb_txt.gone()
+        contact_icon.gone()
+        provide_feedback.gone()
+        textView127.gone()
+    }
+
+    private fun showFeedBackOption(){
+        right_arrow2.visible()
+        provide_fb_txt.visible()
+        contact_icon.visible()
+        provide_feedback.visible()
+        textView127.visible()
     }
 
     private val dateFormatter = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
