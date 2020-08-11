@@ -100,7 +100,6 @@
             app:cardCornerRadius="12dp"
             app:layout_constraintRight_toLeftOf="@id/callCardView"
             app:cardBackgroundColor="@color/light_pink"
-            android:visibility="gone"
             app:layout_constraintTop_toBottomOf="@id/seaprator1">
 
             <ImageView
