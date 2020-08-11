@@ -274,7 +274,8 @@ class HourViewFragment: RosterBaseFragment() {
                         rating = gig.gigRating,
                         gigSuccess = gig.isGigCompleted,
                         paymentSuccess = gig.isPaymentDone,
-                        cardHeight = (itemHeight * gig.duration).toInt().px
+                        cardHeight = (itemHeight * gig.duration).toInt().px,
+                        isMonthlyGig = gig.isMonthlyGig
                     )
                     completedCard.id = View.generateViewId()
                     completedCard.tag = gig.tag
@@ -483,6 +484,15 @@ class HourViewFragment: RosterBaseFragment() {
             }
         }
         return views
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    override fun onResume() {
+        super.onResume()
+        rosterViewModel.resetDayTimeAvailability(
+                viewModelCustomPreference, day_times, configDataModel
+        )
+        rosterViewModel.scrollToPosition(activeDateTime.toDate)
     }
 
 //    fun setHourOutline(startIndex: Int, endIndex: Int) {
