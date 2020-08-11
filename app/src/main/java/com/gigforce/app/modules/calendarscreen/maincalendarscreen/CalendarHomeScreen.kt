@@ -270,6 +270,16 @@ class CalendarHomeScreen : BaseFragment(),
         })
     }
 
+    override fun onBackPressed(): Boolean {
+        try {
+            findNavController().getBackStackEntry(R.id.landinghomefragment)
+            return false
+        } catch (e: IllegalArgumentException) {
+            navigate(R.id.landinghomefragment)
+            return true
+        }
+    }
+
     private fun displayImage(profileImg: String) {
         if (profileImg != null && !profileImg.equals("")) {
             val profilePicRef: StorageReference =
