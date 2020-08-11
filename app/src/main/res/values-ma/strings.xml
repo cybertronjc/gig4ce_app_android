@@ -398,4 +398,6 @@
     <string name="gig_id">Gig Id :</string>
     <string name="gigforce_pvt_ltd">Gigforce Pvt. Ltd.</string>
     <string name="issued_on">Issued On</string>
+    <string name="go_to_settings">Go To Settings</string>
+    <string name="camera_and_audtio_permission_required_to_access_camera">Camera and Audtio Permission Required To Access Camera</string>
 </resources>

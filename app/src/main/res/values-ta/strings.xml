@@ -73,4 +73,6 @@
     <string name="bank_details_uploaded">Bank details Uploaded</string>
     <string name="under_verification">Under Verification</string>
     <string name="verifying">Verifying</string>
+    <string name="go_to_settings">Go To Settings</string>
+    <string name="camera_and_audtio_permission_required_to_access_camera">Camera and Audtio Permission Required To Access Camera</string>
 </resources>

@@ -174,6 +174,10 @@ class AddAadharCardInfoFragment : BaseFragment() {
                     if (aadharYesRB.isChecked || aadharSubmitSliderBtn.text == getString(R.string.update)) {
                         if (aadharCardET.text!!.length != 12) {
 
+                            aadharEditLayout.post {
+                                aadharEditLayout.scrollTo(0,topSeaparator.y.toInt())
+                            }
+
                             MaterialAlertDialogBuilder(requireContext())
                                 .setTitle(getString(R.string.alert))
                                 .setMessage(getString(R.string.enter_valid_aadhar_no))
