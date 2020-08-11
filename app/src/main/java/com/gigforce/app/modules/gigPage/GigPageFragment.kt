@@ -44,6 +44,7 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.storage.FirebaseStorage
 import com.ncorti.slidetoact.SlideToActView
 import kotlinx.android.synthetic.main.fragment_gig_page_present.*
@@ -597,7 +598,7 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
                     )
 
                     inflatedImageView.setOnClickListener(onClickImageListener)
-                    // inflatedImageView.findViewById<View>(R.id.ic_delete_btn).setOnClickListener(onDeleteImageClickImageListener)
+                    inflatedImageView.findViewById<View>(R.id.ic_delete_btn).setOnClickListener(onDeleteUserReceivedFeedbackClickImageListener)
 
                     inflatedImageView.tag = it.toString()
 
@@ -644,7 +645,7 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
                     )
 
                     inflatedImageView.setOnClickListener(onClickImageListener)
-                    // inflatedImageView.findViewById<View>(R.id.ic_delete_btn).setOnClickListener(onDeleteImageClickImageListener)
+                     inflatedImageView.findViewById<View>(R.id.ic_delete_btn).setOnClickListener(onDeleteUserFeedbackClickImageListener)
 
                     inflatedImageView.tag = it.toString()
 
@@ -673,6 +674,40 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
         val uriString = imageView.tag.toString()
         val uri = Uri.parse(uriString)
         ViewFullScreenImageDialogFragment.showImage(childFragmentManager, uri)
+    }
+
+    private val onDeleteUserFeedbackClickImageListener = View.OnClickListener { deleteImageView ->
+        //TAG INFO - Parent Container Layout have Fixed
+
+        val parentLinearLayout : View = deleteImageView.parent as View
+        val imageNameTV : TextView = parentLinearLayout.findViewById(R.id.imageNameTV)
+
+        val attachmentToDeleteName = imageNameTV.text.toString()
+
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle("Alert")
+            .setMessage("Remove Attachment : $attachmentToDeleteName ?")
+            .setPositiveButton("Yes"){ _,_ ->
+                viewModel.deleteUserFeedbackAttachment(gigId,attachmentToDeleteName)
+            }
+            .setNegativeButton("No"){_,_ ->}
+            .show()
+    }
+
+    private val onDeleteUserReceivedFeedbackClickImageListener = View.OnClickListener { deleteImageView ->
+        //TAG INFO - Parent Container Layout have Fixed
+        val parentLinearLayout : View = deleteImageView.parent as View
+        val imageNameTV : TextView = parentLinearLayout.findViewById(R.id.imageNameTV)
+
+        val attachmentToDeleteName = imageNameTV.text.toString()
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle("Alert")
+            .setMessage("Remove Attachment : $attachmentToDeleteName ?")
+            .setPositiveButton("Yes"){ _,_ ->
+                viewModel.deleteUserReceivedFeedbackAttachment(gigId,attachmentToDeleteName)
+            }
+            .setNegativeButton("No"){_,_ ->}
+            .show()
     }
 
     private fun inflateLocationPics(locationPictures: List<String>) = locationPictures.forEach {
