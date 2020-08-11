@@ -172,6 +172,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-storage:19.1.1'
     implementation 'com.firebaseui:firebase-ui-storage:4.3.2'
     implementation 'com.google.firebase:firebase-crashlytics:17.0.0'
+    implementation 'com.google.firebase:firebase-functions:19.0.2'
 
     implementation "com.github.StephenVinouze:MaterialNumberPicker:1.0.0"
 
