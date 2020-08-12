@@ -474,7 +474,6 @@ class CalendarHomeScreen : BaseFragment(),
         }
 
         var scrollListener = object : RecyclerView.OnScrollListener() {
-
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
                 var layoutManager: LinearLayoutManager? = null
