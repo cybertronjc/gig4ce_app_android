@@ -138,7 +138,7 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
         }
 
         messageCardView.setOnClickListener {
-            navigate(R.id.contactScreenFragment)
+            navigate(R.id.fakeGigContactScreenFragment)
         }
 
         favoriteCB.setOnCheckedChangeListener { _, isChecked ->

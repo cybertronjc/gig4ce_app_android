@@ -407,7 +407,11 @@ class LandingScreenFragment : BaseFragment() {
             about_us_cl.visibility = View.GONE
         }
         chat_icon_iv.setOnClickListener {
-            navigate(R.id.contactScreenFragment)
+            navigate(R.id.fakeGigContactScreenFragment)
+        }
+
+        contact_us.setOnClickListener {
+            navigate(R.id.fakeGigContactScreenFragment)
         }
 
         invite_contact.setOnClickListener {
