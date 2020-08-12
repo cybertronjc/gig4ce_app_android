@@ -59,7 +59,7 @@ class AddAchievementBottomSheetFragment: ProfileBaseBottomSheetFragment() {
             if (validateAchievement()) {
                 addNewAchievement()
 
-                Toast.makeText(this.context, "Updated Achievement Section", Toast.LENGTH_LONG).show()
+                Toast.makeText(this.context, getString(R.string.updated_achievement_sec), Toast.LENGTH_LONG).show()
                 this.findNavController().navigate(R.id.educationExpandedFragment)
             }
         }

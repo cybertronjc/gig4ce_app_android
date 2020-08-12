@@ -3,14 +3,11 @@ package com.gigforce.app.modules.profile
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import androidx.activity.addCallback
 import androidx.coordinatorlayout.widget.CoordinatorLayout
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
@@ -39,7 +36,7 @@ class ProfileFragment : BaseFragment() {
     private lateinit var layout: View
     private lateinit var profileAvatarName: String
     private lateinit var dWidth: Display
-    private lateinit var win:Window
+    private lateinit var win: Window
     private var PHOTO_CROP: Int = 45
     private var isShow: Boolean = true
     private var scrollRange: Int = -1
@@ -50,12 +47,13 @@ class ProfileFragment : BaseFragment() {
         makeStatusBarTransparent()
     }
 
-    private fun makeStatusBarTransparent(){
+    private fun makeStatusBarTransparent() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             win = requireActivity().window
             win.setFlags(
                 WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
+                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+            )
             win.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             win.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             win.setStatusBarColor(requireActivity().getColor(R.color.white))
@@ -63,7 +61,7 @@ class ProfileFragment : BaseFragment() {
         }
     }
 
-    private fun restoreStatusBar(){
+    private fun restoreStatusBar() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             win = requireActivity().window
             win.clearFlags(
@@ -210,11 +208,11 @@ class ProfileFragment : BaseFragment() {
                 }
             }
 
-            layout.main_about_card.card_title.text = "About me"
+            layout.main_about_card.card_title.text = getString(R.string.about_me)
             layout.main_about_card.card_content.text = mainAboutString
             layout.main_about_card.card_icon.setImageResource(R.drawable.about_me_new)
             if (mainAboutString.trim().isEmpty())
-                layout.main_about_card.card_view_more.text = "Add bio"
+                layout.main_about_card.card_view_more.text = getString(R.string.add_bio_profile)
             layout.main_about_card.card_view_more.setOnClickListener {
                 findNavController().navigate(R.id.aboutExpandedFragment)
             }
@@ -253,17 +251,17 @@ class ProfileFragment : BaseFragment() {
             profile.achievements?.let {
                 val achievements = it.sortedByDescending { achievement -> achievement.year }
                 for ((index, value) in achievements.withIndex()) {
-                    mainEducationString += if (index == 0) "Achievements: " + value.title + "\n"
+                    mainEducationString += if (index == 0) getString(R.string.achievements_colon) + " " + value.title + "\n"
                     else "\t\t\t\t\t\t\t\t\t\t\t\t" + value.title + "\n"
                 }
             }
 
             Log.d("ProfileFragment", mainEducationString)
-            layout.main_education_card.card_title.text = "Education"
+            layout.main_education_card.card_title.text = getString(R.string.education)
             layout.main_education_card.card_content.text = mainEducationString
             layout.main_education_card.card_icon.setImageResource(R.drawable.ic_education_new)
             if (mainEducationString.trim().isEmpty())
-                layout.main_education_card.card_view_more.text = "Add Education"
+                layout.main_education_card.card_view_more.text = getString(R.string.add_education)
             layout.main_education_card.card_view_more.setOnClickListener {
                 findNavController().navigate(R.id.educationExpandedFragment)
             }
@@ -279,16 +277,18 @@ class ProfileFragment : BaseFragment() {
                     mainExperienceString += experiences[0].employmentType + "\n"
                     mainExperienceString += experiences[0].location + "\n"
                     mainExperienceString += format.format(experiences[0].startDate!!) + "-"
-                    mainExperienceString += if(experiences[0].endDate != null) format.format(experiences[0].endDate!!) + "\n"
-                                            else "current" + "\n"
+                    mainExperienceString += if (experiences[0].endDate != null) format.format(
+                        experiences[0].endDate!!
+                    ) + "\n"
+                    else "current" + "\n"
                 }
             }
 
-            layout.main_experience_card.card_title.text = "Experience"
+            layout.main_experience_card.card_title.text = getString(R.string.experience)
             layout.main_experience_card.card_content.text = mainExperienceString
             layout.main_experience_card.card_icon.setImageResource(R.drawable.ic_experience)
             if (mainExperienceString.trim().isEmpty())
-                layout.main_experience_card.card_view_more.text = "Add Experience"
+                layout.main_experience_card.card_view_more.text = getString(R.string.add_experience)
             layout.main_experience_card.card_view_more.setOnClickListener {
                 findNavController().navigate(R.id.experienceExpandedFragment)
             }
@@ -332,7 +332,7 @@ class ProfileFragment : BaseFragment() {
             startActivityForResult(photoCropIntent, PHOTO_CROP)
         }
 
-        layout.edit_cover.setOnClickListener{
+        layout.edit_cover.setOnClickListener {
             this.findNavController().navigate(R.id.editTagBottomSheet)
         }
 
@@ -361,15 +361,12 @@ class ProfileFragment : BaseFragment() {
 //                }
 //            }
 //        })
-        appbar.addOnOffsetChangedListener(object:AppBarLayout.OnOffsetChangedListener {
-            override fun onOffsetChanged(appBarLayout:AppBarLayout, verticalOffset:Int) {
-                if (Math.abs(verticalOffset)-appBarLayout.getTotalScrollRange() == 0)
-                {
+        appbar.addOnOffsetChangedListener(object : AppBarLayout.OnOffsetChangedListener {
+            override fun onOffsetChanged(appBarLayout: AppBarLayout, verticalOffset: Int) {
+                if (Math.abs(verticalOffset) - appBarLayout.getTotalScrollRange() == 0) {
                     main_expanded_user_name.animate().alpha(0.0f).setDuration(100)
                     main_expanded_user_name.visibility = View.INVISIBLE
-                }
-                else
-                {
+                } else {
                     main_expanded_user_name.animate().alpha(1.0f).setDuration(0)
                     main_expanded_user_name.visibility = View.VISIBLE
 
@@ -382,10 +379,10 @@ class ProfileFragment : BaseFragment() {
     private fun loadImage(Path: String) {
         var profilePicRef: StorageReference =
             storage.reference.child(PROFILE_PICTURE_FOLDER).child(Path)
-        if(layout.profile_avatar!=null)
-        GlideApp.with(this.requireContext())
-            .load(profilePicRef)
-            .into(layout.profile_avatar)
+        if (layout.profile_avatar != null)
+            GlideApp.with(this.requireContext())
+                .load(profilePicRef)
+                .into(layout.profile_avatar)
     }
 
     private fun addChip(context: Context, name: String): Chip {
@@ -432,40 +429,35 @@ class ProfileFragment : BaseFragment() {
 
 }
 
-internal abstract class AppBarStateChangeListener:AppBarLayout.OnOffsetChangedListener {
+internal abstract class AppBarStateChangeListener : AppBarLayout.OnOffsetChangedListener {
     private var mCurrentState = State.IDLE
+
     enum class State {
         EXPANDED,
         COLLAPSED,
         IDLE
     }
-    override fun onOffsetChanged(appBarLayout:AppBarLayout, i:Int) {
-        if (i == 0)
-        {
-            if (mCurrentState != State.EXPANDED)
-            {
+
+    override fun onOffsetChanged(appBarLayout: AppBarLayout, i: Int) {
+        if (i == 0) {
+            if (mCurrentState != State.EXPANDED) {
                 onStateChanged(appBarLayout, State.EXPANDED)
             }
             mCurrentState = State.EXPANDED
-        }
-        else if (Math.abs(i) >= appBarLayout.getTotalScrollRange())
-        {
-            if (mCurrentState != State.COLLAPSED)
-            {
+        } else if (Math.abs(i) >= appBarLayout.getTotalScrollRange()) {
+            if (mCurrentState != State.COLLAPSED) {
                 onStateChanged(appBarLayout, State.COLLAPSED)
             }
             mCurrentState = State.COLLAPSED
-        }
-        else
-        {
-            if (mCurrentState != State.IDLE)
-            {
+        } else {
+            if (mCurrentState != State.IDLE) {
                 onStateChanged(appBarLayout, State.IDLE)
             }
             mCurrentState = State.IDLE
         }
     }
-    abstract fun onStateChanged(appBarLayout:AppBarLayout, state:State)
+
+    abstract fun onStateChanged(appBarLayout: AppBarLayout, state: State)
 }
 //And then you can use it:
 //appBarLayout.addOnOffsetChangedListener(new AppBarStateChangeListener() {

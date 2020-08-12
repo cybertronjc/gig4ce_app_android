@@ -68,7 +68,7 @@ class EditHeadlineBottomSheet: ProfileBaseBottomSheetFragment() {
                 profileViewModel.setProfileBio(bio.text.toString())
                 this.dismiss()
             } else {
-                Toast.makeText(requireContext(), "bio can not be > 150 characters", Toast.LENGTH_LONG).show()
+                Toast.makeText(requireContext(), getString(R.string.bio_limit), Toast.LENGTH_LONG).show()
             }
         }
 

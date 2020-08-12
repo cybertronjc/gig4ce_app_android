@@ -1,193 +1,200 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/bottom_up_sheet">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_marginStart="32dp"
-        android:layout_marginEnd="32dp"
-        android:isScrollContainer="true"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
-        <TextView
-            android:id="@+id/form_error"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:layout_marginTop="@dimen/bs_top_margin"
-            android:textColor="#d4e02020"
-            android:letterSpacing="0.05"
-            android:visibility="gone"
-            android:text="@string/error_empty_mandatory_fields" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/bs_top_margin"
-            android:orientation="horizontal">
+            android:layout_height="match_parent"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp"
+            android:isScrollContainer="true"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <TextView
-                android:id="@+id/textView12"
-                style="@style/BsHeadingBold12"
+                android:id="@+id/form_error"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_gravity="center_vertical"
-                android:text="@string/edit_education" />
+                android:layout_marginTop="@dimen/bs_top_margin"
+                android:letterSpacing="0.05"
+                android:text="@string/error_empty_mandatory_fields"
+                android:textColor="#d4e02020"
+                android:textSize="14sp"
+                android:visibility="gone" />
 
-            <ImageButton
-                android:id="@+id/delete"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:src="@drawable/ic_delete"
-                style="@style/Widget.MaterialComponents.Button.TextButton" />
+                android:layout_marginTop="@dimen/bs_top_margin"
+                android:orientation="horizontal">
 
-        </LinearLayout>
+                <TextView
+                    android:id="@+id/textView12"
+                    style="@style/BsHeadingBold12"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:text="@string/edit_education" />
+
+                <ImageButton
+                    android:id="@+id/delete"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:src="@drawable/ic_delete" />
+
+            </LinearLayout>
 
 
+            <TextView
+                android:id="@+id/textView15"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/institution" />
 
-        <TextView
-            android:id="@+id/textView15"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/institution"
-            android:layout_marginTop="8dp" />
+            <EditText
+                android:id="@+id/institution"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:ems="10"
+                android:inputType="textPersonName" />
 
-        <EditText
-            android:id="@+id/institution"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:ems="10"
-            android:inputType="textPersonName" />
+            <TextView
+                android:id="@+id/textView19"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/course_name" />
 
-        <TextView
-            android:id="@+id/textView19"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="@string/course_name" />
+            <EditText
+                android:id="@+id/course"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:ems="10"
+                android:inputType="textPersonName" />
 
-        <EditText
-            android:id="@+id/course"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="textPersonName"
-            android:layout_marginTop="8dp"/>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/degree_holder"
-            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:endIconDrawable="@drawable/ic_down"
-            app:boxBackgroundColor="@color/white"
-            android:focusable="false"
-            android:clickable="false"
-            android:hint="Degree *">
-
-            <AutoCompleteTextView
-                android:id="@+id/degree"
-                android:paddingStart="3dp"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/degree_holder"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="false"
                 android:focusable="false"
-                android:longClickable="false"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:hint="@string/degree_mandatory"
+                app:boxBackgroundColor="@color/white"
+                app:endIconDrawable="@drawable/ic_down">
 
-        </com.google.android.material.textfield.TextInputLayout>
+                <AutoCompleteTextView
+                    android:id="@+id/degree"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:focusable="false"
+                    android:longClickable="false"
+                    android:paddingStart="3dp" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="16dp">
+            </com.google.android.material.textfield.TextInputLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_weight="1">
-                <TextView
-                    android:id="@+id/textView25"
+                android:layout_marginTop="16dp"
+                android:orientation="horizontal">
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/start_date" />
-                <EditText
-                    android:id="@+id/start_date"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/textView25"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/start_date" />
+
+                    <EditText
+                        android:id="@+id/start_date"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:drawableEnd="@drawable/ic_calendar_small"
+                        android:ems="10"
+                        android:focusable="false"
+                        android:inputType="date" />
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:inputType="date"
-                    android:focusable="false"
-                    android:drawableEnd="@drawable/ic_calendar_small"
-                    android:layout_marginTop="8dp" />
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/textView27"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/end_date" />
+
+                    <EditText
+                        android:id="@+id/end_date"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:drawableEnd="@drawable/ic_calendar_small"
+                        android:ems="10"
+                        android:focusable="false"
+                        android:inputType="date" />
+                </LinearLayout>
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_weight="1">
-                <TextView
-                    android:id="@+id/textView27"
+                android:layout_marginTop="16dp"
+                android:orientation="horizontal">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/cancel"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/end_date" />
-                <EditText
-                    android:id="@+id/end_date"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_weight="1"
+                    android:text="@string/cancel_text"
+                    android:textColor="@color/gray_color"
+                    app:strokeColor="@color/gray_color" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/save"
+                    style="?attr/materialButtonOutlinedStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:inputType="date"
-                    android:focusable="false"
-                    android:drawableEnd="@drawable/ic_calendar_small"
-                    android:layout_marginTop="8dp" />
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_weight="1"
+                    android:text="@string/save_text"
+                    android:textColor="@color/colorPrimary"
+                    app:strokeColor="@color/colorPrimary" />
+
             </LinearLayout>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:orientation="horizontal">
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/cancel"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/cancel_text"
-                android:layout_weight="1"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
-                android:textColor="@color/gray_color"
-                app:strokeColor="@color/gray_color"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/save"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/save_text"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
-                app:strokeColor="@color/colorPrimary"
-                android:textColor="@color/colorPrimary"
-                style="?attr/materialButtonOutlinedStyle"  />
 
         </LinearLayout>
-
-    </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.core.widget.NestedScrollView>

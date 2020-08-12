@@ -16,15 +16,12 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.ViewModel
 import com.gigforce.app.R
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.chip.Chip
-import com.google.firebase.auth.FirebaseAuth
-import kotlinx.android.synthetic.main.add_achievement_bottom_sheet.*
 import kotlinx.android.synthetic.main.delete_confirmation_dialog.*
 
-abstract class ProfileBaseBottomSheetFragment: BottomSheetDialogFragment() {
+abstract class ProfileBaseBottomSheetFragment : BottomSheetDialogFragment() {
     var mView: View? = null
     var validation: ProfileValidation? = null
     val profileViewModel: ProfileViewModel by activityViewModels<ProfileViewModel>()
@@ -33,7 +30,7 @@ abstract class ProfileBaseBottomSheetFragment: BottomSheetDialogFragment() {
         validation = ProfileValidation()
     }
 
-    open fun activate(view:View?){}
+    open fun activate(view: View?) {}
 
     open fun inflateView(
         resource: Int, inflater: LayoutInflater,
@@ -44,7 +41,7 @@ abstract class ProfileBaseBottomSheetFragment: BottomSheetDialogFragment() {
         return mView
     }
 
-    fun getFragmentView():View{
+    fun getFragmentView(): View {
         return mView!!
     }
 
@@ -88,7 +85,7 @@ abstract class ProfileBaseBottomSheetFragment: BottomSheetDialogFragment() {
         dialog.setContentView(R.layout.delete_confirmation_dialog)
 
         dialog.cancel.setOnClickListener {
-            dialog .dismiss()
+            dialog.dismiss()
         }
         return dialog
     }
@@ -113,11 +110,11 @@ abstract class ProfileBaseBottomSheetFragment: BottomSheetDialogFragment() {
         linearLayout.addView(aNumberPicker, numPicerParams)
 
         val alertDialogBuilder: AlertDialog.Builder = AlertDialog.Builder(context)
-        alertDialogBuilder.setTitle("Select the Year")
+        alertDialogBuilder.setTitle(getString(R.string.sel_year))
         alertDialogBuilder.setView(linearLayout)
         alertDialogBuilder
             .setCancelable(false)
-            .setPositiveButton("Ok",
+            .setPositiveButton(getString(R.string.okay),
                 DialogInterface.OnClickListener { dialog, id ->
                     Log.d(
                         "NUMBERPICKER",
@@ -125,7 +122,7 @@ abstract class ProfileBaseBottomSheetFragment: BottomSheetDialogFragment() {
                     )
                     text.setText(aNumberPicker.value.toString())
                 })
-            .setNegativeButton("Cancel",
+            .setNegativeButton(getString(R.string.cancel),
                 DialogInterface.OnClickListener { dialog, id -> dialog.cancel() })
 
         val alertDialog: AlertDialog = alertDialogBuilder.create()

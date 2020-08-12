@@ -90,7 +90,7 @@ class AboutExpandedFragment : ProfileBaseFragment() {
             language_card.nextDestination = R.id.editLanguageBottomSheet
             language_card.cardTitle = getString(R.string.language)
             language_card.cardContent = languageString
-            language_card.cardBottom = getString(R.string.add_languages)
+            language_card.cardBottom = getString(R.string.add_lang)
 
             var contactString = ""
             profile.contact?.let {
@@ -102,7 +102,7 @@ class AboutExpandedFragment : ProfileBaseFragment() {
             contact_card.hasContentTitles = false
             contact_card.cardTitle = getString(R.string.contact)
             contact_card.cardContent = contactString
-            contact_card.cardBottom = getString(R.string.add_contacts)
+            contact_card.cardBottom = getString(R.string.add_contact)
 
             if (contact_card.edit_button != null) {
                 contact_card.edit_button.setOnClickListener {
