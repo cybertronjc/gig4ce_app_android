@@ -440,6 +440,23 @@
     <string name="bank_details_uploaded">Bank details Uploaded</string>
     <string name="under_verification">Under Verification</string>
     <string name="verifying">Verifying</string>
+    <string name="about_me">About me</string>
+    <string name="education">Education</string>
+    <string name="experience">Experience</string>
+    <string name="bio_profile">Bio</string>
+    <string name="add_bio_profile">Add bio</string>
+    <string name="speaking">Speaking</string>
+    <string name="writing">Writing</string>
+    <string name="language">Language</string>
+    <string name="add_languages">Add languages</string>
+    <string name="phone_colon">phone:</string>
+    <string name="email_colon">email:</string>
+    <string name="contact">Contact</string>
+    <string name="add_contacts">Add contacts</string>
+    <string name="cta_not_implemented">CTA NOT IMPLEMENTED</string>
+    <string name="beginner">beginner</string>
+    <string name="moderate">moderate</string>
+    <string name="advanced">advanced</string>
 
 
 </resources>

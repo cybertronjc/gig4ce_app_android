@@ -328,7 +328,7 @@
     <string name="completed">पूरे</string>
     <string name="complete_your_verification">अपना सत्यापन पूरा करें</string>
     <string name="verification">सत्यापन</string>
-    <string name="verified_giger_s_get_recruited_first">आरक्षित गिगर \\\ के पहले भर्ती हो जाते हैं</string>
+    <string name="verified_giger_s_get_recruited_first">आरक्षित गिगर के पहले भर्ती हो जाते हैं</string>
     <string name="my_calendar">मेरा कैलेंडर</string>
     <string name="giger_verification">गीगर सत्यापन</string>
     <string name="ifsc">IFSC *</string>
@@ -382,7 +382,7 @@
     <string name="click_or_select_bank_passbook">पहले अपनी पासबुक छवि पर क्लिक करें या चयन करें</string>
     <string name="your_are_reuploading_bank_details">आप अपने बैंक विवरण पुनः अपलोड कर रहे हैं, उन्हें एक बार फिर से सत्यापित किया जाएगा, जिसमें 7 दिन तक का समय लग सकता है</string>
     <string name="bank_details_uploaded">बैंक विवरण अपलोड किया गया</string>
-    <string name="let_s_go">Let \\\ &amp;#x27;s जाओ</string>
+    <string name="let_s_go">चलो चलते हैं</string>
     <string name="thank_you">धन्यवाद!</string>
     <string name="documents_uploaded_long">जैसे-जैसे आपके दस्तावेज़ सत्यापित होते जाएंगे, आप अपने गिग्स को शुरू कर पाएंगे।</string>
     <string name="under_verification">Under Verification</string>
@@ -393,5 +393,22 @@
     <string name="gig_id">Gig Id :</string>
     <string name="gigforce_pvt_ltd">Gigforce Pvt. Ltd.</string>
     <string name="issued_on">Issued On</string>
+    <string name="about_me">मेरे बारे में</string>
+    <string name="education">शिक्षा</string>
+    <string name="experience">अनुभव</string>
+    <string name="bio_profile">जैव</string>
+    <string name="add_bio_profile">जैव जोड़ें</string>
+    <string name="speaking">बोला जा रहा है</string>
+    <string name="writing">लिख रहे हैं</string>
+    <string name="language">भाषा</string>
+    <string name="add_languages">+ भाषा जोड़ें</string>
+    <string name="phone_colon">फ़ोन:</string>
+    <string name="email_colon">ईमेल:</string>
+    <string name="contact">संपर्क करें</string>
+    <string name="add_contacts">+ संपर्क जोड़ें</string>
+    <string name="cta_not_implemented">सीटीए लागू नहीं है</string>
+    <string name="beginner">शुरुआत</string>
+    <string name="moderate">moderate</string>
+    <string name="advanced">advanced</string>
 
 </resources>

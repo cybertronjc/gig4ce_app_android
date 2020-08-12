@@ -7,22 +7,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.widget.Toast
-import androidx.activity.addCallback
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-import com.afollestad.materialdialogs.MaterialDialog
 import com.gigforce.app.R
 import com.gigforce.app.modules.landingscreen.LandingPageConstants.INTENT_EXTRA_ACTION
 import com.gigforce.app.modules.landingscreen.LandingPageConstants.INTENT_EXTRA_CAME_FROM_LANDING_SCREEN
 import kotlinx.android.synthetic.main.card_row.view.*
 import kotlinx.android.synthetic.main.contact_edit_warning_dialog.*
-import kotlinx.android.synthetic.main.delete_confirmation_dialog.*
 import kotlinx.android.synthetic.main.fragment_profile_about_expanded.*
 import kotlinx.android.synthetic.main.fragment_profile_about_expanded.view.*
-import kotlinx.android.synthetic.main.fragment_profile_about_expanded.view.nav_bar
 import kotlinx.android.synthetic.main.profile_card_background.view.*
 
-class AboutExpandedFragment: ProfileBaseFragment() {
+class AboutExpandedFragment : ProfileBaseFragment() {
     companion object {
         fun newInstance() = AboutExpandedFragment()
 
@@ -39,7 +35,7 @@ class AboutExpandedFragment: ProfileBaseFragment() {
     }
 
     private var cameFromLandingPage = false
-    private var action : Int  = -1
+    private var action: Int = -1
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -76,37 +72,37 @@ class AboutExpandedFragment: ProfileBaseFragment() {
             bio_card.isBottomRemoved = profile.aboutMe.isNotEmpty()
             bio_card.hasContentTitles = false
             bio_card.nextDestination = R.id.addAboutMeBottomSheet
-            bio_card.cardTitle = "Bio"
+            bio_card.cardTitle = getString(R.string.bio_profile)
             bio_card.cardContent = if (profile.aboutMe != "") profile.aboutMe
-                                    else this.requireContext().getString(R.string.empty_about_me_text)
+            else this.requireContext().getString(R.string.empty_about_me_text)
             bio_card.cardBottom = if (profile.aboutMe != "") ""
-                                    else "Add bio"
+            else getString(R.string.add_bio_profile)
 
             var languageString = ""
             profile.languages?.let {
                 val languages = it.sortedByDescending { language -> language.speakingSkill }
                 for (lang in languages) {
                     languageString += lang.name + "\n"
-                    languageString += "Speaking " + getLanguageLevel(lang.speakingSkill.toInt()) + "\n"
-                    languageString += "Writing " + getLanguageLevel(lang.writingSkill.toInt()) + "\n\n"
+                    languageString += getString(R.string.speaking) + " " + getLanguageLevel(lang.speakingSkill.toInt()) + "\n"
+                    languageString += getString(R.string.writing) + " " + getLanguageLevel(lang.writingSkill.toInt()) + "\n\n"
                 }
             }
             language_card.nextDestination = R.id.editLanguageBottomSheet
-            language_card.cardTitle = "Language"
+            language_card.cardTitle = getString(R.string.language)
             language_card.cardContent = languageString
-            language_card.cardBottom = "Add languages"
+            language_card.cardBottom = getString(R.string.add_languages)
 
             var contactString = ""
             profile.contact?.let {
                 for (contact in it) {
-                    contactString += "phone: " + contact.phone + "\n"
-                    contactString += "email: " + contact.email + "\n\n"
+                    contactString += getString(R.string.phone_colon) + " " + contact.phone + "\n"
+                    contactString += getString(R.string.email_colon)+" "+ contact.email + "\n\n"
                 }
             }
             contact_card.hasContentTitles = false
-            contact_card.cardTitle = "Contact"
+            contact_card.cardTitle = getString(R.string.contact)
             contact_card.cardContent = contactString
-            contact_card.cardBottom = "Add contacts"
+            contact_card.cardBottom = getString(R.string.add_contacts)
 
             if (contact_card.edit_button != null) {
                 contact_card.edit_button.setOnClickListener {
@@ -118,14 +114,14 @@ class AboutExpandedFragment: ProfileBaseFragment() {
             about_top_profile.imageName = profile.profileAvatarName
         })
 
-        if(cameFromLandingPage)
+        if (cameFromLandingPage)
             profileViewModel.getProfileData()
 
         when (action) {
             ACTION_OPEN_EDIT_ABOUT_ME_BOTTOM_SHEET -> {
                 this.findNavController().navigate(R.id.addAboutMeBottomSheet)
             }
-            ACTION_OPEN_EDIT_LANGUAGE_BOTTOM_SHEET ->{
+            ACTION_OPEN_EDIT_LANGUAGE_BOTTOM_SHEET -> {
                 this.findNavController().navigate(R.id.addLanguageBottomSheetFragment)
             }
         }
@@ -137,7 +133,7 @@ class AboutExpandedFragment: ProfileBaseFragment() {
             this.findNavController().navigate(R.id.addAboutMeBottomSheet)
         }
 
-        language_card.card_bottom.setOnClickListener{
+        language_card.card_bottom.setOnClickListener {
             this.findNavController().navigate(R.id.addLanguageBottomSheetFragment)
         }
 
@@ -154,12 +150,12 @@ class AboutExpandedFragment: ProfileBaseFragment() {
         dialog.setContentView(R.layout.contact_edit_warning_dialog)
 
         dialog.cancel_button.setOnClickListener {
-            dialog .dismiss()
+            dialog.dismiss()
         }
 
         dialog.submit_button.setOnClickListener {
-            Toast.makeText(requireContext(), "CTA NOT IMPLEMENTED", Toast.LENGTH_SHORT).show()
-            dialog .dismiss()
+            Toast.makeText(requireContext(), getString(R.string.cta_not_implemented), Toast.LENGTH_SHORT).show()
+            dialog.dismiss()
         }
 
         dialog.show()
@@ -167,9 +163,10 @@ class AboutExpandedFragment: ProfileBaseFragment() {
 
     private fun getLanguageLevel(level: Int): String {
         return when (level) {
-            in 0..25 -> "beginner"
-            in 26..75 -> "moderate"
-            else -> "advanced"
+            in 0..25 -> getString(R.string.beginner)
+            //TODO: Hindi Translation left
+            in 26..75 -> getString(R.string.moderate)
+            else -> getString(R.string.advanced)
         }
     }
 

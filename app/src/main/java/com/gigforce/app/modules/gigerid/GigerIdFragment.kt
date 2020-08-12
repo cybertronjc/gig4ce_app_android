@@ -53,10 +53,9 @@ class GigerIdFragment : BaseFragment() {
         initClicks()
         initObservers()
         viewModelGigerID.getProfileData()
-        viewModelGigerID.getGigDetails(arguments?.getString(GigPageFragment.INTENT_EXTRA_GIG_ID))
     }
 
-    fun iniFileSharing() = runBlocking<Unit> {
+    fun iniFileSharing(it: String?) = runBlocking<Unit> {
         val bm = getScreenShot(cl_parent_giger_id)
         shareFile(
             imageToPDF(
@@ -65,13 +64,14 @@ class GigerIdFragment : BaseFragment() {
                     StringConstants.GIGER_ID.value,
                     context?.filesDir?.absolutePath!!
                 )
+                , it
             ), requireContext(), "*/*"
         )
     }
 
     private fun initObservers() {
         viewModelGigerID.observablePermGranted.observe(viewLifecycleOwner, Observer {
-            iniFileSharing()
+            iniFileSharing(it)
         })
         viewModelGigerID.observablePermResultsNotGranted.observe(
             viewLifecycleOwner,
@@ -87,6 +87,8 @@ class GigerIdFragment : BaseFragment() {
             showToast(it!!)
         })
         viewModelGigerID.observableUserProfileDataSuccess.observe(viewLifecycleOwner, Observer {
+            viewModelGigerID.getGigDetails(arguments?.getString(GigPageFragment.INTENT_EXTRA_GIG_ID))
+
             viewModelGigerID.getProfilePicture(it?.profileAvatarName ?: "--")
             tv_giger_name_giger_id.text = it?.name ?: "--"
             tv_giger_location_giger_id.text =
@@ -124,13 +126,14 @@ class GigerIdFragment : BaseFragment() {
             tv_issued_date_giger_id.text =
                 "${getString(R.string.issued_on)} ${parseTime("dd MMM yyyy", it.toDate())}"
         }
-    }
-
-    private fun initClicks() {
         iv_share_giger_id.setOnClickListener {
             viewModelGigerID.showProgress(true)
             viewModelGigerID.checkForPermissionsAndInitSharing(checkForRequiredPermissions())
         }
+    }
+
+    private fun initClicks() {
+
         ic_close_giger_id.setOnClickListener {
             popBackState()
         }
@@ -155,11 +158,11 @@ class GigerIdFragment : BaseFragment() {
 
 
     @Throws(FileNotFoundException::class)
-    suspend fun imageToPDF(imagePath: String): File? {
+    suspend fun imageToPDF(imagePath: String, fileName: String?): File? {
         try {
             val document = Document()
             val dirPath = context?.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)
-                .toString() + "/${System.currentTimeMillis()}.pdf"
+                .toString() + "/${fileName ?: ""}.pdf"
             PdfWriter.getInstance(document, FileOutputStream(dirPath)) //  Change pdf's name.
             document.open()
             val documentWidth: Float =
