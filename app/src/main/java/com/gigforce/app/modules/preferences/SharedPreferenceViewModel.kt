@@ -190,6 +190,11 @@ class SharedPreferenceViewModel : ViewModel {
 
     fun setIsWeekdays(checked: Boolean) {
         preferencesRepository.setData(preferencesRepository.WEEKDAYS, checked)
+
+        if(!checked){
+            setWorkingDays(arrayListOf())
+            setWorkingSlots(arrayListOf())
+        }
     }
 
 
@@ -203,6 +208,11 @@ class SharedPreferenceViewModel : ViewModel {
 
     fun setIsWeekend(checked: Boolean) {
         preferencesRepository.setData(preferencesRepository.WEEKEND, checked)
+
+        if(!checked){
+            setWorkendDays(arrayListOf())
+            setWorkendSlots(arrayListOf())
+        }
     }
 
     fun setWorkendDays(arrDays: ArrayList<String>) {
