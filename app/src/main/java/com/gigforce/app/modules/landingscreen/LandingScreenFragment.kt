@@ -472,7 +472,8 @@ class LandingScreenFragment : BaseFragment() {
             RecyclerGenericAdapter<TitleSubtitleModel>(
                 activity?.applicationContext,
                 PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
-                    navigate(R.id.mainLearningFragment)
+//                    navigate(R.id.mainLearningFragment)
+                    showToast("This is work in progress. Please check again in a few days")
                 },
                 RecyclerGenericAdapter.ItemInterface<TitleSubtitleModel?> { obj, viewHolder, position ->
                     var view = getView(viewHolder, R.id.card_view)

@@ -131,7 +131,7 @@ class ProfileFragment : BaseFragment() {
 
         val viewModel: ProfileViewModel by activityViewModels<ProfileViewModel>()
         location_card.setOnClickListener{
-            showToast("Work in progress")
+            showToast("This is work in progress. Please check again in a few days")
         }
         // load user data
         viewModel.getProfileData().observe(viewLifecycleOwner, Observer { profile ->
