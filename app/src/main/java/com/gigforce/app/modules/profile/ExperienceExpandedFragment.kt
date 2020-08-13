@@ -108,8 +108,5 @@ class ExperienceExpandedFragment: ProfileBaseFragment() {
         }
     }
 
-    override fun onBackPressed(): Boolean {
-        popBackState()
-        return false
-    }
+
 }

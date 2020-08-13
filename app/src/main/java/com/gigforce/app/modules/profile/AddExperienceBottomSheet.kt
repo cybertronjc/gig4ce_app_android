@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.DatePicker
 import android.widget.Toast
-import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
 import com.gigforce.app.modules.profile.models.Experience
 import com.gigforce.app.utils.DropdownAdapter
@@ -122,13 +121,13 @@ class AddExperienceBottomSheet : ProfileBaseBottomSheetFragment() {
         }
 
         cancel_button.setOnClickListener {
-            this.findNavController().navigate(R.id.experienceExpandedFragment)
+            this.dismiss()
         }
 
         save_button.setOnClickListener {
             if (validateExperience()) {
                 addNewExperience()
-                this.findNavController().navigate(R.id.experienceExpandedFragment)
+                this.dismiss()
             }
         }
 

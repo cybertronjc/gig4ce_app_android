@@ -1,23 +1,17 @@
 package com.gigforce.app.modules.profile
 
-import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.NumberPicker
-import android.widget.RelativeLayout
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AlertDialog.Builder
-import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
 import com.gigforce.app.modules.profile.models.Achievement
 import kotlinx.android.synthetic.main.add_achievement_bottom_sheet.*
 
 
-class AddAchievementBottomSheetFragment: ProfileBaseBottomSheetFragment() {
+class AddAchievementBottomSheetFragment : ProfileBaseBottomSheetFragment() {
     companion object {
         fun newInstance() = AddAchievementBottomSheetFragment()
     }
@@ -41,7 +35,7 @@ class AddAchievementBottomSheetFragment: ProfileBaseBottomSheetFragment() {
         year.setOnClickListener {
             showNumberPicker(requireContext(), year)
         }
-        add_more_button.setOnClickListener{
+        add_more_button.setOnClickListener {
             if (validateAchievement()) {
                 addNewAchievement()
                 title.setText("")
@@ -51,16 +45,17 @@ class AddAchievementBottomSheetFragment: ProfileBaseBottomSheetFragment() {
             }
         }
 
-        cancel_button.setOnClickListener{
-            this.findNavController().navigate(R.id.educationExpandedFragment)
+        cancel_button.setOnClickListener {
+            this.dismiss()
         }
 
-        save_button.setOnClickListener{
+        save_button.setOnClickListener {
             if (validateAchievement()) {
                 addNewAchievement()
 
-                Toast.makeText(this.context, "Updated Achievement Section", Toast.LENGTH_LONG).show()
-                this.findNavController().navigate(R.id.educationExpandedFragment)
+                Toast.makeText(this.context, "Updated Achievement Section", Toast.LENGTH_LONG)
+                    .show()
+                this.dismiss()
             }
         }
     }
@@ -83,10 +78,10 @@ class AddAchievementBottomSheetFragment: ProfileBaseBottomSheetFragment() {
                 title,
                 authority,
                 year
-            )) {
+            )
+        ) {
             return true
-        }
-        else {
+        } else {
             showError(form_error, title, authority, year)
             return false
         }
