@@ -98,7 +98,7 @@ class DayTimeFragment : BaseFragment() {
             return "Yes"
         }
         else{
-            return "No"
+            return "None"
         }
     }
 

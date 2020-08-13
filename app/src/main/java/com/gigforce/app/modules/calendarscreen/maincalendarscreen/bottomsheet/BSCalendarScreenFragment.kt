@@ -397,7 +397,7 @@ class BSCalendarScreenFragment : BaseFragment() {
 
         datalist.add(FeatureModel("Settings", R.drawable.settings, R.id.settingFragment))
         datalist.add(FeatureModel("Chat", R.drawable.chat, -1/*R.id.contactScreenFragment*/))
-        datalist.add(FeatureModel("Landing HS", R.drawable.chat, R.id.landinghomefragment))
+        datalist.add(FeatureModel("Home Screen", R.drawable.chat, R.id.landinghomefragment))
         datalist.add(FeatureModel("Explore", R.drawable.ic_landinghome_search, -1))
 
         val itemWidth = ((width / 7) * 1.6).toInt()

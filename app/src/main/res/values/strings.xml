@@ -177,8 +177,8 @@
     <string name="end_date">End Date</string>
     <string name="delete">delete</string>
     <string name="edit_achievement">Edit Achievement</string>
-    <string name="title">title</string>
-    <string name="authority">authority</string>
+    <string name="title">Title</string>
+    <string name="authority">Authority</string>
     <string name="location">Location</string>
     <string name="year">year</string>
     <string name="year_text">Year</string>

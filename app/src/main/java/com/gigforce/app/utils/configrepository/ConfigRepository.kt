@@ -24,8 +24,8 @@ class ConfigRepository : BaseFirestoreDBRepository {
     var configLiveDataModel: MutableLiveData<ConfigDataModel> = MutableLiveData<ConfigDataModel>()
 
     constructor() {
-        configCollectionListener()
         documentReference = getCustomDBCollection()
+        configCollectionListener()
     }
 
     fun configCollectionListener() {
