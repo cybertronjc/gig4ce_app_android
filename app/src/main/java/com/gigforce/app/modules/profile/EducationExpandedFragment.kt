@@ -5,7 +5,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.addCallback
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
@@ -13,11 +12,10 @@ import com.gigforce.app.modules.landingscreen.LandingPageConstants
 import com.gigforce.app.modules.landingscreen.LandingPageConstants.INTENT_EXTRA_CAME_FROM_LANDING_SCREEN
 import kotlinx.android.synthetic.main.fragment_profile_education_expanded.*
 import kotlinx.android.synthetic.main.fragment_profile_education_expanded.view.*
-import kotlinx.android.synthetic.main.fragment_profile_education_expanded.view.nav_bar
 import kotlinx.android.synthetic.main.profile_card_background.view.*
 import java.text.SimpleDateFormat
 
-class EducationExpandedFragment: ProfileBaseFragment() {
+class EducationExpandedFragment : ProfileBaseFragment() {
 
     companion object {
         fun newInstance() = EducationExpandedFragment()
@@ -36,7 +34,7 @@ class EducationExpandedFragment: ProfileBaseFragment() {
     }
 
     private var cameFromLandingPage = false
-    private var action : Int  = -1
+    private var action: Int = -1
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -53,7 +51,7 @@ class EducationExpandedFragment: ProfileBaseFragment() {
         }
 
         Log.d("DEBUG", "ENTERED Profile Education Expanded VIEW")
-        var view =inflateView(R.layout.fragment_profile_education_expanded, inflater, container)
+        var view = inflateView(R.layout.fragment_profile_education_expanded, inflater, container)
         view?.nav_bar?.education_active = true
         return view
     }
@@ -121,7 +119,7 @@ class EducationExpandedFragment: ProfileBaseFragment() {
             education_top_profile.imageName = profile.profileAvatarName
         })
 
-        if(cameFromLandingPage)
+        if (cameFromLandingPage)
             profileViewModel.getProfileData()
 
         when (action) {
@@ -140,14 +138,16 @@ class EducationExpandedFragment: ProfileBaseFragment() {
 
     private fun setListeners() {
         // Navigate to bottom sheets
-        skill_card.card_bottom.setOnClickListener{
+        skill_card.card_bottom.setOnClickListener {
             this.findNavController().navigate(R.id.addSkillBottomSheetFragment)
         }
-        achievement_card.card_bottom.setOnClickListener{
+        achievement_card.card_bottom.setOnClickListener {
             this.findNavController().navigate(R.id.addAchievementBottomSheetFragment)
         }
-        education_card.card_bottom.setOnClickListener{
+        education_card.card_bottom.setOnClickListener {
             this.findNavController().navigate(R.id.addEducationBottomSheetFragment)
         }
     }
+
+
 }

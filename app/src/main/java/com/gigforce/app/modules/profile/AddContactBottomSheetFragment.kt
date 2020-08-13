@@ -39,12 +39,12 @@ class AddContactBottomSheetFragment: BottomSheetDialogFragment() {
             resetLayout()
         }
         layout.add_contact_cancel.setOnClickListener{
-            findNavController().navigate(R.id.aboutExpandedFragment)
+            this.dismiss()
         }
         layout.add_contact_save.setOnClickListener{
             addNewContact()
             saveNewContacts()
-            findNavController().navigate(R.id.aboutExpandedFragment)
+            this.dismiss()
         }
     }
 

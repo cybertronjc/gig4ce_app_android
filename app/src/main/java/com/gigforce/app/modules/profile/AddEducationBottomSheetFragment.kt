@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.DatePicker
 import android.widget.Toast
-import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
 import com.gigforce.app.modules.profile.models.Education
 import com.gigforce.app.utils.DropdownAdapter
@@ -122,12 +121,12 @@ class AddEducationBottomSheetFragment : ProfileBaseBottomSheetFragment() {
             if (validateEducation()) {
                 addNewEducation()
                 Toast.makeText(this.context, "Updated Education Section", Toast.LENGTH_LONG).show()
-                this.findNavController().navigate(R.id.educationExpandedFragment)
+                this.dismiss()
             }
         }
 
         cancel_button.setOnClickListener {
-            this.findNavController().navigate(R.id.educationExpandedFragment)
+            this.dismiss()
         }
 
     }

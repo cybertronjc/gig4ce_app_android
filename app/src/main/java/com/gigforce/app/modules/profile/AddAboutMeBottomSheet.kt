@@ -5,12 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
-import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
 import kotlinx.android.synthetic.main.add_about_bottom_sheet.*
 
-class AddAboutMeBottomSheet: ProfileBaseBottomSheetFragment() {
+class AddAboutMeBottomSheet : ProfileBaseBottomSheetFragment() {
 
     companion object {
         fun newInstance() = AddAboutMeBottomSheet()
@@ -32,17 +30,19 @@ class AddAboutMeBottomSheet: ProfileBaseBottomSheetFragment() {
         })
 
         cancel_button.setOnClickListener {
-            findNavController().navigate(R.id.aboutExpandedFragment)
+            this.dismiss()
+
         }
 
         save_button.setOnClickListener {
-            if (about_me_text.text.toString().isNotEmpty() && about_me_text.text.toString().trim().isEmpty()) {
+            if (about_me_text.text.toString().isNotEmpty() && about_me_text.text.toString().trim()
+                    .isEmpty()
+            ) {
                 form_error.visibility = View.VISIBLE
                 about_me_text.setHintTextColor(resources.getColor(R.color.red))
-            }
-            else {
+            } else {
                 profileViewModel!!.setProfileAboutMe(about_me_text.text.toString())
-                findNavController().navigate(R.id.aboutExpandedFragment)
+                this.dismiss()
             }
         }
         super.onViewCreated(view, savedInstanceState)
