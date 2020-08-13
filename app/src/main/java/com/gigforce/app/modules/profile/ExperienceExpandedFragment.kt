@@ -107,4 +107,9 @@ class ExperienceExpandedFragment: ProfileBaseFragment() {
             findNavController().navigate(R.id.addExperienceBottomSheet)
         }
     }
+
+    override fun onBackPressed(): Boolean {
+        popBackState()
+        return false
+    }
 }

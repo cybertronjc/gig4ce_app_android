@@ -63,6 +63,7 @@ class ProfileFragment : BaseFragment() {
         }
     }
 
+
     private fun restoreStatusBar(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             win = requireActivity().window
