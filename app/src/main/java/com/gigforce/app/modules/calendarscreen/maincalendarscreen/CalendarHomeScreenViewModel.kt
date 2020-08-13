@@ -39,17 +39,19 @@ class CalendarHomeScreenViewModel : ViewModel() {
         mainHomeRepository.getCollectionReference()
             .whereEqualTo("gigerId", mainHomeRepository.getUID())
             .addSnapshotListener { querySnapshot, firebaseFirestoreException ->
+                if(arrMainHomeDataModel!=null) {
+                    arrMainHomeDataModel?.clear()
+                    if (querySnapshot != null) {
+                        querySnapshot.documents.forEach { t ->
 
-                if (querySnapshot != null) {
-                    querySnapshot.documents.forEach { t ->
-
-                        Log.d("gig id : data", t.id.toString())
-                        t.toObject(GigData::class.java)
-                            ?.let { arrMainHomeDataModel?.add(AllotedGigDataModel.getGigData(it)) }
+                            Log.d("gig id : data", t.id.toString())
+                            t.toObject(GigData::class.java)
+                                ?.let { arrMainHomeDataModel?.add(AllotedGigDataModel.getGigData(it)) }
+                        }
+                        mainHomeLiveDataModel.postValue(
+                            MainHomeCompleteGigModel()
+                        )
                     }
-                    mainHomeLiveDataModel.postValue(
-                        MainHomeCompleteGigModel()
-                    )
                 }
             }
         preferencesRepository.getDBCollection()

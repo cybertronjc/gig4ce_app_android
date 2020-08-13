@@ -132,11 +132,20 @@ class EarningFragment : BaseFragment() {
         permonthGoalSB.setProgress(viewModel.getPreferenceDataModel().earning.perMonthGoal/500)
         checkbox_monthly_constract.isChecked =
             viewModel.getPreferenceDataModel().earning.monthlyContractRequired
+        setMonthlyContractVisibility()
         monthlyExpectationSB.setProgress(0)
         monthlyExpectationSB.setProgress(viewModel.getPreferenceDataModel().earning.monthlyExpectation/500)
 
         dailyGoalsTV.text = "Rs 0 - Rs " + viewModel.getPreferenceDataModel().earning.perDayGoal
         monthlyGoalsTV.text = "Rs 0 - Rs " + viewModel.getPreferenceDataModel().earning.perMonthGoal
+    }
+
+    private fun setMonthlyContractVisibility() {
+        if(viewModel.getPreferenceDataModel().earning.monthlyContractRequired)
+        monthly_expectation_constraintlayout.visibility = View.VISIBLE
+        else
+            monthly_expectation_constraintlayout.visibility = View.GONE
+
     }
 
     override fun onBackPressed(): Boolean {

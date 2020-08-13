@@ -156,7 +156,6 @@ class CalendarHomeScreen : BaseFragment(),
         calendarView.setOnDateClickListner(object : CalendarView.MonthChangeAndDateClickedListener {
             override fun onMonthChange(monthModel: CalendarView.MonthModel) {
                 selectedMonthModel = monthModel
-                println(" date data1 " + selectedMonthModel.toString())
                 changeVisibilityCalendarView()
             }
         })
@@ -242,6 +241,9 @@ class CalendarHomeScreen : BaseFragment(),
 //                viewModel.setDataModel(homeDataModel.all_gigs)
                 initializeViews()
                 calendarView.setGigData(viewModel.arrMainHomeDataModel!!)
+                var layoutManager = rv_.layoutManager as LinearLayoutManager
+                var data = recyclerGenericAdapter.list.get(layoutManager.findFirstVisibleItemPosition())
+                calendarView.setCurrentVisibleDate(data.getDateObj())
             }
         })
 
@@ -474,7 +476,6 @@ class CalendarHomeScreen : BaseFragment(),
         }
 
         var scrollListener = object : RecyclerView.OnScrollListener() {
-
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
                 var layoutManager: LinearLayoutManager? = null
