@@ -297,5 +297,4 @@
     <string name="bank_details_uploaded">Bank details Uploaded</string>
     <string name="under_verification">Under Verification</string>
     <string name="verifying">Verifying</string>
-    <string name="select_start_date">Please select start date first</string>
 </resources>

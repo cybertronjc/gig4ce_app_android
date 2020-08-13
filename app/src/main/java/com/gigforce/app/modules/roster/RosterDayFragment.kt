@@ -186,14 +186,14 @@ class RosterDayFragment : RosterBaseFragment() {
             popupMenu.menuInflater.inflate(R.menu.roster_menu, popupMenu.menu)
             popupMenu.setOnMenuItemClickListener {
                 when (it.itemId) {
-                    R.id.location_card -> {
-
+                    R.id.location_preference -> {
+                        navigate(R.id.locationFragment)
                     }
                     R.id.settings -> {
-
+                        navigate(R.id.settingFragment)
                     }
                     R.id.help -> {
-
+                        navigate(R.id.fakeGigContactScreenFragment)
                     }
                 }
                 true

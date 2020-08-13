@@ -328,7 +328,7 @@
     <string name="completed">पूरे</string>
     <string name="complete_your_verification">अपना सत्यापन पूरा करें</string>
     <string name="verification">सत्यापन</string>
-    <string name="verified_giger_s_get_recruited_first">आरक्षित गिगर \\\ के पहले भर्ती हो जाते हैं</string>
+    <string name="verified_giger_s_get_recruited_first">आरक्षित गिगर के पहले भर्ती हो जाते हैं</string>
     <string name="my_calendar">मेरा कैलेंडर</string>
     <string name="giger_verification">गीगर सत्यापन</string>
     <string name="ifsc">IFSC *</string>
@@ -364,7 +364,7 @@
     <string name="aadhar_card_details_uploaded">आधार कार्ड विवरण अपलोड किया गया</string>
     <string name="you_are_reuploading_aadhar">आप अपने आधार विवरणों को फिर से अपलोड कर रहे हैं, उन्हें एक बार फिर से सत्यापित किया जाएगा, जिसमें 7 दिन लग सकते हैं</string>
     <string name="select_or_capture_both_sides_of_aadhar">आधार कार्ड के दोनों किनारों को चुनें या कैप्चर करें</string>
-    <string name="enter_valid_aadhar_no">मान्य आधार कार्ड सं</string>
+    <string name="enter_valid_aadhar_no">कृपया सही आधार कार्ड नंबर जोड़ें</string>
     <string name="video_uploaded">वीडियो अपलोड किया गया</string>
     <string name="why_we_need_this_dl">प्रोफ़ाइल सत्यापन के लिए ड्राइवर का लाइसेंस या आधार कार्ड अपलोड करना अनिवार्य है। ड्राइविंग लाइसेंस आपके नाम, जन्म तिथि, पते और अन्य विवरणों को सत्यापित करने में मदद करता है।</string>
     <string name="dl_image_front_side">ड्राइविंग लाइसेंस (सामने की ओर)</string>
@@ -382,17 +382,18 @@
     <string name="click_or_select_bank_passbook">पहले अपनी पासबुक छवि पर क्लिक करें या चयन करें</string>
     <string name="your_are_reuploading_bank_details">आप अपने बैंक विवरण पुनः अपलोड कर रहे हैं, उन्हें एक बार फिर से सत्यापित किया जाएगा, जिसमें 7 दिन तक का समय लग सकता है</string>
     <string name="bank_details_uploaded">बैंक विवरण अपलोड किया गया</string>
-    <string name="let_s_go">Let \\\ &amp;#x27;s जाओ</string>
+    <string name="let_s_go">चलो चलते हैं</string>
     <string name="thank_you">धन्यवाद!</string>
     <string name="documents_uploaded_long">जैसे-जैसे आपके दस्तावेज़ सत्यापित होते जाएंगे, आप अपने गिग्स को शुरू कर पाएंगे।</string>
-    <string name="under_verification">Under Verification</string>
-    <string name="verifying">Verifying</string>
+    <string name="under_verification">सत्यापन के तहत</string>
+    <string name="verifying">सत्यापन</string>
 
     <string name="valid_upto">Valid Upto :</string>
     <string name="giger_since">Giger Since</string>
     <string name="gig_id">Gig Id :</string>
     <string name="gigforce_pvt_ltd">Gigforce Pvt. Ltd.</string>
     <string name="issued_on">Issued On</string>
-    <string name="select_start_date">Please select start date first</string>
+    <string name="go_to_settings">सेटिंग्स में जाओ</string>
+    <string name="camera_and_audtio_permission_required_to_access_camera">कैमरा और ऑडियो अनुमति वीडियो रिकॉर्ड करने के लिए आवश्यक है</string>
 
 </resources>

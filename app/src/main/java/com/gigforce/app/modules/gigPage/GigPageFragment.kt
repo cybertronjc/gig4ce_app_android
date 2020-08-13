@@ -33,10 +33,7 @@ import com.gigforce.app.modules.gigPage.models.Gig
 import com.gigforce.app.modules.gigPage.models.GigAttendance
 import com.gigforce.app.modules.markattendance.ImageCaptureActivity
 import com.gigforce.app.modules.roster.inflate
-import com.gigforce.app.utils.DateHelper
-import com.gigforce.app.utils.Lce
-import com.gigforce.app.utils.TextDrawable
-import com.gigforce.app.utils.ViewFullScreenImageDialogFragment
+import com.gigforce.app.utils.*
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -44,6 +41,7 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.storage.FirebaseStorage
 import com.ncorti.slidetoact.SlideToActView
 import kotlinx.android.synthetic.main.fragment_gig_page_present.*
@@ -119,7 +117,7 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
         }
 
         contactUsLayout.setOnClickListener {
-            navigate(R.id.contactScreenFragment)
+            navigate(R.id.fakeGigContactScreenFragment)
         }
 
 
@@ -140,7 +138,7 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
         }
 
         messageCardView.setOnClickListener {
-            navigate(R.id.contactScreenFragment)
+            navigate(R.id.fakeGigContactScreenFragment)
         }
 
         favoriteCB.setOnCheckedChangeListener { _, isChecked ->
@@ -322,8 +320,9 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
         if (!gig.companyLogo.isNullOrBlank()) {
             if (gig.companyLogo!!.startsWith("http", true)) {
 
-                Glide.with(requireContext())
+                GlideApp.with(requireContext())
                     .load(gig.companyLogo)
+                    .placeholder(getCircularProgressDrawable())
                     .into(companyLogoIV)
             } else {
                 FirebaseStorage.getInstance()
@@ -331,8 +330,10 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
                     .child(gig.companyLogo!!)
                     .downloadUrl
                     .addOnSuccessListener { fileUri ->
-                        Glide.with(requireContext())
+
+                        GlideApp.with(requireContext())
                             .load(fileUri)
+                            .placeholder(getCircularProgressDrawable())
                             .into(companyLogoIV)
                     }
             }
@@ -455,6 +456,7 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
         completedGigControlsLayout.gone()
         presentGigAttendanceCardView.visible()
         presentOrFutureGigControls.visible()
+        hideFeedbackOption()
 
         if (gig.isCheckInAndCheckOutMarked()) {
             //Attendance have been marked show it
@@ -497,7 +499,7 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
     private fun showPastgigDetails(gig: Gig) {
         checkInCheckOutSliderBtn.gone()
         presentOrFutureGigControls.gone()
-
+        showFeedBackOption()
 
         completedGigControlsLayout.visible()
         bt_download_id_gig_past_gigs.visible()
@@ -555,6 +557,7 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
         checkInCheckOutSliderBtn.gone()
         completedGigControlsLayout.gone()
         presentGigAttendanceCardView.gone()
+        hideFeedbackOption()
         presentOrFutureGigControls.visible()
 
         val timeLeft = gig.startDateTime!!.toDate().time - Date().time
@@ -597,7 +600,7 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
                     )
 
                     inflatedImageView.setOnClickListener(onClickImageListener)
-                    // inflatedImageView.findViewById<View>(R.id.ic_delete_btn).setOnClickListener(onDeleteImageClickImageListener)
+                    inflatedImageView.findViewById<View>(R.id.ic_delete_btn).setOnClickListener(onDeleteUserReceivedFeedbackClickImageListener)
 
                     inflatedImageView.tag = it.toString()
 
@@ -644,7 +647,7 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
                     )
 
                     inflatedImageView.setOnClickListener(onClickImageListener)
-                    // inflatedImageView.findViewById<View>(R.id.ic_delete_btn).setOnClickListener(onDeleteImageClickImageListener)
+                     inflatedImageView.findViewById<View>(R.id.ic_delete_btn).setOnClickListener(onDeleteUserFeedbackClickImageListener)
 
                     inflatedImageView.tag = it.toString()
 
@@ -675,6 +678,40 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
         ViewFullScreenImageDialogFragment.showImage(childFragmentManager, uri)
     }
 
+    private val onDeleteUserFeedbackClickImageListener = View.OnClickListener { deleteImageView ->
+        //TAG INFO - Parent Container Layout have Fixed
+
+        val parentLinearLayout : View = deleteImageView.parent as View
+        val imageNameTV : TextView = parentLinearLayout.findViewById(R.id.imageNameTV)
+
+        val attachmentToDeleteName = imageNameTV.text.toString()
+
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle("Alert")
+            .setMessage("Remove Attachment : $attachmentToDeleteName ?")
+            .setPositiveButton("Yes"){ _,_ ->
+                viewModel.deleteUserFeedbackAttachment(gigId,attachmentToDeleteName)
+            }
+            .setNegativeButton("No"){_,_ ->}
+            .show()
+    }
+
+    private val onDeleteUserReceivedFeedbackClickImageListener = View.OnClickListener { deleteImageView ->
+        //TAG INFO - Parent Container Layout have Fixed
+        val parentLinearLayout : View = deleteImageView.parent as View
+        val imageNameTV : TextView = parentLinearLayout.findViewById(R.id.imageNameTV)
+
+        val attachmentToDeleteName = imageNameTV.text.toString()
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle("Alert")
+            .setMessage("Remove Attachment : $attachmentToDeleteName ?")
+            .setPositiveButton("Yes"){ _,_ ->
+                viewModel.deleteUserReceivedFeedbackAttachment(gigId,attachmentToDeleteName)
+            }
+            .setNegativeButton("No"){_,_ ->}
+            .show()
+    }
+
     private fun inflateLocationPics(locationPictures: List<String>) = locationPictures.forEach {
         locationImageContainer.inflate(R.layout.layout_gig_location_picture_item, true)
         val gigItem: View =
@@ -686,8 +723,9 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
         if (it.startsWith("http", true)) {
             gigItem.tag = it
 
-            Glide.with(requireContext())
+            GlideApp.with(requireContext())
                 .load(it)
+                .placeholder(getCircularProgressDrawable())
                 .into(locationImageView)
         } else {
             FirebaseStorage.getInstance()
@@ -695,8 +733,10 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
                 .child(it)
                 .downloadUrl
                 .addOnSuccessListener { fileUri ->
-                    Glide.with(requireContext())
+
+                    GlideApp.with(requireContext())
                         .load(fileUri)
+                        .placeholder(getCircularProgressDrawable())
                         .into(locationImageView)
 
                     (locationImageView.parent as View).tag = fileUri.toString()
@@ -753,6 +793,22 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
             gigHighlightsContainer.getChildAt(gigHighlightsContainer.childCount - 1) as LinearLayout
         val gigTextTV: TextView = gigItem.findViewById(R.id.text)
         gigTextTV.text = it
+    }
+
+    private fun hideFeedbackOption(){
+        right_arrow2.gone()
+        provide_fb_txt.gone()
+        contact_icon.gone()
+        provide_feedback.gone()
+        textView127.gone()
+    }
+
+    private fun showFeedBackOption(){
+        right_arrow2.visible()
+        provide_fb_txt.visible()
+        contact_icon.visible()
+        provide_feedback.visible()
+        textView127.visible()
     }
 
     private val dateFormatter = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
