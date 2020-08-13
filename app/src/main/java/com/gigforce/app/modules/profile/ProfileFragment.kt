@@ -129,7 +129,9 @@ class ProfileFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val viewModel: ProfileViewModel by activityViewModels<ProfileViewModel>()
-
+        location_card.setOnClickListener{
+            showToast("Work in progress")
+        }
         // load user data
         viewModel.getProfileData().observe(viewLifecycleOwner, Observer { profile ->
             layout.gigger_rating.text =
