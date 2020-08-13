@@ -1,13 +1,10 @@
 package com.gigforce.app.modules.roster
 
 import android.content.Context
-import android.content.res.ColorStateList
 import android.os.Build
 import android.util.AttributeSet
-import android.util.Log
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
@@ -16,27 +13,31 @@ import com.gigforce.app.utils.DropdownAdapter
 import com.google.android.material.card.MaterialCardView
 import kotlinx.android.synthetic.main.day_view_top_bar.view.*
 import java.time.LocalDateTime
-import kotlin.collections.ArrayList
 
 @RequiresApi(Build.VERSION_CODES.O)
-class RosterTopBar: MaterialCardView {
-    constructor(context: Context): super(context)
-    constructor(context: Context, attrs: AttributeSet): super(context, attrs)
+class RosterTopBar : MaterialCardView {
+    constructor(context: Context) : super(context)
+    constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
 
     val datetime = LocalDateTime.now()
 
-    var monthTemplate = ArrayList<String> (
-        listOf("January", "February", "March", "April", "May",
+    var monthTemplate = ArrayList<String>(
+        listOf(
+            "January", "February", "March", "April", "May",
             "June", "July", "August", "September", "October",
-            "November", "December")
+            "November", "December"
+        )
     )
 
-    var months = ArrayList<String> (
-        listOf("January", "February", "March", "April", "May",
+    var months = ArrayList<String>(
+        listOf(
+            "January", "February", "March", "April", "May",
             "June", "July", "August", "September", "October",
-            "November", "December"))
+            "November", "December"
+        )
+    )
 
-    var days = ArrayList<String> (
+    var days = ArrayList<String>(
         listOf("Mon", "Tue", "Wed", "Thur", "Fri", "Sat", "Sun")
     )
 
@@ -72,7 +73,7 @@ class RosterTopBar: MaterialCardView {
         }
 
     var isCurrentDay: Boolean = false
-        set(value){
+        set(value) {
             field = value
             if (!value) {
                 date_text.setTextColor(resources.getColor(R.color.gray_color_calendar))
@@ -86,7 +87,7 @@ class RosterTopBar: MaterialCardView {
     var isFutureDate: Boolean = false
         set(value) {
             field = value
-            if(value) {
+            if (value) {
                 date_text.setTextColor(resources.getColor(R.color.black))
                 day_text.setTextColor(resources.getColor(R.color.gray_color_calendar))
             }
@@ -109,6 +110,8 @@ class RosterTopBar: MaterialCardView {
         set(value) {
             field = value
             available_toggle.isClickable = !value
+//            available_toggle.isEnabled = !value
+            available_toggle.alpha = if (value) 0.3f else 1f
         }
 
     var fullDayGigCard: MaterialCardView? = null
@@ -118,7 +121,8 @@ class RosterTopBar: MaterialCardView {
             value?.let {
                 value.id = View.generateViewId()
                 full_day_gig.addView(value)
-                value.layoutParams = ConstraintLayout.LayoutParams(LayoutParams.MATCH_PARENT, value.height)
+                value.layoutParams =
+                    ConstraintLayout.LayoutParams(LayoutParams.MATCH_PARENT, value.height)
                 val constraintSet = ConstraintSet()
                 constraintSet.clone(full_day_gig)
                 constraintSet.connect(
