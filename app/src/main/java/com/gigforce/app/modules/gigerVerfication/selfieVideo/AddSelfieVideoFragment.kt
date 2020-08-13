@@ -48,6 +48,7 @@ class AddSelfieVideoFragment : BaseFragment(), CaptureVideoFragmentEventListener
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        pb_selfie_video.visibility=View.VISIBLE
         initViews()
         // addCaptureVideoFragment()
         initViewModel()
@@ -99,6 +100,7 @@ class AddSelfieVideoFragment : BaseFragment(), CaptureVideoFragmentEventListener
         )
         transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
         transaction.commit()
+
     }
 
     private fun initViewModel() {
@@ -123,7 +125,7 @@ class AddSelfieVideoFragment : BaseFragment(), CaptureVideoFragmentEventListener
 
         viewModel.gigerVerificationStatus
             .observe(viewLifecycleOwner, Observer {
-
+                pb_selfie_video.visibility=View.GONE
                 this.gigerVerificationStatus = it
                 if (it.selfieVideoUploaded) {
                     selfieVideoSubmitSliderBtn.text = getString(R.string.update)

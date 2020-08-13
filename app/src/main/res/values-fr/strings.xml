@@ -297,4 +297,5 @@
     <string name="bank_details_uploaded">Bank details Uploaded</string>
     <string name="under_verification">Under Verification</string>
     <string name="verifying">Verifying</string>
+    <string name="download_id_card">Download Id Card</string>
 </resources>

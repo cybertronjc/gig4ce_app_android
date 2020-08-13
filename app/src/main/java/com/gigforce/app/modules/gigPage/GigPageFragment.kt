@@ -144,9 +144,12 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
         favoriteCB.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked && gig?.isFavourite!!.not()) {
                 viewModel.favoriteGig(gigId)
+                favoriteCB.buttonTintList=resources.getColorStateList(R.color.lipstick)
                 showToast("Marked As Favourite")
             } else if (!isChecked && gig?.isFavourite!!) {
                 viewModel.unFavoriteGig(gigId)
+                favoriteCB.buttonTintList=resources.getColorStateList(R.color.black)
+
                 showToast("Unmarked As Favourite")
             }
         }
