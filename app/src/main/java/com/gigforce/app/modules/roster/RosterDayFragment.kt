@@ -411,8 +411,15 @@ class RosterDayFragment : RosterBaseFragment() {
 
             top_bar.isCurrentDay = isSameDate(it, actualDateTime)
             top_bar.isFutureDate = isMoreDate(it, actualDateTime)
-
-            top_bar.toggleInactive = isLessDate(it, actualDateTime)
+            var calendar = Calendar.getInstance()
+            calendar.set(Calendar.DATE, it.dayOfMonth)
+            calendar.set(Calendar.MONTH, it.monthValue - 1)
+            calendar.set(Calendar.YEAR, it.year)
+            var calendarAct = Calendar.getInstance()
+            calendarAct.set(Calendar.DATE, actualDateTime.dayOfMonth)
+            calendarAct.set(Calendar.MONTH, actualDateTime.monthValue - 1)
+            calendarAct.set(Calendar.YEAR, actualDateTime.year)
+            top_bar.toggleInactive = calendar.time.before(calendarAct.time)
 
 
             //dayTag = "${activeDateTime.year}${activeDateTime.monthValue}${activeDateTime.dayOfMonth}"
