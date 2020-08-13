@@ -21,6 +21,7 @@
             android:background="@color/white"
             app:navigationIcon="@drawable/ic_arrow_back_black"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            app:contentInsetStartWithNavigation="@dimen/size_19"
             app:title="@string/giger_verification"
             app:titleTextColor="@color/black" />
     </com.google.android.material.appbar.AppBarLayout>

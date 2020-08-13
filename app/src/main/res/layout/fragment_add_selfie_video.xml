@@ -19,9 +19,11 @@
             android:layout_width="match_parent"
             android:layout_height="?android:attr/actionBarSize"
             android:background="@color/white"
+            app:contentInsetStartWithNavigation="@dimen/size_19"
             app:navigationIcon="@drawable/ic_arrow_back_black"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
             app:title="@string/giger_verification"
+            app:titleMarginStart="0dp"
             app:titleTextColor="@color/black" />
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -46,9 +48,9 @@
         android:layout_height="14dp"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="13dp"
-        android:src="@drawable/ic_time"
         android:clickable="true"
         android:focusable="true"
+        android:src="@drawable/ic_time"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/appBar" />
 
@@ -59,15 +61,15 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="14dp"
         android:layout_marginRight="4dp"
-        android:letterSpacing="-0.01"
-        android:text="@string/how_to_record_selfie_video"
-        android:textColor="@color/battle_ship_grey"
-        android:textSize="12sp"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
         android:clickable="true"
         android:focusable="true"
         android:fontFamily="@font/lato"
+        android:letterSpacing="-0.01"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:text="@string/how_to_record_selfie_video"
+        android:textColor="@color/battle_ship_grey"
+        android:textSize="12sp"
         app:layout_constraintEnd_toStartOf="@+id/helpIconIV"
         app:layout_constraintTop_toBottomOf="@id/appBar" />
 
@@ -92,26 +94,39 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="30dp"
         app:border_radius="8dp"
+        app:icon_margin="@dimen/size_7"
         app:inner_color="#888888"
         app:layout_constraintBottom_toBottomOf="parent"
         app:outer_color="#dddddd"
         app:slider_height="60dp"
+
         app:slider_icon="@drawable/ic_arrow_forward_white"
         app:slider_icon_color="@color/white"
-        app:text="@string/save_all_caps" />
+        app:text="@string/save_all_caps"
+        app:text_size="@dimen/font_16" />
 
     <com.google.android.material.checkbox.MaterialCheckBox
         android:id="@+id/selfieVideoCorrectCB"
+        style="@style/Theme.CheckBoxLipstickPink"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="13dp"
         android:layout_marginBottom="18dp"
         android:fontFamily="@font/lato"
-        style="@style/Theme.CheckBoxLipstickPink"
         android:text="@string/yes_i_confirm_the_data_is_correct"
         app:layout_constraintBottom_toTopOf="@id/selfieVideoSubmitSliderBtn"
         app:layout_constraintVertical_bias="0.98"
         tools:layout_editor_absoluteX="0dp" />
+
+    <ProgressBar
+        android:id="@+id/pb_selfie_video"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
