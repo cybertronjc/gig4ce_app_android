@@ -241,9 +241,9 @@ class CalendarHomeScreen : BaseFragment(),
 //                viewModel.setDataModel(homeDataModel.all_gigs)
                 initializeViews()
                 calendarView.setGigData(viewModel.arrMainHomeDataModel!!)
-                var layoutManager = rv_.layoutManager as LinearLayoutManager
-                var data = recyclerGenericAdapter.list.get(layoutManager.findFirstVisibleItemPosition())
-                calendarView.setCurrentVisibleDate(data.getDateObj())
+//                var layoutManager = rv_.layoutManager as LinearLayoutManager
+//                var data = recyclerGenericAdapter.list.get(layoutManager.findFirstVisibleItemPosition())
+//                calendarView.setCurrentVisibleDate(data.getDateObj())
             }
         })
 

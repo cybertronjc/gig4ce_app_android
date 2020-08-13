@@ -296,7 +296,7 @@ class CalendarView : LinearLayout {
         this.arrMainHomeDataModel = arrMainHomeDataModel
         calendarData = Calendar.getInstance()
         calendarData.set(Calendar.DATE, 1)
-        calendarData.set(Calendar.YEAR, 2019)
+//        calendarData.set(Calendar.YEAR, 2019)
         recyclerGenericAdapter.list = getDefaultItems()
         recyclerGenericAdapter.notifyDataSetChanged()
     }
