@@ -37,18 +37,22 @@
             app:layout_constraintTop_toTopOf="parent" />
 
 
-
         <TextView
             android:id="@+id/textView41"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
             android:layout_marginTop="15dp"
+            android:paddingEnd="5dp"
             android:fontFamily="@font/lato_bold"
             android:letterSpacing="0.02"
-            android:text="Urgent Unloading"
+            android:scrollHorizontally="true"
+            android:ellipsize="end"
+            android:maxLines="1"
+            tools:text="Urgent Unloading"
             android:textColor="@color/upcoming_gig_title"
             android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/companyLogoIV"
             app:layout_constraintTop_toTopOf="parent" />
 
