@@ -485,4 +485,5 @@
     <string name="camera_and_audtio_permission_required_to_access_camera">Camera and Audio Permission Required To Record Video</string>
     <string name="select_start_date">Please select start date first</string>
     <string name="download_id_card">Download Id Card</string>
+    <string name="how_to_rec_selfie_video_content">\nRecord a 10-second video of yourself\nFace the camera and say “Hi, I’m (your name) and I like to do (mention 2 things you like to do.)</string>
 </resources>
