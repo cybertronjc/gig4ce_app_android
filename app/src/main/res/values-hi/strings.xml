@@ -382,7 +382,7 @@
     <string name="click_or_select_bank_passbook">पहले अपनी पासबुक छवि पर क्लिक करें या चयन करें</string>
     <string name="your_are_reuploading_bank_details">आप अपने बैंक विवरण पुनः अपलोड कर रहे हैं, उन्हें एक बार फिर से सत्यापित किया जाएगा, जिसमें 7 दिन तक का समय लग सकता है</string>
     <string name="bank_details_uploaded">बैंक विवरण अपलोड किया गया</string>
-    <string name="let_s_go">चलो चलते हैं</string>
+    <string name="let_s_go">ठीक हैं</string>
     <string name="thank_you">धन्यवाद!</string>
     <string name="documents_uploaded_long">जैसे-जैसे आपके दस्तावेज़ सत्यापित होते जाएंगे, आप अपने गिग्स को शुरू कर पाएंगे।</string>
     <string name="under_verification">सत्यापन के तहत</string>
