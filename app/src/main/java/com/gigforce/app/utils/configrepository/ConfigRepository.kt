@@ -7,7 +7,7 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.EventListener
 
 class ConfigRepository : BaseFirestoreDBRepository {
-    var COLLECTION_NAME = "configurations";
+    var COLLECTION_NAME = "Configuration";
     var CUSTOMUID = "N9EzW0SOAhOLVI1oA9Pu"
 
     companion object {
