@@ -25,6 +25,7 @@ import com.gigforce.app.utils.Lse
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.storage.FirebaseStorage
 import com.ncorti.slidetoact.SlideToActView
+import kotlinx.android.synthetic.main.fragment_add_selfie_play_selfie_video.*
 import kotlinx.android.synthetic.main.fragment_add_selfie_video.*
 import java.io.File
 
@@ -48,7 +49,7 @@ class AddSelfieVideoFragment : BaseFragment(), CaptureVideoFragmentEventListener
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        pb_selfie_video.visibility=View.VISIBLE
+        pb_selfie_video.visibility = View.VISIBLE
         initViews()
         // addCaptureVideoFragment()
         initViewModel()
@@ -123,9 +124,16 @@ class AddSelfieVideoFragment : BaseFragment(), CaptureVideoFragmentEventListener
                 }
             })
 
+        viewModel.selfieVideoUploadProgressState.observe(
+            viewLifecycleOwner, Observer {
+                uploadStatusTV.text = it
+                Log.d("TAG", it)
+            }
+        )
+
         viewModel.gigerVerificationStatus
             .observe(viewLifecycleOwner, Observer {
-                pb_selfie_video.visibility=View.GONE
+                pb_selfie_video.visibility = View.GONE
                 this.gigerVerificationStatus = it
                 if (it.selfieVideoUploaded) {
                     selfieVideoSubmitSliderBtn.text = getString(R.string.update)

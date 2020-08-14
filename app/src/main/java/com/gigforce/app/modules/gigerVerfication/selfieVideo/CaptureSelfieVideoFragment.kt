@@ -32,12 +32,13 @@ class CaptureSelfieVideoFragment : BaseFragment() {
 
     private lateinit var mCaptureVideoFragmentEventListener: CaptureVideoFragmentEventListener
     private var capturingVideo = false
+    private var cameraInitiated = false
 
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ) = inflateView(R.layout.fragment_add_selfie_capture_video, inflater, container)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -74,19 +75,19 @@ class CaptureSelfieVideoFragment : BaseFragment() {
     }
 
     val timer =
-            object : CountDownTimer(SELFIE_VIDEO_TIME.toLong() + 1000, 1000) {
-                override fun onFinish() {
-                    countDownTimerTV.text = "00:00"
-                }
-
-                override fun onTick(millisUntilFinished: Long) {
-
-                    if (millisUntilFinished >= 10_000)
-                        countDownTimerTV.text = "00:${millisUntilFinished / 1000}"
-                    else
-                        countDownTimerTV.text = "00:0${millisUntilFinished / 1000}"
-                }
+        object : CountDownTimer(SELFIE_VIDEO_TIME.toLong() + 1000, 1000) {
+            override fun onFinish() {
+                countDownTimerTV.text = "00:00"
             }
+
+            override fun onTick(millisUntilFinished: Long) {
+
+                if (millisUntilFinished >= 10_000)
+                    countDownTimerTV.text = "00:${millisUntilFinished / 1000}"
+                else
+                    countDownTimerTV.text = "00:0${millisUntilFinished / 1000}"
+            }
+        }
 
     private fun startTimer() {
         timer.start()
@@ -94,11 +95,11 @@ class CaptureSelfieVideoFragment : BaseFragment() {
 
     private fun hasCameraPermissions(): Boolean {
         return ContextCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.CAMERA
+            requireContext(),
+            Manifest.permission.CAMERA
         ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.RECORD_AUDIO
+            requireContext(),
+            Manifest.permission.RECORD_AUDIO
         ) == PackageManager.PERMISSION_GRANTED
     }
 
@@ -108,18 +109,23 @@ class CaptureSelfieVideoFragment : BaseFragment() {
         cameraPermissionLayout.visible()
 
         requestPermissions(
-                arrayOf(
-                        Manifest.permission.CAMERA,
-                        Manifest.permission.RECORD_AUDIO
-                ),
-                REQUEST_CAMERA_PERMISSION
+            arrayOf(
+                Manifest.permission.CAMERA,
+                Manifest.permission.RECORD_AUDIO
+            ),
+            REQUEST_CAMERA_PERMISSION
         )
     }
 
     override fun onResume() {
         super.onResume()
-        if (hasCameraPermissions())
-            initCamera()
+
+        if (hasCameraPermissions()) {
+
+            if (!cameraInitiated)
+                initCamera()
+        } else
+            showPermissionLayout()
     }
 
     override fun onDestroy() {
@@ -128,8 +134,8 @@ class CaptureSelfieVideoFragment : BaseFragment() {
     }
 
     override fun onRequestPermissionsResult(
-            requestCode: Int,
-            permissions: Array<String>, grantResults: IntArray
+        requestCode: Int,
+        permissions: Array<String>, grantResults: IntArray
     ) {
         when (requestCode) {
             REQUEST_CAMERA_PERMISSION -> {
@@ -157,6 +163,9 @@ class CaptureSelfieVideoFragment : BaseFragment() {
         CameraLogger.setLogLevel(CameraLogger.LEVEL_VERBOSE)
         cameraView.setLifecycleOwner(this)
         cameraView.addCameraListener(CameraListener())
+
+        cameraInitiated = true
+        Log.d("Logger", "CaptureSelfieVideoFragment : Camera Initiated")
     }
 
     private fun showPermissionLayout() {
@@ -196,14 +205,14 @@ class CaptureSelfieVideoFragment : BaseFragment() {
             return
 
         val videoPath =
-                File(requireContext().filesDir, "vid_${DateHelper.getFullDateTimeStamp()}.mp4")
+            File(requireContext().filesDir, "vid_${DateHelper.getFullDateTimeStamp()}.mp4")
         cameraView.takeVideo(videoPath, SELFIE_VIDEO_TIME)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if(requestCode == REQUEST_CAMERA_MANUAL){
+        if (requestCode == REQUEST_CAMERA_MANUAL) {
             if (hasCameraPermissions())
                 initCamera()
         }
@@ -226,9 +235,9 @@ class CaptureSelfieVideoFragment : BaseFragment() {
 
         fun getInstance(captureVideoFragmentEventListener: CaptureVideoFragmentEventListener): CaptureSelfieVideoFragment {
             return CaptureSelfieVideoFragment()
-                    .apply {
-                        mCaptureVideoFragmentEventListener = captureVideoFragmentEventListener
-                    }
+                .apply {
+                    mCaptureVideoFragmentEventListener = captureVideoFragmentEventListener
+                }
         }
     }
 
