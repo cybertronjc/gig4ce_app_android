@@ -45,6 +45,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/add_mother_tongue_text"
+            android:buttonTint="@color/warm_grey_two"
             style="@style/LatoRegularCardText12" />
 
         <TextView

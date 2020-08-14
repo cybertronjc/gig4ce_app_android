@@ -69,6 +69,7 @@
             android:textAlignment="gravity"
             android:textSize="20sp"
             android:textColor="#ffffff"
+            android:letterSpacing="0"
             android:lineSpacingExtra="21sp"
             android:paddingStart="3dp"
             android:paddingEnd="3dp"
