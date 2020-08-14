@@ -356,7 +356,7 @@
     <string name="pan_details_uploaded">पैन कार्ड विवरण अपलोड</string>
     <string name="unable_to_capture_image">छवि पर कब्जा करने में असमर्थ</string>
     <string name="pan_card_image">पैन कार्ड की छवि</string>
-    <string name="got_it">मिल गया</string>
+    <string name="got_it">ठीक हैं</string>
     <string name="aadhar_card_front_image">आधार कार्ड (फ्रंट इमेज)</string>
     <string name="aadhar_card_back_image">आधार कार्ड (बैक इमेज)</string>
     <string name="why_we_need_this_aadhar">प्रोफ़ाइल सत्यापन के लिए आधार या ड्राइवर का लाइसेंस अपलोड करना अनिवार्य है। आधार कार्ड आपके नाम, जन्म तिथि, पते और अन्य विवरणों को सत्यापित करने में मदद करता है।
@@ -395,5 +395,8 @@
     <string name="issued_on">Issued On</string>
     <string name="go_to_settings">सेटिंग्स में जाओ</string>
     <string name="camera_and_audtio_permission_required_to_access_camera">कैमरा और ऑडियो अनुमति वीडियो रिकॉर्ड करने के लिए आवश्यक है</string>
+    <string name="how_to_rec_selfie_video_content">\n
+आपकी एक 10 सेकंड की वीडियो रिकॉर्ड करें।\n
+सेल्फी मोड में कैमरे की ओर देखें और कहें, "हैलो, मैं (आपका नाम) हूं और मुझे ये करना पसंद है - (2 चीजें जो आप करना चाहते हैं उनका उल्लेख करें।)</string>
 
 </resources>

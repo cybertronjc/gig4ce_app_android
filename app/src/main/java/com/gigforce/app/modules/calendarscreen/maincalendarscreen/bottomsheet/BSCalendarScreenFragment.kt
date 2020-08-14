@@ -483,7 +483,8 @@ class BSCalendarScreenFragment : BaseFragment() {
             RecyclerGenericAdapter<LandingScreenFragment.TitleSubtitleModel>(
                 activity?.applicationContext,
                 PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
-                    navigate(R.id.mainLearningFragment)
+                    showToast("This page are inactive. We’ll activate it in a few weeks")
+                  //  navigate(R.id.mainLearningFragment)
                 },
                 RecyclerGenericAdapter.ItemInterface<LandingScreenFragment.TitleSubtitleModel?> { obj, viewHolder, position ->
                     var view = getView(viewHolder, R.id.card_view)

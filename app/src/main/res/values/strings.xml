@@ -444,17 +444,17 @@
     <string name="video_recorded">Video Recorded</string>
     <string name="why_do_we_need_this_pan">A PAN card is mandatory for profile verification. It helps verify your name and date of birth and also helps with payments to your wallet.</string>
     <string name="alert">Alert</string>
-    <string name="you_are_reuploading_pan_card">You are re-uploading your PAN details, they will be verified once again, that can take up to 7 days</string>
+    <string name="you_are_reuploading_pan_card">You are re-uploading your PAN details. They will be verified once again, which may take up to 7 days.</string>
     <string name="enter_valid_pan">Enter Valid PAN Card No</string>
     <string name="click_select_pan_image">Click Or Select your Pan card Image first</string>
     <string name="pan_details_uploaded">Pan Card Details Uploaded</string>
-    <string name="unable_to_capture_image">Unable to Capture Image</string>
+    <string name="unable_to_capture_image">Unable to capture image</string>
     <string name="got_it">Got it</string>
     <string name="aadhar_card_front_image">Aadhar Card (Front Image)</string>
     <string name="aadhar_card_back_image">Aadhar Card (Back Image)</string>
     <string name="why_we_need_this_aadhar">Uploading either Aadhar or Driver’s license is mandatory for profile verification. Aadhar card helps verify your name, date of birth, address, and other details.</string>
     <string name="aadhar_card_details_uploaded">Aadhaar Card Details Uploaded</string>
-    <string name="you_are_reuploading_aadhar">You are re-uploading your Aadhar details, they will be verified once again, that can take up to 7 days</string>
+    <string name="you_are_reuploading_aadhar">You are re-uploading your Aadhar details. They will be verified once again, which may take up to 7 days.</string>
     <string name="select_or_capture_both_sides_of_aadhar">Select or capture both sides of Aadhar Card</string>
     <string name="enter_valid_aadhar_no">Enter Valid Aadhar Card No</string>
     <string name="video_uploaded">Video Uploaded</string>
@@ -462,7 +462,7 @@
     <string name="dl_image_front_side">Driving License (Front Side)</string>
     <string name="dl_image_back_side">Driving License (Back Side)</string>
     <string name="dl_details_uploaded">Driving License Details Uploaded</string>
-    <string name="reuploading_driving_license">You are re-uploading your Driving License details, they will be verified once again, that can take up to 7 days</string>
+    <string name="reuploading_driving_license">You are re-uploading your Driving License details. They will be verified once again, which may take up to 7 days.</string>
     <string name="capture_both_sides_dl">Select or capture both sides of Driving License</string>
     <string name="enter_valid_dl">Enter Valid Driving License</string>
     <string name="select_dl_state">Select Driving License State</string>
@@ -472,7 +472,7 @@
     <string name="bank_name_too_short">Bank name is too short</string>
     <string name="enter_valid_acc_no">Enter A Valid Account No</string>
     <string name="click_or_select_bank_passbook">Click Or Select your Passbook Image first</string>
-    <string name="your_are_reuploading_bank_details">You are re-uploading your Bank details, they will be verified once again, that can take up to 7 days</string>
+    <string name="your_are_reuploading_bank_details">You are re-uploading your Bank details. They will be verified once again, which may take up to 7 days.</string>
     <string name="bank_details_uploaded">Bank details Uploaded</string>
     <string name="under_verification">Under Verification</string>
     <string name="verifying">Verifying</string>
@@ -485,4 +485,5 @@
     <string name="camera_and_audtio_permission_required_to_access_camera">Camera and Audio Permission Required To Record Video</string>
     <string name="select_start_date">Please select start date first</string>
     <string name="download_id_card">Download Id Card</string>
+    <string name="how_to_rec_selfie_video_content">\nRecord a 10-second video of yourself\nFace the camera and say “Hi, I’m (your name) and I like to do (mention 2 things you like to do.)</string>
 </resources>

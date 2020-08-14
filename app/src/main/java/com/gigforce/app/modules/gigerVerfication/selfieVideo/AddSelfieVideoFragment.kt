@@ -20,6 +20,7 @@ import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.gigerVerfication.GigerVerificationStatus
+import com.gigforce.app.modules.gigerVerfication.WhyWeNeedThisBottomSheet
 import com.gigforce.app.utils.DateHelper
 import com.gigforce.app.utils.Lse
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -224,34 +225,20 @@ class AddSelfieVideoFragment : BaseFragment(), CaptureVideoFragmentEventListener
 
         helpIconIV.setOnClickListener {
 
-            val id = "usZgFZga7xE"
-            val appIntent =
-                Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:$id"))
-            val webIntent = Intent(
-                Intent.ACTION_VIEW,
-                Uri.parse("http://www.youtube.com/watch?v=$id")
+            WhyWeNeedThisBottomSheet.launch(
+                childFragmentManager = childFragmentManager,
+                title = getString(R.string.how_to_record_selfie_video),
+                content = getString(R.string.how_to_rec_selfie_video_content)
             )
-            try {
-                requireContext().startActivity(appIntent)
-            } catch (ex: ActivityNotFoundException) {
-                requireContext().startActivity(webIntent)
-            }
         }
 
         howToRecordVideoBtn.setOnClickListener {
 
-            val id = "usZgFZga7xE"
-            val appIntent =
-                Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:$id"))
-            val webIntent = Intent(
-                Intent.ACTION_VIEW,
-                Uri.parse("http://www.youtube.com/watch?v=$id")
+            WhyWeNeedThisBottomSheet.launch(
+                childFragmentManager = childFragmentManager,
+                title = getString(R.string.how_to_record_selfie_video),
+                content = getString(R.string.how_to_rec_selfie_video_content)
             )
-            try {
-                requireContext().startActivity(appIntent)
-            } catch (ex: ActivityNotFoundException) {
-                requireContext().startActivity(webIntent)
-            }
         }
     }
 
