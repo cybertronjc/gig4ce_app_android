@@ -467,4 +467,26 @@
     <string name="proceed">PROCEED</string>
     <string name="achievements_colon">Achievements:</string>
     <string name="add_hashtags">Add hashtags</string>
+    <string name="err_driving_license">Error : Uploaded Image is not a Driving License Image</string>
+    <string name="recommended_learnings">Recommended Learnings</string>
+    <string name="most_popular_learnings">Most Popular Learnings</string>
+    <string name="achieve_retail_goal">How to acheive your retail goal market?</string>
+    <string name="industry_based">Industry Based</string>
+    <string name="apply_driving_license">How to apply for driving license?</string>
+    <string name="role_based">Role Based</string>
+    <string name="retail_sales_executive">Retail Sales Executive</string>
+    <string name="driver">Driver</string>
+    <string name="accept_ride">How to accept a ride</string>
+    <string name="delivery">Delivery</string>
+    <string name="maintaining_safety">Maintaining hygiene and safety at gig</string>
+    <string name="cook">Cook</string>
+    <string name="cook_salt_meals">How to cook low salt meals</string>
+    <string name="basrista">Barista</string>
+    <string name="prepare_coffee">How to prepare coffee?</string>
+    <string name="housekeeping">Housekeeping</string>
+    <string name="clean_floors">Selecting the right reagent to clean different floors?</string>
+    <string name="lessons">Lessons</string>
+    <string name="invite_friends">Invite Friends...</string>
+    <string name="refresh">Referesh...</string>
+    <string name="contacts">Contacts</string>
 </resources>

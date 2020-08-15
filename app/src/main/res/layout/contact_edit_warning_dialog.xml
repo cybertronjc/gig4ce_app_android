@@ -9,7 +9,7 @@
         android:layout_width="336dp"
         android:layout_height="56dp"
         android:drawableStart="@drawable/ic_warning"
-        android:background="#e94b81"
+        android:background="@color/lipstick"
         android:paddingStart="16dp"
         android:gravity="center_vertical"
         android:textColor="@color/white"

@@ -113,11 +113,11 @@ class ContactScreenFragment : BaseFragment(), OnContactClickListener {
         return when (item.itemId)
         {
             R.id.action_invite_friends -> {
-                showToast("Invite Friends...")
+                showToast(getString(R.string.invite_friends))
                 true
             }
             R.id.action_referesh -> {
-                showToast("Referesh...")
+                showToast(getString(R.string.refresh))
                 true
             }
             else -> super.onOptionsItemSelected(item)

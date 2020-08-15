@@ -87,7 +87,7 @@
             android:textSize="12sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/doYouHavePassbookLabel"
-            tools:text="Error : Uploaded Image is not a Driving License Image" />
+            android:text="@string/err_driving_license" />
 
 
         <RadioGroup
@@ -188,7 +188,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/dlNoTV"
                     android:textSize="12sp"
-                    tools:text="Error : Uploaded Image is not a Driving License Image" />
+                    tools:text="@string/err_driving_license" />
 
 
                 <TextView
@@ -226,7 +226,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/dlNoTV"
                     android:textSize="12sp"
-                    tools:text="Error : Uploaded Image is not a Driving License Image" />
+                    android:text="@string/err_driving_license" />
 
 
 
@@ -266,7 +266,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/dlNoTV"
                     android:textSize="12sp"
-                    tools:text="Error : Uploaded Image is not a Driving License Image" />
+                    android:text="@string/err_driving_license" />
 
 
 
@@ -296,7 +296,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/passbookImageHolder"
             android:textSize="12sp"
-            tools:text="Error : Uploaded Image is not a Driving License Image" />
+            android:text="@string/err_driving_license" />
 
 
         <com.ncorti.slidetoact.SlideToActView
