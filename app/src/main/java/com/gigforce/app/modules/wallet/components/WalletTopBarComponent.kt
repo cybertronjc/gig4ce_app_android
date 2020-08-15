@@ -21,11 +21,16 @@ class WalletTopBarComponent: ConstraintLayout {
     }
 
     private fun displayImage() {
-        if (imageName != null) {
+        if (imageName != "avatar.jpg" && imageName != ""){
             val profilePicRef: StorageReference =
                 storage.reference.child("profile_pics").child(imageName!!)
             GlideApp.with(this.context!!)
                 .load(profilePicRef)
+                .apply(RequestOptions().circleCrop())
+                .into(profile_image)
+        } else{
+            GlideApp.with(this.context!!)
+                .load(R.drawable.avatar)
                 .apply(RequestOptions().circleCrop())
                 .into(profile_image)
         }

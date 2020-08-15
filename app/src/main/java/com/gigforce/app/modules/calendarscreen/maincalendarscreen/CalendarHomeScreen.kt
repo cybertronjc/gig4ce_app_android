@@ -273,7 +273,9 @@ class CalendarHomeScreen : BaseFragment(),
     }
 
     private fun displayImage(profileImg: String) {
-        if (profileImg != null && !profileImg.equals("")) {
+
+
+        if (profileImg != "avatar.jpg" && profileImg != "") {
             val profilePicRef: StorageReference =
                 PreferencesFragment.storage.reference.child("profile_pics").child(profileImg)
             if (profile_image != null)
@@ -281,6 +283,11 @@ class CalendarHomeScreen : BaseFragment(),
                     .load(profilePicRef)
                     .apply(RequestOptions().circleCrop())
                     .into(profile_image)
+        } else{
+            GlideApp.with(this.requireContext())
+                .load(R.drawable.avatar)
+                .apply(RequestOptions().circleCrop())
+                .into(profile_image)
         }
     }
 

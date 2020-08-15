@@ -77,7 +77,16 @@ class AroundCurrentAddressFragment : BaseFragment() {
         workFromHomeSwitch.isChecked = viewModel.getCurrentAddress()?.preferredDistanceActive!!
         preferredDistanceActive = viewModel.getCurrentAddress()?.preferredDistanceActive!!
         arround_current_add_seekbar.progress = 0
-        arround_current_add_seekbar.progress = viewModel.getCurrentAddress()?.preferred_distance!!
+
+        val progress = viewModel.getCurrentAddress()?.preferred_distance!!
+        arround_current_add_seekbar.progress = progress
+
+        val value =
+            (progress * (arround_current_add_seekbar.getWidth() - 2 * arround_current_add_seekbar.getThumbOffset())) / arround_current_add_seekbar.getMax()
+        seekbardependent.text = progress.toString() + " Km"
+        seekbardependent.setX(arround_current_add_seekbar.getX() + value + arround_current_add_seekbar.getThumbOffset() / 2)
+
+
 //        arround_current_add_seekbar.setOtherView(seekbardependent,false,"Km")
         populateAddress(viewModel.getCurrentAddress()!!)
         setVisibilityAroundCurrAdd()
