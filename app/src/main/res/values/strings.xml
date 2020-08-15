@@ -573,5 +573,6 @@
     <string name="invite_friends">Invite Friends...</string>
     <string name="refresh">Referesh...</string>
     <string name="contacts">Contacts</string>
+    <string name="last_seen_at">last seen at</string>
 
 </resources>
