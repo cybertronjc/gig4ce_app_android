@@ -179,11 +179,16 @@ class GigHistoryFragment : BaseFragment(), AdapterGigHistory.AdapterGigHistoryCa
 
     //TODO : Correct This Code After wards
     private fun displayImage(profileImg: String) {
-        if (profileImg != null && !profileImg.equals("")) {
+        if (profileImg != "avatar.jpg" && profileImg != "") {
             val profilePicRef: StorageReference =
                 PreferencesFragment.storage.reference.child("profile_pics").child(profileImg)
             GlideApp.with(this.requireContext())
                 .load(profilePicRef)
+                .apply(RequestOptions().circleCrop())
+                .into(iv_profile_image_gig_his)
+        }else{
+            GlideApp.with(this.requireContext())
+                .load(R.drawable.avatar)
                 .apply(RequestOptions().circleCrop())
                 .into(iv_profile_image_gig_his)
         }

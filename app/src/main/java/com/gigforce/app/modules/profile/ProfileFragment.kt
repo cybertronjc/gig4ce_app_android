@@ -383,12 +383,20 @@ class ProfileFragment : BaseFragment() {
 
 
     private fun loadImage(Path: String) {
-        var profilePicRef: StorageReference =
-            storage.reference.child(PROFILE_PICTURE_FOLDER).child(Path)
-        if(layout.profile_avatar!=null)
-        GlideApp.with(this.requireContext())
-            .load(profilePicRef)
-            .into(layout.profile_avatar)
+
+
+        if (Path != "avatar.jpg" && Path != "") {
+            var profilePicRef: StorageReference =
+                storage.reference.child(PROFILE_PICTURE_FOLDER).child(Path)
+            if(layout.profile_avatar!=null)
+                GlideApp.with(this.requireContext())
+                    .load(profilePicRef)
+                    .into(layout.profile_avatar)
+        }else{
+            GlideApp.with(requireContext())
+                .load(R.drawable.avatar)
+                .into(layout.profile_avatar)
+        }
     }
 
     private fun addChip(context: Context, name: String): Chip {

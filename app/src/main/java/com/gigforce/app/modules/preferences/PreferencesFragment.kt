@@ -76,11 +76,16 @@ class PreferencesFragment : BaseFragment() {
         return true
     }
     private fun displayImage(profileImg: String) {
-        if (profileImg != null && !profileImg.equals("")) {
+        if (profileImg != "avatar.jpg" && profileImg != "")  {
             val profilePicRef: StorageReference =
                 storage.reference.child("profile_pics").child(profileImg)
             GlideApp.with(this.requireContext())
                 .load(profilePicRef)
+                .apply(RequestOptions().circleCrop())
+                .into(profile_image)
+        }else{
+            GlideApp.with(this.requireContext())
+                .load(R.drawable.avatar)
                 .apply(RequestOptions().circleCrop())
                 .into(profile_image)
         }
