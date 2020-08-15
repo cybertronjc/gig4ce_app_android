@@ -8,7 +8,7 @@
         android:id="@+id/caution_text"
         android:layout_width="336dp"
         android:layout_height="56dp"
-        android:background="#e94b81"
+        android:background="@color/lipstick"
         android:drawableStart="@drawable/ic_warning"
         android:drawablePadding="@dimen/size_8"
         android:gravity="center_vertical"
