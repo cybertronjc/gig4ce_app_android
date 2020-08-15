@@ -597,6 +597,7 @@
                     android:text="Not Now"
                     android:textColor="#444444"
                     android:textSize="14sp"
+                    android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="@+id/textView119"
                     app:layout_constraintEnd_toStartOf="@+id/textView119"
                     app:layout_constraintTop_toTopOf="@+id/textView119" />
