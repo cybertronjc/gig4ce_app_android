@@ -17,6 +17,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.gigforce.app.R
+import com.gigforce.app.core.ImagePicker
 import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
 import com.gigforce.app.modules.profile.ProfileViewModel
 import com.gigforce.app.utils.GlideApp
@@ -197,18 +198,25 @@ class PhotoCrop : AppCompatActivity() {
          * Gets uri when the image is to be captured from gallery or camera
          */
         if (requestCode == CODE_IMG_GALLERY && resultCode == Activity.RESULT_OK) {
-            var imageUri: Uri? = data?.data
-            if (imageUri == null) {
-                imageUri = getImageUriFromBitmap(
-                    this.applicationContext,
-                    data?.extras!!.get("data") as Bitmap
-                )
-            }
+//            var imageUri: Uri? = data?.data
+//            if (imageUri == null) {
+//                imageUri = getImageUriFromBitmap(
+//                    this.applicationContext,
+//                    data?.extras!!.get("data") as Bitmap
+//                )
+//            }
             Log.v(
                 "IMAGE_CAPTURE",
-                "request code=" + requestCode.toString() + "  ImURI: " + imageUri.toString()
+                "request code=" + requestCode.toString() + "  ImURI: " + outputFileUri.toString()
             )
-            startCrop(imageUri)
+            outputFileUri = ImagePicker.getImageFromResult(this, resultCode, data);
+            if(outputFileUri!=null) {
+                outputFileUri?.let { it -> startCrop(it)}
+
+            }
+            else{
+                Toast.makeText(this,"Issue in capturing image!!",Toast.LENGTH_LONG).show()
+            }
         }
 
         /**
@@ -281,6 +289,7 @@ class PhotoCrop : AppCompatActivity() {
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
         val path =
             MediaStore.Images.Media.insertImage(context.contentResolver, bitmap, System.currentTimeMillis().toString(), null)
+
         return Uri.parse(path.toString())
     }
 
@@ -420,25 +429,30 @@ class PhotoCrop : AppCompatActivity() {
      * Creates the intent to use files and camera that will be cropped.
      * Chosen files are saven as temporary file with the name profilePicture.jpg
      */
+    var outputFileUri: Uri? = null
     open fun getImageFromPhone() {
-        val pickIntent = Intent()
-        pickIntent.type = "image/*"
-        pickIntent.action = Intent.ACTION_GET_CONTENT
-        val takePhotoIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        val galleryIntent = Intent(
-            Intent.ACTION_PICK,
-            android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-        )
-        galleryIntent.type = "image/gallery"
-        val pickTitle = "Select or take a new Picture"
-        var outputFileUri: Uri? = Uri.fromFile(File.createTempFile(TEMP_FILE, EXTENSION))
-        val chooserIntent = Intent.createChooser(pickIntent, pickTitle)
-        chooserIntent.putExtra(
-            Intent.EXTRA_INITIAL_INTENTS,
-            arrayOf(takePhotoIntent, galleryIntent)
-        )
-        chooserIntent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri)
-        startActivityForResult(chooserIntent, CODE_IMG_GALLERY)
+        var chooseImageIntent = ImagePicker.getPickImageIntent(this);
+    startActivityForResult(chooseImageIntent, CODE_IMG_GALLERY);
+
+
+//        val pickIntent = Intent()
+//        pickIntent.type = "image/*"
+//        pickIntent.action = Intent.ACTION_GET_CONTENT
+//        val takePhotoIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+//        val galleryIntent = Intent(
+//            Intent.ACTION_PICK,
+//            android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+//        )
+//        galleryIntent.type = "image/gallery"
+//        val pickTitle = "Select or take a new Picture"
+//        outputFileUri = Uri.fromFile(File.createTempFile(TEMP_FILE, EXTENSION))
+//        val chooserIntent = Intent.createChooser(pickIntent, pickTitle)
+//        chooserIntent.putExtra(
+//            Intent.EXTRA_INITIAL_INTENTS,
+//            arrayOf(takePhotoIntent, galleryIntent)
+//        )
+//        chooserIntent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri)
+//        startActivityForResult(chooserIntent, CODE_IMG_GALLERY)
     }
 
     private fun logBundle(bundle: Bundle) {
