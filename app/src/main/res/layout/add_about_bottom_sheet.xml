@@ -1,37 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/bottom_up_sheet">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginStart="32dp"
-        android:layout_marginEnd="32dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="28dp"
+        android:layout_marginEnd="26dp"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:orientation="vertical">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
         <TextView
             android:id="@+id/form_error"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="14sp"
             android:layout_marginTop="@dimen/bs_top_margin"
-            android:textColor="#d4e02020"
             android:letterSpacing="0.05"
-            android:visibility="gone"
-            android:text="@string/error_empty_mandatory_fields" />
+            android:text="@string/error_empty_mandatory_fields"
+            android:textColor="#d4e02020"
+            android:textSize="14sp"
+            android:visibility="gone" />
+
         <TextView
+            style="@style/BsHeadingBold12"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/size_1"
             android:layout_marginTop="@dimen/bs_top_margin"
-            style="@style/BsHeadingBold12"
-            android:text="@string/edit_aboutme_text" />
+            android:text="@string/add_bio" />
+
         <EditText
-            android:id = "@+id/about_me_text"
+            android:id="@+id/about_me_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -43,28 +48,29 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:orientation="horizontal">
+
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/cancel_button"
+                style="?attr/materialButtonOutlinedStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/cancel_text"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
-                android:textColor="@color/gray_color"
-                style="?attr/materialButtonOutlinedStyle"/>
+                android:layout_weight="1"
+                android:text="@string/cancel_text"
+                android:textColor="@color/gray_color" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/save_button"
+                style="?attr/materialButtonOutlinedStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/save_text"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
-                app:strokeColor="@color/colorPrimary"
+                android:layout_weight="1"
+                android:text="@string/save_text"
                 android:textColor="@color/colorPrimary"
-                style="?attr/materialButtonOutlinedStyle"  />
+                app:strokeColor="@color/colorPrimary" />
         </LinearLayout>
 
 
