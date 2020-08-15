@@ -8,9 +8,9 @@ import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
 import com.gigforce.app.modules.gigerVerfication.GigerVerificationRepository
 import com.gigforce.app.utils.Lse
 import com.gigforce.app.utils.SingleLiveEvent2
-import com.gigforce.app.utils.putFileOrThrow
 import com.gigforce.app.utils.setOrThrow
 import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
 import com.otaliastudios.transcoder.Transcoder
 import com.otaliastudios.transcoder.TranscoderListener
@@ -32,6 +32,9 @@ class SelfiVideoViewModel constructor(
     private val _uploadSelfieState = SingleLiveEvent2<Lse>()
     val uploadSelfieState: LiveData<Lse> get() = _uploadSelfieState
 
+    private val _selfieVideoUploadState = MutableLiveData<String>()
+    val selfieVideoUploadProgressState: LiveData<String> get() = _selfieVideoUploadState
+
     fun uploadSelfieVideo(videoPath: File, transcodedFile: File) = viewModelScope.launch {
         _uploadSelfieState.value = Lse.loading()
 
@@ -47,12 +50,40 @@ class SelfiVideoViewModel constructor(
         try {
             val fileRef =
                 firebaseStorage.reference.child("$FB_SELFIE_VIDEO_FOLDER_NAME/${videoFile.lastPathSegment}")
-            val taskSnapshot = fileRef.putFileOrThrow(videoFile)
+            val taskSnapshot =
+                uploadselfieVideo(fileRef, videoFile) //fileRef.putFileOrThrow(videoFile)
+
             val fileName = taskSnapshot.metadata?.reference?.name.toString()
             setCompleteSelfieInfo(fileName, videoPath, transcodedFile)
         } catch (e: Exception) {
             _uploadSelfieState.value = Lse.error(e.localizedMessage)
         }
+    }
+
+    private suspend fun uploadselfieVideo(
+        fileRef: StorageReference,
+        videoFile: Uri
+    ) = suspendCancellableCoroutine<UploadTask.TaskSnapshot> { cont ->
+
+        val uploadSelfieVideoTask = fileRef.putFile(videoFile)
+
+        cont.invokeOnCancellation {
+            if (!uploadSelfieVideoTask.isComplete)
+                uploadSelfieVideoTask.cancel()
+        }
+
+        uploadSelfieVideoTask
+            .addOnSuccessListener {
+                _selfieVideoUploadState.value = "Video Uploaded, Saving Info.."
+                cont.resume(it)
+            }
+            .addOnProgressListener {
+                val progress = (it.bytesTransferred.toDouble() / it.totalByteCount.toDouble()) * 100
+                _selfieVideoUploadState.value =
+                    "Uploading Video ${String.format("%.2f", progress)} %"
+            }
+            .addOnFailureListener { cont.resumeWithException(it) }
+
     }
 
     suspend fun transcodeVideo(source: File, dest: File) =
@@ -62,10 +93,14 @@ class SelfiVideoViewModel constructor(
                 .addDataSource(source.path)
                 .setListener(object : TranscoderListener {
                     override fun onTranscodeCompleted(successCode: Int) {
+                        _selfieVideoUploadState.value = "Video Compressed"
                         cont.resume(dest)
                     }
 
                     override fun onTranscodeProgress(progress: Double) {
+                        val progressInTens = progress * 100
+                        _selfieVideoUploadState.value =
+                            "Compressing Video ${String.format("%.2f", progressInTens)} %"
                     }
 
                     override fun onTranscodeCanceled() {

@@ -236,7 +236,7 @@ class SharedPreferenceViewModel : ViewModel {
             str+=profileDataModelObj.address.current.city
         }
         if(str.isNullOrBlank()){
-            return "none"
+            return "None"
         }
         return str
 

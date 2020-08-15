@@ -63,6 +63,7 @@ class ProfileFragment : BaseFragment() {
         }
     }
 
+
     private fun restoreStatusBar(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             win = requireActivity().window
@@ -129,7 +130,9 @@ class ProfileFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val viewModel: ProfileViewModel by activityViewModels<ProfileViewModel>()
-
+        location_card.setOnClickListener{
+            showToast("This is work in progress. Please check again in a few days")
+        }
         // load user data
         viewModel.getProfileData().observe(viewLifecycleOwner, Observer { profile ->
             layout.gigger_rating.text =
@@ -380,12 +383,20 @@ class ProfileFragment : BaseFragment() {
 
 
     private fun loadImage(Path: String) {
-        var profilePicRef: StorageReference =
-            storage.reference.child(PROFILE_PICTURE_FOLDER).child(Path)
-        if(layout.profile_avatar!=null)
-        GlideApp.with(this.requireContext())
-            .load(profilePicRef)
-            .into(layout.profile_avatar)
+
+
+        if (Path != "avatar.jpg" && Path != "") {
+            var profilePicRef: StorageReference =
+                storage.reference.child(PROFILE_PICTURE_FOLDER).child(Path)
+            if(layout.profile_avatar!=null)
+                GlideApp.with(this.requireContext())
+                    .load(profilePicRef)
+                    .into(layout.profile_avatar)
+        }else{
+            GlideApp.with(requireContext())
+                .load(R.drawable.avatar)
+                .into(layout.profile_avatar)
+        }
     }
 
     private fun addChip(context: Context, name: String): Chip {

@@ -297,5 +297,6 @@
     <string name="issued_on">Issued On</string>
     <string name="download_id_card">Download Id Card</string>
     <string name="add_bio">Add Bio</string>
+    <string name="how_to_rec_selfie_video_content">Record a 10-minute video of yourself. Face the camera and say “Hi, I’m (your name) and I like to do (mention 2 things you like to do.)</string>
 
 </resources>

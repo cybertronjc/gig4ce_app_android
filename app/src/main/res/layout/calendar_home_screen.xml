@@ -18,7 +18,7 @@
             android:layout_marginStart="18dp"
             android:layout_marginTop="13dp"
             android:fontFamily="@font/lato"
-            android:letterSpacing="0.01"
+            android:letterSpacing="0"
             android:text="Good morning!"
             android:textColor="#cd000000"
             android:textSize="22sp"

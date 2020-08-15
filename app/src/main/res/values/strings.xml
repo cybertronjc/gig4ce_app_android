@@ -177,8 +177,8 @@
     <string name="end_date">End Date</string>
     <string name="delete">delete</string>
     <string name="edit_achievement">Edit Achievement</string>
-    <string name="title">title</string>
-    <string name="authority">authority</string>
+    <string name="title">Title</string>
+    <string name="authority">Authority</string>
     <string name="location">Location</string>
     <string name="year">year</string>
     <string name="year_text">Year</string>
@@ -318,12 +318,12 @@
     <string name="reupload"><u>Reupload</u></string>
     <string name="save_all_caps">SAVE</string>
     <string name="upload_pan_card">Upload Pan Card</string>
-    <string name="please_confirm_the_following_information">Please Confirm the following information</string>
+    <string name="please_confirm_the_following_information">Please confirm the following information</string>
     <string name="name_with_colon">Name :</string>
     <string name="father_s_name_with_colon">Father\'s Name :</string>
     <string name="date_of_birth">Date Of Birth :</string>
     <string name="pan_with_colon">Permanent Account Number :</string>
-    <string name="yes_i_confirm_the_data_is_correct">Yes, I Confirm the data is correct.</string>
+    <string name="yes_i_confirm_the_data_is_correct">Yes, I confirm the data is correct.</string>
     <string name="why_do_we_need_this">Why we need this ?</string>
     <string name="license_number_with_colon">License Number :</string>
     <string name="address_with_colon">Address :</string>
@@ -372,7 +372,7 @@
     <string name="uploaded">Uploaded</string>
     <string name="let_s_go">Let\'s Go</string>
     <string name="thank_you">Thank You !</string>
-    <string name="documents_uploaded_long">As your documents will get verifed, you will be able to start your gigs.</string>
+    <string name="documents_uploaded_long">As your documents will get verified, you will be able to start your gigs.</string>
 
 
     // terminologies
@@ -444,17 +444,17 @@
     <string name="video_recorded">Video Recorded</string>
     <string name="why_do_we_need_this_pan">A PAN card is mandatory for profile verification. It helps verify your name and date of birth and also helps with payments to your wallet.</string>
     <string name="alert">Alert</string>
-    <string name="you_are_reuploading_pan_card">You are re-uploading your PAN details, they will be verified once again, that can take up to 7 days</string>
+    <string name="you_are_reuploading_pan_card">You are re-uploading your PAN details. They will be verified once again, which may take up to 7 days.</string>
     <string name="enter_valid_pan">Enter Valid PAN Card No</string>
     <string name="click_select_pan_image">Click Or Select your Pan card Image first</string>
     <string name="pan_details_uploaded">Pan Card Details Uploaded</string>
-    <string name="unable_to_capture_image">Unable to Capture Image</string>
+    <string name="unable_to_capture_image">Unable to capture image</string>
     <string name="got_it">Got it</string>
     <string name="aadhar_card_front_image">Aadhar Card (Front Image)</string>
     <string name="aadhar_card_back_image">Aadhar Card (Back Image)</string>
     <string name="why_we_need_this_aadhar">Uploading either Aadhar or Driver’s license is mandatory for profile verification. Aadhar card helps verify your name, date of birth, address, and other details.</string>
     <string name="aadhar_card_details_uploaded">Aadhaar Card Details Uploaded</string>
-    <string name="you_are_reuploading_aadhar">You are re-uploading your Aadhar details, they will be verified once again, that can take up to 7 days</string>
+    <string name="you_are_reuploading_aadhar">You are re-uploading your Aadhar details. They will be verified once again, which may take up to 7 days.</string>
     <string name="select_or_capture_both_sides_of_aadhar">Select or capture both sides of Aadhar Card</string>
     <string name="enter_valid_aadhar_no">Enter Valid Aadhar Card No</string>
     <string name="video_uploaded">Video Uploaded</string>
@@ -462,7 +462,7 @@
     <string name="dl_image_front_side">Driving License (Front Side)</string>
     <string name="dl_image_back_side">Driving License (Back Side)</string>
     <string name="dl_details_uploaded">Driving License Details Uploaded</string>
-    <string name="reuploading_driving_license">You are re-uploading your Driving License details, they will be verified once again, that can take up to 7 days</string>
+    <string name="reuploading_driving_license">You are re-uploading your Driving License details. They will be verified once again, which may take up to 7 days.</string>
     <string name="capture_both_sides_dl">Select or capture both sides of Driving License</string>
     <string name="enter_valid_dl">Enter Valid Driving License</string>
     <string name="select_dl_state">Select Driving License State</string>
@@ -472,7 +472,7 @@
     <string name="bank_name_too_short">Bank name is too short</string>
     <string name="enter_valid_acc_no">Enter A Valid Account No</string>
     <string name="click_or_select_bank_passbook">Click Or Select your Passbook Image first</string>
-    <string name="your_are_reuploading_bank_details">You are re-uploading your Bank details, they will be verified once again, that can take up to 7 days</string>
+    <string name="your_are_reuploading_bank_details">You are re-uploading your Bank details. They will be verified once again, which may take up to 7 days.</string>
     <string name="bank_details_uploaded">Bank details Uploaded</string>
     <string name="under_verification">Under Verification</string>
     <string name="verifying">Verifying</string>
@@ -481,6 +481,11 @@
     <string name="gig_id">Gig Id :</string>
     <string name="gigforce_pvt_ltd">Gigforce Pvt. Ltd.</string>
     <string name="issued_on">Issued On</string>
+    <string name="go_to_settings">Go To Settings</string>
+    <string name="camera_and_audtio_permission_required_to_access_camera">Camera and Audio Permission Required To Record Video</string>
+    <string name="select_start_date">Please select start date first</string>
     <string name="download_id_card">Download Id Card</string>
+    <string name="how_to_rec_selfie_video_content">\nRecord a 10-second video of yourself\nFace the camera and say “Hi, I’m (your name) and I like to do (mention 2 things you like to do.)</string>
+    <string name="pick_image_intent_text">Choose Image</string>
     <string name="add_bio">Add Bio</string>
 </resources>

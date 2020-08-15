@@ -1,22 +1,16 @@
 package com.gigforce.app.modules.profile
 
 import android.os.Bundle
-import android.os.DropBoxManager
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.Toast
-import androidx.lifecycle.ViewModelProviders
-import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
 import com.gigforce.app.modules.profile.models.Skill
 import com.gigforce.app.utils.DropdownAdapter
 import kotlinx.android.synthetic.main.add_skill_bottom_sheet.*
 
-class AddSkillBottomSheetFragment: ProfileBaseBottomSheetFragment() {
+class AddSkillBottomSheetFragment : ProfileBaseBottomSheetFragment() {
     companion object {
         fun newInstance() = AddSkillBottomSheetFragment()
     }
@@ -31,12 +25,15 @@ class AddSkillBottomSheetFragment: ProfileBaseBottomSheetFragment() {
         Log.d("DEBUG", "ENTERED Profile Education Expanded VIEW")
         inflateView(R.layout.add_skill_bottom_sheet, inflater, container)
 
-        skills.addAll(listOf(
-            "Driving", "Cooking", "Shop-keeping", "Managing Catalog",
-            "Cashier", "Tele-calling", "Waiter", "Bartender", "Barback",
-            "Fleet Management", "Assembly-dismantling", "E-commence delivery",
-            "Admin assistant", "Store manager", "In-store promoter",
-            "Record keeper", "Barista", "House keeping", "Reception", "Artist"))
+        skills.addAll(
+            listOf(
+                "Driving", "Cooking", "Shop-keeping", "Managing Catalog",
+                "Cashier", "Tele-calling", "Waiter", "Bartender", "Barback",
+                "Fleet Management", "Assembly-dismantling", "E-commence delivery",
+                "Admin assistant", "Store manager", "In-store promoter",
+                "Record keeper", "Barista", "House keeping", "Reception", "Artist"
+            )
+        )
 
         return getFragmentView()
     }
@@ -58,14 +55,14 @@ class AddSkillBottomSheetFragment: ProfileBaseBottomSheetFragment() {
             }
         }
 
-        add_skill_cancel_button.setOnClickListener{
-            this.findNavController().navigate(R.id.educationExpandedFragment)
+        add_skill_cancel_button.setOnClickListener {
+            this.dismiss()
         }
 
-        add_skill_save_button.setOnClickListener{
+        add_skill_save_button.setOnClickListener {
             if (validateSkill()) {
                 addNewSkill()
-                this.findNavController().navigate(R.id.educationExpandedFragment)
+                this.dismiss()
             }
         }
 

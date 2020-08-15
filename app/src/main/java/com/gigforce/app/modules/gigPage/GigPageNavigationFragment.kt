@@ -70,7 +70,7 @@ class GigPageNavigationFragment : BaseFragment() {
         }
 
         messageCardView.setOnClickListener {
-            navigate(R.id.contactScreenFragment)
+            navigate(R.id.fakeGigContactScreenFragment)
         }
 
 

@@ -73,13 +73,14 @@ class VerticalCalendarDataItemModel(
 
             if (preferenceData != null) {
                 var isFound = false
+                if(preferenceData.isweekdaysenabled)
                 for (data in preferenceData.selecteddays) {
                     if (calendar.get(Calendar.DAY_OF_WEEK) == getDayOfWeek(data)) {
                         isFound = true
                         break
                     }
                 }
-                if (!isFound)
+                if (!isFound && preferenceData.isweekendenabled)
                     for (data in preferenceData.selectedweekends) {
                         if (calendar.get(Calendar.DAY_OF_WEEK) == getDayOfWeek(data)) {
                             isFound = true
@@ -140,13 +141,14 @@ class VerticalCalendarDataItemModel(
 
             if (preferenceData != null) {
                 var isFound = false
+                if(preferenceData.isweekdaysenabled)
                 for (data in preferenceData.selecteddays) {
                     if (calendar.get(Calendar.DAY_OF_WEEK) == getDayOfWeek(data)) {
                         isFound = true
                         break
                     }
                 }
-                if (!isFound)
+                if (!isFound && preferenceData.isweekendenabled)
                     for (data in preferenceData.selectedweekends) {
                         if (calendar.get(Calendar.DAY_OF_WEEK) == getDayOfWeek(data)) {
                             isFound = true

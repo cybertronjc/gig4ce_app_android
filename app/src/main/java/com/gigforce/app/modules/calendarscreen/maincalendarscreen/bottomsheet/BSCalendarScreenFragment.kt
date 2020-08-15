@@ -285,11 +285,13 @@ class BSCalendarScreenFragment : BaseFragment() {
     inner class NavigationClickListener(val rv: RecyclerView, var position: Int) :
         View.OnClickListener {
         override fun onClick(v: View?) {
-            val gig = (rv.adapter as RecyclerGenericAdapter<Gig>).list.get(position)
+            //val gig = (rv.adapter as RecyclerGenericAdapter<Gig>).list.get(position)
 
-            navigate(R.id.gigPageNavigationFragment, Bundle().apply {
-                this.putString(GigPageNavigationFragment.INTENT_EXTRA_GIG_ID, gig.gigId)
-            })
+            showToast("This is work in progress. Please check again in a few days")
+
+//            navigate(R.id.gigPageNavigationFragment, Bundle().apply {
+//                this.putString(GigPageNavigationFragment.INTENT_EXTRA_GIG_ID, gig.gigId)
+//            })
         }
     }
 
@@ -317,7 +319,7 @@ class BSCalendarScreenFragment : BaseFragment() {
     inner class ChatClickListener(val rv: RecyclerView, var position: Int) : View.OnClickListener {
         override fun onClick(v: View?) {
             val gig = (rv.adapter as RecyclerGenericAdapter<Gig>).list.get(position)
-            navigate(R.id.contactScreenFragment)
+            navigate(R.id.fakeGigContactScreenFragment)
         }
     }
 
@@ -395,7 +397,7 @@ class BSCalendarScreenFragment : BaseFragment() {
 
         datalist.add(FeatureModel("Settings", R.drawable.settings, R.id.settingFragment))
         datalist.add(FeatureModel("Chat", R.drawable.chat, -1/*R.id.contactScreenFragment*/))
-        datalist.add(FeatureModel("Landing HS", R.drawable.chat, R.id.landinghomefragment))
+        datalist.add(FeatureModel("Home Screen", R.drawable.chat, R.id.landinghomefragment))
         datalist.add(FeatureModel("Explore", R.drawable.ic_landinghome_search, -1))
 
         val itemWidth = ((width / 7) * 1.6).toInt()
@@ -481,7 +483,8 @@ class BSCalendarScreenFragment : BaseFragment() {
             RecyclerGenericAdapter<LandingScreenFragment.TitleSubtitleModel>(
                 activity?.applicationContext,
                 PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
-                    navigate(R.id.mainLearningFragment)
+                    showToast("This page are inactive. We’ll activate it in a few weeks")
+                  //  navigate(R.id.mainLearningFragment)
                 },
                 RecyclerGenericAdapter.ItemInterface<LandingScreenFragment.TitleSubtitleModel?> { obj, viewHolder, position ->
                     var view = getView(viewHolder, R.id.card_view)
@@ -551,7 +554,10 @@ class BSCalendarScreenFragment : BaseFragment() {
         val recyclerGenericAdapter: RecyclerGenericAdapter<Assessment> =
             RecyclerGenericAdapter<Assessment>(
                 activity?.applicationContext,
-                PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item -> navigate(R.id.assessment_fragment) },
+                PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
+                    showToast("This page are inactive. We’ll activate it in a few weeks")
+                    //navigate(R.id.assessment_fragment)
+                     },
                 RecyclerGenericAdapter.ItemInterface<Assessment?> { obj, viewHolder, position ->
                     val lp = getView(viewHolder, R.id.assessment_cl).layoutParams
                     lp.height = lp.height

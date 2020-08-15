@@ -32,7 +32,7 @@ class OnboardingLoaderFragment: BaseFragment() {
 //        }
         observer()
         Handler().postDelayed({
-            viewModel.getProfileData()
+            viewModel.getProfileAndGigData()
         }, SPLASH_TIME_OUT)
     }
     private fun navigateToLandingHomeScreen() {
@@ -44,19 +44,29 @@ class OnboardingLoaderFragment: BaseFragment() {
         navigate(R.id.onboardingfragment)
     }
     private fun observer() {
-        viewModel.userProfileData.observe(viewLifecycleOwner, Observer { profile ->
-            if (profile != null ) {
-                if (profile.status) {
-                    if (profile.isonboardingdone) {
+        viewModel.userProfileAndGigData.observe(viewLifecycleOwner, Observer { profileAndGig ->
+            if (profileAndGig.profile != null ) {
+                if (profileAndGig.profile.status) {
+                    if (profileAndGig.profile.isonboardingdone) {
                         saveOnBoardingCompleted()
-                        navigateToLandingHomeScreen()
+
+                        if(profileAndGig.hasGigs){
+                            navigateToCalendarGomeScreen()
+                        }else {
+                            navigateToLandingHomeScreen()
+                        }
                     }else {
                         navigateToMainOnboarding()
                     }
                 } else
-                    showToast(profile.errormsg)
+                    showToast(profileAndGig.profile.errormsg)
             }
         })
+    }
+
+    private fun navigateToCalendarGomeScreen() {
+        popFragmentFromStack(R.id.onboardingLoaderfragment)
+        navigate(R.id.mainHomeScreen)
     }
 
 }

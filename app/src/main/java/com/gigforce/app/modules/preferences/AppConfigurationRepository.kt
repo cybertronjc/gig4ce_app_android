@@ -10,9 +10,9 @@ class AppConfigurationRepository constructor(
 )  {
 
     companion object{
-        const val COLLECTION_NAME = "configurations"
+        const val COLLECTION_NAME = "Configuration"
 
-        const val DOCUMENT_LANGUAGE = "languages"
+        const val DOCUMENT_LANGUAGE = "Languages"
     }
 
     suspend fun getActiveLanguages() : List<String>  = suspendCoroutine {cont ->

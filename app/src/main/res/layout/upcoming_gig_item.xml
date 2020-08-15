@@ -32,22 +32,28 @@
             android:layout_height="24dp"
             android:layout_marginStart="17dp"
             android:layout_marginTop="17dp"
+            tools:src="@drawable/ic_emoji"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:src="@drawable/ic_emoji" />
+            app:layout_constraintTop_toTopOf="parent" />
+
 
 
         <TextView
             android:id="@+id/textView41"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
             android:layout_marginTop="15dp"
+            android:paddingEnd="5dp"
             android:fontFamily="@font/lato_bold"
             android:letterSpacing="0.02"
-            android:text="Urgent Unloading"
+            android:scrollHorizontally="true"
+            android:ellipsize="end"
+            android:maxLines="1"
+            tools:text="Urgent Unloading"
             android:textColor="@color/upcoming_gig_title"
             android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/companyLogoIV"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -68,12 +74,13 @@
             android:id="@+id/seaprator1"
             android:layout_width="0dp"
             android:layout_height="0.5dp"
+            android:background="#c0c0c0"
             android:layout_marginTop="6dp"
             android:layout_marginEnd="16dp"
-            android:background="#c0c0c0"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/textView41"
-            app:layout_constraintTop_toBottomOf="@+id/textView67" />
+            app:layout_constraintTop_toBottomOf="@+id/textView67"
+           />
 
         <TextView
             android:id="@+id/contactPersonLabel"
@@ -81,58 +88,62 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
             android:letterSpacing="0"
-            android:text="Contact Person"
             android:textColor="@color/upcoming_gig_time"
             android:textSize="12sp"
             app:layout_constraintStart_toStartOf="@+id/textView41"
-            app:layout_constraintTop_toBottomOf="@+id/seaprator1" />
+            app:layout_constraintTop_toBottomOf="@+id/seaprator1"
+            android:text="Contact Person" />
+
 
 
         <androidx.cardview.widget.CardView
             android:id="@+id/messageCardView"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
             android:layout_marginTop="12dp"
             android:layout_marginRight="8dp"
-            android:visibility="gone"
-            app:cardBackgroundColor="@color/light_pink"
-            app:cardCornerRadius="12dp"
+            android:scaleX="0.9"
+            android:scaleY="0.9"
+            app:cardCornerRadius="20dp"
             app:layout_constraintRight_toLeftOf="@id/callCardView"
+            app:cardBackgroundColor="@color/light_pink"
             app:layout_constraintTop_toBottomOf="@id/seaprator1">
 
             <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:scaleX="0.5"
-                android:scaleY="0.5"
-                android:src="@drawable/ic_chat" />
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:scaleY="0.4"
+                android:scaleX="0.4"
+                android:src="@drawable/ic_chat"
+            />
 
         </androidx.cardview.widget.CardView>
 
 
         <androidx.cardview.widget.CardView
             android:id="@+id/callCardView"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
             android:layout_marginTop="12dp"
-
+            android:scaleX="0.9"
+            android:scaleY="0.9"
             android:layout_marginEnd="17dp"
+            app:cardCornerRadius="20dp"
             android:clickable="true"
             android:focusable="true"
-            app:cardBackgroundColor="@color/light_pink"
 
-            app:cardCornerRadius="12dp"
+            app:cardBackgroundColor="@color/light_pink"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/seaprator1">
 
             <ImageView
-                android:layout_width="12dp"
-                android:layout_height="@dimen/size_12"
-                android:layout_gravity="center"
-                android:adjustViewBounds="true"
-                android:scaleType="fitCenter"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:scaleY="0.4"
+                android:scaleX="0.4"
+                android:tint="@color/lipstick"
                 android:src="@drawable/fui_ic_phone_white_24dp"
-                android:tint="@color/lipstick" />
+                />
 
         </androidx.cardview.widget.CardView>
 
@@ -155,26 +166,27 @@
             android:id="@+id/buttonSpace"
             android:layout_width="13dp"
             android:layout_height="10dp"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@id/textView41"
-            app:layout_constraintTop_toBottomOf="@id/contactPersonTV" />
+            app:layout_constraintTop_toBottomOf="@id/contactPersonTV"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
 
 
         <TextView
             android:id="@+id/navigateTV"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="25dp"
             android:layout_marginEnd="7dp"
-            android:layout_marginBottom="10dp"
-            android:background="@drawable/edittext_border_lipstick"
-            android:clickable="true"
-            android:focusable="true"
+            android:background="@drawable/edittext_border_grey"
             android:letterSpacing="0"
             android:padding="10dp"
             android:text="Navigate"
+            android:clickable="true"
+            android:focusable="true"
             android:textAlignment="center"
-            android:textColor="@color/lipstick"
+            android:textColor="@color/disabled_button_color"
+            android:layout_marginBottom="15dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/buttonSpace"
             app:layout_constraintStart_toStartOf="@+id/textView41"
@@ -185,20 +197,24 @@
             android:id="@+id/checkInTV"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="7dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="16dp"
+            app:layout_constraintStart_toStartOf="@+id/buttonSpace"
+            app:layout_constraintTop_toBottomOf="@id/contactPersonTV"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="15dp"
+            android:text="Check-In"
             android:background="@drawable/gradient_button"
             android:clickable="true"
             android:focusable="true"
+            android:layout_marginStart="7dp"
             android:letterSpacing="0"
-            android:padding="10dp"
-            android:text="Check-In"
+            android:layout_marginTop="25dp"
+            android:layout_marginEnd="16dp"
             android:textAlignment="center"
+            android:padding="10dp"
             android:textColor="@color/white"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/buttonSpace"
-            app:layout_constraintTop_toBottomOf="@id/contactPersonTV" />
+            />
+
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

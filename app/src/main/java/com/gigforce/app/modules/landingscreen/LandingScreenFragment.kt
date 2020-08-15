@@ -374,12 +374,17 @@ class LandingScreenFragment : BaseFragment() {
     }
 
     private fun displayImage(profileImg: String) {
-        if (profileImg != null && !profileImg.equals("")) {
+        if (profileImg != "avatar.jpg" && profileImg != "") {
             val profilePicRef: StorageReference =
                 PreferencesFragment.storage.reference.child("profile_pics").child(profileImg)
             if(profile_image!=null)
             GlideApp.with(this.requireContext())
                 .load(profilePicRef)
+                .apply(RequestOptions().circleCrop())
+                .into(profile_image)
+        }else{
+            GlideApp.with(this.requireContext())
+                .load(R.drawable.avatar)
                 .apply(RequestOptions().circleCrop())
                 .into(profile_image)
         }
@@ -407,7 +412,11 @@ class LandingScreenFragment : BaseFragment() {
             about_us_cl.visibility = View.GONE
         }
         chat_icon_iv.setOnClickListener {
-            navigate(R.id.contactScreenFragment)
+            navigate(R.id.fakeGigContactScreenFragment)
+        }
+
+        contact_us.setOnClickListener {
+            navigate(R.id.fakeGigContactScreenFragment)
         }
 
         invite_contact.setOnClickListener {
@@ -468,7 +477,8 @@ class LandingScreenFragment : BaseFragment() {
             RecyclerGenericAdapter<TitleSubtitleModel>(
                 activity?.applicationContext,
                 PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
-                    navigate(R.id.mainLearningFragment)
+//                    navigate(R.id.mainLearningFragment)
+                    showToast("This is work in progress. Please check again in a few days")
                 },
                 RecyclerGenericAdapter.ItemInterface<TitleSubtitleModel?> { obj, viewHolder, position ->
                     var view = getView(viewHolder, R.id.card_view)

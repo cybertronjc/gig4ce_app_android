@@ -26,7 +26,7 @@ class AroundCurrentAddressFragment : BaseFragment() {
     }
 
     private lateinit var viewModel: SharedPreferenceViewModel
-    private var preferredDistanceActive:Boolean = false
+    private var preferredDistanceActive: Boolean = false
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -42,10 +42,12 @@ class AroundCurrentAddressFragment : BaseFragment() {
     }
 
     private fun listener() {
-        arround_current_add_seekbar.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener{
-            override fun onProgressChanged(seekBar: SeekBar, progress:Int, fromUser:Boolean) {
-                val value = (progress * (seekBar.getWidth() - 2 * seekBar.getThumbOffset())) / seekBar.getMax()
-                seekbardependent.text =  progress.toString()+" Km"
+        arround_current_add_seekbar.setOnSeekBarChangeListener(object :
+            SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                val value =
+                    (progress * (seekBar.getWidth() - 2 * seekBar.getThumbOffset())) / seekBar.getMax()
+                seekbardependent.text = progress.toString() + " Km"
                 seekbardependent.setX(seekBar.getX() + value + seekBar.getThumbOffset() / 2)
                 //textView.setY(100); just added a value set this properly using screen with height aspect ratio , if you do not set it by default it will be there below seek bar
             }
@@ -57,7 +59,16 @@ class AroundCurrentAddressFragment : BaseFragment() {
             }
         })
 
-        back_arrow_iv.setOnClickListener{
+        workFromHomeSwitch.setOnCheckedChangeListener({
+                buttonView, isChecked ->
+            if (isChecked){
+                around_current_add_cl.visibility = View.VISIBLE
+            }else{
+                around_current_add_cl.visibility = View.GONE
+            }
+        })
+
+        back_arrow_iv.setOnClickListener {
             activity?.onBackPressed()
         }
     }
@@ -65,11 +76,31 @@ class AroundCurrentAddressFragment : BaseFragment() {
     private fun initializeAll() {
         workFromHomeSwitch.isChecked = viewModel.getCurrentAddress()?.preferredDistanceActive!!
         preferredDistanceActive = viewModel.getCurrentAddress()?.preferredDistanceActive!!
-        arround_current_add_seekbar.progress = viewModel.getCurrentAddress()?.preferred_distance!!
+        arround_current_add_seekbar.progress = 0
+
+        val progress = viewModel.getCurrentAddress()?.preferred_distance!!
+        arround_current_add_seekbar.progress = progress
+
+        val value =
+            (progress * (arround_current_add_seekbar.getWidth() - 2 * arround_current_add_seekbar.getThumbOffset())) / arround_current_add_seekbar.getMax()
+        seekbardependent.text = progress.toString() + " Km"
+        seekbardependent.setX(arround_current_add_seekbar.getX() + value + arround_current_add_seekbar.getThumbOffset() / 2)
+
+
 //        arround_current_add_seekbar.setOtherView(seekbardependent,false,"Km")
         populateAddress(viewModel.getCurrentAddress()!!)
+        setVisibilityAroundCurrAdd()
     }
-    private fun populateAddress(address: AddressModel){
+
+    private fun setVisibilityAroundCurrAdd() {
+        if (viewModel.getCurrentAddress()?.preferredDistanceActive!!)
+            around_current_add_cl.visibility = View.VISIBLE
+        else
+            around_current_add_cl.visibility = View.GONE
+
+    }
+
+    private fun populateAddress(address: AddressModel) {
         line1view.text = address.firstLine
         line2view.text = address.secondLine
         areaview.text = address.area
@@ -78,12 +109,15 @@ class AroundCurrentAddressFragment : BaseFragment() {
         pincodeview.text = address.pincode
 
     }
+
     override fun onBackPressed(): Boolean {
-        if(arround_current_add_seekbar.progress==0){
+        if (arround_current_add_seekbar.progress == 0) {
             showToast("Preferred distance is 0 so you are not able to enable it.")
-            viewModel.setCurrentAddressPrferredDistanceData(arround_current_add_seekbar.progress,false)
-        }
-        else {
+            viewModel.setCurrentAddressPrferredDistanceData(
+                arround_current_add_seekbar.progress,
+                false
+            )
+        } else {
             preferredDistanceActive = workFromHomeSwitch.isChecked
             viewModel.setCurrentAddressPrferredDistanceData(
                 arround_current_add_seekbar.progress,

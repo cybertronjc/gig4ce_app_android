@@ -17,119 +17,119 @@ import com.google.firebase.firestore.ListenerRegistration
 import kotlinx.coroutines.launch
 
 class LandingScreenViewModel constructor(
-        private val profileFirebaseRepository: ProfileFirebaseRepository = ProfileFirebaseRepository(),
-        private val preferencesRepository: PreferencesRepository = PreferencesRepository()
+    private val profileFirebaseRepository: ProfileFirebaseRepository = ProfileFirebaseRepository(),
+    private val preferencesRepository: PreferencesRepository = PreferencesRepository()
 ) : ViewModel() {
 
     companion object {
 
         //TIPS
         private val ADD_EDUCATION_TIP = Tip(
-                title = "Gigforce Tip ",
-                subTitle = "Your education details help build your profile.",
-                whereToRedirect = R.id.educationExpandedFragment,
-                intentExtraMap = mapOf(
-                        LandingPageConstants.INTENT_EXTRA_CAME_FROM_LANDING_SCREEN to true,
-                        LandingPageConstants.INTENT_EXTRA_ACTION to EducationExpandedFragment.ACTION_OPEN_EDIT_EDUCATION_BOTTOM_SHEET
-                )
+            title = "Gigforce Tip ",
+            subTitle = "Your education details help build your profile.",
+            whereToRedirect = R.id.educationExpandedFragment,
+            intentExtraMap = mapOf(
+                LandingPageConstants.INTENT_EXTRA_CAME_FROM_LANDING_SCREEN to true,
+                LandingPageConstants.INTENT_EXTRA_ACTION to EducationExpandedFragment.ACTION_OPEN_EDIT_EDUCATION_BOTTOM_SHEET
+            )
         )
 
         private val ADD_WORK_EXP_TIP = Tip(
-                title = "Gigforce Tip ",
-                subTitle = "Your work experience helps find similar gigs for you.",
-                whereToRedirect = R.id.experienceExpandedFragment,
-                intentExtraMap = mapOf(
-                        LandingPageConstants.INTENT_EXTRA_CAME_FROM_LANDING_SCREEN to true,
-                        LandingPageConstants.INTENT_EXTRA_ACTION to ExperienceExpandedFragment.ACTION_OPEN_EDIT_EXPERIENCE_BOTTOM_SHEET
-                )
+            title = "Gigforce Tip ",
+            subTitle = "Your work experience helps find similar gigs for you.",
+            whereToRedirect = R.id.experienceExpandedFragment,
+            intentExtraMap = mapOf(
+                LandingPageConstants.INTENT_EXTRA_CAME_FROM_LANDING_SCREEN to true,
+                LandingPageConstants.INTENT_EXTRA_ACTION to ExperienceExpandedFragment.ACTION_OPEN_EDIT_EXPERIENCE_BOTTOM_SHEET
+            )
         )
 
         private val ADD_SKILLS_TIP = Tip(
-                title = "Gigforce Tip ",
-                subTitle = "Adding your skills helps recommend suitable gigs.",
-                whereToRedirect = R.id.educationExpandedFragment,
-                intentExtraMap = mapOf(
-                        LandingPageConstants.INTENT_EXTRA_CAME_FROM_LANDING_SCREEN to true,
-                        LandingPageConstants.INTENT_EXTRA_ACTION to EducationExpandedFragment.ACTION_OPEN_EDIT_SKILLS_BOTTOM_SHEET
-                )
+            title = "Gigforce Tip ",
+            subTitle = "Adding your skills helps recommend suitable gigs.",
+            whereToRedirect = R.id.educationExpandedFragment,
+            intentExtraMap = mapOf(
+                LandingPageConstants.INTENT_EXTRA_CAME_FROM_LANDING_SCREEN to true,
+                LandingPageConstants.INTENT_EXTRA_ACTION to EducationExpandedFragment.ACTION_OPEN_EDIT_SKILLS_BOTTOM_SHEET
+            )
         )
 
         private val ADD_ACHIEVEMENTS_TIP = Tip(
-                title = "Gigforce Tip ",
-                subTitle = "Sharing your past achievements highlights your profile.",
-                whereToRedirect = R.id.educationExpandedFragment,
-                intentExtraMap = mapOf(
-                        LandingPageConstants.INTENT_EXTRA_CAME_FROM_LANDING_SCREEN to true,
-                        LandingPageConstants.INTENT_EXTRA_ACTION to EducationExpandedFragment.ACTION_OPEN_EDIT_ACHIEVEMENTS_BOTTOM_SHEET
-                )
+            title = "Gigforce Tip ",
+            subTitle = "Sharing your past achievements highlights your profile.",
+            whereToRedirect = R.id.educationExpandedFragment,
+            intentExtraMap = mapOf(
+                LandingPageConstants.INTENT_EXTRA_CAME_FROM_LANDING_SCREEN to true,
+                LandingPageConstants.INTENT_EXTRA_ACTION to EducationExpandedFragment.ACTION_OPEN_EDIT_ACHIEVEMENTS_BOTTOM_SHEET
+            )
         )
 
 
         private val ADD_PROFILE_PHOTO_TIP = Tip(
-                title = "Gigforce Tip ",
-                subTitle = "Adding a profile photo shows off your personality.",
-                whereToRedirect = R.id.profileFragment
+            title = "Gigforce Tip ",
+            subTitle = "Adding a profile photo shows off your personality.",
+            whereToRedirect = R.id.profileFragment
         )
 
         private val ADD_LANGUAGE_TIP = Tip(
-                title = "Gigforce Tip ",
-                subTitle = "How many languages can you speak in?",
-                whereToRedirect = R.id.aboutExpandedFragment,
-                intentExtraMap = mapOf(
-                        LandingPageConstants.INTENT_EXTRA_CAME_FROM_LANDING_SCREEN to true,
-                        LandingPageConstants.INTENT_EXTRA_ACTION to AboutExpandedFragment.ACTION_OPEN_EDIT_LANGUAGE_BOTTOM_SHEET
-                )
+            title = "Gigforce Tip ",
+            subTitle = "How many languages can you speak in?",
+            whereToRedirect = R.id.aboutExpandedFragment,
+            intentExtraMap = mapOf(
+                LandingPageConstants.INTENT_EXTRA_CAME_FROM_LANDING_SCREEN to true,
+                LandingPageConstants.INTENT_EXTRA_ACTION to AboutExpandedFragment.ACTION_OPEN_EDIT_LANGUAGE_BOTTOM_SHEET
+            )
         )
 
         private val ADD_ABOUT_ME_TIP = Tip(
-                title = "Gigforce Tip ",
-                subTitle = "Tell me 2 lines that best describe your.",
-                whereToRedirect = R.id.aboutExpandedFragment,
-                intentExtraMap = mapOf(
-                        LandingPageConstants.INTENT_EXTRA_CAME_FROM_LANDING_SCREEN to true,
-                        LandingPageConstants.INTENT_EXTRA_ACTION to AboutExpandedFragment.ACTION_OPEN_EDIT_ABOUT_ME_BOTTOM_SHEET
-                )
+            title = "Gigforce Tip ",
+            subTitle = "Tell me 2 lines that best describe your.",
+            whereToRedirect = R.id.aboutExpandedFragment,
+            intentExtraMap = mapOf(
+                LandingPageConstants.INTENT_EXTRA_CAME_FROM_LANDING_SCREEN to true,
+                LandingPageConstants.INTENT_EXTRA_ACTION to AboutExpandedFragment.ACTION_OPEN_EDIT_ABOUT_ME_BOTTOM_SHEET
+            )
         )
 
 
         //Pref Tips from here
 
         private val ADD_PERMANENT_ADD_TIP = Tip(
-                title = "Gigforce Tip ",
-                subTitle = "Add your permanent address to complete verification?",
-                whereToRedirect = R.id.permanentAddressViewFragment
+            title = "Gigforce Tip ",
+            subTitle = "Add your permanent address to complete verification?",
+            whereToRedirect = R.id.permanentAddressViewFragment
         )
 
 
         private val ADD_PREFERRED_DISTANCE_TIP = Tip(
-                title = "Gigforce Tip ",
-                subTitle = "How far are you willing to travel for work daily?",
-                whereToRedirect = R.id.arrountCurrentAddress
+            title = "Gigforce Tip ",
+            subTitle = "How far are you willing to travel for work daily?",
+            whereToRedirect = R.id.arrountCurrentAddress
         )
 
         private val ADD_DAILY_EARNING_EXPECTATION_TIP = Tip(
-                title = "Gigforce Tip ",
-                subTitle = "What is your daily earning expectation?",
-                whereToRedirect = R.id.earningFragment
+            title = "Gigforce Tip ",
+            subTitle = "What is your daily earning expectation?",
+            whereToRedirect = R.id.earningFragment
         )
 
 
         private val ADD_WEEKDAY_TIP = Tip(
-                title = "Gigforce Tip ",
-                subTitle = "How many days during the week are you willing to work?",
-                whereToRedirect = R.id.weekDayFragment
+            title = "Gigforce Tip ",
+            subTitle = "How many days during the week are you willing to work?",
+            whereToRedirect = R.id.weekDayFragment
         )
 
         private val ADD_WEEKEND_TIP = Tip(
-                title = "Gigforce Tip ",
-                subTitle = "Are you willing to work during the weekends?",
-                whereToRedirect = R.id.weekEndFragment
+            title = "Gigforce Tip ",
+            subTitle = "Are you willing to work during the weekends?",
+            whereToRedirect = R.id.weekEndFragment
         )
 
         private val ADD_WFH_TIP = Tip(
-                title = "Gigforce Tip ",
-                subTitle = "Would you want to work from home?",
-                whereToRedirect = R.id.locationFragment
+            title = "Gigforce Tip ",
+            subTitle = "Would you want to work from home?",
+            whereToRedirect = R.id.locationFragment
         )
     }
 
@@ -155,8 +155,8 @@ class LandingScreenViewModel constructor(
     }
 
     private fun prepareTipsCards(
-            preferencesData: PreferencesDataModel?,
-            profileData: ProfileData?
+        preferencesData: PreferencesDataModel?,
+        profileData: ProfileData?
     ) {
         val profileHelpTips: MutableList<Tip> = mutableListOf()
 
@@ -231,47 +231,55 @@ class LandingScreenViewModel constructor(
     private fun startWatchingPrefChanges() {
 
         prefListenerRegistration = preferencesRepository
-                .getDBCollection()
-                .addSnapshotListener { documentSnapshot, firebaseFirestoreException ->
-                    mPreferencesFinishedLoading = true
+            .getDBCollection()
+            .addSnapshotListener { documentSnapshot, firebaseFirestoreException ->
+                mPreferencesFinishedLoading = true
 
-                    if (documentSnapshot?.data != null) {
+                if (documentSnapshot?.data != null) {
 
-                        runCatching { documentSnapshot.toObject(PreferencesDataModel::class.java) }
-                                .onFailure { exception -> }
-                                .onSuccess { prefData ->
-                                    this.mPreferencesData = prefData
-                                    compareAndPublish()
-                                }
-                    }
+                    runCatching { documentSnapshot.toObject(PreferencesDataModel::class.java) }
+                        .onFailure { exception ->
+                            exception.printStackTrace()
+                        }
+                        .onSuccess { prefData ->
+                            this.mPreferencesData = prefData
+                            compareAndPublish()
+                        }
+                } else {
+                    compareAndPublish()
                 }
+            }
     }
 
     private fun startWatchingProfileChanges() {
 
         profileFirebaseRepository
-                .getDBCollection()
-                .addSnapshotListener { documentSnapshot, firebaseFirestoreException ->
-                    mProfileFinishedLoading = true
+            .getDBCollection()
+            .addSnapshotListener { documentSnapshot, firebaseFirestoreException ->
+                mProfileFinishedLoading = true
 
-                    if (documentSnapshot?.data != null) {
+                if (documentSnapshot?.data != null) {
 
-                        runCatching { documentSnapshot.toObject(ProfileData::class.java) }
-                                .onFailure { exception -> }
-                                .onSuccess { profileData ->
-                                    mProfileData = profileData
-                                    compareAndPublish()
-                                }
-                    }
+                    runCatching { documentSnapshot.toObject(ProfileData::class.java) }
+                        .onFailure { exception ->
+                            exception.printStackTrace()
+                        }
+                        .onSuccess { profileData ->
+                            mProfileData = profileData
+                            compareAndPublish()
+                        }
+                } else {
+                    compareAndPublish()
                 }
+            }
     }
 
     private fun compareAndPublish() {
 
         if (mPreferencesFinishedLoading && mProfileFinishedLoading)
             prepareTipsCards(
-                    preferencesData = mPreferencesData,
-                    profileData = mProfileData
+                preferencesData = mPreferencesData,
+                profileData = mProfileData
             )
     }
 
