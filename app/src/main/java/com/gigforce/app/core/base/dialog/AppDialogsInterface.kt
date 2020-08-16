@@ -29,6 +29,10 @@ interface AppDialogsInterface {
         subTitle: String,
         buttonClickListener: OptionSelected
     )
+    fun showConfirmationDialogType7(
+            title: String,
+            buttonClickListener: ConfirmationDialogOnClickListener
+    )
 }
 
 interface ConfirmationDialogOnClickListener {
