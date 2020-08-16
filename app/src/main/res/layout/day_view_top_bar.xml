@@ -77,7 +77,7 @@
                 android:textSize="14sp"
                 android:fontFamily="@font/lato"
                 android:textColor="#000"
-                android:text="Available"
+                android:text="@string/available"
                 android:letterSpacing="0"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/available_toggle"

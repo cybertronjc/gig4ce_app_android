@@ -3,7 +3,6 @@ package com.gigforce.app.modules.preferences.earnings
 import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,12 +13,12 @@ import android.widget.RadioGroup
 import android.widget.SeekBar
 import android.widget.TextView
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.base.dialog.ConfirmationDialogOnClickListener
 import com.gigforce.app.modules.preferences.SharedPreferenceViewModel
 import kotlinx.android.synthetic.main.earning_fragment.*
-import kotlinx.android.synthetic.main.fragment_select_language.*
 
 class EarningFragment : BaseFragment() {
 
@@ -63,8 +62,8 @@ class EarningFragment : BaseFragment() {
                     (progress * (seekBar.getWidth() - 2 * seekBar.getThumbOffset())) / seekBar.getMax()
                 seekBarDependentCanvas2.setX((seekBar.getX() + value + seekBar.getThumbOffset() / 2) - 35)
                 var progress1 = progress * 500
-                seekBarDependentCanvas2.text = "Rs " + progress1.toString()
-                dailyGoalsTV.text = "Rs 0 - Rs " + progress1
+                seekBarDependentCanvas2.text = getString(R.string.rs) + " " + progress1.toString()
+                dailyGoalsTV.text = getString(R.string.zero_to_rs) + progress1
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
@@ -80,8 +79,8 @@ class EarningFragment : BaseFragment() {
                     (progress * (seekBar.getWidth() - 2 * seekBar.getThumbOffset())) / seekBar.getMax()
                 seekBarDependentCanvas3.setX((seekBar.getX() + value + seekBar.getThumbOffset() / 2) - 35)
                 var progress1 = progress * 500
-                monthlyGoalsTV.text = "Rs 0 - Rs " + progress1
-                seekBarDependentCanvas3.text = "Rs " + progress1.toString()
+                monthlyGoalsTV.text = getString(R.string.zero_to_rs) + progress1
+                seekBarDependentCanvas3.text = getString(R.string.rs) + " " + progress1.toString()
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
@@ -96,9 +95,9 @@ class EarningFragment : BaseFragment() {
                     (progress * (seekBar.getWidth() - 2 * seekBar.getThumbOffset())) / seekBar.getMax()
                 seekBarDependentCanvas4.setX((seekBar.getX() + value + seekBar.getThumbOffset() / 2) - 35)
                 var progress1 = progress * 500
-                monthlyContractTV.text = "Rs 0 - Rs " + progress1
+                monthlyContractTV.text = getString(R.string.zero_to_rs) + progress1
 
-                seekBarDependentCanvas4.text = "Rs " + progress1.toString()
+                seekBarDependentCanvas4.text = getString(R.string.rs) + progress1.toString()
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
@@ -125,18 +124,18 @@ class EarningFragment : BaseFragment() {
         if (viewModel.getPreferenceDataModel().earning.preferredNoOfDays.isEmpty())
             viewModel.getPreferenceDataModel().earning.preferredNoOfDays = "0"
         selected_pre_no_of_days.text =
-            viewModel.getPreferenceDataModel().earning.preferredNoOfDays + " Days"
+            viewModel.getPreferenceDataModel().earning.preferredNoOfDays + " "+getString(R.string.days_camel_case)
         perDayGoalSB.setProgress(0)
-        perDayGoalSB.setProgress(viewModel.getPreferenceDataModel().earning.perDayGoal/500)
+        perDayGoalSB.setProgress(viewModel.getPreferenceDataModel().earning.perDayGoal / 500)
         permonthGoalSB.setProgress(0)
-        permonthGoalSB.setProgress(viewModel.getPreferenceDataModel().earning.perMonthGoal/500)
+        permonthGoalSB.setProgress(viewModel.getPreferenceDataModel().earning.perMonthGoal / 500)
         checkbox_monthly_constract.isChecked =
             viewModel.getPreferenceDataModel().earning.monthlyContractRequired
         monthlyExpectationSB.setProgress(0)
-        monthlyExpectationSB.setProgress(viewModel.getPreferenceDataModel().earning.monthlyExpectation/500)
+        monthlyExpectationSB.setProgress(viewModel.getPreferenceDataModel().earning.monthlyExpectation / 500)
 
-        dailyGoalsTV.text = "Rs 0 - Rs " + viewModel.getPreferenceDataModel().earning.perDayGoal
-        monthlyGoalsTV.text = "Rs 0 - Rs " + viewModel.getPreferenceDataModel().earning.perMonthGoal
+        dailyGoalsTV.text = getString(R.string.zero_to_rs)  + viewModel.getPreferenceDataModel().earning.perDayGoal
+        monthlyGoalsTV.text =getString(R.string.zero_to_rs) + viewModel.getPreferenceDataModel().earning.perMonthGoal
     }
 
     override fun onBackPressed(): Boolean {
@@ -147,7 +146,7 @@ class EarningFragment : BaseFragment() {
     }
 
     private fun confirmationForSavingData() {
-        showConfirmationDialogType2("Are sure you want to change preferences ?",
+        showConfirmationDialogType2(getString(R.string.are_you_sure_change_preferences),
             object : ConfirmationDialogOnClickListener {
                 override fun clickedOnYes(dialog: Dialog?) {
                     saveDataToDB()
@@ -164,21 +163,22 @@ class EarningFragment : BaseFragment() {
     }
 
     fun isDataChanged(): Boolean {
-        if (viewModel.getPreferenceDataModel().earning.preferredNoOfDays != selected_pre_no_of_days.text.toString().split(
-                " "
-            )[0]
+        if (viewModel.getPreferenceDataModel().earning.preferredNoOfDays != selected_pre_no_of_days.text.toString()
+                .split(
+                    " "
+                )[0]
         )
             return true
-        if (viewModel.getPreferenceDataModel().earning.perDayGoal/500 != perDayGoalSB.progress) {
+        if (viewModel.getPreferenceDataModel().earning.perDayGoal / 500 != perDayGoalSB.progress) {
             return true
         }
-        if (viewModel.getPreferenceDataModel().earning.perMonthGoal/500 != permonthGoalSB.progress) {
+        if (viewModel.getPreferenceDataModel().earning.perMonthGoal / 500 != permonthGoalSB.progress) {
             return true
         }
         if (viewModel.getPreferenceDataModel().earning.monthlyContractRequired != checkbox_monthly_constract.isChecked) {
             return true
         }
-        if (viewModel.getPreferenceDataModel().earning.monthlyExpectation/500 != monthlyExpectationSB.progress) {
+        if (viewModel.getPreferenceDataModel().earning.monthlyExpectation / 500 != monthlyExpectationSB.progress) {
             return true
         }
         return false
@@ -186,10 +186,10 @@ class EarningFragment : BaseFragment() {
 
     private fun saveDataToDB() {
         earningDataModel.preferredNoOfDays = selected_pre_no_of_days.text.toString().split(" ")[0]
-        earningDataModel.perDayGoal = perDayGoalSB.progress*500
-        earningDataModel.perMonthGoal = permonthGoalSB.progress*500
+        earningDataModel.perDayGoal = perDayGoalSB.progress * 500
+        earningDataModel.perMonthGoal = permonthGoalSB.progress * 500
         earningDataModel.monthlyContractRequired = checkbox_monthly_constract.isChecked
-        earningDataModel.monthlyExpectation = monthlyExpectationSB.progress*500
+        earningDataModel.monthlyExpectation = monthlyExpectationSB.progress * 500
         viewModel.saveEarningData(earningDataModel)
 
     }
@@ -223,18 +223,18 @@ class EarningFragment : BaseFragment() {
                 customialog?.dismiss()
             })
         radioGroup?.setOnClickListener {
-            showToast("working")
+            showToast(getString(R.string.working))
         }
         customialog?.show()
     }
 
     private fun setPreferenceNoOfDays(radioGroup: RadioGroup) {
         when (selected_pre_no_of_days.text) {
-            "00-04 Days" -> radioGroup.findViewById<RadioButton>(R.id.zeroToFour).isChecked = true
-            "04-08 Days" -> radioGroup.findViewById<RadioButton>(R.id.fourToEight).isChecked = true
-            "08-15 Days" -> radioGroup.findViewById<RadioButton>(R.id.eightToFifteen).isChecked =
+            getString(R.string.zero_to_four_days) -> radioGroup.findViewById<RadioButton>(R.id.zeroToFour).isChecked = true
+            getString(R.string.four_to_eight) -> radioGroup.findViewById<RadioButton>(R.id.fourToEight).isChecked = true
+            getString(R.string.eight_to_fifteen) -> radioGroup.findViewById<RadioButton>(R.id.eightToFifteen).isChecked =
                 true
-            "15-30 Days" -> radioGroup.findViewById<RadioButton>(R.id.fifteenToThirty).isChecked =
+            getString(R.string.fifteen_to_thirty) -> radioGroup.findViewById<RadioButton>(R.id.fifteenToThirty).isChecked =
                 true
         }
 

@@ -9,7 +9,6 @@ import android.view.Window
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,8 +17,8 @@ import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.app.core.genericadapter.RecyclerGenericAdapter
-import com.gigforce.app.utils.GlideApp
 import com.gigforce.app.core.setDarkStatusBarTheme
+import com.gigforce.app.utils.GlideApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
@@ -75,6 +74,7 @@ class PreferencesFragment : BaseFragment() {
     override fun isConfigRequired(): Boolean {
         return true
     }
+
     private fun displayImage(profileImg: String) {
         if (profileImg != null && !profileImg.equals("")) {
             val profilePicRef: StorageReference =
@@ -132,10 +132,9 @@ class PreferencesFragment : BaseFragment() {
             if (preferenceData != null) {
                 viewModel.setPreferenceDataModel(preferenceData)
                 setPreferenecesList()
+            } else if (configDataModel == null) {
+                showToast(getString(R.string.config_data_not_loaded))
             }
-            else if(configDataModel==null){
-                    showToast("Config data not loaded!!")
-                }
         })
     }
 
@@ -159,13 +158,11 @@ class PreferencesFragment : BaseFragment() {
             signOutView.visibility = View.GONE
             visibleInvisibleMainItemView(constraintView, othersTV, false)
             setItemAsOther(othersTV, obj)
-        }
-        else if (position == TITLE_SIGNOUT) {
+        } else if (position == TITLE_SIGNOUT) {
             signOutView.visibility = View.VISIBLE
             hideMainConstraintViewAndOthersViewInItemView(constraintView, othersTV)
             setItemAsSignOut(signOutTV, signOutIV, obj)
-        }
-        else {
+        } else {
             signOutView.visibility = View.GONE
             visibleInvisibleMainItemView(constraintView, othersTV, true)
             setItems(imageView, title, subTitle, obj)
@@ -234,8 +231,7 @@ class PreferencesFragment : BaseFragment() {
 //        titleDialog?.text = "Missing out on gigs?"
         val title = dialog?.findViewById(R.id.title) as TextView
         title.text =
-            "Are you sure?\n" +
-                    "Signing out means missing out on gigs around you."
+            getString(R.string.are_you_sure) + "\n" + getString(R.string.signing_out_means_missing_out_on_gigs)
         val yesBtn = dialog.findViewById(R.id.yes) as TextView
         val noBtn = dialog.findViewById(R.id.cancel) as TextView
         yesBtn.setOnClickListener {

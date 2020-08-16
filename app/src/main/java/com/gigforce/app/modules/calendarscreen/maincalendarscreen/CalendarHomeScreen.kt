@@ -1,7 +1,6 @@
 package com.gigforce.app.modules.calendarscreen.maincalendarscreen
 
 import android.app.Dialog
-import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.view.LayoutInflater
@@ -30,8 +29,6 @@ import com.gigforce.app.modules.calendarscreen.maincalendarscreen.verticalcalend
 import com.gigforce.app.modules.custom_gig_preferences.CustomPreferencesViewModel
 import com.gigforce.app.modules.custom_gig_preferences.ParamCustPreferViewModel
 import com.gigforce.app.modules.custom_gig_preferences.UnavailableDataModel
-import com.gigforce.app.modules.gigPage.GigAttendancePageFragment
-import com.gigforce.app.modules.markattendance.ImageCaptureActivity
 import com.gigforce.app.modules.preferences.PreferencesFragment
 import com.gigforce.app.modules.profile.ProfileViewModel
 import com.gigforce.app.modules.roster.RosterDayFragment
@@ -41,11 +38,6 @@ import com.google.firebase.storage.StorageReference
 import com.riningan.widget.ExtendedBottomSheetBehavior
 import com.riningan.widget.ExtendedBottomSheetBehavior.STATE_COLLAPSED
 import kotlinx.android.synthetic.main.calendar_home_screen.*
-import kotlinx.android.synthetic.main.calendar_home_screen.cardView
-import kotlinx.android.synthetic.main.calendar_home_screen.chat_icon_iv
-import kotlinx.android.synthetic.main.calendar_home_screen.oval_gradient_iv
-import kotlinx.android.synthetic.main.calendar_home_screen.profile_image
-import kotlinx.android.synthetic.main.landingscreen_fragment.*
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.util.*
@@ -392,7 +384,8 @@ class CalendarHomeScreen : BaseFragment(),
                             }
                         } else {
                             if (obj!!.isUnavailable) {
-                                getTextView(viewHolder, R.id.title).text = "Not working"
+                                getTextView(viewHolder, R.id.title).text =
+                                    getString(R.string.not_working)
                                 getTextView(viewHolder, R.id.subtitle).gone()
                                 setTextViewColor(
                                     getTextView(viewHolder, R.id.title),
@@ -601,7 +594,8 @@ class CalendarHomeScreen : BaseFragment(),
             getTextView(viewHolder, R.id.title_calendar_action_item),
             R.color.action_layout_available_title
         )
-        getTextView(viewHolder, R.id.title_calendar_action_item).text = "Marked working"
+        getTextView(viewHolder, R.id.title_calendar_action_item).text =
+            getString(R.string.marked_working)
         getImageView(viewHolder, R.id.flash_icon).setImageResource(R.drawable.ic_flash_green)
     }
 
@@ -621,16 +615,18 @@ class CalendarHomeScreen : BaseFragment(),
                 recyclerGenericAdapter.notifyItemChanged(position)
             } else {
                 showConfirmationDialogType1(
-                    "Are you sure you want to not work on this day?",
+                    getString(R.string.sure_working_on_this_day),
                     object : ConfirmationDialogOnClickListener {
                         override fun clickedOnYes(dialog: Dialog?) {
                             var title =
-                                "Alright, no new gigs will be assigned to you on this day. However, you have \"" + temporaryData.title + "\" is assigned to you. If you want to decline it please do it separately."
+                                getString(R.string.alright_no_new_gigs_assigned_on_this_day) + temporaryData.title + getString(
+                                    R.string.want_to_decline
+                                )
                             showConfirmationDialogType5(
                                 title,
                                 object : ConfirmationDialogOnClickListener {
                                     override fun clickedOnYes(dialog: Dialog?) {
-                                        showToast("Screen is pending to show List of gigs on this day.")
+                                        showToast(getString(R.string.screen_pending_show_gigs))
                                         makeChangesToCalendarItem(position, true)
                                         dialog?.dismiss()
                                     }

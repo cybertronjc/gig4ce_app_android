@@ -26,18 +26,24 @@ class RosterTopBar: MaterialCardView {
     val datetime = LocalDateTime.now()
 
     var monthTemplate = ArrayList<String> (
-        listOf("January", "February", "March", "April", "May",
-            "June", "July", "August", "September", "October",
-            "November", "December")
+        listOf(context.getString(R.string.jan), context.getString(R.string.feb), context.getString(R.string.mar), context.getString(
+                    R.string.apr), context.getString(R.string.may),
+            context.getString(R.string.june), context.getString(R.string.july), context.getString(R.string.aug), context.getString(
+                            R.string.sep), context.getString(R.string.oct),
+            context.getString(R.string.nov), context.getString(R.string.dec))
     )
 
     var months = ArrayList<String> (
-        listOf("January", "February", "March", "April", "May",
-            "June", "July", "August", "September", "October",
-            "November", "December"))
+        listOf(context.getString(R.string.jan), context.getString(R.string.feb), context.getString(R.string.mar), context.getString(
+            R.string.apr), context.getString(R.string.may),
+            context.getString(R.string.june), context.getString(R.string.july), context.getString(R.string.aug), context.getString(
+                R.string.sep), context.getString(R.string.oct),
+            context.getString(R.string.nov), context.getString(R.string.dec)))
 
     var days = ArrayList<String> (
-        listOf("Mon", "Tue", "Wed", "Thur", "Fri", "Sat", "Sun")
+        listOf(context.getString(R.string.mon), context.getString(R.string.tue), context.getString(R.string.wed), context.getString(
+                    R.string.thur), context.getString(R.string.fri), context.getString(R.string.sat), context.getString(
+                                R.string.sun))
     )
 
     init {

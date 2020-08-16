@@ -35,7 +35,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="19dp"
             android:fontFamily="@font/lato"
-            android:text="Location"
+            android:text="@string/location"
             android:textColor="@color/black"
             android:textSize="20sp"
             android:letterSpacing="0" />
@@ -78,7 +78,7 @@
             app:layout_constraintStart_toEndOf="@+id/imageView22"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_chainStyle="packed"
-            android:text="Permanent Address  " />
+            android:text="@string/permanent_address" />
 
         <TextView
             android:id="@+id/textView79"
@@ -140,7 +140,7 @@
             app:layout_constraintStart_toEndOf="@+id/imageView23"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_chainStyle="packed"
-            android:text="Current Address" />
+            android:text="@string/current_address" />
 
         <TextView
             android:id="@+id/textView81"
@@ -191,7 +191,7 @@
             android:id="@+id/textView82"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Work from home"
+            android:text="@string/work_from_home"
             android:layout_marginLeft="10dp"
             android:textSize="14sp"
             android:textColor="#000000"
@@ -218,7 +218,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:letterSpacing="-0.01"
-        android:text="PREFERRED LOCATION"
+        android:text="@string/preferred_location"
         android:textColor="#6d7278"
         android:textSize="12sp"
         android:layout_marginLeft="62dp"
@@ -260,7 +260,7 @@
             app:layout_constraintStart_toEndOf="@+id/imageView25"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_chainStyle="packed"
-            android:text="Around Current Address" />
+            android:text="@string/around_current_add" />
 
         <TextView
             android:id="@+id/preferredDistanceTV"
@@ -274,7 +274,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/imageView25"
             app:layout_constraintTop_toBottomOf="@+id/textView84"
-            android:text="Preferred Locations" />
+            android:text="@string/preferred_locations" />
 
         <Switch
             android:id="@+id/arroundCurrentAddSwitch"
