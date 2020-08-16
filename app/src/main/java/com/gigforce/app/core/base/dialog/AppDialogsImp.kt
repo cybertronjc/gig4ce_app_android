@@ -25,6 +25,12 @@ open class AppDialogsImp(var activity: Activity) : AppDialogsInterface {
         customialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
         customialog?.setCancelable(false)
         customialog?.setContentView(R.layout.confirmation_custom_alert_type1)
+        val displayMetrics = DisplayMetrics()
+        activity?.windowManager?.getDefaultDisplay()?.getMetrics(displayMetrics)
+        var width = displayMetrics.widthPixels
+        var parentLayout = customialog?.findViewById<ConstraintLayout>(R.id.parent_cl)
+        var lp = parentLayout?.layoutParams
+        lp?.width = width-32
         val titleDialog = customialog?.findViewById(R.id.title) as TextView
         titleDialog.text = title
         val yesBtn = customialog?.findViewById(R.id.yes) as TextView
@@ -44,8 +50,10 @@ open class AppDialogsImp(var activity: Activity) : AppDialogsInterface {
         customialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
         customialog?.setCancelable(false)
         customialog?.setContentView(R.layout.confirmation_custom_alert_type2)
+
         val titleDialog = customialog?.findViewById(R.id.title) as TextView
         titleDialog.text = title
+
         val yesBtn = customialog?.findViewById(R.id.yes) as TextView
         val noBtn = customialog?.findViewById(R.id.cancel) as TextView
         yesBtn.setOnClickListener(View.OnClickListener {
