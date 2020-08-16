@@ -23,7 +23,6 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import com.bumptech.glide.Glide
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.gone
@@ -144,11 +143,11 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
         favoriteCB.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked && gig?.isFavourite!!.not()) {
                 viewModel.favoriteGig(gigId)
-                favoriteCB.buttonTintList=resources.getColorStateList(R.color.lipstick)
+                favoriteCB.buttonTintList = resources.getColorStateList(R.color.lipstick)
                 showToast("Marked As Favourite")
             } else if (!isChecked && gig?.isFavourite!!) {
                 viewModel.unFavoriteGig(gigId)
-                favoriteCB.buttonTintList=resources.getColorStateList(R.color.black_42)
+                favoriteCB.buttonTintList = resources.getColorStateList(R.color.black_42)
 
                 showToast("Unmarked As Favourite")
             }
@@ -502,8 +501,8 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
     private fun showPastgigDetails(gig: Gig) {
         checkInCheckOutSliderBtn.gone()
         presentOrFutureGigControls.gone()
-        showFeedBackOption()
-
+//        showFeedBackOption()
+        hideFeedbackOption()
         completedGigControlsLayout.visible()
         bt_download_id_gig_past_gigs.visible()
 
@@ -603,7 +602,8 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
                     )
 
                     inflatedImageView.setOnClickListener(onClickImageListener)
-                    inflatedImageView.findViewById<View>(R.id.ic_delete_btn).setOnClickListener(onDeleteUserReceivedFeedbackClickImageListener)
+                    inflatedImageView.findViewById<View>(R.id.ic_delete_btn)
+                        .setOnClickListener(onDeleteUserReceivedFeedbackClickImageListener)
 
                     inflatedImageView.tag = it.toString()
 
@@ -616,8 +616,12 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
             } else {
                 userReceivedRatingAttachmentsContainer.gone()
             }
+            userReceivedRateTv.text = getString(R.string.rating_you_received)
+
+
         } else {
-            userReceviedFeedbackRatingLayout.gone()
+            userReceviedFeedbackRatingLayout.visible()
+            userReceivedRateTv.text = getString(R.string.pending_rating_from_client)
         }
     }
 
@@ -625,6 +629,8 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
 
         if (gig.gigRating > 0) {
             userFeedbackRatingLayout.visible()
+            whatsYourRateTv.text =getString(R.string.you_have_rated_this_gig_as)
+
 
             userFeedbackRatingBar.rating = gig.gigRating
             if (gig.gigUserFeedback != null) {
@@ -650,7 +656,8 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
                     )
 
                     inflatedImageView.setOnClickListener(onClickImageListener)
-                     inflatedImageView.findViewById<View>(R.id.ic_delete_btn).setOnClickListener(onDeleteUserFeedbackClickImageListener)
+                    inflatedImageView.findViewById<View>(R.id.ic_delete_btn)
+                        .setOnClickListener(onDeleteUserFeedbackClickImageListener)
 
                     inflatedImageView.tag = it.toString()
 
@@ -664,7 +671,13 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
                 userFeedbackAttachmentsContainer.gone()
             }
         } else {
-            userFeedbackRatingLayout.gone()
+            userFeedbackRatingLayout.visible()
+            userFeedbackRatingBar.visible()
+            whatsYourRateTv.text = getString(R.string.provide_feedback)
+            userFeedbackRatingLayout.setOnClickListener {
+                RateGigDialogFragment.launch(gigId, childFragmentManager)
+
+            }
         }
     }
 
@@ -684,36 +697,37 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
     private val onDeleteUserFeedbackClickImageListener = View.OnClickListener { deleteImageView ->
         //TAG INFO - Parent Container Layout have Fixed
 
-        val parentLinearLayout : View = deleteImageView.parent as View
-        val imageNameTV : TextView = parentLinearLayout.findViewById(R.id.imageNameTV)
+        val parentLinearLayout: View = deleteImageView.parent as View
+        val imageNameTV: TextView = parentLinearLayout.findViewById(R.id.imageNameTV)
 
         val attachmentToDeleteName = imageNameTV.text.toString()
 
         MaterialAlertDialogBuilder(requireContext())
             .setTitle("Alert")
             .setMessage("Remove Attachment : $attachmentToDeleteName ?")
-            .setPositiveButton("Yes"){ _,_ ->
-                viewModel.deleteUserFeedbackAttachment(gigId,attachmentToDeleteName)
+            .setPositiveButton("Yes") { _, _ ->
+                viewModel.deleteUserFeedbackAttachment(gigId, attachmentToDeleteName)
             }
-            .setNegativeButton("No"){_,_ ->}
+            .setNegativeButton("No") { _, _ -> }
             .show()
     }
 
-    private val onDeleteUserReceivedFeedbackClickImageListener = View.OnClickListener { deleteImageView ->
-        //TAG INFO - Parent Container Layout have Fixed
-        val parentLinearLayout : View = deleteImageView.parent as View
-        val imageNameTV : TextView = parentLinearLayout.findViewById(R.id.imageNameTV)
+    private val onDeleteUserReceivedFeedbackClickImageListener =
+        View.OnClickListener { deleteImageView ->
+            //TAG INFO - Parent Container Layout have Fixed
+            val parentLinearLayout: View = deleteImageView.parent as View
+            val imageNameTV: TextView = parentLinearLayout.findViewById(R.id.imageNameTV)
 
-        val attachmentToDeleteName = imageNameTV.text.toString()
-        MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Alert")
-            .setMessage("Remove Attachment : $attachmentToDeleteName ?")
-            .setPositiveButton("Yes"){ _,_ ->
-                viewModel.deleteUserReceivedFeedbackAttachment(gigId,attachmentToDeleteName)
-            }
-            .setNegativeButton("No"){_,_ ->}
-            .show()
-    }
+            val attachmentToDeleteName = imageNameTV.text.toString()
+            MaterialAlertDialogBuilder(requireContext())
+                .setTitle("Alert")
+                .setMessage("Remove Attachment : $attachmentToDeleteName ?")
+                .setPositiveButton("Yes") { _, _ ->
+                    viewModel.deleteUserReceivedFeedbackAttachment(gigId, attachmentToDeleteName)
+                }
+                .setNegativeButton("No") { _, _ -> }
+                .show()
+        }
 
     private fun inflateLocationPics(locationPictures: List<String>) = locationPictures.forEach {
         locationImageContainer.inflate(R.layout.layout_gig_location_picture_item, true)
@@ -798,7 +812,7 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
         gigTextTV.text = it
     }
 
-    private fun hideFeedbackOption(){
+    private fun hideFeedbackOption() {
         right_arrow2.gone()
         provide_fb_txt.gone()
         contact_icon.gone()
@@ -806,7 +820,7 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
         textView127.gone()
     }
 
-    private fun showFeedBackOption(){
+    private fun showFeedBackOption() {
         right_arrow2.visible()
         provide_fb_txt.visible()
         contact_icon.visible()
