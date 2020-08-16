@@ -1,8 +1,10 @@
 package com.gigforce.app.modules.roster
 
+import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.ContextThemeWrapper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -130,8 +132,8 @@ class RosterDayFragment : RosterBaseFragment() {
 //            rosterViewModel.allGigs.put(dayTag, MutableLiveData(ArrayList<Gig>()))
 //        rosterViewModel.getGigs(activeDateTime.toDate)
 
-        //observer()
-        //initializeBottomSheet()
+        //observer
+        //initializeBottomSheet()()
         attachHourViewAdapter()
         attachDayAvailabilityObserver()
         attachCurrentDateTimeChangeObserver()
@@ -184,6 +186,8 @@ class RosterDayFragment : RosterBaseFragment() {
         top_bar.more_bottom.setOnClickListener {
             val popupMenu: PopupMenu = PopupMenu(requireContext(), more_bottom)
             popupMenu.menuInflater.inflate(R.menu.roster_menu, popupMenu.menu)
+
+
             popupMenu.setOnMenuItemClickListener {
                 when (it.itemId) {
                     R.id.location_preference -> {

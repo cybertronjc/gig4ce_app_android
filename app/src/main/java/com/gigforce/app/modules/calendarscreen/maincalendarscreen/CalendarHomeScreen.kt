@@ -628,7 +628,7 @@ class CalendarHomeScreen : BaseFragment(),
 
                 recyclerGenericAdapter.notifyItemChanged(position)
             } else {
-                showConfirmationDialogType1(
+                showConfirmationDialogType7(
                     "Are you sure you want to not work on this day?",
                     object : ConfirmationDialogOnClickListener {
                         override fun clickedOnYes(dialog: Dialog?) {

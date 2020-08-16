@@ -398,5 +398,11 @@
     <string name="how_to_rec_selfie_video_content">\n
 आपकी एक 10 सेकंड की वीडियो रिकॉर्ड करें।\n
 सेल्फी मोड में कैमरे की ओर देखें और कहें, "हैलो, मैं (आपका नाम) हूं और मुझे ये करना पसंद है - (2 चीजें जो आप करना चाहते हैं उनका उल्लेख करें।)</string>
+    <string name="download_id_card">Download Id Card</string>
+    <string name="add_bio">Add Bio</string>
+    <string name="provide_feedback">Provide Feedback</string>
+    <string name="pending_rating_from_client">Pending Rating From Client</string>
+    <string name="you_have_rated_this_gig_as">You Have Rated This Gig As</string>
+    <string name="rating_you_received">Rating You Have Received From Client</string>
 
 </resources>

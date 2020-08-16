@@ -31,12 +31,13 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginTop="20dp"
+            android:fontFamily="@font/lato"
             android:gravity="center_horizontal"
             android:paddingBottom="2dp"
             android:text="April 2020"
             android:textColor="#333333"
             android:textSize="14sp"
-            android:letterSpacing="0"
+
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv1HS1" />
 
