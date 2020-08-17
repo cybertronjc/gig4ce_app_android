@@ -154,7 +154,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/imageView23"
             app:layout_constraintTop_toBottomOf="@+id/textView80"
-            android:text="Same as permanent Address" />
+            android:text="@string/same_as_permanent_address" />
 
         <ImageView
             android:id="@+id/arrow2"
@@ -333,7 +333,7 @@
             app:layout_constraintStart_toEndOf="@+id/imageView26"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_chainStyle="packed"
-            android:text="Preferred Locations" />
+            android:text="@string/preferred_locations" />
 
         <TextView
             android:id="@+id/textView87"

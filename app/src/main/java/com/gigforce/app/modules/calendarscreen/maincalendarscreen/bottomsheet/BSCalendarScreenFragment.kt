@@ -34,7 +34,6 @@ import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.app.core.genericadapter.RecyclerGenericAdapter
 import com.gigforce.app.core.gone
-import com.gigforce.app.core.toDate
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.gigPage.GigAttendancePageFragment
 import com.gigforce.app.modules.gigPage.GigPageFragment
@@ -48,7 +47,6 @@ import com.gigforce.app.utils.TextDrawable
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.*
 import java.text.SimpleDateFormat
-import java.time.LocalDateTime
 import java.util.*
 
 class BSCalendarScreenFragment : BaseFragment() {
@@ -104,18 +102,18 @@ class BSCalendarScreenFragment : BaseFragment() {
         initializeFeaturesBottomSheet()
         initializeLearningModule()
         initializeAssessmentBottomSheet()
-        application_version.text = "version " + getCurrentVersion()
+        application_version.text = getString(R.string.version) + " " + getCurrentVersion()
         listener()
     }
 
     private fun initializeVerificationAlert() {
-        var clickhere: String = "Click here";
+        var clickhere: String = getString(R.string.click_here);
         var content: SpannableString = SpannableString(clickhere);
         content.setSpan(UnderlineSpan(), 0, content.length, 0);
         kyc_tv.text =
-            Html.fromHtml("Kyc Verification is not done , <font color='#060606'><u>Click here</u></font> to  complete.")
+            Html.fromHtml(getString(R.string.kyc_not_done))
         video_resume_tv.text =
-            Html.fromHtml("Your Video resume is Pending , <font color='#060606'><u>Click here</u></font> to  complete.")
+            Html.fromHtml(getString(R.string.video_resume_pending_html))
     }
 
     private fun listener() {
@@ -197,10 +195,10 @@ class BSCalendarScreenFragment : BaseFragment() {
                                 getView(viewHolder, R.id.checkInTV).isEnabled = false
                             } else if (obj.isCheckInMarked()) {
                                 getView(viewHolder, R.id.checkInTV).isEnabled = true
-                                (getView(viewHolder, R.id.checkInTV) as Button).text = "Check Out"
+                                (getView(viewHolder, R.id.checkInTV) as Button).text = getString(R.string.check_out)
                             } else {
                                 getView(viewHolder, R.id.checkInTV).isEnabled = true
-                                (getView(viewHolder, R.id.checkInTV) as Button).text = "Check In"
+                                (getView(viewHolder, R.id.checkInTV) as Button).text = getString(R.string.check_in)
                             }
 
                         } else {
@@ -215,17 +213,17 @@ class BSCalendarScreenFragment : BaseFragment() {
                         )
 
                         val callView = getView(viewHolder, R.id.callCardView)
-                        if(obj.gigContactDetails?.contactNumber != 0L) {
+                        if (obj.gigContactDetails?.contactNumber != 0L) {
 
 
                             callView.visible()
                             callView.setOnClickListener(
-                                    CallClickListener(
-                                            upcoming_gig_rv,
-                                            position
-                                    )
+                                CallClickListener(
+                                    upcoming_gig_rv,
+                                    position
+                                )
                             )
-                        }else{
+                        } else {
                             callView.gone()
                         }
 
@@ -308,8 +306,11 @@ class BSCalendarScreenFragment : BaseFragment() {
         override fun onClick(v: View?) {
             val gig = (rv.adapter as RecyclerGenericAdapter<Gig>).list.get(position)
 
-            if(gig.gigContactDetails?.contactNumber == 0L) return
-            val intent = Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", gig.gigContactDetails?.contactNumber?.toString(), null))
+            if (gig.gigContactDetails?.contactNumber == 0L) return
+            val intent = Intent(
+                Intent.ACTION_DIAL,
+                Uri.fromParts("tel", gig.gigContactDetails?.contactNumber?.toString(), null)
+            )
             startActivity(intent)
         }
     }
@@ -405,7 +406,7 @@ class BSCalendarScreenFragment : BaseFragment() {
                 PFRecyclerViewAdapter.OnViewHolderClick<FeatureModel?> { view, position, item ->
                     if (item?.navigationID != -1) {
                         navigate(item?.navigationID!!)
-                    }else{
+                    } else {
                         showToast("This page are inactive. We’ll activate it in a few weeks")
                     }
                 },
@@ -561,7 +562,7 @@ class BSCalendarScreenFragment : BaseFragment() {
                     getTextView(viewHolder, R.id.time).text = obj?.time
 
                     if (obj?.status!!) {
-                        getTextView(viewHolder, R.id.status).text = "COMPLETED"
+                        getTextView(viewHolder, R.id.status).text = getString(R.string.completed)
                         getTextView(
                             viewHolder,
                             R.id.status
@@ -572,7 +573,7 @@ class BSCalendarScreenFragment : BaseFragment() {
                         ) as CardView).setCardBackgroundColor(resources.getColor(R.color.status_bg_completed))
 
                     } else {
-                        getTextView(viewHolder, R.id.status).text = "PENDING"
+                        getTextView(viewHolder, R.id.status).text =  getString(R.string.pending)
                         getTextView(
                             viewHolder,
                             R.id.status

@@ -19,7 +19,7 @@
             android:layout_marginTop="13dp"
             android:fontFamily="@font/lato"
             android:letterSpacing="0.01"
-            android:text="Good morning!"
+            android:text="@string/good_morning"
             android:textColor="#cd000000"
             android:textSize="22sp"
             app:layout_constraintStart_toStartOf="parent"

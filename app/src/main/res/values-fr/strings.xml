@@ -412,10 +412,12 @@
     <string name="current_address">Current Address</string>
     <string name="preferred_locations">Preferred Locations</string>
     <string name="w_my_wallet_balance">My Wallet Balance</string>
+    <string name="okay">OKAY</string>
+    <string name="cancel">CANCEL</string>
+    <string name="veri_hint_ifsc">IFSC code</string>
 
     <string name="set_your_preferences">Set Your Preferences</string>
     <string name="add_your_preferences_to_get_gigs_that_suit_you">Add your preferences to get gigs that suit you</string>
-    <string name="help">Help</string>
     <string name="see_more">See more</string>
     <string name="browse_all_help_topic">Browse all help topic</string>
     <string name="contact_us">Contact Us</string>
@@ -489,5 +491,52 @@
     <string name="current_month">Current Month</string>
     <string name="received">Received</string>
     <string name="withdrawn">Withdrawn</string>
+    <string name="under_verification">Under Verification</string>
+    <string name="area_">Area</string>
+    <string name="state_">State</string>
+    <string name="pincode_">Pincode</string>
+    <string name="add_new_contact">Add New Contact</string>
+    <string name="action">Action</string>
+    <string name="onback_operation">onBackPressed operation</string>
+    <string name="search_operation">Search Operation...</string>
+    <string name="today">TODAY</string>
+    <string name="what_would_you_need_help_with">What would you need help with?</string>
+    <string name="my_current_gig">My Current Gig</string>
+    <string name="my_past_gig">My Past Gig</string>
+    <string name="my_upcoming_gig">My Upcoming Gig</string>
+    <string name="my_profile">My Profile</string>
+    <string name="my_preferences">My Preferences</string>
+    <string name="my_wallet">My Wallet</string>
+    <string name="my_learning">My Learning</string>
+    <string name="others_camel_case">Others</string>
+    <string name="assessment_">Assessment</string>
+    <string name="good_morning">Good morning!</string>
+    <string name="version">version</string>
+    <string name="click_here">Click here</string>
+    <string name="kyc_not_done"><![CDATA[Kyc Verification is not done , <font color=\'#060606\'><u>Click here</u></font> to  complete.]]></string>
+    <string name="video_resume_pending_html"><![CDATA[Your Video resume is Pending , <font color=\'#060606\'><u>Click here</u></font> to  complete.]]></string>
+    <string name="check_out">Check Out</string>
+    <string name="check_in">Check In</string>
+    <string name="upcoming_gig_">Upcoming Gig</string>
+    <string name="explore_by_role_">Explore By Role</string>
+    <string name="monthy_goal">Monthy Goal</string>
+    <string name="per_month_goal">Per month goal</string>
+    <string name="same_as_permanent_address_">Same As Permanent Address</string>
+    <string name="save_">SAVE</string>
+    <string name="more_detail">More detail require!!</string>
+    <string name="pincode_not_correct">Pincode is not correct!!</string>
+    <string name="first_line_">First Line</string>
+    <string name="second_line_">Second Line</string>
+    <string name="area_">Area</string>
+    <string name="city_">City</string>
+    <string name="state_">State</string>
+    <string name="pincode_">Pincode</string>
+    <string name="address_proof_">ADDRESS PROOF</string>
+    <string name="adhaar_card_">Adhaar Card</string>
+    <string name="document_under_verification_">Document Under Verification</string>
+    <string name="km">Km</string>
+    <string name="prefered_distance_zero">Preferred distance is 0 so you are not able to enable it.</string>
+    <string name="preferred_distance_">Preferred Distance</string>
+    <string name="around_current_address_">Around Current Address</string>
 
 </resources>
