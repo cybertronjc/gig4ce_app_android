@@ -295,7 +295,6 @@
     <string name="click_or_select_bank_passbook">Click Or Select your Passbook Image first</string>
     <string name="your_are_reuploading_bank_details">You are re-uploading your Bank details, they will be verified once again, that can take up to 7 days</string>
     <string name="bank_details_uploaded">Bank details Uploaded</string>
-    <string name="under_verification">Under Verification</string>
     <string name="verifying">Verifying</string>
     <string name="about_me">About me</string>
     <string name="education">Education</string>
@@ -492,9 +491,7 @@
     <string name="received">Received</string>
     <string name="withdrawn">Withdrawn</string>
     <string name="under_verification">Under Verification</string>
-    <string name="area_">Area</string>
-    <string name="state_">State</string>
-    <string name="pincode_">Pincode</string>
+
     <string name="add_new_contact">Add New Contact</string>
     <string name="action">Action</string>
     <string name="onback_operation">onBackPressed operation</string>

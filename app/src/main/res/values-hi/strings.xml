@@ -385,7 +385,6 @@
     <string name="let_s_go">चलो चलते हैं</string>
     <string name="thank_you">धन्यवाद!</string>
     <string name="documents_uploaded_long">जैसे-जैसे आपके दस्तावेज़ सत्यापित होते जाएंगे, आप अपने गिग्स को शुरू कर पाएंगे।</string>
-    <string name="under_verification">Under Verification</string>
     <string name="verifying">Verifying</string>
 
     <string name="valid_upto">Valid Upto :</string>
@@ -580,9 +579,7 @@
     <string name="received">Received</string>
     <string name="withdrawn">Withdrawn</string>
     <string name="under_verification">Under Verification</string>
-    <string name="area_">Area</string>
-    <string name="state_">State</string>
-    <string name="pincode_">Pincode</string>
+
     <string name="add_new_contact">Add New Contact</string>
     <string name="action">Action</string>
     <string name="onback_operation">onBackPressed operation</string>

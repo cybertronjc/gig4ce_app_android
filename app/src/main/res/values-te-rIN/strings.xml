@@ -490,9 +490,7 @@
     <string name="received">Received</string>
     <string name="withdrawn">Withdrawn</string>
     <string name="cancel">CANCEL</string>
-    <string name="area_">Area</string>
-    <string name="state_">State</string>
-    <string name="pincode_">Pincode</string>
+
     <string name="add_new_contact">Add New Contact</string>
     <string name="action">Action</string>
     <string name="onback_operation">onBackPressed operation</string>
