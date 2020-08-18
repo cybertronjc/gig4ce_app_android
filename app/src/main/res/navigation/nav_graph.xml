@@ -542,11 +542,6 @@
         android:name="com.gigforce.app.modules.wallet.models.WalletExpandedPage"
         android:label="WalletExpandedPage" />
     <fragment
-        android:id="@+id/learningWithStatsFragment"
-        android:name="com.gigforce.app.modules.learning.LearningWithStatsFragment"
-        android:label="fragment_learning_stats"
-        tools:layout="@layout/fragment_learning_stats" />
-    <fragment
         android:id="@+id/learningVideoFragment"
         android:name="com.gigforce.app.modules.learning.LearningVideoFragment"
         android:label="LearningVideoFragment" />
