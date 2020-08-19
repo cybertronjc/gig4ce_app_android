@@ -176,7 +176,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/textView98" />
 
                 <TextView
-                    android:id="@+id/textView99"
+                    android:id="@+id/gigforce_video"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="24dp"
@@ -198,9 +198,9 @@
                     android:text="Skip"
                     android:textColor="#444444"
                     android:textSize="14sp"
-                    app:layout_constraintBottom_toBottomOf="@+id/textView99"
-                    app:layout_constraintEnd_toStartOf="@+id/textView99"
-                    app:layout_constraintTop_toTopOf="@+id/textView99" />
+                    app:layout_constraintBottom_toBottomOf="@+id/gigforce_video"
+                    app:layout_constraintEnd_toStartOf="@+id/gigforce_video"
+                    app:layout_constraintTop_toTopOf="@+id/gigforce_video" />
 
                 <View
                     android:id="@+id/textView105"
