@@ -50,7 +50,6 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.storage.FirebaseStorage
 import com.ncorti.slidetoact.SlideToActView
-import kotlinx.android.synthetic.main.fragment_gig_page_attendance.*
 import kotlinx.android.synthetic.main.fragment_gig_page_present.*
 import kotlinx.android.synthetic.main.fragment_gig_page_present.addressTV
 import kotlinx.android.synthetic.main.fragment_gig_page_present.callCardView
@@ -198,7 +197,7 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
                         )
                     } else {
                         requestPermissionForGPS()
-                        startNavigationSliderBtn.resetSlider()
+                        checkInCheckOutSliderBtn.resetSlider()
                     }
                 }
             }
