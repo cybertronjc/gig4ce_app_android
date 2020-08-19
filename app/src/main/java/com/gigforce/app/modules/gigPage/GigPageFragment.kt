@@ -2,13 +2,18 @@ package com.gigforce.app.modules.gigPage
 
 import android.Manifest
 import android.app.Activity
+import android.app.Dialog
+import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.location.Geocoder
 import android.location.Location
+import android.location.LocationManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.view.LayoutInflater
@@ -23,8 +28,10 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
+import com.gigforce.app.core.base.dialog.ConfirmationDialogOnClickListener
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.toLocalDate
 import com.gigforce.app.core.visible
@@ -44,6 +51,19 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.storage.FirebaseStorage
 import com.ncorti.slidetoact.SlideToActView
 import kotlinx.android.synthetic.main.fragment_gig_page_present.*
+import kotlinx.android.synthetic.main.fragment_gig_page_present.addressTV
+import kotlinx.android.synthetic.main.fragment_gig_page_present.callCardView
+import kotlinx.android.synthetic.main.fragment_gig_page_present.companyLogoIV
+import kotlinx.android.synthetic.main.fragment_gig_page_present.companyNameTV
+import kotlinx.android.synthetic.main.fragment_gig_page_present.contactPersonTV
+import kotlinx.android.synthetic.main.fragment_gig_page_present.durationTextTV
+import kotlinx.android.synthetic.main.fragment_gig_page_present.favoriteCB
+import kotlinx.android.synthetic.main.fragment_gig_page_present.gigIdTV
+import kotlinx.android.synthetic.main.fragment_gig_page_present.gigTypeTV
+import kotlinx.android.synthetic.main.fragment_gig_page_present.messageCardView
+import kotlinx.android.synthetic.main.fragment_gig_page_present.roleNameTV
+import kotlinx.android.synthetic.main.fragment_gig_page_present.shiftTV
+import kotlinx.android.synthetic.main.fragment_gig_page_present.wageTV
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.util.*
@@ -98,7 +118,7 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
             comingFromCheckInScreen = arguments.getBoolean(INTENT_EXTRA_COMING_FROM_CHECK_IN)
         }
     }
-
+    var userGpsDialogActionCount = 0
     private fun initUi() {
 //        gigLocationMapView.getMapAsync {
 //            mGoogleMap = it
@@ -158,17 +178,23 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
 
                 override fun onSlideComplete(view: SlideToActView) {
 
-                    if (ContextCompat.checkSelfPermission(
+                    var manager = activity?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+                    var statusOfGPS = manager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+                    if(userGpsDialogActionCount==0 && !statusOfGPS){
+                        showEnableGPSDialog()
+                        checkInCheckOutSliderBtn.resetSlider()
+                        return;
+                    }
+
+                    if (userGpsDialogActionCount==1 || ContextCompat.checkSelfPermission(
                             requireActivity(),
                             android.Manifest.permission.ACCESS_COARSE_LOCATION
                         ) == PackageManager.PERMISSION_GRANTED
                     ) {
                         var intent = Intent(context, ImageCaptureActivity::class.java)
-                        startActivityForResult(
-                            intent,
-                            REQUEST_CODE_UPLOAD_SELFIE_IMAGE
+                        startActivityForResult(intent,
+                            GigAttendancePageFragment.REQUEST_CODE_UPLOAD_SELFIE_IMAGE
                         )
-
                     } else {
                         requestPermissionForGPS()
                         checkInCheckOutSliderBtn.resetSlider()
@@ -177,6 +203,63 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
             }
     }
 
+    private fun turnGPSOn() {
+        val provider = Settings.Secure.getString(context?.getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED)
+        if (!provider.contains("gps"))
+        { //if gps is disabled
+            val poke = Intent()
+            poke.setClassName("com.android.settings", "com.android.settings.widget.SettingsAppWidgetProvider")
+            poke.addCategory(Intent.CATEGORY_ALTERNATIVE)
+            poke.setData(Uri.parse("3"))
+            context?.let { it-> LocalBroadcastManager.getInstance(it).sendBroadcast(poke) }
+
+        }
+    }
+    private fun showEnableGPSDialog() {
+        showConfirmationDialogType2("Please enable your GPS!!\n                                                               ",
+            object : ConfirmationDialogOnClickListener {
+                override fun clickedOnYes(dialog: Dialog?) {
+                    if(canToggleGPS())turnGPSOn()
+                    else{showToast("Please Enable your GPS manually in setting!!")}
+                    dialog?.dismiss()
+                }
+
+                override fun clickedOnNo(dialog: Dialog?) {
+                    popFragmentFromStack(R.id.earningFragment)
+                    userGpsDialogActionCount = 1
+                    dialog?.dismiss()
+                }
+
+            })
+    }
+
+
+    private fun canToggleGPS():Boolean {
+        val pacman = context?.getPackageManager()
+        var pacInfo: PackageInfo? = null
+        try
+        {
+            pacInfo = pacman?.getPackageInfo("com.android.settings", PackageManager.GET_RECEIVERS)
+        }
+        catch (e: PackageManager.NameNotFoundException) {
+            return false //package not found
+        }
+        catch (e:Exception){
+
+        }
+        if (pacInfo != null)
+        {
+            for (actInfo in pacInfo.receivers)
+            {
+                //test if recevier is exported. if so, we can toggle GPS.
+                if (actInfo.name.equals("com.android.settings.widget.SettingsAppWidgetProvider") && actInfo.exported)
+                {
+                    return true
+                }
+            }
+        }
+        return false //default
+    }
 
     private fun initViewModel(view: View) {
         viewModel.gigDetails
@@ -246,7 +329,9 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
     }
 
     private fun checkAndUpdateAttendance() {
-        if (ActivityCompat.checkSelfPermission(
+        var manager = activity?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        var statusOfGPS = manager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+        if (statusOfGPS && ActivityCompat.checkSelfPermission(
                 requireContext(),
                 Manifest.permission.ACCESS_FINE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED
@@ -254,13 +339,36 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
             if (!isGPSRequestCompleted) {
                 initializeGPS()
             }
+
             fusedLocationProviderClient.lastLocation.addOnSuccessListener {
                 updateAttendanceOnDBCall(it)
             }
-
-
-        } else {
+        }
+        else if(userGpsDialogActionCount==0){
             requestPermissionForGPS()
+        }
+        else {
+            if (gig!!.attendance == null || !gig!!.attendance!!.checkInMarked) {
+                var markAttendance =
+                    GigAttendance(
+                        true,
+                        Date(),
+                        0.0,
+                        0.0,
+                        selfieImg,
+                        ""
+                    )
+                viewModel.markAttendance(markAttendance, gigId)
+
+            } else {
+                gig!!.attendance!!.setCheckout(
+                    true, Date(), 0.0,
+                    0.0, selfieImg,
+                    ""
+                )
+                viewModel.markAttendance(gig!!.attendance!!, gigId)
+
+            }
         }
     }
 
