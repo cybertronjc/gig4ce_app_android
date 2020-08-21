@@ -7,9 +7,9 @@ import android.widget.LinearLayout
 import com.gigforce.app.R
 import kotlinx.android.synthetic.main.card_row.view.*
 
-class CardRow: LinearLayout {
-    constructor(context: Context): super(context)
-    constructor(context: Context, attrs: AttributeSet): super(context, attrs)
+class CardRow : LinearLayout {
+    constructor(context: Context) : super(context)
+    constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
 
     init {
         View.inflate(context, R.layout.card_row, this)
@@ -30,5 +30,11 @@ class CardRow: LinearLayout {
     var rowLocation: String = ""
         set(value) {
             field = value
+        }
+
+    var showIsWhatsappCb: Boolean = false
+        set(value) {
+            field = value
+            cb_is_whatsapp_number_card_row.visibility = if (value) View.VISIBLE else View.GONE
         }
 }

@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.util.AttributeSet
 import android.util.Log
 import android.view.View
-import android.view.ViewGroup
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.navigation.findNavController
@@ -13,9 +12,9 @@ import com.gigforce.app.R
 import kotlinx.android.synthetic.main.card_row.view.*
 import kotlinx.android.synthetic.main.profile_card_background.view.*
 
-class ProfileCardBackground: CardView {
-    constructor(context: Context): super(context)
-    constructor(context: Context, attrs:AttributeSet): super(context, attrs)
+class ProfileCardBackground : CardView {
+    constructor(context: Context) : super(context)
+    constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
 
     init {
         View.inflate(context, R.layout.profile_card_background, this)
@@ -24,7 +23,7 @@ class ProfileCardBackground: CardView {
     // setters
     var cardTitle: String = ""
         set(value) {
-            field=value
+            field = value
             card_title.text = value
         }
 
@@ -35,7 +34,7 @@ class ProfileCardBackground: CardView {
 
     var cardContent: String = ""
         set(value) {
-            field=value
+            field = value
             val viewgroup = card_content
 
             // TODO: Think if there is a better way such that only non
@@ -52,6 +51,7 @@ class ProfileCardBackground: CardView {
                 }
                 if (item != "") {
                     val widget = CardRow(this.context!!)
+                    widget.showIsWhatsappCb = showIsWhatsappCb
                     if (hasContentTitles) {
                         widget.rowContent = ""
                         for ((idx, it) in item.split('\n').withIndex()) {
@@ -60,8 +60,7 @@ class ProfileCardBackground: CardView {
                             else
                                 widget.rowContent += it + "\n"
                         }
-                    }
-                    else {
+                    } else {
                         widget.rowContent = item
                     }
 
@@ -82,6 +81,11 @@ class ProfileCardBackground: CardView {
         set(value) {
             field = value
             card_bottom.text = value
+        }
+    var showIsWhatsappCb: Boolean = false
+        set(value) {
+            field = value
+
         }
 
     var nextDestination: Int = 0

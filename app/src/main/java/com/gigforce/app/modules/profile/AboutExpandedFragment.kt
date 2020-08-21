@@ -63,6 +63,7 @@ class AboutExpandedFragment : ProfileBaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        contact_card.showIsWhatsappCb=true
         initialize()
         setListeners()
     }
@@ -103,6 +104,7 @@ class AboutExpandedFragment : ProfileBaseFragment() {
             contact_card.cardTitle = "Contact"
             contact_card.cardContent = contactString
             contact_card.cardBottom = "Add contacts"
+
 
             if (contact_card.edit_button != null) {
                 contact_card.edit_button.setOnClickListener {
