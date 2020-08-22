@@ -15,6 +15,7 @@ class CardRow : LinearLayout {
         View.inflate(context, R.layout.card_row, this)
     }
 
+    private var callbacks: CardRowCallbacks? = null
     var rowTitle: String = ""
         set(value) {
             field = value
@@ -36,5 +37,17 @@ class CardRow : LinearLayout {
         set(value) {
             field = value
             cb_is_whatsapp_number_card_row.visibility = if (value) View.VISIBLE else View.GONE
+            if(value){
+                setCbCheckedListener()
+            }
+
         }
+
+    fun setCbCheckedListener() {
+        cb_is_whatsapp_number_card_row.setOnCheckedChangeListener { _, isChecked -> callbacks?.checked(isChecked, rowContent) }
+    }
+
+    fun setCallbacks(callbacks: CardRowCallbacks) {
+        this.callbacks = callbacks
+    }
 }

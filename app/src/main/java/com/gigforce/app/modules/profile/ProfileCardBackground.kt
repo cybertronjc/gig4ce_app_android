@@ -20,6 +20,8 @@ class ProfileCardBackground : CardView {
         View.inflate(context, R.layout.profile_card_background, this)
     }
 
+    private var callbacks: ProfileCardBgCallbacks? = null
+
     // setters
     var cardTitle: String = ""
         set(value) {
@@ -51,7 +53,15 @@ class ProfileCardBackground : CardView {
                 }
                 if (item != "") {
                     val widget = CardRow(this.context!!)
-                    widget.showIsWhatsappCb = showIsWhatsappCb
+                    if (showIsWhatsappCb) {
+                        widget.showIsWhatsappCb = showIsWhatsappCb
+
+                        widget.setCallbacks(object : CardRowCallbacks {
+                            override fun checked(isChecked: Boolean, contactNumber: String) {
+                                callbacks?.checked(isChecked, contactNumber)
+                            }
+                        })
+                    }
                     if (hasContentTitles) {
                         widget.rowContent = ""
                         for ((idx, it) in item.split('\n').withIndex()) {
@@ -104,4 +114,8 @@ class ProfileCardBackground : CardView {
                 bottom_divider.visibility = View.VISIBLE
             }
         }
+
+    fun setCallbacks(callbacks: ProfileCardBgCallbacks) {
+        this.callbacks = callbacks;
+    }
 }

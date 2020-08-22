@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
+import com.gigforce.app.core.base.dialog.ConfirmationDialogOnClickListener
 import com.gigforce.app.modules.landingscreen.LandingPageConstants.INTENT_EXTRA_ACTION
 import com.gigforce.app.modules.landingscreen.LandingPageConstants.INTENT_EXTRA_CAME_FROM_LANDING_SCREEN
 import kotlinx.android.synthetic.main.card_row.view.*
@@ -18,7 +19,7 @@ import kotlinx.android.synthetic.main.fragment_profile_about_expanded.*
 import kotlinx.android.synthetic.main.fragment_profile_about_expanded.view.*
 import kotlinx.android.synthetic.main.profile_card_background.view.*
 
-class AboutExpandedFragment : ProfileBaseFragment() {
+class AboutExpandedFragment : ProfileBaseFragment(), ProfileCardBgCallbacks {
     companion object {
         fun newInstance() = AboutExpandedFragment()
 
@@ -63,7 +64,8 @@ class AboutExpandedFragment : ProfileBaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        contact_card.showIsWhatsappCb=true
+        contact_card.showIsWhatsappCb = true
+        contact_card.setCallbacks(this)
         initialize()
         setListeners()
     }
@@ -171,6 +173,20 @@ class AboutExpandedFragment : ProfileBaseFragment() {
         }
     }
 
+    override fun checked(isChecked: Boolean, contact: String) {
+        showConfirmationDialogType7(
+            getString(R.string.this_is_my_whatsapp_number),
+            object : ConfirmationDialogOnClickListener {
+                override fun clickedOnYes(dialog: Dialog?) {
+                    dialog?.dismiss()
+                }
+
+                override fun clickedOnNo(dialog: Dialog?) {
+                    dialog?.dismiss()
+                }
+
+            })
 
 
+    }
 }
