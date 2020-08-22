@@ -178,6 +178,7 @@ class AboutExpandedFragment : ProfileBaseFragment(), ProfileCardBgCallbacks {
             getString(R.string.this_is_my_whatsapp_number),
             object : ConfirmationDialogOnClickListener {
                 override fun clickedOnYes(dialog: Dialog?) {
+
                     dialog?.dismiss()
                 }
 
