@@ -4,12 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
 import com.gigforce.app.modules.profile.models.Language
 import kotlinx.android.synthetic.main.add_language_bottom_sheet.*
 
-class AddLanguageBottomSheetFragment: ProfileBaseBottomSheetFragment() {
+class AddLanguageBottomSheetFragment : ProfileBaseBottomSheetFragment() {
 
     companion object {
         fun newInstance() = AddLanguageBottomSheetFragment()
@@ -31,7 +30,7 @@ class AddLanguageBottomSheetFragment: ProfileBaseBottomSheetFragment() {
     }
 
     private fun setListeners() {
-        add_language_add_more.setOnClickListener{
+        add_language_add_more.setOnClickListener {
             addNewLanguage()
 
             add_language_name.setText("")
@@ -42,14 +41,14 @@ class AddLanguageBottomSheetFragment: ProfileBaseBottomSheetFragment() {
         mother_language.setOnCheckedChangeListener { mother_language, isChecked ->
         }
 
-        add_language_cancel.setOnClickListener{
-            findNavController().navigate(R.id.aboutExpandedFragment)
+        add_language_cancel.setOnClickListener {
+            this.dismiss()
         }
 
-        add_language_save.setOnClickListener{
+        add_language_save.setOnClickListener {
             if (validateLanguage()) {
                 addNewLanguage()
-                findNavController().navigate(R.id.aboutExpandedFragment)
+                this.dismiss()
             }
         }
     }

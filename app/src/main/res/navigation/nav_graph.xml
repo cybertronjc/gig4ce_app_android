@@ -608,6 +608,11 @@
         android:id="@+id/giger_id_fragment"
         android:name="com.gigforce.app.modules.gigerid.GigerIdFragment"
         android:label="GigerIdFragment" />
+    <fragment
+        android:id="@+id/fakeGigContactScreenFragment"
+        android:name="com.gigforce.app.modules.chatmodule.ui.FakeGigContactScreenFragment"
+        android:label="fragment_fake_contact_screen"
+        tools:layout="@layout/fragment_fake_contact_screen" />
 
 
 </navigation>

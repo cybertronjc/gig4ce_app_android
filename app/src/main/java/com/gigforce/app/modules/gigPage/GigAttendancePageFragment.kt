@@ -2,13 +2,18 @@ package com.gigforce.app.modules.gigPage
 
 import android.Manifest
 import android.app.Activity
+import android.app.Dialog
+import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.location.Geocoder
 import android.location.Location
+import android.location.LocationManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.view.LayoutInflater
@@ -22,9 +27,11 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.bumptech.glide.Glide
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
+import com.gigforce.app.core.base.dialog.ConfirmationDialogOnClickListener
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.gigPage.models.Gig
@@ -73,11 +80,21 @@ class GigAttendancePageFragment : BaseFragment(), PopupMenu.OnMenuItemClickListe
         listener()
     }
 
+    var userGpsDialogActionCount = 0
+
     private fun listener() {
         startNavigationSliderBtn.onSlideCompleteListener =
             object : SlideToActView.OnSlideCompleteListener {
                 override fun onSlideComplete(view: SlideToActView) {
-                    if (ContextCompat.checkSelfPermission(
+                    var manager = activity?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+                    var statusOfGPS = manager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+                    if(userGpsDialogActionCount==0 && !statusOfGPS){
+                        showEnableGPSDialog()
+                        startNavigationSliderBtn.resetSlider()
+                        return;
+                    }
+
+                    if (userGpsDialogActionCount==1 || ContextCompat.checkSelfPermission(
                             requireActivity(),
                             android.Manifest.permission.ACCESS_COARSE_LOCATION
                         ) == PackageManager.PERMISSION_GRANTED
@@ -94,6 +111,64 @@ class GigAttendancePageFragment : BaseFragment(), PopupMenu.OnMenuItemClickListe
             }
 
     }
+    private fun turnGPSOn() {
+        val provider = Settings.Secure.getString(context?.getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED)
+        if (!provider.contains("gps"))
+        { //if gps is disabled
+            val poke = Intent()
+            poke.setClassName("com.android.settings", "com.android.settings.widget.SettingsAppWidgetProvider")
+            poke.addCategory(Intent.CATEGORY_ALTERNATIVE)
+            poke.setData(Uri.parse("3"))
+            context?.let { it->LocalBroadcastManager.getInstance(it).sendBroadcast(poke) }
+
+        }
+    }
+    private fun showEnableGPSDialog() {
+        showConfirmationDialogType2("Please enable your GPS!!\n                                                               ",
+            object : ConfirmationDialogOnClickListener {
+                override fun clickedOnYes(dialog: Dialog?) {
+                    if(canToggleGPS())turnGPSOn()
+                    else{showToast("Please Enable your GPS manually in setting!!")}
+                    dialog?.dismiss()
+                }
+
+                override fun clickedOnNo(dialog: Dialog?) {
+                    popFragmentFromStack(R.id.earningFragment)
+                    userGpsDialogActionCount = 1
+                    dialog?.dismiss()
+                }
+
+            })
+    }
+
+
+    private fun canToggleGPS():Boolean {
+        val pacman = context?.getPackageManager()
+        var pacInfo: PackageInfo? = null
+        try
+        {
+            pacInfo = pacman?.getPackageInfo("com.android.settings", PackageManager.GET_RECEIVERS)
+        }
+        catch (e: PackageManager.NameNotFoundException) {
+            return false //package not found
+        }
+        catch (e:Exception){
+
+        }
+        if (pacInfo != null)
+        {
+            for (actInfo in pacInfo.receivers)
+            {
+                //test if recevier is exported. if so, we can toggle GPS.
+                if (actInfo.name.equals("com.android.settings.widget.SettingsAppWidgetProvider") && actInfo.exported)
+                {
+                    return true
+                }
+            }
+        }
+        return false //default
+    }
+
 
     private fun initView() {
         cross_btn.setOnClickListener {
@@ -117,7 +192,7 @@ class GigAttendancePageFragment : BaseFragment(), PopupMenu.OnMenuItemClickListe
         }
 
         messageCardView.setOnClickListener {
-            navigate(R.id.contactScreenFragment)
+            navigate(R.id.fakeGigContactScreenFragment)
         }
 
         favoriteCB.setOnCheckedChangeListener { _, isChecked ->
@@ -346,7 +421,9 @@ class GigAttendancePageFragment : BaseFragment(), PopupMenu.OnMenuItemClickListe
     }
 
     private fun checkAndUpdateAttendance() {
-        if (ActivityCompat.checkSelfPermission(
+        var manager = activity?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        var statusOfGPS = manager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+        if (statusOfGPS && ActivityCompat.checkSelfPermission(
                 requireContext(),
                 Manifest.permission.ACCESS_FINE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED
@@ -354,13 +431,36 @@ class GigAttendancePageFragment : BaseFragment(), PopupMenu.OnMenuItemClickListe
             if (!isGPSRequestCompleted) {
                 initializeGPS()
             }
+
             fusedLocationProviderClient.lastLocation.addOnSuccessListener {
                 updateAttendanceOnDBCall(it)
             }
-
-
-        } else {
+        }
+        else if(userGpsDialogActionCount==0){
             requestPermissionForGPS()
+        }
+        else {
+            if (gig!!.attendance == null || !gig!!.attendance!!.checkInMarked) {
+                var markAttendance =
+                    GigAttendance(
+                        true,
+                        Date(),
+                        0.0,
+                        0.0,
+                        selfieImg,
+                        ""
+                    )
+                viewModel.markAttendance(markAttendance, gigId)
+
+            } else {
+                gig!!.attendance!!.setCheckout(
+                    true, Date(), 0.0,
+                    0.0, selfieImg,
+                    ""
+                )
+                viewModel.markAttendance(gig!!.attendance!!, gigId)
+
+            }
         }
 
     }
@@ -432,6 +532,7 @@ class GigAttendancePageFragment : BaseFragment(), PopupMenu.OnMenuItemClickListe
                     isGPSRequestCompleted = true
                     initializeGPS()
                 } else {
+                    userGpsDialogActionCount = 1
                     showToast("This APP require GPS permission to work properly")
                 }
             }

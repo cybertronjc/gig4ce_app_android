@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isGone
@@ -34,6 +35,7 @@ import kotlinx.android.synthetic.main.fragment_add_driving_license_info_main.*
 import kotlinx.android.synthetic.main.fragment_add_driving_license_info_view.*
 import kotlinx.android.synthetic.main.fragment_verification_image_holder.view.*
 import java.util.*
+
 
 enum class DrivingLicenseSides {
     FRONT_SIDE,
@@ -73,6 +75,16 @@ class AddDrivingLicenseInfoFragment : BaseFragment() {
     }
 
     private fun initViews() {
+        val adapter =
+            ArrayAdapter<String>(
+                requireContext(),
+                R.layout.layout_sp_state_dl,
+                resources.getStringArray(R.array.indian_states)
+            )
+        stateSpinner.adapter = adapter
+
+
+
         dlFrontImageHolder.documentUploadLabelTV.text =
             getString(R.string.upload_driving_license_front_side)
         dlFrontImageHolder.documentUploadSubLabelTV.text =

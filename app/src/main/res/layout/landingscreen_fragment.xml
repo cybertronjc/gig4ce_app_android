@@ -29,8 +29,9 @@
         android:fontFamily="@font/lato"
         android:text="Username"
         android:textColor="#000000"
+
         android:textSize="16sp"
-        android:letterSpacing="0"
+        android:letterSpacing="0.02"
         app:layout_constraintStart_toStartOf="@+id/textView3"
         app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
@@ -175,7 +176,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/textView98" />
 
                 <TextView
-                    android:id="@+id/textView99"
+                    android:id="@+id/gigforce_video"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="24dp"
@@ -197,9 +198,9 @@
                     android:text="Skip"
                     android:textColor="#444444"
                     android:textSize="14sp"
-                    app:layout_constraintBottom_toBottomOf="@+id/textView99"
-                    app:layout_constraintEnd_toStartOf="@+id/textView99"
-                    app:layout_constraintTop_toTopOf="@+id/textView99" />
+                    app:layout_constraintBottom_toBottomOf="@+id/gigforce_video"
+                    app:layout_constraintEnd_toStartOf="@+id/gigforce_video"
+                    app:layout_constraintTop_toTopOf="@+id/gigforce_video" />
 
                 <View
                     android:id="@+id/textView105"
@@ -216,6 +217,7 @@
                 android:id="@+id/gigforce_tip"
                 android:layout_width="match_parent"
                 android:layout_height="124dp"
+                android:visibility="gone"
                 android:nestedScrollingEnabled="false" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -595,6 +597,7 @@
                     android:text="Not Now"
                     android:textColor="#444444"
                     android:textSize="14sp"
+                    android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="@+id/textView119"
                     app:layout_constraintEnd_toStartOf="@+id/textView119"
                     app:layout_constraintTop_toTopOf="@+id/textView119" />
@@ -733,6 +736,8 @@
                     android:id="@+id/contact_us"
                     android:layout_width="match_parent"
                     android:layout_height="55dp"
+                    android:clickable="true"
+                    android:focusable="true"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView127" />
 

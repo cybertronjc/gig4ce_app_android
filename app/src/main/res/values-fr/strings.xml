@@ -297,4 +297,11 @@
     <string name="bank_details_uploaded">Bank details Uploaded</string>
     <string name="under_verification">Under Verification</string>
     <string name="verifying">Verifying</string>
+    <string name="download_id_card">Download Id Card</string>
+    <string name="add_bio">Add Bio</string>
+    <string name="how_to_rec_selfie_video_content">Record a 10-minute video of yourself. Face the camera and say “Hi, I’m (your name) and I like to do (mention 2 things you like to do.)</string>
+    <string name="provide_feedback">Provide Feedback</string>
+    <string name="pending_rating_from_client">Pending Rating From Client</string>
+    <string name="you_have_rated_this_gig_as">You Have Rated This Gig As</string>
+    <string name="rating_you_received">Rating You Have Received From Client</string>
 </resources>

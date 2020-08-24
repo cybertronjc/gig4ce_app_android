@@ -71,7 +71,7 @@
 
                     android:layout_marginEnd="20dp"
                     android:button="@drawable/sl_favorite_24_dp"
-                    app:buttonTint="@color/lipstick"
+                    app:buttonTint="@color/black_42"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/gigBannerImageIV" />
 
@@ -151,7 +151,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingBottom="10dp"
-                android:visibility="gone"
+                android:visibility="visible"
                 app:layout_constraintTop_toBottomOf="@id/separator30">
 
 
@@ -296,10 +296,18 @@
                     style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
+                    android:layout_marginStart="18dp"
                     android:layout_marginTop="14dp"
-                    android:layout_marginEnd="16dp"
-                    android:text="Download ID"
+                    android:layout_marginEnd="14dp"
+                    android:fontFamily="@font/lato"
+                    android:paddingTop="@dimen/size_10"
+                    android:textColor="@color/lipstick"
+                    android:paddingBottom="@dimen/size_9"
+                    android:text="@string/download_id_card"
+                    android:textAllCaps="false"
+
+
+                    android:textSize="@dimen/font_14"
                     app:layout_constraintTop_toBottomOf="@id/presentFutureGigNoteTV"
                     app:strokeColor="@color/lipstick" />
 
@@ -310,7 +318,7 @@
                 android:id="@+id/completedGigControlsLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="visible"
+                android:visibility="gone"
                 app:layout_constraintTop_toBottomOf="@id/presentOrFutureGigControls">
 
                 <ImageView
@@ -755,14 +763,18 @@
                     style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
+                    android:layout_marginStart="18dp"
                     android:layout_marginTop="14dp"
-                    android:layout_marginEnd="16dp"
-                    android:text="Download ID"
+                    android:layout_marginEnd="14dp"
+                    android:fontFamily="@font/lato"
+                    android:paddingTop="@dimen/size_10"
+                    android:paddingBottom="@dimen/size_9"
+                    android:textColor="@color/lipstick"
+                    android:text="@string/download_id_card"
+                    android:textAllCaps="false"
+                    android:textSize="@dimen/font_14"
                     android:visibility="gone"
                     app:layout_constraintEnd_toEndOf="parent"
-
-
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:strokeColor="@color/lipstick" />
@@ -843,7 +855,6 @@
                     android:padding="1dp"
                     android:scaleX="0.9"
                     android:scaleY="0.9"
-                    android:visibility="gone"
                     app:cardBackgroundColor="@color/light_pink"
                     app:cardCornerRadius="20dp"
                     app:layout_constraintBottom_toBottomOf="parent"

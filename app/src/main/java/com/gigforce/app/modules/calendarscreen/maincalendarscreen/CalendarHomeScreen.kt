@@ -156,7 +156,6 @@ class CalendarHomeScreen : BaseFragment(),
         calendarView.setOnDateClickListner(object : CalendarView.MonthChangeAndDateClickedListener {
             override fun onMonthChange(monthModel: CalendarView.MonthModel) {
                 selectedMonthModel = monthModel
-                println(" date data1 " + selectedMonthModel.toString())
                 changeVisibilityCalendarView()
             }
         })
@@ -242,6 +241,9 @@ class CalendarHomeScreen : BaseFragment(),
 //                viewModel.setDataModel(homeDataModel.all_gigs)
                 initializeViews()
                 calendarView.setGigData(viewModel.arrMainHomeDataModel!!)
+//                var layoutManager = rv_.layoutManager as LinearLayoutManager
+//                var data = recyclerGenericAdapter.list.get(layoutManager.findFirstVisibleItemPosition())
+//                calendarView.setCurrentVisibleDate(data.getDateObj())
             }
         })
 
@@ -271,7 +273,9 @@ class CalendarHomeScreen : BaseFragment(),
     }
 
     private fun displayImage(profileImg: String) {
-        if (profileImg != null && !profileImg.equals("")) {
+
+
+        if (profileImg != "avatar.jpg" && profileImg != "") {
             val profilePicRef: StorageReference =
                 PreferencesFragment.storage.reference.child("profile_pics").child(profileImg)
             if (profile_image != null)
@@ -279,6 +283,11 @@ class CalendarHomeScreen : BaseFragment(),
                     .load(profilePicRef)
                     .apply(RequestOptions().circleCrop())
                     .into(profile_image)
+        } else{
+            GlideApp.with(this.requireContext())
+                .load(R.drawable.avatar)
+                .apply(RequestOptions().circleCrop())
+                .into(profile_image)
         }
     }
 
@@ -474,7 +483,6 @@ class CalendarHomeScreen : BaseFragment(),
         }
 
         var scrollListener = object : RecyclerView.OnScrollListener() {
-
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
                 var layoutManager: LinearLayoutManager? = null
@@ -620,7 +628,7 @@ class CalendarHomeScreen : BaseFragment(),
 
                 recyclerGenericAdapter.notifyItemChanged(position)
             } else {
-                showConfirmationDialogType1(
+                showConfirmationDialogType7(
                     "Are you sure you want to not work on this day?",
                     object : ConfirmationDialogOnClickListener {
                         override fun clickedOnYes(dialog: Dialog?) {

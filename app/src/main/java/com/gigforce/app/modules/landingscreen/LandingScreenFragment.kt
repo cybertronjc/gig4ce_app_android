@@ -329,17 +329,7 @@ class LandingScreenFragment : BaseFragment() {
                 activity?.applicationContext,
                 PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
                     val id = (item as HelpVideo).videoYoutubeId
-                    val appIntent =
-                        Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:$id"))
-                    val webIntent = Intent(
-                        Intent.ACTION_VIEW,
-                        Uri.parse("http://www.youtube.com/watch?v=$id")
-                    )
-                    try {
-                        requireContext().startActivity(appIntent)
-                    } catch (ex: ActivityNotFoundException) {
-                        requireContext().startActivity(webIntent)
-                    }
+                    playVideo(id)
                 },
                 RecyclerGenericAdapter.ItemInterface<HelpVideo?> { obj, viewHolder, position ->
 
@@ -373,13 +363,32 @@ class LandingScreenFragment : BaseFragment() {
         helpVideoRV.adapter = recyclerGenericAdapter
     }
 
+    fun playVideo( id : String){
+        val appIntent =
+            Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:$id"))
+        val webIntent = Intent(
+            Intent.ACTION_VIEW,
+            Uri.parse("https://www.youtube.com/watch?v=$id")
+        )
+        try {
+            requireContext().startActivity(appIntent)
+        } catch (ex: ActivityNotFoundException) {
+            requireContext().startActivity(webIntent)
+        }
+    }
+
     private fun displayImage(profileImg: String) {
-        if (profileImg != null && !profileImg.equals("")) {
+        if (profileImg != "avatar.jpg" && profileImg != "") {
             val profilePicRef: StorageReference =
                 PreferencesFragment.storage.reference.child("profile_pics").child(profileImg)
             if(profile_image!=null)
             GlideApp.with(this.requireContext())
                 .load(profilePicRef)
+                .apply(RequestOptions().circleCrop())
+                .into(profile_image)
+        }else{
+            GlideApp.with(this.requireContext())
+                .load(R.drawable.avatar)
                 .apply(RequestOptions().circleCrop())
                 .into(profile_image)
         }
@@ -407,7 +416,11 @@ class LandingScreenFragment : BaseFragment() {
             about_us_cl.visibility = View.GONE
         }
         chat_icon_iv.setOnClickListener {
-            navigate(R.id.contactScreenFragment)
+            navigate(R.id.fakeGigContactScreenFragment)
+        }
+
+        contact_us.setOnClickListener {
+            navigate(R.id.fakeGigContactScreenFragment)
         }
 
         invite_contact.setOnClickListener {
@@ -424,6 +437,13 @@ class LandingScreenFragment : BaseFragment() {
 
         seeMoreBtn.setOnClickListener {
             navigate(R.id.helpVideosFragment)
+        }
+        help_topic.setOnClickListener{
+            showToast("This is under development. Please check again in a few days.")
+        }
+
+        gigforce_video.setOnClickListener{
+            playVideo("FbiyRe49wjY")
         }
     }
 
@@ -465,7 +485,8 @@ class LandingScreenFragment : BaseFragment() {
             RecyclerGenericAdapter<TitleSubtitleModel>(
                 activity?.applicationContext,
                 PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
-                    navigate(R.id.mainLearningFragment)
+//                    navigate(R.id.mainLearningFragment)
+                    showToast("This is work in progress. Please check again in a few days")
                 },
                 RecyclerGenericAdapter.ItemInterface<TitleSubtitleModel?> { obj, viewHolder, position ->
                     var view = getView(viewHolder, R.id.card_view)
@@ -537,7 +558,7 @@ class LandingScreenFragment : BaseFragment() {
             RecyclerGenericAdapter<TitleSubtitleModel>(
                 activity?.applicationContext,
                 PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
-
+                    showToast("This is under development. Please check again in a few days.")
                 },
                 RecyclerGenericAdapter.ItemInterface<TitleSubtitleModel?> { obj, viewHolder, position ->
                     var view = getView(viewHolder, R.id.card_view)
@@ -604,7 +625,8 @@ class LandingScreenFragment : BaseFragment() {
             RecyclerGenericAdapter<TitleSubtitleModel>(
                 activity?.applicationContext,
                 PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
-                    navigate(R.id.explore_by_role)
+                    showToast("This is under development. Please check again in a few days.")
+//                    navigate(R.id.explore_by_role)
                 },
                 RecyclerGenericAdapter.ItemInterface<TitleSubtitleModel?> { obj, viewHolder, position ->
                     var view = getView(viewHolder, R.id.card_view)

@@ -34,9 +34,9 @@
             android:layout_height="14dp"
             android:layout_marginTop="22dp"
             android:layout_marginEnd="13dp"
-            android:src="@drawable/ic_time"
             android:clickable="true"
             android:focusable="true"
+            android:src="@drawable/ic_time"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -153,6 +153,7 @@
 
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/panCardEditText"
+                style=""
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
@@ -192,8 +193,7 @@
             android:layout_height="0.5dp"
             android:layout_marginTop="8dp"
             android:background="#cdccd1"
-            app:layout_constraintTop_toBottomOf="@id/panInfoLayout"
-            />
+            app:layout_constraintTop_toBottomOf="@id/panInfoLayout" />
 
         <include
             android:id="@+id/panImageHolder"
@@ -207,18 +207,16 @@
             android:id="@+id/panImageEditErrorMessage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="18dp"
             android:layout_marginTop="5dp"
             android:fontFamily="@font/lato"
             android:letterSpacing="0"
-            android:visibility="gone"
-            android:layout_marginStart="18dp"
             android:textColor="@color/app_red"
+            android:textSize="12sp"
+            android:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/panImageHolder"
-            android:textSize="12sp"
             tools:text="Error : Uploaded Image is not a Driving License Image" />
-
-
 
 
         <com.ncorti.slidetoact.SlideToActView
@@ -231,9 +229,11 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:outer_color="#dddddd"
             app:slider_height="60dp"
+            app:icon_margin="@dimen/size_7"
             app:slider_icon="@drawable/ic_arrow_forward_white"
             app:slider_icon_color="@color/white"
-            app:text="@string/save_all_caps" />
+            app:text="@string/save_all_caps"
+            app:text_size="@dimen/font_16" />
 
         <com.google.android.material.checkbox.MaterialCheckBox
             android:id="@+id/panDataCorrectCB"

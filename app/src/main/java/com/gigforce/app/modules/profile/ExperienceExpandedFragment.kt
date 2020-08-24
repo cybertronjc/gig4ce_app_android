@@ -107,4 +107,6 @@ class ExperienceExpandedFragment: ProfileBaseFragment() {
             findNavController().navigate(R.id.addExperienceBottomSheet)
         }
     }
+
+
 }

@@ -35,8 +35,8 @@
                 android:layout_centerHorizontal="true"
                 android:fontFamily="@font/lato"
                 android:letterSpacing="-0.01"
-                tools:text="@string/upload_aadhar_card_back_side"
-                android:textColor="#d72467" />
+                android:textColor="#d72467"
+                tools:text="@string/upload_aadhar_card_back_side" />
 
             <ImageView
                 android:layout_width="15dp"
@@ -55,8 +55,8 @@
                 android:fontFamily="@font/lato"
                 android:gravity="center"
                 android:letterSpacing="-0.01"
-                tools:text="@string/upload_your_aadhar_card"
-                android:textColor="@color/battle_ship_grey" />
+                android:textColor="@color/battle_ship_grey"
+                tools:text="@string/upload_your_aadhar_card" />
 
         </RelativeLayout>
     </com.google.android.material.card.MaterialCardView>
@@ -76,30 +76,31 @@
             android:layout_marginTop="12dp"
             android:fontFamily="@font/lato"
             android:letterSpacing="-0.01"
-            tools:text="Image Label"
-            android:textColor="@color/black" />
+            android:textColor="@color/black"
+            tools:text="Image Label" />
 
 
         <TextView
             android:id="@+id/reuploadBtn"
-            android:textColor="@color/colorPrimary"
-            app:strokeColor="@color/lipstick"
-            android:padding="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:fontFamily="@font/lato"
-            android:letterSpacing="-0.01"
+            android:letterSpacing="-0.07"
+            android:padding="10dp"
             android:text="@string/reupload"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/font_14"
+            app:strokeColor="@color/lipstick"
             tools:ignore="RelativeOverlap" />
 
         <ImageView
             android:id="@+id/clickedImageIV"
             android:layout_width="match_parent"
             android:layout_height="172dp"
+            android:layout_below="@id/reuploadBtn"
             android:layout_marginTop="14dp"
-            android:scaleType="fitXY"
-            android:layout_below="@id/reuploadBtn" />
+            android:scaleType="fitXY" />
     </RelativeLayout>
 
 </LinearLayout>

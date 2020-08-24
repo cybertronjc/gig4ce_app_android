@@ -2,13 +2,18 @@ package com.gigforce.app.modules.gigPage
 
 import android.Manifest
 import android.app.Activity
+import android.app.Dialog
+import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.location.Geocoder
 import android.location.Location
+import android.location.LocationManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.view.LayoutInflater
@@ -23,9 +28,10 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import com.bumptech.glide.Glide
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
+import com.gigforce.app.core.base.dialog.ConfirmationDialogOnClickListener
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.toLocalDate
 import com.gigforce.app.core.visible
@@ -33,10 +39,7 @@ import com.gigforce.app.modules.gigPage.models.Gig
 import com.gigforce.app.modules.gigPage.models.GigAttendance
 import com.gigforce.app.modules.markattendance.ImageCaptureActivity
 import com.gigforce.app.modules.roster.inflate
-import com.gigforce.app.utils.DateHelper
-import com.gigforce.app.utils.Lce
-import com.gigforce.app.utils.TextDrawable
-import com.gigforce.app.utils.ViewFullScreenImageDialogFragment
+import com.gigforce.app.utils.*
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -44,9 +47,23 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.storage.FirebaseStorage
 import com.ncorti.slidetoact.SlideToActView
 import kotlinx.android.synthetic.main.fragment_gig_page_present.*
+import kotlinx.android.synthetic.main.fragment_gig_page_present.addressTV
+import kotlinx.android.synthetic.main.fragment_gig_page_present.callCardView
+import kotlinx.android.synthetic.main.fragment_gig_page_present.companyLogoIV
+import kotlinx.android.synthetic.main.fragment_gig_page_present.companyNameTV
+import kotlinx.android.synthetic.main.fragment_gig_page_present.contactPersonTV
+import kotlinx.android.synthetic.main.fragment_gig_page_present.durationTextTV
+import kotlinx.android.synthetic.main.fragment_gig_page_present.favoriteCB
+import kotlinx.android.synthetic.main.fragment_gig_page_present.gigIdTV
+import kotlinx.android.synthetic.main.fragment_gig_page_present.gigTypeTV
+import kotlinx.android.synthetic.main.fragment_gig_page_present.messageCardView
+import kotlinx.android.synthetic.main.fragment_gig_page_present.roleNameTV
+import kotlinx.android.synthetic.main.fragment_gig_page_present.shiftTV
+import kotlinx.android.synthetic.main.fragment_gig_page_present.wageTV
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.util.*
@@ -101,7 +118,7 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
             comingFromCheckInScreen = arguments.getBoolean(INTENT_EXTRA_COMING_FROM_CHECK_IN)
         }
     }
-
+    var userGpsDialogActionCount = 0
     private fun initUi() {
 //        gigLocationMapView.getMapAsync {
 //            mGoogleMap = it
@@ -119,7 +136,7 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
         }
 
         contactUsLayout.setOnClickListener {
-            navigate(R.id.contactScreenFragment)
+            navigate(R.id.fakeGigContactScreenFragment)
         }
 
 
@@ -140,15 +157,18 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
         }
 
         messageCardView.setOnClickListener {
-            navigate(R.id.contactScreenFragment)
+            navigate(R.id.fakeGigContactScreenFragment)
         }
 
         favoriteCB.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked && gig?.isFavourite!!.not()) {
                 viewModel.favoriteGig(gigId)
+                favoriteCB.buttonTintList = resources.getColorStateList(R.color.lipstick)
                 showToast("Marked As Favourite")
             } else if (!isChecked && gig?.isFavourite!!) {
                 viewModel.unFavoriteGig(gigId)
+                favoriteCB.buttonTintList = resources.getColorStateList(R.color.black_42)
+
                 showToast("Unmarked As Favourite")
             }
         }
@@ -158,17 +178,23 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
 
                 override fun onSlideComplete(view: SlideToActView) {
 
-                    if (ContextCompat.checkSelfPermission(
+                    var manager = activity?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+                    var statusOfGPS = manager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+                    if(userGpsDialogActionCount==0 && !statusOfGPS){
+                        showEnableGPSDialog()
+                        checkInCheckOutSliderBtn.resetSlider()
+                        return;
+                    }
+
+                    if (userGpsDialogActionCount==1 || ContextCompat.checkSelfPermission(
                             requireActivity(),
                             android.Manifest.permission.ACCESS_COARSE_LOCATION
                         ) == PackageManager.PERMISSION_GRANTED
                     ) {
                         var intent = Intent(context, ImageCaptureActivity::class.java)
-                        startActivityForResult(
-                            intent,
-                            REQUEST_CODE_UPLOAD_SELFIE_IMAGE
+                        startActivityForResult(intent,
+                            GigAttendancePageFragment.REQUEST_CODE_UPLOAD_SELFIE_IMAGE
                         )
-
                     } else {
                         requestPermissionForGPS()
                         checkInCheckOutSliderBtn.resetSlider()
@@ -177,6 +203,63 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
             }
     }
 
+    private fun turnGPSOn() {
+        val provider = Settings.Secure.getString(context?.getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED)
+        if (!provider.contains("gps"))
+        { //if gps is disabled
+            val poke = Intent()
+            poke.setClassName("com.android.settings", "com.android.settings.widget.SettingsAppWidgetProvider")
+            poke.addCategory(Intent.CATEGORY_ALTERNATIVE)
+            poke.setData(Uri.parse("3"))
+            context?.let { it-> LocalBroadcastManager.getInstance(it).sendBroadcast(poke) }
+
+        }
+    }
+    private fun showEnableGPSDialog() {
+        showConfirmationDialogType2("Please enable your GPS!!\n                                                               ",
+            object : ConfirmationDialogOnClickListener {
+                override fun clickedOnYes(dialog: Dialog?) {
+                    if(canToggleGPS())turnGPSOn()
+                    else{showToast("Please Enable your GPS manually in setting!!")}
+                    dialog?.dismiss()
+                }
+
+                override fun clickedOnNo(dialog: Dialog?) {
+                    popFragmentFromStack(R.id.earningFragment)
+                    userGpsDialogActionCount = 1
+                    dialog?.dismiss()
+                }
+
+            })
+    }
+
+
+    private fun canToggleGPS():Boolean {
+        val pacman = context?.getPackageManager()
+        var pacInfo: PackageInfo? = null
+        try
+        {
+            pacInfo = pacman?.getPackageInfo("com.android.settings", PackageManager.GET_RECEIVERS)
+        }
+        catch (e: PackageManager.NameNotFoundException) {
+            return false //package not found
+        }
+        catch (e:Exception){
+
+        }
+        if (pacInfo != null)
+        {
+            for (actInfo in pacInfo.receivers)
+            {
+                //test if recevier is exported. if so, we can toggle GPS.
+                if (actInfo.name.equals("com.android.settings.widget.SettingsAppWidgetProvider") && actInfo.exported)
+                {
+                    return true
+                }
+            }
+        }
+        return false //default
+    }
 
     private fun initViewModel(view: View) {
         viewModel.gigDetails
@@ -246,7 +329,9 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
     }
 
     private fun checkAndUpdateAttendance() {
-        if (ActivityCompat.checkSelfPermission(
+        var manager = activity?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        var statusOfGPS = manager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+        if (statusOfGPS && ActivityCompat.checkSelfPermission(
                 requireContext(),
                 Manifest.permission.ACCESS_FINE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED
@@ -254,13 +339,36 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
             if (!isGPSRequestCompleted) {
                 initializeGPS()
             }
+
             fusedLocationProviderClient.lastLocation.addOnSuccessListener {
                 updateAttendanceOnDBCall(it)
             }
-
-
-        } else {
+        }
+        else if(userGpsDialogActionCount==0){
             requestPermissionForGPS()
+        }
+        else {
+            if (gig!!.attendance == null || !gig!!.attendance!!.checkInMarked) {
+                var markAttendance =
+                    GigAttendance(
+                        true,
+                        Date(),
+                        0.0,
+                        0.0,
+                        selfieImg,
+                        ""
+                    )
+                viewModel.markAttendance(markAttendance, gigId)
+
+            } else {
+                gig!!.attendance!!.setCheckout(
+                    true, Date(), 0.0,
+                    0.0, selfieImg,
+                    ""
+                )
+                viewModel.markAttendance(gig!!.attendance!!, gigId)
+
+            }
         }
     }
 
@@ -322,8 +430,9 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
         if (!gig.companyLogo.isNullOrBlank()) {
             if (gig.companyLogo!!.startsWith("http", true)) {
 
-                Glide.with(requireContext())
+                GlideApp.with(requireContext())
                     .load(gig.companyLogo)
+                    .placeholder(getCircularProgressDrawable())
                     .into(companyLogoIV)
             } else {
                 FirebaseStorage.getInstance()
@@ -331,8 +440,10 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
                     .child(gig.companyLogo!!)
                     .downloadUrl
                     .addOnSuccessListener { fileUri ->
-                        Glide.with(requireContext())
+
+                        GlideApp.with(requireContext())
                             .load(fileUri)
+                            .placeholder(getCircularProgressDrawable())
                             .into(companyLogoIV)
                     }
             }
@@ -455,6 +566,7 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
         completedGigControlsLayout.gone()
         presentGigAttendanceCardView.visible()
         presentOrFutureGigControls.visible()
+        hideFeedbackOption()
 
         if (gig.isCheckInAndCheckOutMarked()) {
             //Attendance have been marked show it
@@ -497,8 +609,8 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
     private fun showPastgigDetails(gig: Gig) {
         checkInCheckOutSliderBtn.gone()
         presentOrFutureGigControls.gone()
-
-
+//        showFeedBackOption()
+        hideFeedbackOption()
         completedGigControlsLayout.visible()
         bt_download_id_gig_past_gigs.visible()
 
@@ -555,6 +667,7 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
         checkInCheckOutSliderBtn.gone()
         completedGigControlsLayout.gone()
         presentGigAttendanceCardView.gone()
+        hideFeedbackOption()
         presentOrFutureGigControls.visible()
 
         val timeLeft = gig.startDateTime!!.toDate().time - Date().time
@@ -597,7 +710,8 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
                     )
 
                     inflatedImageView.setOnClickListener(onClickImageListener)
-                    // inflatedImageView.findViewById<View>(R.id.ic_delete_btn).setOnClickListener(onDeleteImageClickImageListener)
+                    inflatedImageView.findViewById<View>(R.id.ic_delete_btn)
+                        .setOnClickListener(onDeleteUserReceivedFeedbackClickImageListener)
 
                     inflatedImageView.tag = it.toString()
 
@@ -610,8 +724,12 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
             } else {
                 userReceivedRatingAttachmentsContainer.gone()
             }
+            userReceivedRateTv.text = getString(R.string.rating_you_received)
+
+
         } else {
-            userReceviedFeedbackRatingLayout.gone()
+            userReceviedFeedbackRatingLayout.visible()
+            userReceivedRateTv.text = getString(R.string.pending_rating_from_client)
         }
     }
 
@@ -619,6 +737,8 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
 
         if (gig.gigRating > 0) {
             userFeedbackRatingLayout.visible()
+            whatsYourRateTv.text =getString(R.string.you_have_rated_this_gig_as)
+
 
             userFeedbackRatingBar.rating = gig.gigRating
             if (gig.gigUserFeedback != null) {
@@ -644,7 +764,8 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
                     )
 
                     inflatedImageView.setOnClickListener(onClickImageListener)
-                    // inflatedImageView.findViewById<View>(R.id.ic_delete_btn).setOnClickListener(onDeleteImageClickImageListener)
+                    inflatedImageView.findViewById<View>(R.id.ic_delete_btn)
+                        .setOnClickListener(onDeleteUserFeedbackClickImageListener)
 
                     inflatedImageView.tag = it.toString()
 
@@ -658,7 +779,13 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
                 userFeedbackAttachmentsContainer.gone()
             }
         } else {
-            userFeedbackRatingLayout.gone()
+            userFeedbackRatingLayout.visible()
+            userFeedbackRatingBar.visible()
+            whatsYourRateTv.text = getString(R.string.provide_feedback)
+            userFeedbackRatingLayout.setOnClickListener {
+                RateGigDialogFragment.launch(gigId, childFragmentManager)
+
+            }
         }
     }
 
@@ -675,6 +802,41 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
         ViewFullScreenImageDialogFragment.showImage(childFragmentManager, uri)
     }
 
+    private val onDeleteUserFeedbackClickImageListener = View.OnClickListener { deleteImageView ->
+        //TAG INFO - Parent Container Layout have Fixed
+
+        val parentLinearLayout: View = deleteImageView.parent as View
+        val imageNameTV: TextView = parentLinearLayout.findViewById(R.id.imageNameTV)
+
+        val attachmentToDeleteName = imageNameTV.text.toString()
+
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle("Alert")
+            .setMessage("Remove Attachment : $attachmentToDeleteName ?")
+            .setPositiveButton("Yes") { _, _ ->
+                viewModel.deleteUserFeedbackAttachment(gigId, attachmentToDeleteName)
+            }
+            .setNegativeButton("No") { _, _ -> }
+            .show()
+    }
+
+    private val onDeleteUserReceivedFeedbackClickImageListener =
+        View.OnClickListener { deleteImageView ->
+            //TAG INFO - Parent Container Layout have Fixed
+            val parentLinearLayout: View = deleteImageView.parent as View
+            val imageNameTV: TextView = parentLinearLayout.findViewById(R.id.imageNameTV)
+
+            val attachmentToDeleteName = imageNameTV.text.toString()
+            MaterialAlertDialogBuilder(requireContext())
+                .setTitle("Alert")
+                .setMessage("Remove Attachment : $attachmentToDeleteName ?")
+                .setPositiveButton("Yes") { _, _ ->
+                    viewModel.deleteUserReceivedFeedbackAttachment(gigId, attachmentToDeleteName)
+                }
+                .setNegativeButton("No") { _, _ -> }
+                .show()
+        }
+
     private fun inflateLocationPics(locationPictures: List<String>) = locationPictures.forEach {
         locationImageContainer.inflate(R.layout.layout_gig_location_picture_item, true)
         val gigItem: View =
@@ -686,8 +848,9 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
         if (it.startsWith("http", true)) {
             gigItem.tag = it
 
-            Glide.with(requireContext())
+            GlideApp.with(requireContext())
                 .load(it)
+                .placeholder(getCircularProgressDrawable())
                 .into(locationImageView)
         } else {
             FirebaseStorage.getInstance()
@@ -695,8 +858,10 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
                 .child(it)
                 .downloadUrl
                 .addOnSuccessListener { fileUri ->
-                    Glide.with(requireContext())
+
+                    GlideApp.with(requireContext())
                         .load(fileUri)
+                        .placeholder(getCircularProgressDrawable())
                         .into(locationImageView)
 
                     (locationImageView.parent as View).tag = fileUri.toString()
@@ -753,6 +918,22 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
             gigHighlightsContainer.getChildAt(gigHighlightsContainer.childCount - 1) as LinearLayout
         val gigTextTV: TextView = gigItem.findViewById(R.id.text)
         gigTextTV.text = it
+    }
+
+    private fun hideFeedbackOption() {
+        right_arrow2.gone()
+        provide_fb_txt.gone()
+        contact_icon.gone()
+        provide_feedback.gone()
+        textView127.gone()
+    }
+
+    private fun showFeedBackOption() {
+        right_arrow2.visible()
+        provide_fb_txt.visible()
+        contact_icon.visible()
+        provide_feedback.visible()
+        textView127.visible()
     }
 
     private val dateFormatter = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())

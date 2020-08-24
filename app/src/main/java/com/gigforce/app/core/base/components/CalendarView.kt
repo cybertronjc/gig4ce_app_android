@@ -22,7 +22,7 @@ import kotlin.collections.ArrayList
 class CalendarView : LinearLayout {
     var visibleOnce = false
     val TOTAL_YEAR = 3
-
+    private var currentVisibleDate = Date()
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
 
@@ -299,5 +299,10 @@ class CalendarView : LinearLayout {
 //        calendarData.set(Calendar.YEAR, 2019)
         recyclerGenericAdapter.list = getDefaultItems()
         recyclerGenericAdapter.notifyDataSetChanged()
+    }
+
+    fun setCurrentVisibleDate(currentVisibleDate: Date) {
+        this.currentVisibleDate = currentVisibleDate
+
     }
 }

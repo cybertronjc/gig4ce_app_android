@@ -18,6 +18,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?android:attr/actionBarSize"
+            app:contentInsetStartWithNavigation="@dimen/size_19"
             android:background="@color/white"
             app:navigationIcon="@drawable/ic_arrow_back_black"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"

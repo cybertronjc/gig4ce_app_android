@@ -11,6 +11,7 @@ import com.gigforce.app.utils.Lce
 import com.gigforce.app.utils.Lse
 import com.gigforce.app.utils.setOrThrow
 import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.storage.FirebaseStorage
@@ -229,4 +230,26 @@ class GigViewModel constructor(
                     continuation.resumeWithException(it)
                 }
         }
+
+    fun deleteUserFeedbackAttachment(
+        gigId: String,
+        attachmentToDeleteName: String
+    ) {
+
+        gigsRepository.getCollectionReference()
+            .document(gigId)
+            .update("gigUserFeedbackAttachments", FieldValue.arrayRemove(attachmentToDeleteName))
+    }
+
+    fun deleteUserReceivedFeedbackAttachment(
+        gigId: String,
+        attachmentToDeleteName: String
+    ) {
+
+        gigsRepository.getCollectionReference()
+            .document(gigId)
+            .update("ratingUserReceivedAttachments", FieldValue.arrayRemove(attachmentToDeleteName))
+    }
+
+
 }

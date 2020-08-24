@@ -1,8 +1,10 @@
 package com.gigforce.app.modules.roster
 
+import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.ContextThemeWrapper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,13 +22,9 @@ import com.gigforce.app.modules.calendarscreen.maincalendarscreen.verticalcalend
 import com.gigforce.app.modules.custom_gig_preferences.CustomPreferencesViewModel
 import com.gigforce.app.modules.custom_gig_preferences.ParamCustPreferViewModel
 import com.gigforce.app.modules.gigPage.models.Gig
-import kotlinx.android.synthetic.main.calendar_home_screen.*
 import kotlinx.android.synthetic.main.day_view_top_bar.*
-import kotlinx.android.synthetic.main.day_view_top_bar.month_year
 import kotlinx.android.synthetic.main.day_view_top_bar.view.*
 import kotlinx.android.synthetic.main.roster_day_fragment.*
-import kotlinx.android.synthetic.main.roster_day_fragment.calendarView
-import kotlinx.android.synthetic.main.roster_day_fragment.calendar_cv
 import java.text.SimpleDateFormat
 import java.time.Instant
 import java.time.LocalDateTime
@@ -112,6 +110,8 @@ class RosterDayFragment : RosterBaseFragment() {
         calendar.set(Calendar.DATE, activeDateTime.dayOfMonth)
         calendar.set(Calendar.MONTH, activeDateTime.monthValue - 1)
         calendar.set(Calendar.YEAR, activeDateTime.year)
+
+
         initializeMonthTV(calendar, false)
 
         rosterViewModel.dayContext = requireContext()
@@ -132,8 +132,8 @@ class RosterDayFragment : RosterBaseFragment() {
 //            rosterViewModel.allGigs.put(dayTag, MutableLiveData(ArrayList<Gig>()))
 //        rosterViewModel.getGigs(activeDateTime.toDate)
 
-        //observer()
-        //initializeBottomSheet()
+        //observer
+        //initializeBottomSheet()()
         attachHourViewAdapter()
         attachDayAvailabilityObserver()
         attachCurrentDateTimeChangeObserver()
@@ -186,16 +186,18 @@ class RosterDayFragment : RosterBaseFragment() {
         top_bar.more_bottom.setOnClickListener {
             val popupMenu: PopupMenu = PopupMenu(requireContext(), more_bottom)
             popupMenu.menuInflater.inflate(R.menu.roster_menu, popupMenu.menu)
+
+
             popupMenu.setOnMenuItemClickListener {
                 when (it.itemId) {
-                    R.id.location_card -> {
-
+                    R.id.location_preference -> {
+                        navigate(R.id.locationFragment)
                     }
                     R.id.settings -> {
-
+                        navigate(R.id.settingFragment)
                     }
                     R.id.help -> {
-
+                        navigate(R.id.fakeGigContactScreenFragment)
                     }
                 }
                 true
@@ -209,40 +211,42 @@ class RosterDayFragment : RosterBaseFragment() {
     }
 
     override fun onBackPressed(): Boolean {
-        if (calendar_top_cl.visibility == View.VISIBLE){
+        if (calendar_top_cl.visibility == View.VISIBLE) {
             calendar_top_cl.visibility = View.GONE
             return true
-        }else {
+        } else {
             return false
         }
     }
-    var curSelectedMonthFromMonthCalendar : CalendarView.MonthModel? = null
+
+    var curSelectedMonthFromMonthCalendar: CalendarView.MonthModel? = null
+
     @RequiresApi(Build.VERSION_CODES.O)
     private fun setListeners() {
         back_button.setOnClickListener {
-            if (calendar_top_cl.visibility == View.VISIBLE){
+            if (calendar_top_cl.visibility == View.VISIBLE) {
                 calendar_top_cl.visibility = View.GONE
-                if(curSelectedMonthFromMonthCalendar!=null)
-                scrollToSelectedDate(curSelectedMonthFromMonthCalendar!!)
-            }else {
+                if (curSelectedMonthFromMonthCalendar != null)
+                    scrollToSelectedDate(curSelectedMonthFromMonthCalendar!!)
+            } else {
                 activity?.onBackPressed()
             }
         }
 
-        calendar_cv.setOnClickListener{
-            if (calendar_top_cl.visibility == View.VISIBLE){
+        calendar_cv.setOnClickListener {
+            if (calendar_top_cl.visibility == View.VISIBLE) {
                 calendar_top_cl.visibility = View.GONE
-                if(curSelectedMonthFromMonthCalendar!=null)
-                scrollToSelectedDate(curSelectedMonthFromMonthCalendar!!)
-            }else{
+                if (curSelectedMonthFromMonthCalendar != null)
+                    scrollToSelectedDate(curSelectedMonthFromMonthCalendar!!)
+            } else {
                 calendar_top_cl.visibility = View.VISIBLE
             }
         }
 
         top_bar.month_year.setOnClickListener {
             changeMonthCalendarVisibility()
-            if(calendar_top_cl.visibility == View.GONE && curSelectedMonthFromMonthCalendar!=null)
-            scrollToSelectedDate(curSelectedMonthFromMonthCalendar!!)
+            if (calendar_top_cl.visibility == View.GONE && curSelectedMonthFromMonthCalendar != null)
+                scrollToSelectedDate(curSelectedMonthFromMonthCalendar!!)
 
         }
 
@@ -301,12 +305,13 @@ class RosterDayFragment : RosterBaseFragment() {
                 rosterViewModel.isDayAvailable.value!!, viewModelCustomPreference
             )
             rosterViewModel.resetDayTimeAvailability(
-                viewModelCustomPreference, getDayTimesChild()!!, configDataModel)
+                viewModelCustomPreference, getDayTimesChild()!!, configDataModel
+            )
         }
     }
 
     private fun scrollToSelectedDate(monthModel: CalendarView.MonthModel) {
-        if(monthModel==null)return
+        if (monthModel == null) return
         var millisecond = activeDateTime.atOffset(ZoneOffset.UTC).toInstant().toEpochMilli();
         var activeDateTimeClone =
             LocalDateTime.ofInstant(Instant.ofEpochMilli(millisecond), ZoneId.systemDefault())
@@ -410,8 +415,16 @@ class RosterDayFragment : RosterBaseFragment() {
 
             top_bar.isCurrentDay = isSameDate(it, actualDateTime)
             top_bar.isFutureDate = isMoreDate(it, actualDateTime)
+            var calendar = Calendar.getInstance()
+            calendar.set(Calendar.DATE, it.dayOfMonth)
+            calendar.set(Calendar.MONTH, it.monthValue - 1)
+            calendar.set(Calendar.YEAR, it.year)
+            var calendarAct = Calendar.getInstance()
+            calendarAct.set(Calendar.DATE, actualDateTime.dayOfMonth)
+            calendarAct.set(Calendar.MONTH, actualDateTime.monthValue - 1)
+            calendarAct.set(Calendar.YEAR, actualDateTime.year)
+            top_bar.toggleInactive = calendar.time.before(calendarAct.time)
 
-            top_bar.toggleInactive = isLessDate(it, actualDateTime)
 
             //dayTag = "${activeDateTime.year}${activeDateTime.monthValue}${activeDateTime.dayOfMonth}"
             dayTag = String.format("%4d", activeDateTime.year) +

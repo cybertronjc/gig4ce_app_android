@@ -98,7 +98,7 @@ class DayTimeFragment : BaseFragment() {
             return "Yes"
         }
         else{
-            return "No"
+            return "None"
         }
     }
 
@@ -119,6 +119,12 @@ class DayTimeFragment : BaseFragment() {
         //weekend listener
         arroundCurrentAddSwitch.setOnClickListener{ view->
             var isChecked = (view as Switch).isChecked
+
+            if(isChecked && preferencesDataModel.selectedweekends.size == 0){
+                navigate(R.id.weekEndFragment)
+                arroundCurrentAddSwitch.setChecked(false)
+            }
+            else
             viewModel.setIsWeekend(isChecked)
         }
 //        switch2.setOnCheckedChangeListener{ buttonView, isChecked ->

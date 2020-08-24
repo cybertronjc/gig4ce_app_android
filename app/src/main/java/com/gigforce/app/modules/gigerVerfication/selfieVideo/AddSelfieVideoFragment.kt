@@ -20,11 +20,13 @@ import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.gigerVerfication.GigerVerificationStatus
+import com.gigforce.app.modules.gigerVerfication.WhyWeNeedThisBottomSheet
 import com.gigforce.app.utils.DateHelper
 import com.gigforce.app.utils.Lse
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.storage.FirebaseStorage
 import com.ncorti.slidetoact.SlideToActView
+import kotlinx.android.synthetic.main.fragment_add_selfie_play_selfie_video.*
 import kotlinx.android.synthetic.main.fragment_add_selfie_video.*
 import java.io.File
 
@@ -48,6 +50,7 @@ class AddSelfieVideoFragment : BaseFragment(), CaptureVideoFragmentEventListener
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        pb_selfie_video.visibility = View.VISIBLE
         initViews()
         // addCaptureVideoFragment()
         initViewModel()
@@ -99,6 +102,7 @@ class AddSelfieVideoFragment : BaseFragment(), CaptureVideoFragmentEventListener
         )
         transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
         transaction.commit()
+
     }
 
     private fun initViewModel() {
@@ -121,9 +125,16 @@ class AddSelfieVideoFragment : BaseFragment(), CaptureVideoFragmentEventListener
                 }
             })
 
+        viewModel.selfieVideoUploadProgressState.observe(
+            viewLifecycleOwner, Observer {
+                uploadStatusTV.text = it
+                Log.d("TAG", it)
+            }
+        )
+
         viewModel.gigerVerificationStatus
             .observe(viewLifecycleOwner, Observer {
-
+                pb_selfie_video.visibility = View.GONE
                 this.gigerVerificationStatus = it
                 if (it.selfieVideoUploaded) {
                     selfieVideoSubmitSliderBtn.text = getString(R.string.update)
@@ -214,34 +225,20 @@ class AddSelfieVideoFragment : BaseFragment(), CaptureVideoFragmentEventListener
 
         helpIconIV.setOnClickListener {
 
-            val id = "usZgFZga7xE"
-            val appIntent =
-                Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:$id"))
-            val webIntent = Intent(
-                Intent.ACTION_VIEW,
-                Uri.parse("http://www.youtube.com/watch?v=$id")
+            WhyWeNeedThisBottomSheet.launch(
+                childFragmentManager = childFragmentManager,
+                title = getString(R.string.how_to_record_selfie_video),
+                content = getString(R.string.how_to_rec_selfie_video_content)
             )
-            try {
-                requireContext().startActivity(appIntent)
-            } catch (ex: ActivityNotFoundException) {
-                requireContext().startActivity(webIntent)
-            }
         }
 
         howToRecordVideoBtn.setOnClickListener {
 
-            val id = "usZgFZga7xE"
-            val appIntent =
-                Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:$id"))
-            val webIntent = Intent(
-                Intent.ACTION_VIEW,
-                Uri.parse("http://www.youtube.com/watch?v=$id")
+            WhyWeNeedThisBottomSheet.launch(
+                childFragmentManager = childFragmentManager,
+                title = getString(R.string.how_to_record_selfie_video),
+                content = getString(R.string.how_to_rec_selfie_video_content)
             )
-            try {
-                requireContext().startActivity(appIntent)
-            } catch (ex: ActivityNotFoundException) {
-                requireContext().startActivity(webIntent)
-            }
         }
     }
 

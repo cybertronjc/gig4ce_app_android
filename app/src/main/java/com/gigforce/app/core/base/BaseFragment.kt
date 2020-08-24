@@ -328,6 +328,13 @@ open class BaseFragment : Fragment(), ViewsFromViewsInterface, NavigationInterfa
         appDialogsInterface.showConfirmationDialogType4(title,subTitle,optionSelected)
     }
 
+    override fun showConfirmationDialogType7(
+        title: String,
+        buttonClickListener: ConfirmationDialogOnClickListener
+    ) {
+        appDialogsInterface.showConfirmationDialogType7(title,buttonClickListener)
+    }
+
     override fun getLanguageCodeToName(languageCode: String): String {
         return languageUtilInterface.getLanguageCodeToName(languageCode)
     }
