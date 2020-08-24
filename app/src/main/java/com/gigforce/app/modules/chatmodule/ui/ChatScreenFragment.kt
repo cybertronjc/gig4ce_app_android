@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.gigforce.app.modules.chatmodule.ui.adapters.ChatRecyclerAdapter
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
+import com.gigforce.app.modules.chatmodule.models.Message
 import com.gigforce.app.modules.chatmodule.viewModels.ChatViewModel
 import com.gigforce.app.utils.AppConstants
 import com.gigforce.app.utils.VerticalItemDecorator
@@ -28,7 +29,8 @@ class ChatScreenFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener {
     private lateinit var mAdapter: ChatRecyclerAdapter
     lateinit var imageUrl: String
     lateinit var username: String
-    var chatHeaderId = ""
+    private lateinit var chatHeaderId: String
+    private lateinit var otherUserId: String
 
     companion object {
         fun newInstance() = ChatScreenFragment()
@@ -40,7 +42,7 @@ class ChatScreenFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener {
             imageUrl = it.getSerializable(AppConstants.IMAGE_URL).toString()
             username = it.getSerializable(AppConstants.CONTACT_NAME).toString()
             chatHeaderId = it.getSerializable("chatHeaderId").toString()
-
+            otherUserId = it.getSerializable("otherUserId").toString()
         }
     }
 
@@ -78,6 +80,7 @@ class ChatScreenFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener {
 
     private fun subscribeViewModel() {
         viewModel.chatMsgs.observe(viewLifecycleOwner, Observer {
+            viewModel.markChatMsgsRead(it)
             if (it != null) {
                 mAdapter.setData(it)
                 rv_chats.scrollToPosition(it.size - 1)
@@ -108,7 +111,7 @@ class ChatScreenFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener {
         popUp.show()
     }
 
-    private fun manageTime(): String {
+    private fun manageTime(): LocalDateTime {
         var current: LocalDateTime
         val formatter = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             current = LocalDateTime.now()
@@ -120,7 +123,7 @@ class ChatScreenFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener {
 
         println("Current Date and Time is: $formatted")
         tv_lastSeenValue.text = "last seen at $formatted"
-        return formatted
+        return current
     }
 
     override fun onMenuItemClick(item: MenuItem?): Boolean = when (item?.itemId) {
@@ -143,6 +146,7 @@ class ChatScreenFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener {
                 val message = et_typedMessageValue.text.toString()
                 val msgTime = manageTime()
                 //viewModel.addNewMessageToTheList(message, msgTime)
+                viewModel.sendNewMsg(chatHeaderId, message, msgTime, otherUserId)
                 et_typedMessageValue.setText("")
             }
         }

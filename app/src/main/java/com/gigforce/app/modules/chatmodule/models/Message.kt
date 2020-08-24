@@ -10,7 +10,6 @@ class Message(
     var forUserId: String = "",
     var otherUserId: String = "",
     var flowType: String = "",
-    var otherMsgId: String = "",
     var timestamp: Timestamp? = null,
     var status: Int = 0,
     var type: String = "",

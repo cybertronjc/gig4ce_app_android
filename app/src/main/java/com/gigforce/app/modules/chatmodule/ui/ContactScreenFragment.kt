@@ -124,7 +124,7 @@ class ContactScreenFragment : BaseFragment(), OnContactClickListener {
         }
     }
 
-    override fun contactClick(url: String, name: String, chatHeaderId: String) {
+    override fun contactClick(url: String, name: String, chatHeaderId: String, otherUserId: String) {
 //        val intent = Intent(activity?.applicationContext,ChatScreenFragment::class.java)
 //        intent.putExtra(AppConstants.IMAGE_URL,url)
 //        intent.putExtra(AppConstants.CONTACT_NAME,name)
@@ -136,6 +136,7 @@ class ContactScreenFragment : BaseFragment(), OnContactClickListener {
             bundle.putSerializable(AppConstants.IMAGE_URL, url)
             bundle.putSerializable(AppConstants.CONTACT_NAME, name)
             bundle.putSerializable("chatHeaderId", chatHeaderId)
+            bundle.putSerializable("otherUserId", otherUserId)
             navigate(R.id.chatScreenFragment, bundle)
         }
     }

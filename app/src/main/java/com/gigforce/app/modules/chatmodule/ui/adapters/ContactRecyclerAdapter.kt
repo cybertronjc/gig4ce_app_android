@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.RequestManager
 import com.gigforce.app.R
 import com.gigforce.app.modules.chatmodule.models.ChatHeader
+import com.gigforce.app.modules.chatmodule.models.UserInfo
 
 class ContactRecyclerAdapter(private val requestManager: RequestManager,private val onContactClickListener: OnContactClickListener) : RecyclerView.Adapter<ContactRecyclerAdapter.ContactViewHolder>()
 {
@@ -63,7 +64,7 @@ class ContactRecyclerAdapter(private val requestManager: RequestManager,private 
 
             itemView.setOnClickListener {
                 chatHeader.let {
-                    onContactClickListener.contactClick(it.otherUser!!.profilePic,it.otherUser!!.name, it.id)
+                    onContactClickListener.contactClick(it.otherUser!!.profilePic,it.otherUser!!.name, it.id, (it.otherUser as UserInfo).id)
                 }
             }
         }

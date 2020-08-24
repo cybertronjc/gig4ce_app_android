@@ -17,5 +17,7 @@ data class ChatHeader(
 data class UserInfo(
    var name: String = "",
    var profilePic: String = "",
-   var type: String = ""
+   var type: String = "",
+   @DocumentId
+   var id: String = ""
 ) {}

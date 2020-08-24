@@ -1,12 +1,22 @@
 package com.gigforce.app.modules.chatmodule.viewModels
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.gigforce.app.core.toDate
 import com.gigforce.app.modules.chatmodule.models.ChatHeader
 import com.gigforce.app.modules.chatmodule.models.Message
 import com.gigforce.app.modules.chatmodule.repository.ChatFirebaseRepository
 import com.gigforce.app.modules.chatmodule.repository.ChatHeaderFirebaseRepository
+import com.google.firebase.Timestamp
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 import com.google.firestore.v1.DocumentChange
+import java.time.LocalDateTime
 
 class ChatViewModel: ViewModel() {
 
@@ -19,6 +29,23 @@ class ChatViewModel: ViewModel() {
 
     var chatHeaders: MutableLiveData<ArrayList<ChatHeader>> = MutableLiveData(ArrayList<ChatHeader>())
     var chatMsgs: MutableLiveData<ArrayList<Message>> = MutableLiveData(ArrayList<Message>())
+
+    val uid = FirebaseAuth.getInstance().currentUser?.uid!!
+
+    fun sendNewMsg(
+        chatHeaderId: String, message: String, time: LocalDateTime, otherUserId: String) {
+        val newMsg = Message(
+            headerId = chatHeaderId,
+            forUserId = uid,
+            flowType = "out",
+            timestamp = Timestamp(time.toDate),
+            type = "text",
+            content = message,
+            otherUserId = otherUserId
+        )
+
+        chatFirebaseRepository.addChatMsg(chatHeaderId, newMsg)
+    }
 
     fun getChatHeaders() {
         chatHeaderRepository.getChatHeaders()
@@ -39,6 +66,15 @@ class ChatViewModel: ViewModel() {
                         }
                     }
                 }
+        }
+    }
+
+    fun markChatMsgsRead(chatMsgs: ArrayList<Message>) {
+        chatMsgs.filter {
+            it.status == 1 && it.flowType == "in"
+        }.forEach {
+            it.status = 2
+            chatFirebaseRepository.updateMsg(it.headerId, it)
         }
     }
 
@@ -66,5 +102,24 @@ class ChatViewModel: ViewModel() {
     }
     init {
         getChatHeaders()
+
+//        val presenceRef = Firebase.database.getReference(uid)
+//        presenceRef.onDisconnect().setValue("Offline")
+
+        val connectedRef = Firebase.database.getReference(".info/connected")
+        connectedRef.addValueEventListener(object : ValueEventListener {
+            override fun onCancelled(error: DatabaseError) {
+                Log.d("ChatViewModel", "Listener cancelled")
+            }
+
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val connected = snapshot.getValue(Boolean::class.java) ?: false
+                if (connected) {
+                    Log.d("ChatViewModel", "User connected")
+                } else {
+                    Log.d("ChatViewModel", "User disconnected")
+                }
+            }
+        })
     }
 }
