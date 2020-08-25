@@ -8,11 +8,15 @@ import android.view.ViewGroup
 import android.view.Window
 import android.widget.Toast
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
 import com.gigforce.app.core.base.dialog.ConfirmationDialogOnClickListener
 import com.gigforce.app.modules.landingscreen.LandingPageConstants.INTENT_EXTRA_ACTION
 import com.gigforce.app.modules.landingscreen.LandingPageConstants.INTENT_EXTRA_CAME_FROM_LANDING_SCREEN
+import com.gigforce.app.modules.profile.models.ProfileData
+import com.gigforce.app.utils.StringConstants
+import com.gigforce.app.utils.ViewModelProviderFactory
 import kotlinx.android.synthetic.main.card_row.view.*
 import kotlinx.android.synthetic.main.contact_edit_warning_dialog.*
 import kotlinx.android.synthetic.main.fragment_profile_about_expanded.*
@@ -25,6 +29,13 @@ class AboutExpandedFragment : ProfileBaseFragment(), ProfileCardBgCallbacks {
 
         const val ACTION_OPEN_EDIT_ABOUT_ME_BOTTOM_SHEET = 31
         const val ACTION_OPEN_EDIT_LANGUAGE_BOTTOM_SHEET = 32
+    }
+
+    private val viewModelFactory by lazy {
+        ViewModelProviderFactory(ViewModelAboutExpandedFragment(ModelAboutExpandedFragment()))
+    }
+    private val viewModel: ViewModelAboutExpandedFragment by lazy {
+        ViewModelProvider(this, viewModelFactory).get(ViewModelAboutExpandedFragment::class.java)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,54 +79,12 @@ class AboutExpandedFragment : ProfileBaseFragment(), ProfileCardBgCallbacks {
         contact_card.setCallbacks(this)
         initialize()
         setListeners()
+
     }
 
     private fun initialize() {
-        profileViewModel.userProfileData.observe(viewLifecycleOwner, Observer { profile ->
-            bio_card.isBottomRemoved = profile.aboutMe.isNotEmpty()
-            bio_card.hasContentTitles = false
-            bio_card.nextDestination = R.id.addAboutMeBottomSheet
-            bio_card.cardTitle = "Bio"
-            bio_card.cardContent = if (profile.aboutMe != "") profile.aboutMe
-            else this.requireContext().getString(R.string.empty_about_me_text)
-            bio_card.cardBottom = if (profile.aboutMe != "") ""
-            else "Add bio"
-
-            var languageString = ""
-            profile.languages?.let {
-                val languages = it.sortedByDescending { language -> language.speakingSkill }
-                for (lang in languages) {
-                    languageString += lang.name + "\n"
-                    languageString += "Speaking " + getLanguageLevel(lang.speakingSkill.toInt()) + "\n"
-                    languageString += "Writing " + getLanguageLevel(lang.writingSkill.toInt()) + "\n\n"
-                }
-            }
-            language_card.nextDestination = R.id.editLanguageBottomSheet
-            language_card.cardTitle = "Language"
-            language_card.cardContent = languageString
-            language_card.cardBottom = "Add languages"
-
-            var contactString = ""
-            profile.contact?.let {
-                for (contact in it) {
-                    contactString += "phone: " + contact.phone + "\n"
-                    contactString += "email: " + contact.email + "\n\n"
-                }
-            }
-            contact_card.hasContentTitles = false
-            contact_card.cardTitle = "Contact"
-            contact_card.cardContent = contactString
-            contact_card.cardBottom = "Add contacts"
-
-
-            if (contact_card.edit_button != null) {
-                contact_card.edit_button.setOnClickListener {
-                    showAddContactDialog()
-                }
-            }
-
-            about_top_profile.userName = profile.name
-            about_top_profile.imageName = profile.profileAvatarName
+        profileViewModel.userProfileData.observe(viewLifecycleOwner, Observer { profileObs ->
+            loadProfile(profileObs)
         })
 
         if (cameFromLandingPage)
@@ -129,6 +98,96 @@ class AboutExpandedFragment : ProfileBaseFragment(), ProfileCardBgCallbacks {
                 this.findNavController().navigate(R.id.addLanguageBottomSheetFragment)
             }
         }
+        viewModel.observableReloadProfile.observe(viewLifecycleOwner, Observer {
+            if (it!!) {
+                loadProfile(
+                    profileViewModel.userProfileData.value!!
+                )
+            } else {
+                profileViewModel.getProfileData()
+            }
+
+        })
+    }
+
+    private fun loadProfile(profile: ProfileData) {
+        contact_card.contactNumbers.clear()
+        email_card.emails.clear()
+        contact_card.setWhatsAppChecked.clear()
+        if (profile.contactPhone == null || profile.contactPhone?.isEmpty() == true)
+            viewModel.updateContactDetails(
+                arguments?.getString(StringConstants.PROFILE_ID.value) ?: "",
+                profile.contact!!
+            )
+
+        bio_card.isBottomRemoved = profile.aboutMe.isNotEmpty()
+        bio_card.hasContentTitles = false
+        bio_card.nextDestination = R.id.addAboutMeBottomSheet
+
+        bio_card.cardTitle = "Bio"
+        bio_card.cardContent = if (profile.aboutMe != "") profile.aboutMe
+        else this.requireContext().getString(R.string.empty_about_me_text)
+        bio_card.cardBottom = if (profile.aboutMe != "") ""
+        else "Add bio"
+
+        var languageString = ""
+        profile.languages?.let {
+            val languages = it.sortedByDescending { language -> language.speakingSkill }
+            for (lang in languages) {
+                languageString += lang.name + "\n"
+                languageString += "Speaking " + getLanguageLevel(lang.speakingSkill.toInt()) + "\n"
+                languageString += "Writing " + getLanguageLevel(lang.writingSkill.toInt()) + "\n\n"
+            }
+        }
+        language_card.nextDestination = R.id.editLanguageBottomSheet
+        language_card.cardTitle = "Language"
+        language_card.cardContent = languageString
+        language_card.cardBottom = "Add languages"
+
+        var contactString = ""
+        profile.contactPhone?.let {
+            for (contactPhone in it) {
+                contact_card.contactNumbers.add(contactPhone.phone ?: "")
+                contactString += "phone: " + contactPhone.phone + "\n\n"
+                if (contact_card.showIsWhatsappCb) {
+                    contact_card.setWhatsAppChecked.add(contactPhone.isWhatsapp)
+                }
+            }
+        }
+        contact_card.hasContentTitles = false
+        contact_card.cardTitle = "Contact"
+        contact_card.cardContent = contactString
+        contact_card.cardBottom = "Add contacts"
+
+        if (contact_card.edit_button != null) {
+            contact_card.edit_button.setOnClickListener {
+                showAddContactDialog()
+            }
+        }
+        var email = ""
+        profile.contactEmail?.let {
+            for (contactEmail in it) {
+                contact_card.emails.add(contactEmail.email ?: "")
+                email += "email: " + contactEmail.email + "\n\n"
+//                if (contact_card.showIsWhatsappCb) {
+//                    contact_card.setWhatsAppChecked.add(contactEmail.isWhatsapp)
+//                }
+            }
+        }
+        email_card.hasContentTitles = false
+        email_card.cardTitle = "Emails"
+        email_card.cardContent = email
+        email_card.cardBottom = "Add Email"
+
+        if (email_card.edit_button != null) {
+            email_card.edit_button.setOnClickListener {
+                showAddContactDialog()
+            }
+        }
+
+        about_top_profile.userName = profile.name
+        about_top_profile.imageName = profile.profileAvatarName
+        profileViewModel.listener?.remove()
     }
 
     private fun setListeners() {
@@ -174,15 +233,27 @@ class AboutExpandedFragment : ProfileBaseFragment(), ProfileCardBgCallbacks {
     }
 
     override fun checked(isChecked: Boolean, contact: String) {
+
         showConfirmationDialogType7(
             getString(R.string.this_is_my_whatsapp_number),
             object : ConfirmationDialogOnClickListener {
                 override fun clickedOnYes(dialog: Dialog?) {
-
+                    viewModel.setWhatsAppNumberStatus(
+                        arguments?.getString(StringConstants.PROFILE_ID.value)!!,
+                        profileViewModel.userProfileData.value?.contactPhone!!,
+                        contact,
+                        true
+                    )
                     dialog?.dismiss()
                 }
 
                 override fun clickedOnNo(dialog: Dialog?) {
+                    viewModel.setWhatsAppNumberStatus(
+                        arguments?.getString(StringConstants.PROFILE_ID.value)!!,
+                        profileViewModel.userProfileData.value?.contactPhone!!,
+                        contact,
+                        false
+                    )
                     dialog?.dismiss()
                 }
 

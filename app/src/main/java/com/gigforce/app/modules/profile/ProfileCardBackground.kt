@@ -28,7 +28,15 @@ class ProfileCardBackground : CardView {
             field = value
             card_title.text = value
         }
+    var contactNumbers: MutableList<String> = mutableListOf()
+        set(value) {
+            field = value
+        }
 
+    var emails: MutableList<String> = mutableListOf()
+        set(value) {
+            field = value
+        }
     var hasContentTitles: Boolean = true
         set(value) {
             field = value
@@ -53,8 +61,12 @@ class ProfileCardBackground : CardView {
                 }
                 if (item != "") {
                     val widget = CardRow(this.context!!)
+
                     if (showIsWhatsappCb) {
+                        widget.hideEditIcon = location == 0
+                        widget.setContactNumber = contactNumbers[location]
                         widget.showIsWhatsappCb = showIsWhatsappCb
+                        widget.setIsWhatsappCBChecked = setWhatsAppChecked[location]
 
                         widget.setCallbacks(object : CardRowCallbacks {
                             override fun checked(isChecked: Boolean, contactNumber: String) {
@@ -65,6 +77,7 @@ class ProfileCardBackground : CardView {
                     if (hasContentTitles) {
                         widget.rowContent = ""
                         for ((idx, it) in item.split('\n').withIndex()) {
+
                             if (idx == 0)
                                 widget.rowTitle = it
                             else
@@ -93,6 +106,11 @@ class ProfileCardBackground : CardView {
             card_bottom.text = value
         }
     var showIsWhatsappCb: Boolean = false
+        set(value) {
+            field = value
+
+        }
+    var setWhatsAppChecked: MutableList<Boolean> = mutableListOf()
         set(value) {
             field = value
 

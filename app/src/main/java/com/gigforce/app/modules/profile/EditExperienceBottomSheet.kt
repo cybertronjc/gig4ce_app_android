@@ -65,7 +65,7 @@ class EditExperienceBottomSheet: ProfileBaseBottomSheetFragment() {
     private fun initialize() {
         val format = SimpleDateFormat("dd/MM/yyyy", Locale.US)
         profileViewModel!!.userProfileData.observe(this, Observer { profile ->
-            profile.experiences?.let {
+            profile?.experiences?.let {
                 val experiences = it.sortedByDescending { experience -> experience.startDate  }
                 experience = experiences[arrayLocation.toInt()]
                 title.setText(experience.title)

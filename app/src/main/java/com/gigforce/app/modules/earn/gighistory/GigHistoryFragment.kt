@@ -131,7 +131,7 @@ class GigHistoryFragment : BaseFragment(), AdapterGigHistory.AdapterGigHistoryCa
         //TODO : Correct this afterwards
         var viewModelProfile = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
         viewModelProfile.getProfileData().observe(viewLifecycleOwner, Observer { profile ->
-            displayImage(profile.profileAvatarName)
+            displayImage(profile?.profileAvatarName!!)
 
         })
     }

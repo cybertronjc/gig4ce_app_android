@@ -59,7 +59,7 @@ class MainLearningFragment : BaseFragment() {
 
     private fun observerProfile() {
         viewModelProfile.getProfileData().observe(viewLifecycleOwner, Observer { profile ->
-            displayImage(profile.profileAvatarName)
+            displayImage(profile?.profileAvatarName!!)
         })
 
     }

@@ -40,7 +40,7 @@ class EditHeadlineBottomSheet: ProfileBaseBottomSheetFragment() {
 
     private fun initialize() {
         profileViewModel.userProfileData.observe(viewLifecycleOwner, Observer { profile ->
-            bio.setText(profile.bio)
+            bio.setText(profile?.bio)
         })
     }
 

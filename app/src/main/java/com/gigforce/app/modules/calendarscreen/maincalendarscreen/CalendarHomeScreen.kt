@@ -1,7 +1,6 @@
 package com.gigforce.app.modules.calendarscreen.maincalendarscreen
 
 import android.app.Dialog
-import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.view.LayoutInflater
@@ -30,10 +29,9 @@ import com.gigforce.app.modules.calendarscreen.maincalendarscreen.verticalcalend
 import com.gigforce.app.modules.custom_gig_preferences.CustomPreferencesViewModel
 import com.gigforce.app.modules.custom_gig_preferences.ParamCustPreferViewModel
 import com.gigforce.app.modules.custom_gig_preferences.UnavailableDataModel
-import com.gigforce.app.modules.gigPage.GigAttendancePageFragment
-import com.gigforce.app.modules.markattendance.ImageCaptureActivity
 import com.gigforce.app.modules.preferences.PreferencesFragment
 import com.gigforce.app.modules.profile.ProfileViewModel
+import com.gigforce.app.modules.profile.models.ProfileData
 import com.gigforce.app.modules.roster.RosterDayFragment
 import com.gigforce.app.utils.GlideApp
 import com.google.android.material.snackbar.Snackbar
@@ -41,11 +39,6 @@ import com.google.firebase.storage.StorageReference
 import com.riningan.widget.ExtendedBottomSheetBehavior
 import com.riningan.widget.ExtendedBottomSheetBehavior.STATE_COLLAPSED
 import kotlinx.android.synthetic.main.calendar_home_screen.*
-import kotlinx.android.synthetic.main.calendar_home_screen.cardView
-import kotlinx.android.synthetic.main.calendar_home_screen.chat_icon_iv
-import kotlinx.android.synthetic.main.calendar_home_screen.oval_gradient_iv
-import kotlinx.android.synthetic.main.calendar_home_screen.profile_image
-import kotlinx.android.synthetic.main.landingscreen_fragment.*
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.util.*
@@ -249,7 +242,8 @@ class CalendarHomeScreen : BaseFragment(),
 
 
         // load user data
-        viewModelProfile.getProfileData().observe(viewLifecycleOwner, Observer { profile ->
+        viewModelProfile.getProfileData().observe(viewLifecycleOwner, Observer { profileObs ->
+            val profile: ProfileData = profileObs!!
             displayImage(profile.profileAvatarName)
             if (profile.name != null && !profile.name.equals(""))
                 tv1HS1.text = profile.name
@@ -283,7 +277,7 @@ class CalendarHomeScreen : BaseFragment(),
                     .load(profilePicRef)
                     .apply(RequestOptions().circleCrop())
                     .into(profile_image)
-        } else{
+        } else {
             GlideApp.with(this.requireContext())
                 .load(R.drawable.avatar)
                 .apply(RequestOptions().circleCrop())

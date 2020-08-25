@@ -5,9 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.gigforce.app.modules.profile.models.*
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.EventListener
-import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.*
 
 class ProfileViewModel : ViewModel() {
 
@@ -15,13 +13,17 @@ class ProfileViewModel : ViewModel() {
         fun newInstance() = ProfileViewModel()
     }
 
+    var listener: ListenerRegistration? = null
+    var profileID: String = ""
     var profileFirebaseRepository = ProfileFirebaseRepository()
     var userProfileData: MutableLiveData<ProfileData> = MutableLiveData<ProfileData>()
     var Tags: MutableLiveData<TagData> = MutableLiveData<TagData>()
     lateinit var uid: String
+    var query: Query? = null
 
     fun getProfileData(): MutableLiveData<ProfileData> {
-        profileFirebaseRepository.getDBCollection()
+
+        listener = profileFirebaseRepository.getDBCollection()
             .addSnapshotListener(EventListener<DocumentSnapshot> { value, e ->
                 if (e != null) {
                     Log.w("ProfileViewModel", "Listen failed", e)
@@ -32,12 +34,14 @@ class ProfileViewModel : ViewModel() {
                     profileFirebaseRepository.createEmptyProfile()
                 } else {
                     Log.d("ProfileViewModel", value!!.data.toString())
-                    userProfileData.postValue(
-                        value!!.toObject(ProfileData::class.java)
-                    )
+                    val obj = value!!.toObject(ProfileData::class.java)
+                    obj?.id = value.id;
+                    userProfileData.value = obj
                     Log.d("ProfileViewModel", userProfileData.toString())
                 }
             })
+
+
         return userProfileData
     }
 

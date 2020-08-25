@@ -37,17 +37,41 @@ class CardRow : LinearLayout {
         set(value) {
             field = value
             cb_is_whatsapp_number_card_row.visibility = if (value) View.VISIBLE else View.GONE
-            if(value){
+            if (value) {
                 setCbCheckedListener()
             }
 
         }
+    var setIsWhatsappCBChecked: Boolean = false
+        set(value) {
+            field = value
+            cb_is_whatsapp_number_card_row.isChecked = value
+
+
+        }
 
     fun setCbCheckedListener() {
-        cb_is_whatsapp_number_card_row.setOnCheckedChangeListener { _, isChecked -> callbacks?.checked(isChecked, rowContent) }
+        cb_is_whatsapp_number_card_row.setOnClickListener {
+            callbacks?.checked(
+                cb_is_whatsapp_number_card_row.isChecked,
+                setContactNumber
+            )
+        }
     }
+
 
     fun setCallbacks(callbacks: CardRowCallbacks) {
         this.callbacks = callbacks
     }
+
+    var setContactNumber: String = ""
+        set(value) {
+            field = value
+        }
+
+    var hideEditIcon: Boolean = false
+        set(value) {
+            field = value
+            edit_button.visibility = if (value) View.GONE else View.VISIBLE
+        }
 }

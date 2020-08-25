@@ -36,6 +36,7 @@ import com.gigforce.app.modules.landingscreen.models.Tip
 import com.gigforce.app.modules.preferences.PreferencesFragment
 import com.gigforce.app.modules.profile.AboutExpandedFragment
 import com.gigforce.app.modules.profile.ProfileViewModel
+import com.gigforce.app.modules.profile.models.ProfileData
 import com.gigforce.app.utils.GlideApp
 import com.google.firebase.storage.StorageReference
 import kotlinx.android.synthetic.main.landingscreen_fragment.*
@@ -191,7 +192,8 @@ class LandingScreenFragment : BaseFragment() {
     private fun observers() {
         // load user data
         viewModelProfile = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
-        viewModelProfile.getProfileData().observe(viewLifecycleOwner, Observer { profile ->
+        viewModelProfile.getProfileData().observe(viewLifecycleOwner, Observer { profileObs ->
+            val profile: ProfileData = profileObs!!
             displayImage(profile.profileAvatarName)
             if (profile.name != null && !profile.name.equals(""))
                 profile_name.text = profile.name
