@@ -306,4 +306,8 @@
     <string name="rating_you_received">Rating You Have Received From Client</string>
     <string name="is_whats_app_number">Is Whatsapp Number</string>
     <string name="this_is_my_whatsapp_number">This is my Whatsapp number</string>
+    <string name="add_contact">Add Contact</string>
+    <string name="add_email">Add Email</string>
+    <string name="edit_contact">Edit Contact</string>
+    <string name="edit_email">Edit Email</string>
 </resources>

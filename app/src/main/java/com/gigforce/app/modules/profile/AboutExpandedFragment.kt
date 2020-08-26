@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -14,6 +15,8 @@ import com.gigforce.app.R
 import com.gigforce.app.core.base.dialog.ConfirmationDialogOnClickListener
 import com.gigforce.app.modules.landingscreen.LandingPageConstants.INTENT_EXTRA_ACTION
 import com.gigforce.app.modules.landingscreen.LandingPageConstants.INTENT_EXTRA_CAME_FROM_LANDING_SCREEN
+import com.gigforce.app.modules.profile.models.ContactEmail
+import com.gigforce.app.modules.profile.models.ContactPhone
 import com.gigforce.app.modules.profile.models.ProfileData
 import com.gigforce.app.utils.StringConstants
 import com.gigforce.app.utils.ViewModelProviderFactory
@@ -23,9 +26,11 @@ import kotlinx.android.synthetic.main.fragment_profile_about_expanded.*
 import kotlinx.android.synthetic.main.fragment_profile_about_expanded.view.*
 import kotlinx.android.synthetic.main.profile_card_background.view.*
 
-class AboutExpandedFragment : ProfileBaseFragment(), ProfileCardBgCallbacks {
+class AboutExpandedFragment : ProfileBaseFragment(), ProfileCardBgCallbacks,
+    AddContactBottomSheetFragment.AddContactBottomSheetCallbacks {
     companion object {
         fun newInstance() = AboutExpandedFragment()
+
 
         const val ACTION_OPEN_EDIT_ABOUT_ME_BOTTOM_SHEET = 31
         const val ACTION_OPEN_EDIT_LANGUAGE_BOTTOM_SHEET = 32
@@ -261,4 +266,24 @@ class AboutExpandedFragment : ProfileBaseFragment(), ProfileCardBgCallbacks {
 
 
     }
+
+    override fun editNumber(number: String, isWhatsApp: Boolean) {
+        AddContactBottomSheetFragment.newInstance(
+            bundleOf(
+                StringConstants.CONTACT_EDIT_STATE.value to AddContactBottomSheetFragment.STATE_EDIT_CONTACT
+            )
+            , this
+        ).show(parentFragmentManager, AddContactBottomSheetFragment::class.java.name)
+
+    }
+
+    override fun contactEdit(contact: ContactPhone, add: Boolean) {
+        showToast("Contact")
+    }
+
+    override fun emailEdit(contact: ContactEmail, add: Boolean) {
+        TODO("Not yet implemented")
+    }
+
+
 }

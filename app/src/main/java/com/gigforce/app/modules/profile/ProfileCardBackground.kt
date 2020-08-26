@@ -7,7 +7,6 @@ import android.util.Log
 import android.view.View
 import android.widget.TextView
 import androidx.cardview.widget.CardView
-import androidx.navigation.findNavController
 import com.gigforce.app.R
 import kotlinx.android.synthetic.main.card_row.view.*
 import kotlinx.android.synthetic.main.profile_card_background.view.*
@@ -72,6 +71,8 @@ class ProfileCardBackground : CardView {
                             override fun checked(isChecked: Boolean, contactNumber: String) {
                                 callbacks?.checked(isChecked, contactNumber)
                             }
+
+
                         })
                     }
                     if (hasContentTitles) {
@@ -93,7 +94,7 @@ class ProfileCardBackground : CardView {
                     bundle.putString("array_location", location.toString())
                     Log.d("LOCATION", location.toString())
                     widget.edit_button.setOnClickListener {
-                        findNavController().navigate(nextDestination, bundle)
+                        callbacks?.editNumber(widget.setContactNumber, widget.setIsWhatsappCBChecked)
                     }
                     viewgroup.addView(widget)
                 }
