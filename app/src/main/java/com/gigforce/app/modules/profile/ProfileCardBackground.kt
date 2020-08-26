@@ -75,6 +75,9 @@ class ProfileCardBackground : CardView {
 
                         })
                     }
+                    if (cardTitle == context.getString(R.string.emails)) {
+                        widget.setEmail = emails[location]
+                    }
                     if (hasContentTitles) {
                         widget.rowContent = ""
                         for ((idx, it) in item.split('\n').withIndex()) {
@@ -93,9 +96,21 @@ class ProfileCardBackground : CardView {
                     var bundle = Bundle()
                     bundle.putString("array_location", location.toString())
                     Log.d("LOCATION", location.toString())
-                    widget.edit_button.setOnClickListener {
-                        callbacks?.editNumber(widget.setContactNumber, widget.setIsWhatsappCBChecked)
+                    if (callbacks != null) {
+                        widget.edit_button.setOnClickListener {
+                            if (cardTitle == context.getString(R.string.contact)) {
+                                callbacks?.editNumber(
+                                    widget.setContactNumber,
+                                    widget.setIsWhatsappCBChecked
+                                )
+                            } else if (cardTitle == context.getString(R.string.emails)) {
+                                callbacks?.editEmail(widget.setEmail)
+
+                            }
+
+                        }
                     }
+
                     viewgroup.addView(widget)
                 }
             }

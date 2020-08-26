@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
-import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -59,6 +58,7 @@ class AboutExpandedFragment : ProfileBaseFragment(), ProfileCardBgCallbacks,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+//        viewModel.updateEmail( arguments?.getString(StringConstants.PROFILE_ID.value)!!)
         arguments?.let {
             cameFromLandingPage = it.getBoolean(INTENT_EXTRA_CAME_FROM_LANDING_SCREEN)
             action = it.getInt(INTENT_EXTRA_ACTION)
@@ -82,6 +82,7 @@ class AboutExpandedFragment : ProfileBaseFragment(), ProfileCardBgCallbacks,
         super.onViewCreated(view, savedInstanceState)
         contact_card.showIsWhatsappCb = true
         contact_card.setCallbacks(this)
+        email_card.setCallbacks(this)
         initialize()
         setListeners()
 
@@ -111,6 +112,10 @@ class AboutExpandedFragment : ProfileBaseFragment(), ProfileCardBgCallbacks,
             } else {
                 profileViewModel.getProfileData()
             }
+
+        })
+        viewModel.observableError.observe(viewLifecycleOwner, Observer {
+            showToast(it!!)
 
         })
     }
@@ -153,42 +158,42 @@ class AboutExpandedFragment : ProfileBaseFragment(), ProfileCardBgCallbacks,
         profile.contactPhone?.let {
             for (contactPhone in it) {
                 contact_card.contactNumbers.add(contactPhone.phone ?: "")
-                contactString += "phone: " + contactPhone.phone + "\n\n"
+                contactString += getString(R.string.phone_colon) + " " + contactPhone.phone + "\n\n"
                 if (contact_card.showIsWhatsappCb) {
                     contact_card.setWhatsAppChecked.add(contactPhone.isWhatsapp)
                 }
             }
         }
         contact_card.hasContentTitles = false
-        contact_card.cardTitle = "Contact"
+        contact_card.cardTitle = getString(R.string.contact)
         contact_card.cardContent = contactString
-        contact_card.cardBottom = "Add contacts"
+        contact_card.cardBottom = getString(R.string.add_contacts)
 
         if (contact_card.edit_button != null) {
             contact_card.edit_button.setOnClickListener {
-                showAddContactDialog()
+                showAddContactDialog(false)
             }
         }
         var email = ""
         profile.contactEmail?.let {
             for (contactEmail in it) {
-                contact_card.emails.add(contactEmail.email ?: "")
-                email += "email: " + contactEmail.email + "\n\n"
+                email_card.emails.add(contactEmail.email ?: "")
+                email += getString(R.string.email_colon) + " " + contactEmail.email + "\n\n"
 //                if (contact_card.showIsWhatsappCb) {
 //                    contact_card.setWhatsAppChecked.add(contactEmail.isWhatsapp)
 //                }
             }
         }
         email_card.hasContentTitles = false
-        email_card.cardTitle = "Emails"
+        email_card.cardTitle = getString(R.string.emails)
         email_card.cardContent = email
-        email_card.cardBottom = "Add Email"
+        email_card.cardBottom = getString(R.string.add_email)
 
-        if (email_card.edit_button != null) {
-            email_card.edit_button.setOnClickListener {
-                showAddContactDialog()
-            }
-        }
+//        if (email_card.edit_button != null) {
+//            email_card.edit_button.setOnClickListener {
+//                showAddContactDialog(true)
+//            }
+//        }
 
         about_top_profile.userName = profile.name
         about_top_profile.imageName = profile.profileAvatarName
@@ -206,12 +211,20 @@ class AboutExpandedFragment : ProfileBaseFragment(), ProfileCardBgCallbacks,
         }
 
         contact_card.card_bottom.setOnClickListener {
-            showAddContactDialog()
+            showAddContactDialog(false)
+        }
+        email_card.card_bottom.setOnClickListener {
+            AddContactBottomSheetFragment.newInstance(
+                bundleOf(
+                    StringConstants.CONTACT_EDIT_STATE.value to AddContactBottomSheetFragment.STATE_ADD_EMAIL
+                )
+                , this
+            ).show(parentFragmentManager, AddContactBottomSheetFragment::class.java.name)
         }
 
     }
 
-    private fun showAddContactDialog() {
+    private fun showAddContactDialog(isEmail: Boolean) {
         val dialog = Dialog(requireContext())
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setCancelable(false)
@@ -221,9 +234,15 @@ class AboutExpandedFragment : ProfileBaseFragment(), ProfileCardBgCallbacks,
             dialog.dismiss()
         }
 
+
         dialog.submit_button.setOnClickListener {
-            Toast.makeText(requireContext(), "CTA NOT IMPLEMENTED", Toast.LENGTH_SHORT).show()
             dialog.dismiss()
+            AddContactBottomSheetFragment.newInstance(
+                bundleOf(
+                    StringConstants.CONTACT_EDIT_STATE.value to if (isEmail) AddContactBottomSheetFragment.STATE_ADD_EMAIL else AddContactBottomSheetFragment.STATE_ADD_CONTACT
+                )
+                , this
+            ).show(parentFragmentManager, AddContactBottomSheetFragment::class.java.name)
         }
 
         dialog.show()
@@ -270,19 +289,44 @@ class AboutExpandedFragment : ProfileBaseFragment(), ProfileCardBgCallbacks,
     override fun editNumber(number: String, isWhatsApp: Boolean) {
         AddContactBottomSheetFragment.newInstance(
             bundleOf(
-                StringConstants.CONTACT_EDIT_STATE.value to AddContactBottomSheetFragment.STATE_EDIT_CONTACT
+                StringConstants.CONTACT_EDIT_STATE.value to AddContactBottomSheetFragment.STATE_EDIT_CONTACT,
+                StringConstants.CONTACT_TO_EDIT.value to number,
+                StringConstants.IS_WHATSAPP_NUMBER.value to isWhatsApp
             )
             , this
         ).show(parentFragmentManager, AddContactBottomSheetFragment::class.java.name)
 
     }
 
-    override fun contactEdit(contact: ContactPhone, add: Boolean) {
-        showToast("Contact")
+    override fun editEmail(email: String) {
+        AddContactBottomSheetFragment.newInstance(
+            bundleOf(
+                StringConstants.CONTACT_EDIT_STATE.value to AddContactBottomSheetFragment.STATE_EDIT_EMAIL,
+                StringConstants.EMAIL_TO_EDIT.value to email
+            )
+            , this
+        ).show(parentFragmentManager, AddContactBottomSheetFragment::class.java.name)
     }
 
-    override fun emailEdit(contact: ContactEmail, add: Boolean) {
-        TODO("Not yet implemented")
+
+    override fun contactEdit(oldPhone: String?, contact: ContactPhone, add: Boolean) {
+        viewModel.contactEdit(
+            arguments?.getString(StringConstants.PROFILE_ID.value)!!,
+            oldPhone,
+            profileViewModel.userProfileData.value?.contactPhone ?: arrayListOf(),
+            contact,
+            add
+        )
+    }
+
+    override fun emailEdit(oldEmail: String?, contact: ContactEmail, add: Boolean) {
+        viewModel.emailEdit(
+            arguments?.getString(StringConstants.PROFILE_ID.value)!!,
+            oldEmail,
+            profileViewModel.userProfileData.value?.contactEmail ?: arrayListOf(),
+            contact,
+            add
+        )
     }
 
 

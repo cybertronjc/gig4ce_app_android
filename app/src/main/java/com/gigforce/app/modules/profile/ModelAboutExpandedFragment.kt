@@ -4,6 +4,7 @@ import com.gigforce.app.core.base.basefirestore.BaseFirestoreDBRepository
 import com.gigforce.app.modules.profile.models.Contact
 import com.gigforce.app.modules.profile.models.ContactEmail
 import com.gigforce.app.modules.profile.models.ContactPhone
+import com.google.firebase.firestore.FieldValue
 
 
 class ModelAboutExpandedFragment : ModelCallbacksAboutExpandedFragment,
@@ -28,6 +29,10 @@ class ModelAboutExpandedFragment : ModelCallbacksAboutExpandedFragment,
             .addOnCompleteListener {
                 if (it.isSuccessful) {
                     responseCallbacks.reloadProfile(true)
+                } else {
+                    if (it.exception != null) {
+                        responseCallbacks.errorUpdatingContact(it.exception?.message!!)
+                    }
                 }
             }
 
@@ -58,8 +63,112 @@ class ModelAboutExpandedFragment : ModelCallbacksAboutExpandedFragment,
             .addOnCompleteListener {
                 if (it.isSuccessful) {
                     responseCallbacks.reloadProfile(false)
+                } else {
+                    if (it.exception != null) {
+                        responseCallbacks.errorUpdatingContact(it.exception?.message!!)
+                    }
                 }
             }
+    }
+
+    override fun updateContact(
+        profileID: String,
+        contactList: ArrayList<ContactPhone>?,
+        newContact: ContactPhone?,
+        oldContact: String?,
+        add: Boolean,
+        responseCallbacks: ModelCallbacksAboutExpandedFragment.ResponseModelCallbacksAboutExpandedFragment
+    ) {
+        if (add) {
+            if (contactList?.indexOfFirst {
+                    it.phone == newContact?.phone ?: ""
+                } != -1) {
+                responseCallbacks.errorUpdatingContact("Contact Already Exists!!!")
+                return
+            }
+
+            getCollectionReference().document(profileID)
+                .update("contactPhone", FieldValue.arrayUnion(newContact))
+                .addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        contactList.add(newContact ?: ContactPhone())
+                        responseCallbacks.reloadProfile(true)
+                    } else {
+                        if (it.exception != null) {
+                            responseCallbacks.errorUpdatingContact(it.exception?.message!!)
+                        }
+                    }
+                }
+        } else {
+            for (i in 0..(contactList?.size?.minus(1) ?: 0)) {
+                if (contactList!![i].phone == oldContact) {
+                    contactList[i] = newContact ?: ContactPhone()
+                }
+            }
+            getCollectionReference().document(profileID).update("contactPhone", contactList)
+                .addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        responseCallbacks.reloadProfile(true)
+                    } else {
+                        if (it.exception != null) {
+                            responseCallbacks.errorUpdatingContact(it.exception?.message!!)
+                        }
+                    }
+                }
+        }
+    }
+
+    override fun updateEmail(
+        profileID: String,
+        contactList: ArrayList<ContactEmail>?,
+        newContact: ContactEmail?,
+        oldContact: String?,
+        add: Boolean,
+        responseCallbacks: ModelCallbacksAboutExpandedFragment.ResponseModelCallbacksAboutExpandedFragment
+    ) {
+        if (add) {
+            if (contactList?.indexOfFirst {
+                    it.email == newContact?.email ?: ""
+                } != -1) {
+                responseCallbacks.errorUpdatingContact("Email Already Exists!!!")
+                return
+            }
+
+            getCollectionReference().document(profileID)
+                .update("contactEmail", FieldValue.arrayUnion(newContact))
+                .addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        contactList.add(newContact ?: ContactEmail())
+                        responseCallbacks.reloadProfile(true)
+                    } else {
+                        if (it.exception != null) {
+                            responseCallbacks.errorUpdatingContact(it.exception?.message!!)
+                        }
+                    }
+                }
+        } else {
+            for (i in 0..(contactList?.size?.minus(1) ?: 0)) {
+                if (contactList!![i].email == oldContact) {
+                    contactList[i] = newContact ?: ContactEmail()
+                }
+            }
+            getCollectionReference().document(profileID).update("contactEmail", contactList)
+                .addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        responseCallbacks.reloadProfile(true)
+                    } else {
+                        if (it.exception != null) {
+                            responseCallbacks.errorUpdatingContact(it.exception?.message!!)
+                        }
+                    }
+                }
+        }
+    }
+
+    fun updateEmails(profileID: String) {
+        getCollectionReference().document(profileID)
+            .update("contactEmail", arrayListOf(ContactEmail("one@gmail.com")));
+
     }
 
 

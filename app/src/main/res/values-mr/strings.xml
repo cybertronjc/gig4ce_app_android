@@ -409,5 +409,13 @@
     <string name="add_email">Add Email</string>
     <string name="edit_contact">Edit Contact</string>
     <string name="edit_email">Edit Email</string>
+    <string name="email">Email</string>
+    <string name="empty_string_validation">Field Cannot Be Empty</string>
+    <string name="validation_phone">Please Enter A Valid Phone Number</string>
+    <string name="validation_email">Please Enter A Valid EMAIL</string>
+    <string name="emails">Emails</string>
+    <string name="contact">Contact</string>
+    <string name="add_contacts">Add contacts</string>
+    <string name="phone_colon">phone:</string>
 
 </resources>

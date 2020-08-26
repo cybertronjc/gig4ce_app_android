@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:clipToPadding="false"
     android:layout_height="match_parent"
-    android:background="@drawable/bottom_up_sheet">
+    android:background="@drawable/bottom_up_sheet"
+    android:clipToPadding="false">
 
     <TextView
         android:id="@+id/tv_heading_add_contact_bts"
@@ -24,6 +24,8 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/size_16"
         android:background="@color/white"
+        android:hint="@string/add_contact_phone"
+
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/tv_heading_add_contact_bts"
         app:layout_constraintTop_toBottomOf="@+id/tv_heading_add_contact_bts">
@@ -36,7 +38,7 @@
             android:background="@color/white"
 
             android:ems="10"
-            android:hint="@string/add_contact_phone"
+
             android:importantForAutofill="no"
             android:inputType="phone" />
     </com.google.android.material.textfield.TextInputLayout>
@@ -59,18 +61,17 @@
         style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:text="@string/add_more_text"
         android:textAlignment="textStart"
         android:textColor="@color/colorPrimary"
         app:icon="@drawable/ic_add"
         app:iconTint="@color/colorPrimary"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/cb_is_whatsapp_number_card_row"
-        app:layout_constraintTop_toBottomOf="@+id/cb_is_whatsapp_number_card_row" />
+        app:layout_constraintStart_toStartOf="@id/til_add_contact_phone"
+        app:layout_constraintTop_toBottomOf="@+id/cb_is_whatsapp_number_add_contact" />
 
     <com.google.android.material.checkbox.MaterialCheckBox
-        android:id="@+id/cb_is_whatsapp_number_card_row"
+        android:id="@+id/cb_is_whatsapp_number_add_contact"
         style="@style/LatoRegularCardText12"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

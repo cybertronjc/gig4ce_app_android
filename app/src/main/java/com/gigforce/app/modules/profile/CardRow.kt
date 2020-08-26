@@ -68,6 +68,10 @@ class CardRow : LinearLayout {
         set(value) {
             field = value
         }
+    var setEmail: String = ""
+        set(value) {
+            field = value
+        }
 
     var hideEditIcon: Boolean = false
         set(value) {
