@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/lipstick"
     tools:context="com.gigforce.app.modules.learning.slides.SlidesFragment">
 
 
@@ -12,26 +13,26 @@
         android:id="@+id/slideInfoLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/lipstick"
+
         android:padding="16dp"
         app:layout_constraintBottom_toBottomOf="parent">
 
 
         <TextView
-            android:id="@+id/slideTitleTV"
+            android:id="@+id/assessment_title_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:fontFamily="@font/lato_bold"
             android:letterSpacing="0"
-            android:text="Slide Title"
+            android:text="Assessment Title"
             android:textColor="@color/white"
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/slideDescriptionTV"
+            android:id="@+id/assessment_desc_tv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
@@ -40,19 +41,51 @@
             android:textColor="@color/white"
             android:textSize="14sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/slideTitleTV"
+            app:layout_constraintTop_toBottomOf="@id/assessment_title_tv"
             tools:text="@string/sample_info" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:src="@drawable/scenario"
-        android:scaleType="centerCrop"
-        app:layout_constraintBottom_toTopOf="@id/slideInfoLayout"
-        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/slideInfoLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/learning"
+            android:tint="@color/white" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/lato_bold"
+            android:letterSpacing="0"
+            android:text="Assessment"
+            android:textColor="@color/white"
+            android:textSize="24sp" />
+
+        <com.google.android.material.button.MaterialButton
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Start"
+            android:layout_marginTop="20dp"
+            android:textColor="@color/white"
+            app:strokeColor="@color/white" />
+
+
+    </LinearLayout>
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

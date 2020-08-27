@@ -41,4 +41,7 @@ class SlideViewModel : ViewModel() {
     val slidesData = listOf(slide1,slide2,slide3,slide4)
 
 
+
+
+
 }

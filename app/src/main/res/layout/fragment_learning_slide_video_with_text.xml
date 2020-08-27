@@ -7,7 +7,6 @@
     android:layout_height="match_parent"
     tools:context="com.gigforce.app.modules.learning.slides.SlidesFragment">
 
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/slideInfoLayout"
         android:layout_width="match_parent"
@@ -15,7 +14,6 @@
         android:background="@color/lipstick"
         android:padding="16dp"
         app:layout_constraintBottom_toBottomOf="parent">
-
 
         <TextView
             android:id="@+id/slideTitleTV"
@@ -46,13 +44,13 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <ImageView
-        android:id="@+id/imageView"
+    <com.google.android.exoplayer2.ui.PlayerView
+        android:id="@+id/slideVideoPlayerView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:src="@drawable/scenario"
-        android:scaleType="centerCrop"
+        app:controller_layout_id="@layout/fragment_add_selfie_play_selfie_video_controls"
         app:layout_constraintBottom_toTopOf="@id/slideInfoLayout"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:show_buffering="always" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

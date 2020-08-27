@@ -33,20 +33,16 @@ class SlidesFragment : BaseFragment(), ViewPager.OnPageChangeListener {
 
         val imageList = viewModel.slidesData.map { it.image }
 
-        val pagerAdapter = SlidesPagerAdapter(childFragmentManager,imageList)
-        singleImageSlideViewpager.adapter = pagerAdapter
-        singleImageSlideViewpager.addOnPageChangeListener(this)
+//        val pagerAdapter = SlidesPagerAdapter(childFragmentManager,imageList)
+//        singleImageSlideViewpager.adapter = pagerAdapter
+//        singleImageSlideViewpager.addOnPageChangeListener(this)
     }
 
     override fun onPageScrollStateChanged(state: Int) {}
     override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
 
     override fun onPageSelected(position: Int) {
-        val data = viewModel.slidesData[position]
 
-        slideCounterTV.text = "Slide ${position + 1} of ${viewModel.slidesData.size}"
-        slideTitleTV.text = data.title
-        slideDescriptionTV.text = data.content
     }
 
 }
