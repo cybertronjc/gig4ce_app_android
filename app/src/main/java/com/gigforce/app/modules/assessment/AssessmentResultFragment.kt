@@ -182,5 +182,9 @@ class AssessmentResultFragment : BaseFragment(), PopupMenu.OnMenuItemClickListen
         viewModelAssessmentResult.checkIfPermGranted(requestCode, grantResults)
     }
 
+    override fun onBackPressed(): Boolean {
+        popBackState()
+        return false
+    }
 
 }

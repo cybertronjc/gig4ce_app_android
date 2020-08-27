@@ -1,34 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bottom_up_sheet">
+    android:background="@drawable/bottom_up_sheet"
+    android:clipToPadding="false">
 
     <TextView
-        android:id="@+id/textView22"
+        android:id="@+id/tv_heading_add_contact_bts"
+        style="@style/BsHeadingBold12"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        android:text="@string/add_contact_new_contact"
-        style="@style/BsHeadingBold12"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@string/add_contact_new_contact" />
 
-    <EditText
-        android:id="@+id/add_contact_phone"
-        android:layout_width="wrap_content"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/til_add_contact_phone"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:ems="10"
+        android:layout_marginEnd="@dimen/size_16"
+        android:background="@color/white"
         android:hint="@string/add_contact_phone"
-        android:inputType="phone"
-        app:layout_constraintStart_toStartOf="@+id/textView22"
-        app:layout_constraintTop_toBottomOf="@+id/textView22"
-        android:importantForAutofill="no" />
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/tv_heading_add_contact_bts"
+        app:layout_constraintTop_toBottomOf="@+id/tv_heading_add_contact_bts">
+
+        <EditText
+            android:id="@+id/add_contact_phone"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="16dp"
+            android:background="@color/white"
+
+            android:ems="10"
+
+            android:importantForAutofill="no"
+            android:inputType="phone" />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <EditText
         android:id="@+id/add_contact_email"
@@ -37,24 +50,39 @@
         android:layout_marginTop="16dp"
         android:ems="10"
         android:hint="@string/add_contact_email"
+        android:importantForAutofill="no"
         android:inputType="textEmailAddress"
-        app:layout_constraintStart_toStartOf="@+id/add_contact_phone"
-        app:layout_constraintTop_toBottomOf="@+id/add_contact_phone"
-        android:importantForAutofill="no" />
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="@+id/til_add_contact_phone"
+        app:layout_constraintTop_toBottomOf="@+id/til_add_contact_phone" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/add_contact_add_more"
-        android:layout_width="match_parent"
+        style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:text="@string/add_more_text"
         android:textAlignment="textStart"
-        app:icon="@drawable/ic_add"
-        style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
         android:textColor="@color/colorPrimary"
+        app:icon="@drawable/ic_add"
         app:iconTint="@color/colorPrimary"
-        app:layout_constraintStart_toStartOf="@+id/add_contact_email"
-        app:layout_constraintTop_toBottomOf="@+id/add_contact_email" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/til_add_contact_phone"
+        app:layout_constraintTop_toBottomOf="@+id/cb_is_whatsapp_number_add_contact" />
+
+    <com.google.android.material.checkbox.MaterialCheckBox
+        android:id="@+id/cb_is_whatsapp_number_add_contact"
+        style="@style/LatoRegularCardText12"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="-5dp"
+        android:layout_marginTop="-10dp"
+        android:layout_marginBottom="-10dp"
+        android:text="@string/is_whats_app_number"
+        android:textSize="@dimen/font_12"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/tv_heading_add_contact_bts"
+        app:layout_constraintTop_toBottomOf="@+id/til_add_contact_phone" />
 
     <Button
         android:id="@+id/add_contact_cancel"
@@ -62,8 +90,10 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="@string/cancel_text"
-        app:layout_constraintStart_toStartOf="@+id/add_contact_add_more"
-        app:layout_constraintTop_toBottomOf="@+id/add_contact_add_more" />
+        app:layout_constraintEnd_toStartOf="@+id/add_contact_save"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/add_contact_add_more"
+        app:layout_constraintVertical_chainStyle="packed" />
 
     <Button
         android:id="@+id/add_contact_save"
@@ -71,7 +101,10 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="16dp"
+
         android:text="@string/save_text"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/add_contact_cancel"
-        app:layout_constraintTop_toBottomOf="@+id/add_contact_add_more" />
+        app:layout_constraintTop_toBottomOf="@+id/add_contact_add_more"
+        app:layout_constraintVertical_chainStyle="packed" />
 </androidx.constraintlayout.widget.ConstraintLayout>

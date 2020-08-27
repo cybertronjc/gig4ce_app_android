@@ -2,7 +2,6 @@
 
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
@@ -11,8 +10,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingBottom="100dp"
-        android:background="@drawable/bg_exp_white_rect">
+        android:background="@drawable/bg_exp_white_rect"
+        android:paddingBottom="100dp">
 
         <com.gigforce.app.modules.profile.ProfileCardBackground
             android:id="@+id/contact_card"
@@ -21,9 +20,20 @@
             android:layout_marginLeft="16dp"
             android:layout_marginTop="24dp"
             android:layout_marginRight="16dp"
-            app:layout_constraintStart_toStartOf="@id/language_card"
             app:layout_constraintEnd_toEndOf="@id/language_card"
+            app:layout_constraintStart_toStartOf="@id/language_card"
             app:layout_constraintTop_toBottomOf="@id/language_card" />
+
+        <com.gigforce.app.modules.profile.ProfileCardBackground
+            android:id="@+id/email_card"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginRight="16dp"
+            app:layout_constraintEnd_toEndOf="@id/contact_card"
+            app:layout_constraintStart_toStartOf="@id/contact_card"
+            app:layout_constraintTop_toBottomOf="@id/contact_card" />
 
         <com.gigforce.app.modules.profile.ProfileCardBackground
             android:id="@+id/language_card"
@@ -32,8 +42,8 @@
             android:layout_marginLeft="16dp"
             android:layout_marginTop="24dp"
             android:layout_marginRight="16dp"
-            app:layout_constraintStart_toStartOf="@id/bio_card"
             app:layout_constraintEnd_toEndOf="@id/bio_card"
+            app:layout_constraintStart_toStartOf="@id/bio_card"
             app:layout_constraintTop_toBottomOf="@id/bio_card" />
 
         <com.gigforce.app.modules.profile.ProfileCardBackground
@@ -52,21 +62,20 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
             android:layout_marginTop="8dp"
-            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginEnd="8dp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/about_top_profile" />
 
         <com.gigforce.app.modules.profile.TopProfileBar
             android:id="@+id/about_top_profile"
-            android:layout_height="wrap_content"
             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             app:cardCornerRadius="0dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-        </com.gigforce.app.modules.profile.TopProfileBar>
+            app:layout_constraintTop_toTopOf="parent"></com.gigforce.app.modules.profile.TopProfileBar>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.core.widget.NestedScrollView>
+</androidx.core.widget.NestedScrollView>

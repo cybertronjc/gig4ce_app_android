@@ -1,10 +1,8 @@
 package com.gigforce.app.modules.profile.models
 
-import kotlin.collections.ArrayList
-
 data class ProfileData(
-    var status : Boolean = true,
-    var errormsg : String = "",
+    var status: Boolean = true,
+    var errormsg: String = "",
     var id: String? = null,
     var name: String = "",
     var aboutMe: String = "",
@@ -22,12 +20,15 @@ data class ProfileData(
     var connections: Int = 0,
     var rating: Rating? = Rating(),
     var tasksDone: Int = 0,
-    var address:AddressFirestoreModel = AddressFirestoreModel(),
-    var ageGroup:String = "",
-    var gender : String = "",
-    var highestEducation:String = "",
-    var workStatus : String = "",
-    var isonboardingdone : Boolean = false
-    ) {
+    var address: AddressFirestoreModel = AddressFirestoreModel(),
+    var ageGroup: String = "",
+    var gender: String = "",
+    var highestEducation: String = "",
+    var workStatus: String = "",
+    var isonboardingdone: Boolean = false,
+    var checked: Boolean = false,
+    var contactPhone: ArrayList<ContactPhone>? = null,
+    var contactEmail: ArrayList<ContactEmail>? = null
+) {
 
 }

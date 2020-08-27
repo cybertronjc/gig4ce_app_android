@@ -555,8 +555,8 @@ class BSCalendarScreenFragment : BaseFragment() {
             RecyclerGenericAdapter<Assessment>(
                 activity?.applicationContext,
                 PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
-                    showToast("This page are inactive. We’ll activate it in a few weeks")
-                    //navigate(R.id.assessment_fragment)
+//                    showToast("This page are inactive. We’ll activate it in a few weeks")
+                    navigate(R.id.assessment_fragment)
                      },
                 RecyclerGenericAdapter.ItemInterface<Assessment?> { obj, viewHolder, position ->
                     val lp = getView(viewHolder, R.id.assessment_cl).layoutParams

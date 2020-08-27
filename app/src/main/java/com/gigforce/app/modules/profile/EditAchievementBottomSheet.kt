@@ -50,7 +50,7 @@ class EditAchievementBottomSheet: ProfileBaseBottomSheetFragment() {
 
     private fun initialize() {
         profileViewModel!!.userProfileData.observe(this, Observer { profile ->
-            profile.achievements?.let {
+            profile?.achievements?.let {
                 val achievements = it.sortedByDescending { achievement -> achievement.year }
                 achievement = achievements[arrayLocation!!.toInt()]
                 title.setText(achievement.title)

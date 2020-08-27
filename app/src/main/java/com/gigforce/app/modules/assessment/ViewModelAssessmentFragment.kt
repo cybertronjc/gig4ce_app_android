@@ -4,8 +4,12 @@ import android.graphics.Rect
 import android.view.View
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.gigforce.app.modules.assessment.models.AssementQuestionsReponse
+import com.google.firebase.firestore.FirebaseFirestoreException
+import com.google.firebase.firestore.QuerySnapshot
 
-class ViewModelAssessmentFragment : ViewModel() {
+class ViewModelAssessmentFragment(private val modelCallbacks: ModelCallbacks) : ViewModel(),
+    ModelCallbacks.ModelResponseCallbacks {
 
 
     internal val observableDialogResult: MutableLiveData<Boolean> by lazy {
@@ -23,7 +27,9 @@ class ViewModelAssessmentFragment : ViewModel() {
     internal val observableShowHideQuestionHeader: MutableLiveData<Int> by lazy {
         MutableLiveData<Int>();
     }
-
+    internal val observableAssessmentData: MutableLiveData<AssementQuestionsReponse> by lazy {
+        MutableLiveData<AssementQuestionsReponse>();
+    }
 
     fun shouldQuestionHeaderBeVisible(top: Float?, bottom: Float?, scrollBounds: Rect) {
         observableShowHideQuestionHeader.value =
@@ -43,6 +49,14 @@ class ViewModelAssessmentFragment : ViewModel() {
             observableRunSwipeDownAnim.value = null
         }
         observableShowHideSwipeDownIcon.value = if (reached) View.GONE else View.VISIBLE
+    }
+
+    fun getQuestionaire() {
+        modelCallbacks.getQuestionaire(this)
+    }
+
+    override fun QuestionairreSuccess(value: QuerySnapshot?, e: FirebaseFirestoreException?) {
+        observableAssessmentData.value = value?.toObjects(AssementQuestionsReponse::class.java)!![0]
     }
 
 }

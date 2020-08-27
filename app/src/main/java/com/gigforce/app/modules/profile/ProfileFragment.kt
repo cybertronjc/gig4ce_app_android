@@ -3,21 +3,21 @@ package com.gigforce.app.modules.profile
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import androidx.activity.addCallback
 import androidx.coordinatorlayout.widget.CoordinatorLayout
-import androidx.fragment.app.Fragment
+import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.modules.photocrop.PhotoCrop
+import com.gigforce.app.modules.profile.models.ProfileData
 import com.gigforce.app.utils.GlideApp
+import com.gigforce.app.utils.StringConstants
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.chip.Chip
 import com.google.firebase.storage.FirebaseStorage
@@ -31,31 +31,35 @@ import java.util.*
 
 class ProfileFragment : BaseFragment() {
 
+
     companion object {
         fun newInstance() = ProfileFragment()
     }
+
 
     private lateinit var storage: FirebaseStorage
     private lateinit var layout: View
     private lateinit var profileAvatarName: String
     private lateinit var dWidth: Display
-    private lateinit var win:Window
+    private lateinit var win: Window
     private var PHOTO_CROP: Int = 45
     private var isShow: Boolean = true
     private var scrollRange: Int = -1
     private var PROFILE_PICTURE_FOLDER: String = "profile_pics"
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         makeStatusBarTransparent()
     }
 
-    private fun makeStatusBarTransparent(){
+    private fun makeStatusBarTransparent() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             win = requireActivity().window
             win.setFlags(
                 WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
+                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+            )
             win.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             win.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             win.setStatusBarColor(requireActivity().getColor(R.color.white))
@@ -64,7 +68,7 @@ class ProfileFragment : BaseFragment() {
     }
 
 
-    private fun restoreStatusBar(){
+    private fun restoreStatusBar() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             win = requireActivity().window
             win.clearFlags(
@@ -130,11 +134,13 @@ class ProfileFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val viewModel: ProfileViewModel by activityViewModels<ProfileViewModel>()
-        location_card.setOnClickListener{
+        location_card.setOnClickListener {
             showToast("This is work in progress. Please check again in a few days")
         }
         // load user data
-        viewModel.getProfileData().observe(viewLifecycleOwner, Observer { profile ->
+        viewModel.getProfileData().observe(viewLifecycleOwner, Observer { profileObs ->
+            val profile: ProfileData = profileObs!!
+            viewModel.profileID = profile?.id ?: ""
             layout.gigger_rating.text =
                 if (profile.rating != null) profile.rating!!.getTotal().toString()
                 else "-"
@@ -142,6 +148,7 @@ class ProfileFragment : BaseFragment() {
             layout.task_done.text = profile.tasksDone.toString()
             layout.connection_count.text = profile.connections.toString()
             layout.main_expanded_user_name.text = profile.name
+
 
             Log.d("ProfileFragment", profile.isVerified.toString())
             if (profile.isVerified) {
@@ -219,10 +226,18 @@ class ProfileFragment : BaseFragment() {
             if (mainAboutString.trim().isEmpty())
                 layout.main_about_card.card_view_more.text = "Add bio"
             layout.main_about_card.card_view_more.setOnClickListener {
-                findNavController().navigate(R.id.aboutExpandedFragment)
+                findNavController().navigate(
+                    R.id.aboutExpandedFragment, bundleOf(
+                        Pair(StringConstants.PROFILE_ID.value, viewModel.profileID)
+                    )
+                )
             }
             layout.main_about_card.setOnClickListener {
-                findNavController().navigate(R.id.aboutExpandedFragment)
+                findNavController().navigate(
+                    R.id.aboutExpandedFragment, bundleOf(
+                        Pair(StringConstants.PROFILE_ID.value, viewModel.profileID)
+                    )
+                )
             }
 
             val format = SimpleDateFormat("dd/MM/yyyy", Locale.US)
@@ -282,8 +297,10 @@ class ProfileFragment : BaseFragment() {
                     mainExperienceString += experiences[0].employmentType + "\n"
                     mainExperienceString += experiences[0].location + "\n"
                     mainExperienceString += format.format(experiences[0].startDate!!) + "-"
-                    mainExperienceString += if(experiences[0].endDate != null) format.format(experiences[0].endDate!!) + "\n"
-                                            else "current" + "\n"
+                    mainExperienceString += if (experiences[0].endDate != null) format.format(
+                        experiences[0].endDate!!
+                    ) + "\n"
+                    else "current" + "\n"
                 }
             }
 
@@ -335,7 +352,7 @@ class ProfileFragment : BaseFragment() {
             startActivityForResult(photoCropIntent, PHOTO_CROP)
         }
 
-        layout.edit_cover.setOnClickListener{
+        layout.edit_cover.setOnClickListener {
             this.findNavController().navigate(R.id.editTagBottomSheet)
         }
 
@@ -364,15 +381,12 @@ class ProfileFragment : BaseFragment() {
 //                }
 //            }
 //        })
-        appbar.addOnOffsetChangedListener(object:AppBarLayout.OnOffsetChangedListener {
-            override fun onOffsetChanged(appBarLayout:AppBarLayout, verticalOffset:Int) {
-                if (Math.abs(verticalOffset)-appBarLayout.getTotalScrollRange() == 0)
-                {
+        appbar.addOnOffsetChangedListener(object : AppBarLayout.OnOffsetChangedListener {
+            override fun onOffsetChanged(appBarLayout: AppBarLayout, verticalOffset: Int) {
+                if (Math.abs(verticalOffset) - appBarLayout.getTotalScrollRange() == 0) {
                     main_expanded_user_name.animate().alpha(0.0f).setDuration(100)
                     main_expanded_user_name.visibility = View.INVISIBLE
-                }
-                else
-                {
+                } else {
                     main_expanded_user_name.animate().alpha(1.0f).setDuration(0)
                     main_expanded_user_name.visibility = View.VISIBLE
 
@@ -388,11 +402,11 @@ class ProfileFragment : BaseFragment() {
         if (Path != "avatar.jpg" && Path != "") {
             var profilePicRef: StorageReference =
                 storage.reference.child(PROFILE_PICTURE_FOLDER).child(Path)
-            if(layout.profile_avatar!=null)
+            if (layout.profile_avatar != null)
                 GlideApp.with(this.requireContext())
                     .load(profilePicRef)
                     .into(layout.profile_avatar)
-        }else{
+        } else {
             GlideApp.with(requireContext())
                 .load(R.drawable.avatar)
                 .into(layout.profile_avatar)
@@ -443,40 +457,35 @@ class ProfileFragment : BaseFragment() {
 
 }
 
-internal abstract class AppBarStateChangeListener:AppBarLayout.OnOffsetChangedListener {
+internal abstract class AppBarStateChangeListener : AppBarLayout.OnOffsetChangedListener {
     private var mCurrentState = State.IDLE
+
     enum class State {
         EXPANDED,
         COLLAPSED,
         IDLE
     }
-    override fun onOffsetChanged(appBarLayout:AppBarLayout, i:Int) {
-        if (i == 0)
-        {
-            if (mCurrentState != State.EXPANDED)
-            {
+
+    override fun onOffsetChanged(appBarLayout: AppBarLayout, i: Int) {
+        if (i == 0) {
+            if (mCurrentState != State.EXPANDED) {
                 onStateChanged(appBarLayout, State.EXPANDED)
             }
             mCurrentState = State.EXPANDED
-        }
-        else if (Math.abs(i) >= appBarLayout.getTotalScrollRange())
-        {
-            if (mCurrentState != State.COLLAPSED)
-            {
+        } else if (Math.abs(i) >= appBarLayout.getTotalScrollRange()) {
+            if (mCurrentState != State.COLLAPSED) {
                 onStateChanged(appBarLayout, State.COLLAPSED)
             }
             mCurrentState = State.COLLAPSED
-        }
-        else
-        {
-            if (mCurrentState != State.IDLE)
-            {
+        } else {
+            if (mCurrentState != State.IDLE) {
                 onStateChanged(appBarLayout, State.IDLE)
             }
             mCurrentState = State.IDLE
         }
     }
-    abstract fun onStateChanged(appBarLayout:AppBarLayout, state:State)
+
+    abstract fun onStateChanged(appBarLayout: AppBarLayout, state: State)
 }
 //And then you can use it:
 //appBarLayout.addOnOffsetChangedListener(new AppBarStateChangeListener() {
