@@ -79,6 +79,18 @@ class DoAndDontImageFragment : BaseFragment() {
         setInfoOnView()
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.apply {
+
+            putString(KEY_LESSON_ID, mLessonId)
+            putString(KEY_DO_IMAGE_URI, mDoImage.toString())
+            putString(KEY_DO_IMAGE_TEXT, mDoText)
+            putString(KEY_DONT_IMAGE_URI, mDontImage.toString())
+            putString(KEY_DONT_IMAGE_TEXT, mDontText)
+        }
+    }
+
     private fun setInfoOnView() {
 
         GlideApp.with(requireContext())

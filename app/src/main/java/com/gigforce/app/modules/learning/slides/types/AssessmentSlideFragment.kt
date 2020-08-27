@@ -63,6 +63,16 @@ class AssessmentSlideFragment : BaseFragment() {
         setAssessmentInfoOnView()
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.apply {
+
+            putString(KEY_LESSON_ID, mAssessmentId)
+            putString(KEY_ASSESSMENT_TITLE, mAssessmentTitle)
+            putString(KEY_ASSESSMENT_DESCRIPTION, mAssessmentDescription)
+        }
+    }
+
     private fun setAssessmentInfoOnView() {
         assessment_title_tv.text = mAssessmentTitle
         assessment_desc_tv.text = mAssessmentDescription

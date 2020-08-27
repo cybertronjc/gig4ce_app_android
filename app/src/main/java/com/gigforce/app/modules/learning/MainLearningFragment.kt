@@ -446,8 +446,7 @@ class MainLearningFragment : BaseFragment() {
             RecyclerGenericAdapter<CourseContent>(
                 activity?.applicationContext,
                 PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
-                    showToast("This page are inactive. We’ll activate it in a few weeks")
-                    //navigate(R.id.assessment_fragment)
+                    TODO("navigate to assessment")
                 },
                 RecyclerGenericAdapter.ItemInterface<CourseContent> { obj, viewHolder, position ->
                     val lp = getView(viewHolder, R.id.assessment_cl).layoutParams

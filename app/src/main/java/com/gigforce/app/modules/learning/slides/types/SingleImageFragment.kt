@@ -72,6 +72,18 @@ class SingleImageFragment : BaseFragment() {
         setInfoOnView()
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.apply {
+
+            putString(KEY_LESSON_ID, mLessonId)
+           // putString(KEY_SLIDE_ID, mSlideId)
+            putString(KEY_IMAGE_URI, mImageUri.toString())
+            putString(KEY_TITLE, mTitle)
+            putString(KEY_DESCRIPTION, mDescription)
+        }
+    }
+
     private fun setInfoOnView() {
         GlideApp.with(requireContext())
             .load(mImageUri)

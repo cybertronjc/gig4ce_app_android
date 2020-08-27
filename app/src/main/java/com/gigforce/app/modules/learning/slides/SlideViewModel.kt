@@ -1,47 +1,71 @@
 package com.gigforce.app.modules.learning.slides
 
-import android.net.Uri
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.gigforce.app.R
+import androidx.lifecycle.viewModelScope
+import com.gigforce.app.modules.learning.LearningRepository
+import com.gigforce.app.modules.learning.modules.SlideContent
+import com.gigforce.app.utils.Lce
+import kotlinx.coroutines.launch
 
-data class Slide(
-    val image : Int,
-    val title : String,
-    val content : String
-)
 
-class SlideViewModel : ViewModel() {
+class SlideViewModel constructor(
+    private val learningRepository: LearningRepository = LearningRepository()
+) : ViewModel() {
 
-    val slide1 = Slide(
-        image = R.drawable.bg_user_learning,
-        title = "Title 1",
-        content = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting"
+    val slides = listOf(
+        SlideContent(
+            slideId= "021",
+            lessonId = "34",
+            slideNo = 1,
+            type = SlideContent.TYPE_IMAGE_WITH_TEXT,
+            title = "Some title",
+            description = "Some long description",
+            image = "https://firebasestorage.googleapis.com/v0/b/gigforce-dev.appspot.com/o/learning_images%2Flearning1.jpg?alt=media&token=856f1858-3f79-4d9b-b1a7-1952c3940019"
+        ),
+        SlideContent(
+            slideId= "021",
+            lessonId = "34",
+            slideNo = 1,
+            type = SlideContent.TYPE_IMAGE_WITH_TEXT,
+            title = "Some title 2",
+            description = "Some long description 2",
+            image = "https://firebasestorage.googleapis.com/v0/b/gigforce-dev.appspot.com/o/learning_images%2Findustry3.jpg?alt=media&token=4fd6848c-6507-448f-b593-bbef1028101c"
+        ),
+        SlideContent(
+            slideId= "021",
+            lessonId = "34",
+            slideNo = 1,
+            type = SlideContent.TYPE_DOS_DONTS,
+            doText = "Do Text title",
+            doImage = "https://firebasestorage.googleapis.com/v0/b/gigforce-dev.appspot.com/o/learning_images%2Flearning1.jpg?alt=media&token=856f1858-3f79-4d9b-b1a7-1952c3940019",
+            dontText = "Dont Text title",
+            dontImage = "https://firebasestorage.googleapis.com/v0/b/gigforce-dev.appspot.com/o/learning_images%2Findustry3.jpg?alt=media&token=4fd6848c-6507-448f-b593-bbef1028101c"
+        ),
+        SlideContent(
+            slideId= "021",
+            lessonId = "34",
+            slideNo = 1,
+            type = SlideContent.TYPE_DOS_DONTS,
+            doText = "Do Text title 2",
+            doImage = "https://firebasestorage.googleapis.com/v0/b/gigforce-dev.appspot.com/o/learning_images%2Flearning1.jpg?alt=media&token=856f1858-3f79-4d9b-b1a7-1952c3940019",
+            dontText = "Dont Text title 2",
+            dontImage = "https://firebasestorage.googleapis.com/v0/b/gigforce-dev.appspot.com/o/learning_images%2Findustry3.jpg?alt=media&token=4fd6848c-6507-448f-b593-bbef1028101c"
+        )
     )
 
-    val slide2 = Slide(
-        image = R.drawable.brista_ls_img,
-        title = "Title 2",
-        content = "Curabitur vitae velit feugiat lacus faucibus rutrum. Sed ultrices ultricies nisl, eu tincidunt mauris lacinia non. Nunc in lorem eu felis tincidunt luctus a a quam. Donec sit amet molestie purus, sit amet iaculis urna. Etiam bibendum pulvinar sem vitae varius. Sed sit amet maximus nibh. Lorem ipsum dolor sit amet, consectetur adipiscing elit."
-    )
+    private val _slideContent = MutableLiveData<Lce<List<SlideContent>>>()
+    val slideContent: LiveData<Lce<List<SlideContent>>> = _slideContent
 
-    val slide3 = Slide(
-        image = R.drawable.bg_user_learning,
-        title = "Title 3",
-        content = "Nulla facilisis, augue eget interdum lobortis, sapien tortor cursus massa, id blandit eros lectus nec libero. Vivamus egestas efficitur rhoncus. In dignissim, mi eu pretium feugiat, velit mauris mattis eros, vitae placerat dolor ante in nulla. Vestibulum convallis varius mi placerat pharetra"
-    )
-
-
-    val slide4 = Slide(
-        image = R.drawable.brista_ls_img,
-        title = "Title 4",
-        content = "Morbi consequat tellus non lorem laoreet pharetra. Vivamus posuere est ligula, eu interdum purus sagittis facilisis. Curabitur accumsan, nulla eu faucibus ultrices, mi tortor pulvinar ante, vehicula rhoncus lectus orci ut est. In tincidunt sapien nec euismod ultrices. Curabitur commodo ultricies leo ac dictum. Donec facilisis pulvinar vulputate."
-    )
-
-
-    val slidesData = listOf(slide1,slide2,slide3,slide4)
+    fun getSlideContent(
+        courseId: String,
+        moduleId: String,
+        lessonId: String
+    ) = viewModelScope.launch {
+        _slideContent.postValue(Lce.loading())
 
 
 
-
-
+    }
 }

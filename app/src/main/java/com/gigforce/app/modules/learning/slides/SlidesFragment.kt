@@ -27,11 +27,11 @@ class SlidesFragment : BaseFragment(), ViewPager.OnPageChangeListener {
 
     private fun initView() {
 
-        slideCounterTV.text = "Slide 1 of ${viewModel.slidesData.size}"
-        slideTitleTV.text = viewModel.slidesData[0].title
-        slideDescriptionTV.text = viewModel.slidesData[0].content
-
-        val imageList = viewModel.slidesData.map { it.image }
+//        slideCounterTV.text = "Slide 1 of ${viewModel.slidesData.size}"
+//        slideTitleTV.text = viewModel.slidesData[0].title
+//        slideDescriptionTV.text = viewModel.slidesData[0].content
+//
+//        val imageList = viewModel.slidesData.map { it.image }
 
 //        val pagerAdapter = SlidesPagerAdapter(childFragmentManager,imageList)
 //        singleImageSlideViewpager.adapter = pagerAdapter

@@ -86,6 +86,18 @@ class VideoWithTextFragment : BaseFragment() {
         setVideoOnView()
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.apply {
+
+            putString(KEY_LESSON_ID, mLessonId)
+            putString(KEY_SLIDE_ID, mSlideId)
+            putString(KEY_VIDEO_URI, mVideoUri.toString())
+            putString(KEY_TITLE, mTitle)
+            putString(KEY_DESCRIPTION, mDescription)
+        }
+    }
+
     private fun setVideoOnView() {
         if (Build.VERSION.SDK_INT > 23)
             initVideoPlayer()
