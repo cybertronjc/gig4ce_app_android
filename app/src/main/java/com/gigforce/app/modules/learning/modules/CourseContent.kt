@@ -6,6 +6,14 @@ data class CourseContent(
 
     var id: String = "",
 
+    @get:PropertyName("course_id")
+    @set:PropertyName("course_id")
+    var courseId: String = "",
+
+    @get:PropertyName("module_id")
+    @set:PropertyName("module_id")
+    var moduleId: String = "",
+
     @get:PropertyName("lesson_type")
     @set:PropertyName("lesson_type")
     var type: String = TYPE_VIDEO,
