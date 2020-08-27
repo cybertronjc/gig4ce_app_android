@@ -10,7 +10,7 @@ android {
     signingConfigs {
         debug {
  //           storeFile file('/home/yogesh/WORK/gig4ce/gig4ce_app_android/build/gigforceapp.jks')
-            storeFile file('C:/rohit/gigforceapp.jks')
+            storeFile file('/Users/apple/Documents/gigforceapp.jks')
             storePassword 'gigforce'
             keyAlias 'key0'
             keyPassword 'gigforce'
@@ -259,9 +259,9 @@ dependencies {
     implementation 'com.otaliastudios:transcoder:0.9.1'
     //Qr Code Library
     implementation 'com.google.zxing:core:3.4.0'
-
-    // https://mvnrepository.com/artifact/com.itextpdf/itextpdf
+// https://mvnrepository.com/artifact/com.itextpdf/itextpdf
     implementation group: 'com.itextpdf', name: 'itextpdf', version: '5.0.6'
+
 
 
 
