@@ -33,10 +33,15 @@ import com.gigforce.app.modules.gigerVerfication.GigerVerificationStatus.Compani
 import com.gigforce.app.modules.help.HelpVideo
 import com.gigforce.app.modules.help.HelpViewModel
 import com.gigforce.app.modules.landingscreen.models.Tip
+import com.gigforce.app.modules.learning.LearningConstants
+import com.gigforce.app.modules.learning.LearningViewModel
+import com.gigforce.app.modules.learning.modules.Course
 import com.gigforce.app.modules.preferences.PreferencesFragment
 import com.gigforce.app.modules.profile.AboutExpandedFragment
 import com.gigforce.app.modules.profile.ProfileViewModel
 import com.gigforce.app.utils.GlideApp
+import com.gigforce.app.utils.Lce
+import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import kotlinx.android.synthetic.main.landingscreen_fragment.*
 import kotlinx.android.synthetic.main.landingscreen_fragment.chat_icon_iv
@@ -58,6 +63,8 @@ class LandingScreenFragment : BaseFragment() {
     private val verificationViewModel : GigVerificationViewModel by viewModels()
     private val helpViewModel : HelpViewModel by viewModels()
     private val landingScreenViewModel : LandingScreenViewModel by viewModels()
+    private val learningViewModel : LearningViewModel by viewModels()
+    private val firebaseStorage : FirebaseStorage = FirebaseStorage.getInstance()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -449,46 +456,33 @@ class LandingScreenFragment : BaseFragment() {
 
     private fun initializeLearningModule() {
 
+        learningViewModel
+            .roleBasedCourses
+            .observe(viewLifecycleOwner, Observer {
+
+                when (it) {
+                    Lce.Loading -> { }
+                    is Lce.Content -> showUserLearningCourses(it.content)
+                    is Lce.Error -> { }
+                }
+            })
+
+
+        learningViewModel.getRoleBasedCourses()
+    }
+
+    private fun showUserLearningCourses(content: List<Course>) {
+
         val itemWidth = ((width / 3) * 2).toInt()
         // model will change when integrated with DB
-        var datalist: ArrayList<TitleSubtitleModel> = ArrayList<TitleSubtitleModel>()
 
-        datalist.add(
-            TitleSubtitleModel(
-                "Retail Sales Executive",
-                "Demonstrate products to customers", R.drawable.learning2
-            )
-        )
-
-        datalist.add(
-            TitleSubtitleModel(
-                "Quick Service Restaurant",
-                "Manage food displays",
-                R.drawable.learning1
-            )
-        )
-        datalist.add(
-            TitleSubtitleModel(
-                "Delivery",
-                "Maintaining hygiene and safety",
-                R.drawable.learning_bg
-            )
-        )
-        datalist.add(
-            TitleSubtitleModel(
-                "Retail Sales executive",
-                "Help customers choose the right products",
-                R.drawable.learning2
-            )
-        )
-        val recyclerGenericAdapter: RecyclerGenericAdapter<TitleSubtitleModel> =
-            RecyclerGenericAdapter<TitleSubtitleModel>(
+        val recyclerGenericAdapter: RecyclerGenericAdapter<Course> =
+            RecyclerGenericAdapter<Course>(
                 activity?.applicationContext,
                 PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
-//                    navigate(R.id.mainLearningFragment)
-                    showToast("This is work in progress. Please check again in a few days")
+                    navigate(R.id.mainLearningFragment)
                 },
-                RecyclerGenericAdapter.ItemInterface<TitleSubtitleModel?> { obj, viewHolder, position ->
+                RecyclerGenericAdapter.ItemInterface<Course?> { obj, viewHolder, position ->
                     var view = getView(viewHolder, R.id.card_view)
                     val lp = view.layoutParams
                     lp.height = lp.height
@@ -496,15 +490,38 @@ class LandingScreenFragment : BaseFragment() {
                     view.layoutParams = lp
 
                     var title = getTextView(viewHolder, R.id.title_)
-                    title.text = obj?.title
+                    title.text = obj?.name
 
                     var subtitle = getTextView(viewHolder, R.id.title)
-                    subtitle.text = obj?.subtitle
+                    subtitle.text = obj?.name
 
                     var img = getImageView(viewHolder, R.id.learning_img)
-                    img.setImageResource(obj?.imgIcon!!)
+
+                    if (!obj!!.coverPicture.isNullOrBlank()) {
+                        if (obj!!.coverPicture!!.startsWith("http", true)) {
+
+                            GlideApp.with(requireContext())
+                                    .load(obj!!.coverPicture!!)
+                                    .placeholder(getCircularProgressDrawable())
+                                    .into(img)
+                        } else {
+                            FirebaseStorage.getInstance()
+                                    .getReference(LearningConstants.LEARNING_IMAGES_FIREBASE_FOLDER)
+                                    .child(obj!!.coverPicture!!)
+                                    .downloadUrl
+                                    .addOnSuccessListener { fileUri ->
+
+                                        GlideApp.with(requireContext())
+                                                .load(fileUri)
+                                                .placeholder(getCircularProgressDrawable())
+                                                .into(img)
+                                    }
+                        }
+                    }
+
+                    //img.setImageResource(obj?.imgIcon!!)
                 })!!
-        recyclerGenericAdapter.setList(datalist)
+        recyclerGenericAdapter.setList(content)
         recyclerGenericAdapter.setLayout(R.layout.learning_bs_item)
         learning_rv.layoutManager = LinearLayoutManager(
             activity?.applicationContext,
@@ -512,6 +529,7 @@ class LandingScreenFragment : BaseFragment() {
             false
         )
         learning_rv.adapter = recyclerGenericAdapter
+
     }
 
     private fun initializeExploreByIndustry() {

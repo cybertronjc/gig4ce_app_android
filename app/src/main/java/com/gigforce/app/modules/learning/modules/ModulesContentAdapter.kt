@@ -1,4 +1,4 @@
-package com.gigforce.app.modules.learning.learningVideo
+package com.gigforce.app.modules.learning.modules
 
 import android.view.LayoutInflater
 import android.view.View
@@ -11,8 +11,9 @@ import com.gigforce.app.utils.VectorDrawableUtils
 import com.github.vipulasri.timelineview.TimelineView
 import kotlinx.android.synthetic.main.fragment_learning_video_item.view.*
 
-class LearningVideoLineAdapter(private val mFeedList: List<LearningVideo>) :
-    RecyclerView.Adapter<LearningVideoLineAdapter.TimeLineViewHolder>() {
+class ModulesContentAdapter(
+    private val mCourseContent: List<CourseContent>
+) : RecyclerView.Adapter<ModulesContentAdapter.TimeLineViewHolder>() {
 
     private var learningVideoActionListener: ((Int) -> Unit)? = null
     private lateinit var mLayoutInflater: LayoutInflater
@@ -42,15 +43,15 @@ class LearningVideoLineAdapter(private val mFeedList: List<LearningVideo>) :
 
     override fun onBindViewHolder(holder: TimeLineViewHolder, position: Int) {
 
-        val videoModel = mFeedList[position]
+        val videoModel = mCourseContent[position]
         setMarker(holder, R.drawable.ic_marker_active, R.color.colorPrimary)
 
         holder.videoTitle.text = videoModel.title
-        holder.videoTimeTV.text = videoModel.videoLength
-        holder.lessonNameTV.text = videoModel.lessonName
-        holder.lessonsSeeMoreButton.text = videoModel.lessonsSeeMoreButton
-        Glide.with(holder.videoThumbnailIV.context).load(videoModel.thumbnail)
-            .into(holder.videoThumbnailIV)
+//        holder.videoTimeTV.text = videoModel.videoLength
+//        holder.lessonNameTV.text = videoModel.lessonName
+//        holder.lessonsSeeMoreButton.text = videoModel.lessonsSeeMoreButton
+//        Glide.with(holder.videoThumbnailIV.context).load(videoModel.thumbnail)
+//            .into(holder.videoThumbnailIV)
     }
 
     private fun setMarker(holder: TimeLineViewHolder, drawableResId: Int, colorFilter: Int) {
@@ -62,8 +63,7 @@ class LearningVideoLineAdapter(private val mFeedList: List<LearningVideo>) :
     }
 
 
-
-    override fun getItemCount() = mFeedList.size
+    override fun getItemCount() = mCourseContent.size
 
     inner class TimeLineViewHolder(itemView: View, viewType: Int) :
         RecyclerView.ViewHolder(itemView), View.OnClickListener {

@@ -4,14 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true"
-    tools:context=".modules.learning.LearningWithStatsFragment">
+    android:fillViewport="true">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:paddingBottom="90dp">
-
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/learningToolbarLayout"
@@ -59,7 +57,7 @@
             android:layout_width="match_parent"
             android:layout_height="275dp"
             android:layout_marginTop="4dp"
-            android:src="@drawable/bg_square_pos"
+            android:scaleType="fitXY"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/learningToolbarLayout" />
 
@@ -85,7 +83,7 @@
             android:layout_marginTop="25dp"
             android:fontFamily="@font/lato_bold"
             android:letterSpacing="0"
-            android:text="Demonstrate products to customers"
+            tools:text="Demonstrate products to customers"
             android:textColor="#d9000000"
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
@@ -106,7 +104,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/videoTitleTV"
-            android:text="Every customer is unique, so every demo should be uniquely matched to that customer. Before you demonstrate a product, do your research. Learn how to become a master of the art of demonstrating a product to  a customer." />
+            tools:text="Every customer is unique, so every demo should be uniquely matched to that customer. Before you demonstrate a product, do your research. Learn how to become a master of the art of demonstrating a product to  a customer." />
 
 
         <ImageView
@@ -128,11 +126,36 @@
             android:layout_marginTop="12dp"
             android:fontFamily="@font/lato"
             android:letterSpacing="0"
-            android:text="Level 1"
+            android:text="Module 1 Of 3"
             android:textColor="#000000"
             android:textSize="14sp"
             app:layout_constraintStart_toEndOf="@+id/imageView38"
             app:layout_constraintTop_toBottomOf="@+id/videoDescTV" />
+
+        <ImageView
+            android:id="@+id/badges_earned_iv"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="12dp"
+            android:src="@drawable/ic_wifi"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/levelTV" />
+
+
+        <TextView
+            android:id="@+id/badges_earned_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="12dp"
+            android:fontFamily="@font/lato"
+            android:letterSpacing="0"
+            android:text="0 Badges earned"
+            android:textColor="#000000"
+            android:textSize="14sp"
+            app:layout_constraintStart_toEndOf="@+id/imageView38"
+            app:layout_constraintTop_toBottomOf="@+id/levelTV" />
 
 
         <ImageView
@@ -144,7 +167,7 @@
             android:src="@drawable/ic_play"
             android:tint="@color/black"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/levelTV" />
+            app:layout_constraintTop_toBottomOf="@+id/badges_earned_tv" />
 
 
         <TextView
@@ -155,11 +178,11 @@
             android:layout_marginTop="12dp"
             android:fontFamily="@font/lato"
             android:letterSpacing="0"
-            android:text="2/4 Lessons completed"
+            android:text="0/0 Lessons completed"
             android:textColor="#000000"
             android:textSize="14sp"
             app:layout_constraintStart_toEndOf="@+id/imageView38"
-            app:layout_constraintTop_toBottomOf="@+id/levelTV" />
+            app:layout_constraintTop_toBottomOf="@+id/badges_earned_tv" />
 
 
         <ImageView
@@ -182,7 +205,7 @@
             android:layout_marginTop="12dp"
             android:fontFamily="@font/lato"
             android:letterSpacing="0"
-            android:text="1/4 Assessments completed"
+            android:text="0/0 Assessments completed"
             android:textColor="#000000"
             android:textSize="14sp"
             app:layout_constraintStart_toEndOf="@+id/imageView38"
@@ -200,23 +223,102 @@
 
 
         <TextView
-            android:id="@+id/lessonsLabel"
+            android:id="@+id/modulesLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="15dp"
             android:layout_marginTop="12dp"
             android:fontFamily="@font/lato_bold"
-            android:text="Lessons "
+            android:text="Modules "
             android:textColor="#000000"
             android:textSize="16sp"
+            android:letterSpacing="0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/dividerView" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/lessonsRV"
+
+
+        <FrameLayout
+            android:id="@+id/modules_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/lessonsLabel" />
+            android:minHeight="170dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintTop_toBottomOf="@id/modulesLabel">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/learning_details_modules_rv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="15dp"
+                android:visibility="gone" />
+
+            <ProgressBar
+                android:id="@+id/learning_modules_progress_bar"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/learning_modules_learning_error"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:drawableTop="@drawable/ic_cross_grey"
+                android:drawablePadding="10dp"
+                tools:text="Unable to load your stuff" />
+
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/lessonsLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="15dp"
+            android:fontFamily="@font/lato_bold"
+            android:text="Lessons (Communication Skills)"
+            android:textColor="#000000"
+            android:textSize="16sp"
+            android:letterSpacing="0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/modules_container" />
+
+
+
+        <FrameLayout
+            android:id="@+id/lessons_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="170dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintTop_toBottomOf="@id/lessonsLabel">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/learning_details_lessons_rv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="15dp"
+                android:visibility="gone" />
+
+            <ProgressBar
+                android:id="@+id/learning_details_progress_bar"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/learning_details_learning_error"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:drawableTop="@drawable/ic_cross_grey"
+                android:drawablePadding="10dp"
+                tools:text="Unable to load your stuff" />
+
+        </FrameLayout>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/lessonsSeeMoreButton"
@@ -225,9 +327,10 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:text="SEE MORE"
+            app:strokeColor="@color/lipstick"
             android:layout_marginLeft="12dp"
             android:layout_marginRight="12dp"
-            app:layout_constraintTop_toBottomOf="@id/lessonsRV" />
+            app:layout_constraintTop_toBottomOf="@id/lessons_container" />
 
         <View
             android:id="@+id/dividerView2"
@@ -251,46 +354,39 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/dividerView2" />
 
-        <include
-            android:id="@+id/assessmentItem1"
-            layout="@layout/assessment_bs_item"
+
+        <FrameLayout
+            android:id="@+id/assessments_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="12dp"
-            android:layout_marginRight="12dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/assessmentsLabel" />
+            android:minHeight="120dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintTop_toBottomOf="@id/assessmentsLabel">
 
-        <include
-            android:id="@+id/assessmentItem2"
-            layout="@layout/assessment_bs_item"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="12dp"
-            android:layout_marginRight="12dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/assessmentItem1" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/learning_details_assessments_rv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="15dp"
+                android:visibility="gone" />
 
-        <include
-            android:id="@+id/assessmentItem3"
-            layout="@layout/assessment_bs_item"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="12dp"
-            android:layout_marginRight="12dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/assessmentItem2" />
+            <ProgressBar
+                android:id="@+id/learning_details_assessments_progress_bar"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:visibility="gone" />
 
+            <TextView
+                android:id="@+id/learning_details_assessments_error"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:drawableTop="@drawable/ic_cross_grey"
+                android:drawablePadding="10dp"
+                tools:text="Unable to load your stuff" />
 
-        <include
-            android:id="@+id/assessmentItem4"
-            layout="@layout/assessment_bs_item"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="12dp"
-            android:layout_marginRight="12dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/assessmentItem3" />
+        </FrameLayout>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/assessmentSeeMoreButton"
@@ -299,9 +395,10 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="SEE MORE"
+            app:strokeColor="@color/lipstick"
             android:layout_marginLeft="12dp"
             android:layout_marginRight="12dp"
-            app:layout_constraintTop_toBottomOf="@id/assessmentItem4" />
+            app:layout_constraintTop_toBottomOf="@id/assessments_container" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
