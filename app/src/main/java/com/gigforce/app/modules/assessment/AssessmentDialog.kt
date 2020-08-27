@@ -141,13 +141,14 @@ class AssessmentDialog : DialogFragment() {
     private fun initClicks() {
         PushDownAnim.setPushDownAnimTo(tv_action_assess_dialog)
             .setOnClickListener(View.OnClickListener {
+                dismiss()
                 assessmentDialogCallbacks?.assessmentState(
                     arguments?.getInt(
                         StringConstants.ASSESSMENT_DIALOG_STATE.value,
                         0
                     )!!
                 )
-                dismiss()
+
             })
     }
 

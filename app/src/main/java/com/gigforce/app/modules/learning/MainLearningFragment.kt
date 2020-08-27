@@ -39,8 +39,8 @@ import java.util.*
 
 class MainLearningFragment : BaseFragment() {
     private val viewModelProfile: ProfileViewModel by viewModels()
-    private val learningViewModel : LearningViewModel by viewModels()
-    private val mainLearningViewModel : MainLearningViewModel by viewModels()
+    private val learningViewModel: LearningViewModel by viewModels()
+    private val mainLearningViewModel: MainLearningViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -67,7 +67,7 @@ class MainLearningFragment : BaseFragment() {
         }
 
         initializeExploreByIndustry()
-     //   mostPopularLearning()
+        //   mostPopularLearning()
         listener()
         observerProfile()
 
@@ -84,7 +84,7 @@ class MainLearningFragment : BaseFragment() {
                     is Lce.Content -> showRoleBasedLearnings(it.content)
                     is Lce.Error -> showRoleBasedLearningError(it.error)
                 }
-        })
+            })
 
         learningViewModel
             .allCourses
@@ -102,9 +102,11 @@ class MainLearningFragment : BaseFragment() {
             .observe(viewLifecycleOwner, Observer {
 
                 when (it) {
-                    Lce.Loading -> {}
+                    Lce.Loading -> {
+                    }
                     is Lce.Content -> showAssessments(it.content)
-                    is Lce.Error -> {}
+                    is Lce.Error -> {
+                    }
                 }
             })
 
@@ -146,8 +148,10 @@ class MainLearningFragment : BaseFragment() {
                 PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
                     val course = item as Course
 
-                    navigate(R.id.learningCourseDetails,
-                        bundleOf(LearningCourseDetailsFragment.INTENT_EXTRA_COURSE_ID to course.id))
+                    navigate(
+                        R.id.learningCourseDetails,
+                        bundleOf(LearningCourseDetailsFragment.INTENT_EXTRA_COURSE_ID to course.id)
+                    )
                 },
                 RecyclerGenericAdapter.ItemInterface<Course?> { obj, viewHolder, position ->
                     var view = getView(viewHolder, R.id.card_view)
@@ -227,8 +231,10 @@ class MainLearningFragment : BaseFragment() {
                 PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
                     val course = item as Course
 
-                    navigate(R.id.learningCourseDetails,
-                        bundleOf(LearningCourseDetailsFragment.INTENT_EXTRA_COURSE_ID to course.id))
+                    navigate(
+                        R.id.learningCourseDetails,
+                        bundleOf(LearningCourseDetailsFragment.INTENT_EXTRA_COURSE_ID to course.id)
+                    )
                 },
                 RecyclerGenericAdapter.ItemInterface<Course?> { obj, viewHolder, position ->
                     var view = getView(viewHolder, R.id.card_view)
@@ -349,8 +355,10 @@ class MainLearningFragment : BaseFragment() {
                 PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
                     val course = item as Course
 
-                    navigate(R.id.learningCourseDetails,
-                        bundleOf(LearningCourseDetailsFragment.INTENT_EXTRA_COURSE_ID to course.id))
+                    navigate(
+                        R.id.learningCourseDetails,
+                        bundleOf(LearningCourseDetailsFragment.INTENT_EXTRA_COURSE_ID to course.id)
+                    )
                 },
                 RecyclerGenericAdapter.ItemInterface<TitleSubtitleModel?> { obj, viewHolder, position ->
                     var view = getView(viewHolder, R.id.card_view)
@@ -405,8 +413,10 @@ class MainLearningFragment : BaseFragment() {
                 PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
                     val course = item as Course
 
-                    navigate(R.id.learningCourseDetails,
-                        bundleOf(LearningCourseDetailsFragment.INTENT_EXTRA_COURSE_ID to course.id))
+                    navigate(
+                        R.id.learningCourseDetails,
+                        bundleOf(LearningCourseDetailsFragment.INTENT_EXTRA_COURSE_ID to course.id)
+                    )
                 },
                 RecyclerGenericAdapter.ItemInterface<TitleSubtitleModel?> { obj, viewHolder, position ->
                     var view = getView(viewHolder, R.id.card_view)
@@ -446,7 +456,7 @@ class MainLearningFragment : BaseFragment() {
             RecyclerGenericAdapter<CourseContent>(
                 activity?.applicationContext,
                 PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
-                    TODO("navigate to assessment")
+                    navigate(R.id.assessment_fragment)
                 },
                 RecyclerGenericAdapter.ItemInterface<CourseContent> { obj, viewHolder, position ->
                     val lp = getView(viewHolder, R.id.assessment_cl).layoutParams
