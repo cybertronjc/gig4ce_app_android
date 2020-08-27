@@ -460,6 +460,29 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
             companyLogoIV.setImageDrawable(drawable)
         }
 
+        if (!gig.bannerImage.isNullOrBlank()) {
+            if (gig.bannerImage!!.startsWith("http", true)) {
+
+                GlideApp.with(requireContext())
+                    .load(gig.bannerImage)
+                    .placeholder(getCircularProgressDrawable())
+                    .into(gigBannerImageIV)
+            } else {
+                FirebaseStorage.getInstance()
+                    .getReference("gig_images")
+                    .child(gig.bannerImage!!)
+                    .downloadUrl
+                    .addOnSuccessListener { fileUri ->
+
+                        GlideApp.with(requireContext())
+                            .load(fileUri)
+                            .placeholder(getCircularProgressDrawable())
+                            .into(gigBannerImageIV)
+                    }
+            }
+        }
+
+
         toolbar.title = gig.title
         roleNameTV.text = gig.title
         companyNameTV.text = "@ ${gig.companyName}"
