@@ -336,17 +336,7 @@ class LandingScreenFragment : BaseFragment() {
                 activity?.applicationContext,
                 PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
                     val id = (item as HelpVideo).videoYoutubeId
-                    val appIntent =
-                        Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:$id"))
-                    val webIntent = Intent(
-                        Intent.ACTION_VIEW,
-                        Uri.parse("http://www.youtube.com/watch?v=$id")
-                    )
-                    try {
-                        requireContext().startActivity(appIntent)
-                    } catch (ex: ActivityNotFoundException) {
-                        requireContext().startActivity(webIntent)
-                    }
+                    playVideo(id)
                 },
                 RecyclerGenericAdapter.ItemInterface<HelpVideo?> { obj, viewHolder, position ->
 
@@ -378,6 +368,20 @@ class LandingScreenFragment : BaseFragment() {
             false
         )
         helpVideoRV.adapter = recyclerGenericAdapter
+    }
+
+    fun playVideo( id : String){
+        val appIntent =
+            Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:$id"))
+        val webIntent = Intent(
+            Intent.ACTION_VIEW,
+            Uri.parse("https://www.youtube.com/watch?v=$id")
+        )
+        try {
+            requireContext().startActivity(appIntent)
+        } catch (ex: ActivityNotFoundException) {
+            requireContext().startActivity(webIntent)
+        }
     }
 
     private fun displayImage(profileImg: String) {
@@ -443,6 +447,10 @@ class LandingScreenFragment : BaseFragment() {
         }
         help_topic.setOnClickListener{
             showToast("This is under development. Please check again in a few days.")
+        }
+
+        gigforce_video.setOnClickListener{
+            playVideo("FbiyRe49wjY")
         }
     }
 
