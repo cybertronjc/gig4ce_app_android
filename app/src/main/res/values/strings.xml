@@ -507,4 +507,5 @@
     <string name="add_contacts">Add contacts</string>
     <string name="email_colon">email:</string>
     <string name="phone_colon">phone:</string>
+    <string name="ques">Ques</string>
 </resources>

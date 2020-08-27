@@ -24,10 +24,13 @@ class ProfileViewModel : ViewModel() {
     fun getProfileData(): MutableLiveData<ProfileData> {
 
         listener = profileFirebaseRepository.getDBCollection()
-            .addSnapshotListener(EventListener<DocumentSnapshot> { value, e ->
+            .addSnapshotListener(EventListener(fun(
+                value: DocumentSnapshot?,
+                e: FirebaseFirestoreException?
+            ) {
                 if (e != null) {
                     Log.w("ProfileViewModel", "Listen failed", e)
-                    return@EventListener
+                    return
                 }
 
                 if (value!!.data == null) {
@@ -39,7 +42,7 @@ class ProfileViewModel : ViewModel() {
                     userProfileData.value = obj
                     Log.d("ProfileViewModel", userProfileData.toString())
                 }
-            })
+            }))
 
 
         return userProfileData

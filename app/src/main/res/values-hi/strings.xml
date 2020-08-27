@@ -418,5 +418,6 @@
     <string name="contact">Contact</string>
     <string name="add_contacts">Add contacts</string>
     <string name="phone_colon">phone:</string>
+    <string name="ques">Ques</string>
 
 </resources>
