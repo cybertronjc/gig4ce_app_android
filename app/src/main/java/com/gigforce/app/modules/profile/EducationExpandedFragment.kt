@@ -10,6 +10,7 @@ import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
 import com.gigforce.app.modules.landingscreen.LandingPageConstants
 import com.gigforce.app.modules.landingscreen.LandingPageConstants.INTENT_EXTRA_CAME_FROM_LANDING_SCREEN
+import com.gigforce.app.modules.profile.models.ProfileData
 import kotlinx.android.synthetic.main.fragment_profile_education_expanded.*
 import kotlinx.android.synthetic.main.fragment_profile_education_expanded.view.*
 import kotlinx.android.synthetic.main.profile_card_background.view.*
@@ -68,11 +69,12 @@ class EducationExpandedFragment : ProfileBaseFragment() {
     }
 
     private fun initialize() {
-        profileViewModel.userProfileData.observe(viewLifecycleOwner, Observer { profile ->
+        profileViewModel.userProfileData.observe(viewLifecycleOwner, Observer { profileObs->
+            val profile: ProfileData = profileObs!!
             var educationString: String = ""
             val format = SimpleDateFormat("dd/MM/yyyy")
 
-            profile.educations?.let {
+            profile?.educations?.let {
                 val educations = it.sortedByDescending { education -> education.startYear!! }
                 for (education in educations) {
                     educationString += education.institution + "\n"

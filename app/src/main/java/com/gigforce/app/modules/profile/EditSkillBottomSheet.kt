@@ -68,7 +68,7 @@ class EditSkillBottomSheet: ProfileBaseBottomSheetFragment() {
         skillSpinner.setAdapter(skillAdapter)
 
         profileViewModel.userProfileData.observe(this, Observer { profile ->
-            currentSkill = profile.skills!![arrayLocation.toInt()]
+            currentSkill = profile?.skills!![arrayLocation.toInt()]
             skill.setText(currentSkill.id, false)
         })
     }
