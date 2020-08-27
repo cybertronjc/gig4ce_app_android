@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "1008010793707",
-    "firebase_url": "https://gig4ce-app.firebaseio.com",
-    "project_id": "gig4ce-app",
-    "storage_bucket": "gig4ce-app.appspot.com"
+    "project_number": "694904206664",
+    "firebase_url": "https://gig4ce-production.firebaseio.com",
+    "project_id": "gig4ce-production",
+    "storage_bucket": "gig4ce-production.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1008010793707:android:ecdb556b5c3f41c7d0a4ae",
+        "mobilesdk_app_id": "1:694904206664:android:f7cc14686cbcb663446f7d",
         "android_client_info": {
           "package_name": "com.gigforce.app"
         }
       },
       "oauth_client": [
         {
-          "client_id": "1008010793707-orbge8894cqikvtt7h4ogih967mh4h3c.apps.googleusercontent.com",
+          "client_id": "694904206664-nolbuoh2spopviss91h8a6p9434g1on6.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.gigforce.app",
@@ -23,20 +23,28 @@
           }
         },
         {
-          "client_id": "1008010793707-k9kg5ni1tjmv788v8uce247b3nvr5a97.apps.googleusercontent.com",
+          "client_id": "694904206664-05v6gr6ta0umnba0plef6125gbali5dk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.gigforce.app",
+            "certificate_hash": "c746602010935245880c9cf02d0fc7c7486833a0"
+          }
+        },
+        {
+          "client_id": "694904206664-iktgdf011vacgkphu2giireki44mim8v.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyD17twavcwPw1Au5eZ4CqELR9w91qTy4oE"
+          "current_key": "AIzaSyDQxaMSYYz5DZ_HmzLaUqAVBHoDQKzK3n4"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "1008010793707-k9kg5ni1tjmv788v8uce247b3nvr5a97.apps.googleusercontent.com",
+              "client_id": "694904206664-iktgdf011vacgkphu2giireki44mim8v.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
