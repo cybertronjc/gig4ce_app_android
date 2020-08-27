@@ -6,321 +6,77 @@
     android:layout_height="match_parent"
     tools:context=".modules.learning.MainLearningFragment">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
+        android:orientation="vertical"
         android:layout_height="wrap_content">
 
+        <include
+            android:id="@+id/toolbar_layout"
+            layout="@layout/fragment_main_learning_toolbar" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/learningToolbarLayout"
+        <include
+            android:id="@+id/why_learning_layout"
+            layout="@layout/fragment_main_learning_why_learning_layout"
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:visibility="visible"
+            android:layout_height="wrap_content" />
+
+        <include
+            android:id="@+id/learning_progress_banner_layout"
+            android:layout_marginTop="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:visibility="gone"
+            layout="@layout/fragment_main_learning_progress_banner" />
 
-
-            <ImageView
-                android:id="@+id/learningBackButton"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginStart="18dp"
-                android:layout_marginTop="18dp"
-                android:clickable="true"
-                android:focusable="true"
-                android:scaleX="0.75"
-                android:scaleY="0.75"
-                android:src="@drawable/ic_arrow_back_black"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/tv1HS1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="18dp"
-                android:layout_marginTop="22dp"
-                android:fontFamily="@font/lato_bold"
-                android:letterSpacing="0.01"
-                android:text="@string/learning"
-                android:textColor="#cd000000"
-                android:textSize="24sp"
-                app:layout_constraintStart_toEndOf="@id/learningBackButton"
-                app:layout_constraintTop_toTopOf="parent" />
-
-
-            <ImageView
-                android:id="@+id/chat_icon_iv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:src="@drawable/ic_home_chat"
-                app:layout_constraintBottom_toBottomOf="@+id/cardView"
-                app:layout_constraintEnd_toStartOf="@+id/cardView"
-                app:layout_constraintTop_toTopOf="@+id/cardView" />
-
-            <ImageView
-                android:id="@+id/imageView30"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:src="@drawable/ic_landinghome_search"
-                app:layout_constraintBottom_toBottomOf="@+id/chat_icon_iv"
-                app:layout_constraintEnd_toStartOf="@+id/chat_icon_iv"
-                app:layout_constraintTop_toTopOf="@+id/chat_icon_iv" />
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cardView"
-                android:layout_width="42dp"
-                android:layout_height="42dp"
-                android:layout_marginTop="21dp"
-                android:layout_marginEnd="16dp"
-                app:cardCornerRadius="21dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <ImageView
-                    android:id="@+id/profile_image_main"
-                    android:layout_width="42dp"
-                    android:layout_height="42dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/placeholder_user"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-            </androidx.cardview.widget.CardView>
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/learningImportanceLayout"
-            android:layout_width="match_parent"
-            android:layout_height="106dp"
-            android:layout_marginTop="30dp"
-            android:background="@color/light_pink"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/learningToolbarLayout">
-
-            <ImageView
-                android:id="@+id/userLearningIV"
-                android:layout_width="124dp"
-                android:layout_height="match_parent"
-                android:src="@drawable/bg_user_learning"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/learningImportantLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:fontFamily="@font/lato_bold"
-                android:letterSpacing="0"
-                android:text="@string/why_learning_is_important"
-                android:textColor="@color/black"
-                app:layout_constraintStart_toEndOf="@id/userLearningIV"
-                app:layout_constraintTop_toTopOf="parent" />
-
-
-            <TextView
-                android:id="@+id/increaseKnowledgeLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="9dp"
-                android:fontFamily="@font/lato_bold"
-                android:letterSpacing="0"
-                android:text="@string/increase_your_knowlegde"
-                android:textColor="@color/black"
-                android:textSize="18sp"
-                app:layout_constraintStart_toEndOf="@id/userLearningIV"
-                app:layout_constraintTop_toBottomOf="@id/learningImportantLabel" />
-
-
-            <TextView
-                android:id="@+id/anytimeAnywhereLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/lato_bold"
-                android:letterSpacing="0"
-                android:text="@string/anytime_anywhere"
-                android:textColor="@color/darkish_pink_two"
-                app:layout_constraintStart_toEndOf="@id/userLearningIV"
-                app:layout_constraintTop_toBottomOf="@id/increaseKnowledgeLabel" />
-
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/retail_cl"
-            android:layout_width="match_parent"
-            android:layout_height="235dp"
-            app:layout_constraintTop_toBottomOf="@+id/learningImportanceLayout"
-            app:layout_constraintLeft_toLeftOf="parent">
-
-            <ImageView
-                android:id="@+id/becuaseYouSearchedIV"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_marginStart="15dp"
-                android:layout_marginTop="30dp"
-                android:src="@drawable/ic_play_round_pink_bck"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/becuaseYouSearchedLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="30dp"
-                android:fontFamily="@font/lato_bold"
-                android:letterSpacing="0"
-                android:text="Recommended Learnings"
-                android:textColor="#080808"
-                android:textSize="16sp"
-                app:layout_constraintStart_toEndOf="@id/becuaseYouSearchedIV"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/searchSuggestionBasedVideosRV"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginEnd="15dp"
-                app:layout_constraintStart_toEndOf="@id/becuaseYouSearchedIV"
-                app:layout_constraintTop_toBottomOf="@id/becuaseYouSearchedLabel" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/mostpopularlearning_cl"
-            android:layout_width="match_parent"
-            android:layout_height="238dp"
-            app:layout_constraintTop_toBottomOf="@id/retail_cl">
-
-            <TextView
-                android:id="@+id/mostPopularLearningsLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:layout_marginTop="16dp"
-                android:fontFamily="@font/lato"
-                android:letterSpacing="0"
-                android:text="Most Popular Learnings"
-                android:textColor="#080808"
-                android:textSize="18sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/mostPopularLearningsRV"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="15dp"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/mostPopularLearningsLabel" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
-
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/learningBasedLayout"
+        <include
+            android:id="@+id/journey_layout"
+            android:layout_marginTop="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            app:cardBackgroundColor="@color/white"
-            app:cardElevation="5dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/mostpopularlearning_cl">
+            layout="@layout/fragment_main_learning_journey_layout" />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingBottom="23dp">
-
-
-                <ImageView
-                    android:id="@+id/learningBasesBanner"
-                    android:layout_width="109dp"
-                    android:layout_height="114dp"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginTop="11dp"
-                    android:src="@drawable/bg_user_learning_2"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/learningBasedLabel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="20dp"
-                    android:fontFamily="@font/lato"
-                    android:letterSpacing="0"
-                    android:text="@string/learning_based_on_nroles_and_industry"
-                    android:textColor="@color/darkish_pink_two"
-                    android:textSize="16sp"
-                    app:layout_constraintStart_toEndOf="@id/learningBasesBanner"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-
-                <ImageView
-                    android:id="@+id/forwardIconIV"
-                    android:layout_width="45dp"
-                    android:layout_height="45dp"
-                    android:layout_marginTop="30dp"
-                    android:layout_marginEnd="24dp"
-                    android:src="@drawable/ic_forward_pink_round_bck"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/learningBasedLabel" />
-
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </com.google.android.material.card.MaterialCardView>
-
-
-        <LinearLayout
-            android:id="@+id/recentlyAddedVideosLayout"
+        <include
+            android:id="@+id/last_time_watching_layout"
+            layout="@layout/fragment_main_learning_last_time_watching"
+            android:layout_marginTop="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="15dp"
-            android:orientation="vertical"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/learningBasedLayout">
+            android:visibility="gone"
+            />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:fontFamily="@font/lato"
-                android:letterSpacing="0"
-                android:text="@string/recently_added"
-                android:textColor="#080808"
-                android:textSize="18sp" />
+        <include
+            android:id="@+id/learning_based_role_layout"
+            layout="@layout/fragment_main_learning_role_based_learnings"
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
-            <LinearLayout
-                android:id="@+id/recentlyAddedVideosContainer"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+        <include
+            android:id="@+id/learning_recommendation_layout"
+            layout="@layout/fragment_main_learning_recommended_learnings"
+            android:layout_marginTop="20dp"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
-                <include
-                    android:id="@+id/dummLayout1"
-                    layout="@layout/fragment_main_learning_recent_video_item" />
+        <include
+            android:id="@+id/explore_learnings_layout"
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            layout="@layout/fragment_main_learning_explore_learnings_layout" />
 
-                <include
-                    android:id="@+id/dummLayout2"
-                    layout="@layout/fragment_main_learning_recent_video_item" />
+        <include
+            android:id="@+id/learning_based_assessments_layout"
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            layout="@layout/fragment_main_learning_assessments" />
 
-                <include
-                    android:id="@+id/dummLayout3"
-                    layout="@layout/fragment_main_learning_recent_video_item" />
-
-            </LinearLayout>
-
-
-        </LinearLayout>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 </ScrollView>
