@@ -136,7 +136,7 @@ class AssessmentFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
                     tv_percent_assess_frag.text = "100%"
                     showDialog(AssessmentDialog.STATE_PASS)
                 } else {
-                    showToast("Please Answer Question to Continue!!!")
+                    showToast(getString(R.string.answer_the_ques))
 
                 }
 
@@ -156,7 +156,7 @@ class AssessmentFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
                         600
                     )
                 } else {
-                    showToast("Please Answer Question to Continue!!!")
+                    showToast(getString(R.string.answer_the_ques))
                 }
             }
 
@@ -215,6 +215,25 @@ class AssessmentFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
     override fun setAnswered(boolean: Boolean) {
         viewModelAssessmentFragment.observableAssessmentData.value?.assessment!![selectedPosition].answered =
             true
+        val optionsArr =
+            viewModelAssessmentFragment.observableAssessmentData.value?.assessment!![selectedPosition].options
+
+        val iterate = optionsArr?.listIterator()
+        while (iterate?.hasNext() == true) {
+            val obj = iterate.next()
+            if (obj.selectedAnswer != true && obj.is_answer != true) {
+                iterate.remove()
+            } else {
+                obj.clickStatus = false
+            }
+
+        }
+        adapter?.addData(optionsArr ?: arrayListOf())
+
+    }
+
+    interface AssessFragmentCallbacks {
+        fun getAnsweredStatus(): Boolean
     }
 
 

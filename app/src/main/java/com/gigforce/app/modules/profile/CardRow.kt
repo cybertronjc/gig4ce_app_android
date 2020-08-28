@@ -46,6 +46,7 @@ class CardRow : LinearLayout {
         set(value) {
             field = value
             cb_is_whatsapp_number_card_row.isChecked = value
+            cb_is_whatsapp_number_card_row.visibility = if (value) View.VISIBLE else View.GONE
 
 
         }
@@ -73,9 +74,9 @@ class CardRow : LinearLayout {
             field = value
         }
 
-    var hideEditIcon: Boolean = false
+    var setAsRegistered: Boolean = false
         set(value) {
             field = value
-            edit_button.visibility = if (value) View.GONE else View.VISIBLE
+//            edit_button.visibility = if (value) View.GONE else View.VISIBLE
         }
 }

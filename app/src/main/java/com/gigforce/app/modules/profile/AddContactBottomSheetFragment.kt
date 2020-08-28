@@ -75,7 +75,8 @@ class AddContactBottomSheetFragment : BottomSheetDialogFragment() {
         if (!validateForm()) return false
         when (arguments?.getInt(StringConstants.CONTACT_EDIT_STATE.value)!!) {
             STATE_EDIT_CONTACT -> {
-                callbacks?.contactEdit(arguments?.getString(StringConstants.CONTACT_TO_EDIT.value)!!,
+                callbacks?.contactEdit(
+                    arguments?.getString(StringConstants.CONTACT_TO_EDIT.value)!!,
                     ContactPhone(
                         add_contact_phone.text.toString(),
                         false,
@@ -84,7 +85,8 @@ class AddContactBottomSheetFragment : BottomSheetDialogFragment() {
                 )
             }
             STATE_ADD_CONTACT -> {
-                callbacks?.contactEdit(null,
+                callbacks?.contactEdit(
+                    null,
                     ContactPhone(
                         add_contact_phone.text.toString(),
                         false,
@@ -94,7 +96,7 @@ class AddContactBottomSheetFragment : BottomSheetDialogFragment() {
             }
             STATE_EDIT_EMAIL -> {
                 callbacks?.emailEdit(
-                   arguments?.getString(StringConstants.EMAIL_TO_EDIT.value)!!,
+                    arguments?.getString(StringConstants.EMAIL_TO_EDIT.value)!!,
                     ContactEmail(
                         add_contact_phone.text.toString(),
                         false
@@ -102,7 +104,8 @@ class AddContactBottomSheetFragment : BottomSheetDialogFragment() {
                 )
             }
             STATE_ADD_EMAIL -> {
-                callbacks?.emailEdit(null,
+                callbacks?.emailEdit(
+                    null,
                     ContactEmail(
                         add_contact_phone.text.toString(),
                         false
@@ -174,6 +177,8 @@ class AddContactBottomSheetFragment : BottomSheetDialogFragment() {
                     arguments?.getBoolean(StringConstants.IS_WHATSAPP_NUMBER.value, false)!!
                 add_contact_phone.filters = arrayOf<InputFilter>(LengthFilter(10))
                 add_contact_phone.setSelection(add_contact_phone.text.toString().length)
+                add_contact_phone.isEnabled =
+                    !arguments?.getBoolean(StringConstants.IS_REGISTERED_NUMBER.value, false)!!
 
 
             }

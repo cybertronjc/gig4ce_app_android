@@ -155,12 +155,13 @@
     <string name="edit_email">Edit Email</string>
     <string name="email">Email</string>
     <string name="empty_string_validation">Field Cannot Be Empty</string>
-    <string name="validation_phone">Please Enter A Valid Phone Number</string>
-    <string name="validation_email">Please Enter A Valid EMAIL</string>
+    <string name="validation_phone">Please enter a valid phone number</string>
+    <string name="validation_email">Please enter a valid email id</string>
     <string name="emails">Emails</string>
     <string name="add_email">Add Email</string>
     <string name="contact">Contact</string>
     <string name="add_contacts">Add contacts</string>
-    <string name="phone_colon">phone:</string>
+    <string name="contact_hyphen">phone:</string>
     <string name="ques">Ques</string>
+    <string name="answer_the_ques">Please Answer Question to Continue!!!</string>
 </resources>

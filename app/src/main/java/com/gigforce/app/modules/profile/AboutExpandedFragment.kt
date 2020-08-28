@@ -158,7 +158,7 @@ class AboutExpandedFragment : ProfileBaseFragment(), ProfileCardBgCallbacks,
         profile.contactPhone?.let {
             for (contactPhone in it) {
                 contact_card.contactNumbers.add(contactPhone.phone ?: "")
-                contactString += getString(R.string.phone_colon) + " " + contactPhone.phone + "\n\n"
+                contactString += getString(R.string.contact_hyphen) + " " + contactPhone.phone + "\n\n"
                 if (contact_card.showIsWhatsappCb) {
                     contact_card.setWhatsAppChecked.add(contactPhone.isWhatsapp)
                 }
@@ -169,16 +169,16 @@ class AboutExpandedFragment : ProfileBaseFragment(), ProfileCardBgCallbacks,
         contact_card.cardContent = contactString
         contact_card.cardBottom = getString(R.string.add_contacts)
 
-        if (contact_card.edit_button != null) {
-            contact_card.edit_button.setOnClickListener {
-                showAddContactDialog(false)
-            }
-        }
+//        if (contact_card.edit_button != null) {
+//            contact_card.edit_button.setOnClickListener {
+//                showAddContactDialog(false)
+//            }
+//        }
         var email = ""
         profile.contactEmail?.let {
             for (contactEmail in it) {
                 email_card.emails.add(contactEmail.email ?: "")
-                email += getString(R.string.email_colon) + " " + contactEmail.email + "\n\n"
+                email += getString(R.string.email_hyphen) + " " + contactEmail.email + "\n\n"
 //                if (contact_card.showIsWhatsappCb) {
 //                    contact_card.setWhatsAppChecked.add(contactEmail.isWhatsapp)
 //                }
@@ -286,12 +286,13 @@ class AboutExpandedFragment : ProfileBaseFragment(), ProfileCardBgCallbacks,
 
     }
 
-    override fun editNumber(number: String, isWhatsApp: Boolean) {
+    override fun editNumber(number: String, isWhatsApp: Boolean, isRegistered: Boolean) {
         AddContactBottomSheetFragment.newInstance(
             bundleOf(
                 StringConstants.CONTACT_EDIT_STATE.value to AddContactBottomSheetFragment.STATE_EDIT_CONTACT,
                 StringConstants.CONTACT_TO_EDIT.value to number,
-                StringConstants.IS_WHATSAPP_NUMBER.value to isWhatsApp
+                StringConstants.IS_WHATSAPP_NUMBER.value to isWhatsApp,
+                StringConstants.IS_REGISTERED_NUMBER.value to isRegistered
             )
             , this
         ).show(parentFragmentManager, AddContactBottomSheetFragment::class.java.name)

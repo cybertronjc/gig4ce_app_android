@@ -62,7 +62,7 @@ class ProfileCardBackground : CardView {
                     val widget = CardRow(this.context!!)
 
                     if (showIsWhatsappCb) {
-                        widget.hideEditIcon = location == 0
+                        widget.setAsRegistered = location == 0
                         widget.setContactNumber = contactNumbers[location]
                         widget.showIsWhatsappCb = showIsWhatsappCb
                         widget.setIsWhatsappCBChecked = setWhatsAppChecked[location]
@@ -101,7 +101,8 @@ class ProfileCardBackground : CardView {
                             if (cardTitle == context.getString(R.string.contact)) {
                                 callbacks?.editNumber(
                                     widget.setContactNumber,
-                                    widget.setIsWhatsappCBChecked
+                                    widget.setIsWhatsappCBChecked,
+                                    widget.setAsRegistered
                                 )
                             } else if (cardTitle == context.getString(R.string.emails)) {
                                 callbacks?.editEmail(widget.setEmail)
