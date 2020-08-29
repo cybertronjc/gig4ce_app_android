@@ -14,7 +14,7 @@ import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.learning.courseDetails.CourseDetailsViewModel
 import com.gigforce.app.modules.learning.courseDetails.LearningDetailsLessonsAdapter
-import com.gigforce.app.modules.learning.modules.CourseContent
+import com.gigforce.app.modules.learning.data.CourseContent
 import com.gigforce.app.utils.Lce
 import kotlinx.android.synthetic.main.fragment_course_content_list.*
 

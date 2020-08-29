@@ -19,9 +19,9 @@ import com.gigforce.app.core.genericadapter.RecyclerGenericAdapter
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.learning.LearningConstants
-import com.gigforce.app.modules.learning.modules.Course
-import com.gigforce.app.modules.learning.modules.CourseContent
-import com.gigforce.app.modules.learning.modules.Module
+import com.gigforce.app.modules.learning.data.Course
+import com.gigforce.app.modules.learning.data.CourseContent
+import com.gigforce.app.modules.learning.data.Module
 import com.gigforce.app.utils.GlideApp
 import com.gigforce.app.utils.Lce
 import com.google.firebase.storage.FirebaseStorage
@@ -183,7 +183,9 @@ class LearningCourseDetailsFragment : BaseFragment() {
 
         videoTitleTV.text = course.name
         videoDescTV.text = course.description
-        levelTV.text = "Module $mCurrentModuleNo of ${course.moduleCount}"
+     //   levelTV.text = "Module $mCurrentModuleNo of ${course.moduleCount}"
+
+        levelTV.text = "Module 1 of 6"
     }
 
     private fun showErrorInLoadingCourseDetails(error: String) {

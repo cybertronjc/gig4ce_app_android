@@ -12,7 +12,7 @@ import com.gigforce.app.R
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.learning.LearningConstants
-import com.gigforce.app.modules.learning.modules.CourseContent
+import com.gigforce.app.modules.learning.data.CourseContent
 import com.gigforce.app.utils.GlideApp
 import com.gigforce.app.utils.VectorDrawableUtils
 import com.github.vipulasri.timelineview.TimelineView

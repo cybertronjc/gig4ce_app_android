@@ -75,10 +75,12 @@
             android:textSize="24sp" />
 
         <com.google.android.material.button.MaterialButton
+            android:id="@+id/start_assessment_btn"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Start"
+            app:rippleColor="@color/white"
             android:layout_marginTop="20dp"
             android:textColor="@color/white"
             app:strokeColor="@color/white" />

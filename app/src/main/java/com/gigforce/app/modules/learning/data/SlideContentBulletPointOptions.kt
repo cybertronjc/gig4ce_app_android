@@ -1,4 +1,4 @@
-package com.gigforce.app.modules.learning.modules
+package com.gigforce.app.modules.learning.data
 
 import com.google.firebase.firestore.PropertyName
 

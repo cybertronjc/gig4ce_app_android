@@ -498,17 +498,46 @@
                     app:layout_constraintStart_toEndOf="@+id/imageView36"
                     app:layout_constraintTop_toTopOf="@+id/imageView36" />
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/learning_rv"
+
+
+                <FrameLayout
+                    android:id="@+id/modules_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                    android:clipToPadding="false"
-                    android:nestedScrollingEnabled="false"
-                    android:paddingRight="20dp"
+                    android:minHeight="170dp"
+                    android:layout_marginTop="16dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView120" />
+                    app:layout_constraintTop_toBottomOf="@+id/textView120">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/learning_rv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="15dp"
+                        android:visibility="gone"
+                        android:clipToPadding="false"
+                        android:nestedScrollingEnabled="false"
+                        android:paddingRight="20dp"
+                        />
+
+                    <ProgressBar
+                        android:id="@+id/learning_progress_bar"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/learning_learning_error"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:drawableTop="@drawable/ic_cross_grey"
+                        android:drawablePadding="10dp"
+                        tools:text="Unable to load your stuff" />
+
+                </FrameLayout>
 
                 <View
                     android:id="@+id/textView121"

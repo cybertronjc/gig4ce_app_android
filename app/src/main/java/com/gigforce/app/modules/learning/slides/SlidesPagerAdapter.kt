@@ -4,7 +4,7 @@ import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
-import com.gigforce.app.modules.learning.modules.SlideContent
+import com.gigforce.app.modules.learning.data.SlideContent
 import com.gigforce.app.modules.learning.slides.types.AssessmentSlideFragment
 import com.gigforce.app.modules.learning.slides.types.DoAndDontImageFragment
 import com.gigforce.app.modules.learning.slides.types.SingleImageFragment

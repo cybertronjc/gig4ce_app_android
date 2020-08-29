@@ -14,7 +14,7 @@ import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.app.core.genericadapter.RecyclerGenericAdapter
 import com.gigforce.app.modules.learning.LearningConstants
 import com.gigforce.app.modules.learning.MainLearningFragment
-import com.gigforce.app.modules.learning.modules.Module
+import com.gigforce.app.modules.learning.data.Module
 import com.gigforce.app.utils.GlideApp
 import com.gigforce.app.utils.Lce
 import com.google.firebase.storage.FirebaseStorage
