@@ -699,9 +699,9 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
 
         presentFutureGigNoteTV.text =
             if (daysLeft > 0)
-                "We are preparing your gig.It will start in next $daysLeft Days"
+                "Your gig will start in next $daysLeft Days"
             else
-                "We are preparing your gig.It will start in next $hoursLeft Hours"
+                "Your gig will start in next $hoursLeft Hours"
     }
 
     private fun showUserReceivedRating(gig: Gig) {
