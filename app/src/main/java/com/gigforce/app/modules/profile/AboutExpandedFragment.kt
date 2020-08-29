@@ -60,7 +60,7 @@ class AboutExpandedFragment : ProfileBaseFragment(), ProfileCardBgCallbacks,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-//        viewModel.updateEmail( arguments?.getString(StringConstants.PROFILE_ID.value)!!)
+//        viewModel.updateEmail( profileViewModel.userProfileData.value?.id!!)
         arguments?.let {
             cameFromLandingPage = it.getBoolean(INTENT_EXTRA_CAME_FROM_LANDING_SCREEN)
             action = it.getInt(INTENT_EXTRA_ACTION)
@@ -199,7 +199,7 @@ class AboutExpandedFragment : ProfileBaseFragment(), ProfileCardBgCallbacks,
 
         about_top_profile.userName = profile.name
         about_top_profile.imageName = profile.profileAvatarName
-        profileViewModel.listener?.remove()
+//        profileViewModel.listener?.remove()
     }
 
     private fun setListeners() {
@@ -267,7 +267,7 @@ class AboutExpandedFragment : ProfileBaseFragment(), ProfileCardBgCallbacks,
             object : ConfirmationDialogOnClickListener {
                 override fun clickedOnYes(dialog: Dialog?) {
                     viewModel.setWhatsAppNumberStatus(
-                        arguments?.getString(StringConstants.PROFILE_ID.value)!!,
+                        profileViewModel.userProfileData.value?.id!!,
                         profileViewModel.userProfileData.value?.contactPhone!!,
                         contact,
                         true
@@ -277,7 +277,7 @@ class AboutExpandedFragment : ProfileBaseFragment(), ProfileCardBgCallbacks,
 
                 override fun clickedOnNo(dialog: Dialog?) {
                     viewModel.setWhatsAppNumberStatus(
-                        arguments?.getString(StringConstants.PROFILE_ID.value)!!,
+                        profileViewModel.userProfileData.value?.id!!,
                         profileViewModel.userProfileData.value?.contactPhone!!,
                         contact,
                         false
@@ -316,7 +316,7 @@ class AboutExpandedFragment : ProfileBaseFragment(), ProfileCardBgCallbacks,
 
     override fun contactEdit(oldPhone: String?, contact: ContactPhone, add: Boolean) {
         viewModel.contactEdit(
-            arguments?.getString(StringConstants.PROFILE_ID.value)!!,
+          profileViewModel.userProfileData.value?.id!!,
             oldPhone,
             profileViewModel.userProfileData.value?.contactPhone ?: arrayListOf(),
             contact,
@@ -326,7 +326,7 @@ class AboutExpandedFragment : ProfileBaseFragment(), ProfileCardBgCallbacks,
 
     override fun emailEdit(oldEmail: String?, contact: ContactEmail, add: Boolean) {
         viewModel.emailEdit(
-            arguments?.getString(StringConstants.PROFILE_ID.value)!!,
+            profileViewModel.userProfileData.value?.id!!,
             oldEmail,
             profileViewModel.userProfileData.value?.contactEmail ?: arrayListOf(),
             contact,
