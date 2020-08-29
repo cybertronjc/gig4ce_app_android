@@ -118,7 +118,7 @@ class AddContactBottomSheetFragment : BottomSheetDialogFragment() {
     }
 
     private fun validateForm(): Boolean {
-        if (add_contact_phone.text.isEmpty()) {
+        if (add_contact_phone.text?.isEmpty()!!) {
             til_add_contact_phone.error = getString(R.string.empty_string_validation)
             return false
         }

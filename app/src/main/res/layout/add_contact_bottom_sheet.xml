@@ -30,12 +30,13 @@
         app:layout_constraintStart_toStartOf="@+id/tv_heading_add_contact_bts"
         app:layout_constraintTop_toBottomOf="@+id/tv_heading_add_contact_bts">
 
-        <EditText
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/add_contact_phone"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="16dp"
             android:background="@color/white"
+            android:paddingStart="0dp"
 
             android:ems="10"
 
@@ -84,24 +85,28 @@
         app:layout_constraintStart_toStartOf="@id/tv_heading_add_contact_bts"
         app:layout_constraintTop_toBottomOf="@+id/til_add_contact_phone" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/add_contact_cancel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="@string/cancel_text"
+        android:textColor="@color/gray_color"
+        style="?attr/materialButtonOutlinedStyle"
         app:layout_constraintEnd_toStartOf="@+id/add_contact_save"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/add_contact_add_more"
         app:layout_constraintVertical_chainStyle="packed" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/add_contact_save"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="16dp"
-
+        style="?attr/materialButtonOutlinedStyle"
+        android:textColor="@color/colorPrimary"
+        app:strokeColor="@color/colorPrimary"
         android:text="@string/save_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/add_contact_cancel"

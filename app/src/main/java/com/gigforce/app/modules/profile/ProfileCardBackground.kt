@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.View
 import android.widget.TextView
 import androidx.cardview.widget.CardView
+import androidx.navigation.findNavController
 import com.gigforce.app.R
 import kotlinx.android.synthetic.main.card_row.view.*
 import kotlinx.android.synthetic.main.profile_card_background.view.*
@@ -96,6 +97,10 @@ class ProfileCardBackground : CardView {
                     var bundle = Bundle()
                     bundle.putString("array_location", location.toString())
                     Log.d("LOCATION", location.toString())
+
+                    widget.edit_button.setOnClickListener {
+                        findNavController().navigate(nextDestination, bundle)
+                    }
                     if (callbacks != null) {
                         widget.edit_button.setOnClickListener {
                             if (cardTitle == context.getString(R.string.contact)) {
