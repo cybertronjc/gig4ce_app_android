@@ -209,7 +209,7 @@
                     android:imeOptions="actionGo"
                     android:inputType="textNoSuggestions"
                     android:letterSpacing="0"
-                    android:maxLength="15"
+                    android:maxLength="25"
                     android:maxLines="1"
                     android:textAllCaps="true"
                     android:textSize="@dimen/font_14"
