@@ -399,6 +399,7 @@ class BSCalendarScreenFragment : BaseFragment() {
         datalist.add(FeatureModel("Chat", R.drawable.chat, -1/*R.id.contactScreenFragment*/))
         datalist.add(FeatureModel("Home Screen", R.drawable.chat, R.id.landinghomefragment))
         datalist.add(FeatureModel("Explore", R.drawable.ic_landinghome_search, -1))
+        datalist.add(FeatureModel("Verification", R.drawable.ic_homescreen_learn, R.id.gigerVerificationFragment))
 
         val itemWidth = ((width / 7) * 1.6).toInt()
         val recyclerGenericAdapter: RecyclerGenericAdapter<FeatureModel> =
