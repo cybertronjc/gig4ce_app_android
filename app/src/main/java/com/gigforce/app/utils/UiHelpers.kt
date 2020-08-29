@@ -11,6 +11,7 @@ import android.util.Size
 import android.view.View
 import android.view.WindowManager
 import android.widget.PopupMenu
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 
 
 fun getScreenWidth(ctx: Activity): Size {
@@ -77,6 +78,14 @@ fun getScreenShot(view: View): Bitmap {
     else canvas.drawColor(Color.WHITE)
     view.draw(canvas)
     return returnedBitmap
+}
+
+fun getCircularProgressDrawable(context: Context): CircularProgressDrawable {
+    val circularProgressDrawable = CircularProgressDrawable(context)
+    circularProgressDrawable.strokeWidth = 5f
+    circularProgressDrawable.centerRadius = 20f
+    circularProgressDrawable.start()
+    return circularProgressDrawable
 }
 
 fun getBitmapFromView(view: View, height: Int, width: Int): Bitmap {

@@ -2,10 +2,12 @@ package com.gigforce.app.modules.profile
 
 import android.app.Dialog
 import android.os.Bundle
+import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.os.bundleOf
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -229,7 +231,9 @@ class AboutExpandedFragment : ProfileBaseFragment(), ProfileCardBgCallbacks,
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setCancelable(false)
         dialog.setContentView(R.layout.contact_edit_warning_dialog)
+        val window = dialog.getWindow();
 
+        window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         dialog.cancel_button.setOnClickListener {
             dialog.dismiss()
         }
