@@ -154,7 +154,7 @@ class AddContactBottomSheetFragment : BottomSheetDialogFragment() {
                 tv_heading_add_contact_bts.text = getString(R.string.add_contact)
                 cb_is_whatsapp_number_add_contact.visibility = View.VISIBLE
                 add_contact_add_more.visibility = View.VISIBLE
-                add_contact_phone.filters = arrayOf<InputFilter>(LengthFilter(10))
+                add_contact_phone.filters = arrayOf<InputFilter>(LengthFilter(13))
 
 
             }
@@ -175,7 +175,7 @@ class AddContactBottomSheetFragment : BottomSheetDialogFragment() {
                 add_contact_phone.setText(arguments?.getString(StringConstants.CONTACT_TO_EDIT.value))
                 cb_is_whatsapp_number_add_contact.isChecked =
                     arguments?.getBoolean(StringConstants.IS_WHATSAPP_NUMBER.value, false)!!
-                add_contact_phone.filters = arrayOf<InputFilter>(LengthFilter(10))
+                add_contact_phone.filters = arrayOf<InputFilter>(LengthFilter(13))
                 add_contact_phone.setSelection(add_contact_phone.text.toString().length)
                 add_contact_phone.isEnabled =
                     !arguments?.getBoolean(StringConstants.IS_REGISTERED_NUMBER.value, false)!!

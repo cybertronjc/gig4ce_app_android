@@ -513,7 +513,7 @@
     <string name="record_a_10_second_video_of_yourself_nface_the_camera_and_say_hi_i_m_your_name_and_i_like_to_do_mention_2_things_you_like_to_do_selfie_video">Record a 10-second video of yourself Face the camera and say “Hi, I’m (your name) and I like to do (mention 2 things you like to do.)</string>
     <string name="pan_number_eg_bttps4444a">PAN Number (Eg: BTTPS4444A)</string>
     <string name="aadhar_number_eg_444433332222">Aadhar Number* (Eg: 444433332222)</string>
-    <string name="driving_license_number_n_eg_if_the_driving_licence_number_is_rj_13_dlc_12_123456_rj1320120123456">Driving License Number* \n [Eg: If the Driving Licence Number is RJ-13/DLC/12/ 123456, RJ1320120123456]</string>
+    <string name="driving_license_number_n_eg_if_the_driving_licence_number_is_rj_13_dlc_12_123456_rj1320120123456">Driving Licence Number * (Accepted formats of DL are as follows: RJ0520091048627. For other formats please call your supervisor for help)</string>
     <string name="ifsc_eg_sbin0000572_bkid0000048">IFSC* (Eg: SBIN0000572, BKID0000048)</string>
     <string name="account_number_eg_10_16_digit_number_30000011111111111">Account number* (Eg: 10-16 digit number : 30000011111111111)</string>
     <string-array name="india_banks">
