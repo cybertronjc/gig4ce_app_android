@@ -527,7 +527,7 @@
                         android:layout_marginTop="10dp"
                         android:fontFamily="@font/lato_bold"
                         android:letterSpacing="0"
-                        android:text="Payment Details"
+                        android:text="Payout Details"
                         android:textColor="@color/black"
                         android:textSize="16sp"
                         android:visibility="visible"

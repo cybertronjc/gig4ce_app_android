@@ -288,9 +288,9 @@ class GigAttendancePageFragment : BaseFragment(), PopupMenu.OnMenuItemClickListe
             "--"
         else {
             if (gig.isMonthlyGig)
-                "Gross Payment : Rs ${gig.gigAmount} per Month"
+                "Payout : Rs ${gig.gigAmount} per Month"
             else
-                "Gross Payment : Rs ${gig.gigAmount} per Hour"
+                "Payout : Rs ${gig.gigAmount} per Hour"
         }
 
         wageTV.text = gigAmountText
