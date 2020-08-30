@@ -427,5 +427,7 @@
     <string name="ifsc_eg_sbin0000572_bkid0000048">IFSC* (Eg: SBIN0000572, BKID0000048)</string>
     <string name="account_number_eg_10_16_digit_number_30000011111111111">Account number* (Eg: 10-16 digit number : 30000011111111111)</string>
     <string name="please_note_that_you_are_not_allowed_to_change_the_mobile_number_you_logged_in_with">Please note that you are not allowed to change the mobile number you logged in with.</string>
+    <string name="email_madatory">Email*</string>
+    <string name="phone_mandatory">Phone*</string>
 
 </resources>

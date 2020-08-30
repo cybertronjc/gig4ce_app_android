@@ -15,12 +15,11 @@ import com.gigforce.app.modules.profile.models.ContactPhone
 import com.gigforce.app.utils.StringConstants
 import com.gigforce.app.utils.isValidMail
 import com.gigforce.app.utils.isValidMobile
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.android.synthetic.main.add_contact_bottom_sheet.*
 import kotlinx.android.synthetic.main.add_contact_bottom_sheet.view.*
 
 
-class AddContactBottomSheetFragment : BottomSheetDialogFragment() {
+class AddContactBottomSheetFragment : ProfileBaseBottomSheetFragment() {
     companion object {
         fun newInstance(
             bundle: Bundle,
@@ -119,21 +118,34 @@ class AddContactBottomSheetFragment : BottomSheetDialogFragment() {
 
     private fun validateForm(): Boolean {
         if (add_contact_phone.text?.isEmpty()!!) {
-            til_add_contact_phone.error = getString(R.string.empty_string_validation)
+            showErrorText(
+                getString(R.string.empty_string_validation),
+                form_error,
+                add_contact_phone
+
+            )
+
             return false
         }
         when (arguments?.getInt(StringConstants.CONTACT_EDIT_STATE.value)) {
             STATE_EDIT_CONTACT, STATE_ADD_CONTACT -> {
                 val isValidMobile = isValidMobile(add_contact_phone.text.toString())
-                til_add_contact_phone.error =
-                    if (isValidMobile) null else getString(R.string.validation_phone)
+
+                if (isValidMobile) hideError(form_error, add_contact_phone) else showErrorText(
+                    getString(R.string.validation_phone),
+                    form_error,
+                    add_contact_phone
+                )
                 return (isValidMobile)
 
             }
             STATE_EDIT_EMAIL, STATE_ADD_EMAIL -> {
                 val isValidEmail = isValidMail(add_contact_phone.text.toString())
-                til_add_contact_phone.error =
-                    if (isValidEmail) null else getString(R.string.validation_email)
+                if (isValidEmail) hideError(form_error, add_contact_phone) else showErrorText(
+                    getString(R.string.validation_email),
+                    form_error,
+                    add_contact_phone
+                )
                 return (isValidEmail)
             }
             else -> {
@@ -144,6 +156,7 @@ class AddContactBottomSheetFragment : BottomSheetDialogFragment() {
     }
 
     private fun initUIAsPerBundle() {
+//        add_contact_phone.background.mutate().setColorFilter(ContextCompat.getColor(requireContext(), R.color.bottom_sheet_et), PorterDuff.Mode.SRC_ATOP);
         checkState(arguments?.getInt(StringConstants.CONTACT_EDIT_STATE.value)!!)
 
     }
@@ -162,7 +175,7 @@ class AddContactBottomSheetFragment : BottomSheetDialogFragment() {
                 tv_heading_add_contact_bts.text = getString(R.string.add_email)
                 cb_is_whatsapp_number_add_contact.visibility = View.GONE
                 add_contact_add_more.visibility = View.VISIBLE
-                til_add_contact_phone.hint = getString(R.string.email)
+                add_contact_phone.hint = getString(R.string.email_madatory)
                 add_contact_phone.inputType = InputType.TYPE_CLASS_TEXT
                 add_contact_phone.filters = arrayOf<InputFilter>(LengthFilter(255))
 
@@ -187,7 +200,7 @@ class AddContactBottomSheetFragment : BottomSheetDialogFragment() {
                 add_contact_phone.setText(arguments?.getString(StringConstants.EMAIL_TO_EDIT.value))
                 cb_is_whatsapp_number_add_contact.visibility = View.GONE
                 add_contact_add_more.visibility = View.GONE
-                til_add_contact_phone.hint = getString(R.string.email)
+                add_contact_phone.hint = getString(R.string.email_madatory)
                 add_contact_phone.inputType = InputType.TYPE_CLASS_TEXT
                 add_contact_phone.filters = arrayOf<InputFilter>(LengthFilter(255))
                 add_contact_phone.setSelection(add_contact_phone.text.toString().length)

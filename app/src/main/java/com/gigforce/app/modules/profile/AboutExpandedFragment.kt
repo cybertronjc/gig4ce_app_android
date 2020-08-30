@@ -156,10 +156,12 @@ class AboutExpandedFragment : ProfileBaseFragment(), ProfileCardBgCallbacks,
         var contactString = ""
         profile.contactPhone?.let {
             for (contactPhone in it) {
-                contact_card.contactNumbers.add(contactPhone.phone ?: "")
-                contactString += getString(R.string.contact_hyphen) + " " + contactPhone.phone + "\n\n"
-                if (contact_card.showIsWhatsappCb) {
-                    contact_card.setWhatsAppChecked.add(contactPhone.isWhatsapp)
+                if (!contactPhone.phone.isNullOrEmpty()) {
+                    contact_card.contactNumbers.add(contactPhone.phone ?: "")
+                    contactString += getString(R.string.contact_hyphen) + " " + contactPhone.phone + "\n\n"
+                    if (contact_card.showIsWhatsappCb) {
+                        contact_card.setWhatsAppChecked.add(contactPhone.isWhatsapp)
+                    }
                 }
             }
         }
@@ -176,11 +178,11 @@ class AboutExpandedFragment : ProfileBaseFragment(), ProfileCardBgCallbacks,
         var email = ""
         profile.contactEmail?.let {
             for (contactEmail in it) {
-                email_card.emails.add(contactEmail.email ?: "")
-                email += getString(R.string.email_hyphen) + " " + contactEmail.email + "\n\n"
-//                if (contact_card.showIsWhatsappCb) {
-//                    contact_card.setWhatsAppChecked.add(contactEmail.isWhatsapp)
-//                }
+                if (!contactEmail.email.isNullOrEmpty()) {
+                    email_card.emails.add(contactEmail.email ?: "")
+                    email += getString(R.string.email_hyphen) + " " + contactEmail.email + "\n\n"
+                }
+
             }
         }
         email_card.hasContentTitles = false

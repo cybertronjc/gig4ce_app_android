@@ -9,7 +9,6 @@ import android.view.Window
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,8 +17,8 @@ import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.app.core.genericadapter.RecyclerGenericAdapter
-import com.gigforce.app.utils.GlideApp
 import com.gigforce.app.core.setDarkStatusBarTheme
+import com.gigforce.app.utils.GlideApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
@@ -75,15 +74,16 @@ class PreferencesFragment : BaseFragment() {
     override fun isConfigRequired(): Boolean {
         return true
     }
+
     private fun displayImage(profileImg: String) {
-        if (profileImg != "avatar.jpg" && profileImg != "")  {
+        if (profileImg != "avatar.jpg" && profileImg != "") {
             val profilePicRef: StorageReference =
                 storage.reference.child("profile_pics").child(profileImg)
             GlideApp.with(this.requireContext())
                 .load(profilePicRef)
                 .apply(RequestOptions().circleCrop())
                 .into(profile_image)
-        }else{
+        } else {
             GlideApp.with(this.requireContext())
                 .load(R.drawable.avatar)
                 .apply(RequestOptions().circleCrop())
@@ -137,10 +137,9 @@ class PreferencesFragment : BaseFragment() {
             if (preferenceData != null) {
                 viewModel.setPreferenceDataModel(preferenceData)
                 setPreferenecesList()
+            } else if (configDataModel == null) {
+                showToast("Config data not loaded!!")
             }
-            else if(configDataModel==null){
-                    showToast("Config data not loaded!!")
-                }
         })
     }
 
@@ -164,13 +163,11 @@ class PreferencesFragment : BaseFragment() {
             signOutView.visibility = View.GONE
             visibleInvisibleMainItemView(constraintView, othersTV, false)
             setItemAsOther(othersTV, obj)
-        }
-        else if (position == TITLE_SIGNOUT) {
+        } else if (position == TITLE_SIGNOUT) {
             signOutView.visibility = View.VISIBLE
             hideMainConstraintViewAndOthersViewInItemView(constraintView, othersTV)
             setItemAsSignOut(signOutTV, signOutIV, obj)
-        }
-        else {
+        } else {
             signOutView.visibility = View.GONE
             visibleInvisibleMainItemView(constraintView, othersTV, true)
             setItems(imageView, title, subTitle, obj)
@@ -247,10 +244,12 @@ class PreferencesFragment : BaseFragment() {
             FirebaseAuth.getInstance().signOut()
             removeIntroComplete()
             popFragmentFromStack(R.id.settingFragment)
+
             dialog.dismiss()
         }
         noBtn.setOnClickListener { dialog.dismiss() }
         dialog.show()
     }
+
 
 }
