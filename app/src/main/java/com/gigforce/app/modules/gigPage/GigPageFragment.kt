@@ -14,7 +14,9 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.text.Html
 import android.text.SpannableString
+import android.text.Spanned
 import android.text.style.ForegroundColorSpan
 import android.view.LayoutInflater
 import android.view.View
@@ -51,19 +53,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.storage.FirebaseStorage
 import com.ncorti.slidetoact.SlideToActView
 import kotlinx.android.synthetic.main.fragment_gig_page_present.*
-import kotlinx.android.synthetic.main.fragment_gig_page_present.addressTV
-import kotlinx.android.synthetic.main.fragment_gig_page_present.callCardView
-import kotlinx.android.synthetic.main.fragment_gig_page_present.companyLogoIV
-import kotlinx.android.synthetic.main.fragment_gig_page_present.companyNameTV
-import kotlinx.android.synthetic.main.fragment_gig_page_present.contactPersonTV
-import kotlinx.android.synthetic.main.fragment_gig_page_present.durationTextTV
-import kotlinx.android.synthetic.main.fragment_gig_page_present.favoriteCB
-import kotlinx.android.synthetic.main.fragment_gig_page_present.gigIdTV
-import kotlinx.android.synthetic.main.fragment_gig_page_present.gigTypeTV
-import kotlinx.android.synthetic.main.fragment_gig_page_present.messageCardView
-import kotlinx.android.synthetic.main.fragment_gig_page_present.roleNameTV
-import kotlinx.android.synthetic.main.fragment_gig_page_present.shiftTV
-import kotlinx.android.synthetic.main.fragment_gig_page_present.wageTV
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.util.*
@@ -923,25 +912,51 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
             val title = it.substringBefore(":").trim()
             val content = it.substringAfter(":").trim()
 
-            gigTitleTV.text = title
-            contentTV.text = content.replace("<>", "\n")
+            gigTitleTV.text = fromHtml(title)
+            contentTV.text = fromHtml(content)
         } else {
             gigRequirementsContainer.inflate(R.layout.gig_details_item, true)
             val gigItem: LinearLayout =
                 gigRequirementsContainer.getChildAt(gigRequirementsContainer.childCount - 1) as LinearLayout
             val gigTextTV: TextView = gigItem.findViewById(R.id.text)
-            gigTextTV.text = it
+            gigTextTV.text = fromHtml(it)
         }
     }
 
-
     private fun inflateGigHighlights(gigHighLights: List<String>) = gigHighLights.forEach {
-        gigHighlightsContainer.inflate(R.layout.gig_details_item, true)
-        val gigItem: LinearLayout =
-            gigHighlightsContainer.getChildAt(gigHighlightsContainer.childCount - 1) as LinearLayout
-        val gigTextTV: TextView = gigItem.findViewById(R.id.text)
-        gigTextTV.text = it
+
+        if (it.contains(":")) {
+            gigHighlightsContainer.inflate(R.layout.gig_requirement_item, true)
+            val gigItem: LinearLayout =
+                gigHighlightsContainer.getChildAt(gigHighlightsContainer.childCount - 1) as LinearLayout
+            val gigTitleTV: TextView = gigItem.findViewById(R.id.title)
+            val contentTV: TextView = gigItem.findViewById(R.id.content)
+
+            val title = it.substringBefore(":").trim()
+            val content = it.substringAfter(":").trim()
+
+            gigTitleTV.text = fromHtml(title)
+            contentTV.text = fromHtml(content)
+        } else {
+            gigHighlightsContainer.inflate(R.layout.gig_details_item, true)
+            val gigItem: LinearLayout =
+                gigHighlightsContainer.getChildAt(gigHighlightsContainer.childCount - 1) as LinearLayout
+            val gigTextTV: TextView = gigItem.findViewById(R.id.text)
+            gigTextTV.text = fromHtml(it)
+        }
+
     }
+
+    fun fromHtml(html: String): Spanned {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            // FROM_HTML_MODE_LEGACY is the behaviour that was used for versions below android N
+            // we are using this flag to give a consistent behaviour
+            Html.fromHtml(html, Html.FROM_HTML_MODE_LEGACY)
+        } else {
+            Html.fromHtml(html)
+        }
+    }
+
 
     private fun hideFeedbackOption() {
         right_arrow2.gone()
