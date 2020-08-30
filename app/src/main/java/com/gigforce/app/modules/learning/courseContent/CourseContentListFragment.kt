@@ -14,7 +14,7 @@ import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.learning.courseDetails.CourseDetailsViewModel
 import com.gigforce.app.modules.learning.courseDetails.LearningDetailsLessonsAdapter
-import com.gigforce.app.modules.learning.data.CourseContent
+import com.gigforce.app.modules.learning.models.CourseContent
 import com.gigforce.app.utils.Lce
 import kotlinx.android.synthetic.main.fragment_course_content_list.*
 
@@ -60,10 +60,19 @@ class CourseContentListFragment : BaseFragment() {
 
         mAdapter.setOnLearningVideoActionListener {
 
-            if (it == 0)
-                navigate(R.id.slidesFragment)
-            else
-                navigate(R.id.playVideoDialogFragment)
+            when (it.type) {
+                CourseContent.TYPE_ASSESSMENT -> {
+                    navigate(R.id.assessment_fragment)
+                }
+                CourseContent.TYPE_SLIDE -> {
+                    navigate(R.id.slidesFragment)
+                }
+                CourseContent.TYPE_VIDEO -> {
+                    navigate(R.id.playVideoDialogFragment)
+                }
+                else -> {
+                }
+            }
         }
         learningAndAssessmentRV.adapter = mAdapter
     }

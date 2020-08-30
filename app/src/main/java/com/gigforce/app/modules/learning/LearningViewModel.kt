@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.gigforce.app.modules.learning.data.Course
+import com.gigforce.app.modules.learning.models.Course
 import com.gigforce.app.utils.Lce
 import kotlinx.coroutines.launch
 

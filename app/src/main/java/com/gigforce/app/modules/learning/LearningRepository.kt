@@ -1,9 +1,9 @@
 package com.gigforce.app.modules.learning
 
 import com.gigforce.app.core.base.basefirestore.BaseFirestoreDBRepository
-import com.gigforce.app.modules.learning.data.Course
-import com.gigforce.app.modules.learning.data.CourseContent
-import com.gigforce.app.modules.learning.data.Module
+import com.gigforce.app.modules.learning.models.Course
+import com.gigforce.app.modules.learning.models.CourseContent
+import com.gigforce.app.modules.learning.models.Module
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine

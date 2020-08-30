@@ -11,7 +11,7 @@ import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
-import com.gigforce.app.modules.learning.data.SlideContent
+import com.gigforce.app.modules.learning.models.SlideContent
 import com.gigforce.app.utils.Lce
 import kotlinx.android.synthetic.main.fragment_slides.*
 import kotlinx.android.synthetic.main.fragment_slides_main.*

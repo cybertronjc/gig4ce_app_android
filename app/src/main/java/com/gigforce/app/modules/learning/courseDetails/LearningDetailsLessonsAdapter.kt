@@ -12,7 +12,7 @@ import com.gigforce.app.R
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.learning.LearningConstants
-import com.gigforce.app.modules.learning.data.CourseContent
+import com.gigforce.app.modules.learning.models.CourseContent
 import com.gigforce.app.utils.GlideApp
 import com.gigforce.app.utils.VectorDrawableUtils
 import com.github.vipulasri.timelineview.TimelineView
@@ -24,11 +24,11 @@ class LearningDetailsLessonsAdapter constructor(
 ) :
     RecyclerView.Adapter<LearningDetailsLessonsAdapter.TimeLineViewHolder>() {
 
-    private var learningVideoActionListener: ((Int) -> Unit)? = null
+    private var learningVideoActionListener: ((CourseContent) -> Unit)? = null
     private lateinit var mLayoutInflater: LayoutInflater
     private var mCourseContent: List<CourseContent> = emptyList()
 
-    fun setOnLearningVideoActionListener(listener: (Int) -> Unit) {
+    fun setOnLearningVideoActionListener(listener: (CourseContent) -> Unit) {
         this.learningVideoActionListener = listener
     }
 
@@ -176,6 +176,7 @@ class LearningDetailsLessonsAdapter constructor(
         val slideVideoplayButton = itemView.time_imageview
 
         //Assessment
+        val assessmentRootLayout = itemView.course_content_assessment_layout
         val assessmentTitle = itemView.title
         val assessmentStatus = itemView.status
         val asessmentSideStausStrip = itemView.side_bar_status
@@ -191,10 +192,11 @@ class LearningDetailsLessonsAdapter constructor(
         init {
             timeline.initLine(viewType)
             lessonsSeeMoreButton.setOnClickListener(this)
+            assessmentRootLayout.setOnClickListener(this)
         }
 
         override fun onClick(v: View?) {
-            learningVideoActionListener?.invoke(adapterPosition)
+            learningVideoActionListener?.invoke(mCourseContent[adapterPosition])
         }
     }
 }

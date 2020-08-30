@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.app.R
-import com.gigforce.app.modules.learning.data.CourseContent
+import com.gigforce.app.modules.learning.models.CourseContent
 import com.gigforce.app.utils.VectorDrawableUtils
 import com.github.vipulasri.timelineview.TimelineView
 import kotlinx.android.synthetic.main.fragment_learning_video_item.view.*

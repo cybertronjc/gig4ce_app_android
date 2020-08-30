@@ -5,9 +5,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gigforce.app.modules.learning.LearningRepository
-import com.gigforce.app.modules.learning.data.Course
-import com.gigforce.app.modules.learning.data.CourseContent
-import com.gigforce.app.modules.learning.data.Module
+import com.gigforce.app.modules.learning.models.Course
+import com.gigforce.app.modules.learning.models.CourseContent
+import com.gigforce.app.modules.learning.models.Module
 import com.gigforce.app.utils.Lce
 import kotlinx.coroutines.launch
 
