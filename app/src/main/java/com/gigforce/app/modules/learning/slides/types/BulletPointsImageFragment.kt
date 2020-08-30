@@ -1,16 +1,12 @@
 package com.gigforce.app.modules.learning.slides.types
 
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
-import com.gigforce.app.utils.GlideApp
-import kotlinx.android.synthetic.main.fragment_learning_slide_single_image.*
 
 class BulletPointsImageFragment : BaseFragment() {
 
@@ -49,6 +45,4 @@ class BulletPointsImageFragment : BaseFragment() {
     private fun setImageOnView() {
 
     }
-
-
 }

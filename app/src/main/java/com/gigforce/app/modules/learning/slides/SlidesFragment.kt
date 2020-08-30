@@ -5,10 +5,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.viewpager.widget.ViewPager
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
+import com.gigforce.app.core.gone
+import com.gigforce.app.core.visible
+import com.gigforce.app.modules.learning.models.SlideContent
+import com.gigforce.app.utils.Lce
 import kotlinx.android.synthetic.main.fragment_slides.*
+import kotlinx.android.synthetic.main.fragment_slides_main.*
 
 
 class SlidesFragment : BaseFragment(), ViewPager.OnPageChangeListener {
@@ -23,6 +29,57 @@ class SlidesFragment : BaseFragment(), ViewPager.OnPageChangeListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
+        initViewModel()
+    }
+
+    private fun initViewModel() {
+
+        viewModel.slideContent
+            .observe(viewLifecycleOwner, Observer {
+
+                when (it) {
+                    Lce.Loading -> showSlidesLoadingLayout()
+                    is Lce.Content -> showSlides(it.content)
+                    is Lce.Error -> showErrorInLoadingSlidesLayout(it.error)
+                }
+            })
+
+        viewModel.getSlideContent(
+            courseId = "",
+            moduleId = "",
+            lessonId = ""
+        )
+    }
+
+    private fun showErrorInLoadingSlidesLayout(error: String) {
+        fragment_slides_main_layout.gone()
+        fragment_slides_progress_bar.gone()
+        fragment_slides_error.visible()
+        fragment_slides_error.text = error
+    }
+
+    private var pagerAdapter: SlidesPagerAdapter? = null
+
+    private fun showSlides(content: List<SlideContent>) {
+
+        fragment_slides_progress_bar.gone()
+        fragment_slides_error.gone()
+        fragment_slides_main_layout.visible()
+
+        pagerAdapter = SlidesPagerAdapter(childFragmentManager, content)
+        slideViewPager.adapter = pagerAdapter
+        slideViewPager.addOnPageChangeListener(this)
+
+        toolbar.subtitle = "1 of ${content.size}"
+        val slidesCoverageProgress =  100 / content.size
+        progress.progress = slidesCoverageProgress
+    }
+
+    private fun showSlidesLoadingLayout() {
+
+        fragment_slides_main_layout.gone()
+        fragment_slides_error.gone()
+        fragment_slides_progress_bar.visible()
     }
 
     private fun initView() {
@@ -33,16 +90,17 @@ class SlidesFragment : BaseFragment(), ViewPager.OnPageChangeListener {
 //
 //        val imageList = viewModel.slidesData.map { it.image }
 
-//        val pagerAdapter = SlidesPagerAdapter(childFragmentManager,imageList)
-//        singleImageSlideViewpager.adapter = pagerAdapter
-//        singleImageSlideViewpager.addOnPageChangeListener(this)
+
     }
 
     override fun onPageScrollStateChanged(state: Int) {}
     override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
 
     override fun onPageSelected(position: Int) {
-
+        val pagesCount = pagerAdapter!!.count
+        val slidesCoverageProgress = ((position + 1) * 100 )/ pagesCount
+        progress.progress = slidesCoverageProgress
+        toolbar.subtitle = "${position + 1} of $pagesCount"
     }
 
 }

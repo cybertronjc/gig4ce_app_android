@@ -155,12 +155,12 @@ class MyAssessmentsInnerFragment : BaseFragment() {
                 })!!
         recyclerGenericAdapter.setList(datalist)
         recyclerGenericAdapter.setLayout(R.layout.assessment_bs_item)
-        completed_assessment_recycler_view.layoutManager = LinearLayoutManager(
+        suggested_assessment_recycler_view.layoutManager = LinearLayoutManager(
             activity?.applicationContext,
             LinearLayoutManager.HORIZONTAL,
             false
         )
-        completed_assessment_recycler_view.adapter = recyclerGenericAdapter
+        suggested_assessment_recycler_view.adapter = recyclerGenericAdapter
     }
 
 }

@@ -60,6 +60,10 @@ class AssessmentSlideFragment : BaseFragment() {
             mAssessmentDescription = it.getString(KEY_ASSESSMENT_DESCRIPTION) ?: return@let
         }
 
+        start_assessment_btn.setOnClickListener {
+            navigate(R.id.assessment_fragment)
+        }
+
         setAssessmentInfoOnView()
     }
 
