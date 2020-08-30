@@ -177,9 +177,9 @@ data class Gig(
                 endDateTime!!.toDate().toInstant().atZone(ZoneId.systemDefault())
                     .toLocalDateTime()
 
-            if (gigCheckOutTime.isBefore(currentTime)) {
-                return false
-            }
+//            if (gigCheckOutTime.isBefore(currentTime)) {
+//                return false
+//            }
 
             val maxCheckOutTime = gigCheckOutTime.plusMinutes(checkOutAfterTimeBufferInMins)
             currentTime.isBefore(maxCheckOutTime) && validCheckInTime
