@@ -16,10 +16,10 @@ android {
             keyPassword 'gigforce'
             }
         production {
-            storeFile file('/Users/apple/Downloads/gigforce-upload.jks')
-            storePassword 'gig4ce'
-            keyAlias 'PlayStoreUploadKey'
-            keyPassword 'gig4ce'
+            storeFile file('/Users/apple/Downloads/gigforceprodapp.jks')
+            storePassword 'gigforce'
+            keyAlias 'gigforce'
+            keyPassword 'gigforce'
         }
     }
 
@@ -62,7 +62,7 @@ android {
          */
         production {
             dimension "default"
-            signingConfig signingConfigs.production
+           signingConfig signingConfigs.production
         }
 
         /**
@@ -259,9 +259,9 @@ dependencies {
     implementation 'com.otaliastudios:transcoder:0.9.1'
     //Qr Code Library
     implementation 'com.google.zxing:core:3.4.0'
-
-    // https://mvnrepository.com/artifact/com.itextpdf/itextpdf
+// https://mvnrepository.com/artifact/com.itextpdf/itextpdf
     implementation group: 'com.itextpdf', name: 'itextpdf', version: '5.0.6'
+
 
 
 

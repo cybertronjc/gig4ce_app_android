@@ -138,10 +138,13 @@ class GigerIdFragment : BaseFragment() {
 
 
     fun genQrCode() {
-        val content =
-            arguments?.getString(GigPageFragment.INTENT_EXTRA_GIG_ID)
         val writer = QRCodeWriter()
-        val bitMatrix = writer.encode(content, BarcodeFormat.QR_CODE, 512, 512)
+        val bitMatrix = writer.encode(
+            arguments?.getString(GigPageFragment.INTENT_EXTRA_GIG_ID),
+            BarcodeFormat.QR_CODE,
+            512,
+            512
+        )
         val width = bitMatrix.width
         val height = bitMatrix.height
         val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565)

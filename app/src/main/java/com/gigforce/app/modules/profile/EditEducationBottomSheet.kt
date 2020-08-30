@@ -77,7 +77,7 @@ class EditEducationBottomSheet: ProfileBaseBottomSheetFragment() {
         degreeSpinner.setAdapter(degreeAdapter)
 
         profileViewModel.userProfileData.observe(this, Observer { profile ->
-            profile.educations?.let {
+            profile?.educations?.let {
                 val educations = it.sortedByDescending { education -> education.startYear!! }
                 education = educations[arrayLocation!!.toInt()]
                 institution.setText(education.institution)

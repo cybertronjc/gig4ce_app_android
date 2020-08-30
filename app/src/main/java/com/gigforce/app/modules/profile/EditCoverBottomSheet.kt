@@ -110,7 +110,7 @@ class EditCoverBottomSheet(): ProfileBaseBottomSheetFragment() {
         })
 
         profileViewModel.userProfileData.observe(this, Observer { profile ->
-            bio.setText(profile.bio)
+            bio.setText(profile?.bio!!)
 
             userTags = profile.tags!!
 

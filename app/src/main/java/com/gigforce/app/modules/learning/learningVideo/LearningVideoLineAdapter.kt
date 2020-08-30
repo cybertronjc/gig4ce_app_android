@@ -14,7 +14,12 @@ import kotlinx.android.synthetic.main.fragment_learning_video_item.view.*
 class LearningVideoLineAdapter(private val mFeedList: List<LearningVideo>) :
     RecyclerView.Adapter<LearningVideoLineAdapter.TimeLineViewHolder>() {
 
+    private var learningVideoActionListener: ((Int) -> Unit)? = null
     private lateinit var mLayoutInflater: LayoutInflater
+
+    fun setOnLearningVideoActionListener(listener : (Int) -> Unit){
+        this.learningVideoActionListener = listener
+    }
 
     override fun getItemViewType(position: Int): Int {
         return TimelineView.getTimeLineViewType(position, itemCount)
@@ -56,10 +61,12 @@ class LearningVideoLineAdapter(private val mFeedList: List<LearningVideo>) :
         )
     }
 
+
+
     override fun getItemCount() = mFeedList.size
 
     inner class TimeLineViewHolder(itemView: View, viewType: Int) :
-        RecyclerView.ViewHolder(itemView) {
+        RecyclerView.ViewHolder(itemView), View.OnClickListener {
 
         val videoThumbnailIV = itemView.videoThumbnailIV
         val videoTitle = itemView.video_title
@@ -70,6 +77,11 @@ class LearningVideoLineAdapter(private val mFeedList: List<LearningVideo>) :
 
         init {
             timeline.initLine(viewType)
+            lessonsSeeMoreButton.setOnClickListener(this)
+        }
+
+        override fun onClick(v: View?) {
+            learningVideoActionListener?.invoke(adapterPosition)
         }
     }
 

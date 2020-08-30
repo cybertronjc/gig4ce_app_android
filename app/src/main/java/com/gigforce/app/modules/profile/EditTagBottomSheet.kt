@@ -47,7 +47,7 @@ class EditTagBottomSheet: ProfileBaseBottomSheetFragment() {
         })
 
         profileViewModel.userProfileData.observe(viewLifecycleOwner, androidx.lifecycle.Observer { profile ->
-            userTags = profile.tags!!
+            userTags = profile?.tags!!
 
             for (tag in profile.tags!!) {
                 var chip = addCrossableChip(this.requireContext(), tag)

@@ -542,13 +542,8 @@
         android:name="com.gigforce.app.modules.wallet.models.WalletExpandedPage"
         android:label="WalletExpandedPage" />
     <fragment
-        android:id="@+id/learningWithStatsFragment"
-        android:name="com.gigforce.app.modules.learning.LearningWithStatsFragment"
-        android:label="fragment_learning_stats"
-        tools:layout="@layout/fragment_learning_stats" />
-    <fragment
-        android:id="@+id/learningVideoFragment"
-        android:name="com.gigforce.app.modules.learning.LearningVideoFragment"
+        android:id="@+id/learningCourseDetails"
+        android:name="com.gigforce.app.modules.learning.courseDetails.LearningCourseDetailsFragment"
         android:label="LearningVideoFragment" />
     <fragment
         android:id="@+id/playVideoDialogFragment"
@@ -613,6 +608,26 @@
         android:name="com.gigforce.app.modules.chatmodule.ui.FakeGigContactScreenFragment"
         android:label="fragment_fake_contact_screen"
         tools:layout="@layout/fragment_fake_contact_screen" />
+    <fragment
+        android:id="@+id/slidesFragment"
+        android:name="com.gigforce.app.modules.learning.slides.SlidesFragment"
+        android:label="fragment_slides"
+        tools:layout="@layout/fragment_slides" />
+    <fragment
+        android:id="@+id/assessmentListFragment"
+        android:name="com.gigforce.app.modules.assessment.AssessmentListFragment"
+        android:label="fragment_assessment_list"
+        tools:layout="@layout/fragment_assessment_list" />
+    <fragment
+        android:id="@+id/myLearningFragment"
+        android:name="com.gigforce.app.modules.learning.myLearning.MyLearningFragment"
+        android:label="fragment_my_learning"
+        tools:layout="@layout/fragment_my_learning" />
+    <fragment
+        android:id="@+id/courseContentListFragment"
+        android:name="com.gigforce.app.modules.learning.courseContent.CourseContentListFragment"
+        android:label="fragment_course_content_list"
+        tools:layout="@layout/fragment_course_content_list" />
 
 
 </navigation>
