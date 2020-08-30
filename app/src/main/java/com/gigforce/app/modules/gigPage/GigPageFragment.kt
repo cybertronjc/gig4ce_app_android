@@ -477,7 +477,7 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
         companyNameTV.text = "@ ${gig.companyName}"
         gigTypeTV.text = gig.gigType
         gigIdTV.text = "Gig Id : ${gig.gigId}"
-        paymentAmountTV.text = "Rs. ${gig.gigAmount}"
+        paymentAmountTV.text = if(gig.gigAmount != 0.0) "Rs. ${gig.gigAmount}" else "N/A"
         contactPersonTV.text = gig.gigContactDetails?.contactName
         callCardView.isVisible = gig.gigContactDetails?.contactNumber != 0L
 
@@ -501,9 +501,9 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
             "--"
         else {
             if (gig.isMonthlyGig)
-                "Gross Payment : Rs ${gig.gigAmount} per Month"
+                "Payout : Rs ${gig.gigAmount} per Month"
             else
-                "Gross Payment : Rs ${gig.gigAmount} per Hour"
+                "Payout : Rs ${gig.gigAmount} per Hour"
 
         }
         wageTV.text = gigAmountText
