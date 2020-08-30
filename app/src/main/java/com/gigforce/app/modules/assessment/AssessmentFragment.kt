@@ -184,7 +184,7 @@ class AssessmentFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
                         AssessmentDialog.STATE_PASS, bundleOf(
 
                             StringConstants.RIGHT_ANSWERS.value to answers,
-                            StringConstants.ASSESSMENT_DIALOG_STATE.value to if (answers >= viewModelAssessmentFragment.observableAssessmentData.value!!.assessment!!.size / 2) AssessmentDialog.STATE_PASS else AssessmentDialog.STATE_REAPPEAR,
+                            StringConstants.ASSESSMENT_DIALOG_STATE.value to if (answers >= viewModelAssessmentFragment.observableAssessmentData.value!!.assessment!!.size / 2.toFloat()) AssessmentDialog.STATE_PASS else AssessmentDialog.STATE_REAPPEAR,
                             StringConstants.QUESTIONS_COUNT.value to questions
 
                         )

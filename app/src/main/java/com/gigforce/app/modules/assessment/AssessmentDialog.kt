@@ -89,23 +89,28 @@ class AssessmentDialog : DialogFragment() {
         tv_assessment_result__assess_dialog.visibility = View.VISIBLE
         val builder = SpannableStringBuilder()
         val spannableString = SpannableString(
-            "You attempt 10 questions"
+            "${getString(R.string.u_attempt)} ${arguments?.getInt(StringConstants.QUESTIONS_COUNT.value)} ${getString(
+                R.string.questions
+            )}"
         )
         spannableString.setSpan(
             ForegroundColorSpan(Color.parseColor("#e94b81")),
-            11,
-            24,
+            spannableString.indexOf(getString(R.string.attempt)) + 7,
+            spannableString.length,
             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
         )
+
+
         builder.append(spannableString)
         val spanable2 = SpannableString(
-            " and from \n" +
-                    "that 7 answer is correct."
+            " ${getString(R.string.and_from)} ${getString(R.string.that)}  ${arguments?.getInt(
+                StringConstants.RIGHT_ANSWERS.value
+            )} ${getString(R.string.answer_is_correct)}"
         )
         spanable2.setSpan(
             ForegroundColorSpan(Color.parseColor("#e94b81")),
-            15,
-            24,
+            spanable2.indexOf(getString(R.string.that)) + 4,
+            spanable2.indexOf(getString(R.string.is_string)),
             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
         )
         builder.append(spanable2)
