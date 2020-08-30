@@ -16,7 +16,7 @@ class AssessmentAnswersAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>()
 
     interface AssessAdapterCallbacks {
         fun submitAnswer()
-        fun setAnswered(boolean: Boolean)
+        fun setAnswered(boolean: Boolean,position: Int)
     }
 
 
@@ -77,7 +77,7 @@ class AssessmentAnswersAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>()
                 holder.itemView.setOnClickListener {
                     if (items!![holder.adapterPosition].clickStatus!!) {
                         items!![holder.adapterPosition].selectedAnswer = true
-                        adapterCallbacks.setAnswered(true)
+                        adapterCallbacks.setAnswered(true,holder.adapterPosition)
 //                        notifyItemChanged(holder.adapterPosition)
 
                     }

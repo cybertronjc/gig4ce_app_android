@@ -327,5 +327,16 @@
     <string name="please_note_that_you_are_not_allowed_to_change_the_mobile_number_you_logged_in_with">Please note that you are not allowed to change the mobile number you logged in with.</string>
     <string name="email_madatory">Email*</string>
     <string name="phone_mandatory">Phone*</string>
+    <string name="assessment_colon">Assessment :</string>
+    <string name="total_questions">Total Questions</string>
+    <string name="time_duration">Time Duration</string>
+    <string name="level">Level</string>
+    <string name="u_attempt">You attempt</string>
+    <string name="questions">questions</string>
+    <string name="and_from">and from</string>
+    <string name="that">that</string>
+    <string name="answer_is_correct">answer is correct.</string>
+    <string name="attempt">attempt</string>
+    <string name="is_string">is</string>
 
 </resources>

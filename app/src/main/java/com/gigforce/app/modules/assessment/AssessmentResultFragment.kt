@@ -52,7 +52,7 @@ class AssessmentResultFragment : BaseFragment(), PopupMenu.OnMenuItemClickListen
 
         viewModelAssessmentResult.observableQuestionWiseSumList.observe(viewLifecycleOwner,
             Observer {
-                adapter?.addAll(it)
+
             })
         viewModelAssessmentResult.observableIsUserPassed.observe(viewLifecycleOwner, Observer {
             tv_sug_learnings_label_assess_frag.visibility = it
@@ -109,7 +109,7 @@ class AssessmentResultFragment : BaseFragment(), PopupMenu.OnMenuItemClickListen
             )
         )
         rv_question_wise_sum_assess_frag.adapter = adapter
-        viewModelAssessmentResult.getQuestionWiseSumData()
+        adapter?.addAll(arguments?.getBooleanArray(StringConstants.ANSWERS_ARR.value)?.toList())
         rv_sug_learnings_assess_result.adapter = AdapterSuggestedLearning()
         rv_sug_learnings_assess_result.layoutManager =
             LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
@@ -132,7 +132,18 @@ class AssessmentResultFragment : BaseFragment(), PopupMenu.OnMenuItemClickListen
     private fun initUI() {
         tv_title_toolbar.text = getString(R.string.assessment)
         iv_options_menu_tb.visibility = View.VISIBLE
-        tv_score_assess_result.text = Html.fromHtml("You have scored <b>70%</b> in your assessment")
+        var correctAns = 0
+        arguments?.getBooleanArray(StringConstants.ANSWERS_ARR.value)?.forEach { item ->
+            run {
+                if (item) correctAns++
+            }
+        }
+        var percent = String.format(
+            "%.1f",
+            (((correctAns / arguments?.getBooleanArray(StringConstants.ANSWERS_ARR.value)?.size?.toFloat()!!) * 100))
+        ) + " %"
+        tv_score_assess_result.text =
+            Html.fromHtml("You have scored <b>$percent</b> in your assessment")
         tv_new_cert_asses_frag.text =
             Html.fromHtml("<u>New certificate has been added to profile .</u>")
         viewModelAssessmentResult.checkIfUserPassed(arguments?.getBoolean(StringConstants.ASSESSMENT_PASSED.value))

@@ -47,7 +47,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
-                    android:text="level 1"
+                    tools:text="level 1"
                     android:textColor="@color/black"
                     android:textSize="@dimen/font_14"
                     android:textStyle="bold" />
@@ -57,7 +57,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_toStartOf="@+id/tv_level_assess_frag"
-                    android:text="Retail Sales Associate"
+                    tools:text="Retail Sales Associate"
                     android:textColor="@color/black"
                     android:textSize="@dimen/font_18"
                     android:textStyle="bold" />
