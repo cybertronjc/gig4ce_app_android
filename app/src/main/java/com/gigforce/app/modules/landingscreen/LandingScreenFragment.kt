@@ -1,16 +1,13 @@
 package com.gigforce.app.modules.landingscreen
 
-import android.app.Dialog
 import android.content.*
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.util.DisplayMetrics
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -35,9 +32,8 @@ import com.gigforce.app.modules.help.HelpViewModel
 import com.gigforce.app.modules.landingscreen.models.Tip
 import com.gigforce.app.modules.learning.LearningConstants
 import com.gigforce.app.modules.learning.LearningViewModel
-import com.gigforce.app.modules.learning.modules.Course
+import com.gigforce.app.modules.learning.models.Course
 import com.gigforce.app.modules.preferences.PreferencesFragment
-import com.gigforce.app.modules.profile.AboutExpandedFragment
 import com.gigforce.app.modules.profile.ProfileViewModel
 import com.gigforce.app.modules.profile.models.ProfileData
 import com.gigforce.app.utils.GlideApp
@@ -463,9 +459,9 @@ class LandingScreenFragment : BaseFragment() {
             .observe(viewLifecycleOwner, Observer {
 
                 when (it) {
-                    Lce.Loading -> { }
+                    Lce.Loading -> showLearningAsLoading()
                     is Lce.Content -> showUserLearningCourses(it.content)
-                    is Lce.Error -> { }
+                    is Lce.Error -> showErrorWhileLoadingCourse(it.error)
                 }
             })
 
@@ -473,7 +469,27 @@ class LandingScreenFragment : BaseFragment() {
         learningViewModel.getRoleBasedCourses()
     }
 
+    private fun showLearningAsLoading() {
+
+        learning_rv.gone()
+        learning_learning_error.gone()
+        learning_progress_bar.visible()
+    }
+
+    private fun showErrorWhileLoadingCourse(error: String) {
+
+        learning_progress_bar.gone()
+        learning_rv.gone()
+        learning_learning_error.visible()
+
+        learning_learning_error.text = error
+    }
+
     private fun showUserLearningCourses(content: List<Course>) {
+
+        learning_progress_bar.gone()
+        learning_learning_error.gone()
+        learning_rv.visible()
 
         val itemWidth = ((width / 3) * 2).toInt()
         // model will change when integrated with DB

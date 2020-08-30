@@ -19,9 +19,9 @@ import com.gigforce.app.core.genericadapter.RecyclerGenericAdapter
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.learning.LearningConstants
-import com.gigforce.app.modules.learning.modules.Course
-import com.gigforce.app.modules.learning.modules.CourseContent
-import com.gigforce.app.modules.learning.modules.Module
+import com.gigforce.app.modules.learning.models.Course
+import com.gigforce.app.modules.learning.models.CourseContent
+import com.gigforce.app.modules.learning.models.Module
 import com.gigforce.app.utils.GlideApp
 import com.gigforce.app.utils.Lce
 import com.google.firebase.storage.FirebaseStorage
@@ -83,11 +83,19 @@ class LearningCourseDetailsFragment : BaseFragment() {
         )
 
         mAdapter.setOnLearningVideoActionListener {
-
-            if (it == 0)
-                navigate(R.id.slidesFragment)
-            else
-                navigate(R.id.playVideoDialogFragment)
+            when (it.type) {
+                CourseContent.TYPE_ASSESSMENT -> {
+                    navigate(R.id.assessment_fragment)
+                }
+                CourseContent.TYPE_SLIDE -> {
+                    navigate(R.id.slidesFragment)
+                }
+                CourseContent.TYPE_VIDEO -> {
+                    navigate(R.id.playVideoDialogFragment)
+                }
+                else -> {
+                }
+            }
         }
         learning_details_lessons_rv.adapter = mAdapter
 
@@ -183,7 +191,9 @@ class LearningCourseDetailsFragment : BaseFragment() {
 
         videoTitleTV.text = course.name
         videoDescTV.text = course.description
-        levelTV.text = "Module $mCurrentModuleNo of ${course.moduleCount}"
+     //   levelTV.text = "Module $mCurrentModuleNo of ${course.moduleCount}"
+
+        levelTV.text = "Module 1 of 6"
     }
 
     private fun showErrorInLoadingCourseDetails(error: String) {
@@ -378,7 +388,7 @@ class LearningCourseDetailsFragment : BaseFragment() {
             RecyclerGenericAdapter<CourseContent>(
                 activity?.applicationContext,
                 PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
-
+                    navigate(R.id.assessment_fragment)
                 },
                 RecyclerGenericAdapter.ItemInterface<CourseContent> { obj, viewHolder, position ->
 

@@ -1,4 +1,4 @@
-package com.gigforce.app.modules.learning.modules
+package com.gigforce.app.modules.learning.models
 
 import com.google.firebase.firestore.PropertyName
 
@@ -32,12 +32,11 @@ data class SlideContent(
     var completed: Boolean = false,
 
 
-
     //Video Slide Excl
 
     @get:PropertyName("video_path")
     @set:PropertyName("video_path")
-    var videoPath : String? = null,
+    var videoPath: String? = null,
 
 
     //Image with text excl
@@ -70,8 +69,13 @@ data class SlideContent(
 
     @get:PropertyName("assessment_id")
     @set:PropertyName("assessment_id")
-    var assessmentId: String? = null
+    var assessmentId: String? = null,
 
+    // Bullet Points Ecl
+
+    @get:PropertyName("bullet_point_options")
+    @set:PropertyName("bullet_point_options")
+    var bulletPointOptions: List<SlideContentBulletPointOptions> = emptyList()
 ) {
 
     companion object {

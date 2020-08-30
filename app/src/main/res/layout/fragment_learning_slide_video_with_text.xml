@@ -13,10 +13,11 @@
         android:layout_height="wrap_content"
         android:background="@color/lipstick"
         android:padding="16dp"
+
         app:layout_constraintBottom_toBottomOf="parent">
 
         <TextView
-            android:id="@+id/slideTitleTV"
+            android:id="@+id/video_slide_title_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
@@ -29,7 +30,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/slideDescriptionTV"
+            android:id="@+id/video_slide_desc_tv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
@@ -38,17 +39,17 @@
             android:textColor="@color/white"
             android:textSize="14sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/slideTitleTV"
+            app:layout_constraintTop_toBottomOf="@id/video_slide_title_tv"
             tools:text="@string/sample_info" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.exoplayer2.ui.PlayerView
-        android:id="@+id/slideVideoPlayerView"
+        android:id="@+id/playerView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:controller_layout_id="@layout/fragment_add_selfie_play_selfie_video_controls"
+        app:controller_layout_id="@layout/fragment_play_video_controls"
         app:layout_constraintBottom_toTopOf="@id/slideInfoLayout"
         app:layout_constraintTop_toTopOf="parent"
         app:show_buffering="always" />

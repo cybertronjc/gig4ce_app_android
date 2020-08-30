@@ -18,8 +18,8 @@ import com.gigforce.app.core.genericadapter.RecyclerGenericAdapter
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.learning.courseDetails.LearningCourseDetailsFragment
-import com.gigforce.app.modules.learning.modules.Course
-import com.gigforce.app.modules.learning.modules.CourseContent
+import com.gigforce.app.modules.learning.models.Course
+import com.gigforce.app.modules.learning.models.CourseContent
 import com.gigforce.app.modules.preferences.PreferencesFragment
 import com.gigforce.app.modules.profile.ProfileViewModel
 import com.gigforce.app.utils.GlideApp
@@ -102,17 +102,81 @@ class MainLearningFragment : BaseFragment() {
             .observe(viewLifecycleOwner, Observer {
 
                 when (it) {
-                    Lce.Loading -> {
-                    }
+                    Lce.Loading -> showAssessmentProgress()
                     is Lce.Content -> showAssessments(it.content)
-                    is Lce.Error -> {
-                    }
+                    is Lce.Error -> showAssessmentError(it.error)
                 }
             })
 
         learningViewModel.getRoleBasedCourses()
         learningViewModel.getAllCourses()
         mainLearningViewModel.getAssessmentsFromAllAssignedCourses()
+    }
+
+    private fun showAssessmentProgress() {
+        main_learning_assessments_rv.gone()
+        main_learning_assessment_error.gone()
+        main_learning_assessment_progress_bar.visible()
+    }
+
+    private fun showAssessmentError(error: String) {
+
+        main_learning_assessments_rv.gone()
+        main_learning_assessment_progress_bar.gone()
+        main_learning_assessment_error.visible()
+
+        main_learning_assessment_error.text = error
+    }
+
+
+    private fun showAssessments(content: List<CourseContent>) {
+
+        main_learning_assessment_progress_bar.gone()
+        main_learning_assessment_error.gone()
+        main_learning_assessments_rv.visible()
+
+        val displayMetrics = DisplayMetrics()
+        activity?.windowManager?.getDefaultDisplay()?.getMetrics(displayMetrics)
+        val width = displayMetrics.widthPixels
+        val itemWidth = ((width / 5) * 3.5).toInt()
+
+
+        val recyclerGenericAdapter: RecyclerGenericAdapter<CourseContent> =
+            RecyclerGenericAdapter<CourseContent>(
+                activity?.applicationContext,
+                PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
+                    navigate(R.id.assessment_fragment)
+                },
+                RecyclerGenericAdapter.ItemInterface<CourseContent> { obj, viewHolder, position ->
+                    val lp = getView(viewHolder, R.id.assessment_cl).layoutParams
+                    lp.height = lp.height
+                    lp.width = itemWidth
+                    getView(viewHolder, R.id.assessment_cl).layoutParams = lp
+                    getTextView(viewHolder, R.id.title).text = obj?.title
+                    getTextView(viewHolder, R.id.time).text = "02:00"
+
+
+                    getTextView(viewHolder, R.id.status).text = "PENDING"
+                    getTextView(
+                        viewHolder,
+                        R.id.status
+                    ).setBackgroundResource(R.drawable.rect_assessment_status_pending)
+                    (getView(
+                        viewHolder,
+                        R.id.side_bar_status
+                    ) as CardView).setCardBackgroundColor(resources.getColor(R.color.status_bg_pending))
+
+
+                })!!
+        recyclerGenericAdapter.setList(content)
+        recyclerGenericAdapter.setLayout(R.layout.assessment_bs_item)
+        main_learning_assessments_rv.layoutManager = LinearLayoutManager(
+            activity?.applicationContext,
+            LinearLayoutManager.HORIZONTAL,
+            false
+        )
+        main_learning_assessments_rv.adapter = recyclerGenericAdapter
+
     }
 
     private fun showRoleBasedLearningError(error: String) {
@@ -444,51 +508,7 @@ class MainLearningFragment : BaseFragment() {
         searchSuggestionBasedVideosRV.adapter = recyclerGenericAdapter
     }
 
-    private fun showAssessments(content: List<CourseContent>) {
 
-        val displayMetrics = DisplayMetrics()
-        activity?.windowManager?.getDefaultDisplay()?.getMetrics(displayMetrics)
-        val width = displayMetrics.widthPixels
-        val itemWidth = ((width / 5) * 3.5).toInt()
-
-
-        val recyclerGenericAdapter: RecyclerGenericAdapter<CourseContent> =
-            RecyclerGenericAdapter<CourseContent>(
-                activity?.applicationContext,
-                PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
-                    navigate(R.id.assessment_fragment)
-                },
-                RecyclerGenericAdapter.ItemInterface<CourseContent> { obj, viewHolder, position ->
-                    val lp = getView(viewHolder, R.id.assessment_cl).layoutParams
-                    lp.height = lp.height
-                    lp.width = itemWidth
-                    getView(viewHolder, R.id.assessment_cl).layoutParams = lp
-                    getTextView(viewHolder, R.id.title).text = obj?.title
-                    getTextView(viewHolder, R.id.time).text = "02:00"
-
-
-                    getTextView(viewHolder, R.id.status).text = "PENDING"
-                    getTextView(
-                        viewHolder,
-                        R.id.status
-                    ).setBackgroundResource(R.drawable.rect_assessment_status_pending)
-                    (getView(
-                        viewHolder,
-                        R.id.side_bar_status
-                    ) as CardView).setCardBackgroundColor(resources.getColor(R.color.status_bg_pending))
-
-
-                })!!
-        recyclerGenericAdapter.setList(content)
-        recyclerGenericAdapter.setLayout(R.layout.assessment_bs_item)
-        main_learning_assessments_rv.layoutManager = LinearLayoutManager(
-            activity?.applicationContext,
-            LinearLayoutManager.HORIZONTAL,
-            false
-        )
-        main_learning_assessments_rv.adapter = recyclerGenericAdapter
-
-    }
 
     class TitleSubtitleModel(var title: String, var subtitle: String, var imgIcon: Int = 0)
 }
