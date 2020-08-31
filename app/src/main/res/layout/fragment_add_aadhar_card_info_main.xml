@@ -160,7 +160,7 @@
                     android:layout_marginLeft="2dp"
                     android:layout_marginTop="8dp"
                     android:fontFamily="@font/lato"
-                    android:text="@string/aadhar_number"
+                    android:text="@string/aadhar_number_eg_444433332222"
                     android:textSize="12sp" />
 
 

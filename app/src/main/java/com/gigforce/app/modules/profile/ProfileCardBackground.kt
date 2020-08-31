@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.View
 import android.widget.TextView
 import androidx.cardview.widget.CardView
+import androidx.navigation.findNavController
 import com.gigforce.app.R
 import kotlinx.android.synthetic.main.card_row.view.*
 import kotlinx.android.synthetic.main.profile_card_background.view.*
@@ -62,7 +63,7 @@ class ProfileCardBackground : CardView {
                     val widget = CardRow(this.context!!)
 
                     if (showIsWhatsappCb) {
-                        widget.hideEditIcon = location == 0
+                        widget.setAsRegistered = location == 0
                         widget.setContactNumber = contactNumbers[location]
                         widget.showIsWhatsappCb = showIsWhatsappCb
                         widget.setIsWhatsappCBChecked = setWhatsAppChecked[location]
@@ -96,12 +97,17 @@ class ProfileCardBackground : CardView {
                     var bundle = Bundle()
                     bundle.putString("array_location", location.toString())
                     Log.d("LOCATION", location.toString())
+
+                    widget.edit_button.setOnClickListener {
+                        findNavController().navigate(nextDestination, bundle)
+                    }
                     if (callbacks != null) {
                         widget.edit_button.setOnClickListener {
                             if (cardTitle == context.getString(R.string.contact)) {
                                 callbacks?.editNumber(
                                     widget.setContactNumber,
-                                    widget.setIsWhatsappCBChecked
+                                    widget.setIsWhatsappCBChecked,
+                                    widget.setAsRegistered
                                 )
                             } else if (cardTitle == context.getString(R.string.emails)) {
                                 callbacks?.editEmail(widget.setEmail)

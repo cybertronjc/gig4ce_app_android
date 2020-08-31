@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.request.RequestOptions
@@ -18,11 +19,13 @@ import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.modules.gigPage.GigPageFragment
 import com.gigforce.app.modules.gigPage.models.Gig
 import com.gigforce.app.utils.*
+import com.google.firebase.storage.FirebaseStorage
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.qrcode.QRCodeWriter
 import com.itextpdf.text.Document
 import com.itextpdf.text.Image
 import com.itextpdf.text.pdf.PdfWriter
+import kotlinx.android.synthetic.main.fragment_gig_page_present.*
 import kotlinx.android.synthetic.main.layout_giger_id_fragment.*
 import kotlinx.coroutines.runBlocking
 import java.io.File
@@ -113,10 +116,38 @@ class GigerIdFragment : BaseFragment() {
                 "MMM yyyy",
                 gig?.startDateTime?.toDate()
             )}"
-        GlideApp.with(this.requireContext())
-            .load(gig.companyLogo)
-            .apply(RequestOptions().circleCrop()).placeholder(R.drawable.profile)
-            .into(iv_brand_logo_giger_id)
+        if (!gig.companyLogo.isNullOrBlank()) {
+            if (gig.companyLogo!!.startsWith("http", true)) {
+
+                GlideApp.with(requireContext())
+                    .load(gig.companyLogo)
+                    .placeholder(getCircularProgressDrawable())
+                    .into(iv_brand_logo_giger_id)
+            } else {
+                FirebaseStorage.getInstance()
+                    .getReference("companies_gigs_images")
+                    .child(gig.companyLogo!!)
+                    .downloadUrl
+                    .addOnSuccessListener { fileUri ->
+
+                        GlideApp.with(requireContext())
+                            .load(fileUri)
+                            .placeholder(getCircularProgressDrawable())
+                            .into(iv_brand_logo_giger_id)
+                    }
+            }
+        } else {
+            val companyInitials = if (gig.companyName.isNullOrBlank())
+                "C"
+            else
+                gig.companyName!![0].toString().toUpperCase()
+            val drawable = TextDrawable.builder().buildRound(
+                companyInitials,
+                ResourcesCompat.getColor(resources, R.color.lipstick, null)
+            )
+
+            iv_brand_logo_giger_id.setImageDrawable(drawable)
+        }
         tv_brand_name_giger_id.text = "@${gig.companyName}"
         tv_gig_id_giger_id.text = "${getString(R.string.gig_id)} ${gig.gigId}"
         gig.startDateTime?.let {

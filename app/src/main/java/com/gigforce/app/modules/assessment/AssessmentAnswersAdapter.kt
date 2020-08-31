@@ -16,7 +16,7 @@ class AssessmentAnswersAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>()
 
     interface AssessAdapterCallbacks {
         fun submitAnswer()
-        fun setAnswered(boolean: Boolean)
+        fun setAnswered(boolean: Boolean,position: Int)
     }
 
 
@@ -50,32 +50,37 @@ class AssessmentAnswersAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>()
 
                 holder.itemView.tv_number_rv_access_frag.text = (65 + position).toChar() + "."
                 holder.itemView.tv_option_rv_access_frag.text = obj.que
+                holder.itemView.tv_helper_rv_access_frag.text =
+                    items!![holder.adapterPosition].reason
                 if (obj.selectedAnswer != null && obj.selectedAnswer!!) {
                     val color = holder.itemView.context.getColor(
-                        if (obj.is_answer!!) R.color.app_green else
+                        if (obj.is_answer == true) R.color.app_green else
                             R.color.red
                     )
                     holder.itemView.tv_number_rv_access_frag.setTextColor(color)
                     holder.itemView.tv_option_rv_access_frag.setTextColor(color)
                     holder.itemView.tv_helper_rv_access_frag.visibility = View.VISIBLE
-                    holder.itemView.tv_helper_rv_access_frag.text =
-                        items!![holder.adapterPosition].reason
-//                    showHelper = true;
-//                    notifyItemChanged(items.size);
-//                    adapterCallbacks.submitAnswer()
 
                 } else {
-                    val color = holder.itemView.resources.getColor(R.color.black_85)
-                    holder.itemView.tv_helper_rv_access_frag.visibility = View.GONE
+                    val color = holder.itemView.context.getColor(
+                        if (obj.clickStatus == true) R.color.black_85 else (if (obj.is_answer == true) R.color.app_green else
+                            R.color.red)
+                    )
+
+                    holder.itemView.tv_helper_rv_access_frag.visibility =
+                        if (obj.clickStatus == true) View.GONE else View.VISIBLE
                     holder.itemView.tv_number_rv_access_frag.setTextColor(color)
                     holder.itemView.tv_option_rv_access_frag.setTextColor(color)
-                    holder.itemView.tv_helper_rv_access_frag.text = ""
+//                    holder.itemView.tv_helper_rv_access_frag.text = ""
 
                 }
                 holder.itemView.setOnClickListener {
-                    items!![holder.adapterPosition].selectedAnswer = true
-                    adapterCallbacks.setAnswered(true)
-                    notifyItemChanged(holder.adapterPosition)
+                    if (items!![holder.adapterPosition].clickStatus!!) {
+                        items!![holder.adapterPosition].selectedAnswer = true
+                        adapterCallbacks.setAnswered(true,holder.adapterPosition)
+//                        notifyItemChanged(holder.adapterPosition)
+
+                    }
 
                 }
 

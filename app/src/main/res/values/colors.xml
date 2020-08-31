@@ -90,6 +90,7 @@
     <color name="darkish_pink_100">#e14c6c</color>
     <color name="black_2222">#222222</color>
     <color name="warm_grey_two">#979797</color>
+    <color name="bottom_sheet_et">#008577</color>
 
 
 </resources>

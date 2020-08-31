@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.widget.PopupMenu
 import android.widget.ScrollView
+import androidx.core.os.bundleOf
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -53,8 +54,8 @@ class AssessmentFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initTb()
-        showDialog(AssessmentDialog.STATE_INIT)
         initObservers();
+        setupRecycler();
         viewModelAssessmentFragment.getQuestionaire()
     }
 
@@ -63,10 +64,27 @@ class AssessmentFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
             observableDialogResult.observe(viewLifecycleOwner, Observer {
                 val bundle = Bundle()
                 bundle.putBoolean(StringConstants.ASSESSMENT_PASSED.value, it)
+                val arr =
+                    BooleanArray(viewModelAssessmentFragment.observableAssessmentData.value?.assessment!!.size) { false }
+                viewModelAssessmentFragment.observableAssessmentData.value!!.assessment!!.forEachIndexed() { index, elem ->
+                    run {
+                        elem.options?.forEach { elem ->
+                            run {
+                                if (elem.selectedAnswer == true && elem.is_answer == true) {
+                                    arr[index] = true
+                                }
+                            }
+                        }
+                    }
+                }
+
+                bundle.putBooleanArray(StringConstants.ANSWERS_ARR.value, arr)
                 navigate(R.id.assessment_result_fragment, bundle)
             })
             observableDialogInit.observe(viewLifecycleOwner, Observer {
                 initialize()
+
+
             })
             observableShowHideSwipeDownIcon.observe(viewLifecycleOwner, Observer {
                 iv_scroll_more_access_frag.visibility = it
@@ -75,12 +93,24 @@ class AssessmentFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
                 swipeDownAnim()
             })
             observableShowHideQuestionHeader.observe(viewLifecycleOwner, Observer {
-                tv_scenario_label_header_assess_frag.visibility = it
-                tv_scenario_value_header_assess_frag.visibility = it
+//                tv_scenario_label_header_assess_frag.visibility = it
+//                tv_scenario_value_header_assess_frag.visibility = it
             })
             observableAssessmentData.observe(viewLifecycleOwner, Observer {
+                showDialog(
+                    AssessmentDialog.STATE_INIT, bundleOf(
+                        StringConstants.DURATION.value to it.duration,
+                        StringConstants.ASSESSMENT_NAME.value to it.assessment_name,
+                        StringConstants.QUESTIONS_COUNT.value to (it.assessment?.size ?: 0),
+                        StringConstants.LEVEL.value to it.level,
+                        StringConstants.ASSESSMENT_DIALOG_STATE.value to AssessmentDialog.STATE_INIT
+
+                    )
+                )
                 tv_scenario_value_assess_frag.text = it.scenario
                 tv_scenario_value_header_assess_frag.text = it.scenario
+                tv_level_assess_frag.text = "${getString(R.string.level)} ${it.level}"
+                tv_designation_assess_frag.text = it.assessment_name
                 h_pb_assess_frag.max = it.assessment?.size!!
                 h_pb_assess_frag.progress = 0
                 tv_percent_assess_frag.text = "0 %"
@@ -108,8 +138,8 @@ class AssessmentFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
     private fun initialize() {
         initUI()
         initClicks();
-        setupRecycler();
-        viewModelAssessmentFragment.getQuestionaire()
+
+
     }
 
     private fun setupRecycler() {
@@ -117,6 +147,7 @@ class AssessmentFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
         adapter?.setCallbacks(this)
 
         rv_options_assess_frag.adapter = adapter
+        rv_options_assess_frag.setHasFixedSize(true)
         rv_options_assess_frag.layoutManager = LinearLayoutManager(activity)
         rv_options_assess_frag.addItemDecoration(ItemOffsetDecoration(context, R.dimen.size_16))
 
@@ -134,9 +165,32 @@ class AssessmentFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
                 if (viewModelAssessmentFragment.observableAssessmentData.value?.assessment!![selectedPosition].answered) {
                     h_pb_assess_frag.progress = h_pb_assess_frag.max
                     tv_percent_assess_frag.text = "100%"
-                    showDialog(AssessmentDialog.STATE_PASS)
+                    var answers = 0;
+                    viewModelAssessmentFragment.observableAssessmentData.value!!.assessment!!.forEach { elem ->
+                        run {
+                            elem.options?.forEach { elem ->
+                                run {
+                                    if (elem.selectedAnswer == true && elem.is_answer == true) {
+                                        answers++;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    val questions =
+                        viewModelAssessmentFragment.observableAssessmentData.value!!.assessment!!.size
+
+                    showDialog(
+                        AssessmentDialog.STATE_PASS, bundleOf(
+
+                            StringConstants.RIGHT_ANSWERS.value to answers,
+                            StringConstants.ASSESSMENT_DIALOG_STATE.value to if (answers >= viewModelAssessmentFragment.observableAssessmentData.value!!.assessment!!.size / 2.toFloat()) AssessmentDialog.STATE_PASS else AssessmentDialog.STATE_REAPPEAR,
+                            StringConstants.QUESTIONS_COUNT.value to questions
+
+                        )
+                    )
                 } else {
-                    showToast("Please Answer Question to Continue!!!")
+                    showToast(getString(R.string.answer_the_ques))
 
                 }
 
@@ -156,7 +210,7 @@ class AssessmentFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
                         600
                     )
                 } else {
-                    showToast("Please Answer Question to Continue!!!")
+                    showToast(getString(R.string.answer_the_ques))
                 }
             }
 
@@ -192,9 +246,13 @@ class AssessmentFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
         )
     }
 
-    private fun showDialog(state: Int) {
+    private fun showDialog(
+        state: Int,
+        bundle: Bundle?
+    ) {
         val dialog = AssessmentDialog.newInstance(state);
         dialog.setCallbacks(this)
+        dialog.arguments = bundle
         dialog.show(parentFragmentManager, AssessmentDialog::class.java.name)
     }
 
@@ -212,9 +270,38 @@ class AssessmentFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
         }
     }
 
-    override fun setAnswered(boolean: Boolean) {
+    override fun setAnswered(boolean: Boolean, position: Int) {
         viewModelAssessmentFragment.observableAssessmentData.value?.assessment!![selectedPosition].answered =
             true
+        val optionsArr =
+            viewModelAssessmentFragment.observableAssessmentData.value?.assessment!![selectedPosition].options
+
+        val iterate = optionsArr?.listIterator()
+        while (iterate?.hasNext() == true) {
+            val obj = iterate.next()
+//            if (obj.selectedAnswer != true && obj.is_answer != true) {
+//                iterate.remove()
+//            } else {
+            obj.clickStatus = false
+//            }
+
+        }
+        adapter?.addData(optionsArr ?: arrayListOf())
+        sv_assess_frag.postDelayed(Runnable {
+            val y: Float =
+                rv_options_assess_frag.y + rv_options_assess_frag.getChildAt(position).y
+            val v = rv_options_assess_frag.findViewHolderForAdapterPosition(position)
+            sv_assess_frag.post {
+                sv_assess_frag.smoothScrollTo(0, y.toInt())
+
+            }
+        },600)
+
+
+    }
+
+    interface AssessFragmentCallbacks {
+        fun getAnsweredStatus(): Boolean
     }
 
 

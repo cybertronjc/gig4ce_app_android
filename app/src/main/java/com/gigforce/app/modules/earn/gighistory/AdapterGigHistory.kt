@@ -3,13 +3,13 @@ package com.gigforce.app.modules.earn.gighistory
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.gigforce.app.R
 import com.gigforce.app.modules.gigPage.models.Gig
-import com.gigforce.app.utils.ItemDecorationOnGoingGigs
-import com.gigforce.app.utils.PushDownAnim
+import com.gigforce.app.utils.*
+import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.layout_rv_gig_details_gig_history.view.*
 import kotlinx.android.synthetic.main.layout_rv_gig_events_gig_hist.view.*
 import kotlinx.android.synthetic.main.layout_rv_ongoing_gigs_gig_hist.view.*
@@ -172,9 +172,7 @@ class AdapterGigHistory : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                             )}"
                     }
                 }
-                Glide.with(viewHolderGigDetails.itemView).load(gig.companyLogo)
-                    .placeholder(R.drawable.profile)
-                    .into(viewHolderGigDetails.itemView.iv_brand_rv_gig_hist)
+
                 PushDownAnim.setPushDownAnimTo(holder.itemView)
                     .setOnClickListener(View.OnClickListener {
                         callbacks?.openGigDetails(scheduledGigs!![holder.adapterPosition - 2])
@@ -185,8 +183,53 @@ class AdapterGigHistory : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                     )}"
                 else
                     "${timeFormatter.format(gig.startDateTime!!.toDate())} - "
+
+
+                setBrandLogo(gig, viewHolderGigDetails)
             }
         }
+
+    private fun setBrandLogo(
+        gig: Gig,
+        viewHolderGigDetails: ViewHolderGigDetails
+    ) {
+        if (!gig.companyLogo.isNullOrBlank()) {
+            if (gig.companyLogo!!.startsWith("http", true)) {
+
+                GlideApp.with(viewHolderGigDetails.itemView.context)
+                    .load(gig.companyLogo)
+                    .placeholder(getCircularProgressDrawable(viewHolderGigDetails.itemView.context))
+                    .into(viewHolderGigDetails.itemView.iv_brand_rv_gig_hist)
+            } else {
+                FirebaseStorage.getInstance()
+                    .getReference("companies_gigs_images")
+                    .child(gig.companyLogo!!)
+                    .downloadUrl
+                    .addOnSuccessListener { fileUri ->
+
+                        GlideApp.with(viewHolderGigDetails.itemView)
+                            .load(fileUri)
+                            .placeholder(getCircularProgressDrawable(viewHolderGigDetails.itemView.context))
+                            .into(viewHolderGigDetails.itemView.iv_brand_rv_gig_hist)
+                    }
+            }
+        } else {
+            val companyInitials = if (gig.companyName.isNullOrBlank())
+                "C"
+            else
+                gig.companyName!![0].toString().toUpperCase()
+            val drawable = TextDrawable.builder().buildRound(
+                companyInitials,
+                ResourcesCompat.getColor(
+                    viewHolderGigDetails.itemView.context.resources,
+                    R.color.lipstick,
+                    null
+                )
+            )
+
+            viewHolderGigDetails.itemView.iv_brand_rv_gig_hist.setImageDrawable(drawable)
+        }
+    }
 
     private fun pushDown(viewHolderGigEvents: ViewHolderGigEvents) {
         PushDownAnim.setPushDownAnimTo(viewHolderGigEvents.itemView.tv_past_events_rv_gig_hist)
@@ -310,4 +353,5 @@ class AdapterGigHistory : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         fun getEventState(): Int
         fun setEventState(state: Int)
     }
+
 }
