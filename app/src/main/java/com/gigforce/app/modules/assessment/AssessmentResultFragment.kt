@@ -22,6 +22,7 @@ import kotlinx.android.synthetic.main.fragment_assessment_result.*
 import kotlinx.android.synthetic.main.layout_rv_question_wisr_sum_assess_result.view.*
 import kotlinx.android.synthetic.main.toolbar.*
 import java.io.File
+import java.util.concurrent.TimeUnit
 
 
 class AssessmentResultFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener {
@@ -147,6 +148,12 @@ class AssessmentResultFragment : BaseFragment(), PopupMenu.OnMenuItemClickListen
         tv_new_cert_asses_frag.text =
             Html.fromHtml("<u>New certificate has been added to profile .</u>")
         viewModelAssessmentResult.checkIfUserPassed(arguments?.getBoolean(StringConstants.ASSESSMENT_PASSED.value))
+        val timeTaken = arguments?.getInt(StringConstants.TIME_TAKEN.value)?.toLong()!!
+        tv_time_taken_value_assess_frag.text = String.format(
+            "%02d hrs %02d min %02d sec", TimeUnit.MILLISECONDS.toHours(timeTaken),
+            TimeUnit.MILLISECONDS.toMinutes(timeTaken) % TimeUnit.HOURS.toMinutes(1),
+            TimeUnit.MILLISECONDS.toSeconds(timeTaken) % TimeUnit.MINUTES.toSeconds(1)
+        );
     }
 
     override fun onMenuItemClick(item: MenuItem?): Boolean {

@@ -530,6 +530,7 @@
     <string name="answer_is_correct">answer is correct.</string>
     <string name="attempt">attempt</string>
     <string name="is_string">is</string>
+    <string name="seconds">seconds</string>
     <string-array name="india_banks">
         <item>ABHYUDAYA CO-OP BANK LTD</item>
         <item>ABU DHABI COMMERCIAL BANK</item>

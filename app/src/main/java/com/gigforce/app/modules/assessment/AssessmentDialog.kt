@@ -45,6 +45,7 @@ class AssessmentDialog : DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         initClicks();
         initUIAsPerState(arguments?.getInt(StringConstants.ASSESSMENT_DIALOG_STATE.value))
+        isCancelable = false
     }
 
     private fun initUIAsPerState(state: Int?) {
@@ -67,17 +68,31 @@ class AssessmentDialog : DialogFragment() {
                     dateFormatter.parse(arguments?.getString(StringConstants.DURATION.value))
 
                 tv_time_assess_dialog.text =
-                    if (calInstance.get(Calendar.HOUR) == 0) "${getString(R.string.time_duration)} : ${calInstance.get(
-                        Calendar.MINUTE
-                    )} ${getString(
-                        R.string.mins
-                    )}" else "${getString(R.string.time_duration)} : ${calInstance.get(
-                        Calendar.HOUR
-                    )} ${calInstance.get(
-                        Calendar.MINUTE
-                    )} ${getString(
-                        R.string.mins
-                    )}"
+                    if (calInstance.get(Calendar.HOUR) == 0) "${getString(R.string.time_duration)} : ${
+                        calInstance.get(
+                            Calendar.MINUTE
+                        )
+                    } ${
+                        getString(
+                            R.string.mins
+                        )
+                    } ${calInstance.get(Calendar.SECOND)} ${getString(R.string.seconds)}" else "${
+                        getString(
+                            R.string.time_duration
+                        )
+                    } : ${
+                        calInstance.get(
+                            Calendar.HOUR
+                        )
+                    } ${
+                        calInstance.get(
+                            Calendar.MINUTE
+                        )
+                    } ${
+                        getString(
+                            R.string.mins
+                        )
+                    } ${calInstance.get(Calendar.SECOND)} ${getString(R.string.seconds)}"
 
             }
         }
@@ -89,9 +104,11 @@ class AssessmentDialog : DialogFragment() {
         tv_assessment_result__assess_dialog.visibility = View.VISIBLE
         val builder = SpannableStringBuilder()
         val spannableString = SpannableString(
-            "${getString(R.string.u_attempt)} ${arguments?.getInt(StringConstants.QUESTIONS_COUNT.value)} ${getString(
-                R.string.questions
-            )}"
+            "${getString(R.string.u_attempt)} ${arguments?.getInt(StringConstants.QUESTIONS_COUNT.value)} ${
+                getString(
+                    R.string.questions
+                )
+            }"
         )
         spannableString.setSpan(
             ForegroundColorSpan(Color.parseColor("#e94b81")),
@@ -103,9 +120,11 @@ class AssessmentDialog : DialogFragment() {
 
         builder.append(spannableString)
         val spanable2 = SpannableString(
-            " ${getString(R.string.and_from)} ${getString(R.string.that)}  ${arguments?.getInt(
-                StringConstants.RIGHT_ANSWERS.value
-            )} ${getString(R.string.answer_is_correct)}"
+            " ${getString(R.string.and_from)} ${getString(R.string.that)}  ${
+                arguments?.getInt(
+                    StringConstants.RIGHT_ANSWERS.value
+                )
+            } ${getString(R.string.answer_is_correct)}"
         )
         spanable2.setSpan(
             ForegroundColorSpan(Color.parseColor("#e94b81")),
@@ -138,9 +157,11 @@ class AssessmentDialog : DialogFragment() {
         val builder = SpannableStringBuilder()
 
         val spannableString = SpannableString(
-            "${getString(R.string.u_attempt)} ${arguments?.getInt(StringConstants.QUESTIONS_COUNT.value)} ${getString(
-                R.string.questions
-            )}"
+            "${getString(R.string.u_attempt)} ${arguments?.getInt(StringConstants.QUESTIONS_COUNT.value)} ${
+                getString(
+                    R.string.questions
+                )
+            }"
         )
         spannableString.setSpan(
             ForegroundColorSpan(Color.parseColor("#e94b81")),
@@ -152,9 +173,11 @@ class AssessmentDialog : DialogFragment() {
 
         builder.append(spannableString)
         val spanable2 = SpannableString(
-            " ${getString(R.string.and_from)} ${getString(R.string.that)}  ${arguments?.getInt(
-                StringConstants.RIGHT_ANSWERS.value
-            )} ${getString(R.string.answer_is_correct)}"
+            " ${getString(R.string.and_from)} ${getString(R.string.that)}  ${
+                arguments?.getInt(
+                    StringConstants.RIGHT_ANSWERS.value
+                )
+            } ${getString(R.string.answer_is_correct)}"
         )
         spanable2.setSpan(
             ForegroundColorSpan(Color.parseColor("#e94b81")),
