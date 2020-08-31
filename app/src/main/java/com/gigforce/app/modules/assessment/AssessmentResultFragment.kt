@@ -150,7 +150,7 @@ class AssessmentResultFragment : BaseFragment(), PopupMenu.OnMenuItemClickListen
         viewModelAssessmentResult.checkIfUserPassed(arguments?.getBoolean(StringConstants.ASSESSMENT_PASSED.value))
         val timeTaken = arguments?.getInt(StringConstants.TIME_TAKEN.value)?.toLong()!!
         tv_time_taken_value_assess_frag.text = String.format(
-            "%02d hrs %02d min %02d sec", TimeUnit.MILLISECONDS.toHours(timeTaken),
+            " %02d hrs %02d min %02d sec", TimeUnit.MILLISECONDS.toHours(timeTaken),
             TimeUnit.MILLISECONDS.toMinutes(timeTaken) % TimeUnit.HOURS.toMinutes(1),
             TimeUnit.MILLISECONDS.toSeconds(timeTaken) % TimeUnit.MINUTES.toSeconds(1)
         );
