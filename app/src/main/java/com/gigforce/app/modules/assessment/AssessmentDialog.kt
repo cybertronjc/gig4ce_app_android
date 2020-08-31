@@ -135,7 +135,7 @@ class AssessmentDialog : DialogFragment() {
         builder.append(spanable2)
         tv_assessment_result__assess_dialog.setText(builder, TextView.BufferType.SPANNABLE)
         tv_message_assess_dialog.text = getString(R.string.oops)
-        tv_assess_name_assess_dialog.text = getString(R.string.assess_complete)
+        tv_assess_name_assess_dialog.text = getString(R.string.assessment_not_completed)
         tv_action_assess_dialog.text = getString(R.string.scorecard)
         val constraintSet = ConstraintSet()
         constraintSet.clone(parent_access_dialog)
