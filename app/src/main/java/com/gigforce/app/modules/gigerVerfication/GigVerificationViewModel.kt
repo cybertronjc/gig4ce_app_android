@@ -153,12 +153,14 @@ open class GigVerificationViewModel constructor(
         _documentUploadState.postValue(Lse.loading())
 
         try {
-            val fileNameAtServer = if (userHasPan)
-                uploadImage(panImage!!)
-            else
-                null
 
             val model = getVerificationModel()
+
+            val fileNameAtServer = if (userHasPan && panImage != null)
+                uploadImage(panImage)
+            else
+                model.pan_card?.panCardImagePath
+
             model.pan_card = PanCardDataModel(
                 userHasPanCard = userHasPan,
                 panCardImagePath = fileNameAtServer,
