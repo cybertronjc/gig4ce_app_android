@@ -187,12 +187,13 @@ open class GigVerificationViewModel constructor(
         _documentUploadState.postValue(Lse.loading())
 
         try {
-            val fileNameAtServer = if (userHasPassBook)
-                uploadImage(passbookImagePath!!)
-            else
-                null
-
             val model = getVerificationModel()
+
+            val fileNameAtServer = if (userHasPassBook && passbookImagePath != null)
+                uploadImage(passbookImagePath)
+            else
+                model.bank_details?.passbookImagePath
+
             model.bank_details = BankDetailsDataModel(
                 userHasPassBook = userHasPassBook,
                 passbookImagePath = fileNameAtServer,
