@@ -30,8 +30,11 @@ import com.gigforce.app.utils.Lse
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.storage.FirebaseStorage
 import com.ncorti.slidetoact.SlideToActView
+import kotlinx.android.synthetic.main.fragment_add_aadhar_card_info_main.*
 import kotlinx.android.synthetic.main.fragment_add_driving_license_info.*
 import kotlinx.android.synthetic.main.fragment_add_driving_license_info_main.*
+import kotlinx.android.synthetic.main.fragment_add_driving_license_info_main.helpIconIV
+import kotlinx.android.synthetic.main.fragment_add_driving_license_info_main.whyWeNeedThisTV
 import kotlinx.android.synthetic.main.fragment_add_driving_license_info_view.*
 import kotlinx.android.synthetic.main.fragment_verification_image_holder.view.*
 import java.util.*
@@ -123,9 +126,11 @@ class AddDrivingLicenseInfoFragment : BaseFragment() {
             if (checkedId == R.id.dlYesRB) {
                 showDLImageAndInfoLayout()
 
+
+
                 if (confirmDLDataCB.isChecked
-                    && dlFrontImagePath != null
-                    && dlBackImagePath != null
+                    && ((dlSubmitSliderBtn.text == getString(R.string.update)
+                            || (dlFrontImagePath != null && dlBackImagePath != null)))
                 ) {
                     enableSubmitButton()
                 } else
@@ -153,8 +158,8 @@ class AddDrivingLicenseInfoFragment : BaseFragment() {
             if (isChecked) {
 
                 if (dlYesRB.isChecked
-                    && dlFrontImagePath != null
-                    && dlBackImagePath != null
+                    && ((dlSubmitSliderBtn.text == getString(R.string.update)
+                            || (dlFrontImagePath != null && dlBackImagePath != null)))
                 )
                     enableSubmitButton()
                 else if (dlNoRB.isChecked)
@@ -196,7 +201,7 @@ class AddDrivingLicenseInfoFragment : BaseFragment() {
                             return
                         }
 
-                        if (dlFrontImagePath == null || dlBackImagePath == null) {
+                        if (dlSubmitSliderBtn.text != getString(R.string.update) && (dlFrontImagePath == null || dlBackImagePath == null)) {
 
                             MaterialAlertDialogBuilder(requireContext())
                                 .setTitle(getString(R.string.alert))
@@ -241,6 +246,7 @@ class AddDrivingLicenseInfoFragment : BaseFragment() {
                     dlMainLayout.visible()
 
                     setDataOnEditLayout(drivingLicenseDetail)
+                    dlSubmitSliderBtn.isEnabled = true
                 }
                 .setNegativeButton(getString(R.string.cancel)) { _, _ -> }
                 .show()
