@@ -10,9 +10,9 @@ import com.gigforce.app.R
 class ImageViewRounded : AppCompatImageView {
     private var radius = 8f
 
-    constructor(context: Context?) : super(context) {}
+    constructor(context: Context?) : super(context!!) {}
     constructor(context: Context?, attrs: AttributeSet?) : super(
-        context,
+        context!!,
         attrs
     ) {
     }

@@ -107,7 +107,6 @@ dependencies {
 
     //Volley
     implementation 'com.android.volley:volley:1.1.1'
-
     implementation 'com.github.pwittchen:swipe-rx2:0.3.0'
 
     //Moshi
@@ -145,7 +144,7 @@ dependencies {
     implementation "androidx.fragment:fragment-ktx:1.2.4"
     implementation 'com.android.support:appcompat-v7:'
     implementation "androidx.recyclerview:recyclerview:1.1.0"
-    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.appcompat:appcompat:1.2.0' // changed from 1.1.0
     implementation 'com.jaeger.statusbarutil:library:1.4.0'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'com.google.android.material:material:1.1.0'
@@ -257,5 +256,10 @@ dependencies {
     //Transcoder for compressing video files
     implementation 'com.otaliastudios:transcoder:0.9.1'
 
+    implementation 'com.clevertap.android:clevertap-android-sdk:3.8.1'
+    implementation 'com.google.android.gms:play-services-base:17.3.0'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    //Mandatory for CleverTap Android SDK v3.6.4 and above add the following -
+    implementation 'com.android.installreferrer:installreferrer:2.1'
 
 }
