@@ -103,6 +103,27 @@ class HelpViewModel : ViewModel() {
             videoYoutubeId = "-xCRjrOltzQ"
         )
 
+        val vid11 = HelpVideo(
+            id = UUID.randomUUID().toString(),
+            videoTitle = "[Hindi] 11. How to upload your Verification documents",
+            videoLength = 248,
+            videoYoutubeId = "8QZCJ3NMsy4"
+        )
+
+        val vid12 = HelpVideo(
+            id = UUID.randomUUID().toString(),
+            videoTitle = "[Hindi] 12. How to mark attendance for a gig",
+            videoLength = 84,
+            videoYoutubeId = "zhouZra1Lck"
+        )
+
+        val vid13 = HelpVideo(
+            id = UUID.randomUUID().toString(),
+            videoTitle = "[Hindi] 13. Calendar और Home Screen के बीच कैसे स्विच करें",
+            videoLength = 43,
+            videoYoutubeId = "AjF50egitnA"
+        )
+
         _helpVideos.value = listOf(
             vid1,
             vid2,
@@ -113,7 +134,10 @@ class HelpViewModel : ViewModel() {
             vid7,
             vid8,
             vid9,
-            vid10
+            vid10,
+            vid11,
+            vid12,
+            vid13
         )
     }
 
