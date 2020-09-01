@@ -236,15 +236,15 @@ open class GigVerificationViewModel constructor(
                 )
             } else {
 
-                val frontImageFileNameAtServer = if (userHasAadhar)
-                    uploadImage(frontImagePath!!)
+                val frontImageFileNameAtServer = if (userHasAadhar && frontImagePath != null)
+                    uploadImage(frontImagePath)
                 else
-                    null
+                    model.aadhar_card?.frontImage
 
-                val backImageFileNameAtServer = if (userHasAadhar)
-                    uploadImage(backImagePath!!)
+                val backImageFileNameAtServer = if (userHasAadhar && backImagePath != null)
+                    uploadImage(backImagePath)
                 else
-                    null
+                    model.aadhar_card?.backImage
 
                 model.aadhar_card = AadharCardDataModel(
                     userHasAadharCard = true,
