@@ -9,8 +9,8 @@ apply plugin: 'com.google.gms.google-services'
 android {
     signingConfigs {
         debug {
-          storeFile file('/home/himanshu/Projects/Android/GigForce/KeyStores/gigforceapp.jks')
-//            storeFile file('/Users/apple/Documents/gigforceapp.jks')
+//          storeFile file('/home/himanshu/Projects/Android/GigForce/KeyStores/gigforceapp.jks')
+            storeFile file('/Users/apple/Documents/gigforceapp.jks')
             storePassword 'gigforce'
             keyAlias 'key0'
             keyPassword 'gigforce'
@@ -29,8 +29,8 @@ android {
         applicationId "com.gigforce.app"
         minSdkVersion 23
         targetSdkVersion 29
-        versionCode 50
-        versionName "1.17.5"
+        versionCode 51
+        versionName "1.18.0"
 
         vectorDrawables.useSupportLibrary = true
 
