@@ -10,10 +10,12 @@ import android.view.*
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
+import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
 import com.gigforce.app.modules.photocrop.PhotoCrop
 import com.gigforce.app.modules.profile.models.ProfileData
 import com.gigforce.app.utils.GlideApp
@@ -47,6 +49,7 @@ class ProfileFragment : BaseFragment() {
     private var scrollRange: Int = -1
     private var PROFILE_PICTURE_FOLDER: String = "profile_pics"
 
+    private val gigerVerificationViewModel : GigVerificationViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -118,6 +121,7 @@ class ProfileFragment : BaseFragment() {
     private fun setAppBarOffset(offsetPx: Int) {
         val params = layout.appbar.layoutParams as CoordinatorLayout.LayoutParams
         val behavior = params.behavior as AppBarLayout.Behavior?
+        appbar.setExpanded(true)
 
         behavior!!.onNestedPreScroll(
             layout.coordinator,
@@ -132,6 +136,16 @@ class ProfileFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        gigerVerificationViewModel.gigerVerificationStatus.observe(viewLifecycleOwner, Observer {
+
+           //TODO
+
+//            if (profile.isVerified) {
+//                layout.main_expanded_is_verified.setBackgroundColor(Color.parseColor("#00FF00"))
+//            }
+
+        })
 
         val viewModel: ProfileViewModel by activityViewModels<ProfileViewModel>()
         location_card.setOnClickListener {
@@ -151,9 +165,7 @@ class ProfileFragment : BaseFragment() {
 
 
             Log.d("ProfileFragment", profile.isVerified.toString())
-            if (profile.isVerified) {
-                //layout.main_expanded_is_verified.setBackgroundColor(Color.parseColor("#00FF00"))
-            }
+
 
             if (profile.bio.trim().isEmpty()) {
                 layout.add_bio_default.visibility = View.VISIBLE
