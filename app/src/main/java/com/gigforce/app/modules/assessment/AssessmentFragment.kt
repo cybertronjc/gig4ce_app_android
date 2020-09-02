@@ -69,6 +69,7 @@ class AssessmentFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
     }
 
     private fun initObservers() {
+
         with(viewModelAssessmentFragment) {
             observableDialogResult.observe(viewLifecycleOwner, Observer {
                 val bundle = Bundle()
@@ -130,6 +131,13 @@ class AssessmentFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
 
             })
 
+            observableError.observe(viewLifecycleOwner, Observer {
+                showToast(it)
+            })
+            observableQuizSubmit.observe(viewLifecycleOwner, Observer {
+                finalResult()
+            })
+
         }
     }
 
@@ -168,8 +176,9 @@ class AssessmentFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
             }
 
             override fun onFinish() {
-                showToast("Time is Up!!!!")
-                finalResult()
+                 viewModelAssessmentFragment.observableAssessmentData.value?.timeTakenInMillis=
+                     timeTaken.toLong();
+                viewModelAssessmentFragment.submitAnswers()
             }
         }
 
@@ -202,8 +211,11 @@ class AssessmentFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
             if (selectedPosition == viewModelAssessmentFragment.observableAssessmentData.value?.assessment!!.size - 1) {
                 if (viewModelAssessmentFragment.observableAssessmentData.value?.assessment!![selectedPosition].answered) {
                     h_pb_assess_frag.progress = h_pb_assess_frag.max
-                    tv_percent_assess_frag.text = "100%"
-                    finalResult()
+                    tv_percent_assess_frag.text = getString(R.string.hundred_percent)
+                    viewModelAssessmentFragment.observableAssessmentData.value?.timeTakenInMillis=
+                        timeTaken.toLong();
+                    viewModelAssessmentFragment.submitAnswers()
+
                 } else {
                     showToast(getString(R.string.answer_the_ques))
 
@@ -237,8 +249,10 @@ class AssessmentFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
         if (pushfinalEvent) {
             pushfinalEvent = false
             Handler().postDelayed({
-                finalResult()
-            },500)
+                viewModelAssessmentFragment.observableAssessmentData.value?.timeTakenInMillis=
+                    timeTaken.toLong();
+                viewModelAssessmentFragment.submitAnswers()
+            }, 500)
 
         }
     }
@@ -384,6 +398,13 @@ class AssessmentFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
 
             })
 
+    }
+
+    override fun onBackPressed(): Boolean {
+
+        countDownTimer?.cancel()
+
+        return super.onBackPressed()
     }
 
 

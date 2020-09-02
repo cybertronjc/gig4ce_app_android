@@ -8,5 +8,6 @@ data class AssementQuestionsReponse(
     var duration: String = "",
     var assessment_name: String = "",
     var level: Int = 0,
-    var assessment_image: String = ""
+    var assessment_image: String = "",
+    var timeTakenInMillis:Long=0
 )

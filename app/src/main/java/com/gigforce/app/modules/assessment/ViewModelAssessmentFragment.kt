@@ -15,6 +15,12 @@ class ViewModelAssessmentFragment(private val modelCallbacks: ModelCallbacks) : 
     internal val observableDialogResult: MutableLiveData<Boolean> by lazy {
         MutableLiveData<Boolean>();
     }
+    internal val observableQuizSubmit: MutableLiveData<Boolean> by lazy {
+        MutableLiveData<Boolean>();
+    }
+    internal val observableError: MutableLiveData<String> by lazy {
+        MutableLiveData<String>();
+    }
     internal val observableDialogInit: MutableLiveData<Nothing> by lazy {
         MutableLiveData<Nothing>();
     }
@@ -55,8 +61,21 @@ class ViewModelAssessmentFragment(private val modelCallbacks: ModelCallbacks) : 
         modelCallbacks.getQuestionaire(this)
     }
 
+    fun submitAnswers() {
+
+        modelCallbacks.submitAnswers(observableAssessmentData.value!!, this)
+    }
+
     override fun QuestionairreSuccess(value: QuerySnapshot?, e: FirebaseFirestoreException?) {
         observableAssessmentData.value = value?.toObjects(AssementQuestionsReponse::class.java)!![0]
+    }
+
+    override fun submitAnswerSuccess() {
+        observableQuizSubmit.value = true
+    }
+
+    override fun submitAnswerFailure(err: String) {
+        observableError.value = err
     }
 
 }
