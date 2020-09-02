@@ -176,6 +176,10 @@ class AssessmentFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
             }
 
             override fun onFinish() {
+                if (!lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) {
+                    pushfinalEvent = true
+                    return
+                }
                  viewModelAssessmentFragment.observableAssessmentData.value?.timeTakenInMillis=
                      timeTaken.toLong();
                 viewModelAssessmentFragment.submitAnswers()
