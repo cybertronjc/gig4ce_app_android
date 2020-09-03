@@ -2,7 +2,6 @@ package com.gigforce.app.modules.assessment
 
 import com.gigforce.app.core.base.basefirestore.BaseFirestoreDBRepository
 import com.gigforce.app.modules.assessment.models.AssementQuestionsReponse
-import com.gigforce.app.utils.DateHelper.getFullDateTimeStamp
 import java.util.*
 
 class ModelAssessmentFragment : BaseFirestoreDBRepository(), ModelCallbacks {
@@ -22,10 +21,14 @@ class ModelAssessmentFragment : BaseFirestoreDBRepository(), ModelCallbacks {
     }
 
     override fun submitAnswers(
+        profileID: String,
         assessmentResponse: AssementQuestionsReponse,
         callbacks: ModelCallbacks.ModelResponseCallbacks
     ) {
         db.collection("assessment_submissions").document().set(mapOf(
+            "active" to true,
+            "source" to "app_android",
+            "profile_id" to profileID,
             "inserted_at" to Date(),
             "lesson_id" to assessmentResponse.lesson_id,
             "time_taken_in_millis" to assessmentResponse.timeTakenInMillis,

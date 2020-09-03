@@ -119,4 +119,7 @@
     <string name="seconds">seconds</string>
     <string name="assessment_not_completed">Assessment Not Completed Successfully</string>
     <string name="hundred_percent">100%</string>
+    <string name="woe_you_are_correct">Wow ! You are correct.</string>
+    <string name="you_are_incorrect">Oops ! You are incorrect.</string>
+    <string name="time_is_up">Time is Up!!!!!</string>
 </resources>

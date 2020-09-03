@@ -24,25 +24,7 @@ class ViewModelAssessmentResult : ViewModel() {
         MutableLiveData<Boolean>();
     }
 
-    fun getQuestionWiseSumData() {
-        observableQuestionWiseSumList.value = mockQuestionWiseSumData()
 
-    }
-
-    fun mockQuestionWiseSumData(): List<Boolean> {
-        val list = ArrayList<Boolean>()
-        list.add(true)
-        list.add(false)
-        list.add(true)
-        list.add(true)
-        list.add(true)
-        list.add(false)
-        list.add(true)
-        list.add(true)
-        list.add(false)
-        list.add(true)
-        return list
-    }
 
     fun checkIfUserPassed(passed: Boolean?) {
         observableIsUserPassed.value = if (passed!!) View.GONE else View.VISIBLE

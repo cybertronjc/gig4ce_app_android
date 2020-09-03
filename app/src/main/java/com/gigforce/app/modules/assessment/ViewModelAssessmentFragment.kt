@@ -61,9 +61,9 @@ class ViewModelAssessmentFragment(private val modelCallbacks: ModelCallbacks) : 
         modelCallbacks.getQuestionaire(this)
     }
 
-    fun submitAnswers() {
+    fun submitAnswers(id: String?) {
 
-        modelCallbacks.submitAnswers(observableAssessmentData.value!!, this)
+        modelCallbacks.submitAnswers(id!!, observableAssessmentData.value!!, this)
     }
 
     override fun QuestionairreSuccess(value: QuerySnapshot?, e: FirebaseFirestoreException?) {

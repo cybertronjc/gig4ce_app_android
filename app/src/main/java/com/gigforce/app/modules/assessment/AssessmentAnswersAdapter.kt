@@ -11,12 +11,13 @@ import kotlinx.android.synthetic.main.layout_rv_answers_adapter.view.*
 
 class AssessmentAnswersAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var items: ArrayList<OptionsArr>? = null
-    private var showHelper = false;
+    private var showAnswerStatus = false;
     private lateinit var adapterCallbacks: AssessAdapterCallbacks
+    private var message: String? = null
 
     interface AssessAdapterCallbacks {
         fun submitAnswer()
-        fun setAnswered(boolean: Boolean,position: Int)
+        fun setAnswered(isCorrect: Boolean, position: Int)
     }
 
 
@@ -77,7 +78,10 @@ class AssessmentAnswersAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>()
                 holder.itemView.setOnClickListener {
                     if (items!![holder.adapterPosition].clickStatus!!) {
                         items!![holder.adapterPosition].selectedAnswer = true
-                        adapterCallbacks.setAnswered(true,holder.adapterPosition)
+                        adapterCallbacks.setAnswered(
+                            items!![holder.adapterPosition].is_answer!!,
+                            holder.adapterPosition
+                        )
 //                        notifyItemChanged(holder.adapterPosition)
 
                     }
@@ -87,8 +91,8 @@ class AssessmentAnswersAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>()
             }
             MESSAGE_ROW -> {
                 holder.itemView.tv_message_rv_answers_access_frag.visibility =
-                    if (showHelper) View.VISIBLE else View.GONE
-                holder.itemView.tv_message_rv_answers_access_frag.text = "Wow ! You Are Correct"
+                    if (showAnswerStatus) View.VISIBLE else View.GONE
+                holder.itemView.tv_message_rv_answers_access_frag.text = message
             }
 
         }
@@ -100,8 +104,10 @@ class AssessmentAnswersAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>()
         return if (position == items?.size) MESSAGE_ROW else DEFAULT_ROW
     }
 
-    fun addData(items: ArrayList<OptionsArr>) {
+    fun addData(items: ArrayList<OptionsArr>, showAnswerStatus: Boolean, message: String) {
         this.items = items;
+        this.showAnswerStatus = showAnswerStatus
+        this.message = message;
         notifyDataSetChanged()
     }
 

@@ -22,6 +22,7 @@ import com.bumptech.glide.request.target.CustomTarget
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.modules.assessment.models.AssementQuestionsReponse
+import com.gigforce.app.modules.profile.ProfileViewModel
 import com.gigforce.app.utils.*
 import com.gigforce.app.utils.widgets.CustomScrollView
 import com.google.firebase.storage.FirebaseStorage
@@ -47,6 +48,9 @@ class AssessmentFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
     }
     private val viewModelAssessmentFragment: ViewModelAssessmentFragment by lazy {
         ViewModelProvider(this, viewModelFactory).get(ViewModelAssessmentFragment::class.java)
+    }
+    private val viewModelProfile: ProfileViewModel by lazy {
+        ViewModelProvider(this).get(ProfileViewModel::class.java)
     }
     private var selectedPosition: Int = 0
     private var timeTaken = 0;
@@ -90,10 +94,13 @@ class AssessmentFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
 
                 bundle.putBooleanArray(StringConstants.ANSWERS_ARR.value, arr)
                 bundle.putInt(StringConstants.TIME_TAKEN.value, timeTaken)
+                countDownTimer?.cancel();
                 navigate(R.id.assessment_result_fragment, bundle)
             })
             observableDialogInit.observe(viewLifecycleOwner, Observer {
-                initialize()
+                viewModelProfile.getProfileData().observe(viewLifecycleOwner, Observer {
+                    initialize()
+                })
 
 
             })
@@ -144,7 +151,7 @@ class AssessmentFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
     fun setDataAsPerPosition(it: AssementQuestionsReponse) {
         tv_ques_no_assess_frag.text =
             "${getString(R.string.ques)} ${selectedPosition + 1}/${it.assessment?.size} "
-        adapter?.addData(it.assessment!![selectedPosition].options!!)
+        adapter?.addData(it.assessment!![selectedPosition].options!!, false, "")
         val sdf = SimpleDateFormat("hh:mm:ss")
         val date = sdf.parse(it.duration)
 
@@ -176,13 +183,15 @@ class AssessmentFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
             }
 
             override fun onFinish() {
+
                 if (!lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) {
                     pushfinalEvent = true
                     return
                 }
-                 viewModelAssessmentFragment.observableAssessmentData.value?.timeTakenInMillis=
-                     timeTaken.toLong();
-                viewModelAssessmentFragment.submitAnswers()
+                showToast(getString(R.string.time_is_up))
+                viewModelAssessmentFragment.observableAssessmentData.value?.timeTakenInMillis =
+                    timeTaken.toLong();
+                viewModelAssessmentFragment.submitAnswers(viewModelProfile.getProfileData().value?.id)
             }
         }
 
@@ -216,9 +225,9 @@ class AssessmentFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
                 if (viewModelAssessmentFragment.observableAssessmentData.value?.assessment!![selectedPosition].answered) {
                     h_pb_assess_frag.progress = h_pb_assess_frag.max
                     tv_percent_assess_frag.text = getString(R.string.hundred_percent)
-                    viewModelAssessmentFragment.observableAssessmentData.value?.timeTakenInMillis=
+                    viewModelAssessmentFragment.observableAssessmentData.value?.timeTakenInMillis =
                         timeTaken.toLong();
-                    viewModelAssessmentFragment.submitAnswers()
+                    viewModelAssessmentFragment.submitAnswers(viewModelProfile.getProfileData().value?.id)
 
                 } else {
                     showToast(getString(R.string.answer_the_ques))
@@ -253,15 +262,17 @@ class AssessmentFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
         if (pushfinalEvent) {
             pushfinalEvent = false
             Handler().postDelayed({
-                viewModelAssessmentFragment.observableAssessmentData.value?.timeTakenInMillis=
+                showToast(getString(R.string.time_is_up))
+                viewModelAssessmentFragment.observableAssessmentData.value?.timeTakenInMillis =
                     timeTaken.toLong();
-                viewModelAssessmentFragment.submitAnswers()
+                viewModelAssessmentFragment.submitAnswers(viewModelProfile.getProfileData().value?.id)
             }, 500)
 
         }
     }
 
     private fun finalResult() {
+
         if (!lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) {
             pushfinalEvent = true
             return
@@ -281,12 +292,13 @@ class AssessmentFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
         }
         val questions =
             viewModelAssessmentFragment.observableAssessmentData.value!!.assessment!!.size
+        var isPassed =
+            (answers / questions.toFloat()) * 100 >= viewModelAssessmentFragment.observableAssessmentData.value?.passing_percentage!!
 
         showDialog(
             AssessmentDialog.STATE_PASS, bundleOf(
-
                 StringConstants.RIGHT_ANSWERS.value to answers,
-                StringConstants.ASSESSMENT_DIALOG_STATE.value to if (answers >= viewModelAssessmentFragment.observableAssessmentData.value!!.assessment!!.size / 2.toFloat()) AssessmentDialog.STATE_PASS else AssessmentDialog.STATE_REAPPEAR,
+                StringConstants.ASSESSMENT_DIALOG_STATE.value to if (isPassed) AssessmentDialog.STATE_PASS else AssessmentDialog.STATE_REAPPEAR,
                 StringConstants.QUESTIONS_COUNT.value to questions
 
             )
@@ -347,7 +359,7 @@ class AssessmentFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
         }
     }
 
-    override fun setAnswered(boolean: Boolean, position: Int) {
+    override fun setAnswered(isCorrect: Boolean, position: Int) {
         viewModelAssessmentFragment.observableAssessmentData.value?.assessment!![selectedPosition].answered =
             true
         val optionsArr =
@@ -363,16 +375,19 @@ class AssessmentFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
 //            }
 
         }
-        adapter?.addData(optionsArr ?: arrayListOf())
-        sv_assess_frag.postDelayed(Runnable {
-            val y: Float =
-                rv_options_assess_frag.y + rv_options_assess_frag.getChildAt(position).y
-            val v = rv_options_assess_frag.findViewHolderForAdapterPosition(position)
-            sv_assess_frag.post {
-                sv_assess_frag.smoothScrollTo(0, y.toInt())
+        adapter?.addData(
+            optionsArr ?: arrayListOf(),
+            true,
+            if (isCorrect) getString(R.string.woe_you_are_correct) else getString(
+                R.string.you_are_incorrect
+            )
+        )
 
-            }
-        }, 600)
+        val y: Float =
+            rv_options_assess_frag.y + rv_options_assess_frag.getChildAt(position).y
+        sv_assess_frag.post {
+            sv_assess_frag.fullScroll(View.FOCUS_DOWN)
+        }
 
 
     }
