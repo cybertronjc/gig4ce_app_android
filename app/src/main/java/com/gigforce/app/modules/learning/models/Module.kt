@@ -16,7 +16,7 @@ data class Module(
 
     @get:PropertyName("module_no")
     @set:PropertyName("module_no")
-    var moduleNo: Int = 1,
+    var moduleNo: Int = 0,
 
     var totalLessons: Int = 0,
     var lessonsCompleted: Int = 0,

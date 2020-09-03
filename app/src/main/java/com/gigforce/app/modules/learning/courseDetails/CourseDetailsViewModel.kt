@@ -16,6 +16,10 @@ class CourseDetailsViewModel constructor(
 ) : ViewModel() {
 
     private var mLastReqCourseDetails: Course? = null
+    var currentModules : List<Module>? = null
+    var currentlySelectedModule : Module? = null
+    var currentLessons : List<CourseContent>? = null
+    var currentAssessments : List<CourseContent>? = null
 
     private val _courseDetails = MutableLiveData<Lce<Course>>()
     val courseDetails: LiveData<Lce<Course>> = _courseDetails
@@ -54,15 +58,15 @@ class CourseDetailsViewModel constructor(
             val courseModules = learningRepository.getModules(
                 courseId = courseId
             )
+            currentModules = courseModules
             _courseModules.postValue(Lce.content(courseModules))
 
             if (courseModules.isNotEmpty()) {
 
-                //TODO change logic
-                val activeModule = courseModules.first()
+                currentlySelectedModule = courseModules.first()
                 getCourseLessonsAndAssessments(
                     courseId = courseId,
-                    moduleId = activeModule.id
+                    moduleId = currentlySelectedModule!!.id
                 )
             } else {
                 _courseLessons.postValue(Lce.content(emptyList()))
@@ -91,12 +95,13 @@ class CourseDetailsViewModel constructor(
                 courseId = courseId,
                 moduleId = moduleId
             )
-
+            currentLessons = courseLessons
             _courseLessons.postValue(Lce.content(courseLessons))
 
             val assessments = courseLessons.filter {
                 it.type == CourseContent.TYPE_ASSESSMENT
             }
+            currentAssessments = assessments
             _courseAssessments.postValue(Lce.content(assessments))
 
         } catch (e: Exception) {

@@ -64,7 +64,6 @@ class LearningCourseDetailsFragment : BaseFragment() {
 
         if (mModuleId != null) {
             //Hide Module
-
             viewModel.getCourseDetails(mCourseId)
             viewModel.getCourseLessonsAndAssessments(mCourseId, mModuleId!!)
         } else {
@@ -225,6 +224,8 @@ class LearningCourseDetailsFragment : BaseFragment() {
         learning_details_progress_bar.gone()
         learning_details_lessons_rv.visible()
 
+        loadModulesInfoInView()
+
         if (content.size > 4) {
             lessonsSeeMoreButton.visible()
             mAdapter.updateCourseContent(content.take(4))
@@ -232,6 +233,14 @@ class LearningCourseDetailsFragment : BaseFragment() {
             lessonsSeeMoreButton.gone()
             mAdapter.updateCourseContent(content)
         }
+    }
+
+    private fun loadModulesInfoInView() {
+        levelTV.text = "Module ${viewModel.currentlySelectedModule?.moduleNo} Of ${viewModel.currentModules?.size}"
+        complitionStatusTv.text = "0/${viewModel.currentLessons?.size} Lessons Completed"
+        assessmentCountTv.text = "${viewModel.currentAssessments?.size} Assessments"
+
+        lessonsLabel.text = "Lesson (${viewModel.currentlySelectedModule?.title})"
     }
 
     private fun showErrorInLoadingLessons(error: String) {
@@ -283,6 +292,7 @@ class LearningCourseDetailsFragment : BaseFragment() {
                 PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
                     //navigate(R.id.learningVideoFragment)
                     val module = item as Module
+                    viewModel.currentlySelectedModule = module
                     viewModel.getCourseLessonsAndAssessments(
                         courseId = mCourseId,
                         moduleId = module.id
