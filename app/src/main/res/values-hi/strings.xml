@@ -15,10 +15,10 @@
     <string name="intro_slide2_title">एक पेशेवर बनें</string>
     <string name="intro_slide2_subtitle">एक प्रोफ़ाइल बनाएं और अपने कौशल को अपग्रेड करने के लिए ट्रेन करें</string>
     <string name="intro_slide3_title">काम होने दो</string>
-
     <string name="intro_slide3_subtitle">अपनी प्राथमिकता तय करें और जिग्स आपको पाएंगे</string>
     <string name="ob_slide1_title">ज्ञानप्राप्ति</string>
-    <string name="ob_slide1_subtitle">कैसे - १ </string>
+    <string name="ob_slide1_subtitle">कैसे - १
+</string>
     <string name="ob_slide2_title">ज्ञानप्राप्ति</string>
     <string name="ob_slide2_subtitle">कैसे - २</string>
     <string name="ob_slide3_title">ज्ञानप्राप्ति</string>
@@ -44,13 +44,17 @@
     <string name="about_card_about_text">मेरे बारे में</string>
     <string name="about_card_content_placeholder">मेरे बारे में लिखें</string>
     <string name="experience_card_experience_text">अनुभव</string>
-    <string name="experience_expanded_add_experience_text">+ अनुभव जोड़ें</string>
+    <string name="experience_expanded_add_experience_text">
+    + अनुभव जोड़ें</string>
     <string name="education_expanded_Education_text">शिक्षा</string>
     <string name="education_expanded_skills_text">कौशल</string>
     <string name="education_expanded_achievements_text">उपलब्धियां</string>
-    <string name="education_expanded_add_education_text">+ शिक्षा जोड़ें</string>
-    <string name="education_expanded_add_skill_text">+ कौशल जोड़ें</string>
-    <string name="education_expanded_add_achievement_text">+ उपलब्धि जोड़ें</string>
+    <string name="education_expanded_add_education_text">
+    + शिक्षा जोड़ें</string>
+    <string name="education_expanded_add_skill_text">
+    + कौशल जोड़ें</string>
+    <string name="education_expanded_add_achievement_text">
+    + उपलब्धि जोड़ें</string>
     <string name="education_expanded_user_name">नाम</string>
     <string name="nav_education_text">शिक्षा</string>
     <string name="nav_about_text">मेरे बारे में</string>
@@ -75,14 +79,16 @@
     <string name="add_contact_email">ईमेल</string>
     <string name="about_expanded_bio_text">जैव</string>
     <string name="about_expanded_language_text">भाषा ज्ञात</string>
-    <string name="about_expanded_add_language_text">+ भाषा जोड़ें</string>
+    <string name="about_expanded_add_language_text">
+    + भाषा जोड़ें</string>
     <string name="about_expanded_contact_text">संपर्क विवरण</string>
-    <string name="about_expanded_add_contact_text">+ संपर्क जोड़ें</string>
+    <string name="about_expanded_add_contact_text">संपर्क जोड़ें</string>
     <string name="add_language_new_language">नई भाषा</string>
     <string name="add_language_name">भाषा: हिन्दी *</string>
     <string name="add_language_speaking_level">बोलने का स्तर</string>
     <string name="add_language_writing_level">लेखन स्तर</string>
     <string name="title_lang">भाषा चुनें</string>
+    <string name="login">लॉग इन करें</string>
     <string name="title_login">कृपया लॉगिन करें</string>
     <string name="mobile_login">मोबाइल नंबर दर्ज करें</string>
     <string name="confirm_login">पुष्टि करें</string>
@@ -101,6 +107,7 @@
     <string name="otp_hint">_ _ _ _ _ _ _</string>
     <string name="otp_verify">वेरिफाइ करें</string>
     <string name="otp_reenter_mobile">मोबाइल नंबर फिर से डालें</string>
+    <string name="otp_send_otp">OTP भेजें</string>
     <string name="add_experience_new_experience">नया अनुभव</string>
     <string name="add_experience_title">भूमिका *</string>
     <string name="add_experience_employment_type">रोजगार के प्रकार *</string>
@@ -169,7 +176,8 @@
     <string name="bio_hint_text">अपने आप को एक पंक्ति में बताएं</string>
     <string name="add_tags">टैग लगा दो</string>
     <string name="hs_rv_title">डंज़ो डेलीवरी</string>
-    <string name="hs_rv_subtitle">+2 और</string>
+    <string name="hs_rv_subtitle">
+    +2 और</string>
     <string name="hs_rv_date">43831</string>
     <string name="hs_rv_month">अप्रैल</string>
     <string name="hs_rv_comment">पिछली बार डिलीवरी 20 मिनट पहले हुई थी</string>
@@ -299,152 +307,6 @@
     <string name="action_report">रिपोर्ट</string>
     <string name="action_invite_friends">दोस्तों को आमंत्रित करें</string>
     <string name="action_refresh">ताज़ा करें</string>
-    <string name="please_provide_following_details">कृपया निम्नलिखित विवरण प्रदान करें।</string>
-    <string name="good_luck">शुभ लाभ!!!</string>
-    <string name="start_assessment">मूल्यांकन शुरू करें</string>
-    <string name="congrats">बधाई</string>
-    <string name="assess_complete">मूल्यांकन सफलतापूर्वक पूरा हुआ</string>
-    <string name="scorecard">स्कोरकार्ड</string>
 
-    <string name="my_gigs">My Gigs</string>
-    <string name="punch_in">Punch In</string>
-    <string name="past">Past</string>
-    <string name="upcoming">Upcoming</string>
-    <string name="punch_out">Punch Out</string>
-    <string name="hours">hrs</string>
-    <string name="mins">mins</string>
-    <string name="no_on_going_gigs">No On Going Gigs</string>
-
-    <string name="pending">Pending</string>
-    <string name="explore_by_role">Explore By Role</string>
-    <string name="oops">उफ़ !!!</string>
-    <string name="keep_it_up">इसे बनाए रखें</string>
-    <string name="you_ll_soon_be_sent_invites_for_best_gigs_around_for_you">आप \\\ &amp;#x27;जल्द ही आप के लिए सबसे अच्छा gigs के लिए आमंत्रित किया जाएगा</string>
-    <string name="time_taken">समय लिया:</string>
-    <string name="question_wise_summary">प्रश्न वार सारांश</string>
-    <string name="suggested_learnings">सीखे हुए सुझाव</string>
-    <string name="share">शेयर</string>
-    <string name="complete_now">अब पूरा करें</string>
-    <string name="completed">पूरे</string>
-    <string name="complete_your_verification">अपना सत्यापन पूरा करें</string>
-    <string name="verification">सत्यापन</string>
-    <string name="verified_giger_s_get_recruited_first">आरक्षित गिगर के पहले भर्ती हो जाते हैं</string>
-    <string name="my_calendar">मेरा कैलेंडर</string>
-    <string name="giger_verification">गीगर सत्यापन</string>
-    <string name="ifsc">IFSC *</string>
-    <string name="bank_name">बैंक का नाम *</string>
-    <string name="account_no">खाता संख्या *</string>
-    <string name="bank_passbook_front_image">बैंक पासबुक (फ्रंट इमेज)</string>
-    <string name="ifsc_code">IFSC कोड:</string>
-    <string name="bank_name_with_colon">बैंक का नाम :</string>
-    <string name="bank_account_no">बैंक खाता संख्या :</string>
-    <string name="please_provide_the_following_information">कृपया निम्नलिखित जानकारी प्रदान करें।</string>
-    <string name="aadhar_number">आधार संख्या *</string>
-    <string name="state_pascal_case">राज्य</string>
-    <string name="driving_license_number">ड्राइविंग लाइसेंस नंबर *</string>
-    <string name="driving_license_front_image">ड्राइविंग लाइसेंस (फ्रंट इमेज)</string>
-    <string name="driving_license_back_image">ड्राइविंग लाइसेंस (बैक इमेज)</string>
-    <string name="dl_state_w_colon">डीएल राज्य :</string>
-    <string name="dl_no_w_colon">डीएल नं :</string>
-    <string name="pan_number">पैन नंबर *</string>
-    <string name="video_recorded">वीडियो रिकॉर्ड किया गया</string>
-    <string name="why_do_we_need_this_pan">प्रोफाइल सत्यापन के लिए पैन कार्ड अनिवार्य है। यह आपके नाम और जन्म तिथि को सत्यापित करने में मदद करता है और आपके बटुए को भुगतान करने में भी मदद करता है।</string>
-    <string name="alert">चेतावनी</string>
-    <string name="you_are_reuploading_pan_card">आप अपने पैन विवरण को फिर से अपलोड कर रहे हैं, उन्हें एक बार फिर से सत्यापित किया जाएगा, जिसमें 7 दिन लग सकते हैं</string>
-    <string name="enter_valid_pan">मान्य पैन कार्ड सं</string>
-    <string name="click_select_pan_image">सबसे पहले अपनी पैन कार्ड छवि पर क्लिक करें या चयन करें</string>
-    <string name="pan_details_uploaded">पैन कार्ड विवरण अपलोड</string>
-    <string name="unable_to_capture_image">छवि पर कब्जा करने में असमर्थ</string>
-    <string name="pan_card_image">पैन कार्ड की छवि</string>
-    <string name="got_it">ठीक हैं</string>
-    <string name="aadhar_card_front_image">आधार कार्ड (फ्रंट इमेज)</string>
-    <string name="aadhar_card_back_image">आधार कार्ड (बैक इमेज)</string>
-    <string name="why_we_need_this_aadhar">प्रोफ़ाइल सत्यापन के लिए आधार या ड्राइवर का लाइसेंस अपलोड करना अनिवार्य है। आधार कार्ड आपके नाम, जन्म तिथि, पते और अन्य विवरणों को सत्यापित करने में मदद करता है।
-</string>
-    <string name="aadhar_card_details_uploaded">आधार कार्ड विवरण अपलोड किया गया</string>
-    <string name="you_are_reuploading_aadhar">आप अपने आधार विवरणों को फिर से अपलोड कर रहे हैं, उन्हें एक बार फिर से सत्यापित किया जाएगा, जिसमें 7 दिन लग सकते हैं</string>
-    <string name="select_or_capture_both_sides_of_aadhar">आधार कार्ड के दोनों किनारों को चुनें या कैप्चर करें</string>
-    <string name="enter_valid_aadhar_no">कृपया सही आधार कार्ड नंबर जोड़ें</string>
-    <string name="video_uploaded">वीडियो अपलोड किया गया</string>
-    <string name="why_we_need_this_dl">प्रोफ़ाइल सत्यापन के लिए ड्राइवर का लाइसेंस या आधार कार्ड अपलोड करना अनिवार्य है। ड्राइविंग लाइसेंस आपके नाम, जन्म तिथि, पते और अन्य विवरणों को सत्यापित करने में मदद करता है।</string>
-    <string name="dl_image_front_side">ड्राइविंग लाइसेंस (सामने की ओर)</string>
-    <string name="dl_image_back_side">ड्राइविंग लाइसेंस (बैक साइड)</string>
-    <string name="dl_details_uploaded">ड्राइविंग लाइसेंस विवरण अपलोड किया गया</string>
-    <string name="reuploading_driving_license">आप अपने ड्राइविंग लाइसेंस के विवरण को फिर से अपलोड कर रहे हैं, उन्हें एक बार फिर से सत्यापित किया जाएगा, जिसमें 7 दिन लग सकते हैं</string>
-    <string name="capture_both_sides_dl">ड्राइविंग लाइसेंस के दोनों किनारों को चुनें या कब्जा करें</string>
-    <string name="enter_valid_dl">वैध ड्राइविंग लाइसेंस दर्ज करें</string>
-    <string name="select_dl_state">ड्राइविंग लाइसेंस राज्य चुनें</string>
-    <string name="why_we_need_this_bank">बैंक विवरण आपके खाते में भुगतान करने और भुगतान करने के लिए अनिवार्य हैं। यह आपके नाम, पते, जन्म तिथि और अन्य विवरणों को सत्यापित करने में भी मदद करता है।</string>
-    <string name="enter_valid_ifsc">मान्य आईएफएससी कोड दर्ज करें</string>
-    <string name="enter_bank_name">बैंक का नाम दर्ज करें</string>
-    <string name="bank_name_too_short">बैंक का नाम बहुत छोटा है</string>
-    <string name="enter_valid_acc_no">एक वैध खाता संख्या दर्ज करें</string>
-    <string name="click_or_select_bank_passbook">पहले अपनी पासबुक छवि पर क्लिक करें या चयन करें</string>
-    <string name="your_are_reuploading_bank_details">आप अपने बैंक विवरण पुनः अपलोड कर रहे हैं, उन्हें एक बार फिर से सत्यापित किया जाएगा, जिसमें 7 दिन तक का समय लग सकता है</string>
-    <string name="bank_details_uploaded">बैंक विवरण अपलोड किया गया</string>
-    <string name="let_s_go">ठीक हैं</string>
-    <string name="thank_you">धन्यवाद!</string>
-    <string name="documents_uploaded_long">जैसे-जैसे आपके दस्तावेज़ सत्यापित होते जाएंगे, आप अपने गिग्स को शुरू कर पाएंगे।</string>
-    <string name="under_verification">सत्यापन के तहत</string>
-    <string name="verifying">सत्यापन</string>
-
-    <string name="valid_upto">Valid Upto :</string>
-    <string name="giger_since">Giger Since</string>
-    <string name="gig_id">Gig Id :</string>
-    <string name="gigforce_pvt_ltd">Gigforce Pvt. Ltd.</string>
-    <string name="issued_on">Issued On</string>
-    <string name="go_to_settings">सेटिंग्स में जाओ</string>
-    <string name="camera_and_audtio_permission_required_to_access_camera">कैमरा और ऑडियो अनुमति वीडियो रिकॉर्ड करने के लिए आवश्यक है</string>
-    <string name="how_to_rec_selfie_video_content">\n
-आपकी एक 10 सेकंड की वीडियो रिकॉर्ड करें।\n
-सेल्फी मोड में कैमरे की ओर देखें और कहें, "हैलो, मैं (आपका नाम) हूं और मुझे ये करना पसंद है - (2 चीजें जो आप करना चाहते हैं उनका उल्लेख करें।)</string>
-    <string name="download_id_card">Download Id Card</string>
-    <string name="add_bio">Add Bio</string>
-    <string name="provide_feedback">Provide Feedback</string>
-    <string name="pending_rating_from_client">Pending Rating From Client</string>
-    <string name="you_have_rated_this_gig_as">You Have Rated This Gig As</string>
-    <string name="rating_you_received">Rating You Have Received From Client</string>
-    <string name="is_whats_app_number">Is Whatsapp Number</string>
-    <string name="this_is_my_whatsapp_number">This is my Whatsapp number</string>
-    <string name="add_contact">Add Contact</string>
-    <string name="edit_contact">Edit Contact</string>
-    <string name="edit_email">Edit Email</string>
-    <string name="email">Email</string>
-    <string name="empty_string_validation">Field cannot be empty</string>
-    <string name="validation_phone">Please enter a valid phone number</string>
-    <string name="validation_email">Please enter a valid email id</string>
-    <string name="emails">Emails</string>
-    <string name="add_email">Add Email</string>
-    <string name="contact">Contact</string>
-    <string name="add_contacts">Add contacts</string>
-    <string name="contact_hyphen">phone:</string>
-    <string name="ques">Ques</string>
-    <string name="answer_the_ques">Please Answer Question to Continue!!!</string>
-    <string name="record_a_10_second_video_of_yourself_nface_the_camera_and_say_hi_i_m_your_name_and_i_like_to_do_mention_2_things_you_like_to_do_selfie_video">Record a 10-second video of yourself\nFace the camera and say “Hi, I’m (your name) and I like to do (mention 2 things you like to do.)</string>
-    <string name="pan_number_eg_bttps4444a">PAN Number (Eg: BTTPS4444A)</string>
-    <string name="aadhar_number_eg_444433332222">Aadhar Number* (Eg: 444433332222)</string>
-    <string name="driving_license_number_n_eg_if_the_driving_licence_number_is_rj_13_dlc_12_123456_rj1320120123456">Driving Licence Number * (Accepted formats of DL are as follows: RJ0520091048627. For other formats please call your supervisor for help)</string>
-    <string name="ifsc_eg_sbin0000572_bkid0000048">IFSC* (Eg: SBIN0000572, BKID0000048)</string>
-    <string name="account_number_eg_10_16_digit_number_30000011111111111">Account number* (Eg: 10-16 digit number : 30000011111111111)</string>
-    <string name="please_note_that_you_are_not_allowed_to_change_the_mobile_number_you_logged_in_with">Please note that you are not allowed to change the mobile number you logged in with.</string>
-    <string name="email_madatory">Email*</string>
-    <string name="phone_mandatory">Phone*</string>
-    <string name="assessment_colon">Assessment :</string>
-    <string name="total_questions">Total Questions</string>
-    <string name="time_duration">Time Duration</string>
-    <string name="level">Level</string>
-    <string name="u_attempt">You attempt</string>
-    <string name="questions">questions</string>
-    <string name="and_from">and from</string>
-    <string name="that">that</string>
-    <string name="answer_is_correct">answer is correct.</string>
-    <string name="attempt">attempt</string>
-    <string name="is_string">is</string>
-    <string name="seconds">seconds</string>
-    <string name="assessment_not_completed">Assessment Not Completed Successfully</string>
-    <string name="hundred_percent">100%</string>
-    <string name="woe_you_are_correct">Wow ! You are correct.</string>
-    <string name="you_are_incorrect">Oops ! You are incorrect.</string>
-    <string name="time_is_up">Time is Up!!!!!</string>
 
 </resources>
