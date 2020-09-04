@@ -42,7 +42,8 @@ class AddExperienceBottomSheet : ProfileBaseBottomSheetFragment() {
     }
 
     private fun setListeners() {
-        employments.addAll(listOf("Full time", "Internship", "Part time"))
+        employments.addAll(listOf(getString(R.string.full_time), getString(R.string.internship), getString(
+                    R.string.part_time)))
         val employmentAdapter = DropdownAdapter(this.requireContext(), employments)
         val employmentSpinner = employment_type
         employmentSpinner.setAdapter(employmentAdapter)
@@ -92,7 +93,8 @@ class AddExperienceBottomSheet : ProfileBaseBottomSheetFragment() {
         }
 
         currently_work_here.setOnCheckedChangeListener { currently_work_here, isChecked ->
-            Toast.makeText(context, "CHECKED", Toast.LENGTH_LONG).show()
+            //TODO: Translate to hindi
+            Toast.makeText(context, getString(R.string.checked), Toast.LENGTH_LONG).show()
             currentlyWorkHere = isChecked
             if (isChecked) {
                 end_date.setText("")

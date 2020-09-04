@@ -11,6 +11,7 @@
         android:layout_height="wrap_content"
         android:paddingBottom="90dp">
 
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/learningToolbarLayout"
             android:layout_width="match_parent"
@@ -278,6 +279,7 @@
             android:layout_marginStart="15dp"
             android:layout_marginTop="15dp"
             android:fontFamily="@font/lato_bold"
+            android:text="@string/lessons"
             android:text="Lessons"
             android:textColor="#000000"
             android:textSize="16sp"
@@ -326,8 +328,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
-            android:text="SEE MORE"
-            app:strokeColor="@color/lipstick"
+            android:text="@string/see_more"
             android:layout_marginLeft="12dp"
             android:layout_marginRight="12dp"
             app:layout_constraintTop_toBottomOf="@id/lessons_container" />
@@ -348,7 +349,7 @@
             android:layout_marginStart="15dp"
             android:layout_marginTop="12dp"
             android:fontFamily="@font/lato_bold"
-            android:text="Assessment"
+            android:text="@string/assessment_"
             android:textColor="#000000"
             android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
@@ -394,11 +395,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="SEE MORE"
-            app:strokeColor="@color/lipstick"
+            android:text="@string/see_more"
             android:layout_marginLeft="12dp"
             android:layout_marginRight="12dp"
-            app:layout_constraintTop_toBottomOf="@id/assessments_container" />
+            app:layout_constraintTop_toBottomOf="@id/assessmentItem4" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

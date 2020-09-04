@@ -54,14 +54,23 @@ class MainLearningFragment : BaseFragment() {
             activity?.onBackPressed()
         }
 
+        dummLayout1.videoTitleTV.text = getString(R.string.achieve_retail_goal)
+        dummLayout1.videoDescTV.text = getString(R.string.industry_based)
+        dummLayout1.videoThumbnailIV.setImageDrawable(resources.getDrawable(R.drawable.recent_added_learning))
         journey_completed_cardview.setOnClickListener {
             navigate(R.id.myLearningFragment)
         }
 
+        dummLayout2.videoTitleTV.text = getString(R.string.apply_driving_license)
+        dummLayout2.videoDescTV.text = getString(R.string.role_based)
+        dummLayout2.videoThumbnailIV.setImageDrawable(resources.getDrawable(R.drawable.recent_added_learning2))
         journey_ongoing_cardview.setOnClickListener {
             navigate(R.id.myLearningFragment)
         }
 
+        dummLayout3.videoTitleTV.text = getString(R.string.achieve_retail_goal)
+        dummLayout3.videoDescTV.text = getString(R.string.industry_based)
+        dummLayout3.videoThumbnailIV.setImageDrawable(resources.getDrawable(R.drawable.recent_added_learning1))
         journey_pending_cardview.setOnClickListener {
             navigate(R.id.myLearningFragment)
         }
@@ -352,7 +361,6 @@ class MainLearningFragment : BaseFragment() {
         })
 
     }
-
     private fun displayImage(profileImg: String) {
         if (profileImg != "avatar.jpg" && profileImg != "") {
             val profilePicRef: StorageReference =
@@ -368,9 +376,8 @@ class MainLearningFragment : BaseFragment() {
                 .into(profile_image_main)
         }
     }
-
     private fun listener() {
-        chat_icon_iv.setOnClickListener {
+        chat_icon_iv.setOnClickListener{
             navigate(R.id.contactScreenFragment)
         }
     }
@@ -437,7 +444,7 @@ class MainLearningFragment : BaseFragment() {
                     var subtitle = getTextView(viewHolder, R.id.subtitle)
                     subtitle.text = obj?.subtitle
 
-                    var img = getImageView(viewHolder, R.id.img)
+                    var img = getImageView(viewHolder,R.id.img)
                     img.setImageResource(obj?.imgIcon!!)
                 })
         recyclerGenericAdapter.list = datalist
@@ -495,7 +502,7 @@ class MainLearningFragment : BaseFragment() {
                     var subtitle = getTextView(viewHolder, R.id.title)
                     subtitle.text = obj?.subtitle
 
-                    var img = getImageView(viewHolder, R.id.learning_img)
+                    var img = getImageView(viewHolder,R.id.learning_img)
                     img.setImageResource(obj?.imgIcon!!)
                 })
         recyclerGenericAdapter.list = datalist

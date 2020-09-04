@@ -220,11 +220,11 @@ class ProfileFragment : BaseFragment() {
                 }
             }
 
-            layout.main_about_card.card_title.text = "About me"
+            layout.main_about_card.card_title.text = getString(R.string.about_me)
             layout.main_about_card.card_content.text = mainAboutString
             layout.main_about_card.card_icon.setImageResource(R.drawable.about_me_new)
             if (mainAboutString.trim().isEmpty())
-                layout.main_about_card.card_view_more.text = "Add bio"
+                layout.main_about_card.card_view_more.text = getString(R.string.add_bio_profile)
             layout.main_about_card.card_view_more.setOnClickListener {
                 findNavController().navigate(
                     R.id.aboutExpandedFragment, bundleOf(
@@ -271,17 +271,17 @@ class ProfileFragment : BaseFragment() {
             profile.achievements?.let {
                 val achievements = it.sortedByDescending { achievement -> achievement.year }
                 for ((index, value) in achievements.withIndex()) {
-                    mainEducationString += if (index == 0) "Achievements: " + value.title + "\n"
+                    mainEducationString += if (index == 0) getString(R.string.achievements_colon) + " " + value.title + "\n"
                     else "\t\t\t\t\t\t\t\t\t\t\t\t" + value.title + "\n"
                 }
             }
 
             Log.d("ProfileFragment", mainEducationString)
-            layout.main_education_card.card_title.text = "Education"
+            layout.main_education_card.card_title.text = getString(R.string.education)
             layout.main_education_card.card_content.text = mainEducationString
             layout.main_education_card.card_icon.setImageResource(R.drawable.ic_education_new)
             if (mainEducationString.trim().isEmpty())
-                layout.main_education_card.card_view_more.text = "Add Education"
+                layout.main_education_card.card_view_more.text = getString(R.string.add_education)
             layout.main_education_card.card_view_more.setOnClickListener {
                 findNavController().navigate(R.id.educationExpandedFragment)
             }
@@ -304,11 +304,11 @@ class ProfileFragment : BaseFragment() {
                 }
             }
 
-            layout.main_experience_card.card_title.text = "Experience"
+            layout.main_experience_card.card_title.text = getString(R.string.experience)
             layout.main_experience_card.card_content.text = mainExperienceString
             layout.main_experience_card.card_icon.setImageResource(R.drawable.ic_experience)
             if (mainExperienceString.trim().isEmpty())
-                layout.main_experience_card.card_view_more.text = "Add Experience"
+                layout.main_experience_card.card_view_more.text = getString(R.string.add_experience)
             layout.main_experience_card.card_view_more.setOnClickListener {
                 findNavController().navigate(R.id.experienceExpandedFragment)
             }

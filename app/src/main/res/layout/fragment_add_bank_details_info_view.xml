@@ -36,7 +36,7 @@
             android:layout_marginTop="4dp"
             android:fontFamily="@font/lato"
             android:letterSpacing="-0.01"
-            tools:text="Under Verification"
+            tools:text="@string/under_verification"
             android:textColor="@color/yellow"
             android:textSize="12sp"
             app:layout_constraintEnd_toStartOf="@+id/editLayout"

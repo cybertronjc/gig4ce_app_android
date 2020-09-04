@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import androidx.core.os.bundleOf
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -24,11 +25,11 @@ import kotlinx.android.synthetic.main.fragment_profile_about_expanded.*
 import kotlinx.android.synthetic.main.fragment_profile_about_expanded.view.*
 import kotlinx.android.synthetic.main.profile_card_background.view.*
 
+class AboutExpandedFragment : ProfileBaseFragment() {
 class AboutExpandedFragment : ProfileBaseFragment(), ProfileCardBgCallbacks,
     AddContactBottomSheetFragment.AddContactBottomSheetCallbacks {
     companion object {
         fun newInstance() = AboutExpandedFragment()
-
 
         const val ACTION_OPEN_EDIT_ABOUT_ME_BOTTOM_SHEET = 31
         const val ACTION_OPEN_EDIT_LANGUAGE_BOTTOM_SHEET = 32
@@ -57,7 +58,6 @@ class AboutExpandedFragment : ProfileBaseFragment(), ProfileCardBgCallbacks,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-//        viewModel.updateEmail( profileViewModel.userProfileData.value?.id!!)
         arguments?.let {
             cameFromLandingPage = it.getBoolean(INTENT_EXTRA_CAME_FROM_LANDING_SCREEN)
             action = it.getInt(INTENT_EXTRA_ACTION)
@@ -132,27 +132,31 @@ class AboutExpandedFragment : ProfileBaseFragment(), ProfileCardBgCallbacks,
         bio_card.isBottomRemoved = profile.aboutMe.isNotEmpty()
         bio_card.hasContentTitles = false
         bio_card.nextDestination = R.id.addAboutMeBottomSheet
-
-        bio_card.cardTitle = "Bio"
+        bio_card.cardTitle = getString(R.string.bio_profile)
         bio_card.cardContent = if (profile.aboutMe != "") profile.aboutMe
         else this.requireContext().getString(R.string.empty_about_me_text)
         bio_card.cardBottom = if (profile.aboutMe != "") ""
-        else "Add bio"
+        else getString(R.string.add_bio_profile)
 
-        var languageString = ""
-        profile.languages?.let {
-            val languages = it.sortedByDescending { language -> language.speakingSkill }
-            for (lang in languages) {
-                languageString += lang.name + "\n"
-                languageString += "Speaking " + getLanguageLevel(lang.speakingSkill.toInt()) + "\n"
-                languageString += "Writing " + getLanguageLevel(lang.writingSkill.toInt()) + "\n\n"
+            var languageString = ""
+            profile.languages?.let {
+                val languages = it.sortedByDescending { language -> language.speakingSkill }
+                for (lang in languages) {
+                    languageString += lang.name + "\n"
+                    languageString += getString(R.string.speaking) + " " + getLanguageLevel(lang.speakingSkill.toInt()) + "\n"
+                    languageString += getString(R.string.writing) + " " + getLanguageLevel(lang.writingSkill.toInt()) + "\n\n"
+                }
             }
-        }
-        language_card.nextDestination = R.id.editLanguageBottomSheet
-        language_card.cardTitle = "Language"
-        language_card.cardContent = languageString
-        language_card.cardBottom = "Add languages"
+            language_card.nextDestination = R.id.editLanguageBottomSheet
+            language_card.cardTitle = getString(R.string.language)
+            language_card.cardContent = languageString
+            language_card.cardBottom = getString(R.string.add_lang)
 
+            var contactString = ""
+            profile.contact?.let {
+                for (contact in it) {
+                    contactString += getString(R.string.phone_colon) + " " + contact.phone + "\n"
+                    contactString += getString(R.string.email_colon)+" "+ contact.email + "\n\n"
         var contactString = ""
         profile.contactPhone?.let {
             for (contactPhone in it) {
@@ -164,6 +168,10 @@ class AboutExpandedFragment : ProfileBaseFragment(), ProfileCardBgCallbacks,
                     }
                 }
             }
+            contact_card.hasContentTitles = false
+            contact_card.cardTitle = getString(R.string.contact)
+            contact_card.cardContent = contactString
+            contact_card.cardBottom = getString(R.string.add_contact)
         }
         contact_card.hasContentTitles = false
         contact_card.cardTitle = getString(R.string.contact)
@@ -196,9 +204,6 @@ class AboutExpandedFragment : ProfileBaseFragment(), ProfileCardBgCallbacks,
 //            }
 //        }
 
-        about_top_profile.userName = profile.name
-        about_top_profile.imageName = profile.profileAvatarName
-//        profileViewModel.listener?.remove()
     }
 
     private fun setListeners() {
@@ -207,7 +212,7 @@ class AboutExpandedFragment : ProfileBaseFragment(), ProfileCardBgCallbacks,
             this.findNavController().navigate(R.id.addAboutMeBottomSheet)
         }
 
-        language_card.card_bottom.setOnClickListener {
+        language_card.card_bottom.setOnClickListener{
             this.findNavController().navigate(R.id.addLanguageBottomSheetFragment)
         }
 
@@ -258,9 +263,10 @@ class AboutExpandedFragment : ProfileBaseFragment(), ProfileCardBgCallbacks,
 
     private fun getLanguageLevel(level: Int): String {
         return when (level) {
-            in 0..25 -> "beginner"
-            in 26..75 -> "moderate"
-            else -> "advanced"
+            in 0..25 -> getString(R.string.beginner)
+            //TODO: Hindi Translation left
+            in 26..75 -> getString(R.string.moderate)
+            else -> getString(R.string.advanced)
         }
     }
 

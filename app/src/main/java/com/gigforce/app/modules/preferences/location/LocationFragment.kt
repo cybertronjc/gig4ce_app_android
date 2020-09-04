@@ -67,7 +67,10 @@ class LocationFragment : BaseFragment() {
             preferredDistanceTV.text = getString(R.string.add_current_address)
         } else {
             arroundCurrentAddSwitch.isEnabled = true
-            preferredDistanceTV.text = viewModel.getCurrentAddress()?.preferred_distance.toString()+" KM Around the Current Address"
+            preferredDistanceTV.text =
+                viewModel.getCurrentAddress()?.preferred_distance.toString() + " " + getString(
+                    R.string.km_around
+                )
         }
         arroundCurrentAddSwitch.isChecked = viewModel.getCurrentAddress()?.preferredDistanceActive!!
     }
@@ -86,8 +89,7 @@ class LocationFragment : BaseFragment() {
             if (viewModel.getCurrentAddress()!!.isEmpty()) {
                 navigate(R.id.preferredLocationFragment)
                 navigate(R.id.currentAddressEditFragment)
-            }
-            else navigate(R.id.preferredLocationFragment)
+            } else navigate(R.id.preferredLocationFragment)
         })
         permanentAddLayout.setOnClickListener(View.OnClickListener {
             if (profileDataModel.address.home.isEmpty()) navigate(R.id.permanentAddressEditFragment)
@@ -99,23 +101,22 @@ class LocationFragment : BaseFragment() {
         })
         workFromHomeSwitch.setOnClickListener { view ->
             var isChecked = (view as Switch).isChecked
-            if(viewModel.getCurrentAddress()!!.isEmpty()){
+            if (viewModel.getCurrentAddress()!!.isEmpty()) {
                 navigate(R.id.currentAddressEditFragment)
-            }else
-            viewModel.setWorkFromHome(isChecked)
+            } else
+                viewModel.setWorkFromHome(isChecked)
         }
         arroundCurrentAddressLayout.setOnClickListener { view ->
-            if(!viewModel.getCurrentAddress()!!.isEmpty()){
+            if (!viewModel.getCurrentAddress()!!.isEmpty()) {
                 navigate(R.id.arrountCurrentAddress)
-            }
-            else{
-                showToast("Please add current address")
+            } else {
+                showToast(getString(R.string.please_add_current_address))
             }
         }
         arroundCurrentAddSwitch.setOnClickListener { view ->
             var isChecked = (view as Switch).isChecked
-            if(viewModel.getCurrentAddress()?.preferred_distance!=0)
-            viewModel.setCurrentAddressPreferredDistanceActive(isChecked)
+            if (viewModel.getCurrentAddress()?.preferred_distance != 0)
+                viewModel.setCurrentAddressPreferredDistanceActive(isChecked)
             else
                 navigate(R.id.arrountCurrentAddress)
         }
