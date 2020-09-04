@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.cardview.widget.CardView
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.os.bundleOf
 import androidx.core.view.ViewCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -18,10 +19,14 @@ import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.app.core.genericadapter.RecyclerGenericAdapter
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
+import com.gigforce.app.modules.assessment.AssessmentListFragment
 import com.gigforce.app.modules.learning.LearningConstants
+import com.gigforce.app.modules.learning.courseContent.CourseContentListFragment
+import com.gigforce.app.modules.learning.learningVideo.PlayVideoDialogFragment
 import com.gigforce.app.modules.learning.models.Course
 import com.gigforce.app.modules.learning.models.CourseContent
 import com.gigforce.app.modules.learning.models.Module
+import com.gigforce.app.modules.learning.slides.SlidesFragment
 import com.gigforce.app.utils.GlideApp
 import com.gigforce.app.utils.Lce
 import com.google.firebase.storage.FirebaseStorage
@@ -87,10 +92,16 @@ class LearningCourseDetailsFragment : BaseFragment() {
                     navigate(R.id.assessment_fragment)
                 }
                 CourseContent.TYPE_SLIDE -> {
-                    navigate(R.id.slidesFragment)
+                    navigate(
+                        R.id.slidesFragment,
+                        bundleOf(SlidesFragment.INTENT_EXTRA_SLIDE_TITLE to it.title)
+                    )
                 }
                 CourseContent.TYPE_VIDEO -> {
-                    navigate(R.id.playVideoDialogFragment)
+                    navigate(
+                        R.id.playVideoDialogFragment,
+                        bundleOf(PlayVideoDialogFragment.INTENT_EXTRA_LESSON_ID to it.id)
+                    )
                 }
                 else -> {
                 }
@@ -108,11 +119,25 @@ class LearningCourseDetailsFragment : BaseFragment() {
         }
 
         assessmentSeeMoreButton.setOnClickListener {
-            navigate(R.id.assessmentListFragment)
+
+            if (viewModel.currentlySelectedModule != null) {
+                navigate(
+                    R.id.assessmentListFragment, bundleOf(
+                        AssessmentListFragment.INTENT_EXTRA_COURSE_ID to viewModel.currentlySelectedModule?.courseId,
+                        AssessmentListFragment.INTENT_EXTRA_MODULE_ID to viewModel.currentlySelectedModule?.id
+                    )
+                )
+            }
         }
 
         lessonsSeeMoreButton.setOnClickListener {
-            navigate(R.id.courseContentListFragment)
+            navigate(
+                R.id.courseContentListFragment,
+                bundleOf(
+                    CourseContentListFragment.INTENT_EXTRA_COURSE_ID to viewModel.currentlySelectedModule?.courseId,
+                    CourseContentListFragment.INTENT_EXTRA_MODULE_ID to viewModel.currentlySelectedModule?.id
+                )
+            )
         }
     }
 
@@ -153,7 +178,7 @@ class LearningCourseDetailsFragment : BaseFragment() {
             .courseAssessments
             .observe(viewLifecycleOwner, Observer {
 
-                when(it){
+                when (it) {
                     Lce.Loading -> showAssessmentsAsLoading()
                     is Lce.Content -> showAssessmentsOnView(it.content)
                     is Lce.Error -> showErrorInLoadingAssessments(it.error)
@@ -190,9 +215,8 @@ class LearningCourseDetailsFragment : BaseFragment() {
 
         videoTitleTV.text = course.name
         videoDescTV.text = course.description
-     //   levelTV.text = "Module $mCurrentModuleNo of ${course.moduleCount}"
-
-        levelTV.text = "Module 1 of 6"
+        tv1HS1.text = course.name
+        //   levelTV.text = "Module $mCurrentModuleNo of ${course.moduleCount}"
     }
 
     private fun showErrorInLoadingCourseDetails(error: String) {
@@ -226,7 +250,16 @@ class LearningCourseDetailsFragment : BaseFragment() {
 
         loadModulesInfoInView()
 
-        if (content.size > 4) {
+        if (content.isEmpty()) {
+
+            learning_details_lessons_rv.gone()
+            learning_details_progress_bar.gone()
+
+            learning_details_learning_error.visible()
+            learning_details_learning_error.text = "No Lessons Found"
+            lessonsSeeMoreButton.gone()
+
+        } else if (content.size > 4) {
             lessonsSeeMoreButton.visible()
             mAdapter.updateCourseContent(content.take(4))
         } else {
@@ -236,7 +269,8 @@ class LearningCourseDetailsFragment : BaseFragment() {
     }
 
     private fun loadModulesInfoInView() {
-        levelTV.text = "Module ${viewModel.currentlySelectedModule?.moduleNo} Of ${viewModel.currentModules?.size}"
+        levelTV.text =
+            "Module ${viewModel.currentlySelectedModule?.moduleNo} Of ${viewModel.currentModules?.size}"
         complitionStatusTv.text = "0/${viewModel.currentLessons?.size} Lessons Completed"
         assessmentCountTv.text = "${viewModel.currentAssessments?.size} Assessments"
 
@@ -368,12 +402,11 @@ class LearningCourseDetailsFragment : BaseFragment() {
         learning_details_assessments_progress_bar.gone()
         learning_details_assessments_rv.visible()
 
-        if(content.isEmpty()){
+        if (content.isEmpty()) {
             learning_details_assessments_error.visible()
             learning_details_assessments_error.text = "No assessments found"
-        }
-
-        if (content.size > 4) {
+            assessmentSeeMoreButton.gone()
+        } else if (content.size > 4) {
             assessmentSeeMoreButton.visible()
             showAssessments(content.take(4))
         } else {
@@ -417,8 +450,8 @@ class LearningCourseDetailsFragment : BaseFragment() {
                     ) as CardView).setCardBackgroundColor(resources.getColor(R.color.status_bg_pending))
 
 
-                })!!
-        recyclerGenericAdapter.setList(content)
+                })
+        recyclerGenericAdapter.list = content
         recyclerGenericAdapter.setLayout(R.layout.assessment_bs_item)
         learning_details_assessments_rv.layoutManager = LinearLayoutManager(
             activity?.applicationContext,

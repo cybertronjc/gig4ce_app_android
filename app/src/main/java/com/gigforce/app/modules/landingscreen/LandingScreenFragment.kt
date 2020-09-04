@@ -511,7 +511,7 @@ class LandingScreenFragment : BaseFragment() {
                     title.text = obj?.name
 
                     var subtitle = getTextView(viewHolder, R.id.title)
-                    subtitle.text = obj?.name
+                    subtitle.text = obj?.description
 
                     var img = getImageView(viewHolder, R.id.learning_img)
 

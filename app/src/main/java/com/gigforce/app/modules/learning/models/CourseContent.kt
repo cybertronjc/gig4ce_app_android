@@ -44,8 +44,12 @@ data class CourseContent(
 
     @get:PropertyName("video_length")
     @set:PropertyName("video_length")
-    var videoLength: String = "00:00"
-) {
+    var videoLength: String = "00:00",
+
+    @get:PropertyName("url")
+    @set:PropertyName("url")
+    var videoUrl: String = ""
+    ) {
 
     companion object {
 

@@ -6,6 +6,10 @@ data class Module(
 
     var id: String = "",
 
+    @get:PropertyName("course_id")
+    @set:PropertyName("course_id")
+    var courseId: String = "",
+
     @get:PropertyName("Name")
     @set:PropertyName("Name")
     var title: String = "",

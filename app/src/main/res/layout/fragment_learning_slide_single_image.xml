@@ -39,6 +39,8 @@
             android:letterSpacing="0"
             android:textColor="@color/white"
             android:textSize="14sp"
+            android:clickable="true"
+            android:focusable="true"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/slideTitleTV"
             tools:text="@string/sample_info" />

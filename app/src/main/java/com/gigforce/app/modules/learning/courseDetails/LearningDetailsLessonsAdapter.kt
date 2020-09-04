@@ -199,6 +199,7 @@ class LearningDetailsLessonsAdapter constructor(
 
         init {
             timeline.initLine(viewType)
+            itemView.setOnClickListener(this)
             lessonsSeeMoreButton.setOnClickListener(this)
             assessmentRootLayout.setOnClickListener(this)
         }

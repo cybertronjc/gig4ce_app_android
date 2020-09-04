@@ -1,27 +1,29 @@
 package com.gigforce.app.modules.learning.slides.types
 
 import android.content.pm.ActivityInfo
-import android.content.res.Configuration
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
+import android.text.style.UnderlineSpan
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.gone
-import com.google.android.exoplayer2.C
+import com.gigforce.app.core.visible
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.source.MediaSource
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
-import com.google.android.exoplayer2.ui.AspectRatioFrameLayout
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.android.synthetic.main.fragment_learning_slide_video_with_text.*
-import kotlinx.android.synthetic.main.fragment_learning_slide_video_with_text.playerView
-import kotlinx.android.synthetic.main.fragment_play_video.*
 
 class VideoWithTextFragment : BaseFragment() {
 
@@ -39,7 +41,8 @@ class VideoWithTextFragment : BaseFragment() {
             slideId: String,
             videoUri: Uri,
             title: String,
-            description: String
+            description: String,
+            baseFragOrientationListener: VideoFragmentOrientationListener
         ): VideoWithTextFragment {
             return VideoWithTextFragment().apply {
                 arguments = bundleOf(
@@ -49,6 +52,8 @@ class VideoWithTextFragment : BaseFragment() {
                     KEY_TITLE to title,
                     KEY_DESCRIPTION to description
                 )
+
+                this.baseFragOrientationListener = baseFragOrientationListener
             }
         }
     }
@@ -58,11 +63,13 @@ class VideoWithTextFragment : BaseFragment() {
     private lateinit var mVideoUri: Uri
     private lateinit var mTitle: String
     private lateinit var mDescription: String
+    private var currentOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 
-    private var playWhenReady = true
+    private var playWhenReady = false
     private var currentWindow = 0
     private var playbackPosition: Long = 0
     private var mPlayer: SimpleExoPlayer? = null
+    private var baseFragOrientationListener: VideoFragmentOrientationListener? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -95,15 +102,21 @@ class VideoWithTextFragment : BaseFragment() {
             mDescription = it.getString(KEY_DESCRIPTION) ?: return@let
         }
 
-        setVideoOnView()
 
-        when (resources.configuration.orientation) {
-            Configuration.ORIENTATION_PORTRAIT -> {
-                video_slide_title_tv.text = mTitle
-                video_slide_desc_tv.text = mDescription
+    }
+
+    private fun adjustUiforOrientation() {
+        when (currentOrientation) {
+            ActivityInfo.SCREEN_ORIENTATION_PORTRAIT -> {
+                Log.d(TAG, "PORTRAIT")
+                slideInfoLayout.visible()
+                activity?.window?.decorView?.systemUiVisibility =
+                    View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
             }
-            Configuration.ORIENTATION_LANDSCAPE -> {
+            ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE -> {
+                Log.d(TAG, "LANDSCAPE")
                 slideInfoLayout.gone()
+                activity?.window?.decorView?.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
             }
         }
     }
@@ -130,44 +143,57 @@ class VideoWithTextFragment : BaseFragment() {
             .findViewById<View>(R.id.toggle_full_screen)
             .setOnClickListener {
 
-                when (resources.configuration.orientation) {
-                    Configuration.ORIENTATION_PORTRAIT -> activity?.requestedOrientation =
-                        ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-                    Configuration.ORIENTATION_LANDSCAPE -> activity?.requestedOrientation =
-                        ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+                when (currentOrientation) {
+                    ActivityInfo.SCREEN_ORIENTATION_PORTRAIT -> {
+                        activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+                        currentOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+                        baseFragOrientationListener?.onOrientationChange(true)
+                    }
+                    ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE -> {
+                        activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+                        currentOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+                        baseFragOrientationListener?.onOrientationChange(false)
+                    }
                 }
+
+                adjustUiforOrientation()
             }
 
-        if (Build.VERSION.SDK_INT > 23)
-            initVideoPlayer()
+        initVideoPlayer()
     }
 
 
     override fun onResume() {
         super.onResume()
-        if (Build.VERSION.SDK_INT <= 23)
-            initVideoPlayer()
+        setVideoOnView()
     }
 
     override fun onPause() {
         super.onPause()
-
-        if (Build.VERSION.SDK_INT <= 23)
-            releasePlayer()
+        mPlayer?.stop()
     }
 
     override fun onStop() {
         super.onStop()
-
-        if (Build.VERSION.SDK_INT > 23)
-            releasePlayer()
+        releasePlayer()
     }
 
     private fun initVideoPlayer() {
         mPlayer = SimpleExoPlayer.Builder(requireContext()).build()
         playerView.player = mPlayer
 
-   //     slideVideoPlayerView.resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FILL
+        video_slide_title_tv.text = mTitle
+
+        if (mDescription.length >= 160)
+            video_slide_desc_tv.text = getDescriptionText(mDescription.substring(0, 160))
+        else
+            video_slide_desc_tv.text = mDescription
+
+        video_slide_desc_tv.setOnClickListener {
+            showText(mDescription)
+        }
+
+        //     slideVideoPlayerView.resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FILL
 //        mPlayer?.videoScalingMode = C.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING
 
         playVideo(mVideoUri)
@@ -198,4 +224,44 @@ class VideoWithTextFragment : BaseFragment() {
     }
 
 
+    private fun getDescriptionText(text: String): SpannableString {
+        if (text.isBlank())
+            return SpannableString("")
+
+        val string = SpannableString(text + SingleImageFragment.READ_MORE)
+
+        val colorLipstick = ResourcesCompat.getColor(resources, R.color.white, null)
+        string.setSpan(ForegroundColorSpan(colorLipstick), text.length + 3, string.length - 1, 0)
+        string.setSpan(UnderlineSpan(), text.length + 2, string.length, 0)
+
+        return string
+    }
+
+    private fun showText(text: String) {
+        val dialogView = layoutInflater.inflate(R.layout.dialog_show_text, null)
+        val textView = dialogView.findViewById<TextView>(R.id.textView)
+        textView.text = text
+
+        MaterialAlertDialogBuilder(requireContext())
+            .setView(dialogView)
+            .setPositiveButton(R.string.okay_text) { _, _ -> }
+            .show()
+    }
+
+    fun backButtonPressed() : Boolean{
+
+        return if(currentOrientation ==  ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE){
+
+            activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+            currentOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+            adjustUiforOrientation()
+            return true
+        }else false
+    }
+
+}
+
+interface VideoFragmentOrientationListener {
+
+    fun onOrientationChange(landscape: Boolean)
 }

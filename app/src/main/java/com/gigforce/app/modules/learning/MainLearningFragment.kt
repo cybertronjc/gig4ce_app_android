@@ -135,47 +135,56 @@ class MainLearningFragment : BaseFragment() {
         main_learning_assessment_error.gone()
         main_learning_assessments_rv.visible()
 
-        val displayMetrics = DisplayMetrics()
-        activity?.windowManager?.getDefaultDisplay()?.getMetrics(displayMetrics)
-        val width = displayMetrics.widthPixels
-        val itemWidth = ((width / 5) * 3.5).toInt()
+        if (content.isEmpty()) {
+            main_learning_assessments_rv.gone()
+            main_learning_assessment_progress_bar.gone()
+            main_learning_assessment_error.visible()
+
+            main_learning_assessment_error.text = "No Assessment Found"
+        } else {
+
+            val displayMetrics = DisplayMetrics()
+            activity?.windowManager?.defaultDisplay?.getMetrics(displayMetrics)
+            val width = displayMetrics.widthPixels
+            val itemWidth = ((width / 5) * 3.5).toInt()
 
 
-        val recyclerGenericAdapter: RecyclerGenericAdapter<CourseContent> =
-            RecyclerGenericAdapter<CourseContent>(
+            val recyclerGenericAdapter: RecyclerGenericAdapter<CourseContent> =
+                RecyclerGenericAdapter<CourseContent>(
+                    activity?.applicationContext,
+                    PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
+                        navigate(R.id.assessment_fragment)
+                    },
+                    RecyclerGenericAdapter.ItemInterface<CourseContent> { obj, viewHolder, position ->
+                        val lp = getView(viewHolder, R.id.assessment_cl).layoutParams
+                        lp.height = lp.height
+                        lp.width = itemWidth
+                        getView(viewHolder, R.id.assessment_cl).layoutParams = lp
+                        getTextView(viewHolder, R.id.title).text = obj?.title
+                        getTextView(viewHolder, R.id.time).text = "02:00"
+
+
+                        getTextView(viewHolder, R.id.status).text = "PENDING"
+                        getTextView(
+                            viewHolder,
+                            R.id.status
+                        ).setBackgroundResource(R.drawable.rect_assessment_status_pending)
+                        (getView(
+                            viewHolder,
+                            R.id.side_bar_status
+                        ) as CardView).setCardBackgroundColor(resources.getColor(R.color.status_bg_pending))
+
+
+                    })
+            recyclerGenericAdapter.list = content
+            recyclerGenericAdapter.setLayout(R.layout.assessment_bs_item)
+            main_learning_assessments_rv.layoutManager = LinearLayoutManager(
                 activity?.applicationContext,
-                PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
-                    navigate(R.id.assessment_fragment)
-                },
-                RecyclerGenericAdapter.ItemInterface<CourseContent> { obj, viewHolder, position ->
-                    val lp = getView(viewHolder, R.id.assessment_cl).layoutParams
-                    lp.height = lp.height
-                    lp.width = itemWidth
-                    getView(viewHolder, R.id.assessment_cl).layoutParams = lp
-                    getTextView(viewHolder, R.id.title).text = obj?.title
-                    getTextView(viewHolder, R.id.time).text = "02:00"
-
-
-                    getTextView(viewHolder, R.id.status).text = "PENDING"
-                    getTextView(
-                        viewHolder,
-                        R.id.status
-                    ).setBackgroundResource(R.drawable.rect_assessment_status_pending)
-                    (getView(
-                        viewHolder,
-                        R.id.side_bar_status
-                    ) as CardView).setCardBackgroundColor(resources.getColor(R.color.status_bg_pending))
-
-
-                })!!
-        recyclerGenericAdapter.setList(content)
-        recyclerGenericAdapter.setLayout(R.layout.assessment_bs_item)
-        main_learning_assessments_rv.layoutManager = LinearLayoutManager(
-            activity?.applicationContext,
-            LinearLayoutManager.HORIZONTAL,
-            false
-        )
-        main_learning_assessments_rv.adapter = recyclerGenericAdapter
+                LinearLayoutManager.HORIZONTAL,
+                false
+            )
+            main_learning_assessments_rv.adapter = recyclerGenericAdapter
+        }
 
     }
 
@@ -228,20 +237,20 @@ class MainLearningFragment : BaseFragment() {
                     title.text = obj?.name
 
                     var subtitle = getTextView(viewHolder, R.id.title)
-                    subtitle.text = obj?.name
+                    subtitle.text = obj?.description
 
                     var img = getImageView(viewHolder, R.id.learning_img)
                     if (!obj!!.coverPicture.isNullOrBlank()) {
-                        if (obj!!.coverPicture!!.startsWith("http", true)) {
+                        if (obj.coverPicture!!.startsWith("http", true)) {
 
                             GlideApp.with(requireContext())
-                                .load(obj!!.coverPicture!!)
+                                .load(obj.coverPicture!!)
                                 .placeholder(getCircularProgressDrawable())
                                 .into(img)
                         } else {
                             FirebaseStorage.getInstance()
                                 .getReference(LearningConstants.LEARNING_IMAGES_FIREBASE_FOLDER)
-                                .child(obj!!.coverPicture!!)
+                                .child(obj.coverPicture!!)
                                 .downloadUrl
                                 .addOnSuccessListener { fileUri ->
 
@@ -311,20 +320,20 @@ class MainLearningFragment : BaseFragment() {
                     title.text = obj?.name
 
                     var subtitle = getTextView(viewHolder, R.id.subtitle)
-                    subtitle.text = obj?.name
+                    subtitle.text = obj?.description
 
                     var img = getImageView(viewHolder, R.id.img)
                     if (!obj!!.coverPicture.isNullOrBlank()) {
-                        if (obj!!.coverPicture!!.startsWith("http", true)) {
+                        if (obj.coverPicture!!.startsWith("http", true)) {
 
                             GlideApp.with(requireContext())
-                                .load(obj!!.coverPicture!!)
+                                .load(obj.coverPicture!!)
                                 .placeholder(getCircularProgressDrawable())
                                 .into(img)
                         } else {
                             FirebaseStorage.getInstance()
                                 .getReference(LearningConstants.LEARNING_IMAGES_FIREBASE_FOLDER)
-                                .child(obj!!.coverPicture!!)
+                                .child(obj.coverPicture!!)
                                 .downloadUrl
                                 .addOnSuccessListener { fileUri ->
 
@@ -507,7 +516,6 @@ class MainLearningFragment : BaseFragment() {
         )
         searchSuggestionBasedVideosRV.adapter = recyclerGenericAdapter
     }
-
 
 
     class TitleSubtitleModel(var title: String, var subtitle: String, var imgIcon: Int = 0)

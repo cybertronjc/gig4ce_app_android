@@ -8,11 +8,12 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.app.R
 import com.gigforce.app.modules.assessment.models.Assessment
+import com.gigforce.app.modules.learning.models.CourseContent
 import kotlinx.android.synthetic.main.assessment_bs_item.view.*
 
 class AssessmentListAdapter(
     private val resources: Resources,
-    private val assessmentList: List<Assessment>
+    private val assessmentList: List<CourseContent>
 ) :
     RecyclerView.Adapter<AssessmentListAdapter.TimeLineViewHolder>() {
 
@@ -38,9 +39,9 @@ class AssessmentListAdapter(
         val videoModel = assessmentList[position]
 
         holder.assessmentTitle.text = videoModel.title
-        holder.approxTime.text = videoModel.assessmentLength
+        holder.approxTime.text = ""
 
-        if (videoModel.status == Assessment.STATUS_PENDING) {
+        if (!videoModel.completed) {
 
             holder.statusTV.text = "PENDING"
             holder.statusTV.status.setBackgroundColor(
@@ -76,7 +77,6 @@ class AssessmentListAdapter(
                 )
             )
         }
-
     }
 
     override fun getItemCount() = assessmentList.size
