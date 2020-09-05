@@ -127,7 +127,7 @@ class CurrentAddressEditFragment : BaseFragment() {
 
     fun addressIsValid(view: EditText):Boolean{
         if(view.text.toString().trim().length<3){
-            view.setError("More detail require!!")
+            view.setError(getString(R.string.more_detail))
             return false
         }
         return true
@@ -144,7 +144,7 @@ class CurrentAddressEditFragment : BaseFragment() {
         if(!addressIsValid(state))
             return false
         if(pincode.text.toString().length<6){
-            pincode.setError("Pincode is not correct!!")
+            pincode.setError(getString(R.string.pincode_not_correct))
             return false
         }
         return true

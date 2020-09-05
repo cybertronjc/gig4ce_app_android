@@ -6,14 +6,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import android.widget.DatePicker
 import android.widget.Toast
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
-import com.afollestad.materialdialogs.MaterialDialog
 import com.gigforce.app.R
 import com.gigforce.app.modules.profile.models.Experience
 import com.gigforce.app.utils.DropdownAdapter
@@ -25,7 +21,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-class EditExperienceBottomSheet: ProfileBaseBottomSheetFragment() {
+class EditExperienceBottomSheet : ProfileBaseBottomSheetFragment() {
     companion object {
         fun newInstance() = EditExperienceBottomSheet()
     }
@@ -51,7 +47,13 @@ class EditExperienceBottomSheet: ProfileBaseBottomSheetFragment() {
         savedInstanceState: Bundle?
     ): View? {
         inflateView(R.layout.edit_experience, inflater, container)
-        employments.addAll(listOf("Full time", "Internship", "Part time"))
+        employments.addAll(
+            listOf(
+                getString(R.string.full_time),
+                getString(R.string.internship),
+                getString(R.string.part_time)
+            )
+        )
 
         return getFragmentView()
     }
@@ -65,7 +67,7 @@ class EditExperienceBottomSheet: ProfileBaseBottomSheetFragment() {
     private fun initialize() {
         val format = SimpleDateFormat("dd/MM/yyyy", Locale.US)
         profileViewModel!!.userProfileData.observe(this, Observer { profile ->
-            profile?.experiences?.let {
+            profile.experiences?.let {
                 val experiences = it.sortedByDescending { experience -> experience.startDate  }
                 experience = experiences[arrayLocation.toInt()]
                 title.setText(experience.title)
@@ -123,7 +125,9 @@ class EditExperienceBottomSheet: ProfileBaseBottomSheetFragment() {
         }
 
         currently_work_here.setOnCheckedChangeListener { currently_work_here, isChecked ->
-            Toast.makeText(context, "CHECKED", Toast.LENGTH_LONG).show()
+            Toast.makeText(
+                context, getString(R.string.checked), Toast.LENGTH_LONG
+            ).show()
             currentlyWorkHere = isChecked
             if (isChecked) {
                 end_date.setText("")

@@ -73,7 +73,6 @@ class MainLearningFragment : BaseFragment() {
 
         initLearningViewModel()
     }
-
     private fun initLearningViewModel() {
         learningViewModel
             .roleBasedCourses
@@ -361,7 +360,6 @@ class MainLearningFragment : BaseFragment() {
         })
 
     }
-
     private fun displayImage(profileImg: String) {
         if (profileImg != "avatar.jpg" && profileImg != "") {
             val profilePicRef: StorageReference =
@@ -377,9 +375,8 @@ class MainLearningFragment : BaseFragment() {
                 .into(profile_image_main)
         }
     }
-
     private fun listener() {
-        chat_icon_iv.setOnClickListener {
+        chat_icon_iv.setOnClickListener{
             navigate(R.id.contactScreenFragment)
         }
     }
@@ -446,7 +443,7 @@ class MainLearningFragment : BaseFragment() {
                     var subtitle = getTextView(viewHolder, R.id.subtitle)
                     subtitle.text = obj?.subtitle
 
-                    var img = getImageView(viewHolder, R.id.img)
+                    var img = getImageView(viewHolder,R.id.img)
                     img.setImageResource(obj?.imgIcon!!)
                 })
         recyclerGenericAdapter.list = datalist
@@ -504,7 +501,7 @@ class MainLearningFragment : BaseFragment() {
                     var subtitle = getTextView(viewHolder, R.id.title)
                     subtitle.text = obj?.subtitle
 
-                    var img = getImageView(viewHolder, R.id.learning_img)
+                    var img = getImageView(viewHolder,R.id.learning_img)
                     img.setImageResource(obj?.imgIcon!!)
                 })
         recyclerGenericAdapter.list = datalist

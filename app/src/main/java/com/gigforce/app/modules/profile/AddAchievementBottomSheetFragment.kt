@@ -35,7 +35,7 @@ class AddAchievementBottomSheetFragment : ProfileBaseBottomSheetFragment() {
         year.setOnClickListener {
             showNumberPicker(requireContext(), year)
         }
-        add_more_button.setOnClickListener {
+        add_more_button.setOnClickListener{
             if (validateAchievement()) {
                 addNewAchievement()
                 title.setText("")
@@ -53,8 +53,7 @@ class AddAchievementBottomSheetFragment : ProfileBaseBottomSheetFragment() {
             if (validateAchievement()) {
                 addNewAchievement()
 
-                Toast.makeText(this.context, "Updated Achievement Section", Toast.LENGTH_LONG)
-                    .show()
+                Toast.makeText(this.context, getString(R.string.updated_achievement_sec), Toast.LENGTH_LONG).show()
                 this.dismiss()
             }
         }
@@ -78,10 +77,10 @@ class AddAchievementBottomSheetFragment : ProfileBaseBottomSheetFragment() {
                 title,
                 authority,
                 year
-            )
-        ) {
+            )) {
             return true
-        } else {
+        }
+        else {
             showError(form_error, title, authority, year)
             return false
         }
