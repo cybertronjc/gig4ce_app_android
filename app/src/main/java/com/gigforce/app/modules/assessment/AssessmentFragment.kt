@@ -423,22 +423,27 @@ class AssessmentFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
 
 //        val reference: StorageReference =
 //            FirebaseStorage.getInstance().reference.child("assessment_images").child(Path)
+        if (Path == null || Path.isEmpty()) {
+            iv_scenario_value_assess_frag.visibility = View.GONE
+        } else {
+            iv_scenario_value_assess_frag.visibility = View.VISIBLE
+            GlideApp.with(this.requireContext())
+                .asBitmap()
+                .load(Path)
+                .into(object : CustomTarget<Bitmap>() {
+                    override fun onResourceReady(
+                        resource: Bitmap,
+                        transition: com.bumptech.glide.request.transition.Transition<in Bitmap>?
+                    ) {
+                        iv_scenario_value_assess_frag.setImageBitmap(resource);
+                    }
 
-        GlideApp.with(this.requireContext())
-            .asBitmap()
-            .load(Path)
-            .into(object : CustomTarget<Bitmap>() {
-                override fun onResourceReady(
-                    resource: Bitmap,
-                    transition: com.bumptech.glide.request.transition.Transition<in Bitmap>?
-                ) {
-                    iv_scenario_value_assess_frag.setImageBitmap(resource);
-                }
+                    override fun onLoadCleared(placeholder: Drawable?) {
+                    }
 
-                override fun onLoadCleared(placeholder: Drawable?) {
-                }
+                })
+        }
 
-            })
 
     }
 
