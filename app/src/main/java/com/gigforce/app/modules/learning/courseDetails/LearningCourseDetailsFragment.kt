@@ -80,6 +80,7 @@ class LearningCourseDetailsFragment : BaseFragment() {
 
     private fun initView() {
         ViewCompat.setNestedScrollingEnabled(learning_details_lessons_rv, false)
+        ViewCompat.setNestedScrollingEnabled(learning_details_assessments_rv, false)
 
         learning_details_lessons_rv.layoutManager = LinearLayoutManager(
             requireContext(),
@@ -90,14 +91,19 @@ class LearningCourseDetailsFragment : BaseFragment() {
         mAdapter.setOnLearningVideoActionListener {
             when (it.type) {
                 CourseContent.TYPE_ASSESSMENT -> {
-                    navigate(R.id.assessment_fragment, bundleOf(
-                        AssessmentFragment.INTENT_LESSON_ID to it.id
-                    ))
+                    navigate(
+                        R.id.assessment_fragment, bundleOf(
+                            AssessmentFragment.INTENT_LESSON_ID to it.id
+                        )
+                    )
                 }
                 CourseContent.TYPE_SLIDE -> {
                     navigate(
                         R.id.slidesFragment,
-                        bundleOf(SlidesFragment.INTENT_EXTRA_SLIDE_TITLE to it.title)
+                        bundleOf(
+                            SlidesFragment.INTENT_EXTRA_SLIDE_TITLE to it.title,
+                            SlidesFragment.INTENT_EXTRA_LESSON_ID to it.id
+                        )
                     )
                 }
                 CourseContent.TYPE_VIDEO -> {
@@ -272,8 +278,14 @@ class LearningCourseDetailsFragment : BaseFragment() {
     }
 
     private fun loadModulesInfoInView() {
+
+       val moduleNo = if (viewModel.currentModules != null && viewModel.currentlySelectedModule != null) {
+           viewModel.currentModules!!.indexOf(viewModel.currentlySelectedModule!!) + 1
+        } else 0
+
+
         levelTV.text =
-            "Module ${viewModel.currentlySelectedModule?.moduleNo} Of ${viewModel.currentModules?.size}"
+            "Module $moduleNo Of ${viewModel.currentModules?.size}"
         complitionStatusTv.text = "0/${viewModel.currentLessons?.size} Lessons Completed"
         assessmentCountTv.text = "${viewModel.currentAssessments?.size} Assessments"
 
@@ -435,7 +447,12 @@ class LearningCourseDetailsFragment : BaseFragment() {
             RecyclerGenericAdapter<CourseContent>(
                 activity?.applicationContext,
                 PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
-                    navigate(R.id.assessment_fragment)
+
+                    val assessment = item as CourseContent
+                    navigate(R.id.assessment_fragment,  bundleOf(
+                        AssessmentFragment.INTENT_LESSON_ID to assessment.id
+                    ))
+
                 },
                 RecyclerGenericAdapter.ItemInterface<CourseContent> { obj, viewHolder, position ->
 

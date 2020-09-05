@@ -19,7 +19,10 @@ import kotlinx.android.synthetic.main.fragment_slides.*
 import kotlinx.android.synthetic.main.fragment_slides_main.*
 
 
-class SlidesFragment : BaseFragment(), ViewPager.OnPageChangeListener, VideoFragmentOrientationListener {
+class SlidesFragment : BaseFragment(), ViewPager.OnPageChangeListener,
+    VideoFragmentOrientationListener {
+
+    private lateinit var mLessonId: String
 
     private val viewModel: SlideViewModel by viewModels()
 
@@ -35,12 +38,16 @@ class SlidesFragment : BaseFragment(), ViewPager.OnPageChangeListener, VideoFrag
 
             val slideTitle = it.getString(INTENT_EXTRA_SLIDE_TITLE)
             toolbar.title = slideTitle
+
+            mLessonId = it.getString(INTENT_EXTRA_LESSON_ID)?: return@let
         }
 
         arguments?.let {
 
             val slideTitle = it.getString(INTENT_EXTRA_SLIDE_TITLE)
             toolbar.title = slideTitle
+
+            mLessonId = it.getString(INTENT_EXTRA_LESSON_ID)?: return@let
         }
 
         initView()
@@ -60,9 +67,7 @@ class SlidesFragment : BaseFragment(), ViewPager.OnPageChangeListener, VideoFrag
             })
 
         viewModel.getSlideContent(
-            courseId = "",
-            moduleId = "",
-            lessonId = ""
+            lessonId = mLessonId
         )
     }
 
@@ -81,11 +86,11 @@ class SlidesFragment : BaseFragment(), ViewPager.OnPageChangeListener, VideoFrag
         fragment_slides_error.gone()
         fragment_slides_main_layout.visible()
 
-        pagerAdapter = SlidesPagerAdapter(childFragmentManager, content,this)
+        pagerAdapter = SlidesPagerAdapter(childFragmentManager, content, this)
         slideViewPager.adapter = pagerAdapter
         slideViewPager.addOnPageChangeListener(this)
 
-        val slidesCoverageProgress =  100 / content.size
+        val slidesCoverageProgress = 100 / content.size
         progress.progress = slidesCoverageProgress
     }
 
@@ -102,6 +107,7 @@ class SlidesFragment : BaseFragment(), ViewPager.OnPageChangeListener, VideoFrag
             activity?.onBackPressed()
         }
 
+
 //        slideCounterTV.text = "Slide 1 of ${viewModel.slidesData.size}"
 //        slideTitleTV.text = viewModel.slidesData[0].title
 //        slideDescriptionTV.text = viewModel.slidesData[0].content
@@ -112,7 +118,7 @@ class SlidesFragment : BaseFragment(), ViewPager.OnPageChangeListener, VideoFrag
     }
 
     override fun onOrientationChange(landscape: Boolean) {
-            appBar.isVisible = !landscape
+        appBar.isVisible = !landscape
     }
 
     override fun onPageScrollStateChanged(state: Int) {}
@@ -120,15 +126,17 @@ class SlidesFragment : BaseFragment(), ViewPager.OnPageChangeListener, VideoFrag
 
     override fun onPageSelected(position: Int) {
         val pagesCount = pagerAdapter!!.count
-        val slidesCoverageProgress = ((position + 1) * 100 )/ pagesCount
+        val slidesCoverageProgress = ((position + 1) * 100) / pagesCount
         progress.progress = slidesCoverageProgress
     }
 
     override fun onBackPressed(): Boolean {
-       return pagerAdapter?.dispatchOnBackPressedIfCurrentFragmentIsVideoFragment(slideViewPager.currentItem) ?: false
+        return pagerAdapter?.dispatchOnBackPressedIfCurrentFragmentIsVideoFragment(slideViewPager.currentItem)
+            ?: false
     }
 
-    companion object{
+    companion object {
         const val INTENT_EXTRA_SLIDE_TITLE = "slide_title"
+        const val INTENT_EXTRA_LESSON_ID = "lesson_id"
     }
 }
