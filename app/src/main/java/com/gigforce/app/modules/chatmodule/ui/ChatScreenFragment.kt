@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.gigforce.app.modules.chatmodule.ui.adapters.ChatRecyclerAdapter
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
-import com.gigforce.app.modules.chatmodule.ui.adapters.ChatRecyclerAdapter
 import com.gigforce.app.modules.chatmodule.viewModels.ChatViewModel
 import com.gigforce.app.utils.AppConstants
 import com.gigforce.app.utils.VerticalItemDecorator

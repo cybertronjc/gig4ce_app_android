@@ -53,17 +53,17 @@ class AroundCurrentAddressFragment : BaseFragment() {
         })
 
         back_arrow_iv.setOnClickListener {
-        workFromHomeSwitch.setOnCheckedChangeListener({
-                buttonView, isChecked ->
-            if (isChecked){
-                around_current_add_cl.visibility = View.VISIBLE
-            }else{
-                around_current_add_cl.visibility = View.GONE
-            }
-        })
+            workFromHomeSwitch.setOnCheckedChangeListener({ buttonView, isChecked ->
+                if (isChecked) {
+                    around_current_add_cl.visibility = View.VISIBLE
+                } else {
+                    around_current_add_cl.visibility = View.GONE
+                }
+            })
 
-        back_arrow_iv.setOnClickListener {
-            activity?.onBackPressed()
+            back_arrow_iv.setOnClickListener {
+                activity?.onBackPressed()
+            }
         }
     }
 
@@ -87,7 +87,7 @@ class AroundCurrentAddressFragment : BaseFragment() {
         setVisibilityAroundCurrAdd()
     }
 
-    private fun populateAddress(address: AddressModel) {
+
 
     private fun setVisibilityAroundCurrAdd() {
         if (viewModel.getCurrentAddress()?.preferredDistanceActive!!)
@@ -123,4 +123,5 @@ class AroundCurrentAddressFragment : BaseFragment() {
         }
         return super.onBackPressed()
     }
+
 }
