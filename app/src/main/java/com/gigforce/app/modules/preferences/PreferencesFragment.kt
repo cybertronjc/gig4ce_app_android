@@ -128,8 +128,21 @@ class PreferencesFragment : BaseFragment() {
 
     private fun setPreferenecesList() {
         arrPrefrancesList.clear()
-        arrPrefrancesList.addAll(viewModel.getPrefrencesData())
+        arrPrefrancesList.addAll(getPrefrencesData())
         recyclerGenericAdapter.notifyDataSetChanged()
+    }
+    fun getPrefrencesData(): ArrayList<PreferencesScreenItem> {
+        val prefrencesItems = ArrayList<PreferencesScreenItem>()
+        // prefrencesItems.add(PreferencesScreenItem(R.drawable.ic_link_black,"Category",""))
+        // prefrencesItems.add(PreferencesScreenItem(R.drawable.ic_group_black,"Roles","At atm"))
+        prefrencesItems.add(PreferencesScreenItem(R.drawable.ic_clock_black,getString(R.string.day_and_time),viewModel.getDateTimeSubtitle()))
+        prefrencesItems.add(PreferencesScreenItem(R.drawable.ic_location_pin_black,getString(R.string.location),viewModel.getLocation()))
+        prefrencesItems.add(PreferencesScreenItem(R.drawable.ic_credit_card_black,getString(R.string.earning),viewModel.getEarning()))
+        prefrencesItems.add(PreferencesScreenItem(0,getString(R.string.others),""))
+        prefrencesItems.add(PreferencesScreenItem(R.drawable.ic_language_black,getString(R.string.app_language),viewModel.getLanguage()))
+        // prefrencesItems.add(PreferencesScreenItem(R.drawable.ic_notifications_on_black,"Notification",""))
+        prefrencesItems.add(PreferencesScreenItem(R.drawable.ic_power_button_black,getString(R.string.sign_out),""))
+        return prefrencesItems
     }
 
     private fun observePreferenceData() {

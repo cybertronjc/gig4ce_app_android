@@ -717,5 +717,8 @@
     <string name="you_are_incorrect">Oops ! You are incorrect.</string>
     <string name="time_is_up">Time is Up!!!!!</string>
 
+    <string name="app_language">App Language</string>
+    <string name="sign_out">Sign out</string>
+
 
 </resources>

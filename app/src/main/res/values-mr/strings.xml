@@ -577,7 +577,6 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="none">None</string>
-    <string name="day_and_time">Day and Time</string>
     <string name="weekday">Weekday</string>
     <string name="_00_04days">00-04days</string>
     <string name="weekends">Weekends</string>
@@ -677,5 +676,8 @@
     <string name="prefered_distance_zero">Preferred distance is 0 so you are not able to enable it.</string>
     <string name="preferred_distance_">Preferred Distance</string>
     <string name="around_current_address_">Around Current Address</string>
+    <string name="day_and_time">Day and Time</string>
+    <string name="app_language">App Language</string>
+    <string name="sign_out">Sign out</string>
 
 </resources>
