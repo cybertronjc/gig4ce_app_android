@@ -19,6 +19,7 @@ import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.app.core.genericadapter.RecyclerGenericAdapter
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
+import com.gigforce.app.modules.assessment.AssessmentFragment
 import com.gigforce.app.modules.assessment.AssessmentListFragment
 import com.gigforce.app.modules.learning.LearningConstants
 import com.gigforce.app.modules.learning.courseContent.CourseContentListFragment
@@ -89,7 +90,9 @@ class LearningCourseDetailsFragment : BaseFragment() {
         mAdapter.setOnLearningVideoActionListener {
             when (it.type) {
                 CourseContent.TYPE_ASSESSMENT -> {
-                    navigate(R.id.assessment_fragment)
+                    navigate(R.id.assessment_fragment, bundleOf(
+                        AssessmentFragment.INTENT_LESSON_ID to it.id
+                    ))
                 }
                 CourseContent.TYPE_SLIDE -> {
                     navigate(
@@ -251,7 +254,7 @@ class LearningCourseDetailsFragment : BaseFragment() {
         loadModulesInfoInView()
 
         if (content.isEmpty()) {
-
+            mAdapter.updateCourseContent(emptyList())
             learning_details_lessons_rv.gone()
             learning_details_progress_bar.gone()
 
@@ -403,9 +406,10 @@ class LearningCourseDetailsFragment : BaseFragment() {
         learning_details_assessments_rv.visible()
 
         if (content.isEmpty()) {
+            showAssessments(emptyList())
+            assessmentSeeMoreButton.gone()
             learning_details_assessments_error.visible()
             learning_details_assessments_error.text = "No assessments found"
-            assessmentSeeMoreButton.gone()
         } else if (content.size > 4) {
             assessmentSeeMoreButton.visible()
             showAssessments(content.take(4))
@@ -455,7 +459,7 @@ class LearningCourseDetailsFragment : BaseFragment() {
         recyclerGenericAdapter.setLayout(R.layout.assessment_bs_item)
         learning_details_assessments_rv.layoutManager = LinearLayoutManager(
             activity?.applicationContext,
-            LinearLayoutManager.HORIZONTAL,
+            LinearLayoutManager.VERTICAL,
             false
         )
         learning_details_assessments_rv.adapter = recyclerGenericAdapter

@@ -9,9 +9,9 @@ class ModelAssessmentFragment : BaseFirestoreDBRepository(), ModelCallbacks {
         return "Course_blocks"
     }
 
-    override fun getQuestionaire(callbacks: ModelCallbacks.ModelResponseCallbacks) {
+    override fun getQuestionaire(   lessonId : String,callbacks: ModelCallbacks.ModelResponseCallbacks) {
         getCollectionReference().whereEqualTo("topictype", "assessment")
-            .whereEqualTo("lesson_id", "oyFhCjdddc6zwIswClds")
+            .whereEqualTo("lesson_id", lessonId)
             .addSnapshotListener { value, error ->
                 run {
                     callbacks.QuestionairreSuccess(value, error)

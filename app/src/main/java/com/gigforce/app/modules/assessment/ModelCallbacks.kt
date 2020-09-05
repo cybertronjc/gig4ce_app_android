@@ -6,7 +6,9 @@ import com.google.firebase.firestore.QuerySnapshot
 
 interface ModelCallbacks {
 
-    fun getQuestionaire(callbacks: ModelResponseCallbacks)
+    fun getQuestionaire(
+        lessonId : String,
+        callbacks: ModelResponseCallbacks)
     fun submitAnswers(
         profileID: String,
         assessmentResponse: AssementQuestionsReponse,

@@ -175,6 +175,30 @@ class LearningRepository : BaseFirestoreDBRepository() {
             }
     }
 
+    suspend fun getSlideContent(
+        lessonId : String
+    ): List<CourseContent> = suspendCoroutine { cont ->
+        getCollectionReference()
+            .whereEqualTo(LESSON_ID, lessonId)
+            .whereEqualTo(TYPE, TYPE_TOPIC)
+            .get()
+            .addOnSuccessListener { querySnap ->
+
+                val modules = querySnap.documents
+                    .map {
+                        val videoDetails = it.toObject(CourseContent::class.java)!!
+                        videoDetails.id = it.id
+                        videoDetails
+                    }.filter {
+                        it.isActive
+                    }
+                cont.resume(modules)
+            }
+            .addOnFailureListener {
+                cont.resumeWithException(it)
+            }
+    }
+
     suspend fun getAssessmentsFromAllCourses(): List<CourseContent> = suspendCoroutine { cont ->
         getCollectionReference()
             .whereEqualTo(TYPE, TYPE_LESSON)

@@ -17,6 +17,7 @@ import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.app.core.genericadapter.RecyclerGenericAdapter
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
+import com.gigforce.app.modules.assessment.AssessmentFragment
 import com.gigforce.app.modules.learning.courseDetails.LearningCourseDetailsFragment
 import com.gigforce.app.modules.learning.models.Course
 import com.gigforce.app.modules.learning.models.CourseContent
@@ -152,7 +153,11 @@ class MainLearningFragment : BaseFragment() {
                 RecyclerGenericAdapter<CourseContent>(
                     activity?.applicationContext,
                     PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
-                        navigate(R.id.assessment_fragment)
+                        val assessment = item as CourseContent
+
+                        navigate(R.id.assessment_fragment,  bundleOf(
+                            AssessmentFragment.INTENT_LESSON_ID to assessment.id
+                        ))
                     },
                     RecyclerGenericAdapter.ItemInterface<CourseContent> { obj, viewHolder, position ->
                         val lp = getView(viewHolder, R.id.assessment_cl).layoutParams
