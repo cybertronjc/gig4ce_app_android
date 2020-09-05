@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/iv_back_referrals_frag"
+            android:layout_width="@dimen/size_16"
+            android:layout_height="@dimen/size_16"
+            android:layout_marginStart="@dimen/size_18"
+            android:layout_marginTop="@dimen/size_46"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_arrow_back_24"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_title_referrals_frag"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/size_24"
+            android:letterSpacing="0"
+            android:text="@string/refer_your_friends"
+            android:textColor="@color/black_85"
+            android:textSize="@dimen/font_20"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/iv_back_referrals_frag"
+            app:layout_constraintTop_toTopOf="@+id/iv_back_referrals_frag" />
+
+        <ImageView
+            android:id="@+id/iv_bg_referrals_frag"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/size_213"
+            android:layout_marginStart="@dimen/size_53"
+            android:layout_marginTop="@dimen/size_120"
+            android:layout_marginEnd="@dimen/size_54"
+            android:src="@drawable/ic_refer_bg"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_title_referrals_frag" />
+
+        <TextView
+            android:id="@+id/iv_share_joy_referrals_frag"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/size_44"
+            android:layout_marginTop="@dimen/size_27"
+            android:layout_marginEnd="@dimen/size_46"
+            android:gravity="center_horizontal"
+            android:letterSpacing="0"
+            android:text="@string/share_the_joy_of_working_with_gigforce_and_invite_your_friends"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/iv_bg_referrals_frag" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/iv_copy_link_referrals_frag"
+            android:layout_width="@dimen/size_56"
+            android:layout_height="@dimen/size_56"
+            android:layout_marginTop="@dimen/size_24"
+            android:layout_marginBottom="@dimen/size_4"
+            android:translationZ="@dimen/size_4"
+
+            app:cardCornerRadius="@dimen/size_4"
+            app:layout_constraintEnd_toStartOf="@+id/iv_whatsapp_referrals_frag"
+
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/iv_share_joy_referrals_frag">
+
+            <ImageView
+                android:layout_width="@dimen/size_27"
+                android:layout_height="@dimen/size_29"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_copy" />
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/iv_whatsapp_referrals_frag"
+            android:layout_width="@dimen/size_56"
+            android:layout_height="@dimen/size_56"
+            android:layout_marginStart="@dimen/size_34"
+            android:layout_marginTop="@dimen/size_24"
+            android:layout_marginEnd="@dimen/size_34"
+            android:translationZ="@dimen/size_4"
+
+            app:cardCornerRadius="@dimen/size_4"
+            app:layout_constraintEnd_toStartOf="@+id/iv_more_referrals_frag"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toEndOf="@+id/iv_copy_link_referrals_frag"
+            app:layout_constraintTop_toBottomOf="@+id/iv_share_joy_referrals_frag">
+
+            <ImageView
+                android:layout_width="@dimen/size_27"
+                android:layout_height="@dimen/size_29"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_whatsapp" />
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/iv_more_referrals_frag"
+            android:layout_width="@dimen/size_56"
+            android:layout_height="@dimen/size_56"
+            android:layout_marginTop="@dimen/size_24"
+            android:translationZ="@dimen/size_4"
+
+            app:cardCornerRadius="@dimen/size_4"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toEndOf="@id/iv_whatsapp_referrals_frag"
+            app:layout_constraintTop_toBottomOf="@+id/iv_share_joy_referrals_frag">
+
+            <ImageView
+                android:layout_width="@dimen/size_27"
+                android:layout_height="@dimen/size_29"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_more" />
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/tv_share_now_referral_frag"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/size_26"
+            android:layout_marginTop="@dimen/size_25"
+            android:layout_marginEnd="@dimen/size_27"
+            android:background="@drawable/border_lipstick_rad_4"
+            android:gravity="center_horizontal"
+            android:letterSpacing="0"
+            android:paddingTop="@dimen/size_10"
+
+            android:paddingBottom="@dimen/size_11"
+            android:text="@string/share_now"
+            android:textColor="@color/lipstick"
+            android:textSize="@dimen/font_12"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/iv_whatsapp_referrals_frag" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

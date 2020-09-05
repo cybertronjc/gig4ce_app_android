@@ -585,4 +585,9 @@
     <string name="day_and_time">Day and Time</string>
     <string name="app_language">App Language</string>
     <string name="sign_out">Sign out</string>
+    <string name="invite_a_friend">Invite a friend</string>
+    <string name="refresh_">Refresh</string>
+    <string name="refer_your_friends">Refer Your Friends</string>
+    <string name="share_the_joy_of_working_with_gigforce_and_invite_your_friends">Share the joy of working with Gigforce and invite your friends.</string>
+    <string name="share_now">Share Now</string>
 </resources>
