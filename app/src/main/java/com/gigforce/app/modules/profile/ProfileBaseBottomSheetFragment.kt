@@ -118,11 +118,11 @@ abstract class ProfileBaseBottomSheetFragment : BottomSheetDialogFragment() {
         linearLayout.addView(aNumberPicker, numPicerParams)
 
         val alertDialogBuilder: AlertDialog.Builder = AlertDialog.Builder(context)
-        alertDialogBuilder.setTitle("Select the Year")
+        alertDialogBuilder.setTitle(getString(R.string.sel_year))
         alertDialogBuilder.setView(linearLayout)
         alertDialogBuilder
             .setCancelable(false)
-            .setPositiveButton("Ok",
+            .setPositiveButton(getString(R.string.okay),
                 DialogInterface.OnClickListener { dialog, id ->
                     Log.d(
                         "NUMBERPICKER",
@@ -130,7 +130,7 @@ abstract class ProfileBaseBottomSheetFragment : BottomSheetDialogFragment() {
                     )
                     text.setText(aNumberPicker.value.toString())
                 })
-            .setNegativeButton("Cancel",
+            .setNegativeButton(getString(R.string.cancel),
                 DialogInterface.OnClickListener { dialog, id -> dialog.cancel() })
 
         val alertDialog: AlertDialog = alertDialogBuilder.create()

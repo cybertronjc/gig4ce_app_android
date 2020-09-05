@@ -75,14 +75,14 @@ class ContactScreenFragment : BaseFragment(), OnContactClickListener {
 
     private fun attachListeners(){
         fab.setOnClickListener { view ->
-            Snackbar.make(view, "Add New Contact", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
+            Snackbar.make(view, getString(R.string.add_new_contact), Snackbar.LENGTH_LONG)
+                .setAction(getString(R.string.action), null).show()
         }
         iv_backArrow.setOnClickListener {
-            showToast("onBackPressed operation")
+            showToast(getString(R.string.onback_operation))
         }
         iv_search.setOnClickListener {
-            showToast("Search Operation...")
+            showToast(getString(R.string.search_operation))
         }
         back_arrow.setOnClickListener{
             activity?.onBackPressed()
@@ -113,11 +113,11 @@ class ContactScreenFragment : BaseFragment(), OnContactClickListener {
         return when (item.itemId)
         {
             R.id.action_invite_friends -> {
-                showToast("Invite Friends...")
+                showToast(getString(R.string.invite_friends))
                 true
             }
             R.id.action_referesh -> {
-                showToast("Referesh...")
+                showToast(getString(R.string.refresh))
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -129,7 +129,7 @@ class ContactScreenFragment : BaseFragment(), OnContactClickListener {
 //        intent.putExtra(AppConstants.IMAGE_URL,url)
 //        intent.putExtra(AppConstants.CONTACT_NAME,name)
 //        startActivity(intent)
-        if(name.equals("Help")){
+        if(name == getString(R.string.help)){
             navigate(R.id.helpChatFragment)
         }else {
             val bundle = Bundle()

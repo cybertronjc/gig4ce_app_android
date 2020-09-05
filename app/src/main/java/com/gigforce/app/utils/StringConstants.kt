@@ -23,7 +23,8 @@ enum class StringConstants(val value: String) {
     QUESTIONS_COUNT("QUESTIONS_COUNT"),
     LEVEL("LEVEL"),
     RIGHT_ANSWERS("RIGHT_ANSWERS"),
-    ANSWERS_ARR("ANSWERS_ARR")
+    ANSWERS_ARR("ANSWERS_ARR"),
+    TIME_TAKEN("TIME_TAKEN")
 
 
 }

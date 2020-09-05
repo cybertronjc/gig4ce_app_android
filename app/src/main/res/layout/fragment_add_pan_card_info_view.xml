@@ -36,7 +36,7 @@
             android:layout_marginTop="4dp"
             android:fontFamily="@font/lato"
             android:letterSpacing="-0.01"
-            tools:text="Under Verification"
+            android:text="@string/under_verification"
             android:textColor="@color/yellow"
             android:textSize="12sp"
             app:layout_constraintEnd_toStartOf="@+id/editLayout"
@@ -79,10 +79,10 @@
             android:layout_marginTop="20dp"
             android:fontFamily="@font/lato"
             android:letterSpacing="-0.01"
+            android:text="@string/pan_card_image"
             android:textColor="@color/black"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/statusTV"
-            android:text="@string/pan_card_image" />
+            app:layout_constraintTop_toBottomOf="@id/statusTV" />
 
         <ImageView
             android:id="@+id/panViewImageIV"
@@ -90,8 +90,8 @@
             android:layout_height="172dp"
             android:layout_marginTop="8dp"
             android:scaleType="fitXY"
-            tools:src="@drawable/bg_square_pos"
-            app:layout_constraintTop_toBottomOf="@id/imageLabelTV" />
+            app:layout_constraintTop_toBottomOf="@id/imageLabelTV"
+            tools:src="@drawable/bg_square_pos" />
 
         <TextView
             android:id="@+id/panViewImageErrorMessage"
@@ -100,20 +100,18 @@
             android:layout_marginTop="8dp"
             android:fontFamily="@font/lato"
             android:letterSpacing="0"
-            android:textSize="12sp"
             android:textColor="@color/app_red"
+            android:textSize="12sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/panViewImageIV"
-            tools:text="Error : Uploaded Image is not a Driving License Image" />
-
+            app:layout_constraintTop_toBottomOf="@id/panViewImageIV" />
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             android:background="@color/white_two"
             android:padding="16dp"
-            android:layout_marginTop="20dp"
             app:layout_constraintTop_toBottomOf="@id/panViewImageErrorMessage">
 
             <TextView
@@ -124,21 +122,21 @@
                 android:letterSpacing="0"
                 android:text="@string/pan_with_colon"
                 android:textColor="@color/black"
+                android:textSize="14sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:textSize="14sp" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/panViewNoTV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                app:layout_constraintStart_toEndOf="@id/panNoLabel"
-                app:layout_constraintTop_toTopOf="parent"
                 android:fontFamily="@font/lato"
                 android:letterSpacing="0"
                 android:textColor="@color/black"
                 android:textSize="14sp"
+                app:layout_constraintStart_toEndOf="@id/panNoLabel"
+                app:layout_constraintTop_toTopOf="parent"
                 tools:text=" UK123456789012" />
 
             <TextView
@@ -149,11 +147,9 @@
                 android:fontFamily="@font/lato"
                 android:letterSpacing="0"
                 android:textColor="@color/app_red"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/panViewNoTV"
                 android:textSize="12sp"
-                tools:text="Error : Uploaded Image is not a Driving License Image" />
-
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/panViewNoTV" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

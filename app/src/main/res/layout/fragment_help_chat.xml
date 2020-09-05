@@ -57,7 +57,7 @@
                 android:layout_marginTop="8dp"
                 android:fontFamily="@font/lato_bold"
                 android:letterSpacing="0.01"
-                android:text="Help"
+                android:text="@string/help"
                 android:textColor="@color/lipstick"
                 android:textSize="20sp"
                 app:layout_constraintStart_toEndOf="@id/imageView30"
@@ -126,7 +126,7 @@
                     android:paddingTop="3dp"
                     android:paddingEnd="8dp"
                     android:paddingBottom="3dp"
-                    android:text="TODAY"
+                    android:text="@string/today"
                     android:textColor="@color/lipstick"
                     android:textSize="12sp" />
 
@@ -193,7 +193,7 @@
                         android:layout_marginTop="11dp"
                         android:fontFamily="@font/lato"
                         android:letterSpacing="0"
-                        android:text="What would you need help with?"
+                        android:text="@string/what_would_you_need_help_with"
                         android:textColor="#d9000000" />
 
                     <LinearLayout
@@ -216,47 +216,47 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="30dp"
                                 android:layout_marginTop="8dp"
-                                android:text="My Current Gig" />
+                                android:text="@string/my_current_gig" />
 
                             <RadioButton
                                 android:layout_width="wrap_content"
                                 android:layout_height="30dp"
-                                android:text="My Past Gig" />
-
-
-                            <RadioButton
-                                android:layout_width="wrap_content"
-                                android:layout_height="30dp"
-                                android:text="My Upcoming Gig" />
+                                android:text="@string/my_past_gig" />
 
 
                             <RadioButton
                                 android:layout_width="wrap_content"
                                 android:layout_height="30dp"
-                                android:text="My Profile" />
+                                android:text="@string/my_upcoming_gig" />
 
 
                             <RadioButton
                                 android:layout_width="wrap_content"
                                 android:layout_height="30dp"
-                                android:text="My Preferences" />
+                                android:text="@string/my_profile" />
 
 
                             <RadioButton
                                 android:layout_width="wrap_content"
                                 android:layout_height="30dp"
-                                android:text="My Wallet" />
-
-                            <RadioButton
-                                android:layout_width="wrap_content"
-                                android:layout_height="30dp"
-                                android:text="My Learning" />
+                                android:text="@string/my_preferences" />
 
 
                             <RadioButton
                                 android:layout_width="wrap_content"
                                 android:layout_height="30dp"
-                                android:text="Others" />
+                                android:text="@string/my_wallet" />
+
+                            <RadioButton
+                                android:layout_width="wrap_content"
+                                android:layout_height="30dp"
+                                android:text="@string/my_learning" />
+
+
+                            <RadioButton
+                                android:layout_width="wrap_content"
+                                android:layout_height="30dp"
+                                android:text="@string/others_camel_case" />
 
                         </RadioGroup>
 

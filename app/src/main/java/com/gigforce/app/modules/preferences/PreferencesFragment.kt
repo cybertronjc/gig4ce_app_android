@@ -138,7 +138,7 @@ class PreferencesFragment : BaseFragment() {
                 viewModel.setPreferenceDataModel(preferenceData)
                 setPreferenecesList()
             } else if (configDataModel == null) {
-                showToast("Config data not loaded!!")
+                showToast(getString(R.string.config_data_not_loaded))
             }
         })
     }
@@ -163,11 +163,13 @@ class PreferencesFragment : BaseFragment() {
             signOutView.visibility = View.GONE
             visibleInvisibleMainItemView(constraintView, othersTV, false)
             setItemAsOther(othersTV, obj)
-        } else if (position == TITLE_SIGNOUT) {
+        }
+        else if (position == TITLE_SIGNOUT) {
             signOutView.visibility = View.VISIBLE
             hideMainConstraintViewAndOthersViewInItemView(constraintView, othersTV)
             setItemAsSignOut(signOutTV, signOutIV, obj)
-        } else {
+        }
+        else {
             signOutView.visibility = View.GONE
             visibleInvisibleMainItemView(constraintView, othersTV, true)
             setItems(imageView, title, subTitle, obj)
@@ -236,20 +238,17 @@ class PreferencesFragment : BaseFragment() {
 //        titleDialog?.text = "Missing out on gigs?"
         val title = dialog?.findViewById(R.id.title) as TextView
         title.text =
-            "Are you sure?\n" +
-                    "Signing out means missing out on gigs around you."
+            getString(R.string.are_you_sure) + "\n" + getString(R.string.signing_out_means_missing_out_on_gigs)
         val yesBtn = dialog.findViewById(R.id.yes) as TextView
         val noBtn = dialog.findViewById(R.id.cancel) as TextView
         yesBtn.setOnClickListener {
             FirebaseAuth.getInstance().signOut()
             removeIntroComplete()
             popFragmentFromStack(R.id.settingFragment)
-
             dialog.dismiss()
         }
         noBtn.setOnClickListener { dialog.dismiss() }
         dialog.show()
     }
-
 
 }
