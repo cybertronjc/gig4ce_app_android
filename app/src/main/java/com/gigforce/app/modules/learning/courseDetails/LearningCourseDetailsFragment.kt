@@ -358,7 +358,7 @@ class LearningCourseDetailsFragment : BaseFragment() {
                     title.text = obj?.title
 
                     var subtitle = getTextView(viewHolder, R.id.title)
-                    subtitle.text = "Lesson ${obj.totalLessons} / ${obj.totalLessons}"
+                    subtitle.text = "Lesson 0 / ${obj.totalLessons}"
 
                     var img = getImageView(viewHolder, R.id.learning_img)
 
