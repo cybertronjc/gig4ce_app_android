@@ -560,25 +560,26 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/attendanceCardView" />
 
-            <com.ncorti.slidetoact.SlideToActView
-                android:id="@+id/startNavigationSliderBtn"
-                android:layout_width="match_parent"
-                android:layout_height="69dp"
-                android:layout_marginTop="20dp"
-                app:border_radius="8dp"
-                android:layout_marginBottom="24dp"
-                app:inner_color="@color/lipstick"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/contact_supervisor"
-                app:outer_color="@color/light_pink"
-                app:slider_height="60dp"
-                app:slider_icon="@drawable/ic_arrow_forward_white"
-                app:slider_icon_color="@color/white"
-                app:text="Check - in" />
+
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
+
+    <com.ncorti.slidetoact.SlideToActView
+        android:id="@+id/startNavigationSliderBtn"
+        android:layout_width="match_parent"
+        android:layout_height="69dp"
+        android:layout_marginTop="20dp"
+        app:border_radius="8dp"
+        android:layout_marginBottom="24dp"
+        app:inner_color="@color/lipstick"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:outer_color="@color/light_pink"
+        app:slider_height="60dp"
+        app:slider_icon="@drawable/ic_arrow_forward_white"
+        app:slider_icon_color="@color/white"
+        app:text="Check - in" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
