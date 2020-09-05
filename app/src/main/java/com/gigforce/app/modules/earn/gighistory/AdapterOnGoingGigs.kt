@@ -5,12 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.gigforce.app.R
 import com.gigforce.app.modules.gigPage.models.Gig
-import com.gigforce.app.utils.PushDownAnim
-import com.gigforce.app.utils.getScreenWidth
+import com.gigforce.app.utils.*
+import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.layout_rv_gig_details_gig_history.view.*
 import java.text.SimpleDateFormat
 
@@ -65,8 +65,7 @@ class AdapterOnGoingGigs : RecyclerView.Adapter<AdapterOnGoingGigs.ViewHolder>()
         gig?.attendance?.checkOutTime?.let {
             holder.itemView.tv_punch_out_time_rv_gig_hist.text = timeFormatter.format(it)
         }
-        Glide.with(holder.itemView).load(gig?.companyLogo).placeholder(R.drawable.profile)
-            .into(holder.itemView.iv_brand_rv_gig_hist)
+        setBrandLogo(gig ?: Gig(), holder)
         PushDownAnim.setPushDownAnimTo(holder.itemView)
             .setOnClickListener(View.OnClickListener {
                 callbacks.openGigDetails(onGoingGigs!![holder.adapterPosition])
@@ -87,4 +86,47 @@ class AdapterOnGoingGigs : RecyclerView.Adapter<AdapterOnGoingGigs.ViewHolder>()
     interface AdapterOnGoingGigCallbacks {
         fun openGigDetails(gig: Gig)
     }
+
+    private fun setBrandLogo(
+        gig: Gig,
+        viewHolderGigDetails: ViewHolder
+    ) {
+        if (!gig.companyLogo.isNullOrBlank()) {
+            if (gig.companyLogo!!.startsWith("http", true)) {
+
+                GlideApp.with(viewHolderGigDetails.itemView.context)
+                    .load(gig.companyLogo)
+                    .placeholder(getCircularProgressDrawable(viewHolderGigDetails.itemView.context))
+                    .into(viewHolderGigDetails.itemView.iv_brand_rv_gig_hist)
+            } else {
+                FirebaseStorage.getInstance()
+                    .getReference("companies_gigs_images")
+                    .child(gig.companyLogo!!)
+                    .downloadUrl
+                    .addOnSuccessListener { fileUri ->
+
+                        GlideApp.with(viewHolderGigDetails.itemView)
+                            .load(fileUri)
+                            .placeholder(getCircularProgressDrawable(viewHolderGigDetails.itemView.context))
+                            .into(viewHolderGigDetails.itemView.iv_brand_rv_gig_hist)
+                    }
+            }
+        } else {
+            val companyInitials = if (gig.companyName.isNullOrBlank())
+                "C"
+            else
+                gig.companyName!![0].toString().toUpperCase()
+            val drawable = TextDrawable.builder().buildRound(
+                companyInitials,
+                ResourcesCompat.getColor(
+                    viewHolderGigDetails.itemView.context.resources,
+                    R.color.lipstick,
+                    null
+                )
+            )
+
+            viewHolderGigDetails.itemView.iv_brand_rv_gig_hist.setImageDrawable(drawable)
+        }
+    }
+
 }

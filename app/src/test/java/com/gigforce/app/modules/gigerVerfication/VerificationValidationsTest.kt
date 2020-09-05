@@ -86,7 +86,7 @@ class VerificationValidationsTest {
         dl = "UKA133434343334" // Alpha in 3rd Place
         assertFalse(VerificationValidations.isDLNumberValid(dl))
 
-        dl = "UK1133A34334334" // Alpha in MID
+        dl = "UK113334A334334" // Alpha in MID
         assertFalse(VerificationValidations.isDLNumberValid(dl))
 
         dl = "UK113334344333A" // Ends With alphabet
@@ -96,6 +96,34 @@ class VerificationValidationsTest {
         assertTrue(VerificationValidations.isDLNumberValid(dl))
 
         dl = "uk1234567890123" // Valid
+        assertTrue(VerificationValidations.isDLNumberValid(dl))
+
+
+        dl = "RJ-05/DLC/09/ 104862" // Valid
+        assertTrue(VerificationValidations.isDLNumberValid(dl))
+
+        dl = "RJ-05/DLC/09/104862" // Valid
+        assertTrue(VerificationValidations.isDLNumberValid(dl))
+
+        dl = "RJ-0520091048627" // Valid
+        assertTrue(VerificationValidations.isDLNumberValid(dl))
+
+        dl = " RJ0520091048627" // Valid
+        assertTrue(VerificationValidations.isDLNumberValid(dl))
+
+        dl = " RJ0520091048627" // Valid
+        assertTrue(VerificationValidations.isDLNumberValid(dl))
+
+        dl = "RJ0520091048627" // Valid
+        assertTrue(VerificationValidations.isDLNumberValid(dl))
+
+        dl = "GJ18 20120001716" // Valid
+        assertTrue(VerificationValidations.isDLNumberValid(dl))
+
+        dl = "GJ18N20120A0171" // Valid
+        assertFalse(VerificationValidations.isDLNumberValid(dl))
+
+        dl = "GJ18N2012000171" // Valid
         assertTrue(VerificationValidations.isDLNumberValid(dl))
     }
 

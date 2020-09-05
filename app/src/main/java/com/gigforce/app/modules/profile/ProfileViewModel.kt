@@ -23,7 +23,7 @@ class ProfileViewModel : ViewModel() {
 
     fun getProfileData(): MutableLiveData<ProfileData> {
 
-        listener = profileFirebaseRepository.getDBCollection()
+        profileFirebaseRepository.getDBCollection()
             .addSnapshotListener(EventListener(fun(
                 value: DocumentSnapshot?,
                 e: FirebaseFirestoreException?

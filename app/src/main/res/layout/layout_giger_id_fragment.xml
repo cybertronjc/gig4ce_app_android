@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/lipstick">
 
     <androidx.appcompat.widget.AppCompatImageView
@@ -221,12 +222,12 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
-                    <com.gigforce.app.utils.widgets.CircleImageView
+                    <ImageView
                         android:id="@+id/iv_brand_logo_giger_id"
                         android:layout_width="@dimen/size_60"
                         android:layout_height="@dimen/size_60"
                         android:layout_gravity="center_horizontal"
-                        android:src="@drawable/p_g_logo" />
+                        tools:src="@drawable/p_g_logo" />
 
                     <TextView
                         android:id="@+id/tv_brand_name_giger_id"

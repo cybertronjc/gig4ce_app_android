@@ -30,9 +30,6 @@ import com.ncorti.slidetoact.SlideToActView
 import kotlinx.android.synthetic.main.fragment_add_bank_details_info.*
 import kotlinx.android.synthetic.main.fragment_add_bank_details_info_main.*
 import kotlinx.android.synthetic.main.fragment_add_bank_details_info_view.*
-import kotlinx.android.synthetic.main.fragment_add_bank_details_info_view.editLayout
-import kotlinx.android.synthetic.main.fragment_add_bank_details_info_view.statusTV
-import kotlinx.android.synthetic.main.fragment_add_pan_card_info_view.*
 import kotlinx.android.synthetic.main.fragment_verification_image_holder.view.*
 import java.util.*
 
@@ -180,7 +177,7 @@ class AddBankDetailsInfoFragment : BaseFragment() {
                             return
                         }
 
-                        if (bankNameEditText.text.toString().length < 6) {
+                        if (bankNameEditText.text.toString().length < 3) {
 
                             MaterialAlertDialogBuilder(requireContext())
                                 .setTitle(getString(R.string.alert))
@@ -227,7 +224,7 @@ class AddBankDetailsInfoFragment : BaseFragment() {
                             accountNo = accNo
                         )
 
-                    } else if(passbookNoRB.isChecked) {
+                    } else if (passbookNoRB.isChecked) {
 
                         viewModel.updateBankPassbookImagePath(
                             userHasPassBook = false,
@@ -321,9 +318,10 @@ class AddBankDetailsInfoFragment : BaseFragment() {
 
         if (bankDetails.passbookImagePath != null) {
 
-            if(bankDetails.passbookImagePath.startsWith("http", true)){
-                Glide.with(requireContext()).load(bankDetails.passbookImagePath).placeholder(getCircularProgressDrawable()).into(bankViewImageIV)
-            }else {
+            if (bankDetails.passbookImagePath.startsWith("http", true)) {
+                Glide.with(requireContext()).load(bankDetails.passbookImagePath)
+                    .placeholder(getCircularProgressDrawable()).into(bankViewImageIV)
+            } else {
                 firebaseStorage
                     .reference
                     .child("verification")
@@ -379,9 +377,9 @@ class AddBankDetailsInfoFragment : BaseFragment() {
 
         if (bankData.passbookImagePath != null) {
 
-            if(bankData.passbookImagePath.startsWith("http", true)){
+            if (bankData.passbookImagePath.startsWith("http", true)) {
                 showPassbookInfoCard(Uri.parse(bankData.passbookImagePath))
-            }else {
+            } else {
                 firebaseStorage
                     .reference
                     .child("verification")

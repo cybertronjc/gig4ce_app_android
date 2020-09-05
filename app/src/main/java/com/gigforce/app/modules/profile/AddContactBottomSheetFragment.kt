@@ -15,12 +15,11 @@ import com.gigforce.app.modules.profile.models.ContactPhone
 import com.gigforce.app.utils.StringConstants
 import com.gigforce.app.utils.isValidMail
 import com.gigforce.app.utils.isValidMobile
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.android.synthetic.main.add_contact_bottom_sheet.*
 import kotlinx.android.synthetic.main.add_contact_bottom_sheet.view.*
 
 
-class AddContactBottomSheetFragment : BottomSheetDialogFragment() {
+class AddContactBottomSheetFragment : ProfileBaseBottomSheetFragment() {
     companion object {
         fun newInstance(
             bundle: Bundle,
@@ -75,7 +74,8 @@ class AddContactBottomSheetFragment : BottomSheetDialogFragment() {
         if (!validateForm()) return false
         when (arguments?.getInt(StringConstants.CONTACT_EDIT_STATE.value)!!) {
             STATE_EDIT_CONTACT -> {
-                callbacks?.contactEdit(arguments?.getString(StringConstants.CONTACT_TO_EDIT.value)!!,
+                callbacks?.contactEdit(
+                    arguments?.getString(StringConstants.CONTACT_TO_EDIT.value)!!,
                     ContactPhone(
                         add_contact_phone.text.toString(),
                         false,
@@ -84,7 +84,8 @@ class AddContactBottomSheetFragment : BottomSheetDialogFragment() {
                 )
             }
             STATE_ADD_CONTACT -> {
-                callbacks?.contactEdit(null,
+                callbacks?.contactEdit(
+                    null,
                     ContactPhone(
                         add_contact_phone.text.toString(),
                         false,
@@ -94,7 +95,7 @@ class AddContactBottomSheetFragment : BottomSheetDialogFragment() {
             }
             STATE_EDIT_EMAIL -> {
                 callbacks?.emailEdit(
-                   arguments?.getString(StringConstants.EMAIL_TO_EDIT.value)!!,
+                    arguments?.getString(StringConstants.EMAIL_TO_EDIT.value)!!,
                     ContactEmail(
                         add_contact_phone.text.toString(),
                         false
@@ -102,7 +103,8 @@ class AddContactBottomSheetFragment : BottomSheetDialogFragment() {
                 )
             }
             STATE_ADD_EMAIL -> {
-                callbacks?.emailEdit(null,
+                callbacks?.emailEdit(
+                    null,
                     ContactEmail(
                         add_contact_phone.text.toString(),
                         false
@@ -115,22 +117,35 @@ class AddContactBottomSheetFragment : BottomSheetDialogFragment() {
     }
 
     private fun validateForm(): Boolean {
-        if (add_contact_phone.text.isEmpty()) {
-            til_add_contact_phone.error = getString(R.string.empty_string_validation)
+        if (add_contact_phone.text?.isEmpty()!!) {
+            showErrorText(
+                getString(R.string.empty_string_validation),
+                form_error,
+                add_contact_phone
+
+            )
+
             return false
         }
         when (arguments?.getInt(StringConstants.CONTACT_EDIT_STATE.value)) {
             STATE_EDIT_CONTACT, STATE_ADD_CONTACT -> {
                 val isValidMobile = isValidMobile(add_contact_phone.text.toString())
-                til_add_contact_phone.error =
-                    if (isValidMobile) null else getString(R.string.validation_phone)
+
+                if (isValidMobile) hideError(form_error, add_contact_phone) else showErrorText(
+                    getString(R.string.validation_phone),
+                    form_error,
+                    add_contact_phone
+                )
                 return (isValidMobile)
 
             }
             STATE_EDIT_EMAIL, STATE_ADD_EMAIL -> {
                 val isValidEmail = isValidMail(add_contact_phone.text.toString())
-                til_add_contact_phone.error =
-                    if (isValidEmail) null else getString(R.string.validation_email)
+                if (isValidEmail) hideError(form_error, add_contact_phone) else showErrorText(
+                    getString(R.string.validation_email),
+                    form_error,
+                    add_contact_phone
+                )
                 return (isValidEmail)
             }
             else -> {
@@ -141,6 +156,7 @@ class AddContactBottomSheetFragment : BottomSheetDialogFragment() {
     }
 
     private fun initUIAsPerBundle() {
+//        add_contact_phone.background.mutate().setColorFilter(ContextCompat.getColor(requireContext(), R.color.bottom_sheet_et), PorterDuff.Mode.SRC_ATOP);
         checkState(arguments?.getInt(StringConstants.CONTACT_EDIT_STATE.value)!!)
 
     }
@@ -151,7 +167,7 @@ class AddContactBottomSheetFragment : BottomSheetDialogFragment() {
                 tv_heading_add_contact_bts.text = getString(R.string.add_contact)
                 cb_is_whatsapp_number_add_contact.visibility = View.VISIBLE
                 add_contact_add_more.visibility = View.VISIBLE
-                add_contact_phone.filters = arrayOf<InputFilter>(LengthFilter(10))
+                add_contact_phone.filters = arrayOf<InputFilter>(LengthFilter(13))
 
 
             }
@@ -159,7 +175,7 @@ class AddContactBottomSheetFragment : BottomSheetDialogFragment() {
                 tv_heading_add_contact_bts.text = getString(R.string.add_email)
                 cb_is_whatsapp_number_add_contact.visibility = View.GONE
                 add_contact_add_more.visibility = View.VISIBLE
-                til_add_contact_phone.hint = getString(R.string.email)
+                add_contact_phone.hint = getString(R.string.email_madatory)
                 add_contact_phone.inputType = InputType.TYPE_CLASS_TEXT
                 add_contact_phone.filters = arrayOf<InputFilter>(LengthFilter(255))
 
@@ -172,8 +188,10 @@ class AddContactBottomSheetFragment : BottomSheetDialogFragment() {
                 add_contact_phone.setText(arguments?.getString(StringConstants.CONTACT_TO_EDIT.value))
                 cb_is_whatsapp_number_add_contact.isChecked =
                     arguments?.getBoolean(StringConstants.IS_WHATSAPP_NUMBER.value, false)!!
-                add_contact_phone.filters = arrayOf<InputFilter>(LengthFilter(10))
+                add_contact_phone.filters = arrayOf<InputFilter>(LengthFilter(13))
                 add_contact_phone.setSelection(add_contact_phone.text.toString().length)
+                add_contact_phone.isEnabled =
+                    !arguments?.getBoolean(StringConstants.IS_REGISTERED_NUMBER.value, false)!!
 
 
             }
@@ -182,7 +200,7 @@ class AddContactBottomSheetFragment : BottomSheetDialogFragment() {
                 add_contact_phone.setText(arguments?.getString(StringConstants.EMAIL_TO_EDIT.value))
                 cb_is_whatsapp_number_add_contact.visibility = View.GONE
                 add_contact_add_more.visibility = View.GONE
-                til_add_contact_phone.hint = getString(R.string.email)
+                add_contact_phone.hint = getString(R.string.email_madatory)
                 add_contact_phone.inputType = InputType.TYPE_CLASS_TEXT
                 add_contact_phone.filters = arrayOf<InputFilter>(LengthFilter(255))
                 add_contact_phone.setSelection(add_contact_phone.text.toString().length)

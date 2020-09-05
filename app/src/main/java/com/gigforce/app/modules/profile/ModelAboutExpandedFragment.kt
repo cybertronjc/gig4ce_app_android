@@ -92,7 +92,7 @@ class ModelAboutExpandedFragment : ModelCallbacksAboutExpandedFragment,
                 .addOnCompleteListener {
                     if (it.isSuccessful) {
                         contactList.add(newContact ?: ContactPhone())
-                        responseCallbacks.reloadProfile(true)
+                        responseCallbacks.reloadProfile(false)
                     } else {
                         if (it.exception != null) {
                             responseCallbacks.errorUpdatingContact(it.exception?.message!!)
@@ -108,7 +108,7 @@ class ModelAboutExpandedFragment : ModelCallbacksAboutExpandedFragment,
             getCollectionReference().document(profileID).update("contactPhone", contactList)
                 .addOnCompleteListener {
                     if (it.isSuccessful) {
-                        responseCallbacks.reloadProfile(true)
+                        responseCallbacks.reloadProfile(false)
                     } else {
                         if (it.exception != null) {
                             responseCallbacks.errorUpdatingContact(it.exception?.message!!)
@@ -139,7 +139,7 @@ class ModelAboutExpandedFragment : ModelCallbacksAboutExpandedFragment,
                 .addOnCompleteListener {
                     if (it.isSuccessful) {
                         contactList.add(newContact ?: ContactEmail())
-                        responseCallbacks.reloadProfile(true)
+                        responseCallbacks.reloadProfile(false)
                     } else {
                         if (it.exception != null) {
                             responseCallbacks.errorUpdatingContact(it.exception?.message!!)
@@ -155,7 +155,7 @@ class ModelAboutExpandedFragment : ModelCallbacksAboutExpandedFragment,
             getCollectionReference().document(profileID).update("contactEmail", contactList)
                 .addOnCompleteListener {
                     if (it.isSuccessful) {
-                        responseCallbacks.reloadProfile(true)
+                        responseCallbacks.reloadProfile(false)
                     } else {
                         if (it.exception != null) {
                             responseCallbacks.errorUpdatingContact(it.exception?.message!!)
@@ -167,7 +167,14 @@ class ModelAboutExpandedFragment : ModelCallbacksAboutExpandedFragment,
 
     fun updateEmails(profileID: String) {
         getCollectionReference().document(profileID)
-            .update("contactEmail", arrayListOf(ContactEmail("one@gmail.com")));
+            .update(
+                mapOf(
+                    "contactEmail" to arrayListOf<ContactEmail>(),
+                    "contactPhone" to arrayListOf<ContactPhone>(),
+                    "contact" to arrayListOf<Contact>()
+
+                )
+            );
 
     }
 

@@ -28,7 +28,8 @@
         android:roundIcon="@mipmap/ic_app_icon_with_grad_round"
         android:supportsRtl="true"
         android:requestLegacyExternalStorage="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        tools:replace="android:allowBackup">
         <!--
                Set to true if your app is Standalone, that is, it does not require the handheld
             <category android:name="android.intent.category.DEFAULT" />
