@@ -19,7 +19,7 @@ class CourseDetailsViewModel constructor(
     var currentModules : List<Module>? = null
     var currentlySelectedModule : Module? = null
     var currentLessons : List<CourseContent>? = null
-    var currentAssessments : List<CourseContent>? = null
+    private var mCurrentModuleId : String? = null
 
     private val _courseDetails = MutableLiveData<Lce<Course>>()
     val courseDetails: LiveData<Lce<Course>> = _courseDetails
@@ -52,6 +52,12 @@ class CourseDetailsViewModel constructor(
     fun getCourseModules(
         courseId: String
     ) = viewModelScope.launch {
+
+        if(currentModules != null) {
+            _courseModules.postValue(Lce.content(currentModules!!))
+            return@launch
+        }
+
         _courseModules.postValue(Lce.loading())
 
         try {
@@ -87,6 +93,13 @@ class CourseDetailsViewModel constructor(
         courseId: String,
         moduleId: String
     ) = viewModelScope.launch {
+
+        if(mCurrentModuleId == moduleId){
+            _courseLessons.postValue(Lce.content(currentLessons!!))
+            _courseAssessments.postValue(Lce.content(currentAssessments!!))
+            return@launch
+        }
+
         _courseLessons.postValue(Lce.loading())
         _courseAssessments.postValue(Lce.loading())
 
@@ -95,6 +108,7 @@ class CourseDetailsViewModel constructor(
                 courseId = courseId,
                 moduleId = moduleId
             )
+            mCurrentModuleId = moduleId
             currentLessons = courseLessons
             _courseLessons.postValue(Lce.content(courseLessons))
 
@@ -115,6 +129,8 @@ class CourseDetailsViewModel constructor(
     private val _courseAssessments = MutableLiveData<Lce<List<CourseContent>>>()
     val courseAssessments: LiveData<Lce<List<CourseContent>>> = _courseAssessments
 
+    var currentAssessments : List<CourseContent>? = null
+
     fun getCourseAssessments(
         courseId: String,
         moduleId: String
@@ -126,7 +142,7 @@ class CourseDetailsViewModel constructor(
                 courseId = courseId,
                 moduleId = moduleId
             )
-
+            currentAssessments = courseAssessments
             _courseAssessments.postValue(Lce.content(courseAssessments))
         } catch (e: Exception) {
             _courseAssessments.postValue(Lce.error(e.toString()))
