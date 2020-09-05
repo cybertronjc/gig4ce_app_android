@@ -25,8 +25,6 @@ import com.gigforce.app.modules.assessment.models.AssementQuestionsReponse
 import com.gigforce.app.modules.profile.ProfileViewModel
 import com.gigforce.app.utils.*
 import com.gigforce.app.utils.widgets.CustomScrollView
-import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.StorageReference
 import kotlinx.android.synthetic.main.fragment_assessment.*
 import kotlinx.android.synthetic.main.toolbar.*
 import java.text.SimpleDateFormat
@@ -127,6 +125,7 @@ class AssessmentFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
                 )
                 tv_scenario_value_assess_frag.text = it.scenario
                 tv_scenario_value_header_assess_frag.text = it.scenario
+
                 tv_level_assess_frag.text = "${getString(R.string.level)} ${it.level}"
                 tv_designation_assess_frag.text = it.assessment_name
                 h_pb_assess_frag.max = it.assessment?.size!!
@@ -150,12 +149,16 @@ class AssessmentFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
 
     fun setDataAsPerPosition(it: AssementQuestionsReponse) {
         tv_ques_no_assess_frag.text =
-            "${getString(R.string.ques)} ${selectedPosition + 1}/${it.assessment?.size} "
+            "${getString(R.string.ques)} ${selectedPosition + 1}/${it.assessment?.size} :"
+        tv_ques_assess_frag.text = it.assessment!![selectedPosition].question!!
         adapter?.addData(it.assessment!![selectedPosition].options!!, false, "")
-        val sdf = SimpleDateFormat("hh:mm:ss")
-        val date = sdf.parse(it.duration)
+        try {
+            val sdf = SimpleDateFormat("hh:mm:ss")
+            val date = sdf.parse(it.duration)
+            initCountDownTimer(miliseconds(date.hours, date.minutes, date.seconds))
+        } catch (ignored: Exception) {
 
-        initCountDownTimer(miliseconds(date.hours, date.minutes, date.seconds))
+        }
 
 
     }
@@ -189,7 +192,7 @@ class AssessmentFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
                     return
                 }
                 showToast(getString(R.string.time_is_up))
-                timeTaken= millis.toInt()
+                timeTaken = millis.toInt()
                 viewModelAssessmentFragment.observableAssessmentData.value?.timeTakenInMillis =
                     timeTaken.toLong();
                 viewModelAssessmentFragment.submitAnswers(viewModelProfile.getProfileData().value?.id)
@@ -399,12 +402,12 @@ class AssessmentFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
 
     private fun loadImage(Path: String) {
 
-        val reference: StorageReference =
-            FirebaseStorage.getInstance().reference.child("assessment_images").child(Path)
+//        val reference: StorageReference =
+//            FirebaseStorage.getInstance().reference.child("assessment_images").child(Path)
 
         GlideApp.with(this.requireContext())
             .asBitmap()
-            .load(reference)
+            .load(Path)
             .into(object : CustomTarget<Bitmap>() {
                 override fun onResourceReady(
                     resource: Bitmap,

@@ -60,7 +60,7 @@ class AssessmentAnswersAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>()
                     )
                     holder.itemView.tv_number_rv_access_frag.setTextColor(color)
                     holder.itemView.tv_option_rv_access_frag.setTextColor(color)
-                    holder.itemView.tv_helper_rv_access_frag.visibility = View.VISIBLE
+                    holder.itemView.tv_helper_rv_access_frag.visibility = if (obj.reason.isEmpty()) View.GONE else View.VISIBLE
 
                 } else {
                     val color = holder.itemView.context.getColor(
@@ -69,7 +69,7 @@ class AssessmentAnswersAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>()
                     )
 
                     holder.itemView.tv_helper_rv_access_frag.visibility =
-                        if (obj.clickStatus == true) View.GONE else View.VISIBLE
+                        if (obj.clickStatus == true || obj.reason.isEmpty()) View.GONE else View.VISIBLE
                     holder.itemView.tv_number_rv_access_frag.setTextColor(color)
                     holder.itemView.tv_option_rv_access_frag.setTextColor(color)
 //                    holder.itemView.tv_helper_rv_access_frag.text = ""

@@ -1,10 +1,7 @@
 <resources>
     <string name="app_name">Gigforce</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_profile">ProfileActivity</string>
-
-
     <string name="english">English</string>
     <string name="hindi">हिंदी</string>
     <string name="telgu">తెలుగు</string>
@@ -12,46 +9,27 @@
     <string name="punjabi">ਪੰਜਾਬੀ</string>
     <string name="francais">français</string>
     <string name="marathi">मराठी</string>
-
-
     <string name="intro_slide1_title">Welcome to Gigforce</string>
     <string name="intro_slide1_subtitle">A Job you always have</string>
-
     <string name="intro_slide2_title">Be a professional</string>
     <string name="intro_slide2_subtitle">Build a profile and train to upgrade your skills</string>
-
     <string name="intro_slide3_title">Let work happen</string>
     <string name="intro_slide3_subtitle">Set your preference and gigs will find you</string>
-
     <string name="ob_slide1_title">Onboarding</string>
     <string name="ob_slide1_subtitle">How to - 1</string>
-
     <string name="ob_slide2_title">Onboarding</string>
     <string name="ob_slide2_subtitle">How to - 2</string>
-
     <string name="ob_slide3_title">Onboarding</string>
     <string name="ob_slide3_subtitle">How to - 3</string>
-    <!--
-    This string is used for square devices and overridden by hello_world in
-    values-round/strings.xml for round devices.
-    -->
     <string name="hello_world">Hello World!</string>
-
-    <!-- Preference Titles -->
     <string name="messages_header">Messages</string>
     <string name="sync_header">Sync</string>
-
-    <!-- Messages Preferences -->
     <string name="signature_title">Your signature</string>
     <string name="reply_title">Default reply action</string>
-
-    <!-- Sync Preferences -->
     <string name="sync_title">Sync email periodically</string>
     <string name="attachment_title">Download incoming attachments</string>
     <string name="attachment_summary_on">Automatically download attachments for incoming emails</string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
-
-    <!-- Profile main expanded page -->
     <string name="rating_text">Rating</string>
     <string name="tasks_done_text">TASK DONE</string>
     <string name="connections_text">CONNECTIONS</string>

@@ -5,10 +5,10 @@ data class AssementQuestionsReponse(
     var lesson_id: String = "",
     var scenario: String = "",
     var type: String = "",
-    var duration: String = "",
-    var assessment_name: String = "",
-    var level: Int = 0,
-    var assessment_image: String = "",
+    var duration: String = "00:04:00",
+    var assessment_name: String = "Retail Sales Executive",
+    var level: Int = 1,
+    var assessment_image: String = "https://image.freepik.com/free-photo/woman-buying-grocery-store_1303-14084.jpg",
     var timeTakenInMillis: Long = 0,
-    var passing_percentage: Int = 0
+    var passing_percentage: Int = 50
 )

@@ -54,23 +54,14 @@ class MainLearningFragment : BaseFragment() {
             activity?.onBackPressed()
         }
 
-        dummLayout1.videoTitleTV.text = getString(R.string.achieve_retail_goal)
-        dummLayout1.videoDescTV.text = getString(R.string.industry_based)
-        dummLayout1.videoThumbnailIV.setImageDrawable(resources.getDrawable(R.drawable.recent_added_learning))
         journey_completed_cardview.setOnClickListener {
             navigate(R.id.myLearningFragment)
         }
 
-        dummLayout2.videoTitleTV.text = getString(R.string.apply_driving_license)
-        dummLayout2.videoDescTV.text = getString(R.string.role_based)
-        dummLayout2.videoThumbnailIV.setImageDrawable(resources.getDrawable(R.drawable.recent_added_learning2))
         journey_ongoing_cardview.setOnClickListener {
             navigate(R.id.myLearningFragment)
         }
 
-        dummLayout3.videoTitleTV.text = getString(R.string.achieve_retail_goal)
-        dummLayout3.videoDescTV.text = getString(R.string.industry_based)
-        dummLayout3.videoThumbnailIV.setImageDrawable(resources.getDrawable(R.drawable.recent_added_learning1))
         journey_pending_cardview.setOnClickListener {
             navigate(R.id.myLearningFragment)
         }
@@ -82,7 +73,6 @@ class MainLearningFragment : BaseFragment() {
 
         initLearningViewModel()
     }
-
     private fun initLearningViewModel() {
         learningViewModel
             .roleBasedCourses
