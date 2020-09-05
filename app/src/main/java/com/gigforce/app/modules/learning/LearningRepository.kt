@@ -258,6 +258,7 @@ class LearningRepository : BaseFirestoreDBRepository() {
 
     companion object {
         private const val COLLECTION_NAME = "Course_blocks"
+        private const val COURSE_PROGRESS_NAME = "Course_Progress"
 
         private const val TYPE = "type"
         private const val TOPIC_TYPE = "topictype"
