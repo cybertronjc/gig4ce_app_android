@@ -307,8 +307,7 @@
     <string name="add_languages">Add languages</string>
     <string name="phone_colon">phone:</string>
     <string name="email_colon">email:</string>
-    <string name="contact">Contact</string>
-    <string name="add_contacts">Add contacts</string>
+
     <string name="cta_not_implemented">CTA NOT IMPLEMENTED</string>
     <string name="beginner">beginner</string>
     <string name="moderate">moderate</string>
@@ -360,7 +359,6 @@
     <string name="verified">Verified</string>
     <string name="add_skill">Add Skill</string>
     <string name="add_lang">Add Languages</string>
-    <string name="add_contact">Add Contact</string>
     <string name="company_name_mandatory">Company Name *</string>
     <string name="proceed">PROCEED</string>
     <string name="achievements_colon">Achievements:</string>

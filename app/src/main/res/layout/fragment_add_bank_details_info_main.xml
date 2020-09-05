@@ -36,9 +36,9 @@
             android:layout_height="14dp"
             android:layout_marginTop="22dp"
             android:layout_marginEnd="13dp"
-            android:src="@drawable/ic_time"
             android:clickable="true"
             android:focusable="true"
+            android:src="@drawable/ic_time"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -82,12 +82,12 @@
             android:layout_marginTop="2dp"
             android:fontFamily="@font/lato"
             android:letterSpacing="0"
-            android:visibility="gone"
+            android:text="@string/err_driving_license"
             android:textColor="@color/app_red"
             android:textSize="12sp"
+            android:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/doYouHavePassbookLabel"
-            android:text="@string/err_driving_license" />
+            app:layout_constraintTop_toBottomOf="@id/doYouHavePassbookLabel" />
 
 
         <RadioGroup
@@ -188,7 +188,6 @@
                     android:visibility="gone"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/dlNoTV"
-                    android:textSize="12sp"
                     tools:text="Error : Uploaded Image is not a Driving License Image" />
 
 
@@ -230,7 +229,6 @@
                     tools:text="Error : Uploaded Image is not a Driving License Image" />
 
 
-
                 <TextView
                     android:id="@+id/accNoLabel"
                     android:layout_width="wrap_content"
@@ -262,15 +260,13 @@
                     android:layout_marginTop="2dp"
                     android:fontFamily="@font/lato"
                     android:letterSpacing="0"
+
                     android:textColor="@color/app_red"
                     android:textSize="12sp"
                     android:visibility="gone"
-                    android:textColor="@color/app_red"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/dlNoTV"
-                    android:textSize="12sp"
                     tools:text="Error : Uploaded Image is not a Driving License Image" />
-
 
 
             </LinearLayout>
@@ -290,15 +286,15 @@
             android:id="@+id/bankImageEditErrorMessage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="2dp"
             android:fontFamily="@font/lato"
-            android:layout_marginStart="16dp"
             android:letterSpacing="0"
             android:textColor="@color/app_red"
+            android:textSize="12sp"
             android:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/passbookImageHolder"
-            android:textSize="12sp"
             tools:text="Error : Uploaded Image is not a Driving License Image" />
 
 

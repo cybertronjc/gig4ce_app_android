@@ -303,7 +303,6 @@
     <string name="rating_you_received">Rating You Have Received From Client</string>
     <string name="is_whats_app_number">Is Whatsapp Number</string>
     <string name="this_is_my_whatsapp_number">This is my Whatsapp number</string>
-    <string name="add_contact">Add Contact</string>
     <string name="edit_contact">Edit Contact</string>
     <string name="edit_email">Edit Email</string>
     <string name="email">Email</string>
@@ -312,8 +311,7 @@
     <string name="validation_email">Please enter a valid email id</string>
     <string name="emails">Emails</string>
     <string name="add_email">Add Email</string>
-    <string name="contact">Contact</string>
-    <string name="add_contacts">Add contacts</string>
+
     <string name="contact_hyphen">phone:</string>
     <string name="ques">Ques</string>
     <string name="answer_the_ques">Please Answer Question to Continue!!!</string>

@@ -189,6 +189,7 @@ class AssessmentFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
                     return
                 }
                 showToast(getString(R.string.time_is_up))
+                timeTaken= millis.toInt()
                 viewModelAssessmentFragment.observableAssessmentData.value?.timeTakenInMillis =
                     timeTaken.toLong();
                 viewModelAssessmentFragment.submitAnswers(viewModelProfile.getProfileData().value?.id)
