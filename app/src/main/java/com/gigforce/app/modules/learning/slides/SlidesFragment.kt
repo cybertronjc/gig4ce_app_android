@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.viewpager.widget.ViewPager
@@ -12,12 +13,13 @@ import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.learning.models.SlideContent
+import com.gigforce.app.modules.learning.slides.types.VideoFragmentOrientationListener
 import com.gigforce.app.utils.Lce
 import kotlinx.android.synthetic.main.fragment_slides.*
 import kotlinx.android.synthetic.main.fragment_slides_main.*
 
 
-class SlidesFragment : BaseFragment(), ViewPager.OnPageChangeListener {
+class SlidesFragment : BaseFragment(), ViewPager.OnPageChangeListener, VideoFragmentOrientationListener {
 
     private val viewModel: SlideViewModel by viewModels()
 
@@ -28,6 +30,19 @@ class SlidesFragment : BaseFragment(), ViewPager.OnPageChangeListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        savedInstanceState?.let {
+
+            val slideTitle = it.getString(INTENT_EXTRA_SLIDE_TITLE)
+            toolbar.title = slideTitle
+        }
+
+        arguments?.let {
+
+            val slideTitle = it.getString(INTENT_EXTRA_SLIDE_TITLE)
+            toolbar.title = slideTitle
+        }
+
         initView()
         initViewModel()
     }
@@ -66,11 +81,10 @@ class SlidesFragment : BaseFragment(), ViewPager.OnPageChangeListener {
         fragment_slides_error.gone()
         fragment_slides_main_layout.visible()
 
-        pagerAdapter = SlidesPagerAdapter(childFragmentManager, content)
+        pagerAdapter = SlidesPagerAdapter(childFragmentManager, content,this)
         slideViewPager.adapter = pagerAdapter
         slideViewPager.addOnPageChangeListener(this)
 
-        toolbar.subtitle = "1 of ${content.size}"
         val slidesCoverageProgress =  100 / content.size
         progress.progress = slidesCoverageProgress
     }
@@ -84,6 +98,10 @@ class SlidesFragment : BaseFragment(), ViewPager.OnPageChangeListener {
 
     private fun initView() {
 
+        toolbar.setNavigationOnClickListener {
+            activity?.onBackPressed()
+        }
+
 //        slideCounterTV.text = "Slide 1 of ${viewModel.slidesData.size}"
 //        slideTitleTV.text = viewModel.slidesData[0].title
 //        slideDescriptionTV.text = viewModel.slidesData[0].content
@@ -93,6 +111,10 @@ class SlidesFragment : BaseFragment(), ViewPager.OnPageChangeListener {
 
     }
 
+    override fun onOrientationChange(landscape: Boolean) {
+            appBar.isVisible = !landscape
+    }
+
     override fun onPageScrollStateChanged(state: Int) {}
     override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
 
@@ -100,7 +122,13 @@ class SlidesFragment : BaseFragment(), ViewPager.OnPageChangeListener {
         val pagesCount = pagerAdapter!!.count
         val slidesCoverageProgress = ((position + 1) * 100 )/ pagesCount
         progress.progress = slidesCoverageProgress
-        toolbar.subtitle = "${position + 1} of $pagesCount"
     }
 
+    override fun onBackPressed(): Boolean {
+       return pagerAdapter?.dispatchOnBackPressedIfCurrentFragmentIsVideoFragment(slideViewPager.currentItem) ?: false
+    }
+
+    companion object{
+        const val INTENT_EXTRA_SLIDE_TITLE = "slide_title"
+    }
 }

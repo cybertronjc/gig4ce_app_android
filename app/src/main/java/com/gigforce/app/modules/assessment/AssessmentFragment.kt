@@ -38,6 +38,8 @@ class AssessmentFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
     AssessmentDialog.AssessmentDialogCallbacks,
     AssessmentAnswersAdapter.AssessAdapterCallbacks {
 
+    private lateinit var mLessonId : String
+
     private var pushfinalEvent: Boolean = false
     private var countDownTimer: CountDownTimer? = null
     private var adapter: AssessmentAnswersAdapter? = null
@@ -64,10 +66,26 @@ class AssessmentFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        getDataFromIntents(savedInstanceState)
         initTb()
         initObservers();
         setupRecycler();
-        viewModelAssessmentFragment.getQuestionaire()
+        viewModelAssessmentFragment.getQuestionaire(mLessonId)
+    }
+
+    private fun getDataFromIntents(savedInstanceState: Bundle?) {
+        savedInstanceState?.let {
+            mLessonId = it.getString(INTENT_LESSON_ID)?: return@let
+        }
+
+        arguments?.let {
+            mLessonId = it.getString(INTENT_LESSON_ID)?: return@let
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString(INTENT_LESSON_ID,mLessonId)
     }
 
     private fun initObservers() {
@@ -350,7 +368,8 @@ class AssessmentFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
     }
 
     override fun onMenuItemClick(item: MenuItem?): Boolean {
-        TODO("Not yet implemented")
+
+        return true
     }
 
     override fun assessmentState(state: Int) {
@@ -435,5 +454,8 @@ class AssessmentFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
         return super.onBackPressed()
     }
 
+    companion object{
+        const val INTENT_LESSON_ID = "lesson_id"
+    }
 
 }

@@ -39,7 +39,7 @@ class SlideViewModel constructor(
             lessonId = "34",
             slideNo = 1,
             type = SlideContent.TYPE_DOS_DONTS,
-            doText = "continue to add boiling water, pouring in a circular motion as to wet all the grounds evenly until you reach your desired final brew weight",
+            doText = "continue to add boiling water, pouring in a circular motion as to wet all the grounds evenly fdewofhiewuf wfewfewf wefewfewfw wefewfewfwef until you reach your desired final brew weight",
             doImage = "https://firebasestorage.googleapis.com/v0/b/gigforce-dev.appspot.com/o/learning_images%2Flearning1.jpg?alt=media&token=856f1858-3f79-4d9b-b1a7-1952c3940019",
             dontText = "Place the Chemex filter inside the flask, lining up the side with multiple folds with the spout.",
             dontImage = "https://firebasestorage.googleapis.com/v0/b/gigforce-dev.appspot.com/o/learning_images%2Findustry3.jpg?alt=media&token=4fd6848c-6507-448f-b593-bbef1028101c"

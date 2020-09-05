@@ -27,7 +27,7 @@ class BulletPointsImageFragment : BaseFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? = inflateView(R.layout.fragment_learning_slide_single_image, inflater, container)
+    ): View? = inflateView(R.layout.fragment_learning_slide_bullet_points, inflater, container)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

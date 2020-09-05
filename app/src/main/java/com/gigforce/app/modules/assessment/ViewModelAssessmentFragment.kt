@@ -57,8 +57,8 @@ class ViewModelAssessmentFragment(private val modelCallbacks: ModelCallbacks) : 
         observableShowHideSwipeDownIcon.value = if (reached) View.GONE else View.VISIBLE
     }
 
-    fun getQuestionaire() {
-        modelCallbacks.getQuestionaire(this)
+    fun getQuestionaire(lessonId : String) {
+        modelCallbacks.getQuestionaire(lessonId,this)
     }
 
     fun submitAnswers(id: String?) {

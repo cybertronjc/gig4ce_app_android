@@ -126,7 +126,8 @@ class LearningDetailsLessonsAdapter constructor(
                         context.resources,
                         R.color.warm_grey,
                         null
-                    ))
+                    )
+                )
             }
 
             holder.videoTitle.text = videoModel.title
@@ -135,7 +136,12 @@ class LearningDetailsLessonsAdapter constructor(
             if (videoModel.type == CourseContent.TYPE_SLIDE) {
                 holder.slideVideoTimeImageLabel.gone()
                 holder.slideVideoLength.text = "${videoModel.slidesCount} Slides"
-            } else {
+                holder.slidePlayIV.setImageResource(R.drawable.ic_slides)
+            } else if (videoModel.type == CourseContent.TYPE_VIDEO) {
+                holder.videoPlayIV.setImageResource(R.drawable.ic_learning_play)
+                holder.slideVideoTimeImageLabel.visible()
+                holder.slideVideoLength.text = videoModel.videoLength
+            } else if (videoModel.type == CourseContent.TYPE_ASSESSMENT) {
                 holder.slideVideoTimeImageLabel.visible()
                 holder.slideVideoLength.text = videoModel.videoLength
             }
@@ -171,6 +177,7 @@ class LearningDetailsLessonsAdapter constructor(
         val slideVideoThumbnail = itemView.videoThumbnailIV
         val slideVideoTitle = itemView.video_title
         val slideVideoLength = itemView.video_time
+        val slidePlayIV = itemView.play_button_iv
         val slideVideoTimeImageLabel = itemView.time_imageview
         val slideVideoLessonNoTV = itemView.lessonNameTV
         val slideVideoplayButton = itemView.time_imageview
@@ -184,6 +191,7 @@ class LearningDetailsLessonsAdapter constructor(
 
         val videoThumbnailIV = itemView.videoThumbnailIV
         val videoTitle = itemView.video_title
+        val videoPlayIV = itemView.play_button_iv
         val lessonNameTV = itemView.lessonNameTV
         val lessonsSeeMoreButton = itemView.lessonsSeeMoreButton
         val videoTimeTV = itemView.video_time
@@ -191,6 +199,7 @@ class LearningDetailsLessonsAdapter constructor(
 
         init {
             timeline.initLine(viewType)
+            itemView.setOnClickListener(this)
             lessonsSeeMoreButton.setOnClickListener(this)
             assessmentRootLayout.setOnClickListener(this)
         }
