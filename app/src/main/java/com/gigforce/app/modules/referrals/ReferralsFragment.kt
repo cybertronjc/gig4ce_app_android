@@ -14,6 +14,8 @@ import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.modules.profile.ProfileViewModel
 import com.gigforce.app.utils.getViewWidth
+import com.google.firebase.dynamiclinks.DynamicLink
+import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import com.google.firebase.dynamiclinks.ktx.androidParameters
 import com.google.firebase.dynamiclinks.ktx.dynamicLink
 import com.google.firebase.dynamiclinks.ktx.dynamicLinks
@@ -43,18 +45,9 @@ class ReferralsFragment : BaseFragment() {
     private fun initClicks() {
         iv_copy_link_referrals_frag.setOnClickListener {
 
-            val dynamicLink = Firebase.dynamicLinks.dynamicLink {
-                link = Uri.parse("http://www.gig4ce.com/?invite="+profileViewModel.getProfileData().value?.id)
-                domainUriPrefix = "https://gigforce.page.link/invite"
-                androidParameters {
-                    "check" to true
-                }
 
 
-                // Open links with this app on Android
-            }
-
-            val dynamicLinkUri = dynamicLink.uri
+            val dynamicLinkUri = buildDeepLink(Uri.parse("http://www.gig4ce.com/?invite="+profileViewModel.getProfileData().value?.id))
             showToast(getString(R.string.link_copied));
             val clipboard: ClipboardManager? =
                 requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager?
@@ -78,5 +71,17 @@ class ReferralsFragment : BaseFragment() {
         params.addRule(RelativeLayout.END_OF, R.id.iv_two_referrals_frag)
         params.addRule(RelativeLayout.ALIGN_BOTTOM, R.id.iv_two_referrals_frag)
         tv_more_items_referrals_frag.layoutParams = params
+    }
+    fun buildDeepLink(deepLink: Uri): Uri {
+        val dynamicLink = FirebaseDynamicLinks.getInstance().createDynamicLink()
+            .setLink(Uri.parse(deepLink.toString()))
+            .setDomainUriPrefix("https://gigforce.page.link/")
+            // Open links with this app on Android
+            .setAndroidParameters(DynamicLink.AndroidParameters.Builder().build())
+            // Open links with com.example.ios on iOS
+            .setIosParameters(DynamicLink.IosParameters.Builder("com.example.ios").build())
+            .buildDynamicLink()
+
+        return dynamicLink.uri;
     }
 }

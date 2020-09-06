@@ -62,7 +62,7 @@ android {
          */
         production {
             dimension "default"
-           signingConfig signingConfigs.production
+//           signingConfig signingConfigs.production
         }
 
         /**
