@@ -57,7 +57,7 @@ class RosterDayViewModel: ViewModel() {
     var isLoadedFirstTime = true
 
     var itemHeight = 70
-    lateinit var nestedScrollView: NestedScrollView
+    var nestedScrollView: NestedScrollView? = null
 
     //lateinit var bsBehavior: BottomSheetBehavior<View>
 //    lateinit var bsBehavior: ExtendedBottomSheetBehavior<View>
@@ -530,13 +530,13 @@ class RosterDayViewModel: ViewModel() {
 
         val gigs = getFilteredGigs(date, "upcoming")
 
-        if (gigs.size != 0) {
+        if (gigs.size != 0 && nestedScrollView!=null) {
             val sortedUpcomingGigs = gigs.sortedBy { gig -> gig.startHour }
 
 //            nestedScrollView.scrollTo(0, (8 * itemHeight).px)
-            nestedScrollView.scrollTo(0, ((sortedUpcomingGigs[0].startHour - 4) * itemHeight).px)
+            nestedScrollView?.scrollTo(0, ((sortedUpcomingGigs[0].startHour - 4) * itemHeight).px)
         } else {
-            nestedScrollView.scrollTo(0, (8 * itemHeight).px)
+            nestedScrollView?.scrollTo(0, (8 * itemHeight).px)
         }
     }
 }
