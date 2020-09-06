@@ -171,6 +171,7 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
                     var statusOfGPS = manager.isProviderEnabled(LocationManager.GPS_PROVIDER)
                     if(userGpsDialogActionCount==0 && !statusOfGPS){
                         showEnableGPSDialog()
+                        if(checkInCheckOutSliderBtn!=null)
                         checkInCheckOutSliderBtn.resetSlider()
                         return;
                     }
@@ -186,6 +187,7 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
                         )
                     } else {
                         requestPermissionForGPS()
+                        if(checkInCheckOutSliderBtn!=null)
                         checkInCheckOutSliderBtn.resetSlider()
                     }
                 }
@@ -302,6 +304,7 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+        if(checkInCheckOutSliderBtn!=null)
         checkInCheckOutSliderBtn.resetSlider()
         if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE_UPLOAD_SELFIE_IMAGE) {
             if (data != null)
@@ -588,6 +591,7 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
 
         if (gig.isCheckInAndCheckOutMarked()) {
             //Attendance have been marked show it
+            if(checkInCheckOutSliderBtn!=null)
             checkInCheckOutSliderBtn.gone()
             dateTV.text = DateHelper.getDateInDDMMYYYY(gig.startDateTime!!.toDate())
 
@@ -604,6 +608,7 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
                 presentGigpunchOutTimeTV.text = "--:--"
         } else {
             //Show Check In Controls
+            if(checkInCheckOutSliderBtn!=null)
             checkInCheckOutSliderBtn.visible()
             presentFutureGigNoteTV.text =
                 "Please contact the supervisor in case there’s an issue with marking attendance."
@@ -615,16 +620,18 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
             if (gig.isCheckOutMarked())
                 presentGigpunchOutTimeTV.text =
                     timeFormatter.format(gig.attendance!!.checkOutTime!!)
-
-            if (!gig.isCheckInMarked()) {
-                checkInCheckOutSliderBtn.text = "Check In"
-            } else if (!gig.isCheckOutMarked()) {
-                checkInCheckOutSliderBtn.text = "Check Out"
+            if(checkInCheckOutSliderBtn!=null) {
+                if (!gig.isCheckInMarked()) {
+                    checkInCheckOutSliderBtn.text = "Check In"
+                } else if (!gig.isCheckOutMarked()) {
+                    checkInCheckOutSliderBtn.text = "Check Out"
+                }
             }
         }
     }
 
     private fun showPastgigDetails(gig: Gig) {
+        if(checkInCheckOutSliderBtn!=null)
         checkInCheckOutSliderBtn.gone()
         presentOrFutureGigControls.gone()
 //        showFeedBackOption()
@@ -682,6 +689,7 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
     }
 
     private fun showUpcomingGigDetails(gig: Gig) {
+        if(checkInCheckOutSliderBtn!=null)
         checkInCheckOutSliderBtn.gone()
         completedGigControlsLayout.gone()
         presentGigAttendanceCardView.gone()

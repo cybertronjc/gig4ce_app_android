@@ -91,6 +91,7 @@ class GigAttendancePageFragment : BaseFragment(), PopupMenu.OnMenuItemClickListe
                     var statusOfGPS = manager.isProviderEnabled(LocationManager.GPS_PROVIDER)
                     if(userGpsDialogActionCount==0 && !statusOfGPS){
                         showEnableGPSDialog()
+                        if(startNavigationSliderBtn!=null)
                         startNavigationSliderBtn.resetSlider()
                         return;
                     }
@@ -106,6 +107,7 @@ class GigAttendancePageFragment : BaseFragment(), PopupMenu.OnMenuItemClickListe
 //                        camera_cl.visible()
                     } else {
                         requestPermissionForGPS()
+                        if(startNavigationSliderBtn!=null)
                         startNavigationSliderBtn.resetSlider()
                     }
                 }
@@ -221,10 +223,6 @@ class GigAttendancePageFragment : BaseFragment(), PopupMenu.OnMenuItemClickListe
         } else {
             arguments?.getString(INTENT_EXTRA_GIG_ID)!!
         }
-
-        if(!gigId.isNullOrBlank()){
-
-        }
     }
 
     private fun initViewModel(savedInstanceState: Bundle?) {
@@ -333,6 +331,7 @@ class GigAttendancePageFragment : BaseFragment(), PopupMenu.OnMenuItemClickListe
 
             if (gig.isCheckInAndCheckOutMarked()) {
                 //Attendance have been marked show it
+                if(startNavigationSliderBtn!=null)
                 startNavigationSliderBtn.gone()
 
                 if (gig.isCheckInMarked())
@@ -348,11 +347,12 @@ class GigAttendancePageFragment : BaseFragment(), PopupMenu.OnMenuItemClickListe
                     punchOutTimeTV.text = "--:--"
             } else {
                 //Show Check In Controls
+                if(startNavigationSliderBtn!=null)
                 startNavigationSliderBtn.visible()
 
                 if (!gig.isCheckInMarked()) {
 
-                    if (startNavigationSliderBtn.isCompleted()) {
+                    if (startNavigationSliderBtn!=null && startNavigationSliderBtn.isCompleted()) {
                         startNavigationSliderBtn.resetSlider()
                     }
 
@@ -363,10 +363,10 @@ class GigAttendancePageFragment : BaseFragment(), PopupMenu.OnMenuItemClickListe
                             null
                         )
                     )
-
+                    if(startNavigationSliderBtn!=null)
                     startNavigationSliderBtn.text = "Check In"
                 } else if (!gig.isCheckOutMarked()) {
-                    if (startNavigationSliderBtn.isCompleted()) {
+                    if (startNavigationSliderBtn!=null && startNavigationSliderBtn.isCompleted()) {
                         startNavigationSliderBtn.resetSlider()
                     }
 
@@ -375,11 +375,12 @@ class GigAttendancePageFragment : BaseFragment(), PopupMenu.OnMenuItemClickListe
                             timeFormatter.format(gig.attendance!!.checkInTime!!)
                     else
                         punchInTimeTV.text = "--:--"
-
+                    if(startNavigationSliderBtn!=null)
                     startNavigationSliderBtn.text = "Check Out"
                 }
             }
         } else if (gig.isPastGig()) {
+            if(startNavigationSliderBtn!=null)
             startNavigationSliderBtn.gone()
 
             if (gig.isCheckInMarked())
@@ -395,6 +396,7 @@ class GigAttendancePageFragment : BaseFragment(), PopupMenu.OnMenuItemClickListe
                 punchOutTimeTV.text = "--:--"
 
         } else {
+            if(startNavigationSliderBtn!=null)
             startNavigationSliderBtn.gone()
         }
     }
@@ -513,6 +515,7 @@ class GigAttendancePageFragment : BaseFragment(), PopupMenu.OnMenuItemClickListe
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+        if(startNavigationSliderBtn!=null)
         startNavigationSliderBtn.resetSlider()
         if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE_UPLOAD_SELFIE_IMAGE) {
             if (data != null)
