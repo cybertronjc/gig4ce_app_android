@@ -361,21 +361,27 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
         }
     }
 
-    fun updateAttendanceOnDBCall(location: Location) {
+    fun updateAttendanceOnDBCall(location: Location?) {
         var geocoder = Geocoder(requireContext())
         var locationAddress = ""
-        try {
-            var addressArr = geocoder.getFromLocation(location.latitude, location.longitude, 1)
-            locationAddress = addressArr.get(0).getAddressLine(0)
-        } catch (e: java.lang.Exception) {
+        var latitude : Double = 0.0
+        var longitude : Double = 0.0
+        if(location!=null) {
+            try {
+                latitude = location.latitude
+                longitude = location.longitude
+                var addressArr = geocoder.getFromLocation(location.latitude, location.longitude, 1)
+                locationAddress = addressArr.get(0).getAddressLine(0)
+            } catch (e: java.lang.Exception) {
+            }
         }
         if (gig!!.attendance == null || !gig!!.attendance!!.checkInMarked) {
             var markAttendance =
                 GigAttendance(
                     true,
                     Date(),
-                    location.latitude,
-                    location.longitude,
+                    latitude,
+                    longitude,
                     selfieImg,
                     locationAddress
                 )
@@ -383,8 +389,8 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
 
         } else {
             gig!!.attendance!!.setCheckout(
-                true, Date(), location.latitude,
-                location.longitude, selfieImg,
+                true, Date(), latitude,
+                longitude, selfieImg,
                 locationAddress
             )
             viewModel.markAttendance(gig!!.attendance!!, gigId)

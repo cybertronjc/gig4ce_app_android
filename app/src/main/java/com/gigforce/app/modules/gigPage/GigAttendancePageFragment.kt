@@ -52,6 +52,7 @@ class GigAttendancePageFragment : BaseFragment(), PopupMenu.OnMenuItemClickListe
     companion object {
         const val INTENT_EXTRA_GIG_ID = "gig_id"
         const val REQUEST_CODE_UPLOAD_SELFIE_IMAGE = 2333
+        var gigIdBackup = ""
     }
 
     var isGPSRequestCompleted = false
@@ -219,6 +220,10 @@ class GigAttendancePageFragment : BaseFragment(), PopupMenu.OnMenuItemClickListe
             savedInstanceState.getString(INTENT_EXTRA_GIG_ID)!!
         } else {
             arguments?.getString(INTENT_EXTRA_GIG_ID)!!
+        }
+
+        if(!gigId.isNullOrBlank()){
+
         }
     }
 
@@ -467,21 +472,29 @@ class GigAttendancePageFragment : BaseFragment(), PopupMenu.OnMenuItemClickListe
 
     var selfieImg: String = ""
 
-    fun updateAttendanceOnDBCall(location: Location) {
+    fun updateAttendanceOnDBCall(location: Location?) {
         var geocoder = Geocoder(requireContext())
         var locationAddress = ""
-        try {
-            var addressArr = geocoder.getFromLocation(location.latitude, location.longitude, 1)
-            locationAddress = addressArr.get(0).getAddressLine(0)
-        } catch (e: java.lang.Exception) {
+        var latitude : Double = 0.0
+        var longitude : Double = 0.0
+        if(location!=null) {
+            try {
+                latitude = location.latitude
+                longitude = location.longitude
+                var addressArr =
+                    geocoder.getFromLocation(location.latitude, location.longitude, 1)
+                locationAddress = addressArr.get(0).getAddressLine(0)
+
+            } catch (e: java.lang.Exception) {
+            }
         }
         if (gig!!.attendance == null || !gig!!.attendance!!.checkInMarked) {
             var markAttendance =
                 GigAttendance(
                     true,
                     Date(),
-                    location.latitude,
-                    location.longitude,
+                    latitude,
+                    longitude,
                     selfieImg,
                     locationAddress
                 )
@@ -489,8 +502,8 @@ class GigAttendancePageFragment : BaseFragment(), PopupMenu.OnMenuItemClickListe
 
         } else {
             gig!!.attendance!!.setCheckout(
-                true, Date(), location.latitude,
-                location.longitude, selfieImg,
+                true, Date(), latitude,
+                longitude, selfieImg,
                 locationAddress
             )
             viewModel.markAttendance(gig!!.attendance!!, gigId)
