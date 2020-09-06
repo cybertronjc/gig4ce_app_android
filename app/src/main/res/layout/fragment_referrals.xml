@@ -7,7 +7,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <ImageView
             android:id="@+id/iv_back_referrals_frag"
@@ -34,17 +34,89 @@
             app:layout_constraintStart_toEndOf="@+id/iv_back_referrals_frag"
             app:layout_constraintTop_toTopOf="@+id/iv_back_referrals_frag" />
 
+        <RelativeLayout
+            android:id="@+id/rv_successful_recommendation_referrals_frag"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/size_16"
+            android:layout_marginTop="@dimen/size_25"
+            android:layout_marginEnd="@dimen/size_16"
+            android:layout_marginBottom="@dimen/size_15"
+            android:background="@drawable/bg_rect_light_pink_rad_4"
+            android:clipToPadding="false"
+            android:paddingStart="@dimen/size_10"
+            android:paddingTop="@dimen/size_16"
+            android:paddingEnd="@dimen/size_11"
+            android:paddingBottom="@dimen/size_16"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_title_referrals_frag">
+
+
+            <com.gigforce.app.utils.widgets.CircleImageView
+                android:id="@+id/iv_two_referrals_frag"
+                android:layout_width="@dimen/size_48"
+                android:layout_height="@dimen/size_48"
+                android:layout_marginStart="@dimen/size_18"
+                android:src="@drawable/aftab"
+                app:civ_border_color="@color/white"
+                app:civ_border_width="@dimen/size_1" />
+
+            <com.gigforce.app.utils.widgets.CircleImageView
+                android:id="@+id/iv_one_referrals_frag"
+                android:layout_width="@dimen/size_48"
+                android:layout_height="@dimen/size_48"
+                android:src="@drawable/ankita"
+                app:civ_border_color="@color/white"
+                app:civ_border_width="@dimen/size_1" />
+
+            <com.gigforce.app.utils.widgets.CircularTextView
+                android:id="@+id/tv_more_items_referrals_frag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@+id/iv_two_referrals_frag"
+                android:gravity="center"
+                android:padding="@dimen/size_4"
+                android:text="+2"
+                android:textColor="@color/white"
+                android:textSize="@dimen/font_12" />
+
+            <TextView
+                android:id="@+id/tv_thank_u_referrals_frag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/size_23"
+                android:layout_toEndOf="@+id/tv_more_items_referrals_frag"
+                android:text="@string/thankyou"
+                android:textColor="@color/black"
+                android:textSize="@dimen/font_16"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_you_helped_referrals_frag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_thank_u_referrals_frag"
+                android:layout_marginStart="@dimen/size_23"
+                android:layout_marginTop="@dimen/size_4"
+                android:layout_toEndOf="@+id/tv_more_items_referrals_frag"
+                android:text="You helped Rajesh and 2 more,
+ find gigs on Gigforce."
+                android:textColor="@color/black"
+                android:textSize="@dimen/font_14" />
+        </RelativeLayout>
+
         <ImageView
             android:id="@+id/iv_bg_referrals_frag"
             android:layout_width="0dp"
             android:layout_height="@dimen/size_213"
             android:layout_marginStart="@dimen/size_53"
-            android:layout_marginTop="@dimen/size_120"
+            android:layout_marginTop="@dimen/size_15"
             android:layout_marginEnd="@dimen/size_54"
             android:src="@drawable/ic_refer_bg"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_title_referrals_frag" />
+            app:layout_constraintTop_toBottomOf="@+id/rv_successful_recommendation_referrals_frag" />
 
         <TextView
             android:id="@+id/iv_share_joy_referrals_frag"
