@@ -36,7 +36,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="19dp"
             android:fontFamily="@font/lato"
-            android:text="Language"
+            android:text="@string/language"
             android:letterSpacing="0"
             android:textColor="@color/black"
             android:textSize="20sp"

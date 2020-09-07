@@ -90,7 +90,7 @@ class EditTagBottomSheet: ProfileBaseBottomSheetFragment() {
                 }
                 add_tag_new_tag.setText("")
             } else {
-                Toast.makeText(requireContext(), "Invalid tag, tag can not be empty or contain #", Toast.LENGTH_LONG).show()
+                Toast.makeText(requireContext(), getString(R.string.tag_cannot_be_empty), Toast.LENGTH_LONG).show()
             }
         }
     }

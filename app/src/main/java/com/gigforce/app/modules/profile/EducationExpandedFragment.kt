@@ -132,9 +132,9 @@ class EducationExpandedFragment : ProfileBaseFragment() {
                 }
             }
             education_card.nextDestination = R.id.editEducationBottomSheet
-            education_card.cardTitle = "Education"
+            education_card.cardTitle = getString(R.string.education)
             education_card.cardContent = educationString
-            education_card.cardBottom = "Add education"
+            education_card.cardBottom = getString(R.string.add_education)
 
             var skillString: String = ""
             profile.skills?.let {
@@ -144,9 +144,9 @@ class EducationExpandedFragment : ProfileBaseFragment() {
             }
             skill_card.nextDestination = R.id.editSkillBottomSheet
             skill_card.hasContentTitles = false
-            skill_card.cardTitle = "Skills"
+            skill_card.cardTitle = getString(R.string.skills)
             skill_card.cardContent = skillString
-            skill_card.cardBottom = "Add skills"
+            skill_card.cardBottom = getString(R.string.add_skill)
 
             var achievementString: String = ""
             profile.achievements?.let {
@@ -160,9 +160,9 @@ class EducationExpandedFragment : ProfileBaseFragment() {
                 }
             }
             achievement_card.nextDestination = R.id.editAchievementBottomSheet
-            achievement_card.cardTitle = "Achievement"
+            achievement_card.cardTitle = getString(R.string.achievement)
             achievement_card.cardContent = achievementString
-            achievement_card.cardBottom = "Add achievements"
+            achievement_card.cardBottom = getString(R.string.add_achievement)
 
             education_top_profile.userName = profile.name
             education_top_profile.imageName = profile.profileAvatarName

@@ -5,12 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/battle_ship_grey"
     tools:context=".modules.learning.learningVideo.PlayVideoDialogFragment">
 
     <com.google.android.exoplayer2.ui.PlayerView
         android:id="@+id/playerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="303dp"
+        app:show_buffering="always"
         app:controller_layout_id="@layout/fragment_play_video_controls" />
 
 </LinearLayout>

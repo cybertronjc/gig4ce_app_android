@@ -17,7 +17,7 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         app:chipBackgroundColor="@color/white"
-        android:text="About me" />
+        android:text="@string/about_me" />
 
     <com.google.android.material.chip.Chip
         android:id="@+id/education"
@@ -29,7 +29,7 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         app:chipBackgroundColor="@color/white"
-        android:text="Education" />
+        android:text="@string/education" />
 
     <com.google.android.material.chip.Chip
         android:id="@+id/experience"
@@ -41,6 +41,6 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         app:chipBackgroundColor="@color/white"
-        android:text="Experience" />
+        android:text="@string/experience" />
 
 </LinearLayout>
