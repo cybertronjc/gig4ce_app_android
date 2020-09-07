@@ -33,6 +33,7 @@ import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.base.dialog.ConfirmationDialogOnClickListener
 import com.gigforce.app.core.gone
+import com.gigforce.app.core.toLocalDate
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.gigPage.models.Gig
 import com.gigforce.app.modules.gigPage.models.GigAttendance
@@ -44,6 +45,21 @@ import com.google.android.gms.location.LocationServices
 import com.google.firebase.storage.FirebaseStorage
 import com.ncorti.slidetoact.SlideToActView
 import kotlinx.android.synthetic.main.fragment_gig_page_attendance.*
+import kotlinx.android.synthetic.main.fragment_gig_page_attendance.addressTV
+import kotlinx.android.synthetic.main.fragment_gig_page_attendance.attendanceCardView
+import kotlinx.android.synthetic.main.fragment_gig_page_attendance.callCardView
+import kotlinx.android.synthetic.main.fragment_gig_page_attendance.companyLogoIV
+import kotlinx.android.synthetic.main.fragment_gig_page_attendance.companyNameTV
+import kotlinx.android.synthetic.main.fragment_gig_page_attendance.contactPersonTV
+import kotlinx.android.synthetic.main.fragment_gig_page_attendance.durationTextTV
+import kotlinx.android.synthetic.main.fragment_gig_page_attendance.favoriteCB
+import kotlinx.android.synthetic.main.fragment_gig_page_attendance.gigIdTV
+import kotlinx.android.synthetic.main.fragment_gig_page_attendance.gigTypeTV
+import kotlinx.android.synthetic.main.fragment_gig_page_attendance.messageCardView
+import kotlinx.android.synthetic.main.fragment_gig_page_attendance.roleNameTV
+import kotlinx.android.synthetic.main.fragment_gig_page_attendance.shiftTV
+import kotlinx.android.synthetic.main.fragment_gig_page_attendance.wageTV
+import kotlinx.android.synthetic.main.fragment_gig_page_present.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -275,8 +291,15 @@ class GigAttendancePageFragment : BaseFragment(), PopupMenu.OnMenuItemClickListe
         }
 
         if (gig.endDateTime != null) {
-            durationTextTV.text =
-                "${dateFormatter.format(gig.startDateTime!!.toDate())} - ${dateFormatter.format(gig.endDateTime!!.toDate())}"
+
+            val startDate = gig.startDateTime!!.toLocalDate()
+            val endDate = gig.endDateTime!!.toLocalDate()
+
+            if(startDate.isEqual(endDate))
+                durationTextTV.text = "${dateFormatter.format(gig.startDateTime!!.toDate())}"
+            else
+                durationTextTV.text = "${dateFormatter.format(gig.startDateTime!!.toDate())} - ${dateFormatter.format(gig.endDateTime!!.toDate())}"
+
             shiftTV.text =
                 "${timeFormatter.format(gig.startDateTime!!.toDate())} - ${timeFormatter.format(gig.endDateTime!!.toDate())}"
         } else {
@@ -359,7 +382,7 @@ class GigAttendancePageFragment : BaseFragment(), PopupMenu.OnMenuItemClickListe
                         )
                     )
 
-                    startNavigationSliderBtn.text = "Check In"
+                    startNavigationSliderBtn.text = "Check-in"
                 } else if (!gig.isCheckOutMarked()) {
                     if (startNavigationSliderBtn.isCompleted()) {
                         startNavigationSliderBtn.resetSlider()
@@ -371,7 +394,7 @@ class GigAttendancePageFragment : BaseFragment(), PopupMenu.OnMenuItemClickListe
                     else
                         punchInTimeTV.text = "--:--"
 
-                    startNavigationSliderBtn.text = "Check Out"
+                    startNavigationSliderBtn.text = "Check-out"
                 }
             }
         } else if (gig.isPastGig()) {

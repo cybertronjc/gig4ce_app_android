@@ -328,6 +328,7 @@
     <string name="earning">Earnings</string>
     <string name="no">No</string>
     <string name="none">None</string>
+    <string name="day_and_time">Day and Time</string>
     <string name="weekday">Weekday</string>
     <string name="_00_04days">00-04days</string>
     <string name="weekends">Weekends</string>
@@ -430,5 +431,7 @@
     <string name="day_and_time">Day and Time</string>
     <string name="app_language">App Language</string>
     <string name="sign_out">Sign out</string>
+    <string name="plus_see_more">+ see more</string>
+    <string name="plus_see_less">+ see less</string>
 
 </resources>

@@ -106,7 +106,11 @@ class AddBankDetailsInfoFragment : BaseFragment() {
                 showPassbookImageLayout()
                 showPassbookInfoLayout()
 
-                if (bankDetailsDataConfirmationCB.isChecked && clickedImagePath != null) {
+                if (bankDetailsDataConfirmationCB.isChecked
+                    && (passbookSubmitSliderBtn.text == getString(R.string.update)
+                            || clickedImagePath != null)
+
+                ) {
                     enableSubmitButton()
                 } else
                     disableSubmitButton()
@@ -133,7 +137,9 @@ class AddBankDetailsInfoFragment : BaseFragment() {
 
                 if (passbookAvailaibilityOptionRG.checkedRadioButtonId == R.id.passbookNoRB)
                     enableSubmitButton()
-                else if (passbookAvailaibilityOptionRG.checkedRadioButtonId == R.id.passbookYesRB && clickedImagePath != null)
+                else if (passbookAvailaibilityOptionRG.checkedRadioButtonId == R.id.passbookYesRB &&
+                     (passbookSubmitSliderBtn.text == getString(R.string.update) || clickedImagePath != null)
+                )
                     enableSubmitButton()
                 else
                     disableSubmitButton()
@@ -201,7 +207,7 @@ class AddBankDetailsInfoFragment : BaseFragment() {
                             return
                         }
 
-                        if (clickedImagePath == null) {
+                        if (passbookSubmitSliderBtn.text != getString(R.string.update) && clickedImagePath == null) {
 
                             MaterialAlertDialogBuilder(requireContext())
                                 .setTitle(getString(R.string.alert))
@@ -249,6 +255,7 @@ class AddBankDetailsInfoFragment : BaseFragment() {
 
                     setDataOnEditLayout(bankDetailsDataModel)
                     passbookAvailaibilityOptionRG.check(R.id.passbookYesRB)
+                    passbookSubmitSliderBtn.isEnabled = true
                 }
                 .setNegativeButton(getString(R.string.cancel)) { _, _ -> }
                 .show()

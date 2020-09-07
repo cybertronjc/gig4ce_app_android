@@ -13,6 +13,7 @@ class ProfileViewModel : ViewModel() {
         fun newInstance() = ProfileViewModel()
     }
 
+    var profileAppBarExpanded = false
     var listener: ListenerRegistration? = null
     var profileID: String = ""
     var profileFirebaseRepository = ProfileFirebaseRepository()
