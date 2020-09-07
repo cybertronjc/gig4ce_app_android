@@ -50,6 +50,7 @@ import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.storage.FirebaseStorage
 import com.ncorti.slidetoact.SlideToActView
@@ -95,7 +96,6 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
     private fun initClicks() {
         bt_download_id_gig_page.setOnClickListener(this)
         bt_download_id_gig_past_gigs.setOnClickListener(this)
-
     }
 
     private fun getData(arguments: Bundle?, savedInstanceState: Bundle?) {
@@ -104,8 +104,14 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
             gigId = it.getString(INTENT_EXTRA_GIG_ID)!!
             comingFromCheckInScreen = it.getBoolean(INTENT_EXTRA_COMING_FROM_CHECK_IN)
         } ?: run{
-            gigId = arguments?.getString(INTENT_EXTRA_GIG_ID)!!
-            comingFromCheckInScreen = arguments.getBoolean(INTENT_EXTRA_COMING_FROM_CHECK_IN)
+            arguments?.let {
+                gigId = it.getString(INTENT_EXTRA_GIG_ID)!!
+                comingFromCheckInScreen = it.getBoolean(INTENT_EXTRA_COMING_FROM_CHECK_IN)
+            }?: run {
+                FirebaseCrashlytics.getInstance().log("GigPageFragment getData method : savedInstanceState and arguments found null")
+                FirebaseCrashlytics.getInstance().setUserId(FirebaseAuth.getInstance().currentUser?.uid!!)
+            }
+
         }
     }
     var userGpsDialogActionCount = 0
@@ -413,7 +419,8 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
             }
 
         } ?: run {
-            // handle if gig is null
+            FirebaseCrashlytics.getInstance().log("Gig not found : GigAttendance Page Fragment")
+            FirebaseCrashlytics.getInstance().setUserId(FirebaseAuth.getInstance().currentUser?.uid!!)
         }
     }
 

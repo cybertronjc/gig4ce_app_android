@@ -41,6 +41,8 @@ import com.gigforce.app.utils.Lce
 import com.gigforce.app.utils.TextDrawable
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.storage.FirebaseStorage
 import com.ncorti.slidetoact.SlideToActView
 import kotlinx.android.synthetic.main.fragment_gig_page_attendance.*
@@ -84,15 +86,14 @@ class GigAttendancePageFragment : BaseFragment(), PopupMenu.OnMenuItemClickListe
     var userGpsDialogActionCount = 0
 
     private fun listener() {
-        startNavigationSliderBtn.onSlideCompleteListener =
+        startNavigationSliderBtn?.onSlideCompleteListener =
             object : SlideToActView.OnSlideCompleteListener {
                 override fun onSlideComplete(view: SlideToActView) {
                     var manager = activity?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
                     var statusOfGPS = manager.isProviderEnabled(LocationManager.GPS_PROVIDER)
                     if(userGpsDialogActionCount==0 && !statusOfGPS){
                         showEnableGPSDialog()
-                        if(startNavigationSliderBtn!=null)
-                        startNavigationSliderBtn.resetSlider()
+                        startNavigationSliderBtn?.resetSlider()
                         return;
                     }
 
@@ -103,8 +104,6 @@ class GigAttendancePageFragment : BaseFragment(), PopupMenu.OnMenuItemClickListe
                     ) {
                         var intent = Intent(context, ImageCaptureActivity::class.java)
                         startActivityForResult(intent, REQUEST_CODE_UPLOAD_SELFIE_IMAGE)
-
-//                        camera_cl.visible()
                     } else {
                         requestPermissionForGPS()
                         if(startNavigationSliderBtn!=null)
@@ -222,6 +221,16 @@ class GigAttendancePageFragment : BaseFragment(), PopupMenu.OnMenuItemClickListe
             savedInstanceState.getString(INTENT_EXTRA_GIG_ID)!!
         } else {
             arguments?.getString(INTENT_EXTRA_GIG_ID)!!
+        }
+        savedInstanceState?.let {
+            gigId = it.getString(INTENT_EXTRA_GIG_ID)!!
+        }?: run {
+            arguments?.let {
+                gigId = it.getString(INTENT_EXTRA_GIG_ID)!!
+            }?.run {
+                FirebaseCrashlytics.getInstance().log("GigAttendancePageFragment getData method : savedInstanceState and arguments found null")
+                FirebaseCrashlytics.getInstance().setUserId(FirebaseAuth.getInstance().currentUser?.uid!!)
+            }
         }
     }
 
@@ -476,23 +485,31 @@ class GigAttendancePageFragment : BaseFragment(), PopupMenu.OnMenuItemClickListe
 
     fun updateAttendanceOnDBCall(location: Location?) {
         var geocoder = Geocoder(requireContext())
-        var locationAddress = ""
-        var latitude : Double = 0.0
-        var longitude : Double = 0.0
-        if(location!=null) {
-            try {
-                latitude = location.latitude
-                longitude = location.longitude
-                var addressArr =
-                    geocoder.getFromLocation(location.latitude, location.longitude, 1)
-                locationAddress = addressArr.get(0).getAddressLine(0)
 
-            } catch (e: java.lang.Exception) {
-            }
-        }
-        if (gig!!.attendance == null || !gig!!.attendance!!.checkInMarked) {
-            var markAttendance =
-                GigAttendance(
+        val latitude : Double = location ?.latitude ?: 0.0
+        val longitude : Double = location ?.longitude ?: 0.0
+
+        val addressArr = geocoder.getFromLocation(latitude, longitude, 1)
+        val locationAddress = addressArr?.get(0) ?.getAddressLine(0) ?: ""
+
+
+        gig ?. let{
+
+            val ifAttendanceMarked = it.attendance?.checkInMarked ?: false
+
+            if (!ifAttendanceMarked) {
+                val markAttendance =
+                    GigAttendance(
+                        true,
+                        Date(),
+                        latitude,
+                        longitude,
+                        selfieImg,
+                        locationAddress
+                    )
+                viewModel.markAttendance(markAttendance, gigId)
+            }else{
+                it.attendance?.setCheckout(
                     true,
                     Date(),
                     latitude,
@@ -500,16 +517,12 @@ class GigAttendancePageFragment : BaseFragment(), PopupMenu.OnMenuItemClickListe
                     selfieImg,
                     locationAddress
                 )
-            viewModel.markAttendance(markAttendance, gigId)
+                viewModel.markAttendance(it.attendance!!, gigId)
+            }
 
-        } else {
-            gig!!.attendance!!.setCheckout(
-                true, Date(), latitude,
-                longitude, selfieImg,
-                locationAddress
-            )
-            viewModel.markAttendance(gig!!.attendance!!, gigId)
-
+        } ?: run {
+            FirebaseCrashlytics.getInstance().log("Gig not found : GigAttendance Page Fragment")
+            FirebaseCrashlytics.getInstance().setUserId(FirebaseAuth.getInstance().currentUser?.uid!!)
         }
     }
 
