@@ -6,12 +6,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
 import com.gigforce.app.core.base.dialog.ConfirmationDialogOnClickListener
+import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
+import com.gigforce.app.modules.gigerVerfication.GigerVerificationStatus
 import com.gigforce.app.modules.landingscreen.LandingPageConstants.INTENT_EXTRA_ACTION
 import com.gigforce.app.modules.landingscreen.LandingPageConstants.INTENT_EXTRA_CAME_FROM_LANDING_SCREEN
 import com.gigforce.app.modules.profile.models.ContactEmail
@@ -22,7 +26,10 @@ import com.gigforce.app.utils.ViewModelProviderFactory
 import kotlinx.android.synthetic.main.contact_edit_warning_dialog.*
 import kotlinx.android.synthetic.main.fragment_profile_about_expanded.*
 import kotlinx.android.synthetic.main.fragment_profile_about_expanded.view.*
+import kotlinx.android.synthetic.main.fragment_profile_main_expanded.view.*
 import kotlinx.android.synthetic.main.profile_card_background.view.*
+import kotlinx.android.synthetic.main.top_profile_bar.view.*
+import kotlinx.android.synthetic.main.verified_button.view.*
 
 
 class AboutExpandedFragment : ProfileBaseFragment(), ProfileCardBgCallbacks,
@@ -43,6 +50,8 @@ class AboutExpandedFragment : ProfileBaseFragment(), ProfileCardBgCallbacks,
             viewModelFactory
         ).get(ViewModelAboutExpandedFragment::class.java)
     }
+
+    private val gigerVerificationViewModel : GigVerificationViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -86,6 +95,46 @@ class AboutExpandedFragment : ProfileBaseFragment(), ProfileCardBgCallbacks,
         email_card.setCallbacks(this)
         initialize()
         setListeners()
+
+        initViewModel()
+
+    }
+
+    private fun initViewModel() {
+
+        gigerVerificationViewModel.gigerVerificationStatus.observe(viewLifecycleOwner, Observer {
+
+            val requiredDocsVerified = it.selfieVideoDataModel?.videoPath != null
+                    && it.panCardDetails?.state == GigerVerificationStatus.STATUS_VERIFIED
+                    && it.bankUploadDetailsDataModel?.state == GigerVerificationStatus.STATUS_VERIFIED
+                    && (it.aadharCardDataModel?.state == GigerVerificationStatus.STATUS_VERIFIED || it.drivingLicenseDataModel?.state == GigerVerificationStatus.STATUS_VERIFIED)
+
+            val requiredDocsUploaded = it.selfieVideoDataModel?.videoPath != null
+                    && it.panCardDetails?.panCardImagePath != null
+                    && it.bankUploadDetailsDataModel?.passbookImagePath != null
+                    && (it.aadharCardDataModel?.frontImage != null || it.drivingLicenseDataModel?.backImage != null)
+
+            if (requiredDocsVerified) {
+                about_top_profile.about_me_verification_layout.verification_status_tv.text = getString(R.string.verified_text)
+                about_top_profile.about_me_verification_layout.verification_status_tv.setTextColor(ResourcesCompat.getColor(resources,R.color.green,null))
+                about_top_profile.about_me_verification_layout.status_iv.setImageResource(R.drawable.ic_check)
+                about_top_profile.about_me_verification_layout.verification_status_cardview.strokeColor = ResourcesCompat.getColor(resources,R.color.green,null)
+            } else if (requiredDocsUploaded){
+                about_top_profile.about_me_verification_layout.verification_status_tv.text = getString(R.string.under_verification)
+                about_top_profile.about_me_verification_layout.verification_status_tv.setTextColor(ResourcesCompat.getColor(resources,R.color.app_orange,null))
+                about_top_profile.about_me_verification_layout.status_iv.setImageResource(R.drawable.ic_clock_orange)
+                about_top_profile.about_me_verification_layout.verification_status_cardview.strokeColor = ResourcesCompat.getColor(resources,R.color.app_orange,null)
+            } else{
+                about_top_profile.about_me_verification_layout.verification_status_tv.text = "Not Verified"
+                about_top_profile.about_me_verification_layout.verification_status_tv.setTextColor(ResourcesCompat.getColor(resources,R.color.red,null))
+                about_top_profile.about_me_verification_layout.status_iv.setImageResource(R.drawable.ic_cross_red)
+                about_top_profile.about_me_verification_layout.verification_status_cardview.strokeColor = ResourcesCompat.getColor(resources,R.color.red,null)
+            }
+        })
+
+        gigerVerificationViewModel.startListeningForGigerVerificationStatusChanges()
+
+
 
     }
 
@@ -229,6 +278,10 @@ class AboutExpandedFragment : ProfileBaseFragment(), ProfileCardBgCallbacks,
                     StringConstants.CONTACT_EDIT_STATE.value to AddContactBottomSheetFragment.STATE_ADD_EMAIL
                 ), this
             ).show(parentFragmentManager, AddContactBottomSheetFragment::class.java.name)
+        }
+
+        about_top_profile.about_me_verification_layout.setOnClickListener {
+            navigate(R.id.gigerVerificationFragment)
         }
 
     }

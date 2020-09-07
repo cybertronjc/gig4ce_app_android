@@ -679,4 +679,6 @@
     <string name="prefered_distance_zero">Preferred distance is 0 so you are not able to enable it.</string>
     <string name="preferred_distance_">Preferred Distance</string>
     <string name="around_current_address_">Around Current Address</string>
+    <string name="plus_see_more">+ see more</string>
+    <string name="plus_see_less">+ see less</string>
 </resources>
