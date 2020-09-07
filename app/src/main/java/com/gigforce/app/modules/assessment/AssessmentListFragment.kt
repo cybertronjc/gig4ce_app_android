@@ -46,6 +46,10 @@ class AssessmentListFragment : BaseFragment() {
             mModuleId = it.getString(INTENT_EXTRA_MODULE_ID) ?: return@let
         }
 
+        toolbar.setNavigationOnClickListener {
+            activity?.onBackPressed()
+        }
+
         initViewModel()
     }
 

@@ -12,6 +12,8 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
+import com.gigforce.app.modules.assessment.AssessmentFragment
+import com.gigforce.app.modules.learning.models.CourseContent
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.android.synthetic.main.fragment_learning_slide_assessment.*
 
@@ -67,7 +69,9 @@ class AssessmentSlideFragment : BaseFragment() {
         }
 
         start_assessment_btn.setOnClickListener {
-            navigate(R.id.assessment_fragment)
+            navigate(R.id.assessment_fragment,  bundleOf(
+                AssessmentFragment.INTENT_LESSON_ID to mAssessmentId
+            ))
         }
 
         setAssessmentInfoOnView()

@@ -1,9 +1,7 @@
 package com.gigforce.app.modules.learning
 
 import com.gigforce.app.core.base.basefirestore.BaseFirestoreDBRepository
-import com.gigforce.app.modules.learning.models.Course
-import com.gigforce.app.modules.learning.models.CourseContent
-import com.gigforce.app.modules.learning.models.Module
+import com.gigforce.app.modules.learning.models.*
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
@@ -177,7 +175,7 @@ class LearningRepository : BaseFirestoreDBRepository() {
 
     suspend fun getSlideContent(
         lessonId : String
-    ): List<CourseContent> = suspendCoroutine { cont ->
+    ): List<SlideContent> = suspendCoroutine { cont ->
         getCollectionReference()
             .whereEqualTo(LESSON_ID, lessonId)
             .whereEqualTo(TYPE, TYPE_TOPIC)
@@ -186,17 +184,33 @@ class LearningRepository : BaseFirestoreDBRepository() {
 
                 val modules = querySnap.documents
                     .map {
-                        val videoDetails = it.toObject(CourseContent::class.java)!!
+                        val videoDetails = it.toObject(SlideContentRemote::class.java)!!
                         videoDetails.id = it.id
                         videoDetails
-                    }.filter {
+                    }
+                    .filter {
                         it.isActive
+                    }
+                    .map {
+                        mapToSlideContent(it)
                     }
                 cont.resume(modules)
             }
             .addOnFailureListener {
                 cont.resumeWithException(it)
             }
+    }
+
+    private fun mapToSlideContent(it: SlideContentRemote): SlideContent {
+        return SlideContent(
+            slideId =  it.id,
+            lessonId = it.lessonId,
+            image = it.coverPicture,
+            isActive = it.isActive,
+            type = it.type,
+            assessmentId = it.lessonId,
+            videoPath = it.videoUrl
+        )
     }
 
     suspend fun getAssessmentsFromAllCourses(): List<CourseContent> = suspendCoroutine { cont ->

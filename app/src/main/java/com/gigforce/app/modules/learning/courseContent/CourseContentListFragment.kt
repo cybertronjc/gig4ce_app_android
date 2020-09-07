@@ -52,6 +52,10 @@ class CourseContentListFragment : BaseFragment() {
     }
 
     private fun initView() {
+        toolbar.setOnClickListener {
+            activity?.onBackPressed()
+        }
+
         learningAndAssessmentRV.layoutManager = LinearLayoutManager(
             requireContext(),
             RecyclerView.VERTICAL,

@@ -78,13 +78,12 @@ class SlideViewModel constructor(
     val slideContent: LiveData<Lce<List<SlideContent>>> = _slideContent
 
     fun getSlideContent(
-        courseId: String,
-        moduleId: String,
         lessonId: String
     ) = viewModelScope.launch {
         _slideContent.postValue(Lce.loading())
-        delay(300)
-        _slideContent.value = Lce.content(slides)
+
+       val slideContent =  learningRepository.getSlideContent(lessonId)
+        _slideContent.value = Lce.content(slideContent)
 
     }
 }

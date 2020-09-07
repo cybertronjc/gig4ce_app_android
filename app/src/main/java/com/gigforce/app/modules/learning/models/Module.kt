@@ -22,6 +22,8 @@ data class Module(
     @set:PropertyName("module_no")
     var moduleNo: Int = 0,
 
+    @get:PropertyName("total_lessons")
+    @set:PropertyName("total_lessons")
     var totalLessons: Int = 0,
     var lessonsCompleted: Int = 0,
     var totalAssessments: Int = 0,
