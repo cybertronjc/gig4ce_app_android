@@ -584,4 +584,7 @@
     <string name="time_is_up">Time is Up!!!!!</string>
     <string name="plus_see_more">+ see more</string>
     <string name="plus_see_less">+ see less</string>
+    <string name="day_and_time">Day and Time</string>
+    <string name="app_language">App Language</string>
+    <string name="sign_out">Sign out</string>
 </resources>
