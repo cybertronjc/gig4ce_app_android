@@ -529,17 +529,18 @@ class RosterDayViewModel: ViewModel() {
         Log.d("RosterDayFragment", "called")
 
         val gigs = getFilteredGigs(date, "upcoming")
-        if(nestedScrollView!=null) {
-            if (gigs.size != 0) {
-                val sortedUpcomingGigs = gigs.sortedBy { gig -> gig.startHour }
 
-//            nestedScrollView.scrollTo(0, (8 * itemHeight).px)
-                nestedScrollView?.scrollTo(
-                    0,
-                    ((sortedUpcomingGigs[0].startHour - 4) * itemHeight).px
-                )
-            } else {
-                nestedScrollView?.scrollTo(0, (8 * itemHeight).px)
+        nestedScrollView?.let {
+            gigs?.let {it1->
+                if(it1.size!=0){
+                    val sortedUpcomingGigs = gigs.sortedBy { gig -> gig.startHour }
+                    it.scrollTo(
+                        0,
+                        ((sortedUpcomingGigs[0].startHour - 4) * itemHeight).px
+                    )
+                }else {
+                    it.scrollTo(0, (8 * itemHeight).px)
+                }
             }
         }
     }
