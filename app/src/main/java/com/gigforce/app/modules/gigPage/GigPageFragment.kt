@@ -190,6 +190,38 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
                     }
                 }
             }
+
+        gigHighlightsSeeMoreTV.setOnClickListener {
+
+            if(gig == null)
+                return@setOnClickListener
+
+            if (gigHighlightsContainer.childCount == 4) {
+                //Collapsed
+                inflateGigHighlights(gig!!.gigHighlights.subList(4, gig!!.gigHighlights.size))
+                gigHighlightsSeeMoreTV.text = getString(R.string.plus_see_less)
+            }else{
+                //Expanded
+                gigHighlightsContainer.removeViews(4, gigHighlightsContainer.childCount - 4)
+                gigHighlightsSeeMoreTV.text = getString(R.string.plus_see_more)
+            }
+        }
+
+        gigRequirementsSeeMoreTV.setOnClickListener {
+
+            if(gig == null)
+                return@setOnClickListener
+
+            if (gigRequirementsContainer.childCount == 4) {
+                //Collapsed
+                inflateGigRequirements(gig!!.gigRequirements.subList(4, gig!!.gigRequirements.size))
+                gigRequirementsSeeMoreTV.text = getString(R.string.plus_see_less)
+            }else{
+                //Expanded
+                gigRequirementsContainer.removeViews(4, gigRequirementsContainer.childCount - 4)
+                gigRequirementsSeeMoreTV.text = getString(R.string.plus_see_more)
+            }
+        }
     }
 
     private fun turnGPSOn() {
@@ -488,10 +520,15 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
         }
 
         if (gig.endDateTime != null) {
-            durationTextTV.text =
-                "${dateFormatter.format(gig.startDateTime!!.toDate())} - ${dateFormatter.format(gig.endDateTime!!.toDate())}"
-            shiftTV.text =
-                "${timeFormatter.format(gig.startDateTime!!.toDate())} - ${timeFormatter.format(gig.endDateTime!!.toDate())}"
+            val startDate = gig.startDateTime!!.toLocalDate()
+            val endDate = gig.endDateTime!!.toLocalDate()
+
+            if(startDate.isEqual(endDate))
+                durationTextTV.text = "${dateFormatter.format(gig.startDateTime!!.toDate())}"
+            else
+                durationTextTV.text = "${dateFormatter.format(gig.startDateTime!!.toDate())} - ${dateFormatter.format(gig.endDateTime!!.toDate())}"
+
+            shiftTV.text = "${timeFormatter.format(gig.startDateTime!!.toDate())} - ${timeFormatter.format(gig.endDateTime!!.toDate())}"
         } else {
             durationTextTV.text = "${dateFormatter.format(gig.startDateTime!!.toDate())} - "
             shiftTV.text = "${timeFormatter.format(gig.startDateTime!!.toDate())} - "
@@ -509,10 +546,24 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
         wageTV.text = gigAmountText
 
         gigHighlightsContainer.removeAllViews()
-        inflateGigHighlights(gig.gigHighlights)
+        if(gig.gigHighlights.size > 4){
+            inflateGigHighlights(gig.gigHighlights.take(4))
+
+            gigHighlightsContainer.removeViews(4, gigHighlightsContainer.childCount - 4)
+            gigHighlightsSeeMoreTV.visible()
+        }else{
+            inflateGigHighlights(gig.gigHighlights)
+            gigHighlightsSeeMoreTV.gone()
+        }
 
         gigRequirementsContainer.removeAllViews()
-        inflateGigRequirements(gig.gigRequirements)
+        if(gig.gigRequirements.size > 4) {
+            inflateGigRequirements(gig.gigRequirements.take(4))
+            gigRequirementsSeeMoreTV.visible()
+        }else{
+            inflateGigRequirements(gig.gigRequirements)
+            gigRequirementsSeeMoreTV.gone()
+        }
 
         addressTV.setOnClickListener {
 
