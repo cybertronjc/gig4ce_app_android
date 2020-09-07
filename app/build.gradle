@@ -9,8 +9,8 @@ apply plugin: 'com.google.gms.google-services'
 android {
     signingConfigs {
         debug {
-          storeFile file('/home/himanshu/Projects/Android/GigForce/KeyStores/gigforceapp.jks')
-//            storeFile file('/Users/apple/Documents/gigforceapp.jks')
+//          storeFile file('/home/himanshu/Projects/Android/GigForce/KeyStores/gigforceapp.jks')
+            storeFile file('D:\\gig_keystore\\gigforceapp.jks')
             storePassword 'gigforce'
             keyAlias 'key0'
             keyPassword 'gigforce'
@@ -29,8 +29,8 @@ android {
         applicationId "com.gigforce.app"
         minSdkVersion 23
         targetSdkVersion 29
-        versionCode 50
-        versionName "1.17.5"
+        versionCode 51
+        versionName "1.18.0"
 
         vectorDrawables.useSupportLibrary = true
 
@@ -259,10 +259,10 @@ dependencies {
     implementation 'com.otaliastudios:transcoder:0.9.1'
     //Qr Code Library
     implementation 'com.google.zxing:core:3.4.0'
-// https://mvnrepository.com/artifact/com.itextpdf/itextpdf
+
+    // https://mvnrepository.com/artifact/com.itextpdf/itextpdf
     implementation group: 'com.itextpdf', name: 'itextpdf', version: '5.0.6'
-    // Searchable Dropdown
-    implementation 'com.toptoche.searchablespinner:searchablespinnerlibrary:1.3.1'
+
 
 
 }

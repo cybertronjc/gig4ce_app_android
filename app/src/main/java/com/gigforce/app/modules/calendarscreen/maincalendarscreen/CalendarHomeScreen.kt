@@ -1,6 +1,7 @@
 package com.gigforce.app.modules.calendarscreen.maincalendarscreen
 
 import android.app.Dialog
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.view.LayoutInflater
@@ -149,6 +150,7 @@ class CalendarHomeScreen : BaseFragment(),
         calendarView.setOnDateClickListner(object : CalendarView.MonthChangeAndDateClickedListener {
             override fun onMonthChange(monthModel: CalendarView.MonthModel) {
                 selectedMonthModel = monthModel
+                println(" date data1 " + selectedMonthModel.toString())
                 changeVisibilityCalendarView()
             }
         })
@@ -234,16 +236,12 @@ class CalendarHomeScreen : BaseFragment(),
 //                viewModel.setDataModel(homeDataModel.all_gigs)
                 initializeViews()
                 calendarView.setGigData(viewModel.arrMainHomeDataModel!!)
-//                var layoutManager = rv_.layoutManager as LinearLayoutManager
-//                var data = recyclerGenericAdapter.list.get(layoutManager.findFirstVisibleItemPosition())
-//                calendarView.setCurrentVisibleDate(data.getDateObj())
             }
         })
 
 
         // load user data
-        viewModelProfile.getProfileData().observe(viewLifecycleOwner, Observer { profileObs ->
-            val profile: ProfileData = profileObs!!
+        viewModelProfile.getProfileData().observe(viewLifecycleOwner, Observer { profile ->
             displayImage(profile.profileAvatarName)
             if (profile.name != null && !profile.name.equals(""))
                 tv1HS1.text = profile.name
@@ -395,7 +393,8 @@ class CalendarHomeScreen : BaseFragment(),
                             }
                         } else {
                             if (obj!!.isUnavailable) {
-                                getTextView(viewHolder, R.id.title).text = "Not working"
+                                getTextView(viewHolder, R.id.title).text =
+                                    getString(R.string.not_working)
                                 getTextView(viewHolder, R.id.subtitle).gone()
                                 setTextViewColor(
                                     getTextView(viewHolder, R.id.title),
@@ -477,6 +476,7 @@ class CalendarHomeScreen : BaseFragment(),
         }
 
         var scrollListener = object : RecyclerView.OnScrollListener() {
+
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
                 var layoutManager: LinearLayoutManager? = null
@@ -603,7 +603,8 @@ class CalendarHomeScreen : BaseFragment(),
             getTextView(viewHolder, R.id.title_calendar_action_item),
             R.color.action_layout_available_title
         )
-        getTextView(viewHolder, R.id.title_calendar_action_item).text = "Marked working"
+        getTextView(viewHolder, R.id.title_calendar_action_item).text =
+            getString(R.string.marked_working)
         getImageView(viewHolder, R.id.flash_icon).setImageResource(R.drawable.ic_flash_green)
     }
 
@@ -622,17 +623,19 @@ class CalendarHomeScreen : BaseFragment(),
 
                 recyclerGenericAdapter.notifyItemChanged(position)
             } else {
-                showConfirmationDialogType7(
-                    "Are you sure you want to not work on this day?",
+                showConfirmationDialogType1(
+                    getString(R.string.sure_working_on_this_day),
                     object : ConfirmationDialogOnClickListener {
                         override fun clickedOnYes(dialog: Dialog?) {
                             var title =
-                                "Alright, no new gigs will be assigned to you on this day. However, you have \"" + temporaryData.title + "\" is assigned to you. If you want to decline it please do it separately."
+                                getString(R.string.alright_no_new_gigs_assigned_on_this_day) + temporaryData.title + getString(
+                                    R.string.want_to_decline
+                                )
                             showConfirmationDialogType5(
                                 title,
                                 object : ConfirmationDialogOnClickListener {
                                     override fun clickedOnYes(dialog: Dialog?) {
-                                        showToast("Screen is pending to show List of gigs on this day.")
+                                        showToast(getString(R.string.screen_pending_show_gigs))
                                         makeChangesToCalendarItem(position, true)
                                         dialog?.dismiss()
                                     }

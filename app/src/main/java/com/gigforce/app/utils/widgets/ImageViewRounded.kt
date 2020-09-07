@@ -37,7 +37,8 @@ class ImageViewRounded : AppCompatImageView {
     }
 
     override fun onDraw(canvas: Canvas) {
-        val drawable = drawable as BitmapDrawable ?: return
+
+        val drawable = drawable as? BitmapDrawable ?: return
         if (width == 0 || height == 0) {
             return
         }

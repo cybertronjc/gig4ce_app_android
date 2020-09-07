@@ -52,7 +52,6 @@
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_gravity="center"
-                    android:src="@drawable/ic_play_round_pink_bck"
                     android:scaleType="fitXY" />
 
             </com.google.android.material.card.MaterialCardView>

@@ -2,14 +2,20 @@ package com.gigforce.app.modules.learning.slides.types
 
 import android.net.Uri
 import android.os.Bundle
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
+import android.text.style.UnderlineSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.utils.GlideApp
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.android.synthetic.main.fragment_learning_slide_single_image.*
 
 class SingleImageFragment : BaseFragment() {
@@ -21,6 +27,8 @@ class SingleImageFragment : BaseFragment() {
         private const val KEY_IMAGE_URI = "image_uri"
         private const val KEY_TITLE = "title"
         private const val KEY_DESCRIPTION = "description"
+
+        const val READ_MORE = "  Read more"
 
         fun getInstance(
             lessonId: String,
@@ -77,7 +85,7 @@ class SingleImageFragment : BaseFragment() {
         outState.apply {
 
             putString(KEY_LESSON_ID, mLessonId)
-           // putString(KEY_SLIDE_ID, mSlideId)
+            // putString(KEY_SLIDE_ID, mSlideId)
             putString(KEY_IMAGE_URI, mImageUri.toString())
             putString(KEY_TITLE, mTitle)
             putString(KEY_DESCRIPTION, mDescription)
@@ -91,6 +99,37 @@ class SingleImageFragment : BaseFragment() {
             .into(imageView)
 
         slideTitleTV.text = mTitle
-        slideDescriptionTV.text = mDescription
+        slideDescriptionTV.setOnClickListener {
+            showText(mDescription)
+        }
+
+        if (mDescription.length >= 180)
+            slideDescriptionTV.text = getDescriptionText(mDescription.substring(0,180))
+        else
+            slideDescriptionTV.text = mDescription
+    }
+
+    private fun getDescriptionText(text: String): SpannableString {
+        if (text.isBlank())
+            return SpannableString("")
+
+        val string = SpannableString(text + READ_MORE)
+
+        val colorLipstick = ResourcesCompat.getColor(resources, R.color.white, null)
+        string.setSpan(ForegroundColorSpan(colorLipstick), text.length + 3, string.length - 1, 0)
+        string.setSpan(UnderlineSpan(), text.length + 2, string.length , 0)
+
+        return string
+    }
+
+    private fun showText(text: String) {
+        val dialogView = layoutInflater.inflate(R.layout.dialog_show_text, null)
+        val textView = dialogView.findViewById<TextView>(R.id.textView)
+        textView.text = text
+
+        MaterialAlertDialogBuilder(requireContext())
+            .setView(dialogView)
+            .setPositiveButton(R.string.okay_text) { _, _ -> }
+            .show()
     }
 }

@@ -1,9 +1,7 @@
 package com.gigforce.app.modules.learning
 
 import com.gigforce.app.core.base.basefirestore.BaseFirestoreDBRepository
-import com.gigforce.app.modules.learning.models.Course
-import com.gigforce.app.modules.learning.models.CourseContent
-import com.gigforce.app.modules.learning.models.Module
+import com.gigforce.app.modules.learning.models.*
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
@@ -149,6 +147,72 @@ class LearningRepository : BaseFirestoreDBRepository() {
             }
     }
 
+
+    suspend fun getVideoDetails(
+        lessonId : String
+    ): List<CourseContent> = suspendCoroutine { cont ->
+        getCollectionReference()
+            .whereEqualTo(LESSON_ID, lessonId)
+            .whereEqualTo(TYPE, TYPE_TOPIC)
+            .whereEqualTo(TOPIC_TYPE, TOPIC_TYPE_VIDEO_WITH_TEXT)
+            .get()
+            .addOnSuccessListener { querySnap ->
+
+                val modules = querySnap.documents
+                    .map {
+                        val videoDetails = it.toObject(CourseContent::class.java)!!
+                        videoDetails.id = it.id
+                        videoDetails
+                    }.filter {
+                        it.isActive
+                    }
+                cont.resume(modules)
+            }
+            .addOnFailureListener {
+                cont.resumeWithException(it)
+            }
+    }
+
+    suspend fun getSlideContent(
+        lessonId : String
+    ): List<SlideContent> = suspendCoroutine { cont ->
+        getCollectionReference()
+            .whereEqualTo(LESSON_ID, lessonId)
+            .whereEqualTo(TYPE, TYPE_TOPIC)
+            .get()
+            .addOnSuccessListener { querySnap ->
+
+                val modules = querySnap.documents
+                    .map {
+                        val videoDetails = it.toObject(SlideContentRemote::class.java)!!
+                        videoDetails.id = it.id
+                        videoDetails
+                    }
+                    .filter {
+                        it.isActive
+                    }
+                    .map {
+                        mapToSlideContent(it)
+                    }
+                cont.resume(modules)
+            }
+            .addOnFailureListener {
+                cont.resumeWithException(it)
+            }
+    }
+
+    private fun mapToSlideContent(it: SlideContentRemote): SlideContent {
+        return SlideContent(
+            slideId =  it.id,
+            lessonId = it.lessonId,
+            image = it.coverPicture,
+            isActive = it.isActive,
+            type = it.type,
+            assessmentId = it.lessonId,
+            videoPath = it.videoUrl
+        )
+    }
+
     suspend fun getAssessmentsFromAllCourses(): List<CourseContent> = suspendCoroutine { cont ->
         getCollectionReference()
             .whereEqualTo(TYPE, TYPE_LESSON)
@@ -232,15 +296,21 @@ class LearningRepository : BaseFirestoreDBRepository() {
 
     companion object {
         private const val COLLECTION_NAME = "Course_blocks"
+        private const val COURSE_PROGRESS_NAME = "Course_Progress"
 
         private const val TYPE = "type"
+        private const val TOPIC_TYPE = "topictype"
         private const val LESSON_TYPE = "lesson_type"
         private const val COURSE_ID = "course_id"
         private const val MODULE_ID = "module_id"
+        private const val LESSON_ID = "lesson_id"
 
         private const val TYPE_COURSE = "course"
         private const val TYPE_MODULE = "module"
-        private const val TYPE_LESSON = "lession"
+        private const val TYPE_LESSON = "lesson"
+        private const val TYPE_TOPIC = "topic"
+
+        private const val TOPIC_TYPE_VIDEO_WITH_TEXT = "video_with_text"
 
         private const val LESSON_TYPE_VIDEO = "video"
         private const val LESSON_TYPE_SLIDES = "slides"

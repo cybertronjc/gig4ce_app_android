@@ -1,7 +1,11 @@
 package com.gigforce.app.modules.assessment
 
+import android.graphics.Bitmap
 import android.graphics.Rect
+import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.os.CountDownTimer
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -10,19 +14,20 @@ import android.view.animation.AnimationUtils
 import android.widget.PopupMenu
 import android.widget.ScrollView
 import androidx.core.os.bundleOf
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.request.target.CustomTarget
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.modules.assessment.models.AssementQuestionsReponse
-import com.gigforce.app.utils.ItemOffsetDecoration
-import com.gigforce.app.utils.StringConstants
-import com.gigforce.app.utils.ViewModelProviderFactory
-import com.gigforce.app.utils.openPopupMenu
+import com.gigforce.app.modules.profile.ProfileViewModel
+import com.gigforce.app.utils.*
 import com.gigforce.app.utils.widgets.CustomScrollView
 import kotlinx.android.synthetic.main.fragment_assessment.*
 import kotlinx.android.synthetic.main.toolbar.*
+import java.text.SimpleDateFormat
 
 
 /**
@@ -33,6 +38,10 @@ class AssessmentFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
     AssessmentDialog.AssessmentDialogCallbacks,
     AssessmentAnswersAdapter.AssessAdapterCallbacks {
 
+    private lateinit var mLessonId : String
+
+    private var pushfinalEvent: Boolean = false
+    private var countDownTimer: CountDownTimer? = null
     private var adapter: AssessmentAnswersAdapter? = null
     private val viewModelFactory by lazy {
         ViewModelProviderFactory(ViewModelAssessmentFragment(ModelAssessmentFragment()))
@@ -40,7 +49,11 @@ class AssessmentFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
     private val viewModelAssessmentFragment: ViewModelAssessmentFragment by lazy {
         ViewModelProvider(this, viewModelFactory).get(ViewModelAssessmentFragment::class.java)
     }
+    private val viewModelProfile: ProfileViewModel by lazy {
+        ViewModelProvider(this).get(ProfileViewModel::class.java)
+    }
     private var selectedPosition: Int = 0
+    private var timeTaken = 0;
 
 
     override fun onCreateView(
@@ -53,13 +66,30 @@ class AssessmentFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        getDataFromIntents(savedInstanceState)
         initTb()
         initObservers();
         setupRecycler();
-        viewModelAssessmentFragment.getQuestionaire()
+        viewModelAssessmentFragment.getQuestionaire(mLessonId)
+    }
+
+    private fun getDataFromIntents(savedInstanceState: Bundle?) {
+        savedInstanceState?.let {
+            mLessonId = it.getString(INTENT_LESSON_ID)?: return@let
+        }
+
+        arguments?.let {
+            mLessonId = it.getString(INTENT_LESSON_ID)?: return@let
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString(INTENT_LESSON_ID,mLessonId)
     }
 
     private fun initObservers() {
+
         with(viewModelAssessmentFragment) {
             observableDialogResult.observe(viewLifecycleOwner, Observer {
                 val bundle = Bundle()
@@ -79,10 +109,14 @@ class AssessmentFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
                 }
 
                 bundle.putBooleanArray(StringConstants.ANSWERS_ARR.value, arr)
+                bundle.putInt(StringConstants.TIME_TAKEN.value, timeTaken)
+                countDownTimer?.cancel();
                 navigate(R.id.assessment_result_fragment, bundle)
             })
             observableDialogInit.observe(viewLifecycleOwner, Observer {
-                initialize()
+                viewModelProfile.getProfileData().observe(viewLifecycleOwner, Observer {
+                    initialize()
+                })
 
 
             })
@@ -109,14 +143,23 @@ class AssessmentFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
                 )
                 tv_scenario_value_assess_frag.text = it.scenario
                 tv_scenario_value_header_assess_frag.text = it.scenario
+
                 tv_level_assess_frag.text = "${getString(R.string.level)} ${it.level}"
                 tv_designation_assess_frag.text = it.assessment_name
                 h_pb_assess_frag.max = it.assessment?.size!!
                 h_pb_assess_frag.progress = 0
                 tv_percent_assess_frag.text = "0 %"
                 setDataAsPerPosition(it)
+                loadImage(it.assessment_image)
 
 
+            })
+
+            observableError.observe(viewLifecycleOwner, Observer {
+                showToast(it)
+            })
+            observableQuizSubmit.observe(viewLifecycleOwner, Observer {
+                finalResult()
             })
 
         }
@@ -124,10 +167,22 @@ class AssessmentFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
 
     fun setDataAsPerPosition(it: AssementQuestionsReponse) {
         tv_ques_no_assess_frag.text =
-            "${getString(R.string.ques)} ${selectedPosition + 1}/${it.assessment?.size} "
-        adapter?.addData(it.assessment!![selectedPosition].options!!)
+            "${getString(R.string.ques)} ${selectedPosition + 1}/${it.assessment?.size} :"
+        tv_ques_assess_frag.text = it.assessment!![selectedPosition].question!!
+        adapter?.addData(it.assessment!![selectedPosition].options!!, false, "")
+        try {
+            val sdf = SimpleDateFormat("hh:mm:ss")
+            val date = sdf.parse(it.duration)
+            initCountDownTimer(miliseconds(date.hours, date.minutes, date.seconds))
+        } catch (ignored: Exception) {
+
+        }
 
 
+    }
+
+    fun miliseconds(hrs: Int, min: Int, sec: Int): Long {
+        return (((hrs * 60 * 60 + min * 60 + sec) * 1000).toLong());
     }
 
     private fun initTb() {
@@ -138,7 +193,34 @@ class AssessmentFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
     private fun initialize() {
         initUI()
         initClicks();
+        countDownTimer?.start();
 
+    }
+
+    private fun initCountDownTimer(millis: Long) {
+        countDownTimer = object : CountDownTimer(millis, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                timeTaken += 1000
+            }
+
+            override fun onFinish() {
+
+                if (!lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) {
+                    pushfinalEvent = true
+                    return
+                }
+                showToast(getString(R.string.time_is_up))
+                timeTaken = millis.toInt()
+                viewModelAssessmentFragment.observableAssessmentData.value?.timeTakenInMillis =
+                    timeTaken.toLong();
+                viewModelAssessmentFragment.submitAnswers(viewModelProfile.getProfileData().value?.id)
+            }
+        }
+
+    }
+
+    override fun onPause() {
+        super.onPause()
 
     }
 
@@ -164,31 +246,11 @@ class AssessmentFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
             if (selectedPosition == viewModelAssessmentFragment.observableAssessmentData.value?.assessment!!.size - 1) {
                 if (viewModelAssessmentFragment.observableAssessmentData.value?.assessment!![selectedPosition].answered) {
                     h_pb_assess_frag.progress = h_pb_assess_frag.max
-                    tv_percent_assess_frag.text = "100%"
-                    var answers = 0;
-                    viewModelAssessmentFragment.observableAssessmentData.value!!.assessment!!.forEach { elem ->
-                        run {
-                            elem.options?.forEach { elem ->
-                                run {
-                                    if (elem.selectedAnswer == true && elem.is_answer == true) {
-                                        answers++;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    val questions =
-                        viewModelAssessmentFragment.observableAssessmentData.value!!.assessment!!.size
+                    tv_percent_assess_frag.text = getString(R.string.hundred_percent)
+                    viewModelAssessmentFragment.observableAssessmentData.value?.timeTakenInMillis =
+                        timeTaken.toLong();
+                    viewModelAssessmentFragment.submitAnswers(viewModelProfile.getProfileData().value?.id)
 
-                    showDialog(
-                        AssessmentDialog.STATE_PASS, bundleOf(
-
-                            StringConstants.RIGHT_ANSWERS.value to answers,
-                            StringConstants.ASSESSMENT_DIALOG_STATE.value to if (answers >= viewModelAssessmentFragment.observableAssessmentData.value!!.assessment!!.size / 2.toFloat()) AssessmentDialog.STATE_PASS else AssessmentDialog.STATE_REAPPEAR,
-                            StringConstants.QUESTIONS_COUNT.value to questions
-
-                        )
-                    )
                 } else {
                     showToast(getString(R.string.answer_the_ques))
 
@@ -215,6 +277,55 @@ class AssessmentFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
             }
 
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (pushfinalEvent) {
+            pushfinalEvent = false
+            Handler().postDelayed({
+                showToast(getString(R.string.time_is_up))
+                viewModelAssessmentFragment.observableAssessmentData.value?.timeTakenInMillis =
+                    timeTaken.toLong();
+                viewModelAssessmentFragment.submitAnswers(viewModelProfile.getProfileData().value?.id)
+            }, 500)
+
+        }
+    }
+
+    private fun finalResult() {
+
+        if (!lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) {
+            pushfinalEvent = true
+            return
+        }
+        countDownTimer?.cancel()
+        var answers = 0;
+        viewModelAssessmentFragment.observableAssessmentData.value!!.assessment!!.forEach { elem ->
+            run {
+                elem.options?.forEach { elem ->
+                    run {
+                        if (elem.selectedAnswer == true && elem.is_answer == true) {
+                            answers++;
+                        }
+                    }
+                }
+            }
+        }
+        val questions =
+            viewModelAssessmentFragment.observableAssessmentData.value!!.assessment!!.size
+        var isPassed =
+            (answers / questions.toFloat()) * 100 >= viewModelAssessmentFragment.observableAssessmentData.value?.passing_percentage!!
+
+        showDialog(
+            AssessmentDialog.STATE_PASS, bundleOf(
+                StringConstants.RIGHT_ANSWERS.value to answers,
+                StringConstants.ASSESSMENT_DIALOG_STATE.value to if (isPassed) AssessmentDialog.STATE_PASS else AssessmentDialog.STATE_REAPPEAR,
+                StringConstants.QUESTIONS_COUNT.value to questions
+
+            )
+        )
+
     }
 
     private fun initUI() {
@@ -257,7 +368,8 @@ class AssessmentFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
     }
 
     override fun onMenuItemClick(item: MenuItem?): Boolean {
-        TODO("Not yet implemented")
+
+        return true
     }
 
     override fun assessmentState(state: Int) {
@@ -270,7 +382,7 @@ class AssessmentFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
         }
     }
 
-    override fun setAnswered(boolean: Boolean, position: Int) {
+    override fun setAnswered(isCorrect: Boolean, position: Int) {
         viewModelAssessmentFragment.observableAssessmentData.value?.assessment!![selectedPosition].answered =
             true
         val optionsArr =
@@ -286,16 +398,19 @@ class AssessmentFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
 //            }
 
         }
-        adapter?.addData(optionsArr ?: arrayListOf())
-        sv_assess_frag.postDelayed(Runnable {
-            val y: Float =
-                rv_options_assess_frag.y + rv_options_assess_frag.getChildAt(position).y
-            val v = rv_options_assess_frag.findViewHolderForAdapterPosition(position)
-            sv_assess_frag.post {
-                sv_assess_frag.smoothScrollTo(0, y.toInt())
+        adapter?.addData(
+            optionsArr ?: arrayListOf(),
+            true,
+            if (isCorrect) getString(R.string.woe_you_are_correct) else getString(
+                R.string.you_are_incorrect
+            )
+        )
 
-            }
-        },600)
+        val y: Float =
+            rv_options_assess_frag.y + rv_options_assess_frag.getChildAt(position).y
+        sv_assess_frag.post {
+            sv_assess_frag.fullScroll(View.FOCUS_DOWN)
+        }
 
 
     }
@@ -304,5 +419,43 @@ class AssessmentFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
         fun getAnsweredStatus(): Boolean
     }
 
+    private fun loadImage(Path: String) {
+
+//        val reference: StorageReference =
+//            FirebaseStorage.getInstance().reference.child("assessment_images").child(Path)
+        if (Path == null || Path.isEmpty()) {
+            iv_scenario_value_assess_frag.visibility = View.GONE
+        } else {
+            iv_scenario_value_assess_frag.visibility = View.VISIBLE
+            GlideApp.with(this.requireContext())
+                .asBitmap()
+                .load(Path)
+                .into(object : CustomTarget<Bitmap>() {
+                    override fun onResourceReady(
+                        resource: Bitmap,
+                        transition: com.bumptech.glide.request.transition.Transition<in Bitmap>?
+                    ) {
+                        iv_scenario_value_assess_frag.setImageBitmap(resource);
+                    }
+
+                    override fun onLoadCleared(placeholder: Drawable?) {
+                    }
+
+                })
+        }
+
+
+    }
+
+    override fun onBackPressed(): Boolean {
+
+        countDownTimer?.cancel()
+
+        return super.onBackPressed()
+    }
+
+    companion object{
+        const val INTENT_LESSON_ID = "lesson_id"
+    }
 
 }

@@ -70,28 +70,28 @@ class ExperienceExpandedFragment : ProfileBaseFragment() {
         profileViewModel.userProfileData.observe(viewLifecycleOwner, Observer { profile ->
             var experienceString = ""
             val format = SimpleDateFormat("dd/MM/yyyy", Locale.US)
-            profile?.experiences?.let {
-                val experiences = it.sortedByDescending { experience -> experience.startDate }
+            profile.experiences?.let {
+                val experiences = it.sortedByDescending { experience -> experience.startDate  }
                 for (exp in experiences) {
                     experienceString += exp.title + "\n"
                     experienceString += exp.company + "\n"
                     experienceString += exp.employmentType + "\n"
                     experienceString += exp.location + "\n"
                     experienceString += format.format(exp.startDate!!) + "-"
-                    experienceString += if (exp.endDate != null) format.format(exp.endDate!!) + "\n\n"
+                    experienceString += if(exp.endDate != null) format.format(exp.endDate!!) + "\n\n"
                     else "current" + "\n\n"
                 }
             }
             experience_card.nextDestination = R.id.editExperienceBottomSheet
-            experience_card.cardTitle = "Experience"
+            experience_card.cardTitle = getString(R.string.experience)
             experience_card.cardContent = experienceString
-            experience_card.cardBottom = "Add experiences"
+            experience_card.cardBottom = getString(R.string.add_experience)
 
-            experience_top_profile.imageName = profile?.profileAvatarName ?: ""
-            experience_top_profile.userName = profile?.name ?: ""
+            experience_top_profile.imageName = profile.profileAvatarName
+            experience_top_profile.userName = profile.name
         })
 
-        if (cameFromLandingPage)
+        if(cameFromLandingPage)
             profileViewModel.getProfileData()
 
         when (action) {
@@ -106,6 +106,4 @@ class ExperienceExpandedFragment : ProfileBaseFragment() {
             findNavController().navigate(R.id.addExperienceBottomSheet)
         }
     }
-
-
 }

@@ -69,7 +69,7 @@
                 android:longClickable="false"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Degree *"/>
+                android:hint="@string/degree_mandatory"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 

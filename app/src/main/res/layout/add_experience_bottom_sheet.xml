@@ -47,7 +47,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:ems="10"
-            android:hint="Company Name *"
+            android:hint="@string/company_name_mandatory"
             android:inputType="textPersonName" />
 
         <com.google.android.material.textfield.TextInputLayout

@@ -5,20 +5,20 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import com.gigforce.app.modules.learning.models.SlideContent
-import com.gigforce.app.modules.learning.slides.types.AssessmentSlideFragment
-import com.gigforce.app.modules.learning.slides.types.DoAndDontImageFragment
-import com.gigforce.app.modules.learning.slides.types.SingleImageFragment
-import com.gigforce.app.modules.learning.slides.types.VideoWithTextFragment
+import com.gigforce.app.modules.learning.slides.types.*
 
 class SlidesPagerAdapter constructor(
     fm: FragmentManager,
-    private val slideList: List<SlideContent>
+    private val slideList: List<SlideContent>,
+    private val videoFragmentOrientationListener: VideoFragmentOrientationListener
 ) : FragmentStatePagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
     override fun getItem(position: Int): Fragment {
-        val slide = slideList[position]
+        if (position == slideList.size)
+            return SlidesCompletedFragment.getInstance()
 
-       return when (slide.type) {
+        val slide = slideList[position]
+        when (slide.type) {
             SlideContent.TYPE_ASSESSMENT -> {
 
                 val assessmentId = slide.assessmentId
@@ -82,7 +82,8 @@ class SlidesPagerAdapter constructor(
                     slideId = slideId,
                     videoUri = videoUri,
                     title = title,
-                    description = description
+                    description = description,
+                    baseFragOrientationListener = videoFragmentOrientationListener
                 )
             }
             else -> {
@@ -91,5 +92,16 @@ class SlidesPagerAdapter constructor(
         }
     }
 
-    override fun getCount(): Int = slideList.size
+    override fun getCount(): Int = slideList.size + 1
+
+    /**
+     *
+     */
+    fun dispatchOnBackPressedIfCurrentFragmentIsVideoFragment(currentPosition: Int): Boolean {
+        val fragment = getItem(currentPosition)
+
+        return if (fragment is VideoWithTextFragment) {
+            fragment.backButtonPressed()
+        } else false
+    }
 }

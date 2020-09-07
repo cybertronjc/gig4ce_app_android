@@ -119,7 +119,8 @@ class ChatScreenFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener {
         val formatted = current.format(formatter)
 
         println("Current Date and Time is: $formatted")
-        tv_lastSeenValue.text = "last seen at $formatted"
+
+        tv_lastSeenValue.text = "${getString(R.string.last_seen_at)} $formatted"
         return formatted
     }
 
