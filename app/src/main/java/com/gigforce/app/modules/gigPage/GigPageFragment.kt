@@ -152,12 +152,9 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
         favoriteCB.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked && gig?.isFavourite!!.not()) {
                 viewModel.favoriteGig(gigId)
-                favoriteCB.buttonTintList = resources.getColorStateList(R.color.lipstick)
                 showToast("Marked As Favourite")
             } else if (!isChecked && gig?.isFavourite!!) {
                 viewModel.unFavoriteGig(gigId)
-                favoriteCB.buttonTintList = resources.getColorStateList(R.color.black_42)
-
                 showToast("Unmarked As Favourite")
             }
         }
@@ -662,9 +659,9 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
                     timeFormatter.format(gig.attendance!!.checkOutTime!!)
 
             if (!gig.isCheckInMarked()) {
-                checkInCheckOutSliderBtn.text = "Check In"
+                checkInCheckOutSliderBtn.text = "Check-in"
             } else if (!gig.isCheckOutMarked()) {
-                checkInCheckOutSliderBtn.text = "Check Out"
+                checkInCheckOutSliderBtn.text = "Check-out"
             }
         }
     }
