@@ -99,7 +99,6 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
     }
 
     private fun getData(arguments: Bundle?, savedInstanceState: Bundle?) {
-
         savedInstanceState ?. let{
             gigId = it.getString(INTENT_EXTRA_GIG_ID)!!
             comingFromCheckInScreen = it.getBoolean(INTENT_EXTRA_COMING_FROM_CHECK_IN)
@@ -111,7 +110,6 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
                 FirebaseCrashlytics.getInstance().log("GigPageFragment getData method : savedInstanceState and arguments found null")
                 FirebaseCrashlytics.getInstance().setUserId(FirebaseAuth.getInstance().currentUser?.uid!!)
             }
-
         }
     }
     var userGpsDialogActionCount = 0
