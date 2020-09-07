@@ -129,10 +129,7 @@ class LanguageSelectFragment : BaseFragment() {
 
     private fun navNext() {
         navigate(
-            R.id.authFlowFragment, bundleOf(
-                StringConstants.INVITE_USER_ID.value to arguments?.getString(StringConstants.INVITE_USER_ID.value)
-            )
-        )
+            R.id.authFlowFragment )
     }
 
 

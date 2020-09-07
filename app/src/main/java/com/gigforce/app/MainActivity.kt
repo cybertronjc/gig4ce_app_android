@@ -44,10 +44,7 @@ class MainActivity : AppCompatActivity() {
     private fun checkForAllAuthentication() {
         navController.popAllBackStates()
         navController.navigate(
-            R.id.authFlowFragment, bundleOf(
-                StringConstants.INVITE_USER_ID.value to intent.getStringExtra(StringConstants.INVITE_USER_ID.value)
-            )
-        )
+            R.id.authFlowFragment)
 //        navController.navigate(R.id.languageSelectFragment)
     }
 

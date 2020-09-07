@@ -9,13 +9,11 @@ import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.widget.ArrayAdapter
 import android.widget.TextView
-import androidx.core.os.bundleOf
 import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
-import com.gigforce.app.utils.StringConstants
 import kotlinx.android.synthetic.main.login_frament.*
 import java.util.regex.Matcher
 import java.util.regex.Pattern
@@ -91,9 +89,7 @@ class Login : BaseFragment() {
             removeIntroComplete()
             popFragmentFromStack(R.id.Login)
             navigate(
-                R.id.authFlowFragment, bundleOf(
-                    StringConstants.INVITE_USER_ID.value to arguments?.getString(StringConstants.INVITE_USER_ID.value)
-                )
+                R.id.authFlowFragment
             )
             dialog?.dismiss()
         }
@@ -117,8 +113,7 @@ class Login : BaseFragment() {
                 findNavController().navigate(
                     LoginDirections.actionLogin2ToVerifyOTP(
                         viewModel.verificationId!!,
-                        otp_mobile_number.text.toString(),
-                        arguments?.getString(StringConstants.INVITE_USER_ID.value)
+                        otp_mobile_number.text.toString()
                     )
                 )
             } catch (e: Exception) {

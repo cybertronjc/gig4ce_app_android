@@ -29,7 +29,7 @@ data class ProfileData(
     var checked: Boolean = false,
     var contactPhone: ArrayList<ContactPhone>? = null,
     var contactEmail: ArrayList<ContactEmail>? = null,
-    var invites: ArrayList<Invites>? = null
+    var invited_by: ArrayList<Invites>? = null
 ) {
 
 }

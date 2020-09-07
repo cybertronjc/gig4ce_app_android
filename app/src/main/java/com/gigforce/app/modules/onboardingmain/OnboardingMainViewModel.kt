@@ -8,6 +8,7 @@ import com.gigforce.app.modules.profile.models.Invites
 import com.gigforce.app.modules.profile.models.ProfileData
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.EventListener
+import com.google.firebase.firestore.FieldValue
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -35,9 +36,9 @@ class OnboardingMainViewModel : ViewModel() {
                     profileFirebaseRepository.createEmptyProfile()
                 } else {
                     Log.d("ProfileViewModel", value!!.data.toString())
-                    userProfileData.postValue(
-                        value!!.toObject(ProfileData::class.java)
-                    )
+                    val obj = value!!.toObject(ProfileData::class.java)
+                    obj?.id = value.id
+                    userProfileData.postValue(obj)
                 }
             })
     }
@@ -133,10 +134,18 @@ class OnboardingMainViewModel : ViewModel() {
 
     fun setOnboardingCompleted(invite: String?) {
         if (!invite.isNullOrEmpty()) {
-            if (userProfileData.value?.invites == null) {
+            if (userProfileData.value?.invited_by == null) {
+                profileFirebaseRepository.getCollectionReference()
+                    .document(userProfileData.value?.id!!)
+                    .update("invited_by", arrayListOf(Invites(invite, Date())))
 
-                profileFirebaseRepository.setDefaultData(arrayListOf(Invites(invite, Date())))
+            } else {
+                profileFirebaseRepository.getCollectionReference()
+                    .document(userProfileData.value?.id!!)
+                    .update("invited_by", FieldValue.arrayUnion(Invites(invite, Date())))
+
             }
+
         }
 
         profileFirebaseRepository.setDataAsKeyValue("isonboardingdone", true)

@@ -151,8 +151,8 @@ class VerifyOTP : BaseFragment() {
 
     private fun navigateToLoginScreen() {
         val bundle = bundleOf(
-            "mobileno" to mobile_number,
-            StringConstants.INVITE_USER_ID.value to arguments?.getString(StringConstants.INVITE_USER_ID.value)
+            "mobileno" to mobile_number
+
         )
         popAllBackStates()
         navigate(R.id.Login, bundle)

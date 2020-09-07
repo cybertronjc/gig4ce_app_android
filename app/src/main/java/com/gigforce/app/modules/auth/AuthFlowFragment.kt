@@ -28,16 +28,12 @@ class AuthFlowFragment : BaseFragment() {
         when {
             lang.isNullOrBlank() -> {
                 navigate(
-                    R.id.languageSelectFragment, bundleOf(
-                        StringConstants.INVITE_USER_ID.value to arguments?.getString(StringConstants.INVITE_USER_ID.value)
-                    )
+                    R.id.languageSelectFragment
                 )//, null, navOptionsPopToHome)
             }
             introComplete.isNullOrBlank() -> {
                 navigate(
-                    R.id.introSlidesFragment, bundleOf(
-                        StringConstants.INVITE_USER_ID.value to arguments?.getString(StringConstants.INVITE_USER_ID.value)
-                    )
+                    R.id.introSlidesFragment
                 )//, null, navOptionsPopToHome)
             }
             else -> {
@@ -53,6 +49,8 @@ class AuthFlowFragment : BaseFragment() {
         return false
     }
 
+
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -65,18 +63,14 @@ class AuthFlowFragment : BaseFragment() {
     private fun onAuthStateChanged(currentUser: FirebaseUser?) {
         if (currentUser == null) {
             navigate(
-                R.id.Login, bundleOf(
-                    StringConstants.INVITE_USER_ID.value to arguments?.getString(StringConstants.INVITE_USER_ID.value)
-                )
+                R.id.Login
             )
         } else {
             var fragments = getFragmentManager()?.getFragments()
             if (fragments != null && fragments?.size == 1) {
                 popAllBackStates()
-                navigate(
-                    R.id.onboardingLoaderfragment, bundleOf(
-                        StringConstants.INVITE_USER_ID.value to arguments?.getString(StringConstants.INVITE_USER_ID.value)
-                    )
+                navigateWithAllPopupStack(
+                    R.id.onboardingLoaderfragment
                 )
 //                val onboardingCompleted = isOnBoardingCompleted()
 //                if (!onboardingCompleted!!) {

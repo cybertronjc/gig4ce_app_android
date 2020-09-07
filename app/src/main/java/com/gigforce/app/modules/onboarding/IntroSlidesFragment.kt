@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
@@ -15,7 +14,6 @@ import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.dp
 import com.gigforce.app.utils.GlideApp
-import com.gigforce.app.utils.StringConstants
 import kotlinx.android.synthetic.main.fragment_intro_slides.*
 
 /**
@@ -49,12 +47,9 @@ class IntroSlidesFragment : BaseFragment() {
                 override fun invoke() {
                     saveIntroCompleted()
                     navigate(
-                        R.id.authFlowFragment, bundleOf(
-                            StringConstants.INVITE_USER_ID.value to arguments?.getString(
-                                StringConstants.INVITE_USER_ID.value
-                            )
-                        )
+                        R.id.authFlowFragment
                     )
+
                 }
             })
         // this.viewpager.setPageTransformer(DepthPageTransformer())
