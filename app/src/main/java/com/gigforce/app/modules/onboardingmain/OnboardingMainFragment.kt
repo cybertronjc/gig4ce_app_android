@@ -25,7 +25,7 @@ import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.app.core.genericadapter.RecyclerGenericAdapter
 import com.gigforce.app.modules.profile.models.ProfileData
-import kotlinx.android.synthetic.main.calendar_home_screen.*
+import com.gigforce.app.utils.StringConstants
 import kotlinx.android.synthetic.main.onboarding_main_fragment.*
 
 
@@ -71,6 +71,7 @@ class OnboardingMainFragment : BaseFragment() {
                 profileData = profile
                 if (profile.status) {
                     if (profileData.isonboardingdone) {
+
                         navigateToHomeScreen()
                     } else {
                         if (firstTimeLoad) {
@@ -238,7 +239,8 @@ class OnboardingMainFragment : BaseFragment() {
     }
 
     private fun setOnboardingCompleteAndNavigate() {
-        viewModel.setOnboardingCompleted()
+
+        viewModel.setOnboardingCompleted(arguments?.getString(StringConstants.INVITE_USER_ID.value))
         saveOnBoardingCompleted()
         navigateToHomeScreen()
     }

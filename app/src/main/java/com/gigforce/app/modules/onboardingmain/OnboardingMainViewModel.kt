@@ -1,22 +1,26 @@
 package com.gigforce.app.modules.onboardingmain
 
 import android.util.Log
-import android.widget.TextView
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.gigforce.app.modules.profile.ProfileFirebaseRepository
+import com.gigforce.app.modules.profile.models.Invites
 import com.gigforce.app.modules.profile.models.ProfileData
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.EventListener
+import java.util.*
+import kotlin.collections.ArrayList
 
 class OnboardingMainViewModel : ViewModel() {
 
     var profileFirebaseRepository = ProfileFirebaseRepository()
 
     var userProfileData: MutableLiveData<ProfileData> = MutableLiveData<ProfileData>()
+
     init {
         getProfileData()
     }
+
     fun getProfileData() {
         profileFirebaseRepository.getDBCollection()
             .addSnapshotListener(EventListener<DocumentSnapshot> { value, e ->
@@ -39,20 +43,21 @@ class OnboardingMainViewModel : ViewModel() {
     }
 
 
-
-    fun getOnboardingData():ArrayList<OnboardingData>{
+    fun getOnboardingData(): ArrayList<OnboardingData> {
         var datalist: ArrayList<OnboardingData> = ArrayList<OnboardingData>()
-        datalist.add(OnboardingData(ArrayList<String>(),0))
-        datalist.add(OnboardingData(getAgeOptions(),1))
-        datalist.add(OnboardingData(getGenderOptions(),0))
-        datalist.add(OnboardingData(getEducationOption(),5))
-        datalist.add(OnboardingData(getWorkStatusOptions(),0))
+        datalist.add(OnboardingData(ArrayList<String>(), 0))
+        datalist.add(OnboardingData(getAgeOptions(), 1))
+        datalist.add(OnboardingData(getGenderOptions(), 0))
+        datalist.add(OnboardingData(getEducationOption(), 5))
+        datalist.add(OnboardingData(getWorkStatusOptions(), 0))
         return datalist
     }
-    class OnboardingData(var data : ArrayList<String>,var defaultValue : Int = 0){
+
+    class OnboardingData(var data: ArrayList<String>, var defaultValue: Int = 0) {
 
     }
-    fun getAgeOptions():ArrayList<String>{
+
+    fun getAgeOptions(): ArrayList<String> {
         var ageOptions = ArrayList<String>()
         ageOptions.add("14-18")
         ageOptions.add("19-23")
@@ -74,14 +79,16 @@ class OnboardingMainViewModel : ViewModel() {
 
         return ageOptions
     }
-    fun getGenderOptions():ArrayList<String>{
+
+    fun getGenderOptions(): ArrayList<String> {
         var genderOption = ArrayList<String>()
         genderOption.add("Male")
         genderOption.add("Female")
         genderOption.add("Other")
         return genderOption
     }
-    fun getEducationOption():ArrayList<String>{
+
+    fun getEducationOption(): ArrayList<String> {
         var educationOption = ArrayList<String>()
         educationOption.add("<10th")
         educationOption.add("10th")
@@ -94,7 +101,8 @@ class OnboardingMainViewModel : ViewModel() {
         educationOption.add("Others")
         return educationOption
     }
-    fun getWorkStatusOptions():ArrayList<String>{
+
+    fun getWorkStatusOptions(): ArrayList<String> {
         var workStatus = ArrayList<String>()
         workStatus.add("Fresher")
         workStatus.add("Experienced")
@@ -102,29 +110,36 @@ class OnboardingMainViewModel : ViewModel() {
     }
 
     fun saveUserName(username: String) {
-        profileFirebaseRepository.setDataAsKeyValue("name",username)
+        profileFirebaseRepository.setDataAsKeyValue("name", username)
     }
 
     fun saveAgeGroup(ageGroup: String) {
-        profileFirebaseRepository.setDataAsKeyValue("ageGroup",ageGroup)
+        profileFirebaseRepository.setDataAsKeyValue("ageGroup", ageGroup)
 
 
     }
 
     fun selectYourGender(selectedDataFromRecycler: String) {
-        profileFirebaseRepository.setDataAsKeyValue("gender",selectedDataFromRecycler)
+        profileFirebaseRepository.setDataAsKeyValue("gender", selectedDataFromRecycler)
     }
 
     fun saveHighestQualification(selectedDataFromRecycler: String) {
-        profileFirebaseRepository.setDataAsKeyValue("highestEducation",selectedDataFromRecycler)
+        profileFirebaseRepository.setDataAsKeyValue("highestEducation", selectedDataFromRecycler)
     }
 
     fun saveWorkStatus(selectedDataFromRecycler: String) {
-        profileFirebaseRepository.setDataAsKeyValue("workStatus",selectedDataFromRecycler)
+        profileFirebaseRepository.setDataAsKeyValue("workStatus", selectedDataFromRecycler)
     }
 
-    fun setOnboardingCompleted() {
-        profileFirebaseRepository.setDataAsKeyValue("isonboardingdone",true)
+    fun setOnboardingCompleted(invite: String?) {
+        if (!invite.isNullOrEmpty()) {
+            if (userProfileData.value?.invites == null) {
+
+                profileFirebaseRepository.setDefaultData(arrayListOf(Invites(invite, Date())))
+            }
+        }
+
+        profileFirebaseRepository.setDataAsKeyValue("isonboardingdone", true)
     }
 
 

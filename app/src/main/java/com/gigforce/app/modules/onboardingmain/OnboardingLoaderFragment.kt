@@ -5,16 +5,19 @@ import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.modules.auth.ui.main.LoginSuccessfulViewModel
+import com.gigforce.app.utils.StringConstants
 
-class OnboardingLoaderFragment: BaseFragment() {
+class OnboardingLoaderFragment : BaseFragment() {
     companion object {
         fun newInstance() = OnboardingLoaderFragment()
     }
+
     private lateinit var viewModel: LoginSuccessfulViewModel
     private val SPLASH_TIME_OUT: Long = 250
     override fun onCreateView(
@@ -23,6 +26,7 @@ class OnboardingLoaderFragment: BaseFragment() {
     ): View? {
         return inflateView(R.layout.onboarding_loader_fragment, inflater, container)
     }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(LoginSuccessfulViewModel::class.java)
@@ -35,27 +39,34 @@ class OnboardingLoaderFragment: BaseFragment() {
             viewModel.getProfileAndGigData()
         }, SPLASH_TIME_OUT)
     }
+
     private fun navigateToLandingHomeScreen() {
         popFragmentFromStack(R.id.onboardingLoaderfragment)
         navigate(R.id.landinghomefragment)
     }
-    private fun navigateToMainOnboarding(){
+
+    private fun navigateToMainOnboarding() {
         popFragmentFromStack(R.id.onboardingLoaderfragment)
-        navigate(R.id.onboardingfragment)
+        navigate(
+            R.id.onboardingfragment, bundleOf(
+                StringConstants.INVITE_USER_ID.value to arguments?.getString(StringConstants.INVITE_USER_ID.value)
+            )
+        )
     }
+
     private fun observer() {
         viewModel.userProfileAndGigData.observe(viewLifecycleOwner, Observer { profileAndGig ->
-            if (profileAndGig.profile != null ) {
+            if (profileAndGig.profile != null) {
                 if (profileAndGig.profile.status) {
                     if (profileAndGig.profile.isonboardingdone) {
                         saveOnBoardingCompleted()
 
-                        if(profileAndGig.hasGigs){
+                        if (profileAndGig.hasGigs) {
                             navigateToCalendarGomeScreen()
-                        }else {
+                        } else {
                             navigateToLandingHomeScreen()
                         }
-                    }else {
+                    } else {
                         navigateToMainOnboarding()
                     }
                 } else

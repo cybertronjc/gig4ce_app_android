@@ -8,6 +8,7 @@ import android.view.MotionEvent
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
@@ -16,6 +17,7 @@ import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.popAllBackStates
 import com.gigforce.app.modules.landingscreen.LandingScreenFragment
 import com.gigforce.app.modules.onboardingmain.OnboardingMainFragment
+import com.gigforce.app.utils.StringConstants
 
 
 class MainActivity : AppCompatActivity() {
@@ -39,10 +41,13 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-
     private fun checkForAllAuthentication() {
         navController.popAllBackStates()
-        navController.navigate(R.id.authFlowFragment)
+        navController.navigate(
+            R.id.authFlowFragment, bundleOf(
+                StringConstants.INVITE_USER_ID.value to intent.getStringExtra(StringConstants.INVITE_USER_ID.value)
+            )
+        )
 //        navController.navigate(R.id.languageSelectFragment)
     }
 
@@ -59,10 +64,9 @@ class MainActivity : AppCompatActivity() {
         }
 
         if (!handled) {
-            if (isMainScreen(fragmentholder)||isOnBoarding(fragmentholder)) {
+            if (isMainScreen(fragmentholder) || isOnBoarding(fragmentholder)) {
                 doubleBackPressFun()
-            }
-            else super.onBackPressed()
+            } else super.onBackPressed()
         }
 
     }
@@ -105,6 +109,7 @@ class MainActivity : AppCompatActivity() {
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
+
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
         if (currentFocus != null) {
             val imm: InputMethodManager =

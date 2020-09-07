@@ -1,20 +1,21 @@
 package com.gigforce.app
+
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.gigforce.app.MainActivity
-import com.gigforce.app.modules.markattendance.ImageCaptureActivity
+import com.gigforce.app.utils.StringConstants
 import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.ktx.Firebase
 
 class SplashScreen : AppCompatActivity() {
 
-    val TAG:String = "activity/main"
+    val TAG: String = "activity/main"
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val intent = Intent(this, MainActivity::class.java)
+        //Handling if Firebase Dynamic link is being clicked in any other application
         Firebase.dynamicLinks
             .getDynamicLink(intent)
             .addOnSuccessListener(this) { pendingDynamicLinkData ->
@@ -22,28 +23,31 @@ class SplashScreen : AppCompatActivity() {
                 var deepLink: Uri? = null
                 if (pendingDynamicLinkData != null) {
                     deepLink = pendingDynamicLinkData.link
-                    Toast.makeText(applicationContext,deepLink.toString(),Toast.LENGTH_LONG).show()
-
+                    intent.putExtra(
+                        StringConstants.INVITE_USER_ID.value,
+                        deepLink?.getQueryParameter("invite")
+                    )
                 }
-
-                // Handle the deep link. For example, open the linked
-                // content, or apply promotional credit to the user's
-                // account.
-                // ...
-
-                // ...
+                initApp(intent)
             }
-            .addOnFailureListener(this) { e -> }
+            .addOnFailureListener(this) { e ->
+                run {
+                    initApp(intent)
+                }
+            }
+
+    }
+
+    fun initApp(intent: Intent) {
         if (!isTaskRoot
             && intent.hasCategory(Intent.CATEGORY_LAUNCHER)
             && intent.action != null
-            && intent.action.equals(Intent.ACTION_MAIN)) {
-
+            && intent.action.equals(Intent.ACTION_MAIN)
+        ) {
+            startActivity(intent)
             finish();
             return;
         }
-        super.onCreate(savedInstanceState)
-        val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
         finish()
     }

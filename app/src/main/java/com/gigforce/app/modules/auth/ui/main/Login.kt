@@ -9,12 +9,13 @@ import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.widget.ArrayAdapter
 import android.widget.TextView
+import androidx.core.os.bundleOf
 import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
-import com.gigforce.app.utils.AppConstants
+import com.gigforce.app.utils.StringConstants
 import kotlinx.android.synthetic.main.login_frament.*
 import java.util.regex.Matcher
 import java.util.regex.Pattern
@@ -34,7 +35,8 @@ class Login : BaseFragment() {
     lateinit var viewModel: LoginViewModel
     private val INDIAN_MOBILE_NUMBER =
         Pattern.compile("^[+][9][1][6-9][0-9]{9}\$")
-//        private val INDIAN_MOBILE_NUMBER =
+
+    //        private val INDIAN_MOBILE_NUMBER =
 //        Pattern.compile("^[+][0-9]{12}\$")
     lateinit var match: Matcher;
     private var mobile_number: String = ""
@@ -42,13 +44,14 @@ class Login : BaseFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            mobile_number = it.getString("mobileno")!!
+            mobile_number = it.getString("mobileno") ?: ""
         }
     }
 
     override fun isDeviceLanguageChangedDialogRequired(): Boolean {
         return false
     }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -69,8 +72,8 @@ class Login : BaseFragment() {
             getAllEarlierMobileNumbers()
             listeners()
             observer()
-            if(mobile_number.equals(""))
-            showComfortDialog()
+            if (mobile_number.equals(""))
+                showComfortDialog()
         }
     }
 
@@ -87,7 +90,11 @@ class Login : BaseFragment() {
         cancel.setOnClickListener() {
             removeIntroComplete()
             popFragmentFromStack(R.id.Login)
-            navigate(R.id.authFlowFragment)
+            navigate(
+                R.id.authFlowFragment, bundleOf(
+                    StringConstants.INVITE_USER_ID.value to arguments?.getString(StringConstants.INVITE_USER_ID.value)
+                )
+            )
             dialog?.dismiss()
         }
         dialog?.show()
@@ -110,7 +117,8 @@ class Login : BaseFragment() {
                 findNavController().navigate(
                     LoginDirections.actionLogin2ToVerifyOTP(
                         viewModel.verificationId!!,
-                        otp_mobile_number.text.toString()
+                        otp_mobile_number.text.toString(),
+                        arguments?.getString(StringConstants.INVITE_USER_ID.value)
                     )
                 )
             } catch (e: Exception) {

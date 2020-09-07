@@ -4,9 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
+import androidx.core.os.bundleOf
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
+import com.gigforce.app.utils.StringConstants
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 
@@ -17,20 +18,32 @@ class AuthFlowFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val lang = getAppLanguageCode()
-        if (lang != null && lang.length > 0)
+        if (lang != null && lang.isNotEmpty())
             updateResources(lang)
 
         val introComplete = getIntroCompleted()
 
 
         popFragmentFromStack(R.id.authFlowFragment)
-        if (lang.isNullOrBlank()) {
-            navigate(R.id.languageSelectFragment)//, null, navOptionsPopToHome)
-        } else if (introComplete.isNullOrBlank()) {
-            navigate(R.id.introSlidesFragment)//, null, navOptionsPopToHome)
-        } else {
-            FirebaseAuth.getInstance().addAuthStateListener {
-                onAuthStateChanged(it.currentUser)
+        when {
+            lang.isNullOrBlank() -> {
+                navigate(
+                    R.id.languageSelectFragment, bundleOf(
+                        StringConstants.INVITE_USER_ID.value to arguments?.getString(StringConstants.INVITE_USER_ID.value)
+                    )
+                )//, null, navOptionsPopToHome)
+            }
+            introComplete.isNullOrBlank() -> {
+                navigate(
+                    R.id.introSlidesFragment, bundleOf(
+                        StringConstants.INVITE_USER_ID.value to arguments?.getString(StringConstants.INVITE_USER_ID.value)
+                    )
+                )//, null, navOptionsPopToHome)
+            }
+            else -> {
+                FirebaseAuth.getInstance().addAuthStateListener {
+                    onAuthStateChanged(it.currentUser)
+                }
             }
         }
 
@@ -39,6 +52,7 @@ class AuthFlowFragment : BaseFragment() {
     override fun isDeviceLanguageChangedDialogRequired(): Boolean {
         return false
     }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -50,11 +64,20 @@ class AuthFlowFragment : BaseFragment() {
 
     private fun onAuthStateChanged(currentUser: FirebaseUser?) {
         if (currentUser == null) {
-            navigate(R.id.Login)
+            navigate(
+                R.id.Login, bundleOf(
+                    StringConstants.INVITE_USER_ID.value to arguments?.getString(StringConstants.INVITE_USER_ID.value)
+                )
+            )
         } else {
             var fragments = getFragmentManager()?.getFragments()
             if (fragments != null && fragments?.size == 1) {
-                    navigateWithAllPopupStack(R.id.onboardingLoaderfragment)
+                popAllBackStates()
+                navigate(
+                    R.id.onboardingLoaderfragment, bundleOf(
+                        StringConstants.INVITE_USER_ID.value to arguments?.getString(StringConstants.INVITE_USER_ID.value)
+                    )
+                )
 //                val onboardingCompleted = isOnBoardingCompleted()
 //                if (!onboardingCompleted!!) {
 //                    navigateWithAllPopupStack(R.id.onboardingfragment)

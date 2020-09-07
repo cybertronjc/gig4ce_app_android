@@ -1,19 +1,21 @@
 package com.gigforce.app.modules.onboarding
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.os.bundleOf
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
-import com.gigforce.app.utils.GlideApp
 import com.gigforce.app.core.dp
+import com.gigforce.app.utils.GlideApp
+import com.gigforce.app.utils.StringConstants
 import kotlinx.android.synthetic.main.fragment_intro_slides.*
 
 /**
@@ -39,16 +41,24 @@ class IntroSlidesFragment : BaseFragment() {
     override fun isDeviceLanguageChangedDialogRequired(): Boolean {
         return false
     }
-    fun setupViewPager(){
-        this.viewpager.adapter = IntroSlidesViewPagerAdapter(this.viewpager, object: OnIntroSlidesCompleted(){
 
-            override fun invoke() {
-                saveIntroCompleted()
-                navigate(R.id.authFlowFragment)
-            }
-        })
+    fun setupViewPager() {
+        this.viewpager.adapter =
+            IntroSlidesViewPagerAdapter(this.viewpager, object : OnIntroSlidesCompleted() {
+
+                override fun invoke() {
+                    saveIntroCompleted()
+                    navigate(
+                        R.id.authFlowFragment, bundleOf(
+                            StringConstants.INVITE_USER_ID.value to arguments?.getString(
+                                StringConstants.INVITE_USER_ID.value
+                            )
+                        )
+                    )
+                }
+            })
         // this.viewpager.setPageTransformer(DepthPageTransformer())
-        this.viewpager.registerOnPageChangeCallback(object:ViewPager2.OnPageChangeCallback(){
+        this.viewpager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
                 updateDotPresenter()
@@ -56,21 +66,21 @@ class IntroSlidesFragment : BaseFragment() {
         })
     }
 
-    fun updateDotPresenter(){
+    fun updateDotPresenter() {
         this.dots_presenter.removeAllViews()
         this.dots_presenter.addView(getDot(this.viewpager.currentItem == 0))
         this.dots_presenter.addView(getDot(this.viewpager.currentItem == 1))
         this.dots_presenter.addView(getDot(this.viewpager.currentItem == 2))
     }
 
-    private fun getDot(selected:Boolean = false):ImageView{
-        val image:ImageView = ImageView(context)
+    private fun getDot(selected: Boolean = false): ImageView {
+        val image: ImageView = ImageView(context)
 
-        val params = LinearLayout.LayoutParams(14.dp,14.dp)
+        val params = LinearLayout.LayoutParams(14.dp, 14.dp)
         params.marginEnd = 6.dp
         image.layoutParams = params
 
-        if(selected)
+        if (selected)
             image.setImageResource(R.drawable.dottab_indicator_selected)
         else
             image.setImageResource(R.drawable.dottab_indicator_default)
@@ -78,30 +88,33 @@ class IntroSlidesFragment : BaseFragment() {
     }
 
     override fun onBackPressed(): Boolean {
-        if(this.viewpager.currentItem==0){
+        if (this.viewpager.currentItem == 0) {
             removeIntroComplete()
             return false
-        }
-        else{
-        this.viewpager.setCurrentItem(this.viewpager.currentItem-1,true)
-        return true
+        } else {
+            this.viewpager.setCurrentItem(this.viewpager.currentItem - 1, true)
+            return true
         }
     }
 }
 
-class IntroSlidesViewPagerAdapter(val viewpager:ViewPager2,
-                                  val onIntroSlidesCompleted: OnIntroSlidesCompleted): RecyclerView.Adapter<IntroSlidesViewPagerAdapter.ViewHolder>(){
+class IntroSlidesViewPagerAdapter(
+    val viewpager: ViewPager2,
+    val onIntroSlidesCompleted: OnIntroSlidesCompleted
+) : RecyclerView.Adapter<IntroSlidesViewPagerAdapter.ViewHolder>() {
 
-    class ViewHolder(view:View,
-                     val viewpager:ViewPager2,
-                     val onIntroSlidesCompleted: OnIntroSlidesCompleted):RecyclerView.ViewHolder(view) {
+    class ViewHolder(
+        view: View,
+        val viewpager: ViewPager2,
+        val onIntroSlidesCompleted: OnIntroSlidesCompleted
+    ) : RecyclerView.ViewHolder(view) {
 
-        var mainArtImageView:ImageView
-        var titleTextView:TextView
-        var subTitleTextView:TextView
-        var nextButton:TextView
-        var right_arrow:ImageView
-        var currentPosition:Int = -1
+        var mainArtImageView: ImageView
+        var titleTextView: TextView
+        var subTitleTextView: TextView
+        var nextButton: TextView
+        var right_arrow: ImageView
+        var currentPosition: Int = -1
 
         init {
             mainArtImageView = this.itemView.findViewById<ImageView>(R.id.iv_main_art_video)
@@ -111,16 +124,16 @@ class IntroSlidesViewPagerAdapter(val viewpager:ViewPager2,
             right_arrow = this.itemView.findViewById<ImageView>(R.id.right_arrow)
 
             nextButton.setOnClickListener {
-                if(currentPosition < 2)
-                    viewpager.setCurrentItem(currentPosition+1, true)
+                if (currentPosition < 2)
+                    viewpager.setCurrentItem(currentPosition + 1, true)
                 else if (currentPosition == 2) {
                     // on Final CA Executed
                     onIntroSlidesCompleted.invoke()
                 }
             }
             right_arrow.setOnClickListener {
-                if(currentPosition < 2)
-                    viewpager.setCurrentItem(currentPosition+1, true)
+                if (currentPosition < 2)
+                    viewpager.setCurrentItem(currentPosition + 1, true)
                 else if (currentPosition == 2) {
                     // on Final CA Executed
                     onIntroSlidesCompleted.invoke()
@@ -128,9 +141,9 @@ class IntroSlidesViewPagerAdapter(val viewpager:ViewPager2,
             }
         }
 
-        fun Bind(position: Int){
+        fun Bind(position: Int) {
             currentPosition = position
-            if(position == 0) {
+            if (position == 0) {
 
                 GlideApp.with(itemView)
                     .load(R.drawable.ic_intro_slides1_mainart)
@@ -141,7 +154,7 @@ class IntroSlidesViewPagerAdapter(val viewpager:ViewPager2,
                 nextButton.setText("next")
                 nextButton.visibility = View.GONE
                 right_arrow.visibility = View.GONE
-            }else if(position == 1){
+            } else if (position == 1) {
                 GlideApp.with(itemView)
                     .load(R.drawable.ic_undraw_superhero)
                     .into(mainArtImageView)
@@ -153,7 +166,7 @@ class IntroSlidesViewPagerAdapter(val viewpager:ViewPager2,
                 right_arrow.visibility = View.GONE
 
 
-            }else if(position == 2) {
+            } else if (position == 2) {
                 GlideApp.with(itemView)
                     .load(R.drawable.ic_intro_slides3_mainart)
                     .into(mainArtImageView)
@@ -167,7 +180,7 @@ class IntroSlidesViewPagerAdapter(val viewpager:ViewPager2,
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view:View = LayoutInflater.from(parent.context)
+        val view: View = LayoutInflater.from(parent.context)
             .inflate(R.layout.layout_intro_slide, parent, false)
         return ViewHolder(view, viewpager, onIntroSlidesCompleted)
     }
