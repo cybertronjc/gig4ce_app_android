@@ -123,10 +123,6 @@ class LearningCourseDetailsFragment : BaseFragment() {
             activity?.onBackPressed()
         }
 
-        playFab.setOnClickListener {
-            navigate(R.id.playVideoDialogFragment)
-        }
-
         assessmentSeeMoreButton.setOnClickListener {
 
             if (viewModel.currentlySelectedModule != null) {

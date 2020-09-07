@@ -576,6 +576,20 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
             }
         }
 
+        fullMapAddresTV.setOnClickListener {
+
+            //Launch Map
+            val lat = this.gig?.latitude
+            val long = this.gig?.longitude
+
+            if (lat != null && long != null) {
+
+                val uri = "http://maps.google.com/maps?q=loc:$lat,$long (Gig Location)"
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
+                requireContext().startActivity(intent)
+            }
+        }
+
         if (gig.latitude != null) {
             addressTV.text = prepareAddress(gig.address)
         } else {
@@ -589,15 +603,17 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
                 fullMapAddresTV.text = gig.address
         }
 
-        if (gig.latitude != null) {
-            gigLocationMapView.visible()
-            addMarkerOnMap(
-                latitude = gig.latitude!!,
-                longitude = gig.longitude!!
-            )
-        } else {
-            gigLocationMapView.gone()
-        }
+//        if (gig.latitude != null) {
+ //           gigLocationMapView.visible()
+//            addMarkerOnMap(
+//                latitude = gig.latitude!!,
+//                longitude = gig.longitude!!
+//            )
+//        } else {
+//            gigLocationMapView.gone()
+//        }
+
+        gigLocationMapView.gone()
 
         if (gig.locationPictures.isNotEmpty()) {
             //Inflate Pics

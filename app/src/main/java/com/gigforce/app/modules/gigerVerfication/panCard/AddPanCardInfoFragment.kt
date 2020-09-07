@@ -24,8 +24,11 @@ import com.gigforce.app.utils.Lse
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.storage.FirebaseStorage
 import com.ncorti.slidetoact.SlideToActView
+import kotlinx.android.synthetic.main.fragment_add_bank_details_info_main.*
 import kotlinx.android.synthetic.main.fragment_add_pan_card_info.*
 import kotlinx.android.synthetic.main.fragment_add_pan_card_info_main.*
+import kotlinx.android.synthetic.main.fragment_add_pan_card_info_main.helpIconIV
+import kotlinx.android.synthetic.main.fragment_add_pan_card_info_main.whyWeNeedThisTV
 import kotlinx.android.synthetic.main.fragment_add_pan_card_info_view.*
 import kotlinx.android.synthetic.main.fragment_verification_image_holder.view.*
 import java.util.*
@@ -99,7 +102,8 @@ class AddPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetActio
                 showPanImageLayout()
                 showImageInfoLayout()
 
-                if (clickedImagePath != null && panDataCorrectCB.isChecked) {
+                if (panDataCorrectCB.isChecked && (panSubmitSliderBtn.text == getString(R.string.update)
+                            || clickedImagePath != null)) {
                     enableSubmitButton()
                 } else
                     disableSubmitButton()
@@ -122,7 +126,7 @@ class AddPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetActio
 
             if (isChecked) {
 
-                if (panYesRB.isChecked && clickedImagePath != null)
+                if (panYesRB.isChecked && (panSubmitSliderBtn.text == getString(R.string.update) || clickedImagePath != null))
                     enableSubmitButton()
                 else if (panNoRB.isChecked)
                     enableSubmitButton()
@@ -144,6 +148,7 @@ class AddPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetActio
 
                     setDataOnEditLayout(panCardDataModel)
                     panCardAvailaibilityOptionRG.check(R.id.panYesRB)
+                    panSubmitSliderBtn.isEnabled = true
                 }
                 .setNegativeButton(getString(R.string.cancel)) { _, _ -> }
                 .show()
@@ -169,7 +174,7 @@ class AddPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetActio
                             return
                         }
 
-                        if (clickedImagePath == null) {
+                        if (panSubmitSliderBtn.text != getString(R.string.update) && clickedImagePath == null) {
 
                             MaterialAlertDialogBuilder(requireContext())
                                 .setTitle(getString(R.string.alert))

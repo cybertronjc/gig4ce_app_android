@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -12,9 +13,12 @@ import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
+import com.gigforce.app.modules.assessment.AssessmentFragment
 import com.gigforce.app.modules.learning.courseDetails.CourseDetailsViewModel
 import com.gigforce.app.modules.learning.courseDetails.LearningDetailsLessonsAdapter
+import com.gigforce.app.modules.learning.learningVideo.PlayVideoDialogFragment
 import com.gigforce.app.modules.learning.models.CourseContent
+import com.gigforce.app.modules.learning.slides.SlidesFragment
 import com.gigforce.app.utils.Lce
 import kotlinx.android.synthetic.main.fragment_course_content_list.*
 
@@ -66,13 +70,26 @@ class CourseContentListFragment : BaseFragment() {
 
             when (it.type) {
                 CourseContent.TYPE_ASSESSMENT -> {
-                    navigate(R.id.assessment_fragment)
+                    navigate(
+                        R.id.assessment_fragment, bundleOf(
+                            AssessmentFragment.INTENT_LESSON_ID to it.id
+                        )
+                    )
                 }
                 CourseContent.TYPE_SLIDE -> {
-                    navigate(R.id.slidesFragment)
+                    navigate(
+                        R.id.slidesFragment,
+                        bundleOf(
+                            SlidesFragment.INTENT_EXTRA_SLIDE_TITLE to it.title,
+                            SlidesFragment.INTENT_EXTRA_LESSON_ID to it.id
+                        )
+                    )
                 }
                 CourseContent.TYPE_VIDEO -> {
-                    navigate(R.id.playVideoDialogFragment)
+                    navigate(
+                        R.id.playVideoDialogFragment,
+                        bundleOf(PlayVideoDialogFragment.INTENT_EXTRA_LESSON_ID to it.id)
+                    )
                 }
                 else -> {
                 }

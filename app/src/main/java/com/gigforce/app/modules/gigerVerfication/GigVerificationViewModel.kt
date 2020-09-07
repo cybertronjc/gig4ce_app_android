@@ -153,12 +153,14 @@ open class GigVerificationViewModel constructor(
         _documentUploadState.postValue(Lse.loading())
 
         try {
-            val fileNameAtServer = if (userHasPan)
-                uploadImage(panImage!!)
-            else
-                null
 
             val model = getVerificationModel()
+
+            val fileNameAtServer = if (userHasPan && panImage != null)
+                uploadImage(panImage)
+            else
+                model.pan_card?.panCardImagePath
+
             model.pan_card = PanCardDataModel(
                 userHasPanCard = userHasPan,
                 panCardImagePath = fileNameAtServer,
@@ -187,12 +189,13 @@ open class GigVerificationViewModel constructor(
         _documentUploadState.postValue(Lse.loading())
 
         try {
-            val fileNameAtServer = if (userHasPassBook)
-                uploadImage(passbookImagePath!!)
-            else
-                null
-
             val model = getVerificationModel()
+
+            val fileNameAtServer = if (userHasPassBook && passbookImagePath != null)
+                uploadImage(passbookImagePath)
+            else
+                model.bank_details?.passbookImagePath
+
             model.bank_details = BankDetailsDataModel(
                 userHasPassBook = userHasPassBook,
                 passbookImagePath = fileNameAtServer,
@@ -236,15 +239,15 @@ open class GigVerificationViewModel constructor(
                 )
             } else {
 
-                val frontImageFileNameAtServer = if (userHasAadhar)
-                    uploadImage(frontImagePath!!)
+                val frontImageFileNameAtServer = if (userHasAadhar && frontImagePath != null)
+                    uploadImage(frontImagePath)
                 else
-                    null
+                    model.aadhar_card?.frontImage
 
-                val backImageFileNameAtServer = if (userHasAadhar)
-                    uploadImage(backImagePath!!)
+                val backImageFileNameAtServer = if (userHasAadhar && backImagePath != null)
+                    uploadImage(backImagePath)
                 else
-                    null
+                    model.aadhar_card?.backImage
 
                 model.aadhar_card = AadharCardDataModel(
                     userHasAadharCard = true,
@@ -288,15 +291,15 @@ open class GigVerificationViewModel constructor(
                 )
             } else {
 
-                val frontImageFileNameAtServer = if (userHasDL)
-                    uploadImage(frontImagePath!!)
+                val frontImageFileNameAtServer = if (userHasDL && frontImagePath!= null)
+                    uploadImage(frontImagePath)
                 else
-                    null
+                    model.driving_license?.frontImage
 
                 val backImageFileNameAtServer = if (userHasDL)
                     uploadImage(backImagePath!!)
                 else
-                    null
+                    model.driving_license?.backImage
 
                 model.driving_license = DrivingLicenseDataModel(
                     userHasDL = true,
