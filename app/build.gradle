@@ -15,11 +15,17 @@ android {
             keyAlias 'key0'
             keyPassword 'gigforce'
             }
+//        production {
+//            storeFile file('/Users/apple/Downloads/gigforceprodapp.jks')
+//            storePassword 'gigforce'
+//            keyAlias 'gigforce'
+//            keyPassword 'gigforce'
+//        }
         production {
-            storeFile file('/Users/apple/Downloads/gigforceprodapp.jks')
-            storePassword 'gigforce'
-            keyAlias 'gigforce'
-            keyPassword 'gigforce'
+            storeFile file('/Users/apple/Documents/gigforce-upload.jks')
+            storePassword 'gig4ce'
+            keyAlias 'PlayStoreUploadKey'
+            keyPassword 'gig4ce'
         }
     }
 
