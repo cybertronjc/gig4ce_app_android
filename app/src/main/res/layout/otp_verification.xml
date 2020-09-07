@@ -74,10 +74,12 @@
 
     <com.gigforce.app.modules.auth.ui.main.OtpEditText
         android:id="@+id/txt_otp"
-        android:layout_width="256dp"
+        android:layout_width="match_parent"
         android:layout_height="64dp"
         android:cursorVisible="false"
         android:digits="0123456789"
+        android:layout_marginStart="52dp"
+        android:layout_marginEnd="52dp"
         android:inputType="number"
         android:maxLength="6"
         android:layout_marginTop="30dp"
@@ -136,9 +138,11 @@
 
     <TextView
         android:id="@+id/verify_otp_button"
-        android:layout_width="256dp"
+        android:layout_width="match_parent"
         android:layout_height="36dp"
         android:layout_marginTop="32dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
         android:text="VERIFY"
         style="@style/button_style"
         app:layout_constraintEnd_toEndOf="parent"

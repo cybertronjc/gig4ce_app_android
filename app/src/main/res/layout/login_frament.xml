@@ -88,9 +88,11 @@
 
     <AutoCompleteTextView
         android:id="@+id/otp_mobile_number"
-        android:layout_width="256dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="64dp"
+        android:layout_marginStart="52dp"
+        android:layout_marginEnd="52dp"
         android:maxLength="10"
         android:ems="10"
         android:inputType="phone"
@@ -110,9 +112,11 @@
 
     <TextView
         android:id="@+id/login_button"
-        android:layout_width="256dp"
+        android:layout_width="match_parent"
         android:layout_height="36dp"
         android:layout_marginTop="36dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
         android:text="@string/otp_send_otp"
         style="@style/button_style"
         app:layout_constraintEnd_toEndOf="parent"
