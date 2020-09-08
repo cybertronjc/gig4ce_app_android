@@ -61,7 +61,6 @@ import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.learning
 import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.learning_progress_bar
 import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.learning_rv
 
-import kotlinx.android.synthetic.main.landingscreen_fragment.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -305,7 +304,6 @@ class BSCalendarScreenFragment : BaseFragment() {
         val displayMetrics = DisplayMetrics()
         activity?.windowManager?.getDefaultDisplay()?.getMetrics(displayMetrics)
         width = displayMetrics.widthPixels
-
         initializeVerificationAlert()
         initializeFeaturesBottomSheet()
         initializeAssessmentBottomSheet()

@@ -203,13 +203,13 @@ class MyJourneyInnerFragment : BaseFragment() {
         // model will change when integrated with DB
         var datalist: ArrayList<MainLearningFragment.TitleSubtitleModel> =
             ArrayList<MainLearningFragment.TitleSubtitleModel>()
-        datalist.add(
-            MainLearningFragment.TitleSubtitleModel(
-                "Behavioral Skills Level1",
-                "Behavioral Skills Level1",
-                R.drawable.learning1
-            )
-        )
+//        datalist.add(
+//            MainLearningFragment.TitleSubtitleModel(
+//                "Behavioral Skills Level1",
+//                "Behavioral Skills Level1",
+//                R.drawable.learning1
+//            )
+//        )
 
         val recyclerGenericAdapter: RecyclerGenericAdapter<MainLearningFragment.TitleSubtitleModel> =
             RecyclerGenericAdapter<MainLearningFragment.TitleSubtitleModel>(
@@ -230,8 +230,8 @@ class MyJourneyInnerFragment : BaseFragment() {
                     var subtitle = getTextView(viewHolder, R.id.title)
                     subtitle.text = obj?.subtitle
 
-                    var img = getImageView(viewHolder, R.id.learning_img)
-                    img.setImageResource(obj?.imgIcon!!)
+//                    var img = getImageView(viewHolder, R.id.learning_img)
+//                    img.setImageResource(obj?.imgIcon!!)
                 })
         recyclerGenericAdapter.list = datalist
         recyclerGenericAdapter.setLayout(R.layout.learning_bs_item)
