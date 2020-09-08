@@ -12,10 +12,13 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
+import com.clevertap.android.sdk.CleverTapAPI
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.popAllBackStates
 import com.gigforce.app.modules.landingscreen.LandingScreenFragment
 import com.gigforce.app.modules.onboardingmain.OnboardingMainFragment
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.iid.FirebaseInstanceId
 
 
 class MainActivity : AppCompatActivity() {
@@ -36,9 +39,28 @@ class MainActivity : AppCompatActivity() {
         this.setContentView(R.layout.activity_main)
         navController = this.findNavController(R.id.nav_fragment)
         checkForAllAuthentication()
+        GetFirebaseInstanceID()
+        CleverTapAPI.getDefaultInstance(applicationContext)?.pushEvent("MAIN_ACTIVITY_CREATED")
     }
 
+    private fun GetFirebaseInstanceID(){
+        FirebaseInstanceId.getInstance().instanceId
+            .addOnCompleteListener(OnCompleteListener { task ->
+                if (!task.isSuccessful) {
+                    Log.w("Firebase/InstanceId", "getInstanceId failed", task.exception)
+                    return@OnCompleteListener
+                }
 
+                // Get new Instance ID token
+                val token = task.result?.token
+
+                // Log and toast
+                val msg = token //getString(R.string.msg_token_fmt, token)
+                Log.v("Firebase/InstanceId", "Firebase Token Received")
+                Log.v("Firebase/InstanceId", msg)
+                Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
+            })
+    }
 
     private fun checkForAllAuthentication() {
         navController.popAllBackStates()
