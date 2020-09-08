@@ -364,7 +364,8 @@ class AssessmentFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
         val dialog = AssessmentDialog.newInstance(state);
         dialog.setCallbacks(this)
         dialog.arguments = bundle
-        dialog.show(parentFragmentManager, AssessmentDialog::class.java.name)
+
+        dialog.show(childFragmentManager, AssessmentDialog::class.java.name)
     }
 
     override fun onMenuItemClick(item: MenuItem?): Boolean {

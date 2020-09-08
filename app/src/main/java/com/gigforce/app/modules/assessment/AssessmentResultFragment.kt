@@ -9,6 +9,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
@@ -129,6 +130,22 @@ class AssessmentResultFragment : BaseFragment(), PopupMenu.OnMenuItemClickListen
         iv_options_menu_tb.setOnClickListener {
             openPopupMenu(it, R.menu.menu_assessment_result, this, activity)
         }
+        iv_back.setOnClickListener {
+            popTillSecondLastFragment()
+        }
+    }
+
+    override fun onBackPressed(): Boolean {
+        popTillSecondLastFragment()
+        return false
+    }
+
+    private fun popTillSecondLastFragment() {
+        val index = parentFragmentManager.backStackEntryCount - 2
+        val backEntry = parentFragmentManager.getBackStackEntryAt(index);
+        val tag = backEntry.name;
+        val fragmentManager: FragmentManager? = parentFragmentManager
+        fragmentManager?.popBackStack(tag, FragmentManager.POP_BACK_STACK_INCLUSIVE)
     }
 
     private fun initUI() {
@@ -208,10 +225,6 @@ class AssessmentResultFragment : BaseFragment(), PopupMenu.OnMenuItemClickListen
         viewModelAssessmentResult.checkIfPermGranted(requestCode, grantResults)
     }
 
-    override fun onBackPressed(): Boolean {
-        popBackState()
-        return false
-    }
 
     override fun onClickSuggestedLearnings() {
         navigate(R.id.mainLearningFragment)
