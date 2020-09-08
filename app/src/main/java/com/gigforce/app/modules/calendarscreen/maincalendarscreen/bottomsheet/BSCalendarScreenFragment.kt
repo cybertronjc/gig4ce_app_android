@@ -41,11 +41,16 @@ import com.gigforce.app.modules.gigPage.GigPageNavigationFragment
 import com.gigforce.app.modules.gigPage.GigViewModel
 import com.gigforce.app.modules.gigPage.models.Gig
 import com.gigforce.app.modules.landingscreen.LandingScreenFragment
+import com.gigforce.app.modules.learning.LearningConstants
+import com.gigforce.app.modules.learning.LearningViewModel
+import com.gigforce.app.modules.learning.models.Course
 import com.gigforce.app.utils.DateHelper
+import com.gigforce.app.utils.GlideApp
 import com.gigforce.app.utils.Lce
 import com.gigforce.app.utils.TextDrawable
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.*
+import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.learning_rv
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -57,7 +62,7 @@ class BSCalendarScreenFragment : BaseFragment() {
 
     private lateinit var viewModel: BSCalendarScreenViewModel
     private val gigViewModel: GigViewModel by viewModels()
-
+    private val learningViewModel : LearningViewModel by viewModels()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -195,10 +200,12 @@ class BSCalendarScreenFragment : BaseFragment() {
                                 getView(viewHolder, R.id.checkInTV).isEnabled = false
                             } else if (obj.isCheckInMarked()) {
                                 getView(viewHolder, R.id.checkInTV).isEnabled = true
-                                (getView(viewHolder, R.id.checkInTV) as Button).text = getString(R.string.check_out)
+                                (getView(viewHolder, R.id.checkInTV) as Button).text =
+                                    getString(R.string.check_out)
                             } else {
                                 getView(viewHolder, R.id.checkInTV).isEnabled = true
-                                (getView(viewHolder, R.id.checkInTV) as Button).text = getString(R.string.check_in)
+                                (getView(viewHolder, R.id.checkInTV) as Button).text =
+                                    getString(R.string.check_in)
                             }
 
                         } else {
@@ -400,7 +407,13 @@ class BSCalendarScreenFragment : BaseFragment() {
         datalist.add(FeatureModel("Chat", R.drawable.chat, -1/*R.id.contactScreenFragment*/))
         datalist.add(FeatureModel("Home Screen", R.drawable.chat, R.id.landinghomefragment))
         datalist.add(FeatureModel("Explore", R.drawable.ic_landinghome_search, -1))
-        datalist.add(FeatureModel("Verification", R.drawable.ic_homescreen_learn, R.id.gigerVerificationFragment))
+        datalist.add(
+            FeatureModel(
+                "Verification",
+                R.drawable.ic_homescreen_learn,
+                R.id.gigerVerificationFragment
+            )
+        )
 
         val itemWidth = ((width / 7) * 1.6).toInt()
         val recyclerGenericAdapter: RecyclerGenericAdapter<FeatureModel> =
@@ -433,7 +446,7 @@ class BSCalendarScreenFragment : BaseFragment() {
         feature_rv.adapter = recyclerGenericAdapter
     }
 
-//    private fun navigateToFeature(position: Int) {
+    //    private fun navigateToFeature(position: Int) {
 //        when (position) {
 //            0 -> showToast("")
 //            1 -> showToast("")
@@ -445,73 +458,173 @@ class BSCalendarScreenFragment : BaseFragment() {
 //            7 -> navigate(R.id.landinghomefragment)
 //        }
 //    }
+    private fun showUserLearningCourses(content: List<Course>) {
+
+        learning_progress_bar.gone()
+        learning_learning_error.gone()
+        learning_rv.visible()
+
+        if (content.isEmpty()) {
+            learning_cl.gone()
+        } else {
+            learning_cl.visible()
+
+            val itemWidth = ((width / 3) * 2).toInt()
+            // model will change when integrated with DB
+
+            val recyclerGenericAdapter: RecyclerGenericAdapter<Course> =
+                RecyclerGenericAdapter<Course>(
+                    activity?.applicationContext,
+                    PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
+                        navigate(R.id.mainLearningFragment)
+                    },
+                    RecyclerGenericAdapter.ItemInterface<Course?> { obj, viewHolder, position ->
+                        var view = getView(viewHolder, R.id.card_view)
+                        val lp = view.layoutParams
+                        lp.height = lp.height
+                        lp.width = itemWidth
+                        view.layoutParams = lp
+
+                        var title = getTextView(viewHolder, R.id.title_)
+                        title.text = obj?.name
+
+                        var subtitle = getTextView(viewHolder, R.id.title)
+                        subtitle.text = obj?.description
+
+                        var img = getImageView(viewHolder, R.id.learning_img)
+
+                        if (!obj!!.coverPicture.isNullOrBlank()) {
+                            if (obj!!.coverPicture!!.startsWith("http", true)) {
+
+                                GlideApp.with(requireContext())
+                                    .load(obj!!.coverPicture!!)
+                                    .placeholder(getCircularProgressDrawable())
+                                    .into(img)
+                            } else {
+                                FirebaseStorage.getInstance()
+                                    .getReference(LearningConstants.LEARNING_IMAGES_FIREBASE_FOLDER)
+                                    .child(obj!!.coverPicture!!)
+                                    .downloadUrl
+                                    .addOnSuccessListener { fileUri ->
+
+                                        GlideApp.with(requireContext())
+                                            .load(fileUri)
+                                            .placeholder(getCircularProgressDrawable())
+                                            .into(img)
+                                    }
+                            }
+                        }
+
+                        //img.setImageResource(obj?.imgIcon!!)
+                    })!!
+            recyclerGenericAdapter.setList(content)
+            recyclerGenericAdapter.setLayout(R.layout.learning_bs_item)
+            learning_rv.layoutManager = LinearLayoutManager(
+                activity?.applicationContext,
+                LinearLayoutManager.HORIZONTAL,
+                false
+            )
+            learning_rv.adapter = recyclerGenericAdapter
+
+        }
+    }
+    private fun showLearningAsLoading() {
+
+        learning_cl.visible()
+        learning_rv.gone()
+        learning_learning_error.gone()
+        learning_progress_bar.visible()
+    }
+
+    private fun showErrorWhileLoadingCourse(error: String) {
+
+        learning_cl.visible()
+        learning_progress_bar.gone()
+        learning_rv.gone()
+        learning_learning_error.visible()
+
+        learning_learning_error.text = error
+    }
 
     private fun initializeLearningModule() {
+        learningViewModel
+            .roleBasedCourses
+            .observe(viewLifecycleOwner, androidx.lifecycle.Observer {
 
-        val itemWidth = ((width / 3) * 2).toInt()
-        // model will change when integrated with DB
-        var datalist: ArrayList<LandingScreenFragment.TitleSubtitleModel> =
-            ArrayList<LandingScreenFragment.TitleSubtitleModel>()
+                when (it) {
+                    Lce.Loading -> showLearningAsLoading()
+                    is Lce.Content -> showUserLearningCourses(it.content)
+                    is Lce.Error -> showErrorWhileLoadingCourse(it.error)
+                }
+            })
 
-        datalist.add(
-            LandingScreenFragment.TitleSubtitleModel(
-                "Retail Sales Executive",
-                "Demonstrate products to customers", R.drawable.learning2
-            )
-        )
 
-        datalist.add(
-            LandingScreenFragment.TitleSubtitleModel(
-                "Quick Service Restaurant",
-                "Manage food displays",
-                R.drawable.learning1
-            )
-        )
-        datalist.add(
-            LandingScreenFragment.TitleSubtitleModel(
-                "Delivery",
-                "Maintaining hygiene and safety",
-                R.drawable.learning_bg
-            )
-        )
-        datalist.add(
-            LandingScreenFragment.TitleSubtitleModel(
-                "Retail Sales Executive",
-                "Help customers choose the right products",
-                R.drawable.learning2
-            )
-        )
-        val recyclerGenericAdapter: RecyclerGenericAdapter<LandingScreenFragment.TitleSubtitleModel> =
-            RecyclerGenericAdapter<LandingScreenFragment.TitleSubtitleModel>(
-                activity?.applicationContext,
-                PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
-                    showToast("This page are inactive. We’ll activate it in a few weeks")
-                  //  navigate(R.id.mainLearningFragment)
-                },
-                RecyclerGenericAdapter.ItemInterface<LandingScreenFragment.TitleSubtitleModel?> { obj, viewHolder, position ->
-                    var view = getView(viewHolder, R.id.card_view)
-                    val lp = view.layoutParams
-                    lp.height = lp.height
-                    lp.width = itemWidth
-                    view.layoutParams = lp
-
-                    var title = getTextView(viewHolder, R.id.title_)
-                    title.text = obj?.title
-
-                    var subtitle = getTextView(viewHolder, R.id.title)
-                    subtitle.text = obj?.subtitle
-
-                    var img = getImageView(viewHolder, R.id.learning_img)
-                    img.setImageResource(obj?.imgIcon!!)
-                })!!
-        recyclerGenericAdapter.setList(datalist)
-        recyclerGenericAdapter.setLayout(R.layout.learning_bs_item)
-        learning_rv.layoutManager = LinearLayoutManager(
-            activity?.applicationContext,
-            LinearLayoutManager.HORIZONTAL,
-            false
-        )
-        learning_rv.adapter = recyclerGenericAdapter
+        learningViewModel.getRoleBasedCourses()
+//
+//        val itemWidth = ((width / 3) * 2).toInt()
+//        // model will change when integrated with DB
+//        var datalist: ArrayList<LandingScreenFragment.TitleSubtitleModel> =
+//            ArrayList<LandingScreenFragment.TitleSubtitleModel>()
+//
+//        datalist.add(
+//            LandingScreenFragment.TitleSubtitleModel(
+//                "Retail Sales Executive",
+//                "Demonstrate products to customers", R.drawable.learning2
+//            )
+//        )
+//
+//        datalist.add(
+//            LandingScreenFragment.TitleSubtitleModel(
+//                "Quick Service Restaurant",
+//                "Manage food displays",
+//                R.drawable.learning1
+//            )
+//        )
+//        datalist.add(
+//            LandingScreenFragment.TitleSubtitleModel(
+//                "Delivery",
+//                "Maintaining hygiene and safety",
+//                R.drawable.learning_bg
+//            )
+//        )
+//        datalist.add(
+//            LandingScreenFragment.TitleSubtitleModel(
+//                "Retail Sales Executive",
+//                "Help customers choose the right products",
+//                R.drawable.learning2
+//            )
+//        )
+//        val recyclerGenericAdapter: RecyclerGenericAdapter<LandingScreenFragment.TitleSubtitleModel> =
+//            RecyclerGenericAdapter<LandingScreenFragment.TitleSubtitleModel>(
+//                activity?.applicationContext,
+//                PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
+//                    showToast("This page are inactive. We’ll activate it in a few weeks")
+//                  //  navigate(R.id.mainLearningFragment)
+//                },
+//                RecyclerGenericAdapter.ItemInterface<LandingScreenFragment.TitleSubtitleModel?> { obj, viewHolder, position ->
+//                    var view = getView(viewHolder, R.id.card_view)
+//                    val lp = view.layoutParams
+//                    lp.height = lp.height
+//                    lp.width = itemWidth
+//                    view.layoutParams = lp
+//
+//                    var title = getTextView(viewHolder, R.id.title_)
+//                    title.text = obj?.title
+//
+//                    var subtitle = getTextView(viewHolder, R.id.title)
+//                    subtitle.text = obj?.subtitle
+//
+//                    var img = getImageView(viewHolder, R.id.learning_img)
+//                    img.setImageResource(obj?.imgIcon!!)
+//                })!!
+//        recyclerGenericAdapter.setList(datalist)
+//        recyclerGenericAdapter.setLayout(R.layout.learning_bs_item)
+//        learning_rv.layoutManager = LinearLayoutManager(
+//            activity?.applicationContext,
+//            LinearLayoutManager.HORIZONTAL,
+//            false
+//        )
+//        learning_rv.adapter = recyclerGenericAdapter
     }
 
     class Assessment(var title: String, var time: String, var status: Boolean) {
@@ -557,9 +670,9 @@ class BSCalendarScreenFragment : BaseFragment() {
             RecyclerGenericAdapter<Assessment>(
                 activity?.applicationContext,
                 PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
-//                    showToast("This page are inactive. We’ll activate it in a few weeks")
+                    //                    showToast("This page are inactive. We’ll activate it in a few weeks")
                     navigate(R.id.assessment_fragment)
-                     },
+                },
                 RecyclerGenericAdapter.ItemInterface<Assessment?> { obj, viewHolder, position ->
                     val lp = getView(viewHolder, R.id.assessment_cl).layoutParams
                     lp.height = lp.height
@@ -580,7 +693,7 @@ class BSCalendarScreenFragment : BaseFragment() {
                         ) as CardView).setCardBackgroundColor(resources.getColor(R.color.status_bg_completed))
 
                     } else {
-                        getTextView(viewHolder, R.id.status).text =  getString(R.string.pending)
+                        getTextView(viewHolder, R.id.status).text = getString(R.string.pending)
                         getTextView(
                             viewHolder,
                             R.id.status
