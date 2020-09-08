@@ -910,6 +910,8 @@
     <string name="day_and_time">Day and Time</string>
     <string name="app_language">App Language</string>
     <string name="sign_out">Sign out</string>
+    <string name="plus_see_more">+ see more</string>
+    <string name="plus_see_less">+ see less</string>
     <string name="invite_a_friend">Invite a friend</string>
     <string name="refresh_">Refresh</string>
     <string name="refer_your_friends">Refer Your Friends</string>

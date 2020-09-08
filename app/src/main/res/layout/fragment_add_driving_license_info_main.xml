@@ -196,7 +196,7 @@
                     android:layout_marginLeft="2dp"
                     android:layout_marginTop="12dp"
                     android:fontFamily="@font/lato"
-                    android:text="@string/driving_license_number_n_eg_if_the_driving_licence_number_is_rj_13_dlc_12_123456_rj1320120123456"
+                    android:text="@string/dl_hint_square_bracket"
                     android:textSize="12sp" />
 
 

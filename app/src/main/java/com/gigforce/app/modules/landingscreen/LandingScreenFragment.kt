@@ -471,6 +471,7 @@ class LandingScreenFragment : BaseFragment() {
 
     private fun showLearningAsLoading() {
 
+        learning_cl.visible()
         learning_rv.gone()
         learning_learning_error.gone()
         learning_progress_bar.visible()
@@ -478,6 +479,7 @@ class LandingScreenFragment : BaseFragment() {
 
     private fun showErrorWhileLoadingCourse(error: String) {
 
+        learning_cl.visible()
         learning_progress_bar.gone()
         learning_rv.gone()
         learning_learning_error.visible()
@@ -491,63 +493,69 @@ class LandingScreenFragment : BaseFragment() {
         learning_learning_error.gone()
         learning_rv.visible()
 
-        val itemWidth = ((width / 3) * 2).toInt()
-        // model will change when integrated with DB
+        if (content.isEmpty()) {
+            learning_cl.gone()
+        } else {
+            learning_cl.visible()
 
-        val recyclerGenericAdapter: RecyclerGenericAdapter<Course> =
-            RecyclerGenericAdapter<Course>(
-                activity?.applicationContext,
-                PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
-                    navigate(R.id.mainLearningFragment)
-                },
-                RecyclerGenericAdapter.ItemInterface<Course?> { obj, viewHolder, position ->
-                    var view = getView(viewHolder, R.id.card_view)
-                    val lp = view.layoutParams
-                    lp.height = lp.height
-                    lp.width = itemWidth
-                    view.layoutParams = lp
+            val itemWidth = ((width / 3) * 2).toInt()
+            // model will change when integrated with DB
 
-                    var title = getTextView(viewHolder, R.id.title_)
-                    title.text = obj?.name
+            val recyclerGenericAdapter: RecyclerGenericAdapter<Course> =
+                RecyclerGenericAdapter<Course>(
+                    activity?.applicationContext,
+                    PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
+                        navigate(R.id.mainLearningFragment)
+                    },
+                    RecyclerGenericAdapter.ItemInterface<Course?> { obj, viewHolder, position ->
+                        var view = getView(viewHolder, R.id.card_view)
+                        val lp = view.layoutParams
+                        lp.height = lp.height
+                        lp.width = itemWidth
+                        view.layoutParams = lp
 
-                    var subtitle = getTextView(viewHolder, R.id.title)
-                    subtitle.text = obj?.description
+                        var title = getTextView(viewHolder, R.id.title_)
+                        title.text = obj?.name
 
-                    var img = getImageView(viewHolder, R.id.learning_img)
+                        var subtitle = getTextView(viewHolder, R.id.title)
+                        subtitle.text = obj?.description
 
-                    if (!obj!!.coverPicture.isNullOrBlank()) {
-                        if (obj!!.coverPicture!!.startsWith("http", true)) {
+                        var img = getImageView(viewHolder, R.id.learning_img)
 
-                            GlideApp.with(requireContext())
+                        if (!obj!!.coverPicture.isNullOrBlank()) {
+                            if (obj!!.coverPicture!!.startsWith("http", true)) {
+
+                                GlideApp.with(requireContext())
                                     .load(obj!!.coverPicture!!)
                                     .placeholder(getCircularProgressDrawable())
                                     .into(img)
-                        } else {
-                            FirebaseStorage.getInstance()
+                            } else {
+                                FirebaseStorage.getInstance()
                                     .getReference(LearningConstants.LEARNING_IMAGES_FIREBASE_FOLDER)
                                     .child(obj!!.coverPicture!!)
                                     .downloadUrl
                                     .addOnSuccessListener { fileUri ->
 
                                         GlideApp.with(requireContext())
-                                                .load(fileUri)
-                                                .placeholder(getCircularProgressDrawable())
-                                                .into(img)
+                                            .load(fileUri)
+                                            .placeholder(getCircularProgressDrawable())
+                                            .into(img)
                                     }
+                            }
                         }
-                    }
 
-                    //img.setImageResource(obj?.imgIcon!!)
-                })!!
-        recyclerGenericAdapter.setList(content)
-        recyclerGenericAdapter.setLayout(R.layout.learning_bs_item)
-        learning_rv.layoutManager = LinearLayoutManager(
-            activity?.applicationContext,
-            LinearLayoutManager.HORIZONTAL,
-            false
-        )
-        learning_rv.adapter = recyclerGenericAdapter
+                        //img.setImageResource(obj?.imgIcon!!)
+                    })!!
+            recyclerGenericAdapter.setList(content)
+            recyclerGenericAdapter.setLayout(R.layout.learning_bs_item)
+            learning_rv.layoutManager = LinearLayoutManager(
+                activity?.applicationContext,
+                LinearLayoutManager.HORIZONTAL,
+                false
+            )
+            learning_rv.adapter = recyclerGenericAdapter
 
+        }
     }
 
     private fun initializeExploreByIndustry() {

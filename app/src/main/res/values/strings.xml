@@ -918,6 +918,11 @@
     <string name="thankyou">ThankYou</string>
     <string name="link_copied">Link Copied</string>
     <string name="looking_for_dynamic_working_hours">\Looking for flexible working hours? Join me at Gigforce :</string>
+    <string name="dl_hint_square_bracket">Driving License Number* [Eg: If the Driving Licence Number is RJ-13/DLC/12/ 123456, RJ1320120123456]</string>
+    <string name="plus_see_more">+ see more</string>
+    <string name="plus_see_less">+ see less</string>
+    <string name="new_version_available">New Version Available</string>
+    <string name="new_version_available_detail">Please, update app to new version to continue reposting</string>
 
 
 </resources>

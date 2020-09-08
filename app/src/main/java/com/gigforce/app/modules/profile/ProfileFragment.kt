@@ -8,12 +8,16 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
+import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
+import com.gigforce.app.modules.gigerVerfication.GigerVerificationStatus
 import com.gigforce.app.modules.photocrop.PhotoCrop
 import com.gigforce.app.modules.profile.models.ProfileData
 import com.gigforce.app.utils.GlideApp
@@ -25,6 +29,7 @@ import com.google.firebase.storage.StorageReference
 import kotlinx.android.synthetic.main.fragment_profile_main_expanded.*
 import kotlinx.android.synthetic.main.fragment_profile_main_expanded.view.*
 import kotlinx.android.synthetic.main.profile_main_card_background.view.*
+import kotlinx.android.synthetic.main.verified_button.view.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -47,6 +52,8 @@ class ProfileFragment : BaseFragment() {
     private var scrollRange: Int = -1
     private var PROFILE_PICTURE_FOLDER: String = "profile_pics"
 
+    private val gigerVerificationViewModel : GigVerificationViewModel by viewModels()
+    val viewModel: ProfileViewModel by activityViewModels<ProfileViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,7 +70,6 @@ class ProfileFragment : BaseFragment() {
             win.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             win.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             win.setStatusBarColor(requireActivity().getColor(R.color.white))
-
         }
     }
 
@@ -110,14 +116,26 @@ class ProfileFragment : BaseFragment() {
         layout.appbar.post(Runnable {
             val heightPx: Int = dWidth.width * 1 / 3
             setAppBarOffset(heightPx)
+
+            if (!viewModel.profileAppBarExpanded) {
+                appbar.setExpanded(true)
+                viewModel.profileAppBarExpanded = true
+            }
         })
+
         layout.profile_avatar.layoutParams.height = dWidth.width
+
+        layout.main_expanded_is_verified.setOnClickListener{
+            navigate(R.id.gigerVerificationFragment)
+        }
+
         return layout
     }
 
     private fun setAppBarOffset(offsetPx: Int) {
         val params = layout.appbar.layoutParams as CoordinatorLayout.LayoutParams
         val behavior = params.behavior as AppBarLayout.Behavior?
+
 
         behavior!!.onNestedPreScroll(
             layout.coordinator,
@@ -133,7 +151,41 @@ class ProfileFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val viewModel: ProfileViewModel by activityViewModels<ProfileViewModel>()
+        gigerVerificationViewModel.gigerVerificationStatus.observe(viewLifecycleOwner, Observer {
+
+            val requiredDocsVerified = it.selfieVideoDataModel?.videoPath != null
+                    && it.panCardDetails?.state == GigerVerificationStatus.STATUS_VERIFIED
+                    && it.bankUploadDetailsDataModel?.state == GigerVerificationStatus.STATUS_VERIFIED
+                    && (it.aadharCardDataModel?.state == GigerVerificationStatus.STATUS_VERIFIED || it.drivingLicenseDataModel?.state == GigerVerificationStatus.STATUS_VERIFIED)
+
+            val requiredDocsUploaded = it.selfieVideoDataModel?.videoPath != null
+                    && it.panCardDetails?.panCardImagePath != null
+                    && it.bankUploadDetailsDataModel?.passbookImagePath != null
+                    && (it.aadharCardDataModel?.frontImage != null || it.drivingLicenseDataModel?.backImage != null)
+
+            if (requiredDocsVerified) {
+                layout.main_expanded_is_verified.verification_status_tv.text = getString(R.string.verified_text)
+                layout.main_expanded_is_verified.verification_status_tv.setTextColor(ResourcesCompat.getColor(resources,R.color.green,null))
+                layout.main_expanded_is_verified.status_iv.setImageResource(R.drawable.ic_check)
+                layout.main_expanded_is_verified.verification_status_cardview.strokeColor = ResourcesCompat.getColor(resources,R.color.green,null)
+            } else if (requiredDocsUploaded){
+                layout.main_expanded_is_verified.verification_status_tv.text = getString(R.string.under_verification)
+                layout.main_expanded_is_verified.verification_status_tv.setTextColor(ResourcesCompat.getColor(resources,R.color.app_orange,null))
+                layout.main_expanded_is_verified.status_iv.setImageResource(R.drawable.ic_clock_orange)
+                layout.main_expanded_is_verified.verification_status_cardview.strokeColor = ResourcesCompat.getColor(resources,R.color.app_orange,null)
+            } else{
+                layout.main_expanded_is_verified.verification_status_tv.text = "Not Verified"
+                layout.main_expanded_is_verified.verification_status_tv.setTextColor(ResourcesCompat.getColor(resources,R.color.red,null))
+                layout.main_expanded_is_verified.status_iv.setImageResource(R.drawable.ic_cross_red)
+                layout.main_expanded_is_verified.verification_status_cardview.strokeColor = ResourcesCompat.getColor(resources,R.color.red,null)
+            }
+        })
+
+        gigerVerificationViewModel.startListeningForGigerVerificationStatusChanges()
+
+
+
+
         location_card.setOnClickListener {
             showToast("This is work in progress. Please check again in a few days")
         }
@@ -151,9 +203,7 @@ class ProfileFragment : BaseFragment() {
 
 
             Log.d("ProfileFragment", profile.isVerified.toString())
-            if (profile.isVerified) {
-                //layout.main_expanded_is_verified.setBackgroundColor(Color.parseColor("#00FF00"))
-            }
+
 
             if (profile.bio.trim().isEmpty()) {
                 layout.add_bio_default.visibility = View.VISIBLE

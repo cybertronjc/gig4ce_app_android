@@ -687,5 +687,7 @@
     <string name="thankyou">ThankYou</string>
     <string name="link_copied">Link Copied</string>
     <string name="looking_for_dynamic_working_hours">\Looking for flexible working hours? Join me at Gigforce :</string>
+    <string name="plus_see_more">+ see more</string>
+    <string name="plus_see_less">+ see less</string>
 
 </resources>
