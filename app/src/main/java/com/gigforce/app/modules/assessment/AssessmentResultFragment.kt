@@ -146,6 +146,7 @@ class AssessmentResultFragment : BaseFragment(), PopupMenu.OnMenuItemClickListen
         val tag = backEntry.name;
         val fragmentManager: FragmentManager? = parentFragmentManager
         fragmentManager?.popBackStack(tag, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+
     }
 
     private fun initUI() {

@@ -69,29 +69,29 @@ class AssessmentDialog : DialogFragment() {
 
                 tv_time_assess_dialog.text =
                     if (calInstance.get(Calendar.HOUR) == 0) "${getString(R.string.time_duration)} : ${
-                        calInstance.get(
-                            Calendar.MINUTE
-                        )
+                    calInstance.get(
+                        Calendar.MINUTE
+                    )
                     } ${
-                        getString(
-                            R.string.mins
-                        )
+                    getString(
+                        R.string.mins
+                    )
                     } ${calInstance.get(Calendar.SECOND)} ${getString(R.string.seconds)}" else "${
-                        getString(
-                            R.string.time_duration
-                        )
+                    getString(
+                        R.string.time_duration
+                    )
                     } : ${
-                        calInstance.get(
-                            Calendar.HOUR
-                        )
+                    calInstance.get(
+                        Calendar.HOUR
+                    )
                     } ${
-                        calInstance.get(
-                            Calendar.MINUTE
-                        )
+                    calInstance.get(
+                        Calendar.MINUTE
+                    )
                     } ${
-                        getString(
-                            R.string.mins
-                        )
+                    getString(
+                        R.string.mins
+                    )
                     } ${calInstance.get(Calendar.SECOND)} ${getString(R.string.seconds)}"
 
             }
@@ -105,9 +105,9 @@ class AssessmentDialog : DialogFragment() {
         val builder = SpannableStringBuilder()
         val spannableString = SpannableString(
             "${getString(R.string.u_attempt)} ${arguments?.getInt(StringConstants.QUESTIONS_COUNT.value)} ${
-                getString(
-                    R.string.questions
-                )
+            getString(
+                R.string.questions
+            )
             }"
         )
         spannableString.setSpan(
@@ -121,9 +121,9 @@ class AssessmentDialog : DialogFragment() {
         builder.append(spannableString)
         val spanable2 = SpannableString(
             " ${getString(R.string.and_from)} ${getString(R.string.that)}  ${
-                arguments?.getInt(
-                    StringConstants.RIGHT_ANSWERS.value
-                )
+            arguments?.getInt(
+                StringConstants.RIGHT_ANSWERS.value
+            )
             } ${getString(R.string.answer_is_correct)}"
         )
         spanable2.setSpan(
@@ -158,9 +158,9 @@ class AssessmentDialog : DialogFragment() {
 
         val spannableString = SpannableString(
             "${getString(R.string.u_attempt)} ${arguments?.getInt(StringConstants.QUESTIONS_COUNT.value)} ${
-                getString(
-                    R.string.questions
-                )
+            getString(
+                R.string.questions
+            )
             }"
         )
         spannableString.setSpan(
@@ -174,9 +174,9 @@ class AssessmentDialog : DialogFragment() {
         builder.append(spannableString)
         val spanable2 = SpannableString(
             " ${getString(R.string.and_from)} ${getString(R.string.that)}  ${
-                arguments?.getInt(
-                    StringConstants.RIGHT_ANSWERS.value
-                )
+            arguments?.getInt(
+                StringConstants.RIGHT_ANSWERS.value
+            )
             } ${getString(R.string.answer_is_correct)}"
         )
         spanable2.setSpan(
@@ -206,6 +206,7 @@ class AssessmentDialog : DialogFragment() {
     private fun initClicks() {
         PushDownAnim.setPushDownAnimTo(tv_action_assess_dialog)
             .setOnClickListener(View.OnClickListener {
+
                 dismiss()
                 assessmentDialogCallbacks?.assessmentState(
                     arguments?.getInt(

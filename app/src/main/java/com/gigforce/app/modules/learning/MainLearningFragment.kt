@@ -52,7 +52,9 @@ class MainLearningFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         learningBackButton.setOnClickListener {
-            activity?.onBackPressed()
+//            popBackState()
+//            activity?.onBackPressed()
+            parentFragmentManager.popBackStack()
         }
 
         journey_completed_cardview.setOnClickListener {
@@ -74,6 +76,7 @@ class MainLearningFragment : BaseFragment() {
 
         initLearningViewModel()
     }
+
     private fun initLearningViewModel() {
         learningViewModel
             .roleBasedCourses
@@ -155,9 +158,11 @@ class MainLearningFragment : BaseFragment() {
                     PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
                         val assessment = item as CourseContent
 
-                        navigate(R.id.assessment_fragment,  bundleOf(
-                            AssessmentFragment.INTENT_LESSON_ID to assessment.id
-                        ))
+                        navigate(
+                            R.id.assessment_fragment, bundleOf(
+                                AssessmentFragment.INTENT_LESSON_ID to assessment.id
+                            )
+                        )
                     },
                     RecyclerGenericAdapter.ItemInterface<CourseContent> { obj, viewHolder, position ->
                         val lp = getView(viewHolder, R.id.assessment_cl).layoutParams
@@ -365,6 +370,7 @@ class MainLearningFragment : BaseFragment() {
         })
 
     }
+
     private fun displayImage(profileImg: String) {
         if (profileImg != "avatar.jpg" && profileImg != "") {
             val profilePicRef: StorageReference =
@@ -380,8 +386,9 @@ class MainLearningFragment : BaseFragment() {
                 .into(profile_image_main)
         }
     }
+
     private fun listener() {
-        chat_icon_iv.setOnClickListener{
+        chat_icon_iv.setOnClickListener {
             navigate(R.id.contactScreenFragment)
         }
     }
@@ -448,7 +455,7 @@ class MainLearningFragment : BaseFragment() {
                     var subtitle = getTextView(viewHolder, R.id.subtitle)
                     subtitle.text = obj?.subtitle
 
-                    var img = getImageView(viewHolder,R.id.img)
+                    var img = getImageView(viewHolder, R.id.img)
                     img.setImageResource(obj?.imgIcon!!)
                 })
         recyclerGenericAdapter.list = datalist
@@ -506,7 +513,7 @@ class MainLearningFragment : BaseFragment() {
                     var subtitle = getTextView(viewHolder, R.id.title)
                     subtitle.text = obj?.subtitle
 
-                    var img = getImageView(viewHolder,R.id.learning_img)
+                    var img = getImageView(viewHolder, R.id.learning_img)
                     img.setImageResource(obj?.imgIcon!!)
                 })
         recyclerGenericAdapter.list = datalist
@@ -517,6 +524,11 @@ class MainLearningFragment : BaseFragment() {
             false
         )
         searchSuggestionBasedVideosRV.adapter = recyclerGenericAdapter
+    }
+
+    override fun onBackPressed(): Boolean {
+        parentFragmentManager.popBackStack()
+        return false
     }
 
 
