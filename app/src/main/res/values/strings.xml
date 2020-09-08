@@ -910,7 +910,7 @@
     <string name="around_current_address_">Around Current Address</string>
     <string name="app_language">App Language</string>
     <string name="sign_out">Sign out</string>
-    <string name="dl_hint_square_bracket">Driving License Number* [Eg: If the Driving Licence Number is RJ-13/DLC/12/ 123456, RJ1320120123456]</string>
+    <string name="dl_hint_square_bracket">Accepted DL formats are : RJ-13/DLC/12/123456, RJ1320120123456, RJ-052009123456, and GJ18N2012123456</string>
     <string name="plus_see_more">+ see more</string>
     <string name="plus_see_less">+ see less</string>
 
