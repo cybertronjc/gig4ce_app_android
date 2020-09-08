@@ -913,6 +913,8 @@
     <string name="dl_hint_square_bracket">Driving License Number*\n(Accepted DL formats are : RJ-13/DLC/12/123456, RJ1320120123456, RJ-052009123456, and GJ18N2012123456. For other formats please call your supervisor for help.)</string>
     <string name="plus_see_more">+ see more</string>
     <string name="plus_see_less">+ see less</string>
+    <string name="new_version_available">New Version Available</string>
+    <string name="new_version_available_detail">Please, update app to new version to continue reposting</string>
 
 
 </resources>
