@@ -19,79 +19,71 @@
         android:id="@+id/kyc_video_resume"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
         android:layout_marginLeft="18dp"
         android:layout_marginTop="20dp"
         android:layout_marginRight="18dp"
-        android:orientation="vertical"
         android:visibility="gone">
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="56dp"
-            android:background="@drawable/kyc_rect_border"
+            android:orientation="horizontal"
             android:gravity="center"
-            android:orientation="horizontal">
-
+            android:background="@drawable/kyc_rect_border">
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="12dp"
-                android:src="@drawable/warning_icon_" />
-
+                android:src="@drawable/warning_icon_"
+                android:layout_marginLeft="12dp"/>
             <TextView
                 android:id="@+id/kyc_tv"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginLeft="16dp"
                 android:layout_weight="1"
+                android:layout_marginLeft="16dp"
+                android:textSize="13sp"
+                android:textColor="#4a4a4a"
                 android:letterSpacing="0"
                 android:text="@string/kyc_verification_not_done"
-                android:textColor="#4a4a4a"
-                android:textSize="13sp" />
-
+                android:layout_gravity="center"/>
             <ImageView
                 android:id="@+id/show_upcominggig_layout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="14dp"
                 android:layout_marginRight="9dp"
-                android:src="@drawable/ic_baseline_keyboard_arrow_right_24" />
+                android:layout_marginLeft="14dp"
+                android:src="@drawable/ic_baseline_keyboard_arrow_right_24"/>
         </LinearLayout>
-
         <LinearLayout
             android:id="@+id/video_resume"
             android:layout_width="match_parent"
             android:layout_height="56dp"
-            android:layout_marginTop="15dp"
-            android:background="@drawable/kyc_rect_border"
+            android:orientation="horizontal"
             android:gravity="center"
-            android:orientation="horizontal">
-
+            android:layout_marginTop="15dp"
+            android:background="@drawable/kyc_rect_border">
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="12dp"
-                android:src="@drawable/warning_icon_" />
-
+                android:src="@drawable/warning_icon_"
+                android:layout_marginLeft="12dp"/>
             <TextView
                 android:id="@+id/video_resume_tv"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginLeft="16dp"
                 android:layout_weight="1"
+                android:layout_marginLeft="16dp"
+                android:textSize="13sp"
+                android:textColor="#4a4a4a"
                 android:letterSpacing="0"
                 android:text="@string/video_resume_pending"
-                android:textColor="#4a4a4a"
-                android:textSize="13sp" />
-
+                android:layout_gravity="center"/>
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="14dp"
                 android:layout_marginRight="9dp"
-                android:src="@drawable/ic_baseline_keyboard_arrow_right_24" />
+                android:layout_marginLeft="14dp"
+                android:src="@drawable/ic_baseline_keyboard_arrow_right_24"/>
         </LinearLayout>
 
     </LinearLayout>
@@ -103,28 +95,28 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="18dp"
         android:layout_marginTop="20dp"
-        android:letterSpacing="0"
         android:text="@string/upcoming_gig_"
         android:textColor="#080808"
+        android:letterSpacing="0"
         android:textSize="14sp" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/upcoming_gig_rv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:clipToPadding="false"
-        android:nestedScrollingEnabled="false"
         android:paddingTop="14dp"
-        android:paddingRight="20dp"
-        android:paddingBottom="15dp" />
+        android:nestedScrollingEnabled="false"
+        android:clipToPadding="false"
+        android:paddingBottom="15dp"
+        android:paddingRight="20dp"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:fontFamily="@font/lato_bold"
-        android:letterSpacing="0"
         android:text="@string/features"
+        android:letterSpacing="0"
         android:textColor="#080808"
         android:textSize="18sp" />
 
@@ -133,9 +125,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="11.5dp"
-        android:clipToPadding="false"
         android:nestedScrollingEnabled="false"
-        android:paddingRight="20dp" />
+        android:clipToPadding="false"
+        android:paddingRight="20dp"/>
 
     <View
         android:layout_width="match_parent"
@@ -143,71 +135,53 @@
         android:layout_marginTop="9.5dp"
         android:background="#f1f1f1" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/learning_cl"
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="18dp"
+        android:layout_marginTop="20dp"
+        android:fontFamily="@font/lato_bold"
+        android:text="@string/learning"
+        android:letterSpacing="0"
+        android:textColor="#080808"
+        android:textSize="16sp" />
+
+    <FrameLayout
+        android:id="@+id/learning_container"
         android:layout_width="match_parent"
-        android:layout_height="233dp">
+        android:layout_height="wrap_content"
+        android:minHeight="170dp"
+        android:layout_marginTop="16dp">
 
-        <TextView
-            android:id="@+id/textView120"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="18dp"
-            android:layout_marginTop="20dp"
-            android:fontFamily="@font/lato_bold"
-            android:letterSpacing="0"
-            android:text="@string/learning"
-            android:textColor="#080808"
-            android:textSize="16sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
-
-        <FrameLayout
-            android:id="@+id/modules_container"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/learning_rv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:minHeight="170dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView120">
+            android:layout_marginEnd="15dp"
+            android:visibility="gone"
+            android:clipToPadding="false"
+            android:nestedScrollingEnabled="false"
+            android:paddingRight="20dp"
+            />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/learning_rv"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="15dp"
-                android:clipToPadding="false"
-                android:nestedScrollingEnabled="false"
-                android:paddingRight="20dp"
-                android:visibility="gone" />
+        <ProgressBar
+            android:id="@+id/learning_progress_bar"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:visibility="gone" />
 
-            <ProgressBar
-                android:id="@+id/learning_progress_bar"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_gravity="center"
-                android:visibility="gone" />
+        <TextView
+            android:id="@+id/learning_learning_error"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:drawableTop="@drawable/ic_cross_grey"
+            android:drawablePadding="10dp"
+            tools:text="Unable to load your stuff" />
 
-            <TextView
-                android:id="@+id/learning_learning_error"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:drawableTop="@drawable/ic_cross_grey"
-                android:drawablePadding="10dp"
-                tools:text="Unable to load your stuff" />
+    </FrameLayout>
 
-        </FrameLayout>
-        <!--    <androidx.recyclerview.widget.RecyclerView-->
-        <!--        android:id="@+id/learning_rv"-->
-        <!--        android:layout_width="match_parent"-->
-        <!--        android:layout_height="wrap_content"-->
-        <!--        android:layout_marginTop="13dp"-->
-        <!--        android:nestedScrollingEnabled="false"-->
-        <!--        android:clipToPadding="false"-->
-        <!--        android:paddingRight="20dp"/>-->
-    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
         android:layout_width="wrap_content"
@@ -215,18 +189,44 @@
         android:layout_marginLeft="18dp"
         android:layout_marginTop="15dp"
         android:fontFamily="@font/lato_bold"
-        android:letterSpacing="0"
         android:text="@string/assessment_"
+        android:letterSpacing="0"
         android:textColor="#686868"
         android:textSize="14sp" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/assessment_rv"
+
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:clipToPadding="false"
-        android:nestedScrollingEnabled="false"
-        android:paddingRight="20dp" />
+        android:minHeight="170dp"
+        android:layout_marginTop="16dp">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/assessment_rv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:nestedScrollingEnabled="false"
+            android:clipToPadding="false"
+            android:layout_marginEnd="15dp"
+            android:visibility="gone" />
+
+        <ProgressBar
+            android:id="@+id/learning_assessment_progress_bar"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/learning_assessment_error"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:drawableTop="@drawable/ic_cross_grey"
+            android:drawablePadding="10dp"
+            tools:text="Unable to load your stuff" />
+
+    </FrameLayout>
 
     <TextView
         android:id="@+id/application_version"
@@ -235,8 +235,8 @@
         android:layout_marginTop="50dp"
         android:layout_marginBottom="50dp"
         android:gravity="center"
+        android:textSize="12sp"
         android:letterSpacing="0"
-        android:textColor="@color/onboarding_rv_item_color_40"
-        android:textSize="12sp" />
+        android:textColor="@color/onboarding_rv_item_color_40"/>
 
 </LinearLayout>

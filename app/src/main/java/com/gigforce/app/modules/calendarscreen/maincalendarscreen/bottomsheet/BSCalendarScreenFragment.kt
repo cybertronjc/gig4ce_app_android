@@ -23,8 +23,12 @@ import androidx.annotation.DimenRes
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.observe
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -35,6 +39,7 @@ import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.app.core.genericadapter.RecyclerGenericAdapter
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
+import com.gigforce.app.modules.assessment.AssessmentFragment
 import com.gigforce.app.modules.gigPage.GigAttendancePageFragment
 import com.gigforce.app.modules.gigPage.GigPageFragment
 import com.gigforce.app.modules.gigPage.GigPageNavigationFragment
@@ -43,14 +48,19 @@ import com.gigforce.app.modules.gigPage.models.Gig
 import com.gigforce.app.modules.landingscreen.LandingScreenFragment
 import com.gigforce.app.modules.learning.LearningConstants
 import com.gigforce.app.modules.learning.LearningViewModel
+import com.gigforce.app.modules.learning.MainLearningViewModel
 import com.gigforce.app.modules.learning.models.Course
+import com.gigforce.app.modules.learning.models.CourseContent
 import com.gigforce.app.utils.DateHelper
 import com.gigforce.app.utils.GlideApp
 import com.gigforce.app.utils.Lce
 import com.gigforce.app.utils.TextDrawable
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.*
+import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.learning_learning_error
+import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.learning_progress_bar
 import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.learning_rv
+
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -63,6 +73,8 @@ class BSCalendarScreenFragment : BaseFragment() {
     private lateinit var viewModel: BSCalendarScreenViewModel
     private val gigViewModel: GigViewModel by viewModels()
     private val learningViewModel : LearningViewModel by viewModels()
+    private val mainLearningViewModel: MainLearningViewModel by viewModels()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -72,9 +84,38 @@ class BSCalendarScreenFragment : BaseFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(BSCalendarScreenViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(BSCalendarScreenViewModel::class.java)
         initializeBottomSheet()
         initGigViewModel()
+        initLearningViewModel()
+    }
+
+    private fun initLearningViewModel() {
+        learningViewModel
+            .roleBasedCourses
+            .observe(viewLifecycleOwner, Observer {
+
+                when (it) {
+                    Lce.Loading -> showLearningAsLoading()
+                    is Lce.Content -> showUserLearningCourses(it.content)
+                    is Lce.Error -> showErrorWhileLoadingCourse(it.error)
+                }
+            })
+
+        mainLearningViewModel
+            .allAssessments
+            .observe(viewLifecycleOwner, Observer {
+
+                when (it) {
+                    Lce.Loading -> showAssessmentProgress()
+                    is Lce.Content -> showAssessments(it.content)
+                    is Lce.Error -> showAssessmentError(it.error)
+                }
+            })
+
+
+        mainLearningViewModel.getAssessmentsFromAllAssignedCourses()
+        learningViewModel.getRoleBasedCourses()
     }
 
     private fun initGigViewModel() {
@@ -93,6 +134,166 @@ class BSCalendarScreenFragment : BaseFragment() {
         gigViewModel.watchUpcomingGigs()
     }
 
+    private fun showLearningAsLoading() {
+
+        learning_rv.gone()
+        learning_learning_error.gone()
+        learning_progress_bar.visible()
+    }
+
+    private fun showErrorWhileLoadingCourse(error: String) {
+
+        learning_progress_bar.gone()
+        learning_rv.gone()
+        learning_learning_error.visible()
+
+        learning_learning_error.text = error
+    }
+
+    private fun showUserLearningCourses(content: List<Course>) {
+
+        learning_progress_bar.gone()
+        learning_learning_error.gone()
+        learning_rv.visible()
+
+        val itemWidth = ((width / 3) * 2).toInt()
+        val recyclerGenericAdapter: RecyclerGenericAdapter<Course> =
+            RecyclerGenericAdapter<Course>(
+                activity?.applicationContext,
+                PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
+                    navigate(R.id.mainLearningFragment)
+                },
+                RecyclerGenericAdapter.ItemInterface<Course?> { obj, viewHolder, position ->
+                    var view = getView(viewHolder, R.id.card_view)
+                    val lp = view.layoutParams
+                    lp.height = lp.height
+                    lp.width = itemWidth
+                    view.layoutParams = lp
+
+                    var title = getTextView(viewHolder, R.id.title_)
+                    title.text = obj?.name
+
+                    var subtitle = getTextView(viewHolder, R.id.title)
+                    subtitle.text = obj?.description
+
+                    var img = getImageView(viewHolder, R.id.learning_img)
+
+                    if (!obj!!.coverPicture.isNullOrBlank()) {
+                        if (obj!!.coverPicture!!.startsWith("http", true)) {
+
+                            GlideApp.with(requireContext())
+                                .load(obj!!.coverPicture!!)
+                                .placeholder(getCircularProgressDrawable())
+                                .into(img)
+                        } else {
+                            FirebaseStorage.getInstance()
+                                .getReference(LearningConstants.LEARNING_IMAGES_FIREBASE_FOLDER)
+                                .child(obj!!.coverPicture!!)
+                                .downloadUrl
+                                .addOnSuccessListener { fileUri ->
+
+                                    GlideApp.with(requireContext())
+                                        .load(fileUri)
+                                        .placeholder(getCircularProgressDrawable())
+                                        .into(img)
+                                }
+                        }
+                    }
+
+                    //img.setImageResource(obj?.imgIcon!!)
+                })!!
+        recyclerGenericAdapter.setList(content)
+        recyclerGenericAdapter.setLayout(R.layout.learning_bs_item)
+        learning_rv.layoutManager = LinearLayoutManager(
+            activity?.applicationContext,
+            LinearLayoutManager.HORIZONTAL,
+            false
+        )
+        learning_rv.adapter = recyclerGenericAdapter
+
+    }
+
+    private fun showAssessmentProgress() {
+        assessment_rv.gone()
+        learning_assessment_error.gone()
+        learning_assessment_progress_bar.visible()
+    }
+
+    private fun showAssessmentError(error: String) {
+
+        assessment_rv.gone()
+        learning_assessment_progress_bar.gone()
+        learning_assessment_error.visible()
+
+        learning_assessment_error.text = error
+    }
+
+
+    private fun showAssessments(content: List<CourseContent>) {
+
+        learning_assessment_progress_bar.gone()
+        learning_assessment_error.gone()
+        assessment_rv.visible()
+
+        if (content.isEmpty()) {
+            assessment_rv.gone()
+            learning_assessment_progress_bar.gone()
+            learning_assessment_error.visible()
+
+            learning_assessment_error.text = "No Assessment Found"
+        } else {
+
+            val displayMetrics = DisplayMetrics()
+            activity?.windowManager?.defaultDisplay?.getMetrics(displayMetrics)
+            val width = displayMetrics.widthPixels
+            val itemWidth = ((width / 5) * 3.5).toInt()
+
+
+            val recyclerGenericAdapter: RecyclerGenericAdapter<CourseContent> =
+                RecyclerGenericAdapter<CourseContent>(
+                    activity?.applicationContext,
+                    PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
+                        val assessment = item as CourseContent
+
+                        navigate(R.id.assessment_fragment,  bundleOf(
+                            AssessmentFragment.INTENT_LESSON_ID to assessment.id
+                        )
+                        )
+                    },
+                    RecyclerGenericAdapter.ItemInterface<CourseContent> { obj, viewHolder, position ->
+                        val lp = getView(viewHolder, R.id.assessment_cl).layoutParams
+                        lp.height = lp.height
+                        lp.width = itemWidth
+                        getView(viewHolder, R.id.assessment_cl).layoutParams = lp
+                        getTextView(viewHolder, R.id.title).text = obj?.title
+                        getTextView(viewHolder, R.id.time).text = "02:00"
+
+
+                        getTextView(viewHolder, R.id.status).text = "PENDING"
+                        getTextView(
+                            viewHolder,
+                            R.id.status
+                        ).setBackgroundResource(R.drawable.rect_assessment_status_pending)
+                        (getView(
+                            viewHolder,
+                            R.id.side_bar_status
+                        ) as CardView).setCardBackgroundColor(resources.getColor(R.color.status_bg_pending))
+
+
+                    })
+            recyclerGenericAdapter.list = content
+            recyclerGenericAdapter.setLayout(R.layout.assessment_bs_item)
+            assessment_rv.layoutManager = LinearLayoutManager(
+                activity?.applicationContext,
+                LinearLayoutManager.HORIZONTAL,
+                false
+            )
+            assessment_rv.adapter = recyclerGenericAdapter
+        }
+
+    }
+
+
     override fun isDeviceLanguageChangedDialogRequired(): Boolean {
         return false
     }
@@ -105,7 +306,6 @@ class BSCalendarScreenFragment : BaseFragment() {
         width = displayMetrics.widthPixels
         initializeVerificationAlert()
         initializeFeaturesBottomSheet()
-        initializeLearningModule()
         initializeAssessmentBottomSheet()
         application_version.text = getString(R.string.version) + " " + getCurrentVersion()
         listener()
@@ -200,12 +400,10 @@ class BSCalendarScreenFragment : BaseFragment() {
                                 getView(viewHolder, R.id.checkInTV).isEnabled = false
                             } else if (obj.isCheckInMarked()) {
                                 getView(viewHolder, R.id.checkInTV).isEnabled = true
-                                (getView(viewHolder, R.id.checkInTV) as Button).text =
-                                    getString(R.string.check_out)
+                                (getView(viewHolder, R.id.checkInTV) as Button).text = getString(R.string.check_out)
                             } else {
                                 getView(viewHolder, R.id.checkInTV).isEnabled = true
-                                (getView(viewHolder, R.id.checkInTV) as Button).text =
-                                    getString(R.string.check_in)
+                                (getView(viewHolder, R.id.checkInTV) as Button).text = getString(R.string.check_in)
                             }
 
                         } else {
@@ -405,15 +603,9 @@ class BSCalendarScreenFragment : BaseFragment() {
 
         datalist.add(FeatureModel("Settings", R.drawable.settings, R.id.settingFragment))
         datalist.add(FeatureModel("Chat", R.drawable.chat, -1/*R.id.contactScreenFragment*/))
-        datalist.add(FeatureModel("Home Screen", R.drawable.chat, R.id.landinghomefragment))
+        datalist.add(FeatureModel("Home Screen", R.drawable.ic_home_black, R.id.landinghomefragment))
         datalist.add(FeatureModel("Explore", R.drawable.ic_landinghome_search, -1))
-        datalist.add(
-            FeatureModel(
-                "Verification",
-                R.drawable.ic_homescreen_learn,
-                R.id.gigerVerificationFragment
-            )
-        )
+        datalist.add(FeatureModel("Verification", R.drawable.ic_shield_black, R.id.gigerVerificationFragment))
 
         val itemWidth = ((width / 7) * 1.6).toInt()
         val recyclerGenericAdapter: RecyclerGenericAdapter<FeatureModel> =
@@ -446,7 +638,7 @@ class BSCalendarScreenFragment : BaseFragment() {
         feature_rv.adapter = recyclerGenericAdapter
     }
 
-    //    private fun navigateToFeature(position: Int) {
+//    private fun navigateToFeature(position: Int) {
 //        when (position) {
 //            0 -> showToast("")
 //            1 -> showToast("")
@@ -458,174 +650,8 @@ class BSCalendarScreenFragment : BaseFragment() {
 //            7 -> navigate(R.id.landinghomefragment)
 //        }
 //    }
-    private fun showUserLearningCourses(content: List<Course>) {
-
-        learning_progress_bar.gone()
-        learning_learning_error.gone()
-        learning_rv.visible()
-
-        if (content.isEmpty()) {
-            learning_cl.gone()
-        } else {
-            learning_cl.visible()
-
-            val itemWidth = ((width / 3) * 2).toInt()
-            // model will change when integrated with DB
-
-            val recyclerGenericAdapter: RecyclerGenericAdapter<Course> =
-                RecyclerGenericAdapter<Course>(
-                    activity?.applicationContext,
-                    PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
-                        navigate(R.id.mainLearningFragment)
-                    },
-                    RecyclerGenericAdapter.ItemInterface<Course?> { obj, viewHolder, position ->
-                        var view = getView(viewHolder, R.id.card_view)
-                        val lp = view.layoutParams
-                        lp.height = lp.height
-                        lp.width = itemWidth
-                        view.layoutParams = lp
-
-                        var title = getTextView(viewHolder, R.id.title_)
-                        title.text = obj?.name
-
-                        var subtitle = getTextView(viewHolder, R.id.title)
-                        subtitle.text = obj?.description
-
-                        var img = getImageView(viewHolder, R.id.learning_img)
-
-                        if (!obj!!.coverPicture.isNullOrBlank()) {
-                            if (obj!!.coverPicture!!.startsWith("http", true)) {
-
-                                GlideApp.with(requireContext())
-                                    .load(obj!!.coverPicture!!)
-                                    .placeholder(getCircularProgressDrawable())
-                                    .into(img)
-                            } else {
-                                FirebaseStorage.getInstance()
-                                    .getReference(LearningConstants.LEARNING_IMAGES_FIREBASE_FOLDER)
-                                    .child(obj!!.coverPicture!!)
-                                    .downloadUrl
-                                    .addOnSuccessListener { fileUri ->
-
-                                        GlideApp.with(requireContext())
-                                            .load(fileUri)
-                                            .placeholder(getCircularProgressDrawable())
-                                            .into(img)
-                                    }
-                            }
-                        }
-
-                        //img.setImageResource(obj?.imgIcon!!)
-                    })!!
-            recyclerGenericAdapter.setList(content)
-            recyclerGenericAdapter.setLayout(R.layout.learning_bs_item)
-            learning_rv.layoutManager = LinearLayoutManager(
-                activity?.applicationContext,
-                LinearLayoutManager.HORIZONTAL,
-                false
-            )
-            learning_rv.adapter = recyclerGenericAdapter
-
-        }
-    }
-    private fun showLearningAsLoading() {
-
-        learning_cl.visible()
-        learning_rv.gone()
-        learning_learning_error.gone()
-        learning_progress_bar.visible()
-    }
-
-    private fun showErrorWhileLoadingCourse(error: String) {
-
-        learning_cl.visible()
-        learning_progress_bar.gone()
-        learning_rv.gone()
-        learning_learning_error.visible()
-
-        learning_learning_error.text = error
-    }
-
-    private fun initializeLearningModule() {
-        learningViewModel
-            .roleBasedCourses
-            .observe(viewLifecycleOwner, androidx.lifecycle.Observer {
-
-                when (it) {
-                    Lce.Loading -> showLearningAsLoading()
-                    is Lce.Content -> showUserLearningCourses(it.content)
-                    is Lce.Error -> showErrorWhileLoadingCourse(it.error)
-                }
-            })
 
 
-        learningViewModel.getRoleBasedCourses()
-//
-//        val itemWidth = ((width / 3) * 2).toInt()
-//        // model will change when integrated with DB
-//        var datalist: ArrayList<LandingScreenFragment.TitleSubtitleModel> =
-//            ArrayList<LandingScreenFragment.TitleSubtitleModel>()
-//
-//        datalist.add(
-//            LandingScreenFragment.TitleSubtitleModel(
-//                "Retail Sales Executive",
-//                "Demonstrate products to customers", R.drawable.learning2
-//            )
-//        )
-//
-//        datalist.add(
-//            LandingScreenFragment.TitleSubtitleModel(
-//                "Quick Service Restaurant",
-//                "Manage food displays",
-//                R.drawable.learning1
-//            )
-//        )
-//        datalist.add(
-//            LandingScreenFragment.TitleSubtitleModel(
-//                "Delivery",
-//                "Maintaining hygiene and safety",
-//                R.drawable.learning_bg
-//            )
-//        )
-//        datalist.add(
-//            LandingScreenFragment.TitleSubtitleModel(
-//                "Retail Sales Executive",
-//                "Help customers choose the right products",
-//                R.drawable.learning2
-//            )
-//        )
-//        val recyclerGenericAdapter: RecyclerGenericAdapter<LandingScreenFragment.TitleSubtitleModel> =
-//            RecyclerGenericAdapter<LandingScreenFragment.TitleSubtitleModel>(
-//                activity?.applicationContext,
-//                PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
-//                    showToast("This page are inactive. We’ll activate it in a few weeks")
-//                  //  navigate(R.id.mainLearningFragment)
-//                },
-//                RecyclerGenericAdapter.ItemInterface<LandingScreenFragment.TitleSubtitleModel?> { obj, viewHolder, position ->
-//                    var view = getView(viewHolder, R.id.card_view)
-//                    val lp = view.layoutParams
-//                    lp.height = lp.height
-//                    lp.width = itemWidth
-//                    view.layoutParams = lp
-//
-//                    var title = getTextView(viewHolder, R.id.title_)
-//                    title.text = obj?.title
-//
-//                    var subtitle = getTextView(viewHolder, R.id.title)
-//                    subtitle.text = obj?.subtitle
-//
-//                    var img = getImageView(viewHolder, R.id.learning_img)
-//                    img.setImageResource(obj?.imgIcon!!)
-//                })!!
-//        recyclerGenericAdapter.setList(datalist)
-//        recyclerGenericAdapter.setLayout(R.layout.learning_bs_item)
-//        learning_rv.layoutManager = LinearLayoutManager(
-//            activity?.applicationContext,
-//            LinearLayoutManager.HORIZONTAL,
-//            false
-//        )
-//        learning_rv.adapter = recyclerGenericAdapter
-    }
 
     class Assessment(var title: String, var time: String, var status: Boolean) {
 
@@ -670,9 +696,9 @@ class BSCalendarScreenFragment : BaseFragment() {
             RecyclerGenericAdapter<Assessment>(
                 activity?.applicationContext,
                 PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
-                    //                    showToast("This page are inactive. We’ll activate it in a few weeks")
+//                    showToast("This page are inactive. We’ll activate it in a few weeks")
                     navigate(R.id.assessment_fragment)
-                },
+                     },
                 RecyclerGenericAdapter.ItemInterface<Assessment?> { obj, viewHolder, position ->
                     val lp = getView(viewHolder, R.id.assessment_cl).layoutParams
                     lp.height = lp.height
@@ -693,7 +719,7 @@ class BSCalendarScreenFragment : BaseFragment() {
                         ) as CardView).setCardBackgroundColor(resources.getColor(R.color.status_bg_completed))
 
                     } else {
-                        getTextView(viewHolder, R.id.status).text = getString(R.string.pending)
+                        getTextView(viewHolder, R.id.status).text =  getString(R.string.pending)
                         getTextView(
                             viewHolder,
                             R.id.status
