@@ -318,7 +318,7 @@
                 android:id="@+id/completedGigControlsLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
+
                 app:layout_constraintTop_toBottomOf="@id/presentOrFutureGigControls">
 
                 <ImageView
@@ -518,6 +518,22 @@
                         android:background="#c0c0c0"
                         app:layout_constraintTop_toTopOf="parent" />
 
+                    <TextView
+                        android:id="@+id/paymentAmountTV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginRight="19dp"
+                        android:fontFamily="@font/lato_bold"
+                        android:letterSpacing="0"
+                        android:textColor="@color/black"
+                        android:textSize="18sp"
+                        android:visibility="visible"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/separator2"
+                        app:layout_goneMarginTop="10dp"
+                        tools:text="Rs 20000" />
+
 
                     <TextView
                         android:id="@+id/payment_details_label"
@@ -536,6 +552,20 @@
 
 
                     <TextView
+                        android:id="@+id/payment_per_contract_label"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="19dp"
+                        android:layout_marginTop="8dp"
+                        android:fontFamily="@font/lato"
+                        android:letterSpacing="0"
+                        android:textColor="@color/black"
+                        android:textSize="12sp"
+                        android:text="Payment as per the contract."
+                        android:visibility="visible"
+                        app:layout_constraintTop_toBottomOf="@id/payment_details_label" />
+
+                    <TextView
                         android:id="@+id/invoice_generation_date"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -547,25 +577,11 @@
                         android:textSize="12sp"
                         android:visibility="visible"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/payment_details_label"
+                        app:layout_constraintTop_toBottomOf="@id/payment_per_contract_label"
                         tools:text="Invoice Generated : 16 Apr 2020" />
 
 
-                    <TextView
-                        android:id="@+id/paymentAmountTV"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginRight="19dp"
-                        android:fontFamily="@font/lato_bold"
-                        android:letterSpacing="0"
-                        android:textColor="@color/black"
-                        android:textSize="18sp"
-                        android:visibility="visible"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/separator2"
-                        app:layout_goneMarginTop="10dp"
-                        tools:text="Rs 20000" />
+
 
                     <TextView
                         android:id="@+id/processingLabel"
@@ -575,12 +591,12 @@
                         android:layout_marginRight="19dp"
                         android:fontFamily="@font/lato_bold"
                         android:letterSpacing="0"
-                        android:text="Processing"
+                        tools:text="Processing"
                         android:textColor="@color/yellow"
                         android:textSize="12sp"
                         android:visibility="visible"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/paymentAmountTV" />
+                        app:layout_constraintTop_toBottomOf="@id/payment_per_contract_label" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -61,7 +61,6 @@ import kotlinx.android.synthetic.main.fragment_gig_page_attendance.messageCardVi
 import kotlinx.android.synthetic.main.fragment_gig_page_attendance.roleNameTV
 import kotlinx.android.synthetic.main.fragment_gig_page_attendance.shiftTV
 import kotlinx.android.synthetic.main.fragment_gig_page_attendance.wageTV
-import kotlinx.android.synthetic.main.fragment_gig_page_present.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -312,16 +311,16 @@ class GigAttendancePageFragment : BaseFragment(), PopupMenu.OnMenuItemClickListe
             shiftTV.text = "${timeFormatter.format(gig.startDateTime!!.toDate())} - "
         }
 
-        val gigAmountText = if (gig.gigAmount == 0.0)
-            "--"
+         if (gig.gigAmount == 0.0){
+             wageTV.text = "Payout : As per contract"
+        }
         else {
-            if (gig.isMonthlyGig)
+             wageTV.text = if (gig.isMonthlyGig)
                 "Payout : Rs ${gig.gigAmount} per Month"
             else
                 "Payout : Rs ${gig.gigAmount} per Hour"
         }
 
-        wageTV.text = gigAmountText
         addressTV.text = gig.address
 
         if (gig.isFavourite && favoriteCB.isChecked.not()) {

@@ -54,7 +54,22 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.storage.FirebaseStorage
 import com.ncorti.slidetoact.SlideToActView
+import kotlinx.android.synthetic.main.fragment_gig_page_attendance.*
 import kotlinx.android.synthetic.main.fragment_gig_page_present.*
+import kotlinx.android.synthetic.main.fragment_gig_page_present.addressTV
+import kotlinx.android.synthetic.main.fragment_gig_page_present.callCardView
+import kotlinx.android.synthetic.main.fragment_gig_page_present.companyLogoIV
+import kotlinx.android.synthetic.main.fragment_gig_page_present.companyNameTV
+import kotlinx.android.synthetic.main.fragment_gig_page_present.contactPersonTV
+import kotlinx.android.synthetic.main.fragment_gig_page_present.durationTextTV
+import kotlinx.android.synthetic.main.fragment_gig_page_present.favoriteCB
+import kotlinx.android.synthetic.main.fragment_gig_page_present.gigIdTV
+import kotlinx.android.synthetic.main.fragment_gig_page_present.gigTypeTV
+import kotlinx.android.synthetic.main.fragment_gig_page_present.messageCardView
+import kotlinx.android.synthetic.main.fragment_gig_page_present.roleNameTV
+import kotlinx.android.synthetic.main.fragment_gig_page_present.shiftTV
+import kotlinx.android.synthetic.main.fragment_gig_page_present.wageIV
+import kotlinx.android.synthetic.main.fragment_gig_page_present.wageTV
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.util.*
@@ -560,16 +575,16 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
             shiftTV.text = "${timeFormatter.format(gig.startDateTime!!.toDate())} - "
         }
 
-        val gigAmountText = if (gig.gigAmount == 0.0)
-            "--"
+         if (gig.gigAmount == 0.0)
+           {
+               wageTV.text = "Payout : As per contract"
+           }
         else {
-            if (gig.isMonthlyGig)
+             wageTV.text = if (gig.isMonthlyGig)
                 "Payout : Rs ${gig.gigAmount} per Month"
             else
                 "Payout : Rs ${gig.gigAmount} per Hour"
-
         }
-        wageTV.text = gigAmountText
 
         gigHighlightsContainer.removeAllViews()
         if(gig.gigHighlights.size > 4){
@@ -727,6 +742,14 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
         if (gig.isCheckInAndCheckOutMarked()) {
             gigPaymentLayout.visible()
             invoiceStatusBtn.visible()
+
+            if(gig.gigAmount == 0.0){
+                paymentAmountTV.gone()
+                payment_per_contract_label.visible()
+            }else{
+                paymentAmountTV.visible()
+                payment_per_contract_label.gone()
+            }
 
             processingLabel.text = gig.paymentStatus
 

@@ -252,6 +252,8 @@ class AboutExpandedFragment : ProfileBaseFragment(), ProfileCardBgCallbacks,
 //            }
 //        }
 
+        about_top_profile.userName = profile.name
+        about_top_profile.imageName = profile.profileAvatarName
     }
 
 
