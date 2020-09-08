@@ -296,8 +296,8 @@ open class GigVerificationViewModel constructor(
                 else
                     model.driving_license?.frontImage
 
-                val backImageFileNameAtServer = if (userHasDL)
-                    uploadImage(backImagePath!!)
+                val backImageFileNameAtServer = if (userHasDL && backImagePath!= null)
+                    uploadImage(backImagePath)
                 else
                     model.driving_license?.backImage
 
