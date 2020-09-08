@@ -681,8 +681,6 @@
     <string name="around_current_address_">Around Current Address</string>
     <string name="plus_see_more">+ see more</string>
     <string name="plus_see_less">+ see less</string>
-    <string name="day_and_time">Day and Time</string>
-    <string name="others">OTHERS</string>
     <string name="app_language">App Language</string>
     <string name="sign_out">Sign out</string>
 </resources>
