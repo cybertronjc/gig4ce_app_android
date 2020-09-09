@@ -1,50 +1,50 @@
 {
   "project_info": {
-    "project_number": "694904206664",
-    "firebase_url": "https://gig4ce-production.firebaseio.com",
-    "project_id": "gig4ce-production",
-    "storage_bucket": "gig4ce-production.appspot.com"
+    "project_number": "1008010793707",
+    "firebase_url": "https://gig4ce-app.firebaseio.com",
+    "project_id": "gig4ce-app",
+    "storage_bucket": "gig4ce-app.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:694904206664:android:f7cc14686cbcb663446f7d",
+        "mobilesdk_app_id": "1:1008010793707:android:ecdb556b5c3f41c7d0a4ae",
         "android_client_info": {
           "package_name": "com.gigforce.app"
         }
       },
       "oauth_client": [
         {
-          "client_id": "694904206664-nolbuoh2spopviss91h8a6p9434g1on6.apps.googleusercontent.com",
+          "client_id": "1008010793707-0rqdmqim302c3amj262gn111rqkkojgc.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.gigforce.app",
-            "certificate_hash": "8afa647f38e029a25acf2e945c43a9e0623aa477"
+            "certificate_hash": "c9cd043805e7dc6273eec3d69f0c325a52b72659"
           }
         },
         {
-          "client_id": "694904206664-05v6gr6ta0umnba0plef6125gbali5dk.apps.googleusercontent.com",
+          "client_id": "1008010793707-187sa4fklp3f1i0hodefq8a71ghh313b.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.gigforce.app",
-            "certificate_hash": "c746602010935245880c9cf02d0fc7c7486833a0"
+            "certificate_hash": "edcb19b44d6f9acba080aab4d1b5abe7ffc784c4"
           }
         },
         {
-          "client_id": "694904206664-iktgdf011vacgkphu2giireki44mim8v.apps.googleusercontent.com",
+          "client_id": "1008010793707-k9kg5ni1tjmv788v8uce247b3nvr5a97.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDQxaMSYYz5DZ_HmzLaUqAVBHoDQKzK3n4"
+          "current_key": "AIzaSyD17twavcwPw1Au5eZ4CqELR9w91qTy4oE"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "694904206664-iktgdf011vacgkphu2giireki44mim8v.apps.googleusercontent.com",
+              "client_id": "1008010793707-k9kg5ni1tjmv788v8uce247b3nvr5a97.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
