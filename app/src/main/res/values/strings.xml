@@ -914,7 +914,9 @@
     <string name="plus_see_more">+ see more</string>
     <string name="plus_see_less">+ see less</string>
     <string name="new_version_available">New Version Available</string>
-    <string name="new_version_available_detail">Please, update app to new version to continue reposting</string>
+    <string name="new_version_available_detail">Please update the app to continue the gigs.</string>
+    <string name="cancel_update">Cancel</string>
+    <string name="update_now">Update now</string>
 
 
 </resources>
