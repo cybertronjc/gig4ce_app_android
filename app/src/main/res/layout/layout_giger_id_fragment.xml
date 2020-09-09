@@ -225,7 +225,7 @@
                     android:layout_marginTop="@dimen/size_11"
                     android:gravity="bottom"
                     android:orientation="vertical"
-                    app:layout_constraintBottom_toBottomOf="@+id/ll_gig_time_details_giger_id"
+
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
@@ -241,6 +241,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/size_7"
+                        android:maxWidth="@dimen/size_100"
                         android:gravity="center_horizontal|bottom"
                         android:textColor="@color/black_85"
                         android:textSize="@dimen/font_12" />
