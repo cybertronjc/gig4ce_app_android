@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import com.gigforce.app.modules.earn.gighistory.models.GigsResponse
 import com.gigforce.app.modules.gigPage.models.Gig
 import com.gigforce.app.utils.SingleLiveEvent
+import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.QuerySnapshot
@@ -61,6 +62,7 @@ class GigHistoryViewModel(private val repositoryCallbacks: DataCallbacks) :
             error?.message?.let {
                 observableError.value = it
             }
+        repositoryCallbacks.removeListener()
     }
 
     override fun pastGigsResponse(
@@ -76,6 +78,7 @@ class GigHistoryViewModel(private val repositoryCallbacks: DataCallbacks) :
                 "Past Gigs Loaded Successfully",
                 getGigsWithId(querySnapshot)
             )
+            repositoryCallbacks.removeListener()
         } else
             error?.message?.let {
                 observableError.value = it
@@ -96,6 +99,7 @@ class GigHistoryViewModel(private val repositoryCallbacks: DataCallbacks) :
                 "Upcoming Gigs Loaded Successfully",
                 getGigsWithId(querySnapshot)
             )
+            repositoryCallbacks.removeListener()
         } else
             error?.message?.let {
                 observableError.value = it
@@ -118,6 +122,10 @@ class GigHistoryViewModel(private val repositoryCallbacks: DataCallbacks) :
         }
     }
 
+    override fun docChange(docChangeType: DocumentChange.Type, change: DocumentChange) {
+        TODO("Not yet implemented")
+    }
+
 
     fun getGigs(pastGigs: Boolean, resetPageCount: Boolean) {
         showProgress(true)
@@ -133,6 +141,7 @@ class GigHistoryViewModel(private val repositoryCallbacks: DataCallbacks) :
         } else {
             repositoryCallbacks.getUpComingGigs(this, lastVisibleItem, limit)
         }
+        repositoryCallbacks.removeListener()
 
 
     }
