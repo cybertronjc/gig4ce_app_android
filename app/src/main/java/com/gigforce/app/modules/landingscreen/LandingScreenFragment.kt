@@ -646,7 +646,7 @@ class LandingScreenFragment : BaseFragment() {
             TitleSubtitleModel(
                 "Driver",
                 "Welcome to Gigforce! Let's talk about what's a gig and how do you start working as a giger at Gigforce.",
-                "https://firebasestorage.googleapis.com/v0/b/gigforce-dev.appspot.com/o/temp_files%2Fdriver_img.jpg?alt=media&token=8ece93c0-b0cb-4824-b839-93413d8952c1"
+                "https://firebasestorage.googleapis.com/v0/b/gigforce-dev.appspot.com/o/temp_files%2Fdriver_img.jpg?alt=media&token=68412376-59c8-4598-81d6-9630724afff6"
             )
         )
         datalist.add(
