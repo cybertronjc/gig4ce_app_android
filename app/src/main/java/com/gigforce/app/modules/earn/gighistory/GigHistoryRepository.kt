@@ -12,8 +12,9 @@ import com.google.firebase.firestore.Query
 class GigHistoryRepository : BaseFirestoreDBRepository(), DataCallbacks {
 
     var listener: ListenerRegistration? = null
+    var onGoingListener: ListenerRegistration? = null
     override fun getOnGoingGigs(responseCallbacks: DataCallbacks.ResponseCallbacks) {
-        listener = getCollectionReference().whereEqualTo("gigerId", getUID())
+        onGoingListener = getCollectionReference().whereEqualTo("gigerId", getUID())
             .whereGreaterThanOrEqualTo("startDateTime", getStartOfDay())
             .whereLessThanOrEqualTo("startDateTime", getEndOfDay())
             .addSnapshotListener { querySnapshot, firebaseFirestoreException ->
@@ -70,6 +71,11 @@ class GigHistoryRepository : BaseFirestoreDBRepository(), DataCallbacks {
 
     override fun removeListener() {
         listener?.remove()
+
+    }
+
+    override fun removeOnGoingGigsListener() {
+        onGoingListener?.remove()
     }
 
     override fun observeDocumentChanges(responseCallbacks: DataCallbacks.ResponseCallbacks) {
@@ -80,7 +86,6 @@ class GigHistoryRepository : BaseFirestoreDBRepository(), DataCallbacks {
                 }
                 for (dc in snapshots!!.documentChanges) {
                     when (dc.type) {
-
                         DocumentChange.Type.ADDED -> {
                             responseCallbacks.docChange(DocumentChange.Type.ADDED, dc)
                         }

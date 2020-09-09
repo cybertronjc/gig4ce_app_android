@@ -19,7 +19,9 @@ interface DataCallbacks {
         lastVisible: DocumentSnapshot?,
         limit: Long
     )
+
     fun removeListener()
+    fun removeOnGoingGigsListener()
     fun observeDocumentChanges(responseCallbacks: ResponseCallbacks)
     fun checkGigsCount(responseCallbacks: ResponseCallbacks)
 

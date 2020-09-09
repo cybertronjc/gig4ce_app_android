@@ -15,8 +15,8 @@ import kotlinx.android.synthetic.main.layout_rv_gig_details_gig_history.view.*
 import java.text.SimpleDateFormat
 
 class AdapterOnGoingGigs : RecyclerView.Adapter<AdapterOnGoingGigs.ViewHolder>() {
-    private lateinit var callbacks: AdapterOnGoingGigCallbacks
-    private var onGoingGigs: List<Gig>? = null
+    private var callbacks: AdapterOnGoingGigCallbacks? = null
+    private var onGoingGigs: MutableList<Gig>? = ArrayList<Gig>()
     private val timeFormatter = SimpleDateFormat("hh.mm aa")
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -68,7 +68,7 @@ class AdapterOnGoingGigs : RecyclerView.Adapter<AdapterOnGoingGigs.ViewHolder>()
         setBrandLogo(gig ?: Gig(), holder)
         PushDownAnim.setPushDownAnimTo(holder.itemView)
             .setOnClickListener(View.OnClickListener {
-                callbacks.openGigDetails(onGoingGigs!![holder.adapterPosition])
+                callbacks?.openGigDetails(onGoingGigs!![holder.adapterPosition])
             })
 
 
@@ -79,7 +79,8 @@ class AdapterOnGoingGigs : RecyclerView.Adapter<AdapterOnGoingGigs.ViewHolder>()
     }
 
     fun addData(onGoingGigs: List<Gig>?) {
-        this.onGoingGigs = onGoingGigs;
+        this.onGoingGigs?.clear()
+        this.onGoingGigs?.addAll(onGoingGigs!!)
         notifyDataSetChanged()
     }
 
@@ -127,6 +128,16 @@ class AdapterOnGoingGigs : RecyclerView.Adapter<AdapterOnGoingGigs.ViewHolder>()
 
             viewHolderGigDetails.itemView.iv_brand_rv_gig_hist.setImageDrawable(drawable)
         }
+    }
+
+    fun removeItem(itemToBeRemoved: Int) {
+        onGoingGigs?.removeAt(itemToBeRemoved)
+        notifyItemRemoved(itemToBeRemoved)
+
+    }
+
+    fun itemAdded(itemToBeRemoved: Int) {
+        notifyItemInserted(itemToBeRemoved)
     }
 
 }

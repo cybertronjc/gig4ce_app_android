@@ -200,4 +200,10 @@ data class Gig(
         return minCheckInTime.isAfter(currentTime)
     }
 
+    override fun equals(other: Any?): Boolean {
+        if (other == null) return false
+        val obj = other as? Gig
+        return (obj?.gigId == gigId)
+
+    }
 }
