@@ -54,7 +54,7 @@ class ConfigRepository : BaseFirestoreDBRepository {
     }
 
     fun getForceUpdateCurrentVersion(latestAPPUpdateListener: LatestAPPUpdateListener){
-        var data = getCollectionReference().whereEqualTo("app_update_config", true).get()
+        getCollectionReference().whereEqualTo("app_update_config", true).get()
                 .addOnSuccessListener {
                     runCatching {
                         val appUpdates = it.toObjects(LatestAPPUpdateModel::class.java)
@@ -75,7 +75,7 @@ class ConfigRepository : BaseFirestoreDBRepository {
     }
 
     class LatestAPPUpdateModel{
-        var is_active = false
+        var active :Boolean= false
         lateinit var force_update_current_version : String
         var force_update_required:Boolean = false
     }
