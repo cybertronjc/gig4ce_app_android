@@ -174,9 +174,11 @@ class AdapterGigHistory : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                         val hours = (durationCalculated / (1000 * 60 * 60))
                         val mins = (durationCalculated / (1000 * 60)).toInt() % 60
                         holder.itemView.tv_time_rv_gig_hist.text =
-                            "${hours}${viewHolderGigDetails.itemView.context.getString(R.string.hours)} : ${mins}${viewHolderGigDetails.itemView.context.getString(
-                                R.string.mins
-                            )}"
+                            "${hours}${viewHolderGigDetails.itemView.context.getString(R.string.hours)} : ${mins}${
+                                viewHolderGigDetails.itemView.context.getString(
+                                    R.string.mins
+                                )
+                            }"
                     }
                 }
 
@@ -185,9 +187,11 @@ class AdapterGigHistory : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                         callbacks?.openGigDetails(scheduledGigs!![holder.adapterPosition - 2])
                     })
                 holder.itemView.tv_timing_rv_gig_hist.text = if (gig.endDateTime != null)
-                    "${timeFormatter.format(gig.startDateTime!!.toDate())} - ${timeFormatter.format(
-                        gig.endDateTime!!.toDate()
-                    )}"
+                    "${timeFormatter.format(gig.startDateTime!!.toDate())} - ${
+                        timeFormatter.format(
+                            gig.endDateTime!!.toDate()
+                        )
+                    }"
                 else
                     "${timeFormatter.format(gig.startDateTime!!.toDate())} - "
 
@@ -365,8 +369,29 @@ class AdapterGigHistory : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                     if (callbacks?.getEventState() == EVENT_PAST) {
                         val itemToBeRemoved = scheduledGigs?.indexOf(it.gig!!)
                         if (itemToBeRemoved != null && itemToBeRemoved == -1) {
-                            scheduledGigs?.add(0, it.gig!!)
-                            notifyItemInserted(2)
+                            val date1 =
+                                convertToLocalDateViaInstant(it.gig?.startDateTime?.toDate()!!)
+                            var noBeforeDateFound = true
+                            var index = -1;
+                            for (i in 0 until scheduledGigs?.size!!) {
+                                val date2 =
+                                    convertToLocalDateViaInstant(scheduledGigs!![i].startDateTime?.toDate()!!)
+                                if (date1?.isEqual(date2)!! || date1.isBefore(date2)) {
+                                    index = i
+                                    noBeforeDateFound = false
+                                    break
+                                }
+                            }
+                            if (noBeforeDateFound) {
+
+                                scheduledGigs?.add(
+                                    0, it.gig!!
+                                )
+                                notifyItemInserted(2)
+                            } else {
+                                scheduledGigs?.add(index, it.gig!!)
+                                notifyItemInserted(index + 2)
+                            }
 
                         }
                     }
@@ -379,8 +404,32 @@ class AdapterGigHistory : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                     if (callbacks?.getEventState() == EVENT_UPCOMING) {
                         val itemToBeRemoved = scheduledGigs?.indexOf(it.gig!!)
                         if (itemToBeRemoved != null && itemToBeRemoved == -1) {
-                            scheduledGigs?.add(0, it.gig!!)
-                            notifyItemInserted(2)
+
+                            val date1 =
+                                convertToLocalDateViaInstant(it.gig?.startDateTime?.toDate()!!)
+                            var noAfterDateFound = true
+                            var index = -1;
+                            for (i in 0 until scheduledGigs!!.size) {
+                                val date2 =
+                                    convertToLocalDateViaInstant(scheduledGigs!![i].startDateTime?.toDate()!!)
+                                if (date1?.isEqual(date2)!! || date1.isBefore(date2)) {
+                                    index = i
+                                    noAfterDateFound = false;
+                                    break
+                                }
+                            }
+                            if (noAfterDateFound) {
+                                scheduledGigs?.size?.minus(1)?.let { it1 ->
+                                    scheduledGigs?.add(
+                                        it1, it.gig!!
+                                    )
+                                    notifyItemInserted(it1 + 2)
+                                }
+                            } else {
+                                scheduledGigs?.add(index, it.gig!!)
+                                notifyItemInserted(index + 2)
+                            }
+
 
                         }
                     }
@@ -393,8 +442,8 @@ class AdapterGigHistory : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                     if (onGoingGigs != null && !onGoingGigs?.isEmpty()!!) {
                         val itemToBeRemoved = onGoingGigs?.indexOf(it.gig!!)
                         if (itemToBeRemoved != null && itemToBeRemoved == -1) {
-                            onGoingGigs?.add(0, it.gig!!)
-                            adapter?.itemAdded(0)
+
+                            adapter?.itemAdded(0,it.gig!!)
 
 
                         }
@@ -488,8 +537,8 @@ class AdapterGigHistory : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                     if (onGoingGigs != null && !onGoingGigs?.isEmpty()!!) {
                         val itemToBeRemoved = onGoingGigs?.indexOf(it.gig!!)
                         if (itemToBeRemoved != null && itemToBeRemoved != -1) {
-                            onGoingGigs!![itemToBeRemoved] = it.gig!!
-                            adapter?.notifyItemChanged(itemToBeRemoved)
+                            adapter?.itemModified(itemToBeRemoved, it.gig!!)
+
 
                         }
                     }

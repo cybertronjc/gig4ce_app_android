@@ -136,8 +136,13 @@ class AdapterOnGoingGigs : RecyclerView.Adapter<AdapterOnGoingGigs.ViewHolder>()
 
     }
 
-    fun itemAdded(itemToBeRemoved: Int) {
+    fun itemAdded(itemToBeRemoved: Int, gig: Gig) {
+        onGoingGigs?.add(itemToBeRemoved, gig)
         notifyItemInserted(itemToBeRemoved)
+    }
+    fun itemModified(index: Int, gig: Gig) {
+        onGoingGigs!![index]=gig
+        notifyItemChanged(index)
     }
 
 }
