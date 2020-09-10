@@ -61,11 +61,11 @@ class OnboardingLoaderFragment : BaseFragment() {
                     if (profileAndGig.profile.isonboardingdone) {
                         saveOnBoardingCompleted()
 
-                        if (profileAndGig.hasGigs) {
-                            navigateToCalendarGomeScreen()
-                        } else {
+//                        if (profileAndGig.hasGigs) {
+//                            navigateToCalendarGomeScreen()
+//                        } else {
                             navigateToLandingHomeScreen()
-                        }
+//                        }
                     } else {
                         navigateToMainOnboarding()
                     }

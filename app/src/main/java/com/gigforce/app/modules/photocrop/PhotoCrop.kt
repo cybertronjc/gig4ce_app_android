@@ -242,7 +242,7 @@ class PhotoCrop : AppCompatActivity() {
                 var baos = ByteArrayOutputStream()
                 if (imageUriResultCrop == null) {
                     var bitmap = data.data as Bitmap
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos)
                 }
                 var fvImage = imageUriResultCrop?.let { FirebaseVisionImage.fromFilePath(this, it) }
 
@@ -286,7 +286,7 @@ class PhotoCrop : AppCompatActivity() {
      */
     open fun getImageUriFromBitmap(context: Context, bitmap: Bitmap): Uri {
         val bytes = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, bytes)
         val path =
             MediaStore.Images.Media.insertImage(context.contentResolver, bitmap, System.currentTimeMillis().toString(), null)
 
@@ -307,7 +307,7 @@ class PhotoCrop : AppCompatActivity() {
         )
         resultIntent.putExtra("filename", imageFileName + EXTENSION)
         uCrop.withAspectRatio(cropX, cropY)
-        uCrop.withMaxResultSize(450, 450)
+        uCrop.withMaxResultSize(1920, 1080)
         uCrop.withOptions(getCropOptions())
         uCrop.start(this as AppCompatActivity)
     }
@@ -317,8 +317,9 @@ class PhotoCrop : AppCompatActivity() {
      */
     private fun getCropOptions(): UCrop.Options {
         val options: UCrop.Options = UCrop.Options()
-        options.setCompressionQuality(70)
-        options.setCompressionFormat(Bitmap.CompressFormat.JPEG)
+        options.setCompressionQuality(100)
+        options.setCompressionFormat(Bitmap.CompressFormat.PNG)
+        options.setMaxBitmapSize(1000)
         options.setHideBottomControls((false))
         options.setFreeStyleCropEnabled(false)
         options.setStatusBarColor(resources.getColor(R.color.topBarDark))

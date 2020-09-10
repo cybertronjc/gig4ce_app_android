@@ -7,11 +7,9 @@ import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Handler
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
-import android.widget.PopupMenu
 import android.widget.ScrollView
 import androidx.core.os.bundleOf
 import androidx.lifecycle.Lifecycle
@@ -23,7 +21,10 @@ import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.modules.assessment.models.AssementQuestionsReponse
 import com.gigforce.app.modules.profile.ProfileViewModel
-import com.gigforce.app.utils.*
+import com.gigforce.app.utils.GlideApp
+import com.gigforce.app.utils.ItemOffsetDecoration
+import com.gigforce.app.utils.StringConstants
+import com.gigforce.app.utils.ViewModelProviderFactory
 import com.gigforce.app.utils.widgets.CustomScrollView
 import kotlinx.android.synthetic.main.fragment_assessment.*
 import kotlinx.android.synthetic.main.toolbar.*
@@ -34,11 +35,11 @@ import java.text.SimpleDateFormat
  * @author Rohit Sharma
  * date - 19/07/2020
  */
-class AssessmentFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
+class AssessmentFragment : BaseFragment(),
     AssessmentDialog.AssessmentDialogCallbacks,
     AssessmentAnswersAdapter.AssessAdapterCallbacks {
 
-    private lateinit var mLessonId : String
+    private lateinit var mLessonId: String
 
     private var pushfinalEvent: Boolean = false
     private var countDownTimer: CountDownTimer? = null
@@ -75,17 +76,17 @@ class AssessmentFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
 
     private fun getDataFromIntents(savedInstanceState: Bundle?) {
         savedInstanceState?.let {
-            mLessonId = it.getString(INTENT_LESSON_ID)?: return@let
+            mLessonId = it.getString(INTENT_LESSON_ID) ?: return@let
         }
 
         arguments?.let {
-            mLessonId = it.getString(INTENT_LESSON_ID)?: return@let
+            mLessonId = it.getString(INTENT_LESSON_ID) ?: return@let
         }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putString(INTENT_LESSON_ID,mLessonId)
+        outState.putString(INTENT_LESSON_ID, mLessonId)
     }
 
     private fun initObservers() {
@@ -186,7 +187,7 @@ class AssessmentFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
     }
 
     private fun initTb() {
-        iv_options_menu_tb.visibility = View.VISIBLE
+//        iv_options_menu_tb.visibility = View.VISIBLE
         tv_title_toolbar.text = getString(R.string.assessment)
     }
 
@@ -236,9 +237,9 @@ class AssessmentFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
     }
 
     private fun initClicks() {
-        iv_options_menu_tb.setOnClickListener {
-            openPopupMenu(it, R.menu.menu_assessment, this, activity)
-        }
+//        iv_options_menu_tb.setOnClickListener {
+//            openPopupMenu(it, R.menu.menu_assessment, this, activity)
+//        }
         iv_back.setOnClickListener {
             popBackState()
         }
@@ -368,10 +369,6 @@ class AssessmentFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
         dialog.show(parentFragmentManager, AssessmentDialog::class.java.name)
     }
 
-    override fun onMenuItemClick(item: MenuItem?): Boolean {
-
-        return true
-    }
 
     override fun assessmentState(state: Int) {
         viewModelAssessmentFragment.switchAsPerState(state)
@@ -392,11 +389,18 @@ class AssessmentFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
         val iterate = optionsArr?.listIterator()
         while (iterate?.hasNext() == true) {
             val obj = iterate.next()
-//            if (obj.selectedAnswer != true && obj.is_answer != true) {
-//                iterate.remove()
-//            } else {
+            if (isCorrect) {
+                if (obj.selectedAnswer != true) {
+                    iterate.remove()
+                }
+            } else {
+                if (obj.selectedAnswer != true && obj.is_answer != true) {
+                    iterate.remove()
+                }
+            }
+
             obj.clickStatus = false
-//            }
+
 
         }
         adapter?.addData(
@@ -455,7 +459,7 @@ class AssessmentFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
         return super.onBackPressed()
     }
 
-    companion object{
+    companion object {
         const val INTENT_LESSON_ID = "lesson_id"
     }
 
