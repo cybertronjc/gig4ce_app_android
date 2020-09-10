@@ -317,9 +317,9 @@ class PhotoCrop : AppCompatActivity() {
      */
     private fun getCropOptions(): UCrop.Options {
         val options: UCrop.Options = UCrop.Options()
-        options.setCompressionQuality(100)
+        options.setCompressionQuality(70)
         options.setCompressionFormat(Bitmap.CompressFormat.PNG)
-        options.setMaxBitmapSize(1000)
+//        options.setMaxBitmapSize(1000)
         options.setHideBottomControls((false))
         options.setFreeStyleCropEnabled(false)
         options.setStatusBarColor(resources.getColor(R.color.topBarDark))
