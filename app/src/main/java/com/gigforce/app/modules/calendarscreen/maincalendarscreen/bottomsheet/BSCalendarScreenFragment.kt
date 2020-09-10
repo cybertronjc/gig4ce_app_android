@@ -51,10 +51,8 @@ import com.gigforce.app.modules.learning.LearningViewModel
 import com.gigforce.app.modules.learning.MainLearningViewModel
 import com.gigforce.app.modules.learning.models.Course
 import com.gigforce.app.modules.learning.models.CourseContent
-import com.gigforce.app.utils.DateHelper
-import com.gigforce.app.utils.GlideApp
-import com.gigforce.app.utils.Lce
-import com.gigforce.app.utils.TextDrawable
+import com.gigforce.app.utils.*
+import com.google.firebase.crashlytics.internal.model.CrashlyticsReport
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.*
 import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.learning_learning_error
@@ -597,12 +595,11 @@ class BSCalendarScreenFragment : BaseFragment() {
     private fun initializeFeaturesBottomSheet() {
         var datalist: ArrayList<FeatureModel> = ArrayList<FeatureModel>()
         datalist.add(FeatureModel("My Gig", R.drawable.mygig, R.id.gig_history_fragment))
-        datalist.add(FeatureModel("Wallet", R.drawable.wallet, -1/*R.id.walletBalancePage*/))
+        datalist.add(FeatureModel("Wallet", R.drawable.wallet, R.id.walletBalancePage))
         datalist.add(FeatureModel("Profile", R.drawable.profile, R.id.profileFragment))
-        datalist.add(FeatureModel("Learning", R.drawable.learning, -1/*R.id.mainLearningFragment*/))
-
+        datalist.add(FeatureModel("Learning", R.drawable.learning, R.id.mainLearningFragment))
         datalist.add(FeatureModel("Settings", R.drawable.settings, R.id.settingFragment))
-        datalist.add(FeatureModel("Chat", R.drawable.chat, -1/*R.id.contactScreenFragment*/))
+        datalist.add(FeatureModel("Chat", R.drawable.chat, R.id.contactScreenFragment))
         datalist.add(FeatureModel("Home Screen", R.drawable.ic_home_black, R.id.landinghomefragment))
         datalist.add(FeatureModel("Explore", R.drawable.ic_landinghome_search, -1))
         datalist.add(FeatureModel("Verification", R.drawable.ic_shield_black, R.id.gigerVerificationFragment))
@@ -613,8 +610,15 @@ class BSCalendarScreenFragment : BaseFragment() {
                 activity?.applicationContext,
                 PFRecyclerViewAdapter.OnViewHolderClick<FeatureModel?> { view, position, item ->
                     if (item?.navigationID != -1) {
-                        navigate(item?.navigationID!!)
+                        if(item?.title?.equals("Wallet")?:false || item?.title?.equals("Chat")?:false){
+                            if(AppConstants.UNLOCK_FEATURE){
+                                navigate(item?.navigationID!!)
+                            }else showToast("This page are inactive. We’ll activate it in a few weeks")
+                        }else
+                            item?.navigationID?.let { navigate(it) }
+
                     } else {
+
                         showToast("This page are inactive. We’ll activate it in a few weeks")
                     }
                 },

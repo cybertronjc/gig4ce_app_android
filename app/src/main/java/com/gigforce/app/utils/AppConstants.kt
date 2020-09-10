@@ -1,7 +1,7 @@
 package com.gigforce.app.utils
 
 object AppConstants {
-
+    const val UNLOCK_FEATURE = false
     const val ON_BOARDING_COMPLETED = "on_boarding_completed"
     // shared preferences keys
     const val APP_LANGUAGE_CODE = "app_lang_code";
