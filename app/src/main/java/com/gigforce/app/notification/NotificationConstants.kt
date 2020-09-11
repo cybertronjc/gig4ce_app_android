@@ -2,8 +2,9 @@ package com.gigforce.app.notification
 
 object NotificationConstants {
 
-    object CLICK_ACTIONS {
+    const val INTENT_EXTRA_CLICK_ACTION = "click_action"
 
+    object CLICK_ACTIONS {
         const val OPEN_GIG_ATTENDANCE_PAGE = "com.gigforce.app.gig.open_gig_attendance_page"
     }
 

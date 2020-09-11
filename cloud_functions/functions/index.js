@@ -1,55 +1,87 @@
 const functions = require('firebase-functions');
 const firebaseAdmin = require('firebase-admin');
 
-const SCREEN_LANDING = "landing"
-const SCREEN_CALENDAR_HOME_SCREEN = "calendar_home_screen"
-
 firebaseAdmin.initializeApp()
 const db = firebaseAdmin.firestore()
 
-const gigCollectionRef = db
-    .collection('Gigs')
+exports.sendNotificationWithPendingVerfication = functions.region('asia-south1').https.onCall((data, context) => {
+    console.log("sendNotificationWithPendingVerfication : Invoked")
 
-exports.getLandingScreenRedirectionConfig = functions.region('asia-south1').https.onCall((data, context) => {
-    console.log("getMainScreenRedirectionConfig : Invoked")
+    const verificationCollectionRef = db.collection('Verification')
 
-    // Checking that the user is authenticated.
-    if (!context.auth) {
-
-        console.log("getMainScreenRedirectionConfig : auth Error")
-
-        // Throwing an HttpsError so that the client gets the error details.
-        throw new functions.https.HttpsError('failed-precondition', 'The function must be called ' +
-            'while authenticated.');
-    }
-
-    var dat = {
-        helloWorld: "firstNumber",
-        secondNumber: "secondNumber",
-        operator: '+',
-        operationResult: "firstNumber + secondNumber"
-    };
-
-    const uid = context.auth.uid;
-    console.log("getMainScreenRedirectionConfig : UID " + uid)
-
-
-    gigCollectionRef.where('gigerId', '==', uid)
+    verificationCollectionRef
         .get()
         .then(docList => {
-            console.log("Sending Back", dat)
+            console.log("sendNotificationWithPendingVerfication : got ${docList.size} verification entries")
 
             if (docList.empty) {
-                return dat;
+
+                console.log("sendNotificationWithPendingVerfication : got no entries from verification collection")
             } else {
-                return dat;
+                const userWhoHaveUploadedverificationData = docList
+                    .filter(checkVerificationDocumentsUploaded)
+                    .map(doc => {
+                        doc.id
+                    })
+                compareAndSendUploadDocumentNotification(userWhoHaveUploadedverificationData)
             }
         })
         .catch(err => {
-            console.log("err while getting getMainScreenRedirectionConfig", err)
-
-            console.log("Sending Back", dat)
-            return dat;
+            console.log("err while getting getting verification entries", err)
         })
 
 });
+
+function checkVerificationDocumentsUploaded(verificationDocument) {
+    const aadharUploaded = verificationDocument.aadhar_card != null
+        && verificationDocument.aadhar_card.frontImage != null
+
+    const bankDetailsUploaded = verificationDocument.bank_details != null
+        && verificationDocument.bank_details.frontImage != null
+
+    const drivingLicenseDetailsUploaded = verificationDocument.driving_license != null
+        && verificationDocument.driving_license.frontImage != null
+
+    const panCardDetailsUploaded = verificationDocument.pan_card != null
+        && verificationDocument.pan_card.panCardImagePath != null
+
+    const selfieUploaded = verificationDocument.selfie_video != null
+        && verificationDocument.selfie_video.videoPath != null
+
+    return selfieUploaded && panCardDetailsUploaded && bankDetailsUploaded && (aadharUploaded || drivingLicenseDetailsUploaded)
+}
+
+function compareAndSendUploadDocumentNotification(userWhoHaveUploadedverificationData) {
+    firebaseAdmin
+        .auth()
+        .listUsers()
+        .then(users => {
+
+            var uidOfUsersWithPendingDocumentUpload = users.map(user => {
+                user.uid
+            }).filter(uid => {
+                return !userWhoHaveUploadedverificationData.includes(uid)
+            })
+
+            fetchFbTokensAndSendNotifcation(uidOfUsersWithPendingDocumentUpload)
+        })
+        .catch(err => {
+            console.log("err while getting users", err)
+        })
+}
+
+function fetchFbTokensAndSendNotifcation(userWhoHaveUploadedverificationData) {
+
+    const firebaseTokensRef = db.collection('firebase_tokens')
+    firebaseTokensRef
+        .where('uid', 'in', userWhoHaveUploadedverificationData)
+        .get()
+        .then(users => {
+
+
+
+        })
+        .catch(err => {
+            console.log("err while fetching firebase tokens", err)
+        })
+}

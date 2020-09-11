@@ -13,13 +13,16 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import com.clevertap.android.sdk.CleverTapAPI
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.popAllBackStates
 import com.gigforce.app.modules.landingscreen.LandingScreenFragment
 import com.gigforce.app.modules.onboardingmain.OnboardingMainFragment
+import com.gigforce.app.notification.NotificationConstants
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.iid.FirebaseInstanceId
+import kotlinx.android.synthetic.main.activity_main.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -33,15 +36,28 @@ class MainActivity : AppCompatActivity() {
             && intent.action != null
             && intent.action.equals(Intent.ACTION_MAIN)
         ) {
-            finish();
-            return;
+            finish()
+            return
         }
         super.onCreate(savedInstanceState)
         this.setContentView(R.layout.activity_main)
+
         navController = this.findNavController(R.id.nav_fragment)
+        processNotificationIf(intent)
         checkForAllAuthentication()
         GetFirebaseInstanceID()
         CleverTapAPI.getDefaultInstance(applicationContext)?.pushEvent("MAIN_ACTIVITY_CREATED")
+    }
+
+    private fun processNotificationIf(intent: Intent?) {
+        when (intent?.getStringExtra(NotificationConstants.INTENT_EXTRA_CLICK_ACTION)) {
+            NotificationConstants.CLICK_ACTIONS.OPEN_GIG_ATTENDANCE_PAGE -> {
+                nav_fragment.findNavController().navigate(R.id.gigAttendancePageFragment,intent.extras)
+                Log.d("EXXX", "attendanceFrag")
+            }
+            else -> {
+            }
+        }
     }
 
     private fun GetFirebaseInstanceID(){
