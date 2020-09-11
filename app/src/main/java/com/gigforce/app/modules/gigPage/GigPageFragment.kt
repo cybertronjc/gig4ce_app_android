@@ -415,8 +415,6 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
     }
 
     fun updateAttendanceOnDBCall(location: Location?) {
-        val geocoder = Geocoder(requireContext())
-
         /*
                 A?.B?.C?.D   return null if anything in between is null
 
@@ -429,8 +427,14 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
         val latitude : Double = location ?.latitude ?: 0.0
         val longitude : Double = location ?.longitude ?: 0.0
 
-        val addressArr = geocoder.getFromLocation(latitude, longitude, 1)
-        val locationAddress = addressArr?.get(0) ?.getAddressLine(0) ?: ""
+        var locationAddress = ""
+        try {
+            val geocoder = Geocoder(requireContext())
+            val addressArr = geocoder.getFromLocation(latitude, longitude, 1)
+            locationAddress = addressArr?.get(0)?.getAddressLine(0) ?: ""
+        } catch (e: Exception) {
+
+        }
 
         gig ?. let{
 
