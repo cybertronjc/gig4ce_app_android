@@ -10,6 +10,7 @@ class SplashScreen : AppCompatActivity() {
     val TAG:String = "activity/main"
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         if (!isTaskRoot
             && intent.hasCategory(Intent.CATEGORY_LAUNCHER)
             && intent.action != null
@@ -18,7 +19,7 @@ class SplashScreen : AppCompatActivity() {
             finish();
             return;
         }
-        super.onCreate(savedInstanceState)
+
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
         finish()
