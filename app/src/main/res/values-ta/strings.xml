@@ -770,5 +770,9 @@
     <string name="looking_for_dynamic_working_hours">\Looking for flexible working hours? Join me at Gigforce :</string>
     <string name="plus_see_more">+ see more</string>
     <string name="plus_see_less">+ see less</string>
+    <string name="you_helped">You helped</string>
+    <string name="and">and</string>
+    <string name="more_comma">more,</string>
+    <string name="find_gigs_on">find gigs on Gigforce.</string>
 
 </resources>

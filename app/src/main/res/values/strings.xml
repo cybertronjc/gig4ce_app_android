@@ -923,6 +923,10 @@
     <string name="plus_see_less">+ see less</string>
     <string name="new_version_available">New Version Available</string>
     <string name="new_version_available_detail">Please, update app to new version to continue reposting</string>
+    <string name="you_helped">You helped</string>
+    <string name="and">and</string>
+    <string name="more_comma">more,</string>
+    <string name="find_gigs_on">find gigs on Gigforce.</string>
 
 
 </resources>

@@ -9,6 +9,7 @@ import com.gigforce.app.modules.profile.models.ProfileData
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.ListenerRegistration
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -134,17 +135,38 @@ class OnboardingMainViewModel : ViewModel() {
 
     fun setOnboardingCompleted(invite: String?) {
         if (!invite.isNullOrEmpty()) {
-            if (userProfileData.value?.invited_by == null) {
-                profileFirebaseRepository.getCollectionReference()
-                    .document(userProfileData.value?.id!!)
-                    .update("invited_by", arrayListOf(Invites(invite, Date())))
+            var listener: ListenerRegistration? = null
+            listener = profileFirebaseRepository.getCollectionReference()
+                .document(invite).addSnapshotListener { snapshot, err ->
+                    listener?.remove()
+                    run {
+                        val obj = snapshot?.toObject(ProfileData::class.java) ?: return@run
+                        if (obj?.invited == null) {
+                            profileFirebaseRepository.getCollectionReference()
+                                .document(invite)
+                                .update(
+                                    "invited",
+                                    arrayListOf(Invites(profileFirebaseRepository.getUID(), Date()))
+                                )
 
-            } else {
-                profileFirebaseRepository.getCollectionReference()
-                    .document(userProfileData.value?.id!!)
-                    .update("invited_by", FieldValue.arrayUnion(Invites(invite, Date())))
+                        } else {
+                            profileFirebaseRepository.getCollectionReference()
+                                .document(invite)
+                                .update(
+                                    "invited",
+                                    FieldValue.arrayUnion(
+                                        Invites(
+                                            profileFirebaseRepository.getUID(),
+                                            Date()
+                                        )
+                                    )
+                                )
 
-            }
+                        }
+
+                    }
+                }
+
 
         }
 
