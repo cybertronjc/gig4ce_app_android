@@ -97,6 +97,11 @@ class GigAttendancePageFragment : BaseFragment(), PopupMenu.OnMenuItemClickListe
         listener()
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString(INTENT_EXTRA_GIG_ID, gigId)
+    }
+
     var userGpsDialogActionCount = 0
 
     private fun listener() {
