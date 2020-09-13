@@ -25,6 +25,9 @@ import com.gigforce.app.utils.ViewModelProviderFactory
 import com.gigforce.app.utils.getViewWidth
 import com.google.firebase.dynamiclinks.DynamicLink
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
+import com.google.firebase.dynamiclinks.ktx.dynamicLinks
+import com.google.firebase.dynamiclinks.ktx.shortLinkAsync
+import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.StorageReference
 import kotlinx.android.synthetic.main.fragment_referrals.*
 import java.io.File
@@ -41,9 +44,9 @@ class ReferralsFragment : BaseFragment() {
     }
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         return inflateView(R.layout.fragment_referrals, inflater, container)
 
@@ -61,30 +64,69 @@ class ReferralsFragment : BaseFragment() {
         profileViewModel.userProfileData.observe(viewLifecycleOwner, Observer { profileData ->
             run {
                 PushDownAnim.setPushDownAnimTo(iv_copy_link_referrals_frag)
-                        .setOnClickListener(View.OnClickListener {
-                            val dynamicLinkUri =
-                                    buildDeepLink(Uri.parse("http://www.gig4ce.com/?invite=" + profileData?.id))
+                    .setOnClickListener(View.OnClickListener {
+
+                        Firebase.dynamicLinks.shortLinkAsync {
+                            longLink =
+                                Uri.parse(buildDeepLink(Uri.parse("http://www.gig4ce.com/?invite=" + profileData?.id)).toString())
+                        }.addOnSuccessListener { result ->
+                            // Short link created
+                            val shortLink = result.shortLink
                             showToast(getString(R.string.link_copied));
                             val clipboard: ClipboardManager? =
-                                    requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager?
+                                requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager?
                             val clip = ClipData.newPlainText(
-                                    "url",
-                                    "${getString(R.string.looking_for_dynamic_working_hours)} $dynamicLinkUri"
+                                "url",
+                                "${getString(R.string.looking_for_dynamic_working_hours)} ${shortLink.toString()}"
                             )
                             clipboard?.setPrimaryClip(clip)
-                        })
+                        }.addOnFailureListener {
+                            // Error
+                            // ...
+                            showToast(it.message!!);
+
+                        }
+
+                    })
                 PushDownAnim.setPushDownAnimTo(iv_whatsapp_referrals_frag)
-                        .setOnClickListener(View.OnClickListener {
-                            val dynamicLinkUri =
-                                    buildDeepLink(Uri.parse("http://www.gig4ce.com/?invite=" + profileData.id))
-                            shareViaWhatsApp("${getString(R.string.looking_for_dynamic_working_hours)} $dynamicLinkUri")
-                        })
+                    .setOnClickListener(View.OnClickListener {
+
+                        Firebase.dynamicLinks.shortLinkAsync {
+                            longLink =
+                                Uri.parse(buildDeepLink(Uri.parse("http://www.gig4ce.com/?invite=" + profileData?.id)).toString())
+                        }.addOnSuccessListener { result ->
+                            // Short link created
+                            val shortLink = result.shortLink
+                            shareViaWhatsApp("${getString(R.string.looking_for_dynamic_working_hours)} ${shortLink.toString()}")
+
+
+                        }.addOnFailureListener {
+                            // Error
+                            // ...
+                            showToast(it.message!!);
+
+                        }
+
+                    })
                 PushDownAnim.setPushDownAnimTo(iv_more_referrals_frag)
-                        .setOnClickListener(View.OnClickListener {
-                            val dynamicLinkUri =
-                                    buildDeepLink(Uri.parse("http://www.gig4ce.com/?invite=" + profileData.id))
-                            shareToAnyApp(dynamicLinkUri.toString())
-                        })
+                    .setOnClickListener(View.OnClickListener {
+                        Firebase.dynamicLinks.shortLinkAsync {
+                            longLink =
+                                Uri.parse(buildDeepLink(Uri.parse("http://www.gig4ce.com/?invite=" + profileData?.id)).toString())
+                        }.addOnSuccessListener { result ->
+                            // Short link created
+                            val shortLink = result.shortLink
+                            shareToAnyApp(shortLink.toString())
+
+
+                        }.addOnFailureListener {
+                            // Error
+                            // ...
+                            showToast(it.message!!);
+
+                        }
+
+                    })
                 viewModel.observableReferralErr.observe(viewLifecycleOwner, Observer {
                     showToast(it!!)
                 })
@@ -97,7 +139,9 @@ class ReferralsFragment : BaseFragment() {
                         iv_one_referrals_frag.visibility = View.VISIBLE
                         displayImage(first.profileAvatarName, iv_one_referrals_frag)
                         tv_you_helped_referrals_frag.text = getString(R.string.you_helped) + " " +
-                                first.name + " " + getString(R.string.and) + " " + (it.size - 1) + " " + getString(R.string.more_comma) +
+                                first.name + " " + getString(R.string.and) + " " + (it.size - 1) + " " + getString(
+                            R.string.more_comma
+                        ) +
                                 " " + getString(R.string.find_gigs_on)
 
                     }
@@ -125,10 +169,10 @@ class ReferralsFragment : BaseFragment() {
         tv_more_items_referrals_frag.setStrokeColor("#ffffff");
         tv_more_items_referrals_frag.setSolidColor("#d72467");
         val params: RelativeLayout.LayoutParams =
-                RelativeLayout.LayoutParams(
-                        ViewGroup.LayoutParams.WRAP_CONTENT,
-                        ViewGroup.LayoutParams.WRAP_CONTENT
-                )
+            RelativeLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+            )
         params.setMargins(-(getViewWidth(tv_more_items_referrals_frag) / 2), 0, 0, 0)
         params.addRule(RelativeLayout.END_OF, R.id.iv_two_referrals_frag)
         params.addRule(RelativeLayout.ALIGN_BOTTOM, R.id.iv_two_referrals_frag)
@@ -137,13 +181,19 @@ class ReferralsFragment : BaseFragment() {
 
     fun buildDeepLink(deepLink: Uri): Uri {
         val dynamicLink = FirebaseDynamicLinks.getInstance().createDynamicLink()
-                .setLink(Uri.parse(deepLink.toString()))
-                .setDomainUriPrefix("https://gigforce.page.link/")
-                // Open links with this app on Android
-                .setAndroidParameters(DynamicLink.AndroidParameters.Builder().build())
-                // Open links with com.example.ios on iOS
-                .setIosParameters(DynamicLink.IosParameters.Builder("com.gigforce.ios").build())
-                .buildDynamicLink()
+            .setLink(Uri.parse(deepLink.toString()))
+            .setDomainUriPrefix("https://gigforce.page.link/")
+            // Open links with this app on Android
+            .setAndroidParameters(DynamicLink.AndroidParameters.Builder().build())
+            // Open links with com.example.ios on iOS
+            .setIosParameters(DynamicLink.IosParameters.Builder("com.gigforce.ios").build())
+            .setSocialMetaTagParameters(
+                DynamicLink.SocialMetaTagParameters.Builder()
+                    .setTitle("Gigforce")
+                    .setDescription("Description")
+                    .setImageUrl(Uri.parse("https://cdn.techmadeplain.com/img/2014/300x200.png"))
+                    .build()
+            ).buildDynamicLink()
 
         return dynamicLink.uri;
     }
@@ -153,7 +203,8 @@ class ReferralsFragment : BaseFragment() {
         whatsappIntent.type = "image/png"
         whatsappIntent.setPackage("com.whatsapp")
         whatsappIntent.putExtra(Intent.EXTRA_TEXT, url)
-        val bitmap = BitmapFactory.decodeResource(requireContext().resources, R.drawable.gig4ce_logo)
+        val bitmap =
+            BitmapFactory.decodeResource(requireContext().resources, R.drawable.bg_gig_type)
 
         //save bitmap to app cache folder
 
@@ -164,20 +215,22 @@ class ReferralsFragment : BaseFragment() {
         outPutStream.flush()
         outPutStream.close()
         outputFile.setReadable(true, false)
-        whatsappIntent.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(
+        whatsappIntent.putExtra(
+            Intent.EXTRA_STREAM, FileProvider.getUriForFile(
                 requireContext(),
                 requireContext().packageName + ".provider",
                 outputFile
-        ))
+            )
+        )
 
         try {
             requireActivity().startActivity(whatsappIntent)
         } catch (ex: ActivityNotFoundException) {
             startActivity(
-                    Intent(
-                            Intent.ACTION_VIEW,
-                            Uri.parse("http://play.google.com/store/apps/details?id=com.whatsapp")
-                    )
+                Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse("http://play.google.com/store/apps/details?id=com.whatsapp")
+                )
             )
         }
     }
@@ -187,12 +240,13 @@ class ReferralsFragment : BaseFragment() {
             val shareIntent = Intent(Intent.ACTION_SEND)
             shareIntent.type = "image/png"
             shareIntent.putExtra(
-                    Intent.EXTRA_SUBJECT,
-                    getString(R.string.looking_for_dynamic_working_hours)
+                Intent.EXTRA_SUBJECT,
+                getString(R.string.looking_for_dynamic_working_hours)
             )
             var shareMessage = url
             shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage)
-            val bitmap = BitmapFactory.decodeResource(requireContext().resources, R.drawable.gig4ce_logo)
+            val bitmap =
+                BitmapFactory.decodeResource(requireContext().resources, R.drawable.gig4ce_logo)
 
             //save bitmap to app cache folder
 
@@ -203,11 +257,13 @@ class ReferralsFragment : BaseFragment() {
             outPutStream.flush()
             outPutStream.close()
             outputFile.setReadable(true, false)
-            shareIntent.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(
+            shareIntent.putExtra(
+                Intent.EXTRA_STREAM, FileProvider.getUriForFile(
                     requireContext(),
                     requireContext().packageName + ".provider",
                     outputFile
-            ))
+                )
+            )
             startActivity(Intent.createChooser(shareIntent, "choose one"))
         } catch (e: Exception) {
             //e.toString();
@@ -217,16 +273,16 @@ class ReferralsFragment : BaseFragment() {
     private fun displayImage(profileImg: String, imageView: ImageView) {
         if (profileImg != "avatar.jpg" && profileImg != "") {
             val profilePicRef: StorageReference =
-                    PreferencesFragment.storage.reference.child("profile_pics").child(profileImg)
+                PreferencesFragment.storage.reference.child("profile_pics").child(profileImg)
             GlideApp.with(this.requireContext())
-                    .load(profilePicRef)
-                    .apply(RequestOptions().circleCrop())
-                    .into(imageView)
+                .load(profilePicRef)
+                .apply(RequestOptions().circleCrop())
+                .into(imageView)
         } else {
             GlideApp.with(this.requireContext())
-                    .load(R.drawable.avatar)
-                    .apply(RequestOptions().circleCrop())
-                    .into(imageView)
+                .load(R.drawable.avatar)
+                .apply(RequestOptions().circleCrop())
+                .into(imageView)
         }
     }
 }

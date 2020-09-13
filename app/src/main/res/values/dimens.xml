@@ -94,4 +94,5 @@
     <dimen name="size_54">54dp</dimen>
     <dimen name="size_56">56dp</dimen>
     <dimen name="size_34">34dp</dimen>
+    <dimen name="size_14_5" >15dp</dimen>
 </resources>
