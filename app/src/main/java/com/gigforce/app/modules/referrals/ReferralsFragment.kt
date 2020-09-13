@@ -140,7 +140,7 @@ class ReferralsFragment : BaseFragment() {
                         displayImage(first.profileAvatarName, iv_one_referrals_frag)
                         tv_you_helped_referrals_frag.text = getString(R.string.you_helped) + " " +
                                 first.name + " " + getString(R.string.and) + " " + (it.size - 1) + " " + getString(
-                            R.string.more_comma
+                            R.string.more
                         ) +
                                 " " + getString(R.string.find_gigs_on)
 
@@ -190,8 +190,8 @@ class ReferralsFragment : BaseFragment() {
             .setSocialMetaTagParameters(
                 DynamicLink.SocialMetaTagParameters.Builder()
                     .setTitle("Gigforce")
-                    .setDescription("Description")
-                    .setImageUrl(Uri.parse("https://cdn.techmadeplain.com/img/2014/300x200.png"))
+                    .setDescription("Flexible work and learning platform")
+                    .setImageUrl(Uri.parse("https://firebasestorage.googleapis.com/v0/b/gig4ce-app.appspot.com/o/app_assets%2Fgigforce.jpg?alt=media&token=f7d4463b-47e4-4b8e-9b55-207594656161"))
                     .build()
             ).buildDynamicLink()
 
