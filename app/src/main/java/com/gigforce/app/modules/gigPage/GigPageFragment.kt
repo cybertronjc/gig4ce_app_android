@@ -91,7 +91,6 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
     private var mGoogleMap: GoogleMap? = null
     private lateinit var gigId: String
     private var gig: Gig? = null
-    private var comingFromCheckInScreen = false
     var selfieImg: String = ""
 
     override fun onCreateView(
@@ -116,17 +115,21 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
     private fun getData(arguments: Bundle?, savedInstanceState: Bundle?) {
         savedInstanceState ?. let{
             gigId = it.getString(INTENT_EXTRA_GIG_ID)!!
-            comingFromCheckInScreen = it.getBoolean(INTENT_EXTRA_COMING_FROM_CHECK_IN)
         } ?: run{
             arguments?.let {
                 gigId = it.getString(INTENT_EXTRA_GIG_ID)!!
-                comingFromCheckInScreen = it.getBoolean(INTENT_EXTRA_COMING_FROM_CHECK_IN)
             }?: run {
                 FirebaseCrashlytics.getInstance().log("GigPageFragment getData method : savedInstanceState and arguments found null")
                 FirebaseCrashlytics.getInstance().setUserId(FirebaseAuth.getInstance().currentUser?.uid!!)
             }
         }
     }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString(INTENT_EXTRA_GIG_ID, gigId)
+    }
+
     var userGpsDialogActionCount = 0
     private fun initUi() {
 //        gigLocationMapView.getMapAsync {
