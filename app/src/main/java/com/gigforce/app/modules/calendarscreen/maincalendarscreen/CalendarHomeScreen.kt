@@ -363,7 +363,7 @@ class CalendarHomeScreen : BaseFragment(),
 
 
     private fun initializeMonthTV(calendar: Calendar, needaction: Boolean) {
-        val pattern = "MMMM YYYY"
+        val pattern = "MMMM yyyy"
         val simpleDateFormat = SimpleDateFormat(pattern)
         val date: String = simpleDateFormat.format(calendar.time)
         month_year.text = date
