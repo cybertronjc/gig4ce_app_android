@@ -4,6 +4,7 @@ import android.app.PendingIntent
 import android.content.Intent
 import android.util.Log
 import androidx.core.app.TaskStackBuilder
+import androidx.core.os.bundleOf
 import androidx.navigation.NavDeepLinkBuilder
 import com.gigforce.app.MainActivity
 import com.gigforce.app.R
@@ -111,23 +112,24 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
         val dataBundle = data.toBundle()
         dataBundle.putString(NotificationConstants.INTENT_EXTRA_CLICK_ACTION, clickAction)
+        dataBundle.putBoolean(MainActivity.IS_DEEPLINK, true)
 
-        return NavDeepLinkBuilder(applicationContext)
-            .setGraph(R.navigation.nav_graph)
-            .setDestination(R.id.gigAttendancePageFragment)
-            .setGraph(R.navigation.nav_graph)
-            .setArguments(dataBundle)
-            .createPendingIntent()
+//        return NavDeepLinkBuilder(applicationContext)
+//            .setGraph(R.navigation.nav_graph)
+//            .setDestination(R.id.gigAttendancePageFragment)
+//            .setArguments(bundleOf())
+//            .createPendingIntent()
 
-//        return TaskStackBuilder.create(applicationContext).run {
-//            addNextIntentWithParentStack(
-//                Intent(
-//                    applicationContext,
-//                    MainActivity::class.java
-//                ).apply {
-//                    putExtras(dataBundle)
-//                })
-//            getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT)
-//        }
+
+        return TaskStackBuilder.create(applicationContext).run {
+            addNextIntentWithParentStack(
+                Intent(
+                    applicationContext,
+                    MainActivity::class.java
+                ).apply {
+                    putExtras(dataBundle)
+                })
+            getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT)
+        }
     }
 }

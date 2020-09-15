@@ -108,14 +108,17 @@
         </activity>
 
         <activity android:name=".MainActivity"
-            android:configChanges="layoutDirection|locale|orientation|screenSize|keyboardHidden"
-            >
+            android:configChanges="layoutDirection|locale|orientation|screenSize|keyboardHidden">
+            <nav-graph android:value="@navigation/nav_graph"/>
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"
                         android:resource="@array/preloaded_fonts"
                         android:windowSoftInputMode="adjustResize"/>
             </intent-filter>
-            <nav-graph android:value="@navigation/nav_graph"/>
+            <intent-filter>
+                <action android:name="com.gigforce.app.gig.open_gig_attendance_page" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
         </activity>
         <meta-data
             android:name="preloaded_fonts"

@@ -9,8 +9,10 @@ import android.view.MotionEvent
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
+import androidx.navigation.NavDeepLinkBuilder
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
@@ -43,7 +45,36 @@ class MainActivity : AppCompatActivity() {
         this.setContentView(R.layout.activity_main)
 
         navController = this.findNavController(R.id.nav_fragment)
-        processNotificationIf(intent)
+        navController.handleDeepLink(intent)
+
+        if (intent.getBooleanExtra(IS_DEEPLINK, false)) {
+            handleDeepLink()
+        } else {
+            proceedWithNormalNavigation()
+        }
+    }
+
+    private fun handleDeepLink() {
+
+        when (intent.getStringExtra(NotificationConstants.INTENT_EXTRA_CLICK_ACTION)) {
+            NotificationConstants.CLICK_ACTIONS.OPEN_GIG_ATTENDANCE_PAGE -> {
+                navController.navigate(
+                    R.id.gigAttendancePageFragment,
+                    intent.extras
+                )
+            }
+            NotificationConstants.CLICK_ACTIONS.OPEN_VERIFICATION_PAGE -> {
+                navController.navigate(
+                    R.id.gigerVerificationFragment,
+                    intent.extras
+                )
+            }
+            else -> {
+            }
+        }
+    }
+
+    private fun proceedWithNormalNavigation() {
         checkForAllAuthentication()
         GetFirebaseInstanceID()
         CleverTapAPI.getDefaultInstance(applicationContext)?.pushEvent("MAIN_ACTIVITY_CREATED")
@@ -52,7 +83,8 @@ class MainActivity : AppCompatActivity() {
     private fun processNotificationIf(intent: Intent?) {
         when (intent?.getStringExtra(NotificationConstants.INTENT_EXTRA_CLICK_ACTION)) {
             NotificationConstants.CLICK_ACTIONS.OPEN_GIG_ATTENDANCE_PAGE -> {
-                nav_fragment.findNavController().navigate(R.id.gigAttendancePageFragment,intent.extras)
+                nav_fragment.findNavController()
+                    .navigate(R.id.gigAttendancePageFragment, intent.extras)
                 Log.d("EXXX", "attendanceFrag")
             }
             else -> {
@@ -60,7 +92,12 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun GetFirebaseInstanceID(){
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        navController.handleDeepLink(intent)
+    }
+
+    private fun GetFirebaseInstanceID() {
         FirebaseInstanceId.getInstance().instanceId
             .addOnCompleteListener(OnCompleteListener { task ->
                 if (!task.isSuccessful) {
@@ -98,10 +135,9 @@ class MainActivity : AppCompatActivity() {
         }
 
         if (!handled) {
-            if (isMainScreen(fragmentholder)||isOnBoarding(fragmentholder)) {
+            if (isMainScreen(fragmentholder) || isOnBoarding(fragmentholder)) {
                 doubleBackPressFun()
-            }
-            else super.onBackPressed()
+            } else super.onBackPressed()
         }
 
     }
@@ -144,6 +180,7 @@ class MainActivity : AppCompatActivity() {
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
+
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
         if (currentFocus != null) {
             val imm: InputMethodManager =
@@ -151,5 +188,9 @@ class MainActivity : AppCompatActivity() {
             imm.hideSoftInputFromWindow(currentFocus!!.windowToken, 0)
         }
         return super.dispatchTouchEvent(ev)
+    }
+
+    companion object {
+        const val IS_DEEPLINK = "is_deeplink"
     }
 }

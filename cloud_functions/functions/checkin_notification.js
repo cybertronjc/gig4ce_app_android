@@ -76,25 +76,39 @@ function sendNotification(notificationTokens, gigersWithPendingCheckIn) {
 
     gigersWithPendingCheckIns.forEach(it => {
         it.firebaseToken = tokenUserIdMap.get(it.gigerId);
-    });
 
-    const distinctCompanies = [...new Set(gigersWithPendingCheckIns.map(it => it.companyName))];
-    const groupedGigs = groupBy(gigersWithPendingCheckIns, gig => gig.companyName);
-
-
-    distinctCompanies.forEach(it => {
-
-        const gigs = groupedGigs.get(it);
         if (gigs.empty) {
-            console.log('No gigs found for company $it');
+            console.log('No pending gigs found');
         } else {
 
-            const role = gig[0].role;
+            // {
+            //     "to": "ckDK1dTtTmOuxtHa5pnMYG:APA91bEFcKAyWAI-gBydC_xEw0cOa5wQz5i-2tG6cG1eNs6Z9ohRzWsSMCT7HtSTWCUKk2pJ5fCL5naMkjoaqRD2CyhWxL-ial-eb13RtqWqD_OMscW5OjVzVmQCzJGaDmjO3TXUpU34",
+            //     "collapse_key": "type_a",
+            //     "notification": {
+            //       "title": "Gig Checkin",
+            //       "body": "Hey Himanshu, Please check in for Sales Executive @ Abc now.",
+            //       "click_action": "com.gigforce.app.gig.open_gig_attendance_page",
+            //       "sound": "default"
+            //     },
+            //     "data": {
+            //       "gig_id": "0FmrW6mIKNKBt9etIGkt",
+            //       "is_deeplink": true
+            //     }
+            //   }
+
+            const role = it.role;
+            const companyName = it.companyName;
 
             const message = {
                 notification: {
                     title: 'Attendance Check-in Alert',
-                    body: 'Hey, Please check in for $role@ $it now'
+                    body: 'Hey, Please check in for $role@ $companyName now',
+                    click_action: "com.gigforce.app.gig.open_gig_attendance_page",
+                    sound: "default"
+                },
+                data: {
+                    is_deeplink: true,
+                    gig_id: it.id
                 },
                 tokens: registrationTokens,
             };
@@ -109,19 +123,5 @@ function sendNotification(notificationTokens, gigersWithPendingCheckIn) {
                 });
         }
     });
-}
 
-
-function groupBy(list, keyGetter) {
-    const map = new Map();
-    list.forEach((item) => {
-        const key = keyGetter(item);
-        const collection = map.get(key);
-        if (!collection) {
-            map.set(key, [item]);
-        } else {
-            collection.push(item);
-        }
-    });
-    return map;
 }
