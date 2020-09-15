@@ -10,6 +10,7 @@ import com.gigforce.app.modules.gigPage.models.GigAttendance
 import com.gigforce.app.utils.Lce
 import com.gigforce.app.utils.Lse
 import com.gigforce.app.utils.setOrThrow
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ListenerRegistration
@@ -92,7 +93,7 @@ class GigViewModel constructor(
             .addSnapshotListener { documentSnapshot, firebaseFirestoreException ->
 
                 if (documentSnapshot != null) {
-                        extractGigData(documentSnapshot)
+                    extractGigData(documentSnapshot)
                 } else {
                     _gigDetails.value = Lce.error(firebaseFirestoreException!!.message!!)
                 }
@@ -147,6 +148,24 @@ class GigViewModel constructor(
                 _gigDetails.value = Lce.error(it.message!!)
             }
 
+    }
+
+    suspend fun getGigNow(gigId : String) = suspendCoroutine<Gig>{ cont ->
+        gigsRepository
+            .getCollectionReference()
+            .document(gigId)
+            .get()
+            .addOnSuccessListener { documentSnapshot ->
+
+                if (documentSnapshot != null) {
+                    val gig = documentSnapshot.toObject(Gig::class.java) ?: throw IllegalArgumentException()
+                    gig.gigId = documentSnapshot.id
+                    cont.resume(gig)
+                }
+            }
+            .addOnFailureListener {
+                cont.resumeWithException(it)
+            }
     }
 
     fun favoriteGig(gigId: String) {
@@ -249,6 +268,30 @@ class GigViewModel constructor(
         gigsRepository.getCollectionReference()
             .document(gigId)
             .update("ratingUserReceivedAttachments", FieldValue.arrayRemove(attachmentToDeleteName))
+    }
+
+
+    private val _declineGig = MutableLiveData<Lse>()
+    val declineGig: LiveData<Lse> get() = _declineGig
+
+    fun declineGig(gigId: String, reason: String) = viewModelScope.launch{
+        _declineGig.value = Lse.loading()
+
+        try {
+            val gig = getGigNow(gigId)
+            gig.declinedBy = gig.gigerId
+            gig.declineReason = reason
+            gig.gigerId = ""
+
+            gigsRepository.getCollectionReference().document(gig.gigId).setOrThrow(gig)
+            _declineGig.value = Lse.success()
+        } catch (e: Exception) {
+            _declineGig.value = Lse.error(e.message!!)
+            FirebaseCrashlytics.getInstance().apply {
+                log("Unable to decline gig")
+                recordException(e)
+            }
+        }
     }
 
 

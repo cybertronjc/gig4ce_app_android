@@ -681,5 +681,14 @@
     <string name="sign_out">Sign out</string>
     <string name="plus_see_more">+ see more</string>
     <string name="plus_see_less">+ see less</string>
+    <string name="submit_all_caps">SUBMIT</string>
+    <string name="yes_i_confirm_that_i_want_to_decline_this_gig">Yes, I confirm that I want to decline this gig.</string>
+    <string name="reason">Reason</string>
+    <string name="this_gig_is_unsuitable_for_me">This gig is unsuitable for me</string>
+    <string name="i_can_t_reach_the_location_today">I can’t reach the location today</string>
+    <string name="i_m_on_sick_leave_today">I’m on sick leave today</string>
+    <string name="please_let_us_know_your_reason_why_are_you_declining_this_gig">Please let us know your reason, why are you declining this gig.</string>
+    <string name="cancelling_out_a_gig">Cancelling out a gig !</string>
+    <string name="i_am_on_leave_today">I am on leave today</string>
 
 </resources>

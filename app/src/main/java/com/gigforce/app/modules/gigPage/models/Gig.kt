@@ -56,7 +56,10 @@ data class Gig(
     var gigHighlights: List<String> = emptyList(),
     var gigRequirements: List<String> = emptyList(),
     var attendance: GigAttendance? = null,
-    var gigContactDetails: GigContactDetails? = null
+    var gigContactDetails: GigContactDetails? = null,
+
+    var declinedBy: String? = null,
+    var declineReason: String? = null
 ) {
 
     @get:Exclude

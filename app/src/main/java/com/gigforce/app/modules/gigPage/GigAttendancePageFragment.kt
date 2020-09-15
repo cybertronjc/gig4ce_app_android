@@ -65,7 +65,8 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-class GigAttendancePageFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener {
+class GigAttendancePageFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
+    DeclineGigDialogFragmentResultListener {
     companion object {
         const val INTENT_EXTRA_GIG_ID = "gig_id"
         const val REQUEST_CODE_UPLOAD_SELFIE_IMAGE = 2333
@@ -590,16 +591,27 @@ class GigAttendancePageFragment : BaseFragment(), PopupMenu.OnMenuItemClickListe
     override fun onMenuItemClick(item: MenuItem?): Boolean {
         item ?: return false
 
-        when (item.itemId) {
+        return when (item.itemId) {
             R.id.action_help -> {
                 navigate(R.id.contactScreenFragment)
-                return true
+                true
             }
             R.id.action_share -> {
-                return true
+                true
             }
-            else -> return false
-
+            R.id.action_decline_gig ->{
+                declineGigDialog()
+                true
+            }
+            else -> false
         }
+    }
+
+    private fun declineGigDialog() {
+        DeclineGigDialogFragment.launch(gigId, childFragmentManager, this)
+    }
+
+    override fun gigDeclined() {
+        activity?.onBackPressed()
     }
 }

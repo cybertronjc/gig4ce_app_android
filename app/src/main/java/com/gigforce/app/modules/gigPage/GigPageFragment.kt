@@ -19,11 +19,13 @@ import android.text.SpannableString
 import android.text.Spanned
 import android.text.style.ForegroundColorSpan
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
@@ -76,7 +78,8 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 
 
-class GigPageFragment : BaseFragment(), View.OnClickListener {
+class GigPageFragment : BaseFragment(), View.OnClickListener, Toolbar.OnMenuItemClickListener,
+    DeclineGigDialogFragmentResultListener {
 
     companion object {
         const val INTENT_EXTRA_GIG_ID = "gig_id"
@@ -104,7 +107,6 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
         initUi()
         initViewModel(view)
         initClicks()
-
     }
 
     private fun initClicks() {
@@ -146,6 +148,8 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
         toolbar?.setNavigationOnClickListener {
             activity?.onBackPressed()
         }
+
+        toolbar?.setOnMenuItemClickListener(this)
 
         contactUsLayout?.setOnClickListener {
             navigate(R.id.fakeGigContactScreenFragment)
@@ -1112,5 +1116,32 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
                 })
             }
         }
+    }
+
+    private fun declineGigDialog() {
+        DeclineGigDialogFragment.launch(gigId, childFragmentManager, this)
+    }
+
+    override fun onMenuItemClick(item: MenuItem?): Boolean {
+        item ?: return false
+
+        return when (item.itemId) {
+            R.id.action_help -> {
+                navigate(R.id.contactScreenFragment)
+                true
+            }
+            R.id.action_share -> {
+                true
+            }
+            R.id.action_decline_gig ->{
+                declineGigDialog()
+                true
+            }
+            else -> false
+        }
+    }
+
+    override fun gigDeclined() {
+        activity?.onBackPressed()
     }
 }
