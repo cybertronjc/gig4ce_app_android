@@ -71,8 +71,8 @@ class Login : BaseFragment() {
             getAllEarlierMobileNumbers()
             listeners()
             observer()
-//            if(mobile_number.equals(""))
-//            showComfortDialog()
+            if(mobile_number.equals(""))
+            showComfortDialog()
         }
     }
     fun hideKeyboard() {
