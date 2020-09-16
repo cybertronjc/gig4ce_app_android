@@ -6,7 +6,7 @@ const firebaseAdmin = require('firebase-admin');
 firebaseAdmin.initializeApp();
 const db = firebaseAdmin.firestore();
 
-exports.sendNotificationWithPendingVerfication = functions.region('asia-south1').https.onCall((data, context) => {
+exports.sendDocumentsNotUploadedNotification = functions.region('asia-south1').https.onCall((data, context) => {
     console.log("sendNotificationWithPendingVerfication : Invoked");
 
     const verificationCollectionRef = db.collection('Verification');
@@ -80,7 +80,7 @@ function fetchFbTokensAndSendNotifcation(userWhoHaveUploadedverificationData) {
         .get()
         .then(users => {
 
-            const firebaseTokens = users.map(user=> {
+            const firebaseTokens = users.map(user => {
                 user.id
             });
 
@@ -91,12 +91,30 @@ function fetchFbTokensAndSendNotifcation(userWhoHaveUploadedverificationData) {
         });
 }
 
+// {
+//     "to": "ckDK1dTtTmOuxtHa5pnMYG:APA91bEFcKAyWAI-gBydC_xEw0cOa5wQz5i-2tG6cG1eNs6Z9ohRzWsSMCT7HtSTWCUKk2pJ5fCL5naMkjoaqRD2CyhWxL-ial-eb13RtqWqD_OMscW5OjVzVmQCzJGaDmjO3TXUpU34",
+//     "collapse_key": "type_a",
+//     "notification": {
+//       "title": "Gig Checkin",
+//       "body": "Hey, Please upload your documents to activate profile.",
+//       "click_action": "com.gigforce.app.verification.open_verification_page",
+//       "sound": "default"
+//     },
+//     "data": {
+//       "gig_id": "0FmrW6mIKNKBt9etIGkt",
+//       "is_deeplink": true
+//     }
+//   }
+
 function sendNotification(registrationTokens) {
 
     const message = {
         notification: {
             title: 'Verification Incomplete',
             body: 'Hey, Please upload your documents to activate profile.'
+        },
+        data: {
+            is_deeplink: true
         },
         tokens: registrationTokens,
     };
