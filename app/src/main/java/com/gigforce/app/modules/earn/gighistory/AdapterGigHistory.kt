@@ -175,9 +175,9 @@ class AdapterGigHistory : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                         val mins = (durationCalculated / (1000 * 60)).toInt() % 60
                         holder.itemView.tv_time_rv_gig_hist.text =
                             "${hours}${viewHolderGigDetails.itemView.context.getString(R.string.hours)} : ${mins}${
-                                viewHolderGigDetails.itemView.context.getString(
-                                    R.string.mins
-                                )
+                            viewHolderGigDetails.itemView.context.getString(
+                                R.string.mins
+                            )
                             }"
                     }
                 }
@@ -188,9 +188,9 @@ class AdapterGigHistory : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                     })
                 holder.itemView.tv_timing_rv_gig_hist.text = if (gig.endDateTime != null)
                     "${timeFormatter.format(gig.startDateTime!!.toDate())} - ${
-                        timeFormatter.format(
-                            gig.endDateTime!!.toDate()
-                        )
+                    timeFormatter.format(
+                        gig.endDateTime!!.toDate()
+                    )
                     }"
                 else
                     "${timeFormatter.format(gig.startDateTime!!.toDate())} - "
@@ -392,9 +392,10 @@ class AdapterGigHistory : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                                 scheduledGigs?.add(index, it.gig!!)
                                 notifyItemInserted(index + 2)
                             }
-
+                            callbacks?.showNoGigExists(View.GONE)
                         }
                     }
+
                 } else if (convertToLocalDateViaInstant(it.gig?.startDateTime?.toDate()!!)!!.isAfter(
                         convertToLocalDateViaInstant(
                             Date()
@@ -404,7 +405,6 @@ class AdapterGigHistory : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                     if (callbacks?.getEventState() == EVENT_UPCOMING) {
                         val itemToBeRemoved = scheduledGigs?.indexOf(it.gig!!)
                         if (itemToBeRemoved != null && itemToBeRemoved == -1) {
-
                             val date1 =
                                 convertToLocalDateViaInstant(it.gig?.startDateTime?.toDate()!!)
                             var noAfterDateFound = true
@@ -419,16 +419,23 @@ class AdapterGigHistory : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                                 }
                             }
                             if (noAfterDateFound) {
-                                scheduledGigs?.size?.minus(1)?.let { it1 ->
-                                    scheduledGigs?.add(
-                                        it1, it.gig!!
-                                    )
-                                    notifyItemInserted(it1 + 2)
+                                if (scheduledGigs?.size != 0) {
+                                    scheduledGigs?.size?.minus(1)?.let { it1 ->
+                                        scheduledGigs?.add(
+                                            it1, it.gig!!
+                                        )
+                                        notifyItemInserted(it1 + 2)
+                                    }
+                                } else {
+                                    scheduledGigs?.add(it.gig!!)
+                                    notifyItemInserted(2)
                                 }
+
                             } else {
                                 scheduledGigs?.add(index, it.gig!!)
                                 notifyItemInserted(index + 2)
                             }
+                            callbacks?.showNoGigExists(View.GONE)
 
 
                         }
@@ -439,11 +446,15 @@ class AdapterGigHistory : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                         )
                     )
                 ) {
-                    if (onGoingGigs != null && !onGoingGigs?.isEmpty()!!) {
+                    if (onGoingGigs != null) {
                         val itemToBeRemoved = onGoingGigs?.indexOf(it.gig!!)
                         if (itemToBeRemoved != null && itemToBeRemoved == -1) {
+                            if (onGoingGigs?.size == 1) {
+                                notifyItemChanged(0)
+                            } else {
+                                adapter?.itemAdded(0, it.gig!!)
 
-                            adapter?.itemAdded(0,it.gig!!)
+                            }
 
 
                         }
