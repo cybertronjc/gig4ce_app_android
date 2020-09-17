@@ -88,7 +88,6 @@ class CalendarHomeScreen : BaseFragment(),
             ViewModelProvider(this, ParamCustPreferViewModel(viewLifecycleOwner)).get(
                 CustomPreferencesViewModel::class.java
             )
-        print("test apk"+"test1")
 
         ConfigRepository().getForceUpdateCurrentVersion(object :
             ConfigRepository.LatestAPPUpdateListener {
