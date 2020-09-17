@@ -35,7 +35,6 @@ import com.gigforce.app.modules.custom_gig_preferences.ParamCustPreferViewModel
 import com.gigforce.app.modules.custom_gig_preferences.UnavailableDataModel
 import com.gigforce.app.modules.preferences.PreferencesFragment
 import com.gigforce.app.modules.profile.ProfileViewModel
-import com.gigforce.app.modules.profile.models.ProfileData
 import com.gigforce.app.modules.roster.RosterDayFragment
 import com.gigforce.app.utils.GlideApp
 import com.gigforce.app.utils.configrepository.ConfigRepository
@@ -88,12 +87,13 @@ class CalendarHomeScreen : BaseFragment(),
             ViewModelProvider(this, ParamCustPreferViewModel(viewLifecycleOwner)).get(
                 CustomPreferencesViewModel::class.java
             )
-        print("test apk"+"test1")
+        print("test apk" + "test1")
+
 
         ConfigRepository().getForceUpdateCurrentVersion(object :
             ConfigRepository.LatestAPPUpdateListener {
             override fun getCurrentAPPVersion(latestAPPUpdateModel: ConfigRepository.LatestAPPUpdateModel) {
-                print("test apk"+"test1"+latestAPPUpdateModel.active)
+                print("test apk" + "test1" + latestAPPUpdateModel.active)
                 if (latestAPPUpdateModel.active && isNotLatestVersion(latestAPPUpdateModel))
                     showConfirmationDialogType3(
                         getString(R.string.new_version_available),
@@ -126,8 +126,8 @@ class CalendarHomeScreen : BaseFragment(),
     private fun isNotLatestVersion(latestAPPUpdateModel: ConfigRepository.LatestAPPUpdateModel): Boolean {
         try {
             var currentAppVersion = getAppVersion()
-            if(currentAppVersion.contains("Dev")){
-                currentAppVersion = currentAppVersion?.split("-")[0]?:currentAppVersion
+            if (currentAppVersion.contains("Dev")) {
+                currentAppVersion = currentAppVersion?.split("-")[0] ?: currentAppVersion
             }
             var appVersion = currentAppVersion?.split(".")?.toTypedArray()
             var serverAPPVersion =
@@ -146,7 +146,7 @@ class CalendarHomeScreen : BaseFragment(),
 
             }
         } catch (e: Exception) {
-            Log.e("test apk","test2 exception"+e.message.toString())
+            Log.e("test apk", "test2 exception" + e.message.toString())
 
             return false
         }
@@ -813,6 +813,11 @@ class CalendarHomeScreen : BaseFragment(),
             getView(viewHolder, R.id.calendar_month_cl).visibility = View.GONE
             getView(viewHolder, R.id.calendar_detail_item_cl).visibility = View.VISIBLE
         }
+    }
+
+    override fun onBackPressed(): Boolean {
+        parentFragmentManager.popBackStack()
+        return false
     }
 
 }
