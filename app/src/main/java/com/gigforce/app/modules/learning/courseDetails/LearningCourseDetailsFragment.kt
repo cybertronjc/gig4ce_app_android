@@ -275,15 +275,22 @@ class LearningCourseDetailsFragment : BaseFragment() {
 
     private fun loadModulesInfoInView() {
 
-       val moduleNo = if (viewModel.currentModules != null && viewModel.currentlySelectedModule != null) {
-           viewModel.currentModules!!.indexOf(viewModel.currentlySelectedModule!!) + 1
-        } else 0
+        val moduleNo =
+            if (viewModel.currentModules != null && viewModel.currentlySelectedModule != null) {
+                viewModel.currentModules!!.indexOf(viewModel.currentlySelectedModule!!) + 1
+            } else 0
 
 
         levelTV.text =
             "Module $moduleNo Of ${viewModel.currentModules?.size}"
         complitionStatusTv.text = "0/${viewModel.currentLessons?.size} Lessons Completed"
-        assessmentCountTv.text = "${viewModel.currentAssessments?.size} Assessments"
+        assessmentCountTv.text =
+            if (viewModel.currentAssessments?.size == null)
+                "0 Assessments"
+            else if (viewModel.currentAssessments?.size == 1)
+                "${viewModel.currentAssessments?.size} Assessment"
+            else
+                "${viewModel.currentAssessments?.size} Assessments"
 
         lessonsLabel.text = "Lesson (${viewModel.currentlySelectedModule?.title})"
     }
@@ -390,7 +397,7 @@ class LearningCourseDetailsFragment : BaseFragment() {
 
                 })
         recyclerGenericAdapter.list = content
-        recyclerGenericAdapter.setLayout(R.layout.learning_bs_item)
+        recyclerGenericAdapter.setLayout(R.layout.recycler_item_course_module)
         learning_details_modules_rv.layoutManager = LinearLayoutManager(
             activity?.applicationContext,
             LinearLayoutManager.HORIZONTAL,
@@ -445,9 +452,11 @@ class LearningCourseDetailsFragment : BaseFragment() {
                 PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
 
                     val assessment = item as CourseContent
-                    navigate(R.id.assessment_fragment,  bundleOf(
-                        AssessmentFragment.INTENT_LESSON_ID to assessment.id
-                    ))
+                    navigate(
+                        R.id.assessment_fragment, bundleOf(
+                            AssessmentFragment.INTENT_LESSON_ID to assessment.id
+                        )
+                    )
 
                 },
                 RecyclerGenericAdapter.ItemInterface<CourseContent> { obj, viewHolder, position ->

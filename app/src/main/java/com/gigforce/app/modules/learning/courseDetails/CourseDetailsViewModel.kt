@@ -16,10 +16,10 @@ class CourseDetailsViewModel constructor(
 ) : ViewModel() {
 
     private var mLastReqCourseDetails: Course? = null
-    var currentModules : List<Module>? = null
-    var currentlySelectedModule : Module? = null
-    var currentLessons : List<CourseContent>? = null
-    private var mCurrentModuleId : String? = null
+    var currentModules: List<Module>? = null
+    var currentlySelectedModule: Module? = null
+    var currentLessons: List<CourseContent>? = null
+    private var mCurrentModuleId: String? = null
 
     private val _courseDetails = MutableLiveData<Lce<Course>>()
     val courseDetails: LiveData<Lce<Course>> = _courseDetails
@@ -53,7 +53,7 @@ class CourseDetailsViewModel constructor(
         courseId: String
     ) = viewModelScope.launch {
 
-        if(currentModules != null) {
+        if (currentModules != null) {
             _courseModules.postValue(Lce.content(currentModules!!))
             return@launch
         }
@@ -94,7 +94,7 @@ class CourseDetailsViewModel constructor(
         moduleId: String
     ) = viewModelScope.launch {
 
-        if(mCurrentModuleId == moduleId){
+        if (mCurrentModuleId == moduleId) {
             _courseLessons.postValue(Lce.content(currentLessons!!))
             _courseAssessments.postValue(Lce.content(currentAssessments!!))
             return@launch
@@ -108,6 +108,12 @@ class CourseDetailsViewModel constructor(
                 courseId = courseId,
                 moduleId = moduleId
             )
+
+            var lessonNo = 1
+            courseLessons.forEach {
+                it.lessonNo = lessonNo
+                lessonNo++
+            }
             mCurrentModuleId = moduleId
             currentLessons = courseLessons
             _courseLessons.postValue(Lce.content(courseLessons))
@@ -129,7 +135,7 @@ class CourseDetailsViewModel constructor(
     private val _courseAssessments = MutableLiveData<Lce<List<CourseContent>>>()
     val courseAssessments: LiveData<Lce<List<CourseContent>>> = _courseAssessments
 
-    var currentAssessments : List<CourseContent>? = null
+    var currentAssessments: List<CourseContent>? = null
 
     fun getCourseAssessments(
         courseId: String,

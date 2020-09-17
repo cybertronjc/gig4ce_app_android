@@ -16,7 +16,6 @@
             android:id="@+id/learningToolbarLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -26,7 +25,7 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_marginStart="18dp"
-                android:layout_marginTop="18dp"
+                android:layout_marginTop="14dp"
                 android:clickable="true"
                 android:focusable="true"
                 android:scaleX="0.75"
@@ -42,11 +41,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="18dp"
                 android:layout_marginTop="22dp"
-                android:fontFamily="@font/lato_bold"
+                android:fontFamily="@font/lato"
                 android:letterSpacing="0.01"
                 tools:text="Retail Sales Executive"
                 android:textColor="#cd000000"
-                android:textSize="24sp"
+                android:textSize="20sp"
                 app:layout_constraintStart_toEndOf="@id/learningBackButton"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -117,33 +116,10 @@
             android:letterSpacing="0"
             android:textColor="#000000"
             android:textSize="14sp"
+            tools:text="Module 1 of 3"
             app:layout_constraintStart_toEndOf="@+id/imageView38"
             app:layout_constraintTop_toBottomOf="@+id/videoDescTV" />
 
-        <ImageView
-            android:id="@+id/badges_earned_iv"
-            android:layout_width="12dp"
-            android:layout_height="12dp"
-            android:layout_marginStart="15dp"
-            android:layout_marginTop="12dp"
-            android:src="@drawable/ic_badge"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/levelTV" />
-
-
-        <TextView
-            android:id="@+id/badges_earned_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="15dp"
-            android:layout_marginTop="12dp"
-            android:fontFamily="@font/lato"
-            android:letterSpacing="0"
-            android:text="0 Badges earned"
-            android:textColor="#000000"
-            android:textSize="14sp"
-            app:layout_constraintStart_toEndOf="@+id/imageView38"
-            app:layout_constraintTop_toBottomOf="@+id/levelTV" />
 
 
         <ImageView
@@ -154,8 +130,9 @@
             android:layout_marginTop="12dp"
             android:src="@drawable/ic_play"
             android:tint="@color/black"
+
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/badges_earned_tv" />
+            app:layout_constraintTop_toBottomOf="@+id/levelTV" />
 
 
         <TextView
@@ -166,11 +143,11 @@
             android:layout_marginTop="12dp"
             android:fontFamily="@font/lato"
             android:letterSpacing="0"
-            android:text="0/0 Lessons completed"
+            tools:text="0/0 Lessons completed"
             android:textColor="#000000"
             android:textSize="14sp"
             app:layout_constraintStart_toEndOf="@+id/imageView38"
-            app:layout_constraintTop_toBottomOf="@+id/badges_earned_tv" />
+            app:layout_constraintTop_toBottomOf="@+id/levelTV" />
 
 
         <ImageView
