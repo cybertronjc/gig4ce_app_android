@@ -60,11 +60,9 @@ open class BaseFragment : Fragment(), ViewsFromViewsInterface, NavigationInterfa
     open fun isConfigRequired(): Boolean {
         return false
     }
-
-    companion object {
-        var configDataModel: ConfigDataModel? = null
+    companion object{
+    var configDataModel: ConfigDataModel? = null
     }
-
     open fun inflateView(
         resource: Int, inflater: LayoutInflater,
         container: ViewGroup?
@@ -124,8 +122,7 @@ open class BaseFragment : Fragment(), ViewsFromViewsInterface, NavigationInterfa
     }
 
     override fun onDetach() {
-        if (this::languageUtilInterface.isInitialized && languageUtilInterface.getDeviceLanguageDialog() != null) languageUtilInterface.getDeviceLanguageDialog()!!
-            .dismiss()
+        if (this::languageUtilInterface.isInitialized && languageUtilInterface.getDeviceLanguageDialog() != null) languageUtilInterface.getDeviceLanguageDialog()!!.dismiss()
         super.onDetach()
     }
 
@@ -325,16 +322,18 @@ open class BaseFragment : Fragment(), ViewsFromViewsInterface, NavigationInterfa
     override fun showConfirmationDialogType3(
         title: String,
         subTitle: String,
+        yesButtonText:String,
+        noButtonText:String,
         buttonClickListener: ConfirmationDialogOnClickListener
     ) {
-        appDialogsInterface.showConfirmationDialogType3(title, subTitle, buttonClickListener)
+        appDialogsInterface.showConfirmationDialogType3(title,subTitle,yesButtonText,noButtonText,buttonClickListener)
     }
 
     override fun showConfirmationDialogType5(
         title: String,
         buttonClickListener: ConfirmationDialogOnClickListener
     ) {
-        appDialogsInterface.showConfirmationDialogType5(title, buttonClickListener)
+        appDialogsInterface.showConfirmationDialogType5(title,buttonClickListener)
     }
 
     override fun showConfirmationDialogType4(
@@ -342,14 +341,14 @@ open class BaseFragment : Fragment(), ViewsFromViewsInterface, NavigationInterfa
         subTitle: String,
         optionSelected: OptionSelected
     ) {
-        appDialogsInterface.showConfirmationDialogType4(title, subTitle, optionSelected)
+        appDialogsInterface.showConfirmationDialogType4(title,subTitle,optionSelected)
     }
 
     override fun showConfirmationDialogType7(
         title: String,
         buttonClickListener: ConfirmationDialogOnClickListener
     ) {
-        appDialogsInterface.showConfirmationDialogType7(title, buttonClickListener)
+        appDialogsInterface.showConfirmationDialogType7(title,buttonClickListener)
     }
 
     override fun getLanguageCodeToName(languageCode: String): String {

@@ -6,6 +6,8 @@ import android.util.AttributeSet
 import android.view.View
 import androidx.navigation.findNavController
 import com.gigforce.app.R
+import com.gigforce.app.core.gone
+import com.gigforce.app.core.visible
 import com.gigforce.app.modules.gigPage.GigPageFragment
 import com.google.android.material.card.MaterialCardView
 import kotlinx.android.synthetic.main.completed_gig_card.view.*
@@ -74,7 +76,12 @@ class CompletedGigCard(
 
     fun setGigAmount(value: Double) {
         amount = value
-        rupee_value.text = if (isMonthlyGig) "Rs. $value / month" else "Rs. $value / hour"
+
+        if(value == 0.0) {
+            rupee_value.text = "As per contract"
+        }else {
+            rupee_value.text = if (isMonthlyGig) "Rs. $value /month" else "Rs. $value /hr"
+        }
     }
 
     fun setTimings() {

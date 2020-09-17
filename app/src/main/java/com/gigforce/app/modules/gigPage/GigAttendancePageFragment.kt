@@ -61,7 +61,6 @@ import kotlinx.android.synthetic.main.fragment_gig_page_attendance.messageCardVi
 import kotlinx.android.synthetic.main.fragment_gig_page_attendance.roleNameTV
 import kotlinx.android.synthetic.main.fragment_gig_page_attendance.shiftTV
 import kotlinx.android.synthetic.main.fragment_gig_page_attendance.wageTV
-import kotlinx.android.synthetic.main.fragment_gig_page_present.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -84,8 +83,8 @@ class GigAttendancePageFragment : BaseFragment(), PopupMenu.OnMenuItemClickListe
     private var gig: Gig? = null
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
     ) = inflateView(R.layout.fragment_gig_page_attendance, inflater, container)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -98,86 +97,88 @@ class GigAttendancePageFragment : BaseFragment(), PopupMenu.OnMenuItemClickListe
         listener()
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString(INTENT_EXTRA_GIG_ID, gigId)
+    }
+
     var userGpsDialogActionCount = 0
 
     private fun listener() {
         startNavigationSliderBtn?.onSlideCompleteListener =
-            object : SlideToActView.OnSlideCompleteListener {
-                override fun onSlideComplete(view: SlideToActView) {
-                    var manager = activity?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-                    var statusOfGPS = manager.isProviderEnabled(LocationManager.GPS_PROVIDER)
-                    if(userGpsDialogActionCount==0 && !statusOfGPS){
-                        showEnableGPSDialog()
-                        startNavigationSliderBtn?.resetSlider()
-                        return;
-                    }
+                object : SlideToActView.OnSlideCompleteListener {
+                    override fun onSlideComplete(view: SlideToActView) {
+                        var manager = activity?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+                        var statusOfGPS = manager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+                        if (userGpsDialogActionCount == 0 && !statusOfGPS) {
+                            showEnableGPSDialog()
+                            startNavigationSliderBtn?.resetSlider()
+                            return;
+                        }
 
-                    if (userGpsDialogActionCount==1 || ContextCompat.checkSelfPermission(
-                            requireActivity(),
-                            android.Manifest.permission.ACCESS_COARSE_LOCATION
-                        ) == PackageManager.PERMISSION_GRANTED
-                    ) {
-                        var intent = Intent(context, ImageCaptureActivity::class.java)
-                        startActivityForResult(intent, REQUEST_CODE_UPLOAD_SELFIE_IMAGE)
-                    } else {
-                        requestPermissionForGPS()
-                        startNavigationSliderBtn?.resetSlider()
+                        if (userGpsDialogActionCount == 1 || ContextCompat.checkSelfPermission(
+                                        requireActivity(),
+                                        android.Manifest.permission.ACCESS_COARSE_LOCATION
+                                ) == PackageManager.PERMISSION_GRANTED
+                        ) {
+                            var intent = Intent(context, ImageCaptureActivity::class.java)
+                            startActivityForResult(intent, REQUEST_CODE_UPLOAD_SELFIE_IMAGE)
+                        } else {
+                            requestPermissionForGPS()
+                            startNavigationSliderBtn?.resetSlider()
+                        }
                     }
                 }
-            }
 
     }
+
     private fun turnGPSOn() {
         val provider = Settings.Secure.getString(context?.getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED)
-        if (!provider.contains("gps"))
-        { //if gps is disabled
+        if (!provider.contains("gps")) { //if gps is disabled
             val poke = Intent()
             poke.setClassName("com.android.settings", "com.android.settings.widget.SettingsAppWidgetProvider")
             poke.addCategory(Intent.CATEGORY_ALTERNATIVE)
             poke.setData(Uri.parse("3"))
-            context?.let { it->LocalBroadcastManager.getInstance(it).sendBroadcast(poke) }
+            context?.let { it -> LocalBroadcastManager.getInstance(it).sendBroadcast(poke) }
 
         }
     }
+
     private fun showEnableGPSDialog() {
         showConfirmationDialogType2("Please enable your GPS!!\n                                                               ",
-            object : ConfirmationDialogOnClickListener {
-                override fun clickedOnYes(dialog: Dialog?) {
-                    if(canToggleGPS())turnGPSOn()
-                    else{showToast("Please Enable your GPS manually in setting!!")}
-                    dialog?.dismiss()
-                }
+                object : ConfirmationDialogOnClickListener {
+                    override fun clickedOnYes(dialog: Dialog?) {
+                        if (canToggleGPS()) turnGPSOn()
+                        else {
+                            showToast("Please Enable your GPS manually in setting!!")
+                        }
+                        dialog?.dismiss()
+                    }
 
-                override fun clickedOnNo(dialog: Dialog?) {
-                    popFragmentFromStack(R.id.earningFragment)
-                    userGpsDialogActionCount = 1
-                    dialog?.dismiss()
-                }
+                    override fun clickedOnNo(dialog: Dialog?) {
+                        popFragmentFromStack(R.id.earningFragment)
+                        userGpsDialogActionCount = 1
+                        dialog?.dismiss()
+                    }
 
-            })
+                })
     }
 
 
-    private fun canToggleGPS():Boolean {
+    private fun canToggleGPS(): Boolean {
         val pacman = context?.getPackageManager()
         var pacInfo: PackageInfo? = null
-        try
-        {
+        try {
             pacInfo = pacman?.getPackageInfo("com.android.settings", PackageManager.GET_RECEIVERS)
-        }
-        catch (e: PackageManager.NameNotFoundException) {
+        } catch (e: PackageManager.NameNotFoundException) {
             return false //package not found
-        }
-        catch (e:Exception){
+        } catch (e: Exception) {
 
         }
-        if (pacInfo != null)
-        {
-            for (actInfo in pacInfo.receivers)
-            {
+        if (pacInfo != null) {
+            for (actInfo in pacInfo.receivers) {
                 //test if recevier is exported. if so, we can toggle GPS.
-                if (actInfo.name.equals("com.android.settings.widget.SettingsAppWidgetProvider") && actInfo.exported)
-                {
+                if (actInfo.name.equals("com.android.settings.widget.SettingsAppWidgetProvider") && actInfo.exported) {
                     return true
                 }
             }
@@ -233,7 +234,7 @@ class GigAttendancePageFragment : BaseFragment(), PopupMenu.OnMenuItemClickListe
     private fun getData(arguments: Bundle?, savedInstanceState: Bundle?) {
         savedInstanceState?.let {
             gigId = it.getString(INTENT_EXTRA_GIG_ID)!!
-        }?: run {
+        } ?: run {
             arguments?.let {
                 gigId = it.getString(INTENT_EXTRA_GIG_ID)!!
             }?.run {
@@ -245,15 +246,15 @@ class GigAttendancePageFragment : BaseFragment(), PopupMenu.OnMenuItemClickListe
 
     private fun initViewModel(savedInstanceState: Bundle?) {
         viewModel.gigDetails
-            .observe(viewLifecycleOwner, Observer {
-                when (it) {
-                    Lce.Loading -> {
+                .observe(viewLifecycleOwner, Observer {
+                    when (it) {
+                        Lce.Loading -> {
+                        }
+                        is Lce.Content -> setGigDetailsOnView(it.content)
+                        is Lce.Error -> {
+                        }
                     }
-                    is Lce.Content -> setGigDetailsOnView(it.content)
-                    is Lce.Error -> {
-                    }
-                }
-            })
+                })
 
         viewModel.watchGig(gigId)
     }
@@ -269,18 +270,18 @@ class GigAttendancePageFragment : BaseFragment(), PopupMenu.OnMenuItemClickListe
             if (gig.companyLogo!!.startsWith("http", true)) {
 
                 Glide.with(requireContext())
-                    .load(gig.companyLogo)
-                    .into(companyLogoIV)
+                        .load(gig.companyLogo)
+                        .into(companyLogoIV)
             } else {
                 FirebaseStorage.getInstance()
-                    .getReference("companies_gigs_images")
-                    .child(gig.companyLogo!!)
-                    .downloadUrl
-                    .addOnSuccessListener { fileUri ->
-                        Glide.with(requireContext())
-                            .load(fileUri)
-                            .into(companyLogoIV)
-                    }
+                        .getReference("companies_gigs_images")
+                        .child(gig.companyLogo!!)
+                        .downloadUrl
+                        .addOnSuccessListener { fileUri ->
+                            Glide.with(requireContext())
+                                    .load(fileUri)
+                                    .into(companyLogoIV)
+                        }
             }
         } else {
             val companyInitials = if (gig.companyName.isNullOrBlank())
@@ -288,8 +289,8 @@ class GigAttendancePageFragment : BaseFragment(), PopupMenu.OnMenuItemClickListe
             else
                 gig.companyName!![0].toString().toUpperCase()
             val drawable = TextDrawable.builder().buildRound(
-                companyInitials,
-                ResourcesCompat.getColor(resources, R.color.lipstick, null)
+                    companyInitials,
+                    ResourcesCompat.getColor(resources, R.color.lipstick, null)
             )
 
             companyLogoIV.setImageDrawable(drawable)
@@ -300,28 +301,27 @@ class GigAttendancePageFragment : BaseFragment(), PopupMenu.OnMenuItemClickListe
             val startDate = gig.startDateTime!!.toLocalDate()
             val endDate = gig.endDateTime!!.toLocalDate()
 
-            if(startDate.isEqual(endDate))
+            if (startDate.isEqual(endDate))
                 durationTextTV.text = "${dateFormatter.format(gig.startDateTime!!.toDate())}"
             else
                 durationTextTV.text = "${dateFormatter.format(gig.startDateTime!!.toDate())} - ${dateFormatter.format(gig.endDateTime!!.toDate())}"
 
             shiftTV.text =
-                "${timeFormatter.format(gig.startDateTime!!.toDate())} - ${timeFormatter.format(gig.endDateTime!!.toDate())}"
+                    "${timeFormatter.format(gig.startDateTime!!.toDate())} - ${timeFormatter.format(gig.endDateTime!!.toDate())}"
         } else {
             durationTextTV.text = "${dateFormatter.format(gig.startDateTime!!.toDate())} - "
             shiftTV.text = "${timeFormatter.format(gig.startDateTime!!.toDate())} - "
         }
 
-        val gigAmountText = if (gig.gigAmount == 0.0)
-            "--"
-        else {
-            if (gig.isMonthlyGig)
+        if (gig.gigAmount == 0.0) {
+            wageTV.text = "Payout : As per contract"
+        } else {
+            wageTV.text = if (gig.isMonthlyGig)
                 "Payout : Rs ${gig.gigAmount} per Month"
             else
                 "Payout : Rs ${gig.gigAmount} per Hour"
         }
 
-        wageTV.text = gigAmountText
         addressTV.text = gig.address
 
         if (gig.isFavourite && favoriteCB.isChecked.not()) {
@@ -360,13 +360,13 @@ class GigAttendancePageFragment : BaseFragment(), PopupMenu.OnMenuItemClickListe
 
                 if (gig.isCheckInMarked())
                     punchInTimeTV.text =
-                        timeFormatter.format(gig.attendance!!.checkInTime!!)
+                            timeFormatter.format(gig.attendance!!.checkInTime!!)
                 else
                     punchInTimeTV.text = "--:--"
 
                 if (gig.isCheckOutMarked())
                     punchOutTimeTV.text =
-                        timeFormatter.format(gig.attendance!!.checkOutTime!!)
+                            timeFormatter.format(gig.attendance!!.checkOutTime!!)
                 else
                     punchOutTimeTV.text = "--:--"
             } else {
@@ -382,11 +382,11 @@ class GigAttendancePageFragment : BaseFragment(), PopupMenu.OnMenuItemClickListe
 
 
                     attendanceCardView.setBackgroundColor(
-                        ResourcesCompat.getColor(
-                            resources,
-                            R.color.light_pink,
-                            null
-                        )
+                            ResourcesCompat.getColor(
+                                    resources,
+                                    R.color.light_pink,
+                                    null
+                            )
                     )
 
                     startNavigationSliderBtn?.text = "Check-in"
@@ -400,7 +400,7 @@ class GigAttendancePageFragment : BaseFragment(), PopupMenu.OnMenuItemClickListe
 
                     if (gig.isCheckInMarked())
                         punchInTimeTV.text =
-                            timeFormatter.format(gig.attendance!!.checkInTime!!)
+                                timeFormatter.format(gig.attendance!!.checkInTime!!)
                     else
                         punchInTimeTV.text = "--:--"
 
@@ -412,13 +412,13 @@ class GigAttendancePageFragment : BaseFragment(), PopupMenu.OnMenuItemClickListe
 
             if (gig.isCheckInMarked())
                 punchInTimeTV.text =
-                    timeFormatter.format(gig.attendance!!.checkInTime!!)
+                        timeFormatter.format(gig.attendance!!.checkInTime!!)
             else
                 punchInTimeTV.text = "--:--"
 
             if (gig.isCheckOutMarked())
                 punchOutTimeTV.text =
-                    timeFormatter.format(gig.attendance!!.checkOutTime!!)
+                        timeFormatter.format(gig.attendance!!.checkOutTime!!)
             else
                 punchOutTimeTV.text = "--:--"
 
@@ -440,15 +440,15 @@ class GigAttendancePageFragment : BaseFragment(), PopupMenu.OnMenuItemClickListe
 
     private fun initializeGPS() {
         fusedLocationProviderClient =
-            LocationServices.getFusedLocationProviderClient(requireActivity())
+                LocationServices.getFusedLocationProviderClient(requireActivity())
     }
 
     fun requestPermissionForGPS() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             requestPermissions(
-                arrayOf(
-                    Manifest.permission.ACCESS_FINE_LOCATION
-                ), PERMISSION_FINE_LOCATION
+                    arrayOf(
+                            Manifest.permission.ACCESS_FINE_LOCATION
+                    ), PERMISSION_FINE_LOCATION
             )
         }
     }
@@ -457,9 +457,9 @@ class GigAttendancePageFragment : BaseFragment(), PopupMenu.OnMenuItemClickListe
         var manager = activity?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
         var statusOfGPS = manager.isProviderEnabled(LocationManager.GPS_PROVIDER)
         if (statusOfGPS && ActivityCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED
+                        requireContext(),
+                        Manifest.permission.ACCESS_FINE_LOCATION
+                ) == PackageManager.PERMISSION_GRANTED
         ) {
             if (!isGPSRequestCompleted) {
                 initializeGPS()
@@ -468,28 +468,26 @@ class GigAttendancePageFragment : BaseFragment(), PopupMenu.OnMenuItemClickListe
             fusedLocationProviderClient.lastLocation.addOnSuccessListener {
                 updateAttendanceOnDBCall(it)
             }
-        }
-        else if(userGpsDialogActionCount==0){
+        } else if (userGpsDialogActionCount == 0) {
             requestPermissionForGPS()
-        }
-        else {
+        } else {
             if (gig!!.attendance == null || !gig!!.attendance!!.checkInMarked) {
                 var markAttendance =
-                    GigAttendance(
-                        true,
-                        Date(),
-                        0.0,
-                        0.0,
-                        selfieImg,
-                        ""
-                    )
+                        GigAttendance(
+                                true,
+                                Date(),
+                                0.0,
+                                0.0,
+                                selfieImg,
+                                ""
+                        )
                 viewModel.markAttendance(markAttendance, gigId)
 
             } else {
                 gig!!.attendance!!.setCheckout(
-                    true, Date(), 0.0,
-                    0.0, selfieImg,
-                    ""
+                        true, Date(), 0.0,
+                        0.0, selfieImg,
+                        ""
                 )
                 viewModel.markAttendance(gig!!.attendance!!, gigId)
 
@@ -501,38 +499,43 @@ class GigAttendancePageFragment : BaseFragment(), PopupMenu.OnMenuItemClickListe
     var selfieImg: String = ""
 
     fun updateAttendanceOnDBCall(location: Location?) {
-        var geocoder = Geocoder(requireContext())
+        val latitude: Double = location?.latitude ?: 0.0
+        val longitude: Double = location?.longitude ?: 0.0
 
-        val latitude : Double = location ?.latitude ?: 0.0
-        val longitude : Double = location ?.longitude ?: 0.0
+        var locationAddress = ""
+        try {
+            val geocoder = Geocoder(requireContext())
+            val addressArr = geocoder.getFromLocation(latitude, longitude, 1)
+            locationAddress = addressArr?.get(0)?.getAddressLine(0) ?: ""
+        } catch (e: Exception) {
 
-        val addressArr = geocoder.getFromLocation(latitude, longitude, 1)
-        val locationAddress = addressArr?.get(0) ?.getAddressLine(0) ?: ""
+        }
 
 
-        gig ?. let{
+
+        gig?.let {
 
             val ifAttendanceMarked = it.attendance?.checkInMarked ?: false
 
             if (!ifAttendanceMarked) {
                 val markAttendance =
-                    GigAttendance(
+                        GigAttendance(
+                                true,
+                                Date(),
+                                latitude,
+                                longitude,
+                                selfieImg,
+                                locationAddress
+                        )
+                viewModel.markAttendance(markAttendance, gigId)
+            } else {
+                it.attendance?.setCheckout(
                         true,
                         Date(),
                         latitude,
                         longitude,
                         selfieImg,
                         locationAddress
-                    )
-                viewModel.markAttendance(markAttendance, gigId)
-            }else{
-                it.attendance?.setCheckout(
-                    true,
-                    Date(),
-                    latitude,
-                    longitude,
-                    selfieImg,
-                    locationAddress
                 )
                 viewModel.markAttendance(it.attendance!!, gigId)
             }
@@ -566,9 +569,9 @@ class GigAttendancePageFragment : BaseFragment(), PopupMenu.OnMenuItemClickListe
 //    }
 
     override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
+            requestCode: Int,
+            permissions: Array<out String>,
+            grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {

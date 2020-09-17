@@ -26,6 +26,7 @@ import com.gigforce.app.utils.ViewModelProviderFactory
 import kotlinx.android.synthetic.main.contact_edit_warning_dialog.*
 import kotlinx.android.synthetic.main.fragment_profile_about_expanded.*
 import kotlinx.android.synthetic.main.fragment_profile_about_expanded.view.*
+import kotlinx.android.synthetic.main.fragment_profile_main_expanded.view.*
 import kotlinx.android.synthetic.main.profile_card_background.view.*
 import kotlinx.android.synthetic.main.top_profile_bar.view.*
 import kotlinx.android.synthetic.main.verified_button.view.*
@@ -50,7 +51,7 @@ class AboutExpandedFragment : ProfileBaseFragment(), ProfileCardBgCallbacks,
         ).get(ViewModelAboutExpandedFragment::class.java)
     }
 
-    private val gigerVerificationViewModel: GigVerificationViewModel by viewModels()
+    private val gigerVerificationViewModel : GigVerificationViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -144,6 +145,7 @@ class AboutExpandedFragment : ProfileBaseFragment(), ProfileCardBgCallbacks,
         })
 
         gigerVerificationViewModel.startListeningForGigerVerificationStatusChanges()
+
 
 
     }
@@ -262,6 +264,8 @@ class AboutExpandedFragment : ProfileBaseFragment(), ProfileCardBgCallbacks,
 //            }
 //        }
 
+        about_top_profile.userName = profile.name
+        about_top_profile.imageName = profile.profileAvatarName
     }
 
 

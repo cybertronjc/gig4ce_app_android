@@ -16,28 +16,39 @@
         android:letterSpacing="0"
         android:paddingLeft="40dp"
         android:paddingRight="50dp"
-        android:text="Are sure you want to change availablilty ?"
+        android:text="New Version Available"
         android:textColor="#313131"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/sub_title"
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/title_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:fontFamily="@font/lato"
-        android:gravity="center_horizontal"
-        android:letterSpacing="0"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:textColor="#313131"
-        android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/title" />
+        app:layout_constraintTop_toBottomOf="@+id/title">
+
+        <TextView
+            android:id="@+id/sub_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/lato"
+            android:gravity="center_horizontal"
+            android:letterSpacing="0"
+            android:paddingLeft="10dp"
+            android:paddingRight="36dp"
+            android:text="Please update the app to continue the gigs."
+            android:textColor="#313131"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     <TextView
         android:id="@+id/yes"
@@ -50,12 +61,13 @@
         android:gravity="center"
         android:letterSpacing="0"
         android:text="Yes"
+        android:layout_marginRight="15dp"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/cancel"
-        app:layout_constraintTop_toBottomOf="@+id/sub_title"
+        app:layout_constraintTop_toBottomOf="@+id/title_parent"
         app:layout_constraintVertical_bias="0.0" />
 
     <TextView
@@ -74,7 +86,7 @@
         app:layout_constraintEnd_toStartOf="@+id/yes"
         app:layout_constraintHorizontal_bias="2.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sub_title" />
+        app:layout_constraintTop_toBottomOf="@+id/title_parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

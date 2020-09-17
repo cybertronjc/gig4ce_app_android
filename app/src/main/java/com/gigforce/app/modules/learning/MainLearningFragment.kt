@@ -5,6 +5,7 @@ import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.cardview.widget.CardView
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
@@ -76,7 +77,6 @@ class MainLearningFragment : BaseFragment() {
 
         initLearningViewModel()
     }
-
     private fun initLearningViewModel() {
         learningViewModel
             .roleBasedCourses
@@ -158,11 +158,9 @@ class MainLearningFragment : BaseFragment() {
                     PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
                         val assessment = item as CourseContent
 
-                        navigate(
-                            R.id.assessment_fragment, bundleOf(
-                                AssessmentFragment.INTENT_LESSON_ID to assessment.id
-                            )
-                        )
+                        navigate(R.id.assessment_fragment,  bundleOf(
+                            AssessmentFragment.INTENT_LESSON_ID to assessment.id
+                        ))
                     },
                     RecyclerGenericAdapter.ItemInterface<CourseContent> { obj, viewHolder, position ->
                         val lp = getView(viewHolder, R.id.assessment_cl).layoutParams
@@ -370,7 +368,6 @@ class MainLearningFragment : BaseFragment() {
         })
 
     }
-
     private fun displayImage(profileImg: String) {
         if (profileImg != "avatar.jpg" && profileImg != "") {
             val profilePicRef: StorageReference =
@@ -386,9 +383,8 @@ class MainLearningFragment : BaseFragment() {
                 .into(profile_image_main)
         }
     }
-
     private fun listener() {
-        chat_icon_iv.setOnClickListener {
+        chat_icon_iv.setOnClickListener{
             navigate(R.id.contactScreenFragment)
         }
     }
@@ -404,7 +400,7 @@ class MainLearningFragment : BaseFragment() {
         datalist.add(
             TitleSubtitleModel(
                 "Delivery",
-                "Maintaining hygiene and safety at gig", R.drawable.man_with_mask
+                "Maintaining hygiene and safety at gig", "https://firebasestorage.googleapis.com/v0/b/gigforce-dev.appspot.com/o/temp_files%2Fman_with_mask.jpg?alt=media&token=5b39c546-edcb-4d09-be53-70d34febb192"
             )
         )
 
@@ -412,22 +408,22 @@ class MainLearningFragment : BaseFragment() {
             TitleSubtitleModel(
                 "Cook",
                 "How to cook low salt meals",
-                R.drawable.cook_
+                "How to prepare coffee?\", \"https://firebasestorage.googleapis.com/v0/b/gigforce-dev.appspot.com/o/temp_files%2Fbrista_ls_img.jpg?alt=media&token=c5061822-a7d6-497c-8bee-09079cb8dc70"
             )
         )
 
-        datalist.add(
-            TitleSubtitleModel(
-                "Barista",
-                "How to prepare coffee?", R.drawable.barista
-            )
-        )
 
         datalist.add(
             TitleSubtitleModel(
                 "Housekeeping",
                 "Selecting the right reagent to clean different floors?",
-                R.drawable.housekeeping
+                "Maintaining hygiene and safety at gig\", \"https://firebasestorage.googleapis.com/v0/b/gigforce-dev.appspot.com/o/temp_files%2Fman_with_mask.jpg?alt=media&token=5b39c546-edcb-4d09-be53-70d34febb192"
+            )
+        )
+        datalist.add(
+            TitleSubtitleModel(
+                "Barista",
+                "How to prepare coffee?", "https://firebasestorage.googleapis.com/v0/b/gigforce-dev.appspot.com/o/temp_files%2Fbrista_ls_img.jpg?alt=media&token=c5061822-a7d6-497c-8bee-09079cb8dc70"
             )
         )
 
@@ -455,8 +451,13 @@ class MainLearningFragment : BaseFragment() {
                     var subtitle = getTextView(viewHolder, R.id.subtitle)
                     subtitle.text = obj?.subtitle
 
-                    var img = getImageView(viewHolder, R.id.img)
-                    img.setImageResource(obj?.imgIcon!!)
+                    obj?.imgStr?.let {
+                        var img = getImageView(viewHolder, R.id.img)
+                        showGlideImage(it,img)
+                    }
+
+//                    var img = getImageView(viewHolder,R.id.img)
+//                    img.setImageResource(obj?.imgIcon!!)
                 })
         recyclerGenericAdapter.list = datalist
         recyclerGenericAdapter.setLayout(R.layout.most_popular_item)
@@ -467,7 +468,12 @@ class MainLearningFragment : BaseFragment() {
         )
         mostPopularLearningsRV.adapter = recyclerGenericAdapter
     }
-
+    private fun showGlideImage(url:String,imgview: ImageView){
+        GlideApp.with(requireContext())
+            .load(url)
+            .placeholder(getCircularProgressDrawable())
+            .into(imgview)
+    }
     var width: Int = 0
     private fun initializeExploreByIndustry() {
         val displayMetrics = DisplayMetrics()
@@ -476,17 +482,17 @@ class MainLearningFragment : BaseFragment() {
         val itemWidth = ((width / 3) * 2).toInt()
         // model will change when integrated with DB
         var datalist: ArrayList<TitleSubtitleModel> = ArrayList<TitleSubtitleModel>()
-        datalist.add(
-            TitleSubtitleModel(
-                "Retail Sales Executive",
-                "Demonstrate products to customers", R.drawable.learning2
-            )
-        )
+//        datalist.add(
+//            TitleSubtitleModel(
+//                "Retail Sales Executive",
+//                "Demonstrate products to customers", R.drawable.learning2
+//            )
+//        )
         datalist.add(
             TitleSubtitleModel(
                 "Driver",
                 "How to accept a ride",
-                R.drawable.driver_img
+                "https://firebasestorage.googleapis.com/v0/b/gigforce-dev.appspot.com/o/temp_files%2Fdriver_img.jpg?alt=media&token=68412376-59c8-4598-81d6-9630724afff6"
             )
         )
         val recyclerGenericAdapter: RecyclerGenericAdapter<TitleSubtitleModel> =
@@ -512,9 +518,10 @@ class MainLearningFragment : BaseFragment() {
 
                     var subtitle = getTextView(viewHolder, R.id.title)
                     subtitle.text = obj?.subtitle
-
-                    var img = getImageView(viewHolder, R.id.learning_img)
-                    img.setImageResource(obj?.imgIcon!!)
+                    obj?.imgStr?.let {
+                        var img = getImageView(viewHolder, R.id.learning_img)
+                        showGlideImage(it,img)
+                    }
                 })
         recyclerGenericAdapter.list = datalist
         recyclerGenericAdapter.setLayout(R.layout.learning_bs_item)
@@ -532,5 +539,5 @@ class MainLearningFragment : BaseFragment() {
     }
 
 
-    class TitleSubtitleModel(var title: String, var subtitle: String, var imgIcon: Int = 0)
+    class TitleSubtitleModel(var title: String, var subtitle: String, var imgStr: String)
 }

@@ -27,7 +27,6 @@
             android:id="@+id/do_image_iv"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/scenario"
             android:scaleType="centerCrop"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -85,7 +84,6 @@
             android:id="@+id/dont_image"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/scenario"
             android:scaleType="centerCrop"
             app:layout_constraintTop_toTopOf="parent" />
 

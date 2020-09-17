@@ -6,6 +6,7 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -87,13 +88,18 @@ class CalendarHomeScreen : BaseFragment(),
             ViewModelProvider(this, ParamCustPreferViewModel(viewLifecycleOwner)).get(
                 CustomPreferencesViewModel::class.java
             )
+        print("test apk"+"test1")
+
         ConfigRepository().getForceUpdateCurrentVersion(object :
             ConfigRepository.LatestAPPUpdateListener {
             override fun getCurrentAPPVersion(latestAPPUpdateModel: ConfigRepository.LatestAPPUpdateModel) {
-                if (isNotLatestVersion(latestAPPUpdateModel))
+                print("test apk"+"test1"+latestAPPUpdateModel.active)
+                if (latestAPPUpdateModel.active && isNotLatestVersion(latestAPPUpdateModel))
                     showConfirmationDialogType3(
                         getString(R.string.new_version_available),
                         getString(R.string.new_version_available_detail),
+                        getString(R.string.update_now),
+                        getString(R.string.cancel_update),
                         object : ConfirmationDialogOnClickListener {
                             override fun clickedOnYes(dialog: Dialog?) {
                                 redirectToStore("https://play.google.com/store/apps/details?id=com.gigforce.app")
@@ -101,7 +107,8 @@ class CalendarHomeScreen : BaseFragment(),
                             }
 
                             override fun clickedOnNo(dialog: Dialog?) {
-                                activity?.finish()
+                                if (latestAPPUpdateModel?.force_update_required)
+                                    activity?.finish()
                                 dialog?.dismiss()
                             }
 
@@ -118,25 +125,29 @@ class CalendarHomeScreen : BaseFragment(),
 
     private fun isNotLatestVersion(latestAPPUpdateModel: ConfigRepository.LatestAPPUpdateModel): Boolean {
         try {
-            var appVersion = getAppVersion()?.split("-")[0]?.split(".")?.toTypedArray()
+            var currentAppVersion = getAppVersion()
+            if(currentAppVersion.contains("Dev")){
+                currentAppVersion = currentAppVersion?.split("-")[0]?:currentAppVersion
+            }
+            var appVersion = currentAppVersion?.split(".")?.toTypedArray()
             var serverAPPVersion =
                 latestAPPUpdateModel?.force_update_current_version?.split(".")?.toTypedArray()
             if (appVersion?.size == 0 || serverAPPVersion?.size == 0) {
                 showToast("not working")
                 return false
-            }
-            else {
-                if(appVersion.get(0).toInt()<serverAPPVersion.get(0).toInt()){
+            } else {
+                if (appVersion.get(0).toInt() < serverAPPVersion.get(0).toInt()) {
                     return true
-                }
-                else if(appVersion.get(1).toInt()<serverAPPVersion.get(1).toInt()){
+                } else if (appVersion.get(1).toInt() < serverAPPVersion.get(1).toInt()) {
                     return true
-                }else if(appVersion.get(2).toInt()<serverAPPVersion.get(2).toInt()){
+                } else if (appVersion.get(2).toInt() < serverAPPVersion.get(2).toInt()) {
                     return true
-                }else return false
+                } else return false
 
             }
         } catch (e: Exception) {
+            Log.e("test apk","test2 exception"+e.message.toString())
+
             return false
         }
     }

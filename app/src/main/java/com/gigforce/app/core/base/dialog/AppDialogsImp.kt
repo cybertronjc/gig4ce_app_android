@@ -11,6 +11,7 @@ import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.marginRight
 import com.gigforce.app.R
 
 open class AppDialogsImp(var activity: Activity) : AppDialogsInterface {
@@ -61,6 +62,8 @@ open class AppDialogsImp(var activity: Activity) : AppDialogsInterface {
     override fun showConfirmationDialogType3(
         title: String,
         subTitle: String,
+        yesButtonText:String,
+        noButtonTxt:String,
         buttonClickListener: ConfirmationDialogOnClickListener
     ) {
         var customialog: Dialog? = activity?.let { Dialog(it) }
@@ -77,8 +80,17 @@ open class AppDialogsImp(var activity: Activity) : AppDialogsInterface {
         titleDialog.text = title
         val subTitleDialog = customialog?.findViewById(R.id.sub_title) as TextView
         subTitleDialog.text = subTitle
+
         val yesBtn = customialog?.findViewById(R.id.yes) as TextView
+        yesBtn.text = yesButtonText
+        var yesBtnlp = yesBtn?.layoutParams
+        yesBtnlp?.width = (width - 32-350)/2
+
         val noBtn = customialog?.findViewById(R.id.cancel) as TextView
+        noBtn.text = noButtonTxt
+        var noBtnlp = noBtn?.layoutParams
+        noBtnlp?.width = (width - 32-350)/2
+
         yesBtn.setOnClickListener(View.OnClickListener {
             buttonClickListener.clickedOnYes(customialog)
         })

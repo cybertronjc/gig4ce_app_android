@@ -52,7 +52,6 @@
         android:id="@+id/imageView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:src="@drawable/scenario"
         android:scaleType="centerCrop"
         app:layout_constraintBottom_toTopOf="@id/slideInfoLayout"
         app:layout_constraintTop_toTopOf="parent" />

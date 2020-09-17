@@ -18,6 +18,8 @@ interface AppDialogsInterface {
     fun showConfirmationDialogType3(
         title: String,
         subTitle: String,
+        yesButtonText:String = "Yes",
+        noButtonText:String = "No",
         buttonClickListener: ConfirmationDialogOnClickListener
     )
     fun showConfirmationDialogType5(
