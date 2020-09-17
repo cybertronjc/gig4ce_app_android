@@ -154,6 +154,7 @@ class CalendarHomeScreenViewModel : ViewModel() {
                             count++
                             if(verticalCalendarData!=null){
                                 verticalCalendarData.subTitle = "+"+count+" More"
+                                verticalCalendarData.gigCount = count + 1
                             }
                             else {
                                 var countGigs = ""

@@ -1,10 +1,12 @@
 package com.gigforce.app.modules.gigPage.models
 
+import android.os.Parcelable
 import androidx.annotation.Keep
 import com.gigforce.app.core.toLocalDateTime
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentId
 import com.google.firebase.firestore.Exclude
+import kotlinx.android.parcel.Parcelize
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId

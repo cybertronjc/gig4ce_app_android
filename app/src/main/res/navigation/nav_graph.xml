@@ -628,6 +628,10 @@
         android:name="com.gigforce.app.modules.learning.courseContent.CourseContentListFragment"
         android:label="fragment_course_content_list"
         tools:layout="@layout/fragment_course_content_list" />
+    <dialog
+        android:id="@+id/gigsListForDeclineBottomSheet"
+        android:name="com.gigforce.app.modules.gigPage.GigsListForDeclineBottomSheet"
+        android:label="GigsListForDeclineBottomSheet" />
 
 
 </navigation>

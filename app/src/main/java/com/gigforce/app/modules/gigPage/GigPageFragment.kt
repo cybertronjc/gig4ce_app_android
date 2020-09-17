@@ -38,6 +38,7 @@ import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.base.dialog.ConfirmationDialogOnClickListener
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.toLocalDate
+import com.gigforce.app.core.toLocalDateTime
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.gigPage.models.Gig
 import com.gigforce.app.modules.gigPage.models.GigAttendance
@@ -74,6 +75,7 @@ import kotlinx.android.synthetic.main.fragment_gig_page_present.wageIV
 import kotlinx.android.synthetic.main.fragment_gig_page_present.wageTV
 import java.text.SimpleDateFormat
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -1134,7 +1136,26 @@ class GigPageFragment : BaseFragment(), View.OnClickListener, Toolbar.OnMenuItem
                 true
             }
             R.id.action_decline_gig ->{
-                declineGigDialog()
+
+                if(gig == null)
+                    return true
+
+                if(gig!!.startDateTime!!.toLocalDateTime() < LocalDateTime.now()){
+                    //Past or ongoing gig
+
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setTitle("Alert")
+                        .setMessage("Cannot decline past or ongoing gig")
+                        .setPositiveButton(getString(R.string.okay_text)){_,_ -> }
+                        .show()
+
+                    return true
+                }
+
+                if(gig != null ) {
+                    declineGigDialog()
+                }
+
                 true
             }
             else -> false

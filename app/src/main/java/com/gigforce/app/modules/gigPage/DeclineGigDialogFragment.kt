@@ -20,7 +20,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.android.synthetic.main.fragment_decline_gig_dialog.*
 import kotlinx.android.synthetic.main.fragment_decline_gig_dialog_main.*
 
-interface DeclineGigDialogFragmentResultListener{
+interface DeclineGigDialogFragmentResultListener {
 
     fun gigDeclined()
 }
@@ -29,24 +29,42 @@ class DeclineGigDialogFragment : DialogFragment() {
 
     companion object {
         const val INTENT_EXTRA_GIG_ID = "gig_id"
+        const val INTENT_EXTRA_GIG_IDS = "gig_ids"
         const val TAG = "DeclineGigDialogFragment"
 
-        fun launch(gigId: String,
-                   fragmentManager: FragmentManager,
-                   declineGigDialogFragmentResultListener : DeclineGigDialogFragmentResultListener) {
+        fun launch(
+            gigId: String,
+            fragmentManager: FragmentManager,
+            declineGigDialogFragmentResultListener: DeclineGigDialogFragmentResultListener
+        ) {
             val frag = DeclineGigDialogFragment()
             frag.arguments = bundleOf(INTENT_EXTRA_GIG_ID to gigId)
+            frag.mDeclineGigDialogFragmentResultListener = declineGigDialogFragmentResultListener
+            frag.show(fragmentManager, TAG)
+        }
+
+        fun launch(
+            gigIds: List<String>,
+            fragmentManager: FragmentManager,
+            declineGigDialogFragmentResultListener: DeclineGigDialogFragmentResultListener
+        ) {
+            val frag = DeclineGigDialogFragment()
+            frag.arguments = bundleOf(INTENT_EXTRA_GIG_IDS to ArrayList(gigIds))
             frag.mDeclineGigDialogFragmentResultListener = declineGigDialogFragmentResultListener
             frag.show(fragmentManager, TAG)
         }
     }
 
     private val viewModel: GigViewModel by viewModels()
-    private lateinit var gigId: String
-    private lateinit var mDeclineGigDialogFragmentResultListener : DeclineGigDialogFragmentResultListener
+
+    private var gigId: String? = null
+    private var gigIds: ArrayList<String>? = null
+
+    private lateinit var mDeclineGigDialogFragmentResultListener: DeclineGigDialogFragmentResultListener
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_decline_gig_dialog, container, false)
@@ -55,11 +73,13 @@ class DeclineGigDialogFragment : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         savedInstanceState?.let {
-            gigId = it.getString(INTENT_EXTRA_GIG_ID) ?: return@let
+            gigId = it.getString(INTENT_EXTRA_GIG_ID)
+            gigIds = it.getStringArrayList(INTENT_EXTRA_GIG_IDS)
         }
 
         arguments?.let {
-            gigId = it.getString(INTENT_EXTRA_GIG_ID) ?: return@let
+            gigId = it.getString(INTENT_EXTRA_GIG_ID)
+            gigIds = it.getStringArrayList(INTENT_EXTRA_GIG_IDS)
         }
         initView()
         initViewModel()
@@ -68,6 +88,7 @@ class DeclineGigDialogFragment : DialogFragment() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString(INTENT_EXTRA_GIG_ID, gigId)
+        outState.putStringArrayList(INTENT_EXTRA_GIG_IDS, gigIds)
     }
 
     private fun initViewModel() {
@@ -159,7 +180,10 @@ class DeclineGigDialogFragment : DialogFragment() {
                 reason_radio_group.findViewById<RadioButton>(checkedRadioButtonId).text.toString()
             }
 
-            viewModel.declineGig(gigId, reason)
+            if (gigId != null)
+                viewModel.declineGig(gigId!!, reason)
+            else if (!gigIds.isNullOrEmpty())
+                viewModel.declineGigs(gigIds!!, reason)
         }
     }
 }

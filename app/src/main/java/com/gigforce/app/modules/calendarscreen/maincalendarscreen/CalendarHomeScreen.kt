@@ -11,6 +11,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
+import androidx.core.os.bundleOf
 import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -33,6 +35,7 @@ import com.gigforce.app.modules.calendarscreen.maincalendarscreen.verticalcalend
 import com.gigforce.app.modules.custom_gig_preferences.CustomPreferencesViewModel
 import com.gigforce.app.modules.custom_gig_preferences.ParamCustPreferViewModel
 import com.gigforce.app.modules.custom_gig_preferences.UnavailableDataModel
+import com.gigforce.app.modules.gigPage.GigsListForDeclineBottomSheet
 import com.gigforce.app.modules.preferences.PreferencesFragment
 import com.gigforce.app.modules.profile.ProfileViewModel
 import com.gigforce.app.modules.profile.models.ProfileData
@@ -44,6 +47,7 @@ import com.google.firebase.storage.StorageReference
 import com.riningan.widget.ExtendedBottomSheetBehavior
 import com.riningan.widget.ExtendedBottomSheetBehavior.STATE_COLLAPSED
 import kotlinx.android.synthetic.main.calendar_home_screen.*
+import org.w3c.dom.Text
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.util.*
@@ -701,38 +705,73 @@ class CalendarHomeScreen : BaseFragment(),
 
                 recyclerGenericAdapter.notifyItemChanged(position)
             } else {
-                showConfirmationDialogType1(
-                    getString(R.string.sure_working_on_this_day),
-                    object : ConfirmationDialogOnClickListener {
-                        override fun clickedOnYes(dialog: Dialog?) {
-                            var title =
-                                getString(R.string.alright_no_new_gigs_assigned_on_this_day) + temporaryData.title + getString(
-                                    R.string.want_to_decline
-                                )
-                            showConfirmationDialogType5(
-                                title,
-                                object : ConfirmationDialogOnClickListener {
-                                    override fun clickedOnYes(dialog: Dialog?) {
-                                        showToast(getString(R.string.screen_pending_show_gigs))
-                                        makeChangesToCalendarItem(position, true)
-                                        dialog?.dismiss()
-                                    }
 
-                                    override fun clickedOnNo(dialog: Dialog?) {
-                                        makeChangesToCalendarItem(position, true)
-                                        dialog?.dismiss()
-                                    }
+                val view =
+                    layoutInflater.inflate(R.layout.dialog_confirm_gig_denial, null)
 
-                                })
-                            dialog?.dismiss()
-                        }
+                val dialog = AlertDialog.Builder(requireContext())
+                    .setView(view)
+                    .show()
 
-                        override fun clickedOnNo(dialog: Dialog?) {
-                            recyclerGenericAdapter.notifyItemChanged(position)
-                            dialog?.dismiss()
-                        }
+                view.findViewById<TextView>(R.id.dialog_message_tv)
+                    .text = "You have ${temporaryData.gigCount} active on this day. These gigs will get cancelled as well."
 
-                    })
+                view.findViewById<View>(R.id.yesBtn)
+                    .setOnClickListener {
+                        val date = temporaryData.getLocalDate()
+                        navigate(R.id.gigsListForDeclineBottomSheet, bundleOf(
+                        GigsListForDeclineBottomSheet.INTEN_EXTRA_DATE to date
+                        ))
+
+                        makeChangesToCalendarItem(position, true)
+                        dialog?.dismiss()
+                    }
+
+                view.findViewById<View>(R.id.noBtn)
+                    .setOnClickListener {
+                        makeChangesToCalendarItem(position, true)
+                        dialog?.dismiss()
+                    }
+
+//                showConfirmationDialogType1(
+//                    getString(R.string.sure_working_on_this_day),
+//                    object : ConfirmationDialogOnClickListener {
+//                        override fun clickedOnYes(dialog: Dialog?) {
+//                            var title =
+//                                getString(R.string.alright_no_new_gigs_assigned_on_this_day) + temporaryData.title + getString(
+//                                    R.string.want_to_decline
+//                                )
+//                            showConfirmationDialogType3(
+//                                title,
+//                                "Sub title",
+//                                "yes",
+//                                "No",
+//                                object : ConfirmationDialogOnClickListener {
+//                                    override fun clickedOnYes(dialog: Dialog?) {
+//                                        val date = temporaryData.getLocalDate()
+//                                        navigate(R.id.gigsListForDeclineBottomSheet, bundleOf(
+//                                            GigsListForDeclineBottomSheet.INTEN_EXTRA_DATE to date
+//                                        ))
+//
+//                                        makeChangesToCalendarItem(position, true)
+//                                        dialog?.dismiss()
+//                                    }
+//
+//                                    override fun clickedOnNo(dialog: Dialog?) {
+//                                        makeChangesToCalendarItem(position, true)
+//                                        dialog?.dismiss()
+//                                    }
+//
+//                                })
+//                            dialog?.dismiss()
+//                        }
+//
+//                        override fun clickedOnNo(dialog: Dialog?) {
+//                            recyclerGenericAdapter.notifyItemChanged(position)
+//                            dialog?.dismiss()
+//                        }
+//
+//                    })
             }
         } else if (temporaryData.isUnavailable) {
             makeChangesToCalendarItem(position, false)

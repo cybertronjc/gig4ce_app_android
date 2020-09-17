@@ -1,15 +1,18 @@
 package com.gigforce.app.modules.gigPage
 
 import android.net.Uri
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.gigforce.app.core.toLocalDate
 import com.gigforce.app.modules.gigPage.models.Gig
 import com.gigforce.app.modules.gigPage.models.GigAttendance
 import com.gigforce.app.utils.Lce
 import com.gigforce.app.utils.Lse
 import com.gigforce.app.utils.setOrThrow
+import com.google.firebase.Timestamp
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FieldValue
@@ -18,6 +21,8 @@ import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.ZoneId
 import java.util.*
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
@@ -30,6 +35,7 @@ class GigViewModel constructor(
 
     private var mWatchUpcomingRepoRegistration: ListenerRegistration? = null
     private var mWatchSingleGigRegistration: ListenerRegistration? = null
+    private var mWatchTodaysGigRegistration: ListenerRegistration? = null
 
     private val _upcomingGigs = MutableLiveData<Lce<List<Gig>>>()
     val upcomingGigs: LiveData<Lce<List<Gig>>> get() = _upcomingGigs
@@ -54,13 +60,7 @@ class GigViewModel constructor(
     }
 
     private fun extractUpcomingGigs(querySnapshot: QuerySnapshot) {
-        val userGigs: MutableList<Gig> = mutableListOf()
-        querySnapshot.documents.forEach { t ->
-            t.toObject(Gig::class.java)?.let {
-                it.gigId = t.id
-                userGigs.add(it)
-            }
-        }
+        val userGigs: MutableList<Gig> = extractGigs(querySnapshot)
 
         val currentDate = Date()
         val upcomingGigs = userGigs.filter {
@@ -75,6 +75,17 @@ class GigViewModel constructor(
             it.startDateTime!!.seconds
         }
         _upcomingGigs.value = Lce.content(upcomingGigs)
+    }
+
+    private fun extractGigs(querySnapshot: QuerySnapshot): MutableList<Gig> {
+        val userGigs: MutableList<Gig> = mutableListOf()
+        querySnapshot.documents.forEach { t ->
+            t.toObject(Gig::class.java)?.let {
+                it.gigId = t.id
+                userGigs.add(it)
+            }
+        }
+        return userGigs
     }
 
 
@@ -185,6 +196,7 @@ class GigViewModel constructor(
         super.onCleared()
         mWatchUpcomingRepoRegistration?.remove()
         mWatchSingleGigRegistration?.remove()
+        mWatchTodaysGigRegistration?.remove()
     }
 
 
@@ -294,5 +306,57 @@ class GigViewModel constructor(
         }
     }
 
+    fun declineGigs(gigIds: List<String>, reason: String) = viewModelScope.launch{
+        _declineGig.value = Lse.loading()
+
+        try {
+            gigIds.forEach {
+
+                val gig = getGigNow(it)
+                gig.declinedBy = gig.gigerId
+                gig.declineReason = reason
+                gig.gigerId = ""
+
+                gigsRepository.getCollectionReference().document(gig.gigId).setOrThrow(gig)
+            }
+
+            _declineGig.value = Lse.success()
+        } catch (e: Exception) {
+            _declineGig.value = Lse.error(e.message!!)
+            FirebaseCrashlytics.getInstance().apply {
+                log("Unable to decline gig")
+                recordException(e)
+            }
+        }
+    }
+
+
+    private val _todaysGigs = MutableLiveData<Lce<List<Gig>>>()
+    val todaysGigs: LiveData<Lce<List<Gig>>> get() = _todaysGigs
+
+    fun startWatchingTodaysOngoingAndUpcomingGig(date : LocalDate){
+        Log.d("GigViewModel", "Started Watching gigs for $date")
+
+        val dateFull = Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant())
+
+        _todaysGigs.value = Lce.loading()
+        mWatchTodaysGigRegistration = gigsRepository
+            .getCurrentUserGigs()
+            .whereGreaterThan("startDateTime", dateFull)
+            .addSnapshotListener { querySnapshot, firebaseFirestoreException ->
+
+                val tomorrow = date.plusDays(1)
+
+                if (querySnapshot != null) {
+                   val todaysUpcomingGigs =  extractGigs(querySnapshot).filter {
+                       it.startDateTime!! > Timestamp.now() && ( it.endDateTime == null || it.endDateTime!!.toLocalDate().isBefore(tomorrow))
+                   }
+                    _todaysGigs.value = Lce.content(todaysUpcomingGigs)
+                } else {
+                    _upcomingGigs.value = Lce.error(firebaseFirestoreException!!.message!!)
+                }
+            }
+
+    }
 
 }
