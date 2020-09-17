@@ -12,7 +12,7 @@
             android:id="@+id/icon"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:src="@drawable/ic_balance_expanded"
+            app:srcCompat="@drawable/ic_balance_expanded"
             android:layout_marginTop="16dp"
             android:layout_marginStart="16dp"
             app:layout_constraintTop_toTopOf="parent"

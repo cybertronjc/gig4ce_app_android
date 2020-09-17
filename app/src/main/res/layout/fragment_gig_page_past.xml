@@ -5,7 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".modules.gigPage.PastGigPageFragment">
+    >
+<!--    tools:context=".modules.gigPage.PastGigPageFragment"-->
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -126,7 +127,7 @@
             android:layout_height="wrap_content"
             android:paddingBottom="18dp"
             android:visibility="gone"
-            app:layout_constraintTop_toBottomOf="@id/gigControlsLayout">
+            app:layout_constraintTop_toBottomOf="@id/gigOverViewLayout">
 
             <TextView
                 android:id="@+id/detailsLabelTV"
@@ -149,7 +150,7 @@
                 android:layout_height="17dp"
                 android:layout_marginStart="25dp"
                 android:layout_marginTop="14dp"
-                android:src="@drawable/ic_play_round_pink_bck"
+                app:srcCompat="@drawable/ic_play_round_pink_bck"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/detailsLabelTV" />
 
@@ -174,7 +175,7 @@
                 android:layout_height="17dp"
                 android:layout_marginStart="25dp"
                 android:layout_marginTop="14dp"
-                android:src="@drawable/ic_play_round_pink_bck"
+                app:srcCompat="@drawable/ic_play_round_pink_bck"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/durationTextTV" />
 
@@ -198,7 +199,7 @@
                 android:layout_height="17dp"
                 android:layout_marginStart="25dp"
                 android:layout_marginTop="14dp"
-                android:src="@drawable/ic_play_round_pink_bck"
+                app:srcCompat="@drawable/ic_play_round_pink_bck"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/shiftTV" />
 
@@ -223,7 +224,7 @@
                 android:layout_height="17dp"
                 android:layout_marginStart="25dp"
                 android:layout_marginTop="14dp"
-                android:src="@drawable/ic_play_round_pink_bck"
+                app:srcCompat="@drawable/ic_play_round_pink_bck"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/addressTV" />
 
@@ -356,7 +357,7 @@
                 android:layout_height="17dp"
                 android:layout_marginStart="25dp"
                 android:layout_marginTop="14dp"
-                android:src="@drawable/ic_play_round_pink_bck"
+                app:srcCompat="@drawable/ic_play_round_pink_bck"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/mapCardView" />
 
@@ -380,7 +381,7 @@
                 android:layout_height="17dp"
                 android:layout_marginStart="25dp"
                 android:layout_marginTop="14dp"
-                android:src="@drawable/ic_play_round_pink_bck"
+                app:srcCompat="@drawable/ic_play_round_pink_bck"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/gigDistanceTV" />
 
