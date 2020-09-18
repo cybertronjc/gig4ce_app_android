@@ -930,6 +930,7 @@
     <string name="more">more</string>
     <string name="cancel_update">Cancel</string>
     <string name="update_now">Update now</string>
+    <string name="do_it_later"><u>Do It Later</u></string>
 
 
 </resources>

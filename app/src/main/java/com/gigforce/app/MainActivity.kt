@@ -49,6 +49,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
+
         val navHostFragment: NavHostFragment? =
             supportFragmentManager.findFragmentById(R.id.nav_fragment) as NavHostFragment?
 

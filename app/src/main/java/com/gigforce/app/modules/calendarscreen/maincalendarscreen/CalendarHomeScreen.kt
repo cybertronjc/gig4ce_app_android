@@ -816,8 +816,12 @@ class CalendarHomeScreen : BaseFragment(),
     }
 
     override fun onBackPressed(): Boolean {
-        parentFragmentManager.popBackStack()
-        return false
+        if (parentFragmentManager.backStackEntryCount == 0) {
+            requireActivity().finish()
+        } else {
+            parentFragmentManager.popBackStack()
+        }
+        return true
     }
 
 }

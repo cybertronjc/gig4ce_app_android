@@ -45,7 +45,7 @@ class AssessmentDialog : DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         initClicks();
         initUIAsPerState(arguments?.getInt(StringConstants.ASSESSMENT_DIALOG_STATE.value))
-        isCancelable = false
+
     }
 
     private fun initUIAsPerState(state: Int?) {
@@ -53,7 +53,8 @@ class AssessmentDialog : DialogFragment() {
             STATE_PASS -> statePass()
             STATE_REAPPEAR -> stateReappear()
             else -> {
-
+                isCancelable = true
+                tv_do_it_later_assess_dialog.visibility = View.VISIBLE
                 tv_assess_name_assess_dialog.text =
                     "${getString(R.string.assessment_colon)} ${arguments?.getString(StringConstants.ASSESSMENT_NAME.value)}"
 
@@ -94,11 +95,13 @@ class AssessmentDialog : DialogFragment() {
                     )
                     } ${calInstance.get(Calendar.SECOND)} ${getString(R.string.seconds)}"
 
+
             }
         }
     }
 
     private fun stateReappear() {
+        isCancelable = false
         tv_ques_count_assess_dialog.visibility = View.GONE
         tv_time_assess_dialog.visibility = View.GONE
         tv_assessment_result__assess_dialog.visibility = View.VISIBLE
@@ -151,6 +154,7 @@ class AssessmentDialog : DialogFragment() {
     }
 
     private fun statePass() {
+        isCancelable = false
         tv_ques_count_assess_dialog.visibility = View.GONE
         tv_time_assess_dialog.visibility = View.GONE
         tv_assessment_result__assess_dialog.visibility = View.VISIBLE
@@ -206,8 +210,8 @@ class AssessmentDialog : DialogFragment() {
     private fun initClicks() {
         PushDownAnim.setPushDownAnimTo(tv_action_assess_dialog)
             .setOnClickListener(View.OnClickListener {
-
                 dismiss()
+
                 assessmentDialogCallbacks?.assessmentState(
                     arguments?.getInt(
                         StringConstants.ASSESSMENT_DIALOG_STATE.value,
@@ -216,6 +220,10 @@ class AssessmentDialog : DialogFragment() {
                 )
 
             })
+        tv_do_it_later_assess_dialog.setOnClickListener {
+            dismiss()
+            assessmentDialogCallbacks?.doItLaterPressed()
+        }
     }
 
     override fun onStart() {
@@ -247,6 +255,7 @@ class AssessmentDialog : DialogFragment() {
 
     interface AssessmentDialogCallbacks {
         fun assessmentState(state: Int)
+        fun doItLaterPressed()
 
 
     }

@@ -145,6 +145,7 @@ class AssessmentResultFragment : BaseFragment(), PopupMenu.OnMenuItemClickListen
         val backEntry = parentFragmentManager.getBackStackEntryAt(index);
         val tag = backEntry.name;
         val fragmentManager: FragmentManager? = parentFragmentManager
+        fragmentManager?.executePendingTransactions()
         fragmentManager?.popBackStack(tag, FragmentManager.POP_BACK_STACK_INCLUSIVE)
 
 
@@ -231,5 +232,6 @@ class AssessmentResultFragment : BaseFragment(), PopupMenu.OnMenuItemClickListen
     override fun onClickSuggestedLearnings() {
         navigate(R.id.mainLearningFragment)
     }
+
 
 }

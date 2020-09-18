@@ -367,11 +367,24 @@ class AssessmentFragment : BaseFragment(),
         dialog.arguments = bundle
 
         dialog.show(parentFragmentManager, AssessmentDialog::class.java.name)
+        parentFragmentManager.executePendingTransactions()
+        when (state) {
+            AssessmentDialog.STATE_INIT -> dialog.dialog?.setOnCancelListener {
+                popBackState()
+            }
+        }
+
+
     }
 
 
     override fun assessmentState(state: Int) {
         viewModelAssessmentFragment.switchAsPerState(state)
+    }
+
+    override fun doItLaterPressed() {
+        popBackState()
+
     }
 
     override fun submitAnswer() {
