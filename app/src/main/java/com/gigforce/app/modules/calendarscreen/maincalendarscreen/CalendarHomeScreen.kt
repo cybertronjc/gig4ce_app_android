@@ -2,8 +2,11 @@ package com.gigforce.app.modules.calendarscreen.maincalendarscreen
 
 import android.app.Dialog
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -35,6 +38,7 @@ import com.gigforce.app.modules.profile.ProfileViewModel
 import com.gigforce.app.modules.profile.models.ProfileData
 import com.gigforce.app.modules.roster.RosterDayFragment
 import com.gigforce.app.utils.GlideApp
+import com.gigforce.app.utils.configrepository.ConfigRepository
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.storage.StorageReference
 import com.riningan.widget.ExtendedBottomSheetBehavior
@@ -85,6 +89,31 @@ class CalendarHomeScreen : BaseFragment(),
                 CustomPreferencesViewModel::class.java
             )
 
+        ConfigRepository().getForceUpdateCurrentVersion(object :
+            ConfigRepository.LatestAPPUpdateListener {
+            override fun getCurrentAPPVersion(latestAPPUpdateModel: ConfigRepository.LatestAPPUpdateModel) {
+                print("test apk"+"test1"+latestAPPUpdateModel.active)
+                if (latestAPPUpdateModel.active && isNotLatestVersion(latestAPPUpdateModel))
+                    showConfirmationDialogType3(
+                        getString(R.string.new_version_available),
+                        getString(R.string.new_version_available_detail),
+                        getString(R.string.update_now),
+                        getString(R.string.cancel_update),
+                        object : ConfirmationDialogOnClickListener {
+                            override fun clickedOnYes(dialog: Dialog?) {
+                                redirectToStore("https://play.google.com/store/apps/details?id=com.gigforce.app")
+                                dialog?.dismiss()
+                            }
+
+                            override fun clickedOnNo(dialog: Dialog?) {
+                                if (latestAPPUpdateModel?.force_update_required)
+                                    activity?.finish()
+                                dialog?.dismiss()
+                            }
+
+                        })
+            }
+        })
         arrCalendarDependent =
             arrayOf(calendar_dependent, margin_40, below_oval, calendar_cv, bottom_sheet_top_shadow)
         selectedMonthModel = CalendarView.MonthModel(Calendar.getInstance().get(Calendar.MONTH))
@@ -93,6 +122,54 @@ class CalendarHomeScreen : BaseFragment(),
         observers()
     }
 
+    private fun isNotLatestVersion(latestAPPUpdateModel: ConfigRepository.LatestAPPUpdateModel): Boolean {
+        try {
+            var currentAppVersion = getAppVersion()
+            if(currentAppVersion.contains("Dev")){
+                currentAppVersion = currentAppVersion?.split("-")[0]?:currentAppVersion
+            }
+            var appVersion = currentAppVersion?.split(".")?.toTypedArray()
+            var serverAPPVersion =
+                latestAPPUpdateModel?.force_update_current_version?.split(".")?.toTypedArray()
+            if (appVersion?.size == 0 || serverAPPVersion?.size == 0) {
+                showToast("not working")
+                return false
+            } else {
+                if (appVersion.get(0).toInt() < serverAPPVersion.get(0).toInt()) {
+                    return true
+                } else if (appVersion.get(1).toInt() < serverAPPVersion.get(1).toInt()) {
+                    return true
+                } else if (appVersion.get(2).toInt() < serverAPPVersion.get(2).toInt()) {
+                    return true
+                } else return false
+
+            }
+        } catch (e: Exception) {
+            Log.e("test apk","test2 exception"+e.message.toString())
+
+            return false
+        }
+    }
+
+    fun getAppVersion(): String {
+        var result = "";
+
+        try {
+            result = context?.getPackageManager()
+                ?.getPackageInfo(context?.getPackageName(), 0)
+                ?.versionName ?: "";
+        } catch (e: PackageManager.NameNotFoundException) {
+
+        }
+
+        return result;
+    }
+
+    fun redirectToStore(playStoreUrl: String) {
+        var intent = Intent(Intent.ACTION_VIEW, Uri.parse(playStoreUrl))
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent)
+    }
 
     private fun initializeViews() {
         initializeExtendedBottomSheet()
@@ -285,7 +362,7 @@ class CalendarHomeScreen : BaseFragment(),
 
 
     private fun initializeMonthTV(calendar: Calendar, needaction: Boolean) {
-        val pattern = "MMMM YYYY"
+        val pattern = "MMMM yyyy"
         val simpleDateFormat = SimpleDateFormat(pattern)
         val date: String = simpleDateFormat.format(calendar.time)
         month_year.text = date

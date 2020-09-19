@@ -176,7 +176,7 @@ class AboutExpandedFragment : ProfileBaseFragment(), ProfileCardBgCallbacks,
         contact_card.setWhatsAppChecked.clear()
         if (profile.contactPhone == null || profile.contactPhone?.isEmpty() == true)
             viewModel.updateContactDetails(
-                arguments?.getString(StringConstants.PROFILE_ID.value) ?: "",
+                profile.id!!,//todo
                 profile.contact!!
             )
 
@@ -252,6 +252,8 @@ class AboutExpandedFragment : ProfileBaseFragment(), ProfileCardBgCallbacks,
 //            }
 //        }
 
+        about_top_profile.userName = profile.name
+        about_top_profile.imageName = profile.profileAvatarName
     }
 
 

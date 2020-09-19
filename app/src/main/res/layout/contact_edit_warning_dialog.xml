@@ -70,7 +70,7 @@
         android:layout_height="40dp"
         android:layout_marginTop="26dp"
 
-        android:background="@drawable/bg_delete_dialog_yes"
+        android:background="@drawable/rect_button_gradient"
         android:fontFamily="@font/lato_bold"
         android:gravity="center"
         android:text="@string/proceed"

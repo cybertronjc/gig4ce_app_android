@@ -10,11 +10,15 @@ import androidx.lifecycle.ViewModelProviders
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.modules.auth.ui.main.LoginSuccessfulViewModel
+import com.gigforce.app.modules.profile.models.ProfileData
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 
-class OnboardingLoaderFragment: BaseFragment() {
+class OnboardingLoaderFragment : BaseFragment() {
     companion object {
         fun newInstance() = OnboardingLoaderFragment()
     }
+
     private lateinit var viewModel: LoginSuccessfulViewModel
     private val SPLASH_TIME_OUT: Long = 250
     override fun onCreateView(
@@ -23,6 +27,7 @@ class OnboardingLoaderFragment: BaseFragment() {
     ): View? {
         return inflateView(R.layout.onboarding_loader_fragment, inflater, container)
     }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(LoginSuccessfulViewModel::class.java)
@@ -30,38 +35,63 @@ class OnboardingLoaderFragment: BaseFragment() {
 //        if(onboardingCompleted!=null && onboardingCompleted.equals("true")){
 //            navigateToHomeScreen()
 //        }
+
         observer()
         Handler().postDelayed({
             viewModel.getProfileAndGigData()
         }, SPLASH_TIME_OUT)
     }
+
     private fun navigateToLandingHomeScreen() {
         popFragmentFromStack(R.id.onboardingLoaderfragment)
         navigate(R.id.landinghomefragment)
     }
-    private fun navigateToMainOnboarding(){
+
+    private fun navigateToMainOnboarding() {
         popFragmentFromStack(R.id.onboardingLoaderfragment)
         navigate(R.id.onboardingfragment)
     }
+
     private fun observer() {
         viewModel.userProfileAndGigData.observe(viewLifecycleOwner, Observer { profileAndGig ->
-            if (profileAndGig.profile != null ) {
+            if (profileAndGig.profile != null) {
+                setUserInCrashlytics(profileAndGig.profile)
                 if (profileAndGig.profile.status) {
+
                     if (profileAndGig.profile.isonboardingdone) {
                         saveOnBoardingCompleted()
 
-                        if(profileAndGig.hasGigs){
+                        if (profileAndGig.hasGigs) {
                             navigateToCalendarGomeScreen()
-                        }else {
+                        } else {
                             navigateToLandingHomeScreen()
                         }
-                    }else {
+                    } else {
                         navigateToMainOnboarding()
                     }
                 } else
                     showToast(profileAndGig.profile.errormsg)
             }
         })
+    }
+
+    private fun setUserInCrashlytics(profile: ProfileData) {
+        val username = profile?.name
+        val uid = FirebaseAuth.getInstance().currentUser?.uid ?: ""
+        var mobileNo = ""
+        profile?.contact?.let {
+            for (contact in it) {
+                mobileNo += contact.phone + ','
+            }
+            if (mobileNo.contains(",")) {
+                mobileNo.substring(0, mobileNo.length - 2)
+            }
+
+        }
+        FirebaseCrashlytics.getInstance().setUserId(uid)
+        FirebaseCrashlytics.getInstance().setCustomKey("username", username)
+        FirebaseCrashlytics.getInstance().setCustomKey("mobileno", mobileNo)
+
     }
 
     private fun navigateToCalendarGomeScreen() {

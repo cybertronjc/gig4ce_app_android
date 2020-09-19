@@ -308,9 +308,11 @@ open class BaseFragment : Fragment(), ViewsFromViewsInterface, NavigationInterfa
     override fun showConfirmationDialogType3(
         title: String,
         subTitle: String,
+        yesButtonText:String,
+        noButtonText:String,
         buttonClickListener: ConfirmationDialogOnClickListener
     ) {
-        appDialogsInterface.showConfirmationDialogType3(title,subTitle,buttonClickListener)
+        appDialogsInterface.showConfirmationDialogType3(title,subTitle,yesButtonText,noButtonText,buttonClickListener)
     }
 
     override fun showConfirmationDialogType5(

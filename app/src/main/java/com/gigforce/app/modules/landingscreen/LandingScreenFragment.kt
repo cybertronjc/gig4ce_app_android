@@ -8,6 +8,7 @@ import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -36,6 +37,7 @@ import com.gigforce.app.modules.learning.models.Course
 import com.gigforce.app.modules.preferences.PreferencesFragment
 import com.gigforce.app.modules.profile.ProfileViewModel
 import com.gigforce.app.modules.profile.models.ProfileData
+import com.gigforce.app.utils.AppConstants
 import com.gigforce.app.utils.GlideApp
 import com.gigforce.app.utils.Lce
 import com.google.firebase.storage.FirebaseStorage
@@ -399,7 +401,7 @@ class LandingScreenFragment : BaseFragment() {
         }
     }
 
-    class TitleSubtitleModel(var title: String, var subtitle: String, var imgIcon: Int = 0) {
+    class TitleSubtitleModel(var title: String, var subtitle: String,var imgStr : String) {
 
     }
 
@@ -557,7 +559,12 @@ class LandingScreenFragment : BaseFragment() {
 
         }
     }
-
+    private fun showGlideImage(url:String,imgview:ImageView){
+        GlideApp.with(requireContext())
+            .load(url)
+            .placeholder(getCircularProgressDrawable())
+            .into(imgview)
+    }
     private fun initializeExploreByIndustry() {
 
         val itemWidth = ((width / 3) * 2).toInt()
@@ -569,7 +576,7 @@ class LandingScreenFragment : BaseFragment() {
             TitleSubtitleModel(
                 "Delivery",
                 "",
-                R.drawable.industry
+                "https://firebasestorage.googleapis.com/v0/b/gigforce-dev.appspot.com/o/temp_files%2Findustry.jpg?alt=media&token=039ddf50-9597-4ee4-bc12-0abdea74fd16"
             )
         )
 
@@ -577,7 +584,7 @@ class LandingScreenFragment : BaseFragment() {
             TitleSubtitleModel(
                 "Retail",
                 "",
-                R.drawable.industry3
+                "https://firebasestorage.googleapis.com/v0/b/gigforce-dev.appspot.com/o/temp_files%2Findustry3.jpg?alt=media&token=1813f5dd-5596-4a04-a0e1-3c8400a3d82d"
             )
         )
 
@@ -586,7 +593,7 @@ class LandingScreenFragment : BaseFragment() {
             TitleSubtitleModel(
                 "Quick Service Restuarant",
                 "",
-                R.drawable.industry1
+                "https://firebasestorage.googleapis.com/v0/b/gigforce-dev.appspot.com/o/temp_files%2Findustry1.jpg?alt=media&token=2634019b-9777-4dbb-9103-1d63eb44df97"
             )
         )
 
@@ -594,7 +601,7 @@ class LandingScreenFragment : BaseFragment() {
             TitleSubtitleModel(
                 "Telesales and Support",
                 "",
-                R.drawable.industry2
+                "https://firebasestorage.googleapis.com/v0/b/gigforce-dev.appspot.com/o/temp_files%2Findustry2.jpg?alt=media&token=00412b0a-fbbe-4790-9a9b-050fefaf5d02"
             )
         )
 
@@ -602,6 +609,8 @@ class LandingScreenFragment : BaseFragment() {
             RecyclerGenericAdapter<TitleSubtitleModel>(
                 activity?.applicationContext,
                 PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
+//                    if(AppConstants.UNLOCK_FEATURE){
+//                    }else
                     showToast("This is under development. Please check again in a few days.")
                 },
                 RecyclerGenericAdapter.ItemInterface<TitleSubtitleModel?> { obj, viewHolder, position ->
@@ -613,9 +622,11 @@ class LandingScreenFragment : BaseFragment() {
 
                     var title = getTextView(viewHolder, R.id.title)
                     title.text = obj?.title
-
+                    obj?.imgStr?.let {
                     var img = getImageView(viewHolder, R.id.img_view)
-                    img.setImageResource(obj?.imgIcon!!)
+                        showGlideImage(it,img)
+                    }
+//                    img.setImageResource(obj?.imgIcon!!)
                 })!!
         recyclerGenericAdapter.setList(datalist)
         recyclerGenericAdapter.setLayout(R.layout.explore_by_industry_item)
@@ -638,14 +649,14 @@ class LandingScreenFragment : BaseFragment() {
             TitleSubtitleModel(
                 "Driver",
                 "Welcome to Gigforce! Let's talk about what's a gig and how do you start working as a giger at Gigforce.",
-                R.drawable.driver_img
+                "https://firebasestorage.googleapis.com/v0/b/gigforce-dev.appspot.com/o/temp_files%2Fdriver_img.jpg?alt=media&token=68412376-59c8-4598-81d6-9630724afff6"
             )
         )
         datalist.add(
             TitleSubtitleModel(
                 "Delivery Executive",
                 "Welcome to Gigforce! Let's talk about what's a gig and how do you start working as a giger at Gigforce.",
-                R.drawable.delivery_executive_ls_img
+                "https://firebasestorage.googleapis.com/v0/b/gigforce-dev.appspot.com/o/temp_files%2Fdelivery_executive_ls_img.jpg?alt=media&token=d42f2ed2-d0e5-472b-bb84-5379528f612f"
             )
         )
 
@@ -653,7 +664,7 @@ class LandingScreenFragment : BaseFragment() {
             TitleSubtitleModel(
                 "Retail Sales Executive",
                 "Welcome to Gigforce! Let's talk about what's a gig and how do you start working as a giger at Gigforce.",
-                R.drawable.retail_img_ls
+                "https://firebasestorage.googleapis.com/v0/b/gigforce-dev.appspot.com/o/temp_files%2Fretail_img_ls.jpg?alt=media&token=c3e587c9-5fdf-4e17-8e78-2799b7280817"
             )
         )
 
@@ -661,7 +672,7 @@ class LandingScreenFragment : BaseFragment() {
             TitleSubtitleModel(
                 "Barista",
                 "Welcome to Gigforce! Let's talk about what's a gig and how do you start working as a giger at Gigforce.",
-                R.drawable.brista_ls_img
+                "https://firebasestorage.googleapis.com/v0/b/gigforce-dev.appspot.com/o/temp_files%2Fbrista_ls_img.jpg?alt=media&token=c5061822-a7d6-497c-8bee-09079cb8dc70"
             )
         )
 
@@ -669,8 +680,10 @@ class LandingScreenFragment : BaseFragment() {
             RecyclerGenericAdapter<TitleSubtitleModel>(
                 activity?.applicationContext,
                 PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
+                    if(AppConstants.UNLOCK_FEATURE) {
+                        navigate(R.id.explore_by_role)
+                    }else
                     showToast("This is under development. Please check again in a few days.")
-//                    navigate(R.id.explore_by_role)
                 },
                 RecyclerGenericAdapter.ItemInterface<TitleSubtitleModel?> { obj, viewHolder, position ->
                     var view = getView(viewHolder, R.id.card_view)
@@ -682,9 +695,11 @@ class LandingScreenFragment : BaseFragment() {
                     var title = getTextView(viewHolder, R.id.title)
                     title.text = obj?.title
 
-                    var img = getImageView(viewHolder, R.id.img_view)
-                    img.setImageResource(obj?.imgIcon!!)
-
+                    obj?.imgStr?.let {
+                        var img = getImageView(viewHolder, R.id.img_view)
+                        showGlideImage(it,img)
+                    }
+//                    img.setImageResource(obj?.imgIcon!!)
                 })!!
         recyclerGenericAdapter.setList(datalist)
         recyclerGenericAdapter.setLayout(R.layout.explore_by_role_item)
