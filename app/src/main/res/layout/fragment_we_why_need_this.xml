@@ -17,7 +17,7 @@
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:layout_marginTop="8dp"
-        android:src="@drawable/ic_ques_round"
+        app:srcCompat="@drawable/ic_ques_round"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
