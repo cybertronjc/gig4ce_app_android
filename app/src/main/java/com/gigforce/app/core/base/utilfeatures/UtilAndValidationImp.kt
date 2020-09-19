@@ -49,7 +49,8 @@ class UtilAndValidationImp(var activity:Activity) :UtilAndValidationInterface{
                     0
                 )
             val version = pInfo.versionName
-            return version
+            val versionCode = pInfo.versionCode
+            return version+"("+versionCode+")"
         } catch (e: PackageManager.NameNotFoundException) {
             e.printStackTrace()
         }
