@@ -112,11 +112,11 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
         val dataBundle = data.toBundle()
         dataBundle.putString(NotificationConstants.INTENT_EXTRA_CLICK_ACTION, clickAction)
-        dataBundle.putBoolean(MainActivity.IS_DEEPLINK, true)
+        dataBundle.putString(MainActivity.IS_DEEPLINK, "true")
 
 //        return NavDeepLinkBuilder(applicationContext)
 //            .setGraph(R.navigation.nav_graph)
-//            .setDestination(R.id.gigAttendancePageFragment)
+//            .setDestination(R.id.gigerVerificationFragment)
 //            .setArguments(bundleOf())
 //            .createPendingIntent()
 

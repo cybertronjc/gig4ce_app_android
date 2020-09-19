@@ -47,7 +47,7 @@ class MainActivity : AppCompatActivity() {
         navController = this.findNavController(R.id.nav_fragment)
         navController.handleDeepLink(intent)
 
-        if (intent.getBooleanExtra(IS_DEEPLINK, false)) {
+        if (intent.getStringExtra(IS_DEEPLINK) == "true") {
             handleDeepLink()
         } else {
             proceedWithNormalNavigation()
@@ -56,20 +56,32 @@ class MainActivity : AppCompatActivity() {
 
     private fun handleDeepLink() {
 
+        val clickAction = intent.getStringExtra(NotificationConstants.INTENT_EXTRA_CLICK_ACTION)
+        Log.d("MainActivity","Click action received $clickAction ")
+
         when (intent.getStringExtra(NotificationConstants.INTENT_EXTRA_CLICK_ACTION)) {
             NotificationConstants.CLICK_ACTIONS.OPEN_GIG_ATTENDANCE_PAGE -> {
+                Log.d("MainActivity","redirecting to attendance page")
+                navController.popAllBackStates()
                 navController.navigate(
                     R.id.gigAttendancePageFragment,
                     intent.extras
                 )
             }
             NotificationConstants.CLICK_ACTIONS.OPEN_VERIFICATION_PAGE -> {
+                Log.d("MainActivity","redirecting to gig verification page")
+                navController.popAllBackStates()
                 navController.navigate(
                     R.id.gigerVerificationFragment,
                     intent.extras
                 )
             }
             else -> {
+                navController.popAllBackStates()
+                navController.navigate(
+                    R.id.landinghomefragment,
+                    intent.extras
+                )
             }
         }
     }
@@ -78,18 +90,6 @@ class MainActivity : AppCompatActivity() {
         checkForAllAuthentication()
         GetFirebaseInstanceID()
         CleverTapAPI.getDefaultInstance(applicationContext)?.pushEvent("MAIN_ACTIVITY_CREATED")
-    }
-
-    private fun processNotificationIf(intent: Intent?) {
-        when (intent?.getStringExtra(NotificationConstants.INTENT_EXTRA_CLICK_ACTION)) {
-            NotificationConstants.CLICK_ACTIONS.OPEN_GIG_ATTENDANCE_PAGE -> {
-                nav_fragment.findNavController()
-                    .navigate(R.id.gigAttendancePageFragment, intent.extras)
-                Log.d("EXXX", "attendanceFrag")
-            }
-            else -> {
-            }
-        }
     }
 
     override fun onNewIntent(intent: Intent?) {
