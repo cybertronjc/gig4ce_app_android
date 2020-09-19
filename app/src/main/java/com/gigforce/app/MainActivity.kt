@@ -112,7 +112,7 @@ class MainActivity : AppCompatActivity() {
                 val msg = token //getString(R.string.msg_token_fmt, token)
                 Log.v("Firebase/InstanceId", "Firebase Token Received")
                 Log.v("Firebase/InstanceId", msg)
-                Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
+              //  Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
             })
     }
 
