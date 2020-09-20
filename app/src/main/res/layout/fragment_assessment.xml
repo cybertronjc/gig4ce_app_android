@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cv_parent"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clipToPadding="false"
@@ -14,8 +15,7 @@
         android:id="@+id/sv_assess_frag"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-
-        android:visibility="gone"
+        android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@+id/bt_next_assess_frag"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -23,9 +23,12 @@
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cv_assessment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="start">
+            android:layout_gravity="start"
+            android:descendantFocusability="blocksDescendants"
+            android:elevation="@dimen/size_16">
 
             <RelativeLayout
                 android:id="@+id/rl_assessment_info_assess_frag"
@@ -47,22 +50,22 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
-                    tools:text="level 1"
                     android:letterSpacing="0"
                     android:textColor="@color/black"
                     android:textSize="@dimen/font_14"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    tools:text="level 1" />
 
                 <TextView
                     android:id="@+id/tv_designation_assess_frag"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_toStartOf="@+id/tv_level_assess_frag"
-                    tools:text="Retail Sales Associate"
+                    android:letterSpacing="0"
                     android:textColor="@color/black"
                     android:textSize="@dimen/font_18"
-                    android:letterSpacing="0"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    tools:text="Retail Sales Associate" />
             </RelativeLayout>
 
 
@@ -71,13 +74,13 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/size_12"
-                android:letterSpacing="0"
                 android:layout_marginEnd="@dimen/size_26"
-                tools:text="10%"
+                android:letterSpacing="0"
                 android:textColor="@color/warm_grey"
                 android:textSize="@dimen/size_14"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/rl_assessment_info_assess_frag" />
+                app:layout_constraintTop_toBottomOf="@id/rl_assessment_info_assess_frag"
+                tools:text="10%" />
 
             <ProgressBar
                 android:id="@+id/h_pb_assess_frag"
@@ -89,7 +92,7 @@
                 android:layout_marginTop="@dimen/size_16"
                 android:layout_marginEnd="@dimen/size_8"
                 android:indeterminate="false"
-                android:progress="10"
+                android:progress="0"
                 android:progressDrawable="@drawable/curved_h_progress_bar"
                 app:layout_constraintEnd_toStartOf="@+id/tv_percent_assess_frag"
                 app:layout_constraintStart_toStartOf="parent"
@@ -119,12 +122,12 @@
                 android:layout_marginTop="@dimen/size_4"
                 android:layout_marginEnd="@dimen/size_16"
                 android:letterSpacing="0"
-                tools:text="A lady enters the store apparently trying to search for something. You notice her from a short distance."
                 android:textColor="@color/black"
                 android:textSize="@dimen/font_18"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_scenario_label_assess_frag" />
+                app:layout_constraintTop_toBottomOf="@id/tv_scenario_label_assess_frag"
+                tools:text="A lady enters the store apparently trying to search for something. You notice her from a short distance." />
 
             <com.gigforce.app.utils.widgets.ImageViewRounded
                 android:id="@+id/iv_scenario_value_assess_frag"
@@ -148,15 +151,15 @@
                 android:layout_marginStart="@dimen/size_16"
                 android:layout_marginTop="@dimen/size_11"
                 android:layout_marginEnd="@dimen/size_16"
-                android:lineSpacingExtra="16sp"
                 android:fontFamily="@font/lato_bold"
-                tools:text="Ques 1/10 :"
                 android:letterSpacing="0"
+                android:lineSpacingExtra="16sp"
                 android:textColor="@color/black_85"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/iv_scenario_value_assess_frag" />
+                app:layout_constraintTop_toBottomOf="@+id/iv_scenario_value_assess_frag"
+                tools:text="Ques 1/10 :" />
 
             <TextView
                 android:id="@+id/tv_ques_assess_frag"
@@ -166,21 +169,40 @@
                 android:layout_marginTop="@dimen/size_16"
                 android:layout_marginEnd="@dimen/size_16"
                 android:letterSpacing="0"
-                tools:text="What should you do in this situation?"
                 android:textColor="@color/black_85"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_ques_no_assess_frag" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_ques_no_assess_frag"
+                tools:text="What should you do in this situation?" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_options_assess_frag"
+            <LinearLayout
+                android:id="@+id/ll_options"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:nestedScrollingEnabled="false"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/size_16"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_ques_assess_frag" />
+                app:layout_constraintTop_toBottomOf="@id/tv_ques_assess_frag">
+
+
+                <androidx.core.widget.NestedScrollView
+                    android:id="@+id/nv_options"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv_options_assess_frag"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:nestedScrollingEnabled="false"
+
+                        />
+
+                </androidx.core.widget.NestedScrollView>
+
+            </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.gigforce.app.utils.widgets.CustomScrollView>
@@ -193,10 +215,10 @@
         android:layout_marginEnd="@dimen/size_16"
         android:layout_marginBottom="@dimen/size_32"
         android:background="@drawable/bg_next_assess_frag"
+        android:letterSpacing="0"
         android:paddingTop="@dimen/size_15"
         android:paddingBottom="@dimen/size_15"
         android:text="@string/next"
-        android:letterSpacing="0"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -229,13 +251,13 @@
         android:paddingTop="@dimen/size_4"
         android:paddingEnd="@dimen/size_16"
         android:paddingBottom="@dimen/size_4"
-        tools:text="A lady enters the store apparently trying to search for something. You notice her from a short distance."
         android:textColor="@color/black"
         android:textSize="@dimen/font_18"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_scenario_label_header_assess_frag" />
+        app:layout_constraintTop_toBottomOf="@id/tv_scenario_label_header_assess_frag"
+        tools:text="A lady enters the store apparently trying to search for something. You notice her from a short distance." />
 
     <ImageView
         android:id="@+id/iv_scroll_more_access_frag"
