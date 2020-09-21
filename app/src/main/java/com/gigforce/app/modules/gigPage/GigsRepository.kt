@@ -11,7 +11,7 @@ open class GigsRepository : BaseFirestoreDBRepository() {
 
     override fun getCollectionName(): String = COLLECTION_NAME
 
-   open fun getCurrentUserGigs() = getCollectionReference().whereEqualTo("gigerId", getUID())
+    open fun getCurrentUserGigs() = getCollectionReference().whereEqualTo("gigerId", getUID())
 
     fun markAttendance(markAttendance: GigAttendance, gigId: String) {
         getCollectionReference().document(gigId).update(markAttendance.tableName, markAttendance)

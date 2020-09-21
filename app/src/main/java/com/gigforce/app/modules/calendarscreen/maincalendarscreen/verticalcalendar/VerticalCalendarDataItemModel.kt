@@ -2,11 +2,13 @@ package com.gigforce.app.modules.calendarscreen.maincalendarscreen.verticalcalen
 
 import com.gigforce.app.modules.custom_gig_preferences.UnavailableDataModel
 import com.gigforce.app.modules.preferences.prefdatamodel.PreferencesDataModel
+import java.time.LocalDate
 import java.util.*
 
 class VerticalCalendarDataItemModel(
     var title: String,
     var subTitle: String,
+    var gigCount : Int =  0,
     val day: String,
     val isToday: Boolean,
     val isPreviousDate: Boolean,
@@ -27,11 +29,16 @@ class VerticalCalendarDataItemModel(
         return dateObj
     }
 
+    fun getLocalDate() : LocalDate{
+        return LocalDate.of(year,month + 1,date)
+    }
+
     companion object {
         fun getMonthObject(calendar: Calendar): VerticalCalendarDataItemModel {
             return VerticalCalendarDataItemModel(
                 "",
                 "",
+                0,
                 getDayOfWeek(calendar.get(Calendar.DAY_OF_WEEK)),
                 false,
                 false,
@@ -59,6 +66,7 @@ class VerticalCalendarDataItemModel(
             var dataModel = VerticalCalendarDataItemModel(
                 "No gigs assigned",
                 "",
+                0,
                 getDayOfWeek(calendar.get(Calendar.DAY_OF_WEEK)),
                 isToday,
                 isPreviousDateFound,
@@ -123,6 +131,7 @@ class VerticalCalendarDataItemModel(
             var dataModel = VerticalCalendarDataItemModel(
                 subTitle,
                 countGigs,
+                0,
                 getDayOfWeek(
                     calendar.get(
                         Calendar.DAY_OF_WEEK

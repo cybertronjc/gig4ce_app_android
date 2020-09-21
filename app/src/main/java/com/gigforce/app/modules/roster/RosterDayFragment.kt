@@ -12,6 +12,7 @@ import android.widget.AdapterView
 import android.widget.PopupMenu
 import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.os.bundleOf
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
@@ -21,6 +22,7 @@ import com.gigforce.app.core.toDate
 import com.gigforce.app.modules.calendarscreen.maincalendarscreen.verticalcalendar.AllotedGigDataModel
 import com.gigforce.app.modules.custom_gig_preferences.CustomPreferencesViewModel
 import com.gigforce.app.modules.custom_gig_preferences.ParamCustPreferViewModel
+import com.gigforce.app.modules.gigPage.GigsListForDeclineBottomSheet
 import com.gigforce.app.modules.gigPage.models.Gig
 import kotlinx.android.synthetic.main.day_view_top_bar.*
 import kotlinx.android.synthetic.main.day_view_top_bar.view.*
@@ -192,6 +194,11 @@ class RosterDayFragment : RosterBaseFragment() {
                 when (it.itemId) {
                     R.id.location_preference -> {
                         navigate(R.id.locationFragment)
+                    }
+                    R.id.decline_gigs ->{
+                        navigate(R.id.gigsListForDeclineBottomSheet, bundleOf(
+                            GigsListForDeclineBottomSheet.INTEN_EXTRA_DATE to activeDateTime.toLocalDate()
+                        ))
                     }
                     R.id.settings -> {
                         navigate(R.id.settingFragment)

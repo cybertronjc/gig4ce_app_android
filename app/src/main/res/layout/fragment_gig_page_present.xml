@@ -33,7 +33,9 @@
                     app:navigationIcon="@drawable/ic_arrow_back_black"
                     app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
                     app:title="Retail Sales Executive"
+                    app:menu="@menu/menu_gig_attendance"
                     app:titleTextColor="@color/black" />
+
             </com.google.android.material.appbar.AppBarLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout

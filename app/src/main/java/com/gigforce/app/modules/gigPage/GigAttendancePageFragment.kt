@@ -34,6 +34,7 @@ import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.base.dialog.ConfirmationDialogOnClickListener
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.toLocalDate
+import com.gigforce.app.core.toLocalDateTime
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.gigPage.models.Gig
 import com.gigforce.app.modules.gigPage.models.GigAttendance
@@ -42,6 +43,7 @@ import com.gigforce.app.utils.Lce
 import com.gigforce.app.utils.TextDrawable
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.storage.FirebaseStorage
@@ -62,10 +64,12 @@ import kotlinx.android.synthetic.main.fragment_gig_page_attendance.roleNameTV
 import kotlinx.android.synthetic.main.fragment_gig_page_attendance.shiftTV
 import kotlinx.android.synthetic.main.fragment_gig_page_attendance.wageTV
 import java.text.SimpleDateFormat
+import java.time.LocalDateTime
 import java.util.*
 
 
-class GigAttendancePageFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener {
+class GigAttendancePageFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
+    DeclineGigDialogFragmentResultListener {
     companion object {
         const val INTENT_EXTRA_GIG_ID = "gig_id"
         const val REQUEST_CODE_UPLOAD_SELFIE_IMAGE = 2333
@@ -590,16 +594,44 @@ class GigAttendancePageFragment : BaseFragment(), PopupMenu.OnMenuItemClickListe
     override fun onMenuItemClick(item: MenuItem?): Boolean {
         item ?: return false
 
-        when (item.itemId) {
+        return when (item.itemId) {
             R.id.action_help -> {
                 navigate(R.id.contactScreenFragment)
-                return true
+                true
             }
             R.id.action_share -> {
-                return true
+                true
             }
-            else -> return false
+            R.id.action_decline_gig ->{
+                if(gig == null)
+                    return true
 
+                if(gig!!.startDateTime!!.toLocalDateTime() < LocalDateTime.now()){
+                    //Past or ongoing gig
+
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setTitle("Alert")
+                        .setMessage("Cannot decline past or ongoing gig")
+                        .setPositiveButton(getString(R.string.okay_text)){_,_ -> }
+                        .show()
+
+                    return true
+                }
+
+                if(gig != null ) {
+                    declineGigDialog()
+                }
+                true
+            }
+            else -> false
         }
+    }
+
+    private fun declineGigDialog() {
+        DeclineGigDialogFragment.launch(gigId, childFragmentManager, this)
+    }
+
+    override fun gigDeclined() {
+        activity?.onBackPressed()
     }
 }

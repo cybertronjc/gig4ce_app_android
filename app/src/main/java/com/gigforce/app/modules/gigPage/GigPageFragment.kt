@@ -19,11 +19,13 @@ import android.text.SpannableString
 import android.text.Spanned
 import android.text.style.ForegroundColorSpan
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
@@ -36,6 +38,7 @@ import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.base.dialog.ConfirmationDialogOnClickListener
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.toLocalDate
+import com.gigforce.app.core.toLocalDateTime
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.gigPage.models.Gig
 import com.gigforce.app.modules.gigPage.models.GigAttendance
@@ -72,11 +75,13 @@ import kotlinx.android.synthetic.main.fragment_gig_page_present.wageIV
 import kotlinx.android.synthetic.main.fragment_gig_page_present.wageTV
 import java.text.SimpleDateFormat
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.util.*
 import java.util.concurrent.TimeUnit
 
 
-class GigPageFragment : BaseFragment(), View.OnClickListener {
+class GigPageFragment : BaseFragment(), View.OnClickListener, Toolbar.OnMenuItemClickListener,
+    DeclineGigDialogFragmentResultListener {
 
     companion object {
         const val INTENT_EXTRA_GIG_ID = "gig_id"
@@ -104,7 +109,6 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
         initUi()
         initViewModel(view)
         initClicks()
-
     }
 
     private fun initClicks() {
@@ -146,6 +150,8 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
         toolbar?.setNavigationOnClickListener {
             activity?.onBackPressed()
         }
+
+        toolbar?.setOnMenuItemClickListener(this)
 
         contactUsLayout?.setOnClickListener {
             navigate(R.id.fakeGigContactScreenFragment)
@@ -1112,5 +1118,51 @@ class GigPageFragment : BaseFragment(), View.OnClickListener {
                 })
             }
         }
+    }
+
+    private fun declineGigDialog() {
+        DeclineGigDialogFragment.launch(gigId, childFragmentManager, this)
+    }
+
+    override fun onMenuItemClick(item: MenuItem?): Boolean {
+        item ?: return false
+
+        return when (item.itemId) {
+            R.id.action_help -> {
+                navigate(R.id.contactScreenFragment)
+                true
+            }
+            R.id.action_share -> {
+                true
+            }
+            R.id.action_decline_gig ->{
+
+                if(gig == null)
+                    return true
+
+                if(gig!!.startDateTime!!.toLocalDateTime() < LocalDateTime.now()){
+                    //Past or ongoing gig
+
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setTitle("Alert")
+                        .setMessage("Cannot decline past or ongoing gig")
+                        .setPositiveButton(getString(R.string.okay_text)){_,_ -> }
+                        .show()
+
+                    return true
+                }
+
+                if(gig != null ) {
+                    declineGigDialog()
+                }
+
+                true
+            }
+            else -> false
+        }
+    }
+
+    override fun gigDeclined() {
+        activity?.onBackPressed()
     }
 }
