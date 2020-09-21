@@ -46,7 +46,7 @@ open class CircleImageView : AppCompatImageView {
     private var mDisableCircularTransformation = false
     private var mDashedBorder = false
 
-    constructor(context: Context?) : super(context) {
+    constructor(context: Context?) : super(context!!) {
         init()
     }
 

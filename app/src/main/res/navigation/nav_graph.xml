@@ -571,7 +571,16 @@
     <fragment
         android:id="@+id/gigAttendancePageFragment"
         android:name="com.gigforce.app.modules.gigPage.GigAttendancePageFragment"
-        android:label="GigAttendancePageFragment" />
+        android:label="GigAttendancePageFragment" >
+
+        <argument
+            android:name="gig_id"
+            app:argType="string"/>
+        <deepLink
+            android:id="@+id/gig_attendance_deeplink"
+            app:uri="www.gigforce.com/gig/attendance/{gig_id}"/>
+
+    </fragment>
     <fragment
         android:id="@+id/gigPageNavigationFragment"
         android:name="com.gigforce.app.modules.gigPage.GigPageNavigationFragment"
