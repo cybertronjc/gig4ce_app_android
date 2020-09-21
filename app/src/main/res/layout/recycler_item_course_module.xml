@@ -9,8 +9,16 @@
     android:layout_marginBottom="2dp"
     app:cardCornerRadius="4dp">
 
+    <FrameLayout
+        android:id="@+id/borderFrameLayout"
+        android:background="@drawable/rect_button_outline"
+        android:layout_width="match_parent"
+        android:visibility="gone"
+        android:layout_height="match_parent"/>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
+        android:padding="1dp"
         android:layout_height="match_parent">
 
         <ImageView

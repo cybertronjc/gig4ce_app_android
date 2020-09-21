@@ -13,7 +13,7 @@
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:layout_marginStart="15dp"
-        app:srcCompat="@drawable/ic_play_round_pink_bck"
+        app:srcCompat="@drawable/ic_learning_role"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

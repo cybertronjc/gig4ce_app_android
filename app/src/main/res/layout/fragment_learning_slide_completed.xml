@@ -32,7 +32,7 @@
             android:layout_marginTop="10dp"
             android:fontFamily="@font/lato_bold"
             android:letterSpacing="0"
-            android:text="You have completed the slides"
+            android:text="You have completed the lesson"
             android:textColor="@color/white"
             android:textSize="24sp" />
 

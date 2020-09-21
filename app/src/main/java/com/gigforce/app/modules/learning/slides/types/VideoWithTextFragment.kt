@@ -193,6 +193,10 @@ class VideoWithTextFragment : BaseFragment() {
             showText(mDescription)
         }
 
+        video_slide_title_tv.text = "Video Title"
+        video_slide_desc_tv.text = "Video description"
+
+
         //     slideVideoPlayerView.resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FILL
 //        mPlayer?.videoScalingMode = C.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING
 
