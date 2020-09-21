@@ -4,57 +4,57 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/card_view"
     android:layout_width="match_parent"
-    android:layout_height="168dp"
+    android:layout_height="148dp"
     android:layout_marginLeft="18dp"
     android:layout_marginBottom="2dp"
-    app:cardBackgroundColor="@color/white"
     app:cardCornerRadius="4dp">
 
-
+    <FrameLayout
+        android:id="@+id/borderFrameLayout"
+        android:background="@drawable/rect_button_outline"
+        android:layout_width="match_parent"
+        android:visibility="gone"
+        android:layout_height="match_parent"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-
-        android:layout_height="168dp">
+        android:padding="1dp"
+        android:layout_height="match_parent">
 
         <ImageView
-            android:id="@+id/img"
+            android:id="@+id/learning_img"
             android:layout_width="match_parent"
-            android:layout_height="114dp"
-            android:adjustViewBounds="true"
+            android:layout_height="96dp"
             android:scaleType="centerCrop"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            android:adjustViewBounds="true"
+            app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="4dp"
-            android:fontFamily="@font/lato"
-            android:letterSpacing="0"
-            android:text="Introduction to marketing"
-            android:textColor="#000000"
-            android:textSize="14sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/img" />
-
-        <TextView
-            android:id="@+id/subtitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
             android:ellipsize="end"
-            android:fontFamily="@font/lato"
-            android:letterSpacing="0"
             android:maxLines="1"
             android:scrollHorizontally="true"
             android:text="Module 1"
             android:textColor="#000000"
             android:textSize="10sp"
+            android:layout_marginLeft="13dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/title"
-            app:layout_constraintTop_toBottomOf="@+id/title" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/title_" />
+
+        <TextView
+            android:id="@+id/title_"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="13dp"
+            android:text="CASHIER"
+            android:textColor="#000000"
+            android:textSize="14sp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/learning_img" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

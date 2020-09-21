@@ -149,7 +149,7 @@ class MainLearningFragment : BaseFragment() {
             val displayMetrics = DisplayMetrics()
             activity?.windowManager?.defaultDisplay?.getMetrics(displayMetrics)
             val width = displayMetrics.widthPixels
-            val itemWidth = ((width / 5) * 3.5).toInt()
+            val itemWidth = ((width / 5) * 4).toInt()
 
 
             val recyclerGenericAdapter: RecyclerGenericAdapter<CourseContent> =

@@ -27,7 +27,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_marginStart="18dp"
+            android:layout_marginStart="10dp"
             android:layout_marginTop="12dp"
             android:visibility="visible"
             android:layout_marginBottom="12dp">
@@ -73,10 +73,10 @@
                 android:layout_width="15dp"
                 android:layout_height="15dp"
                 android:layout_below="@id/video_title"
+                android:layout_toRightOf="@id/imageLayout"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="6dp"
-                android:layout_toRightOf="@id/imageLayout"
-                android:src="@drawable/ic_clock_assessment"
+                app:srcCompat="@drawable/ic_time_light_grey"
                 tools:text="Order Successfully Completed" />
 
 
@@ -85,7 +85,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/video_title"
-
                 android:layout_marginTop="8dp"
                 android:layout_toRightOf="@id/time_imageview"
                 android:fontFamily="@font/lato"
@@ -99,14 +98,30 @@
                 android:id="@+id/lessonNameTV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/video_time"
-                android:layout_marginTop="12dp"
-                android:layout_toRightOf="@id/imageLayout"
+                android:layout_alignParentEnd="true"
                 android:fontFamily="@font/lato"
                 android:letterSpacing="0"
+                android:layout_marginEnd="5dp"
+                android:layout_marginTop="8dp"
                 android:textColor="@color/warm_grey"
                 android:textSize="12sp"
+                android:layout_below="@id/video_title"
                 tools:text="Lesson 2" />
+
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/lesson_completion_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/lato"
+                android:letterSpacing="0"
+                android:layout_marginEnd="28dp"
+                android:layout_below="@id/video_time"
+                android:layout_toRightOf="@id/imageLayout"
+                android:layout_marginTop="18dp"
+                android:textColor="#f7b500"
+                android:textSize="12sp"
+                android:text="Pending 0%" />
 
 
             <com.google.android.material.button.MaterialButton
@@ -116,7 +131,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/video_time"
                 android:layout_alignParentRight="true"
-                android:layout_marginEnd="24dp"
+                android:layout_marginEnd="5dp"
                 android:text="Play now"
                 android:textAllCaps="false"
                 app:strokeColor="@color/lipstick" />
@@ -139,10 +154,10 @@
             <androidx.cardview.widget.CardView
                 android:id="@+id/card_view"
                 android:layout_width="match_parent"
-                android:layout_height="88dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginBottom="8dp"
+                android:layout_height="84dp"
+                android:layout_marginStart="4dp"
                 android:layout_marginTop="8dp"
+                android:layout_marginBottom="10dp"
                 android:layout_marginEnd="4dp"
                 app:cardCornerRadius="5dp"
                 app:cardElevation="5dp"
@@ -151,50 +166,65 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="367dp"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent">
+
+
+                    <ImageView
+                        android:id="@+id/quiz_icon_iv"
+                        android:layout_width="27dp"
+                        android:layout_height="27dp"
+                        android:layout_marginStart="16dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:src="@drawable/ic_quiz"/>
 
 
                     <TextView
                         android:id="@+id/title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="15dp"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="15dp"
                         android:letterSpacing="0.01"
-                        android:text="Assessment 1"
                         android:textColor="#000000"
                         android:textSize="14sp"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintStart_toEndOf="@id/quiz_icon_iv"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:text="Assessment 1" />
 
                     <TextView
                         android:id="@+id/status"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginBottom="5dp"
+                        android:layout_marginLeft="10dp"
+                        android:paddingStart="12dp"
+                        android:paddingEnd="12dp"
                         android:background="@drawable/rect_assessment_status_pending"
                         android:gravity="center"
                         android:letterSpacing="0.05"
                         android:padding="4dp"
-                        android:text="PENDING"
+                        android:layout_marginTop="12dp"
+                        tools:text="PENDING"
                         android:textColor="#ffffff"
-                        android:textSize="11sp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent" />
+                        android:textSize="12sp"
+                        android:layout_marginBottom="5dp"
+                        app:layout_constraintTop_toBottomOf="@id/title"
+                        app:layout_constraintStart_toEndOf="@id/quiz_icon_iv" />
 
                     <TextView
                         android:id="@+id/time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="16dp"
-                        android:layout_marginBottom="5dp"
                         android:letterSpacing="0.02"
-                        android:text="2:00"
+                        tools:text="12:00"
                         android:textColor="#000000"
                         android:textSize="12sp"
-                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:layout_marginTop="18dp"
+                        android:layout_marginBottom="5dp"
+                        app:layout_constraintTop_toBottomOf="@id/title"
                         app:layout_constraintEnd_toEndOf="parent" />
 
                     <ImageView
@@ -203,9 +233,9 @@
                         android:layout_height="11dp"
                         android:layout_marginRight="5dp"
                         android:layout_marginBottom="2dp"
-                        android:src="@drawable/ic_clock_assessment"
                         app:layout_constraintBottom_toBottomOf="@+id/time"
-                        app:layout_constraintEnd_toStartOf="@+id/time" />
+                        app:layout_constraintEnd_toStartOf="@+id/time"
+                        android:src="@drawable/ic_clock_assessment" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
             </androidx.cardview.widget.CardView>
@@ -216,7 +246,7 @@
                 android:layout_height="42dp"
                 app:cardBackgroundColor="#f5a623"
                 app:cardElevation="6dp"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="2dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"/>

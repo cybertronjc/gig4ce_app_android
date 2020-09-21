@@ -65,8 +65,6 @@ class LearningDetailsLessonsAdapter constructor(
         else
             setMarker(holder, R.drawable.ic_marker_inactive, R.color.colorPrimary)
 
-
-
         if (videoModel.type == CourseContent.TYPE_ASSESSMENT) {
             holder.videoSlideLayout.gone()
             holder.assessmentLayout.visible()
