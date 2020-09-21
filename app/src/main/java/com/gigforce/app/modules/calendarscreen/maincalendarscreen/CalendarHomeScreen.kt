@@ -815,13 +815,5 @@ class CalendarHomeScreen : BaseFragment(),
         }
     }
 
-    override fun onBackPressed(): Boolean {
-        if (parentFragmentManager.backStackEntryCount == 0) {
-            requireActivity().finish()
-        } else {
-            parentFragmentManager.popBackStack()
-        }
-        return true
-    }
 
 }
