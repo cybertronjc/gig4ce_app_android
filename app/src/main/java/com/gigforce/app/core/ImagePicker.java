@@ -39,7 +39,7 @@ import javax.annotation.Nullable;
 public class ImagePicker {
 
 
-    private static final int DEFAULT_MIN_WIDTH_QUALITY = 400;        // min pixels
+    private static final int DEFAULT_MIN_WIDTH_QUALITY = 600;        // min pixels
     private static final String TAG = "ImagePicker";
     private static final String TEMP_IMAGE_NAME = String.valueOf(System.currentTimeMillis());
     public static int minWidthQuality = DEFAULT_MIN_WIDTH_QUALITY;
@@ -190,7 +190,7 @@ public class ImagePicker {
         OutputStream os;
         try {
             os = new FileOutputStream(imageFile);
-            bm.compress(Bitmap.CompressFormat.JPEG, 40, os);
+            bm.compress(Bitmap.CompressFormat.PNG, 90, os);
             os.flush();
             os.close();
         } catch (Exception e) {
@@ -215,7 +215,7 @@ public class ImagePicker {
         if (folder != null && !folder.exists()) {
             folder.mkdir();
         }
-        return new File(folder, TEMP_IMAGE_NAME + ".jpg");
+        return new File(folder, TEMP_IMAGE_NAME + ".png");
     }
 
     /**

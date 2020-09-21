@@ -89,6 +89,7 @@ class CalendarHomeScreen : BaseFragment(),
             ViewModelProvider(this, ParamCustPreferViewModel(viewLifecycleOwner)).get(
                 CustomPreferencesViewModel::class.java
             )
+        print("test apk"+"test1")
 
         ConfigRepository().getForceUpdateCurrentVersion(object :
             ConfigRepository.LatestAPPUpdateListener {
@@ -814,5 +815,6 @@ class CalendarHomeScreen : BaseFragment(),
             getView(viewHolder, R.id.calendar_detail_item_cl).visibility = View.VISIBLE
         }
     }
+
 
 }

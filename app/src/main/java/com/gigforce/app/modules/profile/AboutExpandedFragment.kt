@@ -115,20 +115,32 @@ class AboutExpandedFragment : ProfileBaseFragment(), ProfileCardBgCallbacks,
                     && (it.aadharCardDataModel?.frontImage != null || it.drivingLicenseDataModel?.backImage != null)
 
             if (requiredDocsVerified) {
-                about_top_profile.about_me_verification_layout.verification_status_tv.text = getString(R.string.verified_text)
-                about_top_profile.about_me_verification_layout.verification_status_tv.setTextColor(ResourcesCompat.getColor(resources,R.color.green,null))
+                about_top_profile.about_me_verification_layout.verification_status_tv.text =
+                    getString(R.string.verified_text)
+                about_top_profile.about_me_verification_layout.verification_status_tv.setTextColor(
+                    ResourcesCompat.getColor(resources, R.color.green, null)
+                )
                 about_top_profile.about_me_verification_layout.status_iv.setImageResource(R.drawable.ic_check)
-                about_top_profile.about_me_verification_layout.verification_status_cardview.strokeColor = ResourcesCompat.getColor(resources,R.color.green,null)
-            } else if (requiredDocsUploaded){
-                about_top_profile.about_me_verification_layout.verification_status_tv.text = getString(R.string.under_verification)
-                about_top_profile.about_me_verification_layout.verification_status_tv.setTextColor(ResourcesCompat.getColor(resources,R.color.app_orange,null))
+                about_top_profile.about_me_verification_layout.verification_status_cardview.strokeColor =
+                    ResourcesCompat.getColor(resources, R.color.green, null)
+            } else if (requiredDocsUploaded) {
+                about_top_profile.about_me_verification_layout.verification_status_tv.text =
+                    getString(R.string.under_verification)
+                about_top_profile.about_me_verification_layout.verification_status_tv.setTextColor(
+                    ResourcesCompat.getColor(resources, R.color.app_orange, null)
+                )
                 about_top_profile.about_me_verification_layout.status_iv.setImageResource(R.drawable.ic_clock_orange)
-                about_top_profile.about_me_verification_layout.verification_status_cardview.strokeColor = ResourcesCompat.getColor(resources,R.color.app_orange,null)
-            } else{
-                about_top_profile.about_me_verification_layout.verification_status_tv.text = "Not Verified"
-                about_top_profile.about_me_verification_layout.verification_status_tv.setTextColor(ResourcesCompat.getColor(resources,R.color.red,null))
+                about_top_profile.about_me_verification_layout.verification_status_cardview.strokeColor =
+                    ResourcesCompat.getColor(resources, R.color.app_orange, null)
+            } else {
+                about_top_profile.about_me_verification_layout.verification_status_tv.text =
+                    "Not Verified"
+                about_top_profile.about_me_verification_layout.verification_status_tv.setTextColor(
+                    ResourcesCompat.getColor(resources, R.color.red, null)
+                )
                 about_top_profile.about_me_verification_layout.status_iv.setImageResource(R.drawable.ic_cross_red)
-                about_top_profile.about_me_verification_layout.verification_status_cardview.strokeColor = ResourcesCompat.getColor(resources,R.color.red,null)
+                about_top_profile.about_me_verification_layout.verification_status_cardview.strokeColor =
+                    ResourcesCompat.getColor(resources, R.color.red, null)
             }
         })
 
@@ -176,7 +188,7 @@ class AboutExpandedFragment : ProfileBaseFragment(), ProfileCardBgCallbacks,
         contact_card.setWhatsAppChecked.clear()
         if (profile.contactPhone == null || profile.contactPhone?.isEmpty() == true)
             viewModel.updateContactDetails(
-                profile.id!!,//todo
+                profile.id!!,
                 profile.contact!!
             )
 

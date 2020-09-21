@@ -87,4 +87,12 @@
     <dimen name="size_52">52dp</dimen>
     <dimen name="size_60">60dp</dimen>
     <dimen name="size_44">44dp</dimen>
+    <dimen name="size_46">46dp</dimen>
+    <dimen name="size_39">39dp</dimen>
+    <dimen name="size_213">213dp</dimen>
+    <dimen name="size_120">120dp</dimen>
+    <dimen name="size_54">54dp</dimen>
+    <dimen name="size_56">56dp</dimen>
+    <dimen name="size_34">34dp</dimen>
+    <dimen name="size_14_5" >15dp</dimen>
 </resources>

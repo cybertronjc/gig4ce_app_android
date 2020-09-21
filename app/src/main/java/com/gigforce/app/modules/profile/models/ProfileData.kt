@@ -28,7 +28,8 @@ data class ProfileData(
     var isonboardingdone: Boolean = false,
     var checked: Boolean = false,
     var contactPhone: ArrayList<ContactPhone>? = null,
-    var contactEmail: ArrayList<ContactEmail>? = null
+    var contactEmail: ArrayList<ContactEmail>? = null,
+    var invited: ArrayList<Invites>? = null
 ) {
 
 }

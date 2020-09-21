@@ -10,7 +10,7 @@ android {
     signingConfigs {
         debug {
 //          storeFile file('/home/himanshu/Projects/Android/GigForce/KeyStores/gigforceapp.jks')
-            storeFile file('/Users/apple/Documents/gigforceapp.jks')
+            storeFile file('C:\\rohit\\gigforceapp.jks')
             storePassword 'gigforce'
             keyAlias 'key0'
             keyPassword 'gigforce'
@@ -68,7 +68,7 @@ android {
          */
         production {
             dimension "default"
-           signingConfig signingConfigs.production
+//           signingConfig signingConfigs.production
         }
 
         /**
@@ -186,7 +186,7 @@ dependencies {
     implementation "com.github.StephenVinouze:MaterialNumberPicker:1.0.0"
 
 
-    implementation 'com.github.yalantis:ucrop:2.2.4'
+//    implementation 'com.github.yalantis:ucrop:2.2.4'
     implementation 'com.theartofdev.edmodo:android-image-cropper:2.8.+'
 //    implementation 'com.google.firebase:firebase-auth:19.0.0'
     implementation 'com.google.firebase:firebase-core:17.4.0'
@@ -269,6 +269,9 @@ dependencies {
     // https://mvnrepository.com/artifact/com.itextpdf/itextpdf
     implementation group: 'com.itextpdf', name: 'itextpdf', version: '5.0.6'
 
+
+    implementation 'com.google.firebase:firebase-dynamic-links-ktx:19.1.0'
+    implementation 'com.google.firebase:firebase-analytics-ktx:17.5.0'
 
 
 }

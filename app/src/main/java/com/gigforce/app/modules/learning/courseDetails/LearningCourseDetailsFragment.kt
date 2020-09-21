@@ -120,7 +120,7 @@ class LearningCourseDetailsFragment : BaseFragment() {
 
 
         learningBackButton.setOnClickListener {
-            activity?.onBackPressed()
+          parentFragmentManager.popBackStack()
         }
 
         assessmentSeeMoreButton.setOnClickListener {
@@ -476,6 +476,11 @@ class LearningCourseDetailsFragment : BaseFragment() {
             false
         )
         learning_details_assessments_rv.adapter = recyclerGenericAdapter
+    }
+
+    override fun onBackPressed(): Boolean {
+        parentFragmentManager.popBackStack()
+        return false
     }
 
 

@@ -139,6 +139,9 @@ class ProfileFirebaseRepository: BaseFirestoreDBRepository() {
         firebaseDB.collection(profileCollectionName)
             .document(uid).update("aboutMe", aboutMe)
     }
+    fun addInviteToProfile(){
+
+    }
 
     /**
      * Don't delete while refactoring. Base Repo doesn't cover this function

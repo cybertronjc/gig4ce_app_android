@@ -53,7 +53,9 @@ class MainLearningFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         learningBackButton.setOnClickListener {
-            activity?.onBackPressed()
+//            popBackState()
+//            activity?.onBackPressed()
+            parentFragmentManager.popBackStack()
         }
 
         journey_completed_cardview.setOnClickListener {
@@ -529,6 +531,11 @@ class MainLearningFragment : BaseFragment() {
             false
         )
         searchSuggestionBasedVideosRV.adapter = recyclerGenericAdapter
+    }
+
+    override fun onBackPressed(): Boolean {
+        parentFragmentManager.popBackStack()
+        return false
     }
 
 
