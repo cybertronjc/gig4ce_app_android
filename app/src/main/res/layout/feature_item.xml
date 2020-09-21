@@ -17,7 +17,8 @@
     android:layout_marginLeft="18dp"
     android:layout_marginTop="12.5dp"
     android:layout_marginBottom="12.5dp"
-    app:cardPreventCornerOverlap="false">
+    app:cardPreventCornerOverlap="false"
+    app:cardBackgroundColor="@color/white">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">

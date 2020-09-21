@@ -1,12 +1,14 @@
 package com.gigforce.app.modules.auth.ui.main
 
 import android.Manifest
+import android.app.Activity
 import android.app.Dialog
 import android.os.Bundle
 import android.os.Handler
 import android.view.*
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
+import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import android.widget.TextView
 import androidx.core.widget.doAfterTextChanged
@@ -74,7 +76,18 @@ class Login : BaseFragment() {
                 showComfortDialog()
         }
     }
-
+    fun hideKeyboard() {
+        val imm = activity?.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        //Find the currently focused view, so we can grab the correct window token from it.
+        var view = activity?.getCurrentFocus()
+        //If no view currently has focus, create a new one, just so we can grab a window token from it
+        view?:run {
+            view = View(activity)
+        }
+        view?.let {
+        imm?.hideSoftInputFromWindow(it.getWindowToken(), 0)
+        }
+    }
     private fun showComfortDialog() {
         val dialog = activity?.let { Dialog(it) }
         dialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -123,10 +136,16 @@ class Login : BaseFragment() {
 
     private fun listeners() {
         cvloginwrong.visibility = INVISIBLE
-        otp_mobile_number.doAfterTextChanged { showWrongMobileNoLayout(false) }
+        otp_mobile_number.doAfterTextChanged {
+            showWrongMobileNoLayout(false)
+            if(otp_mobile_number.text.toString().length==10){
+                hideKeyboard()
+            }
+        }
         otp_mobile_number.setOnKeyListener(View.OnKeyListener { _, keyCode, event ->
             cvloginwrong.visibility = INVISIBLE
             textView23.visibility = VISIBLE
+
             if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP) {
                 login_button.isEnabled = false;
                 doActionOnClick()

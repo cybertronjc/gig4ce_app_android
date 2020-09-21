@@ -43,7 +43,6 @@ class OnboardingMainFragment : BaseFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         return inflateView(R.layout.onboarding_main_fragment, inflater, container)
     }
 
@@ -72,8 +71,7 @@ class OnboardingMainFragment : BaseFragment() {
                 profileData = profile
                 if (profile.status) {
                     if (profileData.isonboardingdone) {
-
-                        navigateToHomeScreen()
+                        navigateToLoaderScreen()
                     } else {
                         if (firstTimeLoad) {
                             checkForAlreadyCompletedData()
@@ -244,14 +242,15 @@ class OnboardingMainFragment : BaseFragment() {
         viewModel.setOnboardingCompleted(inviteId)
         sharedDataInterface.remove(StringConstants.INVITE_USER_ID.value)
         saveOnBoardingCompleted()
-        navigateToHomeScreen()
+        navigateToLoaderScreen()
     }
 
-    private fun navigateToHomeScreen() {
-        popFragmentFromStack(R.id.onboardingfragment)
+    private fun navigateToLoaderScreen() {
+//        popFragmentFromStack(R.id.onboardingfragment)
 //        navigateWithAllPopupStack(R.id.mainHomeScreen)
 //        navigate(R.id.authFlowFragment)
-        navigate(R.id.landinghomefragment)
+//        navigate(R.id.landinghomefragment)
+        navigateWithAllPopupStack(R.id.onboardingLoaderfragment)
     }
 
     private fun showBackIcon(show: Boolean) {
@@ -628,8 +627,7 @@ class OnboardingMainFragment : BaseFragment() {
     private val keyboardLayoutListener = OnGlobalLayoutListener {
         try {
             val heightDiff: Int =
-                onboarding_root_layout.getRootView()
-                    .getHeight() - onboarding_root_layout.getHeight()
+                onboarding_root_layout.getRootView().getHeight() - onboarding_root_layout.getHeight()
 //        val contentViewTop: Int = activity?.getWindow()?.findViewById<View>(Window.ID_ANDROID_CONTENT)?.getTop()!!
 //        val broadcastManager =
 //            LocalBroadcastManager.getInstance(requireContext())

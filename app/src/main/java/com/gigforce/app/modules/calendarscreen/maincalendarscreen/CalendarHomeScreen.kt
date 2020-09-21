@@ -35,6 +35,7 @@ import com.gigforce.app.modules.custom_gig_preferences.ParamCustPreferViewModel
 import com.gigforce.app.modules.custom_gig_preferences.UnavailableDataModel
 import com.gigforce.app.modules.preferences.PreferencesFragment
 import com.gigforce.app.modules.profile.ProfileViewModel
+import com.gigforce.app.modules.profile.models.ProfileData
 import com.gigforce.app.modules.roster.RosterDayFragment
 import com.gigforce.app.utils.GlideApp
 import com.gigforce.app.utils.configrepository.ConfigRepository
@@ -87,13 +88,12 @@ class CalendarHomeScreen : BaseFragment(),
             ViewModelProvider(this, ParamCustPreferViewModel(viewLifecycleOwner)).get(
                 CustomPreferencesViewModel::class.java
             )
-        print("test apk" + "test1")
-
+        print("test apk"+"test1")
 
         ConfigRepository().getForceUpdateCurrentVersion(object :
             ConfigRepository.LatestAPPUpdateListener {
             override fun getCurrentAPPVersion(latestAPPUpdateModel: ConfigRepository.LatestAPPUpdateModel) {
-                print("test apk" + "test1" + latestAPPUpdateModel.active)
+                print("test apk"+"test1"+latestAPPUpdateModel.active)
                 if (latestAPPUpdateModel.active && isNotLatestVersion(latestAPPUpdateModel))
                     showConfirmationDialogType3(
                         getString(R.string.new_version_available),
@@ -146,7 +146,7 @@ class CalendarHomeScreen : BaseFragment(),
 
             }
         } catch (e: Exception) {
-            Log.e("test apk", "test2 exception" + e.message.toString())
+            Log.e("test apk","test2 exception"+e.message.toString())
 
             return false
         }
@@ -363,7 +363,7 @@ class CalendarHomeScreen : BaseFragment(),
 
 
     private fun initializeMonthTV(calendar: Calendar, needaction: Boolean) {
-        val pattern = "MMMM YYYY"
+        val pattern = "MMMM yyyy"
         val simpleDateFormat = SimpleDateFormat(pattern)
         val date: String = simpleDateFormat.format(calendar.time)
         month_year.text = date
