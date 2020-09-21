@@ -4,6 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.LinearLayout
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -90,9 +93,30 @@ class SlidesFragment : BaseFragment(), ViewPager.OnPageChangeListener,
         slideViewPager.adapter = pagerAdapter
         slideViewPager.addOnPageChangeListener(this)
 
-        val slidesCoverageProgress = 100 / content.size
-        progress.progress = slidesCoverageProgress
+//        val slidesCoverageProgress = 100 / content.size
+//        progress.progress = slidesCoverageProgress
+
+        showDots(content.size)
     }
+
+    private fun showDots(dotsCount: Int) {
+        for (i in 0..dotsCount) {
+
+            val dotIV = ImageView(requireContext())
+
+            if(i == 0){
+                dotIV.setImageResource(R.drawable.ic_dot_active)
+            } else{
+                dotIV.setImageResource(R.drawable.ic_dot_inactive)
+            }
+
+            val layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+            layoutParams.leftMargin = 8
+            layoutParams.rightMargin = 8
+            sliderDotsContainer.addView(dotIV,layoutParams)
+        }
+    }
+
 
     private fun showSlidesLoadingLayout() {
 
@@ -125,9 +149,23 @@ class SlidesFragment : BaseFragment(), ViewPager.OnPageChangeListener,
     override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
 
     override fun onPageSelected(position: Int) {
-        val pagesCount = pagerAdapter!!.count
-        val slidesCoverageProgress = ((position + 1) * 100) / pagesCount
-        progress.progress = slidesCoverageProgress
+//        val pagesCount = pagerAdapter!!.count
+//        val slidesCoverageProgress = ((position + 1) * 100) / pagesCount
+//        progress.progress = slidesCoverageProgress
+
+        setDotAsSelected(position)
+    }
+
+    private fun setDotAsSelected(position: Int) {
+        for (i in 0 until sliderDotsContainer.childCount) {
+
+            val dotIV = sliderDotsContainer.getChildAt(i) as ImageView
+            if(i == position)
+                dotIV.setImageResource(R.drawable.ic_dot_active)
+            else
+                dotIV.setImageResource(R.drawable.ic_dot_inactive)
+
+        }
     }
 
     override fun onBackPressed(): Boolean {

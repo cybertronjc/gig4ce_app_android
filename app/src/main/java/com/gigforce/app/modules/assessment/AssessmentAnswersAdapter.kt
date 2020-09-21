@@ -1,5 +1,6 @@
 package com.gigforce.app.modules.assessment
 
+import android.app.ActionBar
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -47,12 +48,12 @@ class AssessmentAnswersAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>()
 
         when (getItemViewType(position)) {
             DEFAULT_ROW -> {
-                val obj = items!![position]
+                val obj = items!![position - 1]
 
-                holder.itemView.tv_number_rv_access_frag.text = (65 + position).toChar() + "."
+                holder.itemView.tv_number_rv_access_frag.text = (65 + (position - 1)).toChar() + "."
                 holder.itemView.tv_option_rv_access_frag.text = obj.que
                 holder.itemView.tv_helper_rv_access_frag.text =
-                    items!![holder.adapterPosition].reason
+                    items!![holder.adapterPosition - 1].reason
                 if (obj.selectedAnswer != null && obj.selectedAnswer!!) {
                     val color = holder.itemView.context.getColor(
                         if (obj.is_answer == true) R.color.app_green else
@@ -60,39 +61,53 @@ class AssessmentAnswersAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>()
                     )
                     holder.itemView.tv_number_rv_access_frag.setTextColor(color)
                     holder.itemView.tv_option_rv_access_frag.setTextColor(color)
-                    holder.itemView.tv_helper_rv_access_frag.visibility = if (obj.reason.isEmpty()) View.GONE else View.VISIBLE
+                    holder.itemView.tv_helper_rv_access_frag.visibility =
+                        if (obj.reason.isEmpty()) View.GONE else (if (obj.showReason == true) View.VISIBLE else View.GONE)
 
                 } else {
                     val color = holder.itemView.context.getColor(
-                        if (obj.clickStatus == true) R.color.black_85 else (if (obj.is_answer == true) R.color.app_green else
+                        if (obj.clickStatus == true) R.color.black_85 else (if (obj.is_answer == true) R.color.app_green else if (obj.showReason == false) R.color.black_85 else
                             R.color.red)
                     )
 
                     holder.itemView.tv_helper_rv_access_frag.visibility =
-                        if (obj.clickStatus == true || obj.reason.isEmpty()) View.GONE else View.VISIBLE
+                        if (obj.clickStatus == true || obj.reason.isEmpty()) View.GONE else (if (obj.showReason == true) View.VISIBLE else View.GONE)
                     holder.itemView.tv_number_rv_access_frag.setTextColor(color)
                     holder.itemView.tv_option_rv_access_frag.setTextColor(color)
 //                    holder.itemView.tv_helper_rv_access_frag.text = ""
 
                 }
-                holder.itemView.setOnClickListener {
-                    if (items!![holder.adapterPosition].clickStatus!!) {
-                        items!![holder.adapterPosition].selectedAnswer = true
+                if (items!![holder.adapterPosition - 1].clickStatus!!) {
+                    holder.itemView.setOnClickListener {
+
+                        items!![holder.adapterPosition - 1].selectedAnswer = true
                         adapterCallbacks.setAnswered(
-                            items!![holder.adapterPosition].is_answer!!,
-                            holder.adapterPosition
+                            items!![holder.adapterPosition - 1].is_answer!!,
+                            holder.adapterPosition - 1
                         )
 //                        notifyItemChanged(holder.adapterPosition)
 
-                    }
 
+                    }
+                } else {
+                    holder.itemView.setOnClickListener(null)
                 }
 
             }
             MESSAGE_ROW -> {
-                holder.itemView.tv_message_rv_answers_access_frag.visibility =
-                    if (showAnswerStatus) View.VISIBLE else View.GONE
-                holder.itemView.tv_message_rv_answers_access_frag.text = message
+                var params: ViewGroup.LayoutParams? = null
+                if (showAnswerStatus) {
+                    params = ViewGroup.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ActionBar.LayoutParams.WRAP_CONTENT
+                    )
+                } else {
+                    params = holder.itemView.layoutParams
+                    params.height = 0
+                }
+
+                holder.itemView.layoutParams = params
+                holder.itemView.tv_message_rv_answers_access_frag.text = message ?: ""
             }
 
         }
@@ -101,7 +116,7 @@ class AssessmentAnswersAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>()
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (position == items?.size) MESSAGE_ROW else DEFAULT_ROW
+        return if (position == 0) MESSAGE_ROW else DEFAULT_ROW
     }
 
     fun addData(items: ArrayList<OptionsArr>, showAnswerStatus: Boolean, message: String) {

@@ -1,5 +1,6 @@
 package com.gigforce.app.modules.assessment
 
+import OnSwipeTouchListener
 import android.graphics.Bitmap
 import android.graphics.Rect
 import android.graphics.drawable.Drawable
@@ -7,13 +8,13 @@ import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Handler
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import android.widget.PopupMenu
 import android.widget.ScrollView
 import androidx.core.os.bundleOf
+import androidx.core.view.ViewCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -34,11 +35,11 @@ import java.text.SimpleDateFormat
  * @author Rohit Sharma
  * date - 19/07/2020
  */
-class AssessmentFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
+class AssessmentFragment : BaseFragment(),
     AssessmentDialog.AssessmentDialogCallbacks,
     AssessmentAnswersAdapter.AssessAdapterCallbacks {
 
-    private lateinit var mLessonId : String
+    private lateinit var mLessonId: String
 
     private var pushfinalEvent: Boolean = false
     private var countDownTimer: CountDownTimer? = null
@@ -75,17 +76,17 @@ class AssessmentFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
 
     private fun getDataFromIntents(savedInstanceState: Bundle?) {
         savedInstanceState?.let {
-            mLessonId = it.getString(INTENT_LESSON_ID)?: return@let
+            mLessonId = it.getString(INTENT_LESSON_ID) ?: return@let
         }
 
         arguments?.let {
-            mLessonId = it.getString(INTENT_LESSON_ID)?: return@let
+            mLessonId = it.getString(INTENT_LESSON_ID) ?: return@let
         }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putString(INTENT_LESSON_ID,mLessonId)
+        outState.putString(INTENT_LESSON_ID, mLessonId)
     }
 
     private fun initObservers() {
@@ -186,13 +187,14 @@ class AssessmentFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
     }
 
     private fun initTb() {
-        iv_options_menu_tb.visibility = View.VISIBLE
+//        iv_options_menu_tb.visibility = View.VISIBLE
         tv_title_toolbar.text = getString(R.string.assessment)
     }
 
     private fun initialize() {
         initUI()
         initClicks();
+        rv_options_assess_frag.isNestedScrollingEnabled=false
         countDownTimer?.start();
 
     }
@@ -229,16 +231,99 @@ class AssessmentFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
         adapter?.setCallbacks(this)
 
         rv_options_assess_frag.adapter = adapter
-        rv_options_assess_frag.setHasFixedSize(true)
         rv_options_assess_frag.layoutManager = LinearLayoutManager(activity)
-        rv_options_assess_frag.addItemDecoration(ItemOffsetDecoration(context, R.dimen.size_16))
+        rv_options_assess_frag.addItemDecoration(
+            ItemDecoratorAssessmentOptions(
+                context,
+                R.dimen.size_16
+            )
+        )
 
     }
 
+
     private fun initClicks() {
-        iv_options_menu_tb.setOnClickListener {
-            openPopupMenu(it, R.menu.menu_assessment, this, activity)
-        }
+
+        sv_assess_frag.setOnTouchListener(object : OnSwipeTouchListener(requireContext()) {
+
+            override fun onSwipeRight() {
+                if (selectedPosition == 0) return
+
+                val anim = AnimationUtils.loadAnimation(
+                    requireContext(),
+                    R.anim.exit_from_right
+                )
+                sv_assess_frag.startAnimation(
+                    anim
+                )
+                anim.setAnimationListener(object : Animation.AnimationListener {
+                    override fun onAnimationRepeat(animation: Animation?) {
+
+                    }
+
+                    override fun onAnimationEnd(animation: Animation?) {
+                        switchPosition(false)
+                        val anim = AnimationUtils.loadAnimation(
+                            requireContext(),
+                            R.anim.entry_from_left
+                        )
+                        sv_assess_frag.startAnimation(
+                            anim
+                        )
+
+
+                    }
+
+                    override fun onAnimationStart(animation: Animation?) {
+                    }
+                })
+
+            }
+
+            override fun onSwipeLeft() {
+                if (selectedPosition == viewModelAssessmentFragment.observableAssessmentData.value?.assessment?.size?.minus(
+                        1
+                    ) ?: false
+                ) return
+                if (!viewModelAssessmentFragment.observableAssessmentData.value?.assessment!![selectedPosition].answered) {
+                    showToast(getString(R.string.answer_the_ques))
+                    return
+                }
+
+                val anim = AnimationUtils.loadAnimation(
+                    requireContext(),
+                    R.anim.exit_from_left
+                )
+                sv_assess_frag.startAnimation(
+                    anim
+                )
+                anim.setAnimationListener(object : Animation.AnimationListener {
+                    override fun onAnimationRepeat(animation: Animation?) {
+
+                    }
+
+                    override fun onAnimationEnd(animation: Animation?) {
+                        switchPosition(true)
+                        val anim = AnimationUtils.loadAnimation(
+                            requireContext(),
+                            R.anim.entry_from_right
+                        )
+                        sv_assess_frag.startAnimation(
+                            anim
+                        )
+
+
+                    }
+
+                    override fun onAnimationStart(animation: Animation?) {
+                    }
+                })
+
+
+            }
+
+
+        });
         iv_back.setOnClickListener {
             popBackState()
         }
@@ -253,31 +338,28 @@ class AssessmentFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
 
                 } else {
                     showToast(getString(R.string.answer_the_ques))
-
                 }
 
             } else {
                 if (viewModelAssessmentFragment.observableAssessmentData.value?.assessment!![selectedPosition].answered) {
-                    ++selectedPosition
-                    setDataAsPerPosition(viewModelAssessmentFragment.observableAssessmentData.value!!)
-                    h_pb_assess_frag.progress = selectedPosition
-                    tv_percent_assess_frag.text =
-                        String.format(
-                            "%.1f",
-                            (((selectedPosition.toFloat() / viewModelAssessmentFragment.observableAssessmentData.value?.assessment!!.size.toFloat()).toFloat() * 100))
-                        ) + " %"
-
-                    sv_assess_frag.postDelayed(
-                        Runnable { sv_assess_frag.fullScroll(ScrollView.FOCUS_UP) },
-                        600
-                    )
+                    switchPosition(true)
                 } else {
                     showToast(getString(R.string.answer_the_ques))
                 }
             }
-
         }
     }
+
+    fun switchPosition(increment: Boolean) {
+        if (increment) ++selectedPosition else --selectedPosition
+        setDataAsPerPosition(viewModelAssessmentFragment.observableAssessmentData.value!!)
+        sv_assess_frag.postDelayed(
+            Runnable { sv_assess_frag.fullScroll(ScrollView.FOCUS_UP) },
+            600
+        )
+
+    }
+
 
     override fun onResume() {
         super.onResume()
@@ -294,7 +376,6 @@ class AssessmentFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
     }
 
     private fun finalResult() {
-
         if (!lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) {
             pushfinalEvent = true
             return
@@ -345,6 +426,7 @@ class AssessmentFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
                 viewModelAssessmentFragment.shouldQuestionHeaderBeVisible(top, bottom, scrollBounds)
             }
         })
+  rv_options_assess_frag.isNestedScrollingEnabled=false
         swipeDownAnim()
     }
 
@@ -364,16 +446,26 @@ class AssessmentFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
         val dialog = AssessmentDialog.newInstance(state);
         dialog.setCallbacks(this)
         dialog.arguments = bundle
+
         dialog.show(parentFragmentManager, AssessmentDialog::class.java.name)
+        parentFragmentManager.executePendingTransactions()
+        when (state) {
+            AssessmentDialog.STATE_INIT -> dialog.dialog?.setOnCancelListener {
+                popBackState()
+            }
+        }
+
+
     }
 
-    override fun onMenuItemClick(item: MenuItem?): Boolean {
-
-        return true
-    }
 
     override fun assessmentState(state: Int) {
         viewModelAssessmentFragment.switchAsPerState(state)
+    }
+
+    override fun doItLaterPressed() {
+        popBackState()
+
     }
 
     override fun submitAnswer() {
@@ -391,12 +483,16 @@ class AssessmentFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
         val iterate = optionsArr?.listIterator()
         while (iterate?.hasNext() == true) {
             val obj = iterate.next()
-//            if (obj.selectedAnswer != true && obj.is_answer != true) {
-//                iterate.remove()
-//            } else {
+            if (isCorrect) {
+                if (obj.selectedAnswer != true) {
+                    obj.showReason = false
+                }
+            } else {
+                if (obj.selectedAnswer != true && obj.is_answer != true) {
+                    obj.showReason = false
+                }
+            }
             obj.clickStatus = false
-//            }
-
         }
         adapter?.addData(
             optionsArr ?: arrayListOf(),
@@ -407,11 +503,18 @@ class AssessmentFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
         )
 
         val y: Float =
-            rv_options_assess_frag.y + rv_options_assess_frag.getChildAt(position).y
+            rv_options_assess_frag.y + rv_options_assess_frag.getChildAt(0).y
         sv_assess_frag.post {
-            sv_assess_frag.fullScroll(View.FOCUS_DOWN)
+            sv_assess_frag.smoothScrollTo(0, y.toInt())
         }
-
+        if (selectedPosition + 1 > h_pb_assess_frag.progress) {
+            h_pb_assess_frag.progress = selectedPosition + 1
+            tv_percent_assess_frag.text =
+                String.format(
+                    "%.1f",
+                    ((((selectedPosition + 1).toFloat() / viewModelAssessmentFragment.observableAssessmentData.value?.assessment!!.size.toFloat()) * 100))
+                ) + " %"
+        }
 
     }
 
@@ -454,7 +557,7 @@ class AssessmentFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
         return super.onBackPressed()
     }
 
-    companion object{
+    companion object {
         const val INTENT_LESSON_ID = "lesson_id"
     }
 

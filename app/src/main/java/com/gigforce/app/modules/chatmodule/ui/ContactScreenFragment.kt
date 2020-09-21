@@ -3,6 +3,7 @@ package com.gigforce.app.modules.chatmodule.ui
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.widget.PopupMenu
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,10 +14,13 @@ import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.modules.chatmodule.viewModels.ChatViewModel
 import com.gigforce.app.utils.AppConstants
 import com.gigforce.app.utils.VerticalItemDecorator
+import com.gigforce.app.utils.openPopupMenu
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.contact_screen_fragment.*
+import kotlinx.android.synthetic.main.toolbar.*
 
-class ContactScreenFragment : BaseFragment(), OnContactClickListener {
+class ContactScreenFragment : BaseFragment(), OnContactClickListener,
+    PopupMenu.OnMenuItemClickListener {
 
     private lateinit var viewModel : ChatViewModel
     private lateinit var mAdapter : ContactRecyclerAdapter
@@ -35,6 +39,7 @@ class ContactScreenFragment : BaseFragment(), OnContactClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initialize()
+        initClicks()
         attachListeners()
 
         val tempviewModel: ChatViewModel by activityViewModels<ChatViewModel>()
@@ -46,6 +51,13 @@ class ContactScreenFragment : BaseFragment(), OnContactClickListener {
             )
         subscribeViewModel()
         initRecycler()
+    }
+
+    private fun initClicks() {
+
+        imageView41.setOnClickListener {
+            openPopupMenu(it, R.menu.menu_contact_screen, this, activity)
+        }
     }
 
     fun initialize() {
@@ -138,5 +150,15 @@ class ContactScreenFragment : BaseFragment(), OnContactClickListener {
             bundle.putSerializable("chatHeaderId", chatHeaderId)
             navigate(R.id.chatScreenFragment, bundle)
         }
+    }
+
+    override fun onMenuItemClick(item: MenuItem?): Boolean {
+when(item?.itemId){
+    R.id.mnu_invite_friend->{
+        navigate(R.id.referrals_fragment)
+    }
+
+}
+        return false
     }
 }

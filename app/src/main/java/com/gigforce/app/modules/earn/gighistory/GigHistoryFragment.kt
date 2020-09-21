@@ -56,6 +56,7 @@ class GigHistoryFragment : BaseFragment(), AdapterGigHistory.AdapterGigHistoryCa
         initClicks()
         initObservers()
         viewModel.getData()
+        viewModel.observeDocChanges()
 
     }
 
@@ -127,6 +128,9 @@ class GigHistoryFragment : BaseFragment(), AdapterGigHistory.AdapterGigHistoryCa
         })
         viewModel.observableError.observe(viewLifecycleOwner, Observer {
             showToast(it!!)
+        })
+        viewModel.observableDocChange.observe(viewLifecycleOwner, Observer {
+            adapter.handleDocChange(it)
         })
         //TODO : Correct this afterwards
         var viewModelProfile = ViewModelProviders.of(this).get(ProfileViewModel::class.java)

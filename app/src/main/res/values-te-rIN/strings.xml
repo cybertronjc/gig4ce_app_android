@@ -586,6 +586,20 @@
     <string name="plus_see_less">+ see less</string>
     <string name="app_language">App Language</string>
     <string name="sign_out">Sign out</string>
+    <string name="invite_a_friend">Invite a friend</string>
+    <string name="refresh_">Refresh</string>
+    <string name="refer_your_friends">Refer Your Friends</string>
+    <string name="share_the_joy_of_working_with_gigforce_and_invite_your_friends">Share the joy of working with Gigforce and invite your friends.</string>
+    <string name="share_now">Share Now</string>
+    <string name="thankyou">ThankYou</string>
+    <string name="link_copied">Link Copied</string>
+    <string name="looking_for_dynamic_working_hours">\Looking for flexible working hours? Join me at Gigforce :</string>
+    <string name="you_helped">You helped</string>
+    <string name="and">and</string>
+    <string name="more_comma">more,</string>
+    <string name="find_gigs_on">find gigs on Gigforce.</string>
+    <string name="more">more</string>
+    <string name="do_it_later"><u>Do It Later</u></string>
     <string name="submit_all_caps">SUBMIT</string>
     <string name="yes_i_confirm_that_i_want_to_decline_this_gig">Yes, I confirm that I want to decline this gig.</string>
     <string name="reason">Reason</string>
@@ -595,4 +609,5 @@
     <string name="please_let_us_know_your_reason_why_are_you_declining_this_gig">Please let us know your reason, why are you declining this gig.</string>
     <string name="cancelling_out_a_gig">Cancelling out a gig !</string>
     <string name="i_am_on_leave_today">I am on leave today</string>
+
 </resources>

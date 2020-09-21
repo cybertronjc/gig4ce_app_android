@@ -10,7 +10,7 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/card_view"
         android:layout_width="match_parent"
-        android:layout_height="88dp"
+        android:layout_height="84dp"
         android:layout_marginStart="4dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="10dp"
@@ -19,23 +19,35 @@
         app:cardElevation="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:cardBackgroundColor="@color/white">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
 
+            <ImageView
+                android:id="@+id/quiz_icon_iv"
+                android:layout_width="27dp"
+                android:layout_height="27dp"
+                android:layout_marginStart="16dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:src="@drawable/ic_quiz"/>
+
+
             <TextView
                 android:id="@+id/title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="15dp"
                 android:letterSpacing="0.01"
                 android:textColor="#000000"
                 android:textSize="14sp"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toEndOf="@id/quiz_icon_iv"
                 app:layout_constraintTop_toTopOf="parent"
                 android:text="Assessment 1" />
 
@@ -43,17 +55,20 @@
                 android:id="@+id/status"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
+                android:layout_marginLeft="10dp"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
                 android:background="@drawable/rect_assessment_status_pending"
                 android:gravity="center"
                 android:letterSpacing="0.05"
                 android:padding="4dp"
-                android:text="PENDING"
+                android:layout_marginTop="12dp"
+                tools:text="PENDING"
                 android:textColor="#ffffff"
-                android:textSize="11sp"
+                android:textSize="12sp"
                 android:layout_marginBottom="5dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintTop_toBottomOf="@id/title"
+                app:layout_constraintStart_toEndOf="@id/quiz_icon_iv" />
 
             <TextView
                 android:id="@+id/time"
@@ -61,11 +76,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="16dp"
                 android:letterSpacing="0.02"
-                android:text="12:00"
+                tools:text="12:00"
                 android:textColor="#000000"
                 android:textSize="12sp"
+                android:layout_marginTop="12dp"
                 android:layout_marginBottom="5dp"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/title"
                 app:layout_constraintEnd_toEndOf="parent" />
 
             <ImageView
@@ -87,6 +103,7 @@
         android:layout_height="42dp"
         app:cardBackgroundColor="#f5a623"
         app:cardElevation="6dp"
+        android:layout_marginStart="2dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>

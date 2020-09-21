@@ -7,18 +7,25 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.app.R
+import com.gigforce.app.modules.gigPage.models.DocChange
 import com.gigforce.app.modules.gigPage.models.Gig
 import com.gigforce.app.utils.*
+import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.layout_rv_gig_details_gig_history.view.*
 import kotlinx.android.synthetic.main.layout_rv_gig_events_gig_hist.view.*
 import kotlinx.android.synthetic.main.layout_rv_ongoing_gigs_gig_hist.view.*
 import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.ZoneId
+import java.util.*
+import kotlin.collections.ArrayList
 
 @Suppress("IMPLICIT_CAST_TO_ANY")
 class AdapterGigHistory : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    private var adapter: AdapterOnGoingGigs? = null
     private var callbacks: AdapterGigHistoryCallbacks? = null
-    private var onGoingGigs: List<Gig>? = null
+    private var onGoingGigs: MutableList<Gig>? = ArrayList<Gig>()
 
     private var scheduledGigs: MutableList<Gig>? = ArrayList<Gig>()
     private val timeFormatter = SimpleDateFormat("hh.mm aa")
@@ -73,7 +80,7 @@ class AdapterGigHistory : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                     viewHolderOnGoings.itemView.tv_on_going_gigs_gig_hist.visibility =
                         if (it) View.GONE else View.VISIBLE
                 }
-                val adapter = AdapterOnGoingGigs()
+                adapter = AdapterOnGoingGigs()
                 viewHolderOnGoings.itemView.rv_on_going_gigs_gig_hist.adapter = adapter
 //                if (horizontalItemDecoration == null) {
 //                    horizontalItemDecoration =
@@ -96,8 +103,8 @@ class AdapterGigHistory : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                         LinearLayoutManager.HORIZONTAL,
                         false
                     )
-                adapter.addData(onGoingGigs)
-                adapter.setCallbacks(object : AdapterOnGoingGigs.AdapterOnGoingGigCallbacks {
+                adapter!!.addData(onGoingGigs)
+                adapter!!.setCallbacks(object : AdapterOnGoingGigs.AdapterOnGoingGigCallbacks {
                     override fun openGigDetails(gig: Gig) {
                         callbacks?.openGigDetails(gig)
                     }
@@ -167,9 +174,11 @@ class AdapterGigHistory : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                         val hours = (durationCalculated / (1000 * 60 * 60))
                         val mins = (durationCalculated / (1000 * 60)).toInt() % 60
                         holder.itemView.tv_time_rv_gig_hist.text =
-                            "${hours}${viewHolderGigDetails.itemView.context.getString(R.string.hours)} : ${mins}${viewHolderGigDetails.itemView.context.getString(
+                            "${hours}${viewHolderGigDetails.itemView.context.getString(R.string.hours)} : ${mins}${
+                            viewHolderGigDetails.itemView.context.getString(
                                 R.string.mins
-                            )}"
+                            )
+                            }"
                     }
                 }
 
@@ -178,9 +187,11 @@ class AdapterGigHistory : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                         callbacks?.openGigDetails(scheduledGigs!![holder.adapterPosition - 2])
                     })
                 holder.itemView.tv_timing_rv_gig_hist.text = if (gig.endDateTime != null)
-                    "${timeFormatter.format(gig.startDateTime!!.toDate())} - ${timeFormatter.format(
+                    "${timeFormatter.format(gig.startDateTime!!.toDate())} - ${
+                    timeFormatter.format(
                         gig.endDateTime!!.toDate()
-                    )}"
+                    )
+                    }"
                 else
                     "${timeFormatter.format(gig.startDateTime!!.toDate())} - "
 
@@ -322,7 +333,8 @@ class AdapterGigHistory : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     fun addOnGoingGigs(onGoingGigs: List<Gig>?) {
-        this.onGoingGigs = onGoingGigs;
+        this.onGoingGigs?.clear()
+        this.onGoingGigs?.addAll(onGoingGigs!!)
         notifyItemChanged(0)
     }
 
@@ -342,6 +354,215 @@ class AdapterGigHistory : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         scheduledGigs?.size?.let { notifyItemRangeRemoved(2, it) }
         scheduledGigs?.clear()
 
+    }
+
+    fun handleDocChange(it: DocChange?) {
+
+        when (it?.type) {
+            DocumentChange.Type.ADDED -> {
+                if (convertToLocalDateViaInstant(it.gig?.startDateTime?.toDate()!!)!!.isBefore(
+                        convertToLocalDateViaInstant(
+                            Date()
+                        )
+                    )
+                ) {
+                    if (callbacks?.getEventState() == EVENT_PAST) {
+                        val itemToBeRemoved = scheduledGigs?.indexOf(it.gig!!)
+                        if (itemToBeRemoved != null && itemToBeRemoved == -1) {
+                            val date1 =
+                                convertToLocalDateViaInstant(it.gig?.startDateTime?.toDate()!!)
+                            var noBeforeDateFound = true
+                            var index = -1;
+                            for (i in 0 until scheduledGigs?.size!!) {
+                                val date2 =
+                                    convertToLocalDateViaInstant(scheduledGigs!![i].startDateTime?.toDate()!!)
+                                if (date1?.isEqual(date2)!! || date1.isBefore(date2)) {
+                                    index = i
+                                    noBeforeDateFound = false
+                                    break
+                                }
+                            }
+                            if (noBeforeDateFound) {
+
+                                scheduledGigs?.add(
+                                    0, it.gig!!
+                                )
+                                notifyItemInserted(2)
+                            } else {
+                                scheduledGigs?.add(index, it.gig!!)
+                                notifyItemInserted(index + 2)
+                            }
+                            callbacks?.showNoGigExists(View.GONE)
+                        }
+                    }
+
+                } else if (convertToLocalDateViaInstant(it.gig?.startDateTime?.toDate()!!)!!.isAfter(
+                        convertToLocalDateViaInstant(
+                            Date()
+                        )
+                    )
+                ) {
+                    if (callbacks?.getEventState() == EVENT_UPCOMING) {
+                        val itemToBeRemoved = scheduledGigs?.indexOf(it.gig!!)
+                        if (itemToBeRemoved != null && itemToBeRemoved == -1) {
+                            val date1 =
+                                convertToLocalDateViaInstant(it.gig?.startDateTime?.toDate()!!)
+                            var noAfterDateFound = true
+                            var index = -1;
+                            for (i in 0 until scheduledGigs!!.size) {
+                                val date2 =
+                                    convertToLocalDateViaInstant(scheduledGigs!![i].startDateTime?.toDate()!!)
+                                if (date1?.isEqual(date2)!! || date1.isBefore(date2)) {
+                                    index = i
+                                    noAfterDateFound = false;
+                                    break
+                                }
+                            }
+                            if (noAfterDateFound) {
+                                if (scheduledGigs?.size != 0) {
+                                    scheduledGigs?.size?.minus(1)?.let { it1 ->
+                                        scheduledGigs?.add(
+                                            it1, it.gig!!
+                                        )
+                                        notifyItemInserted(it1 + 2)
+                                    }
+                                } else {
+                                    scheduledGigs?.add(it.gig!!)
+                                    notifyItemInserted(2)
+                                }
+
+                            } else {
+                                scheduledGigs?.add(index, it.gig!!)
+                                notifyItemInserted(index + 2)
+                            }
+                            callbacks?.showNoGigExists(View.GONE)
+
+
+                        }
+                    }
+                } else if (convertToLocalDateViaInstant(it.gig?.startDateTime?.toDate()!!)!!.isEqual(
+                        convertToLocalDateViaInstant(
+                            Date()
+                        )
+                    )
+                ) {
+                    if (onGoingGigs != null) {
+                        val itemToBeRemoved = onGoingGigs?.indexOf(it.gig!!)
+                        if (itemToBeRemoved != null && itemToBeRemoved == -1) {
+                            if (onGoingGigs?.size == 1) {
+                                notifyItemChanged(0)
+                            } else {
+                                adapter?.itemAdded(0, it.gig!!)
+
+                            }
+
+
+                        }
+                    }
+
+                }
+            }
+            DocumentChange.Type.REMOVED -> {
+
+
+                if (convertToLocalDateViaInstant(it.gig?.startDateTime?.toDate()!!)!!.isBefore(
+                        convertToLocalDateViaInstant(
+                            Date()
+                        )
+                    )
+                ) {
+                    if (callbacks?.getEventState() == EVENT_PAST) {
+                        val itemToBeRemoved = scheduledGigs?.indexOf(it.gig!!)
+                        if (itemToBeRemoved != null && itemToBeRemoved != -1) {
+                            scheduledGigs?.removeAt(itemToBeRemoved)
+                            notifyItemRemoved(itemToBeRemoved + 2)
+
+                        }
+                    }
+                } else if (convertToLocalDateViaInstant(it.gig?.startDateTime?.toDate()!!)!!.isAfter(
+                        convertToLocalDateViaInstant(
+                            Date()
+                        )
+                    )
+                ) {
+                    if (callbacks?.getEventState() == EVENT_UPCOMING) {
+                        val itemToBeRemoved = scheduledGigs?.indexOf(it.gig!!)
+                        if (itemToBeRemoved != null && itemToBeRemoved != -1) {
+                            scheduledGigs?.removeAt(itemToBeRemoved)
+                            notifyItemRemoved(itemToBeRemoved + 2)
+
+                        }
+                    }
+                } else if (convertToLocalDateViaInstant(it.gig?.startDateTime?.toDate()!!)!!.isEqual(
+                        convertToLocalDateViaInstant(
+                            Date()
+                        )
+                    )
+                ) {
+                    if (onGoingGigs != null && !onGoingGigs?.isEmpty()!!) {
+                        val itemToBeRemoved = onGoingGigs?.indexOf(it.gig!!)
+                        if (itemToBeRemoved != null && itemToBeRemoved != -1) {
+                            onGoingGigs?.removeAt(itemToBeRemoved)
+                            adapter?.removeItem(itemToBeRemoved)
+
+                        }
+                    }
+
+                }
+            }
+            DocumentChange.Type.MODIFIED -> {
+                if (convertToLocalDateViaInstant(it.gig?.startDateTime?.toDate()!!)!!.isBefore(
+                        convertToLocalDateViaInstant(
+                            Date()
+                        )
+                    )
+                ) {
+                    if (callbacks?.getEventState() == EVENT_PAST) {
+                        val itemToBeRemoved = scheduledGigs?.indexOf(it.gig!!)
+                        if (itemToBeRemoved != null && itemToBeRemoved != -1) {
+                            scheduledGigs!![itemToBeRemoved] = it.gig!!
+                            notifyItemChanged(itemToBeRemoved + 2)
+
+                        }
+                    }
+                } else if (convertToLocalDateViaInstant(it.gig?.startDateTime?.toDate()!!)!!.isAfter(
+                        convertToLocalDateViaInstant(
+                            Date()
+                        )
+                    )
+                ) {
+                    if (callbacks?.getEventState() == EVENT_UPCOMING) {
+                        val itemToBeRemoved = scheduledGigs?.indexOf(it.gig!!)
+                        if (itemToBeRemoved != null && itemToBeRemoved != -1) {
+                            scheduledGigs!![itemToBeRemoved] = it.gig!!
+                            notifyItemChanged(itemToBeRemoved + 2)
+
+                        }
+                    }
+                } else if (convertToLocalDateViaInstant(it.gig?.startDateTime?.toDate()!!)!!.isEqual(
+                        convertToLocalDateViaInstant(
+                            Date()
+                        )
+                    )
+                ) {
+                    if (onGoingGigs != null && !onGoingGigs?.isEmpty()!!) {
+                        val itemToBeRemoved = onGoingGigs?.indexOf(it.gig!!)
+                        if (itemToBeRemoved != null && itemToBeRemoved != -1) {
+                            adapter?.itemModified(itemToBeRemoved, it.gig!!)
+
+
+                        }
+                    }
+
+                }
+            }
+        }
+    }
+
+    fun convertToLocalDateViaInstant(dateToConvert: Date): LocalDate? {
+        return dateToConvert.toInstant()
+            .atZone(ZoneId.systemDefault())
+            .toLocalDate()
     }
 
 

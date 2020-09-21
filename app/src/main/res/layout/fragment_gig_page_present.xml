@@ -804,7 +804,7 @@
                     android:layout_height="24dp"
                     android:layout_marginStart="25dp"
                     android:layout_marginTop="14dp"
-                    android:src="@drawable/ic_group_pink"
+                    app:srcCompat="@drawable/ic_group_pink"
 
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/bt_download_id_gig_past_gigs" />
@@ -952,7 +952,7 @@
                     android:layout_height="24dp"
                     android:layout_marginStart="25dp"
                     android:layout_marginTop="14dp"
-                    android:src="@drawable/ic_clock_pink"
+                    app:srcCompat="@drawable/ic_clock_pink"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/durationTextTV" />
 
@@ -977,7 +977,7 @@
                     android:layout_height="24dp"
                     android:layout_marginStart="25dp"
                     android:layout_marginTop="14dp"
-                    android:src="@drawable/ic_location"
+                    app:srcCompat="@drawable/ic_location"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/shiftTV" />
 
@@ -1005,7 +1005,7 @@
                     android:layout_height="24dp"
                     android:layout_marginStart="25dp"
                     android:layout_marginTop="14dp"
-                    android:src="@drawable/ic_credit_card"
+                    app:srcCompat="@drawable/ic_credit_card"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/addressTV" />
 
@@ -1207,7 +1207,7 @@
                     android:layout_height="17dp"
                     android:layout_marginStart="25dp"
                     android:layout_marginTop="14dp"
-                    android:src="@drawable/ic_location"
+                    app:srcCompat="@drawable/ic_location"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/locationImageScrollView" />
 

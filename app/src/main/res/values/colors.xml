@@ -6,6 +6,7 @@
     <color name="colorAccent">#930077</color>
     <color name="colorLightAccent">#e42c64</color>
     <color name="topBarDark">#d72467</color>
+    <color name="background">#FFFFFF</color>
     <color name="black">#000000</color>
     <color name="black_42">#6B000000</color>
     <color name="black_20">#20000000</color>

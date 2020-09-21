@@ -6,7 +6,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.EditText
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
@@ -41,7 +43,7 @@ import com.gigforce.app.utils.configrepository.ConfigRepository
  * create an instance of this fragment.
  */
 open class BaseFragment : Fragment(), ViewsFromViewsInterface, NavigationInterface,
-    SharedDataInterface, AppDialogsInterface, UtilAndValidationInterface,LanguageUtilInterface {
+    SharedDataInterface, AppDialogsInterface, UtilAndValidationInterface, LanguageUtilInterface {
 
     lateinit var viewsFromViewsInterface: ViewsFromViewsInterface
     lateinit var navigationInterface: NavigationInterface
@@ -266,6 +268,18 @@ open class BaseFragment : Fragment(), ViewsFromViewsInterface, NavigationInterfa
 
     override fun getAllMobileNumber(): String? {
         return sharedDataInterface.getAllMobileNumber()
+    }
+
+    override fun saveData(key: String, value: String?) {
+        sharedDataInterface.saveData(key, value)
+    }
+
+    override fun getData(key: String?): String? {
+        return sharedDataInterface.getData(key)
+    }
+
+    override fun remove(key: String?) {
+        sharedDataInterface.remove(key)
     }
 
     override fun getChangedDeviceLanguageCode(deviceLanguage: String): String {

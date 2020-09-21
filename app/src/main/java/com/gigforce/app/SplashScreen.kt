@@ -1,26 +1,57 @@
 package com.gigforce.app
+
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.gigforce.app.MainActivity
-import com.gigforce.app.modules.markattendance.ImageCaptureActivity
+import com.gigforce.app.core.base.shareddata.SharedDataImp
+import com.gigforce.app.utils.StringConstants
+import com.google.firebase.dynamiclinks.ktx.dynamicLinks
+import com.google.firebase.ktx.Firebase
 
 class SplashScreen : AppCompatActivity() {
 
-    val TAG:String = "activity/main"
+    val TAG: String = "activity/main"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        //Handling if Firebase Dynamic link is being clicked in any other application
+        Firebase.dynamicLinks
+            .getDynamicLink(intent)
+            .addOnSuccessListener(this) { pendingDynamicLinkData ->
+                // Get deep link from result (may be null if no link is found)
+                var deepLink: Uri? = null
+                if (pendingDynamicLinkData != null) {
+                    deepLink = pendingDynamicLinkData.link
+                    val sp = SharedDataImp(this)
+                    sp.saveData(
+                        StringConstants.INVITE_USER_ID.value,
+                        deepLink?.getQueryParameter("invite")
+                    )
+                }
+
+            }
+            .addOnFailureListener(this) { e ->
+                run {
+
+                }
+            }
+        initApp()
+
+    }
+
+    fun initApp() {
+        val intent = Intent(this, MainActivity::class.java)
         if (!isTaskRoot
             && intent.hasCategory(Intent.CATEGORY_LAUNCHER)
             && intent.action != null
-            && intent.action.equals(Intent.ACTION_MAIN)) {
-
+            && intent.action.equals(Intent.ACTION_MAIN)
+        ) {
+            startActivity(intent)
             finish();
             return;
         }
-
-        val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
         finish()
     }
