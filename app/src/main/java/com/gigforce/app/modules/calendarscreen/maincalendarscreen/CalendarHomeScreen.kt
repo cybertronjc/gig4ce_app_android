@@ -40,6 +40,7 @@ import com.gigforce.app.modules.roster.RosterDayFragment
 import com.gigforce.app.utils.GlideApp
 import com.gigforce.app.utils.configrepository.ConfigRepository
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.storage.StorageReference
 import com.riningan.widget.ExtendedBottomSheetBehavior
 import com.riningan.widget.ExtendedBottomSheetBehavior.STATE_COLLAPSED
@@ -126,27 +127,27 @@ class CalendarHomeScreen : BaseFragment(),
     private fun isNotLatestVersion(latestAPPUpdateModel: ConfigRepository.LatestAPPUpdateModel): Boolean {
         try {
             var currentAppVersion = getAppVersion()
-            if (currentAppVersion.contains("Dev")) {
-                currentAppVersion = currentAppVersion?.split("-")[0] ?: currentAppVersion
+            if(currentAppVersion.contains("Dev")){
+                currentAppVersion = currentAppVersion?.split("-")[0]
             }
             var appVersion = currentAppVersion?.split(".")?.toTypedArray()
             var serverAPPVersion =
                 latestAPPUpdateModel?.force_update_current_version?.split(".")?.toTypedArray()
             if (appVersion?.size == 0 || serverAPPVersion?.size == 0) {
-                showToast("not working")
+                FirebaseCrashlytics.getInstance().log("isNotLatestVersion method : appVersion or serverAPPVersion has zero size!!")
                 return false
             } else {
                 if (appVersion.get(0).toInt() < serverAPPVersion.get(0).toInt()) {
                     return true
-                } else if (appVersion.get(1).toInt() < serverAPPVersion.get(1).toInt()) {
+                } else if (appVersion.get(0).toInt()== serverAPPVersion.get(0).toInt() && appVersion.get(1).toInt() < serverAPPVersion.get(1).toInt()) {
                     return true
-                } else if (appVersion.get(2).toInt() < serverAPPVersion.get(2).toInt()) {
+                } else if (appVersion.get(0).toInt()== serverAPPVersion.get(0).toInt() && appVersion.get(1).toInt() == serverAPPVersion.get(1).toInt() && appVersion.get(2).toInt() < serverAPPVersion.get(2).toInt()) {
                     return true
                 } else return false
 
             }
         } catch (e: Exception) {
-            Log.e("test apk","test2 exception"+e.message.toString())
+            FirebaseCrashlytics.getInstance().log("isNotLatestVersion Method Exception")
 
             return false
         }
