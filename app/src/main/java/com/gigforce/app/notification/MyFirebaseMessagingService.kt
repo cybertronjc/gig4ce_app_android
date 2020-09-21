@@ -96,7 +96,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             NotificationHelper(applicationContext)
                 .createUrgentPriorityNotification(
                     title = it.title ?: "Gigforce",
-                    message = it.body ?: "Some message",
+                    message = it.body ?: "message",
                     pendingIntent = pendingIntent
                 )
         }
@@ -109,10 +109,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         clickAction: String,
         data: Map<String, String>
     ): PendingIntent? {
-
-        val dataBundle = data.toBundle()
-        dataBundle.putString(NotificationConstants.INTENT_EXTRA_CLICK_ACTION, clickAction)
-        dataBundle.putString(MainActivity.IS_DEEPLINK, "true")
 
 //        return NavDeepLinkBuilder(applicationContext)
 //            .setGraph(R.navigation.nav_graph)
@@ -127,7 +123,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                     applicationContext,
                     MainActivity::class.java
                 ).apply {
-                    putExtras(dataBundle)
+                    putExtras(data.toBundle())
                 })
             getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT)
         }
