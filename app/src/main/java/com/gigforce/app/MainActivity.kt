@@ -9,7 +9,6 @@ import android.view.MotionEvent
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.NavDeepLinkBuilder
@@ -38,8 +37,8 @@ class MainActivity : AppCompatActivity() {
             && intent.action != null
             && intent.action.equals(Intent.ACTION_MAIN)
         ) {
-            finish()
-            return
+            finish();
+            return;
         }
         super.onCreate(savedInstanceState)
         this.setContentView(R.layout.activity_main)
@@ -135,9 +134,10 @@ class MainActivity : AppCompatActivity() {
         }
 
         if (!handled) {
-            if (isMainScreen(fragmentholder) || isOnBoarding(fragmentholder)) {
+            if (isMainScreen(fragmentholder)||isOnBoarding(fragmentholder)) {
                 doubleBackPressFun()
-            } else super.onBackPressed()
+            }
+            else super.onBackPressed()
         }
 
     }
@@ -180,7 +180,6 @@ class MainActivity : AppCompatActivity() {
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
-
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
         if (currentFocus != null) {
             val imm: InputMethodManager =

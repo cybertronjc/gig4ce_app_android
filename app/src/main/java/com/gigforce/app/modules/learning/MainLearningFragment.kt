@@ -53,7 +53,9 @@ class MainLearningFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         learningBackButton.setOnClickListener {
-            activity?.onBackPressed()
+//            popBackState()
+//            activity?.onBackPressed()
+            parentFragmentManager.popBackStack()
         }
 
         journey_completed_cardview.setOnClickListener {
@@ -147,7 +149,7 @@ class MainLearningFragment : BaseFragment() {
             val displayMetrics = DisplayMetrics()
             activity?.windowManager?.defaultDisplay?.getMetrics(displayMetrics)
             val width = displayMetrics.widthPixels
-            val itemWidth = ((width / 5) * 3.5).toInt()
+            val itemWidth = ((width / 5) * 4).toInt()
 
 
             val recyclerGenericAdapter: RecyclerGenericAdapter<CourseContent> =
@@ -529,6 +531,11 @@ class MainLearningFragment : BaseFragment() {
             false
         )
         searchSuggestionBasedVideosRV.adapter = recyclerGenericAdapter
+    }
+
+    override fun onBackPressed(): Boolean {
+        parentFragmentManager.popBackStack()
+        return false
     }
 
 

@@ -24,7 +24,8 @@ enum class StringConstants(val value: String) {
     LEVEL("LEVEL"),
     RIGHT_ANSWERS("RIGHT_ANSWERS"),
     ANSWERS_ARR("ANSWERS_ARR"),
-    TIME_TAKEN("TIME_TAKEN")
+    TIME_TAKEN("TIME_TAKEN"),
+    INVITE_USER_ID("INVITE_USER_ID")
 
 
 }

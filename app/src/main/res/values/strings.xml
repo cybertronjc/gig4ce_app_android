@@ -490,9 +490,9 @@
     <string name="record_a_10_second_video_of_yourself_nface_the_camera_and_say_hi_i_m_your_name_and_i_like_to_do_mention_2_things_you_like_to_do_selfie_video">Record a 10-second video of yourself Face the camera and say “Hi, I’m (your name) and I like to do (mention 2 things you like to do.)</string>
     <string name="pan_number_eg_bttps4444a">PAN Number (Eg: BTTPS4444A)</string>
     <string name="aadhar_number_eg_444433332222">Aadhar Number* (Eg: 444433332222)</string>
-    <string name="driving_license_number_n_eg_if_the_driving_licence_number_is_rj_13_dlc_12_123456_rj1320120123456">Driving License Number* [Accepted DL formats are : RJ-13/DLC/12/123456, RJ1320120123456, RJ-052009123456, and GJ18N2012123456. For other formats please call your supervisor for help.]</string>
+    <string name="driving_license_number_n_eg_if_the_driving_licence_number_is_rj_13_dlc_12_123456_rj1320120123456">Driving Licence Number * (Accepted formats of DL are as follows: RJ0520091048627. For other formats please call your supervisor for help)</string>
     <string name="ifsc_eg_sbin0000572_bkid0000048">IFSC* (Eg: SBIN0000572, BKID0000048)</string>
-    <string name="account_number_eg_10_16_digit_number_30000011111111111">Account number* (Eg: 10&#8211;16 digit number : 30000012345678901)</string>
+    <string name="account_number_eg_10_16_digit_number_30000011111111111">Account number* (Eg: 10-16 digit number : 30000011111111111)</string>
     <string name="please_note_that_you_are_not_allowed_to_change_the_mobile_number_you_logged_in_with">Please note that you are not allowed to change the mobile number you logged in with.</string>
     <string name="email_madatory">Email*</string>
     <string name="phone_mandatory">Phone*</string>
@@ -910,13 +910,27 @@
     <string name="around_current_address_">Around Current Address</string>
     <string name="app_language">App Language</string>
     <string name="sign_out">Sign out</string>
+    <string name="invite_a_friend">Invite a friend</string>
+    <string name="refresh_">Refresh</string>
+    <string name="refer_your_friends">Refer Your Friends</string>
+    <string name="share_the_joy_of_working_with_gigforce_and_invite_your_friends">Share the joy of working with Gigforce and invite your friends.</string>
+    <string name="share_now">Share Now</string>
+    <string name="thankyou">ThankYou</string>
+    <string name="link_copied">Link Copied</string>
+    <string name="looking_for_dynamic_working_hours">\Looking for flexible working hours? Join me at Gigforce :</string>
     <string name="dl_hint_square_bracket">Driving License Number*\n(Accepted DL formats are : RJ-13/DLC/12/123456, RJ1320120123456, RJ-052009123456, and GJ18N2012123456. For other formats please call your supervisor for help.)</string>
     <string name="plus_see_more">+ see more</string>
     <string name="plus_see_less">+ see less</string>
     <string name="new_version_available">New Version Available</string>
-    <string name="new_version_available_detail">Please update the app to continue the gigs.</string>
+    <string name="new_version_available_detail">Please, update app to new version to continue reposting</string>
+    <string name="you_helped">You helped</string>
+    <string name="and">and</string>
+    <string name="more_comma">more,</string>
+    <string name="find_gigs_on">find gigs on Gigforce.</string>
+    <string name="more">more</string>
     <string name="cancel_update">Cancel</string>
     <string name="update_now">Update now</string>
+    <string name="do_it_later"><u>Do It Later</u></string>
 
 
 </resources>

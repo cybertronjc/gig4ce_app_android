@@ -251,6 +251,7 @@
             android:name="mobile_number"
             android:defaultValue='""'
             app:argType="string" />
+
     </fragment>
     <fragment
         android:id="@+id/homeScreenFragment"
@@ -637,7 +638,11 @@
         android:name="com.gigforce.app.modules.learning.courseContent.CourseContentListFragment"
         android:label="fragment_course_content_list"
         tools:layout="@layout/fragment_course_content_list" />
-
+    <fragment
+        android:id="@+id/referrals_fragment"
+        android:name="com.gigforce.app.modules.referrals.ReferralsFragment"
+        android:label="fragment_referrals"
+        tools:layout="@layout/fragment_referrals" />
 
 </navigation>
 
