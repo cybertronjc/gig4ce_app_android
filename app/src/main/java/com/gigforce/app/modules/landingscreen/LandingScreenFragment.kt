@@ -42,9 +42,9 @@ import com.gigforce.app.utils.GlideApp
 import com.gigforce.app.utils.Lce
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import com.riningan.widget.ExtendedBottomSheetBehavior
 import kotlinx.android.synthetic.main.landingscreen_fragment.*
-import kotlinx.android.synthetic.main.landingscreen_fragment.chat_icon_iv
-import java.util.ArrayList
+import java.util.*
 
 class LandingScreenFragment : BaseFragment() {
 
@@ -59,11 +59,12 @@ class LandingScreenFragment : BaseFragment() {
     private lateinit var viewModel: LandingScreenViewModel
     var width: Int = 0
     private var comingFromOrGoingToScreen = -1
-    private val verificationViewModel : GigVerificationViewModel by viewModels()
-    private val helpViewModel : HelpViewModel by viewModels()
-    private val landingScreenViewModel : LandingScreenViewModel by viewModels()
-    private val learningViewModel : LearningViewModel by viewModels()
-    private val firebaseStorage : FirebaseStorage = FirebaseStorage.getInstance()
+    private val verificationViewModel: GigVerificationViewModel by viewModels()
+    private val helpViewModel: HelpViewModel by viewModels()
+    private val landingScreenViewModel: LandingScreenViewModel by viewModels()
+    private val learningViewModel: LearningViewModel by viewModels()
+    private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance()
+    private var mExtendedBottomSheetBehavior: ExtendedBottomSheetBehavior<*>? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -76,9 +77,15 @@ class LandingScreenFragment : BaseFragment() {
         return inflateView(R.layout.landingscreen_fragment, inflater, container)
     }
 
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putInt(INTENT_EXTRA_SCREEN,comingFromOrGoingToScreen)
+        outState.putInt(INTENT_EXTRA_SCREEN, comingFromOrGoingToScreen)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initializeExtendedBottomSheet()
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -229,7 +236,7 @@ class LandingScreenFragment : BaseFragment() {
                     complete_now.text = getString(R.string.complete_now)
                 }
 
-        })
+            })
 
         verificationViewModel.startListeningForGigerVerificationStatusChanges()
 
@@ -237,7 +244,7 @@ class LandingScreenFragment : BaseFragment() {
         landingScreenViewModel
             .tips
             .observe(viewLifecycleOwner, Observer {
-                    setTipsOnView(it)
+                setTipsOnView(it)
             })
 
         helpViewModel
@@ -251,9 +258,9 @@ class LandingScreenFragment : BaseFragment() {
 
     private fun setTipsOnView(tips: List<Tip>) {
 
-        if(tips.isEmpty()){
+        if (tips.isEmpty()) {
             gigforce_tip.gone()
-        }else {
+        } else {
             gigforce_tip.visible()
 
             val recyclerGenericAdapter: RecyclerGenericAdapter<Tip> =
@@ -341,20 +348,20 @@ class LandingScreenFragment : BaseFragment() {
                 RecyclerGenericAdapter.ItemInterface<HelpVideo?> { obj, viewHolder, position ->
 
                     var iconIV = getImageView(viewHolder, R.id.help_first_card_img)
-                    Glide.with(requireContext()).load(obj?.getThumbNailUrl()).placeholder(getCircularProgressDrawable()).into(iconIV)
+                    Glide.with(requireContext()).load(obj?.getThumbNailUrl())
+                        .placeholder(getCircularProgressDrawable()).into(iconIV)
 
                     var titleTV = getTextView(viewHolder, R.id.titleTV)
                     titleTV.text = obj?.videoTitle
 
                     var timeTV = getTextView(viewHolder, R.id.time_text)
-                    timeTV.text = if(obj!!.videoLength >= 60){
-                            val minutes = obj!!.videoLength / 60
-                            val secs = obj!!.videoLength % 60
-                           "$minutes:$secs"
-                     }else{
+                    timeTV.text = if (obj!!.videoLength >= 60) {
+                        val minutes = obj!!.videoLength / 60
+                        val secs = obj!!.videoLength % 60
+                        "$minutes:$secs"
+                    } else {
                         "00:${obj.videoLength}"
-                      }
-
+                    }
 
 
 //                    var img = getImageView(viewHolder, R.id.learning_img)
@@ -370,7 +377,7 @@ class LandingScreenFragment : BaseFragment() {
         helpVideoRV.adapter = recyclerGenericAdapter
     }
 
-    fun playVideo( id : String){
+    fun playVideo(id: String) {
         val appIntent =
             Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:$id"))
         val webIntent = Intent(
@@ -388,12 +395,12 @@ class LandingScreenFragment : BaseFragment() {
         if (profileImg != "avatar.jpg" && profileImg != "") {
             val profilePicRef: StorageReference =
                 PreferencesFragment.storage.reference.child("profile_pics").child(profileImg)
-            if(profile_image!=null)
-            GlideApp.with(this.requireContext())
-                .load(profilePicRef)
-                .apply(RequestOptions().circleCrop())
-                .into(profile_image)
-        }else{
+            if (profile_image != null)
+                GlideApp.with(this.requireContext())
+                    .load(profilePicRef)
+                    .apply(RequestOptions().circleCrop())
+                    .into(profile_image)
+        } else {
             GlideApp.with(this.requireContext())
                 .load(R.drawable.avatar)
                 .apply(RequestOptions().circleCrop())
@@ -401,7 +408,7 @@ class LandingScreenFragment : BaseFragment() {
         }
     }
 
-    class TitleSubtitleModel(var title: String, var subtitle: String,var imgStr : String) {
+    class TitleSubtitleModel(var title: String, var subtitle: String, var imgStr: String) {
 
     }
 
@@ -445,11 +452,11 @@ class LandingScreenFragment : BaseFragment() {
         seeMoreBtn.setOnClickListener {
             navigate(R.id.helpVideosFragment)
         }
-        help_topic.setOnClickListener{
+        help_topic.setOnClickListener {
             showToast("This is under development. Please check again in a few days.")
         }
 
-        gigforce_video.setOnClickListener{
+        gigforce_video.setOnClickListener {
             playVideo("FbiyRe49wjY")
         }
     }
@@ -559,12 +566,14 @@ class LandingScreenFragment : BaseFragment() {
 
         }
     }
-    private fun showGlideImage(url:String,imgview:ImageView){
+
+    private fun showGlideImage(url: String, imgview: ImageView) {
         GlideApp.with(requireContext())
             .load(url)
             .placeholder(getCircularProgressDrawable())
             .into(imgview)
     }
+
     private fun initializeExploreByIndustry() {
 
         val itemWidth = ((width / 3) * 2).toInt()
@@ -623,8 +632,8 @@ class LandingScreenFragment : BaseFragment() {
                     var title = getTextView(viewHolder, R.id.title)
                     title.text = obj?.title
                     obj?.imgStr?.let {
-                    var img = getImageView(viewHolder, R.id.img_view)
-                        showGlideImage(it,img)
+                        var img = getImageView(viewHolder, R.id.img_view)
+                        showGlideImage(it, img)
                     }
 //                    img.setImageResource(obj?.imgIcon!!)
                 })!!
@@ -680,10 +689,10 @@ class LandingScreenFragment : BaseFragment() {
             RecyclerGenericAdapter<TitleSubtitleModel>(
                 activity?.applicationContext,
                 PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
-                    if(AppConstants.UNLOCK_FEATURE) {
+                    if (AppConstants.UNLOCK_FEATURE) {
                         navigate(R.id.explore_by_role)
-                    }else
-                    showToast("This is under development. Please check again in a few days.")
+                    } else
+                        showToast("This is under development. Please check again in a few days.")
                 },
                 RecyclerGenericAdapter.ItemInterface<TitleSubtitleModel?> { obj, viewHolder, position ->
                     var view = getView(viewHolder, R.id.card_view)
@@ -697,7 +706,7 @@ class LandingScreenFragment : BaseFragment() {
 
                     obj?.imgStr?.let {
                         var img = getImageView(viewHolder, R.id.img_view)
-                        showGlideImage(it,img)
+                        showGlideImage(it, img)
                     }
 //                    img.setImageResource(obj?.imgIcon!!)
                 })!!
@@ -710,5 +719,11 @@ class LandingScreenFragment : BaseFragment() {
         )
         explore_by_role_rv.adapter = recyclerGenericAdapter
 
+    }
+
+    private fun initializeExtendedBottomSheet() {
+        mExtendedBottomSheetBehavior = ExtendedBottomSheetBehavior.from(nsv)
+        mExtendedBottomSheetBehavior?.state = ExtendedBottomSheetBehavior.STATE_HIDDEN
+        mExtendedBottomSheetBehavior?.isAllowUserDragging = true;
     }
 }
