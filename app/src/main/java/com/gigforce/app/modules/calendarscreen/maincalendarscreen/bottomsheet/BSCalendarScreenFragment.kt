@@ -920,7 +920,7 @@ class BSCalendarScreenFragment : BaseFragment() {
 
         invite_contact_bs_calendar_screen.setOnClickListener {
 
-            navigate(R.id.referrals_fragment)
+            showToast("This is not functional, Please check later")
 
         }
 
