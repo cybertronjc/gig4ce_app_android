@@ -12,12 +12,12 @@
 
         <ImageView
             android:id="@+id/iv_back_referrals_frag"
-            android:layout_width="@dimen/size_16"
+            android:layout_width="wrap_content"
             android:layout_height="@dimen/size_16"
-            android:layout_marginStart="@dimen/size_18"
+            android:paddingStart="@dimen/size_18"
             android:layout_marginTop="@dimen/size_46"
             android:adjustViewBounds="true"
-            android:scaleType="fitCenter"
+            android:scaleType="centerCrop"
             android:src="@drawable/ic_arrow_back_24"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -60,8 +60,6 @@
                 android:layout_width="@dimen/size_48"
                 android:layout_height="@dimen/size_48"
                 android:layout_marginStart="@dimen/size_18"
-
-                tools:src="@drawable/aftab"
                 app:civ_border_color="@color/white"
                 app:civ_border_width="@dimen/size_1" />
 
@@ -69,7 +67,6 @@
                 android:id="@+id/iv_one_referrals_frag"
                 android:layout_width="@dimen/size_48"
                 android:layout_height="@dimen/size_48"
-                tools:src="@drawable/ankita"
                 app:civ_border_color="@color/white"
                 app:civ_border_width="@dimen/size_1" />
 

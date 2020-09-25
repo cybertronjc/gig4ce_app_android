@@ -56,7 +56,15 @@ class ReferralsFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         initUI();
         initObservers();
+        initClicks();
         profileViewModel.getProfileData()
+    }
+
+    private fun initClicks() {
+
+        iv_back_referrals_frag.setOnClickListener {
+            popBackState()
+        }
     }
 
     private fun initObservers() {

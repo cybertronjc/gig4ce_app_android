@@ -48,22 +48,22 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="23dp"
-                android:tint="@color/black"
-                app:layout_constraintBottom_toBottomOf="@+id/imageView41"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/imageView41"
-                app:layout_constraintTop_toTopOf="@+id/imageView41"
-                app:srcCompat="@drawable/ic_search_calendar" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_search_calendar"
+                app:tint="@color/black" />
 
             <ImageView
                 android:id="@+id/imageView41"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginRight="16dp"
-                android:tint="@color/black"
+                android:paddingEnd="@dimen/size_16"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_three_dots" />
+                app:srcCompat="@drawable/ic_three_dots"
+                app:tint="@color/black" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.cardview.widget.CardView>
@@ -120,6 +120,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
+
                 <ImageView
                     android:id="@+id/iv_options_menu_contact_screen"
                     android:layout_width="wrap_content"
