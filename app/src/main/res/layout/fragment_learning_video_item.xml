@@ -14,13 +14,22 @@
         app:endLineColor="@color/colorPrimary"
         app:lineStyle="dash"
         app:lineWidth="1dp"
-        app:markerSize="18dp"
+        app:markerSize="16dp"
         app:startLineColor="@color/colorPrimary" />
 
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        >
+
+        <RelativeLayout
+            android:id="@+id/disabled_overlay"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:elevation="10dp"
+            android:visibility="gone"
+            android:background="@color/grey_transparetn"/>
 
         <RelativeLayout
             android:id="@+id/course_content_video_slide_layout"
@@ -94,19 +103,7 @@
                 tools:text="6:15" />
 
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/lessonNameTV"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:fontFamily="@font/lato"
-                android:letterSpacing="0"
-                android:layout_marginEnd="5dp"
-                android:layout_marginTop="8dp"
-                android:textColor="@color/warm_grey"
-                android:textSize="12sp"
-                android:layout_below="@id/video_title"
-                tools:text="Lesson 2" />
+
 
 
             <androidx.appcompat.widget.AppCompatTextView
@@ -121,7 +118,7 @@
                 android:layout_marginTop="18dp"
                 android:textColor="#f7b500"
                 android:textSize="12sp"
-                android:text="Pending 0%" />
+                tools:text="Pending 0%" />
 
 
             <com.google.android.material.button.MaterialButton

@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
@@ -59,21 +60,23 @@ class LearningDetailsLessonsAdapter constructor(
     override fun onBindViewHolder(holder: TimeLineViewHolder, position: Int) {
 
         val videoModel = mCourseContent[position]
-
-        if (videoModel.completed)
-            setMarker(holder, R.drawable.ic_marker_active, R.color.colorPrimary)
-        else
-            setMarker(holder, R.drawable.ic_marker_inactive, R.color.colorPrimary)
+        val viewType = getItemViewType(position)
 
         if (videoModel.type == CourseContent.TYPE_ASSESSMENT) {
             holder.videoSlideLayout.gone()
             holder.assessmentLayout.visible()
 
             holder.assessmentTitle.text = videoModel.title
-            holder.assessmentEstTime.text = videoModel.videoLength
+            holder.assessmentEstTime.text = videoModel.videoLengthString
 
             if (videoModel.completed) {
                 holder.assessmentStatus.text = "COMPLETED"
+
+                holder.timeline.setStartLineColor(R.color.colorPrimary, viewType)
+                holder.timeline.setEndLineColor(R.color.colorPrimary, viewType)
+
+                setMarker(holder, R.drawable.ic_marker, R.color.colorPrimary)
+
                 holder.assessmentStatus.setBackgroundResource(R.drawable.rect_assessment_status_completed)
                 holder.asessmentSideStausStrip.setCardBackgroundColor(
                     ResourcesCompat.getColor(
@@ -83,6 +86,13 @@ class LearningDetailsLessonsAdapter constructor(
                     )
                 )
             } else {
+                //Not even started
+                if (videoModel.currentlyOnGoing) {
+                    setMarker(holder, R.drawable.ic_marker_active, R.color.colorPrimary)
+                } else {
+                    setMarker(holder, R.drawable.ic_marker_inactive, R.color.colorPrimary)
+                }
+
                 holder.assessmentStatus.text = "PENDING"
                 holder.assessmentStatus.setBackgroundResource(R.drawable.rect_assessment_status_pending)
                 holder.asessmentSideStausStrip.setCardBackgroundColor(
@@ -93,8 +103,7 @@ class LearningDetailsLessonsAdapter constructor(
                     )
                 )
             }
-
-        } else {
+        } else if (videoModel.type == CourseContent.TYPE_SLIDE) {
             holder.assessmentLayout.gone()
             holder.videoSlideLayout.visible()
 
@@ -129,22 +138,102 @@ class LearningDetailsLessonsAdapter constructor(
             }
 
             holder.videoTitle.text = videoModel.title
-            holder.slideVideoLessonNoTV.text = "Lesson ${videoModel.lessonNo}"
 
-            if (videoModel.type == CourseContent.TYPE_SLIDE) {
-                holder.slideVideoTimeImageLabel.gone()
-                holder.slideVideoLength.text = "${videoModel.slidesCount} Slides"
-                holder.slidePlayIV.setImageResource(R.drawable.ic_slides)
-            } else if (videoModel.type == CourseContent.TYPE_VIDEO) {
-                holder.videoPlayIV.setImageResource(R.drawable.ic_learning_play)
-                holder.slideVideoTimeImageLabel.visible()
-                holder.slideVideoLength.text = videoModel.videoLength
-            } else if (videoModel.type == CourseContent.TYPE_ASSESSMENT) {
-                holder.slideVideoTimeImageLabel.visible()
-                holder.slideVideoLength.text = videoModel.videoLength
+            holder.slideVideoTimeImageLabel.gone()
+            holder.slideVideoLength.text = "${videoModel.slidesCount} Slides"
+            holder.slidePlayIV.setImageResource(R.drawable.ic_slides)
+
+            if (videoModel.completed) {
+                setMarker(holder, R.drawable.ic_marker, R.color.colorPrimary)
+                holder.lessonCompletionPercentage.text = "Complete 100%"
+                holder.lessonCompletionPercentage.setTextColor(ResourcesCompat.getColor(context.resources,R.color.text_green,null))
+            } else if (videoModel.currentlyOnGoing) {
+                if (videoModel.completionProgress == 0L) {
+                    //Not even started
+                    //Not even started
+                    setMarker(holder, R.drawable.ic_marker_active, R.color.colorPrimary)
+                    holder.lessonCompletionPercentage.text = "Pending 0%"
+                    holder.lessonCompletionPercentage.setTextColor(ResourcesCompat.getColor(context.resources,R.color.text_yellow,null))
+                } else {
+                    //Currently going on
+                    setMarker(holder, R.drawable.ic_marker_active, R.color.colorPrimary)
+
+                    val completedPercentage =
+                        (videoModel.completionProgress * 100) / videoModel.lessonTotalLength
+                    holder.lessonCompletionPercentage.text = "Complete $completedPercentage%"
+                    holder.lessonCompletionPercentage.setTextColor(ResourcesCompat.getColor(context.resources,R.color.text_orange,null))
+                }
+            } else {
+                setMarker(holder, R.drawable.ic_marker_inactive, R.color.colorPrimary)
+            }
+
+
+        } else if (videoModel.type == CourseContent.TYPE_VIDEO) {
+            holder.assessmentLayout.gone()
+            holder.videoSlideLayout.visible()
+
+            if (!videoModel.coverPicture.isNullOrBlank()) {
+                if (videoModel.coverPicture!!.startsWith("http", true)) {
+
+                    GlideApp.with(context)
+                        .load(videoModel.coverPicture)
+                        .placeholder(getCircularProgressDrawable())
+                        .into(holder.slideVideoThumbnail)
+                } else {
+                    FirebaseStorage.getInstance()
+                        .getReference(LearningConstants.LEARNING_IMAGES_FIREBASE_FOLDER)
+                        .child(videoModel.coverPicture!!)
+                        .downloadUrl
+                        .addOnSuccessListener { fileUri ->
+
+                            GlideApp.with(context)
+                                .load(fileUri)
+                                .placeholder(getCircularProgressDrawable())
+                                .into(holder.slideVideoThumbnail)
+                        }
+                }
+            } else {
+                holder.slideVideoThumbnail.setBackgroundColor(
+                    ResourcesCompat.getColor(
+                        context.resources,
+                        R.color.warm_grey,
+                        null
+                    )
+                )
+            }
+
+            holder.videoTitle.text = videoModel.title
+
+            holder.videoPlayIV.setImageResource(R.drawable.ic_learning_play)
+            holder.slideVideoTimeImageLabel.visible()
+            holder.slideVideoLength.text = videoModel.videoLengthString
+
+            if (videoModel.completed) {
+                setMarker(holder, R.drawable.ic_marker, R.color.colorPrimary)
+                holder.lessonCompletionPercentage.text = "Complete 100%"
+                holder.lessonCompletionPercentage.setTextColor(ResourcesCompat.getColor(context.resources,R.color.text_green,null))
+            } else if (videoModel.currentlyOnGoing) {
+
+                if (videoModel.completionProgress == 0L) {
+                    //Not even started
+                    setMarker(holder, R.drawable.ic_marker_active, R.color.colorPrimary)
+                    holder.lessonCompletionPercentage.text = "Pending 0%"
+                    holder.lessonCompletionPercentage.setTextColor(ResourcesCompat.getColor(context.resources,R.color.text_yellow,null))
+                } else {
+                    //Currently going on
+                    setMarker(holder, R.drawable.ic_marker_active, R.color.colorPrimary)
+
+                    val completedPercentage =
+                        (videoModel.completionProgress * 100) / videoModel.lessonTotalLength
+                    holder.lessonCompletionPercentage.text = "Complete $completedPercentage%"
+                    holder.lessonCompletionPercentage.setTextColor(ResourcesCompat.getColor(context.resources,R.color.text_orange,null))
+                }
+            } else {
+                setMarker(holder, R.drawable.ic_marker_inactive, R.color.colorPrimary)
             }
         }
     }
+
 
     private fun setMarker(holder: TimeLineViewHolder, drawableResId: Int, colorFilter: Int) {
         holder.timeline.marker = VectorDrawableUtils.getDrawable(
@@ -177,7 +266,6 @@ class LearningDetailsLessonsAdapter constructor(
         val slideVideoLength = itemView.video_time
         val slidePlayIV = itemView.play_button_iv
         val slideVideoTimeImageLabel = itemView.time_imageview
-        val slideVideoLessonNoTV = itemView.lessonNameTV
         val slideVideoplayButton = itemView.time_imageview
 
         //Assessment
@@ -190,10 +278,12 @@ class LearningDetailsLessonsAdapter constructor(
         val videoThumbnailIV = itemView.videoThumbnailIV
         val videoTitle = itemView.video_title
         val videoPlayIV = itemView.play_button_iv
-        val lessonNameTV = itemView.lessonNameTV
         val lessonsSeeMoreButton = itemView.lessonsSeeMoreButton
         val videoTimeTV = itemView.video_time
         val timeline = itemView.timeline
+
+
+        val lessonCompletionPercentage = itemView.lesson_completion_tv
 
         init {
             timeline.initLine(viewType)
@@ -203,7 +293,17 @@ class LearningDetailsLessonsAdapter constructor(
         }
 
         override fun onClick(v: View?) {
-            learningVideoActionListener?.invoke(mCourseContent[adapterPosition])
+            val content = mCourseContent[adapterPosition]
+
+            if (content.completed || content.currentlyOnGoing) {
+                learningVideoActionListener?.invoke(mCourseContent[adapterPosition])
+            } else {
+                Toast.makeText(
+                    context,
+                    "Please complete previous lessons first",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
         }
     }
 }

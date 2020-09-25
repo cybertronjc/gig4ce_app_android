@@ -517,7 +517,7 @@ class LandingScreenFragment : BaseFragment() {
                         view.layoutParams = lp
 
                         var title = getTextView(viewHolder, R.id.title_)
-                        title.text = obj?.name
+                        title.text = obj?.name + " " + obj?.level
 
                         var subtitle = getTextView(viewHolder, R.id.title)
                         subtitle.text = obj?.description

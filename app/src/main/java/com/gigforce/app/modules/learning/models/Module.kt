@@ -1,5 +1,6 @@
 package com.gigforce.app.modules.learning.models
 
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.PropertyName
 
 data class Module(
@@ -30,5 +31,22 @@ data class Module(
 
     @get:PropertyName("is_active")
     @set:PropertyName("is_active")
-    var isActive: Boolean = false
+    var isActive: Boolean = false,
+
+
+    @get:PropertyName("module_start_date")
+    @set:PropertyName("module_start_date")
+    var moduleStartDate : Timestamp? = null,
+
+    @get:PropertyName("module_completion_date")
+    @set:PropertyName("module_completion_date")
+    var moduleCompletionDate : Timestamp? = null,
+
+    @get:PropertyName("completed")
+    @set:PropertyName("completed")
+    var completed : Boolean = false,
+
+    @get:PropertyName("ongoing")
+    @set:PropertyName("ongoing")
+    var ongoing : Boolean = false
 )

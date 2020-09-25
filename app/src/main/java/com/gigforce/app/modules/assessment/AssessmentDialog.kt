@@ -13,10 +13,13 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.viewModels
 import com.gigforce.app.R
+import com.gigforce.app.utils.Lce
 import com.gigforce.app.utils.PushDownAnim
 import com.gigforce.app.utils.StringConstants
 import com.gigforce.app.utils.getScreenWidth
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.android.synthetic.main.layout_assessment_dialog.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -27,6 +30,11 @@ import java.util.*
  * date 19/7/2020
  */
 class AssessmentDialog : DialogFragment() {
+
+    private val viewModel : AssessmentDialogViewModel by viewModels()
+
+    private lateinit var mModuleId : String
+    private var assessmentResultWithNextDest : AssessmentResult? =null
 
     private var assessmentDialogCallbacks: AssessmentDialogCallbacks? = null;
     fun setCallbacks(assessmentDialogCallbacks: AssessmentDialogCallbacks) {
@@ -43,23 +51,56 @@ class AssessmentDialog : DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initClicks();
-        initUIAsPerState(arguments?.getInt(StringConstants.ASSESSMENT_DIALOG_STATE.value))
+        initClicks()
 
+        arguments?.let {
+            mModuleId = it.getString(INTENT_EXTRA_MODULE_ID) ?: return@let
+        }
+
+        initUIAsPerState(arguments?.getInt(StringConstants.ASSESSMENT_DIALOG_STATE.value))
+        initViewModel()
+    }
+
+    private fun initViewModel() {
+        viewModel.savingAssessmentState
+            .observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+
+                when(it){
+                    Lce.Loading -> {
+
+                    }
+                    is Lce.Content -> {
+                       assessmentResultWithNextDest = it.content
+                        when (it.content.state) {
+                            STATE_PASS -> statePass()
+                            STATE_REAPPEAR -> stateReappear()
+                        }
+                    }
+                    is Lce.Error -> {
+                        MaterialAlertDialogBuilder(requireContext())
+                            .setTitle("Unable to save state")
+                            .setMessage("Unable to mark assessment as complete")
+                            .setPositiveButton("Okay"){_,_ ->}
+                            .show()
+                    }
+                }
+            })
     }
 
     private fun initUIAsPerState(state: Int?) {
         when (state) {
-            STATE_PASS -> statePass()
-            STATE_REAPPEAR -> stateReappear()
+            STATE_PASS -> viewModel.saveAssessmentState(mModuleId, state)
+            STATE_REAPPEAR -> viewModel.saveAssessmentState(mModuleId, state)
             else -> {
                 isCancelable = true
                 tv_do_it_later_assess_dialog.visibility = View.VISIBLE
+                tv_message_assess_dialog.text = getString(R.string.good_luck)
                 tv_assess_name_assess_dialog.text =
                     "${getString(R.string.assessment_colon)} ${arguments?.getString(StringConstants.ASSESSMENT_NAME.value)}"
 
                 tv_level_assess_dialog.text =
                     "${getString(R.string.level)} ${arguments?.getInt(StringConstants.LEVEL.value)}"
+                tv_action_assess_dialog.text = "Start Assessment"
 
                 tv_ques_count_assess_dialog.text =
                     "${getString(R.string.total_questions)} : ${arguments?.getInt(StringConstants.QUESTIONS_COUNT.value)} "
@@ -210,8 +251,8 @@ class AssessmentDialog : DialogFragment() {
     private fun initClicks() {
         PushDownAnim.setPushDownAnimTo(tv_action_assess_dialog)
             .setOnClickListener(View.OnClickListener {
-                dismiss()
 
+                dismiss()
                 assessmentDialogCallbacks?.assessmentState(
                     arguments?.getInt(
                         StringConstants.ASSESSMENT_DIALOG_STATE.value,
@@ -248,9 +289,21 @@ class AssessmentDialog : DialogFragment() {
             return assessmentDialog
         }
 
+        fun newInstance(moduleId : String, state: Int): AssessmentDialog {
+            //Setting Dialog State Before Initializing the dialog object
+            val bundle = Bundle()
+            bundle.putInt(StringConstants.ASSESSMENT_DIALOG_STATE.value, state)
+            bundle.putString(INTENT_EXTRA_MODULE_ID, moduleId)
+            val assessmentDialog = AssessmentDialog()
+            assessmentDialog.arguments = bundle
+            return assessmentDialog
+        }
+
         const val STATE_INIT = 1;
         const val STATE_PASS = 2;
         const val STATE_REAPPEAR = 3;
+
+        const val INTENT_EXTRA_MODULE_ID = "module_id"
     }
 
     interface AssessmentDialogCallbacks {

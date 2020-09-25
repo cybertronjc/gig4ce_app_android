@@ -8,6 +8,7 @@ import com.gigforce.app.modules.learning.LearningRepository
 import com.gigforce.app.modules.learning.models.Course
 import com.gigforce.app.modules.learning.models.CourseContent
 import com.gigforce.app.modules.learning.models.Module
+import com.gigforce.app.modules.learning.models.progress.ModuleProgress
 import com.gigforce.app.utils.Lce
 import kotlinx.coroutines.launch
 
@@ -19,8 +20,11 @@ class CourseDetailsViewModel constructor(
     var currentModules: List<Module>? = null
     var currentlySelectedModule: Module? = null
     var currentLessons: List<CourseContent>? = null
-    private var mCurrentModuleId: String? = null
     var currentlySelectedModulePosition = 0
+
+    private var mCurrentModuleId: String? = null
+    private var mCurrentModuleProgressData: List<ModuleProgress>? = null
+
 
     private val _courseDetails = MutableLiveData<Lce<Course>>()
     val courseDetails: LiveData<Lce<Course>> = _courseDetails
@@ -36,6 +40,12 @@ class CourseDetailsViewModel constructor(
 
         try {
             val course = learningRepository.getCourseDetails(courseId)
+            val courseProgressDetails = learningRepository.getCourseProgress(courseId)
+
+            course.courseStartDate = courseProgressDetails.courseStartDate
+            course.courseCompletionDate = courseProgressDetails.courseCompletionDate
+            course.completed = courseProgressDetails.completed
+
             mLastReqCourseDetails = course
 
             _courseDetails.postValue(Lce.content(course))
@@ -43,7 +53,6 @@ class CourseDetailsViewModel constructor(
             _courseDetails.postValue(Lce.error(e.toString()))
         }
     }
-
 
     //Getting Course Modules
 
@@ -65,13 +74,13 @@ class CourseDetailsViewModel constructor(
             val courseModules = learningRepository.getModules(
                 courseId = courseId
             )
-
-            currentModules = courseModules
+            currentModules = appendProgressInfoToModules(courseId, courseModules)
             _courseModules.postValue(Lce.content(courseModules))
 
             if (courseModules.isNotEmpty()) {
 
                 currentlySelectedModule = courseModules.first()
+                mCurrentModuleId = currentlySelectedModule!!.id
                 getCourseLessonsAndAssessments(
                     courseId = courseId,
                     moduleId = currentlySelectedModule!!.id
@@ -85,6 +94,28 @@ class CourseDetailsViewModel constructor(
         }
     }
 
+    private suspend fun appendProgressInfoToModules(
+        courseId: String,
+        courseModules: List<Module>
+    ): List<Module> {
+        val moduleProgress = learningRepository.getCourseModulesProgress(courseId)
+
+        courseModules.forEach { module ->
+            val progressItem = moduleProgress.find {
+                module.id == it.moduleId
+            }
+
+            if (progressItem != null) {
+                module.lessonsCompleted = progressItem.lessonsCompleted
+                module.moduleStartDate = progressItem.moduleStartDate
+                module.moduleCompletionDate = progressItem.moduleCompletionDate
+                module.ongoing = progressItem.ongoing
+                module.completed = progressItem.completed
+            }
+        }
+        return courseModules
+    }
+
 
     //Getting Course Lessons
 
@@ -96,7 +127,7 @@ class CourseDetailsViewModel constructor(
         moduleId: String
     ) = viewModelScope.launch {
 
-        if (mCurrentModuleId == moduleId) {
+        if (mCurrentModuleId == moduleId && currentLessons != null) {
             _courseLessons.postValue(Lce.content(currentLessons!!))
             _courseAssessments.postValue(Lce.content(currentAssessments!!))
             return@launch
@@ -111,24 +142,97 @@ class CourseDetailsViewModel constructor(
                 moduleId = moduleId
             )
 
-            var lessonNo = 1
-            courseLessons.forEach {
-                it.lessonNo = lessonNo
-                lessonNo++
-            }
             mCurrentModuleId = moduleId
-            currentLessons = courseLessons
-            _courseLessons.postValue(Lce.content(courseLessons))
 
-            val assessments = courseLessons.filter {
-                it.type == CourseContent.TYPE_ASSESSMENT
+            if (mCurrentModuleProgressData != null) {
+                currentLessons = appendLessonProgressInfo(courseId, moduleId, courseLessons)
+
+                _courseLessons.postValue(Lce.content(courseLessons))
+
+                val assessments = courseLessons.filter {
+                    it.type == CourseContent.TYPE_ASSESSMENT
+                }
+                currentAssessments = assessments
+                _courseAssessments.postValue(Lce.content(assessments))
+
+            } else {
+                currentLessons = courseLessons
+                startWatchingForUpdates(courseId, moduleId)
             }
-            currentAssessments = assessments
-            _courseAssessments.postValue(Lce.content(assessments))
-
         } catch (e: Exception) {
             _courseLessons.postValue(Lce.error(e.toString()))
         }
+    }
+
+    private fun startWatchingForUpdates(courseId: String, moduleId: String) {
+        learningRepository.courseModuleProgressInfo(courseId)
+            .addSnapshotListener { querySnap, error ->
+
+                if (querySnap != null) {
+
+                    mCurrentModuleProgressData = querySnap.documents.map {
+                        it.toObject(ModuleProgress::class.java)!!
+                    }
+
+                    if (currentLessons != null) {
+                        currentLessons =
+                            appendLessonProgressInfo(courseId, moduleId, currentLessons!!)
+
+                        _courseLessons.postValue(Lce.content(currentLessons!!))
+
+
+
+
+                        val assessments = currentLessons!!.filter {
+                            it.type == CourseContent.TYPE_ASSESSMENT
+                        }.sortedBy {
+                            it.priority
+                        }
+                        currentAssessments = assessments
+                        _courseAssessments.postValue(Lce.content(assessments))
+                    }
+                }
+
+                if(currentAssessments != null){
+                    currentAssessments = appendLessonProgressInfo(courseId, moduleId, currentAssessments!!)
+                    _courseAssessments.postValue(Lce.content(currentAssessments!!))
+                }
+            }
+    }
+
+    private fun appendLessonProgressInfo(
+        courseId: String,
+        moduleId: String,
+        courseLessons: List<CourseContent>
+    ): List<CourseContent> {
+        val moduleProgress = mCurrentModuleProgressData!!.find {
+            it.moduleId == mCurrentModuleId
+        }
+
+        if (moduleProgress != null) {
+
+            val lessons = courseLessons
+                .sortedBy {
+                    it.priority
+                }
+            lessons.forEach { lesson ->
+
+                val progressItem = moduleProgress.lessonsProgress.find {
+                    lesson.id == it.lessonId
+                }
+
+                if (progressItem != null) {
+                    lesson.progressTrackingId = progressItem.progressTrackingId
+                    lesson.lessonTotalLength = progressItem.lessonTotalLength
+                    lesson.completionProgress = progressItem.completionProgress
+                    lesson.currentlyOnGoing = progressItem.ongoing
+                    lesson.completed = progressItem.completed
+                }
+            }
+
+            return lessons
+        }
+        return courseLessons
     }
 
 
@@ -150,8 +254,17 @@ class CourseDetailsViewModel constructor(
                 courseId = courseId,
                 moduleId = moduleId
             )
-            currentAssessments = courseAssessments
-            _courseAssessments.postValue(Lce.content(courseAssessments))
+
+            mCurrentModuleId = moduleId
+
+            if (mCurrentModuleProgressData != null) {
+                currentAssessments = appendLessonProgressInfo(courseId, moduleId, courseAssessments)
+
+                _courseAssessments.postValue(Lce.content(courseAssessments))
+            } else {
+                currentAssessments = courseAssessments
+                startWatchingForUpdates(courseId, moduleId)
+            }
         } catch (e: Exception) {
             _courseAssessments.postValue(Lce.error(e.toString()))
         }

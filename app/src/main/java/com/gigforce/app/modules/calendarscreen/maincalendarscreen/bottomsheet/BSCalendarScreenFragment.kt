@@ -169,7 +169,7 @@ class BSCalendarScreenFragment : BaseFragment() {
                     view.layoutParams = lp
 
                     var title = getTextView(viewHolder, R.id.title_)
-                    title.text = obj?.name
+                    title.text = obj?.name + " "+ obj?.level
 
                     var subtitle = getTextView(viewHolder, R.id.title)
                     subtitle.text = obj?.description
@@ -253,10 +253,12 @@ class BSCalendarScreenFragment : BaseFragment() {
                     PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
                         val assessment = item as CourseContent
 
-                        navigate(R.id.assessment_fragment,  bundleOf(
-                            AssessmentFragment.INTENT_LESSON_ID to assessment.id
-                        )
-                        )
+                        showToast("Disabled ,will be enabled soon")
+
+//                        navigate(R.id.assessment_fragment,  bundleOf(
+//                            AssessmentFragment.INTENT_LESSON_ID to assessment.id
+//                        )
+//                        )
                     },
                     RecyclerGenericAdapter.ItemInterface<CourseContent> { obj, viewHolder, position ->
                         val lp = getView(viewHolder, R.id.assessment_cl).layoutParams

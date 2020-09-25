@@ -27,10 +27,6 @@ data class SlideContent(
     @set:PropertyName("is_active")
     var isActive: Boolean = false,
 
-    @get:PropertyName("completed")
-    @set:PropertyName("completed")
-    var completed: Boolean = false,
-
 
     //Video Slide Excl
 
@@ -75,7 +71,20 @@ data class SlideContent(
 
     @get:PropertyName("bullet_point_options")
     @set:PropertyName("bullet_point_options")
-    var bulletPointOptions: List<SlideContentBulletPointOptions> = emptyList()
+    var bulletPointOptions: List<SlideContentBulletPointOptions> = emptyList(),
+
+
+    @get:PropertyName("completed")
+    @set:PropertyName("completed")
+    var completed: Boolean = false,
+
+    @get:PropertyName("total_length")
+    @set:PropertyName("total_length")
+    var totalLength: Long = 0,
+
+    @get:PropertyName("completion_progress")
+    @set:PropertyName("completion_progress")
+    var completionProgress: Long = 0
 ) {
 
     companion object {

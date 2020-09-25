@@ -70,7 +70,6 @@ class ModulesContentAdapter(
 
         val videoThumbnailIV = itemView.videoThumbnailIV
         val videoTitle = itemView.video_title
-        val lessonNameTV = itemView.lessonNameTV
         val lessonsSeeMoreButton = itemView.lessonsSeeMoreButton
         val videoTimeTV = itemView.video_time
         val timeline = itemView.timeline

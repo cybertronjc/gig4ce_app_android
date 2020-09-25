@@ -1,6 +1,7 @@
 package com.gigforce.app.modules.learning.courseDetails
 
 import android.os.Bundle
+import android.os.Handler
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.text.style.UnderlineSpan
@@ -8,6 +9,7 @@ import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
@@ -24,7 +26,6 @@ import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.assessment.AssessmentFragment
 import com.gigforce.app.modules.assessment.AssessmentListFragment
-import com.gigforce.app.modules.gigPage.GigPageFragment
 import com.gigforce.app.modules.learning.LearningConstants
 import com.gigforce.app.modules.learning.courseContent.CourseContentListFragment
 import com.gigforce.app.modules.learning.learningVideo.PlayVideoDialogFragment
@@ -103,7 +104,8 @@ class LearningCourseDetailsFragment : BaseFragment() {
                 CourseContent.TYPE_ASSESSMENT -> {
                     navigate(
                         R.id.assessment_fragment, bundleOf(
-                            AssessmentFragment.INTENT_LESSON_ID to it.id
+                            AssessmentFragment.INTENT_LESSON_ID to it.id,
+                            AssessmentFragment.INTENT_MODULE_ID to it.moduleId
                         )
                     )
                 }
@@ -112,6 +114,7 @@ class LearningCourseDetailsFragment : BaseFragment() {
                         R.id.slidesFragment,
                         bundleOf(
                             SlidesFragment.INTENT_EXTRA_SLIDE_TITLE to it.title,
+                            SlidesFragment.INTENT_EXTRA_MODULE_ID to it.moduleId,
                             SlidesFragment.INTENT_EXTRA_LESSON_ID to it.id
                         )
                     )
@@ -119,7 +122,10 @@ class LearningCourseDetailsFragment : BaseFragment() {
                 CourseContent.TYPE_VIDEO -> {
                     navigate(
                         R.id.playVideoDialogFragment,
-                        bundleOf(PlayVideoDialogFragment.INTENT_EXTRA_LESSON_ID to it.id)
+                        bundleOf(
+                            PlayVideoDialogFragment.INTENT_EXTRA_LESSON_ID to it.id,
+                            PlayVideoDialogFragment.INTENT_EXTRA_MODULE_ID to it.moduleId
+                        )
                     )
                 }
                 else -> {
@@ -130,7 +136,7 @@ class LearningCourseDetailsFragment : BaseFragment() {
 
 
         learningBackButton.setOnClickListener {
-          parentFragmentManager.popBackStack()
+            parentFragmentManager.popBackStack()
         }
 
         assessmentSeeMoreButton.setOnClickListener {
@@ -230,23 +236,23 @@ class LearningCourseDetailsFragment : BaseFragment() {
 
         videoTitleTV.text = course.name
 
-        if(!course.description.isNullOrBlank()){
-            if(course.description!!.length > 150){
+        if (!course.description.isNullOrBlank()) {
+            if (course.description!!.length > 150) {
                 videoDescTV.text = prepareDescription(course.description!!.substring(0, 150))
-            }else{
+            } else {
                 videoDescTV.text = course.description
             }
         }
 
         videoDescTV.setOnClickListener {
-            val desc =viewModel.mLastReqCourseDetails?.description ?: return@setOnClickListener
+            val desc = viewModel.mLastReqCourseDetails?.description ?: return@setOnClickListener
 
-            if(desc.length > 150){
+            if (desc.length > 150) {
 
-                if(videoDescTV.text.length < 160){
+                if (videoDescTV.text.length < 160) {
                     // Collapsed
                     videoDescTV.text = prepareDescription(desc)
-                } else{
+                } else {
                     //Expanded
                     videoDescTV.text = prepareDescription(desc.substring(0, 150))
                 }
@@ -261,15 +267,15 @@ class LearningCourseDetailsFragment : BaseFragment() {
         if (description.isBlank())
             return SpannableString("")
 
-        val string = if(description.length > 150 ){
+        val string = if (description.length > 150) {
             SpannableString(description + SEE_LESS)
-        } else{
+        } else {
             SpannableString(description + SEE_MORE)
         }
 
         val colorLipstick = ResourcesCompat.getColor(resources, R.color.lipstick, null)
-        string.setSpan(ForegroundColorSpan(colorLipstick), description.length +1, string.length , 0)
-        string.setSpan(UnderlineSpan(), description.length +1, string.length , 0)
+        string.setSpan(ForegroundColorSpan(colorLipstick), description.length + 1, string.length, 0)
+        string.setSpan(UnderlineSpan(), description.length + 1, string.length, 0)
 
         return string
     }
@@ -316,10 +322,10 @@ class LearningCourseDetailsFragment : BaseFragment() {
 
         } else if (content.size > 4) {
             lessonsSeeMoreButton.visible()
-            mAdapter.updateCourseContent(content.take(4))
+            mAdapter.updateCourseContent(content.sortedBy { it.priority }.take(4))
         } else {
             lessonsSeeMoreButton.gone()
-            mAdapter.updateCourseContent(content)
+            mAdapter.updateCourseContent(content.sortedBy { it.priority })
         }
     }
 
@@ -333,7 +339,14 @@ class LearningCourseDetailsFragment : BaseFragment() {
 
         levelTV.text =
             "Module $moduleNo Of ${viewModel.currentModules?.size}"
-        complitionStatusTv.text = "0/${viewModel.currentLessons?.size} Lessons Completed"
+
+        var lessonsCompleted = 0
+        viewModel.currentLessons?.forEach {
+            if (it.completed) lessonsCompleted++
+        }
+
+        complitionStatusTv.text =
+            "$lessonsCompleted/${viewModel.currentLessons?.size} Lessons Completed"
         assessmentCountTv.text =
             if (viewModel.currentAssessments?.size == null)
                 "0 Assessments"
@@ -382,7 +395,7 @@ class LearningCourseDetailsFragment : BaseFragment() {
 
 
     private var recyclerGenericAdapter: RecyclerGenericAdapter<Module>? = null
-    private var  linearLayoutManager : LinearLayoutManager? = null
+    private var linearLayoutManager: LinearLayoutManager? = null
     private fun setModulesOnView(content: List<Module>) {
         var width: Int = 0
         val displayMetrics = DisplayMetrics()
@@ -407,10 +420,13 @@ class LearningCourseDetailsFragment : BaseFragment() {
                     var oldPostion = viewModel.currentlySelectedModulePosition
                     viewModel.currentlySelectedModulePosition = position
 
-                    if(oldPostion != viewModel.currentlySelectedModulePosition) {
+                    if (oldPostion != viewModel.currentlySelectedModulePosition) {
                         recyclerGenericAdapter?.notifyItemChanged(oldPostion)
                         recyclerGenericAdapter?.notifyItemChanged(viewModel.currentlySelectedModulePosition)
-                        linearLayoutManager?.scrollToPositionWithOffset(viewModel.currentlySelectedModulePosition,40)
+                        linearLayoutManager?.scrollToPositionWithOffset(
+                            viewModel.currentlySelectedModulePosition,
+                            40
+                        )
 //                        learning_details_modules_rv.scrollTP(viewModel.currentlySelectedModulePosition)
                     }
                 },
@@ -425,16 +441,16 @@ class LearningCourseDetailsFragment : BaseFragment() {
                     title.text = obj?.title
 
                     var subtitle = getTextView(viewHolder, R.id.title)
-                    subtitle.text = "Lesson 0 / ${obj.totalLessons}"
+                    subtitle.text = "Lesson ${obj.lessonsCompleted} / ${obj.totalLessons}"
 
                     var img = getImageView(viewHolder, R.id.learning_img)
 
 
                     var borderView = getView(viewHolder, R.id.borderFrameLayout)
-                    if(viewModel.currentlySelectedModulePosition == position){
+                    if (viewModel.currentlySelectedModulePosition == position) {
                         //Set Module as selected
                         borderView.visible()
-                    } else{
+                    } else {
                         borderView.gone()
                     }
 
@@ -477,8 +493,16 @@ class LearningCourseDetailsFragment : BaseFragment() {
             false
         )
         learning_details_modules_rv.layoutManager = linearLayoutManager
-
         learning_details_modules_rv.adapter = recyclerGenericAdapter
+
+        Handler().postDelayed({
+            if(viewModel.currentlySelectedModulePosition != 0)
+                linearLayoutManager?.scrollToPositionWithOffset(
+                    viewModel.currentlySelectedModulePosition,
+                    40
+                )
+        },200)
+
     }
 
 
@@ -502,10 +526,10 @@ class LearningCourseDetailsFragment : BaseFragment() {
             learning_details_assessments_error.text = "No assessments found"
         } else if (content.size > 4) {
             assessmentSeeMoreButton.visible()
-            showAssessments(content.take(4))
+            showAssessments(content.sortedBy { it.priority }.take(4))
         } else {
             assessmentSeeMoreButton.gone()
-            showAssessments(content)
+            showAssessments(content.sortedBy { it.priority })
         }
     }
 
@@ -527,29 +551,51 @@ class LearningCourseDetailsFragment : BaseFragment() {
                 PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
 
                     val assessment = item as CourseContent
-                    navigate(
-                        R.id.assessment_fragment, bundleOf(
-                            AssessmentFragment.INTENT_LESSON_ID to assessment.id
-                        )
-                    )
 
+                    if(assessment.completed || assessment.currentlyOnGoing) {
+
+                        navigate(
+                            R.id.assessment_fragment, bundleOf(
+                                AssessmentFragment.INTENT_LESSON_ID to assessment.id,
+                                AssessmentFragment.INTENT_MODULE_ID to assessment.moduleId
+                            )
+                        )
+                    } else{
+                        Toast.makeText(
+                            requireContext(),
+                            "Please complete previous lessons first",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
                 },
                 RecyclerGenericAdapter.ItemInterface<CourseContent> { obj, viewHolder, position ->
 
                     getTextView(viewHolder, R.id.title).text = obj?.title
-                    getTextView(viewHolder, R.id.time).text = obj?.videoLength
+                    getTextView(viewHolder, R.id.time).text = obj?.videoLengthString
 
 
-                    getTextView(viewHolder, R.id.status).text = "PENDING"
-                    getTextView(
-                        viewHolder,
-                        R.id.status
-                    ).setBackgroundResource(R.drawable.rect_assessment_status_pending)
-                    (getView(
-                        viewHolder,
-                        R.id.side_bar_status
-                    ) as CardView).setCardBackgroundColor(resources.getColor(R.color.status_bg_pending))
+                    if(obj.completed){
+                        getTextView(viewHolder, R.id.status).text = "COMPLETED"
+                        getTextView(
+                            viewHolder,
+                            R.id.status
+                        ).setBackgroundResource(R.drawable.rect_assessment_status_completed)
+                        (getView(
+                            viewHolder,
+                            R.id.side_bar_status
+                        ) as CardView).setCardBackgroundColor(resources.getColor(R.color.status_bg_completed))
+                    } else {
 
+                        getTextView(viewHolder, R.id.status).text = "PENDING"
+                        getTextView(
+                            viewHolder,
+                            R.id.status
+                        ).setBackgroundResource(R.drawable.rect_assessment_status_pending)
+                        (getView(
+                            viewHolder,
+                            R.id.side_bar_status
+                        ) as CardView).setCardBackgroundColor(resources.getColor(R.color.status_bg_pending))
+                    }
 
                 })
         recyclerGenericAdapter.list = content
@@ -560,6 +606,9 @@ class LearningCourseDetailsFragment : BaseFragment() {
             false
         )
         learning_details_assessments_rv.adapter = recyclerGenericAdapter
+
+
+
     }
 
     override fun onBackPressed(): Boolean {
