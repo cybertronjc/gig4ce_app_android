@@ -84,7 +84,7 @@ class MainLearningFragment : BaseFragment() {
 
                 when (it) {
                     Lce.Loading -> showRoleBasedLearningProgress()
-                    is Lce.Content -> showRoleBasedLearnings(it.content)
+                    is Lce.Content -> showRoleBasedLearnings(it.content.sortedBy { it.priority })
                     is Lce.Error -> showRoleBasedLearningError(it.error)
                 }
             })
@@ -95,7 +95,7 @@ class MainLearningFragment : BaseFragment() {
 
                 when (it) {
                     Lce.Loading -> showExploreLearningProgress()
-                    is Lce.Content -> showCoursesOnExploreLearning(it.content)
+                    is Lce.Content -> showCoursesOnExploreLearning(it.content.sortedBy { it.priority })
                     is Lce.Error -> showExploreLearningError(it.error)
                 }
             })
@@ -158,9 +158,11 @@ class MainLearningFragment : BaseFragment() {
                     PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
                         val assessment = item as CourseContent
 
-                        navigate(R.id.assessment_fragment,  bundleOf(
-                            AssessmentFragment.INTENT_LESSON_ID to assessment.id
-                        ))
+                        showToast("Disabled ,will be enabled soon")
+
+//                        navigate(R.id.assessment_fragment,  bundleOf(
+//                            AssessmentFragment.INTENT_LESSON_ID to assessment.id
+//                        ))
                     },
                     RecyclerGenericAdapter.ItemInterface<CourseContent> { obj, viewHolder, position ->
                         val lp = getView(viewHolder, R.id.assessment_cl).layoutParams
@@ -241,7 +243,7 @@ class MainLearningFragment : BaseFragment() {
                     view.layoutParams = lp
 
                     var title = getTextView(viewHolder, R.id.title_)
-                    title.text = obj?.name
+                    title.text = obj?.name + " " +obj?.level
 
                     var subtitle = getTextView(viewHolder, R.id.title)
                     subtitle.text = obj?.description
@@ -324,7 +326,7 @@ class MainLearningFragment : BaseFragment() {
                     view.layoutParams = lp
 
                     var title = getTextView(viewHolder, R.id.title)
-                    title.text = obj?.name
+                    title.text = obj?.name + " " +obj?.level
 
                     var subtitle = getTextView(viewHolder, R.id.subtitle)
                     subtitle.text = obj?.description

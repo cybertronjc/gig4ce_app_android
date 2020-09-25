@@ -1,7 +1,7 @@
 package com.gigforce.app.utils
 
 import android.net.Uri
-import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.*
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
 import kotlinx.coroutines.suspendCancellableCoroutine
@@ -27,3 +27,27 @@ suspend fun StorageReference.putFileOrThrow(file: Uri) =
             .addOnSuccessListener { cont.resume(it) }
             .addOnFailureListener { cont.resumeWithException(it) }
     }
+
+suspend fun Query.getOrThrow() = suspendCoroutine<QuerySnapshot> { cont ->
+    get().addOnSuccessListener {
+        cont.resume(it)
+    }.addOnFailureListener {
+        cont.resumeWithException(it)
+    }
+}
+
+suspend fun CollectionReference.addOrThrow(data : Any) = suspendCoroutine<DocumentReference> { cont ->
+    add(data).addOnSuccessListener {
+        cont.resume(it)
+    }.addOnFailureListener {
+        cont.resumeWithException(it)
+    }
+}
+
+suspend fun DocumentReference.getOrThrow() = suspendCoroutine<DocumentSnapshot> { cont ->
+    get().addOnSuccessListener {
+        cont.resume(it)
+    }.addOnFailureListener {
+        cont.resumeWithException(it)
+    }
+}

@@ -72,7 +72,8 @@ class CourseContentListFragment : BaseFragment() {
                 CourseContent.TYPE_ASSESSMENT -> {
                     navigate(
                         R.id.assessment_fragment, bundleOf(
-                            AssessmentFragment.INTENT_LESSON_ID to it.id
+                            AssessmentFragment.INTENT_LESSON_ID to it.id,
+                            AssessmentFragment.INTENT_MODULE_ID to it.moduleId
                         )
                     )
                 }
@@ -81,6 +82,7 @@ class CourseContentListFragment : BaseFragment() {
                         R.id.slidesFragment,
                         bundleOf(
                             SlidesFragment.INTENT_EXTRA_SLIDE_TITLE to it.title,
+                            SlidesFragment.INTENT_EXTRA_MODULE_ID to it.moduleId,
                             SlidesFragment.INTENT_EXTRA_LESSON_ID to it.id
                         )
                     )
@@ -88,13 +90,18 @@ class CourseContentListFragment : BaseFragment() {
                 CourseContent.TYPE_VIDEO -> {
                     navigate(
                         R.id.playVideoDialogFragment,
-                        bundleOf(PlayVideoDialogFragment.INTENT_EXTRA_LESSON_ID to it.id)
+                        bundleOf(
+                            PlayVideoDialogFragment.INTENT_EXTRA_LESSON_ID to it.id,
+                            PlayVideoDialogFragment.INTENT_EXTRA_MODULE_ID to it.moduleId
+                        )
                     )
                 }
                 else -> {
                 }
             }
         }
+
+
         learningAndAssessmentRV.adapter = mAdapter
     }
 

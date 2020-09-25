@@ -14,7 +14,6 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.ScrollView
 import androidx.core.os.bundleOf
-import androidx.core.view.ViewCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -24,7 +23,10 @@ import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.modules.assessment.models.AssementQuestionsReponse
 import com.gigforce.app.modules.profile.ProfileViewModel
-import com.gigforce.app.utils.*
+import com.gigforce.app.utils.GlideApp
+import com.gigforce.app.utils.ItemDecoratorAssessmentOptions
+import com.gigforce.app.utils.StringConstants
+import com.gigforce.app.utils.ViewModelProviderFactory
 import com.gigforce.app.utils.widgets.CustomScrollView
 import kotlinx.android.synthetic.main.fragment_assessment.*
 import kotlinx.android.synthetic.main.toolbar.*
@@ -40,6 +42,7 @@ class AssessmentFragment : BaseFragment(),
     AssessmentAnswersAdapter.AssessAdapterCallbacks {
 
     private lateinit var mLessonId: String
+    private lateinit var mModuleId: String
 
     private var pushfinalEvent: Boolean = false
     private var countDownTimer: CountDownTimer? = null
@@ -54,7 +57,7 @@ class AssessmentFragment : BaseFragment(),
         ViewModelProvider(this).get(ProfileViewModel::class.java)
     }
     private var selectedPosition: Int = 0
-    private var timeTaken = 0;
+    private var timeTaken = 0
 
 
     override fun onCreateView(
@@ -69,24 +72,27 @@ class AssessmentFragment : BaseFragment(),
         super.onViewCreated(view, savedInstanceState)
         getDataFromIntents(savedInstanceState)
         initTb()
-        initObservers();
-        setupRecycler();
+        initObservers()
+        setupRecycler()
         viewModelAssessmentFragment.getQuestionaire(mLessonId)
     }
 
     private fun getDataFromIntents(savedInstanceState: Bundle?) {
         savedInstanceState?.let {
             mLessonId = it.getString(INTENT_LESSON_ID) ?: return@let
+            mModuleId = it.getString(INTENT_MODULE_ID) ?: return@let
         }
 
         arguments?.let {
             mLessonId = it.getString(INTENT_LESSON_ID) ?: return@let
+            mModuleId = it.getString(INTENT_MODULE_ID) ?: return@let
         }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString(INTENT_LESSON_ID, mLessonId)
+        outState.putString(INTENT_MODULE_ID, mModuleId)
     }
 
     private fun initObservers() {
@@ -97,7 +103,7 @@ class AssessmentFragment : BaseFragment(),
                 bundle.putBoolean(StringConstants.ASSESSMENT_PASSED.value, it)
                 val arr =
                     BooleanArray(viewModelAssessmentFragment.observableAssessmentData.value?.assessment!!.size) { false }
-                viewModelAssessmentFragment.observableAssessmentData.value!!.assessment!!.forEachIndexed() { index, elem ->
+                viewModelAssessmentFragment.observableAssessmentData.value!!.assessment!!.forEachIndexed { index, elem ->
                     run {
                         elem.options?.forEach { elem ->
                             run {
@@ -111,7 +117,9 @@ class AssessmentFragment : BaseFragment(),
 
                 bundle.putBooleanArray(StringConstants.ANSWERS_ARR.value, arr)
                 bundle.putInt(StringConstants.TIME_TAKEN.value, timeTaken)
-                countDownTimer?.cancel();
+                countDownTimer?.cancel()
+
+                bundle.putString(AssessmentFragment.INTENT_MODULE_ID,mModuleId)
                 navigate(R.id.assessment_result_fragment, bundle)
             })
             observableDialogInit.observe(viewLifecycleOwner, Observer {
@@ -139,7 +147,6 @@ class AssessmentFragment : BaseFragment(),
                         StringConstants.QUESTIONS_COUNT.value to (it.assessment?.size ?: 0),
                         StringConstants.LEVEL.value to it.level,
                         StringConstants.ASSESSMENT_DIALOG_STATE.value to AssessmentDialog.STATE_INIT
-
                     )
                 )
                 tv_scenario_value_assess_frag.text = it.scenario
@@ -169,7 +176,7 @@ class AssessmentFragment : BaseFragment(),
     fun setDataAsPerPosition(it: AssementQuestionsReponse) {
         tv_ques_no_assess_frag.text =
             "${getString(R.string.ques)} ${selectedPosition + 1}/${it.assessment?.size} :"
-        tv_ques_assess_frag.text = it.assessment!![selectedPosition].question!!
+        tv_ques_assess_frag.text = it.assessment!![selectedPosition].question
         adapter?.addData(it.assessment!![selectedPosition].options!!, false, "")
         try {
             val sdf = SimpleDateFormat("hh:mm:ss")
@@ -183,7 +190,7 @@ class AssessmentFragment : BaseFragment(),
     }
 
     fun miliseconds(hrs: Int, min: Int, sec: Int): Long {
-        return (((hrs * 60 * 60 + min * 60 + sec) * 1000).toLong());
+        return (((hrs * 60 * 60 + min * 60 + sec) * 1000).toLong())
     }
 
     private fun initTb() {
@@ -193,9 +200,9 @@ class AssessmentFragment : BaseFragment(),
 
     private fun initialize() {
         initUI()
-        initClicks();
-        rv_options_assess_frag.isNestedScrollingEnabled=false
-        countDownTimer?.start();
+        initClicks()
+        rv_options_assess_frag.isNestedScrollingEnabled = false
+        countDownTimer?.start()
 
     }
 
@@ -214,15 +221,10 @@ class AssessmentFragment : BaseFragment(),
                 showToast(getString(R.string.time_is_up))
                 timeTaken = millis.toInt()
                 viewModelAssessmentFragment.observableAssessmentData.value?.timeTakenInMillis =
-                    timeTaken.toLong();
+                    timeTaken.toLong()
                 viewModelAssessmentFragment.submitAnswers(viewModelProfile.getProfileData().value?.id)
             }
         }
-
-    }
-
-    override fun onPause() {
-        super.onPause()
 
     }
 
@@ -323,7 +325,7 @@ class AssessmentFragment : BaseFragment(),
             }
 
 
-        });
+        })
         iv_back.setOnClickListener {
             popBackState()
         }
@@ -333,7 +335,7 @@ class AssessmentFragment : BaseFragment(),
                     h_pb_assess_frag.progress = h_pb_assess_frag.max
                     tv_percent_assess_frag.text = getString(R.string.hundred_percent)
                     viewModelAssessmentFragment.observableAssessmentData.value?.timeTakenInMillis =
-                        timeTaken.toLong();
+                        timeTaken.toLong()
                     viewModelAssessmentFragment.submitAnswers(viewModelProfile.getProfileData().value?.id)
 
                 } else {
@@ -368,7 +370,7 @@ class AssessmentFragment : BaseFragment(),
             Handler().postDelayed({
                 showToast(getString(R.string.time_is_up))
                 viewModelAssessmentFragment.observableAssessmentData.value?.timeTakenInMillis =
-                    timeTaken.toLong();
+                    timeTaken.toLong()
                 viewModelAssessmentFragment.submitAnswers(viewModelProfile.getProfileData().value?.id)
             }, 500)
 
@@ -381,13 +383,13 @@ class AssessmentFragment : BaseFragment(),
             return
         }
         countDownTimer?.cancel()
-        var answers = 0;
+        var answers = 0
         viewModelAssessmentFragment.observableAssessmentData.value!!.assessment!!.forEach { elem ->
             run {
                 elem.options?.forEach { elem ->
                     run {
                         if (elem.selectedAnswer == true && elem.is_answer == true) {
-                            answers++;
+                            answers++
                         }
                     }
                 }
@@ -399,12 +401,13 @@ class AssessmentFragment : BaseFragment(),
             (answers / questions.toFloat()) * 100 >= viewModelAssessmentFragment.observableAssessmentData.value?.passing_percentage!!
 
         showDialog(
-            AssessmentDialog.STATE_PASS, bundleOf(
+            AssessmentDialog.STATE_PASS,
+            bundleOf(
                 StringConstants.RIGHT_ANSWERS.value to answers,
                 StringConstants.ASSESSMENT_DIALOG_STATE.value to if (isPassed) AssessmentDialog.STATE_PASS else AssessmentDialog.STATE_REAPPEAR,
                 StringConstants.QUESTIONS_COUNT.value to questions
-
-            )
+            ),
+            mModuleId
         )
 
     }
@@ -426,7 +429,7 @@ class AssessmentFragment : BaseFragment(),
                 viewModelAssessmentFragment.shouldQuestionHeaderBeVisible(top, bottom, scrollBounds)
             }
         })
-  rv_options_assess_frag.isNestedScrollingEnabled=false
+        rv_options_assess_frag.isNestedScrollingEnabled = false
         swipeDownAnim()
     }
 
@@ -441,10 +444,17 @@ class AssessmentFragment : BaseFragment(),
 
     private fun showDialog(
         state: Int,
-        bundle: Bundle?
+        bundle: Bundle?,
+        moduleId: String? = null
     ) {
-        val dialog = AssessmentDialog.newInstance(state);
+        val dialog = if(moduleId != null)
+            AssessmentDialog.newInstance(moduleId,state)
+        else
+            AssessmentDialog.newInstance(state)
+
         dialog.setCallbacks(this)
+
+        bundle?.putString(INTENT_MODULE_ID, moduleId)
         dialog.arguments = bundle
 
         dialog.show(parentFragmentManager, AssessmentDialog::class.java.name)
@@ -454,8 +464,6 @@ class AssessmentFragment : BaseFragment(),
                 popBackState()
             }
         }
-
-
     }
 
 
@@ -538,7 +546,7 @@ class AssessmentFragment : BaseFragment(),
                         resource: Bitmap,
                         transition: com.bumptech.glide.request.transition.Transition<in Bitmap>?
                     ) {
-                        iv_scenario_value_assess_frag.setImageBitmap(resource);
+                        iv_scenario_value_assess_frag.setImageBitmap(resource)
                     }
 
                     override fun onLoadCleared(placeholder: Drawable?) {
@@ -558,6 +566,7 @@ class AssessmentFragment : BaseFragment(),
     }
 
     companion object {
+        const val INTENT_MODULE_ID = "module_id"
         const val INTENT_LESSON_ID = "lesson_id"
     }
 

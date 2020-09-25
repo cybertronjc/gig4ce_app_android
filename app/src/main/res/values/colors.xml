@@ -55,6 +55,7 @@
     <color name="upcoming_gig_time">#787993</color>
     <color name="grey_photocrop_background">#888888</color>
     <color name="hour_disabled">#979797</color>
+    <color name="grey_transparetn">#4B979797</color>
     <color name="onboarding_rv_item_color">#131415</color>
     <color name="onboarding_rv_item_color_60">#60131415</color>
     <color name="onboarding_rv_item_color_40">#40131415</color>
@@ -92,6 +93,10 @@
     <color name="black_2222">#222222</color>
     <color name="warm_grey_two">#979797</color>
     <color name="bottom_sheet_et">#008577</color>
+
+    <color name="text_green">#468800</color>
+    <color name="text_yellow">#fa6400</color>
+    <color name="text_orange">#f7b500</color>
 
 
 </resources>

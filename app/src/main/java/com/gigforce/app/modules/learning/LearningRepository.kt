@@ -2,6 +2,15 @@ package com.gigforce.app.modules.learning
 
 import com.gigforce.app.core.base.basefirestore.BaseFirestoreDBRepository
 import com.gigforce.app.modules.learning.models.*
+import com.gigforce.app.modules.learning.models.progress.CourseProgress
+import com.gigforce.app.modules.learning.models.progress.LessonProgress
+import com.gigforce.app.modules.learning.models.progress.ModuleProgress
+import com.gigforce.app.modules.learning.models.progress.ProgressConstants
+import com.gigforce.app.utils.addOrThrow
+import com.gigforce.app.utils.getOrThrow
+import com.gigforce.app.utils.setOrThrow
+import com.google.firebase.Timestamp
+import com.google.firebase.firestore.Query
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
@@ -10,11 +19,17 @@ class LearningRepository : BaseFirestoreDBRepository() {
 
     override fun getCollectionName(): String = COLLECTION_NAME
 
+    fun courseModuleProgressInfo(courseId: String): Query {
+        return db.collection(COURSE_PROGRESS_NAME)
+            .whereEqualTo("course_id", courseId)
+            .whereEqualTo(TYPE, TYPE_MODULE)
+    }
+
     suspend fun getUserCourses(): List<Course> = suspendCoroutine { cont ->
         getCollectionReference()
             .whereEqualTo(TYPE, TYPE_COURSE)
             .get()
-            .addOnSuccessListener {querySnap ->
+            .addOnSuccessListener { querySnap ->
 
                 val courses = querySnap.documents
                     .map {
@@ -33,11 +48,209 @@ class LearningRepository : BaseFirestoreDBRepository() {
             }
     }
 
+    suspend fun getCourseProgress(courseId: String): CourseProgress {
+
+        val querySnap = db.collection(COURSE_PROGRESS_NAME)
+            .whereEqualTo("uid", getUID())
+            .whereEqualTo("course_id", courseId)
+            .getOrThrow()
+
+        if (querySnap.isEmpty) {
+            //No data in Progress DB
+            addInitalProgressDataForCourse(courseId)
+            return CourseProgress(
+                uid = getUID(),
+                courseId = courseId,
+                courseStartDate = Timestamp.now(),
+                courseCompletionDate = null,
+                ongoing = true,
+                completed = false
+            )
+        } else {
+            return querySnap.documents.map {
+                it.toObject(CourseProgress::class.java)!!
+            }.first()
+        }
+    }
+
+    suspend fun getCourseModulesProgress(courseId: String): List<ModuleProgress> {
+
+        val querySnap = db.collection(COURSE_PROGRESS_NAME)
+            .whereEqualTo("uid", getUID())
+            .whereEqualTo("course_id", courseId)
+            .whereEqualTo("type", ProgressConstants.TYPE_MODULE)
+            .getOrThrow()
+
+        if (querySnap.isEmpty) {
+            return emptyList()
+        } else {
+            return querySnap.documents.map {
+                it.toObject(ModuleProgress::class.java)!!
+            }
+        }
+    }
+
+    suspend fun getLessonsProgress(courseId: String, moduleId: String): List<LessonProgress> {
+
+        val querySnap = db.collection(COURSE_PROGRESS_NAME)
+            .whereEqualTo("uid", getUID())
+            .whereEqualTo("course_id", courseId)
+            .whereEqualTo("module_id", moduleId)
+            .whereEqualTo("type", ProgressConstants.TYPE_LESSON)
+            .getOrThrow()
+
+        if (querySnap.isEmpty) {
+            return emptyList()
+        } else {
+            return querySnap.documents.map {
+                val lessonProgress = it.toObject(LessonProgress::class.java)!!
+                lessonProgress.progressTrackingId = it.id
+                lessonProgress
+            }
+        }
+    }
+
+    suspend fun getLessonProgress(progressTrackingId: String): LessonProgress {
+        val docRef = db.collection(COURSE_PROGRESS_NAME)
+            .document(progressTrackingId)
+            .getOrThrow()
+
+        val lessonProgress = docRef.toObject(LessonProgress::class.java)
+            ?: throw IllegalArgumentException("unable to parse db learning progress model")
+        lessonProgress.progressTrackingId = docRef.id
+        return lessonProgress
+    }
+
+    suspend fun updateLessonProgress(progressTrackingId: String, lessonProgress: LessonProgress) {
+        db.collection(COURSE_PROGRESS_NAME)
+            .document(progressTrackingId)
+            .setOrThrow(lessonProgress)
+    }
+
+    suspend fun updateModuleProgress(progressTrackingId: String, moduleProgress: ModuleProgress) {
+        db.collection(COURSE_PROGRESS_NAME)
+            .document(progressTrackingId)
+            .setOrThrow(moduleProgress)
+    }
+
+    suspend fun markCurrentLessonAsCompleteAndEnableNextOne(
+        moduleId: String
+    ): CourseContent? {
+        val moduleProgress = getModuleProgress(moduleId)
+        var nextLessonProgress: LessonProgress? = null
+
+        if (moduleProgress != null) {
+            var currentLessonIndex = -10
+
+            val lessons = moduleProgress.lessonsProgress.sortedBy { it.priority }
+
+            for (i in lessons.indices) {
+                if (lessons[i].ongoing) {
+                    currentLessonIndex = i
+
+                    lessons[i].apply {
+                        ongoing = false
+                        completed = true
+                        lessonCompletionDate = Timestamp.now()
+                    }
+                }
+
+                if (i < lessons.size) {
+                    if (currentLessonIndex + 1 == i) {
+                        moduleProgress.lessonsProgress[i].apply {
+                            ongoing = true
+                            completed = false
+                            lessonCompletionDate = null
+                            lessonStartDate = Timestamp.now()
+                        }
+
+                        nextLessonProgress = moduleProgress.lessonsProgress[i]
+                    }
+                }
+            }
+
+            updateModuleProgress(moduleProgress.progressId, moduleProgress)
+        }
+
+        return if (nextLessonProgress == null)
+            null
+        else
+            getLessonInfo(nextLessonProgress.lessonId)
+    }
+
+    private suspend fun getLessonInfo(lessonId: String) = suspendCoroutine<CourseContent> { cont ->
+        getCollectionReference()
+            .document(lessonId)
+            .get()
+            .addOnSuccessListener { docRef ->
+                val courseContent = docRef.toObject(CourseContent::class.java)!!
+                courseContent.id = docRef.id
+                cont.resume(courseContent)
+            }
+            .addOnFailureListener {
+                cont.resumeWithException(it)
+            }
+
+    }
+
+
+    private suspend fun addInitalProgressDataForCourse(courseId: String) {
+
+        val progress = CourseProgress(
+            uid = getUID(),
+            courseId = courseId,
+            courseStartDate = Timestamp.now(),
+            courseCompletionDate = null,
+            ongoing = true,
+            completed = false
+        )
+        db.collection(COURSE_PROGRESS_NAME).addOrThrow(progress)
+
+        val modules = getModules(courseId)
+        modules.map {
+
+            val lessonProgress =
+                getModuleLessons(courseId, it.id).sortedBy { courseContent ->
+                    courseContent.priority
+                }.map { cc ->
+                    LessonProgress(
+                        uid = getUID(),
+                        courseId = courseId,
+                        moduleId = cc.moduleId,
+                        lessonId = cc.id,
+                        lessonStartDate = Timestamp.now(),
+                        lessonCompletionDate = null,
+                        ongoing = false,
+                        priority = cc.priority,
+                        completed = false,
+                        lessonType = cc.type
+                    )
+                }
+
+            if (lessonProgress.isNotEmpty()) {
+                lessonProgress.get(0).ongoing = true
+            }
+
+            ModuleProgress(
+                uid = getUID(),
+                courseId = courseId,
+                moduleId = it.id,
+                moduleStartDate = Timestamp.now(),
+                moduleCompletionDate = null,
+                ongoing = false,
+                completed = false,
+                lessonsProgress = lessonProgress
+            )
+        }.forEach {
+            db.collection(COURSE_PROGRESS_NAME).addOrThrow(it)
+        }
+    }
+
     suspend fun getRoleBasedCourses(): List<Course> = suspendCoroutine { cont ->
         getCollectionReference()
             .whereEqualTo(TYPE, TYPE_COURSE)
             .get()
-            .addOnSuccessListener {querySnap ->
+            .addOnSuccessListener { querySnap ->
 
                 val courses = querySnap.documents
                     .map {
@@ -60,7 +273,7 @@ class LearningRepository : BaseFirestoreDBRepository() {
         getCollectionReference()
             .whereEqualTo(TYPE, TYPE_COURSE)
             .get()
-            .addOnSuccessListener {querySnap ->
+            .addOnSuccessListener { querySnap ->
 
                 val courses = querySnap.documents
                     .map {
@@ -78,11 +291,11 @@ class LearningRepository : BaseFirestoreDBRepository() {
             }
     }
 
-    suspend fun getCourseDetails(courseId : String): Course = suspendCoroutine { cont ->
+    suspend fun getCourseDetails(courseId: String): Course = suspendCoroutine { cont ->
         getCollectionReference()
             .document(courseId)
             .get()
-            .addOnSuccessListener {docSnap ->
+            .addOnSuccessListener { docSnap ->
 
                 val course = docSnap.toObject(Course::class.java)!!
                 course.id = docSnap.id
@@ -94,8 +307,8 @@ class LearningRepository : BaseFirestoreDBRepository() {
     }
 
     suspend fun getModuleLessons(
-        courseId : String,
-        moduleId : String
+        courseId: String,
+        moduleId: String
     ): List<CourseContent> = suspendCoroutine { cont ->
         getCollectionReference()
             .whereEqualTo(COURSE_ID, courseId)
@@ -121,8 +334,8 @@ class LearningRepository : BaseFirestoreDBRepository() {
 
 
     suspend fun getModuleAssessments(
-        courseId : String,
-        moduleId : String
+        courseId: String,
+        moduleId: String
     ): List<CourseContent> = suspendCoroutine { cont ->
         getCollectionReference()
             .whereEqualTo(COURSE_ID, courseId)
@@ -149,7 +362,7 @@ class LearningRepository : BaseFirestoreDBRepository() {
 
 
     suspend fun getVideoDetails(
-        lessonId : String
+        lessonId: String
     ): List<CourseContent> = suspendCoroutine { cont ->
         getCollectionReference()
             .whereEqualTo(LESSON_ID, lessonId)
@@ -174,7 +387,7 @@ class LearningRepository : BaseFirestoreDBRepository() {
     }
 
     suspend fun getSlideContent(
-        lessonId : String
+        lessonId: String
     ): List<SlideContent> = suspendCoroutine { cont ->
         getCollectionReference()
             .whereEqualTo(LESSON_ID, lessonId)
@@ -203,7 +416,7 @@ class LearningRepository : BaseFirestoreDBRepository() {
 
     private fun mapToSlideContent(it: SlideContentRemote): SlideContent {
         return SlideContent(
-            slideId =  it.id,
+            slideId = it.id,
             lessonId = it.lessonId,
             image = it.coverPicture,
             isActive = it.isActive,
@@ -257,8 +470,7 @@ class LearningRepository : BaseFirestoreDBRepository() {
     }
 
 
-
-    suspend fun getModules(courseId : String) : List<Module> = suspendCoroutine { cont ->
+    suspend fun getModules(courseId: String): List<Module> = suspendCoroutine { cont ->
         getCollectionReference()
             .whereEqualTo(TYPE, TYPE_MODULE)
             .get()
@@ -280,18 +492,44 @@ class LearningRepository : BaseFirestoreDBRepository() {
             }
     }
 
-    suspend fun getModulesWithCourseContent(courseId : String) : List<Module> = suspendCoroutine { cont ->
-        getCollectionReference()
-            .whereEqualTo(TYPE, TYPE_LESSON)
-            .get()
-            .addOnSuccessListener {
+    suspend fun getModulesWithCourseContent(courseId: String): List<Module> =
+        suspendCoroutine { cont ->
+            getCollectionReference()
+                .whereEqualTo(TYPE, TYPE_LESSON)
+                .get()
+                .addOnSuccessListener {
 
-               TODO("not implemented")
-            }
-            .addOnFailureListener {
+                    TODO("not implemented")
+                }
+                .addOnFailureListener {
 
-                cont.resumeWithException(it)
+                    cont.resumeWithException(it)
+                }
+        }
+
+    suspend fun getModuleProgress(moduleId: String): ModuleProgress? {
+        val querySnap = db.collection(COURSE_PROGRESS_NAME)
+            .whereEqualTo("uid", getUID())
+            .whereEqualTo("module_id", moduleId)
+            .whereEqualTo("type", ProgressConstants.TYPE_MODULE)
+            .getOrThrow()
+
+        if (querySnap.isEmpty) {
+            return null
+        } else {
+            val moduleProgress = querySnap.documents.map {
+                val module = it.toObject(ModuleProgress::class.java)!!
+                module.progressId = it.id
+                module
             }
+
+            if (moduleProgress.isEmpty())
+                return null
+            else
+                return moduleProgress[0]
+        }
+
+
     }
 
     companion object {

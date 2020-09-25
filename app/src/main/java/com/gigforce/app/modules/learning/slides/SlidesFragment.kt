@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
-import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -15,7 +14,6 @@ import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
-import com.gigforce.app.modules.learning.models.SlideContent
 import com.gigforce.app.modules.learning.slides.types.VideoFragmentOrientationListener
 import com.gigforce.app.utils.Lce
 import kotlinx.android.synthetic.main.fragment_slides.*
@@ -26,6 +24,8 @@ class SlidesFragment : BaseFragment(), ViewPager.OnPageChangeListener,
     VideoFragmentOrientationListener {
 
     private lateinit var mLessonId: String
+    private lateinit var mModuleId: String
+    private lateinit var toolbarTitle: String
 
     private val viewModel: SlideViewModel by viewModels()
 
@@ -39,22 +39,31 @@ class SlidesFragment : BaseFragment(), ViewPager.OnPageChangeListener,
 
         savedInstanceState?.let {
 
-            val slideTitle = it.getString(INTENT_EXTRA_SLIDE_TITLE)
-            toolbar.title = slideTitle
+            toolbarTitle = it.getString(INTENT_EXTRA_SLIDE_TITLE) ?: ""
+            mLessonId = it.getString(INTENT_EXTRA_LESSON_ID) ?: return@let
+            mModuleId = it.getString(INTENT_EXTRA_MODULE_ID) ?: return@let
 
-            mLessonId = it.getString(INTENT_EXTRA_LESSON_ID)?: return@let
+            toolbar.title = toolbarTitle
         }
 
         arguments?.let {
 
-            val slideTitle = it.getString(INTENT_EXTRA_SLIDE_TITLE)
-            toolbar.title = slideTitle
+            toolbarTitle = it.getString(INTENT_EXTRA_SLIDE_TITLE) ?: ""
+            mLessonId = it.getString(INTENT_EXTRA_LESSON_ID) ?: return@let
+            mModuleId = it.getString(INTENT_EXTRA_MODULE_ID) ?: return@let
 
-            mLessonId = it.getString(INTENT_EXTRA_LESSON_ID)?: return@let
+            toolbar.title = toolbarTitle
         }
 
         initView()
         initViewModel()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString(INTENT_EXTRA_LESSON_ID, mLessonId)
+        outState.putString(INTENT_EXTRA_MODULE_ID, mModuleId)
+        outState.putString(INTENT_EXTRA_SLIDE_TITLE, toolbarTitle)
     }
 
     private fun initViewModel() {
@@ -70,6 +79,7 @@ class SlidesFragment : BaseFragment(), ViewPager.OnPageChangeListener,
             })
 
         viewModel.getSlideContent(
+            moduleId = mModuleId,
             lessonId = mLessonId
         )
     }
@@ -83,37 +93,41 @@ class SlidesFragment : BaseFragment(), ViewPager.OnPageChangeListener,
 
     private var pagerAdapter: SlidesPagerAdapter? = null
 
-    private fun showSlides(content: List<SlideContent>) {
+    private fun showSlides(content: SlideInfoAndDirection) {
 
         fragment_slides_progress_bar.gone()
         fragment_slides_error.gone()
         fragment_slides_main_layout.visible()
 
-        pagerAdapter = SlidesPagerAdapter(childFragmentManager, content, this)
+        pagerAdapter = SlidesPagerAdapter(childFragmentManager, content.slideContent, this)
         slideViewPager.adapter = pagerAdapter
         slideViewPager.addOnPageChangeListener(this)
 
-//        val slidesCoverageProgress = 100 / content.size
-//        progress.progress = slidesCoverageProgress
+        slideViewPager.setCurrentItem(content.activeSlideIndex, true)
 
-        showDots(content.size)
+        showDots(content.slideContent.size)
     }
 
     private fun showDots(dotsCount: Int) {
+        sliderDotsContainer.removeAllViews()
+
         for (i in 0..dotsCount) {
 
             val dotIV = ImageView(requireContext())
 
-            if(i == 0){
+            if (i == 0) {
                 dotIV.setImageResource(R.drawable.ic_dot_active)
-            } else{
+            } else {
                 dotIV.setImageResource(R.drawable.ic_dot_inactive)
             }
 
-            val layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+            val layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
             layoutParams.leftMargin = 8
             layoutParams.rightMargin = 8
-            sliderDotsContainer.addView(dotIV,layoutParams)
+            sliderDotsContainer.addView(dotIV, layoutParams)
         }
     }
 
@@ -149,10 +163,6 @@ class SlidesFragment : BaseFragment(), ViewPager.OnPageChangeListener,
     override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
 
     override fun onPageSelected(position: Int) {
-//        val pagesCount = pagerAdapter!!.count
-//        val slidesCoverageProgress = ((position + 1) * 100) / pagesCount
-//        progress.progress = slidesCoverageProgress
-
         setDotAsSelected(position)
     }
 
@@ -160,7 +170,7 @@ class SlidesFragment : BaseFragment(), ViewPager.OnPageChangeListener,
         for (i in 0 until sliderDotsContainer.childCount) {
 
             val dotIV = sliderDotsContainer.getChildAt(i) as ImageView
-            if(i == position)
+            if (i == position)
                 dotIV.setImageResource(R.drawable.ic_dot_active)
             else
                 dotIV.setImageResource(R.drawable.ic_dot_inactive)
@@ -176,5 +186,6 @@ class SlidesFragment : BaseFragment(), ViewPager.OnPageChangeListener,
     companion object {
         const val INTENT_EXTRA_SLIDE_TITLE = "slide_title"
         const val INTENT_EXTRA_LESSON_ID = "lesson_id"
+        const val INTENT_EXTRA_MODULE_ID = "module_id"
     }
 }
