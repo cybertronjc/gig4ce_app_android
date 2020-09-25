@@ -5,6 +5,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -21,7 +23,7 @@ import com.gigforce.app.utils.Lce
 import kotlinx.android.synthetic.main.fragment_assessment_list.*
 
 
-class AssessmentListFragment : BaseFragment() {
+class AssessmentListFragment : BaseFragment(), AssessmentClickListener {
 
     private lateinit var mCourseId: String
     private lateinit var mModuleId: String
@@ -95,8 +97,10 @@ class AssessmentListFragment : BaseFragment() {
             assessmentListRV.layoutManager = LinearLayoutManager(requireContext())
             val adapter = AssessmentListAdapter(
                 resources,
-                assessments
-            )
+                assessments.sortedBy { it.priority }
+            ).apply {
+                setListener(this@AssessmentListFragment)
+            }
             assessmentListRV.adapter = adapter
         }
     }
@@ -105,6 +109,24 @@ class AssessmentListFragment : BaseFragment() {
 
         const val INTENT_EXTRA_COURSE_ID = "course_id"
         const val INTENT_EXTRA_MODULE_ID = "module_id"
+    }
+
+    override fun onAssessmentClicked(assessment: CourseContent) {
+        if(assessment.completed || assessment.currentlyOnGoing) {
+
+            navigate(
+                R.id.assessment_fragment, bundleOf(
+                    AssessmentFragment.INTENT_LESSON_ID to assessment.id,
+                    AssessmentFragment.INTENT_MODULE_ID to assessment.moduleId
+                )
+            )
+        } else{
+            Toast.makeText(
+                requireContext(),
+                "Please complete previous lessons first",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
     }
 
 }

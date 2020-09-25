@@ -4,12 +4,18 @@ import android.content.res.Resources
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.cardview.widget.CardView
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.app.R
 import com.gigforce.app.modules.assessment.models.Assessment
 import com.gigforce.app.modules.learning.models.CourseContent
 import kotlinx.android.synthetic.main.assessment_bs_item.view.*
+
+interface AssessmentClickListener{
+
+    fun onAssessmentClicked(assessment : CourseContent)
+}
 
 class AssessmentListAdapter(
     private val resources: Resources,
@@ -18,6 +24,11 @@ class AssessmentListAdapter(
     RecyclerView.Adapter<AssessmentListAdapter.TimeLineViewHolder>() {
 
     private lateinit var mLayoutInflater: LayoutInflater
+    private var assessmentClickListener : AssessmentClickListener? = null
+
+    fun setListener(assessmentClickListener : AssessmentClickListener){
+        this.assessmentClickListener = assessmentClickListener
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TimeLineViewHolder {
 
@@ -39,18 +50,12 @@ class AssessmentListAdapter(
         val videoModel = assessmentList[position]
 
         holder.assessmentTitle.text = videoModel.title
-        holder.approxTime.text = ""
+        holder.approxTime.text = videoModel.videoLengthString
 
         if (!videoModel.completed) {
 
             holder.statusTV.text = "PENDING"
-            holder.statusTV.status.setBackgroundColor(
-                ResourcesCompat.getColor(
-                    resources,
-                    R.color.yellow,
-                    null
-                )
-            )
+            holder.statusTV.setBackgroundResource(R.drawable.rect_assessment_status_pending)
             holder.statusSlideRibbon.setCardBackgroundColor(
                 ResourcesCompat.getColor(
                     resources,
@@ -62,13 +67,8 @@ class AssessmentListAdapter(
         } else {
 
             holder.statusTV.text = "COMPLETED"
-            holder.statusTV.status.setBackgroundColor(
-                ResourcesCompat.getColor(
-                    resources,
-                    R.color.green,
-                    null
-                )
-            )
+            holder.statusTV.setBackgroundResource(R.drawable.rect_assessment_status_completed)
+
             holder.statusSlideRibbon.setCardBackgroundColor(
                 ResourcesCompat.getColor(
                     resources,
@@ -82,12 +82,20 @@ class AssessmentListAdapter(
     override fun getItemCount() = assessmentList.size
 
     inner class TimeLineViewHolder(itemView: View, viewType: Int) :
-        RecyclerView.ViewHolder(itemView) {
+        RecyclerView.ViewHolder(itemView), View.OnClickListener {
+
+        init {
+            itemView.setOnClickListener(this)
+        }
 
         val assessmentTitle = itemView.title
         val statusTV = itemView.status
         val statusSlideRibbon = itemView.side_bar_status
         val approxTime = itemView.time
+
+        override fun onClick(v: View?) {
+            assessmentClickListener?.onAssessmentClicked(assessmentList[adapterPosition])
+        }
     }
 
 }
