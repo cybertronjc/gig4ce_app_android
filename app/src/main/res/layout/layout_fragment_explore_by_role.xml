@@ -77,7 +77,13 @@
         android:id="@+id/rv_explore_by_role"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/rl_explore_by_role"
-   />
+        android:layout_below="@+id/rl_explore_by_role" />
+
+    <ProgressBar
+        android:id="@+id/pb_explore_by_role"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
 
 </RelativeLayout>

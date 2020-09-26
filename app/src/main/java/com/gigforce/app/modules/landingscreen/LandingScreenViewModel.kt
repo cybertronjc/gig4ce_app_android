@@ -311,7 +311,9 @@ class LandingScreenViewModel constructor(
         if (error != null) {
 
         } else {
-            observerRole.value = querySnapshot?.toObjects(Role::class.java)?.get(0)
+            val role = querySnapshot?.toObjects(Role::class.java)?.get(0)
+            role?.id = querySnapshot?.documents?.get(0)?.id
+            observerRole.value = role
         }
     }
 }

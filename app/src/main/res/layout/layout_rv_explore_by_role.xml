@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     app:cardCornerRadius="@dimen/size_4">
 
     <LinearLayout
@@ -16,13 +17,14 @@
             android:layout_height="@dimen/size_144" />
 
         <TextView
+            android:id="@+id/tv_title_rv_explore_by_role"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/size_6"
             android:layout_marginTop="@dimen/size_10"
             android:layout_marginBottom="@dimen/size_9"
             android:gravity="center_horizontal"
-            android:text="Driver"
+            tools:text="Driver"
             android:textColor="@color/black_85"
             android:textSize="14sp" />
     </LinearLayout>

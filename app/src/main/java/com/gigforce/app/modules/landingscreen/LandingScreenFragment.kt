@@ -14,6 +14,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import com.bumptech.glide.Glide
@@ -642,14 +643,24 @@ class LandingScreenFragment : BaseFragment() {
     }
 
     private fun initializeExploreByRole() {
-        landingScreenViewModel.observerRole.observe(viewLifecycleOwner, Observer {
-
-            showGlideImage(it?.role_image ?: "", iv_role)
-            tv_title_role.text = it?.role_title
-            if (!it?.job_description.isNullOrEmpty()) {
-                tv_subtitle_role.visible()
-                tv_subtitle_role.text = it?.job_description?.get(0)
+        landingScreenViewModel.observerRole.observe(viewLifecycleOwner, Observer {gig->
+            run {
+                showGlideImage(gig?.role_image ?: "", iv_role)
+                tv_title_role.text = gig?.role_title
+                if (!gig?.job_description.isNullOrEmpty()) {
+                    tv_subtitle_role.visible()
+                    tv_subtitle_role.text = gig?.job_description?.get(0)
+                }
+                cv_role.setOnClickListener {
+                    findNavController().navigate(
+                        LandingScreenFragmentDirections.openRoleDetailsHome(
+                            gig?.id!!
+                        )
+                    )
+                }
             }
+
+
         })
         landingScreenViewModel.getRoles()
         val itemWidth = ((width / 3) * 2).toInt()
@@ -658,6 +669,7 @@ class LandingScreenFragment : BaseFragment() {
         lp.width = itemWidth
 
         cv_role.layoutParams = lp
+
 //        // model will change when integrated with DB
 ////        var datalist: ArrayList<UpcomingGigModel> = ArrayList<UpcomingGigModel>()
 //        var datalist: ArrayList<TitleSubtitleModel> = ArrayList<TitleSubtitleModel>()

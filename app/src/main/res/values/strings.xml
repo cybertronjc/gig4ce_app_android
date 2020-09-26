@@ -942,6 +942,11 @@
     <string name="i_am_on_leave_today">I am on leave today</string>
     <string name="see_more">See more</string>
     <string name="sort_by_popular">Sort by : Popular</string>
+    <string name="read_more">more</string>
+    <string name="read_less">less</string>
+    <string name="what_does_a">What does a</string>
+    <string name="do_question_mark">do?</string>
+    <string name="earnings">Earnings</string>
 
 
 </resources>
