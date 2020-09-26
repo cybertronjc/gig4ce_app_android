@@ -450,6 +450,9 @@ class LandingScreenFragment : BaseFragment() {
         gigforce_video.setOnClickListener {
             playVideo("FbiyRe49wjY")
         }
+        ll_search_role.setOnClickListener {
+            navigate(R.id.fragment_explore_by_role)
+        }
     }
 
     private fun initializeLearningModule() {
@@ -640,6 +643,7 @@ class LandingScreenFragment : BaseFragment() {
 
     private fun initializeExploreByRole() {
         landingScreenViewModel.observerRole.observe(viewLifecycleOwner, Observer {
+
             showGlideImage(it?.role_image ?: "", iv_role)
             tv_title_role.text = it?.role_title
             if (!it?.job_description.isNullOrEmpty()) {

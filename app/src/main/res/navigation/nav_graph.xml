@@ -570,14 +570,14 @@
     <fragment
         android:id="@+id/gigAttendancePageFragment"
         android:name="com.gigforce.app.modules.gigPage.GigAttendancePageFragment"
-        android:label="GigAttendancePageFragment" >
+        android:label="GigAttendancePageFragment">
 
         <argument
             android:name="gig_id"
-            app:argType="string"/>
+            app:argType="string" />
         <deepLink
             android:id="@+id/gig_attendance_deeplink"
-            app:uri="www.gigforce.com/gig/attendance/{gig_id}"/>
+            app:uri="www.gigforce.com/gig/attendance/{gig_id}" />
 
     </fragment>
     <fragment
@@ -642,6 +642,11 @@
         android:name="com.gigforce.app.modules.referrals.ReferralsFragment"
         android:label="fragment_referrals"
         tools:layout="@layout/fragment_referrals" />
+    <fragment
+        android:id="@+id/fragment_explore_by_role"
+        android:name="com.gigforce.app.modules.explore_by_role.ExploreByRoleFragment"
+        android:label="fragment_explore_by_role"
+        tools:layout="@layout/layout_fragment_explore_by_role" />
     <dialog
         android:id="@+id/gigsListForDeclineBottomSheet"
         android:name="com.gigforce.app.modules.gigPage.GigsListForDeclineBottomSheet"

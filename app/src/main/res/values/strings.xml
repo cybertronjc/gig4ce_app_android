@@ -941,6 +941,7 @@
     <string name="cancelling_out_a_gig">Cancelling out a gig !</string>
     <string name="i_am_on_leave_today">I am on leave today</string>
     <string name="see_more">See more</string>
+    <string name="sort_by_popular">Sort by : Popular</string>
 
 
 </resources>

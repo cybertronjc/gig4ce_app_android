@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+
+    android:layout_height="match_parent">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/tb_explore_by_role"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/size_52"
+        app:contentInsetStart="0dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/iv_back_explore_by_role"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="@dimen/size_16"
+                android:adjustViewBounds="true"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_arrow_back_24" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="@dimen/size_16"
+
+                android:layout_toEndOf="@+id/iv_back_explore_by_role"
+                android:text="@string/explore_by_role"
+                android:textColor="@color/black"
+                android:textSize="@dimen/font_20" />
+
+            <ImageView
+                android:id="@+id/iv_search_explore_by_role"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="@dimen/size_16"
+                android:layout_marginEnd="@dimen/size_16"
+                android:adjustViewBounds="true"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_search_calendar" />
+        </RelativeLayout>
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <RelativeLayout
+        android:id="@+id/rl_explore_by_role"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tb_explore_by_role"
+        android:background="@drawable/bg_border_f0f0f0"
+        android:minHeight="@dimen/size_48">
+
+
+        <TextView
+            android:id="@+id/tv_sort_explore_by_role"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="@dimen/size_18"
+            android:letterSpacing="-0.01"
+            android:text="@string/sort_by_popular"
+            android:textColor="#000000"
+            android:textSize="@dimen/font_14" />
+    </RelativeLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_explore_by_role"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/rl_explore_by_role"
+   />
+
+</RelativeLayout>
