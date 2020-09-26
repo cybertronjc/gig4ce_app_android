@@ -95,4 +95,6 @@
     <dimen name="size_56">56dp</dimen>
     <dimen name="size_34">34dp</dimen>
     <dimen name="size_14_5" >15dp</dimen>
+    <dimen name="size_144">144dp</dimen>
+    <dimen name="size_215">215dp</dimen>
 </resources>

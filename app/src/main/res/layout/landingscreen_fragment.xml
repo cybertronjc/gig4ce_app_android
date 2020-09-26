@@ -265,9 +265,10 @@
                     app:layout_constraintTop_toBottomOf="@+id/textView109" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="215dp">
+                android:minHeight="@dimen/size_215"
+                android:layout_height="wrap_content">
 
                 <TextView
                     android:id="@+id/textView114"
@@ -283,19 +284,106 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/explore_by_role_rv"
-                    android:layout_width="match_parent"
+                <LinearLayout
+                    android:id="@+id/ll_search_role"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="11dp"
-                    android:clipToPadding="false"
-                    android:nestedScrollingEnabled="false"
-                    android:paddingRight="20dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView114" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                    android:layout_alignTop="@+id/cv_role"
+                    android:layout_alignBottom="@+id/cv_role"
+                    android:layout_alignParentEnd="true"
+                    android:layout_toEndOf="@+id/cv_role"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:paddingStart="@dimen/size_41"
+                    android:paddingEnd="@dimen/size_24">
+
+
+                    <ImageView
+                        android:id="@+id/iv"
+                        android:layout_width="@dimen/size_24"
+                        android:layout_height="@dimen/size_24"
+                        app:srcCompat="@drawable/ic_search_lipstick" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:text="@string/see_more_underline"
+                        android:textColor="@color/lipstick"
+                        android:textSize="@dimen/font_14" />
+                </LinearLayout>
+
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cv_role"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minWidth="@dimen/size_144"
+                    android:layout_below="@+id/textView114"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginTop="@dimen/size_16"
+                    android:layout_marginBottom="@dimen/size_16"
+
+                    app:cardCornerRadius="4dp">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+
+                        android:layout_height="wrap_content">
+
+
+                        <ImageView
+                            android:id="@+id/iv_role"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/size_144"
+                            android:adjustViewBounds="true"
+                            android:scaleType="centerCrop"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.0"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@color/white"
+                            android:paddingTop="@dimen/size_9"
+                            android:paddingBottom="@dimen/size_9"
+                            app:layout_constraintTop_toBottomOf="@+id/iv_role"
+                            app:layout_constraintLeft_toLeftOf="parent">
+
+                            <TextView
+                                android:id="@+id/tv_title_role"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="4dp"
+                                android:layout_marginBottom="8dp"
+                                android:fontFamily="@font/lato"
+                                android:letterSpacing="0"
+                                android:textColor="#d9000000"
+                                android:textSize="14sp"
+                               app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                tools:text="Driver" />
+
+                            <TextView
+                                android:id="@+id/tv_subtitle_role"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                tools:text="Lorem Ipsum is simply dummy"
+                                android:ellipsize="end"
+                                android:singleLine="true"
+                                android:textColor="#000000"
+                                android:textSize="10sp"
+                                android:visibility="gone"
+                                app:layout_constraintStart_toStartOf="@+id/tv_title_role"
+                                app:layout_constraintTop_toBottomOf="@+id/tv_title_role" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </androidx.cardview.widget.CardView>
+            </RelativeLayout>
 
             <View
                 android:layout_width="match_parent"
