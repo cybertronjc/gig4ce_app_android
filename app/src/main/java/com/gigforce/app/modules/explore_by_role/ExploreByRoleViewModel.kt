@@ -8,10 +8,10 @@ import com.google.firebase.firestore.QuerySnapshot
 
 class ExploreByRoleViewModel(private val callbacks: ExploreByRoleCallbacks) : ViewModel(),
     ExploreByRoleCallbacks.ResponseCallbacks {
-    private val _observerRoleList: SingleLiveEvent<List<Role>> by lazy {
-        SingleLiveEvent<List<Role>>();
+    private val _observerRoleList: SingleLiveEvent<ArrayList<Role>> by lazy {
+        SingleLiveEvent<ArrayList<Role>>();
     }
-    val observerRoleList: SingleLiveEvent<List<Role>> get() = _observerRoleList
+    val observerRoleList: SingleLiveEvent<ArrayList<Role>> get() = _observerRoleList
 
     private val _observerError: SingleLiveEvent<String> by lazy {
         SingleLiveEvent<String>();
@@ -34,7 +34,9 @@ class ExploreByRoleViewModel(private val callbacks: ExploreByRoleCallbacks) : Vi
         querySnapshot?.documents?.forEachIndexed { index, element ->
             roles?.get(index)?.id = element.id
         }
-        observerRoleList.value = roles
+        val arrayList = ArrayList<Role>()
+        arrayList.addAll(roles!!)
+        observerRoleList.value = arrayList
     }
 
 

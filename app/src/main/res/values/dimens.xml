@@ -102,4 +102,7 @@
     <dimen name="size_49">49dp</dimen>
     <dimen name="size_66">66dp</dimen>
     <dimen name="size_133">133dp</dimen>
+    <dimen name="size_47">47dp</dimen>
+    <dimen name="size_70">70dp</dimen>
+    <dimen name="size_237">237dp</dimen>
 </resources>

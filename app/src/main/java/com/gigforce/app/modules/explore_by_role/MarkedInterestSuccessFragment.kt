@@ -4,21 +4,21 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.landingscreen.models.Role
 import com.gigforce.app.modules.profile.ProfileViewModel
-import com.gigforce.app.utils.GridSpacingItemDecoration
+import com.gigforce.app.utils.HorizontaltemDecoration
 import com.gigforce.app.utils.ViewModelProviderFactory
-import kotlinx.android.synthetic.main.layout_fragment_explore_by_role.*
+import kotlinx.android.synthetic.main.layout_marked_interest_success_fragment.*
 
-class ExploreByRoleFragment : BaseFragment(), AdapterExploreByRole.AdapterExploreByRoleCallbacks {
+class MarkedInterestSuccessFragment : BaseFragment() {
     private val viewModelFactory by lazy {
         ViewModelProviderFactory(ExploreByRoleViewModel(ExploreByRoleRepository()))
     }
@@ -33,31 +33,20 @@ class ExploreByRoleFragment : BaseFragment(), AdapterExploreByRole.AdapterExplor
         AdapterExploreByRole()
     }
 
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflateView(R.layout.layout_fragment_explore_by_role, inflater, container)
+        return inflateView(R.layout.layout_marked_interest_success_fragment, inflater, container)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupRecyclerView()
-        initObservers()
         initClicks()
-    }
-
-    private fun initClicks() {
-        iv_back_explore_by_role.setOnClickListener {
-            popBackState()
-        }
-        iv_search_explore_by_role.setOnClickListener {
-            showToast("Coming Soon!!")
-        }
-        tv_sort_explore_by_role.setOnClickListener {
-            showToast("Coming Soon!!")
-        }
+        setUpRecycler()
+        initObservers()
 
     }
 
@@ -69,11 +58,12 @@ class ExploreByRoleFragment : BaseFragment(), AdapterExploreByRole.AdapterExplor
                     it.role_interests?.forEach { element ->
                         val index = rolesList?.indexOf(Role(id = element.interestID))
                         if (index != -1) {
-                            rolesList?.get(index!!)?.isMarkedAsInterest = true
+
+                            rolesList?.removeAt(index!!)
                         }
                     }
                     adapter.addData(rolesList ?: mutableListOf())
-                    pb_explore_by_role.gone()
+                    pb_marked_as_interest.gone()
                 })
             }
 
@@ -81,27 +71,48 @@ class ExploreByRoleFragment : BaseFragment(), AdapterExploreByRole.AdapterExplor
         })
         viewModel.observerError.observe(viewLifecycleOwner, Observer {
             showToast(it ?: "")
-            pb_explore_by_role.gone()
+            pb_marked_as_interest.gone()
         })
 
-        pb_explore_by_role.visible()
+        pb_marked_as_interest.visible()
         viewModel.getRoles()
     }
 
-    private fun setupRecyclerView() {
-        rv_explore_by_role.adapter = adapter
-        adapter.setCallbacks(this)
-        rv_explore_by_role.layoutManager = GridLayoutManager(requireContext(), 2)
-        rv_explore_by_role.addItemDecoration(
-            GridSpacingItemDecoration(
-                2,
-                resources.getDimensionPixelSize(R.dimen.size_16), true
+    private fun setUpRecycler() {
+        rv_not_interested_roles.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        rv_not_interested_roles.addItemDecoration(
+            HorizontaltemDecoration(
+                requireContext(),
+                R.dimen.size_16
             )
         )
+        rv_not_interested_roles.adapter = adapter
+        adapter.isHorizontalCarousel()
+    }
+
+    private fun initClicks() {
+
+        iv_close_mark_interest.setOnClickListener {
+            popBackState()
+        }
+        tv_learning_mark_interest_success.setOnClickListener {
+            navigate(R.id.mainLearningFragment)
+        }
+        tv_update_profile_mark_interest_success.setOnClickListener {
+            navigate(R.id.profileFragment)
+        }
+    }
+
+    private fun popTillSecondLastFragment() {
+        val index = parentFragmentManager.backStackEntryCount - 2
+        val backEntry = parentFragmentManager.getBackStackEntryAt(index);
+        val tag = backEntry.name;
+        val fragmentManager: FragmentManager? = parentFragmentManager
+        fragmentManager?.executePendingTransactions()
+        fragmentManager?.popBackStack(tag, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+
 
     }
 
-    override fun onItemClicked(id: String?) {
-        findNavController().navigate(ExploreByRoleFragmentDirections.openRoleDetails(id!!))
-    }
 }

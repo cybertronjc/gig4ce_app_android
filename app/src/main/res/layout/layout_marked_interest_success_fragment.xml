@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clipToPadding="false"
+        android:paddingBottom="@dimen/size_70">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <ImageView
+                android:id="@+id/iv_close_mark_interest"
+                android:layout_width="@dimen/size_24"
+                android:layout_height="@dimen/size_24"
+                android:layout_margin="@dimen/size_16"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
+                app:srcCompat="@drawable/ic_close"
+                app:tint="@color/black" />
+
+            <LinearLayout
+                android:id="@+id/ll_success_message_mark_interest"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/iv_close_mark_interest"
+                android:background="@color/light_pink"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <FrameLayout
+                    android:layout_width="@dimen/size_47"
+                    android:layout_height="@dimen/size_48"
+                    android:layout_marginTop="@dimen/size_15"
+                    android:background="@drawable/circle_border_41b423">
+
+                    <ImageView
+                        android:layout_width="@dimen/size_22"
+                        android:layout_height="@dimen/size_17"
+                        android:layout_gravity="center"
+                        app:srcCompat="@drawable/ic_baseline_done_24" />
+
+
+                </FrameLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/size_17"
+                    android:text="@string/marked_as_interest_exlamation"
+                    android:textColor="#222222"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/size_12"
+                    android:layout_marginBottom="@dimen/size_34"
+                    android:gravity="center_horizontal"
+                    android:text="@string/our_team_will_soon_contact_you_for_more_details_and_further_procedure"
+                    android:textColor="#000000"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_explore_more_mark_interest"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/ll_success_message_mark_interest"
+                android:layout_marginStart="@dimen/size_17"
+                android:layout_marginTop="@dimen/size_24"
+                android:text="@string/explore_more_role"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_not_interested_roles"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_explore_more_mark_interest"
+                android:layout_marginTop="@dimen/size_16" />
+
+
+        </RelativeLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true">
+
+        <TextView
+            android:id="@+id/tv_learning_mark_interest_success"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/size_19"
+            android:layout_marginBottom="@dimen/size_34"
+            android:layout_weight="1"
+            android:background="@drawable/border_e94b81_rad5"
+            android:gravity="center_horizontal"
+            android:minHeight="@dimen/size_36"
+            android:paddingTop="@dimen/size_10"
+            android:paddingBottom="@dimen/size_9"
+            android:text="@string/explore_learning"
+            android:textColor="@color/darkish_pink_two"
+            android:textSize="14sp" />
+
+        <View
+            android:layout_width="@dimen/size_15"
+            android:layout_height="1dp" />
+
+        <TextView
+            android:id="@+id/tv_update_profile_mark_interest_success"
+
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/size_8"
+            android:layout_marginBottom="@dimen/size_34"
+            android:layout_weight="1"
+            android:background="@drawable/rect_bg_rad_rad_5_sg_e42c64_eg_990077"
+            android:gravity="center_horizontal"
+            android:minHeight="@dimen/size_36"
+            android:paddingTop="@dimen/size_10"
+            android:paddingBottom="@dimen/size_9"
+            android:text="@string/update_your_profile"
+            android:textColor="#ffffff"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/pb_marked_as_interest"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
+</RelativeLayout>

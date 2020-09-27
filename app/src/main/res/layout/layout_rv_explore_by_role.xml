@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:tools="http://schemas.android.com/tools"
     app:cardCornerRadius="@dimen/size_4">
 
     <LinearLayout
@@ -14,19 +14,41 @@
         <ImageView
             android:id="@+id/iv_rv_explore_by_role"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/size_144" />
+            android:layout_height="@dimen/size_144"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop" />
 
-        <TextView
-            android:id="@+id/tv_title_rv_explore_by_role"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/size_6"
-            android:layout_marginTop="@dimen/size_10"
-            android:layout_marginBottom="@dimen/size_9"
-            android:gravity="center_horizontal"
-            tools:text="Driver"
-            android:textColor="@color/black_85"
-            android:textSize="14sp" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tv_title_rv_explore_by_role"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/size_6"
+                android:layout_marginTop="@dimen/size_10"
+                android:layout_marginBottom="@dimen/size_9"
+                android:layout_toStartOf="@+id/cb_interested_rv_explore_role"
+                android:gravity="start"
+                android:textColor="@color/black_85"
+                android:textSize="14sp"
+                tools:text="Driver" />
+
+            <androidx.appcompat.widget.AppCompatCheckBox
+                android:id="@+id/cb_interested_rv_explore_role"
+                android:layout_width="@dimen/size_16"
+                android:layout_height="@dimen/size_16"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="@dimen/size_8"
+                android:layout_marginEnd="@dimen/size_8"
+                android:layout_marginBottom="@dimen/size_8"
+                android:button="@drawable/marked_as_interest_heart_selector"
+                android:buttonTint="@null"
+                app:buttonTint="@null" />
+        </RelativeLayout>
+
+
     </LinearLayout>
 
 

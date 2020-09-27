@@ -11,6 +11,7 @@ import com.gigforce.app.utils.getCircularProgressDrawable
 import kotlinx.android.synthetic.main.layout_rv_explore_by_role.view.*
 
 class AdapterExploreByRole : RecyclerView.Adapter<AdapterExploreByRole.ViewHolder>() {
+
     interface AdapterExploreByRoleCallbacks {
         fun onItemClicked(id: String?)
     }
@@ -19,6 +20,7 @@ class AdapterExploreByRole : RecyclerView.Adapter<AdapterExploreByRole.ViewHolde
         this.callbacks = callbacks
     }
 
+    private var horizontalCarousel: Boolean = false
     private var callbacks: AdapterExploreByRoleCallbacks? = null
     private var items: List<Role>? = null
 
@@ -38,6 +40,7 @@ class AdapterExploreByRole : RecyclerView.Adapter<AdapterExploreByRole.ViewHolde
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val obj = items?.get(position)
         holder.itemView.tv_title_rv_explore_by_role.text = obj?.role_title ?: ""
+        holder.itemView.cb_interested_rv_explore_role.isChecked = obj?.isMarkedAsInterest!!
         GlideApp.with(holder.itemView.context)
             .load(obj?.role_image)
             .placeholder(getCircularProgressDrawable(holder.itemView.context))
@@ -45,10 +48,20 @@ class AdapterExploreByRole : RecyclerView.Adapter<AdapterExploreByRole.ViewHolde
         holder.itemView.setOnClickListener {
             callbacks?.onItemClicked(items?.get(holder.adapterPosition)?.id)
         }
+        if (horizontalCarousel) {
+            holder.itemView.layoutParams = ViewGroup.LayoutParams(
+                holder.itemView.context.resources.getDimensionPixelSize(R.dimen.size_237),
+                ViewGroup.LayoutParams.WRAP_CONTENT
+            )
+        }
     }
 
     fun addData(items: List<Role>) {
         this.items = items
         notifyDataSetChanged()
+    }
+
+    fun isHorizontalCarousel() {
+        this.horizontalCarousel = true
     }
 }

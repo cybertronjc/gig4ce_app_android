@@ -951,6 +951,12 @@
     <string name="requirements">Requirements</string>
     <string name="responsibilities">Responsibilities</string>
     <string name="mark_as_interest">Mark As Interest</string>
+    <string name="marked_as_interest">Marked As Interest</string>
+    <string name="marked_as_interest_exlamation">Marked as Interest!!</string>
+    <string name="our_team_will_soon_contact_you_for_more_details_and_further_procedure">Our team will soon contact you for more details and further procedure.</string>
+    <string name="update_your_profile">Update your profile</string>
+    <string name="explore_learning">Explore Learning</string>
+    <string name="explore_more_role">Explore More role</string>
 
 
 </resources>

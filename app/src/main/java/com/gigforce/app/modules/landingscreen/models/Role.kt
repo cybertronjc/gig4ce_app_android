@@ -1,5 +1,7 @@
 package com.gigforce.app.modules.landingscreen.models
 
+import com.gigforce.app.modules.profile.models.RoleInterests
+
 data class Role(
     var id: String? = "",
     var about: String = "",
@@ -8,6 +10,11 @@ data class Role(
     var requirements: ArrayList<String>? = null,
     var role_image: String? = null,
     var role_title: String? = null,
-    var top_locations: ArrayList<String>? = null
+    var top_locations: ArrayList<String>? = null,
+    var isMarkedAsInterest: Boolean = false
 ) {
+    override fun equals(other: Any?): Boolean {
+        val obj = other as Role
+        return obj.id.equals(id)
+    }
 }

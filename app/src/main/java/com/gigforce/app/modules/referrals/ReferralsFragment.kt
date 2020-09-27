@@ -17,6 +17,8 @@ import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.request.RequestOptions
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
+import com.gigforce.app.core.gone
+import com.gigforce.app.core.visible
 import com.gigforce.app.modules.preferences.PreferencesFragment
 import com.gigforce.app.modules.profile.ProfileViewModel
 import com.gigforce.app.utils.GlideApp
@@ -65,6 +67,7 @@ class ReferralsFragment : BaseFragment() {
         iv_back_referrals_frag.setOnClickListener {
             popBackState()
         }
+
     }
 
     private fun initObservers() {
@@ -73,7 +76,7 @@ class ReferralsFragment : BaseFragment() {
             run {
                 PushDownAnim.setPushDownAnimTo(iv_copy_link_referrals_frag)
                     .setOnClickListener(View.OnClickListener {
-
+                        pb_referrals_frag.visible()
                         Firebase.dynamicLinks.shortLinkAsync {
                             longLink =
                                 Uri.parse(buildDeepLink(Uri.parse("http://www.gig4ce.com/?invite=" + profileData?.id)).toString())
@@ -88,16 +91,21 @@ class ReferralsFragment : BaseFragment() {
                                 "${getString(R.string.looking_for_dynamic_working_hours)} ${shortLink.toString()}"
                             )
                             clipboard?.setPrimaryClip(clip)
+                            pb_referrals_frag.gone()
+
                         }.addOnFailureListener {
                             // Error
                             // ...
                             showToast(it.message!!);
+                            pb_referrals_frag.gone()
+
 
                         }
 
                     })
                 PushDownAnim.setPushDownAnimTo(iv_whatsapp_referrals_frag)
                     .setOnClickListener(View.OnClickListener {
+                        pb_referrals_frag.visible()
 
                         Firebase.dynamicLinks.shortLinkAsync {
                             longLink =
@@ -106,6 +114,28 @@ class ReferralsFragment : BaseFragment() {
                             // Short link created
                             val shortLink = result.shortLink
                             shareViaWhatsApp("${getString(R.string.looking_for_dynamic_working_hours)} ${shortLink.toString()}")
+                            pb_referrals_frag.gone()
+
+                        }.addOnFailureListener {
+                            // Error
+                            // ...
+                            showToast(it.message!!);
+                            pb_referrals_frag.gone()
+                        }
+
+                    })
+                PushDownAnim.setPushDownAnimTo(iv_more_referrals_frag)
+                    .setOnClickListener(View.OnClickListener {
+                        pb_referrals_frag.visible()
+
+                        Firebase.dynamicLinks.shortLinkAsync {
+                            longLink =
+                                Uri.parse(buildDeepLink(Uri.parse("http://www.gig4ce.com/?invite=" + profileData?.id)).toString())
+                        }.addOnSuccessListener { result ->
+                            // Short link created
+                            val shortLink = result.shortLink
+                            shareToAnyApp(shortLink.toString())
+
 
 
                         }.addOnFailureListener {
@@ -116,8 +146,10 @@ class ReferralsFragment : BaseFragment() {
                         }
 
                     })
-                PushDownAnim.setPushDownAnimTo(iv_more_referrals_frag)
+                PushDownAnim.setPushDownAnimTo(tv_share_now_referral_frag)
                     .setOnClickListener(View.OnClickListener {
+                        pb_referrals_frag.visible()
+
                         Firebase.dynamicLinks.shortLinkAsync {
                             longLink =
                                 Uri.parse(buildDeepLink(Uri.parse("http://www.gig4ce.com/?invite=" + profileData?.id)).toString())
@@ -276,6 +308,7 @@ class ReferralsFragment : BaseFragment() {
         } catch (e: Exception) {
             //e.toString();
         }
+        pb_referrals_frag.gone()
     }
 
     private fun displayImage(profileImg: String, imageView: ImageView) {

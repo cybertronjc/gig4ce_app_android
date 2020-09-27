@@ -16,6 +16,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
+import com.gigforce.app.core.gone
+import com.gigforce.app.core.visible
+import com.gigforce.app.modules.profile.ProfileViewModel
+import com.gigforce.app.modules.profile.models.RoleInterests
 import com.gigforce.app.utils.HorizontaltemDecoration
 import com.gigforce.app.utils.StringConstants
 import com.gigforce.app.utils.ViewModelProviderFactory
@@ -29,6 +33,9 @@ class RoleDetailsFragment : BaseFragment() {
     }
     private val viewModel: RoleDetailsVIewModel by lazy {
         ViewModelProvider(this, viewModelFactory).get(RoleDetailsVIewModel::class.java)
+    }
+    private val viewModelProfile: ProfileViewModel by lazy {
+        ViewModelProvider(this).get(ProfileViewModel::class.java)
     }
     private val adapterPreferredLocation: AdapterPreferredLocation by lazy {
         AdapterPreferredLocation()
@@ -48,6 +55,34 @@ class RoleDetailsFragment : BaseFragment() {
         getDataFromSavedState(savedInstanceState)
         setupPreferredLocationRv()
         initObservers()
+        checkForMarkedAsInterest()
+    }
+
+    private fun checkForMarkedAsInterest() {
+
+        viewModelProfile.getProfileData().observe(viewLifecycleOwner, Observer {
+            if (!it.role_interests.isNullOrEmpty()) {
+                if (it.role_interests!!.contains(RoleInterests(mRoleID))) {
+                    tv_mark_as_interest_role_details.visible()
+                    tv_mark_as_interest_role_details.setOnClickListener(null)
+                    tv_mark_as_interest_role_details.text = getString(R.string.marked_as_interest)
+                } else {
+                    tv_mark_as_interest_role_details.text = getString(R.string.mark_as_interest)
+                    tv_mark_as_interest_role_details.setOnClickListener {
+                        tv_mark_as_interest_role_details.gone()
+                        viewModel.addAsInterest(mRoleID)
+                    }
+
+                }
+            } else {
+                tv_mark_as_interest_role_details.text = getString(R.string.mark_as_interest)
+                tv_mark_as_interest_role_details.setOnClickListener {
+                    tv_mark_as_interest_role_details.gone()
+                    viewModel.addAsInterest(mRoleID)
+                }
+
+            }
+        })
     }
 
     private fun initObservers() {
@@ -92,6 +127,9 @@ class RoleDetailsFragment : BaseFragment() {
         })
         viewModel.observerError.observe(viewLifecycleOwner, Observer {
             showToast(it ?: "")
+        })
+        viewModel.observerMarkedAsInterest.observe(viewLifecycleOwner, Observer {
+            navigate(R.id.fragment_marked_as_interest)
         })
 
         viewModel.getRoleDetails(mRoleID)
