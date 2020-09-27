@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
@@ -18,7 +19,7 @@ import com.gigforce.app.utils.HorizontaltemDecoration
 import com.gigforce.app.utils.ViewModelProviderFactory
 import kotlinx.android.synthetic.main.layout_marked_interest_success_fragment.*
 
-class MarkedInterestSuccessFragment : BaseFragment() {
+class MarkedInterestSuccessFragment : BaseFragment(), AdapterExploreByRole.AdapterExploreByRoleCallbacks {
     private val viewModelFactory by lazy {
         ViewModelProviderFactory(ExploreByRoleViewModel(ExploreByRoleRepository()))
     }
@@ -35,9 +36,9 @@ class MarkedInterestSuccessFragment : BaseFragment() {
 
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         return inflateView(R.layout.layout_marked_interest_success_fragment, inflater, container)
     }
@@ -58,11 +59,15 @@ class MarkedInterestSuccessFragment : BaseFragment() {
                     it.role_interests?.forEach { element ->
                         val index = rolesList?.indexOf(Role(id = element.interestID))
                         if (index != -1) {
-
                             rolesList?.removeAt(index!!)
                         }
                     }
-                    adapter.addData(rolesList ?: mutableListOf())
+                    if (rolesList?.isNotEmpty()!!) {
+                        tv_explore_more_mark_interest.visible()
+                        adapter.addData(rolesList ?: mutableListOf())
+                    }
+
+
                     pb_marked_as_interest.gone()
                 })
             }
@@ -80,15 +85,16 @@ class MarkedInterestSuccessFragment : BaseFragment() {
 
     private fun setUpRecycler() {
         rv_not_interested_roles.layoutManager =
-            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+                LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         rv_not_interested_roles.addItemDecoration(
-            HorizontaltemDecoration(
-                requireContext(),
-                R.dimen.size_16
-            )
+                HorizontaltemDecoration(
+                        requireContext(),
+                        R.dimen.size_16
+                )
         )
         rv_not_interested_roles.adapter = adapter
         adapter.isHorizontalCarousel()
+        adapter.setCallbacks(this)
     }
 
     private fun initClicks() {
@@ -112,6 +118,11 @@ class MarkedInterestSuccessFragment : BaseFragment() {
         fragmentManager?.executePendingTransactions()
         fragmentManager?.popBackStack(tag, FragmentManager.POP_BACK_STACK_INCLUSIVE)
 
+
+    }
+
+    override fun onItemClicked(id: String?) {
+        findNavController().navigate(MarkedInterestSuccessFragmentDirections.openRoleDetails(id!!))
 
     }
 

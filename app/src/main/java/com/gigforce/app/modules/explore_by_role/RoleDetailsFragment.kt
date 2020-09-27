@@ -59,7 +59,7 @@ class RoleDetailsFragment : BaseFragment() {
     }
 
     private fun checkForMarkedAsInterest() {
-
+        pb_role_details.visible()
         viewModelProfile.getProfileData().observe(viewLifecycleOwner, Observer {
             if (!it.role_interests.isNullOrEmpty()) {
                 if (it.role_interests!!.contains(RoleInterests(mRoleID))) {
@@ -82,10 +82,12 @@ class RoleDetailsFragment : BaseFragment() {
                 }
 
             }
+            pb_role_details.gone()
         })
     }
 
     private fun initObservers() {
+
 
         viewModel.observerRole.observe(viewLifecycleOwner, Observer { role ->
             run {
@@ -122,7 +124,7 @@ class RoleDetailsFragment : BaseFragment() {
                 }
 
             }
-
+            pb_role_details.gone()
 
         })
         viewModel.observerError.observe(viewLifecycleOwner, Observer {
@@ -133,6 +135,7 @@ class RoleDetailsFragment : BaseFragment() {
         })
 
         viewModel.getRoleDetails(mRoleID)
+        pb_role_details.visible()
     }
 
     fun setOnExpandListener(role: List<String>?, layout: TableLayout, textView: TextView) {

@@ -672,10 +672,9 @@
         android:name="com.gigforce.app.modules.explore_by_role.MarkedInterestSuccessFragment"
         android:label="fragment_marked_as_interest"
         tools:layout="@layout/layout_marked_interest_success_fragment">
-        <argument
-            android:name="ROLE_ID"
-            android:defaultValue='""'
-            app:argType="string" />
+        <action
+            android:id="@+id/open_role_details"
+            app:destination="@id/fragment_role_details" />
     </fragment>
     <dialog
         android:id="@+id/gigsListForDeclineBottomSheet"

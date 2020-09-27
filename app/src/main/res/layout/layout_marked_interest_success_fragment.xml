@@ -78,7 +78,8 @@
                 android:layout_marginTop="@dimen/size_24"
                 android:text="@string/explore_more_role"
                 android:textColor="@color/black"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:visibility="gone" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_not_interested_roles"

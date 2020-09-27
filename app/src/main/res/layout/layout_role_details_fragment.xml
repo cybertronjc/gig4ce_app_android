@@ -8,15 +8,15 @@
     <ScrollView
         android:id="@+id/sv_role_details"
         android:layout_width="match_parent"
-        android:clipToPadding="false"
         android:layout_height="wrap_content"
+        android:clipToPadding="false"
         android:paddingBottom="@dimen/size_133"
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:animateLayoutChanges="true"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:animateLayoutChanges="true">
 
             <ImageView
                 android:id="@+id/iv_gig_bg_role_details"
@@ -37,7 +37,6 @@
                 android:layout_marginTop="@dimen/size_17"
                 android:layout_marginEnd="@dimen/size_17"
                 android:gravity="center"
-                android:text="RETAIL SALES EXECUTIVE"
                 android:textColor="@color/darkish_pink_two"
                 android:textSize="@dimen/font_24"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -97,7 +96,6 @@
                 android:layout_marginEnd="@dimen/size_43"
                 android:drawablePadding="@dimen/size_9"
                 android:gravity="center|start"
-                android:text="What does a Sales Associate do?"
                 android:textColor="#000000"
                 android:textSize="@dimen/font_14"
                 app:drawableStartCompat="@drawable/ic_brightness_gradient"
@@ -112,8 +110,7 @@
                 android:layout_marginStart="@dimen/size_19"
                 android:layout_marginTop="@dimen/size_6"
                 android:layout_marginEnd="@dimen/size_13"
-                android:text="As the public face of the company the Sales Associate is responsible for dealing with any and all customer questions about the products and services the company offers. A Sales Associate is expected to be
-moreasjpahjfk;na'kfn;afn;nf;knfk;nakfnlkanfklnafknakf;nlaknflk;anflnalkfnkanflbofbqk;afn,;ansflkblfbklnbflkansbflk"
+                android:text="As the public face of the company the Sales Associate is responsible for dealing with any and all customer questions about the products and services the company offers. A Sales Associate is expected to be"
                 android:textColor="#000000"
                 android:textSize="@dimen/font_14"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -261,4 +258,15 @@ moreasjpahjfk;na'kfn;afn;nf;knfk;nakfnlkanfklnafknakf;nlaknflk;anflnalkfnkanflbo
         android:textColor="#ffffff"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent" />
+
+    <ProgressBar
+        android:id="@+id/pb_role_details"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
