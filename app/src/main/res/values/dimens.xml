@@ -98,4 +98,8 @@
     <dimen name="size_144">144dp</dimen>
     <dimen name="size_215">215dp</dimen>
     <dimen name="size_316">316dp</dimen>
+    <dimen name="font_9">9sp</dimen>
+    <dimen name="size_49">49dp</dimen>
+    <dimen name="size_66">66dp</dimen>
+    <dimen name="size_133">133dp</dimen>
 </resources>

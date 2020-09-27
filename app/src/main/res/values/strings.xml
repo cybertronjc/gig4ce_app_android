@@ -947,6 +947,10 @@
     <string name="what_does_a">What does a</string>
     <string name="do_question_mark">do?</string>
     <string name="earnings">Earnings</string>
+    <string name="plus_more">+more</string>
+    <string name="requirements">Requirements</string>
+    <string name="responsibilities">Responsibilities</string>
+    <string name="mark_as_interest">Mark As Interest</string>
 
 
 </resources>

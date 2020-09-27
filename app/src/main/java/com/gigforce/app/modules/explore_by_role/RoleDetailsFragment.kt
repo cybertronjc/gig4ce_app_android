@@ -1,9 +1,15 @@
 package com.gigforce.app.modules.explore_by_role
 
+import android.graphics.Typeface
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TableLayout
+import android.widget.TableRow
+import android.widget.TextView
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -13,7 +19,9 @@ import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.utils.HorizontaltemDecoration
 import com.gigforce.app.utils.StringConstants
 import com.gigforce.app.utils.ViewModelProviderFactory
+import com.gigforce.app.utils.getScreenWidth
 import kotlinx.android.synthetic.main.layout_role_details_fragment.*
+
 
 class RoleDetailsFragment : BaseFragment() {
     private val viewModelFactory by lazy {
@@ -53,36 +61,28 @@ class RoleDetailsFragment : BaseFragment() {
                         R.string.do_question_mark
                     )}"
                 adapterPreferredLocation.addData(role?.top_locations ?: mutableListOf())
-                ll_earnings_role_details.setOnClickListener {
-                    ll_earn_role_details.removeAllViews()
-                    role?.payments_and_benefits?.forEachIndexed() { index, element ->
-                        if (index < 2) {
-                            val textView = AppCompatTextView(requireContext())
-                            textView.setCompoundDrawablesWithIntrinsicBounds(
-                                R.drawable.shape_circle_lipstick,
-                                0,
-                                0,
-                                0
-                            )
-                            textView.compoundDrawablePadding =
-                                resources.getDimensionPixelSize(R.dimen.size_8)
-                            textView.text = element
-                            ll_earnings_role_details.addView(textView)
-                        }
-                    }
-                    if (role?.payments_and_benefits?.size!! > 1) {
-                        val textView = AppCompatTextView(requireContext())
-                        textView.setCompoundDrawablesWithIntrinsicBounds(
-                            R.drawable.ic_add,
-                            0,
-                            0,
-                            0
-                        )
-                        textView.compoundDrawablePadding =
-                            resources.getDimensionPixelSize(R.dimen.size_8)
-                        textView.text = getString(R.string.more)
-                        ll_earnings_role_details.addView(textView)
-                    }
+                tv_earnings_role_details.setOnClickListener {
+                    setOnExpandListener(
+                        role?.payments_and_benefits,
+                        tl_earnings_role_details,
+                        tv_earnings_role_details
+                    )
+
+                }
+                tv_requirements_role_details.setOnClickListener {
+                    setOnExpandListener(
+                        role?.requirements,
+                        tl_requirements_role_details,
+                        tv_requirements_role_details
+                    )
+
+                }
+                tv_responsibilities_role_details.setOnClickListener {
+                    setOnExpandListener(
+                        role?.job_description,
+                        tl_responsibilities_role_details,
+                        tv_responsibilities_role_details
+                    )
 
                 }
 
@@ -95,6 +95,120 @@ class RoleDetailsFragment : BaseFragment() {
         })
 
         viewModel.getRoleDetails(mRoleID)
+    }
+
+    fun setOnExpandListener(role: List<String>?, layout: TableLayout, textView: TextView) {
+        if (layout.childCount > 0) {
+            layout.removeAllViews()
+            textView.setCompoundDrawablesWithIntrinsicBounds(
+                textView.compoundDrawables[0],
+                null,
+                resources.getDrawable(R.drawable.ic_keyboard_arrow_down_c7c7cc),
+                null
+            )
+
+        } else {
+            textView.setCompoundDrawablesWithIntrinsicBounds(
+                textView.compoundDrawables[0],
+                null,
+                resources.getDrawable(R.drawable.ic_baseline_keyboard_arrow_up_c7c7c7),
+                null
+            )
+            addBulletsTill(
+                0,
+                if (role?.size!! > 2) 1 else role.size!! - 1,
+                layout,
+                role,
+                true
+            )
+            if (role?.size!! > 2) {
+                val moreTextView = AppCompatTextView(requireContext())
+                moreTextView.setTextSize(
+                    TypedValue.COMPLEX_UNIT_SP,
+                    14F
+                )
+                moreTextView.setTextColor(resources.getColor(R.color.lipstick))
+                moreTextView.text = getString(R.string.plus_more)
+                val face =
+                    Typeface.createFromAsset(requireActivity().assets, "fonts/Lato-Regular.ttf")
+                moreTextView.typeface = face
+                moreTextView.setPadding(resources.getDimensionPixelSize(R.dimen.size_16), 0, 0, 0)
+
+                layout.addView(moreTextView)
+                moreTextView.setOnClickListener {
+                    layout.removeViewInLayout(moreTextView)
+                    addBulletsTill(
+                        2,
+                        role.size!! - 1,
+                        layout,
+                        role,
+                        false
+                    )
+                }
+            }
+        }
+
+    }
+
+    fun addBulletsTill(
+        from: Int,
+        to: Int,
+        layout: TableLayout,
+        arr: List<String>?,
+        removeAllViews: Boolean
+    ) {
+        if (removeAllViews)
+            ll_earn_role_details.removeAllViews()
+        for (i in from..to) {
+
+            val iv = ImageView(requireContext())
+            val layoutParams = TableRow.LayoutParams(
+                TableRow.LayoutParams.WRAP_CONTENT,
+                TableRow.LayoutParams.WRAP_CONTENT
+            )
+            layoutParams.setMargins(
+                0,
+                resources.getDimensionPixelSize(R.dimen.font_9),
+                resources.getDimensionPixelSize(R.dimen.size_8),
+                0
+            )
+            iv.layoutParams = layoutParams
+            iv.setImageResource(R.drawable.shape_circle_lipstick)
+            val textView = TextView(requireContext())
+            val face =
+                Typeface.createFromAsset(requireActivity().assets, "fonts/Lato-Regular.ttf")
+            textView.typeface = face
+            textView.layoutParams = TableRow.LayoutParams(
+                getScreenWidth(requireActivity()).width - (resources.getDimensionPixelSize(R.dimen.size_66)),
+                TableRow.LayoutParams.WRAP_CONTENT
+            )
+
+            textView.setTextSize(
+                TypedValue.COMPLEX_UNIT_SP,
+                18F
+            )
+            textView.text = arr?.get(i)
+            textView.setTextColor(resources.getColor(R.color.black))
+            val tr = TableRow(requireContext())
+
+
+            tr.layoutParams = TableRow.LayoutParams(
+                TableRow.LayoutParams.MATCH_PARENT,
+                TableRow.LayoutParams.WRAP_CONTENT
+            )
+
+            tr.addView(iv)
+            tr.addView(textView)
+            layout.addView(
+                tr
+                ,
+                TableLayout.LayoutParams(
+                    TableLayout.LayoutParams.MATCH_PARENT,
+                    TableLayout.LayoutParams.WRAP_CONTENT
+                )
+            )
+
+        }
     }
 
     private fun setupPreferredLocationRv() {

@@ -1,153 +1,264 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
+
     android:layout_height="match_parent">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <ScrollView
+        android:id="@+id/sv_role_details"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:clipToPadding="false"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/size_133"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <ImageView
-            android:id="@+id/iv_gig_bg_role_details"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/size_316"
-            android:adjustViewBounds="true"
-            android:scaleType="centerCrop"
-            android:src="@drawable/bg_gig_type"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/tv_role_role_details"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/size_20"
-            android:layout_marginTop="@dimen/size_17"
-            android:layout_marginEnd="@dimen/size_17"
-            android:gravity="center"
-            android:text="RETAIL SALES EXECUTIVE"
-            android:textColor="@color/darkish_pink_two"
-            android:textSize="@dimen/font_24"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/iv_gig_bg_role_details" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_preferred_locations_role_details"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/size_15"
-            android:clipToPadding="false"
-            android:paddingStart="@dimen/size_10"
-            app:layout_constraintTop_toBottomOf="@id/tv_role_role_details" />
+            android:animateLayoutChanges="true"
+            android:layout_height="wrap_content">
 
-        <LinearLayout
-            android:id="@+id/ll_earn_role_details"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/size_16"
-            android:background="#5fe94b81"
-            android:orientation="vertical"
-            android:paddingTop="@dimen/size_18"
-            android:paddingBottom="@dimen/size_19"
-            android:visibility="gone"
-            app:layout_constraintTop_toBottomOf="@+id/rv_preferred_locations_role_details">
+            <ImageView
+                android:id="@+id/iv_gig_bg_role_details"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/size_316"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
+                android:src="@drawable/bg_gig_type"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
+                android:id="@+id/tv_role_role_details"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/size_20"
+                android:layout_marginTop="@dimen/size_17"
+                android:layout_marginEnd="@dimen/size_17"
+                android:gravity="center"
+                android:text="RETAIL SALES EXECUTIVE"
+                android:textColor="@color/darkish_pink_two"
+                android:textSize="@dimen/font_24"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/iv_gig_bg_role_details" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_preferred_locations_role_details"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/size_10"
-                android:layout_marginEnd="@dimen/size_11"
-                android:gravity="center"
-                android:text="Earn upto 2000 /Day by working as Retail Executive"
+                android:layout_marginTop="@dimen/size_15"
+                android:clipToPadding="false"
+                android:paddingStart="@dimen/size_10"
+                app:layout_constraintTop_toBottomOf="@id/tv_role_role_details" />
+
+            <TableLayout
+                android:id="@+id/ll_earn_role_details"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/size_16"
+                android:background="#5fe94b81"
+                android:orientation="vertical"
+                android:paddingTop="@dimen/size_18"
+                android:paddingBottom="@dimen/size_19"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@+id/rv_preferred_locations_role_details">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/size_10"
+                    android:layout_marginEnd="@dimen/size_11"
+                    android:gravity="center"
+                    android:text="Earn upto 2000 /Day by working as Retail Executive"
+                    android:textColor="#000000"
+                    android:textSize="@dimen/font_16" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/size_10"
+                    android:layout_marginTop="@dimen/size_14"
+                    android:layout_marginEnd="@dimen/size_11"
+                    android:gravity="center"
+                    android:text="Monthly earn up to Rs. 31000"
+                    android:textColor="#1d1c1c"
+                    android:textSize="@dimen/font_16" />
+            </TableLayout>
+
+            <TextView
+                android:id="@+id/tv_what_read_more_details"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/size_17"
+                android:layout_marginTop="@dimen/size_27"
+                android:layout_marginEnd="@dimen/size_43"
+                android:drawablePadding="@dimen/size_9"
+                android:gravity="center|start"
+                android:text="What does a Sales Associate do?"
                 android:textColor="#000000"
-                android:textSize="@dimen/font_16" />
+                android:textSize="@dimen/font_14"
+                app:drawableStartCompat="@drawable/ic_brightness_gradient"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ll_earn_role_details" />
+
+            <com.gigforce.app.utils.ReadMoreTextView
+                android:id="@+id/tv_what_content_role_details"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/size_19"
+                android:layout_marginTop="@dimen/size_6"
+                android:layout_marginEnd="@dimen/size_13"
+                android:text="As the public face of the company the Sales Associate is responsible for dealing with any and all customer questions about the products and services the company offers. A Sales Associate is expected to be
+moreasjpahjfk;na'kfn;afn;nf;knfk;nakfnlkanfklnafknakf;nlaknflk;anflnalkfnkanflbofbqk;afn,;ansflkblfbklnbflkansbflk"
+                android:textColor="#000000"
+                android:textSize="@dimen/font_14"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_what_read_more_details"
+                app:trimLines="4" />
+
+            <View
+                android:id="@+id/divider_one"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/size_1"
+                android:layout_marginTop="@dimen/size_24"
+                android:background="#68979797"
+                app:layout_constraintTop_toBottomOf="@+id/tv_what_content_role_details" />
 
             <TextView
-                android:layout_width="match_parent"
+                android:id="@+id/tv_earnings_role_details"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginStart="@dimen/size_10"
-                android:layout_marginTop="@dimen/size_14"
-                android:layout_marginEnd="@dimen/size_11"
-                android:gravity="center"
-                android:text="Monthly earn up to Rs. 31000"
-                android:textColor="#1d1c1c"
-                android:textSize="@dimen/font_16" />
-        </LinearLayout>
+                android:layout_marginStart="@dimen/size_17"
+                android:layout_marginTop="@dimen/size_27"
+                android:layout_marginEnd="@dimen/size_16"
+                android:drawablePadding="@dimen/size_9"
+                android:fontFamily="@font/lato_bold"
+                android:gravity="center|start"
+                android:text="@string/earnings"
+                android:textColor="#000000"
+                android:textSize="@dimen/font_14"
+                app:drawableEndCompat="@drawable/ic_keyboard_arrow_down_c7c7cc"
+                app:drawableStartCompat="@drawable/ic_credit_card_gradient"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/divider_one" />
 
-        <TextView
-            android:id="@+id/tv_what_read_more_details"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/size_17"
-            android:layout_marginTop="@dimen/size_27"
-            android:layout_marginEnd="@dimen/size_43"
-            android:drawablePadding="@dimen/size_9"
-            android:gravity="center|start"
-            android:text="What does a Sales Associate do?"
-            android:textColor="#000000"
-            android:textSize="@dimen/font_14"
-            app:drawableStartCompat="@drawable/ic_brightness_gradient"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ll_earn_role_details" />
+            <TableLayout
+                android:id="@+id/tl_earnings_role_details"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/size_19"
+                android:animateLayoutChanges="true"
+                android:paddingStart="@dimen/size_29"
+                android:paddingEnd="@dimen/size_20"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_earnings_role_details" />
 
-        <com.gigforce.app.utils.ReadMoreTextView
-            android:id="@+id/tv_what_content_role_details"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/size_19"
-            android:layout_marginTop="@dimen/size_6"
-            android:layout_marginEnd="@dimen/size_13"
-            android:text="As the public face of the company the Sales Associate is responsible for dealing with any and all customer questions about the products and services the company offers. A Sales Associate is expected to be
-moreasjpahjfk;na'kfn;afn;nf;knfk;nakfnlkanfklnafknakf;nlaknflk;anflnalkfnkanflbofbqk;afn,;ansflkblfbklnbflkansbflk"
-            android:textColor="#000000"
-            android:textSize="@dimen/font_14"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_what_read_more_details"
-            app:trimLines="4" />
+            <View
+                android:id="@+id/divider_two"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/size_1"
+                android:layout_marginStart="@dimen/size_17"
+                android:layout_marginTop="@dimen/size_24"
+                android:layout_marginEnd="@dimen/size_15"
+                android:background="#68979797"
+                app:layout_constraintTop_toBottomOf="@+id/tl_earnings_role_details" />
 
-        <View
-            android:id="@+id/divider_one"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/size_1"
-            android:layout_marginTop="@dimen/size_24"
-            android:background="#68979797"
-            app:layout_constraintTop_toBottomOf="@+id/tv_what_content_role_details" />
+            <TextView
+                android:id="@+id/tv_requirements_role_details"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/size_17"
+                android:layout_marginTop="@dimen/size_27"
+                android:layout_marginEnd="@dimen/size_16"
+                android:drawablePadding="@dimen/size_9"
+                android:fontFamily="@font/lato_bold"
+                android:gravity="center|start"
+                android:text="@string/requirements"
+                android:textColor="#000000"
+                android:textSize="@dimen/font_14"
+                app:drawableEndCompat="@drawable/ic_keyboard_arrow_down_c7c7cc"
+                app:drawableStartCompat="@drawable/ic_document_gradient"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/divider_two" />
 
-        <TextView
-            android:id="@+id/tv_requirements_role_details"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/size_17"
-            android:layout_marginTop="@dimen/size_27"
-            android:layout_marginEnd="@dimen/size_16"
-            android:drawablePadding="@dimen/size_9"
-            android:fontFamily="@font/lato_bold"
-            android:gravity="center|start"
-            android:text="@string/earnings"
-            android:textColor="#000000"
-            android:textSize="@dimen/font_14"
-            app:drawableEndCompat="@drawable/ic_keyboard_arrow_down_c7c7cc"
-            app:drawableStartCompat="@drawable/ic_credit_card_gradient"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/divider_one" />
+            <TableLayout
+                android:id="@+id/tl_requirements_role_details"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/size_19"
+                android:animateLayoutChanges="true"
+                android:paddingStart="@dimen/size_29"
+                android:paddingEnd="@dimen/size_20"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_requirements_role_details" />
 
-        <LinearLayout
-            android:id="@+id/ll_earnings_role_details"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/size_19"
-            android:orientation="vertical"
-            android:paddingStart="@dimen/size_29"
-            android:paddingEnd="@dimen/size_20"
-            app:layout_constraintTop_toBottomOf="@+id/tv_requirements_role_details" />
+            <View
+                android:id="@+id/divider_three"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/size_1"
+                android:layout_marginStart="@dimen/size_17"
+                android:layout_marginTop="@dimen/size_24"
+                android:layout_marginEnd="@dimen/size_15"
+                android:background="#68979797"
+                app:layout_constraintTop_toBottomOf="@+id/tl_requirements_role_details" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <TextView
+                android:id="@+id/tv_responsibilities_role_details"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/size_17"
+                android:layout_marginTop="@dimen/size_27"
+                android:layout_marginEnd="@dimen/size_16"
+                android:drawablePadding="@dimen/size_9"
+                android:fontFamily="@font/lato_bold"
+                android:gravity="center|start"
+                android:text="@string/responsibilities"
+                android:textColor="#000000"
+                android:textSize="@dimen/font_14"
+                app:drawableEndCompat="@drawable/ic_keyboard_arrow_down_c7c7cc"
+                app:drawableStartCompat="@drawable/ic_play_gradient"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/divider_three" />
 
-</ScrollView>
+            <TableLayout
+                android:id="@+id/tl_responsibilities_role_details"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/size_19"
+                android:animateLayoutChanges="true"
+                android:paddingStart="@dimen/size_29"
+                android:paddingEnd="@dimen/size_20"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_responsibilities_role_details" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
+    <TextView
+        android:id="@+id/tv_mark_as_interest_role_details"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/size_48"
+        android:layout_marginStart="@dimen/size_18"
+        android:layout_marginEnd="@dimen/size_14"
+        android:layout_marginBottom="@dimen/size_44"
+        android:background="@drawable/rect_bg_rad_rad_5_sg_e42c64_eg_990077"
+        android:gravity="center_horizontal"
+        android:paddingTop="@dimen/size_14"
+        android:paddingBottom="@dimen/size_12"
+        android:text="@string/mark_as_interest"
+        android:textColor="#ffffff"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>
