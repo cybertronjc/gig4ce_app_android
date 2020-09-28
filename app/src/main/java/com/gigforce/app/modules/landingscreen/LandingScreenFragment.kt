@@ -16,6 +16,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.gigforce.app.R
@@ -44,6 +45,9 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import kotlinx.android.synthetic.main.landingscreen_fragment.*
 import kotlinx.android.synthetic.main.landingscreen_fragment.chat_icon_iv
+import kotlinx.android.synthetic.main.landingscreen_fragment.learning_learning_error
+import kotlinx.android.synthetic.main.landingscreen_fragment.learning_progress_bar
+import kotlinx.android.synthetic.main.landingscreen_fragment.learning_rv
 import java.util.ArrayList
 
 class LandingScreenFragment : BaseFragment() {
@@ -265,8 +269,6 @@ class LandingScreenFragment : BaseFragment() {
                             resId = tip.whereToRedirect,
                             args = tip.intentExtraMap.toBundle()
                         )
-
-
                     },
                     RecyclerGenericAdapter.ItemInterface<Tip?> { obj, viewHolder, position ->
                         var title = getTextView(viewHolder, R.id.gigtip_title)
@@ -278,6 +280,10 @@ class LandingScreenFragment : BaseFragment() {
                         title.layoutParams = lp
                         title.text = obj?.title
                         subtitle.text = obj?.subTitle
+
+                        getView(viewHolder, R.id.skip).setOnClickListener(
+                            SkipClickListener(gigforce_tip, position)
+                        )
 
 //                    getTextView(viewHolder, R.id.skip).setOnClickListener{
 //                        datalist.removeAt(position)
@@ -326,6 +332,13 @@ class LandingScreenFragment : BaseFragment() {
                 }
             }
             handler.postDelayed(runnableCode, SPLASH_TIME_OUT)
+        }
+    }
+
+    inner class SkipClickListener(val rv: RecyclerView, var position: Int) :
+        View.OnClickListener {
+        override fun onClick(v: View?) {
+            gigforce_tip.gone()
         }
     }
 
