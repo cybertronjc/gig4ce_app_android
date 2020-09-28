@@ -157,6 +157,9 @@
             app:launchSingleTop="true"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+        <action
+            android:id="@+id/open_role_details_home"
+            app:destination="@id/fragment_role_details" />
     </fragment>
 
     <fragment
@@ -570,14 +573,14 @@
     <fragment
         android:id="@+id/gigAttendancePageFragment"
         android:name="com.gigforce.app.modules.gigPage.GigAttendancePageFragment"
-        android:label="GigAttendancePageFragment" >
+        android:label="GigAttendancePageFragment">
 
         <argument
             android:name="gig_id"
-            app:argType="string"/>
+            app:argType="string" />
         <deepLink
             android:id="@+id/gig_attendance_deeplink"
-            app:uri="www.gigforce.com/gig/attendance/{gig_id}"/>
+            app:uri="www.gigforce.com/gig/attendance/{gig_id}" />
 
     </fragment>
     <fragment
@@ -642,6 +645,37 @@
         android:name="com.gigforce.app.modules.referrals.ReferralsFragment"
         android:label="fragment_referrals"
         tools:layout="@layout/fragment_referrals" />
+    <fragment
+        android:id="@+id/fragment_explore_by_role"
+        android:name="com.gigforce.app.modules.explore_by_role.ExploreByRoleFragment"
+        android:label="fragment_explore_by_role"
+        tools:layout="@layout/layout_fragment_explore_by_role">
+        <action
+            android:id="@+id/open_role_details"
+            app:destination="@id/fragment_role_details" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/fragment_role_details"
+        android:name="com.gigforce.app.modules.explore_by_role.RoleDetailsFragment"
+        android:label="fragment_role_details"
+        tools:layout="@layout/layout_role_details_fragment">
+        <argument
+            android:name="ROLE_ID"
+            android:defaultValue='""'
+            app:argType="string" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/fragment_marked_as_interest"
+        android:name="com.gigforce.app.modules.explore_by_role.MarkedInterestSuccessFragment"
+        android:label="fragment_marked_as_interest"
+        tools:layout="@layout/layout_marked_interest_success_fragment">
+        <action
+            android:id="@+id/open_role_details"
+            app:destination="@id/fragment_role_details" />
+    </fragment>
     <dialog
         android:id="@+id/gigsListForDeclineBottomSheet"
         android:name="com.gigforce.app.modules.gigPage.GigsListForDeclineBottomSheet"

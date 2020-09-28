@@ -793,7 +793,7 @@
     <string name="set_your_preferences">Set Your Preferences</string>
     <string name="add_your_preferences_to_get_gigs_that_suit_you">Add your preferences to get gigs that suit you</string>
     <string name="help">Help</string>
-    <string name="see_more">See more</string>
+    <string name="see_more_underline"> <u>See more</u></string>
     <string name="browse_all_help_topic">Browse all help topic</string>
     <string name="contact_us">Contact Us</string>
     <string name="invite_your_contacts">Invite your contacts</string>
@@ -940,6 +940,23 @@
     <string name="please_let_us_know_your_reason_why_are_you_declining_this_gig">Please let us know your reason, why are you declining this gig.</string>
     <string name="cancelling_out_a_gig">Cancelling out a gig !</string>
     <string name="i_am_on_leave_today">I am on leave today</string>
+    <string name="see_more">See more</string>
+    <string name="sort_by_popular">Sort by : Popular</string>
+    <string name="read_more">more</string>
+    <string name="read_less">less</string>
+    <string name="what_does_a">What does a</string>
+    <string name="do_question_mark">do?</string>
+    <string name="earnings">Earnings</string>
+    <string name="plus_more">+more</string>
+    <string name="requirements">Requirements</string>
+    <string name="responsibilities">Responsibilities</string>
+    <string name="mark_as_interest">Mark As Interest</string>
+    <string name="marked_as_interest">Marked As Interest</string>
+    <string name="marked_as_interest_exlamation">Marked as Interest!!</string>
+    <string name="our_team_will_soon_contact_you_for_more_details_and_further_procedure">Our team will soon contact you for more details and further procedure.</string>
+    <string name="update_your_profile">Update your profile</string>
+    <string name="explore_learning">Explore Learning</string>
+    <string name="explore_more_role">Explore More role</string>
 
 
 </resources>

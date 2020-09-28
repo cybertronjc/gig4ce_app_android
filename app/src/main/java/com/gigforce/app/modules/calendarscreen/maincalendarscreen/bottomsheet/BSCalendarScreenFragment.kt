@@ -18,6 +18,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
 import androidx.annotation.ColorRes
 import androidx.annotation.DimenRes
 import androidx.cardview.widget.CardView
@@ -42,7 +43,6 @@ import com.gigforce.app.core.visible
 import com.gigforce.app.modules.assessment.AssessmentFragment
 import com.gigforce.app.modules.gigPage.GigAttendancePageFragment
 import com.gigforce.app.modules.gigPage.GigPageFragment
-import com.gigforce.app.modules.gigPage.GigPageNavigationFragment
 import com.gigforce.app.modules.gigPage.GigViewModel
 import com.gigforce.app.modules.gigPage.models.Gig
 import com.gigforce.app.modules.landingscreen.LandingScreenFragment
@@ -52,13 +52,8 @@ import com.gigforce.app.modules.learning.MainLearningViewModel
 import com.gigforce.app.modules.learning.models.Course
 import com.gigforce.app.modules.learning.models.CourseContent
 import com.gigforce.app.utils.*
-import com.google.firebase.crashlytics.internal.model.CrashlyticsReport
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.*
-import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.learning_learning_error
-import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.learning_progress_bar
-import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.learning_rv
-
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -309,6 +304,9 @@ class BSCalendarScreenFragment : BaseFragment() {
         initializeAssessmentBottomSheet()
         application_version.text = getString(R.string.version) + " " + getCurrentVersion()
         listener()
+        initializeExploreByRole()
+        initializeExploreByIndustry()
+        initBottomMenuClicks()
     }
 
     private fun initializeVerificationAlert() {
@@ -602,7 +600,13 @@ class BSCalendarScreenFragment : BaseFragment() {
         datalist.add(FeatureModel("Learning", R.drawable.learning, R.id.mainLearningFragment))
         datalist.add(FeatureModel("Settings", R.drawable.settings, R.id.settingFragment))
         datalist.add(FeatureModel("Chat", R.drawable.chat, R.id.contactScreenFragment))
-        datalist.add(FeatureModel("Home Screen", R.drawable.ic_home_black, R.id.landinghomefragment))
+//        datalist.add(
+//            FeatureModel(
+//                "Home Screen",
+//                R.drawable.ic_home_black,
+//                R.id.landinghomefragment
+//            )
+//        )
         datalist.add(FeatureModel("Explore", R.drawable.ic_landinghome_search, -1))
         datalist.add(FeatureModel("Verification", R.drawable.ic_shield_black, R.id.gigerVerificationFragment))
 
@@ -747,4 +751,181 @@ class BSCalendarScreenFragment : BaseFragment() {
         assessment_rv.adapter = recyclerGenericAdapter
     }
 
+    private fun initializeExploreByRole() {
+        val itemWidth = ((width / 3) * 2).toInt()
+        // model will change when integrated with DB
+//        var datalist: ArrayList<UpcomingGigModel> = ArrayList<UpcomingGigModel>()
+        var datalist: ArrayList<LandingScreenFragment.TitleSubtitleModel> =
+                ArrayList<LandingScreenFragment.TitleSubtitleModel>()
+
+
+        datalist.add(
+                LandingScreenFragment.TitleSubtitleModel(
+                        "Driver",
+                        "Welcome to Gigforce! Let's talk about what's a gig and how do you start working as a giger at Gigforce.",
+                        "https://firebasestorage.googleapis.com/v0/b/gigforce-dev.appspot.com/o/temp_files%2Fdriver_img.jpg?alt=media&token=68412376-59c8-4598-81d6-9630724afff6"
+                )
+        )
+        datalist.add(
+                LandingScreenFragment.TitleSubtitleModel(
+                        "Delivery Executive",
+                        "Welcome to Gigforce! Let's talk about what's a gig and how do you start working as a giger at Gigforce.",
+                        "https://firebasestorage.googleapis.com/v0/b/gigforce-dev.appspot.com/o/temp_files%2Fdelivery_executive_ls_img.jpg?alt=media&token=d42f2ed2-d0e5-472b-bb84-5379528f612f"
+                )
+        )
+
+        datalist.add(
+                LandingScreenFragment.TitleSubtitleModel(
+                        "Retail Sales Executive",
+                        "Welcome to Gigforce! Let's talk about what's a gig and how do you start working as a giger at Gigforce.",
+                        "https://firebasestorage.googleapis.com/v0/b/gigforce-dev.appspot.com/o/temp_files%2Fretail_img_ls.jpg?alt=media&token=c3e587c9-5fdf-4e17-8e78-2799b7280817"
+                )
+        )
+
+        datalist.add(
+                LandingScreenFragment.TitleSubtitleModel(
+                        "Barista",
+                        "Welcome to Gigforce! Let's talk about what's a gig and how do you start working as a giger at Gigforce.",
+                        "https://firebasestorage.googleapis.com/v0/b/gigforce-dev.appspot.com/o/temp_files%2Fbrista_ls_img.jpg?alt=media&token=c5061822-a7d6-497c-8bee-09079cb8dc70"
+                )
+        )
+
+        val recyclerGenericAdapter: RecyclerGenericAdapter<LandingScreenFragment.TitleSubtitleModel> =
+                RecyclerGenericAdapter<LandingScreenFragment.TitleSubtitleModel>(
+                        activity?.applicationContext,
+                        PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
+                            if (AppConstants.UNLOCK_FEATURE) {
+                                navigate(R.id.explore_by_role)
+                            } else
+                                showToast("This is under development. Please check again in a few days.")
+                        },
+                        RecyclerGenericAdapter.ItemInterface<LandingScreenFragment.TitleSubtitleModel?> { obj, viewHolder, position ->
+                            var view = getView(viewHolder, R.id.card_view)
+                            val lp = view.layoutParams
+                            lp.height = lp.height
+                            lp.width = itemWidth
+                            view.layoutParams = lp
+
+                            var title = getTextView(viewHolder, R.id.title)
+                            title.text = obj?.title
+
+                            obj?.imgStr?.let {
+                                var img = getImageView(viewHolder, R.id.img_view)
+                                showGlideImage(it, img)
+                            }
+//                    img.setImageResource(obj?.imgIcon!!)
+                        })!!
+        recyclerGenericAdapter.setList(datalist)
+        recyclerGenericAdapter.setLayout(R.layout.explore_by_role_item)
+        explore_by_role_rv.layoutManager = LinearLayoutManager(
+                activity?.applicationContext,
+                LinearLayoutManager.HORIZONTAL,
+                false
+        )
+        explore_by_role_rv.adapter = recyclerGenericAdapter
+
+    }
+
+    private fun showGlideImage(url: String, imgview: ImageView) {
+        GlideApp.with(requireContext())
+                .load(url)
+                .placeholder(getCircularProgressDrawable())
+                .into(imgview)
+    }
+
+    private fun initializeExploreByIndustry() {
+
+        val itemWidth = ((width / 3) * 2).toInt()
+        // model will change when integrated with DB
+//        var datalist: ArrayList<UpcomingGigModel> = ArrayList<UpcomingGigModel>()
+        var datalist: ArrayList<LandingScreenFragment.TitleSubtitleModel> = ArrayList<LandingScreenFragment.TitleSubtitleModel>()
+
+        datalist.add(
+                LandingScreenFragment.TitleSubtitleModel(
+                        "Delivery",
+                        "",
+                        "https://firebasestorage.googleapis.com/v0/b/gigforce-dev.appspot.com/o/temp_files%2Findustry.jpg?alt=media&token=039ddf50-9597-4ee4-bc12-0abdea74fd16"
+                )
+        )
+
+        datalist.add(
+                LandingScreenFragment.TitleSubtitleModel(
+                        "Retail",
+                        "",
+                        "https://firebasestorage.googleapis.com/v0/b/gigforce-dev.appspot.com/o/temp_files%2Findustry3.jpg?alt=media&token=1813f5dd-5596-4a04-a0e1-3c8400a3d82d"
+                )
+        )
+
+
+        datalist.add(
+                LandingScreenFragment.TitleSubtitleModel(
+                        "Quick Service Restuarant",
+                        "",
+                        "https://firebasestorage.googleapis.com/v0/b/gigforce-dev.appspot.com/o/temp_files%2Findustry1.jpg?alt=media&token=2634019b-9777-4dbb-9103-1d63eb44df97"
+                )
+        )
+
+        datalist.add(
+                LandingScreenFragment.TitleSubtitleModel(
+                        "Telesales and Support",
+                        "",
+                        "https://firebasestorage.googleapis.com/v0/b/gigforce-dev.appspot.com/o/temp_files%2Findustry2.jpg?alt=media&token=00412b0a-fbbe-4790-9a9b-050fefaf5d02"
+                )
+        )
+
+        val recyclerGenericAdapter: RecyclerGenericAdapter<LandingScreenFragment.TitleSubtitleModel> =
+                RecyclerGenericAdapter<LandingScreenFragment.TitleSubtitleModel>(
+                        activity?.applicationContext,
+                        PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
+//                    if(AppConstants.UNLOCK_FEATURE){
+//                    }else
+                            showToast("This is under development. Please check again in a few days.")
+                        },
+                        RecyclerGenericAdapter.ItemInterface<LandingScreenFragment.TitleSubtitleModel?> { obj, viewHolder, position ->
+                            var view = getView(viewHolder, R.id.card_view)
+                            val lp = view.layoutParams
+                            lp.height = lp.height
+                            lp.width = itemWidth
+                            view.layoutParams = lp
+
+                            var title = getTextView(viewHolder, R.id.title)
+                            title.text = obj?.title
+                            obj?.imgStr?.let {
+                                var img = getImageView(viewHolder, R.id.img_view)
+                                showGlideImage(it, img)
+                            }
+//                    img.setImageResource(obj?.imgIcon!!)
+                        })!!
+        recyclerGenericAdapter.setList(datalist)
+        recyclerGenericAdapter.setLayout(R.layout.explore_by_industry_item)
+        explore_by_industry.layoutManager = LinearLayoutManager(
+                activity?.applicationContext,
+                LinearLayoutManager.HORIZONTAL,
+                false
+        )
+        explore_by_industry.adapter = recyclerGenericAdapter
+    }
+
+    private fun initBottomMenuClicks() {
+
+
+        contact_us_bs_calendar_screen.setOnClickListener {
+            navigate(R.id.fakeGigContactScreenFragment)
+        }
+
+        invite_contact_bs_calendar_screen.setOnClickListener {
+
+            showToast("This is not functional, Please check later")
+
+        }
+
+
+
+
+        help_topic_bs_calendar_screen.setOnClickListener {
+            showToast("This is under development. Please check again in a few days.")
+        }
+
+
+    }
 }

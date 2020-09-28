@@ -1,39 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     android:fillViewport="true">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <ImageView
-            android:id="@+id/iv_back_referrals_frag"
-            android:layout_width="@dimen/size_16"
-            android:layout_height="@dimen/size_16"
-            android:layout_marginStart="@dimen/size_18"
-            android:layout_marginTop="@dimen/size_46"
-            android:adjustViewBounds="true"
-            android:scaleType="fitCenter"
-            android:src="@drawable/ic_arrow_back_24"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/tv_title_referrals_frag"
-            android:layout_width="0dp"
+        <LinearLayout
+            android:id="@+id/ll_top"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/size_24"
-            android:letterSpacing="0"
-            android:text="@string/refer_your_friends"
-            android:textColor="@color/black_85"
-            android:textSize="@dimen/font_20"
+            android:layout_marginTop="@dimen/size_39"
+            android:gravity="center_vertical"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/iv_back_referrals_frag"
-            app:layout_constraintTop_toTopOf="@+id/iv_back_referrals_frag" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/iv_back_referrals_frag"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/size_23"
+                android:adjustViewBounds="true"
+
+                android:paddingStart="@dimen/size_18"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_arrow_back_24" />
+
+            <TextView
+                android:id="@+id/tv_title_referrals_frag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/size_24"
+                android:letterSpacing="0"
+                android:text="@string/refer_your_friends"
+                android:textColor="@color/black_85"
+                android:textSize="@dimen/font_20"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/iv_back_referrals_frag"
+                app:layout_constraintTop_toTopOf="@+id/iv_back_referrals_frag" />
+        </LinearLayout>
+
 
         <RelativeLayout
             android:id="@+id/rv_successful_recommendation_referrals_frag"
@@ -42,7 +52,6 @@
             android:layout_marginStart="@dimen/size_16"
             android:layout_marginTop="@dimen/size_25"
             android:layout_marginEnd="@dimen/size_16"
-            android:visibility="gone"
             android:layout_marginBottom="@dimen/size_15"
             android:background="@drawable/bg_rect_light_pink_rad_4"
             android:clipToPadding="false"
@@ -50,9 +59,10 @@
             android:paddingTop="@dimen/size_16"
             android:paddingEnd="@dimen/size_11"
             android:paddingBottom="@dimen/size_16"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_title_referrals_frag">
+            app:layout_constraintTop_toBottomOf="@+id/ll_top">
 
 
             <com.gigforce.app.utils.widgets.CircleImageView
@@ -60,8 +70,6 @@
                 android:layout_width="@dimen/size_48"
                 android:layout_height="@dimen/size_48"
                 android:layout_marginStart="@dimen/size_18"
-
-                tools:src="@drawable/aftab"
                 app:civ_border_color="@color/white"
                 app:civ_border_width="@dimen/size_1" />
 
@@ -69,7 +77,6 @@
                 android:id="@+id/iv_one_referrals_frag"
                 android:layout_width="@dimen/size_48"
                 android:layout_height="@dimen/size_48"
-                tools:src="@drawable/ankita"
                 app:civ_border_color="@color/white"
                 app:civ_border_width="@dimen/size_1" />
 
@@ -80,9 +87,9 @@
                 android:layout_toEndOf="@+id/iv_two_referrals_frag"
                 android:gravity="center"
                 android:padding="@dimen/size_4"
-                tools:text="+2"
                 android:textColor="@color/white"
-                android:textSize="@dimen/font_12" />
+                android:textSize="@dimen/font_12"
+                tools:text="+2" />
 
             <TextView
                 android:id="@+id/tv_thank_u_referrals_frag"
@@ -103,10 +110,10 @@
                 android:layout_marginStart="@dimen/size_23"
                 android:layout_marginTop="@dimen/size_4"
                 android:layout_toEndOf="@+id/tv_more_items_referrals_frag"
-                tools:text="You helped Rajesh and 2 more,
- find gigs on Gigforce."
                 android:textColor="@color/black"
-                android:textSize="@dimen/font_14" />
+                android:textSize="@dimen/font_14"
+                tools:text="You helped Rajesh and 2 more,
+ find gigs on Gigforce." />
         </RelativeLayout>
 
         <ImageView
@@ -114,7 +121,8 @@
             android:layout_width="0dp"
             android:layout_height="@dimen/size_213"
             android:layout_marginStart="@dimen/size_53"
-            android:layout_marginTop="@dimen/size_15"
+            android:layout_marginTop="@dimen/size_120"
+
             android:layout_marginEnd="@dimen/size_54"
             android:src="@drawable/ic_refer_bg"
             app:layout_constraintEnd_toEndOf="parent"
@@ -220,6 +228,17 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/iv_whatsapp_referrals_frag" />
+
+        <ProgressBar
+            android:id="@+id/pb_referrals_frag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

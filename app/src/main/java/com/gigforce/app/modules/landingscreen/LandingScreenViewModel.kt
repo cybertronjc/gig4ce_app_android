@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gigforce.app.R
+import com.gigforce.app.modules.landingscreen.models.Role
 import com.gigforce.app.modules.landingscreen.models.Tip
 import com.gigforce.app.modules.preferences.PreferencesRepository
 import com.gigforce.app.modules.preferences.prefdatamodel.PreferencesDataModel
@@ -13,13 +14,21 @@ import com.gigforce.app.modules.profile.EducationExpandedFragment
 import com.gigforce.app.modules.profile.ExperienceExpandedFragment
 import com.gigforce.app.modules.profile.ProfileFirebaseRepository
 import com.gigforce.app.modules.profile.models.ProfileData
+import com.gigforce.app.utils.SingleLiveEvent
+import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.ListenerRegistration
+import com.google.firebase.firestore.QuerySnapshot
 import kotlinx.coroutines.launch
 
 class LandingScreenViewModel constructor(
     private val profileFirebaseRepository: ProfileFirebaseRepository = ProfileFirebaseRepository(),
     private val preferencesRepository: PreferencesRepository = PreferencesRepository()
-) : ViewModel() {
+) : ViewModel(), LandingScreenCallbacks.ResponseCallbacks {
+    private var callbacks: LandingScreenCallbacks? = null
+    private val _observerRole: SingleLiveEvent<Role> by lazy {
+        SingleLiveEvent<Role>();
+    }
+    val observerRole: SingleLiveEvent<Role> get() = _observerRole
 
     companion object {
 
@@ -147,6 +156,7 @@ class LandingScreenViewModel constructor(
 
     init {
         startWatchingProfileAndPreferencesChanges()
+        callbacks = LandingScreenRepository()
     }
 
     private fun startWatchingProfileAndPreferencesChanges() = viewModelScope.launch {
@@ -283,10 +293,27 @@ class LandingScreenViewModel constructor(
             )
     }
 
+    fun getRoles() {
+        callbacks?.getRoles(true, this)
+
+    }
 
     override fun onCleared() {
         super.onCleared()
         prefListenerRegistration?.remove()
         profileListenerRegistration?.remove()
+    }
+
+    override fun getRolesResponse(
+        querySnapshot: QuerySnapshot?,
+        error: FirebaseFirestoreException?
+    ) {
+        if (error != null) {
+
+        } else {
+            val role = querySnapshot?.toObjects(Role::class.java)?.get(0)
+            role?.id = querySnapshot?.documents?.get(0)?.id
+            observerRole.value = role
+        }
     }
 }
