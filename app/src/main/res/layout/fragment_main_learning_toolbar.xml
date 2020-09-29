@@ -26,16 +26,17 @@
 
     <TextView
         android:id="@+id/tv1HS1"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="14dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="22dp"
         android:fontFamily="@font/lato"
         android:letterSpacing="0.01"
-        android:text="@string/learning"
+        android:text="Learning &amp; Assessment"
         android:textColor="#000000"
         android:textSize="20sp"
-        app:layout_constraintStart_toEndOf="@id/learningBackButton"
+        app:layout_constraintEnd_toStartOf="@+id/imageView30"
+        app:layout_constraintStart_toEndOf="@+id/learningBackButton"
         app:layout_constraintTop_toTopOf="parent" />
 
 
@@ -63,7 +64,7 @@
         android:id="@+id/cardView"
         android:layout_width="42dp"
         android:layout_height="42dp"
-        android:layout_marginTop="21dp"
+        android:layout_marginTop="14dp"
         android:layout_marginEnd="16dp"
         app:cardCornerRadius="21dp"
         app:layout_constraintEnd_toEndOf="parent"

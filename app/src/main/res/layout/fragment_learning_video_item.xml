@@ -243,12 +243,12 @@
                 android:layout_height="42dp"
                 app:cardBackgroundColor="#f5a623"
                 app:cardElevation="6dp"
+                app:cardCornerRadius="4dp"
                 android:layout_marginStart="2dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
-
     </FrameLayout>
 
 

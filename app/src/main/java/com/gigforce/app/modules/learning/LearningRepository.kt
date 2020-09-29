@@ -37,7 +37,7 @@ class LearningRepository : BaseFirestoreDBRepository() {
                         course.id = it.id
                         course
                     }.filter {
-                        it.isActive
+                        it.isActive && doesCourseFullFillsCondition(it)
                     }
 
                 cont.resume(courses)
@@ -46,6 +46,25 @@ class LearningRepository : BaseFirestoreDBRepository() {
 
                 cont.resumeWithException(it)
             }
+    }
+
+    private fun doesCourseFullFillsCondition(it: Course): Boolean {
+
+        return if (it.isOpened) {
+            if (it.rolesRequired) {
+                TODO("")
+                true
+            } else if (it.userIdRequired) {
+                it.userUids.contains(getUID());
+            } else if (it.clientsRequired) {
+                TODO("")
+                true
+            } else {
+                true
+            }
+        } else {
+            false
+        }
     }
 
     suspend fun getCourseProgress(courseId: String): CourseProgress {
@@ -151,6 +170,7 @@ class LearningRepository : BaseFirestoreDBRepository() {
                     lessons[i].apply {
                         ongoing = false
                         completed = true
+                        completionProgress = 0L
                         lessonCompletionDate = Timestamp.now()
                     }
                 }
@@ -258,7 +278,7 @@ class LearningRepository : BaseFirestoreDBRepository() {
                         course.id = it.id
                         course
                     }.filter {
-                        it.isActive
+                        it.isActive && doesCourseFullFillsCondition(it)
                     }
 
                 cont.resume(courses)
@@ -281,7 +301,7 @@ class LearningRepository : BaseFirestoreDBRepository() {
                         course.id = it.id
                         course
                     }.filter {
-                        it.isActive
+                        it.isActive && doesCourseFullFillsCondition(it)
                     }
 
                 cont.resume(courses)
@@ -323,7 +343,7 @@ class LearningRepository : BaseFirestoreDBRepository() {
                         lesson.id = it.id
                         lesson
                     }.filter {
-                        it.isActive
+                        it.isActive && doesLessonFullFillsCondition(it)
                     }
                 cont.resume(modules)
             }
@@ -331,6 +351,26 @@ class LearningRepository : BaseFirestoreDBRepository() {
                 cont.resumeWithException(it)
             }
     }
+
+    private fun doesLessonFullFillsCondition(it: CourseContent): Boolean {
+
+        return if (it.isOpened) {
+            if (it.rolesRequired) {
+                TODO("")
+                true
+            } else if (it.userIdRequired) {
+                it.userUids.contains(getUID());
+            } else if (it.clientsRequired) {
+                TODO("")
+                true
+            } else {
+                true
+            }
+        } else {
+            false
+        }
+    }
+
 
 
     suspend fun getModuleAssessments(
@@ -351,7 +391,7 @@ class LearningRepository : BaseFirestoreDBRepository() {
                         lesson.id = it.id
                         lesson
                     }.filter {
-                        it.isActive
+                        it.isActive && doesLessonFullFillsCondition(it)
                     }
                 cont.resume(modules)
             }
@@ -377,7 +417,7 @@ class LearningRepository : BaseFirestoreDBRepository() {
                         videoDetails.id = it.id
                         videoDetails
                     }.filter {
-                        it.isActive
+                        it.isActive && doesLessonFullFillsCondition(it)
                     }
                 cont.resume(modules)
             }
@@ -385,6 +425,26 @@ class LearningRepository : BaseFirestoreDBRepository() {
                 cont.resumeWithException(it)
             }
     }
+
+    private fun doesSlideFullFillsCondition(it: SlideContentRemote): Boolean {
+
+        return if (it.isOpened) {
+            if (it.rolesRequired) {
+                TODO("")
+                true
+            } else if (it.userIdRequired) {
+                it.userUids.contains(getUID());
+            } else if (it.clientsRequired) {
+                TODO("")
+                true
+            } else {
+                true
+            }
+        } else {
+            false
+        }
+    }
+
 
     suspend fun getSlideContent(
         lessonId: String
@@ -402,7 +462,7 @@ class LearningRepository : BaseFirestoreDBRepository() {
                         videoDetails
                     }
                     .filter {
-                        it.isActive
+                        it.isActive && doesSlideFullFillsCondition(it)
                     }
                     .map {
                         mapToSlideContent(it)
@@ -439,7 +499,7 @@ class LearningRepository : BaseFirestoreDBRepository() {
                         lesson.id = it.id
                         lesson
                     }.filter {
-                        it.isActive
+                        it.isActive && doesLessonFullFillsCondition(it)
                     }
                 cont.resume(modules)
             }
@@ -460,7 +520,7 @@ class LearningRepository : BaseFirestoreDBRepository() {
                         modules.id = it.id
                         modules
                     }.filter {
-                        it.isActive
+                        it.isActive && doesModuleFullFillsCondition(it)
                     }
                 cont.resume(modules)
             }
@@ -468,6 +528,26 @@ class LearningRepository : BaseFirestoreDBRepository() {
                 cont.resumeWithException(it)
             }
     }
+
+    private fun doesModuleFullFillsCondition(it: Module): Boolean {
+
+        return if (it.isOpened) {
+            if (it.rolesRequired) {
+                TODO("")
+                true
+            } else if (it.userIdRequired) {
+                it.userUids.contains(getUID());
+            } else if (it.clientsRequired) {
+                TODO("")
+                true
+            } else {
+                true
+            }
+        } else {
+            false
+        }
+    }
+
 
 
     suspend fun getModules(courseId: String): List<Module> = suspendCoroutine { cont ->
@@ -482,7 +562,7 @@ class LearningRepository : BaseFirestoreDBRepository() {
                         modules.id = it.id
                         modules
                     }.filter {
-                        it.isActive
+                        it.isActive && doesModuleFullFillsCondition(it)
                     }
                 cont.resume(modules)
             }

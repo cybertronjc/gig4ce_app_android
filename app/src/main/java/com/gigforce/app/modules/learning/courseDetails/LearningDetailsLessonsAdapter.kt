@@ -113,6 +113,7 @@ class LearningDetailsLessonsAdapter constructor(
                     GlideApp.with(context)
                         .load(videoModel.coverPicture)
                         .placeholder(getCircularProgressDrawable())
+                        .error(R.drawable.ic_learning_default_back)
                         .into(holder.slideVideoThumbnail)
                 } else {
                     FirebaseStorage.getInstance()
@@ -124,17 +125,14 @@ class LearningDetailsLessonsAdapter constructor(
                             GlideApp.with(context)
                                 .load(fileUri)
                                 .placeholder(getCircularProgressDrawable())
+                                .error(R.drawable.ic_learning_default_back)
                                 .into(holder.slideVideoThumbnail)
                         }
                 }
             } else {
-                holder.slideVideoThumbnail.setBackgroundColor(
-                    ResourcesCompat.getColor(
-                        context.resources,
-                        R.color.warm_grey,
-                        null
-                    )
-                )
+                GlideApp.with(context)
+                    .load(R.drawable.ic_learning_default_back)
+                    .into(holder.slideVideoThumbnail)
             }
 
             holder.videoTitle.text = videoModel.title
@@ -178,6 +176,7 @@ class LearningDetailsLessonsAdapter constructor(
                     GlideApp.with(context)
                         .load(videoModel.coverPicture)
                         .placeholder(getCircularProgressDrawable())
+                        .error(R.drawable.ic_learning_default_back)
                         .into(holder.slideVideoThumbnail)
                 } else {
                     FirebaseStorage.getInstance()
@@ -189,17 +188,15 @@ class LearningDetailsLessonsAdapter constructor(
                             GlideApp.with(context)
                                 .load(fileUri)
                                 .placeholder(getCircularProgressDrawable())
+                                .error(R.drawable.ic_learning_default_back)
                                 .into(holder.slideVideoThumbnail)
                         }
                 }
             } else {
-                holder.slideVideoThumbnail.setBackgroundColor(
-                    ResourcesCompat.getColor(
-                        context.resources,
-                        R.color.warm_grey,
-                        null
-                    )
-                )
+                GlideApp.with(context)
+                    .load(R.drawable.ic_learning_default_back)
+                    .placeholder(getCircularProgressDrawable())
+                    .into(holder.slideVideoThumbnail)
             }
 
             holder.videoTitle.text = videoModel.title
@@ -229,6 +226,8 @@ class LearningDetailsLessonsAdapter constructor(
                     holder.lessonCompletionPercentage.setTextColor(ResourcesCompat.getColor(context.resources,R.color.text_orange,null))
                 }
             } else {
+                holder.lessonCompletionPercentage.text = "Pending 0%"
+                holder.lessonCompletionPercentage.setTextColor(ResourcesCompat.getColor(context.resources,R.color.text_yellow,null))
                 setMarker(holder, R.drawable.ic_marker_inactive, R.color.colorPrimary)
             }
         }
