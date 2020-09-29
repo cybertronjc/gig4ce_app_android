@@ -1133,6 +1133,7 @@ class GigPageFragment : BaseFragment(), View.OnClickListener, Toolbar.OnMenuItem
                 true
             }
             R.id.action_share -> {
+                navigate(R.id.referrals_fragment)
                 true
             }
             R.id.action_decline_gig ->{

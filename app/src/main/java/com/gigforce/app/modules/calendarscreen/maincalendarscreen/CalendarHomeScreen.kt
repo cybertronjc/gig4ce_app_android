@@ -10,6 +10,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.os.bundleOf
@@ -36,10 +37,12 @@ import com.gigforce.app.modules.custom_gig_preferences.CustomPreferencesViewMode
 import com.gigforce.app.modules.custom_gig_preferences.ParamCustPreferViewModel
 import com.gigforce.app.modules.custom_gig_preferences.UnavailableDataModel
 import com.gigforce.app.modules.gigPage.GigsListForDeclineBottomSheet
+import com.gigforce.app.modules.landingscreen.LandingScreenFragment
 import com.gigforce.app.modules.preferences.PreferencesFragment
 import com.gigforce.app.modules.profile.ProfileViewModel
 import com.gigforce.app.modules.profile.models.ProfileData
 import com.gigforce.app.modules.roster.RosterDayFragment
+import com.gigforce.app.utils.AppConstants
 import com.gigforce.app.utils.GlideApp
 import com.gigforce.app.utils.configrepository.ConfigRepository
 import com.google.android.material.snackbar.Snackbar
@@ -48,6 +51,11 @@ import com.google.firebase.storage.StorageReference
 import com.riningan.widget.ExtendedBottomSheetBehavior
 import com.riningan.widget.ExtendedBottomSheetBehavior.STATE_COLLAPSED
 import kotlinx.android.synthetic.main.calendar_home_screen.*
+import kotlinx.android.synthetic.main.calendar_home_screen.cardView
+import kotlinx.android.synthetic.main.calendar_home_screen.chat_icon_iv
+import kotlinx.android.synthetic.main.calendar_home_screen.oval_gradient_iv
+import kotlinx.android.synthetic.main.calendar_home_screen.profile_image
+import kotlinx.android.synthetic.main.landingscreen_fragment.*
 import org.w3c.dom.Text
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
@@ -74,6 +82,7 @@ class CalendarHomeScreen : BaseFragment(),
     private lateinit var viewModel: CalendarHomeScreenViewModel
     lateinit var viewModelProfile: ProfileViewModel
     lateinit var viewModelCustomPreference: CustomPreferencesViewModel
+    var width: Int = 0
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -181,6 +190,7 @@ class CalendarHomeScreen : BaseFragment(),
         initializeExtendedBottomSheet()
         initializeMonthTV(Calendar.getInstance(), true)
         initializeVerticalCalendarRV()
+
     }
 
     private fun initializeExtendedBottomSheet() {
@@ -854,6 +864,5 @@ class CalendarHomeScreen : BaseFragment(),
             getView(viewHolder, R.id.calendar_detail_item_cl).visibility = View.VISIBLE
         }
     }
-
 
 }

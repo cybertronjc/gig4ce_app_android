@@ -14,9 +14,9 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
-import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.gigforce.app.R
@@ -38,17 +38,13 @@ import com.gigforce.app.modules.learning.models.Course
 import com.gigforce.app.modules.preferences.PreferencesFragment
 import com.gigforce.app.modules.profile.ProfileViewModel
 import com.gigforce.app.modules.profile.models.ProfileData
-import com.gigforce.app.utils.AppConstants
 import com.gigforce.app.utils.GlideApp
 import com.gigforce.app.utils.Lce
+import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import kotlinx.android.synthetic.main.landingscreen_fragment.*
-import kotlinx.android.synthetic.main.landingscreen_fragment.chat_icon_iv
-import kotlinx.android.synthetic.main.landingscreen_fragment.learning_learning_error
-import kotlinx.android.synthetic.main.landingscreen_fragment.learning_progress_bar
-import kotlinx.android.synthetic.main.landingscreen_fragment.learning_rv
-import java.util.ArrayList
+import java.util.*
 
 class LandingScreenFragment : BaseFragment() {
 
@@ -63,11 +59,11 @@ class LandingScreenFragment : BaseFragment() {
     private lateinit var viewModel: LandingScreenViewModel
     var width: Int = 0
     private var comingFromOrGoingToScreen = -1
-    private val verificationViewModel : GigVerificationViewModel by viewModels()
-    private val helpViewModel : HelpViewModel by viewModels()
-    private val landingScreenViewModel : LandingScreenViewModel by viewModels()
-    private val learningViewModel : LearningViewModel by viewModels()
-    private val firebaseStorage : FirebaseStorage = FirebaseStorage.getInstance()
+    private val verificationViewModel: GigVerificationViewModel by viewModels()
+    private val helpViewModel: HelpViewModel by viewModels()
+    private val landingScreenViewModel: LandingScreenViewModel by viewModels()
+    private val learningViewModel: LearningViewModel by viewModels()
+    private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -82,7 +78,7 @@ class LandingScreenFragment : BaseFragment() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putInt(INTENT_EXTRA_SCREEN,comingFromOrGoingToScreen)
+        outState.putInt(INTENT_EXTRA_SCREEN, comingFromOrGoingToScreen)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -233,7 +229,7 @@ class LandingScreenFragment : BaseFragment() {
                     complete_now.text = getString(R.string.complete_now)
                 }
 
-        })
+            })
 
         verificationViewModel.startListeningForGigerVerificationStatusChanges()
 
@@ -241,7 +237,7 @@ class LandingScreenFragment : BaseFragment() {
         landingScreenViewModel
             .tips
             .observe(viewLifecycleOwner, Observer {
-                    setTipsOnView(it)
+                setTipsOnView(it)
             })
 
         helpViewModel
@@ -255,9 +251,9 @@ class LandingScreenFragment : BaseFragment() {
 
     private fun setTipsOnView(tips: List<Tip>) {
 
-        if(tips.isEmpty()){
+        if (tips.isEmpty()) {
             gigforce_tip.gone()
-        }else {
+        } else {
             gigforce_tip.visible()
 
             val recyclerGenericAdapter: RecyclerGenericAdapter<Tip> =
@@ -269,6 +265,8 @@ class LandingScreenFragment : BaseFragment() {
                             resId = tip.whereToRedirect,
                             args = tip.intentExtraMap.toBundle()
                         )
+
+
                     },
                     RecyclerGenericAdapter.ItemInterface<Tip?> { obj, viewHolder, position ->
                         var title = getTextView(viewHolder, R.id.gigtip_title)
@@ -280,10 +278,6 @@ class LandingScreenFragment : BaseFragment() {
                         title.layoutParams = lp
                         title.text = obj?.title
                         subtitle.text = obj?.subTitle
-
-                        getView(viewHolder, R.id.skip).setOnClickListener(
-                            SkipClickListener(gigforce_tip, position)
-                        )
 
 //                    getTextView(viewHolder, R.id.skip).setOnClickListener{
 //                        datalist.removeAt(position)
@@ -335,13 +329,6 @@ class LandingScreenFragment : BaseFragment() {
         }
     }
 
-    inner class SkipClickListener(val rv: RecyclerView, var position: Int) :
-        View.OnClickListener {
-        override fun onClick(v: View?) {
-            gigforce_tip.gone()
-        }
-    }
-
     private fun setHelpVideosOnView(helpVideos: List<HelpVideo>?) {
 
         val recyclerGenericAdapter: RecyclerGenericAdapter<HelpVideo> =
@@ -354,20 +341,20 @@ class LandingScreenFragment : BaseFragment() {
                 RecyclerGenericAdapter.ItemInterface<HelpVideo?> { obj, viewHolder, position ->
 
                     var iconIV = getImageView(viewHolder, R.id.help_first_card_img)
-                    Glide.with(requireContext()).load(obj?.getThumbNailUrl()).placeholder(getCircularProgressDrawable()).into(iconIV)
+                    Glide.with(requireContext()).load(obj?.getThumbNailUrl())
+                        .placeholder(getCircularProgressDrawable()).into(iconIV)
 
                     var titleTV = getTextView(viewHolder, R.id.titleTV)
                     titleTV.text = obj?.videoTitle
 
                     var timeTV = getTextView(viewHolder, R.id.time_text)
-                    timeTV.text = if(obj!!.videoLength >= 60){
-                            val minutes = obj!!.videoLength / 60
-                            val secs = obj!!.videoLength % 60
-                           "$minutes:$secs"
-                     }else{
+                    timeTV.text = if (obj!!.videoLength >= 60) {
+                        val minutes = obj!!.videoLength / 60
+                        val secs = obj!!.videoLength % 60
+                        "$minutes:$secs"
+                    } else {
                         "00:${obj.videoLength}"
-                      }
-
+                    }
 
 
 //                    var img = getImageView(viewHolder, R.id.learning_img)
@@ -383,7 +370,7 @@ class LandingScreenFragment : BaseFragment() {
         helpVideoRV.adapter = recyclerGenericAdapter
     }
 
-    fun playVideo( id : String){
+    fun playVideo(id: String) {
         val appIntent =
             Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:$id"))
         val webIntent = Intent(
@@ -401,12 +388,12 @@ class LandingScreenFragment : BaseFragment() {
         if (profileImg != "avatar.jpg" && profileImg != "") {
             val profilePicRef: StorageReference =
                 PreferencesFragment.storage.reference.child("profile_pics").child(profileImg)
-            if(profile_image!=null)
-            GlideApp.with(this.requireContext())
-                .load(profilePicRef)
-                .apply(RequestOptions().circleCrop())
-                .into(profile_image)
-        }else{
+            if (profile_image != null)
+                GlideApp.with(this.requireContext())
+                    .load(profilePicRef)
+                    .apply(RequestOptions().circleCrop())
+                    .into(profile_image)
+        } else {
             GlideApp.with(this.requireContext())
                 .load(R.drawable.avatar)
                 .apply(RequestOptions().circleCrop())
@@ -414,7 +401,7 @@ class LandingScreenFragment : BaseFragment() {
         }
     }
 
-    class TitleSubtitleModel(var title: String, var subtitle: String,var imgStr : String) {
+    class TitleSubtitleModel(var title: String, var subtitle: String, var imgStr: String) {
 
     }
 
@@ -458,12 +445,15 @@ class LandingScreenFragment : BaseFragment() {
         seeMoreBtn.setOnClickListener {
             navigate(R.id.helpVideosFragment)
         }
-        help_topic.setOnClickListener{
+        help_topic.setOnClickListener {
             showToast("This is under development. Please check again in a few days.")
         }
 
-        gigforce_video.setOnClickListener{
+        gigforce_video.setOnClickListener {
             playVideo("FbiyRe49wjY")
+        }
+        ll_search_role.setOnClickListener {
+            navigate(R.id.fragment_explore_by_role)
         }
     }
 
@@ -530,10 +520,10 @@ class LandingScreenFragment : BaseFragment() {
                         view.layoutParams = lp
 
                         var title = getTextView(viewHolder, R.id.title_)
-                        title.text = obj?.name
+                        title.text = obj?.name + " " + obj?.level
 
                         var subtitle = getTextView(viewHolder, R.id.title)
-                        subtitle.text = obj?.level
+                        subtitle.text = obj?.description
 
                         var img = getImageView(viewHolder, R.id.learning_img)
 
@@ -543,7 +533,6 @@ class LandingScreenFragment : BaseFragment() {
                                 GlideApp.with(requireContext())
                                     .load(obj!!.coverPicture!!)
                                     .placeholder(getCircularProgressDrawable())
-                                    .error(R.drawable.ic_learning_default_back)
                                     .into(img)
                             } else {
                                 FirebaseStorage.getInstance()
@@ -555,14 +544,9 @@ class LandingScreenFragment : BaseFragment() {
                                         GlideApp.with(requireContext())
                                             .load(fileUri)
                                             .placeholder(getCircularProgressDrawable())
-                                            .error(R.drawable.ic_learning_default_back)
                                             .into(img)
                                     }
                             }
-                        } else{
-                            GlideApp.with(requireContext())
-                                .load(R.drawable.ic_learning_default_back)
-                                .into(img)
                         }
 
                         //img.setImageResource(obj?.imgIcon!!)
@@ -578,12 +562,14 @@ class LandingScreenFragment : BaseFragment() {
 
         }
     }
-    private fun showGlideImage(url:String,imgview:ImageView){
+
+    private fun showGlideImage(url: String, imgview: ImageView) {
         GlideApp.with(requireContext())
             .load(url)
             .placeholder(getCircularProgressDrawable())
             .into(imgview)
     }
+
     private fun initializeExploreByIndustry() {
 
         val itemWidth = ((width / 3) * 2).toInt()
@@ -642,8 +628,8 @@ class LandingScreenFragment : BaseFragment() {
                     var title = getTextView(viewHolder, R.id.title)
                     title.text = obj?.title
                     obj?.imgStr?.let {
-                    var img = getImageView(viewHolder, R.id.img_view)
-                        showGlideImage(it,img)
+                        var img = getImageView(viewHolder, R.id.img_view)
+                        showGlideImage(it, img)
                     }
 //                    img.setImageResource(obj?.imgIcon!!)
                 })!!
@@ -658,76 +644,102 @@ class LandingScreenFragment : BaseFragment() {
     }
 
     private fun initializeExploreByRole() {
+        landingScreenViewModel.observerRole.observe(viewLifecycleOwner, Observer {gig->
+            run {
+                showGlideImage(gig?.role_image ?: "", iv_role)
+                tv_title_role.text = gig?.role_title
+                if (!gig?.job_description.isNullOrEmpty()) {
+                    tv_subtitle_role.visible()
+                    tv_subtitle_role.text = gig?.job_description?.get(0)
+                }
+                cv_role.setOnClickListener {
+                    findNavController().navigate(
+                        LandingScreenFragmentDirections.openRoleDetailsHome(
+                            gig?.id!!
+                        )
+                    )
+                }
+            }
+
+
+        })
+        landingScreenViewModel.getRoles()
         val itemWidth = ((width / 3) * 2).toInt()
-        // model will change when integrated with DB
-//        var datalist: ArrayList<UpcomingGigModel> = ArrayList<UpcomingGigModel>()
-        var datalist: ArrayList<TitleSubtitleModel> = ArrayList<TitleSubtitleModel>()
+        val lp = cv_role.layoutParams
+        lp.height = lp.height
+        lp.width = itemWidth
 
+        cv_role.layoutParams = lp
 
-        datalist.add(
-            TitleSubtitleModel(
-                "Driver",
-                "Welcome to Gigforce! Let's talk about what's a gig and how do you start working as a giger at Gigforce.",
-                "https://firebasestorage.googleapis.com/v0/b/gigforce-dev.appspot.com/o/temp_files%2Fdriver_img.jpg?alt=media&token=68412376-59c8-4598-81d6-9630724afff6"
-            )
-        )
-        datalist.add(
-            TitleSubtitleModel(
-                "Delivery Executive",
-                "Welcome to Gigforce! Let's talk about what's a gig and how do you start working as a giger at Gigforce.",
-                "https://firebasestorage.googleapis.com/v0/b/gigforce-dev.appspot.com/o/temp_files%2Fdelivery_executive_ls_img.jpg?alt=media&token=d42f2ed2-d0e5-472b-bb84-5379528f612f"
-            )
-        )
-
-        datalist.add(
-            TitleSubtitleModel(
-                "Retail Sales Executive",
-                "Welcome to Gigforce! Let's talk about what's a gig and how do you start working as a giger at Gigforce.",
-                "https://firebasestorage.googleapis.com/v0/b/gigforce-dev.appspot.com/o/temp_files%2Fretail_img_ls.jpg?alt=media&token=c3e587c9-5fdf-4e17-8e78-2799b7280817"
-            )
-        )
-
-        datalist.add(
-            TitleSubtitleModel(
-                "Barista",
-                "Welcome to Gigforce! Let's talk about what's a gig and how do you start working as a giger at Gigforce.",
-                "https://firebasestorage.googleapis.com/v0/b/gigforce-dev.appspot.com/o/temp_files%2Fbrista_ls_img.jpg?alt=media&token=c5061822-a7d6-497c-8bee-09079cb8dc70"
-            )
-        )
-
-        val recyclerGenericAdapter: RecyclerGenericAdapter<TitleSubtitleModel> =
-            RecyclerGenericAdapter<TitleSubtitleModel>(
-                activity?.applicationContext,
-                PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
-                    if(AppConstants.UNLOCK_FEATURE) {
-                        navigate(R.id.explore_by_role)
-                    }else
-                    showToast("This is under development. Please check again in a few days.")
-                },
-                RecyclerGenericAdapter.ItemInterface<TitleSubtitleModel?> { obj, viewHolder, position ->
-                    var view = getView(viewHolder, R.id.card_view)
-                    val lp = view.layoutParams
-                    lp.height = lp.height
-                    lp.width = itemWidth
-                    view.layoutParams = lp
-
-                    var title = getTextView(viewHolder, R.id.title)
-                    title.text = obj?.title
-
-                    obj?.imgStr?.let {
-                        var img = getImageView(viewHolder, R.id.img_view)
-                        showGlideImage(it,img)
-                    }
-//                    img.setImageResource(obj?.imgIcon!!)
-                })!!
-        recyclerGenericAdapter.setList(datalist)
-        recyclerGenericAdapter.setLayout(R.layout.explore_by_role_item)
-        explore_by_role_rv.layoutManager = LinearLayoutManager(
-            activity?.applicationContext,
-            LinearLayoutManager.HORIZONTAL,
-            false
-        )
-        explore_by_role_rv.adapter = recyclerGenericAdapter
+//        // model will change when integrated with DB
+////        var datalist: ArrayList<UpcomingGigModel> = ArrayList<UpcomingGigModel>()
+//        var datalist: ArrayList<TitleSubtitleModel> = ArrayList<TitleSubtitleModel>()
+//
+//
+//        datalist.add(
+//            TitleSubtitleModel(
+//                "Driver",
+//                "Welcome to Gigforce! Let's talk about what's a gig and how do you start working as a giger at Gigforce.",
+//                "https://firebasestorage.googleapis.com/v0/b/gigforce-dev.appspot.com/o/temp_files%2Fdriver_img.jpg?alt=media&token=68412376-59c8-4598-81d6-9630724afff6"
+//            )
+//        )
+//        datalist.add(
+//            TitleSubtitleModel(
+//                "Delivery Executive",
+//                "Welcome to Gigforce! Let's talk about what's a gig and how do you start working as a giger at Gigforce.",
+//                "https://firebasestorage.googleapis.com/v0/b/gigforce-dev.appspot.com/o/temp_files%2Fdelivery_executive_ls_img.jpg?alt=media&token=d42f2ed2-d0e5-472b-bb84-5379528f612f"
+//            )
+//        )
+//
+//        datalist.add(
+//            TitleSubtitleModel(
+//                "Retail Sales Executive",
+//                "Welcome to Gigforce! Let's talk about what's a gig and how do you start working as a giger at Gigforce.",
+//                "https://firebasestorage.googleapis.com/v0/b/gigforce-dev.appspot.com/o/temp_files%2Fretail_img_ls.jpg?alt=media&token=c3e587c9-5fdf-4e17-8e78-2799b7280817"
+//            )
+//        )
+//
+//        datalist.add(
+//            TitleSubtitleModel(
+//                "Barista",
+//                "Welcome to Gigforce! Let's talk about what's a gig and how do you start working as a giger at Gigforce.",
+//                "https://firebasestorage.googleapis.com/v0/b/gigforce-dev.appspot.com/o/temp_files%2Fbrista_ls_img.jpg?alt=media&token=c5061822-a7d6-497c-8bee-09079cb8dc70"
+//            )
+//        )
+//
+//        val recyclerGenericAdapter: RecyclerGenericAdapter<TitleSubtitleModel> =
+//            RecyclerGenericAdapter<TitleSubtitleModel>(
+//                activity?.applicationContext,
+//                PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
+//                    if(AppConstants.UNLOCK_FEATURE) {
+//                        navigate(R.id.explore_by_role)
+//                    }else
+//                    showToast("This is under development. Please check again in a few days.")
+//                },
+//                RecyclerGenericAdapter.ItemInterface<TitleSubtitleModel?> { obj, viewHolder, position ->
+//                    var view = getView(viewHolder, R.id.card_view)
+//                    val lp = view.layoutParams
+//                    lp.height = lp.height
+//                    lp.width = itemWidth
+//                    view.layoutParams = lp
+//
+//                    var title = getTextView(viewHolder, R.id.title)
+//                    title.text = obj?.title
+//
+//                    obj?.imgStr?.let {
+//                        var img = getImageView(viewHolder, R.id.img_view)
+//                        showGlideImage(it,img)
+//                    }
+////                    img.setImageResource(obj?.imgIcon!!)
+//                })!!
+//        recyclerGenericAdapter.setList(datalist)
+//        recyclerGenericAdapter.setLayout(R.layout.explore_by_role_item)
+//        explore_by_role_rv.layoutManager = LinearLayoutManager(
+//            activity?.applicationContext,
+//            LinearLayoutManager.HORIZONTAL,
+//            false
+//        )
+//        explore_by_role_rv.adapter = recyclerGenericAdapter
 
     }
 }
