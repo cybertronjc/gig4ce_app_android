@@ -164,10 +164,10 @@ class PlayVideoDialogFragment : DialogFragment() {
 
         viewModel.openNextDestination.observe(viewLifecycleOwner, Observer { cc ->
 
-            if (cc == null) {
-                activity?.onBackPressed()
-                return@Observer
-            }
+//            if (cc == null) {
+//                activity?.onBackPressed()
+//                return@Observer
+//            }
 
             val view = layoutInflater.inflate(R.layout.layout_video_completed, null)
 
