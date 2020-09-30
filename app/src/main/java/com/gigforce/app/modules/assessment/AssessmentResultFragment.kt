@@ -115,7 +115,6 @@ class AssessmentResultFragment : BaseFragment(), PopupMenu.OnMenuItemClickListen
         rv_question_wise_sum_assess_frag.adapter = adapter
         adapter?.addAll(arguments?.getBooleanArray(StringConstants.ANSWERS_ARR.value)?.toList())
 
-        rv_sug_learnings_assess_result.gone()
         rv_sug_learnings_assess_result.adapter = AdapterSuggestedLearning().setCallbacks(this)
         rv_sug_learnings_assess_result.layoutManager =
             LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
