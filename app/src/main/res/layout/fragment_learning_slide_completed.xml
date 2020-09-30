@@ -8,8 +8,20 @@
     android:background="@color/lipstick"
     tools:context="com.gigforce.app.modules.learning.slides.types.SlidesCompletedFragment">
 
+    <ProgressBar
+        android:id="@+id/slideProgressSavingPB"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:visibility="gone"
+        android:indeterminateTint="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 
     <LinearLayout
+        android:id="@+id/main_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
@@ -24,7 +36,7 @@
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:src="@drawable/ic_green_check_24"
-            android:tint="@color/white" />
+            app:tint="@color/white" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -42,7 +54,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="Go Back"
+            android:text="Mark Slides As Complete"
             android:textColor="@color/white"
             app:rippleColor="@color/white"
             app:strokeColor="@color/white" />

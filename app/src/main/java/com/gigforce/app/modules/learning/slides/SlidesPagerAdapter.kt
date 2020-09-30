@@ -9,13 +9,15 @@ import com.gigforce.app.modules.learning.slides.types.*
 
 class SlidesPagerAdapter constructor(
     fm: FragmentManager,
+    private val moduleId : String,
+    private val lessonId : String,
     private val slideList: List<SlideContent>,
     private val videoFragmentOrientationListener: VideoFragmentOrientationListener
 ) : FragmentStatePagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
     override fun getItem(position: Int): Fragment {
         if (position == slideList.size)
-            return SlidesCompletedFragment.getInstance()
+            return SlidesCompletedFragment.getInstance(moduleId, lessonId)
 
         val slide = slideList[position]
         when (slide.type) {
