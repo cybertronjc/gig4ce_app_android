@@ -163,6 +163,7 @@
                 android:layout_marginStart="@dimen/size_16"
                 android:layout_marginTop="@dimen/size_16"
                 android:layout_marginEnd="@dimen/size_16"
+                android:visibility="gone"
                 android:background="@drawable/bg_round_corner_d8d8d8"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
