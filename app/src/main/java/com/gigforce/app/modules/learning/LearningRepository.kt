@@ -157,7 +157,7 @@ class LearningRepository constructor(
 
                 db.collection("Course_company_mapping")
                     .whereIn("companyId", companies)
-                    .whereEqualTo("moduleId", slideId)
+                    .whereEqualTo("slideId", slideId)
                     .get()
                     .addOnSuccessListener {
 
@@ -192,7 +192,7 @@ class LearningRepository constructor(
                 }
 
 
-                if(it.roles_required){
+                if(it.rolesRequired){
 
                     if (mProfile?.role_interests != null) {
                         for (role in mProfile!!.role_interests!!) {
@@ -574,7 +574,7 @@ class LearningRepository constructor(
                 }
 
 
-                if(it.roles_required){
+                if(it.rolesRequired){
 
                     if (mProfile?.role_interests != null) {
                         for (role in mProfile!!.role_interests!!) {
@@ -687,7 +687,7 @@ class LearningRepository constructor(
                 }
 
 
-                if(it.roles_required){
+                if(it.rolesRequired){
 
                     if (mProfile?.role_interests != null) {
                         for (role in mProfile!!.role_interests!!) {
@@ -834,7 +834,7 @@ class LearningRepository constructor(
                 }
 
 
-                if(it.roles_required){
+                if(it.rolesRequired){
 
                     if (mProfile?.role_interests != null) {
                         for (role in mProfile!!.role_interests!!) {
