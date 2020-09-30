@@ -233,6 +233,37 @@ class LearningRepository constructor(
             getLessonInfo(nextLessonProgress.lessonId)
     }
 
+    suspend fun markCurrentLessonAsComplete(
+        moduleId: String,
+        lessonId: String
+    ): CourseContent? {
+        val moduleProgress = getModuleProgress(moduleId)
+        var nextLessonProgress: LessonProgress? = null
+
+        if (moduleProgress != null) {
+             moduleProgress.lessonsProgress.forEach {
+
+                 if (it.lessonId == lessonId) {
+                     it.apply {
+                         ongoing = false
+                         completed = true
+                         completionProgress = 0L
+                         lessonCompletionDate = Timestamp.now()
+                     }
+                 }
+
+             }
+
+            updateModuleProgress(moduleProgress.progressId, moduleProgress)
+        }
+
+        return if (nextLessonProgress == null)
+            null
+        else
+            getLessonInfo(nextLessonProgress.lessonId)
+    }
+
+
     private suspend fun getLessonInfo(lessonId: String) = suspendCoroutine<CourseContent> { cont ->
         getCollectionReference()
             .document(lessonId)

@@ -87,7 +87,7 @@ class CourseVideoViewModel constructor(
         try {
 
             val nextLesson =
-                learningRepository.markCurrentLessonAsCompleteAndEnableNextOne(moduleId)
+                learningRepository.markCurrentLessonAsComplete(moduleId,lessonId)
             _videoSaveState.value = Lce.content(VideoSaveState.VideoMarkedComplete)
 
             if (nextLesson != null)

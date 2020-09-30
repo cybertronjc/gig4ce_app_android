@@ -60,7 +60,7 @@ class LearningDetailsLessonsAdapter constructor(
     override fun onBindViewHolder(holder: TimeLineViewHolder, position: Int) {
 
         val videoModel = mCourseContent[position]
-        val viewType = getItemViewType(position)
+      //  val viewType = getItemViewType(position)
 
         if (videoModel.type == CourseContent.TYPE_ASSESSMENT) {
             holder.videoSlideLayout.gone()
@@ -72,10 +72,10 @@ class LearningDetailsLessonsAdapter constructor(
             if (videoModel.completed) {
                 holder.assessmentStatus.text = "COMPLETED"
 
-                holder.timeline.setStartLineColor(R.color.colorPrimary, viewType)
-                holder.timeline.setEndLineColor(R.color.colorPrimary, viewType)
+//                holder.timeline.setStartLineColor(R.color.colorPrimary, viewType)
+//                holder.timeline.setEndLineColor(R.color.colorPrimary, viewType)
 
-                setMarker(holder, R.drawable.ic_marker, R.color.colorPrimary)
+              //  setMarker(holder, R.drawable.ic_marker, R.color.colorPrimary)
 
                 holder.assessmentStatus.setBackgroundResource(R.drawable.rect_assessment_status_completed)
                 holder.asessmentSideStausStrip.setCardBackgroundColor(
@@ -87,11 +87,11 @@ class LearningDetailsLessonsAdapter constructor(
                 )
             } else {
                 //Not even started
-                if (videoModel.currentlyOnGoing) {
-                    setMarker(holder, R.drawable.ic_marker_active, R.color.colorPrimary)
-                } else {
-                    setMarker(holder, R.drawable.ic_marker_inactive, R.color.colorPrimary)
-                }
+//                if (videoModel.currentlyOnGoing) {
+//                    setMarker(holder, R.drawable.ic_marker_active, R.color.colorPrimary)
+//                } else {
+//                    setMarker(holder, R.drawable.ic_marker_inactive, R.color.colorPrimary)
+//                }
 
                 holder.assessmentStatus.text = "PENDING"
                 holder.assessmentStatus.setBackgroundResource(R.drawable.rect_assessment_status_pending)
@@ -130,9 +130,13 @@ class LearningDetailsLessonsAdapter constructor(
                         }
                 }
             } else {
-                GlideApp.with(context)
-                    .load(R.drawable.ic_learning_default_back)
-                    .into(holder.slideVideoThumbnail)
+                holder.slideVideoThumbnail.setBackgroundColor(
+                    ResourcesCompat.getColor(
+                        context.resources,
+                        R.color.warm_grey,
+                        null
+                    )
+                )
             }
 
             holder.videoTitle.text = videoModel.title
@@ -142,28 +146,32 @@ class LearningDetailsLessonsAdapter constructor(
             holder.slidePlayIV.setImageResource(R.drawable.ic_slides)
 
             if (videoModel.completed) {
-                setMarker(holder, R.drawable.ic_marker, R.color.colorPrimary)
+//                setMarker(holder, R.drawable.ic_marker, R.color.colorPrimary)
                 holder.lessonCompletionPercentage.text = "Complete 100%"
+                holder.lessonsSeeMoreButton.text = "Re-play"
                 holder.lessonCompletionPercentage.setTextColor(ResourcesCompat.getColor(context.resources,R.color.text_green,null))
-            } else if (videoModel.currentlyOnGoing) {
+            } else /*if (videoModel.currentlyOnGoing)*/ {
                 if (videoModel.completionProgress == 0L) {
                     //Not even started
                     //Not even started
-                    setMarker(holder, R.drawable.ic_marker_active, R.color.colorPrimary)
+  //                  setMarker(holder, R.drawable.ic_marker_active, R.color.colorPrimary)
                     holder.lessonCompletionPercentage.text = "Pending 0%"
+                    holder.lessonsSeeMoreButton.text = "Play"
                     holder.lessonCompletionPercentage.setTextColor(ResourcesCompat.getColor(context.resources,R.color.text_yellow,null))
                 } else {
                     //Currently going on
-                    setMarker(holder, R.drawable.ic_marker_active, R.color.colorPrimary)
+    //                setMarker(holder, R.drawable.ic_marker_active, R.color.colorPrimary)
 
                     val completedPercentage =
                         (videoModel.completionProgress * 100) / videoModel.lessonTotalLength
                     holder.lessonCompletionPercentage.text = "Complete $completedPercentage%"
+                    holder.lessonsSeeMoreButton.text = "Resume"
                     holder.lessonCompletionPercentage.setTextColor(ResourcesCompat.getColor(context.resources,R.color.text_orange,null))
                 }
-            } else {
-                setMarker(holder, R.drawable.ic_marker_inactive, R.color.colorPrimary)
             }
+            //else {
+      //          setMarker(holder, R.drawable.ic_marker_inactive, R.color.colorPrimary)
+            //}
 
 
         } else if (videoModel.type == CourseContent.TYPE_VIDEO) {
@@ -193,10 +201,14 @@ class LearningDetailsLessonsAdapter constructor(
                         }
                 }
             } else {
-                GlideApp.with(context)
-                    .load(R.drawable.ic_learning_default_back)
-                    .placeholder(getCircularProgressDrawable())
-                    .into(holder.slideVideoThumbnail)
+
+                holder.slideVideoThumbnail.setBackgroundColor(
+                    ResourcesCompat.getColor(
+                        context.resources,
+                        R.color.warm_grey,
+                        null
+                    )
+                )
             }
 
             holder.videoTitle.text = videoModel.title
@@ -206,40 +218,44 @@ class LearningDetailsLessonsAdapter constructor(
             holder.slideVideoLength.text = videoModel.videoLengthString
 
             if (videoModel.completed) {
-                setMarker(holder, R.drawable.ic_marker, R.color.colorPrimary)
+        //        setMarker(holder, R.drawable.ic_marker, R.color.colorPrimary)
                 holder.lessonCompletionPercentage.text = "Complete 100%"
+                holder.lessonsSeeMoreButton.text = "Re-play"
                 holder.lessonCompletionPercentage.setTextColor(ResourcesCompat.getColor(context.resources,R.color.text_green,null))
-            } else if (videoModel.currentlyOnGoing) {
+            } else /*if (videoModel.currentlyOnGoing) */{
 
                 if (videoModel.completionProgress == 0L) {
                     //Not even started
-                    setMarker(holder, R.drawable.ic_marker_active, R.color.colorPrimary)
+          //          setMarker(holder, R.drawable.ic_marker_active, R.color.colorPrimary)
                     holder.lessonCompletionPercentage.text = "Pending 0%"
+                    holder.lessonsSeeMoreButton.text = "Play"
                     holder.lessonCompletionPercentage.setTextColor(ResourcesCompat.getColor(context.resources,R.color.text_yellow,null))
                 } else {
                     //Currently going on
-                    setMarker(holder, R.drawable.ic_marker_active, R.color.colorPrimary)
+            //        setMarker(holder, R.drawable.ic_marker_active, R.color.colorPrimary)
 
                     val completedPercentage =
                         (videoModel.completionProgress * 100) / videoModel.lessonTotalLength
                     holder.lessonCompletionPercentage.text = "Complete $completedPercentage%"
+                    holder.lessonsSeeMoreButton.text = "Resume"
                     holder.lessonCompletionPercentage.setTextColor(ResourcesCompat.getColor(context.resources,R.color.text_orange,null))
                 }
-            } else {
-                holder.lessonCompletionPercentage.text = "Pending 0%"
-                holder.lessonCompletionPercentage.setTextColor(ResourcesCompat.getColor(context.resources,R.color.text_yellow,null))
-                setMarker(holder, R.drawable.ic_marker_inactive, R.color.colorPrimary)
+            }
+                //else {
+            //    holder.lessonCompletionPercentage.text = "Pending 0%"
+              //  holder.lessonCompletionPercentage.setTextColor(ResourcesCompat.getColor(context.resources,R.color.text_yellow,null))
+              //  setMarker(holder, R.drawable.ic_marker_inactive, R.color.colorPrimary)
             }
         }
-    }
+
 
 
     private fun setMarker(holder: TimeLineViewHolder, drawableResId: Int, colorFilter: Int) {
-        holder.timeline.marker = VectorDrawableUtils.getDrawable(
-            holder.itemView.context,
-            drawableResId,
-            ContextCompat.getColor(holder.itemView.context, colorFilter)
-        )
+//        holder.timeline.marker = VectorDrawableUtils.getDrawable(
+//            holder.itemView.context,
+//            drawableResId,
+//            ContextCompat.getColor(holder.itemView.context, colorFilter)
+//        )
     }
 
     override fun getItemCount() = mCourseContent.size
@@ -279,13 +295,13 @@ class LearningDetailsLessonsAdapter constructor(
         val videoPlayIV = itemView.play_button_iv
         val lessonsSeeMoreButton = itemView.lessonsSeeMoreButton
         val videoTimeTV = itemView.video_time
-        val timeline = itemView.timeline
+       // val timeline = itemView.timeline
 
 
         val lessonCompletionPercentage = itemView.lesson_completion_tv
 
         init {
-            timeline.initLine(viewType)
+            //timeline.initLine(viewType)
             itemView.setOnClickListener(this)
             lessonsSeeMoreButton.setOnClickListener(this)
             assessmentRootLayout.setOnClickListener(this)
@@ -294,15 +310,15 @@ class LearningDetailsLessonsAdapter constructor(
         override fun onClick(v: View?) {
             val content = mCourseContent[adapterPosition]
 
-            if (content.completed || content.currentlyOnGoing) {
+//            if (content.completed || content.currentlyOnGoing) {
                 learningVideoActionListener?.invoke(mCourseContent[adapterPosition])
-            } else {
-                Toast.makeText(
-                    context,
-                    "Please complete previous lessons first",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
+//            } else {
+//                Toast.makeText(
+//                    context,
+//                    "Please complete previous lessons first",
+//                    Toast.LENGTH_SHORT
+//                ).show()
+//            }
         }
     }
 }

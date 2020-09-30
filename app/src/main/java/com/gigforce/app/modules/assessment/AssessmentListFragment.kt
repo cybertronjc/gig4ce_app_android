@@ -112,7 +112,7 @@ class AssessmentListFragment : BaseFragment(), AssessmentClickListener {
     }
 
     override fun onAssessmentClicked(assessment: CourseContent) {
-        if(assessment.completed || assessment.currentlyOnGoing) {
+        //if(assessment.completed || assessment.currentlyOnGoing) {
 
             navigate(
                 R.id.assessment_fragment, bundleOf(
@@ -120,13 +120,13 @@ class AssessmentListFragment : BaseFragment(), AssessmentClickListener {
                     AssessmentFragment.INTENT_MODULE_ID to assessment.moduleId
                 )
             )
-        } else{
-            Toast.makeText(
-                requireContext(),
-                "Please complete previous lessons first",
-                Toast.LENGTH_SHORT
-            ).show()
-        }
+//        } else{
+//            Toast.makeText(
+//                requireContext(),
+//                "Please complete previous lessons first",
+//                Toast.LENGTH_SHORT
+//            ).show()
+//        }
     }
 
 }

@@ -164,10 +164,10 @@ class BSCalendarScreenFragment : BaseFragment() {
                     view.layoutParams = lp
 
                     var title = getTextView(viewHolder, R.id.title_)
-                    title.text = obj?.name + " "+ obj?.level
+                    title.text = obj?.name
 
                     var subtitle = getTextView(viewHolder, R.id.title)
-                    subtitle.text = obj?.description
+                    subtitle.text = obj?.level
 
                     var img = getImageView(viewHolder, R.id.learning_img)
 
@@ -177,6 +177,7 @@ class BSCalendarScreenFragment : BaseFragment() {
                             GlideApp.with(requireContext())
                                 .load(obj!!.coverPicture!!)
                                 .placeholder(getCircularProgressDrawable())
+                                .error(R.drawable.ic_learning_default_back)
                                 .into(img)
                         } else {
                             FirebaseStorage.getInstance()
@@ -188,9 +189,14 @@ class BSCalendarScreenFragment : BaseFragment() {
                                     GlideApp.with(requireContext())
                                         .load(fileUri)
                                         .placeholder(getCircularProgressDrawable())
+                                        .error(R.drawable.ic_learning_default_back)
                                         .into(img)
                                 }
                         }
+                    } else{
+                        GlideApp.with(requireContext())
+                            .load(R.drawable.ic_learning_default_back)
+                            .into(img)
                     }
 
                     //img.setImageResource(obj?.imgIcon!!)

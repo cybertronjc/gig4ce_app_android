@@ -448,13 +448,14 @@ class AssessmentFragment : BaseFragment(),
         moduleId: String? = null
     ) {
         val dialog = if(moduleId != null)
-            AssessmentDialog.newInstance(moduleId,state)
+            AssessmentDialog.newInstance(moduleId,mLessonId, state)
         else
             AssessmentDialog.newInstance(state)
 
         dialog.setCallbacks(this)
 
         bundle?.putString(INTENT_MODULE_ID, moduleId)
+        bundle?.putString(INTENT_LESSON_ID, mLessonId)
         dialog.arguments = bundle
 
         dialog.show(parentFragmentManager, AssessmentDialog::class.java.name)
