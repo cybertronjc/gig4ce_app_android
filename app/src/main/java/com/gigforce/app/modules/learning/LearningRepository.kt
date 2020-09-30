@@ -251,7 +251,6 @@ class LearningRepository constructor(
                          lessonCompletionDate = Timestamp.now()
                      }
                  }
-
              }
 
             updateModuleProgress(moduleProgress.progressId, moduleProgress)
@@ -770,6 +769,7 @@ class LearningRepository constructor(
     private suspend fun getModulesC(courseId: String): List<Module> = suspendCoroutine { cont ->
         getCollectionReference()
             .whereEqualTo(TYPE, TYPE_MODULE)
+            .whereEqualTo(COURSE_ID, courseId)
             .get()
             .addOnSuccessListener { querySnap ->
 
