@@ -1,6 +1,7 @@
 package com.gigforce.app.modules.learning.learningVideo
 
 
+import android.app.Dialog
 import android.content.pm.ActivityInfo
 import android.net.Uri
 import android.os.Build
@@ -111,6 +112,14 @@ class PlayVideoDialogFragment : DialogFragment() {
             }
     }
 
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        return object : Dialog(requireContext(),theme){
+            override fun onBackPressed() {
+               backPressed()
+            }
+        }
+    }
+
     override fun onStart() {
         super.onStart()
 
@@ -141,7 +150,7 @@ class PlayVideoDialogFragment : DialogFragment() {
                         when (it.content) {
                             VideoSaveState.VideoStateSaved -> {
                                 videoStateSaved = true
-                                activity?.onBackPressed()
+                                dismiss()
                             }
                             VideoSaveState.VideoMarkedComplete -> {
                                 //Open next
@@ -169,7 +178,7 @@ class PlayVideoDialogFragment : DialogFragment() {
             view.findViewById<View>(R.id.tv_action_assess_dialog)
                 .setOnClickListener {
                     dialog.dismiss()
-                    activity?.onBackPressed()
+                    dismiss()
 
 
 //                    when (cc.type) {
@@ -258,30 +267,30 @@ class PlayVideoDialogFragment : DialogFragment() {
         }
     }
 
-//    override fun onBackPressed(): Boolean {
-//
-//        return if (currentOrientation == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
-//
-//            activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-//            currentOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-//            adjustUiforOrientation()
-//            true
-//        } else {
-//            if (player == null || videoStateSaved)
-//                return false
-//
-//            player?.stop()
-//            val currentPos = player?.currentPosition ?: 0L
-//            val totalLenght = player?.duration ?: 0L
-//            viewModel.savedVideoState(
-//                moduleId = mModuleId,
-//                lessonId = mLessonId,
-//                playBackPosition = currentPos,
-//                fullVideoLength = totalLenght
-//            )
-//            true
-//        }
-//    }
+    fun backPressed() {
+
+        if (currentOrientation == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
+
+            activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+            currentOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+            adjustUiforOrientation()
+        } else {
+            if (player == null || videoStateSaved){
+                dismiss()
+            }
+
+            player?.stop()
+            val currentPos = player?.currentPosition ?: 0L
+            val totalLenght = player?.duration ?: 0L
+            viewModel.savedVideoState(
+                moduleId = mModuleId,
+                lessonId = mLessonId,
+                playBackPosition = currentPos,
+                fullVideoLength = totalLenght
+            )
+        }
+    }
+
 
     private fun initializePlayer(uri: Uri, lastTimePlayBackPosition: Long) {
         player = SimpleExoPlayer.Builder(requireContext()).build()

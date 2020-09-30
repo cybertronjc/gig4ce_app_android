@@ -315,6 +315,8 @@ class LearningCourseDetailsFragment : BaseFragment() {
         learning_details_progress_bar.visible()
     }
 
+
+
     private fun showLessonsOnView(content: List<CourseContent>) {
 
         learning_details_learning_error.gone()
@@ -623,11 +625,6 @@ class LearningCourseDetailsFragment : BaseFragment() {
 
 
 
-    }
-
-    override fun onBackPressed(): Boolean {
-        parentFragmentManager.popBackStack()
-        return false
     }
 
 

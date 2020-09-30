@@ -9,6 +9,9 @@ import com.google.firebase.firestore.*
 import com.google.firebase.firestore.model.Document
 import kotlinx.coroutines.tasks.await
 import javax.security.auth.callback.Callback
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
+import kotlin.coroutines.suspendCoroutine
 
 class ProfileFirebaseRepository: BaseFirestoreDBRepository() {
 
@@ -141,6 +144,20 @@ class ProfileFirebaseRepository: BaseFirestoreDBRepository() {
     }
     fun addInviteToProfile(){
 
+    }
+
+    suspend fun getProfileData() : ProfileData = suspendCoroutine {cont ->
+
+        getCollectionReference()
+            .document(uid)
+            .get()
+            .addOnSuccessListener {
+                val profileData = it.toObject(ProfileData::class.java) ?: throw  IllegalStateException("unable to parse profile object")
+                cont.resume(profileData)
+            }
+            .addOnFailureListener {
+                cont.resumeWithException(it)
+            }
     }
 
     /**

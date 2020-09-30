@@ -6,6 +6,8 @@ import com.gigforce.app.modules.learning.models.progress.CourseProgress
 import com.gigforce.app.modules.learning.models.progress.LessonProgress
 import com.gigforce.app.modules.learning.models.progress.ModuleProgress
 import com.gigforce.app.modules.learning.models.progress.ProgressConstants
+import com.gigforce.app.modules.profile.ProfileFirebaseRepository
+import com.gigforce.app.modules.profile.models.ProfileData
 import com.gigforce.app.utils.addOrThrow
 import com.gigforce.app.utils.getOrThrow
 import com.gigforce.app.utils.setOrThrow
@@ -15,8 +17,11 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
-class LearningRepository : BaseFirestoreDBRepository() {
+class LearningRepository constructor(
+    private val profileFirebaseRepository: ProfileFirebaseRepository = ProfileFirebaseRepository()
+) : BaseFirestoreDBRepository() {
 
+    private var mProfile: ProfileData? = null
     override fun getCollectionName(): String = COLLECTION_NAME
 
     fun courseModuleProgressInfo(courseId: String): Query {
@@ -25,7 +30,16 @@ class LearningRepository : BaseFirestoreDBRepository() {
             .whereEqualTo(TYPE, TYPE_MODULE)
     }
 
-    suspend fun getUserCourses(): List<Course> = suspendCoroutine { cont ->
+    suspend fun getUserCourses(): List<Course> {
+
+        if (mProfile == null) {
+            mProfile = profileFirebaseRepository.getProfileData()
+        }
+        return getUserCoursesC()
+    }
+
+    private suspend fun getUserCoursesC(): List<Course> = suspendCoroutine { cont ->
+
         getCollectionReference()
             .whereEqualTo(TYPE, TYPE_COURSE)
             .get()
@@ -43,27 +57,48 @@ class LearningRepository : BaseFirestoreDBRepository() {
                 cont.resume(courses)
             }
             .addOnFailureListener {
-
                 cont.resumeWithException(it)
             }
     }
 
-    private fun doesCourseFullFillsCondition(it: Course): Boolean {
 
-        return if (it.isOpened) {
-            if (it.rolesRequired) {
-                TODO("")
-                true
-            } else if (it.userIdRequired) {
-                it.userUids.contains(getUID());
-            } else if (it.clientsRequired) {
-                TODO("")
-                true
-            } else {
-                true
-            }
+    private fun doesCourseFullFillsCondition(it: Course): Boolean {
+        if (it.isOpened) {
+           return true
         } else {
-            false
+            when {
+                it.rolesRequired -> {
+
+                    for (role in mProfile!!.role_interests!!) {
+                        for (courseRoles in it.roles) {
+                            if (courseRoles == role.interestID) {
+                                return true
+                            }
+                        }
+                    }
+
+                    return false
+                }
+                it.userIdRequired -> {
+                    it.userUids.contains(getUID());
+                }
+                it.clientsRequired -> {
+                    for (company in mProfile!!.companies!!) {
+                        for (courseClients in it.clients) {
+                            if (courseClients == company.companyId) {
+                                return true
+                            }
+                        }
+                    }
+
+                    return false
+                }
+                else -> {
+                    return true
+                }
+            }
+
+            return false
         }
     }
 
@@ -109,25 +144,25 @@ class LearningRepository : BaseFirestoreDBRepository() {
         }
     }
 
-    suspend fun getLessonsProgress(courseId: String, moduleId: String): List<LessonProgress> {
-
-        val querySnap = db.collection(COURSE_PROGRESS_NAME)
-            .whereEqualTo("uid", getUID())
-            .whereEqualTo("course_id", courseId)
-            .whereEqualTo("module_id", moduleId)
-            .whereEqualTo("type", ProgressConstants.TYPE_LESSON)
-            .getOrThrow()
-
-        if (querySnap.isEmpty) {
-            return emptyList()
-        } else {
-            return querySnap.documents.map {
-                val lessonProgress = it.toObject(LessonProgress::class.java)!!
-                lessonProgress.progressTrackingId = it.id
-                lessonProgress
-            }
-        }
-    }
+//    suspend fun getLessonsProgress(courseId: String, moduleId: String): List<LessonProgress> {
+//
+//        val querySnap = db.collection(COURSE_PROGRESS_NAME)
+//            .whereEqualTo("uid", getUID())
+//            .whereEqualTo("course_id", courseId)
+//            .whereEqualTo("module_id", moduleId)
+//            .whereEqualTo("type", ProgressConstants.TYPE_LESSON)
+//            .getOrThrow()
+//
+//        if (querySnap.isEmpty) {
+//            return emptyList()
+//        } else {
+//            return querySnap.documents.map {
+//                val lessonProgress = it.toObject(LessonProgress::class.java)!!
+//                lessonProgress.progressTrackingId = it.id
+//                lessonProgress
+//            }
+//        }
+//    }
 
     suspend fun getLessonProgress(progressTrackingId: String): LessonProgress {
         val docRef = db.collection(COURSE_PROGRESS_NAME)
@@ -266,7 +301,17 @@ class LearningRepository : BaseFirestoreDBRepository() {
         }
     }
 
-    suspend fun getRoleBasedCourses(): List<Course> = suspendCoroutine { cont ->
+    suspend fun getRoleBasedCourses(): List<Course> {
+
+        if(mProfile == null){
+            mProfile = profileFirebaseRepository.getProfileData()
+        }
+
+        return getRoleBasedCoursesC()
+    }
+
+
+    private suspend fun getRoleBasedCoursesC(): List<Course> = suspendCoroutine { cont ->
         getCollectionReference()
             .whereEqualTo(TYPE, TYPE_COURSE)
             .get()
@@ -284,12 +329,20 @@ class LearningRepository : BaseFirestoreDBRepository() {
                 cont.resume(courses)
             }
             .addOnFailureListener {
-
                 cont.resumeWithException(it)
             }
     }
 
-    suspend fun getAllCourses(): List<Course> = suspendCoroutine { cont ->
+    suspend fun getAllCourses(): List<Course>{
+
+        if(mProfile == null){
+            mProfile = profileFirebaseRepository.getProfileData()
+        }
+
+        return getAllCoursesC()
+    }
+
+    private suspend fun getAllCoursesC(): List<Course> = suspendCoroutine { cont ->
         getCollectionReference()
             .whereEqualTo(TYPE, TYPE_COURSE)
             .get()
@@ -329,6 +382,18 @@ class LearningRepository : BaseFirestoreDBRepository() {
     suspend fun getModuleLessons(
         courseId: String,
         moduleId: String
+    ): List<CourseContent> {
+
+        if(mProfile == null){
+            mProfile = profileFirebaseRepository.getProfileData()
+        }
+
+        return getModuleLessonsC(courseId, moduleId)
+    }
+
+    private suspend fun getModuleLessonsC(
+        courseId: String,
+        moduleId: String
     ): List<CourseContent> = suspendCoroutine { cont ->
         getCollectionReference()
             .whereEqualTo(COURSE_ID, courseId)
@@ -353,27 +418,59 @@ class LearningRepository : BaseFirestoreDBRepository() {
     }
 
     private fun doesLessonFullFillsCondition(it: CourseContent): Boolean {
-
-        return if (it.isOpened) {
-            if (it.rolesRequired) {
-                TODO("")
-                true
-            } else if (it.userIdRequired) {
-                it.userUids.contains(getUID());
-            } else if (it.clientsRequired) {
-                TODO("")
-                true
-            } else {
-                true
-            }
+        if (it.isOpened) {
+            return true
         } else {
-            false
+            when {
+                it.rolesRequired -> {
+
+                    for (role in mProfile!!.role_interests!!) {
+                        for (courseRoles in it.roles) {
+                            if (courseRoles == role.interestID) {
+                                return true
+                            }
+                        }
+                    }
+
+                    return false
+                }
+                it.userIdRequired -> {
+                    it.userUids.contains(getUID());
+                }
+                it.clientsRequired -> {
+                    for (company in mProfile!!.companies!!) {
+                        for (courseClients in it.clients) {
+                            if (courseClients == company.companyId) {
+                                return true
+                            }
+                        }
+                    }
+
+                    return false
+                }
+                else -> {
+                    return true
+                }
+            }
+
+            return false
         }
     }
 
 
-
     suspend fun getModuleAssessments(
+        courseId: String,
+        moduleId: String
+    ): List<CourseContent> {
+
+        if(mProfile == null){
+            mProfile = profileFirebaseRepository.getProfileData()
+        }
+
+        return getModuleAssessmentsC(courseId, moduleId)
+    }
+
+    private suspend fun getModuleAssessmentsC(
         courseId: String,
         moduleId: String
     ): List<CourseContent> = suspendCoroutine { cont ->
@@ -400,8 +497,19 @@ class LearningRepository : BaseFirestoreDBRepository() {
             }
     }
 
-
     suspend fun getVideoDetails(
+        lessonId: String
+    ): List<CourseContent>  {
+
+        if(mProfile == null){
+            mProfile = profileFirebaseRepository.getProfileData()
+        }
+
+        return getVideoDetailsC(lessonId)
+    }
+
+
+    suspend fun getVideoDetailsC(
         lessonId: String
     ): List<CourseContent> = suspendCoroutine { cont ->
         getCollectionReference()
@@ -427,26 +535,57 @@ class LearningRepository : BaseFirestoreDBRepository() {
     }
 
     private fun doesSlideFullFillsCondition(it: SlideContentRemote): Boolean {
-
-        return if (it.isOpened) {
-            if (it.rolesRequired) {
-                TODO("")
-                true
-            } else if (it.userIdRequired) {
-                it.userUids.contains(getUID());
-            } else if (it.clientsRequired) {
-                TODO("")
-                true
-            } else {
-                true
-            }
+        if (it.isOpened) {
+            return true
         } else {
-            false
+            when {
+                it.rolesRequired -> {
+
+                    for (role in mProfile!!.role_interests!!) {
+                        for (courseRoles in it.roles) {
+                            if (courseRoles == role.interestID) {
+                                return true
+                            }
+                        }
+                    }
+
+                    return false
+                }
+                it.userIdRequired -> {
+                    it.userUids.contains(getUID());
+                }
+                it.clientsRequired -> {
+                    for (company in mProfile!!.companies!!) {
+                        for (courseClients in it.clients) {
+                            if (courseClients == company.companyId) {
+                                return true
+                            }
+                        }
+                    }
+
+                    return false
+                }
+                else -> {
+                    return true
+                }
+            }
+
+            return false
         }
     }
 
 
     suspend fun getSlideContent(
+        lessonId: String
+    ): List<SlideContent>  {
+        if(mProfile == null){
+            mProfile = profileFirebaseRepository.getProfileData()
+        }
+
+        return getSlideContentC(lessonId)
+    }
+
+    private suspend fun getSlideContentC(
         lessonId: String
     ): List<SlideContent> = suspendCoroutine { cont ->
         getCollectionReference()
@@ -486,7 +625,16 @@ class LearningRepository : BaseFirestoreDBRepository() {
         )
     }
 
-    suspend fun getAssessmentsFromAllCourses(): List<CourseContent> = suspendCoroutine { cont ->
+    suspend fun getAssessmentsFromAllCourses(): List<CourseContent>  {
+
+        if(mProfile == null){
+            mProfile = profileFirebaseRepository.getProfileData()
+        }
+
+        return getAssessmentsFromAllCoursesC()
+    }
+
+    private suspend fun getAssessmentsFromAllCoursesC(): List<CourseContent> = suspendCoroutine { cont ->
         getCollectionReference()
             .whereEqualTo(TYPE, TYPE_LESSON)
             .whereEqualTo(LESSON_TYPE, LESSON_TYPE_ASSESSMENT)
@@ -508,7 +656,16 @@ class LearningRepository : BaseFirestoreDBRepository() {
             }
     }
 
-    suspend fun getModulesFromAllCourses(): List<Module> = suspendCoroutine { cont ->
+    suspend fun getModulesFromAllCourses(): List<Module>   {
+
+        if(mProfile == null){
+            mProfile = profileFirebaseRepository.getProfileData()
+        }
+
+        return getModulesFromAllCoursesC()
+    }
+
+    private suspend fun getModulesFromAllCoursesC(): List<Module> = suspendCoroutine { cont ->
         getCollectionReference()
             .whereEqualTo(TYPE, TYPE_MODULE)
             .get()
@@ -530,27 +687,56 @@ class LearningRepository : BaseFirestoreDBRepository() {
     }
 
     private fun doesModuleFullFillsCondition(it: Module): Boolean {
-
-        return if (it.isOpened) {
-            if (it.rolesRequired) {
-                TODO("")
-                true
-            } else if (it.userIdRequired) {
-                it.userUids.contains(getUID());
-            } else if (it.clientsRequired) {
-                TODO("")
-                true
-            } else {
-                true
-            }
+        if (it.isOpened) {
+            return true
         } else {
-            false
+            when {
+                it.rolesRequired -> {
+
+                    for (role in mProfile!!.role_interests!!) {
+                        for (courseRoles in it.roles) {
+                            if (courseRoles == role.interestID) {
+                                return true
+                            }
+                        }
+                    }
+
+                    return false
+                }
+                it.userIdRequired -> {
+                    it.userUids.contains(getUID());
+                }
+                it.clientsRequired -> {
+                    for (company in mProfile!!.companies!!) {
+                        for (courseClients in it.clients) {
+                            if (courseClients == company.companyId) {
+                                return true
+                            }
+                        }
+                    }
+
+                    return false
+                }
+                else -> {
+                    return true
+                }
+            }
+
+            return false
         }
     }
 
 
+    suspend fun getModules(courseId: String): List<Module>  {
 
-    suspend fun getModules(courseId: String): List<Module> = suspendCoroutine { cont ->
+        if(mProfile == null){
+            mProfile = profileFirebaseRepository.getProfileData()
+        }
+
+        return getModulesC(courseId)
+    }
+
+    private suspend fun getModulesC(courseId: String): List<Module> = suspendCoroutine { cont ->
         getCollectionReference()
             .whereEqualTo(TYPE, TYPE_MODULE)
             .get()
