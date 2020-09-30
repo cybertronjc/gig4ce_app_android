@@ -39,6 +39,7 @@ class CourseDetailsViewModel constructor(
         _courseDetails.postValue(Lce.loading())
 
         try {
+
             val course = learningRepository.getCourseDetails(courseId)
             val courseProgressDetails = learningRepository.getCourseProgress(courseId)
 

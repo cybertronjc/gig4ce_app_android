@@ -35,7 +35,9 @@ class LearningRepository constructor(
         if (mProfile == null) {
             mProfile = profileFirebaseRepository.getProfileData()
         }
-        return getUserCoursesC()
+        return getUserCoursesC().filter {
+            it.isActive && doesCourseFullFillsCondition(it)
+        }
     }
 
     private suspend fun getUserCoursesC(): List<Course> = suspendCoroutine { cont ->
@@ -50,8 +52,6 @@ class LearningRepository constructor(
                         val course = it.toObject(Course::class.java)!!
                         course.id = it.id
                         course
-                    }.filter {
-                        it.isActive && doesCourseFullFillsCondition(it)
                     }
 
                 cont.resume(courses)
@@ -62,39 +62,147 @@ class LearningRepository constructor(
     }
 
 
-    private fun doesCourseFullFillsCondition(it: Course): Boolean {
+    private suspend fun getCourseCompanyMappings(courseId: String): List<CourseMapping> =
+        suspendCoroutine { cont ->
+            val companies: List<String> = mProfile?.companies?.map {
+                it.companyId
+            } ?: emptyList()
+
+            if (companies.isEmpty())
+                cont.resume(emptyList())
+            else {
+
+                db.collection("Course_company_mapping")
+                    .whereIn("companyId", companies)
+                    .whereEqualTo("courseId", courseId)
+                    .get()
+                    .addOnSuccessListener {
+
+                        val courseMappings = it.documents.map {
+                            it.toObject(CourseMapping::class.java)!!
+                        }
+                        cont.resume(courseMappings)
+                    }
+                    .addOnFailureListener {
+                        cont.resumeWithException(it)
+                    }
+            }
+        }
+
+    private suspend fun getModuleCompanyMappings(moduleId: String): List<CourseMapping> =
+        suspendCoroutine { cont ->
+            val companies: List<String> = mProfile?.companies?.map {
+                it.companyId
+            } ?: emptyList()
+
+            if (companies.isEmpty())
+                cont.resume(emptyList())
+            else {
+
+                db.collection("Course_company_mapping")
+                    .whereIn("companyId", companies)
+                    .whereEqualTo("moduleId", moduleId)
+                    .get()
+                    .addOnSuccessListener {
+
+                        val courseMappings = it.documents.map {
+                            it.toObject(CourseMapping::class.java)!!
+                        }
+                        cont.resume(courseMappings)
+                    }
+                    .addOnFailureListener {
+                        cont.resumeWithException(it)
+                    }
+            }
+        }
+
+
+    private suspend fun getLessonCompanyMappings(lessonId: String): List<CourseMapping> =
+        suspendCoroutine { cont ->
+            val companies: List<String> = mProfile?.companies?.map {
+                it.companyId
+            } ?: emptyList()
+
+            if (companies.isEmpty())
+                cont.resume(emptyList())
+            else {
+
+                db.collection("Course_company_mapping")
+                    .whereIn("companyId", companies)
+                    .whereEqualTo("lessonId", lessonId)
+                    .get()
+                    .addOnSuccessListener {
+
+                        val courseMappings = it.documents.map {
+                            it.toObject(CourseMapping::class.java)!!
+                        }
+                        cont.resume(courseMappings)
+                    }
+                    .addOnFailureListener {
+                        cont.resumeWithException(it)
+                    }
+            }
+        }
+
+
+    private suspend fun getSlideCompanyMappings(slideId: String): List<CourseMapping> =
+        suspendCoroutine { cont ->
+            val companies: List<String> = mProfile?.companies?.map {
+                it.companyId
+            } ?: emptyList()
+
+            if (companies.isEmpty())
+                cont.resume(emptyList())
+            else {
+
+                db.collection("Course_company_mapping")
+                    .whereIn("companyId", companies)
+                    .whereEqualTo("slideId", slideId)
+                    .get()
+                    .addOnSuccessListener {
+
+                        val courseMappings = it.documents.map {
+                            it.toObject(CourseMapping::class.java)!!
+                        }
+                        cont.resume(courseMappings)
+                    }
+                    .addOnFailureListener {
+                        cont.resumeWithException(it)
+                    }
+            }
+        }
+
+
+
+    private suspend fun doesCourseFullFillsCondition(it: Course): Boolean {
         if (it.isOpened) {
-           return true
+            return true
         } else {
-            when {
-                it.rolesRequired -> {
 
-                    for (role in mProfile!!.role_interests!!) {
-                        for (courseRoles in it.roles) {
-                            if (courseRoles == role.interestID) {
-                                return true
+            val courseAndMappings = getCourseCompanyMappings(it.id)
+
+            if (courseAndMappings.isEmpty()) {
+                return false
+            }
+
+            courseAndMappings.forEach {
+                if(it.userIdsRequired) {
+                    val userMatched = it.userUids.contains(getUID())
+                    if(userMatched) return true
+                }
+
+
+                if(it.rolesRequired){
+
+                    if (mProfile?.role_interests != null) {
+                        for (role in mProfile!!.role_interests!!) {
+                            for (courseRoles in it.roles) {
+                                if (courseRoles == role.interestID) {
+                                   return true
+                                }
                             }
                         }
                     }
-
-                    return false
-                }
-                it.userIdRequired -> {
-                    it.userUids.contains(getUID());
-                }
-                it.clientsRequired -> {
-                    for (company in mProfile!!.companies!!) {
-                        for (courseClients in it.clients) {
-                            if (courseClients == company.companyId) {
-                                return true
-                            }
-                        }
-                    }
-
-                    return false
-                }
-                else -> {
-                    return true
                 }
             }
 
@@ -241,17 +349,17 @@ class LearningRepository constructor(
         var nextLessonProgress: LessonProgress? = null
 
         if (moduleProgress != null) {
-             moduleProgress.lessonsProgress.forEach {
+            moduleProgress.lessonsProgress.forEach {
 
-                 if (it.lessonId == lessonId) {
-                     it.apply {
-                         ongoing = false
-                         completed = true
-                         completionProgress = 0L
-                         lessonCompletionDate = Timestamp.now()
-                     }
-                 }
-             }
+                if (it.lessonId == lessonId) {
+                    it.apply {
+                        ongoing = false
+                        completed = true
+                        completionProgress = 0L
+                        lessonCompletionDate = Timestamp.now()
+                    }
+                }
+            }
 
             updateModuleProgress(moduleProgress.progressId, moduleProgress)
         }
@@ -333,11 +441,13 @@ class LearningRepository constructor(
 
     suspend fun getRoleBasedCourses(): List<Course> {
 
-        if(mProfile == null){
+        if (mProfile == null) {
             mProfile = profileFirebaseRepository.getProfileData()
         }
 
-        return getRoleBasedCoursesC()
+        return getRoleBasedCoursesC().filter {
+            it.isActive && doesCourseFullFillsCondition(it)
+        }
     }
 
 
@@ -352,8 +462,6 @@ class LearningRepository constructor(
                         val course = it.toObject(Course::class.java)!!
                         course.id = it.id
                         course
-                    }.filter {
-                        it.isActive && doesCourseFullFillsCondition(it)
                     }
 
                 cont.resume(courses)
@@ -363,13 +471,15 @@ class LearningRepository constructor(
             }
     }
 
-    suspend fun getAllCourses(): List<Course>{
+    suspend fun getAllCourses(): List<Course> {
 
-        if(mProfile == null){
+        if (mProfile == null) {
             mProfile = profileFirebaseRepository.getProfileData()
         }
 
-        return getAllCoursesC()
+        return getAllCoursesC().filter {
+            it.isActive && doesCourseFullFillsCondition(it)
+        }
     }
 
     private suspend fun getAllCoursesC(): List<Course> = suspendCoroutine { cont ->
@@ -383,8 +493,6 @@ class LearningRepository constructor(
                         val course = it.toObject(Course::class.java)!!
                         course.id = it.id
                         course
-                    }.filter {
-                        it.isActive && doesCourseFullFillsCondition(it)
                     }
 
                 cont.resume(courses)
@@ -393,6 +501,7 @@ class LearningRepository constructor(
                 cont.resumeWithException(it)
             }
     }
+
 
     suspend fun getCourseDetails(courseId: String): Course = suspendCoroutine { cont ->
         getCollectionReference()
@@ -414,11 +523,13 @@ class LearningRepository constructor(
         moduleId: String
     ): List<CourseContent> {
 
-        if(mProfile == null){
+        if (mProfile == null) {
             mProfile = profileFirebaseRepository.getProfileData()
         }
 
-        return getModuleLessonsC(courseId, moduleId)
+        return getModuleLessonsC(courseId, moduleId).filter {
+            it.isActive && doesLessonFullFillsCondition(it)
+        }
     }
 
     private suspend fun getModuleLessonsC(
@@ -437,8 +548,6 @@ class LearningRepository constructor(
                         val lesson = it.toObject(CourseContent::class.java)!!
                         lesson.id = it.id
                         lesson
-                    }.filter {
-                        it.isActive && doesLessonFullFillsCondition(it)
                     }
                 cont.resume(modules)
             }
@@ -447,39 +556,35 @@ class LearningRepository constructor(
             }
     }
 
-    private fun doesLessonFullFillsCondition(it: CourseContent): Boolean {
+    private suspend fun doesLessonFullFillsCondition(it: CourseContent): Boolean  {
         if (it.isOpened) {
             return true
         } else {
-            when {
-                it.rolesRequired -> {
 
-                    for (role in mProfile!!.role_interests!!) {
-                        for (courseRoles in it.roles) {
-                            if (courseRoles == role.interestID) {
-                                return true
+            val lessonMapping = getLessonCompanyMappings(it.id)
+
+            if (lessonMapping.isEmpty()) {
+                return false
+            }
+
+            lessonMapping.forEach {
+                if(it.userIdsRequired) {
+                    val userMatched = it.userUids.contains(getUID())
+                    if(userMatched) return true
+                }
+
+
+                if(it.rolesRequired){
+
+                    if (mProfile?.role_interests != null) {
+                        for (role in mProfile!!.role_interests!!) {
+                            for (courseRoles in it.roles) {
+                                if (courseRoles == role.interestID) {
+                                    return true
+                                }
                             }
                         }
                     }
-
-                    return false
-                }
-                it.userIdRequired -> {
-                    it.userUids.contains(getUID());
-                }
-                it.clientsRequired -> {
-                    for (company in mProfile!!.companies!!) {
-                        for (courseClients in it.clients) {
-                            if (courseClients == company.companyId) {
-                                return true
-                            }
-                        }
-                    }
-
-                    return false
-                }
-                else -> {
-                    return true
                 }
             }
 
@@ -493,11 +598,13 @@ class LearningRepository constructor(
         moduleId: String
     ): List<CourseContent> {
 
-        if(mProfile == null){
+        if (mProfile == null) {
             mProfile = profileFirebaseRepository.getProfileData()
         }
 
-        return getModuleAssessmentsC(courseId, moduleId)
+        return getModuleAssessmentsC(courseId, moduleId).filter {
+            it.isActive && doesLessonFullFillsCondition(it)
+        }
     }
 
     private suspend fun getModuleAssessmentsC(
@@ -517,8 +624,6 @@ class LearningRepository constructor(
                         val lesson = it.toObject(CourseContent::class.java)!!
                         lesson.id = it.id
                         lesson
-                    }.filter {
-                        it.isActive && doesLessonFullFillsCondition(it)
                     }
                 cont.resume(modules)
             }
@@ -529,17 +634,19 @@ class LearningRepository constructor(
 
     suspend fun getVideoDetails(
         lessonId: String
-    ): List<CourseContent>  {
+    ): List<CourseContent> {
 
-        if(mProfile == null){
+        if (mProfile == null) {
             mProfile = profileFirebaseRepository.getProfileData()
         }
 
-        return getVideoDetailsC(lessonId)
+        return getVideoDetailsC(lessonId).filter {
+            it.isActive && doesLessonFullFillsCondition(it)
+        }
     }
 
 
-    suspend fun getVideoDetailsC(
+    private suspend fun getVideoDetailsC(
         lessonId: String
     ): List<CourseContent> = suspendCoroutine { cont ->
         getCollectionReference()
@@ -554,8 +661,6 @@ class LearningRepository constructor(
                         val videoDetails = it.toObject(CourseContent::class.java)!!
                         videoDetails.id = it.id
                         videoDetails
-                    }.filter {
-                        it.isActive && doesLessonFullFillsCondition(it)
                     }
                 cont.resume(modules)
             }
@@ -564,39 +669,35 @@ class LearningRepository constructor(
             }
     }
 
-    private fun doesSlideFullFillsCondition(it: SlideContentRemote): Boolean {
+    private suspend fun doesSlideFullFillsCondition(it: SlideContent): Boolean {
         if (it.isOpened) {
             return true
         } else {
-            when {
-                it.rolesRequired -> {
 
-                    for (role in mProfile!!.role_interests!!) {
-                        for (courseRoles in it.roles) {
-                            if (courseRoles == role.interestID) {
-                                return true
+            val slideMappings = getSlideCompanyMappings(it.slideId)
+
+            if (slideMappings.isEmpty()) {
+                return false
+            }
+
+            slideMappings.forEach {
+                if(it.userIdsRequired) {
+                    val userMatched = it.userUids.contains(getUID())
+                    if(userMatched) return true
+                }
+
+
+                if(it.rolesRequired){
+
+                    if (mProfile?.role_interests != null) {
+                        for (role in mProfile!!.role_interests!!) {
+                            for (courseRoles in it.roles) {
+                                if (courseRoles == role.interestID) {
+                                    return true
+                                }
                             }
                         }
                     }
-
-                    return false
-                }
-                it.userIdRequired -> {
-                    it.userUids.contains(getUID());
-                }
-                it.clientsRequired -> {
-                    for (company in mProfile!!.companies!!) {
-                        for (courseClients in it.clients) {
-                            if (courseClients == company.companyId) {
-                                return true
-                            }
-                        }
-                    }
-
-                    return false
-                }
-                else -> {
-                    return true
                 }
             }
 
@@ -604,15 +705,16 @@ class LearningRepository constructor(
         }
     }
 
-
     suspend fun getSlideContent(
         lessonId: String
-    ): List<SlideContent>  {
-        if(mProfile == null){
+    ): List<SlideContent> {
+        if (mProfile == null) {
             mProfile = profileFirebaseRepository.getProfileData()
         }
 
-        return getSlideContentC(lessonId)
+        return getSlideContentC(lessonId) .filter {
+            it.isActive && doesSlideFullFillsCondition(it)
+        }
     }
 
     private suspend fun getSlideContentC(
@@ -629,9 +731,6 @@ class LearningRepository constructor(
                         val videoDetails = it.toObject(SlideContentRemote::class.java)!!
                         videoDetails.id = it.id
                         videoDetails
-                    }
-                    .filter {
-                        it.isActive && doesSlideFullFillsCondition(it)
                     }
                     .map {
                         mapToSlideContent(it)
@@ -655,44 +754,47 @@ class LearningRepository constructor(
         )
     }
 
-    suspend fun getAssessmentsFromAllCourses(): List<CourseContent>  {
+    suspend fun getAssessmentsFromAllCourses(): List<CourseContent> {
 
-        if(mProfile == null){
+        if (mProfile == null) {
             mProfile = profileFirebaseRepository.getProfileData()
         }
 
-        return getAssessmentsFromAllCoursesC()
+        return getAssessmentsFromAllCoursesC().filter {
+            it.isActive && doesLessonFullFillsCondition(it)
+        }
     }
 
-    private suspend fun getAssessmentsFromAllCoursesC(): List<CourseContent> = suspendCoroutine { cont ->
-        getCollectionReference()
-            .whereEqualTo(TYPE, TYPE_LESSON)
-            .whereEqualTo(LESSON_TYPE, LESSON_TYPE_ASSESSMENT)
-            .get()
-            .addOnSuccessListener { querySnap ->
+    private suspend fun getAssessmentsFromAllCoursesC(): List<CourseContent> =
+        suspendCoroutine { cont ->
+            getCollectionReference()
+                .whereEqualTo(TYPE, TYPE_LESSON)
+                .whereEqualTo(LESSON_TYPE, LESSON_TYPE_ASSESSMENT)
+                .get()
+                .addOnSuccessListener { querySnap ->
 
-                val modules = querySnap.documents
-                    .map {
-                        val lesson = it.toObject(CourseContent::class.java)!!
-                        lesson.id = it.id
-                        lesson
-                    }.filter {
-                        it.isActive && doesLessonFullFillsCondition(it)
-                    }
-                cont.resume(modules)
-            }
-            .addOnFailureListener {
-                cont.resumeWithException(it)
-            }
-    }
+                    val modules = querySnap.documents
+                        .map {
+                            val lesson = it.toObject(CourseContent::class.java)!!
+                            lesson.id = it.id
+                            lesson
+                        }
+                    cont.resume(modules)
+                }
+                .addOnFailureListener {
+                    cont.resumeWithException(it)
+                }
+        }
 
-    suspend fun getModulesFromAllCourses(): List<Module>   {
+    suspend fun getModulesFromAllCourses(): List<Module> {
 
-        if(mProfile == null){
+        if (mProfile == null) {
             mProfile = profileFirebaseRepository.getProfileData()
         }
 
-        return getModulesFromAllCoursesC()
+        return getModulesFromAllCoursesC().filter {
+            it.isActive && doesModuleFullFillsCondition(it)
+        }
     }
 
     private suspend fun getModulesFromAllCoursesC(): List<Module> = suspendCoroutine { cont ->
@@ -706,8 +808,6 @@ class LearningRepository constructor(
                         val modules = it.toObject(Module::class.java)!!
                         modules.id = it.id
                         modules
-                    }.filter {
-                        it.isActive && doesModuleFullFillsCondition(it)
                     }
                 cont.resume(modules)
             }
@@ -716,39 +816,35 @@ class LearningRepository constructor(
             }
     }
 
-    private fun doesModuleFullFillsCondition(it: Module): Boolean {
+    private suspend fun doesModuleFullFillsCondition(it: Module): Boolean {
         if (it.isOpened) {
             return true
         } else {
-            when {
-                it.rolesRequired -> {
 
-                    for (role in mProfile!!.role_interests!!) {
-                        for (courseRoles in it.roles) {
-                            if (courseRoles == role.interestID) {
-                                return true
+            val moduleMapping = getModuleCompanyMappings(it.id)
+
+            if (moduleMapping.isEmpty()) {
+                return false
+            }
+
+            moduleMapping.forEach {
+                if(it.userIdsRequired) {
+                    val userMatched = it.userUids.contains(getUID())
+                    if(userMatched) return true
+                }
+
+
+                if(it.rolesRequired){
+
+                    if (mProfile?.role_interests != null) {
+                        for (role in mProfile!!.role_interests!!) {
+                            for (courseRoles in it.roles) {
+                                if (courseRoles == role.interestID) {
+                                    return true
+                                }
                             }
                         }
                     }
-
-                    return false
-                }
-                it.userIdRequired -> {
-                    it.userUids.contains(getUID());
-                }
-                it.clientsRequired -> {
-                    for (company in mProfile!!.companies!!) {
-                        for (courseClients in it.clients) {
-                            if (courseClients == company.companyId) {
-                                return true
-                            }
-                        }
-                    }
-
-                    return false
-                }
-                else -> {
-                    return true
                 }
             }
 
@@ -757,13 +853,15 @@ class LearningRepository constructor(
     }
 
 
-    suspend fun getModules(courseId: String): List<Module>  {
+    suspend fun getModules(courseId: String): List<Module> {
 
-        if(mProfile == null){
+        if (mProfile == null) {
             mProfile = profileFirebaseRepository.getProfileData()
         }
 
-        return getModulesC(courseId)
+        return getModulesC(courseId).filter {
+            it.isActive && doesModuleFullFillsCondition(it)
+        }
     }
 
     private suspend fun getModulesC(courseId: String): List<Module> = suspendCoroutine { cont ->
@@ -778,8 +876,6 @@ class LearningRepository constructor(
                         val modules = it.toObject(Module::class.java)!!
                         modules.id = it.id
                         modules
-                    }.filter {
-                        it.isActive && doesModuleFullFillsCondition(it)
                     }
                 cont.resume(modules)
             }
