@@ -83,6 +83,7 @@ class LandingScreenFragment : BaseFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        val notificationToken=FirebaseInstanceId.getInstance().getToken()
         viewModel = ViewModelProvider(this).get(LandingScreenViewModel::class.java)
         val displayMetrics = DisplayMetrics()
         activity?.windowManager?.getDefaultDisplay()?.getMetrics(displayMetrics)

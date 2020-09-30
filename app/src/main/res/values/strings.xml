@@ -957,6 +957,7 @@
     <string name="update_your_profile">Update your profile</string>
     <string name="explore_learning">Explore Learning</string>
     <string name="explore_more_role">Explore More role</string>
+    <string name="default_notification_channel_id">19871629</string>
 
 
 </resources>
