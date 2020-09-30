@@ -64,8 +64,10 @@
 
             <ImageView
                 android:id="@+id/retake_image"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:scaleX="0.8"
+                android:scaleY="0.8"
                 android:layout_marginLeft="27dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -74,8 +76,10 @@
 
             <ImageView
                 android:id="@+id/upload_img"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:scaleX="0.8"
+                android:scaleY="0.8"
                 android:layout_marginRight="27dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

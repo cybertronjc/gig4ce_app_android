@@ -18,6 +18,7 @@ import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.app.core.genericadapter.RecyclerGenericAdapter
+import com.gigforce.app.core.gone
 import com.gigforce.app.utils.*
 import kotlinx.android.synthetic.main.fragment_assessment_result.*
 import kotlinx.android.synthetic.main.layout_rv_question_wisr_sum_assess_result.view.*
@@ -113,6 +114,7 @@ class AssessmentResultFragment : BaseFragment(), PopupMenu.OnMenuItemClickListen
         )
         rv_question_wise_sum_assess_frag.adapter = adapter
         adapter?.addAll(arguments?.getBooleanArray(StringConstants.ANSWERS_ARR.value)?.toList())
+
         rv_sug_learnings_assess_result.adapter = AdapterSuggestedLearning().setCallbacks(this)
         rv_sug_learnings_assess_result.layoutManager =
             LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)

@@ -22,12 +22,12 @@ class AssessmentDialogViewModel constructor(
     private val _savingAssessmentState = MutableLiveData<Lce<AssessmentResult>>()
     val savingAssessmentState : LiveData<Lce<AssessmentResult>> = _savingAssessmentState
 
-    fun saveAssessmentState(moduleId : String, state : Int) = viewModelScope.launch{
+    fun saveAssessmentState(moduleId : String,lessonId : String, state : Int) = viewModelScope.launch{
         _savingAssessmentState.value = Lce.loading()
 
         try {
 
-            val nextDest = learningRepository.markCurrentLessonAsCompleteAndEnableNextOne(moduleId)
+            val nextDest = learningRepository.markCurrentLessonAsComplete(moduleId,lessonId)
             _savingAssessmentState.value = Lce.content(AssessmentResult(
                 state = state,
                 nextDest = nextDest

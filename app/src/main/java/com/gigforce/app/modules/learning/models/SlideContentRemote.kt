@@ -44,7 +44,35 @@ data class SlideContentRemote(
 
     @get:PropertyName("url")
     @set:PropertyName("url")
-    var videoUrl: String = ""
+    var videoUrl: String = "",
+
+    @get:PropertyName("isopened")
+    @set:PropertyName("isopened")
+    var isOpened : Boolean = false,
+
+    @get:PropertyName("roles_required")
+    @set:PropertyName("roles_required")
+    var rolesRequired : Boolean = false,
+
+    @get:PropertyName("roles")
+    @set:PropertyName("roles")
+    var roles : List<String> = emptyList(),
+
+    @get:PropertyName("user_ids_required")
+    @set:PropertyName("user_ids_required")
+    var userIdRequired : Boolean = false,
+
+    @get:PropertyName("user_uids")
+    @set:PropertyName("user_uids")
+    var userUids : List<String> = emptyList(),
+
+    @get:PropertyName("clients_required")
+    @set:PropertyName("clients_required")
+    var clientsRequired : Boolean = false,
+
+    @get:PropertyName("clients")
+    @set:PropertyName("clients")
+    var clients : List<String> = emptyList()
     ) {
 
     companion object {

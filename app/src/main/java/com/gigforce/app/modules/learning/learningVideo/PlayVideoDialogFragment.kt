@@ -1,6 +1,7 @@
 package com.gigforce.app.modules.learning.learningVideo
 
 
+import android.app.Dialog
 import android.content.pm.ActivityInfo
 import android.net.Uri
 import android.os.Build
@@ -12,28 +13,28 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.appcompat.app.AlertDialog
 import androidx.core.os.bundleOf
+import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
-import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
-import com.gigforce.app.modules.assessment.AssessmentFragment
 import com.gigforce.app.modules.learning.models.CourseContent
-import com.gigforce.app.modules.learning.slides.SlidesFragment
 import com.gigforce.app.modules.learning.slides.types.VideoWithTextFragment
 import com.gigforce.app.utils.Lce
+import com.google.android.exoplayer2.C
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.source.MediaSource
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
+import com.google.android.exoplayer2.ui.AspectRatioFrameLayout
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import kotlinx.android.synthetic.main.fragment_play_video.*
 import kotlinx.android.synthetic.main.fragment_play_video_main.*
 
 
-class PlayVideoDialogFragment : BaseFragment() {
+class PlayVideoDialogFragment : DialogFragment() {
 
     private var playWhenReady = true
     private var currentWindow = 0
@@ -68,7 +69,8 @@ class PlayVideoDialogFragment : BaseFragment() {
             mModuleId = it.getString(INTENT_EXTRA_MODULE_ID) ?: return@let
         }
 
-        return inflateView(R.layout.fragment_play_video, inflater, container)
+        return inflater.inflate(R.layout.fragment_play_video, container, false)
+//        return inflateView(R.layout.fragment_play_video, inflater, container)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -79,6 +81,11 @@ class PlayVideoDialogFragment : BaseFragment() {
         outState.putLong("key_play_back_position", playbackPosition)
         outState.putString(INTENT_EXTRA_LESSON_ID, mLessonId)
         outState.putString(INTENT_EXTRA_MODULE_ID, mModuleId)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setStyle(STYLE_NORMAL, R.style.Theme_App_Dialog_FullScreen)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -105,6 +112,24 @@ class PlayVideoDialogFragment : BaseFragment() {
             }
     }
 
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        return object : Dialog(requireContext(),theme){
+            override fun onBackPressed() {
+               backPressed()
+            }
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        val winAttrib = dialog?.window?.attributes
+        winAttrib?.dimAmount = 0.0f
+        dialog?.window?.attributes = winAttrib
+
+        activity?.window?.decorView?.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+    }
+
     private fun initViewModel() {
         viewModel.videoDetails
             .observe(viewLifecycleOwner, Observer {
@@ -125,7 +150,7 @@ class PlayVideoDialogFragment : BaseFragment() {
                         when (it.content) {
                             VideoSaveState.VideoStateSaved -> {
                                 videoStateSaved = true
-                                activity?.onBackPressed()
+                                dismiss()
                             }
                             VideoSaveState.VideoMarkedComplete -> {
                                 //Open next
@@ -139,7 +164,7 @@ class PlayVideoDialogFragment : BaseFragment() {
 
         viewModel.openNextDestination.observe(viewLifecycleOwner, Observer { cc ->
 
-            if(cc == null){
+            if (cc == null) {
                 activity?.onBackPressed()
                 return@Observer
             }
@@ -153,7 +178,7 @@ class PlayVideoDialogFragment : BaseFragment() {
             view.findViewById<View>(R.id.tv_action_assess_dialog)
                 .setOnClickListener {
                     dialog.dismiss()
-                    activity?.onBackPressed()
+                    dismiss()
 
 
 //                    when (cc.type) {
@@ -242,17 +267,17 @@ class PlayVideoDialogFragment : BaseFragment() {
         }
     }
 
-    override fun onBackPressed(): Boolean {
+    fun backPressed() {
 
-        return if (currentOrientation == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
+        if (currentOrientation == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
 
             activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
             currentOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
             adjustUiforOrientation()
-            true
         } else {
-            if (player == null || videoStateSaved)
-                return false
+            if (player == null || videoStateSaved){
+                dismiss()
+            }
 
             player?.stop()
             val currentPos = player?.currentPosition ?: 0L
@@ -263,17 +288,19 @@ class PlayVideoDialogFragment : BaseFragment() {
                 playBackPosition = currentPos,
                 fullVideoLength = totalLenght
             )
-            true
         }
     }
+
 
     private fun initializePlayer(uri: Uri, lastTimePlayBackPosition: Long) {
         player = SimpleExoPlayer.Builder(requireContext()).build()
         player?.addListener(PlayerEventListener())
         playerView.player = player
 
-        val mediaSource = buildMediaSource(uri)
+        playerView.resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FILL
+        player?.videoScalingMode = C.VIDEO_SCALING_MODE_SCALE_TO_FIT
 
+        val mediaSource = buildMediaSource(uri)
         player?.playWhenReady = playWhenReady
 
         if (playbackPosition != 0L)
@@ -316,12 +343,30 @@ class PlayVideoDialogFragment : BaseFragment() {
     companion object {
         const val INTENT_EXTRA_LESSON_ID = "lesson_id"
         const val INTENT_EXTRA_MODULE_ID = "module_id"
+        const val TAG = "PlayVideoDialogFragment"
+
+        fun launch(
+            childFragmentManager: FragmentManager,
+            moduleId: String,
+            lessonId: String
+        ) {
+            val frag = PlayVideoDialogFragment()
+            val bundle = bundleOf(
+                INTENT_EXTRA_MODULE_ID to moduleId,
+                INTENT_EXTRA_LESSON_ID to lessonId
+            )
+
+            frag.arguments = bundle
+            frag.show(childFragmentManager, TAG)
+        }
     }
 
     inner class PlayerEventListener : Player.EventListener {
 
+
         override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
             super.onPlayerStateChanged(playWhenReady, playbackState)
+
 
             if (playbackState == Player.STATE_ENDED) {
                 viewModel.markVideoAsComplete(mModuleId, mLessonId)

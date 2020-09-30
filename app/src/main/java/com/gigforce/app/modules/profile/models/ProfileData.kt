@@ -1,5 +1,7 @@
 package com.gigforce.app.modules.profile.models
 
+import com.google.firebase.firestore.PropertyName
+
 data class ProfileData(
     var status: Boolean = true,
     var errormsg: String = "",
@@ -30,7 +32,11 @@ data class ProfileData(
     var contactPhone: ArrayList<ContactPhone>? = null,
     var contactEmail: ArrayList<ContactEmail>? = null,
     var invited: ArrayList<Invites>? = null,
-    var role_interests: ArrayList<RoleInterests>? = null
+    var role_interests: ArrayList<RoleInterests>? = null,
+
+    @get:PropertyName("companies")
+    @set:PropertyName("companies")
+    var companies: ArrayList<Company>? = null
 ) {
 
 }
