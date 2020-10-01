@@ -37,6 +37,8 @@ class LearningRepository constructor(
         }
         return getUserCoursesC().filter {
             it.isActive && doesCourseFullFillsCondition(it)
+        }.sortedBy {
+            it.priority
         }
     }
 
@@ -452,6 +454,8 @@ class LearningRepository constructor(
 
         return getRoleBasedCoursesC().filter {
             it.isActive && doesCourseFullFillsCondition(it)
+        }.sortedBy {
+            it.priority
         }
     }
 
@@ -484,6 +488,8 @@ class LearningRepository constructor(
 
         return getAllCoursesC().filter {
             it.isActive && doesCourseFullFillsCondition(it)
+        }.sortedBy {
+            it.priority
         }
     }
 
