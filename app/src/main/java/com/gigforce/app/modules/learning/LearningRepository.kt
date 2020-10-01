@@ -186,6 +186,11 @@ class LearningRepository constructor(
             }
 
             courseAndMappings.forEach {
+
+                if(it.isopened){
+                    return true
+                }
+
                 if(it.userIdsRequired) {
                     val userMatched = it.userUids.contains(getUID())
                     if(userMatched) return true
@@ -568,6 +573,11 @@ class LearningRepository constructor(
             }
 
             lessonMapping.forEach {
+
+                if(it.isopened){
+                    return true
+                }
+
                 if(it.userIdsRequired) {
                     val userMatched = it.userUids.contains(getUID())
                     if(userMatched) return true
@@ -681,6 +691,11 @@ class LearningRepository constructor(
             }
 
             slideMappings.forEach {
+
+                if(it.isopened){
+                    return true
+                }
+
                 if(it.userIdsRequired) {
                     val userMatched = it.userUids.contains(getUID())
                     if(userMatched) return true
@@ -828,6 +843,11 @@ class LearningRepository constructor(
             }
 
             moduleMapping.forEach {
+
+                if(it.isopened){
+                    return true
+                }
+
                 if(it.userIdsRequired) {
                     val userMatched = it.userUids.contains(getUID())
                     if(userMatched) return true
