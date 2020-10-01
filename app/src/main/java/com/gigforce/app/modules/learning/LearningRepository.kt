@@ -37,6 +37,8 @@ class LearningRepository constructor(
         }
         return getUserCoursesC().filter {
             it.isActive && doesCourseFullFillsCondition(it)
+        }.sortedBy {
+            it.priority
         }
     }
 
@@ -186,6 +188,11 @@ class LearningRepository constructor(
             }
 
             courseAndMappings.forEach {
+
+                if(it.isopened){
+                    return true
+                }
+
                 if(it.userIdsRequired) {
                     val userMatched = it.userUids.contains(getUID())
                     if(userMatched) return true
@@ -447,6 +454,8 @@ class LearningRepository constructor(
 
         return getRoleBasedCoursesC().filter {
             it.isActive && doesCourseFullFillsCondition(it)
+        }.sortedBy {
+            it.priority
         }
     }
 
@@ -479,6 +488,8 @@ class LearningRepository constructor(
 
         return getAllCoursesC().filter {
             it.isActive && doesCourseFullFillsCondition(it)
+        }.sortedBy {
+            it.priority
         }
     }
 
@@ -568,6 +579,11 @@ class LearningRepository constructor(
             }
 
             lessonMapping.forEach {
+
+                if(it.isopened){
+                    return true
+                }
+
                 if(it.userIdsRequired) {
                     val userMatched = it.userUids.contains(getUID())
                     if(userMatched) return true
@@ -681,6 +697,11 @@ class LearningRepository constructor(
             }
 
             slideMappings.forEach {
+
+                if(it.isopened){
+                    return true
+                }
+
                 if(it.userIdsRequired) {
                     val userMatched = it.userUids.contains(getUID())
                     if(userMatched) return true
@@ -828,6 +849,11 @@ class LearningRepository constructor(
             }
 
             moduleMapping.forEach {
+
+                if(it.isopened){
+                    return true
+                }
+
                 if(it.userIdsRequired) {
                     val userMatched = it.userUids.contains(getUID())
                     if(userMatched) return true
