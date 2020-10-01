@@ -99,7 +99,7 @@ class SlidesFragment : BaseFragment(), ViewPager.OnPageChangeListener,
         fragment_slides_error.gone()
         fragment_slides_main_layout.visible()
 
-        pagerAdapter = SlidesPagerAdapter(childFragmentManager, content.slideContent, this)
+        pagerAdapter = SlidesPagerAdapter(childFragmentManager,mModuleId,mLessonId, content.slideContent, this)
         slideViewPager.adapter = pagerAdapter
         slideViewPager.addOnPageChangeListener(this)
 

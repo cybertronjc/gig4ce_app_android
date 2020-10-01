@@ -4,8 +4,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.core.os.bundleOf
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
+import com.gigforce.app.core.gone
+import com.gigforce.app.core.visible
+import com.gigforce.app.modules.learning.slides.SlideViewModel
+import com.gigforce.app.utils.Lse
 import kotlinx.android.synthetic.main.fragment_learning_slide_completed.*
 
 class SlidesCompletedFragment : BaseFragment() {
@@ -13,11 +21,27 @@ class SlidesCompletedFragment : BaseFragment() {
     companion object {
         const val TAG = "SlidesCompletedFragment"
 
-        fun getInstance() : SlidesCompletedFragment{
-            return SlidesCompletedFragment()
+        const val INTENT_EXTRA_MODULE_ID = "module_id"
+        const val INTENT_EXTRA_LESSON_ID = "lesson_id"
+
+        fun getInstance(
+            moduleId: String,
+            lessonId: String
+        ): SlidesCompletedFragment {
+            return SlidesCompletedFragment().apply {
+                val bundle = bundleOf(
+                    INTENT_EXTRA_MODULE_ID to  moduleId,
+                    INTENT_EXTRA_LESSON_ID to lessonId
+                )
+                arguments = bundle
+            }
         }
     }
 
+    private lateinit var moduleId : String
+    private lateinit var lessonId : String
+
+    private val slidesViewModel : SlideViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -28,8 +52,49 @@ class SlidesCompletedFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        go_back_btn.setOnClickListener {
-            activity?.onBackPressed()
+        arguments?.let {
+
+            moduleId = it.getString(INTENT_EXTRA_MODULE_ID) ?: return@let
+            lessonId = it.getString(INTENT_EXTRA_LESSON_ID) ?: return@let
         }
+
+        savedInstanceState?.let {
+
+            moduleId = it.getString(INTENT_EXTRA_MODULE_ID) ?: return@let
+            lessonId = it.getString(INTENT_EXTRA_LESSON_ID) ?: return@let
+        }
+
+        initViewModel()
+
+
+
+        go_back_btn.setOnClickListener {
+            slidesViewModel.markAllSlidesAsComplete(moduleId, lessonId)
+        }
+    }
+
+    private fun initViewModel() {
+        slidesViewModel.markAllSlidesAsComplete.observe(viewLifecycleOwner, Observer {
+
+            when (it) {
+                Lse.Loading -> {
+                    main_layout.gone()
+                    slideProgressSavingPB.visible()
+                }
+                Lse.Success -> {
+                    Toast.makeText(requireContext(), "Slides marked as complete", Toast.LENGTH_SHORT).show()
+                    activity?.onBackPressed()
+                }
+                is Lse.Error -> {
+                    Toast.makeText(requireContext(), "Unable to save progress ${it.error}" , Toast.LENGTH_LONG).show()
+                }
+            }
+        })
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString(INTENT_EXTRA_MODULE_ID , moduleId)
+        outState.putString(INTENT_EXTRA_LESSON_ID , lessonId)
     }
 }

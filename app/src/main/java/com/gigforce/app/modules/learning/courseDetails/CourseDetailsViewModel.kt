@@ -23,7 +23,7 @@ class CourseDetailsViewModel constructor(
     var currentlySelectedModulePosition = 0
 
     private var mCurrentModuleId: String? = null
-    private var mCurrentModuleProgressData: List<ModuleProgress>? = null
+    private var mCurrentModulesProgressData: List<ModuleProgress>? = null
 
 
     private val _courseDetails = MutableLiveData<Lce<Course>>()
@@ -39,6 +39,7 @@ class CourseDetailsViewModel constructor(
         _courseDetails.postValue(Lce.loading())
 
         try {
+
             val course = learningRepository.getCourseDetails(courseId)
             val courseProgressDetails = learningRepository.getCourseProgress(courseId)
 
@@ -144,7 +145,7 @@ class CourseDetailsViewModel constructor(
 
             mCurrentModuleId = moduleId
 
-            if (mCurrentModuleProgressData != null) {
+            if (mCurrentModulesProgressData != null) {
                 currentLessons = appendLessonProgressInfo(courseId, moduleId, courseLessons)
 
                 _courseLessons.postValue(Lce.content(courseLessons))
@@ -170,7 +171,7 @@ class CourseDetailsViewModel constructor(
 
                 if (querySnap != null) {
 
-                    mCurrentModuleProgressData = querySnap.documents.map {
+                    mCurrentModulesProgressData = querySnap.documents.map {
                         it.toObject(ModuleProgress::class.java)!!
                     }
 
@@ -179,9 +180,6 @@ class CourseDetailsViewModel constructor(
                             appendLessonProgressInfo(courseId, moduleId, currentLessons!!)
 
                         _courseLessons.postValue(Lce.content(currentLessons!!))
-
-
-
 
                         val assessments = currentLessons!!.filter {
                             it.type == CourseContent.TYPE_ASSESSMENT
@@ -205,7 +203,7 @@ class CourseDetailsViewModel constructor(
         moduleId: String,
         courseLessons: List<CourseContent>
     ): List<CourseContent> {
-        val moduleProgress = mCurrentModuleProgressData!!.find {
+        val moduleProgress = mCurrentModulesProgressData!!.find {
             it.moduleId == mCurrentModuleId
         }
 
@@ -257,7 +255,7 @@ class CourseDetailsViewModel constructor(
 
             mCurrentModuleId = moduleId
 
-            if (mCurrentModuleProgressData != null) {
+            if (mCurrentModulesProgressData != null) {
                 currentAssessments = appendLessonProgressInfo(courseId, moduleId, courseAssessments)
 
                 _courseAssessments.postValue(Lce.content(courseAssessments))

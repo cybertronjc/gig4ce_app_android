@@ -8,6 +8,7 @@ import com.gigforce.app.modules.learning.LearningRepository
 import com.gigforce.app.modules.learning.models.SlideContent
 import com.gigforce.app.modules.learning.models.progress.SlideProgress
 import com.gigforce.app.utils.Lce
+import com.gigforce.app.utils.Lse
 import com.google.firebase.Timestamp
 import kotlinx.coroutines.launch
 
@@ -74,6 +75,7 @@ class SlideViewModel constructor(
                 SlideProgress(
                     progressId = "",
                     slideId = it.slideId,
+                    lessonId = it.lessonId,
                     slideStartDate = Timestamp.now(),
                     slideCompletionDate = null,
                     completed = false
@@ -88,6 +90,39 @@ class SlideViewModel constructor(
             return moduleProgressInfo.slidesProgress
         } else {
             return moduleProgressInfo.slidesProgress
+        }
+    }
+
+    private val _markAllSlidesAsComplete = MutableLiveData<Lse>()
+    val markAllSlidesAsComplete: LiveData<Lse> = _markAllSlidesAsComplete
+
+
+    fun markAllSlidesAsComplete(moduleId: String, lessonId: String) = viewModelScope.launch {
+        _markAllSlidesAsComplete.value  = Lse.loading()
+
+        try {
+            val moduleProgress = learningRepository.getModuleProgress(moduleId)
+
+            moduleProgress!!.slidesProgress.forEach {
+                if (it.lessonId == lessonId) {
+                    it.completed = true
+                    it.slideCompletionDate = Timestamp.now()
+                }
+            }
+
+            moduleProgress.lessonsProgress.forEach {
+
+                if(it.lessonId == lessonId){
+                    it.completed = true
+                    it.lessonCompletionDate = Timestamp.now()
+                }
+            }
+
+            learningRepository.updateModuleProgress(progressTrackingId = moduleProgress.progressId, moduleProgress = moduleProgress)
+
+            _markAllSlidesAsComplete.value  = Lse.success()
+        } catch (e: Exception) {
+            _markAllSlidesAsComplete.value  = Lse.error(e.message ?: "Unable to Save Slide Progress")
         }
     }
 }
