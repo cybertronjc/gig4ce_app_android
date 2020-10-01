@@ -29,6 +29,7 @@ import com.google.firebase.dynamiclinks.DynamicLink
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.dynamiclinks.ktx.shortLinkAsync
+import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.StorageReference
 import kotlinx.android.synthetic.main.fragment_referrals.*
@@ -102,6 +103,14 @@ class ReferralsFragment : BaseFragment() {
 
                         }
 
+//                        val clipboard: ClipboardManager? =
+//                            requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager?
+//                        val clip = ClipData.newPlainText(
+//                            "token",
+//                              FirebaseInstanceId.getInstance().getToken()
+//                        )
+//                        clipboard?.setPrimaryClip(clip)
+
                     })
                 PushDownAnim.setPushDownAnimTo(iv_whatsapp_referrals_frag)
                     .setOnClickListener(View.OnClickListener {
@@ -135,7 +144,6 @@ class ReferralsFragment : BaseFragment() {
                             // Short link created
                             val shortLink = result.shortLink
                             shareToAnyApp(shortLink.toString())
-
 
 
                         }.addOnFailureListener {
@@ -286,7 +294,7 @@ class ReferralsFragment : BaseFragment() {
             var shareMessage = url
             shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage)
             val bitmap =
-                BitmapFactory.decodeResource(requireContext().resources, R.drawable.gig4ce_logo)
+                BitmapFactory.decodeResource(requireContext().resources,R.drawable.bg_gig_type)
 
             //save bitmap to app cache folder
 
