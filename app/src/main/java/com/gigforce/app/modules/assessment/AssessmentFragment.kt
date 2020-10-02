@@ -143,7 +143,7 @@ class AssessmentFragment : BaseFragment(),
                 showDialog(
                     AssessmentDialog.STATE_INIT, bundleOf(
                         StringConstants.DURATION.value to it.duration,
-                        StringConstants.ASSESSMENT_NAME.value to it.assessment_name,
+                        StringConstants.ASSESSMENT_NAME.value to it.Name,
                         StringConstants.QUESTIONS_COUNT.value to (it.assessment?.size ?: 0),
                         StringConstants.LEVEL.value to it.level,
                         StringConstants.ASSESSMENT_DIALOG_STATE.value to AssessmentDialog.STATE_INIT
@@ -153,7 +153,7 @@ class AssessmentFragment : BaseFragment(),
                 tv_scenario_value_header_assess_frag.text = it.scenario
 
                 tv_level_assess_frag.text = "${getString(R.string.level)} ${it.level}"
-                tv_designation_assess_frag.text = it.assessment_name
+                tv_designation_assess_frag.text = it.Name
                 h_pb_assess_frag.max = it.assessment?.size!!
                 h_pb_assess_frag.progress = 0
                 tv_percent_assess_frag.text = "0 %"
