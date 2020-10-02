@@ -18,7 +18,7 @@ import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
 class LearningRepository constructor(
-    private val profileFirebaseRepository: ProfileFirebaseRepository = ProfileFirebaseRepository()
+        private val profileFirebaseRepository: ProfileFirebaseRepository = ProfileFirebaseRepository()
 ) : BaseFirestoreDBRepository() {
 
     private var mProfile: ProfileData? = null
@@ -26,8 +26,9 @@ class LearningRepository constructor(
 
     fun courseModuleProgressInfo(courseId: String): Query {
         return db.collection(COURSE_PROGRESS_NAME)
-            .whereEqualTo("course_id", courseId)
-            .whereEqualTo(TYPE, TYPE_MODULE)
+                .whereEqualTo("course_id", courseId)
+                .whereEqualTo("uid", getUID())
+                .whereEqualTo(TYPE, TYPE_MODULE)
     }
 
     suspend fun getUserCourses(): List<Course> {
@@ -45,135 +46,134 @@ class LearningRepository constructor(
     private suspend fun getUserCoursesC(): List<Course> = suspendCoroutine { cont ->
 
         getCollectionReference()
-            .whereEqualTo(TYPE, TYPE_COURSE)
-            .get()
-            .addOnSuccessListener { querySnap ->
+                .whereEqualTo(TYPE, TYPE_COURSE)
+                .get()
+                .addOnSuccessListener { querySnap ->
 
-                val courses = querySnap.documents
-                    .map {
-                        val course = it.toObject(Course::class.java)!!
-                        course.id = it.id
-                        course
-                    }
+                    val courses = querySnap.documents
+                            .map {
+                                val course = it.toObject(Course::class.java)!!
+                                course.id = it.id
+                                course
+                            }
 
-                cont.resume(courses)
-            }
-            .addOnFailureListener {
-                cont.resumeWithException(it)
-            }
+                    cont.resume(courses)
+                }
+                .addOnFailureListener {
+                    cont.resumeWithException(it)
+                }
     }
 
 
     private suspend fun getCourseCompanyMappings(courseId: String): List<CourseMapping> =
-        suspendCoroutine { cont ->
-            val companies: List<String> = mProfile?.companies?.map {
-                it.companyId
-            } ?: emptyList()
+            suspendCoroutine { cont ->
+                val companies: List<String> = mProfile?.companies?.map {
+                    it.companyId
+                } ?: emptyList()
 
-            if (companies.isEmpty())
-                cont.resume(emptyList())
-            else {
+                if (companies.isEmpty())
+                    cont.resume(emptyList())
+                else {
 
-                db.collection("Course_company_mapping")
-                    .whereIn("companyId", companies)
-                    .whereEqualTo("courseId", courseId)
-                    .get()
-                    .addOnSuccessListener {
+                    db.collection("Course_company_mapping")
+                            .whereIn("companyId", companies)
+                            .whereEqualTo("courseId", courseId)
+                            .get()
+                            .addOnSuccessListener {
 
-                        val courseMappings = it.documents.map {
-                            it.toObject(CourseMapping::class.java)!!
-                        }
-                        cont.resume(courseMappings)
-                    }
-                    .addOnFailureListener {
-                        cont.resumeWithException(it)
-                    }
+                                val courseMappings = it.documents.map {
+                                    it.toObject(CourseMapping::class.java)!!
+                                }
+                                cont.resume(courseMappings)
+                            }
+                            .addOnFailureListener {
+                                cont.resumeWithException(it)
+                            }
+                }
             }
-        }
 
     private suspend fun getModuleCompanyMappings(moduleId: String): List<CourseMapping> =
-        suspendCoroutine { cont ->
-            val companies: List<String> = mProfile?.companies?.map {
-                it.companyId
-            } ?: emptyList()
+            suspendCoroutine { cont ->
+                val companies: List<String> = mProfile?.companies?.map {
+                    it.companyId
+                } ?: emptyList()
 
-            if (companies.isEmpty())
-                cont.resume(emptyList())
-            else {
+                if (companies.isEmpty())
+                    cont.resume(emptyList())
+                else {
 
-                db.collection("Course_company_mapping")
-                    .whereIn("companyId", companies)
-                    .whereEqualTo("moduleId", moduleId)
-                    .get()
-                    .addOnSuccessListener {
+                    db.collection("Course_company_mapping")
+                            .whereIn("companyId", companies)
+                            .whereEqualTo("moduleId", moduleId)
+                            .get()
+                            .addOnSuccessListener {
 
-                        val courseMappings = it.documents.map {
-                            it.toObject(CourseMapping::class.java)!!
-                        }
-                        cont.resume(courseMappings)
-                    }
-                    .addOnFailureListener {
-                        cont.resumeWithException(it)
-                    }
+                                val courseMappings = it.documents.map {
+                                    it.toObject(CourseMapping::class.java)!!
+                                }
+                                cont.resume(courseMappings)
+                            }
+                            .addOnFailureListener {
+                                cont.resumeWithException(it)
+                            }
+                }
             }
-        }
 
 
     private suspend fun getLessonCompanyMappings(lessonId: String): List<CourseMapping> =
-        suspendCoroutine { cont ->
-            val companies: List<String> = mProfile?.companies?.map {
-                it.companyId
-            } ?: emptyList()
+            suspendCoroutine { cont ->
+                val companies: List<String> = mProfile?.companies?.map {
+                    it.companyId
+                } ?: emptyList()
 
-            if (companies.isEmpty())
-                cont.resume(emptyList())
-            else {
+                if (companies.isEmpty())
+                    cont.resume(emptyList())
+                else {
 
-                db.collection("Course_company_mapping")
-                    .whereIn("companyId", companies)
-                    .whereEqualTo("lessonId", lessonId)
-                    .get()
-                    .addOnSuccessListener {
+                    db.collection("Course_company_mapping")
+                            .whereIn("companyId", companies)
+                            .whereEqualTo("lessonId", lessonId)
+                            .get()
+                            .addOnSuccessListener {
 
-                        val courseMappings = it.documents.map {
-                            it.toObject(CourseMapping::class.java)!!
-                        }
-                        cont.resume(courseMappings)
-                    }
-                    .addOnFailureListener {
-                        cont.resumeWithException(it)
-                    }
+                                val courseMappings = it.documents.map {
+                                    it.toObject(CourseMapping::class.java)!!
+                                }
+                                cont.resume(courseMappings)
+                            }
+                            .addOnFailureListener {
+                                cont.resumeWithException(it)
+                            }
+                }
             }
-        }
 
 
     private suspend fun getSlideCompanyMappings(slideId: String): List<CourseMapping> =
-        suspendCoroutine { cont ->
-            val companies: List<String> = mProfile?.companies?.map {
-                it.companyId
-            } ?: emptyList()
+            suspendCoroutine { cont ->
+                val companies: List<String> = mProfile?.companies?.map {
+                    it.companyId
+                } ?: emptyList()
 
-            if (companies.isEmpty())
-                cont.resume(emptyList())
-            else {
+                if (companies.isEmpty())
+                    cont.resume(emptyList())
+                else {
 
-                db.collection("Course_company_mapping")
-                    .whereIn("companyId", companies)
-                    .whereEqualTo("slideId", slideId)
-                    .get()
-                    .addOnSuccessListener {
+                    db.collection("Course_company_mapping")
+                            .whereIn("companyId", companies)
+                            .whereEqualTo("slideId", slideId)
+                            .get()
+                            .addOnSuccessListener {
 
-                        val courseMappings = it.documents.map {
-                            it.toObject(CourseMapping::class.java)!!
-                        }
-                        cont.resume(courseMappings)
-                    }
-                    .addOnFailureListener {
-                        cont.resumeWithException(it)
-                    }
+                                val courseMappings = it.documents.map {
+                                    it.toObject(CourseMapping::class.java)!!
+                                }
+                                cont.resume(courseMappings)
+                            }
+                            .addOnFailureListener {
+                                cont.resumeWithException(it)
+                            }
+                }
             }
-        }
-
 
 
     private suspend fun doesCourseFullFillsCondition(it: Course): Boolean {
@@ -189,23 +189,23 @@ class LearningRepository constructor(
 
             courseAndMappings.forEach {
 
-                if(it.isopened){
+                if (it.isopened) {
                     return true
                 }
 
-                if(it.userIdsRequired) {
+                if (it.userIdsRequired) {
                     val userMatched = it.userUids.contains(getUID())
-                    if(userMatched) return true
+                    if (userMatched) return true
                 }
 
 
-                if(it.rolesRequired){
+                if (it.rolesRequired) {
 
                     if (mProfile?.role_interests != null) {
                         for (role in mProfile!!.role_interests!!) {
                             for (courseRoles in it.roles) {
                                 if (courseRoles == role.interestID) {
-                                   return true
+                                    return true
                                 }
                             }
                         }
@@ -220,20 +220,20 @@ class LearningRepository constructor(
     suspend fun getCourseProgress(courseId: String): CourseProgress {
 
         val querySnap = db.collection(COURSE_PROGRESS_NAME)
-            .whereEqualTo("uid", getUID())
-            .whereEqualTo("course_id", courseId)
-            .getOrThrow()
+                .whereEqualTo("uid", getUID())
+                .whereEqualTo("course_id", courseId)
+                .getOrThrow()
 
         if (querySnap.isEmpty) {
             //No data in Progress DB
             addInitalProgressDataForCourse(courseId)
             return CourseProgress(
-                uid = getUID(),
-                courseId = courseId,
-                courseStartDate = Timestamp.now(),
-                courseCompletionDate = null,
-                ongoing = true,
-                completed = false
+                    uid = getUID(),
+                    courseId = courseId,
+                    courseStartDate = Timestamp.now(),
+                    courseCompletionDate = null,
+                    ongoing = true,
+                    completed = false
             )
         } else {
             return querySnap.documents.map {
@@ -245,10 +245,10 @@ class LearningRepository constructor(
     suspend fun getCourseModulesProgress(courseId: String): List<ModuleProgress> {
 
         val querySnap = db.collection(COURSE_PROGRESS_NAME)
-            .whereEqualTo("uid", getUID())
-            .whereEqualTo("course_id", courseId)
-            .whereEqualTo("type", ProgressConstants.TYPE_MODULE)
-            .getOrThrow()
+                .whereEqualTo("uid", getUID())
+                .whereEqualTo("course_id", courseId)
+                .whereEqualTo("type", ProgressConstants.TYPE_MODULE)
+                .getOrThrow()
 
         if (querySnap.isEmpty) {
             return emptyList()
@@ -281,29 +281,29 @@ class LearningRepository constructor(
 
     suspend fun getLessonProgress(progressTrackingId: String): LessonProgress {
         val docRef = db.collection(COURSE_PROGRESS_NAME)
-            .document(progressTrackingId)
-            .getOrThrow()
+                .document(progressTrackingId)
+                .getOrThrow()
 
         val lessonProgress = docRef.toObject(LessonProgress::class.java)
-            ?: throw IllegalArgumentException("unable to parse db learning progress model")
+                ?: throw IllegalArgumentException("unable to parse db learning progress model")
         lessonProgress.progressTrackingId = docRef.id
         return lessonProgress
     }
 
     suspend fun updateLessonProgress(progressTrackingId: String, lessonProgress: LessonProgress) {
         db.collection(COURSE_PROGRESS_NAME)
-            .document(progressTrackingId)
-            .setOrThrow(lessonProgress)
+                .document(progressTrackingId)
+                .setOrThrow(lessonProgress)
     }
 
     suspend fun updateModuleProgress(progressTrackingId: String, moduleProgress: ModuleProgress) {
         db.collection(COURSE_PROGRESS_NAME)
-            .document(progressTrackingId)
-            .setOrThrow(moduleProgress)
+                .document(progressTrackingId)
+                .setOrThrow(moduleProgress)
     }
 
     suspend fun markCurrentLessonAsCompleteAndEnableNextOne(
-        moduleId: String
+            moduleId: String
     ): CourseContent? {
         val moduleProgress = getModuleProgress(moduleId)
         var nextLessonProgress: LessonProgress? = null
@@ -349,8 +349,8 @@ class LearningRepository constructor(
     }
 
     suspend fun markCurrentLessonAsComplete(
-        moduleId: String,
-        lessonId: String
+            moduleId: String,
+            lessonId: String
     ): CourseContent? {
         val moduleProgress = getModuleProgress(moduleId)
         var nextLessonProgress: LessonProgress? = null
@@ -380,16 +380,16 @@ class LearningRepository constructor(
 
     private suspend fun getLessonInfo(lessonId: String) = suspendCoroutine<CourseContent> { cont ->
         getCollectionReference()
-            .document(lessonId)
-            .get()
-            .addOnSuccessListener { docRef ->
-                val courseContent = docRef.toObject(CourseContent::class.java)!!
-                courseContent.id = docRef.id
-                cont.resume(courseContent)
-            }
-            .addOnFailureListener {
-                cont.resumeWithException(it)
-            }
+                .document(lessonId)
+                .get()
+                .addOnSuccessListener { docRef ->
+                    val courseContent = docRef.toObject(CourseContent::class.java)!!
+                    courseContent.id = docRef.id
+                    cont.resume(courseContent)
+                }
+                .addOnFailureListener {
+                    cont.resumeWithException(it)
+                }
 
     }
 
@@ -397,12 +397,12 @@ class LearningRepository constructor(
     private suspend fun addInitalProgressDataForCourse(courseId: String) {
 
         val progress = CourseProgress(
-            uid = getUID(),
-            courseId = courseId,
-            courseStartDate = Timestamp.now(),
-            courseCompletionDate = null,
-            ongoing = true,
-            completed = false
+                uid = getUID(),
+                courseId = courseId,
+                courseStartDate = Timestamp.now(),
+                courseCompletionDate = null,
+                ongoing = true,
+                completed = false
         )
         db.collection(COURSE_PROGRESS_NAME).addOrThrow(progress)
 
@@ -410,36 +410,36 @@ class LearningRepository constructor(
         modules.map {
 
             val lessonProgress =
-                getModuleLessons(courseId, it.id).sortedBy { courseContent ->
-                    courseContent.priority
-                }.map { cc ->
-                    LessonProgress(
-                        uid = getUID(),
-                        courseId = courseId,
-                        moduleId = cc.moduleId,
-                        lessonId = cc.id,
-                        lessonStartDate = Timestamp.now(),
-                        lessonCompletionDate = null,
-                        ongoing = false,
-                        priority = cc.priority,
-                        completed = false,
-                        lessonType = cc.type
-                    )
-                }
+                    getModuleLessons(courseId, it.id).sortedBy { courseContent ->
+                        courseContent.priority
+                    }.map { cc ->
+                        LessonProgress(
+                                uid = getUID(),
+                                courseId = courseId,
+                                moduleId = cc.moduleId,
+                                lessonId = cc.id,
+                                lessonStartDate = Timestamp.now(),
+                                lessonCompletionDate = null,
+                                ongoing = false,
+                                priority = cc.priority,
+                                completed = false,
+                                lessonType = cc.type
+                        )
+                    }
 
             if (lessonProgress.isNotEmpty()) {
                 lessonProgress.get(0).ongoing = true
             }
 
             ModuleProgress(
-                uid = getUID(),
-                courseId = courseId,
-                moduleId = it.id,
-                moduleStartDate = Timestamp.now(),
-                moduleCompletionDate = null,
-                ongoing = false,
-                completed = false,
-                lessonsProgress = lessonProgress
+                    uid = getUID(),
+                    courseId = courseId,
+                    moduleId = it.id,
+                    moduleStartDate = Timestamp.now(),
+                    moduleCompletionDate = null,
+                    ongoing = false,
+                    completed = false,
+                    lessonsProgress = lessonProgress
             )
         }.forEach {
             db.collection(COURSE_PROGRESS_NAME).addOrThrow(it)
@@ -462,22 +462,22 @@ class LearningRepository constructor(
 
     private suspend fun getRoleBasedCoursesC(): List<Course> = suspendCoroutine { cont ->
         getCollectionReference()
-            .whereEqualTo(TYPE, TYPE_COURSE)
-            .get()
-            .addOnSuccessListener { querySnap ->
+                .whereEqualTo(TYPE, TYPE_COURSE)
+                .get()
+                .addOnSuccessListener { querySnap ->
 
-                val courses = querySnap.documents
-                    .map {
-                        val course = it.toObject(Course::class.java)!!
-                        course.id = it.id
-                        course
-                    }
+                    val courses = querySnap.documents
+                            .map {
+                                val course = it.toObject(Course::class.java)!!
+                                course.id = it.id
+                                course
+                            }
 
-                cont.resume(courses)
-            }
-            .addOnFailureListener {
-                cont.resumeWithException(it)
-            }
+                    cont.resume(courses)
+                }
+                .addOnFailureListener {
+                    cont.resumeWithException(it)
+                }
     }
 
     suspend fun getAllCourses(): List<Course> {
@@ -495,43 +495,43 @@ class LearningRepository constructor(
 
     private suspend fun getAllCoursesC(): List<Course> = suspendCoroutine { cont ->
         getCollectionReference()
-            .whereEqualTo(TYPE, TYPE_COURSE)
-            .get()
-            .addOnSuccessListener { querySnap ->
+                .whereEqualTo(TYPE, TYPE_COURSE)
+                .get()
+                .addOnSuccessListener { querySnap ->
 
-                val courses = querySnap.documents
-                    .map {
-                        val course = it.toObject(Course::class.java)!!
-                        course.id = it.id
-                        course
-                    }
+                    val courses = querySnap.documents
+                            .map {
+                                val course = it.toObject(Course::class.java)!!
+                                course.id = it.id
+                                course
+                            }
 
-                cont.resume(courses)
-            }
-            .addOnFailureListener {
-                cont.resumeWithException(it)
-            }
+                    cont.resume(courses)
+                }
+                .addOnFailureListener {
+                    cont.resumeWithException(it)
+                }
     }
 
 
     suspend fun getCourseDetails(courseId: String): Course = suspendCoroutine { cont ->
         getCollectionReference()
-            .document(courseId)
-            .get()
-            .addOnSuccessListener { docSnap ->
+                .document(courseId)
+                .get()
+                .addOnSuccessListener { docSnap ->
 
-                val course = docSnap.toObject(Course::class.java)!!
-                course.id = docSnap.id
-                cont.resume(course)
-            }
-            .addOnFailureListener {
-                cont.resumeWithException(it)
-            }
+                    val course = docSnap.toObject(Course::class.java)!!
+                    course.id = docSnap.id
+                    cont.resume(course)
+                }
+                .addOnFailureListener {
+                    cont.resumeWithException(it)
+                }
     }
 
     suspend fun getModuleLessons(
-        courseId: String,
-        moduleId: String
+            courseId: String,
+            moduleId: String
     ): List<CourseContent> {
 
         if (mProfile == null) {
@@ -544,30 +544,30 @@ class LearningRepository constructor(
     }
 
     private suspend fun getModuleLessonsC(
-        courseId: String,
-        moduleId: String
+            courseId: String,
+            moduleId: String
     ): List<CourseContent> = suspendCoroutine { cont ->
         getCollectionReference()
-            .whereEqualTo(COURSE_ID, courseId)
-            .whereEqualTo(MODULE_ID, moduleId)
-            .whereEqualTo(TYPE, TYPE_LESSON)
-            .get()
-            .addOnSuccessListener { querySnap ->
+                .whereEqualTo(COURSE_ID, courseId)
+                .whereEqualTo(MODULE_ID, moduleId)
+                .whereEqualTo(TYPE, TYPE_LESSON)
+                .get()
+                .addOnSuccessListener { querySnap ->
 
-                val modules = querySnap.documents
-                    .map {
-                        val lesson = it.toObject(CourseContent::class.java)!!
-                        lesson.id = it.id
-                        lesson
-                    }
-                cont.resume(modules)
-            }
-            .addOnFailureListener {
-                cont.resumeWithException(it)
-            }
+                    val modules = querySnap.documents
+                            .map {
+                                val lesson = it.toObject(CourseContent::class.java)!!
+                                lesson.id = it.id
+                                lesson
+                            }
+                    cont.resume(modules)
+                }
+                .addOnFailureListener {
+                    cont.resumeWithException(it)
+                }
     }
 
-    private suspend fun doesLessonFullFillsCondition(it: CourseContent): Boolean  {
+    private suspend fun doesLessonFullFillsCondition(it: CourseContent): Boolean {
         if (it.isOpened) {
             return true
         } else {
@@ -580,17 +580,17 @@ class LearningRepository constructor(
 
             lessonMapping.forEach {
 
-                if(it.isopened){
+                if (it.isopened) {
                     return true
                 }
 
-                if(it.userIdsRequired) {
+                if (it.userIdsRequired) {
                     val userMatched = it.userUids.contains(getUID())
-                    if(userMatched) return true
+                    if (userMatched) return true
                 }
 
 
-                if(it.rolesRequired){
+                if (it.rolesRequired) {
 
                     if (mProfile?.role_interests != null) {
                         for (role in mProfile!!.role_interests!!) {
@@ -610,8 +610,8 @@ class LearningRepository constructor(
 
 
     suspend fun getModuleAssessments(
-        courseId: String,
-        moduleId: String
+            courseId: String,
+            moduleId: String
     ): List<CourseContent> {
 
         if (mProfile == null) {
@@ -624,32 +624,32 @@ class LearningRepository constructor(
     }
 
     private suspend fun getModuleAssessmentsC(
-        courseId: String,
-        moduleId: String
+            courseId: String,
+            moduleId: String
     ): List<CourseContent> = suspendCoroutine { cont ->
         getCollectionReference()
-            .whereEqualTo(COURSE_ID, courseId)
-            .whereEqualTo(MODULE_ID, moduleId)
-            .whereEqualTo(TYPE, TYPE_LESSON)
-            .whereEqualTo(LESSON_TYPE, LESSON_TYPE_ASSESSMENT)
-            .get()
-            .addOnSuccessListener { querySnap ->
+                .whereEqualTo(COURSE_ID, courseId)
+                .whereEqualTo(MODULE_ID, moduleId)
+                .whereEqualTo(TYPE, TYPE_LESSON)
+                .whereEqualTo(LESSON_TYPE, LESSON_TYPE_ASSESSMENT)
+                .get()
+                .addOnSuccessListener { querySnap ->
 
-                val modules = querySnap.documents
-                    .map {
-                        val lesson = it.toObject(CourseContent::class.java)!!
-                        lesson.id = it.id
-                        lesson
-                    }
-                cont.resume(modules)
-            }
-            .addOnFailureListener {
-                cont.resumeWithException(it)
-            }
+                    val modules = querySnap.documents
+                            .map {
+                                val lesson = it.toObject(CourseContent::class.java)!!
+                                lesson.id = it.id
+                                lesson
+                            }
+                    cont.resume(modules)
+                }
+                .addOnFailureListener {
+                    cont.resumeWithException(it)
+                }
     }
 
     suspend fun getVideoDetails(
-        lessonId: String
+            lessonId: String
     ): List<CourseContent> {
 
         if (mProfile == null) {
@@ -663,26 +663,26 @@ class LearningRepository constructor(
 
 
     private suspend fun getVideoDetailsC(
-        lessonId: String
+            lessonId: String
     ): List<CourseContent> = suspendCoroutine { cont ->
         getCollectionReference()
-            .whereEqualTo(LESSON_ID, lessonId)
-            .whereEqualTo(TYPE, TYPE_TOPIC)
-            .whereEqualTo(TOPIC_TYPE, TOPIC_TYPE_VIDEO_WITH_TEXT)
-            .get()
-            .addOnSuccessListener { querySnap ->
+                .whereEqualTo(LESSON_ID, lessonId)
+                .whereEqualTo(TYPE, TYPE_TOPIC)
+                .whereEqualTo(TOPIC_TYPE, TOPIC_TYPE_VIDEO_WITH_TEXT)
+                .get()
+                .addOnSuccessListener { querySnap ->
 
-                val modules = querySnap.documents
-                    .map {
-                        val videoDetails = it.toObject(CourseContent::class.java)!!
-                        videoDetails.id = it.id
-                        videoDetails
-                    }
-                cont.resume(modules)
-            }
-            .addOnFailureListener {
-                cont.resumeWithException(it)
-            }
+                    val modules = querySnap.documents
+                            .map {
+                                val videoDetails = it.toObject(CourseContent::class.java)!!
+                                videoDetails.id = it.id
+                                videoDetails
+                            }
+                    cont.resume(modules)
+                }
+                .addOnFailureListener {
+                    cont.resumeWithException(it)
+                }
     }
 
     private suspend fun doesSlideFullFillsCondition(it: SlideContent): Boolean {
@@ -698,17 +698,17 @@ class LearningRepository constructor(
 
             slideMappings.forEach {
 
-                if(it.isopened){
+                if (it.isopened) {
                     return true
                 }
 
-                if(it.userIdsRequired) {
+                if (it.userIdsRequired) {
                     val userMatched = it.userUids.contains(getUID())
-                    if(userMatched) return true
+                    if (userMatched) return true
                 }
 
 
-                if(it.rolesRequired){
+                if (it.rolesRequired) {
 
                     if (mProfile?.role_interests != null) {
                         for (role in mProfile!!.role_interests!!) {
@@ -727,51 +727,51 @@ class LearningRepository constructor(
     }
 
     suspend fun getSlideContent(
-        lessonId: String
+            lessonId: String
     ): List<SlideContent> {
         if (mProfile == null) {
             mProfile = profileFirebaseRepository.getProfileData()
         }
 
-        return getSlideContentC(lessonId) .filter {
+        return getSlideContentC(lessonId).filter {
             it.isActive
         }
     }
 
     private suspend fun getSlideContentC(
-        lessonId: String
+            lessonId: String
     ): List<SlideContent> = suspendCoroutine { cont ->
         getCollectionReference()
-            .whereEqualTo(LESSON_ID, lessonId)
-            .whereEqualTo(TYPE, TYPE_TOPIC)
-            .get()
-            .addOnSuccessListener { querySnap ->
+                .whereEqualTo(LESSON_ID, lessonId)
+                .whereEqualTo(TYPE, TYPE_TOPIC)
+                .get()
+                .addOnSuccessListener { querySnap ->
 
-                val modules = querySnap.documents
-                    .map {
-                        val videoDetails = it.toObject(SlideContentRemote::class.java)!!
-                        videoDetails.id = it.id
-                        videoDetails
-                    }
-                    .map {
-                        mapToSlideContent(it)
-                    }
-                cont.resume(modules)
-            }
-            .addOnFailureListener {
-                cont.resumeWithException(it)
-            }
+                    val modules = querySnap.documents
+                            .map {
+                                val videoDetails = it.toObject(SlideContentRemote::class.java)!!
+                                videoDetails.id = it.id
+                                videoDetails
+                            }
+                            .map {
+                                mapToSlideContent(it)
+                            }
+                    cont.resume(modules)
+                }
+                .addOnFailureListener {
+                    cont.resumeWithException(it)
+                }
     }
 
     private fun mapToSlideContent(it: SlideContentRemote): SlideContent {
         return SlideContent(
-            slideId = it.id,
-            lessonId = it.lessonId,
-            image = it.coverPicture,
-            isActive = it.isActive,
-            type = it.type,
-            assessmentId = it.lessonId,
-            videoPath = it.videoUrl
+                slideId = it.id,
+                lessonId = it.lessonId,
+                image = it.coverPicture,
+                isActive = it.isActive,
+                type = it.type,
+                assessmentId = it.lessonId,
+                videoPath = it.videoUrl
         )
     }
 
@@ -787,25 +787,25 @@ class LearningRepository constructor(
     }
 
     private suspend fun getAssessmentsFromAllCoursesC(): List<CourseContent> =
-        suspendCoroutine { cont ->
-            getCollectionReference()
-                .whereEqualTo(TYPE, TYPE_LESSON)
-                .whereEqualTo(LESSON_TYPE, LESSON_TYPE_ASSESSMENT)
-                .get()
-                .addOnSuccessListener { querySnap ->
+            suspendCoroutine { cont ->
+                getCollectionReference()
+                        .whereEqualTo(TYPE, TYPE_LESSON)
+                        .whereEqualTo(LESSON_TYPE, LESSON_TYPE_ASSESSMENT)
+                        .get()
+                        .addOnSuccessListener { querySnap ->
 
-                    val modules = querySnap.documents
-                        .map {
-                            val lesson = it.toObject(CourseContent::class.java)!!
-                            lesson.id = it.id
-                            lesson
+                            val modules = querySnap.documents
+                                    .map {
+                                        val lesson = it.toObject(CourseContent::class.java)!!
+                                        lesson.id = it.id
+                                        lesson
+                                    }
+                            cont.resume(modules)
                         }
-                    cont.resume(modules)
-                }
-                .addOnFailureListener {
-                    cont.resumeWithException(it)
-                }
-        }
+                        .addOnFailureListener {
+                            cont.resumeWithException(it)
+                        }
+            }
 
     suspend fun getModulesFromAllCourses(): List<Module> {
 
@@ -820,21 +820,21 @@ class LearningRepository constructor(
 
     private suspend fun getModulesFromAllCoursesC(): List<Module> = suspendCoroutine { cont ->
         getCollectionReference()
-            .whereEqualTo(TYPE, TYPE_MODULE)
-            .get()
-            .addOnSuccessListener { querySnap ->
+                .whereEqualTo(TYPE, TYPE_MODULE)
+                .get()
+                .addOnSuccessListener { querySnap ->
 
-                val modules = querySnap.documents
-                    .map {
-                        val modules = it.toObject(Module::class.java)!!
-                        modules.id = it.id
-                        modules
-                    }
-                cont.resume(modules)
-            }
-            .addOnFailureListener {
-                cont.resumeWithException(it)
-            }
+                    val modules = querySnap.documents
+                            .map {
+                                val modules = it.toObject(Module::class.java)!!
+                                modules.id = it.id
+                                modules
+                            }
+                    cont.resume(modules)
+                }
+                .addOnFailureListener {
+                    cont.resumeWithException(it)
+                }
     }
 
     private suspend fun doesModuleFullFillsCondition(it: Module): Boolean {
@@ -850,17 +850,17 @@ class LearningRepository constructor(
 
             moduleMapping.forEach {
 
-                if(it.isopened){
+                if (it.isopened) {
                     return true
                 }
 
-                if(it.userIdsRequired) {
+                if (it.userIdsRequired) {
                     val userMatched = it.userUids.contains(getUID())
-                    if(userMatched) return true
+                    if (userMatched) return true
                 }
 
 
-                if(it.rolesRequired){
+                if (it.rolesRequired) {
 
                     if (mProfile?.role_interests != null) {
                         for (role in mProfile!!.role_interests!!) {
@@ -892,46 +892,46 @@ class LearningRepository constructor(
 
     private suspend fun getModulesC(courseId: String): List<Module> = suspendCoroutine { cont ->
         getCollectionReference()
-            .whereEqualTo(TYPE, TYPE_MODULE)
-            .whereEqualTo(COURSE_ID, courseId)
-            .get()
-            .addOnSuccessListener { querySnap ->
-
-                val modules = querySnap.documents
-                    .map {
-                        val modules = it.toObject(Module::class.java)!!
-                        modules.id = it.id
-                        modules
-                    }
-                cont.resume(modules)
-            }
-            .addOnFailureListener {
-
-                cont.resumeWithException(it)
-            }
-    }
-
-    suspend fun getModulesWithCourseContent(courseId: String): List<Module> =
-        suspendCoroutine { cont ->
-            getCollectionReference()
-                .whereEqualTo(TYPE, TYPE_LESSON)
+                .whereEqualTo(TYPE, TYPE_MODULE)
+                .whereEqualTo(COURSE_ID, courseId)
                 .get()
-                .addOnSuccessListener {
+                .addOnSuccessListener { querySnap ->
 
-                    TODO("not implemented")
+                    val modules = querySnap.documents
+                            .map {
+                                val modules = it.toObject(Module::class.java)!!
+                                modules.id = it.id
+                                modules
+                            }
+                    cont.resume(modules)
                 }
                 .addOnFailureListener {
 
                     cont.resumeWithException(it)
                 }
-        }
+    }
+
+    suspend fun getModulesWithCourseContent(courseId: String): List<Module> =
+            suspendCoroutine { cont ->
+                getCollectionReference()
+                        .whereEqualTo(TYPE, TYPE_LESSON)
+                        .get()
+                        .addOnSuccessListener {
+
+                            TODO("not implemented")
+                        }
+                        .addOnFailureListener {
+
+                            cont.resumeWithException(it)
+                        }
+            }
 
     suspend fun getModuleProgress(moduleId: String): ModuleProgress? {
         val querySnap = db.collection(COURSE_PROGRESS_NAME)
-            .whereEqualTo("uid", getUID())
-            .whereEqualTo("module_id", moduleId)
-            .whereEqualTo("type", ProgressConstants.TYPE_MODULE)
-            .getOrThrow()
+                .whereEqualTo("uid", getUID())
+                .whereEqualTo("module_id", moduleId)
+                .whereEqualTo("type", ProgressConstants.TYPE_MODULE)
+                .getOrThrow()
 
         if (querySnap.isEmpty) {
             return null

@@ -9,7 +9,6 @@ import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
@@ -52,9 +51,9 @@ class LearningCourseDetailsFragment : BaseFragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ) = inflateView(R.layout.fragment_learning_course_details, inflater, container)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -94,36 +93,36 @@ class LearningCourseDetailsFragment : BaseFragment() {
         ViewCompat.setNestedScrollingEnabled(learning_details_assessments_rv, false)
 
         learning_details_lessons_rv.layoutManager = LinearLayoutManager(
-            requireContext(),
-            RecyclerView.VERTICAL,
-            false
+                requireContext(),
+                RecyclerView.VERTICAL,
+                false
         )
 
         mAdapter.setOnLearningVideoActionListener {
             when (it.type) {
                 CourseContent.TYPE_ASSESSMENT -> {
                     navigate(
-                        R.id.assessment_fragment, bundleOf(
+                            R.id.assessment_fragment, bundleOf(
                             AssessmentFragment.INTENT_LESSON_ID to it.id,
                             AssessmentFragment.INTENT_MODULE_ID to it.moduleId
-                        )
+                    )
                     )
                 }
                 CourseContent.TYPE_SLIDE -> {
                     navigate(
-                        R.id.slidesFragment,
-                        bundleOf(
-                            SlidesFragment.INTENT_EXTRA_SLIDE_TITLE to it.title,
-                            SlidesFragment.INTENT_EXTRA_MODULE_ID to it.moduleId,
-                            SlidesFragment.INTENT_EXTRA_LESSON_ID to it.id
-                        )
+                            R.id.slidesFragment,
+                            bundleOf(
+                                    SlidesFragment.INTENT_EXTRA_SLIDE_TITLE to it.title,
+                                    SlidesFragment.INTENT_EXTRA_MODULE_ID to it.moduleId,
+                                    SlidesFragment.INTENT_EXTRA_LESSON_ID to it.id
+                            )
                     )
                 }
                 CourseContent.TYPE_VIDEO -> {
                     PlayVideoDialogFragment.launch(
-                        childFragmentManager = childFragmentManager,
-                        moduleId = it.moduleId,
-                        lessonId = it.id
+                            childFragmentManager = childFragmentManager,
+                            moduleId = it.moduleId,
+                            lessonId = it.id
                     )
 
 //                    navigate(
@@ -149,68 +148,68 @@ class LearningCourseDetailsFragment : BaseFragment() {
 
             if (viewModel.currentlySelectedModule != null) {
                 navigate(
-                    R.id.assessmentListFragment, bundleOf(
+                        R.id.assessmentListFragment, bundleOf(
                         AssessmentListFragment.INTENT_EXTRA_COURSE_ID to viewModel.currentlySelectedModule?.courseId,
                         AssessmentListFragment.INTENT_EXTRA_MODULE_ID to viewModel.currentlySelectedModule?.id
-                    )
+                )
                 )
             }
         }
 
         lessonsSeeMoreButton.setOnClickListener {
             navigate(
-                R.id.courseContentListFragment,
-                bundleOf(
-                    CourseContentListFragment.INTENT_EXTRA_COURSE_ID to viewModel.currentlySelectedModule?.courseId,
-                    CourseContentListFragment.INTENT_EXTRA_MODULE_ID to viewModel.currentlySelectedModule?.id
-                )
+                    R.id.courseContentListFragment,
+                    bundleOf(
+                            CourseContentListFragment.INTENT_EXTRA_COURSE_ID to viewModel.currentlySelectedModule?.courseId,
+                            CourseContentListFragment.INTENT_EXTRA_MODULE_ID to viewModel.currentlySelectedModule?.id
+                    )
             )
         }
     }
 
     private fun initViewModel() {
         viewModel
-            .courseDetails
-            .observe(viewLifecycleOwner, Observer {
+                .courseDetails
+                .observe(viewLifecycleOwner, Observer {
 
-                when (it) {
-                    Lce.Loading -> showCourseDetailsAsLoading()
-                    is Lce.Content -> showCourseDetails(it.content)
-                    is Lce.Error -> showErrorInLoadingCourseDetails(it.error)
-                }
-            })
+                    when (it) {
+                        Lce.Loading -> showCourseDetailsAsLoading()
+                        is Lce.Content -> showCourseDetails(it.content)
+                        is Lce.Error -> showErrorInLoadingCourseDetails(it.error)
+                    }
+                })
 
         viewModel.courseModules
-            .observe(viewLifecycleOwner, Observer {
+                .observe(viewLifecycleOwner, Observer {
 
-                when (it) {
-                    Lce.Loading -> showModulesAsLoading()
-                    is Lce.Content -> showModulesOnView(it.content)
-                    is Lce.Error -> showErrorInLoadingModules(it.error)
-                }
-            })
-
-        viewModel
-            .courseLessons
-            .observe(viewLifecycleOwner, Observer {
-
-                when (it) {
-                    Lce.Loading -> showLessonsAsLoading()
-                    is Lce.Content -> showLessonsOnView(it.content)
-                    is Lce.Error -> showErrorInLoadingLessons(it.error)
-                }
-            })
+                    when (it) {
+                        Lce.Loading -> showModulesAsLoading()
+                        is Lce.Content -> showModulesOnView(it.content)
+                        is Lce.Error -> showErrorInLoadingModules(it.error)
+                    }
+                })
 
         viewModel
-            .courseAssessments
-            .observe(viewLifecycleOwner, Observer {
+                .courseLessons
+                .observe(viewLifecycleOwner, Observer {
 
-                when (it) {
-                    Lce.Loading -> showAssessmentsAsLoading()
-                    is Lce.Content -> showAssessmentsOnView(it.content)
-                    is Lce.Error -> showErrorInLoadingAssessments(it.error)
-                }
-            })
+                    when (it) {
+                        Lce.Loading -> showLessonsAsLoading()
+                        is Lce.Content -> showLessonsOnView(it.content)
+                        is Lce.Error -> showErrorInLoadingLessons(it.error)
+                    }
+                })
+
+        viewModel
+                .courseAssessments
+                .observe(viewLifecycleOwner, Observer {
+
+                    when (it) {
+                        Lce.Loading -> showAssessmentsAsLoading()
+                        is Lce.Content -> showAssessmentsOnView(it.content)
+                        is Lce.Error -> showErrorInLoadingAssessments(it.error)
+                    }
+                })
     }
 
     private fun showCourseDetails(course: Course) {
@@ -222,28 +221,28 @@ class LearningCourseDetailsFragment : BaseFragment() {
             if (course.coverPicture!!.startsWith("http", true)) {
 
                 GlideApp.with(requireContext())
-                    .load(course.coverPicture)
-                    .placeholder(getCircularProgressDrawable())
-                    .error(R.drawable.ic_learning_default_back)
-                    .into(videoThumnailIV)
+                        .load(course.coverPicture)
+                        .placeholder(getCircularProgressDrawable())
+                        .error(R.drawable.ic_learning_default_back)
+                        .into(videoThumnailIV)
             } else {
                 FirebaseStorage.getInstance()
-                    .getReference(LearningConstants.LEARNING_IMAGES_FIREBASE_FOLDER)
-                    .child(course.coverPicture!!)
-                    .downloadUrl
-                    .addOnSuccessListener { fileUri ->
+                        .getReference(LearningConstants.LEARNING_IMAGES_FIREBASE_FOLDER)
+                        .child(course.coverPicture!!)
+                        .downloadUrl
+                        .addOnSuccessListener { fileUri ->
 
-                        GlideApp.with(requireContext())
-                            .load(fileUri)
-                            .placeholder(getCircularProgressDrawable())
-                            .error(R.drawable.ic_learning_default_back)
-                            .into(videoThumnailIV)
-                    }
+                            GlideApp.with(requireContext())
+                                    .load(fileUri)
+                                    .placeholder(getCircularProgressDrawable())
+                                    .error(R.drawable.ic_learning_default_back)
+                                    .into(videoThumnailIV)
+                        }
             }
-        } else{
+        } else {
             GlideApp.with(requireContext())
-                .load(R.drawable.ic_learning_default_back)
-                .into(videoThumnailIV)
+                    .load(R.drawable.ic_learning_default_back)
+                    .into(videoThumnailIV)
         }
 
         videoTitleTV.text = course.name
@@ -316,7 +315,6 @@ class LearningCourseDetailsFragment : BaseFragment() {
     }
 
 
-
     private fun showLessonsOnView(content: List<CourseContent>) {
 
         learning_details_learning_error.gone()
@@ -346,13 +344,13 @@ class LearningCourseDetailsFragment : BaseFragment() {
     private fun loadModulesInfoInView() {
 
         val moduleNo =
-            if (viewModel.currentModules != null && viewModel.currentlySelectedModule != null) {
-                viewModel.currentModules!!.indexOf(viewModel.currentlySelectedModule!!) + 1
-            } else 0
+                if (viewModel.currentModules != null && viewModel.currentlySelectedModule != null) {
+                    viewModel.currentModules!!.indexOf(viewModel.currentlySelectedModule!!) + 1
+                } else 0
 
 
         levelTV.text =
-            "Module $moduleNo Of ${viewModel.currentModules?.size}"
+                "Module $moduleNo Of ${viewModel.currentModules?.size}"
 
         var lessonsCompleted = 0
         viewModel.currentLessons?.forEach {
@@ -360,14 +358,14 @@ class LearningCourseDetailsFragment : BaseFragment() {
         }
 
         complitionStatusTv.text =
-            "$lessonsCompleted/${viewModel.currentLessons?.size} Lessons Completed"
+                "$lessonsCompleted/${viewModel.currentLessons?.size} Lessons Completed"
         assessmentCountTv.text =
-            if (viewModel.currentAssessments?.size == null)
-                "0 Assessments"
-            else if (viewModel.currentAssessments?.size == 1)
-                "${viewModel.currentAssessments?.size} Assessment"
-            else
-                "${viewModel.currentAssessments?.size} Assessments"
+                if (viewModel.currentAssessments?.size == null)
+                    "0 Assessments"
+                else if (viewModel.currentAssessments?.size == 1)
+                    "${viewModel.currentAssessments?.size} Assessment"
+                else
+                    "${viewModel.currentAssessments?.size} Assessments"
 
         lessonsLabel.text = "Lesson (${viewModel.currentlySelectedModule?.title})"
     }
@@ -419,105 +417,105 @@ class LearningCourseDetailsFragment : BaseFragment() {
         // model will change when integrated with DB
 
         recyclerGenericAdapter =
-            RecyclerGenericAdapter<Module>(
-                activity?.applicationContext,
-                PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
-                    //navigate(R.id.learningVideoFragment)
-                    val module = item as Module
-                    viewModel.currentlySelectedModule = module
+                RecyclerGenericAdapter<Module>(
+                        activity?.applicationContext,
+                        PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
+                            //navigate(R.id.learningVideoFragment)
+                            val module = item as Module
+                            viewModel.currentlySelectedModule = module
 
-                    viewModel.getCourseLessonsAndAssessments(
-                        courseId = mCourseId,
-                        moduleId = module.id
-                    )
+                            viewModel.getCourseLessonsAndAssessments(
+                                    courseId = mCourseId,
+                                    moduleId = module.id
+                            )
 
-                    course_details_main_layout.post {
-                        course_details_main_layout.scrollTo(0, modulesLabel.y.toInt())
-                    }
+                            course_details_main_layout.post {
+                                course_details_main_layout.scrollTo(0, modulesLabel.y.toInt())
+                            }
 
-                    var oldPostion = viewModel.currentlySelectedModulePosition
-                    viewModel.currentlySelectedModulePosition = position
+                            var oldPostion = viewModel.currentlySelectedModulePosition
+                            viewModel.currentlySelectedModulePosition = position
 
-                    if (oldPostion != viewModel.currentlySelectedModulePosition) {
-                        recyclerGenericAdapter?.notifyItemChanged(oldPostion)
-                        recyclerGenericAdapter?.notifyItemChanged(viewModel.currentlySelectedModulePosition)
-                        linearLayoutManager?.scrollToPositionWithOffset(
-                            viewModel.currentlySelectedModulePosition,
-                            40
-                        )
+                            if (oldPostion != viewModel.currentlySelectedModulePosition) {
+                                recyclerGenericAdapter?.notifyItemChanged(oldPostion)
+                                recyclerGenericAdapter?.notifyItemChanged(viewModel.currentlySelectedModulePosition)
+                                linearLayoutManager?.scrollToPositionWithOffset(
+                                        viewModel.currentlySelectedModulePosition,
+                                        40
+                                )
 //                        learning_details_modules_rv.scrollTP(viewModel.currentlySelectedModulePosition)
-                    }
-                },
-                RecyclerGenericAdapter.ItemInterface<Module> { obj, viewHolder, position ->
-                    var view = getView(viewHolder, R.id.card_view)
-                    val lp = view.layoutParams
-                    lp.height = lp.height
-                    lp.width = itemWidth
-                    view.layoutParams = lp
+                            }
+                        },
+                        RecyclerGenericAdapter.ItemInterface<Module> { obj, viewHolder, position ->
+                            var view = getView(viewHolder, R.id.card_view)
+                            val lp = view.layoutParams
+                            lp.height = lp.height
+                            lp.width = itemWidth
+                            view.layoutParams = lp
 
-                    var title = getTextView(viewHolder, R.id.title_)
-                    title.text = obj?.title
+                            var title = getTextView(viewHolder, R.id.title_)
+                            title.text = obj?.title
 
-                    var subtitle = getTextView(viewHolder, R.id.title)
-                    subtitle.text = "Lesson ${obj.lessonsCompleted} / ${obj.totalLessons}"
+                            var subtitle = getTextView(viewHolder, R.id.title)
+                            subtitle.text = "Lesson ${obj.lessonsCompleted} / ${obj.totalLessons}"
 
-                    var img = getImageView(viewHolder, R.id.learning_img)
+                            var img = getImageView(viewHolder, R.id.learning_img)
 
 
-                    var borderView = getView(viewHolder, R.id.borderFrameLayout)
-                    if (viewModel.currentlySelectedModulePosition == position) {
-                        //Set Module as selected
-                        borderView.visible()
-                    } else {
-                        borderView.gone()
-                    }
+                            var borderView = getView(viewHolder, R.id.borderFrameLayout)
+                            if (viewModel.currentlySelectedModulePosition == position) {
+                                //Set Module as selected
+                                borderView.visible()
+                            } else {
+                                borderView.gone()
+                            }
 
-                    if (!obj.coverPicture.isNullOrBlank()) {
-                        if (obj.coverPicture!!.startsWith("http", true)) {
-
-                            GlideApp.with(requireContext())
-                                .load(obj.coverPicture)
-                                .placeholder(getCircularProgressDrawable())
-                                .error(R.drawable.ic_learning_default_back)
-                                .into(img)
-                        } else {
-                            FirebaseStorage.getInstance()
-                                .getReference(LearningConstants.LEARNING_IMAGES_FIREBASE_FOLDER)
-                                .child(obj.coverPicture!!)
-                                .downloadUrl
-                                .addOnSuccessListener { fileUri ->
+                            if (!obj.coverPicture.isNullOrBlank()) {
+                                if (obj.coverPicture!!.startsWith("http", true)) {
 
                                     GlideApp.with(requireContext())
-                                        .load(fileUri)
-                                        .placeholder(getCircularProgressDrawable())
-                                        .error(R.drawable.ic_learning_default_back)
-                                        .into(img)
-                                }
-                        }
-                    } else {
-                        GlideApp.with(requireContext())
-                            .load(R.drawable.ic_learning_default_back)
-                            .into(img)
-                    }
+                                            .load(obj.coverPicture)
+                                            .placeholder(getCircularProgressDrawable())
+                                            .error(R.drawable.ic_learning_default_back)
+                                            .into(img)
+                                } else {
+                                    FirebaseStorage.getInstance()
+                                            .getReference(LearningConstants.LEARNING_IMAGES_FIREBASE_FOLDER)
+                                            .child(obj.coverPicture!!)
+                                            .downloadUrl
+                                            .addOnSuccessListener { fileUri ->
 
-                })
+                                                GlideApp.with(requireContext())
+                                                        .load(fileUri)
+                                                        .placeholder(getCircularProgressDrawable())
+                                                        .error(R.drawable.ic_learning_default_back)
+                                                        .into(img)
+                                            }
+                                }
+                            } else {
+                                GlideApp.with(requireContext())
+                                        .load(R.drawable.ic_learning_default_back)
+                                        .into(img)
+                            }
+
+                        })
         recyclerGenericAdapter?.list = content
         recyclerGenericAdapter?.setLayout(R.layout.recycler_item_course_module)
         linearLayoutManager = LinearLayoutManager(
-            activity?.applicationContext,
-            LinearLayoutManager.HORIZONTAL,
-            false
+                activity?.applicationContext,
+                LinearLayoutManager.HORIZONTAL,
+                false
         )
         learning_details_modules_rv.layoutManager = linearLayoutManager
         learning_details_modules_rv.adapter = recyclerGenericAdapter
 
         Handler().postDelayed({
-            if(viewModel.currentlySelectedModulePosition != 0)
+            if (viewModel.currentlySelectedModulePosition != 0)
                 linearLayoutManager?.scrollToPositionWithOffset(
-                    viewModel.currentlySelectedModulePosition,
-                    40
+                        viewModel.currentlySelectedModulePosition,
+                        40
                 )
-        },200)
+        }, 200)
 
     }
 
@@ -562,67 +560,58 @@ class LearningCourseDetailsFragment : BaseFragment() {
     private fun showAssessments(content: List<CourseContent>) {
 
         val recyclerGenericAdapter: RecyclerGenericAdapter<CourseContent> =
-            RecyclerGenericAdapter<CourseContent>(
-                activity?.applicationContext,
-                PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
+                RecyclerGenericAdapter<CourseContent>(
+                        activity?.applicationContext,
+                        PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
 
-                    val assessment = item as CourseContent
+                            val assessment = item as CourseContent
 
-                    if(assessment.completed || assessment.currentlyOnGoing) {
-
-                        navigate(
-                            R.id.assessment_fragment, bundleOf(
-                                AssessmentFragment.INTENT_LESSON_ID to assessment.id,
-                                AssessmentFragment.INTENT_MODULE_ID to assessment.moduleId
+                            navigate(
+                                    R.id.assessment_fragment, bundleOf(
+                                    AssessmentFragment.INTENT_LESSON_ID to assessment.id,
+                                    AssessmentFragment.INTENT_MODULE_ID to assessment.moduleId
                             )
-                        )
-                    } else{
-                        Toast.makeText(
-                            requireContext(),
-                            "Please complete previous lessons first",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                },
-                RecyclerGenericAdapter.ItemInterface<CourseContent> { obj, viewHolder, position ->
+                            )
 
-                    getTextView(viewHolder, R.id.title).text = obj?.title
-                    getTextView(viewHolder, R.id.time).text = obj?.videoLengthString
+                        },
+                        RecyclerGenericAdapter.ItemInterface<CourseContent> { obj, viewHolder, position ->
+
+                            getTextView(viewHolder, R.id.title).text = obj?.title
+                            getTextView(viewHolder, R.id.time).text = obj?.videoLengthString
 
 
-                    if(obj.completed){
-                        getTextView(viewHolder, R.id.status).text = "COMPLETED"
-                        getTextView(
-                            viewHolder,
-                            R.id.status
-                        ).setBackgroundResource(R.drawable.rect_assessment_status_completed)
-                        (getView(
-                            viewHolder,
-                            R.id.side_bar_status
-                        ) as CardView).setCardBackgroundColor(resources.getColor(R.color.status_bg_completed))
-                    } else {
+                            if (obj.completed) {
+                                getTextView(viewHolder, R.id.status).text = "COMPLETED"
+                                getTextView(
+                                        viewHolder,
+                                        R.id.status
+                                ).setBackgroundResource(R.drawable.rect_assessment_status_completed)
+                                (getView(
+                                        viewHolder,
+                                        R.id.side_bar_status
+                                ) as CardView).setCardBackgroundColor(resources.getColor(R.color.status_bg_completed))
+                            } else {
 
-                        getTextView(viewHolder, R.id.status).text = "PENDING"
-                        getTextView(
-                            viewHolder,
-                            R.id.status
-                        ).setBackgroundResource(R.drawable.rect_assessment_status_pending)
-                        (getView(
-                            viewHolder,
-                            R.id.side_bar_status
-                        ) as CardView).setCardBackgroundColor(resources.getColor(R.color.status_bg_pending))
-                    }
+                                getTextView(viewHolder, R.id.status).text = "PENDING"
+                                getTextView(
+                                        viewHolder,
+                                        R.id.status
+                                ).setBackgroundResource(R.drawable.rect_assessment_status_pending)
+                                (getView(
+                                        viewHolder,
+                                        R.id.side_bar_status
+                                ) as CardView).setCardBackgroundColor(resources.getColor(R.color.status_bg_pending))
+                            }
 
-                })
+                        })
         recyclerGenericAdapter.list = content
         recyclerGenericAdapter.setLayout(R.layout.assessment_bs_item)
         learning_details_assessments_rv.layoutManager = LinearLayoutManager(
-            activity?.applicationContext,
-            LinearLayoutManager.VERTICAL,
-            false
+                activity?.applicationContext,
+                LinearLayoutManager.VERTICAL,
+                false
         )
         learning_details_assessments_rv.adapter = recyclerGenericAdapter
-
 
 
     }
