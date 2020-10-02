@@ -12,6 +12,7 @@ import com.gigforce.app.DeepLinkActivity
 import com.gigforce.app.R
 import com.gigforce.app.notification.NotificationChannels
 import com.gigforce.app.notification.NotificationChannels.URGENT_NOTIFICATIONS
+import kotlin.random.Random
 
 class NotificationHelper(private val mContext: Context) {
 
@@ -57,7 +58,8 @@ class NotificationHelper(private val mContext: Context) {
             mNotificationManager.createNotificationChannel(URGENT_NOTIFICATIONS)
         }
 
-        mNotificationManager.notify(0 /* Request Code */, mBuilder.build())
+        val reqCode = Random.nextInt(0,100)
+        mNotificationManager.notify(reqCode /* Request Code */, mBuilder.build())
     }
 
 
@@ -96,7 +98,8 @@ class NotificationHelper(private val mContext: Context) {
             mNotificationManager.createNotificationChannel(URGENT_NOTIFICATIONS)
         }
 
-        mNotificationManager.notify(0 /* Request Code */, mBuilder.build())
+        val reqCode = Random.nextInt(0,100)
+        mNotificationManager.notify(reqCode /* Request Code */, mBuilder.build())
     }
 
 }
