@@ -657,7 +657,7 @@ class LearningRepository constructor(
         }
 
         return getVideoDetailsC(lessonId).filter {
-            it.isActive && doesLessonFullFillsCondition(it)
+            it.isActive
         }
     }
 
@@ -734,7 +734,7 @@ class LearningRepository constructor(
         }
 
         return getSlideContentC(lessonId) .filter {
-            it.isActive && doesSlideFullFillsCondition(it)
+            it.isActive
         }
     }
 
