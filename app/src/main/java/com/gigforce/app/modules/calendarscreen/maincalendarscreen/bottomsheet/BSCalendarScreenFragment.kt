@@ -38,6 +38,7 @@ import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.app.core.genericadapter.RecyclerGenericAdapter
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
+import com.gigforce.app.modules.assessment.AssessmentFragment
 import com.gigforce.app.modules.gigPage.GigAttendancePageFragment
 import com.gigforce.app.modules.gigPage.GigPageFragment
 import com.gigforce.app.modules.gigPage.GigViewModel
@@ -52,6 +53,16 @@ import com.gigforce.app.modules.learning.models.CourseContent
 import com.gigforce.app.utils.*
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.*
+import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.cv_role
+import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.explore_by_industry
+import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.iv_role
+import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.learning_learning_error
+import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.learning_progress_bar
+import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.learning_rv
+import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.ll_search_role
+import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.tv_subtitle_role
+import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.tv_title_role
+import kotlinx.android.synthetic.main.landingscreen_fragment.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -865,6 +876,9 @@ class BSCalendarScreenFragment : BaseFragment() {
     }
 
     private fun initializeExploreByRole() {
+        ll_search_role.setOnClickListener {
+            navigate(R.id.fragment_explore_by_role)
+        }
         landingScreenViewModel.observerRole.observe(viewLifecycleOwner, Observer { gig ->
             run {
                 showGlideImage(gig?.role_image ?: "", iv_role)

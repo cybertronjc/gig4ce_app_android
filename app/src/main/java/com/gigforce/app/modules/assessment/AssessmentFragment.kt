@@ -12,7 +12,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import android.widget.ScrollView
 import androidx.core.os.bundleOf
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
@@ -119,7 +118,7 @@ class AssessmentFragment : BaseFragment(),
                 bundle.putInt(StringConstants.TIME_TAKEN.value, timeTaken)
                 countDownTimer?.cancel()
 
-                bundle.putString(AssessmentFragment.INTENT_MODULE_ID,mModuleId)
+                bundle.putString(AssessmentFragment.INTENT_MODULE_ID, mModuleId)
                 navigate(R.id.assessment_result_fragment, bundle)
             })
             observableDialogInit.observe(viewLifecycleOwner, Observer {
@@ -355,10 +354,10 @@ class AssessmentFragment : BaseFragment(),
     fun switchPosition(increment: Boolean) {
         if (increment) ++selectedPosition else --selectedPosition
         setDataAsPerPosition(viewModelAssessmentFragment.observableAssessmentData.value!!)
-        sv_assess_frag.postDelayed(
-            Runnable { sv_assess_frag.fullScroll(ScrollView.FOCUS_UP) },
-            600
-        )
+//        sv_assess_frag.postDelayed(
+//            Runnable { sv_assess_frag.fullScroll(ScrollView.FOCUS_UP) },
+//            600
+//        )
 
     }
 
@@ -447,8 +446,8 @@ class AssessmentFragment : BaseFragment(),
         bundle: Bundle?,
         moduleId: String? = null
     ) {
-        val dialog = if(moduleId != null)
-            AssessmentDialog.newInstance(moduleId,state)
+        val dialog = if (moduleId != null)
+            AssessmentDialog.newInstance(moduleId, state)
         else
             AssessmentDialog.newInstance(state)
 
@@ -540,7 +539,11 @@ class AssessmentFragment : BaseFragment(),
             iv_scenario_value_assess_frag.visibility = View.VISIBLE
             GlideApp.with(this.requireContext())
                 .asBitmap()
-                .load(Path)
+                .load(Path).placeholder(
+                    com.gigforce.app.utils.getCircularProgressDrawable(
+                        requireContext()
+                    )
+                )
                 .into(object : CustomTarget<Bitmap>() {
                     override fun onResourceReady(
                         resource: Bitmap,

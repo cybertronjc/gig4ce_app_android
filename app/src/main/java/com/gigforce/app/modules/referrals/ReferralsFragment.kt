@@ -29,7 +29,6 @@ import com.google.firebase.dynamiclinks.DynamicLink
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.dynamiclinks.ktx.shortLinkAsync
-import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.StorageReference
 import kotlinx.android.synthetic.main.fragment_referrals.*
@@ -289,12 +288,12 @@ class ReferralsFragment : BaseFragment() {
             shareIntent.type = "image/png"
             shareIntent.putExtra(
                 Intent.EXTRA_SUBJECT,
-                getString(R.string.looking_for_dynamic_working_hours)
+                getString(R.string.app_name)
             )
-            var shareMessage = url
+            val shareMessage = getString(R.string.looking_for_dynamic_working_hours) + " " + url
             shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage)
             val bitmap =
-                BitmapFactory.decodeResource(requireContext().resources,R.drawable.bg_gig_type)
+                BitmapFactory.decodeResource(requireContext().resources, R.drawable.bg_gig_type)
 
             //save bitmap to app cache folder
 
