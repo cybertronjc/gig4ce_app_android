@@ -145,9 +145,11 @@ class GigsListForDeclineBottomSheet : BottomSheetDialogFragment(),
 
     private fun showTodaysGig(content: List<Gig>) {
         progress_bar.gone()
+
         if (decline_slider_btn.isCompleted()) {
             decline_slider_btn.resetSlider()
         }
+        disableSubmitButton()
 
         gig_message_tv.text = when {
             content.isEmpty() -> {

@@ -4,12 +4,15 @@ import android.Manifest
 import android.content.Intent
 import android.os.Bundle
 import android.text.Html
+import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
+import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
@@ -18,7 +21,12 @@ import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.app.core.genericadapter.RecyclerGenericAdapter
+import com.gigforce.app.modules.learning.LearningConstants
+import com.gigforce.app.modules.learning.LearningViewModel
+import com.gigforce.app.modules.learning.courseDetails.LearningCourseDetailsFragment
+import com.gigforce.app.modules.learning.models.Course
 import com.gigforce.app.utils.*
+import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.fragment_assessment_result.*
 import kotlinx.android.synthetic.main.layout_rv_question_wisr_sum_assess_result.view.*
 import kotlinx.android.synthetic.main.toolbar.*
@@ -32,6 +40,7 @@ class AssessmentResultFragment : BaseFragment(), PopupMenu.OnMenuItemClickListen
     private val viewModelAssessmentResult by lazy {
         ViewModelProvider(this).get(ViewModelAssessmentResult::class.java)
     }
+    private val learningViewModel : LearningViewModel by viewModels()
 
 
     override fun onCreateView(
@@ -76,6 +85,94 @@ class AssessmentResultFragment : BaseFragment(), PopupMenu.OnMenuItemClickListen
             Observer {
                 initShareImage()
             })
+
+        learningViewModel.allCourses.observe(viewLifecycleOwner, Observer {
+
+            when (it) {
+                Lce.Loading -> {
+
+                }
+                is Lce.Content -> {
+                    showLearnings(it.content)
+                }
+                is Lce.Error -> {}
+            }
+        })
+
+        learningViewModel.getAllCourses()
+    }
+
+    var width = 0
+    private fun showLearnings(content: List<Course>) {
+
+        val displayMetrics = DisplayMetrics()
+        activity?.windowManager?.defaultDisplay?.getMetrics(displayMetrics)
+        width = displayMetrics.widthPixels
+        val itemWidth = ((width / 3) * 2).toInt()
+        // model will change when integrated with DB
+
+        val recyclerGenericAdapter: RecyclerGenericAdapter<Course> =
+            RecyclerGenericAdapter<Course>(
+                activity?.applicationContext,
+                PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
+                    val course = item as Course
+
+                    navigate(
+                        R.id.learningCourseDetails,
+                        bundleOf(LearningCourseDetailsFragment.INTENT_EXTRA_COURSE_ID to course.id)
+                    )
+                },
+                RecyclerGenericAdapter.ItemInterface<Course?> { obj, viewHolder, position ->
+                    var view = getView(viewHolder, R.id.card_view)
+                    val lp = view.layoutParams
+                    lp.height = lp.height
+                    lp.width = itemWidth
+                    view.layoutParams = lp
+
+                    var title = getTextView(viewHolder, R.id.title_)
+                    title.text = obj?.name
+
+                    var subtitle = getTextView(viewHolder, R.id.title)
+                    subtitle.text = obj?.level
+
+                    var img = getImageView(viewHolder, R.id.learning_img)
+                    if (!obj!!.coverPicture.isNullOrBlank()) {
+                        if (obj.coverPicture!!.startsWith("http", true)) {
+
+                            GlideApp.with(requireContext())
+                                .load(obj.coverPicture!!)
+                                .placeholder(getCircularProgressDrawable())
+                                .error(R.drawable.ic_learning_default_back)
+                                .into(img)
+                        } else {
+                            FirebaseStorage.getInstance()
+                                .getReference(LearningConstants.LEARNING_IMAGES_FIREBASE_FOLDER)
+                                .child(obj.coverPicture!!)
+                                .downloadUrl
+                                .addOnSuccessListener { fileUri ->
+
+                                    GlideApp.with(requireContext())
+                                        .load(fileUri)
+                                        .placeholder(getCircularProgressDrawable())
+                                        .error(R.drawable.ic_learning_default_back)
+                                        .into(img)
+                                }
+                        }
+                    } else{
+                        GlideApp.with(requireContext())
+                            .load(R.drawable.ic_learning_default_back)
+                            .into(img)
+                    }
+                })
+        recyclerGenericAdapter.list = content
+        recyclerGenericAdapter.setLayout(R.layout.learning_bs_item)
+        rv_sug_learnings_assess_result.layoutManager = LinearLayoutManager(
+            activity?.applicationContext,
+            LinearLayoutManager.HORIZONTAL,
+            false
+        )
+        rv_sug_learnings_assess_result.adapter = recyclerGenericAdapter
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -113,15 +210,7 @@ class AssessmentResultFragment : BaseFragment(), PopupMenu.OnMenuItemClickListen
         )
         rv_question_wise_sum_assess_frag.adapter = adapter
         adapter?.addAll(arguments?.getBooleanArray(StringConstants.ANSWERS_ARR.value)?.toList())
-        rv_sug_learnings_assess_result.adapter = AdapterSuggestedLearning().setCallbacks(this)
-        rv_sug_learnings_assess_result.layoutManager =
-            LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
-        rv_sug_learnings_assess_result.addItemDecoration(
-            HorizontaltemDecoration(
-                activity,
-                R.dimen.size_16
-            )
-        )
+
 
 
     }

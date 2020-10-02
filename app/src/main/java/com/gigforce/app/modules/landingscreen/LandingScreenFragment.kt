@@ -17,6 +17,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.gigforce.app.R
@@ -280,6 +281,11 @@ class LandingScreenFragment : BaseFragment() {
                         title.text = obj?.title
                         subtitle.text = obj?.subTitle
 
+                        getView(viewHolder, R.id.skip).setOnClickListener(
+                            SkipClickListener(gigforce_tip, position)
+                        )
+
+
 //                    getTextView(viewHolder, R.id.skip).setOnClickListener{
 //                        datalist.removeAt(position)
 //                        gigforce_tip.adapter?.notifyItemChanged(position+1)
@@ -327,6 +333,13 @@ class LandingScreenFragment : BaseFragment() {
                 }
             }
             handler.postDelayed(runnableCode, SPLASH_TIME_OUT)
+        }
+    }
+
+    inner class SkipClickListener(val rv: RecyclerView, var position: Int) :
+        View.OnClickListener {
+        override fun onClick(v: View?) {
+            gigforce_tip.gone()
         }
     }
 
@@ -521,10 +534,10 @@ class LandingScreenFragment : BaseFragment() {
                         view.layoutParams = lp
 
                         var title = getTextView(viewHolder, R.id.title_)
-                        title.text = obj?.name + " " + obj?.level
+                        title.text = obj?.name
 
                         var subtitle = getTextView(viewHolder, R.id.title)
-                        subtitle.text = obj?.description
+                        subtitle.text = obj?.level
 
                         var img = getImageView(viewHolder, R.id.learning_img)
 
@@ -534,6 +547,7 @@ class LandingScreenFragment : BaseFragment() {
                                 GlideApp.with(requireContext())
                                     .load(obj!!.coverPicture!!)
                                     .placeholder(getCircularProgressDrawable())
+                                    .error(R.drawable.ic_learning_default_back)
                                     .into(img)
                             } else {
                                 FirebaseStorage.getInstance()
@@ -545,9 +559,15 @@ class LandingScreenFragment : BaseFragment() {
                                         GlideApp.with(requireContext())
                                             .load(fileUri)
                                             .placeholder(getCircularProgressDrawable())
+                                            .error(R.drawable.ic_learning_default_back)
                                             .into(img)
                                     }
                             }
+                        } else{
+
+                            GlideApp.with(requireContext())
+                                .load(R.drawable.ic_learning_default_back)
+                                .into(img)
                         }
 
                         //img.setImageResource(obj?.imgIcon!!)

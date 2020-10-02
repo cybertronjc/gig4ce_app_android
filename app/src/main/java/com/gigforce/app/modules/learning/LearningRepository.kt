@@ -6,6 +6,8 @@ import com.gigforce.app.modules.learning.models.progress.CourseProgress
 import com.gigforce.app.modules.learning.models.progress.LessonProgress
 import com.gigforce.app.modules.learning.models.progress.ModuleProgress
 import com.gigforce.app.modules.learning.models.progress.ProgressConstants
+import com.gigforce.app.modules.profile.ProfileFirebaseRepository
+import com.gigforce.app.modules.profile.models.ProfileData
 import com.gigforce.app.utils.addOrThrow
 import com.gigforce.app.utils.getOrThrow
 import com.gigforce.app.utils.setOrThrow
@@ -15,8 +17,11 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
-class LearningRepository : BaseFirestoreDBRepository() {
+class LearningRepository constructor(
+    private val profileFirebaseRepository: ProfileFirebaseRepository = ProfileFirebaseRepository()
+) : BaseFirestoreDBRepository() {
 
+    private var mProfile: ProfileData? = null
     override fun getCollectionName(): String = COLLECTION_NAME
 
     fun courseModuleProgressInfo(courseId: String): Query {
@@ -25,7 +30,20 @@ class LearningRepository : BaseFirestoreDBRepository() {
             .whereEqualTo(TYPE, TYPE_MODULE)
     }
 
-    suspend fun getUserCourses(): List<Course> = suspendCoroutine { cont ->
+    suspend fun getUserCourses(): List<Course> {
+
+        if (mProfile == null) {
+            mProfile = profileFirebaseRepository.getProfileData()
+        }
+        return getUserCoursesC().filter {
+            it.isActive && doesCourseFullFillsCondition(it)
+        }.sortedBy {
+            it.priority
+        }
+    }
+
+    private suspend fun getUserCoursesC(): List<Course> = suspendCoroutine { cont ->
+
         getCollectionReference()
             .whereEqualTo(TYPE, TYPE_COURSE)
             .get()
@@ -36,16 +54,167 @@ class LearningRepository : BaseFirestoreDBRepository() {
                         val course = it.toObject(Course::class.java)!!
                         course.id = it.id
                         course
-                    }.filter {
-                        it.isActive
                     }
 
                 cont.resume(courses)
             }
             .addOnFailureListener {
-
                 cont.resumeWithException(it)
             }
+    }
+
+
+    private suspend fun getCourseCompanyMappings(courseId: String): List<CourseMapping> =
+        suspendCoroutine { cont ->
+            val companies: List<String> = mProfile?.companies?.map {
+                it.companyId
+            } ?: emptyList()
+
+            if (companies.isEmpty())
+                cont.resume(emptyList())
+            else {
+
+                db.collection("Course_company_mapping")
+                    .whereIn("companyId", companies)
+                    .whereEqualTo("courseId", courseId)
+                    .get()
+                    .addOnSuccessListener {
+
+                        val courseMappings = it.documents.map {
+                            it.toObject(CourseMapping::class.java)!!
+                        }
+                        cont.resume(courseMappings)
+                    }
+                    .addOnFailureListener {
+                        cont.resumeWithException(it)
+                    }
+            }
+        }
+
+    private suspend fun getModuleCompanyMappings(moduleId: String): List<CourseMapping> =
+        suspendCoroutine { cont ->
+            val companies: List<String> = mProfile?.companies?.map {
+                it.companyId
+            } ?: emptyList()
+
+            if (companies.isEmpty())
+                cont.resume(emptyList())
+            else {
+
+                db.collection("Course_company_mapping")
+                    .whereIn("companyId", companies)
+                    .whereEqualTo("moduleId", moduleId)
+                    .get()
+                    .addOnSuccessListener {
+
+                        val courseMappings = it.documents.map {
+                            it.toObject(CourseMapping::class.java)!!
+                        }
+                        cont.resume(courseMappings)
+                    }
+                    .addOnFailureListener {
+                        cont.resumeWithException(it)
+                    }
+            }
+        }
+
+
+    private suspend fun getLessonCompanyMappings(lessonId: String): List<CourseMapping> =
+        suspendCoroutine { cont ->
+            val companies: List<String> = mProfile?.companies?.map {
+                it.companyId
+            } ?: emptyList()
+
+            if (companies.isEmpty())
+                cont.resume(emptyList())
+            else {
+
+                db.collection("Course_company_mapping")
+                    .whereIn("companyId", companies)
+                    .whereEqualTo("lessonId", lessonId)
+                    .get()
+                    .addOnSuccessListener {
+
+                        val courseMappings = it.documents.map {
+                            it.toObject(CourseMapping::class.java)!!
+                        }
+                        cont.resume(courseMappings)
+                    }
+                    .addOnFailureListener {
+                        cont.resumeWithException(it)
+                    }
+            }
+        }
+
+
+    private suspend fun getSlideCompanyMappings(slideId: String): List<CourseMapping> =
+        suspendCoroutine { cont ->
+            val companies: List<String> = mProfile?.companies?.map {
+                it.companyId
+            } ?: emptyList()
+
+            if (companies.isEmpty())
+                cont.resume(emptyList())
+            else {
+
+                db.collection("Course_company_mapping")
+                    .whereIn("companyId", companies)
+                    .whereEqualTo("slideId", slideId)
+                    .get()
+                    .addOnSuccessListener {
+
+                        val courseMappings = it.documents.map {
+                            it.toObject(CourseMapping::class.java)!!
+                        }
+                        cont.resume(courseMappings)
+                    }
+                    .addOnFailureListener {
+                        cont.resumeWithException(it)
+                    }
+            }
+        }
+
+
+
+    private suspend fun doesCourseFullFillsCondition(it: Course): Boolean {
+        if (it.isOpened) {
+            return true
+        } else {
+
+            val courseAndMappings = getCourseCompanyMappings(it.id)
+
+            if (courseAndMappings.isEmpty()) {
+                return false
+            }
+
+            courseAndMappings.forEach {
+
+                if(it.isopened){
+                    return true
+                }
+
+                if(it.userIdsRequired) {
+                    val userMatched = it.userUids.contains(getUID())
+                    if(userMatched) return true
+                }
+
+
+                if(it.rolesRequired){
+
+                    if (mProfile?.role_interests != null) {
+                        for (role in mProfile!!.role_interests!!) {
+                            for (courseRoles in it.roles) {
+                                if (courseRoles == role.interestID) {
+                                   return true
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            return false
+        }
     }
 
     suspend fun getCourseProgress(courseId: String): CourseProgress {
@@ -90,25 +259,25 @@ class LearningRepository : BaseFirestoreDBRepository() {
         }
     }
 
-    suspend fun getLessonsProgress(courseId: String, moduleId: String): List<LessonProgress> {
-
-        val querySnap = db.collection(COURSE_PROGRESS_NAME)
-            .whereEqualTo("uid", getUID())
-            .whereEqualTo("course_id", courseId)
-            .whereEqualTo("module_id", moduleId)
-            .whereEqualTo("type", ProgressConstants.TYPE_LESSON)
-            .getOrThrow()
-
-        if (querySnap.isEmpty) {
-            return emptyList()
-        } else {
-            return querySnap.documents.map {
-                val lessonProgress = it.toObject(LessonProgress::class.java)!!
-                lessonProgress.progressTrackingId = it.id
-                lessonProgress
-            }
-        }
-    }
+//    suspend fun getLessonsProgress(courseId: String, moduleId: String): List<LessonProgress> {
+//
+//        val querySnap = db.collection(COURSE_PROGRESS_NAME)
+//            .whereEqualTo("uid", getUID())
+//            .whereEqualTo("course_id", courseId)
+//            .whereEqualTo("module_id", moduleId)
+//            .whereEqualTo("type", ProgressConstants.TYPE_LESSON)
+//            .getOrThrow()
+//
+//        if (querySnap.isEmpty) {
+//            return emptyList()
+//        } else {
+//            return querySnap.documents.map {
+//                val lessonProgress = it.toObject(LessonProgress::class.java)!!
+//                lessonProgress.progressTrackingId = it.id
+//                lessonProgress
+//            }
+//        }
+//    }
 
     suspend fun getLessonProgress(progressTrackingId: String): LessonProgress {
         val docRef = db.collection(COURSE_PROGRESS_NAME)
@@ -151,6 +320,7 @@ class LearningRepository : BaseFirestoreDBRepository() {
                     lessons[i].apply {
                         ongoing = false
                         completed = true
+                        completionProgress = 0L
                         lessonCompletionDate = Timestamp.now()
                     }
                 }
@@ -177,6 +347,36 @@ class LearningRepository : BaseFirestoreDBRepository() {
         else
             getLessonInfo(nextLessonProgress.lessonId)
     }
+
+    suspend fun markCurrentLessonAsComplete(
+        moduleId: String,
+        lessonId: String
+    ): CourseContent? {
+        val moduleProgress = getModuleProgress(moduleId)
+        var nextLessonProgress: LessonProgress? = null
+
+        if (moduleProgress != null) {
+            moduleProgress.lessonsProgress.forEach {
+
+                if (it.lessonId == lessonId) {
+                    it.apply {
+                        ongoing = false
+                        completed = true
+                        completionProgress = 0L
+                        lessonCompletionDate = Timestamp.now()
+                    }
+                }
+            }
+
+            updateModuleProgress(moduleProgress.progressId, moduleProgress)
+        }
+
+        return if (nextLessonProgress == null)
+            null
+        else
+            getLessonInfo(nextLessonProgress.lessonId)
+    }
+
 
     private suspend fun getLessonInfo(lessonId: String) = suspendCoroutine<CourseContent> { cont ->
         getCollectionReference()
@@ -246,7 +446,21 @@ class LearningRepository : BaseFirestoreDBRepository() {
         }
     }
 
-    suspend fun getRoleBasedCourses(): List<Course> = suspendCoroutine { cont ->
+    suspend fun getRoleBasedCourses(): List<Course> {
+
+        if (mProfile == null) {
+            mProfile = profileFirebaseRepository.getProfileData()
+        }
+
+        return getRoleBasedCoursesC().filter {
+            it.isActive && doesCourseFullFillsCondition(it)
+        }.sortedBy {
+            it.priority
+        }
+    }
+
+
+    private suspend fun getRoleBasedCoursesC(): List<Course> = suspendCoroutine { cont ->
         getCollectionReference()
             .whereEqualTo(TYPE, TYPE_COURSE)
             .get()
@@ -257,19 +471,29 @@ class LearningRepository : BaseFirestoreDBRepository() {
                         val course = it.toObject(Course::class.java)!!
                         course.id = it.id
                         course
-                    }.filter {
-                        it.isActive
                     }
 
                 cont.resume(courses)
             }
             .addOnFailureListener {
-
                 cont.resumeWithException(it)
             }
     }
 
-    suspend fun getAllCourses(): List<Course> = suspendCoroutine { cont ->
+    suspend fun getAllCourses(): List<Course> {
+
+        if (mProfile == null) {
+            mProfile = profileFirebaseRepository.getProfileData()
+        }
+
+        return getAllCoursesC().filter {
+            it.isActive && doesCourseFullFillsCondition(it)
+        }.sortedBy {
+            it.priority
+        }
+    }
+
+    private suspend fun getAllCoursesC(): List<Course> = suspendCoroutine { cont ->
         getCollectionReference()
             .whereEqualTo(TYPE, TYPE_COURSE)
             .get()
@@ -280,8 +504,6 @@ class LearningRepository : BaseFirestoreDBRepository() {
                         val course = it.toObject(Course::class.java)!!
                         course.id = it.id
                         course
-                    }.filter {
-                        it.isActive
                     }
 
                 cont.resume(courses)
@@ -290,6 +512,7 @@ class LearningRepository : BaseFirestoreDBRepository() {
                 cont.resumeWithException(it)
             }
     }
+
 
     suspend fun getCourseDetails(courseId: String): Course = suspendCoroutine { cont ->
         getCollectionReference()
@@ -309,6 +532,20 @@ class LearningRepository : BaseFirestoreDBRepository() {
     suspend fun getModuleLessons(
         courseId: String,
         moduleId: String
+    ): List<CourseContent> {
+
+        if (mProfile == null) {
+            mProfile = profileFirebaseRepository.getProfileData()
+        }
+
+        return getModuleLessonsC(courseId, moduleId).filter {
+            it.isActive && doesLessonFullFillsCondition(it)
+        }
+    }
+
+    private suspend fun getModuleLessonsC(
+        courseId: String,
+        moduleId: String
     ): List<CourseContent> = suspendCoroutine { cont ->
         getCollectionReference()
             .whereEqualTo(COURSE_ID, courseId)
@@ -322,8 +559,6 @@ class LearningRepository : BaseFirestoreDBRepository() {
                         val lesson = it.toObject(CourseContent::class.java)!!
                         lesson.id = it.id
                         lesson
-                    }.filter {
-                        it.isActive
                     }
                 cont.resume(modules)
             }
@@ -332,8 +567,63 @@ class LearningRepository : BaseFirestoreDBRepository() {
             }
     }
 
+    private suspend fun doesLessonFullFillsCondition(it: CourseContent): Boolean  {
+        if (it.isOpened) {
+            return true
+        } else {
+
+            val lessonMapping = getLessonCompanyMappings(it.id)
+
+            if (lessonMapping.isEmpty()) {
+                return false
+            }
+
+            lessonMapping.forEach {
+
+                if(it.isopened){
+                    return true
+                }
+
+                if(it.userIdsRequired) {
+                    val userMatched = it.userUids.contains(getUID())
+                    if(userMatched) return true
+                }
+
+
+                if(it.rolesRequired){
+
+                    if (mProfile?.role_interests != null) {
+                        for (role in mProfile!!.role_interests!!) {
+                            for (courseRoles in it.roles) {
+                                if (courseRoles == role.interestID) {
+                                    return true
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            return false
+        }
+    }
+
 
     suspend fun getModuleAssessments(
+        courseId: String,
+        moduleId: String
+    ): List<CourseContent> {
+
+        if (mProfile == null) {
+            mProfile = profileFirebaseRepository.getProfileData()
+        }
+
+        return getModuleAssessmentsC(courseId, moduleId).filter {
+            it.isActive && doesLessonFullFillsCondition(it)
+        }
+    }
+
+    private suspend fun getModuleAssessmentsC(
         courseId: String,
         moduleId: String
     ): List<CourseContent> = suspendCoroutine { cont ->
@@ -350,8 +640,6 @@ class LearningRepository : BaseFirestoreDBRepository() {
                         val lesson = it.toObject(CourseContent::class.java)!!
                         lesson.id = it.id
                         lesson
-                    }.filter {
-                        it.isActive
                     }
                 cont.resume(modules)
             }
@@ -360,8 +648,21 @@ class LearningRepository : BaseFirestoreDBRepository() {
             }
     }
 
-
     suspend fun getVideoDetails(
+        lessonId: String
+    ): List<CourseContent> {
+
+        if (mProfile == null) {
+            mProfile = profileFirebaseRepository.getProfileData()
+        }
+
+        return getVideoDetailsC(lessonId).filter {
+            it.isActive
+        }
+    }
+
+
+    private suspend fun getVideoDetailsC(
         lessonId: String
     ): List<CourseContent> = suspendCoroutine { cont ->
         getCollectionReference()
@@ -376,8 +677,6 @@ class LearningRepository : BaseFirestoreDBRepository() {
                         val videoDetails = it.toObject(CourseContent::class.java)!!
                         videoDetails.id = it.id
                         videoDetails
-                    }.filter {
-                        it.isActive
                     }
                 cont.resume(modules)
             }
@@ -386,7 +685,60 @@ class LearningRepository : BaseFirestoreDBRepository() {
             }
     }
 
+    private suspend fun doesSlideFullFillsCondition(it: SlideContent): Boolean {
+        if (it.isOpened) {
+            return true
+        } else {
+
+            val slideMappings = getSlideCompanyMappings(it.slideId)
+
+            if (slideMappings.isEmpty()) {
+                return false
+            }
+
+            slideMappings.forEach {
+
+                if(it.isopened){
+                    return true
+                }
+
+                if(it.userIdsRequired) {
+                    val userMatched = it.userUids.contains(getUID())
+                    if(userMatched) return true
+                }
+
+
+                if(it.rolesRequired){
+
+                    if (mProfile?.role_interests != null) {
+                        for (role in mProfile!!.role_interests!!) {
+                            for (courseRoles in it.roles) {
+                                if (courseRoles == role.interestID) {
+                                    return true
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            return false
+        }
+    }
+
     suspend fun getSlideContent(
+        lessonId: String
+    ): List<SlideContent> {
+        if (mProfile == null) {
+            mProfile = profileFirebaseRepository.getProfileData()
+        }
+
+        return getSlideContentC(lessonId) .filter {
+            it.isActive
+        }
+    }
+
+    private suspend fun getSlideContentC(
         lessonId: String
     ): List<SlideContent> = suspendCoroutine { cont ->
         getCollectionReference()
@@ -400,9 +752,6 @@ class LearningRepository : BaseFirestoreDBRepository() {
                         val videoDetails = it.toObject(SlideContentRemote::class.java)!!
                         videoDetails.id = it.id
                         videoDetails
-                    }
-                    .filter {
-                        it.isActive
                     }
                     .map {
                         mapToSlideContent(it)
@@ -426,29 +775,50 @@ class LearningRepository : BaseFirestoreDBRepository() {
         )
     }
 
-    suspend fun getAssessmentsFromAllCourses(): List<CourseContent> = suspendCoroutine { cont ->
-        getCollectionReference()
-            .whereEqualTo(TYPE, TYPE_LESSON)
-            .whereEqualTo(LESSON_TYPE, LESSON_TYPE_ASSESSMENT)
-            .get()
-            .addOnSuccessListener { querySnap ->
+    suspend fun getAssessmentsFromAllCourses(): List<CourseContent> {
 
-                val modules = querySnap.documents
-                    .map {
-                        val lesson = it.toObject(CourseContent::class.java)!!
-                        lesson.id = it.id
-                        lesson
-                    }.filter {
-                        it.isActive
-                    }
-                cont.resume(modules)
-            }
-            .addOnFailureListener {
-                cont.resumeWithException(it)
-            }
+        if (mProfile == null) {
+            mProfile = profileFirebaseRepository.getProfileData()
+        }
+
+        return getAssessmentsFromAllCoursesC().filter {
+            it.isActive && doesLessonFullFillsCondition(it)
+        }
     }
 
-    suspend fun getModulesFromAllCourses(): List<Module> = suspendCoroutine { cont ->
+    private suspend fun getAssessmentsFromAllCoursesC(): List<CourseContent> =
+        suspendCoroutine { cont ->
+            getCollectionReference()
+                .whereEqualTo(TYPE, TYPE_LESSON)
+                .whereEqualTo(LESSON_TYPE, LESSON_TYPE_ASSESSMENT)
+                .get()
+                .addOnSuccessListener { querySnap ->
+
+                    val modules = querySnap.documents
+                        .map {
+                            val lesson = it.toObject(CourseContent::class.java)!!
+                            lesson.id = it.id
+                            lesson
+                        }
+                    cont.resume(modules)
+                }
+                .addOnFailureListener {
+                    cont.resumeWithException(it)
+                }
+        }
+
+    suspend fun getModulesFromAllCourses(): List<Module> {
+
+        if (mProfile == null) {
+            mProfile = profileFirebaseRepository.getProfileData()
+        }
+
+        return getModulesFromAllCoursesC().filter {
+            it.isActive && doesModuleFullFillsCondition(it)
+        }
+    }
+
+    private suspend fun getModulesFromAllCoursesC(): List<Module> = suspendCoroutine { cont ->
         getCollectionReference()
             .whereEqualTo(TYPE, TYPE_MODULE)
             .get()
@@ -459,8 +829,6 @@ class LearningRepository : BaseFirestoreDBRepository() {
                         val modules = it.toObject(Module::class.java)!!
                         modules.id = it.id
                         modules
-                    }.filter {
-                        it.isActive
                     }
                 cont.resume(modules)
             }
@@ -469,10 +837,63 @@ class LearningRepository : BaseFirestoreDBRepository() {
             }
     }
 
+    private suspend fun doesModuleFullFillsCondition(it: Module): Boolean {
+        if (it.isOpened) {
+            return true
+        } else {
 
-    suspend fun getModules(courseId: String): List<Module> = suspendCoroutine { cont ->
+            val moduleMapping = getModuleCompanyMappings(it.id)
+
+            if (moduleMapping.isEmpty()) {
+                return false
+            }
+
+            moduleMapping.forEach {
+
+                if(it.isopened){
+                    return true
+                }
+
+                if(it.userIdsRequired) {
+                    val userMatched = it.userUids.contains(getUID())
+                    if(userMatched) return true
+                }
+
+
+                if(it.rolesRequired){
+
+                    if (mProfile?.role_interests != null) {
+                        for (role in mProfile!!.role_interests!!) {
+                            for (courseRoles in it.roles) {
+                                if (courseRoles == role.interestID) {
+                                    return true
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            return false
+        }
+    }
+
+
+    suspend fun getModules(courseId: String): List<Module> {
+
+        if (mProfile == null) {
+            mProfile = profileFirebaseRepository.getProfileData()
+        }
+
+        return getModulesC(courseId).filter {
+            it.isActive && doesModuleFullFillsCondition(it)
+        }
+    }
+
+    private suspend fun getModulesC(courseId: String): List<Module> = suspendCoroutine { cont ->
         getCollectionReference()
             .whereEqualTo(TYPE, TYPE_MODULE)
+            .whereEqualTo(COURSE_ID, courseId)
             .get()
             .addOnSuccessListener { querySnap ->
 
@@ -481,8 +902,6 @@ class LearningRepository : BaseFirestoreDBRepository() {
                         val modules = it.toObject(Module::class.java)!!
                         modules.id = it.id
                         modules
-                    }.filter {
-                        it.isActive
                     }
                 cont.resume(modules)
             }

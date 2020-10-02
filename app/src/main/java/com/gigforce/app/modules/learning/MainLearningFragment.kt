@@ -243,10 +243,10 @@ class MainLearningFragment : BaseFragment() {
                     view.layoutParams = lp
 
                     var title = getTextView(viewHolder, R.id.title_)
-                    title.text = obj?.name + " " +obj?.level
+                    title.text = obj?.name
 
                     var subtitle = getTextView(viewHolder, R.id.title)
-                    subtitle.text = obj?.description
+                    subtitle.text = obj?.level
 
                     var img = getImageView(viewHolder, R.id.learning_img)
                     if (!obj!!.coverPicture.isNullOrBlank()) {
@@ -255,6 +255,7 @@ class MainLearningFragment : BaseFragment() {
                             GlideApp.with(requireContext())
                                 .load(obj.coverPicture!!)
                                 .placeholder(getCircularProgressDrawable())
+                                .error(R.drawable.ic_learning_default_back)
                                 .into(img)
                         } else {
                             FirebaseStorage.getInstance()
@@ -266,9 +267,14 @@ class MainLearningFragment : BaseFragment() {
                                     GlideApp.with(requireContext())
                                         .load(fileUri)
                                         .placeholder(getCircularProgressDrawable())
+                                        .error(R.drawable.ic_learning_default_back)
                                         .into(img)
                                 }
                         }
+                    } else{
+                        GlideApp.with(requireContext())
+                            .load(R.drawable.ic_learning_default_back)
+                            .into(img)
                     }
                 })
         recyclerGenericAdapter.list = content
@@ -326,10 +332,10 @@ class MainLearningFragment : BaseFragment() {
                     view.layoutParams = lp
 
                     var title = getTextView(viewHolder, R.id.title)
-                    title.text = obj?.name + " " +obj?.level
+                    title.text = obj?.name
 
                     var subtitle = getTextView(viewHolder, R.id.subtitle)
-                    subtitle.text = obj?.description
+                    subtitle.text = obj?.level
 
                     var img = getImageView(viewHolder, R.id.img)
                     if (!obj!!.coverPicture.isNullOrBlank()) {
@@ -338,6 +344,7 @@ class MainLearningFragment : BaseFragment() {
                             GlideApp.with(requireContext())
                                 .load(obj.coverPicture!!)
                                 .placeholder(getCircularProgressDrawable())
+                                .error(R.drawable.ic_learning_default_back)
                                 .into(img)
                         } else {
                             FirebaseStorage.getInstance()
@@ -349,9 +356,14 @@ class MainLearningFragment : BaseFragment() {
                                     GlideApp.with(requireContext())
                                         .load(fileUri)
                                         .placeholder(getCircularProgressDrawable())
+                                        .error(R.drawable.ic_learning_default_back)
                                         .into(img)
                                 }
                         }
+                    } else{
+                        GlideApp.with(requireContext())
+                            .load(R.drawable.ic_learning_default_back)
+                            .into(img)
                     }
                 })
         recyclerGenericAdapter.list = content
@@ -388,6 +400,9 @@ class MainLearningFragment : BaseFragment() {
     private fun listener() {
         chat_icon_iv.setOnClickListener{
             navigate(R.id.contactScreenFragment)
+        }
+        cardView.setOnClickListener{
+            navigate(R.id.profileFragment)
         }
     }
 

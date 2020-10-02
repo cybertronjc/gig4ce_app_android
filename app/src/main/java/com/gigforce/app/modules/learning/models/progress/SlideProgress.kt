@@ -10,6 +10,10 @@ data class SlideProgress(
     @set:PropertyName("slide_id")
     var slideId: String = "",
 
+    @get:PropertyName("lesson_id")
+    @set:PropertyName("lesson_id")
+    var lessonId: String = "",
+
     @get:PropertyName("slide_start_date")
     @set:PropertyName("slide_start_date")
     var slideStartDate: Timestamp? = null,

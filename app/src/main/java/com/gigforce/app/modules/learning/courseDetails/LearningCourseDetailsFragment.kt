@@ -120,13 +120,19 @@ class LearningCourseDetailsFragment : BaseFragment() {
                     )
                 }
                 CourseContent.TYPE_VIDEO -> {
-                    navigate(
-                        R.id.playVideoDialogFragment,
-                        bundleOf(
-                            PlayVideoDialogFragment.INTENT_EXTRA_LESSON_ID to it.id,
-                            PlayVideoDialogFragment.INTENT_EXTRA_MODULE_ID to it.moduleId
-                        )
+                    PlayVideoDialogFragment.launch(
+                        childFragmentManager = childFragmentManager,
+                        moduleId = it.moduleId,
+                        lessonId = it.id
                     )
+
+//                    navigate(
+//                        R.id.playVideoDialogFragment,
+//                        bundleOf(
+//                            PlayVideoDialogFragment.INTENT_EXTRA_LESSON_ID to it.id,
+//                            PlayVideoDialogFragment.INTENT_EXTRA_MODULE_ID to it.moduleId
+//                        )
+//                    )
                 }
                 else -> {
                 }
@@ -218,6 +224,7 @@ class LearningCourseDetailsFragment : BaseFragment() {
                 GlideApp.with(requireContext())
                     .load(course.coverPicture)
                     .placeholder(getCircularProgressDrawable())
+                    .error(R.drawable.ic_learning_default_back)
                     .into(videoThumnailIV)
             } else {
                 FirebaseStorage.getInstance()
@@ -229,9 +236,14 @@ class LearningCourseDetailsFragment : BaseFragment() {
                         GlideApp.with(requireContext())
                             .load(fileUri)
                             .placeholder(getCircularProgressDrawable())
+                            .error(R.drawable.ic_learning_default_back)
                             .into(videoThumnailIV)
                     }
             }
+        } else{
+            GlideApp.with(requireContext())
+                .load(R.drawable.ic_learning_default_back)
+                .into(videoThumnailIV)
         }
 
         videoTitleTV.text = course.name
@@ -302,6 +314,8 @@ class LearningCourseDetailsFragment : BaseFragment() {
         learning_details_learning_error.gone()
         learning_details_progress_bar.visible()
     }
+
+
 
     private fun showLessonsOnView(content: List<CourseContent>) {
 
@@ -417,6 +431,10 @@ class LearningCourseDetailsFragment : BaseFragment() {
                         moduleId = module.id
                     )
 
+                    course_details_main_layout.post {
+                        course_details_main_layout.scrollTo(0, modulesLabel.y.toInt())
+                    }
+
                     var oldPostion = viewModel.currentlySelectedModulePosition
                     viewModel.currentlySelectedModulePosition = position
 
@@ -460,6 +478,7 @@ class LearningCourseDetailsFragment : BaseFragment() {
                             GlideApp.with(requireContext())
                                 .load(obj.coverPicture)
                                 .placeholder(getCircularProgressDrawable())
+                                .error(R.drawable.ic_learning_default_back)
                                 .into(img)
                         } else {
                             FirebaseStorage.getInstance()
@@ -471,17 +490,14 @@ class LearningCourseDetailsFragment : BaseFragment() {
                                     GlideApp.with(requireContext())
                                         .load(fileUri)
                                         .placeholder(getCircularProgressDrawable())
+                                        .error(R.drawable.ic_learning_default_back)
                                         .into(img)
                                 }
                         }
                     } else {
-                        img.setBackgroundColor(
-                            ResourcesCompat.getColor(
-                                requireContext().resources,
-                                R.color.warm_grey,
-                                null
-                            )
-                        )
+                        GlideApp.with(requireContext())
+                            .load(R.drawable.ic_learning_default_back)
+                            .into(img)
                     }
 
                 })
@@ -609,11 +625,6 @@ class LearningCourseDetailsFragment : BaseFragment() {
 
 
 
-    }
-
-    override fun onBackPressed(): Boolean {
-        parentFragmentManager.popBackStack()
-        return false
     }
 
 

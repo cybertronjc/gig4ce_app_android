@@ -34,6 +34,7 @@ class AssessmentDialog : DialogFragment() {
     private val viewModel : AssessmentDialogViewModel by viewModels()
 
     private lateinit var mModuleId : String
+    private lateinit var mLessonId : String
     private var assessmentResultWithNextDest : AssessmentResult? =null
 
     private var assessmentDialogCallbacks: AssessmentDialogCallbacks? = null;
@@ -54,6 +55,7 @@ class AssessmentDialog : DialogFragment() {
         initClicks()
 
         arguments?.let {
+            mLessonId = it.getString(INTENT_EXTRA_LESSON_ID) ?: return@let
             mModuleId = it.getString(INTENT_EXTRA_MODULE_ID) ?: return@let
         }
 
@@ -89,8 +91,8 @@ class AssessmentDialog : DialogFragment() {
 
     private fun initUIAsPerState(state: Int?) {
         when (state) {
-            STATE_PASS -> viewModel.saveAssessmentState(mModuleId, state)
-            STATE_REAPPEAR -> viewModel.saveAssessmentState(mModuleId, state)
+            STATE_PASS -> viewModel.saveAssessmentState(mModuleId,mLessonId, state)
+            STATE_REAPPEAR -> viewModel.saveAssessmentState(mModuleId, mLessonId,state)
             else -> {
                 isCancelable = true
                 tv_do_it_later_assess_dialog.visibility = View.VISIBLE
@@ -289,11 +291,12 @@ class AssessmentDialog : DialogFragment() {
             return assessmentDialog
         }
 
-        fun newInstance(moduleId : String, state: Int): AssessmentDialog {
+        fun newInstance(moduleId : String,lessonId : String, state: Int): AssessmentDialog {
             //Setting Dialog State Before Initializing the dialog object
             val bundle = Bundle()
             bundle.putInt(StringConstants.ASSESSMENT_DIALOG_STATE.value, state)
             bundle.putString(INTENT_EXTRA_MODULE_ID, moduleId)
+            bundle.putString(INTENT_EXTRA_LESSON_ID, lessonId)
             val assessmentDialog = AssessmentDialog()
             assessmentDialog.arguments = bundle
             return assessmentDialog
@@ -304,6 +307,7 @@ class AssessmentDialog : DialogFragment() {
         const val STATE_REAPPEAR = 3;
 
         const val INTENT_EXTRA_MODULE_ID = "module_id"
+        const val INTENT_EXTRA_LESSON_ID = "lesson_id"
     }
 
     interface AssessmentDialogCallbacks {
