@@ -84,6 +84,7 @@ class LandingScreenFragment : BaseFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        val notificationToken=FirebaseInstanceId.getInstance().getToken()
         viewModel = ViewModelProvider(this).get(LandingScreenViewModel::class.java)
         val displayMetrics = DisplayMetrics()
         activity?.windowManager?.getDefaultDisplay()?.getMetrics(displayMetrics)
@@ -691,75 +692,6 @@ class LandingScreenFragment : BaseFragment() {
 
         cv_role.layoutParams = lp
 
-//        // model will change when integrated with DB
-////        var datalist: ArrayList<UpcomingGigModel> = ArrayList<UpcomingGigModel>()
-//        var datalist: ArrayList<TitleSubtitleModel> = ArrayList<TitleSubtitleModel>()
-//
-//
-//        datalist.add(
-//            TitleSubtitleModel(
-//                "Driver",
-//                "Welcome to Gigforce! Let's talk about what's a gig and how do you start working as a giger at Gigforce.",
-//                "https://firebasestorage.googleapis.com/v0/b/gigforce-dev.appspot.com/o/temp_files%2Fdriver_img.jpg?alt=media&token=68412376-59c8-4598-81d6-9630724afff6"
-//            )
-//        )
-//        datalist.add(
-//            TitleSubtitleModel(
-//                "Delivery Executive",
-//                "Welcome to Gigforce! Let's talk about what's a gig and how do you start working as a giger at Gigforce.",
-//                "https://firebasestorage.googleapis.com/v0/b/gigforce-dev.appspot.com/o/temp_files%2Fdelivery_executive_ls_img.jpg?alt=media&token=d42f2ed2-d0e5-472b-bb84-5379528f612f"
-//            )
-//        )
-//
-//        datalist.add(
-//            TitleSubtitleModel(
-//                "Retail Sales Executive",
-//                "Welcome to Gigforce! Let's talk about what's a gig and how do you start working as a giger at Gigforce.",
-//                "https://firebasestorage.googleapis.com/v0/b/gigforce-dev.appspot.com/o/temp_files%2Fretail_img_ls.jpg?alt=media&token=c3e587c9-5fdf-4e17-8e78-2799b7280817"
-//            )
-//        )
-//
-//        datalist.add(
-//            TitleSubtitleModel(
-//                "Barista",
-//                "Welcome to Gigforce! Let's talk about what's a gig and how do you start working as a giger at Gigforce.",
-//                "https://firebasestorage.googleapis.com/v0/b/gigforce-dev.appspot.com/o/temp_files%2Fbrista_ls_img.jpg?alt=media&token=c5061822-a7d6-497c-8bee-09079cb8dc70"
-//            )
-//        )
-//
-//        val recyclerGenericAdapter: RecyclerGenericAdapter<TitleSubtitleModel> =
-//            RecyclerGenericAdapter<TitleSubtitleModel>(
-//                activity?.applicationContext,
-//                PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
-//                    if(AppConstants.UNLOCK_FEATURE) {
-//                        navigate(R.id.explore_by_role)
-//                    }else
-//                    showToast("This is under development. Please check again in a few days.")
-//                },
-//                RecyclerGenericAdapter.ItemInterface<TitleSubtitleModel?> { obj, viewHolder, position ->
-//                    var view = getView(viewHolder, R.id.card_view)
-//                    val lp = view.layoutParams
-//                    lp.height = lp.height
-//                    lp.width = itemWidth
-//                    view.layoutParams = lp
-//
-//                    var title = getTextView(viewHolder, R.id.title)
-//                    title.text = obj?.title
-//
-//                    obj?.imgStr?.let {
-//                        var img = getImageView(viewHolder, R.id.img_view)
-//                        showGlideImage(it,img)
-//                    }
-////                    img.setImageResource(obj?.imgIcon!!)
-//                })!!
-//        recyclerGenericAdapter.setList(datalist)
-//        recyclerGenericAdapter.setLayout(R.layout.explore_by_role_item)
-//        explore_by_role_rv.layoutManager = LinearLayoutManager(
-//            activity?.applicationContext,
-//            LinearLayoutManager.HORIZONTAL,
-//            false
-//        )
-//        explore_by_role_rv.adapter = recyclerGenericAdapter
 
     }
 }

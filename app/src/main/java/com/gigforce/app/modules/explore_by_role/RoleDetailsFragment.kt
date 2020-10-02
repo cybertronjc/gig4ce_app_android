@@ -88,7 +88,6 @@ class RoleDetailsFragment : BaseFragment() {
 
     private fun initObservers() {
 
-
         viewModel.observerRole.observe(viewLifecycleOwner, Observer { role ->
             run {
                 tv_role_role_details.text = role?.role_title

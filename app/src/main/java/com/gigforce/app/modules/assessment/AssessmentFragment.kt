@@ -119,7 +119,7 @@ class AssessmentFragment : BaseFragment(),
                 bundle.putInt(StringConstants.TIME_TAKEN.value, timeTaken)
                 countDownTimer?.cancel()
 
-                bundle.putString(AssessmentFragment.INTENT_MODULE_ID,mModuleId)
+                bundle.putString(AssessmentFragment.INTENT_MODULE_ID, mModuleId)
                 navigate(R.id.assessment_result_fragment, bundle)
             })
             observableDialogInit.observe(viewLifecycleOwner, Observer {
@@ -143,7 +143,7 @@ class AssessmentFragment : BaseFragment(),
                 showDialog(
                     AssessmentDialog.STATE_INIT, bundleOf(
                         StringConstants.DURATION.value to it.duration,
-                        StringConstants.ASSESSMENT_NAME.value to it.assessment_name,
+                        StringConstants.ASSESSMENT_NAME.value to it.Name,
                         StringConstants.QUESTIONS_COUNT.value to (it.assessment?.size ?: 0),
                         StringConstants.LEVEL.value to it.level,
                         StringConstants.ASSESSMENT_DIALOG_STATE.value to AssessmentDialog.STATE_INIT
@@ -153,7 +153,7 @@ class AssessmentFragment : BaseFragment(),
                 tv_scenario_value_header_assess_frag.text = it.scenario
 
                 tv_level_assess_frag.text = "${getString(R.string.level)} ${it.level}"
-                tv_designation_assess_frag.text = it.assessment_name
+                tv_designation_assess_frag.text = it.Name
                 h_pb_assess_frag.max = it.assessment?.size!!
                 h_pb_assess_frag.progress = 0
                 tv_percent_assess_frag.text = "0 %"
@@ -355,10 +355,10 @@ class AssessmentFragment : BaseFragment(),
     fun switchPosition(increment: Boolean) {
         if (increment) ++selectedPosition else --selectedPosition
         setDataAsPerPosition(viewModelAssessmentFragment.observableAssessmentData.value!!)
-        sv_assess_frag.postDelayed(
-            Runnable { sv_assess_frag.fullScroll(ScrollView.FOCUS_UP) },
-            600
-        )
+//        sv_assess_frag.postDelayed(
+//            Runnable { sv_assess_frag.fullScroll(ScrollView.FOCUS_UP) },
+//            600
+//        )
 
     }
 
@@ -541,7 +541,11 @@ class AssessmentFragment : BaseFragment(),
             iv_scenario_value_assess_frag.visibility = View.VISIBLE
             GlideApp.with(this.requireContext())
                 .asBitmap()
-                .load(Path)
+                .load(Path).placeholder(
+                    com.gigforce.app.utils.getCircularProgressDrawable(
+                        requireContext()
+                    )
+                )
                 .into(object : CustomTarget<Bitmap>() {
                     override fun onResourceReady(
                         resource: Bitmap,
