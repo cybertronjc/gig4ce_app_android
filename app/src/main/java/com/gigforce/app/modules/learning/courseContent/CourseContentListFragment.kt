@@ -88,12 +88,10 @@ class CourseContentListFragment : BaseFragment() {
                     )
                 }
                 CourseContent.TYPE_VIDEO -> {
-                    navigate(
-                        R.id.playVideoDialogFragment,
-                        bundleOf(
-                            PlayVideoDialogFragment.INTENT_EXTRA_LESSON_ID to it.id,
-                            PlayVideoDialogFragment.INTENT_EXTRA_MODULE_ID to it.moduleId
-                        )
+                    PlayVideoDialogFragment.launch(
+                        childFragmentManager = childFragmentManager,
+                        moduleId = it.moduleId,
+                        lessonId = it.id
                     )
                 }
                 else -> {
