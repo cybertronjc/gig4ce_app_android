@@ -903,7 +903,8 @@ class LearningRepository constructor(
                                 modules.id = it.id
                                 modules
                             }
-                    cont.resume(modules)
+
+                    cont.resume(modules.sortedBy { it.priority })
                 }
                 .addOnFailureListener {
 

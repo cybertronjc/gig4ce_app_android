@@ -33,6 +33,9 @@ data class Module(
     @set:PropertyName("is_active")
     var isActive: Boolean = false,
 
+    @get:PropertyName("priority")
+    @set:PropertyName("priority")
+    var priority: Int = 0,
 
     @get:PropertyName("module_start_date")
     @set:PropertyName("module_start_date")
