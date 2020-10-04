@@ -404,7 +404,7 @@ class AssessmentFragment : BaseFragment(),
         }
         val questions =
             viewModelAssessmentFragment.observableAssessmentData.value!!.assessment!!.size
-        var isPassed =
+        val isPassed =
             (answers / questions.toFloat()) * 100 >= viewModelAssessmentFragment.observableAssessmentData.value?.passing_percentage!!
 
         showDialog(
