@@ -22,8 +22,8 @@
 
             <ImageView
                 android:id="@+id/iv_back"
-                android:layout_width="@dimen/size_32"
-                android:layout_height="@dimen/size_32"
+                android:layout_width="@dimen/size_15"
+                android:layout_height="@dimen/size_15"
                 android:layout_centerVertical="true"
                 android:adjustViewBounds="true"
                 android:contentDescription="@string/back_button"
@@ -34,14 +34,14 @@
                 android:id="@+id/tv_title_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:letterSpacing="0"
                 android:layout_centerVertical="true"
                 android:layout_marginStart="@dimen/size_16"
                 android:layout_marginEnd="@dimen/size_16"
                 android:layout_toEndOf="@+id/iv_back"
                 android:ellipsize="end"
+                android:letterSpacing="0"
                 android:textColor="@android:color/black"
-                android:textSize="@dimen/font_16" />
+                android:textSize="@dimen/font_20" />
 
             <ImageView
                 android:id="@+id/iv_options_menu_tb"
@@ -50,8 +50,8 @@
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:src="@drawable/ic_three_dots"
-                android:tint="@color/black"
-                android:visibility="gone" />
+                android:visibility="gone"
+                app:tint="@color/black" />
 
         </RelativeLayout>
 

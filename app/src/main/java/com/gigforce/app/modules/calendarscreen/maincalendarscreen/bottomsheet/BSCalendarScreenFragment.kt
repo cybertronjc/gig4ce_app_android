@@ -347,6 +347,7 @@ class BSCalendarScreenFragment : BaseFragment() {
         show_upcominggig_layout.setOnClickListener() {
             showKYCAndHideUpcomingLayout(false)
         }
+
     }
 
     private fun showKYCAndHideUpcomingLayout(show: Boolean) {
@@ -862,11 +863,8 @@ class BSCalendarScreenFragment : BaseFragment() {
         }
 
         invite_contact_bs_calendar_screen.setOnClickListener {
-
-            showToast("This is not functional, Please check later")
-
+            navigate(R.id.referrals_fragment)
         }
-
 
 
 

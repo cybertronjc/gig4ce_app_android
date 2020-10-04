@@ -24,7 +24,8 @@ interface ModelCallbacksAboutExpandedFragment {
         contactList: ArrayList<ContactPhone>?,
         newContact: ContactPhone?,
         oldContact: String?,
-        add: Boolean,
+        add: Boolean?,
+        delete: Boolean?,
         responseCallbacks: ResponseModelCallbacksAboutExpandedFragment
     )
 
@@ -33,7 +34,8 @@ interface ModelCallbacksAboutExpandedFragment {
         contactList: ArrayList<ContactEmail>?,
         newContact: ContactEmail?,
         oldContact: String?,
-        add: Boolean,
+        add: Boolean?,
+        delete: Boolean?,
         responseCallbacks: ResponseModelCallbacksAboutExpandedFragment
     )
 

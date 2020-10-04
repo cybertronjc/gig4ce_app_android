@@ -12,7 +12,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import android.widget.ScrollView
 import androidx.core.os.bundleOf
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
@@ -21,6 +20,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.request.target.CustomTarget
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
+import com.gigforce.app.core.gone
+import com.gigforce.app.core.visible
 import com.gigforce.app.modules.assessment.models.AssementQuestionsReponse
 import com.gigforce.app.modules.profile.ProfileViewModel
 import com.gigforce.app.utils.GlideApp
@@ -68,6 +69,7 @@ class AssessmentFragment : BaseFragment(),
         return inflateView(R.layout.fragment_assessment, inflater, container)
     }
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         getDataFromIntents(savedInstanceState)
@@ -75,6 +77,7 @@ class AssessmentFragment : BaseFragment(),
         initObservers()
         setupRecycler()
         viewModelAssessmentFragment.getQuestionaire(mLessonId)
+
     }
 
     private fun getDataFromIntents(savedInstanceState: Bundle?) {
@@ -167,6 +170,7 @@ class AssessmentFragment : BaseFragment(),
                 showToast(it)
             })
             observableQuizSubmit.observe(viewLifecycleOwner, Observer {
+                pb_assessment.gone()
                 finalResult()
             })
 
@@ -222,6 +226,7 @@ class AssessmentFragment : BaseFragment(),
                 timeTaken = millis.toInt()
                 viewModelAssessmentFragment.observableAssessmentData.value?.timeTakenInMillis =
                     timeTaken.toLong()
+                pb_assessment.visible()
                 viewModelAssessmentFragment.submitAnswers(viewModelProfile.getProfileData().value?.id)
             }
         }
@@ -236,8 +241,8 @@ class AssessmentFragment : BaseFragment(),
         rv_options_assess_frag.layoutManager = LinearLayoutManager(activity)
         rv_options_assess_frag.addItemDecoration(
             ItemDecoratorAssessmentOptions(
-                context,
-                R.dimen.size_16
+                context
+
             )
         )
 
@@ -336,6 +341,7 @@ class AssessmentFragment : BaseFragment(),
                     tv_percent_assess_frag.text = getString(R.string.hundred_percent)
                     viewModelAssessmentFragment.observableAssessmentData.value?.timeTakenInMillis =
                         timeTaken.toLong()
+                    pb_assessment.visible()
                     viewModelAssessmentFragment.submitAnswers(viewModelProfile.getProfileData().value?.id)
 
                 } else {
@@ -371,6 +377,7 @@ class AssessmentFragment : BaseFragment(),
                 showToast(getString(R.string.time_is_up))
                 viewModelAssessmentFragment.observableAssessmentData.value?.timeTakenInMillis =
                     timeTaken.toLong()
+                pb_assessment.visible()
                 viewModelAssessmentFragment.submitAnswers(viewModelProfile.getProfileData().value?.id)
             }, 500)
 
@@ -447,8 +454,8 @@ class AssessmentFragment : BaseFragment(),
         bundle: Bundle?,
         moduleId: String? = null
     ) {
-        val dialog = if(moduleId != null)
-            AssessmentDialog.newInstance(moduleId,mLessonId, state)
+        val dialog = if (moduleId != null)
+            AssessmentDialog.newInstance(moduleId, mLessonId, state)
         else
             AssessmentDialog.newInstance(state)
 
