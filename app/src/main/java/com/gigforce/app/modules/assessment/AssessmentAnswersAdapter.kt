@@ -81,17 +81,20 @@ class AssessmentAnswersAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>()
                             holder.itemView.context.getColor(R.color.black_85),
                             holder.itemView.context.getDrawable(R.drawable.border_tv_rv_answers_assess_frag)!!
                         )
-                        else (if (obj.is_answer == true) ColorAndBg(
-                            holder.itemView.context.getColor(R.color.app_green),
-                            holder.itemView.context.getDrawable(R.drawable.border_option_green)!!
-                        ) else if (obj.showReason == false) ColorAndBg(
-                            holder.itemView.context.getColor(R.color.black_85),
-                            holder.itemView.context.getDrawable(R.drawable.border_tv_rv_answers_assess_frag)!!
-                        ) else
-                            ColorAndBg(
+                        else (when {
+                            obj.is_answer == true -> ColorAndBg(
+                                holder.itemView.context.getColor(R.color.app_green),
+                                holder.itemView.context.getDrawable(R.drawable.border_option_green)!!
+                            )
+                            obj.showReason == false -> ColorAndBg(
+                                holder.itemView.context.getColor(R.color.black_85),
+                                holder.itemView.context.getDrawable(R.drawable.border_tv_rv_answers_assess_frag)!!
+                            )
+                            else -> ColorAndBg(
                                 holder.itemView.context.getColor(R.color.red),
                                 holder.itemView.context.getDrawable(R.drawable.border_option_red)!!
-                            ))
+                            )
+                        })
 
 
                     holder.itemView.tv_number_rv_access_frag.setTextColor(color.color)
