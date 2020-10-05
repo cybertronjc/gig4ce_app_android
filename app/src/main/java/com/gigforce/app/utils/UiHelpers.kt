@@ -2,15 +2,13 @@ package com.gigforce.app.utils
 
 import android.app.Activity
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Point
+import android.graphics.*
 import android.util.DisplayMetrics
 import android.util.Size
 import android.view.View
 import android.view.WindowManager
 import android.widget.PopupMenu
+import android.widget.TextView
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 
 
@@ -98,6 +96,12 @@ fun getBitmapFromView(view: View, height: Int, width: Int): Bitmap {
         canvas.drawColor(Color.WHITE);
     view.draw(canvas);
     return bitmap;
+}
+
+fun TextView.setDrawableColor(color: Int) {
+    compoundDrawables.filterNotNull().forEach {
+        it.colorFilter = PorterDuffColorFilter(color, PorterDuff.Mode.SRC_IN)
+    }
 }
 
 

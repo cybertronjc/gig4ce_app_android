@@ -271,12 +271,12 @@ class BSCalendarScreenFragment : BaseFragment() {
                     PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
                         val assessment = item as CourseContent
 
-//                        showToast("Disabled ,will be enabled soon")
-
-                        navigate(R.id.assessment_fragment,  bundleOf(
-                            AssessmentFragment.INTENT_LESSON_ID to assessment.id
-                        )
-                        )
+                        showToast("Disabled ,will be enabled soon")
+//
+//                        navigate(R.id.assessment_fragment,  bundleOf(
+//                            AssessmentFragment.INTENT_LESSON_ID to assessment.id
+//                        )
+//                        )
                     },
                     RecyclerGenericAdapter.ItemInterface<CourseContent> { obj, viewHolder, position ->
                         val lp = getView(viewHolder, R.id.assessment_cl).layoutParams
@@ -352,6 +352,7 @@ class BSCalendarScreenFragment : BaseFragment() {
         show_upcominggig_layout.setOnClickListener() {
             showKYCAndHideUpcomingLayout(false)
         }
+
     }
 
     private fun showKYCAndHideUpcomingLayout(show: Boolean) {
@@ -867,11 +868,8 @@ class BSCalendarScreenFragment : BaseFragment() {
         }
 
         invite_contact_bs_calendar_screen.setOnClickListener {
-
-            showToast("This is not functional, Please check later")
-
+            navigate(R.id.referrals_fragment)
         }
-
 
 
 

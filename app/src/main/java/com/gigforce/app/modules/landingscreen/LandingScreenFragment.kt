@@ -446,7 +446,7 @@ class LandingScreenFragment : BaseFragment() {
         }
 
         invite_contact.setOnClickListener {
-            showToast("This is not functional, Please check later")
+          navigate(R.id.referrals_fragment)
         }
 
         profile_image.setOnClickListener {
