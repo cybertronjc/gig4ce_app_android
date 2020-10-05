@@ -144,6 +144,7 @@
         android:background="#f1f1f1" />
 
     <TextView
+        android:id="@+id/learning_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="18dp"
@@ -191,6 +192,7 @@
 
 
     <TextView
+        android:id="@+id/assessment_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="18dp"
@@ -199,13 +201,16 @@
         android:letterSpacing="0"
         android:text="@string/assessment_"
         android:textColor="#686868"
+        android:visibility="gone"
         android:textSize="14sp" />
 
 
     <FrameLayout
+        android:id="@+id/assessment_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:visibility="gone"
         android:minHeight="170dp">
 
         <androidx.recyclerview.widget.RecyclerView

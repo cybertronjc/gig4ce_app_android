@@ -120,7 +120,7 @@ class BSCalendarScreenFragment : BaseFragment() {
             })
 
 
-        mainLearningViewModel.getAssessmentsFromAllAssignedCourses()
+       // mainLearningViewModel.getAssessmentsFromAllAssignedCourses()
         learningViewModel.getRoleBasedCourses()
     }
 
@@ -162,71 +162,80 @@ class BSCalendarScreenFragment : BaseFragment() {
         learning_learning_error.gone()
         learning_rv.visible()
 
-        val itemWidth = ((width / 3) * 2).toInt()
-        val recyclerGenericAdapter: RecyclerGenericAdapter<Course> =
-            RecyclerGenericAdapter<Course>(
-                activity?.applicationContext,
-                PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
-                    navigate(R.id.mainLearningFragment)
-                },
-                RecyclerGenericAdapter.ItemInterface<Course?> { obj, viewHolder, position ->
-                    var view = getView(viewHolder, R.id.card_view)
-                    val lp = view.layoutParams
-                    lp.height = lp.height
-                    lp.width = itemWidth
-                    view.layoutParams = lp
-
-                    var title = getTextView(viewHolder, R.id.title_)
-                    title.text = obj?.name
-
-                    var subtitle = getTextView(viewHolder, R.id.title)
-                    subtitle.text = obj?.level
-
-                    var comImg = getImageView(viewHolder, R.id.completed_iv)
-                    comImg.isVisible = obj?.completed ?: false
+        if(content.isEmpty()){
+            learning_tv.gone()
+            learning_container.gone()
+        } else{
+            learning_tv.visible()
+            learning_container.visible()
 
 
-                    var img = getImageView(viewHolder, R.id.learning_img)
+            val itemWidth = ((width / 3) * 2).toInt()
+            val recyclerGenericAdapter: RecyclerGenericAdapter<Course> =
+                RecyclerGenericAdapter<Course>(
+                    activity?.applicationContext,
+                    PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
+                        navigate(R.id.mainLearningFragment)
+                    },
+                    RecyclerGenericAdapter.ItemInterface<Course?> { obj, viewHolder, position ->
+                        var view = getView(viewHolder, R.id.card_view)
+                        val lp = view.layoutParams
+                        lp.height = lp.height
+                        lp.width = itemWidth
+                        view.layoutParams = lp
 
-                    if (!obj!!.coverPicture.isNullOrBlank()) {
-                        if (obj!!.coverPicture!!.startsWith("http", true)) {
+                        var title = getTextView(viewHolder, R.id.title_)
+                        title.text = obj?.name
 
+                        var subtitle = getTextView(viewHolder, R.id.title)
+                        subtitle.text = obj?.level
+
+                        var comImg = getImageView(viewHolder, R.id.completed_iv)
+                        comImg.isVisible = obj?.completed ?: false
+
+
+                        var img = getImageView(viewHolder, R.id.learning_img)
+
+                        if (!obj!!.coverPicture.isNullOrBlank()) {
+                            if (obj!!.coverPicture!!.startsWith("http", true)) {
+
+                                GlideApp.with(requireContext())
+                                    .load(obj!!.coverPicture!!)
+                                    .placeholder(getCircularProgressDrawable())
+                                    .error(R.drawable.ic_learning_default_back)
+                                    .into(img)
+                            } else {
+                                FirebaseStorage.getInstance()
+                                    .getReference(LearningConstants.LEARNING_IMAGES_FIREBASE_FOLDER)
+                                    .child(obj!!.coverPicture!!)
+                                    .downloadUrl
+                                    .addOnSuccessListener { fileUri ->
+
+                                        GlideApp.with(requireContext())
+                                            .load(fileUri)
+                                            .placeholder(getCircularProgressDrawable())
+                                            .error(R.drawable.ic_learning_default_back)
+                                            .into(img)
+                                    }
+                            }
+                        } else{
                             GlideApp.with(requireContext())
-                                .load(obj!!.coverPicture!!)
-                                .placeholder(getCircularProgressDrawable())
-                                .error(R.drawable.ic_learning_default_back)
+                                .load(R.drawable.ic_learning_default_back)
                                 .into(img)
-                        } else {
-                            FirebaseStorage.getInstance()
-                                .getReference(LearningConstants.LEARNING_IMAGES_FIREBASE_FOLDER)
-                                .child(obj!!.coverPicture!!)
-                                .downloadUrl
-                                .addOnSuccessListener { fileUri ->
-
-                                    GlideApp.with(requireContext())
-                                        .load(fileUri)
-                                        .placeholder(getCircularProgressDrawable())
-                                        .error(R.drawable.ic_learning_default_back)
-                                        .into(img)
-                                }
                         }
-                    } else{
-                        GlideApp.with(requireContext())
-                            .load(R.drawable.ic_learning_default_back)
-                            .into(img)
-                    }
 
-                    //img.setImageResource(obj?.imgIcon!!)
-                })!!
-        recyclerGenericAdapter.setList(content)
-        recyclerGenericAdapter.setLayout(R.layout.learning_bs_item)
-        learning_rv.layoutManager = LinearLayoutManager(
-            activity?.applicationContext,
-            LinearLayoutManager.HORIZONTAL,
-            false
-        )
-        learning_rv.adapter = recyclerGenericAdapter
+                        //img.setImageResource(obj?.imgIcon!!)
+                    })!!
+            recyclerGenericAdapter.setList(content)
+            recyclerGenericAdapter.setLayout(R.layout.learning_bs_item)
+            learning_rv.layoutManager = LinearLayoutManager(
+                activity?.applicationContext,
+                LinearLayoutManager.HORIZONTAL,
+                false
+            )
+            learning_rv.adapter = recyclerGenericAdapter
 
+        }
     }
 
     private fun showAssessmentProgress() {
@@ -249,15 +258,14 @@ class BSCalendarScreenFragment : BaseFragment() {
 
         learning_assessment_progress_bar.gone()
         learning_assessment_error.gone()
-        assessment_rv.visible()
 
         if (content.isEmpty()) {
-            assessment_rv.gone()
-            learning_assessment_progress_bar.gone()
-            learning_assessment_error.visible()
-
-            learning_assessment_error.text = "No Assessment Found"
+            assessment_tv.gone()
+            assessment_layout.gone()
         } else {
+
+            assessment_tv.visible()
+            assessment_layout.visible()
 
             val displayMetrics = DisplayMetrics()
             activity?.windowManager?.defaultDisplay?.getMetrics(displayMetrics)

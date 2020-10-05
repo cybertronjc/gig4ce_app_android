@@ -166,6 +166,7 @@ class AssessmentResultFragment : BaseFragment(), PopupMenu.OnMenuItemClickListen
 
                 }
                 is Lce.Content -> {
+                    redoLesson = it.content
                     lesson_suggestions_layout.visible()
                     showLessonSuggestionOnFailing(it.content)
                 }
@@ -285,6 +286,8 @@ class AssessmentResultFragment : BaseFragment(), PopupMenu.OnMenuItemClickListen
     }
 
     private var nextLesson: CourseContent? = null
+    private var redoLesson: CourseContent? = null
+
 
     var width = 0
     private fun showLearnings(content: List<Course>) {
@@ -494,6 +497,41 @@ class AssessmentResultFragment : BaseFragment(), PopupMenu.OnMenuItemClickListen
             TimeUnit.MILLISECONDS.toMinutes(timeTaken) % TimeUnit.HOURS.toMinutes(1),
             TimeUnit.MILLISECONDS.toSeconds(timeTaken) % TimeUnit.MINUTES.toSeconds(1)
         )
+
+        lessons_on_failed_layout.setOnClickListener {
+
+            redoLesson?.let { cc ->
+
+                when (cc.type) {
+                    CourseContent.TYPE_VIDEO -> {
+                        PlayVideoDialogFragment.launch(
+                            childFragmentManager = childFragmentManager,
+                            moduleId = cc.moduleId,
+                            lessonId = cc.id
+                        )
+                    }
+                    CourseContent.TYPE_ASSESSMENT -> {
+                        navigate(
+                            R.id.assessment_fragment, bundleOf(
+                                AssessmentFragment.INTENT_LESSON_ID to cc.id,
+                                AssessmentFragment.INTENT_MODULE_ID to cc.moduleId
+                            )
+                        )
+                    }
+                    CourseContent.TYPE_SLIDE -> {
+                        navigate(
+                            R.id.slidesFragment,
+                            bundleOf(
+                                SlidesFragment.INTENT_EXTRA_SLIDE_TITLE to cc.title,
+                                SlidesFragment.INTENT_EXTRA_MODULE_ID to cc.moduleId,
+                                SlidesFragment.INTENT_EXTRA_LESSON_ID to cc.id
+                            )
+                        )
+                    }
+                }
+
+            }
+        }
     }
 
     override fun onMenuItemClick(item: MenuItem?): Boolean {
