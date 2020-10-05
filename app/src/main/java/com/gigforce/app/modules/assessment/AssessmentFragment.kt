@@ -518,11 +518,11 @@ class AssessmentFragment : BaseFragment(),
             )
         )
 
-        val y: Float =
-            rv_options_assess_frag.y + rv_options_assess_frag.getChildAt(0).y
-        sv_assess_frag.post {
-            sv_assess_frag.smoothScrollTo(0, y.toInt())
-        }
+//        val y: Float =
+//            rv_options_assess_frag.y + rv_options_assess_frag.getChildAt(0).y
+//        sv_assess_frag.post {
+//            sv_assess_frag.smoothScrollTo(0, y.toInt())
+//        }
         if (selectedPosition + 1 > h_pb_assess_frag.progress) {
             h_pb_assess_frag.progress = selectedPosition + 1
             tv_percent_assess_frag.text =
