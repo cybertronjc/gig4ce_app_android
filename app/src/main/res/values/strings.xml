@@ -508,6 +508,7 @@
     <string name="attempt">attempt</string>
     <string name="is_string">is</string>
     <string name="seconds">seconds</string>
+    <string name="secs">secs</string>
     <string name="assessment_not_completed">Assessment Not Completed Successfully</string>
     <string name="hundred_percent">100%</string>
     <string name="woe_you_are_correct">Wow ! You are correct.</string>
@@ -959,5 +960,10 @@
     <string name="explore_more_role">Explore More role</string>
     <string name="default_notification_channel_id">19871629</string>
     <string name="learning_assign_to_you">Learning assigned to you</string>
+    <string name="as_you_clear_more_assessments">As you clear more assessments suitable gigs will get assigned soon</string>
+    <string name="you_have_scored">You have scored</string>
+    <string name="in_your_assessment">in your assessment</string>
+    <string name="new_cert_added_underlined"><![CDATA[<u>New certificate has been added to profile .</u>]]></string>
+
 
 </resources>

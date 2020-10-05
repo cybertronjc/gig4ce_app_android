@@ -1,9 +1,11 @@
 package com.gigforce.app.modules.assessment
 
 import android.app.ActionBar
+import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.app.R
 import com.gigforce.app.modules.assessment.models.OptionsArr
@@ -55,25 +57,53 @@ class AssessmentAnswersAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>()
                 holder.itemView.tv_helper_rv_access_frag.text =
                     items!![holder.adapterPosition - 1].reason
                 if (obj.selectedAnswer != null && obj.selectedAnswer!!) {
-                    val color = holder.itemView.context.getColor(
-                        if (obj.is_answer == true) R.color.app_green else
-                            R.color.red
-                    )
-                    holder.itemView.tv_number_rv_access_frag.setTextColor(color)
-                    holder.itemView.tv_option_rv_access_frag.setTextColor(color)
+                    val color =
+                        if (obj.is_answer == true) ColorAndBg(
+                            holder.itemView.context.getColor(R.color.app_green),
+                            holder.itemView.context.getDrawable(R.drawable.border_option_green)!!
+                        ) else
+                            ColorAndBg(
+                                holder.itemView.context.getColor(R.color.red),
+                                holder.itemView.context.getDrawable(R.drawable.border_option_red)!!
+                            )
+
+                    holder.itemView.tv_number_rv_access_frag.setTextColor(color.color)
+                    holder.itemView.tv_option_rv_access_frag.setTextColor(color.color)
+                    holder.itemView.tv_option_rv_access_frag.background = color.drawable
+
+
                     holder.itemView.tv_helper_rv_access_frag.visibility =
                         if (obj.reason.isEmpty()) View.GONE else (if (obj.showReason == true) View.VISIBLE else View.GONE)
 
                 } else {
-                    val color = holder.itemView.context.getColor(
-                        if (obj.clickStatus == true) R.color.black_85 else (if (obj.is_answer == true) R.color.app_green else if (obj.showReason == false) R.color.black_85 else
-                            R.color.red)
-                    )
+                    val color =
+                        if (obj.clickStatus == true) ColorAndBg(
+                            holder.itemView.context.getColor(R.color.black_85),
+                            holder.itemView.context.getDrawable(R.drawable.border_tv_rv_answers_assess_frag)!!
+                        )
+                        else (when {
+                            obj.is_answer == true -> ColorAndBg(
+                                holder.itemView.context.getColor(R.color.app_green),
+                                holder.itemView.context.getDrawable(R.drawable.border_option_green)!!
+                            )
+                            obj.showReason == false -> ColorAndBg(
+                                holder.itemView.context.getColor(R.color.black_85),
+                                holder.itemView.context.getDrawable(R.drawable.border_tv_rv_answers_assess_frag)!!
+                            )
+                            else -> ColorAndBg(
+                                holder.itemView.context.getColor(R.color.red),
+                                holder.itemView.context.getDrawable(R.drawable.border_option_red)!!
+                            )
+                        })
+
+
+                    holder.itemView.tv_number_rv_access_frag.setTextColor(color.color)
+                    holder.itemView.tv_option_rv_access_frag.setTextColor(color.color)
+                    holder.itemView.tv_option_rv_access_frag.background = color.drawable
 
                     holder.itemView.tv_helper_rv_access_frag.visibility =
                         if (obj.clickStatus == true || obj.reason.isEmpty()) View.GONE else (if (obj.showReason == true) View.VISIBLE else View.GONE)
-                    holder.itemView.tv_number_rv_access_frag.setTextColor(color)
-                    holder.itemView.tv_option_rv_access_frag.setTextColor(color)
+
 //                    holder.itemView.tv_helper_rv_access_frag.text = ""
 
                 }
@@ -136,3 +166,5 @@ class AssessmentAnswersAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>()
     }
 
 }
+
+data class ColorAndBg(val color: Int, val drawable: Drawable)

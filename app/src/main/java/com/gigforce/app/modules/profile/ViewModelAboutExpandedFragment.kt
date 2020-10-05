@@ -57,9 +57,10 @@ class ViewModelAboutExpandedFragment(private val modelCallbacksAboutExpandedFrag
     fun contactEdit(
         profileID: String,
         contact1: String?,
-        arrayList: ArrayList<ContactPhone>,
-        contact: ContactPhone,
-        add: Boolean
+        arrayList: ArrayList<ContactPhone>?,
+        contact: ContactPhone?,
+        add: Boolean?,
+        delete: Boolean?
     ) {
         modelCallbacksAboutExpandedFragment.updateContact(
             profileID,
@@ -67,6 +68,7 @@ class ViewModelAboutExpandedFragment(private val modelCallbacksAboutExpandedFrag
             contact,
             contact1,
             add,
+            delete,
             this
         )
 
@@ -75,9 +77,10 @@ class ViewModelAboutExpandedFragment(private val modelCallbacksAboutExpandedFrag
     fun emailEdit(
         profileID: String,
         contact1: String?,
-        arrayList: ArrayList<ContactEmail>,
-        contact: ContactEmail,
-        add: Boolean
+        arrayList: ArrayList<ContactEmail>?,
+        contact: ContactEmail?,
+        add: Boolean?,
+        delete: Boolean?
     ) {
         modelCallbacksAboutExpandedFragment.updateEmail(
             profileID,
@@ -85,6 +88,7 @@ class ViewModelAboutExpandedFragment(private val modelCallbacksAboutExpandedFrag
             contact,
             contact1,
             add,
+            delete,
             this
         )
     }

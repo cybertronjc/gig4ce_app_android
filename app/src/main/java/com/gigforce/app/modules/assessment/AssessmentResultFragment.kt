@@ -40,7 +40,7 @@ class AssessmentResultFragment : BaseFragment(), PopupMenu.OnMenuItemClickListen
     private val viewModelAssessmentResult by lazy {
         ViewModelProvider(this).get(ViewModelAssessmentResult::class.java)
     }
-    private val learningViewModel : LearningViewModel by viewModels()
+    private val learningViewModel: LearningViewModel by viewModels()
 
 
     override fun onCreateView(
@@ -95,7 +95,8 @@ class AssessmentResultFragment : BaseFragment(), PopupMenu.OnMenuItemClickListen
                 is Lce.Content -> {
                     showLearnings(it.content)
                 }
-                is Lce.Error -> {}
+                is Lce.Error -> {
+                }
             }
         })
 
@@ -107,8 +108,8 @@ class AssessmentResultFragment : BaseFragment(), PopupMenu.OnMenuItemClickListen
 
         val displayMetrics = DisplayMetrics()
         activity?.windowManager?.defaultDisplay?.getMetrics(displayMetrics)
-        width = displayMetrics.widthPixels
-        val itemWidth = ((width / 3) * 2).toInt()
+//        width = displayMetrics.widthPixels
+//        val itemWidth = ((width / 3) * 2).toInt()
         // model will change when integrated with DB
 
         val recyclerGenericAdapter: RecyclerGenericAdapter<Course> =
@@ -124,10 +125,10 @@ class AssessmentResultFragment : BaseFragment(), PopupMenu.OnMenuItemClickListen
                 },
                 RecyclerGenericAdapter.ItemInterface<Course?> { obj, viewHolder, position ->
                     var view = getView(viewHolder, R.id.card_view)
-                    val lp = view.layoutParams
-                    lp.height = lp.height
-                    lp.width = itemWidth
-                    view.layoutParams = lp
+//                    val lp = view.layoutParams
+//                    lp.height = lp.height
+//                    lp.width = itemWidth
+//                    view.layoutParams = lp
 
                     var title = getTextView(viewHolder, R.id.title_)
                     title.text = obj?.name
@@ -158,20 +159,21 @@ class AssessmentResultFragment : BaseFragment(), PopupMenu.OnMenuItemClickListen
                                         .into(img)
                                 }
                         }
-                    } else{
+                    } else {
                         GlideApp.with(requireContext())
                             .load(R.drawable.ic_learning_default_back)
                             .into(img)
                     }
                 })
         recyclerGenericAdapter.list = content
-        recyclerGenericAdapter.setLayout(R.layout.learning_bs_item)
+        recyclerGenericAdapter.setLayout(R.layout.layout_sug_learning_ass_result)
         rv_sug_learnings_assess_result.layoutManager = LinearLayoutManager(
             activity?.applicationContext,
             LinearLayoutManager.HORIZONTAL,
             false
         )
         rv_sug_learnings_assess_result.adapter = recyclerGenericAdapter
+        rv_sug_learnings_assess_result.addItemDecoration(ItemDecorSugLearning(requireContext()))
 
     }
 
@@ -201,16 +203,10 @@ class AssessmentResultFragment : BaseFragment(), PopupMenu.OnMenuItemClickListen
         rv_question_wise_sum_assess_frag.setHasFixedSize(true)
         rv_question_wise_sum_assess_frag.layoutManager = GridLayoutManager(activity, 5)
         rv_question_wise_sum_assess_frag.addItemDecoration(
-            ItemDecor(
-                resources.getDimensionPixelSize(
-                    R.dimen.size_10
-                ),
-                5
-            )
+            ItemDecor(requireContext())
         )
         rv_question_wise_sum_assess_frag.adapter = adapter
         adapter?.addAll(arguments?.getBooleanArray(StringConstants.ANSWERS_ARR.value)?.toList())
-
 
 
     }
@@ -226,7 +222,7 @@ class AssessmentResultFragment : BaseFragment(), PopupMenu.OnMenuItemClickListen
 
     override fun onBackPressed(): Boolean {
         popTillSecondLastFragment()
-        return false
+        return true
     }
 
     private fun popTillSecondLastFragment() {
@@ -253,10 +249,12 @@ class AssessmentResultFragment : BaseFragment(), PopupMenu.OnMenuItemClickListen
             "%.1f",
             (((correctAns / arguments?.getBooleanArray(StringConstants.ANSWERS_ARR.value)?.size?.toFloat()!!) * 100))
         ) + " %"
+
+
         tv_score_assess_result.text =
-            Html.fromHtml("You have scored <b>$percent</b> in your assessment")
+            Html.fromHtml("${getString(R.string.you_have_scored)} <b>${percent}</b> ${getString(R.string.in_your_assessment)}")
         tv_new_cert_asses_frag.text =
-            Html.fromHtml("<u>New certificate has been added to profile .</u>")
+            Html.fromHtml(getString(R.string.new_cert_added_underlined))
         viewModelAssessmentResult.checkIfUserPassed(arguments?.getBoolean(StringConstants.ASSESSMENT_PASSED.value))
         iv_options_menu_tb.visibility =
             if (arguments?.getBoolean(
@@ -267,7 +265,8 @@ class AssessmentResultFragment : BaseFragment(), PopupMenu.OnMenuItemClickListen
 
         val timeTaken = arguments?.getInt(StringConstants.TIME_TAKEN.value)?.toLong()!!
         tv_time_taken_value_assess_frag.text = String.format(
-            " %02d hrs %02d min %02d sec", TimeUnit.MILLISECONDS.toHours(timeTaken),
+            " %02d ${getString(R.string.hours)} %02d ${getString(R.string.mins)}  %02d ${getString(R.string.secs)} ",
+            TimeUnit.MILLISECONDS.toHours(timeTaken),
             TimeUnit.MILLISECONDS.toMinutes(timeTaken) % TimeUnit.HOURS.toMinutes(1),
             TimeUnit.MILLISECONDS.toSeconds(timeTaken) % TimeUnit.MINUTES.toSeconds(1)
         );
