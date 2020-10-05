@@ -26,7 +26,6 @@ import com.gigforce.app.utils.ViewModelProviderFactory
 import kotlinx.android.synthetic.main.contact_edit_warning_dialog.*
 import kotlinx.android.synthetic.main.fragment_profile_about_expanded.*
 import kotlinx.android.synthetic.main.fragment_profile_about_expanded.view.*
-import kotlinx.android.synthetic.main.fragment_profile_main_expanded.view.*
 import kotlinx.android.synthetic.main.profile_card_background.view.*
 import kotlinx.android.synthetic.main.top_profile_bar.view.*
 import kotlinx.android.synthetic.main.verified_button.view.*
@@ -51,7 +50,7 @@ class AboutExpandedFragment : ProfileBaseFragment(), ProfileCardBgCallbacks,
         ).get(ViewModelAboutExpandedFragment::class.java)
     }
 
-    private val gigerVerificationViewModel : GigVerificationViewModel by viewModels()
+    private val gigerVerificationViewModel: GigVerificationViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -91,6 +90,8 @@ class AboutExpandedFragment : ProfileBaseFragment(), ProfileCardBgCallbacks,
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         contact_card.showIsWhatsappCb = true
+        contact_card.enableDeletion = true
+        email_card.enableDeletion = true
         contact_card.setCallbacks(this)
         email_card.setCallbacks(this)
         initialize()
@@ -145,7 +146,6 @@ class AboutExpandedFragment : ProfileBaseFragment(), ProfileCardBgCallbacks,
         })
 
         gigerVerificationViewModel.startListeningForGigerVerificationStatusChanges()
-
 
 
     }
@@ -364,7 +364,12 @@ class AboutExpandedFragment : ProfileBaseFragment(), ProfileCardBgCallbacks,
 
     }
 
-    override fun editNumber(number: String, isWhatsApp: Boolean, isRegistered: Boolean) {
+    override fun editNumber(
+        number: String,
+        isWhatsApp: Boolean,
+        isRegistered: Boolean,
+        delete: Boolean
+    ) {
         val bundle = bundleOf(
             StringConstants.CONTACT_EDIT_STATE.value to AddContactBottomSheetFragment.STATE_EDIT_CONTACT,
             StringConstants.CONTACT_TO_EDIT.value to number,
@@ -373,43 +378,101 @@ class AboutExpandedFragment : ProfileBaseFragment(), ProfileCardBgCallbacks,
 
         )
         if (isRegistered) {
-            showAddContactDialog(false, isRegistered, bundle)
+            if (delete) {
+                showToast("Registered Number Cannot Be Deleted")
+            } else {
+                showAddContactDialog(false, isRegistered, bundle)
+
+            }
         } else {
-            AddContactBottomSheetFragment.newInstance(
-                bundle, this
-            ).show(parentFragmentManager, AddContactBottomSheetFragment::class.java.name)
+            if (delete) {
+                showConfirmationDialogType3("Are You Sure!!!",
+                    "You want to delete $number from your contacts!!!",
+                    "Yes", "No", object : ConfirmationDialogOnClickListener {
+                        override fun clickedOnYes(dialog: Dialog?) {
+                            contactEdit(
+                                number,
+                                null, false, delete = true
+                            )
+                            dialog?.dismiss()
+                        }
+
+                        override fun clickedOnNo(dialog: Dialog?) {
+                            dialog?.dismiss()
+                        }
+
+                    }
+
+                )
+            } else {
+                AddContactBottomSheetFragment.newInstance(
+                    bundle, this
+                ).show(parentFragmentManager, AddContactBottomSheetFragment::class.java.name)
+            }
+
         }
 
 
     }
 
-    override fun editEmail(email: String) {
-        AddContactBottomSheetFragment.newInstance(
-            bundleOf(
-                StringConstants.CONTACT_EDIT_STATE.value to AddContactBottomSheetFragment.STATE_EDIT_EMAIL,
-                StringConstants.EMAIL_TO_EDIT.value to email
-            ), this
-        ).show(parentFragmentManager, AddContactBottomSheetFragment::class.java.name)
+    override fun editEmail(email: String, delete: Boolean) {
+        if (delete) {
+            showConfirmationDialogType3("Are You Sure!!!",
+                "You want to delete $email from your emails!!!",
+                "Yes", "No", object : ConfirmationDialogOnClickListener {
+                    override fun clickedOnYes(dialog: Dialog?) {
+                        emailEdit(
+                            email,
+                            null, false, delete = false
+                        )
+                        dialog?.dismiss()
+                    }
+
+                    override fun clickedOnNo(dialog: Dialog?) {
+                        dialog?.dismiss()
+                    }
+
+                }
+
+            )
+        } else
+            AddContactBottomSheetFragment.newInstance(
+                bundleOf(
+                    StringConstants.CONTACT_EDIT_STATE.value to AddContactBottomSheetFragment.STATE_EDIT_EMAIL,
+                    StringConstants.EMAIL_TO_EDIT.value to email
+                ), this
+            ).show(parentFragmentManager, AddContactBottomSheetFragment::class.java.name)
     }
 
 
-    override fun contactEdit(oldPhone: String?, contact: ContactPhone, add: Boolean) {
+    override fun contactEdit(
+        oldPhone: String?,
+        contact: ContactPhone?,
+        add: Boolean?,
+        delete: Boolean?
+    ) {
         viewModel.contactEdit(
             profileViewModel.userProfileData.value?.id!!,
             oldPhone,
             profileViewModel.userProfileData.value?.contactPhone ?: arrayListOf(),
             contact,
-            add
+            add, delete
         )
     }
 
-    override fun emailEdit(oldEmail: String?, contact: ContactEmail, add: Boolean) {
+    override fun emailEdit(
+        oldEmail: String?,
+        contact: ContactEmail?,
+        add: Boolean?,
+        delete: Boolean?
+    ) {
         viewModel.emailEdit(
             profileViewModel.userProfileData.value?.id!!,
             oldEmail,
             profileViewModel.userProfileData.value?.contactEmail ?: arrayListOf(),
             contact,
-            add
+            add,
+            delete
         )
     }
 

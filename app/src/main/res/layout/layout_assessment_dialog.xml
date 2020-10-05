@@ -39,17 +39,19 @@
 
                 <TextView
                     android:id="@+id/tv_message_assess_dialog"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/size_17"
+                    android:gravity="center"
                     android:letterSpacing="0"
-                    tools:text="@string/good_luck"
+
                     android:textColor="@color/black_85"
                     android:textSize="@dimen/font_24"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/iv_bg_top_assess_dialog" />
+                    app:layout_constraintTop_toBottomOf="@+id/iv_bg_top_assess_dialog"
+                    tools:text="@string/good_luck" />
 
                 <TextView
                     android:id="@+id/tv_level_assess_dialog"
@@ -125,12 +127,12 @@
                     android:layout_marginEnd="@dimen/size_27"
                     android:gravity="start"
                     android:letterSpacing="0"
-                    tools:text="Time Duration : 10 mins"
                     android:textColor="@color/black_85"
                     android:textSize="@dimen/font_14"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_ques_count_assess_dialog" />
+                    app:layout_constraintTop_toBottomOf="@+id/tv_ques_count_assess_dialog"
+                    tools:text="Time Duration : 10 mins" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -150,12 +152,12 @@
             android:gravity="center_horizontal"
             android:letterSpacing="0"
             android:padding="@dimen/size_15"
-            tools:text="@string/start_assessment"
             android:textColor="@color/lipstick"
             android:textSize="16sp"
             app:layout_constraintBottom_toTopOf="@+id/tv_do_it_later_assess_dialog"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            tools:text="@string/start_assessment" />
 
         <TextView
             android:id="@+id/tv_do_it_later_assess_dialog"
