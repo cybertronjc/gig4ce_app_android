@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.cardview.widget.CardView
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -248,6 +249,9 @@ class MainLearningFragment : BaseFragment() {
                     var subtitle = getTextView(viewHolder, R.id.title)
                     subtitle.text = obj?.level
 
+                    var comImg = getImageView(viewHolder, R.id.completed_iv)
+                    comImg.isVisible = obj?.completed ?: false
+
                     var img = getImageView(viewHolder, R.id.learning_img)
                     if (!obj!!.coverPicture.isNullOrBlank()) {
                         if (obj.coverPicture!!.startsWith("http", true)) {
@@ -336,6 +340,9 @@ class MainLearningFragment : BaseFragment() {
 
                     var subtitle = getTextView(viewHolder, R.id.subtitle)
                     subtitle.text = obj?.level
+
+                    var comImg = getImageView(viewHolder, R.id.completed_iv)
+                    comImg.isVisible = obj?.completed ?: false
 
                     var img = getImageView(viewHolder, R.id.img)
                     if (!obj!!.coverPicture.isNullOrBlank()) {

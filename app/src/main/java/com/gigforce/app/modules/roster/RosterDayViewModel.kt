@@ -47,6 +47,8 @@ class RosterDayViewModel: ViewModel() {
 
     var isDayAvailable: MutableLiveData<Boolean> = MutableLiveData(true)
 
+    var showDeclineGigDialog: MutableLiveData<Boolean> = MutableLiveData()
+
     private var userPref: MutableLiveData<PreferencesDataModel> = MutableLiveData<PreferencesDataModel>()
     var preferencesRepository = PreferencesRepository()
 
@@ -291,6 +293,8 @@ class RosterDayViewModel: ViewModel() {
                 unavailable.dayUnavailable = true
 
                 viewModelCustomPreference.updateCustomPreference(unavailable)
+
+                //showDeclineGigDialog.value = true
             }
         } else {
             // today is inactive

@@ -8,12 +8,18 @@ import com.gigforce.app.modules.assessment.models.AssementQuestionsReponse
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.QuerySnapshot
 
+data class observableDialogResultWrapper(
+    var result : Boolean,
+    var nextNextLessonId : String?
+)
+
 class ViewModelAssessmentFragment(private val modelCallbacks: ModelCallbacks) : ViewModel(),
     ModelCallbacks.ModelResponseCallbacks {
 
+    var nextLessonId : String? = null
 
-    internal val observableDialogResult: MutableLiveData<Boolean> by lazy {
-        MutableLiveData<Boolean>();
+    internal val observableDialogResult: MutableLiveData<observableDialogResultWrapper> by lazy {
+        MutableLiveData<observableDialogResultWrapper>();
     }
     internal val observableQuizSubmit: MutableLiveData<Boolean> by lazy {
         MutableLiveData<Boolean>();
@@ -42,11 +48,11 @@ class ViewModelAssessmentFragment(private val modelCallbacks: ModelCallbacks) : 
             if (scrollBounds.top < top!! && scrollBounds.bottom > bottom!!) View.GONE else View.VISIBLE
     }
 
-    fun switchAsPerState(state: Int) {
+    fun switchAsPerState(state: Int, nextNextLessonId: String?) {
         when (state) {
             AssessmentDialog.STATE_INIT -> observableDialogInit.value = null
-            AssessmentDialog.STATE_PASS -> observableDialogResult.value = true
-            AssessmentDialog.STATE_REAPPEAR -> observableDialogResult.value = false
+            AssessmentDialog.STATE_PASS -> observableDialogResult.value = observableDialogResultWrapper(true,nextNextLessonId)
+            AssessmentDialog.STATE_REAPPEAR -> observableDialogResult.value = observableDialogResultWrapper(false,nextNextLessonId)
         }
     }
 

@@ -270,7 +270,8 @@ class AssessmentDialog : DialogFragment() {
                     arguments?.getInt(
                         StringConstants.ASSESSMENT_DIALOG_STATE.value,
                         0
-                    )!!
+                    )!!,
+                    viewModel.nextDest?.id
                 )
 
             })
@@ -322,7 +323,7 @@ class AssessmentDialog : DialogFragment() {
     }
 
     interface AssessmentDialogCallbacks {
-        fun assessmentState(state: Int)
+        fun assessmentState(state: Int, nextLesson : String?)
         fun doItLaterPressed()
 
 

@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -538,6 +539,9 @@ class LandingScreenFragment : BaseFragment() {
 
                         var subtitle = getTextView(viewHolder, R.id.title)
                         subtitle.text = obj?.level
+
+                        var comImg = getImageView(viewHolder, R.id.completed_iv)
+                        comImg.isVisible = obj?.completed ?: false
 
                         var img = getImageView(viewHolder, R.id.learning_img)
 

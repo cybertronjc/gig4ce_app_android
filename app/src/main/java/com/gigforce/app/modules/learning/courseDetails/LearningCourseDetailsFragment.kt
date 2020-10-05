@@ -13,6 +13,7 @@ import androidx.cardview.widget.CardView
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.ViewCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -353,19 +354,35 @@ class LearningCourseDetailsFragment : BaseFragment() {
                 "Module $moduleNo Of ${viewModel.currentModules?.size}"
 
         var lessonsCompleted = 0
+        var totalLessons = 0
+
+        var assignmentsCompleted = 0
+        var totalAssignments = 0
+
         viewModel.currentLessons?.forEach {
-            if (it.completed) lessonsCompleted++
+
+            if(it.type == CourseContent.TYPE_VIDEO){
+                totalLessons++
+
+                if(it.completed)
+                    lessonsCompleted++
+            } else if(it.type == CourseContent.TYPE_ASSESSMENT){
+                totalAssignments++
+
+                if(it.completed)
+                    assignmentsCompleted++
+            }
         }
 
         complitionStatusTv.text =
-                "$lessonsCompleted/${viewModel.currentLessons?.size} Lessons Completed"
+                "$lessonsCompleted/$totalLessons Lessons Completed"
         assessmentCountTv.text =
-                if (viewModel.currentAssessments?.size == null)
+                if (viewModel.currentAssessments?.size == null || totalAssignments==0)
                     "0 Assessments"
-                else if (viewModel.currentAssessments?.size == 1)
-                    "${viewModel.currentAssessments?.size} Assessment"
+                else if (assignmentsCompleted == 1)
+                    "$assignmentsCompleted/$totalAssignments Assignment Completed"
                 else
-                    "${viewModel.currentAssessments?.size} Assessments"
+                    "$assignmentsCompleted/$totalAssignments Assignments Completed"
 
         lessonsLabel.text = "Lesson (${viewModel.currentlySelectedModule?.title})"
     }
@@ -461,6 +478,8 @@ class LearningCourseDetailsFragment : BaseFragment() {
 
                             var img = getImageView(viewHolder, R.id.learning_img)
 
+                            var completedIV = getImageView(viewHolder, R.id.module_completed_iv)
+                            completedIV.isVisible = obj?.completed ?: false
 
                             var borderView = getView(viewHolder, R.id.borderFrameLayout)
                             if (viewModel.currentlySelectedModulePosition == position) {

@@ -108,6 +108,7 @@ class CourseDetailsViewModel constructor(
 
             if (progressItem != null) {
                 module.lessonsCompleted = progressItem.lessonsCompleted
+                module.totalLessons = progressItem.lessonsTotal
                 module.moduleStartDate = progressItem.moduleStartDate
                 module.moduleCompletionDate = progressItem.moduleCompletionDate
                 module.ongoing = progressItem.ongoing
@@ -173,6 +174,25 @@ class CourseDetailsViewModel constructor(
 
                     mCurrentModulesProgressData = querySnap.documents.map {
                         it.toObject(ModuleProgress::class.java)!!
+                    }
+
+                    if(currentModules != null && mCurrentModulesProgressData != null) {
+                        currentModules!!.forEach { module ->
+                            val progressItem = mCurrentModulesProgressData!!.find {
+                                module.id == it.moduleId
+                            }
+
+                            if (progressItem != null) {
+                                module.lessonsCompleted = progressItem.lessonsCompleted
+                                module.totalLessons = progressItem.lessonsTotal
+                                module.moduleStartDate = progressItem.moduleStartDate
+                                module.moduleCompletionDate = progressItem.moduleCompletionDate
+                                module.ongoing = progressItem.ongoing
+                                module.completed = progressItem.completed
+                            }
+                        }
+
+                        _courseModules.postValue(Lce.content(currentModules!!))
                     }
 
                     if (currentLessons != null) {

@@ -19,6 +19,8 @@ class AssessmentDialogViewModel constructor(
     private val learningRepository: LearningRepository = LearningRepository()
 ) : ViewModel() {
 
+    var nextDest : CourseContent? = null
+
     private val _savingAssessmentState = MutableLiveData<Lce<AssessmentResult>>()
     val savingAssessmentState : LiveData<Lce<AssessmentResult>> = _savingAssessmentState
 
@@ -27,7 +29,7 @@ class AssessmentDialogViewModel constructor(
 
         try {
 
-            val nextDest = learningRepository.markCurrentLessonAsComplete(moduleId,lessonId)
+            nextDest = learningRepository.markCurrentLessonAsComplete(moduleId,lessonId)
             _savingAssessmentState.value = Lce.content(AssessmentResult(
                 state = state,
                 nextDest = nextDest

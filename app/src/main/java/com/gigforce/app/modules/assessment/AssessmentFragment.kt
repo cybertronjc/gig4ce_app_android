@@ -16,6 +16,8 @@ import androidx.core.os.bundleOf
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.request.target.CustomTarget
 import com.gigforce.app.R
@@ -103,7 +105,7 @@ class AssessmentFragment : BaseFragment(),
         with(viewModelAssessmentFragment) {
             observableDialogResult.observe(viewLifecycleOwner, Observer {
                 val bundle = Bundle()
-                bundle.putBoolean(StringConstants.ASSESSMENT_PASSED.value, it)
+                bundle.putBoolean(StringConstants.ASSESSMENT_PASSED.value, it.result)
                 val arr =
                     BooleanArray(viewModelAssessmentFragment.observableAssessmentData.value?.assessment!!.size) { false }
                 viewModelAssessmentFragment.observableAssessmentData.value!!.assessment!!.forEachIndexed { index, elem ->
@@ -123,6 +125,8 @@ class AssessmentFragment : BaseFragment(),
                 countDownTimer?.cancel()
 
                 bundle.putString(AssessmentFragment.INTENT_MODULE_ID, mModuleId)
+                bundle.putString(AssessmentFragment.INTENT_NEXT_LESSON_ID, it.nextNextLessonId)
+                bundle.putString(AssessmentFragment.INTENT_LESSON_ID, mLessonId)
                 navigate(R.id.assessment_result_fragment, bundle)
             })
             observableDialogInit.observe(viewLifecycleOwner, Observer {
@@ -475,13 +479,12 @@ class AssessmentFragment : BaseFragment(),
     }
 
 
-    override fun assessmentState(state: Int) {
-        viewModelAssessmentFragment.switchAsPerState(state)
+    override fun assessmentState(state: Int, nextLesson : String?) {
+        viewModelAssessmentFragment.switchAsPerState(state, nextLesson)
     }
 
     override fun doItLaterPressed() {
-        popBackState()
-
+        clearBackStackToContentList()
     }
 
     override fun submitAnswer() {
@@ -573,13 +576,45 @@ class AssessmentFragment : BaseFragment(),
     override fun onBackPressed(): Boolean {
 
         countDownTimer?.cancel()
+        clearBackStackToContentList()
+        return true
+    }
 
-        return super.onBackPressed()
+    private val navController : NavController by lazy {
+        findNavController()
+    }
+
+    private fun clearBackStackToContentList() {
+        try {
+            navController.getBackStackEntry(R.id.assessmentListFragment)
+            navController.popBackStack(R.id.assessmentListFragment, false)
+        } catch (e: Exception) {
+
+            try {
+                navController.getBackStackEntry(R.id.courseContentListFragment)
+                navController.popBackStack(R.id.courseContentListFragment, false)
+            } catch (e: Exception) {
+
+                try {
+                    navController.getBackStackEntry(R.id.learningCourseDetails)
+                    navController.popBackStack(R.id.learningCourseDetails, false)
+                } catch (e: Exception) {
+
+                    try {
+                        navController.getBackStackEntry(R.id.mainLearningFragment)
+                        navController.popBackStack(R.id.mainLearningFragment, false)
+                    } catch (e: Exception) {
+
+                    }
+                }
+            }
+        }
     }
 
     companion object {
         const val INTENT_MODULE_ID = "module_id"
         const val INTENT_LESSON_ID = "lesson_id"
+        const val INTENT_NEXT_LESSON_ID = "next_lesson_id"
     }
 
 }
