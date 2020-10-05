@@ -935,7 +935,7 @@ class LearningRepository constructor(
 
         return getModulesC(courseId).filter {
             it.isActive && doesModuleFullFillsCondition(it)
-        }
+        }.sortedBy { it.priority }
     }
 
     private suspend fun getModulesC(courseId: String): List<Module> = suspendCoroutine { cont ->
