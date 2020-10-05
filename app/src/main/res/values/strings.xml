@@ -958,6 +958,6 @@
     <string name="explore_learning">Explore Learning</string>
     <string name="explore_more_role">Explore More role</string>
     <string name="default_notification_channel_id">19871629</string>
-
+    <string name="learning_assign_to_you">Learning assigned to you</string>
 
 </resources>
