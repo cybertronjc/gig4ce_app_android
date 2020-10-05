@@ -91,6 +91,8 @@ class DeclineGigDialogFragment : DialogFragment() {
         outState.putStringArrayList(INTENT_EXTRA_GIG_IDS, gigIds)
     }
 
+
+
     private fun initViewModel() {
         viewModel.declineGig.observe(viewLifecycleOwner, Observer {
 

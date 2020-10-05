@@ -73,6 +73,8 @@ class AssessmentDialog : DialogFragment() {
                     }
                     is Lce.Content -> {
                        assessmentResultWithNextDest = it.content
+
+
                         when (it.content.state) {
                             STATE_PASS -> statePass()
                             STATE_REAPPEAR -> stateReappear()
@@ -259,7 +261,8 @@ class AssessmentDialog : DialogFragment() {
                     arguments?.getInt(
                         StringConstants.ASSESSMENT_DIALOG_STATE.value,
                         0
-                    )!!
+                    )!!,
+                    viewModel.nextDest?.id
                 )
 
             })
@@ -311,7 +314,7 @@ class AssessmentDialog : DialogFragment() {
     }
 
     interface AssessmentDialogCallbacks {
-        fun assessmentState(state: Int)
+        fun assessmentState(state: Int, nextLesson : String?)
         fun doItLaterPressed()
 
 

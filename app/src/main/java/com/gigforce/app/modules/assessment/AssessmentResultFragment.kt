@@ -11,10 +11,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gigforce.app.R
@@ -24,7 +28,10 @@ import com.gigforce.app.core.genericadapter.RecyclerGenericAdapter
 import com.gigforce.app.modules.learning.LearningConstants
 import com.gigforce.app.modules.learning.LearningViewModel
 import com.gigforce.app.modules.learning.courseDetails.LearningCourseDetailsFragment
+import com.gigforce.app.modules.learning.learningVideo.PlayVideoDialogFragment
 import com.gigforce.app.modules.learning.models.Course
+import com.gigforce.app.modules.learning.models.CourseContent
+import com.gigforce.app.modules.learning.slides.SlidesFragment
 import com.gigforce.app.utils.*
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.fragment_assessment_result.*
@@ -40,7 +47,13 @@ class AssessmentResultFragment : BaseFragment(), PopupMenu.OnMenuItemClickListen
     private val viewModelAssessmentResult by lazy {
         ViewModelProvider(this).get(ViewModelAssessmentResult::class.java)
     }
-    private val learningViewModel : LearningViewModel by viewModels()
+    private val learningViewModel: LearningViewModel by viewModels()
+
+    private var nextLessonId : String? = null
+
+    private val navController : NavController by lazy {
+        findNavController()
+    }
 
 
     override fun onCreateView(
@@ -53,11 +66,24 @@ class AssessmentResultFragment : BaseFragment(), PopupMenu.OnMenuItemClickListen
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        savedInstanceState?.let {
+            nextLessonId = it.getString(AssessmentFragment.INTENT_NEXT_LESSON_ID)
+        }
+
+        arguments?.let {
+            nextLessonId = it.getString(AssessmentFragment.INTENT_NEXT_LESSON_ID)
+        }
+
         initUI()
         setupRecycler()
         initObservers()
         initClicks()
+    }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString(AssessmentFragment.INTENT_NEXT_LESSON_ID, nextLessonId)
     }
 
     private fun initObservers() {
@@ -95,12 +121,31 @@ class AssessmentResultFragment : BaseFragment(), PopupMenu.OnMenuItemClickListen
                 is Lce.Content -> {
                     showLearnings(it.content)
                 }
+                is Lce.Error -> {
+                }
+            }
+        })
+
+        learningViewModel.lessonDetails.observe(viewLifecycleOwner, Observer {
+
+            when (it) {
+                Lce.Loading -> {
+                }
+                is Lce.Content -> {
+                    nextLesson = it.content
+                    next_lesson_btn.isVisible = it.content != null
+                }
                 is Lce.Error -> {}
             }
         })
 
         learningViewModel.getAllCourses()
+
+        if(nextLessonId != null)
+        learningViewModel.getLessonDetails(nextLessonId!!)
     }
+
+    private var nextLesson: CourseContent? = null
 
     var width = 0
     private fun showLearnings(content: List<Course>) {
@@ -158,7 +203,7 @@ class AssessmentResultFragment : BaseFragment(), PopupMenu.OnMenuItemClickListen
                                         .into(img)
                                 }
                         }
-                    } else{
+                    } else {
                         GlideApp.with(requireContext())
                             .load(R.drawable.ic_learning_default_back)
                             .into(img)
@@ -212,7 +257,6 @@ class AssessmentResultFragment : BaseFragment(), PopupMenu.OnMenuItemClickListen
         adapter?.addAll(arguments?.getBooleanArray(StringConstants.ANSWERS_ARR.value)?.toList())
 
 
-
     }
 
     private fun initClicks() {
@@ -220,13 +264,51 @@ class AssessmentResultFragment : BaseFragment(), PopupMenu.OnMenuItemClickListen
             openPopupMenu(it, R.menu.menu_assessment_result, this, activity)
         }
         iv_back.setOnClickListener {
-            popTillSecondLastFragment()
+            clearBackStackToContentList()
+        }
+
+        next_lesson_btn.setOnClickListener {
+
+            if(nextLesson == null)
+                return@setOnClickListener
+
+            nextLesson?.let { cc->
+
+                when (cc.type) {
+                    CourseContent.TYPE_VIDEO -> {
+                        PlayVideoDialogFragment.launch(
+                            childFragmentManager = childFragmentManager,
+                            moduleId = cc.moduleId,
+                            lessonId = cc.id
+                        )
+                    }
+                    CourseContent.TYPE_ASSESSMENT -> {
+                        navigate(
+                            R.id.assessment_fragment, bundleOf(
+                                AssessmentFragment.INTENT_LESSON_ID to cc.id,
+                                AssessmentFragment.INTENT_MODULE_ID to cc.moduleId
+                            )
+                        )
+                    }
+                    CourseContent.TYPE_SLIDE -> {
+                        navigate(
+                            R.id.slidesFragment,
+                            bundleOf(
+                                SlidesFragment.INTENT_EXTRA_SLIDE_TITLE to cc.title,
+                                SlidesFragment.INTENT_EXTRA_MODULE_ID to cc.moduleId,
+                                SlidesFragment.INTENT_EXTRA_LESSON_ID to cc.id
+                            )
+                        )
+                    }
+                }
+
+            }
         }
     }
 
     override fun onBackPressed(): Boolean {
-        popTillSecondLastFragment()
-        return false
+        clearBackStackToContentList()
+        return true
     }
 
     private fun popTillSecondLastFragment() {
@@ -236,8 +318,6 @@ class AssessmentResultFragment : BaseFragment(), PopupMenu.OnMenuItemClickListen
         val fragmentManager: FragmentManager? = parentFragmentManager
         fragmentManager?.executePendingTransactions()
         fragmentManager?.popBackStack(tag, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-
-
     }
 
     private fun initUI() {
@@ -320,6 +400,33 @@ class AssessmentResultFragment : BaseFragment(), PopupMenu.OnMenuItemClickListen
 
     override fun onClickSuggestedLearnings() {
         navigate(R.id.mainLearningFragment)
+    }
+
+    private fun clearBackStackToContentList() {
+        try {
+            navController.getBackStackEntry(R.id.assessmentListFragment)
+            navController.popBackStack(R.id.assessmentListFragment, false)
+        } catch (e: Exception) {
+
+            try {
+                navController.getBackStackEntry(R.id.courseContentListFragment)
+                navController.popBackStack(R.id.courseContentListFragment, false)
+            } catch (e: Exception) {
+
+                try {
+                    navController.getBackStackEntry(R.id.learningCourseDetails)
+                    navController.popBackStack(R.id.learningCourseDetails, false)
+                } catch (e: Exception) {
+
+                    try {
+                        navController.getBackStackEntry(R.id.mainLearningFragment)
+                        navController.popBackStack(R.id.mainLearningFragment, false)
+                    } catch (e: Exception) {
+
+                    }
+                }
+            }
+        }
     }
 
 

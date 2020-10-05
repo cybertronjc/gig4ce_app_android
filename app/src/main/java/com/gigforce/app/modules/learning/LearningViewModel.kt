@@ -5,6 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gigforce.app.modules.learning.models.Course
+import com.gigforce.app.modules.learning.models.CourseContent
+import com.gigforce.app.modules.learning.models.progress.CourseProgress
 import com.gigforce.app.utils.Lce
 import kotlinx.coroutines.launch
 
@@ -34,10 +36,37 @@ class LearningViewModel constructor(
             val courses = learningRepository.getRoleBasedCourses()
             mCachedRoleBasedCourses = courses
 
-            _roleBasedCourses.postValue(Lce.content(courses))
+            startListeningForRoleBasedCourseUpdates()
         } catch (e: Exception) {
             _roleBasedCourses.postValue(Lce.error(e.toString()))
         }
+    }
+
+    private fun startListeningForRoleBasedCourseUpdates() {
+        learningRepository.courseProgressInfo()
+            .addSnapshotListener { querySnap, error ->
+
+                if(querySnap != null){
+
+                    val courseProgress = querySnap.documents.map {
+                        it.toObject(CourseProgress::class.java)!!
+                    }
+
+                    if(mCachedRoleBasedCourses != null) {
+                        mCachedRoleBasedCourses!!.forEach { course ->
+                            val progressItem = courseProgress.find {
+                                course.id == it.courseId
+                            }
+
+                            if (progressItem != null) {
+                                course.completed = progressItem.completed
+                            }
+                        }
+
+                        _roleBasedCourses.postValue(Lce.content(mCachedRoleBasedCourses!!))
+                    }
+                }
+            }
     }
 
 
@@ -71,9 +100,51 @@ class LearningViewModel constructor(
             val courses = learningRepository.getAllCourses()
             mAllCoursesBasedCourses = courses
 
-            _allCourses.postValue(Lce.content(courses))
+            startListeningForAllUpdates()
         } catch (e: Exception) {
             _allCourses.postValue(Lce.error(e.toString()))
+        }
+    }
+
+    private fun startListeningForAllUpdates() {
+        learningRepository.courseProgressInfo()
+            .addSnapshotListener { querySnap, error ->
+
+                if(querySnap != null){
+
+                    val courseProgress = querySnap.documents.map {
+                        it.toObject(CourseProgress::class.java)!!
+                    }
+
+                    if(mAllCoursesBasedCourses != null) {
+                        mAllCoursesBasedCourses!!.forEach { course ->
+                            val progressItem = courseProgress.find {
+                                course.id == it.courseId
+                            }
+
+                            if (progressItem != null) {
+                                course.completed = progressItem.completed
+                            }
+                        }
+
+                        _allCourses.postValue(Lce.content(mAllCoursesBasedCourses!!))
+                    }
+                }
+            }
+    }
+
+
+    private val _lessonDetails = MutableLiveData<Lce<CourseContent?>>()
+    val lessonDetails : LiveData<Lce<CourseContent?>> = _lessonDetails
+
+    fun getLessonDetails(lessonId : String) = viewModelScope.launch {
+        _lessonDetails.postValue(Lce.loading())
+
+        try {
+            val courses = learningRepository.getLesson(lessonId)
+            _lessonDetails.postValue(Lce.content(courses))
+        } catch (e: Exception) {
+            _lessonDetails.postValue(Lce.error(e.toString()))
         }
     }
 

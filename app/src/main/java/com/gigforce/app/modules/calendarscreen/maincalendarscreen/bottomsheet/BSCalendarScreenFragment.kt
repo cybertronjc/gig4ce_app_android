@@ -25,6 +25,7 @@ import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -180,6 +181,10 @@ class BSCalendarScreenFragment : BaseFragment() {
 
                     var subtitle = getTextView(viewHolder, R.id.title)
                     subtitle.text = obj?.level
+
+                    var comImg = getImageView(viewHolder, R.id.completed_iv)
+                    comImg.isVisible = obj?.completed ?: false
+
 
                     var img = getImageView(viewHolder, R.id.learning_img)
 

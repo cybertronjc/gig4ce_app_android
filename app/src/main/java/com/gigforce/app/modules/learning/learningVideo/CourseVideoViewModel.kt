@@ -7,7 +7,6 @@ import androidx.lifecycle.viewModelScope
 import com.gigforce.app.modules.learning.LearningRepository
 import com.gigforce.app.modules.learning.models.CourseContent
 import com.gigforce.app.utils.Lce
-import com.gigforce.app.utils.SingleLiveEvent
 import com.gigforce.app.utils.SingleLiveEvent2
 import kotlinx.coroutines.launch
 
@@ -87,14 +86,10 @@ class CourseVideoViewModel constructor(
         try {
 
             val nextLesson =
-                learningRepository.markCurrentLessonAsComplete(moduleId,lessonId)
+                learningRepository.markCurrentLessonAsComplete(moduleId, lessonId)
             _videoSaveState.value = Lce.content(VideoSaveState.VideoMarkedComplete)
 
-            if (nextLesson != null)
-                _openNextDestination.value = nextLesson
-            else
-                _openNextDestination.value = null
-
+            _openNextDestination.value = nextLesson
         } catch (e: Exception) {
             _videoSaveState.value = Lce.error(e.message!!)
         }
@@ -113,7 +108,7 @@ class CourseVideoViewModel constructor(
 
             if (moduleProgress != null) {
                 moduleProgress.lessonsProgress.forEach {
-                    if (it.lessonId == lessonId) {
+                    if (it.lessonId == lessonId && playBackPosition > it.completionProgress) {
                         it.ongoing = true
                         it.completed = it.completed
                         it.completionProgress = playBackPosition

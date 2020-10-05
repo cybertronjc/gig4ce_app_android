@@ -13,6 +13,7 @@ import androidx.cardview.widget.CardView
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.ViewCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -461,6 +462,8 @@ class LearningCourseDetailsFragment : BaseFragment() {
 
                             var img = getImageView(viewHolder, R.id.learning_img)
 
+                            var completedIV = getImageView(viewHolder, R.id.module_completed_iv)
+                            completedIV.isVisible = obj?.completed ?: false
 
                             var borderView = getView(viewHolder, R.id.borderFrameLayout)
                             if (viewModel.currentlySelectedModulePosition == position) {

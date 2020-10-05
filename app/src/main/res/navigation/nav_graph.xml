@@ -681,6 +681,7 @@
         android:id="@+id/fragment_home_bottom_sheet"
         android:name="com.gigforce.app.modules.calendarscreen.maincalendarscreen.bottomsheet.BSCalendarScreenFragment"
         android:label="fragment_home_bottom_sheet"
+
         tools:layout="@layout/home_screen_bottom_sheet_fragment" />
     <dialog
         android:id="@+id/gigsListForDeclineBottomSheet"
