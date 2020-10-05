@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
@@ -105,20 +106,23 @@ class PlayVideoDialogFragment : DialogFragment() {
         playerView
             .findViewById<View>(R.id.toggle_full_screen)
             .setOnClickListener {
-
-                when (currentOrientation) {
-                    ActivityInfo.SCREEN_ORIENTATION_PORTRAIT -> {
-                        activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-                        currentOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-                    }
-                    ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE -> {
-                        activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-                        currentOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-                    }
-                }
-
-                adjustUiforOrientation()
+                changeOrientation()
             }
+    }
+
+    private fun changeOrientation() {
+        when (currentOrientation) {
+            ActivityInfo.SCREEN_ORIENTATION_PORTRAIT -> {
+                activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+                currentOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+            }
+            ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE -> {
+                activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+                currentOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+            }
+        }
+
+        adjustUiforOrientation()
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -135,8 +139,6 @@ class PlayVideoDialogFragment : DialogFragment() {
         val winAttrib = dialog?.window?.attributes
         winAttrib?.dimAmount = 0.0f
         dialog?.window?.attributes = winAttrib
-
-        activity?.window?.decorView?.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
     }
 
     private fun initViewModel() {
@@ -174,13 +176,6 @@ class PlayVideoDialogFragment : DialogFragment() {
 
         viewModel.openNextDestination.observe(viewLifecycleOwner, Observer { cc ->
 
-            if (cc == null) {
-                //Go back to
-
-                clearBackStackToContentList()
-                dismiss()
-                return@Observer
-            }
 
             val view = layoutInflater.inflate(R.layout.layout_video_completed, null)
 
@@ -188,13 +183,20 @@ class PlayVideoDialogFragment : DialogFragment() {
                 .setView(view)
                 .show()
 
-            view.findViewById<View>(R.id.tv_action_assess_dialog)
-                .setOnClickListener {
+            val submitTV = view.findViewById<TextView>(R.id.tv_action_assess_dialog)
+            submitTV.text = when (cc?.type) {
+                CourseContent.TYPE_ASSESSMENT -> "Next Assessment"
+                CourseContent.TYPE_VIDEO -> "Next Lesson"
+                CourseContent.TYPE_SLIDE -> "Next Slide"
+                else -> "Okay"
+            }
+
+            submitTV.setOnClickListener {
                     dialog.dismiss()
                     dismiss()
 
 
-                    when (cc.type) {
+                    when (cc?.type) {
                         CourseContent.TYPE_VIDEO -> {
                             PlayVideoDialogFragment.launch(
                                 childFragmentManager = childFragmentManager,
@@ -219,6 +221,10 @@ class PlayVideoDialogFragment : DialogFragment() {
                                     SlidesFragment.INTENT_EXTRA_LESSON_ID to cc.id
                                 )
                             )
+                        }
+                        else ->{
+                            clearBackStackToContentList()
+                            dismiss()
                         }
                     }
 
@@ -271,6 +277,7 @@ class PlayVideoDialogFragment : DialogFragment() {
 
         val videoUri = Uri.parse(content.videoUrl)
         initializePlayer(videoUri, content.completionProgress)
+        changeOrientation()
     }
 
 
@@ -289,8 +296,8 @@ class PlayVideoDialogFragment : DialogFragment() {
                 val scale = resources.displayMetrics.density
                 val pixels = (303 * scale + 0.5f).toInt()
 
-                playerView.layoutParams.height = pixels
-                playerView.layoutParams.width = LinearLayout.LayoutParams.MATCH_PARENT
+                playerView?.layoutParams?.height = pixels
+                playerView?.layoutParams?.width = LinearLayout.LayoutParams.MATCH_PARENT
 
                 activity?.window?.decorView?.systemUiVisibility =
                     View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
@@ -298,8 +305,8 @@ class PlayVideoDialogFragment : DialogFragment() {
             ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE -> {
                 Log.d(VideoWithTextFragment.TAG, "LANDSCAPE")
 
-                playerView.layoutParams.height = LinearLayout.LayoutParams.MATCH_PARENT
-                playerView.layoutParams.width = LinearLayout.LayoutParams.MATCH_PARENT
+                playerView?.layoutParams?.height = LinearLayout.LayoutParams.MATCH_PARENT
+                playerView?.layoutParams?.width = LinearLayout.LayoutParams.MATCH_PARENT
 
                 activity?.window?.decorView?.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
             }

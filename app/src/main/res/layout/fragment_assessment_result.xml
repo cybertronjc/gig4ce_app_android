@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/white">
 
     <include layout="@layout/toolbar" />
@@ -59,10 +59,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/size_18"
-                    android:letterSpacing="0"
                     android:layout_marginTop="@dimen/size_16"
                     android:layout_marginEnd="@dimen/size_16"
                     android:layout_toEndOf="@+id/ic_remarks_assess_result"
+                    android:letterSpacing="0"
                     android:text="@string/keep_it_up"
                     android:textColor="@color/black"
                     android:textSize="@dimen/font_16"
@@ -72,13 +72,13 @@
                     android:id="@+id/tv_score_assess_result"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:letterSpacing="0"
                     android:layout_below="@+id/tv_kp_it_up_assess_result"
                     android:layout_marginStart="@dimen/size_18"
                     android:layout_marginTop="@dimen/size_8"
                     android:layout_marginEnd="@dimen/size_16"
                     android:layout_marginBottom="@dimen/size_16"
                     android:layout_toEndOf="@+id/ic_remarks_assess_result"
+                    android:letterSpacing="0"
                     android:textColor="@color/black_85"
                     android:textSize="@dimen/font_16" />
 
@@ -89,10 +89,10 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/size_16"
-                android:letterSpacing="0"
                 android:layout_marginTop="@dimen/size_19"
                 android:layout_marginEnd="@dimen/size_16"
                 android:gravity="start"
+                android:letterSpacing="0"
                 android:text="@string/you_ll_soon_be_sent_invites_for_best_gigs_around_for_you"
                 android:textColor="@color/black_85"
                 android:textSize="@dimen/font_14"
@@ -106,13 +106,13 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/size_16"
                 android:layout_marginTop="@dimen/size_19"
-                android:letterSpacing="0"
                 android:layout_marginEnd="@dimen/size_16"
+                android:letterSpacing="0"
                 android:text="@string/time_taken"
-                android:visibility="visible"
                 android:textColor="@color/black"
                 android:textSize="@dimen/font_14"
                 android:textStyle="bold"
+                android:visibility="visible"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_gigs_around_assess_result" />
 
@@ -121,23 +121,23 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/size_19"
-                android:visibility="visible"
-                android:letterSpacing="0"
                 android:layout_marginEnd="@dimen/size_16"
-                tools:text=" 4 Mins"
+                android:letterSpacing="0"
                 android:textColor="@color/black"
                 android:textSize="@dimen/font_14"
+                android:visibility="visible"
                 app:layout_constraintStart_toEndOf="@+id/tv_time_taken_label_assess_frag"
-                app:layout_constraintTop_toBottomOf="@+id/tv_gigs_around_assess_result" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_gigs_around_assess_result"
+                tools:text=" 4 Mins" />
 
             <TextView
                 android:id="@+id/tv_question_wise_sum_label_assess_frag"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/size_16"
-                android:letterSpacing="0"
                 android:layout_marginTop="@dimen/size_32"
                 android:layout_marginEnd="@dimen/size_16"
+                android:letterSpacing="0"
                 android:text="@string/question_wise_summary"
                 android:textColor="@color/black"
                 android:textStyle="bold"
@@ -157,17 +157,17 @@
                 app:layout_constraintTop_toBottomOf="@+id/tv_question_wise_sum_label_assess_frag" />
 
             <com.google.android.material.button.MaterialButton
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:id="@+id/next_lesson_btn"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
                 android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:text="Next Lesson"
                 android:visibility="gone"
-                app:strokeColor="@color/colorPrimary"
                 app:layout_constraintTop_toBottomOf="@id/rv_question_wise_sum_assess_frag"
-                android:text="Next Lesson"/>
+                app:strokeColor="@color/colorPrimary" />
 
             <RelativeLayout
                 android:id="@+id/rl_new_certificate_assess_result"
@@ -176,8 +176,8 @@
                 android:layout_marginStart="@dimen/size_16"
                 android:layout_marginTop="@dimen/size_16"
                 android:layout_marginEnd="@dimen/size_16"
-                android:visibility="gone"
                 android:background="@drawable/bg_round_corner_d8d8d8"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/next_lesson_btn">
@@ -200,14 +200,49 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginStart="@dimen/size_10"
-                    android:letterSpacing="0"
                     android:layout_marginEnd="@dimen/size_16"
                     android:layout_toEndOf="@+id/ic_new_cert_assess_result"
+                    android:letterSpacing="0"
                     android:textColor="@color/lipstick"
-
                     android:textSize="@dimen/font_16" />
 
             </RelativeLayout>
+
+
+            <LinearLayout
+                android:id="@+id/lesson_suggestions_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/rl_new_certificate_assess_result">
+
+                <TextView
+                    android:id="@+id/tv_lessons_on_fail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/size_16"
+                    android:layout_marginEnd="@dimen/size_16"
+                    android:layout_marginTop="@dimen/size_24"
+                    android:letterSpacing="0"
+                    android:text="Lessons to Retake"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/font_18" />
+
+                <include
+                    android:id="@+id/lessons_on_failed_layout"
+                    layout="@layout/fragment_learning_video_item"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginStart="@dimen/size_16"
+                    android:layout_marginEnd="@dimen/size_16"
+                    app:layout_constraintTop_toBottomOf="@id/rl_new_certificate_assess_result" />
+
+            </LinearLayout>
+
 
             <TextView
                 android:id="@+id/tv_sug_learnings_label_assess_frag"
@@ -216,20 +251,22 @@
                 android:layout_marginStart="@dimen/size_16"
                 android:layout_marginTop="@dimen/size_24"
                 android:layout_marginEnd="@dimen/size_16"
-                android:text="@string/suggested_learnings"
                 android:letterSpacing="0"
+                android:text="@string/suggested_learnings"
                 android:textColor="@color/black"
                 android:textSize="@dimen/font_18"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/rl_new_certificate_assess_result" />
+                app:layout_constraintTop_toBottomOf="@id/lesson_suggestions_layout" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_sug_learnings_assess_result"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:letterSpacing="0"
                 android:layout_marginTop="8dp"
+                android:letterSpacing="0"
+                android:visibility="gone"
                 android:nestedScrollingEnabled="true"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

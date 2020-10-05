@@ -10,6 +10,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
@@ -17,7 +18,6 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -25,6 +25,8 @@ import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.app.core.genericadapter.RecyclerGenericAdapter
+import com.gigforce.app.core.gone
+import com.gigforce.app.core.visible
 import com.gigforce.app.modules.learning.LearningConstants
 import com.gigforce.app.modules.learning.LearningViewModel
 import com.gigforce.app.modules.learning.courseDetails.LearningCourseDetailsFragment
@@ -35,6 +37,8 @@ import com.gigforce.app.modules.learning.slides.SlidesFragment
 import com.gigforce.app.utils.*
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.fragment_assessment_result.*
+import kotlinx.android.synthetic.main.fragment_assessment_result.view.*
+import kotlinx.android.synthetic.main.fragment_learning_video_item.view.*
 import kotlinx.android.synthetic.main.layout_rv_question_wisr_sum_assess_result.view.*
 import kotlinx.android.synthetic.main.toolbar.*
 import java.io.File
@@ -49,9 +53,11 @@ class AssessmentResultFragment : BaseFragment(), PopupMenu.OnMenuItemClickListen
     }
     private val learningViewModel: LearningViewModel by viewModels()
 
-    private var nextLessonId : String? = null
+    private var nextLessonId: String? = null
+    private var currentLessonId: String? = null
+    private var moduleId: String? = null
 
-    private val navController : NavController by lazy {
+    private val navController: NavController by lazy {
         findNavController()
     }
 
@@ -69,10 +75,14 @@ class AssessmentResultFragment : BaseFragment(), PopupMenu.OnMenuItemClickListen
 
         savedInstanceState?.let {
             nextLessonId = it.getString(AssessmentFragment.INTENT_NEXT_LESSON_ID)
+            currentLessonId = it.getString(AssessmentFragment.INTENT_LESSON_ID)
+            moduleId = it.getString(AssessmentFragment.INTENT_MODULE_ID)
         }
 
         arguments?.let {
             nextLessonId = it.getString(AssessmentFragment.INTENT_NEXT_LESSON_ID)
+            currentLessonId = it.getString(AssessmentFragment.INTENT_LESSON_ID)
+            moduleId = it.getString(AssessmentFragment.INTENT_MODULE_ID)
         }
 
         initUI()
@@ -84,6 +94,8 @@ class AssessmentResultFragment : BaseFragment(), PopupMenu.OnMenuItemClickListen
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString(AssessmentFragment.INTENT_NEXT_LESSON_ID, nextLessonId)
+        outState.putString(AssessmentFragment.INTENT_LESSON_ID, currentLessonId)
+        outState.putString(AssessmentFragment.INTENT_MODULE_ID, moduleId)
     }
 
     private fun initObservers() {
@@ -93,8 +105,8 @@ class AssessmentResultFragment : BaseFragment(), PopupMenu.OnMenuItemClickListen
 
             })
         viewModelAssessmentResult.observableIsUserPassed.observe(viewLifecycleOwner, Observer {
-            tv_sug_learnings_label_assess_frag.visibility = it
-            rv_sug_learnings_assess_result.visibility = it
+//            tv_sug_learnings_label_assess_frag.visibility = it
+//            rv_sug_learnings_assess_result.visibility = it
         })
         viewModelAssessmentResult.observablePermResultsGranted.observe(
             viewLifecycleOwner,
@@ -134,15 +146,142 @@ class AssessmentResultFragment : BaseFragment(), PopupMenu.OnMenuItemClickListen
                 is Lce.Content -> {
                     nextLesson = it.content
                     next_lesson_btn.isVisible = it.content != null
+
+                    next_lesson_btn.text = when (nextLesson?.type) {
+                        CourseContent.TYPE_ASSESSMENT -> "Next Assessment"
+                        CourseContent.TYPE_VIDEO -> "Next Lesson"
+                        CourseContent.TYPE_SLIDE -> "Next Slide"
+                        else -> "Okay"
+                    }
                 }
-                is Lce.Error -> {}
+                is Lce.Error -> {
+                }
             }
         })
 
-        learningViewModel.getAllCourses()
+        learningViewModel.showLessonOnFailing.observe(viewLifecycleOwner, Observer {
 
-        if(nextLessonId != null)
-        learningViewModel.getLessonDetails(nextLessonId!!)
+            when (it) {
+                Lce.Loading -> {
+
+                }
+                is Lce.Content -> {
+                    lesson_suggestions_layout.visible()
+                    showLessonSuggestionOnFailing(it.content)
+                }
+                is Lce.Error -> {
+
+                }
+            }
+        })
+
+        if (userPassed) {
+
+            if (nextLessonId != null)
+                learningViewModel.getLessonDetails(nextLessonId!!)
+        } else {
+
+            if (moduleId != null && currentLessonId != null)
+                learningViewModel.showLessonToRedoOnFailing(
+                    moduleId = moduleId!!,
+                    lessonId = currentLessonId!!
+                )
+        }
+    }
+
+    private fun showLessonSuggestionOnFailing(content: CourseContent) {
+        when (content.type) {
+            CourseContent.TYPE_VIDEO -> {
+                lesson_suggestions_layout.lessons_on_failed_layout.apply {
+                    course_content_video_slide_layout.visible()
+                    course_content_assessment_layout.gone()
+
+                    video_title.text = content.title
+                    video_time.text = content.videoLengthString
+
+                    if (!content.coverPicture.isNullOrBlank()) {
+                        if (content.coverPicture!!.startsWith("http", true)) {
+
+                            GlideApp.with(context)
+                                .load(content.coverPicture)
+                                .placeholder(getCircularProgressDrawable())
+                                .error(R.drawable.ic_learning_default_back)
+                                .into(videoThumbnailIV)
+                        } else {
+                            FirebaseStorage.getInstance()
+                                .getReference(LearningConstants.LEARNING_IMAGES_FIREBASE_FOLDER)
+                                .child(content.coverPicture!!)
+                                .downloadUrl
+                                .addOnSuccessListener { fileUri ->
+
+                                    GlideApp.with(context)
+                                        .load(fileUri)
+                                        .placeholder(getCircularProgressDrawable())
+                                        .error(R.drawable.ic_learning_default_back)
+                                        .into(videoThumbnailIV)
+                                }
+                        }
+                    } else {
+                        videoThumbnailIV.setBackgroundColor(
+                            ResourcesCompat.getColor(
+                                context.resources,
+                                R.color.warm_grey,
+                                null
+                            )
+                        )
+                    }
+
+                }
+            }
+            CourseContent.TYPE_SLIDE -> {
+                lesson_suggestions_layout.lessons_on_failed_layout.apply {
+                    course_content_video_slide_layout.visible()
+                    course_content_assessment_layout.gone()
+
+                    video_title.text = content.videoLengthString
+                    video_time.text = content.videoLengthString
+
+                    if (!content.coverPicture.isNullOrBlank()) {
+                        if (content.coverPicture!!.startsWith("http", true)) {
+
+                            GlideApp.with(context)
+                                .load(content.coverPicture)
+                                .placeholder(getCircularProgressDrawable())
+                                .error(R.drawable.ic_learning_default_back)
+                                .into(videoThumbnailIV)
+                        } else {
+                            FirebaseStorage.getInstance()
+                                .getReference(LearningConstants.LEARNING_IMAGES_FIREBASE_FOLDER)
+                                .child(content.coverPicture!!)
+                                .downloadUrl
+                                .addOnSuccessListener { fileUri ->
+
+                                    GlideApp.with(context)
+                                        .load(fileUri)
+                                        .placeholder(getCircularProgressDrawable())
+                                        .error(R.drawable.ic_learning_default_back)
+                                        .into(videoThumbnailIV)
+                                }
+                        }
+                    } else {
+                        videoThumbnailIV.setBackgroundColor(
+                            ResourcesCompat.getColor(
+                                context.resources,
+                                R.color.warm_grey,
+                                null
+                            )
+                        )
+                    }
+                }
+            }
+            CourseContent.TYPE_ASSESSMENT -> {
+                lesson_suggestions_layout.lessons_on_failed_layout.apply {
+                    course_content_video_slide_layout.gone()
+                    course_content_assessment_layout.visible()
+                    title.text = content.title
+                }
+            }
+        }
     }
 
     private var nextLesson: CourseContent? = null
@@ -269,10 +408,12 @@ class AssessmentResultFragment : BaseFragment(), PopupMenu.OnMenuItemClickListen
 
         next_lesson_btn.setOnClickListener {
 
-            if(nextLesson == null)
+            if (nextLesson == null) {
+                clearBackStackToContentList()
                 return@setOnClickListener
+            }
 
-            nextLesson?.let { cc->
+            nextLesson?.let { cc ->
 
                 when (cc.type) {
                     CourseContent.TYPE_VIDEO -> {
@@ -320,6 +461,7 @@ class AssessmentResultFragment : BaseFragment(), PopupMenu.OnMenuItemClickListen
         fragmentManager?.popBackStack(tag, FragmentManager.POP_BACK_STACK_INCLUSIVE)
     }
 
+    private var userPassed = false
     private fun initUI() {
         tv_title_toolbar.text = getString(R.string.assessment)
         iv_options_menu_tb.visibility = View.VISIBLE
@@ -337,7 +479,8 @@ class AssessmentResultFragment : BaseFragment(), PopupMenu.OnMenuItemClickListen
             Html.fromHtml("You have scored <b>$percent</b> in your assessment")
         tv_new_cert_asses_frag.text =
             Html.fromHtml("<u>New certificate has been added to profile .</u>")
-        viewModelAssessmentResult.checkIfUserPassed(arguments?.getBoolean(StringConstants.ASSESSMENT_PASSED.value))
+        userPassed = arguments?.getBoolean(StringConstants.ASSESSMENT_PASSED.value) ?: false
+        viewModelAssessmentResult.checkIfUserPassed(userPassed)
         iv_options_menu_tb.visibility =
             if (arguments?.getBoolean(
                     StringConstants.ASSESSMENT_PASSED.value,
@@ -350,7 +493,7 @@ class AssessmentResultFragment : BaseFragment(), PopupMenu.OnMenuItemClickListen
             " %02d hrs %02d min %02d sec", TimeUnit.MILLISECONDS.toHours(timeTaken),
             TimeUnit.MILLISECONDS.toMinutes(timeTaken) % TimeUnit.HOURS.toMinutes(1),
             TimeUnit.MILLISECONDS.toSeconds(timeTaken) % TimeUnit.MINUTES.toSeconds(1)
-        );
+        )
     }
 
     override fun onMenuItemClick(item: MenuItem?): Boolean {

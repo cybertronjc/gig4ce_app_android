@@ -123,6 +123,7 @@ class AssessmentFragment : BaseFragment(),
 
                 bundle.putString(AssessmentFragment.INTENT_MODULE_ID, mModuleId)
                 bundle.putString(AssessmentFragment.INTENT_NEXT_LESSON_ID, it.nextNextLessonId)
+                bundle.putString(AssessmentFragment.INTENT_LESSON_ID, mLessonId)
                 navigate(R.id.assessment_result_fragment, bundle)
             })
             observableDialogInit.observe(viewLifecycleOwner, Observer {

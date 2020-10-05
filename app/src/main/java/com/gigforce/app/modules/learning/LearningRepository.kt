@@ -591,12 +591,47 @@ class LearningRepository constructor(
         }
     }
 
+    suspend fun getModuleLessons(
+        moduleId: String
+    ): List<CourseContent> {
+
+        if (mProfile == null) {
+            mProfile = profileFirebaseRepository.getProfileData()
+        }
+
+        return getModuleLessonsC(moduleId).filter {
+            it.isActive && doesLessonFullFillsCondition(it)
+        }.sortedBy { it.priority }
+    }
+
     private suspend fun getModuleLessonsC(
         courseId: String,
         moduleId: String
     ): List<CourseContent> = suspendCoroutine { cont ->
         getCollectionReference()
             .whereEqualTo(COURSE_ID, courseId)
+            .whereEqualTo(MODULE_ID, moduleId)
+            .whereEqualTo(TYPE, TYPE_LESSON)
+            .get()
+            .addOnSuccessListener { querySnap ->
+
+                val modules = querySnap.documents
+                    .map {
+                        val lesson = it.toObject(CourseContent::class.java)!!
+                        lesson.id = it.id
+                        lesson
+                    }
+                cont.resume(modules)
+            }
+            .addOnFailureListener {
+                cont.resumeWithException(it)
+            }
+    }
+
+    private suspend fun getModuleLessonsC(
+        moduleId: String
+    ): List<CourseContent> = suspendCoroutine { cont ->
+        getCollectionReference()
             .whereEqualTo(MODULE_ID, moduleId)
             .whereEqualTo(TYPE, TYPE_LESSON)
             .get()
