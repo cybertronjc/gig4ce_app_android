@@ -1068,6 +1068,23 @@ class LearningRepository constructor(
             }
     }
 
+    suspend fun syncCourseProgressData(courseId: String) {
+
+        val courseDetails = getCourseDetails(courseId)
+        val courseProgress = getCourseProgress(courseId)
+
+        val modules = getModules(courseId)
+        val moduleProgress = getCourseModulesProgress(courseId)
+
+        //Deleting progress of modules and lessons deleted
+        val filteredModulesProgressData = moduleProgress.filter {moduleProg ->
+            modules.find { it.id == moduleProg.moduleId } != null
+        }
+
+
+
+    }
+
 
     companion object {
         private const val COLLECTION_NAME = "Course_blocks"

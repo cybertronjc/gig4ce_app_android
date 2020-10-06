@@ -23,11 +23,28 @@ class CourseDetailsViewModel constructor(
     var currentlySelectedModulePosition = 0
 
     private var mCurrentModuleId: String? = null
-    private var mCurrentModulesProgressData: List<ModuleProgress>? = null
+    var mCurrentModulesProgressData: List<ModuleProgress>? = null
+    private var courseDataSynced : Boolean = false
 
 
     private val _courseDetails = MutableLiveData<Lce<Course>>()
     val courseDetails: LiveData<Lce<Course>> = _courseDetails
+
+    fun getCourseDetailsAndModules(mCourseId: String) = viewModelScope.launch {
+       if(courseDataSynced)
+       {
+           getCourseDetails(mCourseId)
+           getCourseModules(mCourseId)
+       } else{
+
+
+           syncCourseProgressData(mCourseId)
+       }
+    }
+
+    private suspend fun syncCourseProgressData(courseId : String) {
+        learningRepository.syncCourseProgressData(courseId)
+    }
 
     fun getCourseDetails(courseId: String) = viewModelScope.launch {
 
