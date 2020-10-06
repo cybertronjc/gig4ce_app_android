@@ -783,7 +783,6 @@
     <string name="hello">Hello!</string>
     <string name="welcome_to_gigforce">Welcome to Gigforce!</string>
     <string name="let_s_talk_about_what_s_a_gig_and_how_do_you_start_working_as_a_giger_at_gigforce">Let\'s talk about what\'s a gig and how do you start working as a giger at Gigforce.</string>
-    <string name="skip">Skip</string>
     <string name="play_now">Play Now</string>
     <string name="my_interest">My Interest</string>
     <string name="explore_gigs_start_earning">Explore gigs to start earning.</string>
@@ -965,6 +964,7 @@
     <string name="in_your_assessment">in your assessment</string>
     <string name="new_cert_added_underlined"><![CDATA[<u>New certificate has been added to profile .</u>]]></string>
     <string name="watch_lesson_again">Watch lesson again</string>
+    <string name="skip">Skip</string>
 
 
 </resources>

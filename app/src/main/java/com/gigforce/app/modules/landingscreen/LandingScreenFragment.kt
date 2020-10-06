@@ -273,15 +273,7 @@ class LandingScreenFragment : BaseFragment() {
             recyclerGenericAdapter =
                 RecyclerGenericAdapter<Tip>(
                     activity?.applicationContext,
-                    PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
-                        val tip = (item as Tip)
-                        navigate(
-                            resId = tip.whereToRedirect,
-                            args = tip.intentExtraMap.toBundle()
-                        )
-
-
-                    },
+                    null,
                     RecyclerGenericAdapter.ItemInterface<Tip?> { obj, viewHolder, position ->
                         var title = getTextView(viewHolder, R.id.gigtip_title)
                         var subtitle = getTextView(viewHolder, R.id.gigtip_subtitle)
@@ -292,11 +284,19 @@ class LandingScreenFragment : BaseFragment() {
                         title.layoutParams = lp
                         title.text = obj?.title
                         subtitle.text = obj?.subTitle
+                        getView(viewHolder, R.id.textView102).setOnClickListener {
+                            val tip = tips.get(viewHolder.adapterPosition)
+                            navigate(
+                                resId = tip.whereToRedirect,
+                                args = tip.intentExtraMap.toBundle()
+                            )
+                        }
 
                         getView(viewHolder, R.id.skip).setOnClickListener {
+                            if (viewHolder.adapterPosition == -1) return@setOnClickListener
                             sharedDataInterface.saveDataBoolean(obj?.tip_id.toString(), true)
-                            recyclerGenericAdapter?.notifyItemRemoved(viewHolder.adapterPosition)
                             tips.removeAt(viewHolder.adapterPosition)
+                            recyclerGenericAdapter?.notifyItemRemoved(viewHolder.adapterPosition)
                             if (tips.isEmpty()) {
                                 gigforce_tip.gone()
                             }
