@@ -201,8 +201,8 @@
         android:letterSpacing="0"
         android:text="@string/assessment_"
         android:textColor="#686868"
-        android:visibility="gone"
-        android:textSize="14sp" />
+        android:textSize="14sp"
+        android:visibility="gone" />
 
 
     <FrameLayout
@@ -210,8 +210,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:visibility="gone"
-        android:minHeight="170dp">
+        android:minHeight="170dp"
+        android:visibility="gone">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/assessment_rv"
@@ -406,7 +406,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/exploreByIndustryLayout"
         android:layout_width="match_parent"
-        android:layout_height="215dp">
+        android:layout_height="215dp"
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/industry"

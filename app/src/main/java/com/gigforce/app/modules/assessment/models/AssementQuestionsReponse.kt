@@ -5,7 +5,7 @@ data class AssementQuestionsReponse(
     var lesson_id: String = "",
     var scenario: String = "",
     var type: String = "",
-    var duration: String = "00:15:00",
+    var duration: String = "00:05:00",
     var Name: String = "",
     var level: Int = 1,
     var assessment_image: String = "",

@@ -314,7 +314,7 @@
     <string name="cif_number_with_colon">CIF Number :</string>
     <string name="account_number_with_colon">Account Number :</string>
     <string name="ifsc_with_colon">IFSC :</string>
-    <string name="upload_bank_passbook">Upload Bank Passbook (Front Page)</string>
+    <string name="upload_bank_passbook">Upload Cheque/Bank Passbook (Front page)</string>
     <string name="upload_bank_passbook_sublabel">Please upload your Bank Passbook for\nyour verification</string>
     <string name="edit">Edit</string>
     <string name="name">Name</string>
@@ -964,6 +964,7 @@
     <string name="you_have_scored">You have scored</string>
     <string name="in_your_assessment">in your assessment</string>
     <string name="new_cert_added_underlined"><![CDATA[<u>New certificate has been added to profile .</u>]]></string>
+    <string name="watch_lesson_again">Watch lesson again</string>
 
 
 </resources>

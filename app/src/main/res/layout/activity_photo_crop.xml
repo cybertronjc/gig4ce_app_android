@@ -1,65 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<androidx.coordinatorlayout.widget.CoordinatorLayout
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+
     android:fillViewport="true"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/grey_photocrop_background"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".modules.photocrop.PhotoCrop">
 
-<androidx.constraintlayout.widget.ConstraintLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/constraintLayout"
-    android:background="#888888">
-
-    <ImageView
-        android:id="@+id/profile_avatar_photo_crop"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:scaleType="fitCenter"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.305"
-        tools:layout_editor_absoluteX="0dp" />
+        android:layout_height="match_parent">
 
-<!--    <ImageView-->
-<!--        android:id="@+id/translusent_bar"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="45dp"-->
-<!--        android:alpha="0.25"-->
-<!--        android:src="@drawable/translucent_bar_grey"-->
-<!--        app:layout_constraintTop_toTopOf="parent"-->
-<!--        />-->
+        <ImageView
+            android:id="@+id/profile_avatar_photo_crop"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scaleType="fitCenter"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.305"
+            tools:layout_editor_absoluteX="0dp" />
 
-    <ImageButton
-        android:id="@+id/back_button_photo_crop"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
-        android:padding="16dp"
-        app:layout_constraintBottom_toTopOf="@id/profile_avatar_photo_crop"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.5"
-        app:srcCompat="@drawable/back_button" />
+        <!--    <ImageView-->
+        <!--        android:id="@+id/translusent_bar"-->
+        <!--        android:layout_width="match_parent"-->
+        <!--        android:layout_height="45dp"-->
+        <!--        android:alpha="0.25"-->
+        <!--        android:src="@drawable/translucent_bar_grey"-->
+        <!--        app:layout_constraintTop_toTopOf="parent"-->
+        <!--        />-->
+
+        <ImageButton
+            android:id="@+id/back_button_photo_crop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:padding="16dp"
+            app:layout_constraintBottom_toTopOf="@id/profile_avatar_photo_crop"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.5"
+            app:srcCompat="@drawable/back_button" />
 
 
-    <ProgressBar
-        android:id="@+id/progress_circular"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:indeterminateTint="@color/colorLightAccent"
-        app:layout_constraintBottom_toBottomOf="@id/profile_avatar_photo_crop"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/profile_avatar_photo_crop" />
+        <ProgressBar
+            android:id="@+id/progress_circular"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminateTint="@color/colorLightAccent"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@id/profile_avatar_photo_crop"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/profile_avatar_photo_crop" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <include layout="@layout/profile_photo_bottom_sheet"></include>
 
