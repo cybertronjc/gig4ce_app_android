@@ -80,6 +80,8 @@ class LearningCourseDetailsFragment : BaseFragment() {
         } else {
             viewModel.getCourseDetails(mCourseId)
             viewModel.getCourseModules(mCourseId)
+
+          //  viewModel.getCourseDetailsAndModules(mCourseId)
         }
     }
 
@@ -349,7 +351,6 @@ class LearningCourseDetailsFragment : BaseFragment() {
                     viewModel.currentModules!!.indexOf(viewModel.currentlySelectedModule!!) + 1
                 } else 0
 
-
         levelTV.text =
                 "Module $moduleNo Of ${viewModel.currentModules?.size}"
 
@@ -359,18 +360,21 @@ class LearningCourseDetailsFragment : BaseFragment() {
         var assignmentsCompleted = 0
         var totalAssignments = 0
 
-        viewModel.currentLessons?.forEach {
+        viewModel.mCurrentModulesProgressData?.forEach { moduleProg ->
 
-            if(it.type == CourseContent.TYPE_VIDEO){
-                totalLessons++
+            moduleProg.lessonsProgress.forEach {lessonProg ->
 
-                if(it.completed)
-                    lessonsCompleted++
-            } else if(it.type == CourseContent.TYPE_ASSESSMENT){
-                totalAssignments++
+                if(lessonProg.lessonType == CourseContent.TYPE_VIDEO){
+                    totalLessons++
 
-                if(it.completed)
-                    assignmentsCompleted++
+                    if(lessonProg.completed)
+                        lessonsCompleted++
+                } else if(lessonProg.lessonType == CourseContent.TYPE_ASSESSMENT){
+                    totalAssignments++
+
+                    if(lessonProg.completed)
+                        assignmentsCompleted++
+                }
             }
         }
 
@@ -380,9 +384,9 @@ class LearningCourseDetailsFragment : BaseFragment() {
                 if (viewModel.currentAssessments?.size == null || totalAssignments==0)
                     "0 Assessments"
                 else if (assignmentsCompleted == 1)
-                    "$assignmentsCompleted/$totalAssignments Assignment Completed"
+                    "$assignmentsCompleted/$totalAssignments Assessment Completed"
                 else
-                    "$assignmentsCompleted/$totalAssignments Assignments Completed"
+                    "$assignmentsCompleted/$totalAssignments Assessments Completed"
 
         lessonsLabel.text = "Lesson (${viewModel.currentlySelectedModule?.title})"
     }
@@ -474,7 +478,7 @@ class LearningCourseDetailsFragment : BaseFragment() {
                             title.text = obj?.title
 
                             var subtitle = getTextView(viewHolder, R.id.title)
-                            subtitle.text = "Lesson ${obj.lessonsCompleted} / ${obj.totalLessons}"
+                            subtitle.text = "${obj.lessonsCompleted} / ${obj.totalLessons} Completed"
 
                             var img = getImageView(viewHolder, R.id.learning_img)
 
