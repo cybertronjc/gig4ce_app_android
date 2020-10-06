@@ -38,6 +38,7 @@ import com.gigforce.app.utils.*
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.fragment_assessment_result.*
 import kotlinx.android.synthetic.main.fragment_assessment_result.view.*
+import kotlinx.android.synthetic.main.fragment_learning_video_item.*
 import kotlinx.android.synthetic.main.fragment_learning_video_item.view.*
 import kotlinx.android.synthetic.main.layout_rv_question_wisr_sum_assess_result.view.*
 import kotlinx.android.synthetic.main.toolbar.*
@@ -444,6 +445,48 @@ class AssessmentResultFragment : BaseFragment(), PopupMenu.OnMenuItemClickListen
 
             }
         }
+
+        lessons_on_failed_layout.setOnClickListener {
+            openLessonToRedo()
+        }
+
+        lessonsSeeMoreButton.setOnClickListener {
+            openLessonToRedo()
+        }
+    }
+
+    private fun openLessonToRedo() {
+        redoLesson?.let { cc ->
+
+            when (cc.type) {
+                CourseContent.TYPE_VIDEO -> {
+                    PlayVideoDialogFragment.launch(
+                        childFragmentManager = childFragmentManager,
+                        moduleId = cc.moduleId,
+                        lessonId = cc.id
+                    )
+                }
+                CourseContent.TYPE_ASSESSMENT -> {
+                    navigate(
+                        R.id.assessment_fragment, bundleOf(
+                            AssessmentFragment.INTENT_LESSON_ID to cc.id,
+                            AssessmentFragment.INTENT_MODULE_ID to cc.moduleId
+                        )
+                    )
+                }
+                CourseContent.TYPE_SLIDE -> {
+                    navigate(
+                        R.id.slidesFragment,
+                        bundleOf(
+                            SlidesFragment.INTENT_EXTRA_SLIDE_TITLE to cc.title,
+                            SlidesFragment.INTENT_EXTRA_MODULE_ID to cc.moduleId,
+                            SlidesFragment.INTENT_EXTRA_LESSON_ID to cc.id
+                        )
+                    )
+                }
+            }
+
+        }
     }
 
     override fun onBackPressed(): Boolean {
@@ -498,40 +541,7 @@ class AssessmentResultFragment : BaseFragment(), PopupMenu.OnMenuItemClickListen
             TimeUnit.MILLISECONDS.toSeconds(timeTaken) % TimeUnit.MINUTES.toSeconds(1)
         )
 
-        lessons_on_failed_layout.setOnClickListener {
 
-            redoLesson?.let { cc ->
-
-                when (cc.type) {
-                    CourseContent.TYPE_VIDEO -> {
-                        PlayVideoDialogFragment.launch(
-                            childFragmentManager = childFragmentManager,
-                            moduleId = cc.moduleId,
-                            lessonId = cc.id
-                        )
-                    }
-                    CourseContent.TYPE_ASSESSMENT -> {
-                        navigate(
-                            R.id.assessment_fragment, bundleOf(
-                                AssessmentFragment.INTENT_LESSON_ID to cc.id,
-                                AssessmentFragment.INTENT_MODULE_ID to cc.moduleId
-                            )
-                        )
-                    }
-                    CourseContent.TYPE_SLIDE -> {
-                        navigate(
-                            R.id.slidesFragment,
-                            bundleOf(
-                                SlidesFragment.INTENT_EXTRA_SLIDE_TITLE to cc.title,
-                                SlidesFragment.INTENT_EXTRA_MODULE_ID to cc.moduleId,
-                                SlidesFragment.INTENT_EXTRA_LESSON_ID to cc.id
-                            )
-                        )
-                    }
-                }
-
-            }
-        }
     }
 
     override fun onMenuItemClick(item: MenuItem?): Boolean {
