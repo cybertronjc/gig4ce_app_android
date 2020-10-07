@@ -4,16 +4,12 @@ import android.app.PendingIntent
 import android.content.Intent
 import android.util.Log
 import androidx.core.app.TaskStackBuilder
-import androidx.core.os.bundleOf
-import androidx.navigation.NavDeepLinkBuilder
 import com.gigforce.app.MainActivity
-import com.gigforce.app.R
 import com.gigforce.app.core.toBundle
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
-import mobile.jobKahaHai.notification.NotificationHelper
 import java.util.*
 
 class MyFirebaseMessagingService : FirebaseMessagingService() {
