@@ -62,7 +62,7 @@ class LoginSuccessfulViewModel constructor(
     fun getProfileAndGigData() {
         profileFirebaseRepository
             .db
-            .collection("version_info")
+            .collection("Version_info")
             .document(profileFirebaseRepository.getUID())
             .set(UserVersionInfo(
                 currentVersion = BuildConfig.VERSION_NAME
