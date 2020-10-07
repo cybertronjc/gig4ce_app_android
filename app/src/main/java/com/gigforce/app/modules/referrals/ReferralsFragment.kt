@@ -102,6 +102,14 @@ class ReferralsFragment : BaseFragment() {
 
                         }
 
+//                        val clipboard: ClipboardManager? =
+//                            requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager?
+//                        val clip = ClipData.newPlainText(
+//                            "token",
+//                              FirebaseInstanceId.getInstance().getToken()
+//                        )
+//                        clipboard?.setPrimaryClip(clip)
+
                     })
                 PushDownAnim.setPushDownAnimTo(iv_whatsapp_referrals_frag)
                     .setOnClickListener(View.OnClickListener {
@@ -135,7 +143,6 @@ class ReferralsFragment : BaseFragment() {
                             // Short link created
                             val shortLink = result.shortLink
                             shareToAnyApp(shortLink.toString())
-
 
 
                         }.addOnFailureListener {
@@ -281,12 +288,12 @@ class ReferralsFragment : BaseFragment() {
             shareIntent.type = "image/png"
             shareIntent.putExtra(
                 Intent.EXTRA_SUBJECT,
-                getString(R.string.looking_for_dynamic_working_hours)
+                getString(R.string.app_name)
             )
-            var shareMessage = url
+            val shareMessage = getString(R.string.looking_for_dynamic_working_hours) + " " + url
             shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage)
             val bitmap =
-                BitmapFactory.decodeResource(requireContext().resources, R.drawable.gig4ce_logo)
+                BitmapFactory.decodeResource(requireContext().resources, R.drawable.bg_gig_type)
 
             //save bitmap to app cache folder
 

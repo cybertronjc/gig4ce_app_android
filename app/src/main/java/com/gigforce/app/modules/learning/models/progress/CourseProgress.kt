@@ -14,6 +14,15 @@ data class CourseProgress(
     @set:PropertyName("course_id")
     var courseId : String = "",
 
+    @get:PropertyName("completed_modules")
+    @set:PropertyName("completed_modules")
+    var completedModules : Int = 0,
+
+    @get:PropertyName("total_modules")
+    @set:PropertyName("total_modules")
+    var totalModules : Int = 0,
+
+
     @get:PropertyName("course_start_date")
     @set:PropertyName("course_start_date")
     var courseStartDate : Timestamp? = null,

@@ -12,15 +12,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import android.widget.ScrollView
 import androidx.core.os.bundleOf
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.request.target.CustomTarget
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
+import com.gigforce.app.core.gone
+import com.gigforce.app.core.visible
 import com.gigforce.app.modules.assessment.models.AssementQuestionsReponse
 import com.gigforce.app.modules.profile.ProfileViewModel
 import com.gigforce.app.utils.GlideApp
@@ -68,6 +71,7 @@ class AssessmentFragment : BaseFragment(),
         return inflateView(R.layout.fragment_assessment, inflater, container)
     }
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         getDataFromIntents(savedInstanceState)
@@ -75,6 +79,7 @@ class AssessmentFragment : BaseFragment(),
         initObservers()
         setupRecycler()
         viewModelAssessmentFragment.getQuestionaire(mLessonId)
+
     }
 
     private fun getDataFromIntents(savedInstanceState: Bundle?) {
@@ -100,7 +105,7 @@ class AssessmentFragment : BaseFragment(),
         with(viewModelAssessmentFragment) {
             observableDialogResult.observe(viewLifecycleOwner, Observer {
                 val bundle = Bundle()
-                bundle.putBoolean(StringConstants.ASSESSMENT_PASSED.value, it)
+                bundle.putBoolean(StringConstants.ASSESSMENT_PASSED.value, it.result)
                 val arr =
                     BooleanArray(viewModelAssessmentFragment.observableAssessmentData.value?.assessment!!.size) { false }
                 viewModelAssessmentFragment.observableAssessmentData.value!!.assessment!!.forEachIndexed { index, elem ->
@@ -119,7 +124,9 @@ class AssessmentFragment : BaseFragment(),
                 bundle.putInt(StringConstants.TIME_TAKEN.value, timeTaken)
                 countDownTimer?.cancel()
 
-                bundle.putString(AssessmentFragment.INTENT_MODULE_ID,mModuleId)
+                bundle.putString(AssessmentFragment.INTENT_MODULE_ID, mModuleId)
+                bundle.putString(AssessmentFragment.INTENT_NEXT_LESSON_ID, it.nextNextLessonId)
+                bundle.putString(AssessmentFragment.INTENT_LESSON_ID, mLessonId)
                 navigate(R.id.assessment_result_fragment, bundle)
             })
             observableDialogInit.observe(viewLifecycleOwner, Observer {
@@ -143,7 +150,7 @@ class AssessmentFragment : BaseFragment(),
                 showDialog(
                     AssessmentDialog.STATE_INIT, bundleOf(
                         StringConstants.DURATION.value to it.duration,
-                        StringConstants.ASSESSMENT_NAME.value to it.assessment_name,
+                        StringConstants.ASSESSMENT_NAME.value to it.Name,
                         StringConstants.QUESTIONS_COUNT.value to (it.assessment?.size ?: 0),
                         StringConstants.LEVEL.value to it.level,
                         StringConstants.ASSESSMENT_DIALOG_STATE.value to AssessmentDialog.STATE_INIT
@@ -153,7 +160,7 @@ class AssessmentFragment : BaseFragment(),
                 tv_scenario_value_header_assess_frag.text = it.scenario
 
                 tv_level_assess_frag.text = "${getString(R.string.level)} ${it.level}"
-                tv_designation_assess_frag.text = it.assessment_name
+                tv_designation_assess_frag.text = it.Name
                 h_pb_assess_frag.max = it.assessment?.size!!
                 h_pb_assess_frag.progress = 0
                 tv_percent_assess_frag.text = "0 %"
@@ -167,6 +174,7 @@ class AssessmentFragment : BaseFragment(),
                 showToast(it)
             })
             observableQuizSubmit.observe(viewLifecycleOwner, Observer {
+                pb_assessment.gone()
                 finalResult()
             })
 
@@ -222,6 +230,7 @@ class AssessmentFragment : BaseFragment(),
                 timeTaken = millis.toInt()
                 viewModelAssessmentFragment.observableAssessmentData.value?.timeTakenInMillis =
                     timeTaken.toLong()
+                pb_assessment.visible()
                 viewModelAssessmentFragment.submitAnswers(viewModelProfile.getProfileData().value?.id)
             }
         }
@@ -236,8 +245,8 @@ class AssessmentFragment : BaseFragment(),
         rv_options_assess_frag.layoutManager = LinearLayoutManager(activity)
         rv_options_assess_frag.addItemDecoration(
             ItemDecoratorAssessmentOptions(
-                context,
-                R.dimen.size_16
+                context
+
             )
         )
 
@@ -336,6 +345,7 @@ class AssessmentFragment : BaseFragment(),
                     tv_percent_assess_frag.text = getString(R.string.hundred_percent)
                     viewModelAssessmentFragment.observableAssessmentData.value?.timeTakenInMillis =
                         timeTaken.toLong()
+                    pb_assessment.visible()
                     viewModelAssessmentFragment.submitAnswers(viewModelProfile.getProfileData().value?.id)
 
                 } else {
@@ -355,10 +365,10 @@ class AssessmentFragment : BaseFragment(),
     fun switchPosition(increment: Boolean) {
         if (increment) ++selectedPosition else --selectedPosition
         setDataAsPerPosition(viewModelAssessmentFragment.observableAssessmentData.value!!)
-        sv_assess_frag.postDelayed(
-            Runnable { sv_assess_frag.fullScroll(ScrollView.FOCUS_UP) },
-            600
-        )
+//        sv_assess_frag.postDelayed(
+//            Runnable { sv_assess_frag.fullScroll(ScrollView.FOCUS_UP) },
+//            600
+//        )
 
     }
 
@@ -371,6 +381,7 @@ class AssessmentFragment : BaseFragment(),
                 showToast(getString(R.string.time_is_up))
                 viewModelAssessmentFragment.observableAssessmentData.value?.timeTakenInMillis =
                     timeTaken.toLong()
+                pb_assessment.visible()
                 viewModelAssessmentFragment.submitAnswers(viewModelProfile.getProfileData().value?.id)
             }, 500)
 
@@ -397,7 +408,7 @@ class AssessmentFragment : BaseFragment(),
         }
         val questions =
             viewModelAssessmentFragment.observableAssessmentData.value!!.assessment!!.size
-        var isPassed =
+        val isPassed =
             (answers / questions.toFloat()) * 100 >= viewModelAssessmentFragment.observableAssessmentData.value?.passing_percentage!!
 
         showDialog(
@@ -447,8 +458,8 @@ class AssessmentFragment : BaseFragment(),
         bundle: Bundle?,
         moduleId: String? = null
     ) {
-        val dialog = if(moduleId != null)
-            AssessmentDialog.newInstance(moduleId,mLessonId, state)
+        val dialog = if (moduleId != null)
+            AssessmentDialog.newInstance(moduleId, mLessonId, state)
         else
             AssessmentDialog.newInstance(state)
 
@@ -468,13 +479,12 @@ class AssessmentFragment : BaseFragment(),
     }
 
 
-    override fun assessmentState(state: Int) {
-        viewModelAssessmentFragment.switchAsPerState(state)
+    override fun assessmentState(state: Int, nextLesson : String?) {
+        viewModelAssessmentFragment.switchAsPerState(state, nextLesson)
     }
 
     override fun doItLaterPressed() {
-        popBackState()
-
+        clearBackStackToContentList()
     }
 
     override fun submitAnswer() {
@@ -511,11 +521,11 @@ class AssessmentFragment : BaseFragment(),
             )
         )
 
-        val y: Float =
-            rv_options_assess_frag.y + rv_options_assess_frag.getChildAt(0).y
-        sv_assess_frag.post {
-            sv_assess_frag.smoothScrollTo(0, y.toInt())
-        }
+//        val y: Float =
+//            rv_options_assess_frag.y + rv_options_assess_frag.getChildAt(0).y
+//        sv_assess_frag.post {
+//            sv_assess_frag.smoothScrollTo(0, y.toInt())
+//        }
         if (selectedPosition + 1 > h_pb_assess_frag.progress) {
             h_pb_assess_frag.progress = selectedPosition + 1
             tv_percent_assess_frag.text =
@@ -541,7 +551,11 @@ class AssessmentFragment : BaseFragment(),
             iv_scenario_value_assess_frag.visibility = View.VISIBLE
             GlideApp.with(this.requireContext())
                 .asBitmap()
-                .load(Path)
+                .load(Path).placeholder(
+                    com.gigforce.app.utils.getCircularProgressDrawable(
+                        requireContext()
+                    )
+                )
                 .into(object : CustomTarget<Bitmap>() {
                     override fun onResourceReady(
                         resource: Bitmap,
@@ -562,13 +576,45 @@ class AssessmentFragment : BaseFragment(),
     override fun onBackPressed(): Boolean {
 
         countDownTimer?.cancel()
+        clearBackStackToContentList()
+        return true
+    }
 
-        return super.onBackPressed()
+    private val navController : NavController by lazy {
+        findNavController()
+    }
+
+    private fun clearBackStackToContentList() {
+        try {
+            navController.getBackStackEntry(R.id.assessmentListFragment)
+            navController.popBackStack(R.id.assessmentListFragment, false)
+        } catch (e: Exception) {
+
+            try {
+                navController.getBackStackEntry(R.id.courseContentListFragment)
+                navController.popBackStack(R.id.courseContentListFragment, false)
+            } catch (e: Exception) {
+
+                try {
+                    navController.getBackStackEntry(R.id.learningCourseDetails)
+                    navController.popBackStack(R.id.learningCourseDetails, false)
+                } catch (e: Exception) {
+
+                    try {
+                        navController.getBackStackEntry(R.id.mainLearningFragment)
+                        navController.popBackStack(R.id.mainLearningFragment, false)
+                    } catch (e: Exception) {
+
+                    }
+                }
+            }
+        }
     }
 
     companion object {
         const val INTENT_MODULE_ID = "module_id"
         const val INTENT_LESSON_ID = "lesson_id"
+        const val INTENT_NEXT_LESSON_ID = "next_lesson_id"
     }
 
 }

@@ -6,6 +6,7 @@ import com.gigforce.app.core.toLocalDateTime
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentId
 import com.google.firebase.firestore.Exclude
+import com.google.firebase.firestore.PropertyName
 import kotlinx.android.parcel.Parcelize
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -38,12 +39,30 @@ data class Gig(
     var gigStatus: String = "upcoming",
     var companyLogo: String? = null,
     var companyName: String? = null,
-    @field:JvmField var isGigActivated: Boolean = true, //TODO change this
-    @field:JvmField var isFavourite: Boolean = false,
-    @field:JvmField var isGigCompleted: Boolean = false,
-    @field:JvmField var isPaymentDone: Boolean = false,
-    @field:JvmField var isMonthlyGig: Boolean = false,
-    @field:JvmField var isFullDay: Boolean = false,
+
+    @get:PropertyName("isGigActivated")
+    @set:PropertyName("isGigActivated")
+    var isGigActivated: Boolean = true, //TODO change this
+
+    @get:PropertyName("isFavourite")
+    @set:PropertyName("isFavourite")
+    var isFavourite: Boolean = false,
+
+    @get:PropertyName("isGigCompleted")
+    @set:PropertyName("isGigCompleted")
+    var isGigCompleted: Boolean = false,
+
+    @get:PropertyName("isPaymentDone")
+    @set:PropertyName("isPaymentDone")
+    var isPaymentDone: Boolean = false,
+
+    @get:PropertyName("isMonthlyGig")
+    @set:PropertyName("isMonthlyGig")
+    var isMonthlyGig: Boolean = false,
+
+    @get:PropertyName("isFullDay")
+    @set:PropertyName("isFullDay")
+    var isFullDay: Boolean = false,
 
     var gigRating: Float = 0.0F,
     var gigUserFeedback: String? = null,

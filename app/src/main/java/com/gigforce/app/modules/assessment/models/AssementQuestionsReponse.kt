@@ -6,7 +6,7 @@ data class AssementQuestionsReponse(
     var scenario: String = "",
     var type: String = "",
     var duration: String = "00:15:00",
-    var assessment_name: String = "",
+    var Name: String = "",
     var level: Int = 1,
     var assessment_image: String = "",
     var timeTakenInMillis: Long = 0,

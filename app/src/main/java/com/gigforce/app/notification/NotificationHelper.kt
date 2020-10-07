@@ -5,13 +5,17 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import android.os.PowerManager
 import android.provider.Settings
 import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.content.res.ResourcesCompat
 import com.gigforce.app.DeepLinkActivity
 import com.gigforce.app.R
 import com.gigforce.app.notification.NotificationChannels
 import com.gigforce.app.notification.NotificationChannels.URGENT_NOTIFICATIONS
+import kotlin.random.Random
+
 
 class NotificationHelper(private val mContext: Context) {
 
@@ -46,7 +50,7 @@ class NotificationHelper(private val mContext: Context) {
         mBuilder.setSmallIcon(R.drawable.ic_notification_icon)
             .setContentTitle(title)
             .setContentText(message)
-            .setColor(ResourcesCompat.getColor(mContext.resources,R.color.colorPrimary,null))
+            .setColor(ResourcesCompat.getColor(mContext.resources, R.color.colorPrimary, null))
             .setAutoCancel(true)
             .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
             .setContentIntent(finalPendingIntent)
@@ -57,8 +61,10 @@ class NotificationHelper(private val mContext: Context) {
             mNotificationManager.createNotificationChannel(URGENT_NOTIFICATIONS)
         }
 
-        mNotificationManager.notify(0 /* Request Code */, mBuilder.build())
+        val reqCode = Random.nextInt(0,100)
+        mNotificationManager.notify(reqCode /* Request Code */, mBuilder.build())
     }
+
 
 
     /**
@@ -85,7 +91,7 @@ class NotificationHelper(private val mContext: Context) {
         mBuilder.setSmallIcon(R.drawable.ic_notification_icon)
             .setContentTitle(title)
             .setContentText(message)
-            .setColor(ResourcesCompat.getColor(mContext.resources,R.color.colorPrimary,null))
+            .setColor(ResourcesCompat.getColor(mContext.resources, R.color.colorPrimary, null))
             .setAutoCancel(true)
             .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
             .setContentIntent(resultPendingIntent)
@@ -96,7 +102,8 @@ class NotificationHelper(private val mContext: Context) {
             mNotificationManager.createNotificationChannel(URGENT_NOTIFICATIONS)
         }
 
-        mNotificationManager.notify(0 /* Request Code */, mBuilder.build())
+        val reqCode = Random.nextInt(0,100)
+        mNotificationManager.notify(reqCode /* Request Code */, mBuilder.build())
     }
 
 }

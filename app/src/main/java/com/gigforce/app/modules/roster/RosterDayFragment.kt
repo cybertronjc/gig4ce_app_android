@@ -315,6 +315,21 @@ class RosterDayFragment : RosterBaseFragment() {
                 viewModelCustomPreference, getDayTimesChild()!!, configDataModel
             )
         }
+
+        rosterViewModel.showDeclineGigDialog.observe(viewLifecycleOwner, Observer {
+
+                            navigate(R.id.gigsListForDeclineBottomSheet, bundleOf(
+                    GigsListForDeclineBottomSheet.INTEN_EXTRA_DATE to activeDateTime.toLocalDate()
+                ))
+
+        })
+
+//        top_bar.available_toggle.setOnCheckedChangeListener { buttonView, isChecked ->
+//
+//            if(!isChecked){
+
+//            }
+//        }
     }
 
     private fun scrollToSelectedDate(monthModel: CalendarView.MonthModel) {
@@ -367,6 +382,14 @@ class RosterDayFragment : RosterBaseFragment() {
     private fun attachDayAvailabilityObserver() {
         rosterViewModel.isDayAvailable.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
             top_bar.isAvailable = it
+
+//                        if(!it) {
+//                            navigate(
+//                                R.id.gigsListForDeclineBottomSheet, bundleOf(
+//                                    GigsListForDeclineBottomSheet.INTEN_EXTRA_DATE to activeDateTime.toLocalDate()
+//                                )
+//                            )
+//                        }
         })
     }
 

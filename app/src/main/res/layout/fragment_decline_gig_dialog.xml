@@ -6,7 +6,8 @@
     android:layout_height="wrap_content"
     android:layout_marginLeft="20dp"
     android:layout_marginRight="20dp"
-    android:background="@color/white"
+    app:cardBackgroundColor="@color/white"
+    app:cardCornerRadius="3dp"
     tools:context=".modules.gigPage.RateGigDialogFragment">
 
 

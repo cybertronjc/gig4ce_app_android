@@ -11,7 +11,7 @@ android {
         debug {
 //          storeFile file('/home/himanshu/Projects/Android/GigForce/KeyStores/gigforceapp.jks')
             storeFile file('/Users/apple/Documents/gigforceapp.jks')
-//            storeFile file('C:/rohit/gigforceapp.jks')
+//            storeFile file('D:\\gig_keystore\\gigforceapp.jks')
 
             storePassword 'gigforce'
             keyAlias 'key0'
@@ -37,8 +37,8 @@ android {
         applicationId "com.gigforce.app"
         minSdkVersion 23
         targetSdkVersion 29
-        versionCode 60
-        versionName "1.22.1"
+        versionCode 63
+        versionName "1.24.1"
 
         vectorDrawables.useSupportLibrary = true
 

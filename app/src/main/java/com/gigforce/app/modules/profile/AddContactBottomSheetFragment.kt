@@ -80,7 +80,7 @@ class AddContactBottomSheetFragment : ProfileBaseBottomSheetFragment() {
                         add_contact_phone.text.toString(),
                         false,
                         cb_is_whatsapp_number_add_contact.isChecked
-                    ), false
+                    ), false, delete = false
                 )
             }
             STATE_ADD_CONTACT -> {
@@ -91,6 +91,7 @@ class AddContactBottomSheetFragment : ProfileBaseBottomSheetFragment() {
                         false,
                         cb_is_whatsapp_number_add_contact.isChecked
                     ), true
+                , delete = false
                 )
             }
             STATE_EDIT_EMAIL -> {
@@ -100,6 +101,7 @@ class AddContactBottomSheetFragment : ProfileBaseBottomSheetFragment() {
                         add_contact_phone.text.toString(),
                         false
                     ), false
+                , delete = false
                 )
             }
             STATE_ADD_EMAIL -> {
@@ -109,6 +111,7 @@ class AddContactBottomSheetFragment : ProfileBaseBottomSheetFragment() {
                         add_contact_phone.text.toString(),
                         false
                     ), true
+                , delete = false
                 )
             }
 
@@ -230,8 +233,8 @@ class AddContactBottomSheetFragment : ProfileBaseBottomSheetFragment() {
     }
 
     interface AddContactBottomSheetCallbacks {
-        fun contactEdit(oldPhone: String?, contact: ContactPhone, add: Boolean)
-        fun emailEdit(oldEmail: String?, contact: ContactEmail, add: Boolean)
+        fun contactEdit(oldPhone: String?, contact: ContactPhone?, add: Boolean?, delete: Boolean?)
+        fun emailEdit(oldEmail: String?, contact: ContactEmail?, add: Boolean?, delete: Boolean?)
     }
 
     fun setCallbacks(callbacks: AddContactBottomSheetCallbacks) {

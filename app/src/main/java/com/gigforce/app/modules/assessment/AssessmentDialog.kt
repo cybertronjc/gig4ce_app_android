@@ -11,10 +11,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import com.gigforce.app.R
+import com.gigforce.app.core.gone
 import com.gigforce.app.utils.Lce
 import com.gigforce.app.utils.PushDownAnim
 import com.gigforce.app.utils.StringConstants
@@ -31,11 +33,11 @@ import java.util.*
  */
 class AssessmentDialog : DialogFragment() {
 
-    private val viewModel : AssessmentDialogViewModel by viewModels()
+    private val viewModel: AssessmentDialogViewModel by viewModels()
 
-    private lateinit var mModuleId : String
-    private lateinit var mLessonId : String
-    private var assessmentResultWithNextDest : AssessmentResult? =null
+    private lateinit var mModuleId: String
+    private lateinit var mLessonId: String
+    private var assessmentResultWithNextDest: AssessmentResult? = null
 
     private var assessmentDialogCallbacks: AssessmentDialogCallbacks? = null;
     fun setCallbacks(assessmentDialogCallbacks: AssessmentDialogCallbacks) {
@@ -67,12 +69,12 @@ class AssessmentDialog : DialogFragment() {
         viewModel.savingAssessmentState
             .observe(viewLifecycleOwner, androidx.lifecycle.Observer {
 
-                when(it){
+                when (it) {
                     Lce.Loading -> {
 
                     }
                     is Lce.Content -> {
-                       assessmentResultWithNextDest = it.content
+                        assessmentResultWithNextDest = it.content
                         when (it.content.state) {
                             STATE_PASS -> statePass()
                             STATE_REAPPEAR -> stateReappear()
@@ -82,7 +84,7 @@ class AssessmentDialog : DialogFragment() {
                         MaterialAlertDialogBuilder(requireContext())
                             .setTitle("Unable to save state")
                             .setMessage("Unable to mark assessment as complete")
-                            .setPositiveButton("Okay"){_,_ ->}
+                            .setPositiveButton("Okay") { _, _ -> }
                             .show()
                     }
                 }
@@ -91,18 +93,27 @@ class AssessmentDialog : DialogFragment() {
 
     private fun initUIAsPerState(state: Int?) {
         when (state) {
-            STATE_PASS -> viewModel.saveAssessmentState(mModuleId,mLessonId, state)
-            STATE_REAPPEAR -> viewModel.saveAssessmentState(mModuleId, mLessonId,state)
+            STATE_PASS -> viewModel.saveAssessmentState(mModuleId, mLessonId, state)
+            STATE_REAPPEAR -> viewModel.saveAssessmentState(mModuleId, mLessonId, state)
             else -> {
+
                 isCancelable = true
+                iv_bg_top_assess_dialog.gone()
+                tv_message_assess_dialog.setTextColor(resources.getColor(R.color.white))
+                tv_message_assess_dialog.setBackgroundColor(resources.getColor(R.color.lipstick))
+                val lp: ConstraintLayout.LayoutParams =
+                    tv_message_assess_dialog.layoutParams as ConstraintLayout.LayoutParams
+                lp.setMargins(0, 0, 0, 0)
+                tv_message_assess_dialog.setPadding(0,resources.getDimensionPixelSize(R.dimen.size_15),0,resources.getDimensionPixelSize(R.dimen.size_15))
+                tv_message_assess_dialog.layoutParams = lp
                 tv_do_it_later_assess_dialog.visibility = View.VISIBLE
                 tv_message_assess_dialog.text = getString(R.string.good_luck)
                 tv_assess_name_assess_dialog.text =
-                    "${getString(R.string.assessment_colon)} ${arguments?.getString(StringConstants.ASSESSMENT_NAME.value)}"
+                    "${arguments?.getString(StringConstants.ASSESSMENT_NAME.value)}"
 
                 tv_level_assess_dialog.text =
                     "${getString(R.string.level)} ${arguments?.getInt(StringConstants.LEVEL.value)}"
-                tv_action_assess_dialog.text = "Start Assessment"
+                tv_action_assess_dialog.text = getString(R.string.start_assessment)
 
                 tv_ques_count_assess_dialog.text =
                     "${getString(R.string.total_questions)} : ${arguments?.getInt(StringConstants.QUESTIONS_COUNT.value)} "
@@ -113,29 +124,29 @@ class AssessmentDialog : DialogFragment() {
 
                 tv_time_assess_dialog.text =
                     if (calInstance.get(Calendar.HOUR) == 0) "${getString(R.string.time_duration)} : ${
-                    calInstance.get(
-                        Calendar.MINUTE
-                    )
+                        calInstance.get(
+                            Calendar.MINUTE
+                        )
                     } ${
-                    getString(
-                        R.string.mins
-                    )
+                        getString(
+                            R.string.mins
+                        )
                     } ${calInstance.get(Calendar.SECOND)} ${getString(R.string.seconds)}" else "${
-                    getString(
-                        R.string.time_duration
-                    )
+                        getString(
+                            R.string.time_duration
+                        )
                     } : ${
-                    calInstance.get(
-                        Calendar.HOUR
-                    )
+                        calInstance.get(
+                            Calendar.HOUR
+                        )
                     } ${
-                    calInstance.get(
-                        Calendar.MINUTE
-                    )
+                        calInstance.get(
+                            Calendar.MINUTE
+                        )
                     } ${
-                    getString(
-                        R.string.mins
-                    )
+                        getString(
+                            R.string.mins
+                        )
                     } ${calInstance.get(Calendar.SECOND)} ${getString(R.string.seconds)}"
 
 
@@ -151,9 +162,9 @@ class AssessmentDialog : DialogFragment() {
         val builder = SpannableStringBuilder()
         val spannableString = SpannableString(
             "${getString(R.string.u_attempt)} ${arguments?.getInt(StringConstants.QUESTIONS_COUNT.value)} ${
-            getString(
-                R.string.questions
-            )
+                getString(
+                    R.string.questions
+                )
             }"
         )
         spannableString.setSpan(
@@ -167,9 +178,9 @@ class AssessmentDialog : DialogFragment() {
         builder.append(spannableString)
         val spanable2 = SpannableString(
             " ${getString(R.string.and_from)} ${getString(R.string.that)}  ${
-            arguments?.getInt(
-                StringConstants.RIGHT_ANSWERS.value
-            )
+                arguments?.getInt(
+                    StringConstants.RIGHT_ANSWERS.value
+                )
             } ${getString(R.string.answer_is_correct)}"
         )
         spanable2.setSpan(
@@ -205,9 +216,9 @@ class AssessmentDialog : DialogFragment() {
 
         val spannableString = SpannableString(
             "${getString(R.string.u_attempt)} ${arguments?.getInt(StringConstants.QUESTIONS_COUNT.value)} ${
-            getString(
-                R.string.questions
-            )
+                getString(
+                    R.string.questions
+                )
             }"
         )
         spannableString.setSpan(
@@ -221,9 +232,9 @@ class AssessmentDialog : DialogFragment() {
         builder.append(spannableString)
         val spanable2 = SpannableString(
             " ${getString(R.string.and_from)} ${getString(R.string.that)}  ${
-            arguments?.getInt(
-                StringConstants.RIGHT_ANSWERS.value
-            )
+                arguments?.getInt(
+                    StringConstants.RIGHT_ANSWERS.value
+                )
             } ${getString(R.string.answer_is_correct)}"
         )
         spanable2.setSpan(
@@ -259,7 +270,8 @@ class AssessmentDialog : DialogFragment() {
                     arguments?.getInt(
                         StringConstants.ASSESSMENT_DIALOG_STATE.value,
                         0
-                    )!!
+                    )!!,
+                    viewModel.nextDest?.id
                 )
 
             })
@@ -291,7 +303,7 @@ class AssessmentDialog : DialogFragment() {
             return assessmentDialog
         }
 
-        fun newInstance(moduleId : String,lessonId : String, state: Int): AssessmentDialog {
+        fun newInstance(moduleId: String, lessonId: String, state: Int): AssessmentDialog {
             //Setting Dialog State Before Initializing the dialog object
             val bundle = Bundle()
             bundle.putInt(StringConstants.ASSESSMENT_DIALOG_STATE.value, state)
@@ -311,7 +323,7 @@ class AssessmentDialog : DialogFragment() {
     }
 
     interface AssessmentDialogCallbacks {
-        fun assessmentState(state: Int)
+        fun assessmentState(state: Int, nextLesson : String?)
         fun doItLaterPressed()
 
 

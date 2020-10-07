@@ -27,7 +27,14 @@ class LearningRepository constructor(
     fun courseModuleProgressInfo(courseId: String): Query {
         return db.collection(COURSE_PROGRESS_NAME)
             .whereEqualTo("course_id", courseId)
+            .whereEqualTo("uid", getUID())
             .whereEqualTo(TYPE, TYPE_MODULE)
+    }
+
+    fun courseProgressInfo(): Query {
+        return db.collection(COURSE_PROGRESS_NAME)
+            .whereEqualTo("uid", getUID())
+            .whereEqualTo(TYPE, TYPE_COURSE)
     }
 
     suspend fun getUserCourses(): List<Course> {
@@ -175,7 +182,6 @@ class LearningRepository constructor(
         }
 
 
-
     private suspend fun doesCourseFullFillsCondition(it: Course): Boolean {
         if (it.isOpened) {
             return true
@@ -189,23 +195,23 @@ class LearningRepository constructor(
 
             courseAndMappings.forEach {
 
-                if(it.isopened){
+                if (it.isopened) {
                     return true
                 }
 
-                if(it.userIdsRequired) {
+                if (it.userIdsRequired) {
                     val userMatched = it.userUids.contains(getUID())
-                    if(userMatched) return true
+                    if (userMatched) return true
                 }
 
 
-                if(it.rolesRequired){
+                if (it.rolesRequired) {
 
                     if (mProfile?.role_interests != null) {
                         for (role in mProfile!!.role_interests!!) {
                             for (courseRoles in it.roles) {
                                 if (courseRoles == role.interestID) {
-                                   return true
+                                    return true
                                 }
                             }
                         }
@@ -237,7 +243,9 @@ class LearningRepository constructor(
             )
         } else {
             return querySnap.documents.map {
-                it.toObject(CourseProgress::class.java)!!
+                val courseProgress = it.toObject(CourseProgress::class.java)!!
+                courseProgress.progressId = it.id
+                courseProgress
             }.first()
         }
     }
@@ -302,73 +310,112 @@ class LearningRepository constructor(
             .setOrThrow(moduleProgress)
     }
 
-    suspend fun markCurrentLessonAsCompleteAndEnableNextOne(
-        moduleId: String
-    ): CourseContent? {
-        val moduleProgress = getModuleProgress(moduleId)
-        var nextLessonProgress: LessonProgress? = null
-
-        if (moduleProgress != null) {
-            var currentLessonIndex = -10
-
-            val lessons = moduleProgress.lessonsProgress.sortedBy { it.priority }
-
-            for (i in lessons.indices) {
-                if (lessons[i].ongoing) {
-                    currentLessonIndex = i
-
-                    lessons[i].apply {
-                        ongoing = false
-                        completed = true
-                        completionProgress = 0L
-                        lessonCompletionDate = Timestamp.now()
-                    }
-                }
-
-                if (i < lessons.size) {
-                    if (currentLessonIndex + 1 == i) {
-                        moduleProgress.lessonsProgress[i].apply {
-                            ongoing = true
-                            completed = false
-                            lessonCompletionDate = null
-                            lessonStartDate = Timestamp.now()
-                        }
-
-                        nextLessonProgress = moduleProgress.lessonsProgress[i]
-                    }
-                }
-            }
-
-            updateModuleProgress(moduleProgress.progressId, moduleProgress)
-        }
-
-        return if (nextLessonProgress == null)
-            null
-        else
-            getLessonInfo(nextLessonProgress.lessonId)
+    suspend fun updateCourseProgress(progressTrackingId: String, courseProgress: CourseProgress) {
+        db.collection(COURSE_PROGRESS_NAME)
+            .document(progressTrackingId)
+            .setOrThrow(courseProgress)
     }
+
 
     suspend fun markCurrentLessonAsComplete(
         moduleId: String,
         lessonId: String
     ): CourseContent? {
-        val moduleProgress = getModuleProgress(moduleId)
+
+        val moduleProgress = getModuleProgress(moduleId) ?: return null
+        val lessonProgress = moduleProgress.lessonsProgress.find { it.lessonId == lessonId }
+
+        if (lessonProgress == null) {
+
+            val lesson = getLessonInfo(lessonId)
+
+            //Add lesson Progress
+            val lessonProgressList = moduleProgress.lessonsProgress.toMutableList()
+            lessonProgressList.add(
+                LessonProgress(
+                    uid = getUID(),
+                    courseId = moduleProgress.courseId,
+                    moduleId = moduleId,
+                    lessonId = lessonId,
+                    lessonStartDate = Timestamp.now(),
+                    lessonCompletionDate = null,
+                    ongoing = false,
+                    priority = lesson.priority,
+                    completed = false,
+                    lessonType = lesson.type
+                )
+            )
+
+            moduleProgress.lessonsProgress = lessonProgressList
+        }
+
+        val updatedLessonProgressList = moduleProgress.lessonsProgress.sortedBy { it.priority }
+
         var nextLessonProgress: LessonProgress? = null
 
-        if (moduleProgress != null) {
-            moduleProgress.lessonsProgress.forEach {
+        for (i in updatedLessonProgressList.indices) {
+            if (updatedLessonProgressList[i].lessonId == lessonId) {
 
-                if (it.lessonId == lessonId) {
-                    it.apply {
-                        ongoing = false
-                        completed = true
-                        completionProgress = 0L
-                        lessonCompletionDate = Timestamp.now()
-                    }
+                updatedLessonProgressList[i].apply {
+                    ongoing = false
+                    completed = true
+                    completionProgress = 0L
+                    lessonCompletionDate = Timestamp.now()
                 }
+
+                if (i < updatedLessonProgressList.size - 1) {
+                    nextLessonProgress = updatedLessonProgressList[i + 1]
+                }
+                break
+            }
+        }
+
+        var completedLesson = 0
+        var totalLessons = 0
+
+        moduleProgress.lessonsProgress.forEach {
+            totalLessons++
+            if (it.completed) completedLesson++
+        }
+
+        moduleProgress.lessonsCompleted = completedLesson
+        moduleProgress.lessonsTotal = totalLessons
+
+        if (totalLessons != 0)
+            moduleProgress.completed = completedLesson == totalLessons
+
+        updateModuleProgress(moduleProgress.progressId, moduleProgress)
+
+        if (moduleProgress.completed) {
+            //Check And Update Course Progress
+            val courseId = moduleProgress.courseId
+
+            var totalModules = 0
+            var completedModules = 0
+            getCourseModulesProgress(courseId)
+                .forEach {
+                    if (it.completed)
+                        completedModules++
+
+                    totalModules++
+                }
+
+            val courseProgress = getCourseProgress(courseId)
+
+            if (totalModules != 0 && totalModules == completedModules) {
+                courseProgress.completed = true
+                courseProgress.courseCompletionDate = Timestamp.now()
+                courseProgress.totalModules = totalModules
+                courseProgress.completedModules = completedModules
+            } else {
+                courseProgress.completed = false
+                courseProgress.courseCompletionDate = null
+                courseProgress.courseStartDate
+                courseProgress.totalModules = totalModules
+                courseProgress.completedModules = completedModules
             }
 
-            updateModuleProgress(moduleProgress.progressId, moduleProgress)
+            updateCourseProgress(courseProgress.progressId, courseProgress)
         }
 
         return if (nextLessonProgress == null)
@@ -439,6 +486,7 @@ class LearningRepository constructor(
                 moduleCompletionDate = null,
                 ongoing = false,
                 completed = false,
+                lessonsTotal = lessonProgress.size,
                 lessonsProgress = lessonProgress
             )
         }.forEach {
@@ -543,6 +591,19 @@ class LearningRepository constructor(
         }
     }
 
+    suspend fun getModuleLessons(
+        moduleId: String
+    ): List<CourseContent> {
+
+        if (mProfile == null) {
+            mProfile = profileFirebaseRepository.getProfileData()
+        }
+
+        return getModuleLessonsC(moduleId).filter {
+            it.isActive && doesLessonFullFillsCondition(it)
+        }.sortedBy { it.priority }
+    }
+
     private suspend fun getModuleLessonsC(
         courseId: String,
         moduleId: String
@@ -567,7 +628,29 @@ class LearningRepository constructor(
             }
     }
 
-    private suspend fun doesLessonFullFillsCondition(it: CourseContent): Boolean  {
+    private suspend fun getModuleLessonsC(
+        moduleId: String
+    ): List<CourseContent> = suspendCoroutine { cont ->
+        getCollectionReference()
+            .whereEqualTo(MODULE_ID, moduleId)
+            .whereEqualTo(TYPE, TYPE_LESSON)
+            .get()
+            .addOnSuccessListener { querySnap ->
+
+                val modules = querySnap.documents
+                    .map {
+                        val lesson = it.toObject(CourseContent::class.java)!!
+                        lesson.id = it.id
+                        lesson
+                    }
+                cont.resume(modules)
+            }
+            .addOnFailureListener {
+                cont.resumeWithException(it)
+            }
+    }
+
+    private suspend fun doesLessonFullFillsCondition(it: CourseContent): Boolean {
         if (it.isOpened) {
             return true
         } else {
@@ -580,17 +663,17 @@ class LearningRepository constructor(
 
             lessonMapping.forEach {
 
-                if(it.isopened){
+                if (it.isopened) {
                     return true
                 }
 
-                if(it.userIdsRequired) {
+                if (it.userIdsRequired) {
                     val userMatched = it.userUids.contains(getUID())
-                    if(userMatched) return true
+                    if (userMatched) return true
                 }
 
 
-                if(it.rolesRequired){
+                if (it.rolesRequired) {
 
                     if (mProfile?.role_interests != null) {
                         for (role in mProfile!!.role_interests!!) {
@@ -657,7 +740,7 @@ class LearningRepository constructor(
         }
 
         return getVideoDetailsC(lessonId).filter {
-            it.isActive && doesLessonFullFillsCondition(it)
+            it.isActive
         }
     }
 
@@ -698,17 +781,17 @@ class LearningRepository constructor(
 
             slideMappings.forEach {
 
-                if(it.isopened){
+                if (it.isopened) {
                     return true
                 }
 
-                if(it.userIdsRequired) {
+                if (it.userIdsRequired) {
                     val userMatched = it.userUids.contains(getUID())
-                    if(userMatched) return true
+                    if (userMatched) return true
                 }
 
 
-                if(it.rolesRequired){
+                if (it.rolesRequired) {
 
                     if (mProfile?.role_interests != null) {
                         for (role in mProfile!!.role_interests!!) {
@@ -733,8 +816,8 @@ class LearningRepository constructor(
             mProfile = profileFirebaseRepository.getProfileData()
         }
 
-        return getSlideContentC(lessonId) .filter {
-            it.isActive && doesSlideFullFillsCondition(it)
+        return getSlideContentC(lessonId).filter {
+            it.isActive
         }
     }
 
@@ -850,17 +933,17 @@ class LearningRepository constructor(
 
             moduleMapping.forEach {
 
-                if(it.isopened){
+                if (it.isopened) {
                     return true
                 }
 
-                if(it.userIdsRequired) {
+                if (it.userIdsRequired) {
                     val userMatched = it.userUids.contains(getUID())
-                    if(userMatched) return true
+                    if (userMatched) return true
                 }
 
 
-                if(it.rolesRequired){
+                if (it.rolesRequired) {
 
                     if (mProfile?.role_interests != null) {
                         for (role in mProfile!!.role_interests!!) {
@@ -887,7 +970,7 @@ class LearningRepository constructor(
 
         return getModulesC(courseId).filter {
             it.isActive && doesModuleFullFillsCondition(it)
-        }
+        }.sortedBy { it.priority }
     }
 
     private suspend fun getModulesC(courseId: String): List<Module> = suspendCoroutine { cont ->
@@ -910,6 +993,24 @@ class LearningRepository constructor(
                 cont.resumeWithException(it)
             }
     }
+
+    private suspend fun getModuleC(moduleId: String): Module = suspendCoroutine { cont ->
+        getCollectionReference()
+            .document(moduleId)
+            .get()
+            .addOnSuccessListener { docRef ->
+
+                val module = docRef.toObject(Module::class.java)!!
+                module.id = docRef.id
+
+                cont.resume(module)
+            }
+            .addOnFailureListener {
+
+                cont.resumeWithException(it)
+            }
+    }
+
 
     suspend fun getModulesWithCourseContent(courseId: String): List<Module> =
         suspendCoroutine { cont ->
@@ -950,6 +1051,40 @@ class LearningRepository constructor(
 
 
     }
+
+    suspend fun getLesson(lessonId: String): CourseContent = suspendCoroutine { cont ->
+        getCollectionReference()
+            .document(lessonId)
+            .get()
+            .addOnSuccessListener {
+
+                val lesson = it.toObject(CourseContent::class.java)!!
+                lesson.id = it.id
+                cont.resume(lesson)
+            }
+            .addOnFailureListener {
+
+                cont.resumeWithException(it)
+            }
+    }
+
+    suspend fun syncCourseProgressData(courseId: String) {
+
+        val courseDetails = getCourseDetails(courseId)
+        val courseProgress = getCourseProgress(courseId)
+
+        val modules = getModules(courseId)
+        val moduleProgress = getCourseModulesProgress(courseId)
+
+        //Deleting progress of modules and lessons deleted
+        val filteredModulesProgressData = moduleProgress.filter {moduleProg ->
+            modules.find { it.id == moduleProg.moduleId } != null
+        }
+
+
+
+    }
+
 
     companion object {
         private const val COLLECTION_NAME = "Course_blocks"

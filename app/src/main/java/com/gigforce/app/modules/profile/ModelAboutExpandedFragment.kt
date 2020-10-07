@@ -15,6 +15,7 @@ class ModelAboutExpandedFragment : ModelCallbacksAboutExpandedFragment,
         contactList: ArrayList<ContactPhone>,
         number: String,
         isWhatsAppNumber: Boolean,
+
         responseCallbacks: ModelCallbacksAboutExpandedFragment.ResponseModelCallbacksAboutExpandedFragment
     ) {
 
@@ -76,10 +77,11 @@ class ModelAboutExpandedFragment : ModelCallbacksAboutExpandedFragment,
         contactList: ArrayList<ContactPhone>?,
         newContact: ContactPhone?,
         oldContact: String?,
-        add: Boolean,
+        add: Boolean?,
+        delete: Boolean?,
         responseCallbacks: ModelCallbacksAboutExpandedFragment.ResponseModelCallbacksAboutExpandedFragment
     ) {
-        if (add) {
+        if (add == true) {
             if (contactList?.indexOfFirst {
                     it.phone == newContact?.phone ?: ""
                 } != -1) {
@@ -102,7 +104,13 @@ class ModelAboutExpandedFragment : ModelCallbacksAboutExpandedFragment,
         } else {
             for (i in 0..(contactList?.size?.minus(1) ?: 0)) {
                 if (contactList!![i].phone == oldContact) {
-                    contactList[i] = newContact ?: ContactPhone()
+                    if (delete == true) {
+                        contactList.removeAt(i)
+                        break
+                    } else {
+                        contactList[i] = newContact ?: ContactPhone()
+                        break
+                    }
                 }
             }
             getCollectionReference().document(profileID).update("contactPhone", contactList)
@@ -123,10 +131,11 @@ class ModelAboutExpandedFragment : ModelCallbacksAboutExpandedFragment,
         contactList: ArrayList<ContactEmail>?,
         newContact: ContactEmail?,
         oldContact: String?,
-        add: Boolean,
+        add: Boolean?,
+        delete: Boolean?,
         responseCallbacks: ModelCallbacksAboutExpandedFragment.ResponseModelCallbacksAboutExpandedFragment
     ) {
-        if (add) {
+        if (add == true) {
             if (contactList?.indexOfFirst {
                     it.email == newContact?.email ?: ""
                 } != -1) {
@@ -149,7 +158,14 @@ class ModelAboutExpandedFragment : ModelCallbacksAboutExpandedFragment,
         } else {
             for (i in 0..(contactList?.size?.minus(1) ?: 0)) {
                 if (contactList!![i].email == oldContact) {
-                    contactList[i] = newContact ?: ContactEmail()
+                    if (delete == true) {
+                        contactList.removeAt(i)
+                        break
+                    } else {
+                        contactList[i] = newContact ?: ContactEmail();
+                        break
+                    }
+
                 }
             }
             getCollectionReference().document(profileID).update("contactEmail", contactList)

@@ -22,6 +22,11 @@ data class ModuleProgress(
     @set:PropertyName("lessons_completed")
     var lessonsCompleted : Int = 0,
 
+    @get:PropertyName("lessons_total")
+    @set:PropertyName("lessons_total")
+    var lessonsTotal : Int = 0,
+
+
     @get:PropertyName("module_start_date")
     @set:PropertyName("module_start_date")
     var moduleStartDate : Timestamp? = null,
