@@ -237,13 +237,13 @@ class GigAttendancePageFragment : BaseFragment(), PopupMenu.OnMenuItemClickListe
     }
 
     private fun getData(arguments: Bundle?, savedInstanceState: Bundle?) {
-        savedInstanceState?.let {
+        arguments?.let {
             gigId = it.getString(INTENT_EXTRA_GIG_ID)!!
-            Log.d("GigAttendancePageFragment", "Showing Data for $gigId")
+            Log.d("GigAttendancePageFrg", "Showing Data for $gigId")
         } ?: run {
-            arguments?.let {
+            savedInstanceState?.let {
                 gigId = it.getString(INTENT_EXTRA_GIG_ID)!!
-                Log.d("GigAttendancePageFragment", "Showing Data for $gigId")
+                Log.d("GigAttendancePageFrg", "Showing Data for $gigId")
             }?.run {
                 FirebaseCrashlytics.getInstance().log("GigAttendancePageFragment getData method : savedInstanceState and arguments found null")
                 FirebaseCrashlytics.getInstance().setUserId(FirebaseAuth.getInstance().currentUser?.uid!!)
