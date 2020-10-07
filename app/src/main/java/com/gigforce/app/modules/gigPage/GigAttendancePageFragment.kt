@@ -16,6 +16,7 @@ import android.os.Bundle
 import android.provider.Settings
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -238,9 +239,11 @@ class GigAttendancePageFragment : BaseFragment(), PopupMenu.OnMenuItemClickListe
     private fun getData(arguments: Bundle?, savedInstanceState: Bundle?) {
         savedInstanceState?.let {
             gigId = it.getString(INTENT_EXTRA_GIG_ID)!!
+            Log.d("GigAttendancePageFragment", "Showing Data for $gigId")
         } ?: run {
             arguments?.let {
                 gigId = it.getString(INTENT_EXTRA_GIG_ID)!!
+                Log.d("GigAttendancePageFragment", "Showing Data for $gigId")
             }?.run {
                 FirebaseCrashlytics.getInstance().log("GigAttendancePageFragment getData method : savedInstanceState and arguments found null")
                 FirebaseCrashlytics.getInstance().setUserId(FirebaseAuth.getInstance().currentUser?.uid!!)
