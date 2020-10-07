@@ -15,6 +15,7 @@ import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import mobile.jobKahaHai.notification.NotificationHelper
 import java.util.*
+import kotlin.random.Random
 
 class MyFirebaseMessagingService : FirebaseMessagingService() {
 
@@ -125,7 +126,8 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                 ).apply {
                     putExtras(data.toBundle())
                 })
-            getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT)
+            val reqCode = Random.nextInt(0,100)
+            getPendingIntent(reqCode, PendingIntent.FLAG_ONE_SHOT)
         }
     }
 
