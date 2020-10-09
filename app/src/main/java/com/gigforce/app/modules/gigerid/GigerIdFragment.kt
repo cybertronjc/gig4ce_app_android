@@ -25,7 +25,6 @@ import com.google.zxing.qrcode.QRCodeWriter
 import com.itextpdf.text.Document
 import com.itextpdf.text.Image
 import com.itextpdf.text.pdf.PdfWriter
-import kotlinx.android.synthetic.main.fragment_gig_page_present.*
 import kotlinx.android.synthetic.main.layout_giger_id_fragment.*
 import kotlinx.coroutines.runBlocking
 import java.io.File
@@ -52,7 +51,7 @@ class GigerIdFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        genQrCode()
+
         initClicks()
         initObservers()
         viewModelGigerID.getProfileData()
@@ -66,8 +65,7 @@ class GigerIdFragment : BaseFragment() {
                     bm,
                     StringConstants.GIGER_ID.value,
                     context?.filesDir?.absolutePath!!
-                )
-                , it
+                ), it
             ), requireContext(), "*/*"
         )
     }
@@ -99,6 +97,7 @@ class GigerIdFragment : BaseFragment() {
             tv_contact_giger_id.text = it?.contact?.get(0)?.phone ?: "--"
             tv_email_giger_id.text =
                 if (it?.contact?.get(0)?.email?.isEmpty()!!) "--" else it.contact?.get(0)?.email
+            viewModelGigerID.getURl()
         })
         viewModelGigerID.observableProfilePic.observe(viewLifecycleOwner, Observer {
             GlideApp.with(this.requireContext())
@@ -109,15 +108,22 @@ class GigerIdFragment : BaseFragment() {
         viewModelGigerID.observableGigDetails.observe(viewLifecycleOwner, Observer {
             initUi(it!!)
         })
+        viewModelGigerID.observableURLS.observe(viewLifecycleOwner, Observer {
+            genQrCode(
+                it?.base_url + it?.qr_code_scanner?.qrcode + viewModelGigerID.observableUserProfileDataSuccess.value?.id
+            )
+        })
     }
 
     private fun initUi(gig: Gig) {
         tv_designation_giger_id.text = gig.title
         tv_gig_since_giger_id.text =
-            "${resources.getString(R.string.giger_since)} ${parseTime(
-                "MMM yyyy",
-                gig?.startDateTime?.toDate()
-            )}"
+            "${resources.getString(R.string.giger_since)} ${
+                parseTime(
+                    "MMM yyyy",
+                    gig?.startDateTime?.toDate()
+                )
+            }"
         if (!gig.companyLogo.isNullOrBlank()) {
             if (gig.companyLogo!!.startsWith("http", true)) {
 
@@ -171,10 +177,10 @@ class GigerIdFragment : BaseFragment() {
     }
 
 
-    fun genQrCode() {
+    fun genQrCode(url: String?) {
         val writer = QRCodeWriter()
         val bitMatrix = writer.encode(
-            arguments?.getString(GigPageFragment.INTENT_EXTRA_GIG_ID),
+            url,
             BarcodeFormat.QR_CODE,
             512,
             512
