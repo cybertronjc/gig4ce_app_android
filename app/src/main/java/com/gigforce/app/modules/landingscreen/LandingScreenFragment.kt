@@ -479,7 +479,7 @@ class LandingScreenFragment : BaseFragment() {
             navigate(R.id.helpVideosFragment)
         }
         help_topic.setOnClickListener {
-            showToast("This is under development. Please check again in a few days.")
+            navigate(R.id.helpVideosFragment)
         }
 
         gigforce_video.setOnClickListener {
