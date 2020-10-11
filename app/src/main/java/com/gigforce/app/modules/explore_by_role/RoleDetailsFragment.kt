@@ -19,6 +19,7 @@ import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.profile.ProfileViewModel
+import com.gigforce.app.modules.profile.models.ProfileData
 import com.gigforce.app.modules.profile.models.RoleInterests
 import com.gigforce.app.utils.HorizontaltemDecoration
 import com.gigforce.app.utils.StringConstants
@@ -69,8 +70,8 @@ class RoleDetailsFragment : BaseFragment() {
                 } else {
                     tv_mark_as_interest_role_details.text = getString(R.string.mark_as_interest)
                     tv_mark_as_interest_role_details.setOnClickListener {
-                        tv_mark_as_interest_role_details.gone()
-                        viewModel.addAsInterest(mRoleID)
+                        checkForProfileAndVerificationData()
+//                        navigate(R.id.fragment_add_bio)
                     }
 
                 }
@@ -86,6 +87,13 @@ class RoleDetailsFragment : BaseFragment() {
         })
     }
 
+    private fun checkForProfileAndVerificationData() {
+        pb_role_details.visible()
+        viewModel.checkForProfileCompletionAndVerification()
+
+    }
+
+
     private fun initObservers() {
 
         viewModel.observerRole.observe(viewLifecycleOwner, Observer { role ->
@@ -93,9 +101,11 @@ class RoleDetailsFragment : BaseFragment() {
                 tv_role_role_details.text = role?.role_title
                 tv_what_content_role_details.text = role?.about
                 tv_what_read_more_details.text =
-                    "${getString(R.string.what_does_a)} ${role?.role_title} ${getString(
-                        R.string.do_question_mark
-                    )}"
+                    "${getString(R.string.what_does_a)} ${role?.role_title} ${
+                        getString(
+                            R.string.do_question_mark
+                        )
+                    }"
                 adapterPreferredLocation.addData(role?.top_locations ?: mutableListOf())
                 tv_earnings_role_details.setOnClickListener {
                     setOnExpandListener(
@@ -131,6 +141,18 @@ class RoleDetailsFragment : BaseFragment() {
         })
         viewModel.observerMarkedAsInterest.observe(viewLifecycleOwner, Observer {
             navigate(R.id.fragment_marked_as_interest)
+        })
+        viewModel.observerDataToCheck.observe(viewLifecycleOwner, Observer {
+            pb_role_details.gone()
+            it?.forEach { element ->
+                run {
+                    if (element is ProfileData) {
+                        if (element.aboutMe == null || element.aboutMe.isEmpty()) {
+                            navigate(R.id.fragment_add_bio)
+                        }
+                    }
+                }
+            }
         })
 
         viewModel.getRoleDetails(mRoleID)
@@ -240,8 +262,7 @@ class RoleDetailsFragment : BaseFragment() {
             tr.addView(iv)
             tr.addView(textView)
             layout.addView(
-                tr
-                ,
+                tr,
                 TableLayout.LayoutParams(
                     TableLayout.LayoutParams.MATCH_PARENT,
                     TableLayout.LayoutParams.WRAP_CONTENT

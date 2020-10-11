@@ -966,6 +966,11 @@
     <string name="new_cert_added_underlined"><![CDATA[<u>New certificate has been added to profile .</u>]]></string>
     <string name="watch_lesson_again">Watch lesson again</string>
     <string name="skip">Skip</string>
+    <string name="new_bio">New Bio</string>
+    <string name="signed">Signed</string>
+    <string name="unsigned">Unsigned</string>
+    <string name="add_bio_star">Add Bio*</string>
+    <string name="new_language">New Language</string>
 
 
 </resources>
