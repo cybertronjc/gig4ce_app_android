@@ -964,6 +964,9 @@
     <string name="you_have_scored">You have scored</string>
     <string name="in_your_assessment">in your assessment</string>
     <string name="new_cert_added_underlined"><![CDATA[<u>New certificate has been added to profile .</u>]]></string>
+    <string name="total_number_of_days">Total number of days</string>
+    <string name="total_working_days">Total working days</string>
+    <string name="number_of_offs">Number of offs</string>
 
 
 </resources>

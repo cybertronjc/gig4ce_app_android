@@ -99,5 +99,8 @@
     <color name="text_yellow">#fa6400</color>
     <color name="text_orange">#f7b500</color>
 
+    <color name="black_three">#333333</color>
+    <color name="grey_c7">#c7c7c7</color>
+
 
 </resources>
