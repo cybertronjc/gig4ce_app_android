@@ -350,7 +350,6 @@ class LearningRepository constructor(
         }
 
         val updatedLessonProgressList = moduleProgress.lessonsProgress.sortedBy { it.priority }
-
         var nextLessonProgress: LessonProgress? = null
 
         for (i in updatedLessonProgressList.indices) {
@@ -1082,7 +1081,7 @@ class LearningRepository constructor(
         }.toMutableList()
 
         //removing lessons progress which have been removed from module
-        for(i in 0..filteredModulesProgressData.size){
+        for(i in 0 until filteredModulesProgressData.size){
             val moduleProgressData = filteredModulesProgressData[i]
             val moduleLessons = getModuleLessons(moduleProgressData.moduleId)
 
@@ -1093,7 +1092,7 @@ class LearningRepository constructor(
         }
 
         //adding progress of lessons which have been added to modules newly
-        for (i in 0..modules.size){
+        for (i in 0 until modules.size){
 
             val moduleData = modules[i]
             val moduleLessons = getModuleLessons(moduleData.id)
