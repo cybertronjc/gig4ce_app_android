@@ -31,7 +31,7 @@
         android:layout_marginTop="4dp"
         app:layout_constraintStart_toEndOf="@id/gig_type_iv"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="Payment Info" />
+        android:text="Payment Info" />
 
 
 
@@ -74,38 +74,6 @@
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text=": Sss" />
 
-
-            <TextView
-                android:id="@+id/gross_payment_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:fontFamily="@font/lato"
-                android:shadowColor="#0a000000"
-                android:shadowDy="2"
-                android:shadowRadius="4"
-                android:textColor="@color/black_85"
-                android:textSize="14sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/gross_wage"
-                tools:text="Duration of Gig" />
-
-
-
-
-            <TextView
-                android:id="@+id/gross_payment"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:fontFamily="@font/lato_bold"
-                android:gravity="center_horizontal"
-                android:layout_marginStart="4dp"
-                android:textColor="@color/black_85"
-                android:textSize="14sp"
-                app:layout_constraintStart_toEndOf="@id/gross_payment_label"
-                app:layout_constraintTop_toBottomOf="@id/gross_wage"
-                tools:text=": Sss" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

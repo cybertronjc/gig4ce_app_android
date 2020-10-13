@@ -30,13 +30,14 @@
         android:textSize="16sp"
         app:layout_constraintStart_toEndOf="@id/gig_type_iv"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="Gig Type" />
+        android:text="Gig Type" />
 
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:strokeColor="@color/colorPrimary"
         android:layout_marginTop="12dp"
+        app:strokeWidth="1dp"
         app:layout_constraintTop_toBottomOf="@id/gig_type_label">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -59,7 +60,7 @@
                 android:textSize="14sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:text="Type of Gig" />
+                android:text="Type of Gig" />
 
 
             <TextView
@@ -75,7 +76,7 @@
                 android:textSize="14sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/type_of_gig_label"
-                tools:text="Duration of Gig" />
+                android:text="Duration of Gig" />
 
 
             <TextView
@@ -110,22 +111,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginTop="16dp"
+                android:background="@color/warm_grey"
                 app:layout_constraintTop_toBottomOf="@id/gig_duration" />
-
-            <TextView
-                android:id="@+id/details_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:fontFamily="@font/lato"
-                android:shadowColor="#0a000000"
-                android:shadowDy="2"
-                android:shadowRadius="4"
-                android:textColor="@color/black_85"
-                android:textSize="14sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/separator"
-                tools:text="Duration of Gig" />
 
             <ImageView
                 android:id="@+id/expand_iv"
@@ -135,6 +122,27 @@
                 android:layout_marginTop="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/separator" />
+
+            <TextView
+                android:id="@+id/details_label"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:fontFamily="@font/lato"
+                android:shadowColor="#0a000000"
+                android:shadowDy="2"
+                android:shadowRadius="4"
+                android:clickable="true"
+                android:focusable="true"
+                android:textColor="@color/black_85"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/separator"
+                app:layout_constraintEnd_toStartOf="@id/expand_iv"
+                android:text="Details" />
+
+
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

@@ -687,6 +687,14 @@
         android:id="@+id/gigsListForDeclineBottomSheet"
         android:name="com.gigforce.app.modules.gigPage.GigsListForDeclineBottomSheet"
         android:label="GigsListForDeclineBottomSheet" />
+    <fragment
+        android:id="@+id/gigPage2Fragment"
+        android:name="com.gigforce.app.modules.gigPage2.GigPage2Fragment"
+        android:label="GigPage2Fragment" />
+    <fragment
+        android:id="@+id/gigDetailsFragment"
+        android:name="com.gigforce.app.modules.gigPage2.GigDetailsFragment"
+        android:label="GigDetailsFragment" />
 
 </navigation>
 

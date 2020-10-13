@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools"
     android:paddingBottom="17dp"
-    android:background="@color/app_green">
+    tools:background="@color/app_green">
 
     <ImageView
         android:id="@+id/gig_cross_btn"
@@ -30,6 +30,8 @@
         android:layout_marginEnd="24dp"
         android:src="@drawable/ic_ellipses"
         app:tint="@color/white"
+        android:clickable="true"
+        android:focusable="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

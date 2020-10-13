@@ -1,33 +1,90 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
-    <include layout="@layout/fragment_gig_page_2_toolbar" />
-
-    <include layout="@layout/fragment_gig_page_2_timer_layout" />
-
-    <include layout="@layout/fragment_gig_page_2_gig_type" />
-
-    <include layout="@layout/fragment_gig_page_2_address" />
-
-    <View
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#e4e4e4"
-        android:layout_marginTop="16dp" />
+        android:layout_height="wrap_content">
+
+        <com.ncorti.slidetoact.SlideToActView
+            android:id="@+id/checkInCheckOutSliderBtn"
+            android:layout_width="match_parent"
+            android:layout_height="69dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp"
+
+            app:border_radius="8dp"
+            app:inner_color="@color/lipstick"
+            app:text_size="16sp"
+            app:text_style="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:outer_color="@color/light_pink"
+            app:slider_height="60dp"
+            app:slider_icon="@drawable/ic_arrow_forward_white"
+            app:slider_icon_color="@color/white"
+            app:text="Check - in" />
 
 
-    <include layout="@layout/fragment_gig_page_2_people_to_expect" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#e4e4e4"
-        android:layout_marginStart="32dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginTop="16dp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            android:paddingBottom="80dp"
+            android:orientation="vertical">
+
+            <include
+                android:id="@+id/gig_page_top_bar"
+                layout="@layout/fragment_gig_page_2_toolbar" />
+
+            <include
+                android:id="@+id/gig_page_timer_layout"
+                layout="@layout/fragment_gig_page_2_timer_layout" />
+
+            <include
+                android:id="@+id/gig_page_completiton_layout"
+                layout="@layout/fragment_gig_page_2_completiton_payment_details" />
 
 
-</LinearLayout>
+            <include layout="@layout/fragment_gig_page_2_gig_type" />
+
+            <include layout="@layout/fragment_gig_page_2_address" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="16dp"
+                android:background="#e4e4e4" />
+
+
+            <include
+                android:id="@+id/people_to_expect_layout"
+                layout="@layout/fragment_gig_page_2_people_to_expect" />
+
+            <View
+                android:id="@+id/divider_below_people_to_expect"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="16dp"
+                android:background="#e4e4e4" />
+
+            <include
+                android:id="@+id/payment_info"
+                layout="@layout/fragment_gig_page_2_payment_info" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="4dp"
+                android:layout_marginTop="16dp"
+                android:background="#e4e4e4" />
+
+            <include layout="@layout/fragment_gig_page_2_other_options" />
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

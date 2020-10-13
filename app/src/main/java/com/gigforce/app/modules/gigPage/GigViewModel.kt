@@ -37,6 +37,8 @@ class GigViewModel constructor(
     private var mWatchSingleGigRegistration: ListenerRegistration? = null
     private var mWatchTodaysGigRegistration: ListenerRegistration? = null
 
+    var currentGig : Gig? = null
+
     private val _upcomingGigs = MutableLiveData<Lce<List<Gig>>>()
     val upcomingGigs: LiveData<Lce<List<Gig>>> get() = _upcomingGigs
 
@@ -115,6 +117,7 @@ class GigViewModel constructor(
         runCatching {
             val gig = documentSnapshot.toObject(Gig::class.java) ?: throw IllegalArgumentException()
             gig.gigId = documentSnapshot.id
+            currentGig = gig
 
             val gigAttachmentWithLinks = gig.gigUserFeedbackAttachments.map {
                 getDownloadLinkFor("gig_feedback_images", it)
