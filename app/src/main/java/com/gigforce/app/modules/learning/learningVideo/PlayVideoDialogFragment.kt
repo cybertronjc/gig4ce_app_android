@@ -108,6 +108,8 @@ class PlayVideoDialogFragment : DialogFragment() {
             .setOnClickListener {
                 changeOrientation()
             }
+
+        playerView.setControlDispatcher(PositionLimitingControlDispatcher())
     }
 
     private fun changeOrientation() {
