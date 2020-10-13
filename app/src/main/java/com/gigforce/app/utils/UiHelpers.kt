@@ -3,6 +3,8 @@ package com.gigforce.app.utils
 import android.app.Activity
 import android.content.Context
 import android.graphics.*
+import android.text.Spannable
+import android.text.style.ForegroundColorSpan
 import android.util.DisplayMetrics
 import android.util.Size
 import android.view.View
@@ -103,5 +105,23 @@ fun TextView.setDrawableColor(color: Int) {
         it.colorFilter = PorterDuffColorFilter(color, PorterDuff.Mode.SRC_IN)
     }
 }
+
+
+//fun updateText() {
+//    try {
+//        builder.append(getText()) //get string
+//        builder.append(" ") // add space between text and start
+//        val start: Int = builder.length()
+//        builder.append(colored)
+//        val end: Int = builder.length()
+//        builder.setSpan(
+//            ForegroundColorSpan(Color.RED), start, end,
+//            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+//        )
+//        setText(builder)
+//    } catch (e: Exception) {
+//        e.printStackTrace()
+//    }
+//}
 
 

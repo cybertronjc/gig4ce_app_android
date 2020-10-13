@@ -889,7 +889,7 @@ class BSCalendarScreenFragment : BaseFragment() {
 
 
         help_topic_bs_calendar_screen.setOnClickListener {
-            showToast("This is under development. Please check again in a few days.")
+            navigate(R.id.helpVideosFragment)
         }
 
 

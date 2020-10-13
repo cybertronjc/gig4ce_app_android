@@ -102,7 +102,7 @@
         <activity
             android:name="com.gigforce.app.modules.photocrop.PhotoCrop"
             android:screenOrientation="portrait"
-            android:theme="@style/PhotoCrop"/>
+            android:theme="@style/Theme.Transparent"/>
 
         <activity
             android:name=".SplashScreen"

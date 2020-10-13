@@ -61,6 +61,8 @@ open class GigVerificationViewModel constructor(
 
     private val _gigerVerificationStatus = MutableLiveData<GigerVerificationStatus>()
     val gigerVerificationStatus: LiveData<GigerVerificationStatus> get() = _gigerVerificationStatus
+    private val _gigerContractStatus = MutableLiveData<Boolean>()
+    val gigerContractStatus: LiveData<Boolean> get() = _gigerContractStatus
 
     private val _documentUploadState = SingleLiveEvent2<Lse>()
     val documentUploadState: LiveData<Lse> get() = _documentUploadState
@@ -291,12 +293,12 @@ open class GigVerificationViewModel constructor(
                 )
             } else {
 
-                val frontImageFileNameAtServer = if (userHasDL && frontImagePath!= null)
+                val frontImageFileNameAtServer = if (userHasDL && frontImagePath != null)
                     uploadImage(frontImagePath)
                 else
                     model.driving_license?.frontImage
 
-                val backImageFileNameAtServer = if (userHasDL && backImagePath!= null)
+                val backImageFileNameAtServer = if (userHasDL && backImagePath != null)
                     uploadImage(backImagePath)
                 else
                     model.driving_license?.backImage
@@ -370,6 +372,15 @@ open class GigVerificationViewModel constructor(
                 continuation.resumeWithException(it)
             }
         }
+
+    fun checkForSignedContract() {
+        gigerVerificationRepository.checkForSignedContract().addSnapshotListener { success, err ->
+            run {
+                _gigerContractStatus.value = err == null && success?.data != null
+            }
+        }
+
+    }
 
     override fun onCleared() {
         super.onCleared()
