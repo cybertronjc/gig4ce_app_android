@@ -366,6 +366,7 @@ class GigPage2Fragment : BaseFragment(), OtherOptionClickListener,
 
     private fun showPastGigDetails(gig: Gig) {
         checkInCheckOutSliderBtn?.gone()
+        gig_checkin_time_tv.gone()
         gig_page_completiton_layout.visible()
 
         if(gig.isCheckInAndCheckOutMarked()){
@@ -485,6 +486,7 @@ class GigPage2Fragment : BaseFragment(), OtherOptionClickListener,
     private fun showFutureGigDetails(gig: Gig) {
         checkInCheckOutSliderBtn?.gone()
         gig_page_completiton_layout.gone()
+        gig_checkin_time_tv.gone()
 
         gig_page_top_bar.setBackgroundColor(
             ResourcesCompat.getColor(
@@ -500,6 +502,21 @@ class GigPage2Fragment : BaseFragment(), OtherOptionClickListener,
                 null
             )
         )
+
+        val gigStartDateTime = gig.attendance?.checkInTime!!
+        val currentTime = Date().time
+
+        val diffInMillisec: Long = gigStartDateTime.time - currentTime
+        val diffInHours: Long = TimeUnit.MILLISECONDS.toHours(diffInMillisec)
+        val diffInMin: Long = TimeUnit.MILLISECONDS.toMinutes(diffInMillisec)
+
+        gig_timer_tv.text = "$diffInHours Hrs : $diffInMin Mins"
+        gig_checkin_time_tv.text = "Since ${timeFormatter.format(gigStartDateTime)}, Today"
+
+        gig_status_tv.text = "Pending"
+        gig_status_iv.setImageResource(R.drawable.round_yellow)
+
+        gig_date_tv.text = "${dateFormatter.format(gig.startDateTime!!.toDate())}"
     }
 
     override fun onOptionClicked(option: OtherOption) {
