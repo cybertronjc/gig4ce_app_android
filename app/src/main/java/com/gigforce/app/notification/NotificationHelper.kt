@@ -1,18 +1,15 @@
-package mobile.jobKahaHai.notification
+package com.gigforce.app.notification
 
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import android.os.PowerManager
 import android.provider.Settings
 import androidx.core.app.NotificationCompat
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.content.res.ResourcesCompat
 import com.gigforce.app.DeepLinkActivity
 import com.gigforce.app.R
-import com.gigforce.app.notification.NotificationChannels
 import com.gigforce.app.notification.NotificationChannels.URGENT_NOTIFICATIONS
 import kotlin.random.Random
 
