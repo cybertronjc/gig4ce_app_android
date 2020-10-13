@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingStart="16dp"
+    android:paddingTop="12dp"
+    android:paddingEnd="16dp"
+    android:paddingBottom="12dp">
+
+
+    <ImageView
+        android:id="@+id/gig_type_iv"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:src="@drawable/ic_location"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <TextView
+        android:id="@+id/gig_type_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:fontFamily="@font/lato_bold"
+        android:letterSpacing="0.02"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintStart_toEndOf="@id/gig_type_iv"
+        app:layout_constraintTop_toTopOf="parent"
+        android:text="Gig Type" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:strokeColor="@color/colorPrimary"
+        android:layout_marginTop="12dp"
+        app:strokeWidth="1dp"
+        app:layout_constraintTop_toBottomOf="@id/gig_type_label">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="16dp"
+            android:paddingTop="12dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="12dp">
+
+            <TextView
+                android:id="@+id/type_of_gig_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/lato"
+                android:shadowColor="#0a000000"
+                android:shadowDy="2"
+                android:shadowRadius="4"
+                android:textColor="@color/black_85"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:text="Type of Gig" />
+
+
+            <TextView
+                android:id="@+id/duration_of_gig_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:fontFamily="@font/lato"
+                android:shadowColor="#0a000000"
+                android:shadowDy="2"
+                android:shadowRadius="4"
+                android:textColor="@color/black_85"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/type_of_gig_label"
+                android:text="Duration of Gig" />
+
+
+            <TextView
+                android:id="@+id/gig_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:fontFamily="@font/lato_bold"
+                android:gravity="center_horizontal"
+                android:textColor="@color/black_85"
+                android:textSize="14sp"
+                app:layout_constraintStart_toEndOf="@id/duration_of_gig_label"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text=": Sss" />
+
+            <TextView
+                android:id="@+id/gig_duration"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="8dp"
+                android:fontFamily="@font/lato_bold"
+                android:gravity="center_horizontal"
+                android:textColor="@color/black_85"
+                android:textSize="14sp"
+                app:layout_constraintStart_toEndOf="@id/duration_of_gig_label"
+                app:layout_constraintTop_toBottomOf="@id/gig_type"
+                tools:text=": Sss" />
+
+            <View
+                android:id="@+id/separator"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="16dp"
+                android:background="@color/warm_grey"
+                app:layout_constraintTop_toBottomOf="@id/gig_duration" />
+
+            <ImageView
+                android:id="@+id/expand_iv"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_baseline_arrow_downward_24"
+                android:layout_marginTop="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/separator" />
+
+            <TextView
+                android:id="@+id/details_label"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:fontFamily="@font/lato"
+                android:shadowColor="#0a000000"
+                android:shadowDy="2"
+                android:shadowRadius="4"
+                android:clickable="true"
+                android:focusable="true"
+                android:textColor="@color/black_85"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/separator"
+                app:layout_constraintEnd_toStartOf="@id/expand_iv"
+                android:text="Details" />
+
+
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </com.google.android.material.card.MaterialCardView>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

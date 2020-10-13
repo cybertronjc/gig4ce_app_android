@@ -457,4 +457,9 @@
         <item name="android:windowContentOverlay">@null</item>
     </style>
 
+    <style name="circleImageView" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">10%</item>
+    </style>
+
 </resources>

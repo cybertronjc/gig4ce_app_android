@@ -46,6 +46,7 @@ import com.gigforce.app.modules.gigPage.GigAttendancePageFragment
 import com.gigforce.app.modules.gigPage.GigPageFragment
 import com.gigforce.app.modules.gigPage.GigViewModel
 import com.gigforce.app.modules.gigPage.models.Gig
+import com.gigforce.app.modules.gigPage2.GigPage2Fragment
 import com.gigforce.app.modules.landingscreen.LandingScreenFragment
 import com.gigforce.app.modules.landingscreen.LandingScreenViewModel
 import com.gigforce.app.modules.learning.LearningConstants
@@ -389,8 +390,8 @@ class BSCalendarScreenFragment : BaseFragment() {
                     activity?.applicationContext,
                     PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
                         val gig = item as Gig
-                        navigate(R.id.presentGigPageFragment, Bundle().apply {
-                            this.putString(GigPageFragment.INTENT_EXTRA_GIG_ID, gig.gigId)
+                        navigate(R.id.gigPage2Fragment, Bundle().apply {
+                            this.putString(GigPage2Fragment.INTENT_EXTRA_GIG_ID, gig.gigId)
                         })
 
 //                    showKYCAndHideUpcomingLayout(

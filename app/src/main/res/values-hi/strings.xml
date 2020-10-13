@@ -307,5 +307,8 @@
     <string name="action_report">रिपोर्ट</string>
     <string name="action_invite_friends">दोस्तों को आमंत्रित करें</string>
     <string name="action_refresh">ताज़ा करें</string>
+    <string name="total_number_of_days">Total number of days</string>
+    <string name="total_working_days">Total working days</string>
+    <string name="number_of_offs">Number of offs</string>
 
 </resources>

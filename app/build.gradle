@@ -157,7 +157,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0' // changed from 1.1.0
     implementation 'com.jaeger.statusbarutil:library:1.4.0'
     implementation 'androidx.cardview:cardview:1.0.0'
-    implementation 'com.google.android.material:material:1.1.0'
+    implementation 'com.google.android.material:material:1.2.1'
     // Navigation library
     def nav_version = "2.3.0"
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
