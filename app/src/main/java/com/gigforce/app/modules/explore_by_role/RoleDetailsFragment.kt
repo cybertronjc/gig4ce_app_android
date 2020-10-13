@@ -69,9 +69,14 @@ class RoleDetailsFragment : BaseFragment() {
                     tv_mark_as_interest_role_details.text = getString(R.string.marked_as_interest)
                 } else {
                     tv_mark_as_interest_role_details.text = getString(R.string.mark_as_interest)
+//                    tv_mark_as_interest_role_details.setOnClickListener {
+////                        checkForProfileAndVerificationData()
+////                        navigate(R.id.fragment_add_bio)
+//                        viewModel
+//                    }
                     tv_mark_as_interest_role_details.setOnClickListener {
-                        checkForProfileAndVerificationData()
-//                        navigate(R.id.fragment_add_bio)
+                        tv_mark_as_interest_role_details.gone()
+                        viewModel.addAsInterest(mRoleID)
                     }
 
                 }
