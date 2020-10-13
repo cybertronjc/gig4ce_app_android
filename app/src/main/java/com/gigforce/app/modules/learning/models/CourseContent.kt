@@ -100,7 +100,11 @@ data class CourseContent(
 
     @get:PropertyName("clients")
     @set:PropertyName("clients")
-    var clients : List<String> = emptyList()
+    var clients : List<String> = emptyList(),
+
+    @get:PropertyName("canUserfastForward")
+    @set:PropertyName("canUserfastForward")
+    var canUserFastForward : Boolean = true
 
     ) {
 
