@@ -78,10 +78,10 @@ class LearningCourseDetailsFragment : BaseFragment() {
             viewModel.getCourseDetails(mCourseId)
             viewModel.getCourseLessonsAndAssessments(mCourseId, mModuleId!!)
         } else {
-            viewModel.getCourseDetails(mCourseId)
-            viewModel.getCourseModules(mCourseId)
+         //   viewModel.getCourseDetails(mCourseId)
+           // viewModel.getCourseModules(mCourseId)
 
-          //  viewModel.getCourseDetailsAndModules(mCourseId)
+           viewModel.getCourseDetailsAndModules(mCourseId)
         }
     }
 
