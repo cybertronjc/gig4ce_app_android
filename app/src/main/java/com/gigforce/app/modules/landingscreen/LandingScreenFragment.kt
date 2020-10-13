@@ -40,6 +40,7 @@ import com.gigforce.app.modules.learning.models.Course
 import com.gigforce.app.modules.preferences.PreferencesFragment
 import com.gigforce.app.modules.profile.ProfileViewModel
 import com.gigforce.app.modules.profile.models.ProfileData
+import com.gigforce.app.utils.AppConstants
 import com.gigforce.app.utils.GlideApp
 import com.gigforce.app.utils.Lce
 import com.gigforce.app.utils.StringConstants
@@ -456,7 +457,7 @@ class LandingScreenFragment : BaseFragment() {
             about_us_cl.visibility = View.GONE
         }
         chat_icon_iv.setOnClickListener {
-            navigate(R.id.fakeGigContactScreenFragment)
+//            navigate(R.id.fakeGigContactScreenFragment)
         }
 
         contact_us.setOnClickListener {
@@ -486,7 +487,11 @@ class LandingScreenFragment : BaseFragment() {
             playVideo("FbiyRe49wjY")
         }
         ll_search_role.setOnClickListener {
-            navigate(R.id.fragment_explore_by_role)
+            if (AppConstants.UNLOCK_FEATURE) {
+                navigate(R.id.fragment_explore_by_role)
+            } else {
+                showToast("This is under development. Please check again in a few days.")
+            }
         }
     }
 
@@ -657,7 +662,7 @@ class LandingScreenFragment : BaseFragment() {
             RecyclerGenericAdapter<TitleSubtitleModel>(
                 activity?.applicationContext,
                 PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
-//                    if(AppConstants.UNLOCK_FEATURE){
+                    //                    if(AppConstants.UNLOCK_FEATURE){
 //                    }else
                     showToast("This is under development. Please check again in a few days.")
                 },
@@ -696,11 +701,15 @@ class LandingScreenFragment : BaseFragment() {
                     tv_subtitle_role.text = gig?.job_description?.get(0)
                 }
                 cv_role.setOnClickListener {
-                    findNavController().navigate(
-                        LandingScreenFragmentDirections.openRoleDetailsHome(
-                            gig?.id!!
+                    if (AppConstants.UNLOCK_FEATURE) {
+                        findNavController().navigate(
+                            LandingScreenFragmentDirections.openRoleDetailsHome(
+                                gig?.id!!
+                            )
                         )
-                    )
+                    } else {
+                        showToast("This is under development. Please check again in a few days.")
+                    }
                 }
             }
 
@@ -713,7 +722,7 @@ class LandingScreenFragment : BaseFragment() {
         lp.width = itemWidth
 
         cv_role.layoutParams = lp
-
-
     }
+
+
 }

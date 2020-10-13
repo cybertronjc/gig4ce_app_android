@@ -1,5 +1,6 @@
 package com.gigforce.app.modules.landingscreen
 
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -19,6 +20,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.QuerySnapshot
 import kotlinx.coroutines.launch
+import java.lang.Exception
 
 class LandingScreenViewModel constructor(
     private val profileFirebaseRepository: ProfileFirebaseRepository = ProfileFirebaseRepository(),
@@ -324,9 +326,13 @@ class LandingScreenViewModel constructor(
         if (error != null) {
 
         } else {
-            val role = querySnapshot?.toObjects(Role::class.java)?.get(0)
-            role?.id = querySnapshot?.documents?.get(0)?.id
-            observerRole.value = role
+            try {
+                val role = querySnapshot?.toObjects(Role::class.java)?.get(0)
+                role?.id = querySnapshot?.documents?.get(0)?.id
+                observerRole.value = role
+            }catch (e:Exception){
+
+            }
         }
     }
 }
