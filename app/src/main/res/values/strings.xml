@@ -9,6 +9,7 @@
     <string name="punjabi">ਪੰਜਾਬੀ</string>
     <string name="francais">français</string>
     <string name="marathi">मराठी</string>
+    <string name="kannada">ಕನ್ನಡ</string>
     <string name="intro_slide1_title">Welcome to Gigforce</string>
     <string name="intro_slide1_subtitle">A Job you always have</string>
     <string name="intro_slide2_title">Be a professional</string>
@@ -314,7 +315,7 @@
     <string name="cif_number_with_colon">CIF Number :</string>
     <string name="account_number_with_colon">Account Number :</string>
     <string name="ifsc_with_colon">IFSC :</string>
-    <string name="upload_bank_passbook">Upload Bank Passbook (Front Page)</string>
+    <string name="upload_bank_passbook">Upload Cheque/Bank Passbook (Front page)</string>
     <string name="upload_bank_passbook_sublabel">Please upload your Bank Passbook for\nyour verification</string>
     <string name="edit">Edit</string>
     <string name="name">Name</string>
@@ -783,7 +784,6 @@
     <string name="hello">Hello!</string>
     <string name="welcome_to_gigforce">Welcome to Gigforce!</string>
     <string name="let_s_talk_about_what_s_a_gig_and_how_do_you_start_working_as_a_giger_at_gigforce">Let\'s talk about what\'s a gig and how do you start working as a giger at Gigforce.</string>
-    <string name="skip">Skip</string>
     <string name="play_now">Play Now</string>
     <string name="my_interest">My Interest</string>
     <string name="explore_gigs_start_earning">Explore gigs to start earning.</string>
@@ -964,6 +964,13 @@
     <string name="you_have_scored">You have scored</string>
     <string name="in_your_assessment">in your assessment</string>
     <string name="new_cert_added_underlined"><![CDATA[<u>New certificate has been added to profile .</u>]]></string>
+    <string name="watch_lesson_again">Watch lesson again</string>
+    <string name="skip">Skip</string>
+    <string name="new_bio">New Bio</string>
+    <string name="signed">Signed</string>
+    <string name="unsigned">Unsigned</string>
+    <string name="add_bio_star">Add Bio*</string>
+    <string name="new_language">New Language</string>
     <string name="total_number_of_days">Total number of days</string>
     <string name="total_working_days">Total working days</string>
     <string name="number_of_offs">Number of offs</string>

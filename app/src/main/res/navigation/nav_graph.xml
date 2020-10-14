@@ -667,6 +667,14 @@
             app:argType="string" />
     </fragment>
 
+
+    <fragment
+        android:id="@+id/fragment_add_bio"
+        android:name="com.gigforce.app.modules.explore_by_role.AddBioFragment"
+        android:label="fragment_add_bio"
+        tools:layout="@layout/layout_add_bio_fragment">
+
+    </fragment>
     <fragment
         android:id="@+id/fragment_marked_as_interest"
         android:name="com.gigforce.app.modules.explore_by_role.MarkedInterestSuccessFragment"

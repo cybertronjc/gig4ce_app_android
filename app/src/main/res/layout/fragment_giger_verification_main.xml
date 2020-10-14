@@ -15,12 +15,13 @@
             android:id="@+id/ll_contracts"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-
             android:orientation="horizontal"
+
             android:paddingStart="@dimen/size_24"
             android:paddingTop="@dimen/size_30"
             android:paddingEnd="@dimen/size_24"
             android:paddingBottom="@dimen/size_25"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -44,13 +45,14 @@
                 android:background="@drawable/bg_capsule_border_fa6400"
                 android:drawableStart="@drawable/ic_time_fa6400"
                 android:drawablePadding="@dimen/size_9"
+                android:gravity="center"
                 android:letterSpacing="0.03"
                 android:paddingStart="@dimen/size_14"
                 android:paddingTop="@dimen/size_7"
                 android:paddingEnd="@dimen/size_16"
                 android:paddingBottom="@dimen/size_8"
-                android:text="Unsigned"
-                android:textColor="#fa6400"
+                android:text="@string/unsigned"
+                android:textColor="@color/fa6400"
                 android:textSize="12sp" />
         </RelativeLayout>
 

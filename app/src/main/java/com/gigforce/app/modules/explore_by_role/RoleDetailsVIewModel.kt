@@ -2,6 +2,7 @@ package com.gigforce.app.modules.explore_by_role
 
 import androidx.lifecycle.ViewModel
 import com.gigforce.app.modules.landingscreen.models.Role
+import com.gigforce.app.modules.profile.models.ProfileData
 import com.gigforce.app.utils.SingleLiveEvent
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.DocumentSnapshot
@@ -13,6 +14,10 @@ class RoleDetailsVIewModel(private val callbacks: RoleDetailsCallbacks) : ViewMo
         SingleLiveEvent<Role>();
     }
     val observerRole: SingleLiveEvent<Role> get() = _observerRole
+    private val _observerDataToCheck: SingleLiveEvent<MutableList<Any>> by lazy {
+        SingleLiveEvent<MutableList<Any>>();
+    }
+    val observerDataToCheck: SingleLiveEvent<MutableList<Any>> get() = _observerDataToCheck
 
     private val _observerMarkedAsInterest: SingleLiveEvent<Boolean> by lazy {
         SingleLiveEvent<Boolean>();
@@ -48,5 +53,17 @@ class RoleDetailsVIewModel(private val callbacks: RoleDetailsCallbacks) : ViewMo
         } else {
             observerError.value = it.exception?.message
         }
+    }
+
+    fun checkForProfileCompletionAndVerification() {
+        callbacks.checkForProfileCompletionAndVerification(this)
+    }
+
+    override fun <T> getProfileSuccess(data: T) {
+        if (data is ProfileData) {
+            observerDataToCheck.value = mutableListOf(data)
+        }
+
+
     }
 }

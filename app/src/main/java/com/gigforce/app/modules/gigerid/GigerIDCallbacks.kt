@@ -8,10 +8,16 @@ interface GigerIDCallbacks {
     fun getProfileData(responseCallbacks: ResponseCallbacks)
     fun getProfilePicture(avatarName: String, responseCallbacks: ResponseCallbacks)
     fun getGigDetails(gigId: String, responseCallbacks: ResponseCallbacks)
+    fun getURls(responseCallbacks: ResponseCallbacks)
     interface ResponseCallbacks {
         fun getProfileSuccess(querySnapshot: DocumentSnapshot?, error: FirebaseFirestoreException?)
         fun getProfilePic(reference: StorageReference)
         fun getGigDetailsResponse(
+            querySnapshot: DocumentSnapshot?,
+            error: FirebaseFirestoreException?
+        )
+
+        fun getUrlResponse(
             querySnapshot: DocumentSnapshot?,
             error: FirebaseFirestoreException?
         )

@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RadioButton
-import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.franmontiel.localechanger.LocaleChanger
@@ -26,6 +25,7 @@ class LanguageSelectFragment : BaseFragment() {
         Arrays.asList(
             Locale("en", "US"),
             Locale("hi", "IN"),
+            Locale("kn", "rIN"),
             Locale("fr", "FR")
             //Locale("ar", "JO")
         )
@@ -62,6 +62,7 @@ class LanguageSelectFragment : BaseFragment() {
                     when (it) {
                         "en" -> groupradio.findViewById<RadioButton>(R.id.en).isEnabled = true
                         "hi" -> groupradio.findViewById<RadioButton>(R.id.hi).isEnabled = true
+                        "kn" -> groupradio.findViewById<RadioButton>(R.id.kn).isEnabled = true
                         "te" -> groupradio.findViewById<RadioButton>(R.id.te).isEnabled = true
                         "gu" -> groupradio.findViewById<RadioButton>(R.id.gu).isEnabled = true
                         "pa" -> groupradio.findViewById<RadioButton>(R.id.pu).isEnabled = true
@@ -103,6 +104,7 @@ class LanguageSelectFragment : BaseFragment() {
         when (Resources.getSystem().getConfiguration().locale.getLanguage()) {
             "en" -> groupradio.findViewById<RadioButton>(R.id.en).isChecked = true
             "hi" -> groupradio.findViewById<RadioButton>(R.id.hi).isChecked = true
+            "kn" -> groupradio.findViewById<RadioButton>(R.id.kn).isEnabled = true
             "te" -> groupradio.findViewById<RadioButton>(R.id.te).isChecked = true
             "gu" -> groupradio.findViewById<RadioButton>(R.id.gu).isChecked = true
             "pa" -> groupradio.findViewById<RadioButton>(R.id.pu).isChecked = true
@@ -129,7 +131,8 @@ class LanguageSelectFragment : BaseFragment() {
 
     private fun navNext() {
         navigate(
-            R.id.authFlowFragment )
+            R.id.authFlowFragment
+        )
     }
 
 

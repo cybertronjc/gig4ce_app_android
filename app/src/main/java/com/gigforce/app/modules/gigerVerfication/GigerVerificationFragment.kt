@@ -33,6 +33,36 @@ class GigerVerificationFragment : BaseFragment() {
         initView()
         setListeners()
         initViewModel()
+        checkForContract()
+    }
+
+    private fun checkForContract() {
+        viewModel.gigerContractStatus.observe(viewLifecycleOwner, Observer {
+            ll_contracts.visible()
+            if (it) {
+                tv_contract_status.setCompoundDrawablesRelativeWithIntrinsicBounds(
+                    R.drawable.ic_check,
+                    0,
+                    0,
+                    0
+                )
+                tv_contract_status.setTextColor(resources.getColor(R.color.green_dc3ab105))
+                tv_contract_status.setBackgroundResource(R.drawable.bg_capsule_53ba25)
+                tv_contract_status.text = getString(R.string.signed)
+
+            }else{
+                tv_contract_status.setCompoundDrawablesRelativeWithIntrinsicBounds(
+                    R.drawable.ic_time_fa6400,
+                    0,
+                    0,
+                    0
+                )
+                tv_contract_status.setTextColor(resources.getColor(R.color.fa6400))
+                tv_contract_status.setBackgroundResource(R.drawable.bg_capsule_border_fa6400)
+                tv_contract_status.text = getString(R.string.unsigned)
+            }
+        })
+        viewModel.checkForSignedContract()
     }
 
     private fun initView() {

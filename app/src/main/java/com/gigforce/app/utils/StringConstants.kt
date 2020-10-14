@@ -26,7 +26,8 @@ enum class StringConstants(val value: String) {
     ANSWERS_ARR("ANSWERS_ARR"),
     TIME_TAKEN("TIME_TAKEN"),
     INVITE_USER_ID("INVITE_USER_ID"),
-    ROLE_ID("ROLE_ID")
+    ROLE_ID("ROLE_ID"),
+    SKIPPED_ABOUT_INTRO("SKIPPED_ABOUT_INTO")
 
 
 }

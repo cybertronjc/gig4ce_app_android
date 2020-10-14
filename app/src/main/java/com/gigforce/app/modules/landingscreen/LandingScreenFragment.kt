@@ -43,6 +43,7 @@ import com.gigforce.app.modules.profile.models.ProfileData
 import com.gigforce.app.utils.AppConstants
 import com.gigforce.app.utils.GlideApp
 import com.gigforce.app.utils.Lce
+import com.gigforce.app.utils.StringConstants
 import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
@@ -91,6 +92,7 @@ class LandingScreenFragment : BaseFragment() {
         val displayMetrics = DisplayMetrics()
         activity?.windowManager?.getDefaultDisplay()?.getMetrics(displayMetrics)
         width = displayMetrics.widthPixels
+        initUI()
         initializeExploreByRole()
         initializeExploreByIndustry()
         initializeLearningModule()
@@ -109,6 +111,12 @@ class LandingScreenFragment : BaseFragment() {
             else -> {
             }
         }
+    }
+
+    private fun initUI() {
+        about_us_cl.visibility =
+            if (sharedDataInterface.getDataBoolean(StringConstants.SKIPPED_ABOUT_INTRO.value) == true
+            ) View.GONE else View.VISIBLE
     }
 
     override fun onDetach() {
@@ -253,25 +261,20 @@ class LandingScreenFragment : BaseFragment() {
         helpViewModel.getTopHelpVideos()
     }
 
-    private fun setTipsOnView(tips: List<Tip>) {
-
+    private fun setTipsOnView(tips_: List<Tip>) {
+        val tips = tips_.filter { item ->
+            !sharedDataInterface.getDataBoolean(item.tip_id.toString())!!
+        }.toMutableList()
         if (tips.isEmpty()) {
             gigforce_tip.gone()
         } else {
             gigforce_tip.visible()
 
-            val recyclerGenericAdapter: RecyclerGenericAdapter<Tip> =
+            var recyclerGenericAdapter: RecyclerGenericAdapter<Tip>? = null
+            recyclerGenericAdapter =
                 RecyclerGenericAdapter<Tip>(
                     activity?.applicationContext,
-                    PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
-                        val tip = (item as Tip)
-                        navigate(
-                            resId = tip.whereToRedirect,
-                            args = tip.intentExtraMap.toBundle()
-                        )
-
-
-                    },
+                    null,
                     RecyclerGenericAdapter.ItemInterface<Tip?> { obj, viewHolder, position ->
                         var title = getTextView(viewHolder, R.id.gigtip_title)
                         var subtitle = getTextView(viewHolder, R.id.gigtip_subtitle)
@@ -282,10 +285,24 @@ class LandingScreenFragment : BaseFragment() {
                         title.layoutParams = lp
                         title.text = obj?.title
                         subtitle.text = obj?.subTitle
+                        getView(viewHolder, R.id.textView102).setOnClickListener {
+                            val tip = tips.get(viewHolder.adapterPosition)
+                            navigate(
+                                resId = tip.whereToRedirect,
+                                args = tip.intentExtraMap.toBundle()
+                            )
+                        }
 
-                        getView(viewHolder, R.id.skip).setOnClickListener(
-                            SkipClickListener(gigforce_tip, position)
-                        )
+                        getView(viewHolder, R.id.skip).setOnClickListener {
+                            if (viewHolder.adapterPosition == -1) return@setOnClickListener
+                            sharedDataInterface.saveDataBoolean(obj?.tip_id.toString(), true)
+                            tips.removeAt(viewHolder.adapterPosition)
+                            recyclerGenericAdapter?.notifyItemRemoved(viewHolder.adapterPosition)
+                            if (tips.isEmpty()) {
+                                gigforce_tip.gone()
+                            }
+
+                        }
 
 
 //                    getTextView(viewHolder, R.id.skip).setOnClickListener{
@@ -436,6 +453,7 @@ class LandingScreenFragment : BaseFragment() {
             navigate(R.id.mainHomeScreen)
         }
         skip_about_intro.setOnClickListener {
+            sharedDataInterface.saveDataBoolean(StringConstants.SKIPPED_ABOUT_INTRO.value, true)
             about_us_cl.visibility = View.GONE
         }
         chat_icon_iv.setOnClickListener {
@@ -462,7 +480,7 @@ class LandingScreenFragment : BaseFragment() {
             navigate(R.id.helpVideosFragment)
         }
         help_topic.setOnClickListener {
-            showToast("This is under development. Please check again in a few days.")
+            navigate(R.id.helpVideosFragment)
         }
 
         gigforce_video.setOnClickListener {

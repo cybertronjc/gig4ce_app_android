@@ -31,6 +31,17 @@ class SharedDataImp : SharedDataInterface {
         }
     }
 
+    private fun saveSharedDataBoolean(Key: String?, Value: Boolean): Boolean {
+        return try {
+            editor?.putBoolean(Key, Value)
+            editor?.commit()
+            true
+        } catch (ex: Exception) {
+            Log.e("Error:", ex.toString())
+            false
+        }
+    }
+
     // for delete
     private fun removeSavedShareData(key: String?): Boolean {
         return try {
@@ -45,6 +56,10 @@ class SharedDataImp : SharedDataInterface {
 
     private fun getSharedData(key: String?, defValue: String?): String? {
         return SP.getString(key, defValue)
+    }
+
+    private fun getSharedDataBoolean(key: String?, defValue: Boolean): Boolean? {
+        return SP.getBoolean(key, defValue)
     }
     //common methods for sharedPreference end
 
@@ -105,11 +120,31 @@ class SharedDataImp : SharedDataInterface {
         saveSharedData(key, value)
     }
 
+    override fun saveDataBoolean(key: String, value: Boolean?) {
+        saveSharedDataBoolean(key, value!!)
+    }
+
     override fun getData(key: String?): String? {
         return getSharedData(key, "")
+    }
+
+    override fun getDataBoolean(key: String?): Boolean? {
+        return getSharedDataBoolean(key, false)
     }
 
     override fun remove(key: String?) {
         removeSavedShareData(key)
     }
+
+    override fun saveInt(key: String?, value: Int) {
+
+        editor?.putInt(key, value)
+        editor?.commit()
+
+    }
+
+    override fun getInt(key: String?): Int {
+        return SP.getInt(key, 0)
+    }
+
 }

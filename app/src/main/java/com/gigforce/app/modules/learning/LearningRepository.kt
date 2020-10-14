@@ -350,7 +350,6 @@ class LearningRepository constructor(
         }
 
         val updatedLessonProgressList = moduleProgress.lessonsProgress.sortedBy { it.priority }
-
         var nextLessonProgress: LessonProgress? = null
 
         for (i in updatedLessonProgressList.indices) {
@@ -1079,10 +1078,118 @@ class LearningRepository constructor(
         //Deleting progress of modules and lessons deleted
         val filteredModulesProgressData = moduleProgress.filter {moduleProg ->
             modules.find { it.id == moduleProg.moduleId } != null
+        }.toMutableList()
+
+        //removing lessons progress which have been removed from module
+        for(i in 0 until filteredModulesProgressData.size){
+            val moduleProgressData = filteredModulesProgressData[i]
+            val moduleLessons = getModuleLessons(moduleProgressData.moduleId)
+
+           val filteredModulesLessons =  moduleProgressData.lessonsProgress.filter { lessonProg ->
+                moduleLessons.find { it.id == lessonProg.lessonId } != null
+            }
+            filteredModulesProgressData[i].lessonsProgress = filteredModulesLessons
         }
 
+        //adding progress of lessons which have been added to modules newly
+        for (i in 0 until modules.size){
 
+            val moduleData = modules[i]
+            val moduleLessons = getModuleLessons(moduleData.id)
 
+            val moduleLessonsProgress = filteredModulesProgressData.find { it.moduleId == moduleData.id }!!
+
+            val newlyAddedLessons = moduleLessons.filter {lesson ->
+                moduleLessonsProgress.lessonsProgress.find { it.lessonId == lesson.id } == null
+            }
+
+            //Adding Newly Added lessons to module lesson progress list
+            filteredModulesProgressData.forEach {
+
+                if(it.moduleId == moduleData.id){
+                   val lessonList =  it.lessonsProgress.toMutableList()
+
+                    newlyAddedLessons.forEach {
+                        lessonList.add(
+                            LessonProgress(
+                                uid = getUID(),
+                                courseId = it.courseId,
+                                moduleId = it.moduleId,
+                                lessonId = it.id,
+                                lessonStartDate = Timestamp.now(),
+                                lessonCompletionDate = null,
+                                ongoing = false,
+                                priority = it.priority,
+                                completed = false,
+                                lessonType = it.type
+                            )
+                        )
+                    }
+
+                    it.lessonsProgress = lessonList
+                }
+            }
+        }
+
+        //Adding newly Added modules
+        val newsModulesAdded = modules.filter { module ->
+            moduleProgress.find { it.moduleId == module.id } == null
+        }
+
+        val newlyModulesProgressData =  newsModulesAdded.map {
+
+            val lessonProgress =
+                getModuleLessons(courseId, it.id).sortedBy { courseContent ->
+                    courseContent.priority
+                }.map { cc ->
+                    LessonProgress(
+                        uid = getUID(),
+                        courseId = courseId,
+                        moduleId = cc.moduleId,
+                        lessonId = cc.id,
+                        lessonStartDate = Timestamp.now(),
+                        lessonCompletionDate = null,
+                        ongoing = false,
+                        priority = cc.priority,
+                        completed = false,
+                        lessonType = cc.type
+                    )
+                }
+
+            if (lessonProgress.isNotEmpty()) {
+                lessonProgress.get(0).ongoing = true
+            }
+
+            ModuleProgress(
+                uid = getUID(),
+                courseId = courseId,
+                moduleId = it.id,
+                moduleStartDate = Timestamp.now(),
+                moduleCompletionDate = null,
+                ongoing = false,
+                completed = false,
+                lessonsTotal = lessonProgress.size,
+                lessonsProgress = lessonProgress
+            )
+        }
+
+        filteredModulesProgressData.addAll(newlyModulesProgressData)
+
+        filteredModulesProgressData.forEach {
+            var totalLessons = 0
+            var completedLessons = 0
+
+            it.lessonsProgress.forEach {
+
+                totalLessons++
+                if(it.completed) completedLessons ++;
+            }
+
+            it.lessonsTotal = totalLessons
+            it.lessonsCompleted = completedLessons
+
+            updateModuleProgress(it.progressId,it)
+        }
     }
 
 
