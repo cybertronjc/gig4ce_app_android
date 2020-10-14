@@ -1,5 +1,6 @@
 package com.gigforce.app.modules.calendarscreen.maincalendarscreen.verticalcalendar
 
+import com.gigforce.app.core.toLocalDate
 import com.gigforce.app.modules.custom_gig_preferences.UnavailableDataModel
 import com.gigforce.app.modules.preferences.prefdatamodel.PreferencesDataModel
 import java.time.LocalDate
@@ -22,11 +23,12 @@ class VerticalCalendarDataItemModel(
     var reason: String = ""
 ) {
     fun getDateObj(): Date {
-        var dateObj = Date()
-        dateObj.date = date
-        dateObj.month = month
-        dateObj.year = year
-        return dateObj
+
+       return Calendar.getInstance().apply {
+            set(Calendar.YEAR,year)
+            set(Calendar.MONTH,month)
+            set(Calendar.DAY_OF_MONTH,date)
+        }.time
     }
 
     fun getLocalDate() : LocalDate{
@@ -101,9 +103,7 @@ class VerticalCalendarDataItemModel(
             }
 
             for (model in customPreferenceUnavailableData) {
-                if (calendar.get(Calendar.DATE) == model.date.date && calendar.get(Calendar.MONTH) == model.date.month && calendar.get(
-                        Calendar.YEAR
-                    ) == model.date.year
+                if (calendar.time.toLocalDate().equals(model.date.toLocalDate())
                 ) {
                     dataModel.isUnavailable = model.dayUnavailable
                     break;
@@ -169,10 +169,7 @@ class VerticalCalendarDataItemModel(
                 }
             }
             for (model in customPreferenceUnavailableData) {
-                if (calendar.get(Calendar.DATE) == model.date.date && calendar.get(Calendar.MONTH) == model.date.month && calendar.get(
-                        Calendar.YEAR
-                    ) == model.date.year
-                ) {
+                if (calendar.time.toLocalDate().equals(model.date.toLocalDate())) {
                     dataModel.isUnavailable = model.dayUnavailable
                     break;
                 }

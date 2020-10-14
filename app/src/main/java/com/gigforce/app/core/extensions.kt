@@ -104,6 +104,10 @@ fun Timestamp.toLocalDate() : LocalDate{
     return this.toDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
 }
 
+fun Date.toLocalDate() : LocalDate{
+    return this.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
+}
+
 fun <V> Map<String, V>.toBundle(bundle: Bundle = Bundle()): Bundle = bundle.apply {
     forEach {
         val k = it.key

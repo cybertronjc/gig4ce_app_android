@@ -11,6 +11,7 @@ import com.gigforce.app.modules.gigPage.models.Gig
 import com.gigforce.app.modules.gigPage.models.GigAttendance
 import com.gigforce.app.utils.Lce
 import com.gigforce.app.utils.Lse
+import com.gigforce.app.utils.getOrThrow
 import com.gigforce.app.utils.setOrThrow
 import com.google.firebase.Timestamp
 import com.google.firebase.crashlytics.FirebaseCrashlytics
@@ -161,7 +162,7 @@ class GigViewModel constructor(
 
     }
 
-    suspend fun getGigNow(gigId : String) = suspendCoroutine<Gig>{ cont ->
+    suspend fun getGigNow(gigId: String) = suspendCoroutine<Gig> { cont ->
         gigsRepository
             .getCollectionReference()
             .document(gigId)
@@ -169,7 +170,8 @@ class GigViewModel constructor(
             .addOnSuccessListener { documentSnapshot ->
 
                 if (documentSnapshot != null) {
-                    val gig = documentSnapshot.toObject(Gig::class.java) ?: throw IllegalArgumentException()
+                    val gig = documentSnapshot.toObject(Gig::class.java)
+                        ?: throw IllegalArgumentException()
                     gig.gigId = documentSnapshot.id
                     cont.resume(gig)
                 }
@@ -286,7 +288,7 @@ class GigViewModel constructor(
     private val _declineGig = MutableLiveData<Lse>()
     val declineGig: LiveData<Lse> get() = _declineGig
 
-    fun declineGig(gigId: String, reason: String) = viewModelScope.launch{
+    fun declineGig(gigId: String, reason: String) = viewModelScope.launch {
         _declineGig.value = Lse.loading()
 
         try {
@@ -306,7 +308,7 @@ class GigViewModel constructor(
         }
     }
 
-    fun declineGigs(gigIds: List<String>, reason: String) = viewModelScope.launch{
+    fun declineGigs(gigIds: List<String>, reason: String) = viewModelScope.launch {
         _declineGig.value = Lse.loading()
 
         try {
@@ -334,7 +336,7 @@ class GigViewModel constructor(
     private val _todaysGigs = MutableLiveData<Lce<List<Gig>>>()
     val todaysGigs: LiveData<Lce<List<Gig>>> get() = _todaysGigs
 
-    fun startWatchingTodaysOngoingAndUpcomingGig(date : LocalDate){
+    fun startWatchingTodaysOngoingAndUpcomingGig(date: LocalDate) {
         Log.d("GigViewModel", "Started Watching gigs for $date")
 
         val dateFull = Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant())
@@ -348,15 +350,18 @@ class GigViewModel constructor(
                 val tomorrow = date.plusDays(1)
 
                 if (querySnapshot != null) {
-                   val todaysUpcomingGigs =  extractGigs(querySnapshot).filter {
-                       it.startDateTime!! > Timestamp.now() && ( it.endDateTime == null || it.endDateTime!!.toLocalDate().isBefore(tomorrow))
-                   }
+                    val todaysUpcomingGigs = extractGigs(querySnapshot).filter {
+                        it.startDateTime!! > Timestamp.now() && (it.endDateTime == null || it.endDateTime!!.toLocalDate()
+                            .isBefore(tomorrow))
+                    }
                     _todaysGigs.value = Lce.content(todaysUpcomingGigs)
                 } else {
-                    _upcomingGigs.value = Lce.error(firebaseFirestoreException!!.message!!)
+                    _todaysGigs.value = Lce.error(firebaseFirestoreException!!.message!!)
                 }
             }
 
     }
+
+
 
 }
