@@ -371,7 +371,7 @@ class GigViewModel constructor(
 
     fun getGigsForMonth(companyName: String, month: Int, year: Int) = viewModelScope.launch {
 
-        val monthStart = LocalDateTime.of(year, month, 0, 0, 0)
+        val monthStart = LocalDateTime.of(year, month, 1, 0, 0)
         val monthEnd = monthStart.plusMonths(1).withDayOfMonth(1).minusDays(1);
 
         try {

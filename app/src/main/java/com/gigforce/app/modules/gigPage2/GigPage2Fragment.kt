@@ -115,6 +115,10 @@ class GigPage2Fragment : BaseFragment(), OtherOptionClickListener,
             )
         }
 
+        gig_page_top_bar.setOnClickListener {
+            navigate(R.id.gigMonthlyAttendanceFragment)
+        }
+
         gig_cross_btn.setOnClickListener {
             activity?.onBackPressed()
         }
@@ -365,6 +369,40 @@ class GigPage2Fragment : BaseFragment(), OtherOptionClickListener,
     }
 
     private fun showPastGigDetails(gig: Gig) {
+
+        if (!gig.companyLogo.isNullOrBlank()) {
+            if (gig.companyLogo!!.startsWith("http", true)) {
+
+                GlideApp.with(requireContext())
+                    .load(gig.companyLogo)
+                    .placeholder(getCircularProgressDrawable())
+                    .into(company_logo_iv)
+            } else {
+                FirebaseStorage.getInstance()
+                    .getReference("companies_gigs_images")
+                    .child(gig.companyLogo!!)
+                    .downloadUrl
+                    .addOnSuccessListener { fileUri ->
+
+                        GlideApp.with(requireContext())
+                            .load(fileUri)
+                            .placeholder(getCircularProgressDrawable())
+                            .into(company_logo_iv)
+                    }
+            }
+        } else {
+            val companyInitials = if (gig.companyName.isNullOrBlank())
+                "C"
+            else
+                gig.companyName!![0].toString().toUpperCase()
+            val drawable = TextDrawable.builder().beginConfig().textColor(R.color.colorPrimary).endConfig().buildRound(
+                companyInitials,
+                ResourcesCompat.getColor(resources, R.color.white, null)
+            )
+
+            company_logo_iv.setImageDrawable(drawable)
+        }
+
         checkInCheckOutSliderBtn?.gone()
         gig_checkin_time_tv.gone()
         gig_page_completiton_layout.visible()
@@ -503,7 +541,7 @@ class GigPage2Fragment : BaseFragment(), OtherOptionClickListener,
             )
         )
 
-        val gigStartDateTime = gig.attendance?.checkInTime!!
+        val gigStartDateTime = gig.startDateTime!!.toDate()
         val currentTime = Date().time
 
         val diffInMillisec: Long = gigStartDateTime.time - currentTime
@@ -720,25 +758,25 @@ class GigPage2Fragment : BaseFragment(), OtherOptionClickListener,
         private val DRESS_CODE = OtherOption(
             id = ID_DRESS_CODE,
             name = "Dress code",
-            icon = R.drawable.ic_gig_success_icon
+            icon = R.drawable.explore_hs_features
         )
 
         private val REIMBURSMENT = OtherOption(
             id = ID_REIMBURSMENT,
             name = "Reimbursment",
-            icon = R.drawable.ic_gig_success_icon
+            icon = R.drawable.explore_hs_features
         )
 
         private val ID_CARD = OtherOption(
             id = ID_IDENTITY_CARD,
             name = "Idenitity card",
-            icon = R.drawable.ic_gig_success_icon
+            icon = R.drawable.explore_hs_features
         )
 
         private val HELP = OtherOption(
             id = ID_HELP,
             name = "Help",
-            icon = R.drawable.ic_gig_success_icon
+            icon = R.drawable.explore_hs_features
         )
     }
 }

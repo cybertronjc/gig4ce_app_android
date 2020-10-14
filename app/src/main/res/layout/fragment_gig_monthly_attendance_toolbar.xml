@@ -59,7 +59,7 @@
         android:fontFamily="@font/lato_bold"
         android:textSize="20sp"
         android:textColor="@color/white"
-        tools:text="Some Post anMe"
+        android:text="Field Development Officer"
         />
 
     <TextView
@@ -69,10 +69,10 @@
         android:textSize="12sp"
         android:textColor="#ffffff"
         android:layout_marginTop="4dp"
+        android:text="\ufeff@ Seedworks"
         app:layout_constraintTop_toBottomOf="@id/gig_title_tv"
         app:layout_constraintStart_toStartOf="@id/gig_title_tv"
-        app:layout_constraintEnd_toEndOf="parent"
-        tools:text="\ufeff@ Procter &amp; Gamble" />
+        app:layout_constraintEnd_toEndOf="parent"/>
 
     <ImageView
         android:id="@+id/company_star_logo_tv"
@@ -95,6 +95,7 @@
         android:layout_marginTop="6dp"
         android:layout_marginStart="4dp"
         android:src="@drawable/ic_star"
+        android:text="-"
         app:layout_constraintTop_toBottomOf="@id/gig_company_name_tv"
         app:layout_constraintStart_toEndOf="@id/company_star_logo_tv"
         tools:text="4.3" />

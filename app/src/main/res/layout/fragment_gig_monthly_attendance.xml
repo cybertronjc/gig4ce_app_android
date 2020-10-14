@@ -27,7 +27,7 @@
         android:drawableEnd="@drawable/ic_baseline_arrow_drop_down_16"
         app:layout_constraintTop_toBottomOf="@id/attendance_top_bar"
         app:layout_constraintStart_toStartOf="parent"
-        tools:text="Apr 2020"/>
+        android:text="Apr 2020"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/attendance_overview_layout"
@@ -64,7 +64,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toEndOf="@id/calendar_iv"
             android:layout_marginStart="8dp"
-            tools:text="Overview" />
+            android:text="Overview" />
 
 
         <TextView
@@ -92,7 +92,7 @@
             app:layout_constraintTop_toBottomOf="@id/calendar_iv"
             app:layout_constraintStart_toEndOf="@id/total_days_label"
             android:layout_marginStart="18dp"
-            tools:text=": 15/30 days" />
+            android:text=": 15/30 days" />
 
         <TextView
             android:id="@+id/total_working_days_label"
