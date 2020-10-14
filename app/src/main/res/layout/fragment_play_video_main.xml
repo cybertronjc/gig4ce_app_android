@@ -31,16 +31,16 @@
             android:orientation="vertical">
 
             <ImageView
-                android:layout_width="60dp"
-                android:layout_height="60dp"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
                 android:src="@drawable/ic_cross_grey"
                 app:tint="@color/white" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Close"
-                android:textSize="18sp"
+                android:text="close"
+                android:textSize="16sp"
                 android:fontFamily="@font/lato"
                 android:textColor="@color/white" />
 
