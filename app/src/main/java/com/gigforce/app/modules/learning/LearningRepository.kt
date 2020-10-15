@@ -228,6 +228,7 @@ class LearningRepository constructor(
         val querySnap = db.collection(COURSE_PROGRESS_NAME)
             .whereEqualTo("uid", getUID())
             .whereEqualTo("course_id", courseId)
+            .whereEqualTo(TYPE, TYPE_COURSE )
             .getOrThrow()
 
         if (querySnap.isEmpty) {
