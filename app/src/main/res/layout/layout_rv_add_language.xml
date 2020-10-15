@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+
+    android:background="@drawable/bottom_up_sheet">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:isScrollContainer="true"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/form_error"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/bs_top_margin"
+            android:letterSpacing="0.05"
+            android:text="@string/error_empty_mandatory_fields"
+            android:textColor="#d4e02020"
+            android:textSize="14sp"
+            android:visibility="gone" />
+
+        <EditText
+            android:id="@+id/add_language_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:background="@android:color/transparent"
+            android:hint="@string/language"
+            android:inputType="textPersonName"
+            android:paddingBottom="@dimen/size_18"
+            android:textSize="@dimen/font_14" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.8dp"
+            android:background="#68979797" />
+
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/mother_language"
+            style="@style/LatoRegularCardText12"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="-5dp"
+            android:buttonTint="@color/warm_grey_two"
+            android:letterSpacing="0.074"
+            android:text="@string/add_mother_tongue_text"
+            android:textSize="@dimen/font_14" />
+
+        <TextView
+            android:id="@+id/textView10"
+            style="@style/LatoRegularCardText12"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/add_language_speaking_level" />
+
+        <com.gigforce.app.utils.ThumbTextSeekBar
+            android:id="@+id/add_language_speaking_level"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:minHeight="@dimen/size_15"
+
+
+            />
+
+        <TextView
+            android:id="@+id/tv_speaking_level_text_add_language"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Low"
+            android:textColor="#7f7f7f"
+            android:textSize="@dimen/font_12" />
+
+        <TextView
+            android:id="@+id/textView13"
+            style="@style/LatoRegularCardText12"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/add_language_writing_level" />
+
+        <SeekBar
+            android:id="@+id/arround_current_add_seekbar"
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
+            android:layout_marginTop="8dp"
+            android:progressTint="@color/colorPrimary"
+            android:thumbTint="@color/colorPrimary" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/add_language_add_more"
+            style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/add_more_text"
+            android:textAlignment="textStart"
+            android:textColor="@color/colorPrimary"
+            app:icon="@drawable/ic_add"
+            app:iconTint="@color/colorPrimary" />
+
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

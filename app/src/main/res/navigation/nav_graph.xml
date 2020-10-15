@@ -695,6 +695,11 @@
         android:id="@+id/gigsListForDeclineBottomSheet"
         android:name="com.gigforce.app.modules.gigPage.GigsListForDeclineBottomSheet"
         android:label="GigsListForDeclineBottomSheet" />
+    <fragment
+        android:id="@+id/fragment_add_language"
+        android:name="com.gigforce.app.modules.explore_by_role.AddLanguageFragment"
+        android:label="fragment_add_language"
+        tools:layout="@layout/layout_fragment_add_language" />
 
 </navigation>
 

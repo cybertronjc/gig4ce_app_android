@@ -43,9 +43,9 @@ class RoleDetailsFragment : BaseFragment() {
     }
     private lateinit var mRoleID: String;
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
 
         return inflateView(R.layout.layout_role_details_fragment, inflater, container)
@@ -69,15 +69,15 @@ class RoleDetailsFragment : BaseFragment() {
                     tv_mark_as_interest_role_details.text = getString(R.string.marked_as_interest)
                 } else {
                     tv_mark_as_interest_role_details.text = getString(R.string.mark_as_interest)
-//                    tv_mark_as_interest_role_details.setOnClickListener {
-////                        checkForProfileAndVerificationData()
-////                        navigate(R.id.fragment_add_bio)
-//                        viewModel
-//                    }
                     tv_mark_as_interest_role_details.setOnClickListener {
-                        tv_mark_as_interest_role_details.gone()
-                        viewModel.addAsInterest(mRoleID)
+                        checkForProfileAndVerificationData()
+//                        navigate(R.id.fragment_add_bio)
+
                     }
+//                    tv_mark_as_interest_role_details.setOnClickListener {
+//                        tv_mark_as_interest_role_details.gone()
+//                        viewModel.addAsInterest(mRoleID)
+//                    }
 
                 }
             } else {
@@ -106,33 +106,33 @@ class RoleDetailsFragment : BaseFragment() {
                 tv_role_role_details.text = role?.role_title
                 tv_what_content_role_details.text = role?.about
                 tv_what_read_more_details.text =
-                    "${getString(R.string.what_does_a)} ${role?.role_title} ${
-                        getString(
-                            R.string.do_question_mark
-                        )
-                    }"
+                        "${getString(R.string.what_does_a)} ${role?.role_title} ${
+                            getString(
+                                    R.string.do_question_mark
+                            )
+                        }"
                 adapterPreferredLocation.addData(role?.top_locations ?: mutableListOf())
                 tv_earnings_role_details.setOnClickListener {
                     setOnExpandListener(
-                        role?.payments_and_benefits,
-                        tl_earnings_role_details,
-                        tv_earnings_role_details
+                            role?.payments_and_benefits,
+                            tl_earnings_role_details,
+                            tv_earnings_role_details
                     )
 
                 }
                 tv_requirements_role_details.setOnClickListener {
                     setOnExpandListener(
-                        role?.requirements,
-                        tl_requirements_role_details,
-                        tv_requirements_role_details
+                            role?.requirements,
+                            tl_requirements_role_details,
+                            tv_requirements_role_details
                     )
 
                 }
                 tv_responsibilities_role_details.setOnClickListener {
                     setOnExpandListener(
-                        role?.job_description,
-                        tl_responsibilities_role_details,
-                        tv_responsibilities_role_details
+                            role?.job_description,
+                            tl_responsibilities_role_details,
+                            tv_responsibilities_role_details
                     )
 
                 }
@@ -154,6 +154,8 @@ class RoleDetailsFragment : BaseFragment() {
                     if (element is ProfileData) {
                         if (element.aboutMe == null || element.aboutMe.isEmpty()) {
                             navigate(R.id.fragment_add_bio)
+                        } else if (element.languages == null || element.languages!!.isEmpty()) {
+                               navigate(R.id.fragment_add_language)
                         }
                     }
                 }
@@ -168,36 +170,36 @@ class RoleDetailsFragment : BaseFragment() {
         if (layout.childCount > 0) {
             layout.removeAllViews()
             textView.setCompoundDrawablesWithIntrinsicBounds(
-                textView.compoundDrawables[0],
-                null,
-                resources.getDrawable(R.drawable.ic_keyboard_arrow_down_c7c7cc),
-                null
+                    textView.compoundDrawables[0],
+                    null,
+                    resources.getDrawable(R.drawable.ic_keyboard_arrow_down_c7c7cc),
+                    null
             )
 
         } else {
             textView.setCompoundDrawablesWithIntrinsicBounds(
-                textView.compoundDrawables[0],
-                null,
-                resources.getDrawable(R.drawable.ic_baseline_keyboard_arrow_up_c7c7c7),
-                null
+                    textView.compoundDrawables[0],
+                    null,
+                    resources.getDrawable(R.drawable.ic_baseline_keyboard_arrow_up_c7c7c7),
+                    null
             )
             addBulletsTill(
-                0,
-                if (role?.size!! > 2) 1 else role.size!! - 1,
-                layout,
-                role,
-                true
+                    0,
+                    if (role?.size!! > 2) 1 else role.size!! - 1,
+                    layout,
+                    role,
+                    true
             )
             if (role?.size!! > 2) {
                 val moreTextView = AppCompatTextView(requireContext())
                 moreTextView.setTextSize(
-                    TypedValue.COMPLEX_UNIT_SP,
-                    14F
+                        TypedValue.COMPLEX_UNIT_SP,
+                        14F
                 )
                 moreTextView.setTextColor(resources.getColor(R.color.lipstick))
                 moreTextView.text = getString(R.string.plus_more)
                 val face =
-                    Typeface.createFromAsset(requireActivity().assets, "fonts/Lato-Regular.ttf")
+                        Typeface.createFromAsset(requireActivity().assets, "fonts/Lato-Regular.ttf")
                 moreTextView.typeface = face
                 moreTextView.setPadding(resources.getDimensionPixelSize(R.dimen.size_16), 0, 0, 0)
 
@@ -205,11 +207,11 @@ class RoleDetailsFragment : BaseFragment() {
                 moreTextView.setOnClickListener {
                     layout.removeViewInLayout(moreTextView)
                     addBulletsTill(
-                        2,
-                        role.size!! - 1,
-                        layout,
-                        role,
-                        false
+                            2,
+                            role.size!! - 1,
+                            layout,
+                            role,
+                            false
                     )
                 }
             }
@@ -218,11 +220,11 @@ class RoleDetailsFragment : BaseFragment() {
     }
 
     fun addBulletsTill(
-        from: Int,
-        to: Int,
-        layout: TableLayout,
-        arr: List<String>?,
-        removeAllViews: Boolean
+            from: Int,
+            to: Int,
+            layout: TableLayout,
+            arr: List<String>?,
+            removeAllViews: Boolean
     ) {
         if (removeAllViews)
             ll_earn_role_details.removeAllViews()
@@ -230,29 +232,29 @@ class RoleDetailsFragment : BaseFragment() {
 
             val iv = ImageView(requireContext())
             val layoutParams = TableRow.LayoutParams(
-                TableRow.LayoutParams.WRAP_CONTENT,
-                TableRow.LayoutParams.WRAP_CONTENT
+                    TableRow.LayoutParams.WRAP_CONTENT,
+                    TableRow.LayoutParams.WRAP_CONTENT
             )
             layoutParams.setMargins(
-                0,
-                resources.getDimensionPixelSize(R.dimen.font_9),
-                resources.getDimensionPixelSize(R.dimen.size_8),
-                0
+                    0,
+                    resources.getDimensionPixelSize(R.dimen.font_9),
+                    resources.getDimensionPixelSize(R.dimen.size_8),
+                    0
             )
             iv.layoutParams = layoutParams
             iv.setImageResource(R.drawable.shape_circle_lipstick)
             val textView = TextView(requireContext())
             val face =
-                Typeface.createFromAsset(requireActivity().assets, "fonts/Lato-Regular.ttf")
+                    Typeface.createFromAsset(requireActivity().assets, "fonts/Lato-Regular.ttf")
             textView.typeface = face
             textView.layoutParams = TableRow.LayoutParams(
-                getScreenWidth(requireActivity()).width - (resources.getDimensionPixelSize(R.dimen.size_66)),
-                TableRow.LayoutParams.WRAP_CONTENT
+                    getScreenWidth(requireActivity()).width - (resources.getDimensionPixelSize(R.dimen.size_66)),
+                    TableRow.LayoutParams.WRAP_CONTENT
             )
 
             textView.setTextSize(
-                TypedValue.COMPLEX_UNIT_SP,
-                18F
+                    TypedValue.COMPLEX_UNIT_SP,
+                    18F
             )
             textView.text = arr?.get(i)
             textView.setTextColor(resources.getColor(R.color.black))
@@ -260,18 +262,18 @@ class RoleDetailsFragment : BaseFragment() {
 
 
             tr.layoutParams = TableRow.LayoutParams(
-                TableRow.LayoutParams.MATCH_PARENT,
-                TableRow.LayoutParams.WRAP_CONTENT
+                    TableRow.LayoutParams.MATCH_PARENT,
+                    TableRow.LayoutParams.WRAP_CONTENT
             )
 
             tr.addView(iv)
             tr.addView(textView)
             layout.addView(
-                tr,
-                TableLayout.LayoutParams(
-                    TableLayout.LayoutParams.MATCH_PARENT,
-                    TableLayout.LayoutParams.WRAP_CONTENT
-                )
+                    tr,
+                    TableLayout.LayoutParams(
+                            TableLayout.LayoutParams.MATCH_PARENT,
+                            TableLayout.LayoutParams.WRAP_CONTENT
+                    )
             )
 
         }
@@ -280,12 +282,12 @@ class RoleDetailsFragment : BaseFragment() {
     private fun setupPreferredLocationRv() {
         rv_preferred_locations_role_details.adapter = adapterPreferredLocation
         rv_preferred_locations_role_details.layoutManager =
-            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+                LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         rv_preferred_locations_role_details.addItemDecoration(
-            HorizontaltemDecoration(
-                requireContext(),
-                R.dimen.size_11
-            )
+                HorizontaltemDecoration(
+                        requireContext(),
+                        R.dimen.size_11
+                )
         )
 
     }
