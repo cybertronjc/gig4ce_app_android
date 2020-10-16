@@ -256,9 +256,9 @@ class GigDetailsFragment : BaseFragment(), Toolbar.OnMenuItemClickListener,
 
 
         if (gig.isPresentGig() || gig.isPastGig()) {
-            toolbar?.menu?.findItem(R.id.action_decline_gig)?.setEnabled(false)
+            toolbar?.menu?.findItem(R.id.action_decline_gig)?.setVisible(false)
         } else {
-            toolbar.menu?.findItem(R.id.action_decline_gig)?.setEnabled(true)
+            toolbar.menu?.findItem(R.id.action_decline_gig)?.setVisible(true)
         }
 
         toolbar?.title = gig.title

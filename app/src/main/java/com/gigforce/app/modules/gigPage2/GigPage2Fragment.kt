@@ -134,9 +134,9 @@ class GigPage2Fragment : BaseFragment(), OtherOptionClickListener,
             viewModel.currentGig?.let {
 
                 if (it.isPresentGig() || it.isPastGig()) {
-                    popupMenu.menu.findItem(R.id.action_decline_gig).setEnabled(false)
+                    popupMenu.menu.findItem(R.id.action_decline_gig).setVisible(false)
                 } else {
-                    popupMenu.menu.findItem(R.id.action_decline_gig).setEnabled(true)
+                    popupMenu.menu.findItem(R.id.action_decline_gig).setVisible(true)
                 }
             }
 
