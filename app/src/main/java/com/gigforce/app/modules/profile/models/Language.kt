@@ -5,8 +5,8 @@ import java.util.*
 
 data class Language(
     var name: String = "",
-    var speakingSkill: String = "",
-    var writingSkill: String = "",
+    var speakingSkill: String = "0",
+    var writingSkill: String = "0",
     var isMotherLanguage: Boolean = false
 ): BaseFirestoreDataModel(tableName = "languages"){
 }

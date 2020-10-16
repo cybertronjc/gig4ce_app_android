@@ -1,71 +1,72 @@
-package com.gigforce.app.utils;
+package com.gigforce.app.utils
 
-import android.content.Context;
-import android.util.AttributeSet;
-import android.view.LayoutInflater;
-import android.widget.LinearLayout;
-import android.widget.SeekBar;
+import android.content.Context
+import android.util.AttributeSet
+import android.view.LayoutInflater
+import android.widget.LinearLayout
+import android.widget.SeekBar
+import android.widget.SeekBar.OnSeekBarChangeListener
+import com.gigforce.app.R
 
-import com.gigforce.app.R;
+class ThumbTextSeekBar : LinearLayout {
+    lateinit var tvThumb: ThumbTextView
+    lateinit var seekBar: SeekBar
+    private var onSeekBarChangeListener: OnSeekBarChangeListener? = null
 
-public class ThumbTextSeekBar extends LinearLayout {
-
-    public ThumbTextView tvThumb;
-    public SeekBar seekBar;
-    private SeekBar.OnSeekBarChangeListener onSeekBarChangeListener;
-
-    public ThumbTextSeekBar(Context context) {
-        super(context);
-        init();
+    constructor(context: Context?) : super(context) {
+        init()
     }
 
-    public ThumbTextSeekBar(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        init();
+    constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs) {
+        init()
     }
 
-    private void init() {
-        LayoutInflater.from(getContext()).inflate(R.layout.layout_thumb_text_seekbar, this);
-        setOrientation(LinearLayout.VERTICAL);
-        tvThumb = findViewById(R.id.tvThumb);
-        seekBar = findViewById(R.id.sbProgress);
-        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-                if (onSeekBarChangeListener != null)
-                    onSeekBarChangeListener.onStopTrackingTouch(seekBar);
+    private fun init() {
+        LayoutInflater.from(context).inflate(R.layout.layout_thumb_text_seekbar, this)
+        orientation = VERTICAL
+        tvThumb = findViewById<ThumbTextView>(R.id.tvThumb)
+        seekBar = findViewById<SeekBar>(R.id.sbProgress)
+
+        val lp = tvThumb.layoutParams as LayoutParams
+        lp.setMargins(seekBar.paddingLeft-(getViewWidth(tvThumb) / 2), resources.getDimensionPixelSize(R.dimen.size_9), 0, 0)
+        seekBar.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
+            override fun onStopTrackingTouch(seekBar: SeekBar) {
+                if (onSeekBarChangeListener != null) onSeekBarChangeListener!!.onStopTrackingTouch(
+                    seekBar
+                )
             }
 
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-                if (onSeekBarChangeListener != null)
-                    onSeekBarChangeListener.onStartTrackingTouch(seekBar);
+            override fun onStartTrackingTouch(seekBar: SeekBar) {
+                if (onSeekBarChangeListener != null) onSeekBarChangeListener!!.onStartTrackingTouch(
+                    seekBar
+                )
             }
 
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if (onSeekBarChangeListener != null)
-                    onSeekBarChangeListener.onProgressChanged(seekBar, progress, fromUser);
-                tvThumb.attachToSeekBar(seekBar);
+            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                if (onSeekBarChangeListener != null) onSeekBarChangeListener!!.onProgressChanged(
+                    seekBar,
+                    progress,
+                    fromUser
+                )
+                tvThumb.attachToSeekBar(seekBar)
             }
-        });
-
+        })
     }
 
-    public void setOnSeekBarChangeListener(SeekBar.OnSeekBarChangeListener l) {
-        this.onSeekBarChangeListener = l;
+    fun setOnSeekBarChangeListener(l: OnSeekBarChangeListener?) {
+        onSeekBarChangeListener = l
     }
 
-    public void setThumbText(String text) {
-        tvThumb.setText(text);
+    fun setThumbText(text: String?) {
+        tvThumb!!.text = text
     }
 
-    public void setProgress(int progress) {
-        if (progress == seekBar.getProgress() && progress == 0) {
-            seekBar.setProgress(1);
-            seekBar.setProgress(0);
+    fun setProgress(progress: Int) {
+        if (progress == seekBar!!.progress && progress == 0) {
+            seekBar!!.progress = 1
+            seekBar!!.progress = 0
         } else {
-            seekBar.setProgress(progress);
+            seekBar!!.progress = progress
         }
     }
 }

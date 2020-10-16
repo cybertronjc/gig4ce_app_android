@@ -17,6 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/bs_top_margin"
+            android:layout_marginBottom="@dimen/size_16"
             android:letterSpacing="0.05"
             android:text="@string/error_empty_mandatory_fields"
             android:textColor="#d4e02020"
@@ -35,6 +36,7 @@
             android:textSize="@dimen/font_14" />
 
         <View
+            android:id="@+id/name_line"
             android:layout_width="match_parent"
             android:layout_height="0.8dp"
             android:background="#68979797" />
@@ -62,48 +64,59 @@
             android:id="@+id/add_language_speaking_level"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="@dimen/size_14"
             android:minHeight="@dimen/size_15"
 
 
             />
 
         <TextView
-            android:id="@+id/tv_speaking_level_text_add_language"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="Low"
-            android:textColor="#7f7f7f"
-            android:textSize="@dimen/font_12" />
-
-        <TextView
             android:id="@+id/textView13"
             style="@style/LatoRegularCardText12"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="@dimen/size_17"
             android:text="@string/add_language_writing_level" />
 
-        <SeekBar
+        <com.gigforce.app.utils.ThumbTextSeekBar
             android:id="@+id/arround_current_add_seekbar"
             android:layout_width="match_parent"
-            android:layout_height="25dp"
-            android:layout_marginTop="8dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/size_11"
             android:progressTint="@color/colorPrimary"
             android:thumbTint="@color/colorPrimary" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/add_language_add_more"
-            style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="@string/add_more_text"
-            android:textAlignment="textStart"
-            android:textColor="@color/colorPrimary"
-            app:icon="@drawable/ic_add"
-            app:iconTint="@color/colorPrimary" />
+            android:layout_marginTop="16dp">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/add_language_add_more"
+                style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+
+                android:text="@string/add_more_text"
+                android:textAlignment="textStart"
+                android:textColor="@color/colorPrimary"
+                app:icon="@drawable/ic_add"
+                app:iconTint="@color/colorPrimary" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/remove_language"
+                style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:drawableEnd="@drawable/ic_delete"
+                android:drawablePadding="@dimen/size_8"
+                android:drawableTint="@color/colorPrimary"
+                android:text="@string/remove_caps"
+                android:textAlignment="textEnd"
+                android:textColor="@color/colorPrimary" />
+        </LinearLayout>
 
 
     </LinearLayout>

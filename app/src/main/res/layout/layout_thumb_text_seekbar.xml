@@ -10,6 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:minHeight="@dimen/size_15"
+
         android:progressDrawable="@drawable/bg_seekbar_add_language"
         android:thumb="@drawable/thumb_seekbar_language" />
 
@@ -17,7 +18,8 @@
         android:id="@+id/tvThumb"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/size_8"
+        android:layout_marginTop="@dimen/size_9"
+        android:text="@string/low"
         android:textColor="#7f7f7f"
         android:textSize="@dimen/font_12" />
 </merge>

@@ -971,6 +971,11 @@
     <string name="unsigned">Unsigned</string>
     <string name="add_bio_star">Add Bio*</string>
     <string name="new_language">New Language</string>
+    <string name="low">Low</string>
+    <string name="moderately_low">Moderately Low</string>
+    <string name="high">High</string>
+    <string name="moderate_add_language">Moderate</string>
+    <string name="remove_caps">REMOVE</string>
 
 
 </resources>
