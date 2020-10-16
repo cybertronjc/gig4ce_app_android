@@ -431,6 +431,7 @@ class BSCalendarScreenFragment : BaseFragment() {
                                 getView(viewHolder, R.id.checkInTV).isEnabled = false
                             } else if (obj.isCheckInAndCheckOutMarked()) {
                                 getView(viewHolder, R.id.checkInTV).isEnabled = false
+                                (getView(viewHolder, R.id.checkInTV) as Button).text = "Checked Out"
                             } else if (obj.isCheckInMarked()) {
                                 getView(viewHolder, R.id.checkInTV).isEnabled = true
                                 (getView(viewHolder, R.id.checkInTV) as Button).text =

@@ -161,7 +161,6 @@ class GigsListForDeclineAdapter constructor(
         override fun onCheckedChanged(buttonView: CompoundButton?, isChecked: Boolean) {
 
             if (isChecked) {
-
                 mSelectedGigIndexes.add(adapterPosition)
                 gigSelectionListener?.invoke(mGigs[adapterPosition])
             }else{

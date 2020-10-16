@@ -96,7 +96,6 @@ class GigDetailsFragment : BaseFragment(), Toolbar.OnMenuItemClickListener,
         }
 
         roleBasedLearningTV.text = "Related Learnings"
-
         toolbar?.setOnMenuItemClickListener(this)
         gigRequirementsSeeMoreTV.setOnClickListener {
 
@@ -228,7 +227,7 @@ class GigDetailsFragment : BaseFragment(), Toolbar.OnMenuItemClickListener,
                                         .into(img)
                                 }
                         }
-                    } else{
+                    } else {
                         GlideApp.with(requireContext())
                             .load(R.drawable.ic_learning_default_back)
                             .into(img)
@@ -254,6 +253,14 @@ class GigDetailsFragment : BaseFragment(), Toolbar.OnMenuItemClickListener,
     }
 
     private fun setGigDetailsOnView(gig: Gig) {
+
+
+        if (gig.isPresentGig() || gig.isPastGig()) {
+            toolbar?.menu?.findItem(R.id.action_decline_gig)?.setEnabled(false)
+        } else {
+            toolbar.menu?.findItem(R.id.action_decline_gig)?.setEnabled(true)
+        }
+
         toolbar?.title = gig.title
         roleNameTV.text = gig.title
         company_rating_tv.text = if (gig.gigRating != 0.0f) gig.gigRating.toString() else "-"
@@ -278,28 +285,34 @@ class GigDetailsFragment : BaseFragment(), Toolbar.OnMenuItemClickListener,
             gigResponsiblitiesSeeMoreTV.gone()
         }
 
-        val earningRow = if(gig.isMonthlyGig){
-            "<b>Typical per month earning</b> : ${if(gig.gigAmount != 0.0) "Rs. ${gig.gigAmount}" else "As per contract"}"
-        } else{
-            "<b>Typical per day earning</b> : ${if(gig.gigAmount != 0.0) "Rs. ${gig.gigAmount}" else "As per contract"}"
+        val earningRow = if (gig.isMonthlyGig) {
+            "<b>Typical per month earning</b> : ${if (gig.gigAmount != 0.0) "Rs. ${gig.gigAmount}" else "As per contract"}"
+        } else {
+            "<b>Typical per day earning</b> : ${if (gig.gigAmount != 0.0) "Rs. ${gig.gigAmount}" else "As per contract"}"
         }
 
         gig_earning_container.removeAllViews()
-        inflateGigPayments(listOf(
-            earningRow
-        ))
+        inflateGigPayments(
+            listOf(
+                earningRow
+            )
+        )
 
         gig_others_container.removeAllViews()
-        inflateGigOthers(listOf(
-            "Dummy Other row",
-            "Dummy Other row 2"
-        ))
+        inflateGigOthers(
+            listOf(
+                "Dummy Other row",
+                "Dummy Other row 2"
+            )
+        )
 
         gig_faq_container.removeAllViews()
-        inflateGigFaqs(listOf(
-            "Dummy Faq row",
-            "Dummy Faq row 2"
-        ))
+        inflateGigFaqs(
+            listOf(
+                "Dummy Faq row",
+                "Dummy Faq row 2"
+            )
+        )
     }
 
     private fun inflateGigChips(gig: Gig) {
@@ -323,7 +336,7 @@ class GigDetailsFragment : BaseFragment(), Toolbar.OnMenuItemClickListener,
         gig_chip_group.addView(chip)
 
 
-        if(gig.gigAmount != 0.0) {
+        if (gig.gigAmount != 0.0) {
             chip = layoutInflater.inflate(
                 R.layout.fragment_gig_page_2_details_chips,
                 gig_chip_group,
@@ -469,6 +482,7 @@ class GigDetailsFragment : BaseFragment(), Toolbar.OnMenuItemClickListener,
                 true
             }
             R.id.action_share -> {
+                showToast("This feature is under development")
                 true
             }
             R.id.action_decline_gig -> {
@@ -505,6 +519,5 @@ class GigDetailsFragment : BaseFragment(), Toolbar.OnMenuItemClickListener,
     }
 
     override fun gigDeclined() {
-        TODO("Not yet implemented")
     }
 }

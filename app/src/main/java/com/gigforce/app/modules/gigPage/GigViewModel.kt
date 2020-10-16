@@ -68,10 +68,9 @@ class GigViewModel constructor(
         val upcomingGigs = userGigs.filter {
 
             if (it.endDateTime != null) {
-                it.endDateTime!!.toDate().time > currentDate.time
+                it.endDateTime!!.toDate().time > currentDate.time && !it.isCheckInAndCheckOutMarked()
             } else {
-
-                it.startDateTime!!.toDate().time > currentDate.time
+                it.startDateTime!!.toDate().time > currentDate.time && !it.isCheckInAndCheckOutMarked()
             }
         }.sortedBy {
             it.startDateTime!!.seconds

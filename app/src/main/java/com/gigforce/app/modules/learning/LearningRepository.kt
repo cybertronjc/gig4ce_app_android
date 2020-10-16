@@ -262,7 +262,9 @@ class LearningRepository constructor(
             return emptyList()
         } else {
             return querySnap.documents.map {
-                it.toObject(ModuleProgress::class.java)!!
+                val moduleProgress  = it.toObject(ModuleProgress::class.java)!!
+                moduleProgress.progressId = it.id
+                moduleProgress
             }
         }
     }
