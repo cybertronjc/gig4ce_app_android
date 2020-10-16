@@ -15,6 +15,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.os.bundleOf
 import androidx.core.widget.NestedScrollView
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
@@ -49,6 +50,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.storage.StorageReference
 import com.riningan.widget.ExtendedBottomSheetBehavior
+import com.riningan.widget.ExtendedBottomSheetBehavior.BottomSheetCallback
 import com.riningan.widget.ExtendedBottomSheetBehavior.STATE_COLLAPSED
 import kotlinx.android.synthetic.main.calendar_home_screen.*
 import kotlinx.android.synthetic.main.calendar_home_screen.cardView
@@ -63,7 +65,7 @@ import java.util.*
 
 
 class CalendarHomeScreen : BaseFragment(),
-    CalendarRecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
+    CalendarRecyclerItemTouchHelper.RecyclerItemTouchHelperListener{
 
     companion object {
         fun newInstance() =
@@ -79,7 +81,7 @@ class CalendarHomeScreen : BaseFragment(),
 
     lateinit var arrCalendarDependent: Array<View>
     private var mExtendedBottomSheetBehavior: ExtendedBottomSheetBehavior<*>? = null
-    private lateinit var viewModel: CalendarHomeScreenViewModel
+    private val viewModel: CalendarHomeScreenViewModel by viewModels()
     lateinit var viewModelProfile: ProfileViewModel
     lateinit var viewModelCustomPreference: CustomPreferencesViewModel
     var width: Int = 0
@@ -96,7 +98,6 @@ class CalendarHomeScreen : BaseFragment(),
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(CalendarHomeScreenViewModel::class.java)
         viewModelProfile = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
         viewModelCustomPreference =
             ViewModelProvider(this, ParamCustPreferViewModel(viewLifecycleOwner)).get(
@@ -195,7 +196,10 @@ class CalendarHomeScreen : BaseFragment(),
 
     private fun initializeExtendedBottomSheet() {
         mExtendedBottomSheetBehavior = ExtendedBottomSheetBehavior.from(nsv)
-        mExtendedBottomSheetBehavior?.state = STATE_COLLAPSED
+
+        Log.d("BottomSheetState " ,"init  : ${viewModel.currentBottomSheetState}")
+        mExtendedBottomSheetBehavior?.setBottomSheetCallback(BottomSheetExpansionListener())
+        mExtendedBottomSheetBehavior?.state = viewModel.currentBottomSheetState
         mExtendedBottomSheetBehavior?.isAllowUserDragging = true;
     }
 
@@ -253,9 +257,11 @@ class CalendarHomeScreen : BaseFragment(),
     private fun changeVisibilityCalendarView() {
         var extendedBottomSheetBehavior: ExtendedBottomSheetBehavior<NestedScrollView> =
             ExtendedBottomSheetBehavior.from(nsv);
+
         if (extendedBottomSheetBehavior.isAllowUserDragging) {
             hideDependentViews(false)
-            extendedBottomSheetBehavior.state = ExtendedBottomSheetBehavior.STATE_COLLAPSED
+            Log.d("BottomSheetState " ,"changeVisibilityCalendarView  : ${viewModel.currentBottomSheetState}")
+            extendedBottomSheetBehavior.state = viewModel.currentBottomSheetState
             extendedBottomSheetBehavior.isAllowUserDragging = false
         } else {
             if (selectedMonthModel.days != null && selectedMonthModel.days.size == 1) {
@@ -862,6 +868,17 @@ class CalendarHomeScreen : BaseFragment(),
         } else {
             getView(viewHolder, R.id.calendar_month_cl).visibility = View.GONE
             getView(viewHolder, R.id.calendar_detail_item_cl).visibility = View.VISIBLE
+        }
+    }
+
+    inner class BottomSheetExpansionListener : ExtendedBottomSheetBehavior.BottomSheetCallback(){
+
+        override fun onStateChanged(bottomSheet: View, newState: Int) {
+            viewModel.currentBottomSheetState = newState
+            Log.d("BottomSheetState " ,"Change State : $newState")
+        }
+
+        override fun onSlide(bottomSheet: View, slideOffset: Float) {
         }
     }
 
