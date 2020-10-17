@@ -5,7 +5,9 @@ import android.os.Bundle
 import android.util.AttributeSet
 import android.view.View
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
+import com.gigforce.app.modules.gigPage.GigNavigation
 import com.gigforce.app.modules.gigPage.GigPageFragment
 import com.google.android.material.card.MaterialCardView
 import kotlinx.android.synthetic.main.upcoming_gig_card.view.*
@@ -53,9 +55,7 @@ class UpcomingGigCard(
             cardHeight = 40.px
 
         this.setOnClickListener {
-            findNavController().navigate(R.id.presentGigPageFragment, Bundle().apply {
-                this.putString(GigPageFragment.INTENT_EXTRA_GIG_ID, gigId)
-            })
+            GigNavigation.openGigMainPage(findNavController(), gigId)
         }
     }
 }

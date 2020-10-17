@@ -18,6 +18,7 @@ import androidx.navigation.fragment.findNavController
 import com.clevertap.android.sdk.CleverTapAPI
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.popAllBackStates
+import com.gigforce.app.modules.gigPage.GigNavigation
 import com.gigforce.app.modules.landingscreen.LandingScreenFragment
 import com.gigforce.app.modules.onboardingmain.OnboardingMainFragment
 import com.gigforce.app.notification.NotificationConstants
@@ -62,10 +63,7 @@ class MainActivity : AppCompatActivity() {
             NotificationConstants.CLICK_ACTIONS.OPEN_GIG_ATTENDANCE_PAGE -> {
                 Log.d("MainActivity","redirecting to attendance page")
                 navController.popAllBackStates()
-                navController.navigate(
-                    R.id.gigAttendancePageFragment,
-                    intent.extras
-                )
+                GigNavigation.openGigAttendancePage(navController, intent.extras)
             }
             NotificationConstants.CLICK_ACTIONS.OPEN_VERIFICATION_PAGE -> {
                 Log.d("MainActivity","redirecting to gig verification page")
