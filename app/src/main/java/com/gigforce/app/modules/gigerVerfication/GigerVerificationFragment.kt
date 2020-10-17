@@ -1,5 +1,6 @@
 package com.gigforce.app.modules.gigerVerfication
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +12,9 @@ import com.bumptech.glide.Glide
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.visible
+import com.gigforce.app.utils.DocViewerActivity
+import com.gigforce.app.utils.PushDownAnim
+import com.gigforce.app.utils.StringConstants
 import kotlinx.android.synthetic.main.fragment_giger_verification.*
 import kotlinx.android.synthetic.main.fragment_giger_verification_item.view.*
 import kotlinx.android.synthetic.main.fragment_giger_verification_main.*
@@ -37,30 +41,46 @@ class GigerVerificationFragment : BaseFragment() {
     }
 
     private fun checkForContract() {
-        viewModel.gigerContractStatus.observe(viewLifecycleOwner, Observer {
-            ll_contracts.visible()
-            if (it) {
-                tv_contract_status.setCompoundDrawablesRelativeWithIntrinsicBounds(
-                    R.drawable.ic_check,
-                    0,
-                    0,
-                    0
-                )
-                tv_contract_status.setTextColor(resources.getColor(R.color.green_dc3ab105))
-                tv_contract_status.setBackgroundResource(R.drawable.bg_capsule_53ba25)
-                tv_contract_status.text = getString(R.string.signed)
+        viewModel.gigerContractStatus.observe(viewLifecycleOwner, Observer { url ->
+            run {
+                ll_contracts.visible()
+                if (url != null) {
+                    tv_contract_status.setCompoundDrawablesRelativeWithIntrinsicBounds(
+                        R.drawable.ic_check,
+                        0,
+                        0,
+                        0
+                    )
+                    tv_contract_status.setTextColor(resources.getColor(R.color.green_dc3ab105))
+                    tv_contract_status.setBackgroundResource(R.drawable.bg_capsule_53ba25)
+                    tv_contract_status.text = getString(R.string.signed)
+                    PushDownAnim.setPushDownAnimTo(ll_contracts)
+                        .setOnClickListener(View.OnClickListener {
+                            val docIntent = Intent(
+                                requireContext(),
+                                DocViewerActivity::class.java
+                            )
+                            docIntent.putExtra(
+                                StringConstants.DOC_URL.value,
+                                url
+                            )
+                            startActivity(docIntent)
+                        })
 
-            }else{
-                tv_contract_status.setCompoundDrawablesRelativeWithIntrinsicBounds(
-                    R.drawable.ic_time_fa6400,
-                    0,
-                    0,
-                    0
-                )
-                tv_contract_status.setTextColor(resources.getColor(R.color.fa6400))
-                tv_contract_status.setBackgroundResource(R.drawable.bg_capsule_border_fa6400)
-                tv_contract_status.text = getString(R.string.unsigned)
+
+                } else {
+                    tv_contract_status.setCompoundDrawablesRelativeWithIntrinsicBounds(
+                        R.drawable.ic_time_fa6400,
+                        0,
+                        0,
+                        0
+                    )
+                    tv_contract_status.setTextColor(resources.getColor(R.color.fa6400))
+                    tv_contract_status.setBackgroundResource(R.drawable.bg_capsule_border_fa6400)
+                    tv_contract_status.text = getString(R.string.unsigned)
+                }
             }
+
         })
         viewModel.checkForSignedContract()
     }

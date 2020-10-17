@@ -20,7 +20,6 @@ import kotlinx.android.synthetic.main.layout_rv_add_language.view.*
 class AdapterAddLanguage() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var adapterAddLanguageCallbacks: AdapterAddLanguageCallbacks? = null
     private var items: MutableList<Language>? = null
-    private var submitClicked = false
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -53,7 +52,7 @@ class AdapterAddLanguage() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 val viewholder: ViewHolderAction = holder as ViewHolderAction
                 PushDownAnim.setPushDownAnimTo(viewholder.itemView.tv_action).setOnClickListener(
                     View.OnClickListener {
-                        submitClicked = true
+
                         adapterAddLanguageCallbacks?.submitClicked(items!!)
                     })
             }
@@ -135,7 +134,7 @@ class AdapterAddLanguage() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                     notifyItemRemoved(viewHolderAddLanguage.adapterPosition)
                     items?.size?.minus(1)?.let { it1 -> notifyItemChanged(it1) }
                 }
-                if (submitClicked) {
+                if (language?.validateFields == true) {
                     validate(viewHolderAddLanguage)
                 }
             }
@@ -147,7 +146,9 @@ class AdapterAddLanguage() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         viewholder.itemView.form_error.visibility =
             if (viewholder.itemView.add_language_name.text.isEmpty()) View.VISIBLE else View.GONE
         viewholder.itemView.name_line.setBackgroundColor(
-            if (viewholder.itemView.add_language_name.text.isEmpty()) R.color.red else Color.parseColor(
+            if (viewholder.itemView.add_language_name.text.isEmpty()) viewholder.itemView.resources.getColor(
+                R.color.red
+            ) else Color.parseColor(
                 "#68979797"
             )
         )

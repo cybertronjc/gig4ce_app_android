@@ -10,59 +10,79 @@ import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
-import com.gigforce.app.modules.profile.models.Language
-import com.gigforce.app.utils.AddLangugeRvItemDecorator
-import kotlinx.android.synthetic.main.layout_fragment_add_language.*
+import com.gigforce.app.modules.explore_by_role.models.ContactModel
+import com.gigforce.app.utils.ItemDecorationAddContact
+import com.gigforce.app.utils.isValidMail
+import com.gigforce.app.utils.isValidMobile
+import kotlinx.android.synthetic.main.layout_fragment_add_contact_details.*
 
-class AddLanguageFragment : BaseFragment(), AdapterAddLanguage.AdapterAddLanguageCallbacks {
+class AddContactDetailsFragment : BaseFragment(), AdapterAddContact.AdapterAddContactsCallbacks {
     private lateinit var win: Window
-    val addLanguageViewModel: AddLanguageViewModel by activityViewModels<AddLanguageViewModel>()
-
+    private var adapter: AdapterAddContact? = null
+    val viewModel: AddContactViewmodel by activityViewModels<AddContactViewmodel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflateView(R.layout.layout_fragment_add_language, inflater, container)
+        return inflateView(R.layout.layout_fragment_add_contact_details, inflater, container)
     }
-
-    private var adapter: AdapterAddLanguage? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setUpRecycler()
         initObservers()
         initClicks()
+
     }
 
     private fun initClicks() {
-        iv_close_add_bio.setOnClickListener {
+        iv_close_add_contact.setOnClickListener {
             popBackState()
         }
     }
 
     private fun initObservers() {
-        addLanguageViewModel.observableSuccess.observe(viewLifecycleOwner, Observer {
-            pb_add_language.gone()
+        viewModel.observableContact.observe(viewLifecycleOwner, Observer {
+            val list: MutableList<ContactModel> = ArrayList()
+            for (i in 0 until it?.contactPhone?.size!!) {
+                list.add(ContactModel(contactPhone = it?.contactPhone?.get(i)))
+            }
+            for (i in 0 until it?.contactEmail?.size!!) {
+                if (i < list.size) {
+                    list[i].contactEmail = it?.contactEmail!![i]!!
+                } else {
+                    list.add(ContactModel(contactEmail = it?.contactEmail!![i]))
+                }
+            }
+            adapter?.addData(list)
+
+        })
+        viewModel.observableSetContacts.observe(viewLifecycleOwner, Observer {
+            pb_add_contact.gone()
             if (it == "true") {
                 popBackState()
             } else {
                 showToast(it!!)
             }
         })
+        viewModel.getPrimaryContact()
+
+
     }
 
     private fun setUpRecycler() {
-        rv_add_language.layoutManager = LinearLayoutManager(requireActivity())
-        rv_add_language.addItemDecoration(AddLangugeRvItemDecorator(requireContext()))
-        adapter = AdapterAddLanguage()
-        rv_add_language.adapter = adapter
-        adapter?.addData(mutableListOf(Language()))
+        rv_add_contact.layoutManager = LinearLayoutManager(requireActivity())
+        rv_add_contact.addItemDecoration(ItemDecorationAddContact(requireContext()))
+        adapter = AdapterAddContact()
+        rv_add_contact.adapter = adapter
+
         adapter?.setCallbacks(this)
 
 
     }
+
 
     private fun makeStatusBarTransparent() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
@@ -102,21 +122,26 @@ class AddLanguageFragment : BaseFragment(), AdapterAddLanguage.AdapterAddLanguag
         restoreStatusBar()
     }
 
-    override fun submitClicked(items: MutableList<Language>) {
-        var submitLanguages = true
+    override fun submitClicked(items: MutableList<ContactModel>) {
+        var submitContact = true
         for (i in 0 until items.size) {
-            if (items[i].name.isEmpty()) {
+            if (!isValidMobile(
+                    items[i].contactPhone?.phone ?: ""
+                ) || items[i].contactEmail?.email?.isNotEmpty()!! && !isValidMail(
+                    items[i].contactEmail?.email ?: ""
+                )
+            ) {
                 items[i].validateFields = true
-                submitLanguages = false
+                submitContact = false
 
             }
         }
         adapter?.notifyItemRangeChanged(0, items.size)
 
-        if (submitLanguages) {
-            pb_add_language.visible()
-            addLanguageViewModel.addLanguages(items)
+
+        if (submitContact) {
+            pb_add_contact.visible()
+            viewModel.addContacts(items)
         }
     }
-
 }

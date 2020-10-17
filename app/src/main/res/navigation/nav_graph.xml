@@ -700,6 +700,12 @@
         android:name="com.gigforce.app.modules.explore_by_role.AddLanguageFragment"
         android:label="fragment_add_language"
         tools:layout="@layout/layout_fragment_add_language" />
+    <fragment
+        android:id="@+id/fragment_add_contact"
+        android:name="com.gigforce.app.modules.explore_by_role.AddContactDetailsFragment"
+        android:label="fragment_add_contact"
+        tools:layout="@layout/layout_fragment_add_contact_details" />
+
 
 </navigation>
 

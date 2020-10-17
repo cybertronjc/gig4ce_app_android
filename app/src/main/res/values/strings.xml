@@ -976,6 +976,11 @@
     <string name="high">High</string>
     <string name="moderate_add_language">Moderate</string>
     <string name="remove_caps">REMOVE</string>
+    <string name="edit_contact_details">Edit Contact Details</string>
+    <string name="phone_number">Phone Number*</string>
+    <string name="enter_phone_number">Enter Phone Number</string>
+    <string name="email_mandatory">Email*</string>
+    <string name="enter_email_address">Enter Email Address</string>
 
 
 </resources>
