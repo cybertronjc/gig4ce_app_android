@@ -40,8 +40,10 @@ import com.gigforce.app.modules.learning.models.Course
 import com.gigforce.app.modules.preferences.PreferencesFragment
 import com.gigforce.app.modules.profile.ProfileViewModel
 import com.gigforce.app.modules.profile.models.ProfileData
+import com.gigforce.app.utils.AppConstants
 import com.gigforce.app.utils.GlideApp
 import com.gigforce.app.utils.Lce
+import com.gigforce.app.utils.StringConstants
 import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
@@ -85,11 +87,12 @@ class LandingScreenFragment : BaseFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        val notificationToken=FirebaseInstanceId.getInstance().getToken()
+        val notificationToken = FirebaseInstanceId.getInstance().getToken()
         viewModel = ViewModelProvider(this).get(LandingScreenViewModel::class.java)
         val displayMetrics = DisplayMetrics()
         activity?.windowManager?.getDefaultDisplay()?.getMetrics(displayMetrics)
         width = displayMetrics.widthPixels
+        initUI()
         initializeExploreByRole()
         initializeExploreByIndustry()
         initializeLearningModule()
@@ -108,6 +111,12 @@ class LandingScreenFragment : BaseFragment() {
             else -> {
             }
         }
+    }
+
+    private fun initUI() {
+        about_us_cl.visibility =
+            if (sharedDataInterface.getDataBoolean(StringConstants.SKIPPED_ABOUT_INTRO.value) == true
+            ) View.GONE else View.VISIBLE
     }
 
     override fun onDetach() {
@@ -252,25 +261,20 @@ class LandingScreenFragment : BaseFragment() {
         helpViewModel.getTopHelpVideos()
     }
 
-    private fun setTipsOnView(tips: List<Tip>) {
-
+    private fun setTipsOnView(tips_: List<Tip>) {
+        val tips = tips_.filter { item ->
+            !sharedDataInterface.getDataBoolean(item.tip_id.toString())!!
+        }.toMutableList()
         if (tips.isEmpty()) {
             gigforce_tip.gone()
         } else {
             gigforce_tip.visible()
 
-            val recyclerGenericAdapter: RecyclerGenericAdapter<Tip> =
+            var recyclerGenericAdapter: RecyclerGenericAdapter<Tip>? = null
+            recyclerGenericAdapter =
                 RecyclerGenericAdapter<Tip>(
                     activity?.applicationContext,
-                    PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
-                        val tip = (item as Tip)
-                        navigate(
-                            resId = tip.whereToRedirect,
-                            args = tip.intentExtraMap.toBundle()
-                        )
-
-
-                    },
+                    null,
                     RecyclerGenericAdapter.ItemInterface<Tip?> { obj, viewHolder, position ->
                         var title = getTextView(viewHolder, R.id.gigtip_title)
                         var subtitle = getTextView(viewHolder, R.id.gigtip_subtitle)
@@ -281,10 +285,24 @@ class LandingScreenFragment : BaseFragment() {
                         title.layoutParams = lp
                         title.text = obj?.title
                         subtitle.text = obj?.subTitle
+                        getView(viewHolder, R.id.textView102).setOnClickListener {
+                            val tip = tips.get(viewHolder.adapterPosition)
+                            navigate(
+                                resId = tip.whereToRedirect,
+                                args = tip.intentExtraMap.toBundle()
+                            )
+                        }
 
-                        getView(viewHolder, R.id.skip).setOnClickListener(
-                            SkipClickListener(gigforce_tip, position)
-                        )
+                        getView(viewHolder, R.id.skip).setOnClickListener {
+                            if (viewHolder.adapterPosition == -1) return@setOnClickListener
+                            sharedDataInterface.saveDataBoolean(obj?.tip_id.toString(), true)
+                            tips.removeAt(viewHolder.adapterPosition)
+                            recyclerGenericAdapter?.notifyItemRemoved(viewHolder.adapterPosition)
+                            if (tips.isEmpty()) {
+                                gigforce_tip.gone()
+                            }
+
+                        }
 
 
 //                    getTextView(viewHolder, R.id.skip).setOnClickListener{
@@ -435,10 +453,11 @@ class LandingScreenFragment : BaseFragment() {
             navigate(R.id.mainHomeScreen)
         }
         skip_about_intro.setOnClickListener {
+            sharedDataInterface.saveDataBoolean(StringConstants.SKIPPED_ABOUT_INTRO.value, true)
             about_us_cl.visibility = View.GONE
         }
         chat_icon_iv.setOnClickListener {
-            navigate(R.id.fakeGigContactScreenFragment)
+//            navigate(R.id.fakeGigContactScreenFragment)
         }
 
         contact_us.setOnClickListener {
@@ -446,7 +465,7 @@ class LandingScreenFragment : BaseFragment() {
         }
 
         invite_contact.setOnClickListener {
-          navigate(R.id.referrals_fragment)
+            navigate(R.id.referrals_fragment)
         }
 
         profile_image.setOnClickListener {
@@ -461,14 +480,18 @@ class LandingScreenFragment : BaseFragment() {
             navigate(R.id.helpVideosFragment)
         }
         help_topic.setOnClickListener {
-            showToast("This is under development. Please check again in a few days.")
+            navigate(R.id.helpVideosFragment)
         }
 
         gigforce_video.setOnClickListener {
             playVideo("FbiyRe49wjY")
         }
         ll_search_role.setOnClickListener {
-            navigate(R.id.fragment_explore_by_role)
+            if (AppConstants.UNLOCK_FEATURE) {
+                navigate(R.id.fragment_explore_by_role)
+            } else {
+                showToast("This is under development. Please check again in a few days.")
+            }
         }
     }
 
@@ -567,7 +590,7 @@ class LandingScreenFragment : BaseFragment() {
                                             .into(img)
                                     }
                             }
-                        } else{
+                        } else {
 
                             GlideApp.with(requireContext())
                                 .load(R.drawable.ic_learning_default_back)
@@ -639,7 +662,7 @@ class LandingScreenFragment : BaseFragment() {
             RecyclerGenericAdapter<TitleSubtitleModel>(
                 activity?.applicationContext,
                 PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
-//                    if(AppConstants.UNLOCK_FEATURE){
+                    //                    if(AppConstants.UNLOCK_FEATURE){
 //                    }else
                     showToast("This is under development. Please check again in a few days.")
                 },
@@ -669,7 +692,7 @@ class LandingScreenFragment : BaseFragment() {
     }
 
     private fun initializeExploreByRole() {
-        landingScreenViewModel.observerRole.observe(viewLifecycleOwner, Observer {gig->
+        landingScreenViewModel.observerRole.observe(viewLifecycleOwner, Observer { gig ->
             run {
                 showGlideImage(gig?.role_image ?: "", iv_role)
                 tv_title_role.text = gig?.role_title
@@ -678,11 +701,15 @@ class LandingScreenFragment : BaseFragment() {
                     tv_subtitle_role.text = gig?.job_description?.get(0)
                 }
                 cv_role.setOnClickListener {
-                    findNavController().navigate(
-                        LandingScreenFragmentDirections.openRoleDetailsHome(
-                            gig?.id!!
+                    if (AppConstants.UNLOCK_FEATURE) {
+                        findNavController().navigate(
+                            LandingScreenFragmentDirections.openRoleDetailsHome(
+                                gig?.id!!
+                            )
                         )
-                    )
+                    } else {
+                        showToast("This is under development. Please check again in a few days.")
+                    }
                 }
             }
 
@@ -695,7 +722,7 @@ class LandingScreenFragment : BaseFragment() {
         lp.width = itemWidth
 
         cv_role.layoutParams = lp
-
-
     }
+
+
 }

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/coodinate_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -33,11 +32,11 @@
             android:layout_marginTop="20dp"
             android:fontFamily="@font/lato"
             android:gravity="center_horizontal"
+            android:letterSpacing="0"
             android:paddingBottom="2dp"
             android:text="April 2020"
             android:textColor="#333333"
             android:textSize="14sp"
-            android:letterSpacing="0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv1HS1" />
 
@@ -57,6 +56,7 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="8dp"
             android:src="@drawable/ic_landinghome_search"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/chat_icon_iv"
             app:layout_constraintEnd_toStartOf="@+id/chat_icon_iv"
             app:layout_constraintTop_toTopOf="@+id/chat_icon_iv" />
@@ -133,8 +133,8 @@
         android:id="@+id/bottom_sheet_top_shadow"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone"
-        android:elevation="30dp">
+        android:elevation="30dp"
+        android:visibility="gone">
 
         <View
             android:id="@+id/bottom_sheet_shadow_view"
@@ -160,9 +160,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:elevation="10dp"
-            app:srcCompat="@drawable/ic_oval_top_landingscreen"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_oval_top_landingscreen" />
 
         <View
             android:id="@+id/below_oval"

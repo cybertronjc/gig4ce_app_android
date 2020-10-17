@@ -58,6 +58,7 @@ class LanguagePreferencesFragment : BaseFragment() {
                     when (it) {
                         "en" -> groupradio.findViewById<RadioButton>(R.id.en).isEnabled = true
                         "hi" -> groupradio.findViewById<RadioButton>(R.id.hi).isEnabled = true
+                        "kn" -> groupradio.findViewById<RadioButton>(R.id.kn).isEnabled = true
                         "te" -> groupradio.findViewById<RadioButton>(R.id.te).isEnabled = true
                         "gu" -> groupradio.findViewById<RadioButton>(R.id.gu).isEnabled = true
                         "pa" -> groupradio.findViewById<RadioButton>(R.id.pu).isEnabled = true
@@ -89,6 +90,7 @@ class LanguagePreferencesFragment : BaseFragment() {
         when(lang){
             "en" -> groupradio.findViewById<RadioButton>(R.id.en).isChecked = true
             "hi" -> groupradio.findViewById<RadioButton>(R.id.hi).isChecked = true
+            "kn" -> groupradio.findViewById<RadioButton>(R.id.kn).isEnabled = true
             "te" -> groupradio.findViewById<RadioButton>(R.id.te).isChecked = true
             "gu" -> groupradio.findViewById<RadioButton>(R.id.gu).isChecked = true
             "pa" -> groupradio.findViewById<RadioButton>(R.id.pu).isChecked = true

@@ -505,7 +505,9 @@ class AssessmentResultFragment : BaseFragment(), PopupMenu.OnMenuItemClickListen
 
     private var userPassed = false
     private fun initUI() {
+        userPassed = arguments?.getBoolean(StringConstants.ASSESSMENT_PASSED.value) ?: false
         tv_title_toolbar.text = getString(R.string.assessment)
+        tv_kp_it_up_assess_result.text=if(userPassed) getString(R.string.keep_it_up) else getString(R.string.watch_lesson_again)
         iv_options_menu_tb.visibility = View.VISIBLE
         var correctAns = 0
         arguments?.getBooleanArray(StringConstants.ANSWERS_ARR.value)?.forEach { item ->
@@ -517,13 +519,11 @@ class AssessmentResultFragment : BaseFragment(), PopupMenu.OnMenuItemClickListen
             "%.1f",
             (((correctAns / arguments?.getBooleanArray(StringConstants.ANSWERS_ARR.value)?.size?.toFloat()!!) * 100))
         ) + " %"
-
-
         tv_score_assess_result.text =
             Html.fromHtml("${getString(R.string.you_have_scored)} <b>${percent}</b> ${getString(R.string.in_your_assessment)}")
         tv_new_cert_asses_frag.text =
             Html.fromHtml(getString(R.string.new_cert_added_underlined))
-        userPassed = arguments?.getBoolean(StringConstants.ASSESSMENT_PASSED.value) ?: false
+
         viewModelAssessmentResult.checkIfUserPassed(userPassed)
 
         iv_options_menu_tb.visibility =

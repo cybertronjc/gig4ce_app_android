@@ -46,6 +46,7 @@ import com.gigforce.app.modules.gigPage.GigAttendancePageFragment
 import com.gigforce.app.modules.gigPage.GigPageFragment
 import com.gigforce.app.modules.gigPage.GigViewModel
 import com.gigforce.app.modules.gigPage.models.Gig
+import com.gigforce.app.modules.gigPage2.GigPage2Fragment
 import com.gigforce.app.modules.landingscreen.LandingScreenFragment
 import com.gigforce.app.modules.landingscreen.LandingScreenViewModel
 import com.gigforce.app.modules.learning.LearningConstants
@@ -120,7 +121,7 @@ class BSCalendarScreenFragment : BaseFragment() {
             })
 
 
-       // mainLearningViewModel.getAssessmentsFromAllAssignedCourses()
+        // mainLearningViewModel.getAssessmentsFromAllAssignedCourses()
         learningViewModel.getRoleBasedCourses()
     }
 
@@ -162,10 +163,10 @@ class BSCalendarScreenFragment : BaseFragment() {
         learning_learning_error.gone()
         learning_rv.visible()
 
-        if(content.isEmpty()){
+        if (content.isEmpty()) {
             learning_tv.gone()
             learning_container.gone()
-        } else{
+        } else {
             learning_tv.visible()
             learning_container.visible()
 
@@ -218,7 +219,7 @@ class BSCalendarScreenFragment : BaseFragment() {
                                             .into(img)
                                     }
                             }
-                        } else{
+                        } else {
                             GlideApp.with(requireContext())
                                 .load(R.drawable.ic_learning_default_back)
                                 .into(img)
@@ -389,8 +390,8 @@ class BSCalendarScreenFragment : BaseFragment() {
                     activity?.applicationContext,
                     PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
                         val gig = item as Gig
-                        navigate(R.id.presentGigPageFragment, Bundle().apply {
-                            this.putString(GigPageFragment.INTENT_EXTRA_GIG_ID, gig.gigId)
+                        navigate(R.id.gigPage2Fragment, Bundle().apply {
+                            this.putString(GigPage2Fragment.INTENT_EXTRA_GIG_ID, gig.gigId)
                         })
 
 //                    showKYCAndHideUpcomingLayout(
@@ -412,9 +413,9 @@ class BSCalendarScreenFragment : BaseFragment() {
 
                             val gigTiming = if (obj.endDateTime != null)
                                 "${timeFormatter.format(obj.startDateTime!!.toDate())} - ${
-                                    timeFormatter.format(
-                                        obj.endDateTime!!.toDate()
-                                    )
+                                timeFormatter.format(
+                                    obj.endDateTime!!.toDate()
+                                )
                                 }"
                             else
                                 "${timeFormatter.format(obj.startDateTime!!.toDate())} - "
@@ -432,10 +433,12 @@ class BSCalendarScreenFragment : BaseFragment() {
                                 getView(viewHolder, R.id.checkInTV).isEnabled = false
                             } else if (obj.isCheckInMarked()) {
                                 getView(viewHolder, R.id.checkInTV).isEnabled = true
-                                (getView(viewHolder, R.id.checkInTV) as Button).text = getString(R.string.check_out)
+                                (getView(viewHolder, R.id.checkInTV) as Button).text =
+                                    getString(R.string.check_out)
                             } else {
                                 getView(viewHolder, R.id.checkInTV).isEnabled = true
-                                (getView(viewHolder, R.id.checkInTV) as Button).text = getString(R.string.check_in)
+                                (getView(viewHolder, R.id.checkInTV) as Button).text =
+                                    getString(R.string.check_in)
                             }
 
                         } else {
@@ -642,7 +645,13 @@ class BSCalendarScreenFragment : BaseFragment() {
             )
         )
         datalist.add(FeatureModel("Explore", R.drawable.ic_landinghome_search, -1))
-        datalist.add(FeatureModel("Verification", R.drawable.ic_shield_black, R.id.gigerVerificationFragment))
+        datalist.add(
+            FeatureModel(
+                "Verification",
+                R.drawable.ic_shield_black,
+                R.id.gigerVerificationFragment
+            )
+        )
 
         val itemWidth = ((width / 7) * 1.6).toInt()
         val recyclerGenericAdapter: RecyclerGenericAdapter<FeatureModel> =
@@ -696,7 +705,6 @@ class BSCalendarScreenFragment : BaseFragment() {
 //    }
 
 
-
     class Assessment(var title: String, var time: String, var status: Boolean) {
 
     }
@@ -740,9 +748,9 @@ class BSCalendarScreenFragment : BaseFragment() {
             RecyclerGenericAdapter<Assessment>(
                 activity?.applicationContext,
                 PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
-//                    showToast("This page are inactive. We’ll activate it in a few weeks")
+                    //                    showToast("This page are inactive. We’ll activate it in a few weeks")
                     navigate(R.id.assessment_fragment)
-                     },
+                },
                 RecyclerGenericAdapter.ItemInterface<Assessment?> { obj, viewHolder, position ->
                     val lp = getView(viewHolder, R.id.assessment_cl).layoutParams
                     lp.height = lp.height
@@ -763,7 +771,7 @@ class BSCalendarScreenFragment : BaseFragment() {
                         ) as CardView).setCardBackgroundColor(resources.getColor(R.color.status_bg_completed))
 
                     } else {
-                        getTextView(viewHolder, R.id.status).text =  getString(R.string.pending)
+                        getTextView(viewHolder, R.id.status).text = getString(R.string.pending)
                         getTextView(
                             viewHolder,
                             R.id.status
@@ -786,12 +794,11 @@ class BSCalendarScreenFragment : BaseFragment() {
     }
 
 
-
     private fun showGlideImage(url: String, imgview: ImageView) {
         GlideApp.with(requireContext())
-                .load(url)
-                .placeholder(getCircularProgressDrawable())
-                .into(imgview)
+            .load(url)
+            .placeholder(getCircularProgressDrawable())
+            .into(imgview)
     }
 
     private fun initializeExploreByIndustry() {
@@ -839,7 +846,7 @@ class BSCalendarScreenFragment : BaseFragment() {
             RecyclerGenericAdapter<LandingScreenFragment.TitleSubtitleModel>(
                 activity?.applicationContext,
                 PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
-//                    if(AppConstants.UNLOCK_FEATURE){
+                    //                    if(AppConstants.UNLOCK_FEATURE){
 //                    }else
                     showToast("This is under development. Please check again in a few days.")
                 },
@@ -882,7 +889,7 @@ class BSCalendarScreenFragment : BaseFragment() {
 
 
         help_topic_bs_calendar_screen.setOnClickListener {
-            showToast("This is under development. Please check again in a few days.")
+            navigate(R.id.helpVideosFragment)
         }
 
 
@@ -890,7 +897,11 @@ class BSCalendarScreenFragment : BaseFragment() {
 
     private fun initializeExploreByRole() {
         ll_search_role.setOnClickListener {
-            navigate(R.id.fragment_explore_by_role)
+            if (AppConstants.UNLOCK_FEATURE) {
+                navigate(R.id.fragment_explore_by_role)
+            } else {
+                showToast("This is under development. Please check again in a few days.")
+            }
         }
         landingScreenViewModel.observerRole.observe(viewLifecycleOwner, Observer { gig ->
             run {
@@ -901,11 +912,15 @@ class BSCalendarScreenFragment : BaseFragment() {
                     tv_subtitle_role.text = gig?.job_description?.get(0)
                 }
                 cv_role.setOnClickListener {
-                    navigate(
-                        R.id.fragment_role_details, bundleOf(
-                            StringConstants.ROLE_ID.value to gig?.id!!
+                    if (AppConstants.UNLOCK_FEATURE) {
+                        navigate(
+                            R.id.fragment_role_details, bundleOf(
+                                StringConstants.ROLE_ID.value to gig?.id!!
+                            )
                         )
-                    )
+                    } else {
+                        showToast("This is under development. Please check again in a few days.")
+                    }
                 }
             }
 

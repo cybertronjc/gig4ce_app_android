@@ -21,10 +21,7 @@ import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.preferences.PreferencesFragment
 import com.gigforce.app.modules.profile.ProfileViewModel
-import com.gigforce.app.utils.GlideApp
-import com.gigforce.app.utils.PushDownAnim
-import com.gigforce.app.utils.ViewModelProviderFactory
-import com.gigforce.app.utils.getViewWidth
+import com.gigforce.app.utils.*
 import com.google.firebase.dynamiclinks.DynamicLink
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import com.google.firebase.dynamiclinks.ktx.dynamicLinks
@@ -127,7 +124,7 @@ class ReferralsFragment : BaseFragment() {
                         }.addOnFailureListener {
                             // Error
                             // ...
-                            showToast(it.message!!);
+                            showToast(it.message!!)
                             pb_referrals_frag.gone()
                         }
 
@@ -153,27 +150,30 @@ class ReferralsFragment : BaseFragment() {
                         }
 
                     })
-                PushDownAnim.setPushDownAnimTo(tv_share_now_referral_frag)
-                    .setOnClickListener(View.OnClickListener {
-                        pb_referrals_frag.visible()
+                if (AppConstants.UNLOCK_FEATURE) {
+                    PushDownAnim.setPushDownAnimTo(tv_share_now_referral_frag)
+                        .setOnClickListener(View.OnClickListener {
+                            pb_referrals_frag.visible()
 
-                        Firebase.dynamicLinks.shortLinkAsync {
-                            longLink =
-                                Uri.parse(buildDeepLink(Uri.parse("http://www.gig4ce.com/?invite=" + profileData?.id)).toString())
-                        }.addOnSuccessListener { result ->
-                            // Short link created
-                            val shortLink = result.shortLink
-                            shareToAnyApp(shortLink.toString())
+                            Firebase.dynamicLinks.shortLinkAsync {
+                                longLink =
+                                    Uri.parse(buildDeepLink(Uri.parse("http://www.gig4ce.com/?invite=" + profileData?.id)).toString())
+                            }.addOnSuccessListener { result ->
+                                // Short link created
+                                val shortLink = result.shortLink
+                                shareToAnyApp(shortLink.toString())
 
 
-                        }.addOnFailureListener {
-                            // Error
-                            // ...
-                            showToast(it.message!!);
+                            }.addOnFailureListener {
+                                // Error
+                                // ...
+                                showToast(it.message!!);
 
-                        }
-
-                    })
+                            }
+                        })
+                } else {
+                    showToast("This is under development. Please check again in a few days.")
+                }
                 viewModel.observableReferralErr.observe(viewLifecycleOwner, Observer {
                     showToast(it!!)
                 })

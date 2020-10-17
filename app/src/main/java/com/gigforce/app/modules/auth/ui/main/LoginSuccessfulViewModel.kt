@@ -1,13 +1,16 @@
 package com.gigforce.app.modules.auth.ui.main
 
 import android.util.Log
+import androidx.annotation.Keep
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.gigforce.app.BuildConfig
 import com.gigforce.app.modules.gigPage.GigsRepository
 import com.gigforce.app.modules.gigPage.models.Gig
 import com.gigforce.app.modules.profile.ProfileFirebaseRepository
 import com.gigforce.app.modules.profile.models.ProfileData
 import com.google.android.gms.tasks.Task
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.QuerySnapshot
@@ -17,6 +20,12 @@ import java.util.*
 data class ProfileAnGigInfo(
     val profile: ProfileData,
     val hasGigs: Boolean
+)
+
+@Keep
+data class UserVersionInfo(
+    var currentVersion: String ="",
+    var time: Timestamp = Timestamp.now()
 )
 
 class LoginSuccessfulViewModel constructor(
@@ -51,6 +60,20 @@ class LoginSuccessfulViewModel constructor(
 
 
     fun getProfileAndGigData() {
+        profileFirebaseRepository
+            .db
+            .collection("Version_info")
+            .document(profileFirebaseRepository.getUID())
+            .set(UserVersionInfo(
+                currentVersion = BuildConfig.VERSION_NAME
+            ))
+            .addOnSuccessListener {
+                Log.d("VersionInfo","User version added")
+            }.addOnFailureListener {
+                Log.e("VersionInfo","unable to add version info",it)
+            }
+
+
 
         profileFirebaseRepository.getDBCollection()
             .addSnapshotListener(EventListener<DocumentSnapshot> { value, e ->

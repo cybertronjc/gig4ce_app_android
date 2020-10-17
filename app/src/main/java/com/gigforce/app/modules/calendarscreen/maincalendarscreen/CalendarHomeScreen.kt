@@ -203,7 +203,7 @@ class CalendarHomeScreen : BaseFragment(),
         cardView.setOnClickListener(View.OnClickListener { navigate(R.id.profileFragment) })
 //        tv_hs1bs_alert.setOnClickListener(View.OnClickListener { navigate(R.id.verification) })
         chat_icon_iv.setOnClickListener {
-            navigate(R.id.contactScreenFragment)
+//            navigate(R.id.contactScreenFragment)
         }
         month_year.setOnClickListener(View.OnClickListener {
             changeVisibilityCalendarView()
