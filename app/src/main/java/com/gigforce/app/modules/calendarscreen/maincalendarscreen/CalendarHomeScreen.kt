@@ -117,7 +117,6 @@ class CalendarHomeScreen : BaseFragment(),
                         object : ConfirmationDialogOnClickListener {
                             override fun clickedOnYes(dialog: Dialog?) {
                                 redirectToStore("https://play.google.com/store/apps/details?id=com.gigforce.app")
-                                dialog?.dismiss()
                             }
 
                             override fun clickedOnNo(dialog: Dialog?) {

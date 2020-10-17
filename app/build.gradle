@@ -70,7 +70,8 @@ android {
          */
         production {
             dimension "default"
-//           signingConfig signingConfigs.production
+           signingConfig signingConfigs.production
+            buildConfigField "String", 'REFERRAL_BASE_URL', '"https://gig4ce.page.link/"'
         }
 
         /**
@@ -80,6 +81,7 @@ android {
             dimension "default"
             versionNameSuffix '-Dev'
             signingConfig signingConfigs.debug
+            buildConfigField "String", 'REFERRAL_BASE_URL', '"https://gigforce.page.link/"'
         }
     }
 
