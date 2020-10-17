@@ -94,6 +94,10 @@ class MainActivity : AppCompatActivity() {
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
         navController.handleDeepLink(intent)
+
+        if (intent?.getStringExtra(IS_DEEPLINK) == "true") {
+            handleDeepLink()
+        }
     }
 
     private fun GetFirebaseInstanceID() {
