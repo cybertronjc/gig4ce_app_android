@@ -72,6 +72,7 @@ class GigerVerificationFragment : BaseFragment() {
                     val layoutParams: RelativeLayout.LayoutParams =
                         tv_contract_status.layoutParams as RelativeLayout.LayoutParams
                     layoutParams.addRule(RelativeLayout.START_OF, iv_download_giger_verification.id)
+                    layoutParams.removeRule(RelativeLayout.ALIGN_PARENT_END)
 
                     tv_contract_status.layoutParams = layoutParams
 
