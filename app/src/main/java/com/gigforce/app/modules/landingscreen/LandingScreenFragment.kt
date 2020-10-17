@@ -103,10 +103,15 @@ class LandingScreenFragment : BaseFragment() {
         exploreByIndustryLayout?.let {
             when (comingFromOrGoingToScreen) {
                 SCREEN_VERIFICATION -> landingScrollView.post {
-                    landingScrollView.scrollTo(0, it.y.toInt())
+                    it.y?.let {
+                        landingScrollView.scrollTo(0, it.toInt())
+                    }
                 }
                 SCREEN_GIG -> landingScrollView.post {
-                    landingScrollView.scrollTo(0, it.y.toInt())
+                    it.y?.let {
+                        landingScrollView.scrollTo(0, it.toInt())
+                    }
+
                 }
                 else -> {
                 }
