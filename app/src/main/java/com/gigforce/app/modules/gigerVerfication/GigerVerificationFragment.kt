@@ -14,6 +14,7 @@ import android.os.Environment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.RelativeLayout
 import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.viewModels
@@ -21,6 +22,7 @@ import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
+import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.utils.DocViewerActivity
 import com.gigforce.app.utils.PermissionUtils
@@ -66,7 +68,16 @@ class GigerVerificationFragment : BaseFragment() {
                     tv_contract_status.setTextColor(resources.getColor(R.color.green_dc3ab105))
                     tv_contract_status.setBackgroundResource(R.drawable.bg_capsule_53ba25)
                     tv_contract_status.text = getString(R.string.signed)
-                    PushDownAnim.setPushDownAnimTo(ll_contracts)
+                    iv_download_giger_verification.visible()
+                    val layoutParams: RelativeLayout.LayoutParams =
+                        tv_contract_status.layoutParams as RelativeLayout.LayoutParams
+                    layoutParams.addRule(RelativeLayout.START_OF, iv_download_giger_verification.id)
+
+                    tv_contract_status.layoutParams = layoutParams
+
+                    PushDownAnim.setPushDownAnimTo(iv_download_giger_verification)
+                        .setOnClickListener(View.OnClickListener { downloadCertificate(url) })
+                    PushDownAnim.setPushDownAnimTo(tv_contract_status)
                         .setOnClickListener(View.OnClickListener {
                             if (PermissionUtils.checkForPermissionFragment(
                                     this,
@@ -75,7 +86,15 @@ class GigerVerificationFragment : BaseFragment() {
                                     Manifest.permission.WRITE_EXTERNAL_STORAGE
                                 )
                             ) {
-                                downloadCertificate(url)
+                                val docIntent = Intent(
+                                    requireContext(),
+                                    DocViewerActivity::class.java
+                                )
+                                docIntent.putExtra(
+                                    StringConstants.DOC_URL.value,
+                                    url
+                                )
+                                startActivity(docIntent)
                             }
 
 
@@ -92,6 +111,11 @@ class GigerVerificationFragment : BaseFragment() {
                     tv_contract_status.setTextColor(resources.getColor(R.color.fa6400))
                     tv_contract_status.setBackgroundResource(R.drawable.bg_capsule_border_fa6400)
                     tv_contract_status.text = getString(R.string.unsigned)
+                    iv_download_giger_verification.gone()
+                    val layoutParams: RelativeLayout.LayoutParams =
+                        tv_contract_status.layoutParams as RelativeLayout.LayoutParams
+                    layoutParams.addRule(RelativeLayout.ALIGN_PARENT_END, tv_contract_status.id)
+                    tv_contract_status.layoutParams = layoutParams
                 }
             }
 
@@ -317,17 +341,12 @@ class GigerVerificationFragment : BaseFragment() {
     }
 
     private fun downloadCertificate(url: String) {
-        if (File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), "GigForceContract.pdf").exists()
+        if (File(
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS),
+                "GigForceContract.pdf"
+            ).exists()
         ) {
-            val docIntent = Intent(
-                requireContext(),
-                DocViewerActivity::class.java
-            )
-            docIntent.putExtra(
-                StringConstants.DOC_URL.value,
-                url
-            )
-            startActivity(docIntent)
+            showToast(getString(R.string.download_contracts_exists))
             return
         }
 
@@ -366,22 +385,12 @@ class GigerVerificationFragment : BaseFragment() {
             Toast.makeText(context, "Network Error. Please try again", Toast.LENGTH_SHORT).show()
         }
         val progressBarDialog = ProgressDialog(context)
-        progressBarDialog.setTitle("Download Contract, Please Wait...")
+        progressBarDialog.setTitle("Downloading Contract, Please Wait...")
         progressBarDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL)
         progressBarDialog.setButton(
             DialogInterface.BUTTON_POSITIVE, "OK"
         ) { dialog: DialogInterface?, whichButton: Int ->
-            run {
-                val docIntent = Intent(
-                    requireContext(),
-                    DocViewerActivity::class.java
-                )
-                docIntent.putExtra(
-                    StringConstants.DOC_URL.value,
-                    url
-                )
-                startActivity(docIntent)
-            }
+
         }
         progressBarDialog.progress = 0
         Thread {

@@ -3,17 +3,22 @@ package com.gigforce.app.modules.explore_by_role
 import android.os.Build
 import android.os.Bundle
 import android.view.*
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
+import com.gigforce.app.core.gone
+import com.gigforce.app.core.visible
 import com.gigforce.app.modules.profile.models.Education
 import com.gigforce.app.utils.ItemDecorationAddContact
 import kotlinx.android.synthetic.main.layout_add_education_fragment.*
-import kotlinx.android.synthetic.main.layout_fragment_add_contact_details.*
 
 class AddEducationFragment : BaseFragment(), AdapterAddEducation.AdapterAddEducationCallbacks {
     private lateinit var win: Window
     private var adapter: AdapterAddEducation? = null
+    val addEducationViewModel: AddEducationViewModel by activityViewModels<AddEducationViewModel>()
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -26,7 +31,7 @@ class AddEducationFragment : BaseFragment(), AdapterAddEducation.AdapterAddEduca
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setUpRecycler()
-//        initObservers()
+        initObservers()
         initClicks()
     }
 
@@ -36,34 +41,19 @@ class AddEducationFragment : BaseFragment(), AdapterAddEducation.AdapterAddEduca
         }
     }
 
-//    private fun initObservers() {
-//        viewModel.observableContact.observe(viewLifecycleOwner, Observer {
-//            val list: MutableList<ContactModel> = ArrayList()
-//            for (i in 0 until it?.contactPhone?.size!!) {
-//                list.add(ContactModel(contactPhone = it?.contactPhone?.get(i)))
-//            }
-//            for (i in 0 until it?.contactEmail?.size!!) {
-//                if (i < list.size) {
-//                    list[i].contactEmail = it?.contactEmail!![i]!!
-//                } else {
-//                    list.add(ContactModel(contactEmail = it?.contactEmail!![i]))
-//                }
-//            }
-//            adapter?.addData(list)
-//
-//        })
-//        viewModel.observableSetContacts.observe(viewLifecycleOwner, Observer {
-//            pb_add_contact.gone()
-//            if (it == "true") {
-//                popBackState()
-//            } else {
-//                showToast(it!!)
-//            }
-//        })
-//        viewModel.getPrimaryContact()
-//
-//
-//    }
+    private fun initObservers() {
+        addEducationViewModel.observableSuccess.observe(viewLifecycleOwner, Observer {
+            pb_add_education.gone()
+            if (it == "true") {
+                popBackState()
+            } else {
+                showToast(it!!)
+            }
+
+        })
+
+
+    }
 
     private fun setUpRecycler() {
         rv_add_education.layoutManager = LinearLayoutManager(requireActivity())
@@ -117,26 +107,22 @@ class AddEducationFragment : BaseFragment(), AdapterAddEducation.AdapterAddEduca
     }
 
     override fun submitClicked(items: MutableList<Education>) {
-//        var submitContact = true
-//        for (i in 0 until items.size) {
-//            if (!isValidMobile(
-//                    items[i].contactPhone?.phone ?: ""
-//                ) || items[i].contactEmail?.email?.isNotEmpty()!! && !isValidMail(
-//                    items[i].contactEmail?.email ?: ""
-//                )
-//            ) {
-//                items[i].validateFields = true
-//                submitContact = false
-//
-//            }
-//        }
-//        adapter?.notifyItemRangeChanged(0, items.size)
-//
-//
-//        if (submitContact) {
-//            pb_add_contact.visible()
-//            viewModel.addContacts(items)
-//        }
+        var submitEducation = true
+        for (i in 0 until items.size) {
+            val education = items.get(i)
+            if (education.institution.isNullOrEmpty() || education.degree.isNullOrEmpty() || education.course.isNullOrEmpty() || education.startYear == null || education.endYear == null) {
+                items[i].validateFields = true
+                submitEducation = false
+
+            }
+        }
+        adapter?.notifyItemRangeChanged(0, items.size)
+
+
+        if (submitEducation) {
+            pb_add_education.visible()
+            addEducationViewModel.addEducation(items)
+        }
     }
 
 

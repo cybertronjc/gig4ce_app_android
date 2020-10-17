@@ -986,6 +986,9 @@
     <string name="degree_star">Degree*</string>
     <string name="course_start">Course*</string>
     <string name="perm_not_granted">Permissions not granted!!</string>
+    <string name="select_start_date_add_education">Please Select Start Date</string>
+    <string name="select_end_date_add_education">Please Select End Date</string>
+    <string name="download_contracts_exists">Downloaded Contract Already Exists!!!!</string>
 
 
 </resources>

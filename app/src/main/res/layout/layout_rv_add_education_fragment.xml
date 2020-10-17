@@ -14,6 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/bs_top_margin"
+        android:layout_marginBottom="@dimen/size_16"
         android:letterSpacing="0.05"
         android:text="@string/error_empty_mandatory_fields"
         android:textColor="#d4e02020"
