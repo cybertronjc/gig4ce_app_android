@@ -10,13 +10,14 @@ import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
-import com.gigforce.app.modules.profile.models.Language
-import com.gigforce.app.utils.AddLangugeRvItemDecorator
-import kotlinx.android.synthetic.main.layout_fragment_add_language.*
+import com.gigforce.app.modules.profile.models.Education
+import com.gigforce.app.utils.ItemDecorationAddContact
+import kotlinx.android.synthetic.main.layout_add_education_fragment.*
 
-class AddLanguageFragment : BaseFragment(), AdapterAddLanguage.AdapterAddLanguageCallbacks {
+class AddEducationFragment : BaseFragment(), AdapterAddEducation.AdapterAddEducationCallbacks {
     private lateinit var win: Window
-    val addLanguageViewModel: AddLanguageViewModel by activityViewModels<AddLanguageViewModel>()
+    private var adapter: AdapterAddEducation? = null
+    val addEducationViewModel: AddEducationViewModel by activityViewModels<AddEducationViewModel>()
 
 
     override fun onCreateView(
@@ -24,10 +25,8 @@ class AddLanguageFragment : BaseFragment(), AdapterAddLanguage.AdapterAddLanguag
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflateView(R.layout.layout_fragment_add_language, inflater, container)
+        return inflateView(R.layout.layout_add_education_fragment, inflater, container)
     }
-
-    private var adapter: AdapterAddLanguage? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -37,32 +36,37 @@ class AddLanguageFragment : BaseFragment(), AdapterAddLanguage.AdapterAddLanguag
     }
 
     private fun initClicks() {
-        iv_close_add_bio.setOnClickListener {
+        iv_close_add_education.setOnClickListener {
             popBackState()
         }
     }
 
     private fun initObservers() {
-        addLanguageViewModel.observableSuccess.observe(viewLifecycleOwner, Observer {
-            pb_add_language.gone()
+        addEducationViewModel.observableSuccess.observe(viewLifecycleOwner, Observer {
+            pb_add_education.gone()
             if (it == "true") {
                 popBackState()
             } else {
                 showToast(it!!)
             }
+
         })
+
+
     }
 
     private fun setUpRecycler() {
-        rv_add_language.layoutManager = LinearLayoutManager(requireActivity())
-        rv_add_language.addItemDecoration(AddLangugeRvItemDecorator(requireContext()))
-        adapter = AdapterAddLanguage()
-        rv_add_language.adapter = adapter
-        adapter?.addData(mutableListOf(Language()))
+        rv_add_education.layoutManager = LinearLayoutManager(requireActivity())
+        rv_add_education.addItemDecoration(ItemDecorationAddContact(requireContext()))
+        adapter = AdapterAddEducation()
+        rv_add_education.adapter = adapter
+        adapter?.addData(mutableListOf(Education()))
+
         adapter?.setCallbacks(this)
 
 
     }
+
 
     private fun makeStatusBarTransparent() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
@@ -102,21 +106,24 @@ class AddLanguageFragment : BaseFragment(), AdapterAddLanguage.AdapterAddLanguag
         restoreStatusBar()
     }
 
-    override fun submitClicked(items: MutableList<Language>) {
-        var submitLanguages = true
+    override fun submitClicked(items: MutableList<Education>) {
+        var submitEducation = true
         for (i in 0 until items.size) {
-            if (items[i].name.isEmpty()) {
+            val education = items.get(i)
+            if (education.institution.isNullOrEmpty() || education.degree.isNullOrEmpty() || education.course.isNullOrEmpty() || education.startYear == null || education.endYear == null) {
                 items[i].validateFields = true
-                submitLanguages = false
+                submitEducation = false
 
             }
         }
         adapter?.notifyItemRangeChanged(0, items.size)
 
-        if (submitLanguages) {
-            pb_add_language.visible()
-            addLanguageViewModel.addLanguages(items)
+
+        if (submitEducation) {
+            pb_add_education.visible()
+            addEducationViewModel.addEducation(items)
         }
     }
+
 
 }

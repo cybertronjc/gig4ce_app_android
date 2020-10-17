@@ -69,15 +69,15 @@ class RoleDetailsFragment : BaseFragment() {
                     tv_mark_as_interest_role_details.text = getString(R.string.marked_as_interest)
                 } else {
                     tv_mark_as_interest_role_details.text = getString(R.string.mark_as_interest)
-//                    tv_mark_as_interest_role_details.setOnClickListener {
-////                        checkForProfileAndVerificationData()
-////                        navigate(R.id.fragment_add_bio)
-//                        viewModel
-//                    }
                     tv_mark_as_interest_role_details.setOnClickListener {
-                        tv_mark_as_interest_role_details.gone()
-                        viewModel.addAsInterest(mRoleID)
+                        checkForProfileAndVerificationData()
+//                        navigate(R.id.fragment_add_bio)
+
                     }
+//                    tv_mark_as_interest_role_details.setOnClickListener {
+//                        tv_mark_as_interest_role_details.gone()
+//                        viewModel.addAsInterest(mRoleID)
+//                    }
 
                 }
             } else {
@@ -154,6 +154,13 @@ class RoleDetailsFragment : BaseFragment() {
                     if (element is ProfileData) {
                         if (element.aboutMe == null || element.aboutMe.isEmpty()) {
                             navigate(R.id.fragment_add_bio)
+                        } else if (element.languages == null || element.languages!!.isEmpty()) {
+                            navigate(R.id.fragment_add_language)
+                        } else if (element.contactEmail!![0].email.isNullOrEmpty()
+                        ) {
+                            navigate(R.id.fragment_add_contact)
+                        } else if (element.educations == null || element.educations!!.isEmpty()) {
+                            navigate(R.id.fragment_new_education)
                         }
                     }
                 }

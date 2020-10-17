@@ -5,7 +5,7 @@
     android:layout_height="match_parent">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/tb_add_language"
+        android:id="@+id/tb_add_contact"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/bg_gradient_e42c64_990077"
@@ -24,7 +24,7 @@
             >
 
             <ImageView
-                android:id="@+id/iv_close_add_bio"
+                android:id="@+id/iv_close_add_contact"
                 android:layout_width="@dimen/size_24"
                 android:layout_height="@dimen/size_24"
                 android:layout_centerVertical="true"
@@ -37,11 +37,11 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginStart="@dimen/size_24"
-                android:layout_toEndOf="@+id/iv_close_add_bio"
+                android:layout_toEndOf="@+id/iv_close_add_contact"
                 android:gravity="center_horizontal"
                 android:lineSpacingExtra="@dimen/font_21"
                 android:padding="@dimen/size_5"
-                android:text="@string/new_language"
+                android:text="@string/edit_contact_details"
                 android:textColor="#ffffff"
                 android:textSize="20sp" />
         </RelativeLayout>
@@ -50,17 +50,17 @@
     </androidx.appcompat.widget.Toolbar>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_add_language"
+        android:id="@+id/rv_add_contact"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tb_add_language" />
+        app:layout_constraintTop_toBottomOf="@+id/tb_add_contact" />
 
 
     <ProgressBar
-        android:id="@+id/pb_add_language"
+        android:id="@+id/pb_add_contact"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
