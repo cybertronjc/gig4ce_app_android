@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:isScrollContainer="true"
+    android:orientation="vertical"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent">
+
+    <TextView
+        android:id="@+id/form_error_add_education"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/bs_top_margin"
+        android:letterSpacing="0.05"
+        android:text="@string/error_empty_mandatory_fields"
+        android:textColor="#d4e02020"
+        android:textSize="14sp"
+        android:visibility="gone" />
+
+
+    <EditText
+        android:id="@+id/et_school_name_add_ducation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        android:ems="10"
+        android:hint="@string/school"
+        android:inputType="textPersonName"
+        android:textColorHint="@color/warm_grey_two" />
+
+    <View
+        android:id="@+id/line_et_school"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/size_2"
+        android:layout_marginTop="@dimen/size_18"
+        android:background="#68979797" />
+
+    <EditText
+        android:id="@+id/course_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/size_23"
+        android:background="@null"
+        android:ems="10"
+        android:hint="@string/course_start"
+        android:inputType="textPersonName" />
+
+    <View
+        android:id="@+id/line_et_course"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/size_2"
+        android:layout_marginTop="@dimen/size_18"
+        android:background="#68979797" />
+
+
+    <AutoCompleteTextView
+        android:id="@+id/degree_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/size_23"
+        android:background="@null"
+        android:drawableEnd="@drawable/ic_down"
+        android:focusable="false"
+        android:hint="@string/degree_star"
+        android:longClickable="false"
+        android:paddingStart="3dp" />
+
+    <View
+        android:id="@+id/line_et_degree"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/size_2"
+        android:layout_marginTop="@dimen/size_18"
+        android:background="#68979797" />
+
+    <!--        <Spinner-->
+    <!--            android:id="@+id/degree_name"-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_marginTop="16dp"-->
+    <!--            android:background="@drawable/ic_down"-->
+    <!--            android:ems="10"-->
+    <!--            android:hint="@string/add_education_sheet_degree"-->
+    <!--            android:inputType="textPersonName" />-->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/start_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:backgroundTint="#68979797"
+            android:drawableEnd="@drawable/ic_calendar_small"
+            android:ems="10"
+            android:focusable="false"
+            android:hint="@string/add_education_sheet_start_year"
+            android:inputType="date"
+            android:paddingBottom="@dimen/size_18" />
+
+        <EditText
+            android:id="@+id/end_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+
+            android:backgroundTint="#68979797"
+            android:drawableEnd="@drawable/ic_calendar_small"
+            android:ems="10"
+            android:focusable="false"
+            android:hint="@string/add_education_sheet_end_year"
+            android:inputType="date"
+            android:paddingBottom="@dimen/size_18" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/bt_add_education_add_more"
+            style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+
+            android:text="@string/add_more_text"
+            android:textAlignment="textStart"
+            android:textColor="@color/colorPrimary"
+            app:icon="@drawable/ic_add"
+            app:iconTint="@color/colorPrimary" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/bt_remove_education_add_more"
+            style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableEnd="@drawable/ic_delete"
+            android:drawablePadding="@dimen/size_8"
+            android:drawableTint="@color/colorPrimary"
+            android:text="@string/remove_caps"
+            android:textAlignment="textEnd"
+            android:textColor="@color/colorPrimary" />
+    </LinearLayout>
+
+
+</LinearLayout>

@@ -159,6 +159,8 @@ class RoleDetailsFragment : BaseFragment() {
                         } else if (element.contactEmail!![0].email.isNullOrEmpty()
                         ) {
                             navigate(R.id.fragment_add_contact)
+                        } else if (element.educations == null || element.educations!!.isEmpty()) {
+                            navigate(R.id.fragment_new_education)
                         }
                     }
                 }

@@ -981,6 +981,10 @@
     <string name="enter_phone_number">Enter Phone Number</string>
     <string name="email_mandatory">Email*</string>
     <string name="enter_email_address">Enter Email Address</string>
+    <string name="new_education">New Education</string>
+    <string name="school">School*</string>
+    <string name="degree_star">Degree*</string>
+    <string name="course_start">Course*</string>
 
 
 </resources>

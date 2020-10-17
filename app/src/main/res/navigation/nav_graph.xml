@@ -705,6 +705,11 @@
         android:name="com.gigforce.app.modules.explore_by_role.AddContactDetailsFragment"
         android:label="fragment_add_contact"
         tools:layout="@layout/layout_fragment_add_contact_details" />
+    <fragment
+        android:id="@+id/fragment_new_education"
+        android:name="com.gigforce.app.modules.explore_by_role.AddEducationFragment"
+        android:label="fragment_new_education"
+        tools:layout="@layout/layout_add_education_fragment" />
 
 
 </navigation>
