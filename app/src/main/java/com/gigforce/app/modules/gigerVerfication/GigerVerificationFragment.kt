@@ -77,7 +77,17 @@ class GigerVerificationFragment : BaseFragment() {
                     tv_contract_status.layoutParams = layoutParams
 
                     PushDownAnim.setPushDownAnimTo(iv_download_giger_verification)
-                        .setOnClickListener(View.OnClickListener { downloadCertificate(url) })
+                        .setOnClickListener(View.OnClickListener {
+                            if (PermissionUtils.checkForPermissionFragment(
+                                    this,
+                                    PermissionUtils.reqCodePerm,
+                                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                                )
+                            ) {
+                                downloadCertificate(url)
+                            }
+                        })
                     PushDownAnim.setPushDownAnimTo(tv_contract_status)
                         .setOnClickListener(View.OnClickListener {
                             if (PermissionUtils.checkForPermissionFragment(
@@ -112,6 +122,8 @@ class GigerVerificationFragment : BaseFragment() {
                     tv_contract_status.setTextColor(resources.getColor(R.color.fa6400))
                     tv_contract_status.setBackgroundResource(R.drawable.bg_capsule_border_fa6400)
                     tv_contract_status.text = getString(R.string.unsigned)
+                    iv_download_giger_verification.setOnClickListener(null)
+                    tv_contract_status.setOnClickListener(null)
                     iv_download_giger_verification.gone()
                     val layoutParams: RelativeLayout.LayoutParams =
                         tv_contract_status.layoutParams as RelativeLayout.LayoutParams
@@ -134,7 +146,7 @@ class GigerVerificationFragment : BaseFragment() {
                 grantResults!!
             )
         ) {
-            ll_contracts.performClick()
+            tv_contract_status.performClick()
         } else {
             showToast(getString(R.string.perm_not_granted))
         }
