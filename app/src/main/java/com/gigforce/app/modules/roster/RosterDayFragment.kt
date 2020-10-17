@@ -26,6 +26,7 @@ import com.gigforce.app.modules.gigPage.GigsListForDeclineBottomSheet
 import com.gigforce.app.modules.gigPage.models.Gig
 import kotlinx.android.synthetic.main.day_view_top_bar.*
 import kotlinx.android.synthetic.main.day_view_top_bar.view.*
+import kotlinx.android.synthetic.main.earning_fragment.view.*
 import kotlinx.android.synthetic.main.roster_day_fragment.*
 import java.text.SimpleDateFormat
 import java.time.Instant
@@ -40,6 +41,7 @@ class RosterDayFragment : RosterBaseFragment() {
     // To fake infinite scroll on day view. We set the adapter array size to 10000
     // and start from 5000
     var lastViewPosition = 5000
+    var timesAvailableSwitchUpdated = 0
 
 
     private var dayTag: String = ""
@@ -306,14 +308,17 @@ class RosterDayFragment : RosterBaseFragment() {
         hourview_viewpager.registerOnPageChangeCallback(hourviewPageChangeCallBack)
 
         top_bar.available_toggle.setOnClickListener {
-            rosterViewModel.switchDayAvailability(
-                requireContext(), getDayTimesChild()!!,
 
-                rosterViewModel.isDayAvailable.value!!, viewModelCustomPreference
-            )
-            rosterViewModel.resetDayTimeAvailability(
-                viewModelCustomPreference, getDayTimesChild()!!, configDataModel
-            )
+
+                rosterViewModel.switchDayAvailability(
+                    requireContext(), getDayTimesChild()!!,
+
+                    rosterViewModel.isDayAvailable.value!!, viewModelCustomPreference
+                )
+                rosterViewModel.resetDayTimeAvailability(
+                    viewModelCustomPreference, getDayTimesChild()!!, configDataModel
+                )
+
         }
 
         rosterViewModel.showDeclineGigDialog.observe(viewLifecycleOwner, Observer {
@@ -382,6 +387,8 @@ class RosterDayFragment : RosterBaseFragment() {
     private fun attachDayAvailabilityObserver() {
         rosterViewModel.isDayAvailable.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
             top_bar.isAvailable = it
+            Log.d("ROsterAvail","called")
+            timesAvailableSwitchUpdated++
 
 //                        if(!it) {
 //                            navigate(
