@@ -124,7 +124,7 @@ class ReferralsFragment : BaseFragment() {
                         }.addOnFailureListener {
                             // Error
                             // ...
-                            showToast(it.message!!);
+                            showToast(it.message!!)
                             pb_referrals_frag.gone()
                         }
 

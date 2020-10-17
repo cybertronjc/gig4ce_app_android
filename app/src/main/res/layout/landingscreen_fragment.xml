@@ -68,6 +68,7 @@
         android:layout_height="wrap_content"
         android:layout_marginRight="8dp"
         android:src="@drawable/ic_landinghome_search"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/chat_icon_iv"
         app:layout_constraintEnd_toStartOf="@+id/chat_icon_iv"
         app:layout_constraintTop_toTopOf="@+id/chat_icon_iv" />
@@ -77,6 +78,7 @@
         android:layout_width="49dp"
         android:layout_height="8dp"
         android:layout_marginTop="7dp"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="@+id/cardView"
         app:layout_constraintTop_toBottomOf="@+id/cardView">
 
@@ -110,6 +112,7 @@
         android:text="20%"
         android:textColor="#888888"
         android:textSize="14sp"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/relativeLayout"
         app:layout_constraintEnd_toStartOf="@+id/relativeLayout"
         app:layout_constraintTop_toTopOf="@+id/relativeLayout" />
@@ -265,8 +268,8 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:minHeight="@dimen/size_215"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:minHeight="@dimen/size_215">
 
                 <TextView
                     android:id="@+id/textView114"
@@ -316,11 +319,11 @@
                     android:id="@+id/cv_role"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:minWidth="@dimen/size_144"
                     android:layout_below="@+id/textView114"
                     android:layout_alignParentStart="true"
                     android:layout_marginTop="@dimen/size_16"
                     android:layout_marginBottom="@dimen/size_16"
+                    android:minWidth="@dimen/size_144"
 
                     app:cardCornerRadius="4dp">
 
@@ -347,8 +350,8 @@
                             android:background="@color/white"
                             android:paddingTop="@dimen/size_9"
                             android:paddingBottom="@dimen/size_9"
-                            app:layout_constraintTop_toBottomOf="@+id/iv_role"
-                            app:layout_constraintLeft_toLeftOf="parent">
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/iv_role">
 
                             <TextView
                                 android:id="@+id/tv_title_role"
@@ -360,22 +363,22 @@
                                 android:letterSpacing="0"
                                 android:textColor="#d9000000"
                                 android:textSize="14sp"
-                               app:layout_constraintTop_toTopOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
                                 tools:text="Driver" />
 
                             <TextView
                                 android:id="@+id/tv_subtitle_role"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                tools:text="Lorem Ipsum is simply dummy"
                                 android:ellipsize="end"
                                 android:singleLine="true"
                                 android:textColor="#000000"
                                 android:textSize="10sp"
                                 android:visibility="gone"
                                 app:layout_constraintStart_toStartOf="@+id/tv_title_role"
-                                app:layout_constraintTop_toBottomOf="@+id/tv_title_role" />
+                                app:layout_constraintTop_toBottomOf="@+id/tv_title_role"
+                                tools:text="Lorem Ipsum is simply dummy" />
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -391,7 +394,8 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/exploreByIndustryLayout"
                 android:layout_width="match_parent"
-                android:layout_height="215dp">
+                android:layout_height="215dp"
+                android:visibility="gone">
 
                 <TextView
                     android:id="@+id/industry"

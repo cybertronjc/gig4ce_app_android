@@ -22,6 +22,7 @@ class ProfileViewModel : ViewModel() {
     lateinit var uid: String
     var query: Query? = null
 
+
     fun getProfileData(): MutableLiveData<ProfileData> {
 
         profileFirebaseRepository.getDBCollection()

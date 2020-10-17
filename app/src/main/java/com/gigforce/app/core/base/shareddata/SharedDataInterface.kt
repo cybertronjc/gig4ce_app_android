@@ -18,6 +18,10 @@ interface SharedDataInterface {
     fun saveAllMobileNumber(allMobileNumber: String)
     fun getAllMobileNumber(): String?
     fun saveData(key: String, value: String?)
+    fun saveDataBoolean(key: String, value: Boolean?)
     fun getData(key: String?): String?
+    fun getDataBoolean(key: String?): Boolean?
     fun remove(key: String?)
+    fun saveInt(key: String?, value: Int)
+    fun getInt(key: String?): Int
 }

@@ -38,6 +38,14 @@ class GigerIdRepository : BaseFirestoreDBRepository(), GigerIDCallbacks {
             }
     }
 
+    override fun getURls(responseCallbacks: GigerIDCallbacks.ResponseCallbacks) {
+        db.collection("Configuration").document("Urls").addSnapshotListener { success, error ->
+            run {
+                responseCallbacks.getUrlResponse(success, error)
+            }
+        }
+    }
+
 
     override fun getCollectionName(): String {
         return COLLECTION_NAME

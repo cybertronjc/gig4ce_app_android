@@ -3,6 +3,7 @@ package com.gigforce.app.modules.gigerid
 import android.view.View
 import androidx.lifecycle.ViewModel
 import com.gigforce.app.modules.gigPage.models.Gig
+import com.gigforce.app.modules.gigerid.models.URLQrCode
 import com.gigforce.app.modules.profile.models.ProfileData
 import com.gigforce.app.utils.PermissionUtils
 import com.gigforce.app.utils.SingleLiveEvent
@@ -16,6 +17,10 @@ class ViewModelGigerIDFragment(private val gigerIDCallbacks: GigerIDCallbacks) :
         SingleLiveEvent<Gig>();
     }
     val observableGigDetails: SingleLiveEvent<Gig> get() = _observableGigDetails
+    private val _observableURLS: SingleLiveEvent<URLQrCode> by lazy {
+        SingleLiveEvent<URLQrCode>();
+    }
+    val observableURLS: SingleLiveEvent<URLQrCode> get() = _observableURLS
     private val _observableProfilePic: SingleLiveEvent<StorageReference> by lazy {
         SingleLiveEvent<StorageReference>();
     }
@@ -98,6 +103,7 @@ class ViewModelGigerIDFragment(private val gigerIDCallbacks: GigerIDCallbacks) :
             observableError.value = error.message
         } else {
             val profileData = querySnapshot?.toObject(ProfileData::class.java)
+            profileData?.id=querySnapshot?.id
             observableUserProfileDataSuccess.value = profileData
             fileNameToShare += profileData?.name + "_"
         }
@@ -119,6 +125,20 @@ class ViewModelGigerIDFragment(private val gigerIDCallbacks: GigerIDCallbacks) :
             observableGigDetails.value = gigDetails
             fileNameToShare += gigDetails?.gigId
         }
+    }
+
+    override fun getUrlResponse(
+        querySnapshot: DocumentSnapshot?,
+        error: FirebaseFirestoreException?
+    ) {
+        if (error != null) {
+        } else {
+            _observableURLS.value = querySnapshot?.toObject(URLQrCode::class.java)
+        }
+    }
+
+    fun getURl() {
+        gigerIDCallbacks.getURls(this)
     }
 
     fun getGigDetails(string: String?) {

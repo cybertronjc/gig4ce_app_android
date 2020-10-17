@@ -667,6 +667,14 @@
             app:argType="string" />
     </fragment>
 
+
+    <fragment
+        android:id="@+id/fragment_add_bio"
+        android:name="com.gigforce.app.modules.explore_by_role.AddBioFragment"
+        android:label="fragment_add_bio"
+        tools:layout="@layout/layout_add_bio_fragment">
+
+    </fragment>
     <fragment
         android:id="@+id/fragment_marked_as_interest"
         android:name="com.gigforce.app.modules.explore_by_role.MarkedInterestSuccessFragment"
@@ -687,6 +695,14 @@
         android:id="@+id/gigsListForDeclineBottomSheet"
         android:name="com.gigforce.app.modules.gigPage.GigsListForDeclineBottomSheet"
         android:label="GigsListForDeclineBottomSheet" />
+    <fragment
+        android:id="@+id/gigPage2Fragment"
+        android:name="com.gigforce.app.modules.gigPage2.GigPage2Fragment"
+        android:label="GigPage2Fragment" />
+    <fragment
+        android:id="@+id/gigDetailsFragment"
+        android:name="com.gigforce.app.modules.gigPage2.GigDetailsFragment"
+        android:label="GigDetailsFragment" />
 
 </navigation>
 

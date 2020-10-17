@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/fragment_gig_page_2_toolbar" />
+
+    <include layout="@layout/fragment_gig_page_2_timer_layout" />
+
+    <include layout="@layout/fragment_gig_page_2_gig_type" />
+
+    <include layout="@layout/fragment_gig_page_2_address" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#e4e4e4"
+        android:layout_marginTop="16dp" />
+
+
+    <include layout="@layout/fragment_gig_page_2_people_to_expect" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#e4e4e4"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginTop="16dp" />
+
+
+</LinearLayout>

@@ -24,26 +24,29 @@ class CourseDetailsViewModel constructor(
 
     private var mCurrentModuleId: String? = null
     var mCurrentModulesProgressData: List<ModuleProgress>? = null
-    private var courseDataSynced : Boolean = false
+    private var courseDataSynced: Boolean = false
 
 
     private val _courseDetails = MutableLiveData<Lce<Course>>()
     val courseDetails: LiveData<Lce<Course>> = _courseDetails
 
     fun getCourseDetailsAndModules(mCourseId: String) = viewModelScope.launch {
-       if(courseDataSynced)
-       {
-           getCourseDetails(mCourseId)
-           getCourseModules(mCourseId)
-       } else{
+        if (courseDataSynced) {
+            getCourseDetails(mCourseId)
+            getCourseModules(mCourseId)
+        } else {
+            _courseDetails.postValue(Lce.loading())
+            _courseModules.postValue(Lce.loading())
 
-
-           syncCourseProgressData(mCourseId)
-       }
+            syncCourseProgressData(mCourseId)
+            getCourseDetails(mCourseId)
+            getCourseModules(mCourseId)
+        }
     }
 
-    private suspend fun syncCourseProgressData(courseId : String) {
+    private suspend fun syncCourseProgressData(courseId: String) {
         learningRepository.syncCourseProgressData(courseId)
+        courseDataSynced = true
     }
 
     fun getCourseDetails(courseId: String) = viewModelScope.launch {
@@ -193,7 +196,7 @@ class CourseDetailsViewModel constructor(
                         it.toObject(ModuleProgress::class.java)!!
                     }
 
-                    if(currentModules != null && mCurrentModulesProgressData != null) {
+                    if (currentModules != null && mCurrentModulesProgressData != null) {
                         currentModules!!.forEach { module ->
                             val progressItem = mCurrentModulesProgressData!!.find {
                                 module.id == it.moduleId
@@ -228,8 +231,9 @@ class CourseDetailsViewModel constructor(
                     }
                 }
 
-                if(currentAssessments != null){
-                    currentAssessments = appendLessonProgressInfo(courseId, moduleId, currentAssessments!!)
+                if (currentAssessments != null) {
+                    currentAssessments =
+                        appendLessonProgressInfo(courseId, moduleId, currentAssessments!!)
                     _courseAssessments.postValue(Lce.content(currentAssessments!!))
                 }
             }
