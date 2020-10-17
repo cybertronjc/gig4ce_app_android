@@ -191,7 +191,7 @@
                     android:layout_marginBottom="@dimen/size_12"
                     android:adjustViewBounds="true"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/ic_new_certificate" />
+                    app:srcCompat="@drawable/ic_new_certificate" />
 
                 <TextView
                     android:id="@+id/tv_new_cert_asses_frag"

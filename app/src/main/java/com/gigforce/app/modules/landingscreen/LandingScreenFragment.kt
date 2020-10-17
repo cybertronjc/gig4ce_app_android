@@ -100,17 +100,24 @@ class LandingScreenFragment : BaseFragment() {
         observers()
         broadcastReceiverForLanguageCahnge()
 //        checkforLanguagedSelectedForLastLogin()
+        exploreByIndustryLayout?.let {
+            when (comingFromOrGoingToScreen) {
+                SCREEN_VERIFICATION -> landingScrollView.post {
+                    it.y?.let {
+                        landingScrollView.scrollTo(0, it.toInt())
+                    }
+                }
+                SCREEN_GIG -> landingScrollView.post {
+                    it.y?.let {
+                        landingScrollView.scrollTo(0, it.toInt())
+                    }
 
-        when (comingFromOrGoingToScreen) {
-            SCREEN_VERIFICATION -> landingScrollView.post {
-                landingScrollView.scrollTo(0, exploreByIndustryLayout.y.toInt())
-            }
-            SCREEN_GIG -> landingScrollView.post {
-                landingScrollView.scrollTo(0, exploreByIndustryLayout.y.toInt())
-            }
-            else -> {
+                }
+                else -> {
+                }
             }
         }
+
     }
 
     private fun initUI() {

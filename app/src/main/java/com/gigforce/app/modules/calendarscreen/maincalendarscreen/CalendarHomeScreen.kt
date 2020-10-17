@@ -341,11 +341,14 @@ class CalendarHomeScreen : BaseFragment(),
         viewModelCustomPreference.customPreferencesLiveDataModel.observe(
             viewLifecycleOwner,
             Observer { data ->
-                viewModel.setCustomPreferenceData(viewModelCustomPreference.getCustomPreferenceData())
-                if (swipedToupdateGig) {
+                viewModelCustomPreference.getCustomPreferenceData()?.let {
+                    viewModel.setCustomPreferenceData(it)
+                    if (swipedToupdateGig) {
 //                    swipedToupdateGig = false
-                } else
-                    initializeViews()
+                    } else
+                        initializeViews()
+                }
+
             })
 
         viewModel.preferenceDataModel.observe(viewLifecycleOwner, Observer { preferenceData ->
