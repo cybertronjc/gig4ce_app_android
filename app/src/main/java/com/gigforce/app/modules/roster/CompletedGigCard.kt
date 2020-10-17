@@ -8,6 +8,7 @@ import androidx.navigation.findNavController
 import com.gigforce.app.R
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
+import com.gigforce.app.modules.gigPage.GigNavigation
 import com.gigforce.app.modules.gigPage.GigPageFragment
 import com.google.android.material.card.MaterialCardView
 import kotlinx.android.synthetic.main.completed_gig_card.view.*
@@ -97,9 +98,7 @@ class CompletedGigCard(
             cardHeight = 70.px
 
         this.setOnClickListener {
-            findNavController().navigate(R.id.presentGigPageFragment, Bundle().apply {
-                this.putString(GigPageFragment.INTENT_EXTRA_GIG_ID, gigId)
-            })
+            GigNavigation.openGigMainPage(findNavController(), gigId)
         }
     }
 }
