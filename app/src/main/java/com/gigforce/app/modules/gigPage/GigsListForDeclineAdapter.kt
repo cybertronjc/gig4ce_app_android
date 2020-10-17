@@ -43,6 +43,8 @@ class GigsListForDeclineAdapter constructor(
         this.gigSelectionListener = listener
     }
 
+    val selectedGigCount : Int get() = mSelectedGigIndexes.size
+
     fun getSelectedGig(): List<Gig> {
         return if (mSelectedGigIndexes.isEmpty())
             emptyList()
@@ -105,6 +107,7 @@ class GigsListForDeclineAdapter constructor(
         private val messageCardView = itemView.messageCardView
 
         init {
+            itemView.setOnClickListener(this)
             selectionRadioButton.setOnCheckedChangeListener(this)
             callCard.setOnClickListener(this)
             messageCardView.setOnClickListener(this)
@@ -162,21 +165,24 @@ class GigsListForDeclineAdapter constructor(
 
             if (isChecked) {
                 mSelectedGigIndexes.add(adapterPosition)
-                gigSelectionListener?.invoke(mGigs[adapterPosition])
             }else{
                 mSelectedGigIndexes.remove(adapterPosition)
             }
+
+            gigSelectionListener?.invoke(mGigs[adapterPosition])
         }
 
         override fun onClick(v: View?) {
             v?: return
+            val position = adapterPosition
 
-            val gig = mGigs[adapterPosition]
+            val gig = mGigs[position]
 
             when (v.id) {
                 R.id.messageCardView -> mGigsListForDeclineAdapterListener.onMessageClicked(gig)
                 R.id.callCardView -> mGigsListForDeclineAdapterListener.onCallClicked(gig)
                 else -> {
+                    selectionRadioButton.toggle()
                 }
             }
 

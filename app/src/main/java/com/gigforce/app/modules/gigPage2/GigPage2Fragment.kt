@@ -442,10 +442,10 @@ class GigPage2Fragment : BaseFragment(), OtherOptionClickListener,
             val diffInHours: Long = TimeUnit.MILLISECONDS.toHours(diffInMillisec)
             val diffInMin: Long = TimeUnit.MILLISECONDS.toMinutes(diffInMillisec) % 60
 
-            gig_timer_tv.text = "$diffInHours Hrs : $diffInMin Mins"
+            gig_timer_tv.text = "No check-out marked"
             gig_checkin_time_tv.text = "${timeFormatter.format(gigStartDateTime)} -"
         } else {
-            gig_timer_tv.text = "No Checkin"
+            gig_timer_tv.text = "No Check-in"
             gig_checkin_time_tv.gone()
         }
     }
