@@ -102,12 +102,10 @@ class CalendarHomeScreen : BaseFragment(),
             ViewModelProvider(this, ParamCustPreferViewModel(viewLifecycleOwner)).get(
                 CustomPreferencesViewModel::class.java
             )
-        print("test apk"+"test1")
 
         ConfigRepository().getForceUpdateCurrentVersion(object :
             ConfigRepository.LatestAPPUpdateListener {
             override fun getCurrentAPPVersion(latestAPPUpdateModel: ConfigRepository.LatestAPPUpdateModel) {
-                print("test apk"+"test1"+latestAPPUpdateModel.active)
                 if (latestAPPUpdateModel.active && isNotLatestVersion(latestAPPUpdateModel))
                     showConfirmationDialogType3(
                         getString(R.string.new_version_available),
