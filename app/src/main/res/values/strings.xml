@@ -985,6 +985,7 @@
     <string name="school">School*</string>
     <string name="degree_star">Degree*</string>
     <string name="course_start">Course*</string>
+    <string name="perm_not_granted">Permissions not granted!!</string>
 
 
 </resources>

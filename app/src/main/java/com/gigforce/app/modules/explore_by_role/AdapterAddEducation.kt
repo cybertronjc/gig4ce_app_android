@@ -9,9 +9,11 @@ import android.widget.DatePicker
 import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.app.R
 import com.gigforce.app.modules.profile.models.Education
+import com.gigforce.app.utils.DropdownAdapter
 import com.gigforce.app.utils.PushDownAnim
 import kotlinx.android.synthetic.main.layout_next_add_profile_segments.view.*
 import kotlinx.android.synthetic.main.layout_rv_add_education_fragment.view.*
+import kotlinx.android.synthetic.main.layout_rv_add_language.view.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -74,20 +76,23 @@ class AdapterAddEducation : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                     ) else ""
                 )
                 viewHolderAddEducation.itemView.et_school_name_add_ducation.setText(
-                    if (education?.institution != null) dateFormatter.format(
+                    if (education?.institution != null)
                         education?.institution
-                    ) else ""
+                    else ""
                 )
                 viewHolderAddEducation.itemView.course_name.setText(
-                    if (education?.institution != null) dateFormatter.format(
+                    if (education?.course != null)
                         education?.institution
-                    ) else ""
+                    else ""
                 )
-                viewHolderAddEducation.itemView.course_name.setText(
-                    if (education?.institution != null) dateFormatter.format(
-                        education?.institution
-                    ) else ""
-                )
+
+                val degreeList = getDegreeList()
+
+                val degreeAdapter = DropdownAdapter(holder.itemView.context, degreeList)
+                val degreeSpinner = holder.itemView.degree_name
+                degreeSpinner.setAdapter(degreeAdapter)
+                if (!education?.degree.isNullOrEmpty())
+                    degreeSpinner.setSelection(degreeList.indexOf(education?.degree))
 
 
                 viewHolderAddEducation.itemView.start_date.setOnClickListener {
@@ -130,9 +135,26 @@ class AdapterAddEducation : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                     datePicker.show()
                 }
 
-//                if (language?.validateFields == true) {
-//                    validate(viewHolderAddEducation)
-//                }
+                viewHolderAddEducation.itemView.add_language_add_more.visibility =
+                    if (position == items?.size?.minus(1) ?: false || items?.size == 1) View.VISIBLE else View.GONE
+                viewHolderAddEducation.itemView.add_language_add_more.setOnClickListener {
+                    if (viewHolderAddEducation.adapterPosition == -1) return@setOnClickListener
+                    items?.add(Education())
+                    notifyItemInserted(viewHolderAddEducation.adapterPosition + 1)
+                    notifyItemChanged(viewHolderAddEducation.adapterPosition)
+                }
+                viewHolderAddEducation.itemView.remove_language.visibility =
+                    if (position != 0) View.VISIBLE else View.GONE
+                viewHolderAddEducation.itemView.remove_language.setOnClickListener {
+                    if (viewHolderAddEducation.adapterPosition == -1) return@setOnClickListener
+                    items?.removeAt(viewHolderAddEducation.adapterPosition)
+                    notifyItemRemoved(viewHolderAddEducation.adapterPosition)
+                    items?.size?.minus(1)?.let { it1 -> notifyItemChanged(it1) }
+                }
+
+                if (education?.validateFields == true) {
+                    validate(viewHolderAddEducation)
+                }
             }
         }
 
@@ -149,6 +171,19 @@ class AdapterAddEducation : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 //            )
 //        )
 
+    }
+
+    fun getDegreeList(): List<String> {
+        return listOf(
+            "<10th",
+            "10th",
+            "12th",
+            "Certificate",
+            "Diploma",
+            "Bachelor",
+            "Masters",
+            "PhD"
+        )
     }
 
 
