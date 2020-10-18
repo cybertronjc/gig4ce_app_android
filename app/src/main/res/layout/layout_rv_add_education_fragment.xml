@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:isScrollContainer="true"
     android:orientation="vertical"
     app:layout_constraintEnd_toEndOf="parent"
@@ -73,7 +74,7 @@
         android:inputType="textPersonName" />
 
     <View
-        android:id="@+id/line_et_course"
+        android:id="@+id/line_et_field"
         android:layout_width="match_parent"
         android:layout_height="@dimen/size_2"
         android:layout_marginTop="@dimen/size_18"
@@ -126,7 +127,7 @@
         android:ems="10"
 
         android:fontFamily="@font/lato"
-        android:hint="@string/field"
+        android:hint="@string/activities_and_socities"
         android:inputType="textPersonName" />
 
     <View
@@ -137,54 +138,57 @@
         android:background="#68979797" />
 
 
-    <LinearLayout xmlns:tools="http://schemas.android.com/tools"
+    <LinearLayout
+        android:id="@+id/ll_upload_education_cert"
+        tools:context=".modules.gigerVerfication.drivingLicense.AddDrivingLicenseInfoFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/size_23"
         android:animateLayoutChanges="true"
-        android:orientation="vertical"
-        tools:context=".modules.gigerVerfication.drivingLicense.AddDrivingLicenseInfoFragment">
+        android:background="@drawable/dashed_border_979797_1dp"
+        android:orientation="vertical">
 
-
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="18dp">
-
-                <TextView
-                    android:id="@+id/documentUploadLabelTV"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:fontFamily="@font/lato"
-                    android:letterSpacing="-0.01"
-                    android:textColor="#d72467"
-                    android:text="@string/upload_education_certificate" />
-
-                <ImageView
-                    android:layout_width="15dp"
-                    android:layout_height="15dp"
-                    android:layout_marginEnd="15dp"
-                    android:layout_toStartOf="@id/documentUploadLabelTV"
-                    android:src="@drawable/ic_attachment_pink" />
-
-                <TextView
-                    android:id="@+id/documentUploadSubLabelTV"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/documentUploadLabelTV"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="4dp"
-                    android:fontFamily="@font/lato"
-                    android:gravity="center"
-                    android:letterSpacing="-0.01"
-                    android:textColor="@color/battle_ship_grey"
-                    android:text="@string/please_add_cert" />
-
-            </RelativeLayout>
 
         <RelativeLayout
-            android:id="@+id/uploadImageLayout"
+            android:id="@+id/upload_ed_rl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="18dp">
+
+            <TextView
+                android:id="@+id/documentUploadLabelTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:fontFamily="@font/lato"
+                android:letterSpacing="-0.01"
+                android:text="@string/upload_education_certificate"
+                android:textColor="#d72467" />
+
+            <ImageView
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_marginEnd="15dp"
+                android:layout_toStartOf="@id/documentUploadLabelTV"
+                android:src="@drawable/ic_attachment_pink" />
+
+            <TextView
+                android:id="@+id/documentUploadSubLabelTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/documentUploadLabelTV"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="4dp"
+                android:fontFamily="@font/lato"
+                android:gravity="center"
+                android:letterSpacing="-0.01"
+                android:text="@string/please_add_cert"
+                android:textColor="@color/battle_ship_grey" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/uploadImageLayout_educcation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="16dp"
@@ -193,31 +197,32 @@
 
             <TextView
                 android:id="@+id/imageLabelTV"
+                tools:text="Image Label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 android:fontFamily="@font/lato"
                 android:letterSpacing="-0.01"
-                android:textColor="@color/black"
-                tools:text="Image Label" />
+                android:textColor="@color/black" />
 
 
             <TextView
                 android:id="@+id/reuploadBtn"
+                tools:ignore="RelativeOverlap"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:fontFamily="@font/lato"
                 android:letterSpacing="-0.07"
                 android:padding="10dp"
+                android:visibility="gone"
                 android:text="@string/reupload"
                 android:textColor="@color/colorPrimary"
                 android:textSize="@dimen/font_14"
-                app:strokeColor="@color/lipstick"
-                tools:ignore="RelativeOverlap" />
+                app:strokeColor="@color/lipstick" />
 
             <ImageView
-                android:id="@+id/clickedImageIV"
+                android:id="@+id/clickedImageIV_education"
                 android:layout_width="match_parent"
                 android:layout_height="172dp"
                 android:layout_below="@id/reuploadBtn"

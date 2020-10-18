@@ -13,12 +13,14 @@ import android.view.ViewGroup
 import android.widget.AdapterView.OnItemClickListener
 import android.widget.DatePicker
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.gigforce.app.R
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.profile.models.Education
 import com.gigforce.app.utils.DropdownAdapter
 import com.gigforce.app.utils.PushDownAnim
+import com.gigforce.app.utils.getCircularProgressDrawable
 import kotlinx.android.synthetic.main.layout_next_add_profile_segments.view.*
 import kotlinx.android.synthetic.main.layout_rv_add_education_fragment.view.*
 import java.text.SimpleDateFormat
@@ -52,6 +54,7 @@ class AdapterAddEducation : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     interface AdapterAddEducationCallbacks {
         fun submitClicked(items: MutableList<Education>)
+        fun uploadEducationDocument(position: Int)
     }
 
     val dateFormatter = SimpleDateFormat("dd/MM/yyyy")
@@ -109,7 +112,7 @@ class AdapterAddEducation : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                                 s.toString()
                         }
                     })
-                viewHolderAddEducation.itemView.course_name.addTextChangedListener(object :
+                viewHolderAddEducation.itemView.et_field_add_education.addTextChangedListener(object :
                     TextWatcher {
                     override fun beforeTextChanged(
                         s: CharSequence?,
@@ -130,7 +133,32 @@ class AdapterAddEducation : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
                     override fun afterTextChanged(s: Editable?) {
                         if (viewHolderAddEducation.adapterPosition == -1) return
-                        items?.get(viewHolderAddEducation.adapterPosition)?.course = s.toString()
+                        items?.get(viewHolderAddEducation.adapterPosition)?.field = s.toString()
+                    }
+                })
+                viewHolderAddEducation.itemView.et_field_activities.addTextChangedListener(object :
+                    TextWatcher {
+                    override fun beforeTextChanged(
+                        s: CharSequence?,
+                        start: Int,
+                        count: Int,
+                        after: Int
+                    ) {
+
+                    }
+
+                    override fun onTextChanged(
+                        s: CharSequence?,
+                        start: Int,
+                        before: Int,
+                        count: Int
+                    ) {
+                    }
+
+                    override fun afterTextChanged(s: Editable?) {
+                        if (viewHolderAddEducation.adapterPosition == -1) return
+                        items?.get(viewHolderAddEducation.adapterPosition)?.activities =
+                            s.toString()
                     }
                 })
 
@@ -139,9 +167,14 @@ class AdapterAddEducation : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                         education?.institution
                     else ""
                 )
-                viewHolderAddEducation.itemView.course_name.setText(
-                    if (education?.course != null)
-                        education?.institution
+                viewHolderAddEducation.itemView.et_field_add_education.setText(
+                    if (education?.field != null)
+                        education?.field
+                    else ""
+                )
+                viewHolderAddEducation.itemView.et_field_activities.setText(
+                    if (education?.activities != null)
+                        education?.activities
                     else ""
                 )
                 holder.itemView.degree_name.onFocusChangeListener =
@@ -227,9 +260,24 @@ class AdapterAddEducation : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                     notifyItemRemoved(viewHolderAddEducation.adapterPosition)
                     items?.size?.minus(1)?.let { it1 -> notifyItemChanged(it1) }
                 }
+                viewHolderAddEducation.itemView.ll_upload_education_cert.setOnClickListener {
+                    if (viewHolderAddEducation.adapterPosition == -1) return@setOnClickListener
+                    adapterEducationCallbacks?.uploadEducationDocument(viewHolderAddEducation.adapterPosition)
+                }
+                if (education?.educationDocument != null) {
+                    holder.itemView.uploadImageLayout_educcation.visible()
+                    holder.itemView.upload_ed_rl.gone()
+                } else {
+                    holder.itemView.uploadImageLayout_educcation.gone()
+                    holder.itemView.upload_ed_rl.visible()
+                }
+                Glide.with(holder.itemView.context)
+                    .load(education?.educationDocument)
+                    .placeholder(getCircularProgressDrawable(holder.itemView.context))
+                    .into(viewHolderAddEducation.itemView.clickedImageIV_education)
 
                 if (education?.validateFields == true) {
-                    validate(viewHolderAddEducation,education)
+                    validate(viewHolderAddEducation, education)
                 }
             }
         }
@@ -238,7 +286,7 @@ class AdapterAddEducation : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private fun validate(viewholder: ViewHolderAddEducation, education: Education) {
 //
-        if (education.institution.isNullOrEmpty() || education.degree.isNullOrEmpty() || education.course.isNullOrEmpty() || education.startYear == null || education.endYear == null) {
+        if (education.institution.isNullOrEmpty() || education.degree.isNullOrEmpty() || education.field.isNullOrEmpty() || education.startYear == null || education.endYear == null || education.activities == null) {
             viewholder.itemView.form_error_add_education.visible()
         } else {
             viewholder.itemView.form_error_add_education.gone()
@@ -250,8 +298,15 @@ class AdapterAddEducation : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 "#68979797"
             )
         )
-        viewholder.itemView.line_et_course.setBackgroundColor(
-            if (viewholder.itemView.course_name.text.isEmpty()) viewholder.itemView.resources.getColor(
+        viewholder.itemView.line_et_field.setBackgroundColor(
+            if (viewholder.itemView.et_field_add_education.text.isEmpty()) viewholder.itemView.resources.getColor(
+                R.color.red
+            ) else Color.parseColor(
+                "#68979797"
+            )
+        )
+        viewholder.itemView.line_et_activities.setBackgroundColor(
+            if (viewholder.itemView.et_field_activities.text.isEmpty()) viewholder.itemView.resources.getColor(
                 R.color.red
             ) else Color.parseColor(
                 "#68979797"
@@ -312,5 +367,11 @@ class AdapterAddEducation : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         this.items = items;
         notifyDataSetChanged()
     }
+
+    fun setImageAdapter(position: Int, url: String?) {
+        items?.get(position)?.educationDocument = url;
+        notifyItemChanged(position)
+    }
+
 
 }

@@ -992,6 +992,8 @@
     <string name="field">Field*</string>
     <string name="upload_education_certificate">Upload Education Certificate</string>
     <string name="please_add_cert">Please upload your Education certificate for activation of this role</string>
+    <string name="activities_and_socities">Activities and socities*</string>
+    <string name="new_experience">New Experience</string>
 
 
 </resources>

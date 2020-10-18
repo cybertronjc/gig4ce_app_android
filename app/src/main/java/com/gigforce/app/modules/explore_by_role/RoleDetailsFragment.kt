@@ -107,9 +107,9 @@ class RoleDetailsFragment : BaseFragment() {
                 tv_what_content_role_details.text = role?.about
                 tv_what_read_more_details.text =
                     "${getString(R.string.what_does_a)} ${role?.role_title} ${
-                        getString(
-                            R.string.do_question_mark
-                        )
+                    getString(
+                        R.string.do_question_mark
+                    )
                     }"
                 adapterPreferredLocation.addData(role?.top_locations ?: mutableListOf())
                 tv_earnings_role_details.setOnClickListener {
@@ -156,11 +156,14 @@ class RoleDetailsFragment : BaseFragment() {
                             navigate(R.id.fragment_add_bio)
                         } else if (element.languages == null || element.languages!!.isEmpty()) {
                             navigate(R.id.fragment_add_language)
-                        } else if (element.contactEmail!![0].email.isNullOrEmpty()
+                        } else if (element.contactEmail == null || element.contactEmail!!.isEmpty() || element.contactEmail!![0].email.isNullOrEmpty()
                         ) {
                             navigate(R.id.fragment_add_contact)
                         } else if (element.educations == null || element.educations!!.isEmpty()) {
                             navigate(R.id.fragment_new_education)
+                        } else if (element.experiences == null || element.experiences!!.isEmpty()) {
+                            navigate(R.id.fragment_add_experience)
+
                         }
                     }
                 }

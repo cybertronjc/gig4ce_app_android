@@ -710,6 +710,11 @@
         android:name="com.gigforce.app.modules.explore_by_role.AddEducationFragment"
         android:label="fragment_new_education"
         tools:layout="@layout/layout_add_education_fragment" />
+    <fragment
+        android:id="@+id/fragment_add_experience"
+        android:name="com.gigforce.app.modules.explore_by_role.AddExperienceFragment"
+        android:label="fragment_add_experience"
+        tools:layout="@layout/layout_add_experience_fragment" />
 
 
 </navigation>
