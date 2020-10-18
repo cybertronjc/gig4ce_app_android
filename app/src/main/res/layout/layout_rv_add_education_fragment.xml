@@ -28,29 +28,13 @@
         android:layout_height="wrap_content"
         android:background="@null"
         android:ems="10"
+        android:fontFamily="@font/lato"
         android:hint="@string/school"
         android:inputType="textPersonName"
         android:textColorHint="@color/warm_grey_two" />
 
     <View
         android:id="@+id/line_et_school"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/size_2"
-        android:layout_marginTop="@dimen/size_18"
-        android:background="#68979797" />
-
-    <EditText
-        android:id="@+id/course_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/size_23"
-        android:background="@null"
-        android:ems="10"
-        android:hint="@string/course_start"
-        android:inputType="textPersonName" />
-
-    <View
-        android:id="@+id/line_et_course"
         android:layout_width="match_parent"
         android:layout_height="@dimen/size_2"
         android:layout_marginTop="@dimen/size_18"
@@ -76,15 +60,25 @@
         android:layout_marginTop="@dimen/size_18"
         android:background="#68979797" />
 
-    <!--        <Spinner-->
-    <!--            android:id="@+id/degree_name"-->
-    <!--            android:layout_width="match_parent"-->
-    <!--            android:layout_height="wrap_content"-->
-    <!--            android:layout_marginTop="16dp"-->
-    <!--            android:background="@drawable/ic_down"-->
-    <!--            android:ems="10"-->
-    <!--            android:hint="@string/add_education_sheet_degree"-->
-    <!--            android:inputType="textPersonName" />-->
+    <EditText
+        android:id="@+id/et_field_add_education"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/size_23"
+        android:background="@null"
+        android:ems="10"
+
+        android:fontFamily="@font/lato"
+        android:hint="@string/field"
+        android:inputType="textPersonName" />
+
+    <View
+        android:id="@+id/line_et_course"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/size_2"
+        android:layout_marginTop="@dimen/size_18"
+        android:background="#68979797" />
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -94,30 +88,143 @@
 
         <EditText
             android:id="@+id/start_date"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:backgroundTint="#68979797"
             android:drawableEnd="@drawable/ic_calendar_small"
             android:ems="10"
             android:focusable="false"
+            android:fontFamily="@font/lato"
+
             android:hint="@string/add_education_sheet_start_year"
             android:inputType="date"
             android:paddingBottom="@dimen/size_18" />
 
         <EditText
             android:id="@+id/end_date"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-
             android:backgroundTint="#68979797"
+
             android:drawableEnd="@drawable/ic_calendar_small"
             android:ems="10"
             android:focusable="false"
+            android:fontFamily="@font/lato"
             android:hint="@string/add_education_sheet_end_year"
             android:inputType="date"
             android:paddingBottom="@dimen/size_18" />
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/et_field_activities"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/size_29"
+        android:background="@null"
+        android:ems="10"
+
+        android:fontFamily="@font/lato"
+        android:hint="@string/field"
+        android:inputType="textPersonName" />
+
+    <View
+        android:id="@+id/line_et_activities"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/size_2"
+        android:layout_marginTop="@dimen/size_18"
+        android:background="#68979797" />
+
+
+    <LinearLayout xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:animateLayoutChanges="true"
+        android:orientation="vertical"
+        tools:context=".modules.gigerVerfication.drivingLicense.AddDrivingLicenseInfoFragment">
+
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="18dp">
+
+                <TextView
+                    android:id="@+id/documentUploadLabelTV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:fontFamily="@font/lato"
+                    android:letterSpacing="-0.01"
+                    android:textColor="#d72467"
+                    android:text="@string/upload_education_certificate" />
+
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_marginEnd="15dp"
+                    android:layout_toStartOf="@id/documentUploadLabelTV"
+                    android:src="@drawable/ic_attachment_pink" />
+
+                <TextView
+                    android:id="@+id/documentUploadSubLabelTV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/documentUploadLabelTV"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="4dp"
+                    android:fontFamily="@font/lato"
+                    android:gravity="center"
+                    android:letterSpacing="-0.01"
+                    android:textColor="@color/battle_ship_grey"
+                    android:text="@string/please_add_cert" />
+
+            </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/uploadImageLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:visibility="gone"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/imageLabelTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:fontFamily="@font/lato"
+                android:letterSpacing="-0.01"
+                android:textColor="@color/black"
+                tools:text="Image Label" />
+
+
+            <TextView
+                android:id="@+id/reuploadBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:fontFamily="@font/lato"
+                android:letterSpacing="-0.07"
+                android:padding="10dp"
+                android:text="@string/reupload"
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/font_14"
+                app:strokeColor="@color/lipstick"
+                tools:ignore="RelativeOverlap" />
+
+            <ImageView
+                android:id="@+id/clickedImageIV"
+                android:layout_width="match_parent"
+                android:layout_height="172dp"
+                android:layout_below="@id/reuploadBtn"
+                android:layout_marginTop="14dp"
+                android:scaleType="fitXY" />
+        </RelativeLayout>
+
     </LinearLayout>
 
     <LinearLayout
@@ -131,6 +238,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:fontFamily="@font/lato"
 
             android:text="@string/add_more_text"
             android:textAlignment="textStart"
@@ -145,8 +253,10 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:drawableEnd="@drawable/ic_delete"
+
             android:drawablePadding="@dimen/size_8"
             android:drawableTint="@color/colorPrimary"
+            android:fontFamily="@font/lato"
             android:text="@string/remove_caps"
             android:textAlignment="textEnd"
             android:textColor="@color/colorPrimary" />

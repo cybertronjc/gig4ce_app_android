@@ -989,6 +989,9 @@
     <string name="select_start_date_add_education">Please Select Start Date</string>
     <string name="select_end_date_add_education">Please Select End Date</string>
     <string name="download_contracts_exists">Downloaded Contract Already Exists!!!!</string>
+    <string name="field">Field*</string>
+    <string name="upload_education_certificate">Upload Education Certificate</string>
+    <string name="please_add_cert">Please upload your Education certificate for activation of this role</string>
 
 
 </resources>
