@@ -24,7 +24,7 @@
             >
 
             <ImageView
-                android:id="@+id/iv_close_add_education"
+                android:id="@+id/iv_close_add_experience"
                 android:layout_width="@dimen/size_24"
                 android:layout_height="@dimen/size_24"
                 android:layout_centerVertical="true"
@@ -37,7 +37,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginStart="@dimen/size_24"
-                android:layout_toEndOf="@+id/iv_close_add_education"
+                android:layout_toEndOf="@+id/iv_close_add_experience"
                 android:gravity="center_horizontal"
                 android:lineSpacingExtra="@dimen/font_21"
                 android:padding="@dimen/size_5"
