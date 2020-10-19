@@ -9,10 +9,8 @@ import androidx.lifecycle.viewModelScope
 import com.gigforce.app.core.toLocalDate
 import com.gigforce.app.modules.gigPage.models.Gig
 import com.gigforce.app.modules.gigPage.models.GigAttendance
-import com.gigforce.app.utils.Lce
-import com.gigforce.app.utils.Lse
-import com.gigforce.app.utils.getOrThrow
-import com.gigforce.app.utils.setOrThrow
+import com.gigforce.app.modules.gigPage.models.GigRegularisationRequest
+import com.gigforce.app.utils.*
 import com.google.firebase.Timestamp
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.firestore.DocumentSnapshot
@@ -387,6 +385,33 @@ class GigViewModel constructor(
             _monthlyGigs.value = Lce.content(gigs)
         } catch (e: Exception) {
             _monthlyGigs.value = Lce.error(e.message!!)
+        }
+    }
+
+    private val _requestAttendanceRegularisation = MutableLiveData<Lse>()
+    val requestAttendanceRegularisation: LiveData<Lse> get() = _requestAttendanceRegularisation
+
+    fun requestRegularisation(
+        gigId: String,
+        punchInTime: Timestamp,
+        punchOutTime: Timestamp
+    ) = viewModelScope.launch {
+        _requestAttendanceRegularisation.value = Lse.loading()
+
+        try {
+            val gigRegularisationRequest = GigRegularisationRequest().apply {
+                checkInTime = punchInTime
+                checkOutTime = punchOutTime
+                requestedOn = Timestamp.now()
+            }
+
+            gigsRepository.getCollectionReference()
+                .document(gigId)
+                .updateOrThrow("regularisationRequest", gigRegularisationRequest)
+
+            _requestAttendanceRegularisation.value = Lse.success()
+        } catch (e: Exception) {
+            _requestAttendanceRegularisation.value = Lse.error(e.message ?: "Unable to submit regularisation attendance")
         }
     }
 }

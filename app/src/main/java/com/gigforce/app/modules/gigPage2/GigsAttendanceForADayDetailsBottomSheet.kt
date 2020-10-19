@@ -38,7 +38,7 @@ class GigsAttendanceForADayDetailsBottomSheet : BottomSheetDialogFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ) = inflater.inflate(R.layout.fragment_gigs_list_for_decline, container, false)
+    ) = inflater.inflate(R.layout.fragment_gig_single_day_attendance_details, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

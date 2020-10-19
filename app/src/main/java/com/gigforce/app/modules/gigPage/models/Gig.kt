@@ -85,7 +85,9 @@ data class Gig(
     var gigContactDetails: GigContactDetails? = null,
 
     var declinedBy: String? = null,
-    var declineReason: String? = null
+    var declineReason: String? = null,
+
+    var regularisationRequest : GigRegularisationRequest? =null
 ) {
 
     @get:Exclude

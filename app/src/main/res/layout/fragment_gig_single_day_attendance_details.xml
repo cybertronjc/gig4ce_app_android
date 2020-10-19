@@ -144,6 +144,7 @@
         android:layout_margin="16dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
+        android:background="@drawable/border_option_grey"
         android:padding="12dp">
 
         <ImageView
@@ -164,7 +165,7 @@ approved by your supervisor." />
         <ImageView
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:src="@drawable/ic_baseline_arrow_forward_24" />
+            android:src="@drawable/ic_baseline_keyboard_arrow_right_24" />
 
     </LinearLayout>
 
