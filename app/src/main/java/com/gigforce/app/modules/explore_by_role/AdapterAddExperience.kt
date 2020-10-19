@@ -2,6 +2,7 @@ package com.gigforce.app.modules.explore_by_role
 
 import android.app.DatePickerDialog
 import android.content.Context
+import android.graphics.Color
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -12,13 +13,13 @@ import android.widget.AdapterView
 import android.widget.DatePicker
 import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.app.R
+import com.gigforce.app.core.gone
+import com.gigforce.app.core.visible
 import com.gigforce.app.modules.profile.models.Experience
 import com.gigforce.app.utils.DropdownAdapter
 import com.gigforce.app.utils.PushDownAnim
 import kotlinx.android.synthetic.main.layout_next_add_profile_segments.view.*
-import kotlinx.android.synthetic.main.layout_rv_add_education_fragment.view.*
 import kotlinx.android.synthetic.main.layout_rv_add_experience.view.*
-import kotlinx.android.synthetic.main.layout_rv_add_language.view.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -49,6 +50,7 @@ class AdapterAddExperience : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     interface AdapterAddEducationCallbacks {
         fun submitClicked(items: MutableList<Experience>)
+        fun goBack()
 //        fun uploadEducationDocument(position: Int)
     }
 
@@ -61,8 +63,11 @@ class AdapterAddExperience : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 val viewholder: ViewHolderAction = holder as ViewHolderAction
                 PushDownAnim.setPushDownAnimTo(viewholder.itemView.tv_action).setOnClickListener(
                     View.OnClickListener {
-
                         adapterEducationCallbacks?.submitClicked(items!!)
+                    })
+                PushDownAnim.setPushDownAnimTo(viewholder.itemView.tv_cancel).setOnClickListener(
+                    View.OnClickListener {
+                        adapterEducationCallbacks?.goBack()
                     })
             }
             else -> {
@@ -77,12 +82,15 @@ class AdapterAddExperience : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                     items?.get(viewHolderAddEducation.adapterPosition)?.currentExperience =
                         viewHolderAddEducation.itemView.currently_work_here_add_experience.isChecked
                 }
-                holder.itemView.degree_name.onItemClickListener =
-                    AdapterView.OnItemClickListener { parent, arg1, pos, id ->
-                        if (viewHolderAddEducation.adapterPosition == -1) return@OnItemClickListener
-                        items?.get(viewHolderAddEducation.adapterPosition)?.degree =
-                            degreeList.get(pos)
-                    }
+
+                viewHolderAddEducation.itemView.fresher_cb.setOnClickListener {
+                    if (viewHolderAddEducation.adapterPosition == -1) return@setOnClickListener
+                    items?.get(viewHolderAddEducation.adapterPosition)?.isFresher =
+                        viewHolderAddEducation.itemView.fresher_cb.isChecked
+                    notifyItemChanged(viewHolderAddEducation.adapterPosition)
+                }
+                viewHolderAddEducation.itemView.fresher_cb.isChecked =
+                    experience?.isFresher ?: false
                 viewHolderAddEducation.itemView.currently_work_here_add_experience.isChecked =
                     experience?.currentExperience ?: false
                 viewHolderAddEducation.itemView.start_date_add_experience.setText(
@@ -90,6 +98,13 @@ class AdapterAddExperience : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                         experience?.startDate
                     ) else ""
                 )
+                holder.itemView.employment_type_add_experience.onFocusChangeListener =
+                    View.OnFocusChangeListener { v, hasFocus -> if (hasFocus) holder.itemView.employment_type_add_experience.showDropDown() }
+
+                holder.itemView.employment_type_add_experience.setOnTouchListener(View.OnTouchListener { v, event ->
+                    holder.itemView.employment_type_add_experience.showDropDown()
+                    false
+                })
                 viewHolderAddEducation.itemView.end_date_add_experience.setText(
                     if (experience?.endDate != null) dateFormatter.format(
                         experience?.endDate
@@ -149,6 +164,19 @@ class AdapterAddExperience : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
                 val employeeTypeAdapter = DropdownAdapter(holder.itemView.context, list)
                 holder.itemView.employment_type_add_experience.setAdapter(employeeTypeAdapter)
+                holder.itemView.employment_type_add_experience.onItemClickListener =
+                    AdapterView.OnItemClickListener { parent, arg1, pos, id ->
+                        if (viewHolderAddEducation.adapterPosition == -1) return@OnItemClickListener
+                        items?.get(viewHolderAddEducation.adapterPosition)?.employmentType =
+                            list[pos]
+                    }
+                if (!experience?.employmentType.isNullOrEmpty()) {
+                    holder.itemView.employment_type_add_experience.setText(experience?.employmentType)
+
+                } else {
+                    holder.itemView.employment_type_add_experience.setText("")
+
+                }
                 viewHolderAddEducation.itemView.location_add_experience.addTextChangedListener(
                     object :
                         TextWatcher {
@@ -191,31 +219,7 @@ class AdapterAddExperience : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                         experience?.location
                     else ""
                 )
-//                holder.itemView.degree_name.onFocusChangeListener =
-//                    OnFocusChangeListener { v, hasFocus -> if (hasFocus) holder.itemView.degree_name.showDropDown() }
-//
-//                holder.itemView.degree_name.setOnTouchListener(OnTouchListener { v, event ->
-//                    holder.itemView.degree_name.showDropDown()
-//                    false
-//                })
-//
-//                val degreeList = getDegreeList()
 
-//                val degreeAdapter = DropdownAdapter(holder.itemView.context, degreeList)
-//                holder.itemView.degree_name.setAdapter(degreeAdapter)
-//                holder.itemView.degree_name.onItemClickListener =
-//                    OnItemClickListener { parent, arg1, pos, id ->
-//                        if (viewHolderAddEducation.adapterPosition == -1) return@OnItemClickListener
-//                        items?.get(viewHolderAddEducation.adapterPosition)?.degree =
-//                            degreeList.get(pos)
-//                    }
-//                if (!education?.degree.isNullOrEmpty()) {
-////                    val index = degreeList.indexOf(education?.degree)
-//                    holder.itemView.degree_name.setText(education?.degree)
-//
-//                } else {
-//                    holder.itemView.degree_name.setText("")
-//                }
 
 
                 viewHolderAddEducation.itemView.start_date_add_experience.setOnClickListener {
@@ -275,9 +279,21 @@ class AdapterAddExperience : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                     items?.size?.minus(1)?.let { it1 -> notifyItemChanged(it1) }
                 }
 
+                holder.itemView.title_add_experience.isEnabled = experience?.isFresher == false
+                holder.itemView.company_add_experience.isEnabled = experience?.isFresher == false
+                holder.itemView.employment_type_add_experience.isEnabled =
+                    experience?.isFresher == false
+                holder.itemView.location_add_experience.isEnabled = experience?.isFresher == false
+                holder.itemView.start_date_add_experience.isEnabled = experience?.isFresher == false
+                holder.itemView.end_date_add_experience.isEnabled = experience?.isFresher == false
+                holder.itemView.currently_work_here_add_experience.isEnabled =
+                    experience?.isFresher == false
+
+
+
 
                 if (experience?.validateFields == true) {
-//                    validate(viewHolderAddEducation, education)
+                    validate(viewHolderAddEducation, experience)
                 }
             }
         }
@@ -295,52 +311,52 @@ class AdapterAddExperience : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     }
 
-//    private fun validate(viewholder: ViewHolderAddEducation, education: Education) {
-////
-//        if (education.institution.isNullOrEmpty() || education.degree.isNullOrEmpty() || education.field.isNullOrEmpty() || education.startYear == null || education.endYear == null || education.activities == null) {
-//            viewholder.itemView.form_error_add_education.visible()
-//        } else {
-//            viewholder.itemView.form_error_add_education.gone()
-//        }
-//        viewholder.itemView.line_et_school.setBackgroundColor(
-//            if (viewholder.itemView.et_school_name_add_ducation.text.isEmpty()) viewholder.itemView.resources.getColor(
-//                R.color.red
-//            ) else Color.parseColor(
-//                "#68979797"
-//            )
-//        )
-//        viewholder.itemView.line_et_field.setBackgroundColor(
-//            if (viewholder.itemView.et_field_add_education.text.isEmpty()) viewholder.itemView.resources.getColor(
-//                R.color.red
-//            ) else Color.parseColor(
-//                "#68979797"
-//            )
-//        )
-//        viewholder.itemView.line_et_activities.setBackgroundColor(
-//            if (viewholder.itemView.et_field_activities.text.isEmpty()) viewholder.itemView.resources.getColor(
-//                R.color.red
-//            ) else Color.parseColor(
-//                "#68979797"
-//            )
-//        )
-//        viewholder.itemView.line_et_degree.setBackgroundColor(
-//            if (viewholder.itemView.degree_name.text.isEmpty()) viewholder.itemView.resources.getColor(
-//                R.color.red
-//            ) else Color.parseColor(
-//                "#68979797"
-//            )
-//        )
-//        viewholder.itemView.start_date.error =
-//            if (viewholder.itemView.start_date.text.isEmpty()) viewholder.itemView.resources.getString(
-//                R.string.select_start_date_add_education
-//            ) else null
-//        viewholder.itemView.end_date.error =
-//            if (viewholder.itemView.start_date.text.isEmpty()) viewholder.itemView.resources.getString(
-//                R.string.select_end_date_add_education
-//            ) else null
-//
-//
-//    }
+    private fun validate(viewholder: ViewHolderAddExperience, education: Experience) {
+
+        if (education.title.isNullOrEmpty() || education.company.isNullOrEmpty() || education.employmentType.isNullOrEmpty() || education.location.isNullOrEmpty() || education.startDate == null || education.endDate == null) {
+            viewholder.itemView.form_error_add_experience.visible()
+        } else {
+            viewholder.itemView.form_error_add_experience.gone()
+        }
+        viewholder.itemView.line_et_title_add_experience.setBackgroundColor(
+            if (viewholder.itemView.title_add_experience.text.isEmpty()) viewholder.itemView.resources.getColor(
+                R.color.red
+            ) else Color.parseColor(
+                "#68979797"
+            )
+        )
+        viewholder.itemView.line_et_company_add_experience.setBackgroundColor(
+            if (viewholder.itemView.company_add_experience.text.isEmpty()) viewholder.itemView.resources.getColor(
+                R.color.red
+            ) else Color.parseColor(
+                "#68979797"
+            )
+        )
+        viewholder.itemView.line_employment_type_add_experience.setBackgroundColor(
+            if (viewholder.itemView.employment_type_add_experience.text.isEmpty()) viewholder.itemView.resources.getColor(
+                R.color.red
+            ) else Color.parseColor(
+                "#68979797"
+            )
+        )
+        viewholder.itemView.line_et_location_add_experience.setBackgroundColor(
+            if (viewholder.itemView.location_add_experience.text.isEmpty()) viewholder.itemView.resources.getColor(
+                R.color.red
+            ) else Color.parseColor(
+                "#68979797"
+            )
+        )
+        viewholder.itemView.start_date_add_experience.error =
+            if (viewholder.itemView.start_date_add_experience.text.isEmpty()) viewholder.itemView.resources.getString(
+                R.string.select_start_date_add_education
+            ) else null
+        viewholder.itemView.end_date_add_experience.error =
+            if (viewholder.itemView.end_date_add_experience.text.isEmpty()) viewholder.itemView.resources.getString(
+                R.string.select_end_date_add_education
+            ) else null
+
+
+    }
 
 
     override fun getItemCount(): Int {

@@ -17,6 +17,6 @@ interface RoleDetailsCallbacks {
         )
 
         fun markedAsInterestSuccess(it: Task<Void>)
-        fun <T> getProfileSuccess(profileData: T)
+        fun <T> checkDataResponse(profileData: T)
     }
 }

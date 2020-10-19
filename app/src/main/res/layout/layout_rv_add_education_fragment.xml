@@ -49,6 +49,8 @@
         android:layout_marginTop="@dimen/size_23"
         android:background="@null"
         android:drawableEnd="@drawable/ic_down"
+        android:fontFamily="@font/lato"
+
         android:focusable="false"
         android:hint="@string/degree_star"
         android:longClickable="false"
@@ -68,6 +70,7 @@
         android:layout_marginTop="@dimen/size_23"
         android:background="@null"
         android:ems="10"
+
 
         android:fontFamily="@font/lato"
         android:hint="@string/field"

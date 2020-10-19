@@ -1,8 +1,11 @@
 package com.gigforce.app.modules.explore_by_role
 
 import androidx.lifecycle.ViewModel
+import com.gigforce.app.modules.gigerVerfication.VerificationBaseModel
 import com.gigforce.app.modules.landingscreen.models.Role
 import com.gigforce.app.utils.SingleLiveEvent
+import com.google.android.gms.tasks.Task
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.QuerySnapshot
 
@@ -11,12 +14,20 @@ class ExploreByRoleViewModel(private val callbacks: ExploreByRoleCallbacks) : Vi
     private val _observerRoleList: SingleLiveEvent<ArrayList<Role>> by lazy {
         SingleLiveEvent<ArrayList<Role>>();
     }
+    private val _observerMarkedAsInterest: SingleLiveEvent<Boolean> by lazy {
+        SingleLiveEvent<Boolean>();
+    }
+    val observerMarkedAsInterest: SingleLiveEvent<Boolean> get() = _observerMarkedAsInterest
     val observerRoleList: SingleLiveEvent<ArrayList<Role>> get() = _observerRoleList
 
     private val _observerError: SingleLiveEvent<String> by lazy {
         SingleLiveEvent<String>();
     }
     val observerError: SingleLiveEvent<String> get() = _observerError
+    private val _observerVerified: SingleLiveEvent<Boolean> by lazy {
+        SingleLiveEvent<Boolean>();
+    }
+    val observerVerified: SingleLiveEvent<Boolean> get() = _observerVerified
 
     fun getRoles() {
         callbacks.getRoles(this)
@@ -37,6 +48,37 @@ class ExploreByRoleViewModel(private val callbacks: ExploreByRoleCallbacks) : Vi
         val arrayList = ArrayList<Role>()
         arrayList.addAll(roles!!)
         observerRoleList.value = arrayList
+    }
+
+    override fun docsVerifiedResponse(
+        querySnapshot: DocumentSnapshot?,
+        error: FirebaseFirestoreException?
+    ) {
+        if (error == null) {
+            val obj = querySnapshot?.toObject(VerificationBaseModel::class.java)
+            observerVerified.value =
+                obj?.bank_details != null && obj?.bank_details?.verified ?: false && obj?.selfie_video != null && obj?.selfie_video?.verified ?: false
+                        && obj?.pan_card != null && obj?.pan_card?.verified ?: false && obj?.aadhar_card != null && obj?.aadhar_card?.verified ?: false
+                        && obj?.driving_license != null && obj?.driving_license?.verified ?: false
+        } else {
+            observerError.value = error?.message
+        }
+    }
+
+    override fun markedAsInterestSuccess(it: Task<Void>) {
+        if (it.isSuccessful) {
+            observerMarkedAsInterest.value = true
+        } else {
+            observerError.value = it.exception?.message
+        }
+    }
+
+    fun addAsInterest(roleID: String) {
+        callbacks.markAsInterest(roleID, this)
+    }
+
+    fun checkVerifiedDocs() {
+        callbacks.checkIfDocsAreVerified(this)
     }
 
 

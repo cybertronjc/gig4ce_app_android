@@ -11,23 +11,22 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
-import androidx.navigation.NavDeepLinkBuilder
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.fragment.findNavController
 import com.clevertap.android.sdk.CleverTapAPI
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.popAllBackStates
 import com.gigforce.app.modules.landingscreen.LandingScreenFragment
 import com.gigforce.app.modules.onboardingmain.OnboardingMainFragment
 import com.gigforce.app.notification.NotificationConstants
+import com.gigforce.app.utils.NavFragmentsData
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.iid.FirebaseInstanceId
-import kotlinx.android.synthetic.main.activity_main.*
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), NavFragmentsData {
 
+    private var bundle: Bundle? = null
     private lateinit var navController: NavController
     private var doubleBackToExitPressedOnce = false
 
@@ -56,11 +55,11 @@ class MainActivity : AppCompatActivity() {
     private fun handleDeepLink() {
 
         val clickAction = intent.getStringExtra(NotificationConstants.INTENT_EXTRA_CLICK_ACTION)
-        Log.d("MainActivity","Click action received $clickAction ")
+        Log.d("MainActivity", "Click action received $clickAction ")
 
         when (intent.getStringExtra(NotificationConstants.INTENT_EXTRA_CLICK_ACTION)) {
             NotificationConstants.CLICK_ACTIONS.OPEN_GIG_ATTENDANCE_PAGE -> {
-                Log.d("MainActivity","redirecting to attendance page")
+                Log.d("MainActivity", "redirecting to attendance page")
                 navController.popAllBackStates()
                 navController.navigate(
                     R.id.gigAttendancePageFragment,
@@ -68,7 +67,7 @@ class MainActivity : AppCompatActivity() {
                 )
             }
             NotificationConstants.CLICK_ACTIONS.OPEN_VERIFICATION_PAGE -> {
-                Log.d("MainActivity","redirecting to gig verification page")
+                Log.d("MainActivity", "redirecting to gig verification page")
                 navController.popAllBackStates()
                 navController.navigate(
                     R.id.gigerVerificationFragment,
@@ -111,7 +110,7 @@ class MainActivity : AppCompatActivity() {
                 val msg = token //getString(R.string.msg_token_fmt, token)
                 Log.v("Firebase/InstanceId", "Firebase Token Received")
                 Log.v("Firebase/InstanceId", msg)
-              //  Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
+                //  Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
             })
     }
 
@@ -134,10 +133,9 @@ class MainActivity : AppCompatActivity() {
         }
 
         if (!handled) {
-            if (isMainScreen(fragmentholder)||isOnBoarding(fragmentholder)) {
+            if (isMainScreen(fragmentholder) || isOnBoarding(fragmentholder)) {
                 doubleBackPressFun()
-            }
-            else super.onBackPressed()
+            } else super.onBackPressed()
         }
 
     }
@@ -180,6 +178,7 @@ class MainActivity : AppCompatActivity() {
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
+
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
         if (currentFocus != null) {
             val imm: InputMethodManager =
@@ -191,5 +190,13 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         const val IS_DEEPLINK = "is_deeplink"
+    }
+
+    override fun setData(bundle: Bundle) {
+        this.bundle = bundle;
+    }
+
+    override fun getData(): Bundle {
+        return bundle ?: Bundle()
     }
 }

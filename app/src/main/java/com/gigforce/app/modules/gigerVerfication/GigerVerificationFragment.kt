@@ -17,6 +17,7 @@ import android.view.ViewGroup
 import android.widget.RelativeLayout
 import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
@@ -32,6 +33,7 @@ import kotlinx.android.synthetic.main.fragment_giger_verification.*
 import kotlinx.android.synthetic.main.fragment_giger_verification_item.view.*
 import kotlinx.android.synthetic.main.fragment_giger_verification_main.*
 import kotlinx.android.synthetic.main.fragment_giger_verification_main.view.*
+import kotlinx.android.synthetic.main.layout_next_add_profile_segments.view.*
 import java.io.File
 
 
@@ -39,6 +41,7 @@ class GigerVerificationFragment : BaseFragment() {
 
     private val viewModel: GigVerificationViewModel by viewModels()
     private var gigerVerificationStatus: GigerVerificationStatus? = null
+    private var showActionButtons: Boolean = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -48,10 +51,29 @@ class GigerVerificationFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        checkForBundleData(savedInstanceState)
         initView()
         setListeners()
         initViewModel()
         checkForContract()
+    }
+
+    private fun checkForBundleData(savedInstanceState: Bundle?) {
+        savedInstanceState?.let {
+            showActionButtons = it.getBoolean(StringConstants.SHOW_ACTION_BUTTONS.value)
+
+        }
+
+        arguments?.let {
+            showActionButtons = it.getBoolean(StringConstants.SHOW_ACTION_BUTTONS.value)
+
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean(StringConstants.SHOW_ACTION_BUTTONS.value, showActionButtons)
+
     }
 
     private fun checkForContract() {
@@ -207,6 +229,33 @@ class GigerVerificationFragment : BaseFragment() {
 
         bankDetailsLayout.optionTitleTV.text = getString(R.string.bank_details)
         bankDetailsLayout.descTitleTV.text = getString(R.string.tap_to_upload)
+        ll_next_giger_verification.visible()
+        ll_next_giger_verification.tv_cancel.gone()
+        PushDownAnim.setPushDownAnimTo(
+
+            ll_next_giger_verification.tv_action
+        ).setOnClickListener(
+            View.OnClickListener {
+                navFragmentsData?.setData(
+                    bundleOf(
+                        StringConstants.NAV_TO_QUESTIONNARE.value to true,
+                        StringConstants.MOVE_TO_NEXT_STEP.value to true
+
+                    )
+                )
+                popBackState()
+            })
+
+    }
+
+    override fun onBackPressed(): Boolean {
+        navFragmentsData?.setData(
+            bundleOf(
+                StringConstants.BACK_PRESSED.value to true
+            )
+        )
+        return super.onBackPressed()
+
     }
 
 

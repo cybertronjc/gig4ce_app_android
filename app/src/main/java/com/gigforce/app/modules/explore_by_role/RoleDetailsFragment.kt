@@ -11,6 +11,7 @@ import android.widget.TableLayout
 import android.widget.TableRow
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.core.os.bundleOf
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,6 +19,7 @@ import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
+import com.gigforce.app.modules.gigerVerfication.VerificationBaseModel
 import com.gigforce.app.modules.profile.ProfileViewModel
 import com.gigforce.app.modules.profile.models.ProfileData
 import com.gigforce.app.modules.profile.models.RoleInterests
@@ -29,15 +31,20 @@ import kotlinx.android.synthetic.main.layout_role_details_fragment.*
 
 
 class RoleDetailsFragment : BaseFragment() {
+    private var fragmentLoaded = false
     private val viewModelFactory by lazy {
         ViewModelProviderFactory(RoleDetailsVIewModel(RoleDetailsRepository()))
     }
+
     private val viewModel: RoleDetailsVIewModel by lazy {
         ViewModelProvider(this, viewModelFactory).get(RoleDetailsVIewModel::class.java)
     }
     private val viewModelProfile: ProfileViewModel by lazy {
         ViewModelProvider(this).get(ProfileViewModel::class.java)
     }
+    private val exploreByRoleViewModel = ExploreByRoleViewModel(ExploreByRoleRepository())
+
+
     private val adapterPreferredLocation: AdapterPreferredLocation by lazy {
         AdapterPreferredLocation()
     }
@@ -47,49 +54,83 @@ class RoleDetailsFragment : BaseFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         return inflateView(R.layout.layout_role_details_fragment, inflater, container)
     }
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         getDataFromSavedState(savedInstanceState)
         setupPreferredLocationRv()
         initObservers()
         checkForMarkedAsInterest()
+        checkForRedirection()
+    }
+
+    private fun checkForRedirection() {
+        if (navFragmentsData?.getData() != null) {
+            if (navFragmentsData?.getData()
+                    ?.getBoolean(StringConstants.BACK_PRESSED.value, false) == true
+            ) {
+
+
+            } else if (navFragmentsData?.getData()
+                    ?.getBoolean(StringConstants.MOVE_TO_NEXT_STEP.value) == true
+            ) {
+                viewModel.checkForProfileCompletionAndVerification()
+                navFragmentsData?.getData()
+                    ?.putBoolean(StringConstants.MOVE_TO_NEXT_STEP.value, false)
+            }
+
+        }
+
     }
 
     private fun checkForMarkedAsInterest() {
         pb_role_details.visible()
         viewModelProfile.getProfileData().observe(viewLifecycleOwner, Observer {
             if (!it.role_interests.isNullOrEmpty()) {
-                if (it.role_interests!!.contains(RoleInterests(mRoleID))) {
-                    tv_mark_as_interest_role_details.visible()
-                    tv_mark_as_interest_role_details.setOnClickListener(null)
-                    tv_mark_as_interest_role_details.text = getString(R.string.marked_as_interest)
-                } else {
-                    tv_mark_as_interest_role_details.text = getString(R.string.mark_as_interest)
-                    tv_mark_as_interest_role_details.setOnClickListener {
-                        checkForProfileAndVerificationData()
-//                        navigate(R.id.fragment_add_bio)
 
-                    }
-//                    tv_mark_as_interest_role_details.setOnClickListener {
-//                        tv_mark_as_interest_role_details.gone()
-//                        viewModel.addAsInterest(mRoleID)
-//                    }
+                exploreByRoleViewModel.observerVerified.observe(
+                    viewLifecycleOwner,
+                    Observer { verified ->
+                        pb_role_details.gone()
+                        run {
+                            val rolePresent = it.role_interests!!.contains(RoleInterests(mRoleID))
+                            tv_mark_as_interest_role_details.setOnClickListener {
+                                pb_role_details.visible()
+                                checkForProfileAndVerificationData()
 
-                }
+                            }
+                            if (rolePresent && verified!!) {
+                                tv_mark_as_interest_role_details.visible()
+                                tv_mark_as_interest_role_details.setOnClickListener(null)
+                                tv_mark_as_interest_role_details.text =
+                                    getString(R.string.activated)
+
+                            } else if (rolePresent) {
+                                tv_mark_as_interest_role_details.text = getString(R.string.applied)
+
+
+                            }
+                        }
+
+                    })
+                exploreByRoleViewModel.checkVerifiedDocs()
             } else {
-                tv_mark_as_interest_role_details.text = getString(R.string.mark_as_interest)
+                tv_mark_as_interest_role_details.text = getString(R.string.apply_now)
                 tv_mark_as_interest_role_details.setOnClickListener {
-                    tv_mark_as_interest_role_details.gone()
-                    viewModel.addAsInterest(mRoleID)
+                    pb_role_details.visible()
+                    checkForProfileAndVerificationData()
+
                 }
 
             }
-            pb_role_details.gone()
+
         })
+
+
     }
 
     private fun checkForProfileAndVerificationData() {
@@ -107,9 +148,9 @@ class RoleDetailsFragment : BaseFragment() {
                 tv_what_content_role_details.text = role?.about
                 tv_what_read_more_details.text =
                     "${getString(R.string.what_does_a)} ${role?.role_title} ${
-                    getString(
-                        R.string.do_question_mark
-                    )
+                        getString(
+                            R.string.do_question_mark
+                        )
                     }"
                 adapterPreferredLocation.addData(role?.top_locations ?: mutableListOf())
                 tv_earnings_role_details.setOnClickListener {
@@ -148,26 +189,71 @@ class RoleDetailsFragment : BaseFragment() {
             navigate(R.id.fragment_marked_as_interest)
         })
         viewModel.observerDataToCheck.observe(viewLifecycleOwner, Observer {
-            pb_role_details.gone()
-            it?.forEach { element ->
-                run {
-                    if (element is ProfileData) {
+            run {
+
+                pb_role_details.gone()
+                for (i in 0 until it?.size!!) {
+                    val element = it[i]
+                    if (navFragmentsData?.getData()
+                            ?.getBoolean(StringConstants.NAVIGATE_TO_MARK_AS_INTERESTED.value) == true
+                    ) {
+                        navFragmentsData?.getData()
+                            ?.putBoolean(
+                                StringConstants.NAVIGATE_TO_MARK_AS_INTERESTED.value,
+                                false
+                            )
+                        navigate(
+                            R.id.fragment_marked_as_interest,
+                            bundleOf(StringConstants.ROLE_ID.value to mRoleID)
+                        )
+                        break
+                    } else if (navFragmentsData?.getData()
+                            ?.getBoolean(StringConstants.NAV_TO_QUESTIONNARE.value) == true
+                    ) {
+                        navFragmentsData?.getData()
+                            ?.putBoolean(StringConstants.NAV_TO_QUESTIONNARE.value, false)
+                        navigate(R.id.fragment_questionnaire)
+                        break
+                    } else if (element is ProfileData) {
                         if (element.aboutMe == null || element.aboutMe.isEmpty()) {
                             navigate(R.id.fragment_add_bio)
+                            break
                         } else if (element.languages == null || element.languages!!.isEmpty()) {
                             navigate(R.id.fragment_add_language)
+                            break
                         } else if (element.contactEmail == null || element.contactEmail!!.isEmpty() || element.contactEmail!![0].email.isNullOrEmpty()
                         ) {
                             navigate(R.id.fragment_add_contact)
+                            break
                         } else if (element.educations == null || element.educations!!.isEmpty()) {
                             navigate(R.id.fragment_new_education)
+                            break
                         } else if (element.experiences == null || element.experiences!!.isEmpty()) {
                             navigate(R.id.fragment_add_experience)
+                            break
 
                         }
+
+                    } else if (element is VerificationBaseModel) {
+                        if (element?.bank_details == null || element?.bank_details?.verified == false || element?.selfie_video == null || element?.selfie_video?.verified == false
+                            || element?.pan_card == null || element?.pan_card?.verified == false || element?.aadhar_card == null || element?.aadhar_card?.verified == false
+                            || element?.driving_license == null || element?.driving_license?.verified == false
+
+                        ) {
+                            navigate(
+                                R.id.gigerVerificationFragment, bundleOf(
+                                    StringConstants.SHOW_ACTION_BUTTONS.value to true
+                                )
+                            )
+                            break
+                        }
+
+
                     }
                 }
+
             }
+
         })
 
         viewModel.getRoleDetails(mRoleID)

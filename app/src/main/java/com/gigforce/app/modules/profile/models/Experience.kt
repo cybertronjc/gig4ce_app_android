@@ -12,6 +12,7 @@ data class Experience(
     var startDate: Date? = null,
     var endDate: Date? = null,
     @get:Exclude var validateFields: Boolean = false,
+    var isFresher: Boolean = false,
     var currentExperience: Boolean = false
 ) : BaseFirestoreDataModel(tableName = "experiences") {
 }

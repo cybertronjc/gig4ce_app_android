@@ -28,48 +28,80 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:background="@null"
             android:ems="10"
-            android:hint="@string/add_experience_title"
+            android:fontFamily="@font/lato"
+            android:hint="@string/title_madatory"
             android:inputType="textPersonName" />
+
+        <View
+            android:id="@+id/line_et_title_add_experience"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/size_2"
+            android:layout_marginTop="@dimen/size_18"
+            android:background="#68979797" />
+
 
         <EditText
             android:id="@+id/company_add_experience"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="@dimen/size_23"
+            android:background="@null"
+
             android:ems="10"
+            android:fontFamily="@font/lato"
             android:hint="@string/company_name_mandatory"
             android:inputType="textPersonName" />
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/employment_holder_add_experience"
-            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+        <View
+            android:id="@+id/line_et_company_add_experience"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/size_2"
+            android:layout_marginTop="@dimen/size_18"
+            android:background="#68979797" />
+
+
+        <AutoCompleteTextView
+            android:id="@+id/employment_type_add_experience"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:clickable="false"
+            android:layout_marginTop="@dimen/size_23"
+            android:background="@null"
+            android:drawableEnd="@drawable/ic_down"
+
             android:focusable="false"
-            app:boxBackgroundColor="@color/white"
-            app:endIconDrawable="@drawable/ic_down">
+            android:fontFamily="@font/lato"
+            android:hint="@string/add_experience_employment_type"
+            android:longClickable="false"
+            android:paddingStart="3dp" />
 
-            <AutoCompleteTextView
-                android:id="@+id/employment_type_add_experience"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:focusable="false"
-                android:hint="@string/add_experience_employment_type"
-                android:longClickable="false"
-                android:paddingStart="3dp" />
 
-        </com.google.android.material.textfield.TextInputLayout>
+        <View
+            android:id="@+id/line_employment_type_add_experience"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/size_2"
+            android:layout_marginTop="@dimen/size_18"
+            android:background="#68979797" />
 
         <EditText
             android:id="@+id/location_add_experience"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="@dimen/size_23"
+            android:background="@null"
+
             android:ems="10"
+            android:fontFamily="@font/lato"
             android:hint="@string/add_experience_location"
             android:inputType="textPersonName" />
+
+        <View
+            android:id="@+id/line_et_location_add_experience"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/size_2"
+            android:layout_marginTop="@dimen/size_18"
+            android:background="#68979797" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -82,12 +114,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
+
                 android:layout_weight="1"
+                android:backgroundTint="#68979797"
                 android:drawableEnd="@drawable/ic_calendar_small"
                 android:ems="10"
                 android:focusable="false"
+                android:fontFamily="@font/lato"
                 android:hint="@string/add_experience_start_date"
-                android:inputType="date" />
+                android:inputType="date"
+                android:paddingBottom="@dimen/size_18" />
 
             <EditText
                 android:id="@+id/end_date_add_experience"
@@ -95,11 +131,15 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_weight="1"
+
+                android:backgroundTint="#68979797"
                 android:drawableEnd="@drawable/ic_calendar_small"
                 android:ems="10"
                 android:focusable="false"
+                android:fontFamily="@font/lato"
                 android:hint="@string/add_experience_end_date"
-                android:inputType="date" />
+                android:inputType="date"
+                android:paddingBottom="@dimen/size_18" />
         </LinearLayout>
 
         <LinearLayout
@@ -107,20 +147,28 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:layout_weight="1"
-                android:ems="10" />
-
             <com.google.android.material.checkbox.MaterialCheckBox
-                android:id="@+id/currently_work_here_add_experience"
-                android:layout_width="match_parent"
+                android:id="@+id/fresher_cb"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_weight="1"
+
                 android:ems="10"
+                android:fontFamily="@font/lato"
+                android:text="@string/i_am_fresher" />
+
+
+
+            <com.google.android.material.checkbox.MaterialCheckBox
+                android:id="@+id/currently_work_here_add_experience"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+
+                android:ems="10"
+                android:fontFamily="@font/lato"
                 android:text="@string/add_experience_currently_working" />
         </LinearLayout>
 

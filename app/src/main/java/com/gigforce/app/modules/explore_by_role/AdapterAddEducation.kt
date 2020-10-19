@@ -55,6 +55,8 @@ class AdapterAddEducation : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     interface AdapterAddEducationCallbacks {
         fun submitClicked(items: MutableList<Education>)
         fun uploadEducationDocument(position: Int)
+        fun goBack()
+
     }
 
     val dateFormatter = SimpleDateFormat("dd/MM/yyyy")
@@ -68,6 +70,10 @@ class AdapterAddEducation : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                     View.OnClickListener {
 
                         adapterEducationCallbacks?.submitClicked(items!!)
+                    })
+                PushDownAnim.setPushDownAnimTo(viewholder.itemView.tv_cancel).setOnClickListener(
+                    View.OnClickListener {
+                        adapterEducationCallbacks?.goBack()
                     })
             }
             else -> {

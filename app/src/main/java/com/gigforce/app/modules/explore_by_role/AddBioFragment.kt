@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.*
+import androidx.core.os.bundleOf
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.gigforce.app.R
@@ -12,6 +13,7 @@ import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.utils.PushDownAnim
+import com.gigforce.app.utils.StringConstants
 import com.gigforce.app.utils.ViewModelProviderFactory
 import kotlinx.android.synthetic.main.layout_add_bio_fragment.*
 
@@ -47,17 +49,21 @@ class AddBioFragment : BaseFragment() {
         })
         viewModel.observableAddBioResponse.observe(viewLifecycleOwner, Observer {
             pb_add_bio.gone()
+            navFragmentsData?.setData(bundleOf(StringConstants.MOVE_TO_NEXT_STEP.value to true))
             popBackState()
         })
     }
 
     private fun initClicks() {
         iv_close_add_bio.setOnClickListener {
-            popBackState()
+            onBackPressed()
         }
         PushDownAnim.setPushDownAnimTo(tv_save_add_bio).setOnClickListener(View.OnClickListener {
             pb_add_bio.visible()
             viewModel.saveBio(et_add_bio.text.toString())
+        })
+        PushDownAnim.setPushDownAnimTo(tv_cancel_add_bio).setOnClickListener(View.OnClickListener {
+            onBackPressed()
         })
         et_add_bio.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
@@ -105,6 +111,16 @@ class AddBioFragment : BaseFragment() {
                 WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
             )
         }
+    }
+
+    override fun onBackPressed(): Boolean {
+        navFragmentsData?.setData(
+            bundleOf(
+                StringConstants.BACK_PRESSED.value to true
+
+            )
+        )
+        return super.onBackPressed()
     }
 
     override fun onStart() {

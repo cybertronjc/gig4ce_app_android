@@ -2,6 +2,7 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -51,20 +52,34 @@
                 </FrameLayout>
 
                 <TextView
+                    android:id="@+id/tv_title_mark_as_interest"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/size_17"
-                    android:text="@string/marked_as_interest_exlamation"
                     android:textColor="#222222"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    tools:text="@string/marked_as_interest_exlamation" />
 
                 <TextView
+                    android:id="@+id/tv_mark_as_interest_note"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/size_12"
+                    android:gravity="center_horizontal"
+                    android:text="@string/our_team_will_soon_contact_you_for_more_details_and_further_procedure"
+                    android:textColor="#000000"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/tv_verify_documents"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/size_12"
                     android:layout_marginBottom="@dimen/size_34"
                     android:gravity="center_horizontal"
-                    android:text="@string/our_team_will_soon_contact_you_for_more_details_and_further_procedure"
+                    android:paddingStart="@dimen/size_16"
+                    android:paddingEnd="@dimen/size_16"
+                    android:text="@string/note_if_any_of_the_doc_i_e_adhar_dl_any_one_pan_selfie_video_bank_details_is_not_completed_there_should_be_a_note_to_show_complete_your_verification_for_quick_activation_of_profile"
                     android:textColor="#000000"
                     android:textSize="14sp" />
             </LinearLayout>

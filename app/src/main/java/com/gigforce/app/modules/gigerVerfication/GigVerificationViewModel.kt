@@ -24,17 +24,17 @@ import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
 data class GigerVerificationStatus(
-    val selfieVideoUploaded: Boolean,
-    val selfieVideoDataModel: SelfieVideoDataModel?,
-    val panCardDetailsUploaded: Boolean,
-    val panCardDetails: PanCardDataModel?,
-    val aadharCardDetailsUploaded: Boolean,
-    val aadharCardDataModel: AadharCardDataModel?,
-    val dlCardDetailsUploaded: Boolean,
-    val drivingLicenseDataModel: DrivingLicenseDataModel?,
-    val bankDetailsUploaded: Boolean,
-    val bankUploadDetailsDataModel: BankDetailsDataModel?,
-    val everyDocumentUploaded: Boolean
+    val selfieVideoUploaded: Boolean=false,
+    val selfieVideoDataModel: SelfieVideoDataModel?=null,
+    val panCardDetailsUploaded: Boolean=false,
+    val panCardDetails: PanCardDataModel?=null,
+    val aadharCardDetailsUploaded: Boolean=false,
+    val aadharCardDataModel: AadharCardDataModel?=null,
+    val dlCardDetailsUploaded: Boolean=false,
+    val drivingLicenseDataModel: DrivingLicenseDataModel?=null,
+    val bankDetailsUploaded: Boolean=false,
+    val bankUploadDetailsDataModel: BankDetailsDataModel?=null,
+    val everyDocumentUploaded: Boolean=false
 
 
 ) {

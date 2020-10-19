@@ -44,6 +44,7 @@ class AdapterAddLanguage() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     interface AdapterAddLanguageCallbacks {
         fun submitClicked(items: MutableList<Language>)
+        fun goBack()
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -51,6 +52,11 @@ class AdapterAddLanguage() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             ACTION -> {
                 val viewholder: ViewHolderAction = holder as ViewHolderAction
                 PushDownAnim.setPushDownAnimTo(viewholder.itemView.tv_action).setOnClickListener(
+                    View.OnClickListener {
+
+                        adapterAddLanguageCallbacks?.submitClicked(items!!)
+                    })
+                PushDownAnim.setPushDownAnimTo(viewholder.itemView.tv_cancel).setOnClickListener(
                     View.OnClickListener {
 
                         adapterAddLanguageCallbacks?.submitClicked(items!!)

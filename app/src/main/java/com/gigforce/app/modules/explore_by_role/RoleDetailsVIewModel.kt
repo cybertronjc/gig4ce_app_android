@@ -10,6 +10,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException
 
 class RoleDetailsVIewModel(private val callbacks: RoleDetailsCallbacks) : ViewModel(),
     RoleDetailsCallbacks.ResponseCallbacks {
+    var openQuestionnaire: Boolean = false
     private val _observerRole: SingleLiveEvent<Role> by lazy {
         SingleLiveEvent<Role>();
     }
@@ -59,11 +60,25 @@ class RoleDetailsVIewModel(private val callbacks: RoleDetailsCallbacks) : ViewMo
         callbacks.checkForProfileCompletionAndVerification(this)
     }
 
-    override fun <T> getProfileSuccess(data: T) {
+    override fun <T> checkDataResponse(data: T) {
+
         if (data is ProfileData) {
-            observerDataToCheck.value = mutableListOf(data)
+            dataCheckList.clear()
+            dataCheckList.add(data)
+        } else {
+            dataCheckList.add(data!!)
+        }
+        if (dataCheckList.size == 2) {
+            observerDataToCheck.value =dataCheckList
+
         }
 
 
+    }
+
+    val dataCheckList = mutableListOf<Any>()
+
+    fun openQuestionnaireLandingAgain() {
+        this.openQuestionnaire = true
     }
 }

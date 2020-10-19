@@ -3,6 +3,7 @@ package com.gigforce.app.modules.explore_by_role
 import android.os.Build
 import android.os.Bundle
 import android.view.*
+import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -12,6 +13,7 @@ import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.explore_by_role.models.ContactModel
 import com.gigforce.app.utils.ItemDecorationAddContact
+import com.gigforce.app.utils.StringConstants
 import com.gigforce.app.utils.isValidMail
 import com.gigforce.app.utils.isValidMobile
 import kotlinx.android.synthetic.main.layout_fragment_add_contact_details.*
@@ -39,8 +41,19 @@ class AddContactDetailsFragment : BaseFragment(), AdapterAddContact.AdapterAddCo
 
     private fun initClicks() {
         iv_close_add_contact.setOnClickListener {
-            popBackState()
+            onBackPressed()
         }
+    }
+
+    override fun onBackPressed(): Boolean {
+        navFragmentsData?.setData(
+            bundleOf(
+                StringConstants.BACK_PRESSED.value to true
+
+            )
+        )
+        return super.onBackPressed()
+
     }
 
     private fun initObservers() {
@@ -62,6 +75,8 @@ class AddContactDetailsFragment : BaseFragment(), AdapterAddContact.AdapterAddCo
         viewModel.observableSetContacts.observe(viewLifecycleOwner, Observer {
             pb_add_contact.gone()
             if (it == "true") {
+                navFragmentsData?.setData(bundleOf(StringConstants.MOVE_TO_NEXT_STEP.value to true))
+
                 popBackState()
             } else {
                 showToast(it!!)
@@ -125,13 +140,14 @@ class AddContactDetailsFragment : BaseFragment(), AdapterAddContact.AdapterAddCo
     override fun submitClicked(items: MutableList<ContactModel>) {
         var submitContact = true
         for (i in 0 until items.size) {
+            items[i].validateFields = true
+
             if (!isValidMobile(
                     items[i].contactPhone?.phone ?: ""
                 ) || items[i].contactEmail?.email?.isNotEmpty()!! && !isValidMail(
                     items[i].contactEmail?.email ?: ""
                 )
             ) {
-                items[i].validateFields = true
                 submitContact = false
 
             }
@@ -143,5 +159,9 @@ class AddContactDetailsFragment : BaseFragment(), AdapterAddContact.AdapterAddCo
             pb_add_contact.visible()
             viewModel.addContacts(items)
         }
+    }
+
+    override fun goBack() {
+        onBackPressed()
     }
 }

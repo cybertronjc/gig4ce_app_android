@@ -33,6 +33,7 @@ import com.gigforce.app.core.base.utilfeatures.UtilAndValidationInterface
 import com.gigforce.app.core.base.viewsfromviews.ViewsFromViewsImpl
 import com.gigforce.app.core.base.viewsfromviews.ViewsFromViewsInterface
 import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
+import com.gigforce.app.utils.NavFragmentsData
 import com.gigforce.app.utils.configrepository.ConfigDataModel
 import com.gigforce.app.utils.configrepository.ConfigRepository
 
@@ -44,7 +45,7 @@ import com.gigforce.app.utils.configrepository.ConfigRepository
  */
 open class BaseFragment : Fragment(), ViewsFromViewsInterface, NavigationInterface,
     SharedDataInterface, AppDialogsInterface, UtilAndValidationInterface, LanguageUtilInterface {
-
+    var navFragmentsData: NavFragmentsData? = null
     lateinit var viewsFromViewsInterface: ViewsFromViewsInterface
     lateinit var navigationInterface: NavigationInterface
     lateinit var sharedDataInterface: SharedDataInterface
@@ -69,6 +70,7 @@ open class BaseFragment : Fragment(), ViewsFromViewsInterface, NavigationInterfa
         resource: Int, inflater: LayoutInflater,
         container: ViewGroup?
     ): View? {
+        navFragmentsData = activity as NavFragmentsData
         baseFragment = this
         mView = inflater.inflate(resource, container, false)
         getActivity()?.setRequestedOrientation(
