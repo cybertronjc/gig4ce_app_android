@@ -2,6 +2,7 @@ package com.gigforce.app.modules.explore_by_role
 
 import android.graphics.Typeface
 import android.os.Bundle
+import android.text.Html
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -107,10 +108,15 @@ class RoleDetailsFragment : BaseFragment() {
                                 tv_mark_as_interest_role_details.visible()
                                 tv_mark_as_interest_role_details.setOnClickListener(null)
                                 tv_mark_as_interest_role_details.text =
-                                    getString(R.string.activated)
+                                    Html.fromHtml("&#x2713 " + getString(R.string.activated))
+                                tv_mark_as_interest_role_details.compoundDrawablePadding =
+                                    resources.getDimensionPixelSize(R.dimen.size_10)
+
 
                             } else if (rolePresent) {
-                                tv_mark_as_interest_role_details.text = getString(R.string.applied)
+                                tv_mark_as_interest_role_details.text =
+                                    Html.fromHtml("&#x2713 " + getString(R.string.applied))
+
 
 
                             }
