@@ -376,8 +376,8 @@ class GigViewModel constructor(
             _monthlyGigs.value = Lce.loading()
             val querySnap = gigsRepository
                 .getCurrentUserGigs()
-                .whereGreaterThan("startDateTime", monthStart)
-                .whereLessThan("startDateTime", monthEnd)
+//                .whereGreaterThan("startDateTime", monthStart)
+//                .whereLessThan("startDateTime", monthEnd)
                 .whereEqualTo("companyName", companyName)
                 .getOrThrow()
 

@@ -77,7 +77,7 @@
             android:layout_width="16dp"
             android:layout_height="16dp"
             android:layout_marginTop="12dp"
-            android:layout_marginEnd="4dp"
+            android:layout_marginEnd="2dp"
             android:src="@drawable/ic_star"
             android:textColor="#ffffff"
             android:textSize="12sp"
@@ -112,7 +112,7 @@
             android:id="@+id/gig_status_iv"
             android:layout_width="8dp"
             android:layout_height="8dp"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="2dp"
             android:layout_marginEnd="4dp"
             android:textColor="@color/black_85"
             android:textSize="12sp"
@@ -150,17 +150,17 @@
         <ImageView
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:src="@drawable/ic_gig_success_icon" />
+            android:src="@drawable/warning_icon_" />
 
         <TextView
+            android:id="@+id/regularisation_text"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_weight="1"
             android:textColor="@color/black_85"
             android:textSize="14sp"
-            tools:text="Your regularisation request has been
-approved by your supervisor." />
+            tools:text="Looks like yo" />
 
         <ImageView
             android:layout_width="24dp"
@@ -178,7 +178,7 @@ approved by your supervisor." />
         android:textColor="#000000"
         android:textSize="16sp"
         android:layout_marginStart="16dp"
-        tools:text="Choose an action" />
+        android:text="Choose an action" />
 
     <View
         android:layout_width="match_parent"
@@ -203,7 +203,7 @@ approved by your supervisor." />
             android:textSize="14sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="I need  to Change my Check in or check out time" />
+            android:text="I need  to Change my Check in or check out time" />
 
         <TextView
             android:id="@+id/you_can_label"
@@ -215,7 +215,7 @@ approved by your supervisor." />
             android:layout_marginTop="4dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/I_need_checkin_label"
-            tools:text="You can always manage your monthly …"
+            android:text="You can always manage your monthly …"
             />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -242,7 +242,7 @@ approved by your supervisor." />
             android:textSize="14sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="I did not work on this day" />
+            android:text="I did not work on this day" />
 
         <TextView
             android:id="@+id/you_can_chnage_label"
@@ -254,7 +254,7 @@ approved by your supervisor." />
             android:layout_marginTop="4dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/I_did_not_work_label"
-            tools:text="You can always manage your monthly …"
+            android:text="You can always manage your monthly …"
             />
     </androidx.constraintlayout.widget.ConstraintLayout>
 

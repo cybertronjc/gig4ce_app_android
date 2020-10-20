@@ -23,7 +23,6 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.ncorti.slidetoact.SlideToActView
 import kotlinx.android.synthetic.main.fragment_gig_regularise_attendance.*
 import kotlinx.android.synthetic.main.fragment_gig_regularise_attendance_main.*
-import kotlinx.android.synthetic.main.fragment_gig_single_day_attendance_details.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -39,14 +38,21 @@ class GigRegulariseAttendanceFragment  : BaseFragment() {
         TimePickerDialog(requireContext(),
             TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
 
+                val gig = viewModel.currentGig ?: return@OnTimeSetListener
+                val gigStartTime = gig.startDateTime!!.toLocalDateTime()
+
                 val newCal = Calendar.getInstance()
                 newCal.set(Calendar.HOUR_OF_DAY, hourOfDay)
                 newCal.set(Calendar.MINUTE, minute)
                 newCal.set(Calendar.SECOND, 0)
                 newCal.set(Calendar.MILLISECOND, 0)
 
+                newCal.set(Calendar.YEAR, gigStartTime.year)
+                newCal.set(Calendar.MONTH, gigStartTime.monthValue -1)
+                newCal.set(Calendar.DAY_OF_MONTH, gigStartTime.dayOfMonth)
+
                 punchInTime = Timestamp(newCal.time)
-                punch_in_time.text = timeFormatter.format(newCal.time)
+                punch_in_time_tv.text = timeFormatter.format(newCal.time)
             },
             cal.get(Calendar.HOUR_OF_DAY),
             cal.get(Calendar.MINUTE),
@@ -60,11 +66,17 @@ class GigRegulariseAttendanceFragment  : BaseFragment() {
         TimePickerDialog(requireContext(),
             TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
 
+                val gig = viewModel.currentGig ?: return@OnTimeSetListener
+                val gigStartTime = gig.startDateTime!!.toLocalDateTime()
+
                 val newCal = Calendar.getInstance()
                 newCal.set(Calendar.HOUR_OF_DAY, hourOfDay)
                 newCal.set(Calendar.MINUTE, minute)
                 newCal.set(Calendar.SECOND, 0)
                 newCal.set(Calendar.MILLISECOND, 0)
+                newCal.set(Calendar.YEAR, gigStartTime.year)
+                newCal.set(Calendar.MONTH, gigStartTime.monthValue -1)
+                newCal.set(Calendar.DAY_OF_MONTH, gigStartTime.dayOfMonth)
 
                 punchOutTime = Timestamp(newCal.time)
                 punch_out_time_tv.text = timeFormatter.format(newCal.time)
@@ -168,7 +180,7 @@ class GigRegulariseAttendanceFragment  : BaseFragment() {
         regularise_details_progress_bar.gone()
         regularise_main_layout.visible()
 
-        dateTV.text = dateFormatter.format(content.startDateTime)
+        dateTV.text = dateFormatter.format(content.startDateTime!!.toDate())
     }
 
     private fun showErrorInLoadingAttendanceDetails(error: String) {

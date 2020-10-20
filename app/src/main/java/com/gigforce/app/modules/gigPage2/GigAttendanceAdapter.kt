@@ -12,6 +12,7 @@ import com.gigforce.app.modules.gigPage2.models.OtherOption
 import com.gigforce.app.utils.GlideApp
 import kotlinx.android.synthetic.main.recycler_item_gig_attendance.view.*
 import kotlinx.android.synthetic.main.recycler_item_other_option.view.*
+import java.text.SimpleDateFormat
 import java.time.format.TextStyle
 import java.util.*
 
@@ -27,6 +28,7 @@ class GigAttendanceAdapter(
 
     private lateinit var mLayoutInflater: LayoutInflater
     private var otherOptionClickListener: GigAttendanceAdapterClickListener? = null
+    private val timeFormatter = SimpleDateFormat("hh.mm aa", Locale.getDefault())
 
     fun setListener(otherOptionClickListener: GigAttendanceAdapterClickListener) {
         this.otherOptionClickListener = otherOptionClickListener
@@ -55,6 +57,25 @@ class GigAttendanceAdapter(
         val dayName = gigStartDateTime.dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.getDefault())
         holder.dayNameTV.text = dayName
         holder.dayTV.text = gigStartDateTime.dayOfMonth.toString()
+
+        if(gig.attendance != null){
+
+            if(gig.attendance!!.checkInTime != null){
+                holder.punchInTV.text = timeFormatter.format(gig.attendance!!.checkInTime)
+            } else{
+                holder.punchInTV.text = "--:--"
+            }
+
+            if(gig.attendance!!.checkOutTime != null){
+                holder.punchOutTV.text = timeFormatter.format(gig.attendance!!.checkOutTime)
+            } else{
+                holder.punchOutTV.text = "--:--"
+            }
+        } else{
+            holder.punchInTV.text = "--:--"
+            holder.punchOutTV.text = "--:--"
+        }
+
     }
 
     override fun getItemCount() = gigs.size
@@ -69,7 +90,7 @@ class GigAttendanceAdapter(
         val dayNameTV = itemView.dayNameTV
         val dayTV = itemView.dayTV
         val punchInTV = itemView.punch_in_tv
-        val punchOutTV = itemView.image_view
+        val punchOutTV = itemView.punch_out_tv
 
         override fun onClick(v: View?) {
             otherOptionClickListener?.onAttendanceClicked(gigs[adapterPosition])

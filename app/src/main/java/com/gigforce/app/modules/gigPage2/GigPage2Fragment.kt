@@ -116,7 +116,17 @@ class GigPage2Fragment : BaseFragment(), OtherOptionClickListener,
         }
 
         gig_page_top_bar.setOnClickListener {
-            navigate(R.id.gigMonthlyAttendanceFragment)
+            val gig = viewModel.currentGig ?: return@setOnClickListener
+            val gigStartEndTime = gig.startDateTime!!.toLocalDateTime()
+
+            navigate(R.id.gigMonthlyAttendanceFragment , bundleOf(
+                GigMonthlyAttendanceFragment.INTENT_EXTRA_MONTH to gigStartEndTime.monthValue,
+                GigMonthlyAttendanceFragment.INTENT_EXTRA_YEAR to gigStartEndTime.year,
+                GigMonthlyAttendanceFragment.INTENT_EXTRA_COMPANY_LOGO to gig.companyLogo,
+                GigMonthlyAttendanceFragment.INTENT_EXTRA_COMPANY_NAME to gig.companyName,
+                GigMonthlyAttendanceFragment.INTENT_EXTRA_ROLE to gig.title,
+                GigMonthlyAttendanceFragment.INTENT_EXTRA_RATING to gig.gigRating
+                ))
         }
 
         gig_cross_btn.setOnClickListener {
@@ -312,16 +322,16 @@ class GigPage2Fragment : BaseFragment(), OtherOptionClickListener,
         gig_company_name_tv.text = "@ ${gig.companyName}"
         company_rating_tv.text = if (gig.gigRating == 0.0f) "--" else gig.gigRating.toString()
 
-        gig_type.text = if (gig.isMonthlyGig) "Monthly" else "Daily"
+        gig_type.text = if (gig.isMonthlyGig) ": Monthly" else ": Daily"
 
         if (gig.endDateTime != null) {
             val startDate = gig.startDateTime!!.toLocalDate()
             val endDate = gig.endDateTime!!.toLocalDate()
 
             if (startDate.isEqual(endDate))
-                gig_duration.text = "${dateFormatter.format(gig.startDateTime!!.toDate())}"
+                gig_duration.text = ": ${dateFormatter.format(gig.startDateTime!!.toDate())}"
             else
-                gig_duration.text = "${dateFormatter.format(gig.startDateTime!!.toDate())} - ${
+                gig_duration.text = ": ${dateFormatter.format(gig.startDateTime!!.toDate())} - ${
                     dateFormatter.format(
                         gig.endDateTime!!.toDate()
                     )
