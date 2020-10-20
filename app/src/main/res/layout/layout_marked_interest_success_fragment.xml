@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -7,10 +6,12 @@
     android:layout_height="match_parent">
 
     <ScrollView
+        android:id="@+id/sv_marked_as_interest"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clipToPadding="false"
-        android:paddingBottom="@dimen/size_70">
+        android:paddingBottom="@dimen/size_70"
+        android:visibility="gone">
 
         <RelativeLayout
             android:layout_width="match_parent"

@@ -1,5 +1,6 @@
 package com.gigforce.app.modules.explore_by_role
 
+import android.location.Location
 import androidx.lifecycle.ViewModel
 import com.gigforce.app.modules.gigerVerfication.VerificationBaseModel
 import com.gigforce.app.modules.landingscreen.models.Role
@@ -73,8 +74,9 @@ class ExploreByRoleViewModel(private val callbacks: ExploreByRoleCallbacks) : Vi
         }
     }
 
-    fun addAsInterest(roleID: String) {
-        callbacks.markAsInterest(roleID, this)
+    fun addAsInterest(roleID: String, location: Location?) {
+        callbacks.markAsInterest(roleID, location, this)
+
     }
 
     fun checkVerifiedDocs() {
