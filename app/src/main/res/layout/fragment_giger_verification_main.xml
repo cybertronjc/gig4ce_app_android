@@ -10,8 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:fillViewport="true"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/ll_next_giger_verification">
+        app:layout_constraintBottom_toTopOf="@+id/tv_action_giger_verification"
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -203,13 +203,19 @@
 
     </androidx.core.widget.NestedScrollView>
 
-    <include
-        android:id="@+id/ll_next_giger_verification"
-        layout="@layout/layout_next_add_profile_segments"
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/tv_action_giger_verification"
+        style="?attr/materialButtonOutlinedStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_weight="1"
+        android:text="@string/next"
+        android:textColor="@color/colorPrimary"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:strokeColor="@color/colorPrimary" />
 </androidx.constraintlayout.widget.ConstraintLayout>

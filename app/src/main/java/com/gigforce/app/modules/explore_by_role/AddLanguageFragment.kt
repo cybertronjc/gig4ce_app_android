@@ -51,7 +51,13 @@ class AddLanguageFragment : BaseFragment(), AdapterAddLanguage.AdapterAddLanguag
 
     private fun initClicks() {
         iv_close_add_bio.setOnClickListener {
-            onBackPressed()
+            navFragmentsData?.setData(
+                bundleOf(
+                    StringConstants.BACK_PRESSED.value to true
+
+                )
+            )
+            popBackState()
         }
     }
 
@@ -135,7 +141,13 @@ class AddLanguageFragment : BaseFragment(), AdapterAddLanguage.AdapterAddLanguag
     }
 
     override fun goBack() {
-        onBackPressed()
+        navFragmentsData?.setData(
+            bundleOf(
+                StringConstants.BACK_PRESSED.value to true
+
+            )
+        )
+        popBackState()
     }
 
 }

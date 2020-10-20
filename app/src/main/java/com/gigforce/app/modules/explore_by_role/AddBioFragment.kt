@@ -56,14 +56,26 @@ class AddBioFragment : BaseFragment() {
 
     private fun initClicks() {
         iv_close_add_bio.setOnClickListener {
-            onBackPressed()
+            navFragmentsData?.setData(
+                bundleOf(
+                    StringConstants.BACK_PRESSED.value to true
+
+                )
+            )
+            popBackState()
         }
         PushDownAnim.setPushDownAnimTo(tv_save_add_bio).setOnClickListener(View.OnClickListener {
             pb_add_bio.visible()
             viewModel.saveBio(et_add_bio.text.toString())
         })
         PushDownAnim.setPushDownAnimTo(tv_cancel_add_bio).setOnClickListener(View.OnClickListener {
-            onBackPressed()
+            navFragmentsData?.setData(
+                bundleOf(
+                    StringConstants.BACK_PRESSED.value to true
+
+                )
+            )
+            popBackState()
         })
         et_add_bio.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {

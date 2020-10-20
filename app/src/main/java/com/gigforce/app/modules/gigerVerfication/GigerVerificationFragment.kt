@@ -33,7 +33,6 @@ import kotlinx.android.synthetic.main.fragment_giger_verification.*
 import kotlinx.android.synthetic.main.fragment_giger_verification_item.view.*
 import kotlinx.android.synthetic.main.fragment_giger_verification_main.*
 import kotlinx.android.synthetic.main.fragment_giger_verification_main.view.*
-import kotlinx.android.synthetic.main.layout_next_add_profile_segments.view.*
 import java.io.File
 
 
@@ -229,22 +228,25 @@ class GigerVerificationFragment : BaseFragment() {
 
         bankDetailsLayout.optionTitleTV.text = getString(R.string.bank_details)
         bankDetailsLayout.descTitleTV.text = getString(R.string.tap_to_upload)
-        ll_next_giger_verification.visible()
-        ll_next_giger_verification.tv_cancel.gone()
-        PushDownAnim.setPushDownAnimTo(
+        if (showActionButtons) {
+            tv_action_giger_verification.visible()
 
-            ll_next_giger_verification.tv_action
-        ).setOnClickListener(
-            View.OnClickListener {
-                navFragmentsData?.setData(
-                    bundleOf(
-                        StringConstants.NAV_TO_QUESTIONNARE.value to true,
-                        StringConstants.MOVE_TO_NEXT_STEP.value to true
+            PushDownAnim.setPushDownAnimTo(
 
+                tv_action_giger_verification
+            ).setOnClickListener(
+                View.OnClickListener {
+                    navFragmentsData?.setData(
+                        bundleOf(
+                            StringConstants.NAV_TO_QUESTIONNARE.value to true,
+                            StringConstants.MOVE_TO_NEXT_STEP.value to true
+
+                        )
                     )
-                )
-                popBackState()
-            })
+                    popBackState()
+                })
+        }
+
 
     }
 

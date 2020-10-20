@@ -35,7 +35,13 @@ class QuestionaireFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         initObservers()
         iv_close_questionaire.setOnClickListener {
-            onBackPressed()
+            navFragmentsData?.setData(
+                bundleOf(
+                    StringConstants.BACK_PRESSED.value to true
+
+                )
+            )
+            popBackState()
         }
         question_dl.tv_field.text = getString(R.string.have_dl)
         question_bike_car.tv_field.text = getString(R.string.own_a_bike)

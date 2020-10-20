@@ -78,7 +78,13 @@ class AddExperienceFragment : BaseFragment(), AdapterAddExperience.AdapterAddEdu
 
     private fun initClicks() {
         iv_close_add_experience.setOnClickListener {
-            onBackPressed()
+            navFragmentsData?.setData(
+                bundleOf(
+                    StringConstants.BACK_PRESSED.value to true
+
+                )
+            )
+            popBackState()
         }
     }
 
@@ -142,6 +148,12 @@ class AddExperienceFragment : BaseFragment(), AdapterAddExperience.AdapterAddEdu
     }
 
     override fun goBack() {
-        onBackPressed()
+        navFragmentsData?.setData(
+            bundleOf(
+                StringConstants.BACK_PRESSED.value to true
+
+            )
+        )
+        popBackState()
     }
 }

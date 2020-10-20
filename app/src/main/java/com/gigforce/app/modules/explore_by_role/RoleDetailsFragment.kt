@@ -246,6 +246,8 @@ class RoleDetailsFragment : BaseFragment() {
                                 )
                             )
                             break
+                        } else {
+                            navigate(R.id.fragment_questionnaire)
                         }
 
 

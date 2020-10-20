@@ -41,7 +41,13 @@ class AddContactDetailsFragment : BaseFragment(), AdapterAddContact.AdapterAddCo
 
     private fun initClicks() {
         iv_close_add_contact.setOnClickListener {
-            onBackPressed()
+            navFragmentsData?.setData(
+                bundleOf(
+                    StringConstants.BACK_PRESSED.value to true
+
+                )
+            )
+            popBackState()
         }
     }
 
@@ -58,18 +64,23 @@ class AddContactDetailsFragment : BaseFragment(), AdapterAddContact.AdapterAddCo
 
     private fun initObservers() {
         viewModel.observableContact.observe(viewLifecycleOwner, Observer {
-            val list: MutableList<ContactModel> = ArrayList()
-            for (i in 0 until it?.contactPhone?.size!!) {
-                list.add(ContactModel(contactPhone = it?.contactPhone?.get(i)))
-            }
-            for (i in 0 until it?.contactEmail?.size!!) {
-                if (i < list.size) {
-                    list[i].contactEmail = it?.contactEmail!![i]!!
-                } else {
-                    list.add(ContactModel(contactEmail = it?.contactEmail!![i]))
+            if (it?.contactPhone == null || it?.contactPhone?.isEmpty() == true) {
+                viewModel.updateContactAndEmailSeparately(it?.contact!!)
+            } else {
+                val list: MutableList<ContactModel> = ArrayList()
+                for (i in 0 until it?.contactPhone?.size!!) {
+                    list.add(ContactModel(contactPhone = it?.contactPhone?.get(i)))
                 }
+                for (i in 0 until it?.contactEmail?.size!!) {
+                    if (i < list.size) {
+                        list[i].contactEmail = it?.contactEmail!![i]!!
+                    } else {
+                        list.add(ContactModel(contactEmail = it?.contactEmail!![i]))
+                    }
+                }
+                adapter?.addData(list)
+
             }
-            adapter?.addData(list)
 
         })
         viewModel.observableSetContacts.observe(viewLifecycleOwner, Observer {
@@ -162,6 +173,12 @@ class AddContactDetailsFragment : BaseFragment(), AdapterAddContact.AdapterAddCo
     }
 
     override fun goBack() {
-        onBackPressed()
+        navFragmentsData?.setData(
+            bundleOf(
+                StringConstants.BACK_PRESSED.value to true
+
+            )
+        )
+        popBackState()
     }
 }

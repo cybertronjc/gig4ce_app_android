@@ -89,6 +89,12 @@ class MarkedInterestSuccessFragment : BaseFragment(),
         viewModel.observerVerified.observe(viewLifecycleOwner, Observer {
             if (it!!) {
                 tv_title_mark_as_interest.text = getString(R.string.role_activated)
+                tv_mark_as_interest_note.setPadding(
+                    0,
+                    0,
+                    0,
+                    resources.getDimensionPixelSize(R.dimen.size_34)
+                )
                 tv_verify_documents.gone()
 
             } else {

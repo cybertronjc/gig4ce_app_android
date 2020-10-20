@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.SeekBar
 import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.app.R
+import com.gigforce.app.core.gone
 import com.gigforce.app.modules.profile.models.Language
 import com.gigforce.app.utils.PushDownAnim
 import com.gigforce.app.utils.ThumbTextSeekBar
@@ -59,7 +60,7 @@ class AdapterAddLanguage() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 PushDownAnim.setPushDownAnimTo(viewholder.itemView.tv_cancel).setOnClickListener(
                     View.OnClickListener {
 
-                        adapterAddLanguageCallbacks?.submitClicked(items!!)
+                        adapterAddLanguageCallbacks?.goBack()
                     })
             }
             else -> {
@@ -129,8 +130,9 @@ class AdapterAddLanguage() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 viewHolderAddLanguage.itemView.add_language_add_more.setOnClickListener {
                     if (viewHolderAddLanguage.adapterPosition == -1) return@setOnClickListener
                     items?.add(Language())
+                    viewHolderAddLanguage.itemView.add_language_add_more.gone()
                     notifyItemInserted(viewHolderAddLanguage.adapterPosition + 1)
-                    notifyItemChanged(viewHolderAddLanguage.adapterPosition)
+
                 }
                 viewHolderAddLanguage.itemView.remove_language.visibility =
                     if (position != 0) View.VISIBLE else View.GONE

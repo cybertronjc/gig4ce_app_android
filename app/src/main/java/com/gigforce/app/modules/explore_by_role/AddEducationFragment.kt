@@ -44,7 +44,13 @@ class AddEducationFragment : BaseFragment(), AdapterAddEducation.AdapterAddEduca
 
     private fun initClicks() {
         iv_close_add_education.setOnClickListener {
-            onBackPressed()
+            navFragmentsData?.setData(
+                bundleOf(
+                    StringConstants.BACK_PRESSED.value to true
+
+                )
+            )
+            popBackState()
         }
     }
 
@@ -165,7 +171,13 @@ class AddEducationFragment : BaseFragment(), AdapterAddEducation.AdapterAddEduca
     }
 
     override fun goBack() {
-       onBackPressed()
+        navFragmentsData?.setData(
+            bundleOf(
+                StringConstants.BACK_PRESSED.value to true
+
+            )
+        )
+        popBackState()
 
     }
 

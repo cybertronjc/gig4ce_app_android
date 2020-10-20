@@ -79,6 +79,11 @@ class AdapterAddExperience : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
                 viewHolderAddEducation.itemView.currently_work_here_add_experience.setOnClickListener {
                     if (viewHolderAddEducation.adapterPosition == -1) return@setOnClickListener
+
+                    items?.get(viewHolderAddEducation.adapterPosition)?.endDate = Date()
+                    viewHolderAddEducation.itemView.end_date_add_experience.setText(
+                        dateFormatter.format(Date())
+                    )
                     items?.get(viewHolderAddEducation.adapterPosition)?.currentExperience =
                         viewHolderAddEducation.itemView.currently_work_here_add_experience.isChecked
                 }
