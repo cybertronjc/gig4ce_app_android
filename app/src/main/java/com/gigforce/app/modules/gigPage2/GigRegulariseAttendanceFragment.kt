@@ -198,7 +198,7 @@ class GigRegulariseAttendanceFragment  : BaseFragment() {
     }
 
     private fun regularisationRequestSubmitted() {
-        showToast("Regularisation request Submitted")
+        showToast("Regularisation request submitted")
         activity?.onBackPressed()
     }
 
