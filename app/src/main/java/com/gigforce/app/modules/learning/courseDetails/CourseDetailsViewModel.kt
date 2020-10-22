@@ -31,6 +31,7 @@ class CourseDetailsViewModel constructor(
     val courseDetails: LiveData<Lce<Course>> = _courseDetails
 
     fun getCourseDetailsAndModules(mCourseId: String) = viewModelScope.launch {
+
         if (courseDataSynced) {
             getCourseDetails(mCourseId)
             getCourseModules(mCourseId)
@@ -38,9 +39,19 @@ class CourseDetailsViewModel constructor(
             _courseDetails.postValue(Lce.loading())
             _courseModules.postValue(Lce.loading())
 
-            syncCourseProgressData(mCourseId)
-            getCourseDetails(mCourseId)
-            getCourseModules(mCourseId)
+            val courseProgressDataGenerated = learningRepository.courseProgressDataGenerated(mCourseId)
+
+            if(!courseProgressDataGenerated){
+
+                getCourseDetails(mCourseId)
+                getCourseModules(mCourseId)
+                courseDataSynced = true
+            } else {
+                syncCourseProgressData(mCourseId)
+
+                getCourseDetails(mCourseId)
+                getCourseModules(mCourseId)
+            }
         }
     }
 
@@ -194,6 +205,8 @@ class CourseDetailsViewModel constructor(
 
                     mCurrentModulesProgressData = querySnap.documents.map {
                         it.toObject(ModuleProgress::class.java)!!
+                    }.filter {
+                        it.isActive
                     }
 
                     if (currentModules != null && mCurrentModulesProgressData != null) {
