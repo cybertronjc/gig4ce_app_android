@@ -9,14 +9,14 @@ import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.QuerySnapshot
 
 data class observableDialogResultWrapper(
-    var result : Boolean,
-    var nextNextLessonId : String?
+    var result: Boolean,
+    var nextNextLessonId: String?
 )
 
 class ViewModelAssessmentFragment(private val modelCallbacks: ModelCallbacks) : ViewModel(),
     ModelCallbacks.ModelResponseCallbacks {
 
-    var nextLessonId : String? = null
+    var nextLessonId: String? = null
 
     internal val observableDialogResult: MutableLiveData<observableDialogResultWrapper> by lazy {
         MutableLiveData<observableDialogResultWrapper>();
@@ -51,8 +51,10 @@ class ViewModelAssessmentFragment(private val modelCallbacks: ModelCallbacks) : 
     fun switchAsPerState(state: Int, nextNextLessonId: String?) {
         when (state) {
             AssessmentDialog.STATE_INIT -> observableDialogInit.value = null
-            AssessmentDialog.STATE_PASS -> observableDialogResult.value = observableDialogResultWrapper(true,nextNextLessonId)
-            AssessmentDialog.STATE_REAPPEAR -> observableDialogResult.value = observableDialogResultWrapper(false,nextNextLessonId)
+            AssessmentDialog.STATE_PASS -> observableDialogResult.value =
+                observableDialogResultWrapper(true, nextNextLessonId)
+            AssessmentDialog.STATE_REAPPEAR -> observableDialogResult.value =
+                observableDialogResultWrapper(false, nextNextLessonId)
         }
     }
 
@@ -63,8 +65,8 @@ class ViewModelAssessmentFragment(private val modelCallbacks: ModelCallbacks) : 
         observableShowHideSwipeDownIcon.value = if (reached) View.GONE else View.VISIBLE
     }
 
-    fun getQuestionaire(lessonId : String) {
-        modelCallbacks.getQuestionaire(lessonId,this)
+    fun getQuestionaire(lessonId: String) {
+        modelCallbacks.getQuestionaire(lessonId, this)
     }
 
     fun submitAnswers(id: String?) {
@@ -73,7 +75,9 @@ class ViewModelAssessmentFragment(private val modelCallbacks: ModelCallbacks) : 
     }
 
     override fun QuestionairreSuccess(value: QuerySnapshot?, e: FirebaseFirestoreException?) {
-        observableAssessmentData.value = value?.toObjects(AssementQuestionsReponse::class.java)!![0]
+        if (value?.documents?.isNotEmpty() == true)
+            observableAssessmentData.value =
+                value?.toObjects(AssementQuestionsReponse::class.java)!![0]
     }
 
     override fun submitAnswerSuccess() {
