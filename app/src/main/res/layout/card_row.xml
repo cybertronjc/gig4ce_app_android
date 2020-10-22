@@ -9,7 +9,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_toStartOf="@+id/del_button"
+        android:layout_toStartOf="@+id/edit_button"
         android:orientation="vertical">
 
         <LinearLayout
@@ -51,18 +51,7 @@
             android:visibility="gone" />
     </LinearLayout>
 
-    <ImageButton
-        android:id="@+id/del_button"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_centerVertical="true"
-        android:layout_toStartOf="@+id/edit_button"
-        android:layout_weight="0"
-        android:background="@android:color/white"
-        android:maxWidth="24dp"
-        android:padding="@dimen/size_10"
-        android:src="@drawable/ic_delete_grey"
-        android:visibility="gone" />
+
 
     <ImageButton
         android:id="@+id/edit_button"
