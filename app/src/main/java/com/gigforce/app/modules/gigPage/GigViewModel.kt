@@ -362,6 +362,29 @@ class GigViewModel constructor(
                     _todaysGigs.value = Lce.error(firebaseFirestoreException!!.message!!)
                 }
             }
+    }
+
+    fun getTodaysUpcomingGig(date: LocalDate) = viewModelScope.launch{
+        Log.d("GigViewModel", "getting gigs for $date")
+
+        val dateFull = Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant())
+
+        _todaysGigs.value = Lce.loading()
+        try {
+            val querySnapshot = gigsRepository
+               .getCurrentUserGigs()
+               .whereGreaterThan("startDateTime", dateFull)
+               .getOrThrow()
+
+            val tomorrow = date.plusDays(1)
+            val todaysUpcomingGigs = extractGigs(querySnapshot).filter {
+                it.startDateTime!! > Timestamp.now() && (it.endDateTime == null || it.endDateTime!!.toLocalDate()
+                    .isBefore(tomorrow))
+            }
+            _todaysGigs.value = Lce.content(todaysUpcomingGigs)
+        } catch (e: Exception) {
+            _todaysGigs.value = Lce.error(e.message!!)
+        }
 
     }
 
