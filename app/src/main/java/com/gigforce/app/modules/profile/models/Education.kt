@@ -9,6 +9,7 @@ data class Education(
     var course: String = "",
     var degree: String = "",
     var startYear: Date? = null,
-    var endYear: Date? = null
-): BaseFirestoreDataModel(tableName = "educations"){
+    var endYear: Date? = null,
+    var validateFields: Boolean = false
+) : BaseFirestoreDataModel(tableName = "educations") {
 }

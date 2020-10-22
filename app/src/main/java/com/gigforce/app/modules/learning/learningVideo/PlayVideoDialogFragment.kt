@@ -112,6 +112,8 @@ class PlayVideoDialogFragment : DialogFragment() {
             .setOnClickListener {
                 changeOrientation()
             }
+
+
     }
 
     private fun changeOrientation() {
@@ -282,6 +284,10 @@ class PlayVideoDialogFragment : DialogFragment() {
         val videoUri = Uri.parse(content.videoUrl)
         initializePlayer(videoUri, content.completionProgress)
         changeOrientation()
+
+        if(!content.canUserFastForward){
+            playerView.setControlDispatcher(PositionLimitingControlDispatcher())
+        }
     }
 
 

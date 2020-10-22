@@ -34,8 +34,11 @@ class CustomPreferencesViewModel(var owner: LifecycleOwner) : ViewModel() {
         })
     }
 
-    fun getCustomPreferenceData(): CustomPreferencesDataModel {
-        return customPreferencesDataModel
+    fun getCustomPreferenceData(): CustomPreferencesDataModel? {
+        if(this::customPreferencesDataModel.isInitialized) {
+            return customPreferencesDataModel
+        }
+        else return null;
     }
 
     fun updateCustomPreference(unavailableDataModel: UnavailableDataModel) {

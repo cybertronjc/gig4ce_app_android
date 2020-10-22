@@ -35,6 +35,8 @@ data class GigerVerificationStatus(
     val bankDetailsUploaded: Boolean,
     val bankUploadDetailsDataModel: BankDetailsDataModel?,
     val everyDocumentUploaded: Boolean
+
+
 ) {
     fun getColorCodeForStatus(statusCode: Int): Int {
         return when (statusCode) {
@@ -61,6 +63,8 @@ open class GigVerificationViewModel constructor(
 
     private val _gigerVerificationStatus = MutableLiveData<GigerVerificationStatus>()
     val gigerVerificationStatus: LiveData<GigerVerificationStatus> get() = _gigerVerificationStatus
+    private val _gigerContractStatus = MutableLiveData<String>()
+    val gigerContractStatus: LiveData<String> get() = _gigerContractStatus
 
     private val _documentUploadState = SingleLiveEvent2<Lse>()
     val documentUploadState: LiveData<Lse> get() = _documentUploadState
@@ -291,12 +295,12 @@ open class GigVerificationViewModel constructor(
                 )
             } else {
 
-                val frontImageFileNameAtServer = if (userHasDL && frontImagePath!= null)
+                val frontImageFileNameAtServer = if (userHasDL && frontImagePath != null)
                     uploadImage(frontImagePath)
                 else
                     model.driving_license?.frontImage
 
-                val backImageFileNameAtServer = if (userHasDL && backImagePath!= null)
+                val backImageFileNameAtServer = if (userHasDL && backImagePath != null)
                     uploadImage(backImagePath)
                 else
                     model.driving_license?.backImage
@@ -370,6 +374,28 @@ open class GigVerificationViewModel constructor(
                 continuation.resumeWithException(it)
             }
         }
+
+    fun checkForSignedContract() {
+        gigerVerificationRepository.checkForSignedContract().addSnapshotListener { success, err ->
+            run {
+                if (err == null) {
+
+                    if (success?.data?.get("role") != null && success?.data?.get("url") != null) {
+                        _gigerContractStatus.value = success.data?.get("url") as String
+                    } else {
+                        _gigerContractStatus.value = null
+                    }
+
+                } else {
+                    _gigerContractStatus.value = null
+
+                }
+
+
+            }
+        }
+
+    }
 
     override fun onCleared() {
         super.onCleared()

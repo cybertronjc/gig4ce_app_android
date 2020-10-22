@@ -18,11 +18,15 @@ import com.gigforce.app.modules.gigPage.models.Gig
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.ServerTimestamp
+import com.riningan.widget.ExtendedBottomSheetBehavior
 import java.util.*
 import kotlin.collections.ArrayList
 
 class CalendarHomeScreenViewModel : ViewModel() {
     // TODO: Implement the ViewModel
+    var currentBottomSheetState = ExtendedBottomSheetBehavior.STATE_COLLAPSED
+
+
     var mainHomeRepository = CalendarHomeRepository()
     var mainHomeLiveDataModel: MutableLiveData<MainHomeCompleteGigModel> =
         MutableLiveData<MainHomeCompleteGigModel>()
@@ -269,199 +273,7 @@ class CalendarHomeScreenViewModel : ViewModel() {
         }
 
     }
-    private fun getAllGigData(): ArrayList<AllotedGigDataModel>? {
-        var arrayList = ArrayList<AllotedGigDataModel>()
-        arrayList.add(
-            getGigData(
-                30,
-                5,
-                2020,
-                "Retail Sales Executive",
-                getGigDetailData("Retail Sales Executive", false),
-                true
-            )
-        )
 
-        arrayList.add(
-            getGigData(
-                29,
-                5,
-                2020,
-                "Retail Sales Executive",
-                getGigDetailData("Retail Sales Executive", false),
-                true
-            )
-        )
-
-        arrayList.add(
-            getGigData(
-                28,
-                5,
-                2020,
-                "Retail Sales Executive",
-                getGigDetailData("Retail Sales Executive", false),
-                true
-            )
-        )
-
-        arrayList.add(
-            getGigData(
-                27,
-                5,
-                2020,
-                "Retail Sales Executive",
-                getGigDetailData("Retail Sales Executive", true),
-                true
-            )
-        )
-
-        arrayList.add(
-            getGigData(
-                26,
-                5,
-                2020,
-                "Retail Sales Executive",
-                getGigDetailData("Retail Sales Executive", false),
-                true
-            )
-        )
-
-        arrayList.add(
-            getGigData(
-                25,
-                5,
-                2020,
-                "Retail Sales Executive",
-                getGigDetailData("Retail Sales Executive", true),
-                true
-            )
-        )
-        arrayList.add(
-            getGigData(
-                24,
-                5,
-                2020,
-                "Retail Sales Executive",
-                getGigDetailData("Retail Sales Executive", true),
-                true
-            )
-        )
-        arrayList.add(
-            getGigData(
-                23,
-                5,
-                2020,
-                "Retail Sales Executive",
-                getGigDetailData("Retail Sales Executive", false),
-                true
-            )
-        )
-
-        arrayList.add(
-            getGigData(
-                22,
-                5,
-                2020,
-                "Retail Sales Executive",
-                getGigDetailData("Retail Sales Executive", false),
-                true
-            )
-        )
-
-        arrayList.add(
-            getGigData(
-                21,
-                5,
-                2020,
-                "Retail Sales Executive",
-                getGigDetailData("Retail Sales Executive", true),
-                true
-            )
-        )
-
-        arrayList.add(
-            getGigData(
-                20,
-                5,
-                2020,
-                "Retail Sales Executive",
-                getGigDetailData("Retail Sales Executive", false),
-                true
-            )
-        )
-
-        arrayList.add(
-            getGigData(
-                19,
-                5,
-                2020,
-                "Retail Sales Executive",
-                getGigDetailData("Retail Sales Executive", true),
-                true
-            )
-        )
-
-
-        return arrayList
-    }
-    fun setGigData() {
-        var arrGigs = ArrayList<GigData>()
-        var gigData = GigData(
-            3,
-            "upcoming",
-            "xyOpFBoUOIRyE9O5VHd2JKM6FZs2",
-            getStartDateTime(2, 6, 2020, 9, 0, Calendar.AM),
-            getStartDateTime(2, 6, 2020, 12, 0, Calendar.PM),
-            "title1"
-        )
-        var gigData1 = GigData(
-            3,
-            "upcoming",
-            "xyOpFBoUOIRyE9O5VHd2JKM6FZs2",
-            getStartDateTime(3, 6, 2020, 12, 0, Calendar.PM),
-            getStartDateTime(3, 6, 2020, 3, 0, Calendar.PM),
-            "title2"
-        )
-        var gigData2 = GigData(
-            3,
-            "upcoming",
-            "xyOpFBoUOIRyE9O5VHd2JKM6FZs2",
-            getStartDateTime(4, 6, 2020, 2, 0, Calendar.PM),
-            getStartDateTime(4, 6, 2020, 5, 0, Calendar.PM),
-            "title3"
-        )
-        var gigData3 = GigData(
-            3,
-            "upcoming",
-            "xyOpFBoUOIRyE9O5VHd2JKM6FZs2",
-            getStartDateTime(5, 6, 2020, 3, 0, Calendar.PM),
-            getStartDateTime(5, 6, 2020, 6, 0, Calendar.PM),
-            "title4"
-        )
-        var gigData4 = GigData(
-            3,
-            "upcoming",
-            "xyOpFBoUOIRyE9O5VHd2JKM6FZs2",
-            getStartDateTime(6, 6, 2020, 10, 0, Calendar.AM),
-            getStartDateTime(6, 6, 2020, 1, 0, Calendar.PM),
-            "title5"
-        )
-        var gigData5 = GigData(
-            3,
-            "upcoming",
-            "xyOpFBoUOIRyE9O5VHd2JKM6FZs2",
-            getStartDateTime(7, 6, 2020, 8, 0, Calendar.AM),
-            getStartDateTime(7, 6, 2020, 11, 0, Calendar.AM),
-            "title6"
-        )
-        arrGigs.add(gigData)
-        arrGigs.add(gigData1)
-        arrGigs.add(gigData2)
-        arrGigs.add(gigData3)
-        arrGigs.add(gigData4)
-        arrGigs.add(gigData5)
-        GigRepository().setGigData(arrGigs)
-    }
     private fun getStartDateTime(
         date: Int,
         month: Int,

@@ -8,6 +8,7 @@ interface RoleDetailsCallbacks {
 
     fun getRoleDetails(id: String?, responseCallbacks: ResponseCallbacks)
     fun markAsInterest(roleID: String?, responseCallbacks: ResponseCallbacks)
+    fun checkForProfileCompletionAndVerification(responseCallbacks: ResponseCallbacks)
 
     interface ResponseCallbacks {
         fun getRoleDetailsResponse(
@@ -16,5 +17,6 @@ interface RoleDetailsCallbacks {
         )
 
         fun markedAsInterestSuccess(it: Task<Void>)
+        fun <T> getProfileSuccess(profileData: T)
     }
 }

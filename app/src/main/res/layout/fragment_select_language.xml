@@ -73,6 +73,22 @@
             android:layout_height="1dp"
             android:background="@color/line_seprator_language"/>
         <RadioButton
+            android:id="@+id/kn"
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/height_select_lang_item"
+            android:hint="te"
+            android:text="@string/kannada"
+            android:enabled="false"
+            android:textSize="14sp"
+            android:paddingLeft="16dp"
+            android:letterSpacing="0"
+            style="@style/Theme.RadioButtonLipstickPink"
+            android:layout_marginLeft="16dp"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/line_seprator_language"/>
+        <RadioButton
             android:id="@+id/te"
             android:layout_width="fill_parent"
             android:layout_height="@dimen/height_select_lang_item"

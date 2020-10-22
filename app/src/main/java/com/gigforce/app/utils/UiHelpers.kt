@@ -3,10 +3,12 @@ package com.gigforce.app.utils
 import android.app.Activity
 import android.content.Context
 import android.graphics.*
+import android.text.Html
 import android.util.DisplayMetrics
 import android.util.Size
 import android.view.View
 import android.view.WindowManager
+import android.widget.EditText
 import android.widget.PopupMenu
 import android.widget.TextView
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
@@ -104,4 +106,12 @@ fun TextView.setDrawableColor(color: Int) {
     }
 }
 
+
+fun addAsteriskHint(normalTextColor: String, color: String, vararg ets: EditText) {
+    for (et in ets) {
+        val hint = et.hint.toString()
+        et.hint =
+            Html.fromHtml("<font color=$normalTextColor>$hint </font><font color=$color> *</font>")
+    }
+}
 

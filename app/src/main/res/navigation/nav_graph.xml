@@ -667,6 +667,14 @@
             app:argType="string" />
     </fragment>
 
+
+    <fragment
+        android:id="@+id/fragment_add_bio"
+        android:name="com.gigforce.app.modules.explore_by_role.AddBioFragment"
+        android:label="fragment_add_bio"
+        tools:layout="@layout/layout_add_bio_fragment">
+
+    </fragment>
     <fragment
         android:id="@+id/fragment_marked_as_interest"
         android:name="com.gigforce.app.modules.explore_by_role.MarkedInterestSuccessFragment"
@@ -687,6 +695,31 @@
         android:id="@+id/gigsListForDeclineBottomSheet"
         android:name="com.gigforce.app.modules.gigPage.GigsListForDeclineBottomSheet"
         android:label="GigsListForDeclineBottomSheet" />
+    <fragment
+        android:id="@+id/gigPage2Fragment"
+        android:name="com.gigforce.app.modules.gigPage2.GigPage2Fragment"
+        android:label="GigPage2Fragment" />
+    <fragment
+        android:id="@+id/gigDetailsFragment"
+        android:name="com.gigforce.app.modules.gigPage2.GigDetailsFragment"
+        android:label="GigDetailsFragment" />
+
+    <fragment
+        android:id="@+id/fragment_add_language"
+        android:name="com.gigforce.app.modules.explore_by_role.AddLanguageFragment"
+        android:label="fragment_add_language"
+        tools:layout="@layout/layout_fragment_add_language" />
+    <fragment
+        android:id="@+id/fragment_add_contact"
+        android:name="com.gigforce.app.modules.explore_by_role.AddContactDetailsFragment"
+        android:label="fragment_add_contact"
+        tools:layout="@layout/layout_fragment_add_contact_details" />
+    <fragment
+        android:id="@+id/fragment_new_education"
+        android:name="com.gigforce.app.modules.explore_by_role.AddEducationFragment"
+        android:label="fragment_new_education"
+        tools:layout="@layout/layout_add_education_fragment" />
+
 
 </navigation>
 
