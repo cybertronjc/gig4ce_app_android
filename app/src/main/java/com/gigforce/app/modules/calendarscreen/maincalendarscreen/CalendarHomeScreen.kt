@@ -37,6 +37,7 @@ import com.gigforce.app.modules.calendarscreen.maincalendarscreen.verticalcalend
 import com.gigforce.app.modules.custom_gig_preferences.CustomPreferencesViewModel
 import com.gigforce.app.modules.custom_gig_preferences.ParamCustPreferViewModel
 import com.gigforce.app.modules.custom_gig_preferences.UnavailableDataModel
+import com.gigforce.app.modules.gigPage.GigViewModel
 import com.gigforce.app.modules.gigPage.GigsListForDeclineBottomSheet
 import com.gigforce.app.modules.landingscreen.LandingScreenFragment
 import com.gigforce.app.modules.preferences.PreferencesFragment
@@ -45,6 +46,7 @@ import com.gigforce.app.modules.profile.models.ProfileData
 import com.gigforce.app.modules.roster.RosterDayFragment
 import com.gigforce.app.utils.AppConstants
 import com.gigforce.app.utils.GlideApp
+import com.gigforce.app.utils.Lce
 import com.gigforce.app.utils.configrepository.ConfigRepository
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.crashlytics.FirebaseCrashlytics
@@ -78,6 +80,8 @@ class CalendarHomeScreen : BaseFragment(),
     var swipedToupdateGig = false
 
     lateinit var selectedMonthModel: CalendarView.MonthModel
+
+    private val gigViewModel : GigViewModel by viewModels()
 
     lateinit var arrCalendarDependent: Array<View>
     private var mExtendedBottomSheetBehavior: ExtendedBottomSheetBehavior<*>? = null
@@ -218,7 +222,7 @@ class CalendarHomeScreen : BaseFragment(),
         month_selector_arrow.setOnClickListener {
             changeVisibilityCalendarView()
         }
-        oval_gradient_iv.setOnClickListener {
+        date_container.setOnClickListener {
             changeVisibilityCalendarView()
         }
         calendarView.setMonthChangeListener(object :
@@ -359,6 +363,16 @@ class CalendarHomeScreen : BaseFragment(),
             if (preferenceData != null) {
                 viewModel.setPreferenceDataModel(preferenceData)
                 initializeViews()
+            }
+        })
+
+        gigViewModel.todaysGigs.observe(viewLifecycleOwner, Observer {
+            when (it) {
+                Lce.Loading -> {}
+                is Lce.Content -> {
+                    showTodaysGigDialog(it.content.size)
+                }
+                is Lce.Error -> {}
             }
         })
     }
@@ -723,32 +737,9 @@ class CalendarHomeScreen : BaseFragment(),
                 recyclerGenericAdapter.notifyItemChanged(position)
             } else {
 
-                val view =
-                    layoutInflater.inflate(R.layout.dialog_confirm_gig_denial, null)
+                calPosition = position
+                gigViewModel.getTodaysUpcomingGig(temporaryData.getLocalDate())
 
-                val dialog = AlertDialog.Builder(requireContext())
-                    .setView(view)
-                    .show()
-
-                view.findViewById<TextView>(R.id.dialog_message_tv)
-                    .text = "You have ${temporaryData.gigCount} active on this day. These gigs will get cancelled as well."
-
-                view.findViewById<View>(R.id.yesBtn)
-                    .setOnClickListener {
-                        val date = temporaryData.getLocalDate()
-                        navigate(R.id.gigsListForDeclineBottomSheet, bundleOf(
-                        GigsListForDeclineBottomSheet.INTEN_EXTRA_DATE to date
-                        ))
-
-                        makeChangesToCalendarItem(position, true)
-                        dialog?.dismiss()
-                    }
-
-                view.findViewById<View>(R.id.noBtn)
-                    .setOnClickListener {
-                        makeChangesToCalendarItem(position, true)
-                        dialog?.dismiss()
-                    }
 
 //                showConfirmationDialogType1(
 //                    getString(R.string.sure_working_on_this_day),
@@ -796,6 +787,39 @@ class CalendarHomeScreen : BaseFragment(),
             makeChangesToCalendarItem(position, true)
             showSnackbar(position)
         }
+    }
+
+    var calPosition = -1
+    private fun showTodaysGigDialog(gigOnDay: Int) {
+        val view =
+            layoutInflater.inflate(R.layout.dialog_confirm_gig_denial, null)
+
+        val dialog = AlertDialog.Builder(requireContext())
+            .setView(view)
+            .show()
+
+        view.findViewById<TextView>(R.id.dialog_message_tv)
+            .text =
+            "You have $gigOnDay active on this day. These gigs will get cancelled as well."
+
+        view.findViewById<View>(R.id.yesBtn)
+            .setOnClickListener {
+                val date = temporaryData.getLocalDate()
+                navigate(
+                    R.id.gigsListForDeclineBottomSheet, bundleOf(
+                        GigsListForDeclineBottomSheet.INTEN_EXTRA_DATE to date
+                    )
+                )
+
+                makeChangesToCalendarItem(calPosition, true)
+                dialog?.dismiss()
+            }
+
+        view.findViewById<View>(R.id.noBtn)
+            .setOnClickListener {
+                makeChangesToCalendarItem(calPosition, true)
+                dialog?.dismiss()
+            }
     }
 
     fun makeChangesToCalendarItem(position: Int, status: Boolean) {
