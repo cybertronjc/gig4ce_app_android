@@ -125,6 +125,7 @@ class LanguageSelectFragment : BaseFragment() {
             val lang = radioButton.hint.toString()
             updateResources(lang)
             saveAppLanuageCode(lang)
+            saveAppLanguageName(radioButton.text.toString())
             navNext()
         }
     }
