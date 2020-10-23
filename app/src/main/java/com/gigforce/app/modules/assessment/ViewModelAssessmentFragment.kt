@@ -73,7 +73,10 @@ class ViewModelAssessmentFragment(private val modelCallbacks: ModelCallbacks) : 
     }
 
     override fun QuestionairreSuccess(value: QuerySnapshot?, e: FirebaseFirestoreException?) {
-        observableAssessmentData.value = value?.toObjects(AssementQuestionsReponse::class.java)!![0]
+        value?.toObjects(AssementQuestionsReponse::class.java)?.let {
+            if(it.size>0)
+                observableAssessmentData.value = it[0]
+        }
     }
 
     override fun submitAnswerSuccess() {

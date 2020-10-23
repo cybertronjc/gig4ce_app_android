@@ -18,11 +18,15 @@ import com.gigforce.app.modules.gigPage.models.Gig
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.ServerTimestamp
+import com.riningan.widget.ExtendedBottomSheetBehavior
 import java.util.*
 import kotlin.collections.ArrayList
 
 class CalendarHomeScreenViewModel : ViewModel() {
     // TODO: Implement the ViewModel
+    var currentBottomSheetState = ExtendedBottomSheetBehavior.STATE_COLLAPSED
+
+
     var mainHomeRepository = CalendarHomeRepository()
     var mainHomeLiveDataModel: MutableLiveData<MainHomeCompleteGigModel> =
         MutableLiveData<MainHomeCompleteGigModel>()

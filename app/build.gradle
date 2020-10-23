@@ -37,8 +37,8 @@ android {
         applicationId "com.gigforce.app"
         minSdkVersion 23
         targetSdkVersion 29
-        versionCode 66
-        versionName "1.24.4"
+        versionCode 67
+        versionName "1.24.5"
 
         vectorDrawables.useSupportLibrary = true
 
@@ -70,7 +70,8 @@ android {
          */
         production {
             dimension "default"
-//           signingConfig signingConfigs.production
+           signingConfig signingConfigs.production
+            buildConfigField "String", 'REFERRAL_BASE_URL', '"https://gig4ce.page.link/"'
         }
 
         /**
@@ -80,6 +81,7 @@ android {
             dimension "default"
             versionNameSuffix '-Dev'
             signingConfig signingConfigs.debug
+            buildConfigField "String", 'REFERRAL_BASE_URL', '"https://gigforce.page.link/"'
         }
     }
 
@@ -296,6 +298,9 @@ dependencies {
     // explicitly depend on RxJava's latest version for bug fixes and new features.
     // (see https://github.com/ReactiveX/RxJava/releases for latest 3.x.x version)
     implementation 'io.reactivex.rxjava3:rxjava:3.0.0'
+
+
+
 
 
 }

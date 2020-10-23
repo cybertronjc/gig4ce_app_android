@@ -106,11 +106,11 @@
     <color name="grey_c7">#c7c7c7</color>
 
     <color name="gig_green">#468800</color>
-    <color name="gig_green_light">#61468800</color>
+    <color name="gig_green_light">#dbe8cd</color>
     <color name="gig_pink">#d72467</color>
-    <color name="gig_pink_light">#61D72467</color>
+    <color name="gig_pink_light">#e8e8e8</color>
     <color name="gig_orange">#fa6400</color>
-    <color name="gig_orange_light">#61FA6400</color>
+    <color name="gig_orange_light">#fee1cd</color>
 
 
 </resources>
