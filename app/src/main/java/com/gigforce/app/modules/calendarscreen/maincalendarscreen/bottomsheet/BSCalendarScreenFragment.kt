@@ -636,13 +636,13 @@ class BSCalendarScreenFragment : BaseFragment() {
         datalist.add(FeatureModel("Learning", R.drawable.learning, R.id.mainLearningFragment))
         datalist.add(FeatureModel("Settings", R.drawable.settings, R.id.settingFragment))
         datalist.add(FeatureModel("Chat", R.drawable.chat, R.id.contactScreenFragment))
-        datalist.add(
-            FeatureModel(
-                "Home Screen",
-                R.drawable.ic_home_black,
-                R.id.landinghomefragment
-            )
-        )
+//        datalist.add(
+//            FeatureModel(
+//                "Home Screen",
+//                R.drawable.ic_home_black,
+//                R.id.landinghomefragment
+//            )
+//        )
         datalist.add(FeatureModel("Explore", R.drawable.ic_landinghome_search, -1))
         datalist.add(
             FeatureModel(

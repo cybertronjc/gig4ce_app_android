@@ -37,7 +37,6 @@ class GigHistoryRepository : BaseFirestoreDBRepository(), DataCallbacks {
                 getCollectionReference().whereEqualTo("gigerId", getUID())
                     .whereLessThan("startDateTime", getStartOfDay())
                     .orderBy("startDateTime", Query.Direction.DESCENDING)
-
                     .limit(limit)
         listener = gigQuery.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
             responseCallbacks.pastGigsResponse(querySnapshot, firebaseFirestoreException);

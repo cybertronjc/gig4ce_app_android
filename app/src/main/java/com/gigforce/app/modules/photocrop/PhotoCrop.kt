@@ -192,6 +192,10 @@ class PhotoCrop : AppCompatActivity() {
         data: Intent?
     ): Unit {
         super.onActivityResult(requestCode, resultCode, data)
+        if (purpose == PURPOSE_VERIFICATION && resultCode == Activity.RESULT_CANCELED) {
+            finish()
+            return
+        }
         var bundle = data?.extras
         if (null != bundle) logBundle(bundle)
 
