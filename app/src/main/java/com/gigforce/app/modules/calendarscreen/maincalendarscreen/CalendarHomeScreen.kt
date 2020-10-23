@@ -349,8 +349,11 @@ class CalendarHomeScreen : BaseFragment(),
         viewModelCustomPreference.customPreferencesLiveDataModel.observe(
             viewLifecycleOwner,
             Observer { data ->
+
+                viewModel.customPreferenceUnavailableData = data.unavailable
                 viewModelCustomPreference.getCustomPreferenceData()?.let {
-                    viewModel.setCustomPreferenceData(it)
+                    //viewModel.setCustomPreferenceData(it)
+                    viewModel.customPreferenceUnavailableData = data.unavailable
                     if (swipedToupdateGig) {
 //                    swipedToupdateGig = false
                     } else
