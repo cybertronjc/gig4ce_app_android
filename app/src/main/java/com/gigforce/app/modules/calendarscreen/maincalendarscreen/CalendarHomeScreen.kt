@@ -222,7 +222,7 @@ class CalendarHomeScreen : BaseFragment(),
         month_selector_arrow.setOnClickListener {
             changeVisibilityCalendarView()
         }
-        oval_gradient_iv.setOnClickListener {
+        date_container.setOnClickListener {
             changeVisibilityCalendarView()
         }
         calendarView.setMonthChangeListener(object :
