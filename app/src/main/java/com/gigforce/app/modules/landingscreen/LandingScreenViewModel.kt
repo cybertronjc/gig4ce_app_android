@@ -61,7 +61,7 @@ class LandingScreenViewModel constructor(
         profileData: ProfileData?
     ) {
         val profileHelpTips: MutableList<Tip> = mutableListOf()
-
+        if (allTips.isNullOrEmpty()) return
         if (profileData == null) {
             //Add All
 
