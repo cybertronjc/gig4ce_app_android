@@ -38,6 +38,9 @@ import com.gigforce.app.modules.learning.LearningConstants
 import com.gigforce.app.modules.learning.LearningViewModel
 import com.gigforce.app.modules.learning.models.Course
 import com.gigforce.app.modules.preferences.PreferencesFragment
+import com.gigforce.app.modules.profile.AboutExpandedFragment
+import com.gigforce.app.modules.profile.EducationExpandedFragment
+import com.gigforce.app.modules.profile.ExperienceExpandedFragment
 import com.gigforce.app.modules.profile.ProfileViewModel
 import com.gigforce.app.modules.profile.models.ProfileData
 import com.gigforce.app.utils.AppConstants
@@ -58,6 +61,7 @@ class LandingScreenFragment : BaseFragment() {
 
         private const val SCREEN_VERIFICATION = 10
         private const val SCREEN_GIG = 11
+
     }
 
     private lateinit var viewModel: LandingScreenViewModel
@@ -92,6 +96,7 @@ class LandingScreenFragment : BaseFragment() {
         val displayMetrics = DisplayMetrics()
         activity?.windowManager?.getDefaultDisplay()?.getMetrics(displayMetrics)
         width = displayMetrics.widthPixels
+        setTipsInViewModel()
         initUI()
         initializeExploreByRole()
         initializeExploreByIndustry()
@@ -259,6 +264,119 @@ class LandingScreenFragment : BaseFragment() {
             })
 
         helpViewModel.getTopHelpVideos()
+    }
+
+    fun setTipsInViewModel() {
+        val tipsList = listOf<Tip>(
+            Tip(
+                key = "ADD_EDUCATION_TIP",
+                title = getString(R.string.gig_force_tip),
+                subTitle = getString(R.string.tip_one),
+                whereToRedirect = R.id.educationExpandedFragment,
+                tip_id = 1097,
+                intentExtraMap = mapOf(
+                    LandingPageConstants.INTENT_EXTRA_CAME_FROM_LANDING_SCREEN to true,
+                    LandingPageConstants.INTENT_EXTRA_ACTION to EducationExpandedFragment.ACTION_OPEN_EDIT_EDUCATION_BOTTOM_SHEET
+                )
+            ), Tip(
+                key = "ADD_WORK_EXP_TIP",
+                title = getString(R.string.gig_force_tip),
+                subTitle = getString(R.string.tip_two),
+                whereToRedirect = R.id.experienceExpandedFragment,
+                tip_id = 1098,
+                intentExtraMap = mapOf(
+                    LandingPageConstants.INTENT_EXTRA_CAME_FROM_LANDING_SCREEN to true,
+                    LandingPageConstants.INTENT_EXTRA_ACTION to ExperienceExpandedFragment.ACTION_OPEN_EDIT_EXPERIENCE_BOTTOM_SHEET
+                )
+            ), Tip(
+                key = "ADD_SKILLS_TIP",
+                title = getString(R.string.gig_force_tip),
+                subTitle = getString(R.string.tip_three),
+                whereToRedirect = R.id.educationExpandedFragment,
+                tip_id = 1099,
+                intentExtraMap = mapOf(
+                    LandingPageConstants.INTENT_EXTRA_CAME_FROM_LANDING_SCREEN to true,
+                    LandingPageConstants.INTENT_EXTRA_ACTION to EducationExpandedFragment.ACTION_OPEN_EDIT_SKILLS_BOTTOM_SHEET
+                )
+            ), Tip(
+                key = "ADD_ACHIEVEMENTS_TIP",
+                title = getString(R.string.gig_force_tip),
+                subTitle = getString(R.string.tip_four),
+                whereToRedirect = R.id.educationExpandedFragment,
+                tip_id = 1100,
+                intentExtraMap = mapOf(
+                    LandingPageConstants.INTENT_EXTRA_CAME_FROM_LANDING_SCREEN to true,
+                    LandingPageConstants.INTENT_EXTRA_ACTION to EducationExpandedFragment.ACTION_OPEN_EDIT_ACHIEVEMENTS_BOTTOM_SHEET
+                )
+            )
+            , Tip(
+                key = "ADD_PROFILE_PHOTO_TIP",
+                title = getString(R.string.gig_force_tip),
+                subTitle = getString(R.string.tip_five),
+                tip_id = 1101,
+                whereToRedirect = R.id.profileFragment
+            ), Tip(
+                key = "ADD_LANGUAGE_TIP",
+                title = getString(R.string.gig_force_tip),
+                subTitle = getString(R.string.tip_six),
+                whereToRedirect = R.id.aboutExpandedFragment,
+                tip_id = 1102,
+                intentExtraMap = mapOf(
+                    LandingPageConstants.INTENT_EXTRA_CAME_FROM_LANDING_SCREEN to true,
+                    LandingPageConstants.INTENT_EXTRA_ACTION to AboutExpandedFragment.ACTION_OPEN_EDIT_LANGUAGE_BOTTOM_SHEET
+                )
+            ), Tip(
+                key = "ADD_ABOUT_ME_TIP",
+                title = getString(R.string.gig_force_tip),
+                subTitle = getString(R.string.tip_seven),
+                whereToRedirect = R.id.aboutExpandedFragment,
+                tip_id = 1103,
+                intentExtraMap = mapOf(
+                    LandingPageConstants.INTENT_EXTRA_CAME_FROM_LANDING_SCREEN to true,
+                    LandingPageConstants.INTENT_EXTRA_ACTION to AboutExpandedFragment.ACTION_OPEN_EDIT_ABOUT_ME_BOTTOM_SHEET
+                )
+            ),
+            Tip(
+                key = "ADD_PERMANENT_ADD_TIP",
+                title = getString(R.string.gig_force_tip),
+                subTitle = getString(R.string.tip_eight),
+                tip_id = 1104,
+                whereToRedirect = R.id.permanentAddressViewFragment
+            )
+            , Tip(
+                key = "ADD_PREFERRED_DISTANCE_TIP",
+                title = getString(R.string.gig_force_tip),
+                subTitle = getString(R.string.tip_nine),
+                tip_id = 1105,
+                whereToRedirect = R.id.arrountCurrentAddress
+            ), Tip(
+                key = "ADD_DAILY_EARNING_EXPECTATION_TIP",
+                title = getString(R.string.gig_force_tip),
+                subTitle = getString(R.string.tip_ten),
+                tip_id = 1106,
+                whereToRedirect = R.id.earningFragment
+            )
+            , Tip(
+                key = "ADD_WEEKDAY_TIP",
+                title = getString(R.string.gig_force_tip),
+                subTitle = getString(R.string.tip_eleven),
+                tip_id = 1107,
+                whereToRedirect = R.id.weekDayFragment
+            ), Tip(
+                key = "ADD_WEEKEND_TIP",
+                title = getString(R.string.gig_force_tip),
+                subTitle = getString(R.string.tip_twelve),
+                tip_id = 1108,
+                whereToRedirect = R.id.weekEndFragment
+            ), Tip(
+                key = "ADD_WFH_TIP",
+                title = getString(R.string.gig_force_tip),
+                subTitle = getString(R.string.tip_thirteen),
+                tip_id = 1109,
+                whereToRedirect = R.id.locationFragment
+            )
+        )
+        viewModel.setTips(tipsList)
     }
 
     private fun setTipsOnView(tips_: List<Tip>) {

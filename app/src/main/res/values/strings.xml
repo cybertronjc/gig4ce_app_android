@@ -1012,6 +1012,23 @@
     <string name="apply_now">Apply Now</string>
     <string name="you_will_be_soon_sent_an_invite">You’ll be soon be sent an invite to suitable gigs around you.</string>
     <string name="not_verified">Not Verified</string>
+    <string name="total_number_of_days">Total number of days</string>
+    <string name="total_working_days">Total working days</string>
+    <string name="number_of_offs">Number of leaves</string>
+    <string name="gig_force_tip">Gigforce Tip</string>
+    <string name="tip_one">Your education details help build your profile.</string>
+    <string name="tip_two">Your work experience helps find similar gigs for you.</string>
+    <string name="tip_three">Adding your skills helps recommend suitable gigs.</string>
+    <string name="tip_four">Sharing your past achievements highlights your profile.</string>
+    <string name="tip_five">Adding a profile photo shows off your personality.</string>
+    <string name="tip_six">How many languages can you speak in?</string>
+    <string name="tip_seven">Tell me 2 lines that best describe your.</string>
+    <string name="tip_eight">Add your permanent address to complete verification?</string>
+    <string name="tip_nine">How far are you willing to travel for work daily?</string>
+    <string name="tip_ten">What is your daily earning expectation?</string>
+    <string name="tip_eleven">How many days during the week are you willing to work?</string>
+    <string name="tip_twelve">Are you willing to work during the weekends?</string>
+    <string name="tip_thirteen">Would you want to work from home?</string>
 
 
 </resources>
