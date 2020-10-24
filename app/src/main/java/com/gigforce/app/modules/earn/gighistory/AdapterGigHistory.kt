@@ -175,9 +175,9 @@ class AdapterGigHistory : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                         val mins = (durationCalculated / (1000 * 60)).toInt() % 60
                         holder.itemView.tv_time_rv_gig_hist.text =
                             "${hours}${viewHolderGigDetails.itemView.context.getString(R.string.hours)} : ${mins}${
-                            viewHolderGigDetails.itemView.context.getString(
-                                R.string.mins
-                            )
+                                viewHolderGigDetails.itemView.context.getString(
+                                    R.string.mins
+                                )
                             }"
                     }
                 }
@@ -188,9 +188,9 @@ class AdapterGigHistory : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                     })
                 holder.itemView.tv_timing_rv_gig_hist.text = if (gig.endDateTime != null)
                     "${timeFormatter.format(gig.startDateTime!!.toDate())} - ${
-                    timeFormatter.format(
-                        gig.endDateTime!!.toDate()
-                    )
+                        timeFormatter.format(
+                            gig.endDateTime!!.toDate()
+                        )
                     }"
                 else
                     "${timeFormatter.format(gig.startDateTime!!.toDate())} - "
@@ -335,7 +335,20 @@ class AdapterGigHistory : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     fun addOnGoingGigs(onGoingGigs: List<Gig>?) {
         this.onGoingGigs?.clear()
         this.onGoingGigs?.addAll(onGoingGigs!!)
-        notifyItemChanged(0)
+        if (scheduledGigs?.isNotEmpty() == true && callbacks?.getEventState() == EVENT_PAST) {
+            this.onGoingGigs?.forEach { element ->
+                if (element?.isCheckInAndCheckOutMarked()) {
+                    if (scheduledGigs?.indexOf(element) == -1) {
+                        this.scheduledGigs?.add(0, element)
+                        notifyItemInserted(0)
+                    }
+
+                }
+            }
+
+        }
+
+        notifyDataSetChanged()
     }
 
     override fun getItemViewType(position: Int): Int {

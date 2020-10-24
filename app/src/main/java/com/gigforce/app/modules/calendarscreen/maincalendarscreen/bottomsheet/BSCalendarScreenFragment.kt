@@ -122,6 +122,7 @@ class BSCalendarScreenFragment : BaseFragment() {
 
         // mainLearningViewModel.getAssessmentsFromAllAssignedCourses()
         learningViewModel.getRoleBasedCourses()
+
     }
 
     private fun initGigViewModel() {

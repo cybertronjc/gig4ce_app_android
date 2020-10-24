@@ -810,7 +810,6 @@
 
     <string name="none">None</string>
     <string name="day_and_time">Day and Time</string>
-    <string name="weekday">Weekday</string>
     <string name="_00_04days">00-04days</string>
     <string name="weekends">Weekends</string>
     <string name="rs">Rs</string>
@@ -1012,6 +1011,10 @@
     <string name="apply_now">Apply Now</string>
     <string name="you_will_be_soon_sent_an_invite">You’ll be soon be sent an invite to suitable gigs around you.</string>
     <string name="not_verified">Not Verified</string>
+    <string name="schedules">Schedules</string>
+    <string name="slots">Slots</string>
+    <string name="weekday">Weekday</string>
+    <string name="days_caps">Days</string>
 
 
 </resources>

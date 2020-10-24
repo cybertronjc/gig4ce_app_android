@@ -6,5 +6,5 @@ import com.gigforce.app.modules.gigPage.models.Gig
 
 data class GigsResponse(
     override val status: Boolean = false, override val message: String = "",
-    override var data: List<Gig>? = ArrayList()
+    override var data: ArrayList<Gig>? = ArrayList()
 ) : BaseResponse<List<Gig>?>()

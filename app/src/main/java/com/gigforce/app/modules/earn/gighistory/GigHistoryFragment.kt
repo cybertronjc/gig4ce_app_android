@@ -76,6 +76,7 @@ class GigHistoryFragment : BaseFragment(), AdapterGigHistory.AdapterGigHistoryCa
 
     private fun setupRecycler() {
         rv_gigs_gig_history.adapter = adapter
+
         adapter.setCallbacks(this)
         val layoutManager = LinearLayoutManager(activity)
         rv_gigs_gig_history.layoutManager = layoutManager
