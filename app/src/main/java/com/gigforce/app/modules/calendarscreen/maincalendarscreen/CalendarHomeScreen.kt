@@ -48,6 +48,7 @@ import com.gigforce.app.utils.AppConstants
 import com.gigforce.app.utils.GlideApp
 import com.gigforce.app.utils.Lce
 import com.gigforce.app.utils.configrepository.ConfigRepository
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.storage.StorageReference
@@ -370,12 +371,20 @@ class CalendarHomeScreen : BaseFragment(),
         })
 
         gigViewModel.todaysGigs.observe(viewLifecycleOwner, Observer {
+            it?: return@Observer
+
             when (it) {
                 Lce.Loading -> {}
                 is Lce.Content -> {
                     showTodaysGigDialog(it.content.size)
                 }
-                is Lce.Error -> {}
+                is Lce.Error -> {
+                    MaterialAlertDialogBuilder(requireContext())
+                            .setTitle("Alert")
+                            .setMessage("Unable to fetch todays gig list, ${it.error}")
+                            .setPositiveButton("Okay"){_,_ ->}
+                            .show()
+                }
             }
         })
     }

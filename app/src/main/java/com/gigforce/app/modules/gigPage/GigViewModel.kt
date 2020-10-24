@@ -381,8 +381,10 @@ class GigViewModel constructor(
                     .isBefore(tomorrow))
             }
             _todaysGigs.value = Lce.content(todaysUpcomingGigs)
+            _todaysGigs.value = null
         } catch (e: Exception) {
             _todaysGigs.value = Lce.error(e.message!!)
+            _todaysGigs.value = null
         }
 
     }
