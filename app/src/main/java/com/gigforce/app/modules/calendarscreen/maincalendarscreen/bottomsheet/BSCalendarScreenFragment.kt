@@ -120,7 +120,7 @@ class BSCalendarScreenFragment : BaseFragment() {
             })
 
 
-        // mainLearningViewModel.getAssessmentsFromAllAssignedCourses()
+         mainLearningViewModel.getAssessmentsFromAllAssignedCourses()
         learningViewModel.getRoleBasedCourses()
 
     }
@@ -267,6 +267,7 @@ class BSCalendarScreenFragment : BaseFragment() {
 
             assessment_tv.visible()
             assessment_layout.visible()
+            assessment_rv.visible()
 
             val displayMetrics = DisplayMetrics()
             activity?.windowManager?.defaultDisplay?.getMetrics(displayMetrics)
