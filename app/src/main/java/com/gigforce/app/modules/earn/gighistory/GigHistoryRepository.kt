@@ -13,13 +13,20 @@ class GigHistoryRepository : BaseFirestoreDBRepository(), DataCallbacks {
 
     var listener: ListenerRegistration? = null
     var onGoingListener: ListenerRegistration? = null
-    override fun getOnGoingGigs(responseCallbacks: DataCallbacks.ResponseCallbacks) {
+    override fun getOnGoingGigs(
+        responseCallbacks: DataCallbacks.ResponseCallbacks,
+        initialLoading: Boolean
+    ) {
 
         onGoingListener = getCollectionReference().whereEqualTo("gigerId", getUID())
             .whereGreaterThanOrEqualTo("startDateTime", getStartOfDay())
             .whereLessThanOrEqualTo("startDateTime", getEndOfDay())
             .addSnapshotListener { querySnapshot, firebaseFirestoreException ->
-                responseCallbacks.onGoingGigsResponse(querySnapshot, firebaseFirestoreException);
+                responseCallbacks.onGoingGigsResponse(
+                    querySnapshot,
+                    firebaseFirestoreException,
+                    initialLoading
+                );
 
             }
     }

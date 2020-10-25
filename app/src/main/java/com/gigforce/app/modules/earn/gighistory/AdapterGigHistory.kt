@@ -19,6 +19,7 @@ import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.ZoneId
 import java.util.*
+import java.util.concurrent.CopyOnWriteArrayList
 import kotlin.collections.ArrayList
 
 @Suppress("IMPLICIT_CAST_TO_ANY")
@@ -121,30 +122,44 @@ class AdapterGigHistory : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             else -> {
                 val viewHolderGigDetails = holder as ViewHolderGigDetails
                 val gig = scheduledGigs?.get(position - 2)
-                holder.itemView.tv_completed_gig_hist.text =
-                    holder.itemView.context.getString(R.string.pending)
-                holder.itemView.tv_completed_gig_hist.setCompoundDrawablesWithIntrinsicBounds(
-                    R.drawable.bg_circle_yellow,
-                    0,
-                    0,
-                    0
-                )
-                gig?.attendance?.checkInMarked?.let { checkInMarked ->
-                    {
-                        gig.attendance?.checkOutMarked?.let {
-                            if (checkInMarked && it) {
-                                holder.itemView.tv_completed_gig_hist.text =
-                                    holder.itemView.context.getString(R.string.completed)
-                                holder.itemView.tv_completed_gig_hist.setCompoundDrawablesWithIntrinsicBounds(
-                                    R.drawable.bg_circle_468800,
-                                    0,
-                                    0,
-                                    0
-                                )
-                            }
-                        }
-                    }
+
+                if (gig?.isCheckInAndCheckOutMarked() == true) {
+                    holder.itemView.tv_completed_gig_hist.text =
+                        holder.itemView.context.getString(R.string.completed)
+                    holder.itemView.tv_completed_gig_hist.setCompoundDrawablesWithIntrinsicBounds(
+                        R.drawable.bg_circle_468800,
+                        0,
+                        0,
+                        0
+                    )
+                } else {
+                    holder.itemView.tv_completed_gig_hist.text =
+                        holder.itemView.context.getString(R.string.pending)
+                    holder.itemView.tv_completed_gig_hist.setCompoundDrawablesWithIntrinsicBounds(
+                        R.drawable.bg_circle_yellow,
+                        0,
+                        0,
+                        0
+                    )
                 }
+
+
+//                gig?.attendance?.checkInMarked?.let { checkInMarked ->
+//                    {
+//                        gig.attendance?.checkOutMarked?.let {
+//                            if (checkInMarked && it) {
+//                                holder.itemView.tv_completed_gig_hist.text =
+//                                    holder.itemView.context.getString(R.string.completed)
+//                                holder.itemView.tv_completed_gig_hist.setCompoundDrawablesWithIntrinsicBounds(
+//                                    R.drawable.bg_circle_468800,
+//                                    0,
+//                                    0,
+//                                    0
+//                                )
+//                            }
+//                        }
+//                    }
+//                }
                 val currentDate = headerDateFormatter.format(gig?.startDateTime?.toDate()!!)
                 viewHolderGigDetails.itemView.tv_gig_day_rv_gig_his.text = currentDate
                 viewHolderGigDetails.itemView.v_car_left_bg_rv_gig_hist.setBackgroundColor(
@@ -175,9 +190,9 @@ class AdapterGigHistory : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                         val mins = (durationCalculated / (1000 * 60)).toInt() % 60
                         holder.itemView.tv_time_rv_gig_hist.text =
                             "${hours}${viewHolderGigDetails.itemView.context.getString(R.string.hours)} : ${mins}${
-                                viewHolderGigDetails.itemView.context.getString(
-                                    R.string.mins
-                                )
+                            viewHolderGigDetails.itemView.context.getString(
+                                R.string.mins
+                            )
                             }"
                     }
                 }
@@ -188,9 +203,9 @@ class AdapterGigHistory : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                     })
                 holder.itemView.tv_timing_rv_gig_hist.text = if (gig.endDateTime != null)
                     "${timeFormatter.format(gig.startDateTime!!.toDate())} - ${
-                        timeFormatter.format(
-                            gig.endDateTime!!.toDate()
-                        )
+                    timeFormatter.format(
+                        gig.endDateTime!!.toDate()
+                    )
                     }"
                 else
                     "${timeFormatter.format(gig.startDateTime!!.toDate())} - "
@@ -332,16 +347,20 @@ class AdapterGigHistory : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         const val EVENT_UPCOMING = 5;
     }
 
-    fun addOnGoingGigs(onGoingGigs: List<Gig>?) {
+    fun addOnGoingGigs(
+        onGoingGigs: List<Gig>?,
+        scheduledGigsLoaded: Boolean
+    ) {
         this.onGoingGigs?.clear()
         this.onGoingGigs?.addAll(onGoingGigs!!)
-        if (scheduledGigs?.isNotEmpty() == true && callbacks?.getEventState() == EVENT_PAST) {
-            this.onGoingGigs?.forEach { element ->
-                if (element?.isCheckInAndCheckOutMarked()) {
+        val copiedList = CopyOnWriteArrayList<Gig>(this.onGoingGigs)
+        if (scheduledGigsLoaded && callbacks?.getEventState() == EVENT_PAST) {
+            copiedList?.forEach { element ->
+                if (element?.isCheckInAndCheckOutMarked() == true) {
                     if (scheduledGigs?.indexOf(element) == -1) {
                         this.scheduledGigs?.add(0, element)
-                        notifyItemInserted(0)
                     }
+                    this.onGoingGigs?.removeAt(this.onGoingGigs?.indexOf(element)!!)
 
                 }
             }
@@ -482,6 +501,10 @@ class AdapterGigHistory : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                         convertToLocalDateViaInstant(
                             Date()
                         )
+                    ) || convertToLocalDateViaInstant(it.gig?.startDateTime?.toDate()!!)!!.isEqual(
+                        convertToLocalDateViaInstant(
+                            Date()
+                        )
                     )
                 ) {
                     if (callbacks?.getEventState() == EVENT_PAST) {
@@ -525,6 +548,10 @@ class AdapterGigHistory : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             }
             DocumentChange.Type.MODIFIED -> {
                 if (convertToLocalDateViaInstant(it.gig?.startDateTime?.toDate()!!)!!.isBefore(
+                        convertToLocalDateViaInstant(
+                            Date()
+                        )
+                    ) || convertToLocalDateViaInstant(it.gig?.startDateTime?.toDate()!!)!!.isEqual(
                         convertToLocalDateViaInstant(
                             Date()
                         )

@@ -115,7 +115,7 @@ class GigHistoryFragment : BaseFragment(), AdapterGigHistory.AdapterGigHistoryCa
         })
         viewModel.observableOnGoingGigs.observe(viewLifecycleOwner, Observer {
             viewModel.showProgress(false)
-            adapter.addOnGoingGigs(it?.data)
+            adapter.addOnGoingGigs(it?.data,viewModel.observableScheduledGigs.value != null && viewModel.observableScheduledGigs.value!!.data != null && viewModel.observableScheduledGigs.value?.data?.isNotEmpty()!!)
         })
         viewModel.observableScheduledGigs.observe(viewLifecycleOwner, Observer {
             viewModel.showProgress(false)
