@@ -1,17 +1,20 @@
 package com.gigforce.app.modules.explore_by_role
 
+import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Typeface
+import android.net.Uri
 import android.os.Bundle
 import android.text.Html
 import android.util.TypedValue
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TableLayout
-import android.widget.TableRow
-import android.widget.TextView
+import android.widget.*
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.core.content.FileProvider
 import androidx.core.os.bundleOf
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -24,14 +27,18 @@ import com.gigforce.app.modules.gigerVerfication.VerificationBaseModel
 import com.gigforce.app.modules.profile.ProfileViewModel
 import com.gigforce.app.modules.profile.models.ProfileData
 import com.gigforce.app.modules.profile.models.RoleInterests
-import com.gigforce.app.utils.HorizontaltemDecoration
-import com.gigforce.app.utils.StringConstants
-import com.gigforce.app.utils.ViewModelProviderFactory
-import com.gigforce.app.utils.getScreenWidth
+import com.gigforce.app.utils.*
+import com.google.firebase.dynamiclinks.DynamicLink
+import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
+import com.google.firebase.dynamiclinks.ktx.dynamicLinks
+import com.google.firebase.dynamiclinks.ktx.shortLinkAsync
+import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.layout_role_details_fragment.*
+import java.io.File
+import java.io.FileOutputStream
 
 
-class RoleDetailsFragment : BaseFragment() {
+class RoleDetailsFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener {
     private var fragmentLoaded = false
     private val viewModelFactory by lazy {
         ViewModelProviderFactory(RoleDetailsVIewModel(RoleDetailsRepository()))
@@ -67,6 +74,14 @@ class RoleDetailsFragment : BaseFragment() {
         initObservers()
         checkForMarkedAsInterest()
         checkForRedirection()
+        initClicks()
+    }
+
+    private fun initClicks() {
+
+        iv_options_role_details.setOnClickListener {
+            openPopupMenu(it, R.menu.menu_assessment_result, this, activity)
+        }
     }
 
     private fun checkForRedirection() {
@@ -118,7 +133,6 @@ class RoleDetailsFragment : BaseFragment() {
                                     Html.fromHtml("&#x2713 " + getString(R.string.applied))
 
 
-
                             }
                         }
 
@@ -154,9 +168,9 @@ class RoleDetailsFragment : BaseFragment() {
                 tv_what_content_role_details.text = role?.about
                 tv_what_read_more_details.text =
                     "${getString(R.string.what_does_a)} ${role?.role_title} ${
-                        getString(
-                            R.string.do_question_mark
-                        )
+                    getString(
+                        R.string.do_question_mark
+                    )
                     }"
                 adapterPreferredLocation.addData(role?.top_locations ?: mutableListOf())
                 tv_earnings_role_details.setOnClickListener {
@@ -407,5 +421,82 @@ class RoleDetailsFragment : BaseFragment() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString(StringConstants.ROLE_ID.value, mRoleID)
+    }
+
+    override fun onMenuItemClick(item: MenuItem?): Boolean {
+        when (item?.itemId) {
+            R.id.action_share -> {
+                pb_role_details.visible()
+                Firebase.dynamicLinks.shortLinkAsync {
+                    longLink =
+                        Uri.parse(buildDeepLink(Uri.parse("http://www.gig4ce.com/?role_id=$mRoleID&invite=${viewModel.getUID()}")).toString())
+                }.addOnSuccessListener { result ->
+                    // Short link created
+                    val shortLink = result.shortLink
+                    shareToAnyApp(shortLink.toString())
+                }.addOnFailureListener {
+                    // Error
+                    // ...
+                    showToast(it.message!!);
+                }
+                return true
+            }
+        }
+        return false;
+    }
+
+    fun buildDeepLink(deepLink: Uri): Uri {
+        val dynamicLink = FirebaseDynamicLinks.getInstance().createDynamicLink()
+            .setLink(Uri.parse(deepLink.toString()))
+            .setDomainUriPrefix("https://gigforce.page.link/")
+            // Open links with this app on Android
+            .setAndroidParameters(DynamicLink.AndroidParameters.Builder().build())
+            // Open links with com.example.ios on iOS
+            .setIosParameters(DynamicLink.IosParameters.Builder("com.gigforce.ios").build())
+            .setSocialMetaTagParameters(
+                DynamicLink.SocialMetaTagParameters.Builder()
+                    .setTitle("Gigforce")
+                    .setDescription("Flexible work and learning platform")
+                    .setImageUrl(Uri.parse("https://firebasestorage.googleapis.com/v0/b/gig4ce-app.appspot.com/o/app_assets%2Fgigforce.jpg?alt=media&token=f7d4463b-47e4-4b8e-9b55-207594656161"))
+                    .build()
+            ).buildDynamicLink()
+
+        return dynamicLink.uri;
+    }
+
+    fun shareToAnyApp(url: String) {
+        try {
+            val shareIntent = Intent(Intent.ACTION_SEND)
+            shareIntent.type = "image/png"
+            shareIntent.putExtra(
+                Intent.EXTRA_SUBJECT,
+                getString(R.string.app_name)
+            )
+            val shareMessage = getString(R.string.looking_for_dynamic_working_hours) + " " + url
+            shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage)
+            val bitmap =
+                BitmapFactory.decodeResource(requireContext().resources, R.drawable.bg_gig_type)
+
+            //save bitmap to app cache folder
+
+            //save bitmap to app cache folder
+            val outputFile = File(requireContext().cacheDir, "share" + ".png")
+            val outPutStream = FileOutputStream(outputFile)
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, outPutStream)
+            outPutStream.flush()
+            outPutStream.close()
+            outputFile.setReadable(true, false)
+            shareIntent.putExtra(
+                Intent.EXTRA_STREAM, FileProvider.getUriForFile(
+                    requireContext(),
+                    requireContext().packageName + ".provider",
+                    outputFile
+                )
+            )
+            startActivity(Intent.createChooser(shareIntent, "choose one"))
+        } catch (e: Exception) {
+            //e.toString();
+        }
+        pb_role_details.gone()
     }
 }

@@ -9,6 +9,8 @@ interface RoleDetailsCallbacks {
     fun getRoleDetails(id: String?, responseCallbacks: ResponseCallbacks)
     fun markAsInterest(roleID: String?, responseCallbacks: ResponseCallbacks)
     fun checkForProfileCompletionAndVerification(responseCallbacks: ResponseCallbacks)
+    fun getUID(): String
+
 
     interface ResponseCallbacks {
         fun getRoleDetailsResponse(

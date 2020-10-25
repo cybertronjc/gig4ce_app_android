@@ -9,6 +9,7 @@ import android.view.MotionEvent
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
@@ -20,6 +21,7 @@ import com.gigforce.app.modules.landingscreen.LandingScreenFragment
 import com.gigforce.app.modules.onboardingmain.OnboardingMainFragment
 import com.gigforce.app.notification.NotificationConstants
 import com.gigforce.app.utils.NavFragmentsData
+import com.gigforce.app.utils.StringConstants
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.iid.FirebaseInstanceId
 
@@ -44,8 +46,13 @@ class MainActivity : AppCompatActivity(), NavFragmentsData {
 
         navController = this.findNavController(R.id.nav_fragment)
         navController.handleDeepLink(intent)
-
-        if (intent.getStringExtra(IS_DEEPLINK) == "true") {
+        if (intent.getBooleanExtra(StringConstants.NAV_TO_ROLE.value, false)) {
+            navController.navigate(
+                R.id.fragment_role_details, bundleOf(
+                    StringConstants.ROLE_ID.value to intent.getStringExtra(StringConstants.ROLE_ID.value)
+                )
+            )
+        } else if (intent.getStringExtra(IS_DEEPLINK) == "true") {
             handleDeepLink()
         } else {
             proceedWithNormalNavigation()

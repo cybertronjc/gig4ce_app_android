@@ -60,6 +60,10 @@ class RoleDetailsVIewModel(private val callbacks: RoleDetailsCallbacks) : ViewMo
         callbacks.checkForProfileCompletionAndVerification(this)
     }
 
+    fun getUID(): String {
+        return callbacks.getUID()
+    }
+
     override fun <T> checkDataResponse(data: T) {
 
         if (data is ProfileData) {
@@ -69,7 +73,7 @@ class RoleDetailsVIewModel(private val callbacks: RoleDetailsCallbacks) : ViewMo
             dataCheckList.add(data!!)
         }
         if (dataCheckList.size == 2) {
-            observerDataToCheck.value =dataCheckList
+            observerDataToCheck.value = dataCheckList
 
         }
 

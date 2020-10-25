@@ -20,6 +20,7 @@ class RoleDetailsRepository : BaseFirestoreDBRepository(), RoleDetailsCallbacks 
         return "Roles"
     }
 
+
     override fun getRoleDetails(
         id: String?,
         responseCallbacks: RoleDetailsCallbacks.ResponseCallbacks
