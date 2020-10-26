@@ -9,26 +9,26 @@ apply plugin: 'com.google.gms.google-services'
 android {
     signingConfigs {
         debug {
-//          storeFile file('/home/himanshu/Projects/Android/GigForce/KeyStores/gigforceapp.jks')
             storeFile file('../keystore/gigforceapp.jks')
-//            storeFile file('D:\\gig_keystore\\gigforceapp.jks')
-
             storePassword 'gigforce'
             keyAlias 'key0'
             keyPassword 'gigforce'
             }
-//        production {
-//            storeFile file('/Users/apple/Downloads/gigforceprodapp.jks')
-//            storePassword 'gigforce'
-//            keyAlias 'gigforce'
-//            keyPassword 'gigforce'
-//        }
+
         production {
             storeFile file('/Users/apple/Documents/gigforce-upload.jks')
             storePassword 'gig4ce'
             keyAlias 'PlayStoreUploadKey'
             keyPassword 'gig4ce'
         }
+
+
+        //        production {
+//            storeFile file('/Users/apple/Downloads/gigforceprodapp.jks')
+//            storePassword 'gigforce'
+//            keyAlias 'gigforce'
+//            keyPassword 'gigforce'
+//        }
     }
 
     compileSdkVersion 29
