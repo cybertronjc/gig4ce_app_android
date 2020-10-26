@@ -79,6 +79,7 @@ class GigHistoryFragment : BaseFragment(), AdapterGigHistory.AdapterGigHistoryCa
 
     private fun setupRecycler() {
         rv_gigs_gig_history.adapter = adapter
+
         adapter.setCallbacks(this)
         val layoutManager = LinearLayoutManager(activity)
         rv_gigs_gig_history.layoutManager = layoutManager
@@ -117,7 +118,7 @@ class GigHistoryFragment : BaseFragment(), AdapterGigHistory.AdapterGigHistoryCa
         })
         viewModel.observableOnGoingGigs.observe(viewLifecycleOwner, Observer {
             viewModel.showProgress(false)
-            adapter.addOnGoingGigs(it?.data)
+            adapter.addOnGoingGigs(it?.data,viewModel.observableScheduledGigs.value != null && viewModel.observableScheduledGigs.value!!.data != null && viewModel.observableScheduledGigs.value?.data?.isNotEmpty()!!)
         })
         viewModel.observableScheduledGigs.observe(viewLifecycleOwner, Observer {
             viewModel.showProgress(false)

@@ -1012,6 +1012,9 @@
     <string name="apply_now">Apply Now</string>
     <string name="you_will_be_soon_sent_an_invite">You’ll be soon be sent an invite to suitable gigs around you.</string>
     <string name="not_verified">Not Verified</string>
+    <string name="schedules">Schedules</string>
+    <string name="slots">Slots</string>
+    <string name="days_caps">Days</string>
     <string name="number_of_offs">Number of leaves</string>
     <string name="gig_force_tip">Gigforce Tip</string>
     <string name="tip_one">Your education details help build your profile.</string>

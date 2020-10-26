@@ -9,14 +9,14 @@ import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.QuerySnapshot
 
 data class observableDialogResultWrapper(
-    var result : Boolean,
-    var nextNextLessonId : String?
+    var result: Boolean,
+    var nextNextLessonId: String?
 )
 
 class ViewModelAssessmentFragment(private val modelCallbacks: ModelCallbacks) : ViewModel(),
     ModelCallbacks.ModelResponseCallbacks {
 
-    var nextLessonId : String? = null
+    var nextLessonId: String? = null
 
     internal val observableDialogResult: MutableLiveData<observableDialogResultWrapper> by lazy {
         MutableLiveData<observableDialogResultWrapper>();
