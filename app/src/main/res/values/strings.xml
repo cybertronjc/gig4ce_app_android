@@ -807,8 +807,7 @@
     <string name="config_data_not_loaded">Config data not loaded!!</string>
     <string name="day">day</string>
     <string name="days">days</string>
-    <string name="yes">Yes</string>
-    <string name="no">No</string>
+
     <string name="none">None</string>
     <string name="day_and_time">Day and Time</string>
     <string name="weekday">Weekday</string>
@@ -965,7 +964,6 @@
     <string name="in_your_assessment">in your assessment</string>
     <string name="new_cert_added_underlined"><![CDATA[<u>New certificate has been added to profile .</u>]]></string>
     <string name="watch_lesson_again">Watch lesson again</string>
-    <string name="skip">Skip</string>
     <string name="new_bio">New Bio</string>
     <string name="signed">Signed</string>
     <string name="unsigned">Unsigned</string>
@@ -998,11 +996,14 @@
     <string name="i_am_fresher">I am Fresher</string>
     <string name="back_cap">Back</string>
     <string name="questionnaire">Questionnaire</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
     <string name="have_dl">Has Driving License for more than 1 year?</string>
     <string name="own_a_bike">Own a bike/car?</string>
     <string name="ready_to_work_6_days">Ready to work 6 days a week?</string>
     <string name="ready_to_join_immediately">Ready to Join immediately?</string>
     <string name="ready_to_wotk_on_field">Ready to work on field?</string>
+    <string name="skip">Skip</string>
     <string name="application_submission_successfull">Your application is successfully submitted</string>
     <string name="role_activated">Your role is activated.</string>
     <string name="note_if_any_of_the_doc_i_e_adhar_dl_any_one_pan_selfie_video_bank_details_is_not_completed_there_should_be_a_note_to_show_complete_your_verification_for_quick_activation_of_profile">Note: If any of the doc i.e. adhar/DL(any one), PAN, Selfie video, Bank details is not completed, there should be a note to show “Complete your Verification for quick Activation of Profile</string>
@@ -1014,9 +1015,23 @@
     <string name="schedules">Schedules</string>
     <string name="slots">Slots</string>
     <string name="days_caps">Days</string>
+    <string name="number_of_offs">Number of leaves</string>
+    <string name="gig_force_tip">Gigforce Tip</string>
+    <string name="tip_one">Your education details help build your profile.</string>
+    <string name="tip_two">Your work experience helps find similar gigs for you.</string>
+    <string name="tip_three">Adding your skills helps recommend suitable gigs.</string>
+    <string name="tip_four">Sharing your past achievements highlights your profile.</string>
+    <string name="tip_five">Adding a profile photo shows off your personality.</string>
+    <string name="tip_six">How many languages can you speak in?</string>
+    <string name="tip_seven">Tell me 2 lines that best describe your.</string>
+    <string name="tip_eight">Add your permanent address to complete verification?</string>
+    <string name="tip_nine">How far are you willing to travel for work daily?</string>
+    <string name="tip_ten">What is your daily earning expectation?</string>
+    <string name="tip_eleven">How many days during the week are you willing to work?</string>
+    <string name="tip_twelve">Are you willing to work during the weekends?</string>
+    <string name="tip_thirteen">Would you want to work from home?</string>
     <string name="total_number_of_days">Total number of days</string>
     <string name="total_working_days">Total working days</string>
-    <string name="number_of_offs">Number of offs</string>
 
 
 

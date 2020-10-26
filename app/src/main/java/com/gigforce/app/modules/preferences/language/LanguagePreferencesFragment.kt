@@ -48,6 +48,7 @@ class LanguagePreferencesFragment : BaseFragment() {
         initViewModel()
     }
 
+
     private fun initViewModel() {
         appConfigViewModel
             .activeLanguages
