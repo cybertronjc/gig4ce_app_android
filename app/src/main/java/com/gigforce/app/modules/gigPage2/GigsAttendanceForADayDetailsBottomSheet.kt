@@ -142,41 +142,49 @@ class GigsAttendanceForADayDetailsBottomSheet : BottomSheetDialogFragment() {
             regularise_layout.gone()
 
         } else {
-            //Check if eligible for regularisation
 
-            val currentTime = LocalDateTime.now()
-            if (currentTime.isAfter(gigStartDateTime)) {
-                val daysDiff = gigStartDateTime.until(currentTime, ChronoUnit.DAYS)
+            if(gig.hasRequestRegularisation()){
 
-                if (daysDiff <= 3) {
-                    //Eligible
 
-                    if (gig.isCheckInMarked()) {
-                        punch_in_time.text =
-                            "Punch In\n${timeFormatter.format(gig.attendance!!.checkInTime)}"
-                        gig_timer_tv.text = "00 : 00 mins"
-                        punch_out_time.text = "Punch Out\n--:--"
-                        regularisation_text.text = "Looks like you forgot to Checkout. Regularise"
+
+            } else{
+
+                //Check if eligible for regularisation
+                val currentTime = LocalDateTime.now()
+                if (currentTime.isAfter(gigStartDateTime)) {
+                    val daysDiff = gigStartDateTime.until(currentTime, ChronoUnit.DAYS)
+
+                    if (daysDiff <= 3) {
+                        //Eligible
+
+                        if (gig.isCheckInMarked()) {
+                            punch_in_time.text =
+                                "Punch In\n${timeFormatter.format(gig.attendance!!.checkInTime)}"
+                            gig_timer_tv.text = "00 : 00 mins"
+                            punch_out_time.text = "Punch Out\n--:--"
+                            regularisation_text.text = "Looks like you forgot to Checkout. Regularise"
+                        } else {
+                            punch_in_time.text = "Punch In\n--:--}"
+                            gig_timer_tv.text = "00 : 00 mins"
+                            punch_out_time.text = "Punch Out\n--:--"
+                            regularisation_text.text = "Looks like you forgot to Checkout. Regularise"
+                        }
                     } else {
+                        //Not eligible
                         punch_in_time.text = "Punch In\n--:--}"
                         gig_timer_tv.text = "00 : 00 mins"
                         punch_out_time.text = "Punch Out\n--:--"
-                        regularisation_text.text = "Looks like you forgot to Checkout. Regularise"
+                        regularise_layout.gone()
                     }
                 } else {
-                    //Not eligible
+                    //Not Eligible , Future gig
+
                     punch_in_time.text = "Punch In\n--:--}"
                     gig_timer_tv.text = "00 : 00 mins"
                     punch_out_time.text = "Punch Out\n--:--"
                     regularise_layout.gone()
                 }
-            } else {
-                //Not Eligible , Future gig
 
-                punch_in_time.text = "Punch In\n--:--}"
-                gig_timer_tv.text = "00 : 00 mins"
-                punch_out_time.text = "Punch Out\n--:--"
-                regularise_layout.gone()
             }
         }
 
