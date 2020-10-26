@@ -3,6 +3,7 @@ package com.gigforce.app.modules.explore_by_role
 import android.os.Build
 import android.os.Bundle
 import android.view.*
+import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -12,6 +13,7 @@ import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.profile.models.Language
 import com.gigforce.app.utils.AddLangugeRvItemDecorator
+import com.gigforce.app.utils.StringConstants
 import kotlinx.android.synthetic.main.layout_fragment_add_language.*
 
 class AddLanguageFragment : BaseFragment(), AdapterAddLanguage.AdapterAddLanguageCallbacks {
@@ -27,6 +29,17 @@ class AddLanguageFragment : BaseFragment(), AdapterAddLanguage.AdapterAddLanguag
         return inflateView(R.layout.layout_fragment_add_language, inflater, container)
     }
 
+    override fun onBackPressed(): Boolean {
+        navFragmentsData?.setData(
+            bundleOf(
+                StringConstants.BACK_PRESSED.value to true
+
+            )
+        )
+        return super.onBackPressed()
+
+    }
+
     private var adapter: AdapterAddLanguage? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -38,6 +51,12 @@ class AddLanguageFragment : BaseFragment(), AdapterAddLanguage.AdapterAddLanguag
 
     private fun initClicks() {
         iv_close_add_bio.setOnClickListener {
+            navFragmentsData?.setData(
+                bundleOf(
+                    StringConstants.BACK_PRESSED.value to true
+
+                )
+            )
             popBackState()
         }
     }
@@ -46,6 +65,8 @@ class AddLanguageFragment : BaseFragment(), AdapterAddLanguage.AdapterAddLanguag
         addLanguageViewModel.observableSuccess.observe(viewLifecycleOwner, Observer {
             pb_add_language.gone()
             if (it == "true") {
+                navFragmentsData?.setData(bundleOf(StringConstants.MOVE_TO_NEXT_STEP.value to true))
+
                 popBackState()
             } else {
                 showToast(it!!)
@@ -117,6 +138,16 @@ class AddLanguageFragment : BaseFragment(), AdapterAddLanguage.AdapterAddLanguag
             pb_add_language.visible()
             addLanguageViewModel.addLanguages(items)
         }
+    }
+
+    override fun goBack() {
+        navFragmentsData?.setData(
+            bundleOf(
+                StringConstants.BACK_PRESSED.value to true
+
+            )
+        )
+        popBackState()
     }
 
 }

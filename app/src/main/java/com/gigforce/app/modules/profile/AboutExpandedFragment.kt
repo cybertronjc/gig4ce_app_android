@@ -135,7 +135,7 @@ class AboutExpandedFragment : ProfileBaseFragment(), ProfileCardBgCallbacks,
                     ResourcesCompat.getColor(resources, R.color.app_orange, null)
             } else {
                 about_top_profile.about_me_verification_layout.verification_status_tv.text =
-                    "Not Verified"
+                    getString(R.string.not_verified)
                 about_top_profile.about_me_verification_layout.verification_status_tv.setTextColor(
                     ResourcesCompat.getColor(resources, R.color.red, null)
                 )

@@ -131,17 +131,48 @@ class PreferencesFragment : BaseFragment() {
         arrPrefrancesList.addAll(getPrefrencesData())
         recyclerGenericAdapter.notifyDataSetChanged()
     }
+
     fun getPrefrencesData(): ArrayList<PreferencesScreenItem> {
         val prefrencesItems = ArrayList<PreferencesScreenItem>()
         // prefrencesItems.add(PreferencesScreenItem(R.drawable.ic_link_black,"Category",""))
         // prefrencesItems.add(PreferencesScreenItem(R.drawable.ic_group_black,"Roles","At atm"))
-        prefrencesItems.add(PreferencesScreenItem(R.drawable.ic_clock_black,getString(R.string.day_and_time),viewModel.getDateTimeSubtitle()))
-        prefrencesItems.add(PreferencesScreenItem(R.drawable.ic_location_pin_black,getString(R.string.location),viewModel.getLocation()))
-        prefrencesItems.add(PreferencesScreenItem(R.drawable.ic_credit_card_black,getString(R.string.earning),viewModel.getEarning()))
-        prefrencesItems.add(PreferencesScreenItem(0,getString(R.string.others),""))
-        prefrencesItems.add(PreferencesScreenItem(R.drawable.ic_language_black,getString(R.string.app_language),viewModel.getLanguage()))
+        prefrencesItems.add(
+            PreferencesScreenItem(
+                R.drawable.ic_clock_black,
+                getString(R.string.day_and_time),
+                viewModel.getDateTimeSubtitle()
+            )
+        )
+        prefrencesItems.add(
+            PreferencesScreenItem(
+                R.drawable.ic_location_pin_black,
+                getString(R.string.location),
+                viewModel.getLocation()
+            )
+        )
+        prefrencesItems.add(
+            PreferencesScreenItem(
+                R.drawable.ic_credit_card_black,
+                getString(R.string.earning),
+                viewModel.getEarning()
+            )
+        )
+        prefrencesItems.add(PreferencesScreenItem(0, getString(R.string.others), ""))
+        prefrencesItems.add(
+            PreferencesScreenItem(
+                R.drawable.ic_language_black,
+                getString(R.string.app_language),
+                sharedDataInterface.getAppLanguageName()!!
+            )
+        )
         // prefrencesItems.add(PreferencesScreenItem(R.drawable.ic_notifications_on_black,"Notification",""))
-        prefrencesItems.add(PreferencesScreenItem(R.drawable.ic_power_button_black,getString(R.string.sign_out),""))
+        prefrencesItems.add(
+            PreferencesScreenItem(
+                R.drawable.ic_power_button_black,
+                getString(R.string.sign_out),
+                ""
+            )
+        )
         return prefrencesItems
     }
 
@@ -176,13 +207,11 @@ class PreferencesFragment : BaseFragment() {
             signOutView.visibility = View.GONE
             visibleInvisibleMainItemView(constraintView, othersTV, false)
             setItemAsOther(othersTV, obj)
-        }
-        else if (position == TITLE_SIGNOUT) {
+        } else if (position == TITLE_SIGNOUT) {
             signOutView.visibility = View.VISIBLE
             hideMainConstraintViewAndOthersViewInItemView(constraintView, othersTV)
             setItemAsSignOut(signOutTV, signOutIV, obj)
-        }
-        else {
+        } else {
             signOutView.visibility = View.GONE
             visibleInvisibleMainItemView(constraintView, othersTV, true)
             setItems(imageView, title, subTitle, obj)

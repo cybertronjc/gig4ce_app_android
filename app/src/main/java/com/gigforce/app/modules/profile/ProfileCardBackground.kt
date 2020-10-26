@@ -121,23 +121,7 @@ class ProfileCardBackground : CardView {
                             }
 
                         }
-                        if (enableDeletion) {
-                            widget.del_button.visibility =
-                                if (location == 0) View.GONE else View.VISIBLE
-                            widget.del_button.setOnClickListener {
-                                if (cardTitle == context.getString(R.string.contact)) {
-                                    callbacks?.editNumber(
-                                        widget.setContactNumber,
-                                        widget.setIsWhatsappCBChecked,
-                                        widget.setAsRegistered,
-                                        true
-                                    )
-                                } else if (cardTitle == context.getString(R.string.emails)) {
-                                    callbacks?.editEmail(widget.setEmail, true)
 
-                                }
-                            }
-                        }
                     }
 
                     viewgroup.addView(widget)

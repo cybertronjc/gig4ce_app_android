@@ -95,7 +95,7 @@
             android:layout_height="@dimen/height_select_lang_item"
             android:layout_marginLeft="15dp"
             android:paddingLeft="11dp"
-            android:hint="@string/kannada"
+            android:hint="kn"
             android:enabled="false"
             style="@style/Theme.RadioButtonLipstickPink"
             android:text="@string/kannada"

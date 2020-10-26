@@ -129,19 +129,34 @@
                 app:layout_constraintTop_toBottomOf="@id/tv_scenario_label_assess_frag"
                 tools:text="A lady enters the store apparently trying to search for something. You notice her from a short distance." />
 
-            <com.gigforce.app.utils.widgets.ImageViewRounded
-                android:id="@+id/iv_scenario_value_assess_frag"
+            <FrameLayout
+                android:id="@+id/fl_scenario_iv"
                 android:layout_width="0dp"
-                android:layout_height="@dimen/size_252"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/size_16"
                 android:layout_marginTop="@dimen/size_8"
                 android:layout_marginEnd="@dimen/size_16"
-                android:adjustViewBounds="true"
-                android:scaleType="centerCrop"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_scenario_value_assess_frag"
-                app:radius="@dimen/size_4" />
+                app:layout_constraintTop_toBottomOf="@id/tv_scenario_value_assess_frag">
+
+                <com.gigforce.app.utils.widgets.ImageViewRounded
+                    android:id="@+id/iv_scenario_value_assess_frag"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/size_252"
+
+                    android:adjustViewBounds="true"
+                    android:scaleType="centerCrop"
+                    app:radius="@dimen/size_4" />
+
+                <ImageView
+                    android:id="@+id/scenrio_placeholder"
+                    android:layout_width="@dimen/size_24"
+                    android:layout_height="@dimen/size_24"
+                    android:layout_gravity="center"
+                    android:visibility="gone" />
+            </FrameLayout>
+
 
             <TextView
                 android:id="@+id/tv_ques_no_assess_frag"
@@ -156,7 +171,7 @@
                 android:textSize="@dimen/font_16"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/iv_scenario_value_assess_frag"
+                app:layout_constraintTop_toBottomOf="@+id/fl_scenario_iv"
                 tools:text="Ques 1/10 :" />
 
             <TextView

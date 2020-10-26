@@ -77,6 +77,7 @@ class MainLearningFragment : BaseFragment() {
         observerProfile()
 
         initLearningViewModel()
+        imageView30.gone()
     }
     private fun initLearningViewModel() {
         learningViewModel

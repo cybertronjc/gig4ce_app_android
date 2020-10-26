@@ -479,7 +479,7 @@ class AssessmentFragment : BaseFragment(),
     }
 
 
-    override fun assessmentState(state: Int, nextLesson : String?) {
+    override fun assessmentState(state: Int, nextLesson: String?) {
         viewModelAssessmentFragment.switchAsPerState(state, nextLesson)
     }
 
@@ -549,19 +549,19 @@ class AssessmentFragment : BaseFragment(),
             iv_scenario_value_assess_frag.visibility = View.GONE
         } else {
             iv_scenario_value_assess_frag.visibility = View.VISIBLE
+            scenrio_placeholder.visible()
+            scenrio_placeholder.setImageDrawable(getCircularProgressDrawable())
+
             GlideApp.with(this.requireContext())
                 .asBitmap()
-                .load(Path).placeholder(
-                    com.gigforce.app.utils.getCircularProgressDrawable(
-                        requireContext()
-                    )
-                )
+                .load(Path)
                 .into(object : CustomTarget<Bitmap>() {
                     override fun onResourceReady(
                         resource: Bitmap,
                         transition: com.bumptech.glide.request.transition.Transition<in Bitmap>?
                     ) {
                         iv_scenario_value_assess_frag.setImageBitmap(resource)
+                        scenrio_placeholder.gone()
                     }
 
                     override fun onLoadCleared(placeholder: Drawable?) {
@@ -580,7 +580,7 @@ class AssessmentFragment : BaseFragment(),
         return true
     }
 
-    private val navController : NavController by lazy {
+    private val navController: NavController by lazy {
         findNavController()
     }
 

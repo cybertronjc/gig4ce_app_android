@@ -51,8 +51,10 @@ class ViewModelAssessmentFragment(private val modelCallbacks: ModelCallbacks) : 
     fun switchAsPerState(state: Int, nextNextLessonId: String?) {
         when (state) {
             AssessmentDialog.STATE_INIT -> observableDialogInit.value = null
-            AssessmentDialog.STATE_PASS -> observableDialogResult.value = observableDialogResultWrapper(true,nextNextLessonId)
-            AssessmentDialog.STATE_REAPPEAR -> observableDialogResult.value = observableDialogResultWrapper(false,nextNextLessonId)
+            AssessmentDialog.STATE_PASS -> observableDialogResult.value =
+                observableDialogResultWrapper(true, nextNextLessonId)
+            AssessmentDialog.STATE_REAPPEAR -> observableDialogResult.value =
+                observableDialogResultWrapper(false, nextNextLessonId)
         }
     }
 
@@ -63,8 +65,8 @@ class ViewModelAssessmentFragment(private val modelCallbacks: ModelCallbacks) : 
         observableShowHideSwipeDownIcon.value = if (reached) View.GONE else View.VISIBLE
     }
 
-    fun getQuestionaire(lessonId : String) {
-        modelCallbacks.getQuestionaire(lessonId,this)
+    fun getQuestionaire(lessonId: String) {
+        modelCallbacks.getQuestionaire(lessonId, this)
     }
 
     fun submitAnswers(id: String?) {
@@ -77,6 +79,9 @@ class ViewModelAssessmentFragment(private val modelCallbacks: ModelCallbacks) : 
             if(it.size>0)
                 observableAssessmentData.value = it[0]
         }
+        if (value?.documents?.isNotEmpty() == true)
+            observableAssessmentData.value =
+                value?.toObjects(AssementQuestionsReponse::class.java)!![0]
     }
 
     override fun submitAnswerSuccess() {

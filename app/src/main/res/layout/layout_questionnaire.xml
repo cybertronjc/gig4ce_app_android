@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:padding="@dimen/size_5">
+
+    <LinearLayout
+        android:id="@+id/ll_questionnaire"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_field"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+
+            android:layout_weight="7"
+            android:gravity="start|center_vertical"
+            android:textSize="@dimen/font_16" />
+
+
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/cb_yes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/lato"
+            android:text="@string/yes" />
+
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/cb_no"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/lato"
+            android:text="@string/no" />
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/line_questionnaire"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/size_2"
+        android:layout_below="@+id/ll_questionnaire"
+        android:background="#68979797" />
+
+</RelativeLayout>
