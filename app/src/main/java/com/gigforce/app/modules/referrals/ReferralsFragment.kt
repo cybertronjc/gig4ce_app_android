@@ -15,6 +15,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.request.RequestOptions
+import com.gigforce.app.BuildConfig
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.gone
@@ -124,7 +125,7 @@ class ReferralsFragment : BaseFragment() {
                         }.addOnFailureListener {
                             // Error
                             // ...
-                            showToast(it.message!!);
+                            showToast(it.message!!)
                             pb_referrals_frag.gone()
                         }
 
@@ -229,7 +230,7 @@ class ReferralsFragment : BaseFragment() {
     fun buildDeepLink(deepLink: Uri): Uri {
         val dynamicLink = FirebaseDynamicLinks.getInstance().createDynamicLink()
             .setLink(Uri.parse(deepLink.toString()))
-            .setDomainUriPrefix("https://gigforce.page.link/")
+            .setDomainUriPrefix(BuildConfig.REFERRAL_BASE_URL)
             // Open links with this app on Android
             .setAndroidParameters(DynamicLink.AndroidParameters.Builder().build())
             // Open links with com.example.ios on iOS

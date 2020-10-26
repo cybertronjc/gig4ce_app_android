@@ -8,8 +8,7 @@
 /build
 /captures
 .externalNativeBuild
-.cxx
-
+/keystore
 # User-specific configurations
 .idea/caches/
 .idea/libraries/

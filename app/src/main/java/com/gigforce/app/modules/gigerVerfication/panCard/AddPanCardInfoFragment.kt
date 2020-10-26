@@ -68,22 +68,20 @@ class AddPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetActio
             findNavController().popBackStack(R.id.gigerVerificationFragment, false)
         }
 
-        helpIconIV.setOnClickListener {
+        helpIconViewIV.setOnClickListener {
+            showWhyWeNeedThisDialog()
+        }
 
-            WhyWeNeedThisBottomSheet.launch(
-                childFragmentManager = childFragmentManager,
-                title = getString(R.string.why_do_we_need_this),
-                content = getString(R.string.why_do_we_need_this_pan)
-            )
+        whyWeNeedThisViewTV.setOnClickListener {
+            showWhyWeNeedThisDialog()
+        }
+
+        helpIconIV.setOnClickListener {
+            showWhyWeNeedThisDialog()
         }
 
         whyWeNeedThisTV.setOnClickListener {
-
-            WhyWeNeedThisBottomSheet.launch(
-                childFragmentManager = childFragmentManager,
-                title = getString(R.string.why_do_we_need_this),
-                content = getString(R.string.why_do_we_need_this_pan)
-            )
+            showWhyWeNeedThisDialog()
         }
 
         panImageHolder.uploadDocumentCardView.setOnClickListener {
@@ -191,6 +189,14 @@ class AddPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetActio
                     }
                 }
             }
+    }
+
+    private fun showWhyWeNeedThisDialog() {
+        WhyWeNeedThisBottomSheet.launch(
+            childFragmentManager = childFragmentManager,
+            title = getString(R.string.why_do_we_need_this),
+            content = getString(R.string.why_do_we_need_this_pan)
+        )
     }
 
 

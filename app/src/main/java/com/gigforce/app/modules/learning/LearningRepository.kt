@@ -223,11 +223,22 @@ class LearningRepository constructor(
         }
     }
 
+    suspend fun courseProgressDataGenerated(courseId: String) : Boolean{
+        return db.collection(COURSE_PROGRESS_NAME)
+            .whereEqualTo("uid", getUID())
+            .whereEqualTo("course_id", courseId)
+            .whereEqualTo(TYPE, TYPE_COURSE)
+            .getOrThrow()
+            .isEmpty
+            .not()
+    }
+
     suspend fun getCourseProgress(courseId: String): CourseProgress {
 
         val querySnap = db.collection(COURSE_PROGRESS_NAME)
             .whereEqualTo("uid", getUID())
             .whereEqualTo("course_id", courseId)
+            .whereEqualTo(TYPE, TYPE_COURSE)
             .getOrThrow()
 
         if (querySnap.isEmpty) {
@@ -262,7 +273,9 @@ class LearningRepository constructor(
             return emptyList()
         } else {
             return querySnap.documents.map {
-                it.toObject(ModuleProgress::class.java)!!
+                val moduleProgress = it.toObject(ModuleProgress::class.java)!!
+                moduleProgress.progressId = it.id
+                moduleProgress
             }
         }
     }
@@ -349,8 +362,7 @@ class LearningRepository constructor(
             moduleProgress.lessonsProgress = lessonProgressList
         }
 
-        val updatedLessonProgressList = moduleProgress.lessonsProgress.sortedBy { it.priority }
-
+        val updatedLessonProgressList = moduleProgress.lessonsProgress.filter { it.isActive }.sortedBy { it.priority }
         var nextLessonProgress: LessonProgress? = null
 
         for (i in updatedLessonProgressList.indices) {
@@ -373,7 +385,7 @@ class LearningRepository constructor(
         var completedLesson = 0
         var totalLessons = 0
 
-        moduleProgress.lessonsProgress.forEach {
+        moduleProgress.lessonsProgress.filter { it.isActive }.forEach {
             totalLessons++
             if (it.completed) completedLesson++
         }
@@ -393,6 +405,9 @@ class LearningRepository constructor(
             var totalModules = 0
             var completedModules = 0
             getCourseModulesProgress(courseId)
+                .filter {
+                    it.isActive
+                }
                 .forEach {
                     if (it.completed)
                         completedModules++
@@ -1069,22 +1084,167 @@ class LearningRepository constructor(
     }
 
     suspend fun syncCourseProgressData(courseId: String) {
-
-        val courseDetails = getCourseDetails(courseId)
         val courseProgress = getCourseProgress(courseId)
 
         val modules = getModules(courseId)
-        val moduleProgress = getCourseModulesProgress(courseId)
+        val moduleProgress = getCourseModulesProgress(courseId).toMutableList()
 
-        //Deleting progress of modules and lessons deleted
-        val filteredModulesProgressData = moduleProgress.filter {moduleProg ->
-            modules.find { it.id == moduleProg.moduleId } != null
+        //Marking Progress as inactive of modules which have been removed
+        moduleProgress.forEach { progress ->
+            progress.isActive = modules.find { progress.moduleId == it.id } != null
         }
 
+        //marking progress inactive which have been removed from module
+        for (i in 0 until moduleProgress.size) {
+            val moduleProgressData = moduleProgress[i]
+            val moduleLessons = getModuleLessons(moduleProgressData.moduleId)
+
+            moduleProgressData.lessonsProgress.forEach { lessonProg ->
+                lessonProg.isActive = moduleLessons.find { it.id == lessonProg.lessonId } != null
+            }
+        }
+
+        //Adding newly Added modules
+        val newsModulesAdded = modules.filter { module ->
+            moduleProgress.find { it.moduleId == module.id } == null
+        }
+
+        val newlyModulesProgressData = newsModulesAdded.map {
+
+            val lessonProgress =
+                getModuleLessons(courseId, it.id).sortedBy { courseContent ->
+                    courseContent.priority
+                }.map { cc ->
+                    LessonProgress(
+                        uid = getUID(),
+                        courseId = courseId,
+                        moduleId = cc.moduleId,
+                        lessonId = cc.id,
+                        lessonStartDate = Timestamp.now(),
+                        lessonCompletionDate = null,
+                        ongoing = false,
+                        priority = cc.priority,
+                        completed = false,
+                        lessonType = cc.type
+                    )
+                }
+
+            if (lessonProgress.isNotEmpty()) {
+                lessonProgress.get(0).ongoing = true
+            }
+
+            val moduleProg = ModuleProgress(
+                uid = getUID(),
+                courseId = courseId,
+                moduleId = it.id,
+                moduleStartDate = Timestamp.now(),
+                moduleCompletionDate = null,
+                ongoing = false,
+                completed = false,
+                lessonsTotal = lessonProgress.size,
+                lessonsProgress = lessonProgress
+            )
+
+            addNewModuleProgress(moduleProg)
+        }
+        moduleProgress.addAll(newlyModulesProgressData)
 
 
+
+        //adding progress of lessons which have been added to modules newly
+        for (moduleData in modules) {
+
+            val moduleLessons = getModuleLessons(moduleData.id)
+            val moduleLessonsProgress = moduleProgress.find { it.moduleId == moduleData.id }!!
+
+            val newlyAddedLessons = moduleLessons.filter { lesson ->
+                moduleLessonsProgress.lessonsProgress.find { it.lessonId == lesson.id } == null
+            }
+
+            //Adding Newly Added lessons to module lesson progress list
+            moduleProgress.forEach {
+
+                if (it.moduleId == moduleData.id) {
+                    val lessonList = it.lessonsProgress.toMutableList()
+
+                    newlyAddedLessons.forEach {
+                        lessonList.add(
+                            LessonProgress(
+                                uid = getUID(),
+                                courseId = it.courseId,
+                                moduleId = it.moduleId,
+                                lessonId = it.id,
+                                lessonStartDate = Timestamp.now(),
+                                lessonCompletionDate = null,
+                                ongoing = false,
+                                priority = it.priority,
+                                completed = false,
+                                lessonType = it.type
+                            )
+                        )
+                    }
+
+                    it.lessonsProgress = lessonList
+                }
+            }
+        }
+
+        //Updating total lessons and other stuff
+        moduleProgress
+            .filter{
+                it.isActive
+            }.forEach {
+                var totalLessons = 0
+                var completedLessons = 0
+
+                it.lessonsProgress.filter { it.isActive }.forEach {
+
+                    totalLessons++
+                    if (it.completed) completedLessons++
+                }
+
+                //Updating count only if it differs
+                it.lessonsTotal = totalLessons
+                it.lessonsCompleted = completedLessons
+
+                if(it.lessonsTotal == it.lessonsCompleted){
+                    it.completed = true
+
+                    if (it.moduleCompletionDate != null) {
+                        it.moduleCompletionDate = Timestamp.now()
+                    }
+                }
+                updateModuleProgress(it.progressId, it)
+            }
+
+
+        //Updating course progress info
+        var modulesCompleted = 0
+        var totalModules = 0
+
+        moduleProgress.forEach {
+            totalModules++
+            if(it.completed) modulesCompleted++
+        }
+
+        if(courseProgress.totalModules!= totalModules || courseProgress.completedModules != modulesCompleted){
+            courseProgress.completed = modulesCompleted == totalModules
+
+            if (courseProgress.courseCompletionDate != null) {
+                courseProgress.courseCompletionDate = Timestamp.now()
+            }
+
+            updateCourseProgress(courseProgress.progressId,courseProgress)
+        }
     }
 
+    private suspend fun addNewModuleProgress(moduleProgress : ModuleProgress) : ModuleProgress{
+        val docRef = db.collection(COURSE_PROGRESS_NAME)
+            .addOrThrow(moduleProgress)
+
+        moduleProgress.progressId = docRef.id
+        return  moduleProgress
+    }
 
     companion object {
         private const val COLLECTION_NAME = "Course_blocks"
