@@ -10,7 +10,7 @@ android {
     signingConfigs {
         debug {
 //          storeFile file('/home/himanshu/Projects/Android/GigForce/KeyStores/gigforceapp.jks')
-            storeFile file('/Users/apple/Documents/gigforceapp.jks')
+            storeFile file('../keystore/gigforceapp.jks')
 //            storeFile file('D:\\gig_keystore\\gigforceapp.jks')
 
             storePassword 'gigforce'
@@ -37,8 +37,8 @@ android {
         applicationId "com.gigforce.app"
         minSdkVersion 23
         targetSdkVersion 29
-        versionCode 67
-        versionName "1.24.5"
+        versionCode 68
+        versionName "1.25.0"
 
         vectorDrawables.useSupportLibrary = true
 
