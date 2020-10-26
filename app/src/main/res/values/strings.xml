@@ -807,8 +807,7 @@
     <string name="config_data_not_loaded">Config data not loaded!!</string>
     <string name="day">day</string>
     <string name="days">days</string>
-    <string name="yes">Yes</string>
-    <string name="no">No</string>
+
     <string name="none">None</string>
     <string name="day_and_time">Day and Time</string>
     <string name="weekday">Weekday</string>
@@ -965,7 +964,6 @@
     <string name="in_your_assessment">in your assessment</string>
     <string name="new_cert_added_underlined"><![CDATA[<u>New certificate has been added to profile .</u>]]></string>
     <string name="watch_lesson_again">Watch lesson again</string>
-    <string name="skip">Skip</string>
     <string name="new_bio">New Bio</string>
     <string name="signed">Signed</string>
     <string name="unsigned">Unsigned</string>
@@ -1014,8 +1012,6 @@
     <string name="apply_now">Apply Now</string>
     <string name="you_will_be_soon_sent_an_invite">You’ll be soon be sent an invite to suitable gigs around you.</string>
     <string name="not_verified">Not Verified</string>
-    <string name="total_number_of_days">Total number of days</string>
-    <string name="total_working_days">Total working days</string>
     <string name="number_of_offs">Number of leaves</string>
     <string name="gig_force_tip">Gigforce Tip</string>
     <string name="tip_one">Your education details help build your profile.</string>
@@ -1033,7 +1029,6 @@
     <string name="tip_thirteen">Would you want to work from home?</string>
     <string name="total_number_of_days">Total number of days</string>
     <string name="total_working_days">Total working days</string>
-    <string name="number_of_offs">Number of offs</string>
 
 
 
