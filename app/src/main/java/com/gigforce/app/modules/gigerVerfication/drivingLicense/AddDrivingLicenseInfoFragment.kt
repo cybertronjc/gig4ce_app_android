@@ -102,30 +102,26 @@ class AddDrivingLicenseInfoFragment : BaseFragment() {
             findNavController().popBackStack(R.id.gigerVerificationFragment, false)
         }
 
-        helpIconIV.setOnClickListener {
+        helpIconViewIV.setOnClickListener {
+            showWhyWeNeedThisDialog()
+        }
 
-            WhyWeNeedThisBottomSheet.launch(
-                childFragmentManager = childFragmentManager,
-                title = getString(R.string.why_do_we_need_this),
-                content = getString(R.string.why_we_need_this_dl)
-            )
+        whyWeNeedThisViewTV.setOnClickListener {
+            showWhyWeNeedThisDialog()
+        }
+
+        helpIconIV.setOnClickListener {
+            showWhyWeNeedThisDialog()
         }
 
         whyWeNeedThisTV.setOnClickListener {
-
-            WhyWeNeedThisBottomSheet.launch(
-                childFragmentManager = childFragmentManager,
-                title = getString(R.string.why_do_we_need_this),
-                content = getString(R.string.why_we_need_this_dl)
-            )
+            showWhyWeNeedThisDialog()
         }
 
         dlAvailaibilityOptionRG.setOnCheckedChangeListener { _, checkedId ->
 
             if (checkedId == R.id.dlYesRB) {
                 showDLImageAndInfoLayout()
-
-
 
                 if (confirmDLDataCB.isChecked
                     && ((dlSubmitSliderBtn.text == getString(R.string.update)
@@ -272,6 +268,14 @@ class AddDrivingLicenseInfoFragment : BaseFragment() {
         dlBackImageHolder.uploadImageLayout.reuploadBtn.setOnClickListener {
             openCameraAndGalleryOptionForBackSideImage()
         }
+    }
+
+    private fun showWhyWeNeedThisDialog() {
+        WhyWeNeedThisBottomSheet.launch(
+            childFragmentManager = childFragmentManager,
+            title = getString(R.string.why_do_we_need_this),
+            content = getString(R.string.why_we_need_this_dl)
+        )
     }
 
     override fun onBackPressed(): Boolean {

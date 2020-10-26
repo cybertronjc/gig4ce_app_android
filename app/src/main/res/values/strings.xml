@@ -807,9 +807,11 @@
     <string name="config_data_not_loaded">Config data not loaded!!</string>
     <string name="day">day</string>
     <string name="days">days</string>
-
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
     <string name="none">None</string>
     <string name="day_and_time">Day and Time</string>
+    <string name="weekday">Weekday</string>
     <string name="_00_04days">00-04days</string>
     <string name="weekends">Weekends</string>
     <string name="rs">Rs</string>
@@ -886,7 +888,7 @@
     <string name="video_resume_pending_html"><![CDATA[Your Video resume is Pending , <font color=\'#060606\'><u>Click here</u></font> to  complete.]]></string>
     <string name="check_out">Check Out</string>
     <string name="check_in">Check In</string>
-    <string name="upcoming_gig_">Upcoming Gig</string>
+    <string name="upcoming_gig_">Scheduled gigs</string>
     <string name="explore_by_role_">Explore By Role</string>
     <string name="monthy_goal">Monthy Goal</string>
     <string name="per_month_goal">Per month goal</string>
@@ -963,6 +965,7 @@
     <string name="in_your_assessment">in your assessment</string>
     <string name="new_cert_added_underlined"><![CDATA[<u>New certificate has been added to profile .</u>]]></string>
     <string name="watch_lesson_again">Watch lesson again</string>
+    <string name="skip">Skip</string>
     <string name="new_bio">New Bio</string>
     <string name="signed">Signed</string>
     <string name="unsigned">Unsigned</string>
@@ -1015,6 +1018,10 @@
     <string name="slots">Slots</string>
     <string name="weekday">Weekday</string>
     <string name="days_caps">Days</string>
+    <string name="total_number_of_days">Total number of days</string>
+    <string name="total_working_days">Total working days</string>
+    <string name="number_of_offs">Number of offs</string>
+
 
 
 </resources>

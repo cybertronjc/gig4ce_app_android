@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
+import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProviders
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
@@ -52,18 +53,12 @@ class AroundCurrentAddressFragment : BaseFragment() {
             }
         })
 
-        back_arrow_iv.setOnClickListener {
-            workFromHomeSwitch.setOnCheckedChangeListener({ buttonView, isChecked ->
-                if (isChecked) {
-                    around_current_add_cl.visibility = View.VISIBLE
-                } else {
-                    around_current_add_cl.visibility = View.GONE
-                }
-            })
+        workFromHomeSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
+                around_current_add_cl.isVisible = isChecked
+        }
 
-            back_arrow_iv.setOnClickListener {
-                activity?.onBackPressed()
-            }
+        back_arrow_iv.setOnClickListener {
+            activity?.onBackPressed()
         }
     }
 

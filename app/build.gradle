@@ -9,26 +9,26 @@ apply plugin: 'com.google.gms.google-services'
 android {
     signingConfigs {
         debug {
-//          storeFile file('/home/himanshu/Projects/Android/GigForce/KeyStores/gigforceapp.jks')
-//            storeFile file('/Users/apple/Documents/gigforceapp.jks')
-            storeFile file('C:\\rohit\\gigforceapp.jks')
-
+            storeFile file('../keystore/gigforceapp.jks')
             storePassword 'gigforce'
             keyAlias 'key0'
             keyPassword 'gigforce'
             }
-//        production {
-//            storeFile file('/Users/apple/Downloads/gigforceprodapp.jks')
-//            storePassword 'gigforce'
-//            keyAlias 'gigforce'
-//            keyPassword 'gigforce'
-//        }
+
         production {
             storeFile file('/Users/apple/Documents/gigforce-upload.jks')
             storePassword 'gig4ce'
             keyAlias 'PlayStoreUploadKey'
             keyPassword 'gig4ce'
         }
+
+
+        //        production {
+//            storeFile file('/Users/apple/Downloads/gigforceprodapp.jks')
+//            storePassword 'gigforce'
+//            keyAlias 'gigforce'
+//            keyPassword 'gigforce'
+//        }
     }
 
     compileSdkVersion 29
@@ -37,8 +37,8 @@ android {
         applicationId "com.gigforce.app"
         minSdkVersion 23
         targetSdkVersion 29
-        versionCode 64
-        versionName "1.24.2"
+        versionCode 68
+        versionName "1.25.0"
 
         vectorDrawables.useSupportLibrary = true
 
@@ -70,7 +70,8 @@ android {
          */
         production {
             dimension "default"
-//           signingConfig signingConfigs.production
+           signingConfig signingConfigs.production
+            buildConfigField "String", 'REFERRAL_BASE_URL', '"https://gig4ce.page.link/"'
         }
 
         /**
@@ -80,6 +81,7 @@ android {
             dimension "default"
             versionNameSuffix '-Dev'
             signingConfig signingConfigs.debug
+            buildConfigField "String", 'REFERRAL_BASE_URL', '"https://gigforce.page.link/"'
         }
     }
 
@@ -157,7 +159,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0' // changed from 1.1.0
     implementation 'com.jaeger.statusbarutil:library:1.4.0'
     implementation 'androidx.cardview:cardview:1.0.0'
-    implementation 'com.google.android.material:material:1.1.0'
+    implementation 'com.google.android.material:material:1.2.1'
     // Navigation library
     def nav_version = "2.3.0"
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"

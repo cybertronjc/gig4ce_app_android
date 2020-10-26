@@ -95,7 +95,11 @@ class GigsListForDeclineBottomSheet : BottomSheetDialogFragment(),
         )
 
         mAdapter.setOnLearningVideoActionListener {
-            enableSubmitButton()
+
+            if (mAdapter.selectedGigCount != 0)
+                enableSubmitButton()
+            else
+                disableSubmitButton()
         }
 
         gigs_recycler_view.adapter = mAdapter

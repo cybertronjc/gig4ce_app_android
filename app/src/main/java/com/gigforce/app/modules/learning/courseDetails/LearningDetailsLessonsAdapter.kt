@@ -219,7 +219,7 @@ class LearningDetailsLessonsAdapter constructor(
 
             if (videoModel.completed) {
         //        setMarker(holder, R.drawable.ic_marker, R.color.colorPrimary)
-                holder.lessonCompletionPercentage.text = "Complete 100%"
+                holder.lessonCompletionPercentage.text = "Completed 100%"
                 holder.lessonsSeeMoreButton.text = "Re-play"
                 holder.lessonCompletionPercentage.setTextColor(ResourcesCompat.getColor(context.resources,R.color.text_green,null))
             } else /*if (videoModel.currentlyOnGoing) */{
@@ -227,7 +227,7 @@ class LearningDetailsLessonsAdapter constructor(
                 if (videoModel.completionProgress == 0L) {
                     //Not even started
           //          setMarker(holder, R.drawable.ic_marker_active, R.color.colorPrimary)
-                    holder.lessonCompletionPercentage.text = "Pending 0%"
+                    holder.lessonCompletionPercentage.text = "Completed 0%"
                     holder.lessonsSeeMoreButton.text = "Play"
                     holder.lessonCompletionPercentage.setTextColor(ResourcesCompat.getColor(context.resources,R.color.text_yellow,null))
                 } else {
