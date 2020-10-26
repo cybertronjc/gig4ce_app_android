@@ -115,18 +115,28 @@ class GigPage2Fragment : BaseFragment(), OtherOptionClickListener,
             )
         }
 
-        gig_page_top_bar.setOnClickListener {
-            val gig = viewModel.currentGig ?: return@setOnClickListener
-            val gigStartEndTime = gig.startDateTime!!.toLocalDateTime()
+//        gig_page_top_bar.setOnClickListener {
+//            val gig = viewModel.currentGig ?: return@setOnClickListener
+//            val gigStartEndTime = gig.startDateTime!!.toLocalDateTime()
+//
+//            navigate(R.id.gigMonthlyAttendanceFragment , bundleOf(
+//                GigMonthlyAttendanceFragment.INTENT_EXTRA_MONTH to gigStartEndTime.monthValue,
+//                GigMonthlyAttendanceFragment.INTENT_EXTRA_YEAR to gigStartEndTime.year,
+//                GigMonthlyAttendanceFragment.INTENT_EXTRA_COMPANY_LOGO to gig.companyLogo,
+//                GigMonthlyAttendanceFragment.INTENT_EXTRA_COMPANY_NAME to gig.companyName,
+//                GigMonthlyAttendanceFragment.INTENT_EXTRA_ROLE to gig.title,
+//                GigMonthlyAttendanceFragment.INTENT_EXTRA_RATING to gig.gigRating
+//                ))
+//        }
 
-            navigate(R.id.gigMonthlyAttendanceFragment , bundleOf(
-                GigMonthlyAttendanceFragment.INTENT_EXTRA_MONTH to gigStartEndTime.monthValue,
-                GigMonthlyAttendanceFragment.INTENT_EXTRA_YEAR to gigStartEndTime.year,
-                GigMonthlyAttendanceFragment.INTENT_EXTRA_COMPANY_LOGO to gig.companyLogo,
-                GigMonthlyAttendanceFragment.INTENT_EXTRA_COMPANY_NAME to gig.companyName,
-                GigMonthlyAttendanceFragment.INTENT_EXTRA_ROLE to gig.title,
-                GigMonthlyAttendanceFragment.INTENT_EXTRA_RATING to gig.gigRating
-                ))
+        gig_page_timer_layout.setOnClickListener {
+            val gig = viewModel.currentGig ?: return@setOnClickListener
+
+            navigate(
+                R.id.gigsAttendanceForADayDetailsBottomSheet, bundleOf(
+                    GigsAttendanceForADayDetailsBottomSheet.INTENT_GIG_ID to gig.gigId
+                )
+            )
         }
 
         expand_iv.setOnClickListener {
@@ -567,6 +577,9 @@ class GigPage2Fragment : BaseFragment(), OtherOptionClickListener,
         gig_page_completiton_layout.gone()
         gig_checkin_time_tv.gone()
 
+        gig_status_iv.setImageResource(R.drawable.round_yellow)
+        gig_status_tv.text = "Pending"
+
         gig_page_top_bar.setBackgroundColor(
             ResourcesCompat.getColor(
                 resources,
@@ -582,20 +595,24 @@ class GigPage2Fragment : BaseFragment(), OtherOptionClickListener,
             )
         )
 
+        gig_date_tv.text = "${dateFormatter.format(gig.startDateTime!!.toDate())}"
         val gigStartDateTime = gig.startDateTime!!.toDate()
         val currentTime = Date().time
 
         val diffInMillisec: Long = gigStartDateTime.time - currentTime
         val diffInHours: Long = TimeUnit.MILLISECONDS.toHours(diffInMillisec)
-        val diffInMin: Long = TimeUnit.MILLISECONDS.toMinutes(diffInMillisec)
 
-        gig_timer_tv.text = "$diffInHours Hrs : $diffInMin Mins"
-        gig_checkin_time_tv.text = "Since ${timeFormatter.format(gigStartDateTime)}, Today"
+        if(diffInHours > 24){
+            val days = diffInHours / 24
+            val hours = diffInHours % 24
 
-        gig_status_tv.text = "Pending"
-        gig_status_iv.setImageResource(R.drawable.round_yellow)
+            gig_timer_tv.text = "$days Days : $hours Hrs"
+        } else {
+            val diffInMin: Long = TimeUnit.MILLISECONDS.toMinutes(diffInMillisec) % 60
 
-        gig_date_tv.text = "${dateFormatter.format(gig.startDateTime!!.toDate())}"
+            gig_timer_tv.text = "$diffInHours Hrs : $diffInMin Mins"
+            gig_checkin_time_tv.text = "Since ${timeFormatter.format(gigStartDateTime)}, Today"
+        }
     }
 
     override fun onOptionClicked(option: OtherOption) {
@@ -801,25 +818,25 @@ class GigPage2Fragment : BaseFragment(), OtherOptionClickListener,
         private val DRESS_CODE = OtherOption(
             id = ID_DRESS_CODE,
             name = "Dress code",
-            icon = R.drawable.explore_hs_features
+            icon = R.drawable.ic_clothes
         )
 
         private val REIMBURSMENT = OtherOption(
             id = ID_REIMBURSMENT,
             name = "Reimbursment",
-            icon = R.drawable.explore_hs_features
+            icon = R.drawable.ic_compensation
         )
 
         private val ID_CARD = OtherOption(
             id = ID_IDENTITY_CARD,
             name = "Idenitity card",
-            icon = R.drawable.explore_hs_features
+            icon = R.drawable.ic_id_card
         )
 
         private val HELP = OtherOption(
             id = ID_HELP,
             name = "Help",
-            icon = R.drawable.explore_hs_features
+            icon = R.drawable.ic_question
         )
     }
 }

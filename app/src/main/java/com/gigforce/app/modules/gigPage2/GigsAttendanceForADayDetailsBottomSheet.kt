@@ -66,11 +66,15 @@ class GigsAttendanceForADayDetailsBottomSheet : BottomSheetDialogFragment() {
     private fun initView() {
 
         regularisation_text.setOnClickListener {
-            findNavController().navigate(
-                R.id.gigRegulariseAttendanceFragment, bundleOf(
-                    GigRegulariseAttendanceFragment.INTENT_EXTRA_GIG_ID to gigId
+
+           val gig =  viewModel.currentGig ?: return@setOnClickListener
+            if(!gig.hasRequestRegularisation()) {
+                findNavController().navigate(
+                    R.id.gigRegulariseAttendanceFragment, bundleOf(
+                        GigRegulariseAttendanceFragment.INTENT_EXTRA_GIG_ID to gigId
+                    )
                 )
-            )
+            }
         }
     }
 
@@ -124,6 +128,8 @@ class GigsAttendanceForADayDetailsBottomSheet : BottomSheetDialogFragment() {
         } else if (gig.isUpcomingGig()) {
             gig_status_tv.text = "Upcoming"
             gig_status_iv.setImageResource(R.drawable.round_yellow)
+
+            regularise_layout.gone()
         }
 
         if (gig.isCheckInAndCheckOutMarked()) {
@@ -140,13 +146,13 @@ class GigsAttendanceForADayDetailsBottomSheet : BottomSheetDialogFragment() {
             gig_timer_tv.text = "$diffInHours : $diffInMin mins"
 
             regularise_layout.gone()
-
         } else {
 
             if(gig.hasRequestRegularisation()){
-
-
-
+                regularisation_text.text = "Your regularisation request is sent to your supervisor."
+                punch_in_time.text = "Punch In\n--:--"
+                gig_timer_tv.text = "00 : 00 mins"
+                punch_out_time.text = "Punch Out\n--:--"
             } else{
 
                 //Check if eligible for regularisation
@@ -164,14 +170,14 @@ class GigsAttendanceForADayDetailsBottomSheet : BottomSheetDialogFragment() {
                             punch_out_time.text = "Punch Out\n--:--"
                             regularisation_text.text = "Looks like you forgot to Checkout. Regularise"
                         } else {
-                            punch_in_time.text = "Punch In\n--:--}"
+                            punch_in_time.text = "Punch In\n--:--"
                             gig_timer_tv.text = "00 : 00 mins"
                             punch_out_time.text = "Punch Out\n--:--"
                             regularisation_text.text = "Looks like you forgot to Checkout. Regularise"
                         }
                     } else {
                         //Not eligible
-                        punch_in_time.text = "Punch In\n--:--}"
+                        punch_in_time.text = "Punch In\n--:--"
                         gig_timer_tv.text = "00 : 00 mins"
                         punch_out_time.text = "Punch Out\n--:--"
                         regularise_layout.gone()
@@ -179,7 +185,7 @@ class GigsAttendanceForADayDetailsBottomSheet : BottomSheetDialogFragment() {
                 } else {
                     //Not Eligible , Future gig
 
-                    punch_in_time.text = "Punch In\n--:--}"
+                    punch_in_time.text = "Punch In\n--:--"
                     gig_timer_tv.text = "00 : 00 mins"
                     punch_out_time.text = "Punch Out\n--:--"
                     regularise_layout.gone()
