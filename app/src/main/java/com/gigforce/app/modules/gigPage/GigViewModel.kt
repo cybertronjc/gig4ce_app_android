@@ -9,11 +9,13 @@ import androidx.lifecycle.viewModelScope
 import com.gigforce.app.core.toLocalDate
 import com.gigforce.app.modules.gigPage.models.Gig
 import com.gigforce.app.modules.gigPage.models.GigAttendance
+import com.gigforce.app.modules.gigPage.models.GigRegularisationRequest
+import com.gigforce.app.utils.*
+import com.google.firebase.Timestamp
 import com.gigforce.app.utils.Lce
 import com.gigforce.app.utils.Lse
 import com.gigforce.app.utils.getOrThrow
 import com.gigforce.app.utils.setOrThrow
-import com.google.firebase.Timestamp
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FieldValue
@@ -23,6 +25,7 @@ import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.ZoneId
 import java.util.*
 import kotlin.coroutines.resume
@@ -38,7 +41,7 @@ class GigViewModel constructor(
     private var mWatchSingleGigRegistration: ListenerRegistration? = null
     private var mWatchTodaysGigRegistration: ListenerRegistration? = null
 
-    var currentGig : Gig? = null
+    var currentGig: Gig? = null
 
     private val _upcomingGigs = MutableLiveData<Lce<List<Gig>>>()
     val upcomingGigs: LiveData<Lce<List<Gig>>> get() = _upcomingGigs
@@ -387,6 +390,57 @@ class GigViewModel constructor(
             _todaysGigs.value = null
         }
 
+    }
+
+    private val _monthlyGigs = MutableLiveData<Lce<List<Gig>>>()
+    val monthlyGigs: LiveData<Lce<List<Gig>>> get() = _monthlyGigs
+
+    fun getGigsForMonth(companyName: String, month: Int, year: Int) = viewModelScope.launch {
+
+        val monthStart = LocalDateTime.of(year, month, 1, 0, 0)
+        val monthEnd = monthStart.plusMonths(1).withDayOfMonth(1).minusDays(1);
+
+        try {
+            _monthlyGigs.value = Lce.loading()
+            val querySnap = gigsRepository
+                .getCurrentUserGigs()
+//                .whereGreaterThan("startDateTime", monthStart)
+//                .whereLessThan("startDateTime", monthEnd)
+                .whereEqualTo("companyName", companyName)
+                .getOrThrow()
+
+            val gigs = extractGigs(querySnap)
+            _monthlyGigs.value = Lce.content(gigs)
+        } catch (e: Exception) {
+            _monthlyGigs.value = Lce.error(e.message!!)
+        }
+    }
+
+    private val _requestAttendanceRegularisation = MutableLiveData<Lse>()
+    val requestAttendanceRegularisation: LiveData<Lse> get() = _requestAttendanceRegularisation
+
+    fun requestRegularisation(
+        gigId: String,
+        punchInTime: Timestamp,
+        punchOutTime: Timestamp
+    ) = viewModelScope.launch {
+        _requestAttendanceRegularisation.value = Lse.loading()
+
+        try {
+            val gigRegularisationRequest = GigRegularisationRequest().apply {
+                checkInTime = punchInTime
+                checkOutTime = punchOutTime
+                requestedOn = Timestamp.now()
+            }
+
+            gigsRepository.getCollectionReference()
+                .document(gigId)
+                .updateOrThrow("regularisationRequest", gigRegularisationRequest)
+
+            _requestAttendanceRegularisation.value = Lse.success()
+        } catch (e: Exception) {
+            _requestAttendanceRegularisation.value = Lse.error(e.message ?: "Unable to submit regularisation attendance")
+        }
     }
 
 

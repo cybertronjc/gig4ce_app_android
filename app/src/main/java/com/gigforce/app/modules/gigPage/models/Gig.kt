@@ -85,7 +85,9 @@ data class Gig(
     var gigContactDetails: GigContactDetails? = null,
 
     var declinedBy: String? = null,
-    var declineReason: String? = null
+    var declineReason: String? = null,
+
+    var regularisationRequest : GigRegularisationRequest? =null
 ) {
 
     @get:Exclude
@@ -227,6 +229,11 @@ data class Gig(
         val currentTime = LocalDateTime.now()
 
         return minCheckInTime.isAfter(currentTime)
+    }
+
+    @Exclude
+    fun hasRequestRegularisation(): Boolean {
+        return regularisationRequest != null
     }
 
     override fun equals(other: Any?): Boolean {

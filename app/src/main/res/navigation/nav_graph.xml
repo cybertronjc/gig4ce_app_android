@@ -704,6 +704,18 @@
         android:id="@+id/gigDetailsFragment"
         android:name="com.gigforce.app.modules.gigPage2.GigDetailsFragment"
         android:label="GigDetailsFragment" />
+    <fragment
+        android:id="@+id/gigMonthlyAttendanceFragment"
+        android:name="com.gigforce.app.modules.gigPage2.GigMonthlyAttendanceFragment"
+        android:label="GigMonthlyAttendanceFragment" />
+    <fragment
+        android:id="@+id/gigRegulariseAttendanceFragment"
+        android:name="com.gigforce.app.modules.gigPage2.GigRegulariseAttendanceFragment"
+        android:label="GigRegulariseAttendanceFragment" />
+    <dialog
+        android:id="@+id/gigsAttendanceForADayDetailsBottomSheet"
+        android:name="com.gigforce.app.modules.gigPage2.GigsAttendanceForADayDetailsBottomSheet"
+        android:label="GigsAttendanceForADayDetailsBottomSheet" />
 
     <fragment
         android:id="@+id/fragment_add_language"

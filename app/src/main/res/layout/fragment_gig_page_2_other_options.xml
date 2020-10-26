@@ -13,7 +13,7 @@
         android:id="@+id/gig_type_iv"
         android:layout_width="24dp"
         android:layout_height="24dp"
-        android:src="@drawable/ic_credit_card"
+        android:src="@drawable/ic_options"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

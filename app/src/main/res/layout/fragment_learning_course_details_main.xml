@@ -98,8 +98,8 @@
 
         <ImageView
             android:id="@+id/imageView38"
-            android:layout_width="12dp"
-            android:layout_height="12dp"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
             android:layout_marginStart="15dp"
             android:layout_marginTop="12dp"
             android:src="@drawable/ic_wifi"
@@ -153,8 +153,8 @@
 
         <ImageView
             android:id="@+id/assessmentCountIV"
-            android:layout_width="12dp"
-            android:layout_height="12dp"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
             android:layout_marginStart="15dp"
             android:layout_marginTop="12dp"
             android:src="@drawable/ic_receipt_outlined"
