@@ -129,6 +129,14 @@ class GigPage2Fragment : BaseFragment(), OtherOptionClickListener,
                 ))
         }
 
+        expand_iv.setOnClickListener {
+            navigate(
+                R.id.gigDetailsFragment, bundleOf(
+                    GigDetailsFragment.INTENT_EXTRA_GIG_ID to viewModel.currentGig?.gigId
+                )
+            )
+        }
+
         gig_cross_btn.setOnClickListener {
             activity?.onBackPressed()
         }
@@ -136,6 +144,16 @@ class GigPage2Fragment : BaseFragment(), OtherOptionClickListener,
         gig_ellipses_iv.setOnClickListener {
             val popupMenu = PopupMenu(requireContext(), it)
             popupMenu.menuInflater.inflate(R.menu.menu_gig_attendance, popupMenu.menu)
+
+            viewModel.currentGig?.let {
+
+                if (it.isPresentGig() || it.isPastGig()) {
+                    popupMenu.menu.findItem(R.id.action_decline_gig).setVisible(false)
+                } else {
+                    popupMenu.menu.findItem(R.id.action_decline_gig).setVisible(true)
+                }
+            }
+
             popupMenu.setOnMenuItemClickListener(this@GigPage2Fragment)
             popupMenu.show()
         }
@@ -163,7 +181,8 @@ class GigPage2Fragment : BaseFragment(), OtherOptionClickListener,
         checkInCheckOutSliderBtn?.onSlideCompleteListener =
             object : SlideToActView.OnSlideCompleteListener {
                 override fun onSlideComplete(view: SlideToActView) {
-                    var manager = activity?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+                    var manager =
+                        activity?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
                     var statusOfGPS = manager.isProviderEnabled(LocationManager.GPS_PROVIDER)
                     if (userGpsDialogActionCount == 0 && !statusOfGPS) {
                         showEnableGPSDialog()
@@ -177,7 +196,8 @@ class GigPage2Fragment : BaseFragment(), OtherOptionClickListener,
                         ) == PackageManager.PERMISSION_GRANTED
                     ) {
                         var intent = Intent(context, ImageCaptureActivity::class.java)
-                        startActivityForResult(intent,
+                        startActivityForResult(
+                            intent,
                             GigAttendancePageFragment.REQUEST_CODE_UPLOAD_SELFIE_IMAGE
                         )
                     } else {
@@ -190,10 +210,16 @@ class GigPage2Fragment : BaseFragment(), OtherOptionClickListener,
     }
 
     private fun turnGPSOn() {
-        val provider = Settings.Secure.getString(context?.getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED)
+        val provider = Settings.Secure.getString(
+            context?.getContentResolver(),
+            Settings.Secure.LOCATION_PROVIDERS_ALLOWED
+        )
         if (!provider.contains("gps")) { //if gps is disabled
             val poke = Intent()
-            poke.setClassName("com.android.settings", "com.android.settings.widget.SettingsAppWidgetProvider")
+            poke.setClassName(
+                "com.android.settings",
+                "com.android.settings.widget.SettingsAppWidgetProvider"
+            )
             poke.addCategory(Intent.CATEGORY_ALTERNATIVE)
             poke.setData(Uri.parse("3"))
             context?.let { it -> LocalBroadcastManager.getInstance(it).sendBroadcast(poke) }
@@ -417,10 +443,10 @@ class GigPage2Fragment : BaseFragment(), OtherOptionClickListener,
         gig_checkin_time_tv.gone()
         gig_page_completiton_layout.visible()
 
-        if(gig.isCheckInAndCheckOutMarked()){
+        if (gig.isCheckInAndCheckOutMarked()) {
             gig_page_completiton_layout.visible()
             amount_tv.text = "${gig.gigAmount} Rs"
-        } else{
+        } else {
             gig_page_completiton_layout.gone()
         }
 
@@ -443,26 +469,31 @@ class GigPage2Fragment : BaseFragment(), OtherOptionClickListener,
         gig_status_tv.text = "Completed"
         gig_status_iv.setImageResource(R.drawable.round_green)
 
-        if (gig.isCheckInMarked()) {
+        if (gig.isCheckInAndCheckOutMarked()) {
+            val checkInTime = gig.attendance!!.checkInTime!!
+            val checkOutTime = gig.attendance!!.checkOutTime!!
+
+            val diffInMillisec: Long = checkOutTime.time - checkInTime.time
+            val diffInHours: Long = TimeUnit.MILLISECONDS.toHours(diffInMillisec)
+            val diffInMin: Long = TimeUnit.MILLISECONDS.toMinutes(diffInMillisec) % 60
+
+            gig_timer_tv.text = "$diffInHours Hrs : $diffInMin Mins"
+            val checkoutTime = gig.attendance!!.checkOutTime
+            gig_checkin_time_tv.text = "${timeFormatter.format(checkInTime)} - ${
+                timeFormatter.format(checkoutTime)
+            }"
+        } else if (gig.isCheckInMarked()) {
             val gigStartDateTime = gig.startDateTime!!.toDate()
             val currentTime = Date().time
 
             val diffInMillisec: Long = currentTime - gigStartDateTime.time
             val diffInHours: Long = TimeUnit.MILLISECONDS.toHours(diffInMillisec)
-            val diffInMin: Long = TimeUnit.MILLISECONDS.toMinutes(diffInMillisec)
+            val diffInMin: Long = TimeUnit.MILLISECONDS.toMinutes(diffInMillisec) % 60
 
-            gig_timer_tv.text = "$diffInHours Hrs : $diffInMin Mins"
-
-            if (gig.attendance?.checkOutTime != null) {
-                val checkoutTime = gig.attendance!!.checkOutTime
-                gig_checkin_time_tv.text = "${timeFormatter.format(gigStartDateTime)} - ${
-                    timeFormatter.format(checkoutTime)
-                }"
-            }
-            else
-                gig_checkin_time_tv.text = "${timeFormatter.format(gigStartDateTime)} -"
+            gig_timer_tv.text = "No check-out marked"
+            gig_checkin_time_tv.text = "${timeFormatter.format(gigStartDateTime)} -"
         } else {
-            gig_timer_tv.text = "No Checkin"
+            gig_timer_tv.text = "No Check-in"
             gig_checkin_time_tv.gone()
         }
     }
@@ -521,7 +552,7 @@ class GigPage2Fragment : BaseFragment(), OtherOptionClickListener,
 
             val diffInMillisec: Long = currentTime - gigStartDateTime.time
             val diffInHours: Long = TimeUnit.MILLISECONDS.toHours(diffInMillisec)
-            val diffInMin: Long = TimeUnit.MILLISECONDS.toMinutes(diffInMillisec)
+            val diffInMin: Long = TimeUnit.MILLISECONDS.toMinutes(diffInMillisec) % 60
 
             gig_timer_tv.text = "$diffInHours Hrs : $diffInMin Mins"
             gig_checkin_time_tv.text = "Since ${timeFormatter.format(gigStartDateTime)}, Today"
@@ -593,6 +624,7 @@ class GigPage2Fragment : BaseFragment(), OtherOptionClickListener,
                 true
             }
             R.id.action_share -> {
+                showToast("This feature is under development")
                 true
             }
             R.id.action_decline_gig -> {
@@ -738,7 +770,8 @@ class GigPage2Fragment : BaseFragment(), OtherOptionClickListener,
 
         } ?: run {
             FirebaseCrashlytics.getInstance().log("Gig not found : GigAttendance Page Fragment")
-            FirebaseCrashlytics.getInstance().setUserId(FirebaseAuth.getInstance().currentUser?.uid!!)
+            FirebaseCrashlytics.getInstance()
+                .setUserId(FirebaseAuth.getInstance().currentUser?.uid!!)
         }
     }
 

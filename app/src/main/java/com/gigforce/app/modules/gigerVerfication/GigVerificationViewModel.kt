@@ -35,6 +35,8 @@ data class GigerVerificationStatus(
     val bankDetailsUploaded: Boolean,
     val bankUploadDetailsDataModel: BankDetailsDataModel?,
     val everyDocumentUploaded: Boolean
+
+
 ) {
     fun getColorCodeForStatus(statusCode: Int): Int {
         return when (statusCode) {
@@ -61,8 +63,8 @@ open class GigVerificationViewModel constructor(
 
     private val _gigerVerificationStatus = MutableLiveData<GigerVerificationStatus>()
     val gigerVerificationStatus: LiveData<GigerVerificationStatus> get() = _gigerVerificationStatus
-    private val _gigerContractStatus = MutableLiveData<Boolean>()
-    val gigerContractStatus: LiveData<Boolean> get() = _gigerContractStatus
+    private val _gigerContractStatus = MutableLiveData<String>()
+    val gigerContractStatus: LiveData<String> get() = _gigerContractStatus
 
     private val _documentUploadState = SingleLiveEvent2<Lse>()
     val documentUploadState: LiveData<Lse> get() = _documentUploadState
@@ -376,7 +378,20 @@ open class GigVerificationViewModel constructor(
     fun checkForSignedContract() {
         gigerVerificationRepository.checkForSignedContract().addSnapshotListener { success, err ->
             run {
-                _gigerContractStatus.value = err == null && success?.data != null
+                if (err == null) {
+
+                    if (success?.data?.get("role") != null && success?.data?.get("url") != null) {
+                        _gigerContractStatus.value = success.data?.get("url") as String
+                    } else {
+                        _gigerContractStatus.value = null
+                    }
+
+                } else {
+                    _gigerContractStatus.value = null
+
+                }
+
+
             }
         }
 

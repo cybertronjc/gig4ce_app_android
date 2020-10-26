@@ -1,6 +1,8 @@
 package com.gigforce.app.modules.landingscreen
 
+import android.app.Dialog
 import android.content.*
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
@@ -23,6 +25,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
+import com.gigforce.app.core.base.dialog.ConfirmationDialogOnClickListener
 import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.app.core.genericadapter.RecyclerGenericAdapter
 import com.gigforce.app.core.gone
@@ -44,6 +47,8 @@ import com.gigforce.app.utils.AppConstants
 import com.gigforce.app.utils.GlideApp
 import com.gigforce.app.utils.Lce
 import com.gigforce.app.utils.StringConstants
+import com.gigforce.app.utils.configrepository.ConfigRepository
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
@@ -99,18 +104,99 @@ class LandingScreenFragment : BaseFragment() {
         listener()
         observers()
         broadcastReceiverForLanguageCahnge()
+        checkforForceupdate()
 //        checkforLanguagedSelectedForLastLogin()
+        exploreByIndustryLayout?.let {
+            when (comingFromOrGoingToScreen) {
+                SCREEN_VERIFICATION -> landingScrollView.post {
+                    it.y?.let {
+                        landingScrollView.scrollTo(0, it.toInt())
+                    }
+                }
+                SCREEN_GIG -> landingScrollView.post {
+                    it.y?.let {
+                        landingScrollView.scrollTo(0, it.toInt())
+                    }
 
-        when (comingFromOrGoingToScreen) {
-            SCREEN_VERIFICATION -> landingScrollView.post {
-                landingScrollView.scrollTo(0, exploreByIndustryLayout.y.toInt())
-            }
-            SCREEN_GIG -> landingScrollView.post {
-                landingScrollView.scrollTo(0, exploreByIndustryLayout.y.toInt())
-            }
-            else -> {
+                }
+                else -> {
+                }
             }
         }
+
+    }
+
+    private fun checkforForceupdate() {
+        ConfigRepository().getForceUpdateCurrentVersion(object :
+                ConfigRepository.LatestAPPUpdateListener {
+            override fun getCurrentAPPVersion(latestAPPUpdateModel: ConfigRepository.LatestAPPUpdateModel) {
+                if (latestAPPUpdateModel.active && isNotLatestVersion(latestAPPUpdateModel))
+                    showConfirmationDialogType3(
+                            getString(R.string.new_version_available),
+                            getString(R.string.new_version_available_detail),
+                            getString(R.string.update_now),
+                            getString(R.string.cancel_update),
+                            object : ConfirmationDialogOnClickListener {
+                                override fun clickedOnYes(dialog: Dialog?) {
+                                    redirectToStore("https://play.google.com/store/apps/details?id=com.gigforce.app")
+                                }
+
+                                override fun clickedOnNo(dialog: Dialog?) {
+                                    if (latestAPPUpdateModel?.force_update_required)
+                                        activity?.finish()
+                                    dialog?.dismiss()
+                                }
+
+                            })
+            }
+        })
+    }
+    private fun isNotLatestVersion(latestAPPUpdateModel: ConfigRepository.LatestAPPUpdateModel): Boolean {
+        try {
+            var currentAppVersion = getAppVersion()
+            if(currentAppVersion.contains("Dev")){
+                currentAppVersion = currentAppVersion?.split("-")[0]
+            }
+            var appVersion = currentAppVersion?.split(".")?.toTypedArray()
+            var serverAPPVersion =
+                    latestAPPUpdateModel?.force_update_current_version?.split(".")?.toTypedArray()
+            if (appVersion?.size == 0 || serverAPPVersion?.size == 0) {
+                FirebaseCrashlytics.getInstance().log("isNotLatestVersion method : appVersion or serverAPPVersion has zero size!!")
+                return false
+            } else {
+                if (appVersion.get(0).toInt() < serverAPPVersion.get(0).toInt()) {
+                    return true
+                } else if (appVersion.get(0).toInt()== serverAPPVersion.get(0).toInt() && appVersion.get(1).toInt() < serverAPPVersion.get(1).toInt()) {
+                    return true
+                } else if (appVersion.get(0).toInt()== serverAPPVersion.get(0).toInt() && appVersion.get(1).toInt() == serverAPPVersion.get(1).toInt() && appVersion.get(2).toInt() < serverAPPVersion.get(2).toInt()) {
+                    return true
+                } else return false
+
+            }
+        } catch (e: Exception) {
+            FirebaseCrashlytics.getInstance().log("isNotLatestVersion Method Exception")
+
+            return false
+        }
+    }
+    fun getAppVersion(): String {
+        var result = "";
+
+        try {
+            result = context?.getPackageManager()
+                    ?.getPackageInfo(context?.getPackageName(), 0)
+                    ?.versionName ?: "";
+        } catch (e: PackageManager.NameNotFoundException) {
+
+        }
+
+        return result;
+    }
+
+    fun redirectToStore(playStoreUrl: String) {
+        var intent = Intent(Intent.ACTION_VIEW, Uri.parse(playStoreUrl))
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent)
     }
 
     private fun initUI() {

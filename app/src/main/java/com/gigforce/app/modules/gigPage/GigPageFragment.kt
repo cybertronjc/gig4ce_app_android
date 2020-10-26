@@ -18,6 +18,7 @@ import android.text.Html
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.style.ForegroundColorSpan
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -117,13 +118,15 @@ class GigPageFragment : BaseFragment(), View.OnClickListener, Toolbar.OnMenuItem
     }
 
     private fun getData(arguments: Bundle?, savedInstanceState: Bundle?) {
-        savedInstanceState ?. let{
+        arguments?.let {
             gigId = it.getString(INTENT_EXTRA_GIG_ID)!!
-        } ?: run{
-            arguments?.let {
+            Log.d("GigAttendancePageFrg", "Args : Showing Data for $gigId")
+        } ?: run {
+            savedInstanceState?.let {
                 gigId = it.getString(INTENT_EXTRA_GIG_ID)!!
-            }?: run {
-                FirebaseCrashlytics.getInstance().log("GigPageFragment getData method : savedInstanceState and arguments found null")
+                Log.d("GigAttendancePageFrg", "Saved Ins : Showing Data for $gigId")
+            }?.run {
+                FirebaseCrashlytics.getInstance().log("GigAttendancePageFragment getData method : savedInstanceState and arguments found null")
                 FirebaseCrashlytics.getInstance().setUserId(FirebaseAuth.getInstance().currentUser?.uid!!)
             }
         }

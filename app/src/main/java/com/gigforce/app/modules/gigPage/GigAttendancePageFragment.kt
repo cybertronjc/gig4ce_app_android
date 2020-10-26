@@ -29,6 +29,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
@@ -207,7 +208,7 @@ class GigAttendancePageFragment : BaseFragment(), PopupMenu.OnMenuItemClickListe
 
         seeMoreBtn.setOnClickListener {
 
-            navigate(R.id.presentGigPageFragment, Bundle().apply {
+            GigNavigation.openGigMainPage(findNavController(), Bundle().apply {
                 this.putString(GigPageFragment.INTENT_EXTRA_GIG_ID, gigId)
                 this.putBoolean(GigPageFragment.INTENT_EXTRA_COMING_FROM_CHECK_IN, true)
             })
@@ -239,11 +240,11 @@ class GigAttendancePageFragment : BaseFragment(), PopupMenu.OnMenuItemClickListe
     private fun getData(arguments: Bundle?, savedInstanceState: Bundle?) {
         arguments?.let {
             gigId = it.getString(INTENT_EXTRA_GIG_ID)!!
-            Log.d("GigAttendancePageFrg", "Showing Data for $gigId")
+            Log.d("GigAttendancePageFrg", "Args : Showing Data for $gigId")
         } ?: run {
             savedInstanceState?.let {
                 gigId = it.getString(INTENT_EXTRA_GIG_ID)!!
-                Log.d("GigAttendancePageFrg", "Showing Data for $gigId")
+                Log.d("GigAttendancePageFrg", "Saved Ins : Showing Data for $gigId")
             }?.run {
                 FirebaseCrashlytics.getInstance().log("GigAttendancePageFragment getData method : savedInstanceState and arguments found null")
                 FirebaseCrashlytics.getInstance().setUserId(FirebaseAuth.getInstance().currentUser?.uid!!)

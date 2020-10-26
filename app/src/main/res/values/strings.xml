@@ -888,7 +888,7 @@
     <string name="video_resume_pending_html"><![CDATA[Your Video resume is Pending , <font color=\'#060606\'><u>Click here</u></font> to  complete.]]></string>
     <string name="check_out">Check Out</string>
     <string name="check_in">Check In</string>
-    <string name="upcoming_gig_">Upcoming Gig</string>
+    <string name="upcoming_gig_">Scheduled gigs</string>
     <string name="explore_by_role_">Explore By Role</string>
     <string name="monthy_goal">Monthy Goal</string>
     <string name="per_month_goal">Per month goal</string>
@@ -971,9 +971,28 @@
     <string name="unsigned">Unsigned</string>
     <string name="add_bio_star">Add Bio*</string>
     <string name="new_language">New Language</string>
+    <string name="low">Low</string>
+    <string name="moderately_low">Moderately Low</string>
+    <string name="high">High</string>
+    <string name="moderate_add_language">Moderate</string>
+    <string name="remove_caps">REMOVE</string>
+    <string name="edit_contact_details">Edit Contact Details</string>
+    <string name="phone_number">Phone Number*</string>
+    <string name="enter_phone_number">Enter Phone Number</string>
+    <string name="email_mandatory">Email*</string>
+    <string name="enter_email_address">Enter Email Address</string>
+    <string name="new_education">New Education</string>
+    <string name="school">School*</string>
+    <string name="degree_star">Degree*</string>
+    <string name="course_start">Course*</string>
+    <string name="perm_not_granted">Permissions not granted!!</string>
+    <string name="select_start_date_add_education">Please Select Start Date</string>
+    <string name="select_end_date_add_education">Please Select End Date</string>
+    <string name="download_contracts_exists">Downloaded Contract Already Exists!!!!</string>
     <string name="total_number_of_days">Total number of days</string>
     <string name="total_working_days">Total working days</string>
     <string name="number_of_offs">Number of offs</string>
+
 
 
 </resources>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:id="@+id/tv_action"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/size_52"
+    android:background="@drawable/border_lipstick_rad_4"
+    android:gravity="center_horizontal"
+    android:paddingTop="@dimen/size_10"
+    android:paddingBottom="@dimen/size_9"
+    android:text="@string/save"
+    android:textColor="@color/lipstick"
+    android:textSize="@dimen/font_14" />

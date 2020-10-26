@@ -31,6 +31,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.observe
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -43,6 +44,7 @@ import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.assessment.AssessmentFragment
 import com.gigforce.app.modules.gigPage.GigAttendancePageFragment
+import com.gigforce.app.modules.gigPage.GigNavigation
 import com.gigforce.app.modules.gigPage.GigPageFragment
 import com.gigforce.app.modules.gigPage.GigViewModel
 import com.gigforce.app.modules.gigPage.models.Gig
@@ -390,10 +392,7 @@ class BSCalendarScreenFragment : BaseFragment() {
                     activity?.applicationContext,
                     PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
                         val gig = item as Gig
-                        navigate(R.id.gigPage2Fragment, Bundle().apply {
-                            this.putString(GigPage2Fragment.INTENT_EXTRA_GIG_ID, gig.gigId)
-                        })
-
+                        GigNavigation.openGigMainPage(findNavController(), gig.gigId)
 //                    showKYCAndHideUpcomingLayout(
 //                        true
 //                    )
@@ -431,6 +430,7 @@ class BSCalendarScreenFragment : BaseFragment() {
                                 getView(viewHolder, R.id.checkInTV).isEnabled = false
                             } else if (obj.isCheckInAndCheckOutMarked()) {
                                 getView(viewHolder, R.id.checkInTV).isEnabled = false
+                                (getView(viewHolder, R.id.checkInTV) as Button).text = "Checked Out"
                             } else if (obj.isCheckInMarked()) {
                                 getView(viewHolder, R.id.checkInTV).isEnabled = true
                                 (getView(viewHolder, R.id.checkInTV) as Button).text =
@@ -537,10 +537,7 @@ class BSCalendarScreenFragment : BaseFragment() {
         View.OnClickListener {
         override fun onClick(v: View?) {
             val gig = (rv.adapter as RecyclerGenericAdapter<Gig>).list.get(position)
-
-            navigate(R.id.gigAttendancePageFragment, Bundle().apply {
-                this.putString(GigAttendancePageFragment.INTENT_EXTRA_GIG_ID, gig.gigId)
-            })
+            GigNavigation.openGigAttendancePage(findNavController(), gig.gigId)
         }
     }
 

@@ -67,10 +67,12 @@ data class LessonProgress(
     @set:PropertyName("lesson_total_length")
     var lessonTotalLength : Long = 0,
 
-
-
     @get:PropertyName("lesson_type")
     @set:PropertyName("lesson_type")
-    var lessonType : String = CourseContent.TYPE_VIDEO
+    var lessonType : String = CourseContent.TYPE_VIDEO,
+
+    @get:PropertyName("isActive")
+    @set:PropertyName("isActive")
+    var isActive : Boolean = true
 
 )

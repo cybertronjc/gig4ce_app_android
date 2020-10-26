@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/form_error_contact_details"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/bs_top_margin"
+        android:layout_marginBottom="@dimen/size_16"
+        android:letterSpacing="0.05"
+        android:text="@string/error_empty_mandatory_fields"
+        android:textColor="#d4e02020"
+        android:textSize="14sp"
+        android:visibility="gone" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:text="@string/phone_number"
+        android:textColor="@color/warm_grey_two"
+        android:textSize="@dimen/font_14" />
+
+    <EditText
+        android:id="@+id/et_add_contact_phone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/size_6"
+        android:background="@null"
+        android:ems="10"
+        android:hint="@string/enter_phone_number"
+        android:importantForAutofill="no"
+        android:inputType="phone"
+        android:maxLength="13"
+        android:textColor="@color/black"
+        android:textSize="@dimen/font_14" />
+
+    <View
+        android:id="@+id/et_line_phone_number"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/size_2"
+        android:layout_marginTop="@dimen/size_11"
+        android:background="@color/warm_grey_two" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/size_8"
+        android:text="@string/email"
+        android:textColor="@color/warm_grey_two"
+        android:textSize="@dimen/font_14" />
+
+    <EditText
+        android:id="@+id/et_add_email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/size_8"
+        android:background="@null"
+        android:ems="10"
+        android:hint="@string/enter_email_address"
+        android:importantForAutofill="no"
+        android:inputType="textEmailAddress"
+        android:textColor="@color/black"
+        android:textSize="@dimen/font_14" />
+
+    <View
+        android:id="@+id/et_line_email"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/size_2"
+        android:layout_marginTop="@dimen/size_11"
+        android:background="@color/warm_grey_two" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/bt_add_contact_add_more"
+            style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+
+            android:text="@string/add_more_text"
+            android:textAlignment="textStart"
+            android:textColor="@color/colorPrimary"
+            app:icon="@drawable/ic_add"
+            app:iconTint="@color/colorPrimary" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/bt_remove_contact_add_more"
+            style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableEnd="@drawable/ic_delete"
+            android:drawablePadding="@dimen/size_8"
+            android:drawableTint="@color/colorPrimary"
+            android:text="@string/remove_caps"
+            android:textAlignment="textEnd"
+            android:textColor="@color/colorPrimary" />
+    </LinearLayout>
+
+</LinearLayout>

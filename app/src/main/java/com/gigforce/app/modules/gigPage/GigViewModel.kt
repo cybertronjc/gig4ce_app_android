@@ -12,6 +12,10 @@ import com.gigforce.app.modules.gigPage.models.GigAttendance
 import com.gigforce.app.modules.gigPage.models.GigRegularisationRequest
 import com.gigforce.app.utils.*
 import com.google.firebase.Timestamp
+import com.gigforce.app.utils.Lce
+import com.gigforce.app.utils.Lse
+import com.gigforce.app.utils.getOrThrow
+import com.gigforce.app.utils.setOrThrow
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FieldValue
@@ -21,6 +25,7 @@ import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.util.*
@@ -68,10 +73,9 @@ class GigViewModel constructor(
         val upcomingGigs = userGigs.filter {
 
             if (it.endDateTime != null) {
-                it.endDateTime!!.toDate().time > currentDate.time
+                it.endDateTime!!.toDate().time > currentDate.time && !it.isCheckInAndCheckOutMarked()
             } else {
-
-                it.startDateTime!!.toDate().time > currentDate.time
+                it.startDateTime!!.toDate().time > currentDate.time && !it.isCheckInAndCheckOutMarked()
             }
         }.sortedBy {
             it.startDateTime!!.seconds
@@ -358,11 +362,36 @@ class GigViewModel constructor(
                     }
                     _todaysGigs.value = Lce.content(todaysUpcomingGigs)
                 } else {
-                    _upcomingGigs.value = Lce.error(firebaseFirestoreException!!.message!!)
+                    _todaysGigs.value = Lce.error(firebaseFirestoreException!!.message!!)
                 }
             }
     }
 
+    fun getTodaysUpcomingGig(date: LocalDate) = viewModelScope.launch{
+        Log.d("GigViewModel", "getting gigs for $date")
+
+        val dateFull = Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant())
+
+        _todaysGigs.value = Lce.loading()
+        try {
+            val querySnapshot = gigsRepository
+               .getCurrentUserGigs()
+               .whereGreaterThan("startDateTime", dateFull)
+               .getOrThrow()
+
+            val tomorrow = date.plusDays(1)
+            val todaysUpcomingGigs = extractGigs(querySnapshot).filter {
+                it.startDateTime!! > Timestamp.now() && (it.endDateTime == null || it.endDateTime!!.toLocalDate()
+                    .isBefore(tomorrow))
+            }
+            _todaysGigs.value = Lce.content(todaysUpcomingGigs)
+            _todaysGigs.value = null
+        } catch (e: Exception) {
+            _todaysGigs.value = Lce.error(e.message!!)
+            _todaysGigs.value = null
+        }
+
+    }
 
     private val _monthlyGigs = MutableLiveData<Lce<List<Gig>>>()
     val monthlyGigs: LiveData<Lce<List<Gig>>> get() = _monthlyGigs
@@ -414,4 +443,7 @@ class GigViewModel constructor(
             _requestAttendanceRegularisation.value = Lse.error(e.message ?: "Unable to submit regularisation attendance")
         }
     }
+
+
+
 }
