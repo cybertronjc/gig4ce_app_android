@@ -112,7 +112,7 @@ class LearningDetailsLessonsAdapter constructor(
 
                     GlideApp.with(context)
                         .load(videoModel.coverPicture)
-                        .placeholder(getCircularProgressDrawable())
+                        .thumbnail(GlideApp.with(context).load(R.drawable.ic_loading))
                         .error(R.drawable.ic_learning_default_back)
                         .into(holder.slideVideoThumbnail)
                 } else {
@@ -124,7 +124,7 @@ class LearningDetailsLessonsAdapter constructor(
 
                             GlideApp.with(context)
                                 .load(fileUri)
-                                .placeholder(getCircularProgressDrawable())
+                                .thumbnail(GlideApp.with(context).load(R.drawable.ic_loading))
                                 .error(R.drawable.ic_learning_default_back)
                                 .into(holder.slideVideoThumbnail)
                         }
@@ -183,7 +183,7 @@ class LearningDetailsLessonsAdapter constructor(
 
                     GlideApp.with(context)
                         .load(videoModel.coverPicture)
-                        .placeholder(getCircularProgressDrawable())
+                        .thumbnail(GlideApp.with(context).load(R.drawable.ic_loading))
                         .error(R.drawable.ic_learning_default_back)
                         .into(holder.slideVideoThumbnail)
                 } else {
@@ -195,7 +195,7 @@ class LearningDetailsLessonsAdapter constructor(
 
                             GlideApp.with(context)
                                 .load(fileUri)
-                                .placeholder(getCircularProgressDrawable())
+                                .thumbnail(GlideApp.with(context).load(R.drawable.ic_loading))
                                 .error(R.drawable.ic_learning_default_back)
                                 .into(holder.slideVideoThumbnail)
                         }
