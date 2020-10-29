@@ -453,7 +453,7 @@
     <string name="ques">सवाल</string>
     <string name="answer_the_ques">कृपया जारी रखने के लिए प्रश्न का उत्तर दें !!!</string>
     <string name="scenario">परिदृश्य:</string>
-    <string name="record_a_10_second_video_of_yourself_nface_the_camera_and_say_hi_i_m_your_name_and_i_like_to_do_mention_2_things_you_like_to_do_selfie_video">अपने आप को एक 10 सेकंड का वीडियो रिकॉर्ड करें और कैमरे का सामना करें "हाय, आई एम (आपका नाम) और मैं ऐसा करना पसंद करता हूं (2 चीजें जो आप करना चाहते हैं उनका उल्लेख करें)</string>
+    <string name="record_a_10_second_video_of_yourself_nface_the_camera_and_say_hi_i_m_your_name_and_i_like_to_do_mention_2_things_you_like_to_do_selfie_video">अपने आप की एक 10 सेकंड का वीडियो रिकॉर्ड करें और कैमरे के सामने कहें "हाय, आई एम (आपका नाम) और मैं ऐसा करना पसंद करता हूं (2 चीजें जो आप करना चाहते हैं उनका उल्लेख करें)</string>
     string>
     <string name="pan_number_eg_bttps4444a">पैन नंबर (जैसे: BTTPS4444A)</string>
     <string name="aadhar_number_eg_444433332222">आधार संख्या * (उदाहरण: ४४४४३३३३२२२२)</string>
@@ -782,7 +782,7 @@
     <string name="yes">हाँ</string>
     <string name="no">नहीं</string>
     <string name="none">कोई नहीं</string>
-    <string name="weekday">काम करने के दिन</string>
+    <string name="weekday">कार्य दिवस</string>
     <string name="_00_04days">00-04days</string>
     <string name="weekends">सप्ताहांत</string>
     <string name="rs">रुपये</string>
@@ -794,7 +794,7 @@
     <string name="eight_to_fifteen">08-15 दिन</string>
     <string name="fifteen_to_thirty">15-30 दिन</string>
     <string name="working">काम कर रहे</string>
-    <string name="prefered_no_days_work">पसंदीदा नहीं</string>string>
+    <string name="prefered_no_days_work">पसंदीदा दिन</string>
     <string name="daily_goal">दैनिक लक्ष्य</string>
     <string name="rs0_rs2000">Rs0 - Rs2000</string>
     <string name="per_day_goal">प्रति दिन का लक्ष्य</string>
