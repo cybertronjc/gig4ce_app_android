@@ -1,5 +1,6 @@
 package com.gigforce.app.modules.wallet.models
 
+import com.google.firebase.firestore.Exclude
 import com.google.firebase.firestore.PropertyName
 import java.time.Month
 import java.time.MonthDay
@@ -54,12 +55,23 @@ data class Payslip(
     @set:PropertyName("monthOfPayment")
     var monthOfPayment: String = "",
 
+    @get:PropertyName("uid")
+    @set:PropertyName("uid")
+    var uid: String = "",
+
     @get:PropertyName("yearOfPayment")
     @set:PropertyName("yearOfPayment")
-    var yearOfPayment: Int = -1
+    var yearOfPayment: Int = -1,
+
+    @get:PropertyName("pdfDownloadLink")
+    @set:PropertyName("pdfDownloadLink")
+    var pdfDownloadLink: String? = null
 ) {
 
     fun getMonthNo() : Int{
        return Month.valueOf(monthOfPayment.toUpperCase(Locale.getDefault())).value
     }
+
+    @Exclude
+    var loading :Boolean = false
 }

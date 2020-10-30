@@ -10,22 +10,18 @@ import com.gigforce.app.modules.wallet.models.Payslip
 import com.github.vipulasri.timelineview.TimelineView
 import kotlinx.android.synthetic.main.recycler_item_monthly_payslip.view.*
 
-interface MonthlyPayslipsAdapterClickListeners{
-
-    fun downloadPaySlip()
-}
 
 class MonthlyPayslipsAdapter constructor(
         private val context: Context
 ) :
         RecyclerView.Adapter<MonthlyPayslipsAdapter.TimeLineViewHolder>() {
 
-    private var learningVideoActionListener: ((Payslip) -> Unit)? = null
+    private var paySlipClickActionListener: ((Payslip) -> Unit)? = null
     private lateinit var mLayoutInflater: LayoutInflater
     private var mPayslips: List<Payslip> = emptyList()
 
-    fun setOnLearningVideoActionListener(listener: (Payslip) -> Unit) {
-        this.learningVideoActionListener = listener
+    fun setOnPaySlipClickActionListener(listener: (Payslip) -> Unit) {
+        this.paySlipClickActionListener = listener
     }
 
     fun updateCourseContent(payslips: List<Payslip>) {
@@ -74,14 +70,15 @@ class MonthlyPayslipsAdapter constructor(
         }
 
         fun binTo(paySlip: Payslip) {
-            roleTV.text = paySlip.profile
+            roleTV.text = paySlip.profile.capitalize()
             serialNoTV.text = "Serial No: ${paySlip.serialNumber}"
             monthYearTV.text = "${paySlip.monthOfPayment} ${paySlip.yearOfPayment}"
             totalPayslipAmountTV.text = "Rs. ${paySlip.totalPayout}"
         }
 
         override fun onClick(v: View?) {
-
+            val paySlip = mPayslips[adapterPosition]
+            paySlipClickActionListener?.invoke(paySlip)
         }
     }
 }

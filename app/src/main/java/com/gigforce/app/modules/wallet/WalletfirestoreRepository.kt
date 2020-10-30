@@ -26,6 +26,7 @@ class WalletfirestoreRepository: BaseFirestoreDBRepository() {
         }
     }
 
+
     companion object{
         const val COLLECTION_PAYSLIPS = "Payslips"
     }
