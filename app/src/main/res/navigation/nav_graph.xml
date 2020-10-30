@@ -719,6 +719,10 @@
         android:name="com.gigforce.app.modules.explore_by_role.AddEducationFragment"
         android:label="fragment_new_education"
         tools:layout="@layout/layout_add_education_fragment" />
+    <fragment
+        android:id="@+id/payslipMonthlyFragment"
+        android:name="com.gigforce.app.modules.wallet.PayslipMonthlyFragment"
+        android:label="PayslipMonthlyFragment" />
 
 
 </navigation>
