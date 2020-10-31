@@ -112,7 +112,7 @@ class LearningDetailsLessonsAdapter constructor(
 
                     GlideApp.with(context)
                         .load(videoModel.coverPicture)
-                        .placeholder(getCircularProgressDrawable())
+                        .thumbnail(GlideApp.with(context).load(R.drawable.ic_loading))
                         .error(R.drawable.ic_learning_default_back)
                         .into(holder.slideVideoThumbnail)
                 } else {
@@ -124,7 +124,7 @@ class LearningDetailsLessonsAdapter constructor(
 
                             GlideApp.with(context)
                                 .load(fileUri)
-                                .placeholder(getCircularProgressDrawable())
+                                .thumbnail(GlideApp.with(context).load(R.drawable.ic_loading))
                                 .error(R.drawable.ic_learning_default_back)
                                 .into(holder.slideVideoThumbnail)
                         }
@@ -147,7 +147,7 @@ class LearningDetailsLessonsAdapter constructor(
 
             if (videoModel.completed) {
 //                setMarker(holder, R.drawable.ic_marker, R.color.colorPrimary)
-                holder.lessonCompletionPercentage.text = "Complete 100%"
+                holder.lessonCompletionPercentage.text = "Completed 100%"
                 holder.lessonsSeeMoreButton.text = "Re-play"
                 holder.lessonCompletionPercentage.setTextColor(ResourcesCompat.getColor(context.resources,R.color.text_green,null))
             } else /*if (videoModel.currentlyOnGoing)*/ {
@@ -164,7 +164,7 @@ class LearningDetailsLessonsAdapter constructor(
 
                     val completedPercentage =
                         (videoModel.completionProgress * 100) / videoModel.lessonTotalLength
-                    holder.lessonCompletionPercentage.text = "Complete $completedPercentage%"
+                    holder.lessonCompletionPercentage.text = "Completed $completedPercentage%"
                     holder.lessonsSeeMoreButton.text = "Resume"
                     holder.lessonCompletionPercentage.setTextColor(ResourcesCompat.getColor(context.resources,R.color.text_orange,null))
                 }
@@ -183,7 +183,7 @@ class LearningDetailsLessonsAdapter constructor(
 
                     GlideApp.with(context)
                         .load(videoModel.coverPicture)
-                        .placeholder(getCircularProgressDrawable())
+                        .thumbnail(GlideApp.with(context).load(R.drawable.ic_loading))
                         .error(R.drawable.ic_learning_default_back)
                         .into(holder.slideVideoThumbnail)
                 } else {
@@ -195,7 +195,7 @@ class LearningDetailsLessonsAdapter constructor(
 
                             GlideApp.with(context)
                                 .load(fileUri)
-                                .placeholder(getCircularProgressDrawable())
+                                .thumbnail(GlideApp.with(context).load(R.drawable.ic_loading))
                                 .error(R.drawable.ic_learning_default_back)
                                 .into(holder.slideVideoThumbnail)
                         }
@@ -236,7 +236,7 @@ class LearningDetailsLessonsAdapter constructor(
 
                     val completedPercentage =
                         (videoModel.completionProgress * 100) / videoModel.lessonTotalLength
-                    holder.lessonCompletionPercentage.text = "Complete $completedPercentage%"
+                    holder.lessonCompletionPercentage.text = "Completed $completedPercentage%"
                     holder.lessonsSeeMoreButton.text = "Resume"
                     holder.lessonCompletionPercentage.setTextColor(ResourcesCompat.getColor(context.resources,R.color.text_orange,null))
                 }
