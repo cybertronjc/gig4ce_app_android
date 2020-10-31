@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -92,6 +93,7 @@ class LandingScreenFragment : BaseFragment() {
         val displayMetrics = DisplayMetrics()
         activity?.windowManager?.getDefaultDisplay()?.getMetrics(displayMetrics)
         width = displayMetrics.widthPixels
+
         initUI()
         initializeExploreByRole()
         initializeExploreByIndustry()
@@ -99,7 +101,9 @@ class LandingScreenFragment : BaseFragment() {
         listener()
         observers()
         broadcastReceiverForLanguageCahnge()
+        checkIfRoleSharedViaDeeplink()
 //        checkforLanguagedSelectedForLastLogin()
+
 
         when (comingFromOrGoingToScreen) {
             SCREEN_VERIFICATION -> landingScrollView.post {
@@ -110,6 +114,24 @@ class LandingScreenFragment : BaseFragment() {
             }
             else -> {
             }
+        }
+    }
+
+    private fun checkIfRoleSharedViaDeeplink() {
+        if (navFragmentsData?.getData()
+                ?.getBoolean(StringConstants.ROLE_VIA_DEEPLINK.value, false)!!
+        ) {
+            navigate(
+                R.id.fragment_role_details, bundleOf(
+                    StringConstants.ROLE_ID.value to navFragmentsData?.getData()
+                        ?.getString(StringConstants.ROLE_ID.value),
+                    StringConstants.ROLE_VIA_DEEPLINK.value to true
+                )
+
+            )
+            navFragmentsData?.setData(bundleOf())
+
+
         }
     }
 
