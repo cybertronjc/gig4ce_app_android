@@ -510,13 +510,15 @@ class AddAadharCardInfoFragment : BaseFragment() {
                     aadharDataCorrectCB.visible()
                 }
 
-            } else {
-                MaterialAlertDialogBuilder(requireContext())
-                    .setTitle(getString(R.string.alert))
-                    .setMessage(getString(R.string.unable_to_capture_image))
-                    .setPositiveButton(getString(R.string.okay)) { _, _ -> }
-                    .show()
             }
+
+//            else {
+//                MaterialAlertDialogBuilder(requireContext())
+//                    .setTitle(getString(R.string.alert))
+//                    .setMessage(getString(R.string.unable_to_capture_image))
+//                    .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+//                    .show()
+//            }
         }
     }
 

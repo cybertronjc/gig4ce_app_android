@@ -133,7 +133,7 @@ class OnboardingMainViewModel : ViewModel() {
         profileFirebaseRepository.setDataAsKeyValue("workStatus", selectedDataFromRecycler)
     }
 
-    fun setOnboardingCompleted(invite: String?) {
+    fun setOnboardingCompleted(invite: String?, roleID: String) {
         if (!invite.isNullOrEmpty()) {
             var listener: ListenerRegistration? = null
             listener = profileFirebaseRepository.getCollectionReference()
@@ -146,7 +146,13 @@ class OnboardingMainViewModel : ViewModel() {
                                 .document(invite)
                                 .update(
                                     "invited",
-                                    arrayListOf(Invites(profileFirebaseRepository.getUID(), Date()))
+                                    arrayListOf(
+                                        Invites(
+                                            profileFirebaseRepository.getUID(),
+                                            Date(),
+                                            roleID
+                                        )
+                                    )
                                 )
 
                         } else {
@@ -157,7 +163,7 @@ class OnboardingMainViewModel : ViewModel() {
                                     FieldValue.arrayUnion(
                                         Invites(
                                             profileFirebaseRepository.getUID(),
-                                            Date()
+                                            Date(), roleID
                                         )
                                     )
                                 )

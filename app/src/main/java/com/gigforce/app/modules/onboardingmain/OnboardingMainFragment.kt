@@ -239,7 +239,10 @@ class OnboardingMainFragment : BaseFragment() {
 
     private fun setOnboardingCompleteAndNavigate() {
         val inviteId = sharedDataInterface.getData(StringConstants.INVITE_USER_ID.value)
-        viewModel.setOnboardingCompleted(inviteId)
+        viewModel.setOnboardingCompleted(
+            inviteId,
+            navFragmentsData?.getData()?.getString(StringConstants.ROLE_ID.value) ?: ""
+        )
         sharedDataInterface.remove(StringConstants.INVITE_USER_ID.value)
         saveOnBoardingCompleted()
         navigateToLoaderScreen()
@@ -627,7 +630,8 @@ class OnboardingMainFragment : BaseFragment() {
     private val keyboardLayoutListener = OnGlobalLayoutListener {
         try {
             val heightDiff: Int =
-                onboarding_root_layout.getRootView().getHeight() - onboarding_root_layout.getHeight()
+                onboarding_root_layout.getRootView()
+                    .getHeight() - onboarding_root_layout.getHeight()
 //        val contentViewTop: Int = activity?.getWindow()?.findViewById<View>(Window.ID_ANDROID_CONTENT)?.getTop()!!
 //        val broadcastManager =
 //            LocalBroadcastManager.getInstance(requireContext())

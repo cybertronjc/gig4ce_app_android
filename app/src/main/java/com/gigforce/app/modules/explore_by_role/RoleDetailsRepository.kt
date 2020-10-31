@@ -80,10 +80,10 @@ class RoleDetailsRepository : BaseFirestoreDBRepository(), RoleDetailsCallbacks 
                         return@EventListener
                     }
 
-                    if (snapshot != null && snapshot.exists()) {
+                    if (snapshot != null ) {
                         val documentModel = snapshot.toObject(clazz)
                         listenerRegistration?.remove()
-                        emitter.onNext(documentModel!!)
+                        emitter.onNext(documentModel?:clazz.newInstance())
                         emitter.onComplete()
                     }
                 })
