@@ -666,6 +666,10 @@
             android:name="ROLE_ID"
             android:defaultValue='""'
             app:argType="string" />
+        <argument
+            android:name="ROLE_VIA_DEEPLINK"
+            android:defaultValue='false'
+            app:argType="boolean" />
     </fragment>
 
 

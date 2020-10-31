@@ -18,6 +18,7 @@ import com.clevertap.android.sdk.CleverTapAPI
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.popAllBackStates
 import com.gigforce.app.modules.landingscreen.LandingScreenFragment
+import com.gigforce.app.modules.landingscreen.LandingScreenFragmentDirections
 import com.gigforce.app.modules.onboardingmain.OnboardingMainFragment
 import com.gigforce.app.notification.NotificationConstants
 import com.gigforce.app.utils.NavFragmentsData
@@ -46,16 +47,22 @@ class MainActivity : AppCompatActivity(), NavFragmentsData {
 
         navController = this.findNavController(R.id.nav_fragment)
         navController.handleDeepLink(intent)
-        if (intent.getBooleanExtra(StringConstants.NAV_TO_ROLE.value, false)) {
-            navController.navigate(
-                R.id.fragment_role_details, bundleOf(
-                    StringConstants.ROLE_ID.value to intent.getStringExtra(StringConstants.ROLE_ID.value)
+        when {
+            intent.getBooleanExtra(StringConstants.NAV_TO_ROLE.value, false) -> {
+//                LandingScreenFragmentDirections.openRoleDetailsHome( intent.getStringExtra(StringConstants.ROLE_ID.value),true)
+                navController.navigate(
+                    R.id.fragment_role_details, bundleOf(
+                        StringConstants.ROLE_ID.value to intent.getStringExtra(StringConstants.ROLE_ID.value),
+                        StringConstants.ROLE_VIA_DEEPLINK.value to true
+                    )
                 )
-            )
-        } else if (intent.getStringExtra(IS_DEEPLINK) == "true") {
-            handleDeepLink()
-        } else {
-            proceedWithNormalNavigation()
+            }
+            intent.getStringExtra(IS_DEEPLINK) == "true" -> {
+                handleDeepLink()
+            }
+            else -> {
+                proceedWithNormalNavigation()
+            }
         }
     }
 

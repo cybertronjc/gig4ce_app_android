@@ -28,6 +28,7 @@ import com.gigforce.app.modules.profile.ProfileViewModel
 import com.gigforce.app.modules.profile.models.ProfileData
 import com.gigforce.app.modules.profile.models.RoleInterests
 import com.gigforce.app.utils.*
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.dynamiclinks.DynamicLink
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import com.google.firebase.dynamiclinks.ktx.dynamicLinks
@@ -39,9 +40,12 @@ import java.io.FileOutputStream
 
 
 class RoleDetailsFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener {
-    private var fragmentLoaded = false
     private val viewModelFactory by lazy {
-        ViewModelProviderFactory(RoleDetailsVIewModel(RoleDetailsRepository()))
+        ViewModelProviderFactory(
+            if (FirebaseAuth.getInstance().currentUser?.uid == null) RoleDetailsVIewModel(
+                RoleDetailsRepoNewUser()
+            ) else RoleDetailsVIewModel(RoleDetailsRepository())
+        )
     }
 
     private val viewModel: RoleDetailsVIewModel by lazy {
@@ -50,13 +54,15 @@ class RoleDetailsFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener {
     private val viewModelProfile: ProfileViewModel by lazy {
         ViewModelProvider(this).get(ProfileViewModel::class.java)
     }
-    private val exploreByRoleViewModel = ExploreByRoleViewModel(ExploreByRoleRepository())
-
+    private val exploreByRoleViewModel by lazy {
+        ExploreByRoleViewModel(ExploreByRoleRepository())
+    }
 
     private val adapterPreferredLocation: AdapterPreferredLocation by lazy {
         AdapterPreferredLocation()
     }
-    private lateinit var mRoleID: String;
+    private var mRoleID: String? = ""
+    private var mIsRoleViaDeeplink: Boolean? = false;
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -68,13 +74,22 @@ class RoleDetailsFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         getDataFromSavedState(savedInstanceState)
         setupPreferredLocationRv()
-        initObservers()
-        checkForMarkedAsInterest()
-        checkForRedirection()
         initClicks()
+        initAsPerLoginState()
+
+    }
+
+    fun initAsPerLoginState() {
+        if (FirebaseAuth.getInstance().currentUser?.uid == null) {
+            viewModel.setNewUser(true)
+        } else {
+            checkForMarkedAsInterest()
+            checkForRedirection()
+        }
+        initObservers()
+
     }
 
     private fun initClicks() {
@@ -89,6 +104,7 @@ class RoleDetailsFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener {
             if (navFragmentsData?.getData()
                     ?.getBoolean(StringConstants.BACK_PRESSED.value, false) == true
             ) {
+                navFragmentsData?.getData()?.putBoolean(StringConstants.BACK_PRESSED.value, false)
 
 
             } else if (navFragmentsData?.getData()
@@ -115,6 +131,10 @@ class RoleDetailsFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener {
                         run {
                             val rolePresent = it.role_interests!!.contains(RoleInterests(mRoleID))
                             tv_mark_as_interest_role_details.setOnClickListener {
+                                if (mIsRoleViaDeeplink == true) {
+                                    navigate(R.id.authFlowFragment)
+                                    return@setOnClickListener
+                                }
                                 pb_role_details.visible()
                                 checkForProfileAndVerificationData()
 
@@ -411,16 +431,20 @@ class RoleDetailsFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener {
     private fun getDataFromSavedState(savedInstanceState: Bundle?) {
         savedInstanceState?.let {
             mRoleID = it.getString(StringConstants.ROLE_ID.value) ?: return@let
+            mIsRoleViaDeeplink = it.getBoolean(StringConstants.ROLE_VIA_DEEPLINK.value, false)
         }
 
         arguments?.let {
             mRoleID = it.getString(StringConstants.ROLE_ID.value) ?: return@let
+            mIsRoleViaDeeplink = it.getBoolean(StringConstants.ROLE_VIA_DEEPLINK.value, false)
+
         }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString(StringConstants.ROLE_ID.value, mRoleID)
+        outState.putBoolean(StringConstants.ROLE_VIA_DEEPLINK.value, mIsRoleViaDeeplink ?: false)
     }
 
     override fun onMenuItemClick(item: MenuItem?): Boolean {
@@ -498,5 +522,15 @@ class RoleDetailsFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener {
             //e.toString();
         }
         pb_role_details.gone()
+    }
+
+    override fun onBackPressed(): Boolean {
+        return if (viewModel.isNewUser()) {
+            requireActivity().finish()
+            true
+        } else {
+            super.onBackPressed()
+        }
+
     }
 }

@@ -10,6 +10,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException
 
 class RoleDetailsVIewModel(private val callbacks: RoleDetailsCallbacks) : ViewModel(),
     RoleDetailsCallbacks.ResponseCallbacks {
+    private var newUser: Boolean = false
     var openQuestionnaire: Boolean = false
     private val _observerRole: SingleLiveEvent<Role> by lazy {
         SingleLiveEvent<Role>();
@@ -84,5 +85,13 @@ class RoleDetailsVIewModel(private val callbacks: RoleDetailsCallbacks) : ViewMo
 
     fun openQuestionnaireLandingAgain() {
         this.openQuestionnaire = true
+    }
+
+    fun setNewUser(b: Boolean) {
+        this.newUser = b;
+    }
+
+    fun isNewUser(): Boolean {
+        return newUser
     }
 }
