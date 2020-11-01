@@ -12,6 +12,7 @@ class RoleDetailsVIewModel(private val callbacks: RoleDetailsCallbacks) : ViewMo
     RoleDetailsCallbacks.ResponseCallbacks {
     private var newUser: Boolean = false
     var openQuestionnaire: Boolean = false
+    var emailValidated = false
     private val _observerRole: SingleLiveEvent<Role> by lazy {
         SingleLiveEvent<Role>();
     }
