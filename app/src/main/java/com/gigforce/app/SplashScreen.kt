@@ -34,30 +34,29 @@ class SplashScreen : AppCompatActivity() {
                 var deepLink: Uri? = null
                 if (pendingDynamicLinkData != null) {
                     deepLink = pendingDynamicLinkData.link
-                    deepLink?.getQueryParameter("role_id")?.let {
+                    val inviteID = deepLink?.getQueryParameter("invite")
+                    val roleID = deepLink?.getQueryParameter("role_id")
+                    val sp = SharedDataImp(this)
+                    sp.saveData(
+                        StringConstants.INVITE_USER_ID.value,
+                        inviteID
+                    )
+                    if (!roleID.isNullOrEmpty()) {
                         val intent = Intent(this, MainActivity::class.java)
                         intent.putExtra(StringConstants.NAV_TO_ROLE.value, true)
-                        intent.putExtra(StringConstants.ROLE_ID.value, it)
+                        intent.putExtra(StringConstants.INVITE_USER_ID.value, inviteID)
+                        intent.putExtra(StringConstants.ROLE_ID.value, roleID)
                         initApp(intent)
                         return@addOnSuccessListener
-
                     }
-                    deepLink?.getQueryParameter("invite")?.let {
-                        val sp = SharedDataImp(this)
-                        sp.saveData(
-                            StringConstants.INVITE_USER_ID.value,
-                            it
-                        )
-                    }
-
-
                 }
 
                 initApp(Intent(this, MainActivity::class.java))
 
 
             }
-            .addOnFailureListener(this) { e ->
+            .addOnFailureListener(this)
+            { e ->
                 run {
                     initApp(Intent(this, MainActivity::class.java))
 

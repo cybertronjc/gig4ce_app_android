@@ -108,18 +108,23 @@ class AdapterAddLanguage() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                     SPEAKING_LEVEL,
                     viewHolderAddLanguage
                 )
+                viewHolderAddLanguage.itemView.add_language_speaking_level.post {
+                    viewHolderAddLanguage.itemView.add_language_speaking_level.setProgress(
+                        language?.speakingSkill?.toInt() ?: 0
+                    )
+                }
 
-                viewHolderAddLanguage.itemView.add_language_speaking_level.setProgress(
-                    language?.speakingSkill?.toInt() ?: 0
-                )
                 setSeekBarListener(
                     viewHolderAddLanguage.itemView.arround_current_add_seekbar,
                     WRITING_LEVEL,
                     viewHolderAddLanguage
                 )
-                viewHolderAddLanguage.itemView.arround_current_add_seekbar.setProgress(
-                    language?.writingSkill?.toInt() ?: 0
-                )
+                viewHolderAddLanguage.itemView.arround_current_add_seekbar.post {
+                    viewHolderAddLanguage.itemView.arround_current_add_seekbar.setProgress(
+                        language?.writingSkill?.toInt() ?: 0
+                    )
+                }
+
                 viewHolderAddLanguage.itemView.mother_language.setOnClickListener {
                     if (viewHolderAddLanguage.adapterPosition == -1) return@setOnClickListener
                     items?.get(viewHolderAddLanguage.adapterPosition)?.isMotherLanguage =

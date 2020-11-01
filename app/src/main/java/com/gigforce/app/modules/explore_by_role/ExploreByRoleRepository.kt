@@ -29,7 +29,9 @@ class ExploreByRoleRepository : BaseFirestoreDBRepository(), ExploreByRoleCallba
 
     override fun markAsInterest(
         roleID: String?,
+        inviteID: String?,
         location: Location?,
+
         responseCallbacks: ExploreByRoleCallbacks.ResponseCallbacks
     ) {
         db.collection("Profiles").document(getUID())
@@ -39,7 +41,8 @@ class ExploreByRoleRepository : BaseFirestoreDBRepository(), ExploreByRoleCallba
                     RoleInterests(
                         roleID,
                         lat = location?.latitude.toString(),
-                        lon = location?.longitude.toString()
+                        lon = location?.longitude.toString(),
+                        invitedBy = inviteID ?: ""
                     )
                 )
             )

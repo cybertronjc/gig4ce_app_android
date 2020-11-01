@@ -181,32 +181,32 @@ class OnboardingMainFragment : BaseFragment() {
 
     private fun initializeTitleAsName() {
         setProgressBarWeight(20f)
-        progress_completion_tv.text = "1/5"
-        title_onboarding.text = "What's your name?"
+        progress_completion_tv.text = getString(R.string.one_of_five)
+        title_onboarding.text = getString(R.string.whats_ur_name)
     }
 
     private fun initializeTitleAsAge() {
         setProgressBarWeight(40f)
-        progress_completion_tv.text = "2/5"
-        title_onboarding.text = "What's your age group?"
+        progress_completion_tv.text = getString(R.string.two_of_five)
+        title_onboarding.text = getString(R.string.whats_ur_age)
     }
 
     private fun initializeTitleAsGender() {
         setProgressBarWeight(60f)
-        progress_completion_tv.text = "3/5"
-        title_onboarding.text = "Select your gender."
+        progress_completion_tv.text = getString(R.string.three_of_five)
+        title_onboarding.text = getString(R.string.select_gender)
     }
 
     private fun initializeTitleAsEducation() {
         setProgressBarWeight(80f)
-        progress_completion_tv.text = "4/5"
-        title_onboarding.text = "What's your highest qualification?"
+        progress_completion_tv.text = getString(R.string.four_of_five)
+        title_onboarding.text = getString(R.string.highest_qualification)
     }
 
     private fun initializeTitleAsWorkStatus() {
         setProgressBarWeight(100f)
-        progress_completion_tv.text = "5/5"
-        title_onboarding.text = "What's your work status?"
+        progress_completion_tv.text = getString(R.string.five_of_five)
+        title_onboarding.text = getString(R.string.whats_ur_work)
     }
 
     private fun nextPage(): Boolean {

@@ -121,15 +121,18 @@ class LandingScreenFragment : BaseFragment() {
         if (navFragmentsData?.getData()
                 ?.getBoolean(StringConstants.ROLE_VIA_DEEPLINK.value, false)!!
         ) {
+
             navigate(
                 R.id.fragment_role_details, bundleOf(
                     StringConstants.ROLE_ID.value to navFragmentsData?.getData()
                         ?.getString(StringConstants.ROLE_ID.value),
-                    StringConstants.ROLE_VIA_DEEPLINK.value to true
+                    StringConstants.ROLE_VIA_DEEPLINK.value to true,
+                    StringConstants.INVITE_USER_ID.value to navFragmentsData?.getData()
+                        ?.getString(StringConstants.INVITE_USER_ID.value)
                 )
 
             )
-            navFragmentsData?.setData(bundleOf())
+            navFragmentsData?.getData()?.putBoolean(StringConstants.ROLE_VIA_DEEPLINK.value, false)
 
 
         }
@@ -233,6 +236,7 @@ class LandingScreenFragment : BaseFragment() {
         viewModelProfile = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
         viewModelProfile.getProfileData().observe(viewLifecycleOwner, Observer { profileObs ->
             val profile: ProfileData = profileObs!!
+
             displayImage(profile.profileAvatarName)
             if (profile.name != null && !profile.name.equals(""))
                 profile_name.text = profile.name

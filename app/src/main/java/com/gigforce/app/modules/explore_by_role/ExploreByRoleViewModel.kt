@@ -74,8 +74,12 @@ class ExploreByRoleViewModel(private val callbacks: ExploreByRoleCallbacks) : Vi
         }
     }
 
-    fun addAsInterest(roleID: String, location: Location?) {
-        callbacks.markAsInterest(roleID, location, this)
+    fun addAsInterest(
+        roleID: String,
+        location: Location?,
+        inviteID: String
+    ) {
+        callbacks.markAsInterest(roleID, inviteID, location, this)
 
     }
 

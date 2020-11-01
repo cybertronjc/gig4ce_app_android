@@ -31,6 +31,7 @@ class MarkedInterestSuccessFragment : BaseFragment(),
     AdapterExploreByRole.AdapterExploreByRoleCallbacks, LocationUpdates.LocationUpdateCallbacks {
     private var mRoleID: String? = null
     private var roleUpdated: Boolean = false
+    private var inviteID: String? = null
     private val viewModelFactory by lazy {
         ViewModelProviderFactory(ExploreByRoleViewModel(ExploreByRoleRepository()))
     }
@@ -98,6 +99,11 @@ class MarkedInterestSuccessFragment : BaseFragment(),
         })
         viewModel.observerVerified.observe(viewLifecycleOwner, Observer {
             if (it!!) {
+                navFragmentsData?.getData()?.putString(StringConstants.INVITE_USER_ID.value, null)
+                navFragmentsData?.getData()?.putString(StringConstants.ROLE_ID.value, null)
+                navFragmentsData?.getData()
+                    ?.putBoolean(StringConstants.ROLE_VIA_DEEPLINK.value, false)
+
                 tv_title_mark_as_interest.text = getString(R.string.role_activated)
                 tv_mark_as_interest_note.setPadding(
                     0,
@@ -172,10 +178,12 @@ class MarkedInterestSuccessFragment : BaseFragment(),
 
     private fun getDataFromSavedState(savedInstanceState: Bundle?) {
         savedInstanceState?.let {
+            inviteID = it.getString(StringConstants.INVITE_USER_ID.value)
             mRoleID = it.getString(StringConstants.ROLE_ID.value) ?: return@let
         }
 
         arguments?.let {
+            inviteID = it.getString(StringConstants.INVITE_USER_ID.value)
             mRoleID = it.getString(StringConstants.ROLE_ID.value) ?: return@let
         }
     }
@@ -183,6 +191,8 @@ class MarkedInterestSuccessFragment : BaseFragment(),
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString(StringConstants.ROLE_ID.value, mRoleID)
+        outState.putString(StringConstants.INVITE_USER_ID.value, inviteID)
+
     }
 
 
@@ -251,7 +261,12 @@ class MarkedInterestSuccessFragment : BaseFragment(),
 
     override fun locationReceiver(location: Location?) {
         if (!roleUpdated) {
-            viewModel.addAsInterest(mRoleID!!, location)
+            viewModel.addAsInterest(
+                mRoleID!!,
+                location,
+                inviteID ?: ""
+
+            )
             locationUpdates?.stopLocationUpdates(activity)
             roleUpdated = true
         }

@@ -1015,6 +1015,16 @@
     <string name="slots">Slots</string>
     <string name="weekday">Weekday</string>
     <string name="days_caps">Days</string>
+    <string name="one_of_five">1/5</string>
+    <string name="whats_ur_name">What\'s your name?</string>
+    <string name="two_of_five">2/5</string>
+    <string name="whats_ur_age">What\'s your age group?</string>
+    <string name="three_of_five">3/5</string>
+    <string name="select_gender">Select your gender.</string>
+    <string name="four_of_five">4/5</string>
+    <string name="highest_qualification">What\'s your highest qualification?</string>
+    <string name="five_of_five">5/5</string>
+    <string name="whats_ur_work">What\'s your work status?</string>
 
 
 </resources>

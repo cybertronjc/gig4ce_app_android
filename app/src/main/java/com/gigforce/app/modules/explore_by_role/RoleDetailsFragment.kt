@@ -69,6 +69,7 @@ class RoleDetailsFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener {
     }
     private var mRoleID: String? = ""
     private var mIsRoleViaDeeplink: Boolean? = false;
+    private var mInviteUserID: String? = ""
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -94,7 +95,8 @@ class RoleDetailsFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener {
                 navFragmentsData?.setData(
                     bundleOf(
                         StringConstants.ROLE_ID.value to mRoleID,
-                        StringConstants.ROLE_VIA_DEEPLINK.value to mIsRoleViaDeeplink
+                        StringConstants.ROLE_VIA_DEEPLINK.value to mIsRoleViaDeeplink,
+                        StringConstants.INVITE_USER_ID.value to mInviteUserID
                     )
                 )
 //                popFragmentFromStack(R.id.fragment_role_details)
@@ -135,9 +137,32 @@ class RoleDetailsFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener {
 
     }
 
+    fun applyOnClick(isOnBoardingDone: Boolean) {
+
+
+        if (!isOnBoardingDone) {
+            if (mIsRoleViaDeeplink == true) {
+                navFragmentsData?.setData(
+                    bundleOf(
+                        StringConstants.ROLE_ID.value to mRoleID,
+                        StringConstants.ROLE_VIA_DEEPLINK.value to mIsRoleViaDeeplink,
+                        StringConstants.INVITE_USER_ID.value to mInviteUserID
+
+                    )
+                )
+            }
+            navigate(R.id.onboardingfragment)
+            return
+        }
+        pb_role_details.visible()
+        checkForProfileAndVerificationData()
+
+    }
+
     private fun checkForMarkedAsInterest() {
         pb_role_details.visible()
         viewModelProfile.getProfileData().observe(viewLifecycleOwner, Observer {
+            val isOnBoardingDone = it.isonboardingdone
             if (!it.role_interests.isNullOrEmpty()) {
 
                 exploreByRoleViewModel.observerVerified.observe(
@@ -145,12 +170,9 @@ class RoleDetailsFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener {
                     Observer { verified ->
                         pb_role_details.gone()
                         run {
-                            val rolePresent = it.role_interests!!.contains(RoleInterests(mRoleID))
-                            tv_mark_as_interest_role_details.setOnClickListener {
-                                pb_role_details.visible()
-                                checkForProfileAndVerificationData()
 
-                            }
+                            val rolePresent = it.role_interests!!.contains(RoleInterests(mRoleID))
+
                             if (rolePresent && verified!!) {
                                 tv_mark_as_interest_role_details.visible()
                                 tv_mark_as_interest_role_details.setOnClickListener(null)
@@ -165,6 +187,10 @@ class RoleDetailsFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener {
                                     Html.fromHtml("&#x2713 " + getString(R.string.applied))
 
 
+                            } else {
+                                tv_mark_as_interest_role_details.setOnClickListener {
+                                    applyOnClick(isOnBoardingDone)
+                                }
                             }
                         }
 
@@ -173,8 +199,8 @@ class RoleDetailsFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener {
             } else {
                 tv_mark_as_interest_role_details.text = getString(R.string.apply_now)
                 tv_mark_as_interest_role_details.setOnClickListener {
-                    pb_role_details.visible()
-                    checkForProfileAndVerificationData()
+                    applyOnClick(isOnBoardingDone)
+
 
                 }
 
@@ -256,7 +282,10 @@ class RoleDetailsFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener {
                             )
                         navigate(
                             R.id.fragment_marked_as_interest,
-                            bundleOf(StringConstants.ROLE_ID.value to mRoleID)
+                            bundleOf(
+                                StringConstants.ROLE_ID.value to mRoleID,
+                                StringConstants.INVITE_USER_ID.value to mInviteUserID
+                            )
                         )
                         break
                     } else if (navFragmentsData?.getData()
@@ -444,11 +473,14 @@ class RoleDetailsFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener {
         savedInstanceState?.let {
             mRoleID = it.getString(StringConstants.ROLE_ID.value) ?: return@let
             mIsRoleViaDeeplink = it.getBoolean(StringConstants.ROLE_VIA_DEEPLINK.value, false)
+            mInviteUserID = it.getString(StringConstants.INVITE_USER_ID.value, "")
+
         }
 
         arguments?.let {
             mRoleID = it.getString(StringConstants.ROLE_ID.value) ?: return@let
             mIsRoleViaDeeplink = it.getBoolean(StringConstants.ROLE_VIA_DEEPLINK.value, false)
+            mInviteUserID = it.getString(StringConstants.INVITE_USER_ID.value, "")
 
         }
     }
@@ -457,6 +489,7 @@ class RoleDetailsFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener {
         super.onSaveInstanceState(outState)
         outState.putString(StringConstants.ROLE_ID.value, mRoleID)
         outState.putBoolean(StringConstants.ROLE_VIA_DEEPLINK.value, mIsRoleViaDeeplink ?: false)
+        outState.putString(StringConstants.INVITE_USER_ID.value, mInviteUserID)
     }
 
     override fun onMenuItemClick(item: MenuItem?): Boolean {

@@ -9,7 +9,12 @@ import com.google.firebase.firestore.QuerySnapshot
 interface ExploreByRoleCallbacks {
     fun getRoles(responseCallbacks: ResponseCallbacks)
     fun checkIfDocsAreVerified(responseCallbacks: ResponseCallbacks)
-    fun markAsInterest(roleID: String?, location: Location?, responseCallbacks: ResponseCallbacks)
+    fun markAsInterest(
+        roleID: String?,
+        inviteID: String?,
+        location: Location?,
+        responseCallbacks: ResponseCallbacks
+    )
 
     interface ResponseCallbacks {
         fun getRolesResponse(querySnapshot: QuerySnapshot?, error: FirebaseFirestoreException?)
