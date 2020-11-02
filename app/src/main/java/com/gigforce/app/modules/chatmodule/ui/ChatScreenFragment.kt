@@ -3,6 +3,7 @@ package com.gigforce.app.modules.chatmodule.ui
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.util.LayoutDirection
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -11,10 +12,12 @@ import android.widget.PopupMenu
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.app.modules.chatmodule.ui.adapters.ChatRecyclerAdapter
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.modules.chatmodule.models.Message
+import com.gigforce.app.modules.chatmodule.viewModels.ChatMessagesViewModel
 import com.gigforce.app.modules.chatmodule.viewModels.ChatViewModel
 import com.gigforce.app.utils.AppConstants
 import com.gigforce.app.utils.VerticalItemDecorator
@@ -25,16 +28,14 @@ import java.time.format.DateTimeFormatter
 
 class ChatScreenFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener {
 
-    private lateinit var viewModel: ChatViewModel
+    private val viewModel: ChatMessagesViewModel by activityViewModels<ChatMessagesViewModel>()
+
     private lateinit var mAdapter: ChatRecyclerAdapter
-    lateinit var imageUrl: String
-    lateinit var username: String
+    private lateinit var imageUrl: String
+    private lateinit var username: String
+    private lateinit var forUserId: String
     private lateinit var chatHeaderId: String
     private lateinit var otherUserId: String
-
-    companion object {
-        fun newInstance() = ChatScreenFragment()
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,6 +43,7 @@ class ChatScreenFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener {
             imageUrl = it.getSerializable(AppConstants.IMAGE_URL).toString()
             username = it.getSerializable(AppConstants.CONTACT_NAME).toString()
             chatHeaderId = it.getSerializable("chatHeaderId").toString()
+            forUserId = it.getSerializable("forUserId").toString()
             otherUserId = it.getSerializable("otherUserId").toString()
         }
     }
@@ -58,7 +60,6 @@ class ChatScreenFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener {
         init()
         manageTime()
         subscribeViewModel()
-        viewModel.getChatMsgs(chatHeaderId)
         manageNewMessageToContact()
         manageBackIcon()
     }
@@ -68,30 +69,31 @@ class ChatScreenFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener {
         initIntent()
         initListeners()
         initRecycler()
-        val tempViewModel:ChatViewModel by activityViewModels<ChatViewModel>()
-        viewModel = tempViewModel
     }
 
     private fun initRecycler() {
-        rv_chats.layoutManager = LinearLayoutManager(activity?.applicationContext)
+        val layoutManager = LinearLayoutManager(activity?.applicationContext)
+        layoutManager.reverseLayout = true
+        layoutManager.stackFromEnd = true
+        rv_chats.layoutManager = layoutManager
+
         rv_chats.addItemDecoration(VerticalItemDecorator(30))
+        // rv_chats.setHasFixedSize(true)
         rv_chats.adapter = mAdapter
     }
 
     private fun subscribeViewModel() {
-        viewModel.chatMsgs.observe(viewLifecycleOwner, Observer {
-            viewModel.markChatMsgsRead(it)
-            if (it != null) {
-                mAdapter.setData(it)
-                rv_chats.scrollToPosition(it.size - 1)
-            }
+        viewModel.getChatMessagesLiveData(chatHeaderId)
+            .observe(viewLifecycleOwner, Observer
+            {
+                if (it != null) {
+                    mAdapter.setData(it)
+                    rv_chats.smoothScrollToPosition(0)
+                }
         })
     }
 
     private fun initIntent() {
-//        val intentData = Intent()
-//        val url = intentData.getStringExtra(AppConstants.IMAGE_URL)
-//        val contactName = intentData.getStringExtra(AppConstants.CONTACT_NAME)
         val req = initGlide()
         val uri = Uri.parse("android.resource://com.gigforce.app/drawable/" + imageUrl)
         req!!.load(uri).into(civ_personImage)
@@ -145,8 +147,7 @@ class ChatScreenFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener {
             if (validateNewMessageTask()) {
                 val message = et_typedMessageValue.text.toString()
                 val msgTime = manageTime()
-                //viewModel.addNewMessageToTheList(message, msgTime)
-                viewModel.sendNewMsg(chatHeaderId, message, msgTime, otherUserId)
+                viewModel.sendNewText(chatHeaderId, forUserId, otherUserId, message)
                 et_typedMessageValue.setText("")
             }
         }

@@ -30,7 +30,7 @@
         android:layout_width="11dp"
         android:layout_height="11dp"
         app:layout_constraintBottom_toBottomOf="@+id/contactImage_cv"
-        app:layout_constraintEnd_toStartOf="@+id/tv_dateValue"
+        app:layout_constraintEnd_toStartOf="@+id/tv_subtitle"
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="10dp"
         android:id="@+id/view_pinkCircle"
@@ -58,7 +58,7 @@
         app:layout_constraintStart_toStartOf="@+id/tv_nameValue"
         app:layout_constraintTop_toBottomOf="@+id/tv_nameValue"
         android:layout_marginTop="5dp"
-        android:id="@+id/tv_dateValue"
+        android:id="@+id/tv_subtitle"
         />
 
     <TextView
@@ -70,7 +70,7 @@
         android:fontFamily="@font/lato"
         android:layout_marginTop="5dp"
         android:layout_marginStart="10dp"
-        app:layout_constraintStart_toEndOf="@+id/tv_dateValue"
+        app:layout_constraintStart_toEndOf="@+id/tv_subtitle"
         app:layout_constraintTop_toBottomOf="@+id/tv_nameValue"
         android:id="@+id/tv_timeValue"
         />
@@ -80,7 +80,7 @@
         android:layout_height="1dp"
         android:background="#35BDBDBD"
         app:layout_constraintTop_toBottomOf="@+id/contactImage_cv"
-        app:layout_constraintStart_toStartOf="@+id/tv_dateValue"
+        app:layout_constraintStart_toStartOf="@+id/tv_subtitle"
         android:layout_marginTop="3dp"
         android:id="@+id/view_bottomBorder"
         />

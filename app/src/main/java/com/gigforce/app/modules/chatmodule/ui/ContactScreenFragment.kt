@@ -10,20 +10,26 @@ import com.gigforce.app.modules.chatmodule.ui.adapters.ContactRecyclerAdapter
 import com.gigforce.app.modules.chatmodule.ui.adapters.OnContactClickListener
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
+import com.gigforce.app.modules.chatmodule.models.ChatHeader
+import com.gigforce.app.modules.chatmodule.viewModels.ChatHeadersViewModel
 import com.gigforce.app.modules.chatmodule.viewModels.ChatViewModel
 import com.gigforce.app.utils.AppConstants
 import com.gigforce.app.utils.VerticalItemDecorator
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.contact_screen_fragment.*
 
+/*
+    This is supposed to be Chat Headers Screen
+ */
 class ContactScreenFragment : BaseFragment(), OnContactClickListener {
 
-    private lateinit var viewModel : ChatViewModel
+    private val viewModel : ChatHeadersViewModel by activityViewModels<ChatHeadersViewModel>()
     private lateinit var mAdapter : ContactRecyclerAdapter
 
+    /*
     companion object {
         fun newInstance() = ContactScreenFragment()
-    }
+    }*/
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,51 +38,42 @@ class ContactScreenFragment : BaseFragment(), OnContactClickListener {
         return inflateView(R.layout.contact_screen_fragment, inflater, container)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?)
+    {
         super.onViewCreated(view, savedInstanceState)
         initialize()
-        attachListeners()
-
-        val tempviewModel: ChatViewModel by activityViewModels<ChatViewModel>()
-        viewModel = tempviewModel
-        mAdapter =
-            ContactRecyclerAdapter(
-                initGlide()!!,
-                this
-            )
-        subscribeViewModel()
-        initRecycler()
     }
 
     fun initialize() {
-        val chatViewModel: ChatViewModel by activityViewModels<ChatViewModel>()
+        initRecycler()
+        viewModel.ChatHeaders.observe(viewLifecycleOwner, Observer {
 
-        chatViewModel.chatHeaders.observe(viewLifecycleOwner, Observer {
+            it ?. let{
+                mAdapter.setData(it)
+            }
+
             it.forEach {
                 Log.d("CHAT", it.toString())
-                chatViewModel.getChatMsgs(it.id)
+                // viewModel.getChatMsgs(it.id)
             }
         })
 
-        chatViewModel.chatMsgs.observe(viewLifecycleOwner, Observer {
+        /*
+        viewModel.chatMsgs.observe(viewLifecycleOwner, Observer {
             it.forEach {
                 Log.d("CHAT", "MSG " + it.toString())
             }
-        })
+        })*/
+        attachListeners()
     }
-//    override fun onCreate(savedInstanceState: Bundle?)
-//    {
-//        super.onCreate(savedInstanceState)
-//        setContentView(R.layout.activity_main)
-//        setSupportActionBar(toolbar)
-//        toolbar.overflowIcon!!.setColorFilter(Color.parseColor("#000000"), PorterDuff.Mode.SRC_ATOP);
-//
-//    }
 
     private fun attachListeners(){
+
         fab.setOnClickListener { view ->
-            Snackbar.make(view, "Add New Contact", Snackbar.LENGTH_LONG)
+            navigate(R.id.chatNewContactFragment)
+            Snackbar.make(view, "To be Implemented", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
+
         }
         iv_backArrow.setOnClickListener {
             showToast("onBackPressed operation")
@@ -89,15 +86,11 @@ class ContactScreenFragment : BaseFragment(), OnContactClickListener {
         }
     }
 
-    private fun subscribeViewModel(){
-        viewModel.chatHeaders.observe(viewLifecycleOwner, Observer {
-            if (it!=null){
-                mAdapter.setData(it)
-            }
-        })
-    }
-
     private fun initRecycler(){
+
+        // Initialise Adapter for Chat Headers RecyclerView
+        mAdapter = ContactRecyclerAdapter(initGlide()!!, this)
+
         rv_contacts.layoutManager = LinearLayoutManager(activity?.applicationContext)
         rv_contacts.addItemDecoration(VerticalItemDecorator(30))
         rv_contacts.adapter = mAdapter
@@ -117,26 +110,27 @@ class ContactScreenFragment : BaseFragment(), OnContactClickListener {
                 true
             }
             R.id.action_referesh -> {
-                showToast("Referesh...")
+                showToast("Refresh...")
                 true
             }
             else -> super.onOptionsItemSelected(item)
         }
     }
 
-    override fun contactClick(url: String, name: String, chatHeaderId: String, otherUserId: String) {
+    override fun contactClick(chatHeader: ChatHeader) {
 //        val intent = Intent(activity?.applicationContext,ChatScreenFragment::class.java)
 //        intent.putExtra(AppConstants.IMAGE_URL,url)
 //        intent.putExtra(AppConstants.CONTACT_NAME,name)
 //        startActivity(intent)
-        if(name.equals("Help")){
+        if(chatHeader.otherUser?.name?.equals("Help")?:false){
             navigate(R.id.helpChatFragment)
         }else {
             val bundle = Bundle()
-            bundle.putSerializable(AppConstants.IMAGE_URL, url)
-            bundle.putSerializable(AppConstants.CONTACT_NAME, name)
-            bundle.putSerializable("chatHeaderId", chatHeaderId)
-            bundle.putSerializable("otherUserId", otherUserId)
+            bundle.putSerializable(AppConstants.IMAGE_URL, chatHeader.otherUser?.profilePic)
+            bundle.putSerializable(AppConstants.CONTACT_NAME, chatHeader.otherUser?.name)
+            bundle.putSerializable("chatHeaderId", chatHeader.id)
+            bundle.putSerializable("forUserId", chatHeader.forUserId)
+            bundle.putSerializable("otherUserId", chatHeader.otherUserId)
             navigate(R.id.chatScreenFragment, bundle)
         }
     }

@@ -7,12 +7,13 @@ import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 
 
-abstract public class BaseFirestoreDBRepository {
+abstract class BaseFirestoreDBRepository {
+
     private var firebaseDB = FirebaseFirestore.getInstance()
     val db: FirebaseFirestore get() = firebaseDB
     private var uid = FirebaseAuth.getInstance().currentUser?.uid!!
 
-    abstract public fun getCollectionName(): String
+    abstract fun getCollectionName(): String
 
     // for set DB data
     //set data object

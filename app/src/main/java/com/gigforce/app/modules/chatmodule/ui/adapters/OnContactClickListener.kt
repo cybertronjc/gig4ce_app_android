@@ -1,5 +1,7 @@
 package com.gigforce.app.modules.chatmodule.ui.adapters
 
+import com.gigforce.app.modules.chatmodule.models.ChatHeader
+
 interface OnContactClickListener {
-    fun contactClick(url:String, name:String, chatHeaderId: String, otherUserId: String)
+    fun contactClick(chatHeader: ChatHeader)
 }

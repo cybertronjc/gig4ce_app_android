@@ -8,15 +8,15 @@ import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
 
 class ChatHeaderFirebaseRepository: BaseFirestoreDBRepository() {
-    private var firebaseDB = FirebaseFirestore.getInstance()
-    private var uid = FirebaseAuth.getInstance().currentUser?.uid!!
+
+    // private var firebaseDB = FirebaseFirestore.getInstance()
     private var COLLECTION_NAME = "chat_headers"
 
     override fun getCollectionName(): String {
         return COLLECTION_NAME
     }
 
-    fun getChatHeaders(): Query {
+    fun getChatHeaders(uid:String): Query {
         return getCollectionReference().whereEqualTo("forUserId", uid)
     }
 }

@@ -5,19 +5,20 @@ import com.google.firebase.firestore.DocumentId
 
 data class ChatHeader(
     @DocumentId
-    var id: String = "",
-    var forUserId: String = "",
-    var lastMsgText: String = "",
-    var lastMsgTimestamp: com.google.firebase.Timestamp? = null,
-    var unseenCount: Int = 0,
-    var otherUser: UserInfo? = null
-): BaseFirestoreDataModel(tableName = "chat_headers") {
+    val id: String = "",
+    val forUserId: String = "",
+    val otherUserId: String = "",
+    val lastMsgText: String = "",
+    val lastMsgTimestamp: com.google.firebase.Timestamp? = null,
+    val unseenCount: Int = 0,
+    val otherUser: UserInfo? = null
+): BaseFirestoreDataModel(tableName = "headers") {
 }
 
 data class UserInfo(
-   var name: String = "",
+    @DocumentId
+    var id: String = "",
+    var name: String = "",
    var profilePic: String = "",
-   var type: String = "",
-   @DocumentId
-   var id: String = ""
+   var type: String = ""
 ) {}

@@ -15,7 +15,6 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-import com.google.firestore.v1.DocumentChange
 import java.time.LocalDateTime
 
 class ChatViewModel: ViewModel() {
@@ -48,7 +47,7 @@ class ChatViewModel: ViewModel() {
     }
 
     fun getChatHeaders() {
-        chatHeaderRepository.getChatHeaders()
+        chatHeaderRepository.getChatHeaders(uid)
             .addSnapshotListener { querySnapshot, firebaseFirestoreException ->
                 querySnapshot?.documentChanges?.forEach {
                     when (it.type) {

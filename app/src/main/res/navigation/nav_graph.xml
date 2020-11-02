@@ -613,6 +613,10 @@
         android:name="com.gigforce.app.modules.chatmodule.ui.FakeGigContactScreenFragment"
         android:label="fragment_fake_contact_screen"
         tools:layout="@layout/fragment_fake_contact_screen" />
+    <fragment
+        android:id="@+id/chatNewContactFragment"
+        android:name="com.gigforce.app.modules.chatmodule.ui.ChatNewContactFragment"
+        android:label="ChatNewContactFragment" />
 
 
 </navigation>

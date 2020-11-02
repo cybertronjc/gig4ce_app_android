@@ -1,8 +1,18 @@
-package com.abhijai.gigschatdemo.contacts_module.models
+package com.gigforce.app.modules.chatmodule.models
+
+import com.google.firebase.firestore.DocumentId
 
 data class ContactModel(
- val imageUrl : String,
- val name : String,
- val date : String,
- val time : String
-)
+ @DocumentId
+ val id: String?,
+ val mobile: String,
+ val name: String? = null,
+ val fb_uid: String? = null,
+ val contactId: String? = null,
+ val headerId: String? = null,
+ val imageUrl : String? = null,
+ val date : String? = null,
+ val time : String? = null
+){
+
+}
