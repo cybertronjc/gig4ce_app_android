@@ -14,5 +14,6 @@ data class VerificationBaseModel(
     var bank_details: BankDetailsDataModel? = null,
     var driving_license: DrivingLicenseDataModel? = null,
     var selfie_video: SelfieVideoDataModel? = null,
-    var sync_status : Boolean = false
+    var sync_status: Boolean = false,
+    var contract: Contract? = null
 )
