@@ -9,7 +9,7 @@ apply plugin: 'com.google.gms.google-services'
 android {
     signingConfigs {
         debug {
-            storeFile file('/home/chirag/gig4ce/GigerProdApp/gigforce-debugapp.jks')
+            storeFile file('../keystore/gigforceapp.jks')
 //            storeFile file('/Users/apple/Documents/gigforceapp.jks')
             storePassword 'gigforce'
             keyAlias 'key0'
