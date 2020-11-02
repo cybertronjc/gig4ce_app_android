@@ -63,7 +63,7 @@
     <string name="add_achievement_sheet_title">ಶೀರ್ಷಿಕೆ *</string>
     <string name="add_achievement_sheet_issuing_authority">ಪ್ರಾಧಿಕಾರವನ್ನು ನೀಡಲಾಗುತ್ತಿದೆ *</string>
     <string name="add_achievement_sheet_location">ಸ್ಥಳ</string>
-    <string name="add_achievement_sheet_year">ವರ್ಷ * (ಉದಾ. 2011)</string>
+    <string name="add_achievement_sheet_year">ವರ್ಷ * (ಉದಾ</string>string>
     <string name="add_education_sheet_new_education">ಹೊಸ ಶಿಕ್ಷಣ</string>
     <string name="add_education_sheet_institution">ಸಂಸ್ಥೆ *</string>
     <string name="add_education_sheet_course">ಕೋರ್ಸ್ *</string>
@@ -94,7 +94,7 @@
     <string name="desc1_video_resume">ನಿಮ್ಮ ಬಗ್ಗೆ ಇನ್ನಷ್ಟು ನಮಗೆ ತಿಳಿಸಿ</string>
     <string name="desc2_video_resume">ಯಾವುದೇ ಪುನರಾರಂಭ ಮತ್ತು ಸಂದರ್ಶನವಿಲ್ಲ</string>
     <string name="otp_sign_in_up">ಲಾಗಿನ್ ಮಾಡಿ</string>
-    <string name="otp_enter_mobile_num">Mobile ಒಟಿಪಿ ಪರಿಶೀಲನೆಗಾಗಿ ನಿಮ್ಮ ಮೊಬೈಲ್ ಸಂಖ್ಯೆಯನ್ನು ನಮೂದಿಸಿ</string>
+    <string name="otp_enter_mobile_num">Mobile n ಒಟಿಪಿ ಪರಿಶೀಲನೆಗಾಗಿ ನಿಮ್ಮ ಮೊಬೈಲ್ ಸಂಖ್ಯೆಯನ್ನು ನಮೂದಿಸಿ</string>
     <string name="otp_verify_account">ಖಾತೆಯನ್ನು ಪರಿಶೀಲಿಸಿ</string>
     <string name="mobile_verified">ಮೊಬೈಲ್ ಪರಿಶೀಲನೆ ಯಶಸ್ವಿಯಾಗಿದೆ!</string>
     <string name="otp_notcorrect">ತಪ್ಪು ಪಾಸ್ವರ್ಡ್ !!</string>
@@ -141,19 +141,19 @@
     <string name="go_back">ಹಿಂದೆ ಹೋಗು</string>
     <string name="add">ಸೇರಿಸಿ</string>
     <string name="veriScreenTitle">ನಮಸ್ಕಾರ ಗಿಗರ್!</string>
-    <string name="veri_address_title">"ಹಂತ 1: ದಯವಿಟ್ಟು ನಿಮ್ಮ ವಿಳಾಸವನ್ನು ಸೇರಿಸಿ"</string>
-    <string name="veri_add_address">"ವಿಳಾಸ"</string>
-    <string name="veri_add_doc_front">"ಫ್ರಂಟ್ ಸೈಡ್"</string>
-    <string name="veri_add_doc_back">"ಬ್ಯಾಕ್ ಸೈಡ್"</string>
-    <string name="veri_pan_title">"ಹಂತ 5: ನಿಮ್ಮ ಪ್ಯಾನ್ ಅನ್ನು ಅಪ್‌ಲೋಡ್ ಮಾಡಿ"</string>
-    <string name="veri_aadhaar_title">"ಹಂತ 2: ನಿಮ್ಮ ಆಧಾರ್ ಅನ್ನು ಅಪ್‌ಲೋಡ್ ಮಾಡಿ"</string>
-    <string name="veri_no_aadhaar">"ಇಲ್ಲ ಆಧಾರ್! ಬಿಟ್ಟುಬಿಡಿ >>"</string>
-    <string name="veri_dl_title">"ಹಂತ 3: ನಿಮ್ಮ ಚಾಲನಾ ಪರವಾನಗಿಯನ್ನು ಅಪ್‌ಲೋಡ್ ಮಾಡಿ"</string>
-    <string name="veri_bank_title">"ಹಂತ 4: ದಯವಿಟ್ಟು ನಿಮ್ಮ ಬ್ಯಾಂಕ್ ವಿವರಗಳನ್ನು ಸೇರಿಸಿ"</string>
-    <string name="veri_add_bank">"ಬ್ಯಾಂಕ್ ವಿವರಗಳನ್ನು ಸೇರಿಸಿ"</string>
-    <string name="veri_done">ಹರ್ರೆ !!! \n ಕೆವೈಸಿ ಡಾಕ್ಯುಮೆಂಟ್‌ಗಳನ್ನು ಸಲ್ಲಿಸಲಾಗಿದೆ. Ver n ಪರಿಶೀಲಿಸಿದ ನಂತರ ನಾವು ನಿಮಗೆ ತಿಳಿಸುತ್ತೇವೆ.</string>
-    <string name="veri_hint_address_line1">"ವಿಳಾಸ ಸಾಲು 1"</string>
-    <string name="veri_hint_address_line2">"ವಿಳಾಸ ಸಾಲು 2"</string>
+    <string name="veri_address_title">ಹಂತ 1: ದಯವಿಟ್ಟು ನಿಮ್ಮ ವಿಳಾಸವನ್ನು ಸೇರಿಸಿ</string>
+    <string name="veri_add_address">ವಿಳಾಸ</string>
+    <string name="veri_add_doc_front">ಫ್ರಂಟ್ ಸೈಡ್</string>
+    <string name="veri_add_doc_back">ಬ್ಯಾಕ್ ಸೈಡ್</string>
+    <string name="veri_pan_title">ಹಂತ 5: ನಿಮ್ಮ ಪ್ಯಾನ್ ಅನ್ನು ಅಪ್‌ಲೋಡ್ ಮಾಡಿ</string>
+    <string name="veri_aadhaar_title">ಹಂತ 2: ನಿಮ್ಮ ಆಧಾರ್ ಅನ್ನು ಅಪ್‌ಲೋಡ್ ಮಾಡಿ</string>
+    <string name="veri_no_aadhaar">ಇಲ್ಲ ಆಧಾರ್! ಬಿಟ್ಟುಬಿಡಿ >></string>
+    <string name="veri_dl_title">ಹಂತ 3: ನಿಮ್ಮ ಚಾಲನಾ ಪರವಾನಗಿಯನ್ನು ಅಪ್‌ಲೋಡ್ ಮಾಡಿ</string>
+    <string name="veri_bank_title">ಹಂತ 4: ದಯವಿಟ್ಟು ನಿಮ್ಮ ಬ್ಯಾಂಕ್ ವಿವರಗಳನ್ನು ಸೇರಿಸಿ</string>
+    <string name="veri_add_bank">ಬ್ಯಾಂಕ್ ವಿವರಗಳನ್ನು ಸೇರಿಸಿ</string>
+    <string name="veri_done">ಹರ್ರೆ !!! K n ಕೆವೈಸಿ ದಾಖಲೆಗಳನ್ನು ಸಲ್ಲಿಸಲಾಗಿದೆ</string>string>
+    <string name="veri_hint_address_line1">ವಿಳಾಸ ಲೈನ್ 1</string>
+    <string name="veri_hint_address_line2">ವಿಳಾಸ ಸಾಲು 2</string>
     <string name="veri_hint_city">ನಗರ</string>
     <string name="veri_hint_state">ರಾಜ್ಯ</string>
     <string name="veri_hint_pin">ಪಿನ್ಕೋಡ್</string>
@@ -171,11 +171,11 @@
     <string name="bio_hint_text">ನಿಮ್ಮ ಬಗ್ಗೆ ಒಂದು ಸಾಲಿನಲ್ಲಿ ವಿವರಿಸಿ</string>
     <string name="add_tags">ಟ್ಯಾಗ್‌ಗಳನ್ನು ಸೇರಿಸಿ</string>
     <string name="hs_rv_title">ಡಂಜೊ ವಿತರಣೆಗಳು</string>
-    <string name="hs_rv_subtitle">2 ಹೆಚ್ಚು</string>
-    <string name="hs_rv_date">11</string>
+    <string name="hs_rv_date">ಹನ್ನೊಂದು</string>
     <string name="hs_rv_month">ಏಪ್ರಿಲ್</string>
     <string name="hs_rv_comment">ಕೊನೆಯ ವಿತರಣೆಯು 20 ನಿಮಿಷಗಳ ಹಿಂದೆ</string>
-    <string name="homescreen_bs_alert">ಕೈಕ್ ಪರಿಶೀಲನೆ ಮಾಡಲಾಗಿಲ್ಲ, ಪೂರ್ಣಗೊಳಿಸಲು ಇಲ್ಲಿ ಕ್ಲಿಕ್ ಮಾಡಿ.</string>
+    <string name="homescreen_bs_alert">ಕೈಕ್ ಪರಿಶೀಲನೆ ಮಾಡಲಾಗಿಲ್ಲ, ಪೂರ್ಣಗೊಳಿಸಲು ಇಲ್ಲಿ ಕ್ಲಿಕ್ ಮಾಡಿ</string>
+    string>
     <string name="homescreen_bs_features">ವೈಶಿಷ್ಟ್ಯಗಳು</string>
     <string name="select_skill">ಕೌಶಲ್ಯ ಆಯ್ಕೆಮಾಡಿ</string>
     <string name="add_mother_tongue_text">ನನ್ನ ಮಾತೃಭಾಷೆಯಾಗಿ ಸೇರಿಸಿ</string>
@@ -928,4 +928,5 @@
     <string name="total_number_of_days">ಒಟ್ಟು ದಿನಗಳ ಸಂಖ್ಯೆ</string>
     <string name="total_working_days">ಒಟ್ಟು ಕೆಲಸದ ದಿನಗಳು</string>
     <string name="number_of_offs">ಆಫ್‌ಗಳ ಸಂಖ್ಯೆ</string>
+    <string name="download_payslip">Download Payslip</string>
 </resources>

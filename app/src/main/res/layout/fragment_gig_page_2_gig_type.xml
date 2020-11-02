@@ -14,7 +14,7 @@
         android:id="@+id/gig_type_iv"
         android:layout_width="24dp"
         android:layout_height="24dp"
-        android:src="@drawable/ic_location"
+        android:src="@drawable/ic_brightness_gradient"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -116,10 +116,10 @@
 
             <ImageView
                 android:id="@+id/expand_iv"
-                android:layout_width="20dp"
-                android:layout_height="36dp"
-                android:src="@drawable/ic_baseline_arrow_downward_24"
-
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_keyboard_arrow_down_c7c7cc"
+                android:layout_marginTop="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/separator" />
 

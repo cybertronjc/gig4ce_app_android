@@ -631,7 +631,7 @@ class BSCalendarScreenFragment : BaseFragment() {
     private fun initializeFeaturesBottomSheet() {
         var datalist: ArrayList<FeatureModel> = ArrayList<FeatureModel>()
         datalist.add(FeatureModel("My Gig", R.drawable.mygig, R.id.gig_history_fragment))
-        datalist.add(FeatureModel("Wallet", R.drawable.wallet, R.id.walletBalancePage))
+        datalist.add(FeatureModel("Wallet", R.drawable.wallet, R.id.payslipMonthlyFragment))
         datalist.add(FeatureModel("Profile", R.drawable.profile, R.id.profileFragment))
         datalist.add(FeatureModel("Learning", R.drawable.learning, R.id.mainLearningFragment))
         datalist.add(FeatureModel("Settings", R.drawable.settings, R.id.settingFragment))
@@ -658,7 +658,7 @@ class BSCalendarScreenFragment : BaseFragment() {
                 activity?.applicationContext,
                 PFRecyclerViewAdapter.OnViewHolderClick<FeatureModel?> { view, position, item ->
                     if (item?.navigationID != -1) {
-                        if (item?.title?.equals("Wallet") ?: false || item?.title?.equals("Chat") ?: false) {
+                        if (/*item?.title?.equals("Wallet") ?: false ||*/ item?.title?.equals("Chat") ?: false) {
                             if (AppConstants.UNLOCK_FEATURE) {
                                 navigate(item?.navigationID!!)
                             } else showToast("This page are inactive. We’ll activate it in a few weeks")

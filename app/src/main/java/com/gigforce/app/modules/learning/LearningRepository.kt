@@ -223,7 +223,7 @@ class LearningRepository constructor(
         }
     }
 
-    suspend fun courseProgressDataGenerated(courseId: String) : Boolean{
+    suspend fun courseProgressDataGenerated(courseId: String): Boolean {
         return db.collection(COURSE_PROGRESS_NAME)
             .whereEqualTo("uid", getUID())
             .whereEqualTo("course_id", courseId)
@@ -362,7 +362,8 @@ class LearningRepository constructor(
             moduleProgress.lessonsProgress = lessonProgressList
         }
 
-        val updatedLessonProgressList = moduleProgress.lessonsProgress.filter { it.isActive }.sortedBy { it.priority }
+        val updatedLessonProgressList =
+            moduleProgress.lessonsProgress.filter { it.isActive }.sortedBy { it.priority }
         var nextLessonProgress: LessonProgress? = null
 
         for (i in updatedLessonProgressList.indices) {
@@ -1150,7 +1151,6 @@ class LearningRepository constructor(
         moduleProgress.addAll(newlyModulesProgressData)
 
 
-
         //adding progress of lessons which have been added to modules newly
         for (moduleData in modules) {
 
@@ -1191,7 +1191,7 @@ class LearningRepository constructor(
 
         //Updating total lessons and other stuff
         moduleProgress
-            .filter{
+            .filter {
                 it.isActive
             }.forEach {
                 var totalLessons = 0
@@ -1207,7 +1207,7 @@ class LearningRepository constructor(
                 it.lessonsTotal = totalLessons
                 it.lessonsCompleted = completedLessons
 
-                if(it.lessonsTotal == it.lessonsCompleted){
+                if (it.lessonsTotal == it.lessonsCompleted) {
                     it.completed = true
 
                     if (it.moduleCompletionDate != null) {
@@ -1224,31 +1224,83 @@ class LearningRepository constructor(
 
         moduleProgress.forEach {
             totalModules++
-            if(it.completed) modulesCompleted++
+            if (it.completed) modulesCompleted++
         }
 
-        if(courseProgress.totalModules!= totalModules || courseProgress.completedModules != modulesCompleted){
+        if (courseProgress.totalModules != totalModules || courseProgress.completedModules != modulesCompleted) {
             courseProgress.completed = modulesCompleted == totalModules
 
             if (courseProgress.courseCompletionDate != null) {
                 courseProgress.courseCompletionDate = Timestamp.now()
             }
 
-            updateCourseProgress(courseProgress.progressId,courseProgress)
+            updateCourseProgress(courseProgress.progressId, courseProgress)
         }
     }
 
-    private suspend fun addNewModuleProgress(moduleProgress : ModuleProgress) : ModuleProgress{
+    private suspend fun addNewModuleProgress(moduleProgress: ModuleProgress): ModuleProgress {
         val docRef = db.collection(COURSE_PROGRESS_NAME)
             .addOrThrow(moduleProgress)
 
         moduleProgress.progressId = docRef.id
-        return  moduleProgress
+        return moduleProgress
+    }
+
+    suspend fun recordLessonFeedback(
+        lessonId: String,
+        lessonRating: Float? = null,
+        explanation: Boolean? = null,
+        relevance: Boolean? = null,
+        completeness: Boolean? = null,
+        easyToUnderStand: Boolean? = null,
+        videoQuality: Boolean? = null,
+        soundQuality: Boolean? = null
+    ) {
+
+        val querySnap = db.collection(COLLECTION_LESSON_FEEDBACK)
+            .whereEqualTo("uid", getUID())
+            .whereEqualTo("lessonId", lessonId)
+            .getOrThrow()
+
+        if (querySnap.isEmpty) {
+            //Create new Entry
+
+            db.collection(COLLECTION_LESSON_FEEDBACK).add(
+                LessonFeedback(
+                    lessonId = lessonId,
+                    uid = getUID(),
+                    lessonRating = lessonRating,
+                    explanation = explanation,
+                    relevance = relevance,
+                    completeness = completeness,
+                    easyToUnderStand = easyToUnderStand,
+                    videoQuality = videoQuality,
+                    soundQuality = soundQuality
+                )
+            )
+        } else {
+            //Update
+            val docSnap = querySnap.documents.first()
+            val feedback = docSnap.toObject(LessonFeedback::class.java)!!
+
+            feedback.lessonRating = lessonRating
+            feedback.explanation = explanation
+            feedback.relevance = relevance
+            feedback.completeness = completeness
+            feedback.easyToUnderStand = easyToUnderStand
+            feedback.videoQuality = videoQuality
+            feedback.soundQuality = soundQuality
+
+            db.collection(COLLECTION_LESSON_FEEDBACK)
+                .document(docSnap.id)
+                .setOrThrow(feedback)
+        }
     }
 
     companion object {
         private const val COLLECTION_NAME = "Course_blocks"
         private const val COURSE_PROGRESS_NAME = "Course_Progress"
+        private const val COLLECTION_LESSON_FEEDBACK = "Course_lesson_feedback"
 
         private const val TYPE = "type"
         private const val TOPIC_TYPE = "topictype"
