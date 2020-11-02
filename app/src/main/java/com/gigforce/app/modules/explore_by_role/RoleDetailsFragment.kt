@@ -303,8 +303,7 @@ class RoleDetailsFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener {
                         } else if (element.languages == null || element.languages!!.isEmpty()) {
                             navigate(R.id.fragment_add_language)
                             break
-                        } else if (viewModel.emailValidated == false && (element.contactEmail == null || element.contactEmail!!.isEmpty() || element.contactEmail!![0].email.isNullOrEmpty()
-                                        )) {
+                        } else if (!viewModel.emailValidated && (element.contactEmail == null || element.contactEmail!!.isEmpty() || element.contactEmail!![0].email.isNullOrEmpty())) {
                             navigate(R.id.fragment_add_contact)
                             viewModel.emailValidated = true
                             break
@@ -571,13 +570,13 @@ class RoleDetailsFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener {
         pb_role_details.gone()
     }
 
-    override fun onBackPressed(): Boolean {
-        if (nav_fragment.requireActivity().supportFragmentManager.fragments.size == 1) {
-            requireActivity().finish()
-            return true
-        }
-        super.onBackPressed()
-        return false
-
-    }
+//    override fun onBackPressed(): Boolean {
+//        if (requireActivity().supportFragmentManager.fragments[0].nav_fragment.childFragmentManager.backStackEntryCount == 1) {
+//            requireActivity().finish()
+//            return true
+//        }
+//        super.onBackPressed()
+//        return false
+//
+//    }
 }

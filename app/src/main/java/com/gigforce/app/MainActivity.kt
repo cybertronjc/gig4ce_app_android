@@ -50,6 +50,7 @@ class MainActivity : AppCompatActivity(), NavFragmentsData {
         when {
             intent.getBooleanExtra(StringConstants.NAV_TO_ROLE.value, false) -> {
 //                LandingScreenFragmentDirections.openRoleDetailsHome( intent.getStringExtra(StringConstants.ROLE_ID.value),true)
+                navController.popBackStack()
                 navController.navigate(
                     R.id.fragment_role_details, bundleOf(
                         StringConstants.ROLE_ID.value to intent.getStringExtra(StringConstants.ROLE_ID.value),
