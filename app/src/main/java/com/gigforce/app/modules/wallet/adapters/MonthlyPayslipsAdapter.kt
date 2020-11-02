@@ -63,10 +63,9 @@ class MonthlyPayslipsAdapter constructor(
         val serialNoTV = itemView.serial_no_text
         val totalPayslipAmountTV = itemView.gig_amount_text
         val monthYearTV = itemView.start_date_text
-        val downloadPayslip = itemView.download_payslip_text
 
         init {
-            downloadPayslip.setOnClickListener(this)
+            itemView.setOnClickListener(this)
         }
 
         fun binTo(paySlip: Payslip) {
