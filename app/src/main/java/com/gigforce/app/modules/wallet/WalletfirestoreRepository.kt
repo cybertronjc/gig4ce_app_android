@@ -20,7 +20,9 @@ class WalletfirestoreRepository: BaseFirestoreDBRepository() {
             .getOrThrow()
 
         return querySnap.documents.map {
-            it.toObject(Payslip::class.java)!!
+            val slip = it.toObject(Payslip::class.java)!!
+            slip.id = it.id
+            slip
         }.sortedBy {
             it.getMonthNo()
         }

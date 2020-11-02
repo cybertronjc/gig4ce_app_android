@@ -88,9 +88,7 @@ class PayslipMonthlyViewModel constructor(
             } else {
                 //Generate and download
                 val response = generatePaySlip(
-                    payslip.uid,
-                    payslip.getMonthNo(),
-                    payslip.yearOfPayment
+                    payslip.id
                 )
 
                 response.downloadLink!!
@@ -105,9 +103,7 @@ class PayslipMonthlyViewModel constructor(
 
 
     private suspend fun generatePaySlip(
-        uid: String,
-        month: Int,
-        year: Int
+        payslipId: String
     ): PaySlipResponseModel {
         val generatePayslipUrl = if (BuildConfig.FLAVOR == "development")
             "https://d38v9ehujf.execute-api.ap-south-1.amazonaws.com/default/get-or-create-payment-advice-dev"
@@ -116,9 +112,7 @@ class PayslipMonthlyViewModel constructor(
 
         val response = paySlipService.generatePayslip(
             generatePayslipUrl,
-            uid,
-            month,
-            year
+            payslipId
         )
 
         if (response.isSuccessful) {

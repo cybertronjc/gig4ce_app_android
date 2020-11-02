@@ -8,6 +8,8 @@ import java.util.*
 
 data class Payslip(
 
+    var id : String = "",
+
     @get:PropertyName("accountNo")
     @set:PropertyName("accountNo")
     var accountNo: String = "",
