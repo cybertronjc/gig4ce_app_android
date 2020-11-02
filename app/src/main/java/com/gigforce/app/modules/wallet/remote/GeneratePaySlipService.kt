@@ -12,9 +12,7 @@ interface GeneratePaySlipService {
     @GET
     suspend fun generatePayslip(
         @Url apiUrl: String,
-        @Query("uid") uid: String,
-        @Query("month") month: Int,
-        @Query("year") year: Int
+        @Query("payslipId") payslipId: String
     ): Response<PaySlipResponseModel>
 
     @GET
