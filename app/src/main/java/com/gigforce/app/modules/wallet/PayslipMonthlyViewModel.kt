@@ -105,13 +105,9 @@ class PayslipMonthlyViewModel constructor(
     private suspend fun generatePaySlip(
         payslipId: String
     ): PaySlipResponseModel {
-        val generatePayslipUrl = if (BuildConfig.FLAVOR == "development")
-            "https://d38v9ehujf.execute-api.ap-south-1.amazonaws.com/default/get-or-create-payment-advice-dev"
-        else
-            "https://d38v9ehujf.execute-api.ap-south-1.amazonaws.com/default/get-or-create-payment-advice-dev"
 
         val response = paySlipService.generatePayslip(
-            generatePayslipUrl,
+            BuildConfig.GENERATE_PAYSLIP_URL,
             payslipId
         )
 
