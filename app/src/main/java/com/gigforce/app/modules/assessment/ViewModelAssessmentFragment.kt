@@ -79,9 +79,9 @@ class ViewModelAssessmentFragment(private val modelCallbacks: ModelCallbacks) : 
             if(it.size>0)
                 observableAssessmentData.value = it[0]
         }
-        if (value?.documents?.isNotEmpty() == true)
-            observableAssessmentData.value =
-                value?.toObjects(AssementQuestionsReponse::class.java)!![0]
+//        if (value?.documents?.isNotEmpty() == true)
+//            observableAssessmentData.value =
+//                value?.toObjects(AssementQuestionsReponse::class.java)!![0]
     }
 
     override fun submitAnswerSuccess() {
