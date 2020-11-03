@@ -25,10 +25,6 @@ data class LessonFeedback (
     @set:PropertyName("explanation")
     var explanation : Boolean? = null,
 
-    @get:PropertyName("relevance")
-    @set:PropertyName("relevance")
-    var relevance : Boolean? = null,
-
     @get:PropertyName("completeness")
     @set:PropertyName("completeness")
     var completeness : Boolean? = null,
