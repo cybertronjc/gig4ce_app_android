@@ -123,16 +123,26 @@ class PayslipMonthlyViewModel constructor(
     }
 
     private suspend fun downloadAndSavePaySlip(pdfDownloadLink: String, filesDir: File): File {
-        val response = paySlipService.downloadPaySlip(pdfDownloadLink)
+        val fileName: String = pdfDownloadLink.substring(
+            pdfDownloadLink.lastIndexOf('/') + 1,
+            pdfDownloadLink.length
+        )
 
-        if (response.isSuccessful) {
-            val body = response.body()!!
-
-            val paySlipFile = File(filesDir, "${System.currentTimeMillis()}.pdf")
-            writeResponseBodyToDisk(body, paySlipFile)
+        val paySlipFile = File(filesDir, fileName)
+        if (paySlipFile.exists()) {
+            Log.d("PayslipMonthlyViewModel","File Present in local")
+            //File Present in Local
             return paySlipFile
         } else {
-            throw Exception("Unable to dowload payslip, ${response.message()}")
+            val response = paySlipService.downloadPaySlip(pdfDownloadLink)
+
+            if (response.isSuccessful) {
+                val body = response.body()!!
+                writeResponseBodyToDisk(body, paySlipFile)
+                return paySlipFile
+            } else {
+                throw Exception("Unable to dowload payslip, ${response.message()}")
+            }
         }
     }
 
