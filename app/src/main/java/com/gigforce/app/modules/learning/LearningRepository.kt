@@ -1213,7 +1213,11 @@ class LearningRepository constructor(
                     if (it.moduleCompletionDate != null) {
                         it.moduleCompletionDate = Timestamp.now()
                     }
+                } else{
+                    it.completed = false
+                    it.moduleCompletionDate = null
                 }
+
                 updateModuleProgress(it.progressId, it)
             }
 

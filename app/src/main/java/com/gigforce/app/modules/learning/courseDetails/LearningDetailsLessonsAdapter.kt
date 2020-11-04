@@ -162,8 +162,11 @@ class LearningDetailsLessonsAdapter constructor(
                     //Currently going on
     //                setMarker(holder, R.drawable.ic_marker_active, R.color.colorPrimary)
 
-                    val completedPercentage =
+                    val completedPercentage : Long = if(videoModel.lessonTotalLength != 0L)
                         (videoModel.completionProgress * 100) / videoModel.lessonTotalLength
+                    else
+                        0
+
                     holder.lessonCompletionPercentage.text = "Completed $completedPercentage%"
                     holder.lessonsSeeMoreButton.text = "Resume"
                     holder.lessonCompletionPercentage.setTextColor(ResourcesCompat.getColor(context.resources,R.color.text_orange,null))
@@ -234,8 +237,11 @@ class LearningDetailsLessonsAdapter constructor(
                     //Currently going on
             //        setMarker(holder, R.drawable.ic_marker_active, R.color.colorPrimary)
 
-                    val completedPercentage =
+                    val completedPercentage : Long = if(videoModel.lessonTotalLength != 0L)
                         (videoModel.completionProgress * 100) / videoModel.lessonTotalLength
+                    else
+                        0
+
                     holder.lessonCompletionPercentage.text = "Completed $completedPercentage%"
                     holder.lessonsSeeMoreButton.text = "Resume"
                     holder.lessonCompletionPercentage.setTextColor(ResourcesCompat.getColor(context.resources,R.color.text_orange,null))
