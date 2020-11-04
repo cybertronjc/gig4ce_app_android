@@ -1254,7 +1254,6 @@ class LearningRepository constructor(
         lessonId: String,
         lessonRating: Float? = null,
         explanation: Boolean? = null,
-        relevance: Boolean? = null,
         completeness: Boolean? = null,
         easyToUnderStand: Boolean? = null,
         videoQuality: Boolean? = null,
@@ -1275,7 +1274,6 @@ class LearningRepository constructor(
                     uid = getUID(),
                     lessonRating = lessonRating,
                     explanation = explanation,
-                    relevance = relevance,
                     completeness = completeness,
                     easyToUnderStand = easyToUnderStand,
                     videoQuality = videoQuality,
@@ -1289,7 +1287,6 @@ class LearningRepository constructor(
 
             feedback.lessonRating = lessonRating
             feedback.explanation = explanation
-            feedback.relevance = relevance
             feedback.completeness = completeness
             feedback.easyToUnderStand = easyToUnderStand
             feedback.videoQuality = videoQuality

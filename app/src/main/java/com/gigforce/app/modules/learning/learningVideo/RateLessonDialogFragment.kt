@@ -20,6 +20,7 @@ import com.gigforce.app.modules.learning.models.CourseContent
 import com.gigforce.app.modules.learning.slides.SlidesFragment
 import com.gigforce.app.utils.Lce
 import com.gigforce.app.utils.Lse
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.android.synthetic.main.fragment_rate_lesson.*
 import kotlinx.android.synthetic.main.fragment_rate_lesson_main.*
 
@@ -97,16 +98,21 @@ class RateLessonDialogFragment : DialogFragment() {
         submitBtn.setOnClickListener {
 
             val rating = ratingBar.rating
+
+            if(rating == 0.0f ){
+                MaterialAlertDialogBuilder(requireContext())
+                    .setTitle("Alert")
+                    .setMessage("Please provide lesson rating in stars")
+                    .setPositiveButton("Okay"){_,_ -> }
+                    .show()
+
+                return@setOnClickListener
+            }
+
             val explanation = if (explanation_chip_group.checkedChipId == -1) {
                 null
             }else{
                 explanation_chip_group.checkedChipId == R.id.explanation_yes_chip
-            }
-
-            val relevance = if (relevance_chip_group.checkedChipId == -1) {
-                null
-            }else{
-                relevance_chip_group.checkedChipId == R.id.relevance_yes_chip
             }
 
             val completeness = if (completeness_chip_group.checkedChipId == -1) {
@@ -131,7 +137,6 @@ class RateLessonDialogFragment : DialogFragment() {
                 lessonId = mLessonId,
                 lessonRating = rating,
                 explanation = explanation,
-                relevance = relevance,
                 completeness = completeness,
                 easyToUnderStand = easyToUnderstand,
                 videoQuality = videoQuality
