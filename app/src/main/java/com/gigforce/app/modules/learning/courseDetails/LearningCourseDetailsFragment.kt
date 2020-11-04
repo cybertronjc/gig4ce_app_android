@@ -492,7 +492,7 @@ class LearningCourseDetailsFragment : BaseFragment() {
                         completedPercTV.setTextColor(ResourcesCompat.getColor(resources,R.color.green,null))
                         completedIV.setImageResource(R.drawable.ic_successful_green_tick)
                     } else{
-                        val completedPercentage = (obj.lessonsCompleted * 100) / obj.totalLessons
+                        val completedPercentage = if(obj.totalLessons != 0) (obj.lessonsCompleted * 100) / obj.totalLessons else 0
 
                         completedPercTV.setTextColor(ResourcesCompat.getColor(resources,R.color.app_orange,null))
                         completedPercTV.text = "$completedPercentage%"
