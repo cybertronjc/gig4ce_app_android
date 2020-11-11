@@ -1,15 +1,11 @@
 package com.gigforce.app.modules.chatmodule.ui
 
-import android.annotation.SuppressLint
 import android.content.*
 import android.content.pm.PackageManager
 import android.database.Cursor
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
-import android.provider.ContactsContract
-import android.provider.ContactsContract.Contacts
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -18,15 +14,11 @@ import android.widget.AdapterView
 import android.widget.CursorAdapter
 import android.widget.ListView
 import android.widget.SimpleCursorAdapter
-import androidx.core.database.getStringOrNull
 import androidx.fragment.app.activityViewModels
-import androidx.loader.app.LoaderManager
-import androidx.loader.content.CursorLoader
-import androidx.loader.content.Loader
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.modules.chatmodule.viewModels.ChatNewContactViewModel
-import com.gigforce.app.modules.chatmodule.viewModels.FetchContactsService
+import com.gigforce.app.modules.chatmodule.service.FetchContactsService
 
 /*
     /////////////////////////////////////////////////////////////////////////////////

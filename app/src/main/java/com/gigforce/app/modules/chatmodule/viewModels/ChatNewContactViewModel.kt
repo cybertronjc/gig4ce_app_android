@@ -28,7 +28,7 @@ class ChatNewContactViewModel:ViewModel() {
     private fun subscribe() {
         FirebaseFirestore.getInstance()
             .collection("chats")
-            .document(uid)
+            .document(uid!!)
             .collection("contacts")
             .get().addOnCompleteListener {
                 if (it.isSuccessful) {

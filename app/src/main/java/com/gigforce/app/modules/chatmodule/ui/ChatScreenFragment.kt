@@ -16,7 +16,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.app.modules.chatmodule.ui.adapters.ChatRecyclerAdapter
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
+import com.gigforce.app.modules.chatmodule.models.ChatMessage
 import com.gigforce.app.modules.chatmodule.models.Message
+import com.gigforce.app.modules.chatmodule.models.MessageType
+import com.gigforce.app.modules.chatmodule.ui.adapters.OnChatMessageClickListener
 import com.gigforce.app.modules.chatmodule.viewModels.ChatMessagesViewModel
 import com.gigforce.app.modules.chatmodule.viewModels.ChatViewModel
 import com.gigforce.app.utils.AppConstants
@@ -26,7 +29,8 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 
-class ChatScreenFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener {
+class ChatScreenFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
+    OnChatMessageClickListener {
 
     private val viewModel: ChatMessagesViewModel by activityViewModels<ChatMessagesViewModel>()
 
@@ -65,7 +69,7 @@ class ChatScreenFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener {
     }
 
     private fun init() {
-        mAdapter = ChatRecyclerAdapter()
+        mAdapter = ChatRecyclerAdapter(this)
         initIntent()
         initListeners()
         initRecycler()
@@ -86,10 +90,10 @@ class ChatScreenFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener {
         viewModel.getChatMessagesLiveData(chatHeaderId)
             .observe(viewLifecycleOwner, Observer
             {
-                if (it != null) {
-                    mAdapter.setData(it)
-                    rv_chats.smoothScrollToPosition(0)
-                }
+//                if (it != null) {
+//                    mAdapter.setData(it)
+//                    rv_chats.smoothScrollToPosition(0)
+//                }
         })
     }
 
@@ -164,6 +168,14 @@ class ChatScreenFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener {
         iv_backArrowInChat.setOnClickListener {
             activity?.onBackPressed()
         }
+    }
+
+    override fun chatMessageClicked(
+        messageType: MessageType,
+        position: Int,
+        message: ChatMessage
+    ) {
+
     }
 
 }

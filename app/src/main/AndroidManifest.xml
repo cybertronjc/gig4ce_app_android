@@ -29,7 +29,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <service
-            android:name=".modules.chatmodule.viewModels.FetchContactsService"
+            android:name=".modules.chatmodule.service.FetchContactsService"
             android:enabled="true"
             android:exported="true"></service>
         <!--

@@ -16,4 +16,7 @@ class Message(
     val type: String = "",
     val content: String = ""
 ) {
+
+
+
 }

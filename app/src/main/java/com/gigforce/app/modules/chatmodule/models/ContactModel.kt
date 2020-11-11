@@ -12,7 +12,8 @@ data class ContactModel(
  val headerId: String? = null,
  val imageUrl : String? = null,
  val date : String? = null,
- val time : String? = null
+ val time : String? = null,
+ val isGigForceUser : Boolean = false
 ){
 
 }
