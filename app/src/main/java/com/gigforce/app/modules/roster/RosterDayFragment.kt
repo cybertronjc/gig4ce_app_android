@@ -12,6 +12,7 @@ import android.widget.AdapterView
 import android.widget.PopupMenu
 import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.os.bundleOf
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
@@ -21,9 +22,11 @@ import com.gigforce.app.core.toDate
 import com.gigforce.app.modules.calendarscreen.maincalendarscreen.verticalcalendar.AllotedGigDataModel
 import com.gigforce.app.modules.custom_gig_preferences.CustomPreferencesViewModel
 import com.gigforce.app.modules.custom_gig_preferences.ParamCustPreferViewModel
+import com.gigforce.app.modules.gigPage.GigsListForDeclineBottomSheet
 import com.gigforce.app.modules.gigPage.models.Gig
 import kotlinx.android.synthetic.main.day_view_top_bar.*
 import kotlinx.android.synthetic.main.day_view_top_bar.view.*
+import kotlinx.android.synthetic.main.earning_fragment.view.*
 import kotlinx.android.synthetic.main.roster_day_fragment.*
 import java.text.SimpleDateFormat
 import java.time.Instant
@@ -38,6 +41,7 @@ class RosterDayFragment : RosterBaseFragment() {
     // To fake infinite scroll on day view. We set the adapter array size to 10000
     // and start from 5000
     var lastViewPosition = 5000
+    var timesAvailableSwitchUpdated = 0
 
 
     private var dayTag: String = ""
@@ -95,7 +99,7 @@ class RosterDayFragment : RosterBaseFragment() {
     }
 
     private fun initializeMonthTV(calendar: Calendar, needaction: Boolean) {
-        val pattern = "MMMM YYYY"
+        val pattern = "MMMM yyyy"
         val simpleDateFormat = SimpleDateFormat(pattern)
         val date: String = simpleDateFormat.format(calendar.time)
         month_year.text = date
@@ -192,6 +196,11 @@ class RosterDayFragment : RosterBaseFragment() {
                 when (it.itemId) {
                     R.id.location_preference -> {
                         navigate(R.id.locationFragment)
+                    }
+                    R.id.decline_gigs ->{
+                        navigate(R.id.gigsListForDeclineBottomSheet, bundleOf(
+                            GigsListForDeclineBottomSheet.INTEN_EXTRA_DATE to activeDateTime.toLocalDate()
+                        ))
                     }
                     R.id.settings -> {
                         navigate(R.id.settingFragment)
@@ -299,15 +308,33 @@ class RosterDayFragment : RosterBaseFragment() {
         hourview_viewpager.registerOnPageChangeCallback(hourviewPageChangeCallBack)
 
         top_bar.available_toggle.setOnClickListener {
-            rosterViewModel.switchDayAvailability(
-                requireContext(), getDayTimesChild()!!,
 
-                rosterViewModel.isDayAvailable.value!!, viewModelCustomPreference
-            )
-            rosterViewModel.resetDayTimeAvailability(
-                viewModelCustomPreference, getDayTimesChild()!!, configDataModel
-            )
+
+                rosterViewModel.switchDayAvailability(
+                    requireContext(), getDayTimesChild()!!,
+
+                    rosterViewModel.isDayAvailable.value!!, viewModelCustomPreference
+                )
+                rosterViewModel.resetDayTimeAvailability(
+                    viewModelCustomPreference, getDayTimesChild()!!, configDataModel
+                )
+
         }
+
+        rosterViewModel.showDeclineGigDialog.observe(viewLifecycleOwner, Observer {
+
+                            navigate(R.id.gigsListForDeclineBottomSheet, bundleOf(
+                    GigsListForDeclineBottomSheet.INTEN_EXTRA_DATE to activeDateTime.toLocalDate()
+                ))
+
+        })
+
+//        top_bar.available_toggle.setOnCheckedChangeListener { buttonView, isChecked ->
+//
+//            if(!isChecked){
+
+//            }
+//        }
     }
 
     private fun scrollToSelectedDate(monthModel: CalendarView.MonthModel) {
@@ -360,6 +387,16 @@ class RosterDayFragment : RosterBaseFragment() {
     private fun attachDayAvailabilityObserver() {
         rosterViewModel.isDayAvailable.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
             top_bar.isAvailable = it
+            Log.d("ROsterAvail","called")
+            timesAvailableSwitchUpdated++
+
+//                        if(!it) {
+//                            navigate(
+//                                R.id.gigsListForDeclineBottomSheet, bundleOf(
+//                                    GigsListForDeclineBottomSheet.INTEN_EXTRA_DATE to activeDateTime.toLocalDate()
+//                                )
+//                            )
+//                        }
         })
     }
 

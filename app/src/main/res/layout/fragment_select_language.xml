@@ -10,8 +10,8 @@
         android:id="@+id/app_bar_lang_opt"
         android:layout_width="match_parent"
         android:layout_height="79dp"
-        android:background="@drawable/rect_lang_screen"
-        tools:ignore="PrivateResource">
+        android:background="@drawable/app_gradient_button_square"
+        >
         <androidx.appcompat.widget.Toolbar
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -24,7 +24,7 @@
                 android:textAlignment="center"
                 android:letterSpacing="0"
                 android:fontFamily="@font/lato"
-                android:textColor="@color/cardview_light_background"
+                android:textColor="@color/white"
                 android:textSize="20sp" />
         </androidx.appcompat.widget.Toolbar>
 
@@ -66,6 +66,22 @@
             android:textSize="14sp"
             android:paddingLeft="16dp"
             android:enabled="false"
+            style="@style/Theme.RadioButtonLipstickPink"
+            android:layout_marginLeft="16dp"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/line_seprator_language"/>
+        <RadioButton
+            android:id="@+id/kn"
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/height_select_lang_item"
+            android:hint="te"
+            android:text="@string/kannada"
+            android:enabled="false"
+            android:textSize="14sp"
+            android:paddingLeft="16dp"
+            android:letterSpacing="0"
             style="@style/Theme.RadioButtonLipstickPink"
             android:layout_marginLeft="16dp"/>
         <View

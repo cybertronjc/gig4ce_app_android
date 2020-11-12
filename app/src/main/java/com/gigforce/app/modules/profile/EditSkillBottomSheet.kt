@@ -48,11 +48,15 @@ class EditSkillBottomSheet: ProfileBaseBottomSheetFragment() {
     ): View? {
         inflateView(R.layout.edit_skill_bottom_sheet, inflater, container)
         skills.addAll(listOf(
-            "Driving", "Cooking", "Shop-keeping", "Managing Catalog",
-            "Cashier", "Tele-calling", "Waiter", "Bartender", "Barback",
-            "Fleet Management", "Assembly-dismantling", "E-commence delivery",
-            "Admin assistant", "Store manager", "In-store promoter",
-            "Record keeper", "Barista", "House keeping", "Reception", "Artist"))
+            getString(R.string.driving), getString(R.string.cooking), getString(R.string.shopkeeping), getString(
+                R.string.managing_catalog),
+            getString(R.string.cashier), getString(R.string.tele_calling), getString(R.string.waiter), getString(
+                R.string.bartener), getString(R.string.barback),
+            getString(R.string.fleet_management), getString(R.string.assembly_dismatling), getString(
+                R.string.e_commerce_delivery),
+            getString(R.string.admin_assistant), getString(R.string.store_manager), getString(R.string.in_store_promoter),
+            getString(R.string.record_keeper), getString(R.string.barista), getString(R.string.house_keeping), getString(
+                R.string.reception), getString(R.string.artist)))
 
         return getFragmentView()
     }
@@ -68,7 +72,7 @@ class EditSkillBottomSheet: ProfileBaseBottomSheetFragment() {
         skillSpinner.setAdapter(skillAdapter)
 
         profileViewModel.userProfileData.observe(this, Observer { profile ->
-            currentSkill = profile.skills!![arrayLocation.toInt()]
+            currentSkill = profile?.skills!![arrayLocation.toInt()]
             skill.setText(currentSkill.id, false)
         })
     }

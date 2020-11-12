@@ -25,7 +25,7 @@ import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.app.core.genericadapter.RecyclerGenericAdapter
 import com.gigforce.app.modules.profile.models.ProfileData
-import kotlinx.android.synthetic.main.calendar_home_screen.*
+import com.gigforce.app.utils.StringConstants
 import kotlinx.android.synthetic.main.onboarding_main_fragment.*
 
 
@@ -71,7 +71,7 @@ class OnboardingMainFragment : BaseFragment() {
                 profileData = profile
                 if (profile.status) {
                     if (profileData.isonboardingdone) {
-                        navigateToHomeScreen()
+                        navigateToLoaderScreen()
                     } else {
                         if (firstTimeLoad) {
                             checkForAlreadyCompletedData()
@@ -238,16 +238,19 @@ class OnboardingMainFragment : BaseFragment() {
     }
 
     private fun setOnboardingCompleteAndNavigate() {
-        viewModel.setOnboardingCompleted()
+        val inviteId = sharedDataInterface.getData(StringConstants.INVITE_USER_ID.value)
+        viewModel.setOnboardingCompleted(inviteId)
+        sharedDataInterface.remove(StringConstants.INVITE_USER_ID.value)
         saveOnBoardingCompleted()
-        navigateToHomeScreen()
+        navigateToLoaderScreen()
     }
 
-    private fun navigateToHomeScreen() {
-        popFragmentFromStack(R.id.onboardingfragment)
+    private fun navigateToLoaderScreen() {
+//        popFragmentFromStack(R.id.onboardingfragment)
 //        navigateWithAllPopupStack(R.id.mainHomeScreen)
 //        navigate(R.id.authFlowFragment)
-        navigate(R.id.landinghomefragment)
+//        navigate(R.id.landinghomefragment)
+        navigateWithAllPopupStack(R.id.onboardingLoaderfragment)
     }
 
     private fun showBackIcon(show: Boolean) {

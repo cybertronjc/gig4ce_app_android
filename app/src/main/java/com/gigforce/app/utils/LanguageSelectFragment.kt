@@ -2,14 +2,15 @@ package com.gigforce.app.utils
 
 import android.content.res.Resources
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.RadioButton
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.franmontiel.localechanger.LocaleChanger
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
-import com.gigforce.app.modules.preferences.SharedPreferenceViewModel
 import com.gigforce.app.utils.configrepository.ConfigViewModel
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_select_language.*
@@ -24,9 +25,11 @@ class LanguageSelectFragment : BaseFragment() {
         Arrays.asList(
             Locale("en", "US"),
             Locale("hi", "IN"),
+            Locale("kn", "rIN"),
             Locale("fr", "FR")
             //Locale("ar", "JO")
         )
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -52,13 +55,14 @@ class LanguageSelectFragment : BaseFragment() {
     private fun initViewModel() {
         viewModel
             .activeLanguages
-            .observe(viewLifecycleOwner, Observer {activeLangs ->
+            .observe(viewLifecycleOwner, Observer { activeLangs ->
 
                 activeLangs.forEach {
 
                     when (it) {
                         "en" -> groupradio.findViewById<RadioButton>(R.id.en).isEnabled = true
                         "hi" -> groupradio.findViewById<RadioButton>(R.id.hi).isEnabled = true
+                        "kn" -> groupradio.findViewById<RadioButton>(R.id.kn).isEnabled = true
                         "te" -> groupradio.findViewById<RadioButton>(R.id.te).isEnabled = true
                         "gu" -> groupradio.findViewById<RadioButton>(R.id.gu).isEnabled = true
                         "pa" -> groupradio.findViewById<RadioButton>(R.id.pu).isEnabled = true
@@ -97,9 +101,10 @@ class LanguageSelectFragment : BaseFragment() {
     }
 
     private fun setDefaultLanguage() {
-        when(Resources.getSystem().getConfiguration().locale.getLanguage()){
+        when (Resources.getSystem().getConfiguration().locale.getLanguage()) {
             "en" -> groupradio.findViewById<RadioButton>(R.id.en).isChecked = true
             "hi" -> groupradio.findViewById<RadioButton>(R.id.hi).isChecked = true
+            "kn" -> groupradio.findViewById<RadioButton>(R.id.kn).isEnabled = true
             "te" -> groupradio.findViewById<RadioButton>(R.id.te).isChecked = true
             "gu" -> groupradio.findViewById<RadioButton>(R.id.gu).isChecked = true
             "pa" -> groupradio.findViewById<RadioButton>(R.id.pu).isChecked = true
@@ -125,9 +130,10 @@ class LanguageSelectFragment : BaseFragment() {
     }
 
     private fun navNext() {
-        navigate(R.id.authFlowFragment)
+        navigate(
+            R.id.authFlowFragment
+        )
     }
-
 
 
     override fun onDestroyView() {

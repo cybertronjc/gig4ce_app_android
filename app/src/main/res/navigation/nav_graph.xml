@@ -157,6 +157,9 @@
             app:launchSingleTop="true"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+        <action
+            android:id="@+id/open_role_details_home"
+            app:destination="@id/fragment_role_details" />
     </fragment>
 
     <fragment
@@ -542,13 +545,8 @@
         android:name="com.gigforce.app.modules.wallet.models.WalletExpandedPage"
         android:label="WalletExpandedPage" />
     <fragment
-        android:id="@+id/learningWithStatsFragment"
-        android:name="com.gigforce.app.modules.learning.LearningWithStatsFragment"
-        android:label="fragment_learning_stats"
-        tools:layout="@layout/fragment_learning_stats" />
-    <fragment
-        android:id="@+id/learningVideoFragment"
-        android:name="com.gigforce.app.modules.learning.LearningVideoFragment"
+        android:id="@+id/learningCourseDetails"
+        android:name="com.gigforce.app.modules.learning.courseDetails.LearningCourseDetailsFragment"
         android:label="LearningVideoFragment" />
     <fragment
         android:id="@+id/playVideoDialogFragment"
@@ -575,7 +573,16 @@
     <fragment
         android:id="@+id/gigAttendancePageFragment"
         android:name="com.gigforce.app.modules.gigPage.GigAttendancePageFragment"
-        android:label="GigAttendancePageFragment" />
+        android:label="GigAttendancePageFragment">
+
+        <argument
+            android:name="gig_id"
+            app:argType="string" />
+        <deepLink
+            android:id="@+id/gig_attendance_deeplink"
+            app:uri="www.gigforce.com/gig/attendance/{gig_id}" />
+
+    </fragment>
     <fragment
         android:id="@+id/gigPageNavigationFragment"
         android:name="com.gigforce.app.modules.gigPage.GigPageNavigationFragment"
@@ -613,6 +620,105 @@
         android:name="com.gigforce.app.modules.chatmodule.ui.FakeGigContactScreenFragment"
         android:label="fragment_fake_contact_screen"
         tools:layout="@layout/fragment_fake_contact_screen" />
+    <fragment
+        android:id="@+id/slidesFragment"
+        android:name="com.gigforce.app.modules.learning.slides.SlidesFragment"
+        android:label="fragment_slides"
+        tools:layout="@layout/fragment_slides" />
+    <fragment
+        android:id="@+id/assessmentListFragment"
+        android:name="com.gigforce.app.modules.assessment.AssessmentListFragment"
+        android:label="fragment_assessment_list"
+        tools:layout="@layout/fragment_assessment_list" />
+    <fragment
+        android:id="@+id/myLearningFragment"
+        android:name="com.gigforce.app.modules.learning.myLearning.MyLearningFragment"
+        android:label="fragment_my_learning"
+        tools:layout="@layout/fragment_my_learning" />
+    <fragment
+        android:id="@+id/courseContentListFragment"
+        android:name="com.gigforce.app.modules.learning.courseContent.CourseContentListFragment"
+        android:label="fragment_course_content_list"
+        tools:layout="@layout/fragment_course_content_list" />
+    <fragment
+        android:id="@+id/referrals_fragment"
+        android:name="com.gigforce.app.modules.referrals.ReferralsFragment"
+        android:label="fragment_referrals"
+        tools:layout="@layout/fragment_referrals" />
+    <fragment
+        android:id="@+id/fragment_explore_by_role"
+        android:name="com.gigforce.app.modules.explore_by_role.ExploreByRoleFragment"
+        android:label="fragment_explore_by_role"
+        tools:layout="@layout/layout_fragment_explore_by_role">
+        <action
+            android:id="@+id/open_role_details"
+            app:destination="@id/fragment_role_details" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/fragment_role_details"
+        android:name="com.gigforce.app.modules.explore_by_role.RoleDetailsFragment"
+        android:label="fragment_role_details"
+        tools:layout="@layout/layout_role_details_fragment">
+        <argument
+            android:name="ROLE_ID"
+            android:defaultValue='""'
+            app:argType="string" />
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/fragment_add_bio"
+        android:name="com.gigforce.app.modules.explore_by_role.AddBioFragment"
+        android:label="fragment_add_bio"
+        tools:layout="@layout/layout_add_bio_fragment">
+
+    </fragment>
+    <fragment
+        android:id="@+id/fragment_marked_as_interest"
+        android:name="com.gigforce.app.modules.explore_by_role.MarkedInterestSuccessFragment"
+        android:label="fragment_marked_as_interest"
+        tools:layout="@layout/layout_marked_interest_success_fragment">
+        <action
+            android:id="@+id/open_role_details"
+            app:destination="@id/fragment_role_details" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/fragment_home_bottom_sheet"
+        android:name="com.gigforce.app.modules.calendarscreen.maincalendarscreen.bottomsheet.BSCalendarScreenFragment"
+        android:label="fragment_home_bottom_sheet"
+
+        tools:layout="@layout/home_screen_bottom_sheet_fragment" />
+    <dialog
+        android:id="@+id/gigsListForDeclineBottomSheet"
+        android:name="com.gigforce.app.modules.gigPage.GigsListForDeclineBottomSheet"
+        android:label="GigsListForDeclineBottomSheet" />
+    <fragment
+        android:id="@+id/gigPage2Fragment"
+        android:name="com.gigforce.app.modules.gigPage2.GigPage2Fragment"
+        android:label="GigPage2Fragment" />
+    <fragment
+        android:id="@+id/gigDetailsFragment"
+        android:name="com.gigforce.app.modules.gigPage2.GigDetailsFragment"
+        android:label="GigDetailsFragment" />
+
+    <fragment
+        android:id="@+id/fragment_add_language"
+        android:name="com.gigforce.app.modules.explore_by_role.AddLanguageFragment"
+        android:label="fragment_add_language"
+        tools:layout="@layout/layout_fragment_add_language" />
+    <fragment
+        android:id="@+id/fragment_add_contact"
+        android:name="com.gigforce.app.modules.explore_by_role.AddContactDetailsFragment"
+        android:label="fragment_add_contact"
+        tools:layout="@layout/layout_fragment_add_contact_details" />
+    <fragment
+        android:id="@+id/fragment_new_education"
+        android:name="com.gigforce.app.modules.explore_by_role.AddEducationFragment"
+        android:label="fragment_new_education"
+        tools:layout="@layout/layout_add_education_fragment" />
     <fragment
         android:id="@+id/chatNewContactFragment"
         android:name="com.gigforce.app.modules.chatmodule.ui.ChatNewContactFragment"

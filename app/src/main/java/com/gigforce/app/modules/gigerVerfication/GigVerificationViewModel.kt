@@ -35,6 +35,8 @@ data class GigerVerificationStatus(
     val bankDetailsUploaded: Boolean,
     val bankUploadDetailsDataModel: BankDetailsDataModel?,
     val everyDocumentUploaded: Boolean
+
+
 ) {
     fun getColorCodeForStatus(statusCode: Int): Int {
         return when (statusCode) {
@@ -61,6 +63,8 @@ open class GigVerificationViewModel constructor(
 
     private val _gigerVerificationStatus = MutableLiveData<GigerVerificationStatus>()
     val gigerVerificationStatus: LiveData<GigerVerificationStatus> get() = _gigerVerificationStatus
+    private val _gigerContractStatus = MutableLiveData<String>()
+    val gigerContractStatus: LiveData<String> get() = _gigerContractStatus
 
     private val _documentUploadState = SingleLiveEvent2<Lse>()
     val documentUploadState: LiveData<Lse> get() = _documentUploadState
@@ -153,12 +157,14 @@ open class GigVerificationViewModel constructor(
         _documentUploadState.postValue(Lse.loading())
 
         try {
-            val fileNameAtServer = if (userHasPan)
-                uploadImage(panImage!!)
-            else
-                null
 
             val model = getVerificationModel()
+
+            val fileNameAtServer = if (userHasPan && panImage != null)
+                uploadImage(panImage)
+            else
+                model.pan_card?.panCardImagePath
+
             model.pan_card = PanCardDataModel(
                 userHasPanCard = userHasPan,
                 panCardImagePath = fileNameAtServer,
@@ -187,12 +193,13 @@ open class GigVerificationViewModel constructor(
         _documentUploadState.postValue(Lse.loading())
 
         try {
-            val fileNameAtServer = if (userHasPassBook)
-                uploadImage(passbookImagePath!!)
-            else
-                null
-
             val model = getVerificationModel()
+
+            val fileNameAtServer = if (userHasPassBook && passbookImagePath != null)
+                uploadImage(passbookImagePath)
+            else
+                model.bank_details?.passbookImagePath
+
             model.bank_details = BankDetailsDataModel(
                 userHasPassBook = userHasPassBook,
                 passbookImagePath = fileNameAtServer,
@@ -236,15 +243,15 @@ open class GigVerificationViewModel constructor(
                 )
             } else {
 
-                val frontImageFileNameAtServer = if (userHasAadhar)
-                    uploadImage(frontImagePath!!)
+                val frontImageFileNameAtServer = if (userHasAadhar && frontImagePath != null)
+                    uploadImage(frontImagePath)
                 else
-                    null
+                    model.aadhar_card?.frontImage
 
-                val backImageFileNameAtServer = if (userHasAadhar)
-                    uploadImage(backImagePath!!)
+                val backImageFileNameAtServer = if (userHasAadhar && backImagePath != null)
+                    uploadImage(backImagePath)
                 else
-                    null
+                    model.aadhar_card?.backImage
 
                 model.aadhar_card = AadharCardDataModel(
                     userHasAadharCard = true,
@@ -288,15 +295,15 @@ open class GigVerificationViewModel constructor(
                 )
             } else {
 
-                val frontImageFileNameAtServer = if (userHasDL)
-                    uploadImage(frontImagePath!!)
+                val frontImageFileNameAtServer = if (userHasDL && frontImagePath != null)
+                    uploadImage(frontImagePath)
                 else
-                    null
+                    model.driving_license?.frontImage
 
-                val backImageFileNameAtServer = if (userHasDL)
-                    uploadImage(backImagePath!!)
+                val backImageFileNameAtServer = if (userHasDL && backImagePath != null)
+                    uploadImage(backImagePath)
                 else
-                    null
+                    model.driving_license?.backImage
 
                 model.driving_license = DrivingLicenseDataModel(
                     userHasDL = true,
@@ -367,6 +374,28 @@ open class GigVerificationViewModel constructor(
                 continuation.resumeWithException(it)
             }
         }
+
+    fun checkForSignedContract() {
+        gigerVerificationRepository.checkForSignedContract().addSnapshotListener { success, err ->
+            run {
+                if (err == null) {
+
+                    if (success?.data?.get("role") != null && success?.data?.get("url") != null) {
+                        _gigerContractStatus.value = success.data?.get("url") as String
+                    } else {
+                        _gigerContractStatus.value = null
+                    }
+
+                } else {
+                    _gigerContractStatus.value = null
+
+                }
+
+
+            }
+        }
+
+    }
 
     override fun onCleared() {
         super.onCleared()

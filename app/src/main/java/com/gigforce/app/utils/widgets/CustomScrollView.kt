@@ -3,24 +3,15 @@ package com.gigforce.app.utils.widgets
 import android.content.Context
 import android.util.AttributeSet
 import android.widget.ScrollView
+import androidx.core.widget.NestedScrollView
 
-class CustomScrollView : ScrollView {
+class CustomScrollView @JvmOverloads constructor(
+    context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
+) : NestedScrollView(context, attrs, defStyleAttr) {
     // Getters & Setters
     var onScrollFireListener: onScrollListener? = null
 
-    constructor(
-        context: Context?, attrs: AttributeSet?,
-        defStyle: Int
-    ) : super(context, attrs, defStyle) {
-    }
 
-    constructor(context: Context?, attrs: AttributeSet?) : super(
-        context,
-        attrs
-    ) {
-    }
-
-    constructor(context: Context?) : super(context) {}
 
     override fun onScrollChanged(l: Int, t: Int, oldl: Int, oldt: Int) {
         val view = getChildAt(childCount - 1)

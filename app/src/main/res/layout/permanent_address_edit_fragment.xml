@@ -136,7 +136,7 @@
             android:id="@+id/imageView27"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/warning_icon_"
+            app:srcCompat="@drawable/warning_icon_"
             android:layout_marginTop="31dp"
             android:visibility="gone"
             app:layout_constraintStart_toStartOf="@+id/state"

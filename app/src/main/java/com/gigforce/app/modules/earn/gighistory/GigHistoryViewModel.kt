@@ -3,8 +3,10 @@ package com.gigforce.app.modules.earn.gighistory
 import android.view.View
 import androidx.lifecycle.ViewModel
 import com.gigforce.app.modules.earn.gighistory.models.GigsResponse
+import com.gigforce.app.modules.gigPage.models.DocChange
 import com.gigforce.app.modules.gigPage.models.Gig
 import com.gigforce.app.utils.SingleLiveEvent
+import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.QuerySnapshot
@@ -40,6 +42,11 @@ class GigHistoryViewModel(private val repositoryCallbacks: DataCallbacks) :
         SingleLiveEvent<Boolean>();
     }
     val observableShowExplore: SingleLiveEvent<Boolean> get() = _observableShowExplore
+    private val _observableDocChange: SingleLiveEvent<DocChange> by lazy {
+        SingleLiveEvent<DocChange>();
+    }
+    val observableDocChange: SingleLiveEvent<DocChange> get() = _observableDocChange
+
     fun getData() {
         if (isInitialDataLoaded) return
         showProgress(true)
@@ -61,6 +68,7 @@ class GigHistoryViewModel(private val repositoryCallbacks: DataCallbacks) :
             error?.message?.let {
                 observableError.value = it
             }
+        repositoryCallbacks.removeOnGoingGigsListener()
     }
 
     override fun pastGigsResponse(
@@ -76,6 +84,7 @@ class GigHistoryViewModel(private val repositoryCallbacks: DataCallbacks) :
                 "Past Gigs Loaded Successfully",
                 getGigsWithId(querySnapshot)
             )
+            repositoryCallbacks.removeListener()
         } else
             error?.message?.let {
                 observableError.value = it
@@ -96,6 +105,7 @@ class GigHistoryViewModel(private val repositoryCallbacks: DataCallbacks) :
                 "Upcoming Gigs Loaded Successfully",
                 getGigsWithId(querySnapshot)
             )
+            repositoryCallbacks.removeListener()
         } else
             error?.message?.let {
                 observableError.value = it
@@ -118,6 +128,13 @@ class GigHistoryViewModel(private val repositoryCallbacks: DataCallbacks) :
         }
     }
 
+    override fun docChange(docChangeType: DocumentChange.Type, change: DocumentChange) {
+        val obj = change.document.toObject(Gig::class.java)
+        obj.gigId = change.document.id
+        observableDocChange.value = DocChange(docChangeType, obj)
+
+    }
+
 
     fun getGigs(pastGigs: Boolean, resetPageCount: Boolean) {
         showProgress(true)
@@ -135,6 +152,7 @@ class GigHistoryViewModel(private val repositoryCallbacks: DataCallbacks) :
         }
 
 
+
     }
 
     fun showProgress(show: Boolean) {
@@ -150,6 +168,10 @@ class GigHistoryViewModel(private val repositoryCallbacks: DataCallbacks) :
             }
         }
         return userGigs
+    }
+
+    fun observeDocChanges() {
+        repositoryCallbacks.observeDocumentChanges(this)
     }
 
 

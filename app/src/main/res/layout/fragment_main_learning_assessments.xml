@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/retail_cl"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:layout_constraintLeft_toLeftOf="parent"
+    android:paddingBottom="30dp"
+    app:layout_constraintTop_toBottomOf="@+id/why_learning_layout">
+
+
+    <TextView
+        android:id="@+id/becuaseYouSearchedLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:fontFamily="@font/lato"
+        android:letterSpacing="0"
+        android:text="Assessments based on learnings"
+        android:textColor="#080808"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="170dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@id/becuaseYouSearchedLabel">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/main_learning_assessments_rv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:layout_marginEnd="15dp"
+            android:visibility="gone" />
+
+        <ProgressBar
+            android:id="@+id/main_learning_assessment_progress_bar"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/main_learning_assessment_error"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:drawableTop="@drawable/ic_cross_grey"
+            android:drawablePadding="10dp"
+            tools:text="Unable to load your stuff" />
+
+    </FrameLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

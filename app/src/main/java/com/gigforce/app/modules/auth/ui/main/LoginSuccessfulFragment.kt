@@ -57,9 +57,11 @@ class LoginSuccessfulFragment : BaseFragment() {
                     popFragmentFromStack(R.id.loginSuccessfulFragment)
                     if (profile.isonboardingdone!=null && profile.isonboardingdone) {
                         saveOnBoardingCompleted()
-                        navigateWithAllPopupStack(R.id.landinghomefragment)
+//                        navigateWithAllPopupStack(R.id.landinghomefragment)
+                        navigateWithAllPopupStack(R.id.onboardingLoaderfragment)
                     } else {
                         navigateWithAllPopupStack(R.id.onboardingfragment)
+
                     }
                 } else
                     showToast(profile.errormsg)

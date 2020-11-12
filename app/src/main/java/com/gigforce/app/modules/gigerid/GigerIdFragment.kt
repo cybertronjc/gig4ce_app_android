@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.request.RequestOptions
@@ -18,6 +19,7 @@ import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.modules.gigPage.GigPageFragment
 import com.gigforce.app.modules.gigPage.models.Gig
 import com.gigforce.app.utils.*
+import com.google.firebase.storage.FirebaseStorage
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.qrcode.QRCodeWriter
 import com.itextpdf.text.Document
@@ -49,14 +51,13 @@ class GigerIdFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        genQrCode()
+
         initClicks()
         initObservers()
         viewModelGigerID.getProfileData()
-        viewModelGigerID.getGigDetails(arguments?.getString(GigPageFragment.INTENT_EXTRA_GIG_ID))
     }
 
-    fun iniFileSharing() = runBlocking<Unit> {
+    fun iniFileSharing(it: String?) = runBlocking<Unit> {
         val bm = getScreenShot(cl_parent_giger_id)
         shareFile(
             imageToPDF(
@@ -64,14 +65,14 @@ class GigerIdFragment : BaseFragment() {
                     bm,
                     StringConstants.GIGER_ID.value,
                     context?.filesDir?.absolutePath!!
-                )
+                ), it
             ), requireContext(), "*/*"
         )
     }
 
     private fun initObservers() {
         viewModelGigerID.observablePermGranted.observe(viewLifecycleOwner, Observer {
-            iniFileSharing()
+            iniFileSharing(it)
         })
         viewModelGigerID.observablePermResultsNotGranted.observe(
             viewLifecycleOwner,
@@ -87,6 +88,8 @@ class GigerIdFragment : BaseFragment() {
             showToast(it!!)
         })
         viewModelGigerID.observableUserProfileDataSuccess.observe(viewLifecycleOwner, Observer {
+            viewModelGigerID.getGigDetails(arguments?.getString(GigPageFragment.INTENT_EXTRA_GIG_ID))
+
             viewModelGigerID.getProfilePicture(it?.profileAvatarName ?: "--")
             tv_giger_name_giger_id.text = it?.name ?: "--"
             tv_giger_location_giger_id.text =
@@ -94,6 +97,7 @@ class GigerIdFragment : BaseFragment() {
             tv_contact_giger_id.text = it?.contact?.get(0)?.phone ?: "--"
             tv_email_giger_id.text =
                 if (it?.contact?.get(0)?.email?.isEmpty()!!) "--" else it.contact?.get(0)?.email
+            viewModelGigerID.getURl()
         })
         viewModelGigerID.observableProfilePic.observe(viewLifecycleOwner, Observer {
             GlideApp.with(this.requireContext())
@@ -104,19 +108,54 @@ class GigerIdFragment : BaseFragment() {
         viewModelGigerID.observableGigDetails.observe(viewLifecycleOwner, Observer {
             initUi(it!!)
         })
+        viewModelGigerID.observableURLS.observe(viewLifecycleOwner, Observer {
+            genQrCode(
+                it?.base_url + it?.qr_code_scanner?.qrcode + viewModelGigerID.observableUserProfileDataSuccess.value?.id
+            )
+        })
     }
 
     private fun initUi(gig: Gig) {
         tv_designation_giger_id.text = gig.title
         tv_gig_since_giger_id.text =
-            "${resources.getString(R.string.giger_since)} ${parseTime(
-                "MMM yyyy",
-                gig?.startDateTime?.toDate()
-            )}"
-        GlideApp.with(this.requireContext())
-            .load(gig.companyLogo)
-            .apply(RequestOptions().circleCrop()).placeholder(R.drawable.profile)
-            .into(iv_brand_logo_giger_id)
+            "${resources.getString(R.string.giger_since)} ${
+                parseTime(
+                    "MMM yyyy",
+                    gig?.startDateTime?.toDate()
+                )
+            }"
+        if (!gig.companyLogo.isNullOrBlank()) {
+            if (gig.companyLogo!!.startsWith("http", true)) {
+
+                GlideApp.with(requireContext())
+                    .load(gig.companyLogo)
+                    .placeholder(getCircularProgressDrawable())
+                    .into(iv_brand_logo_giger_id)
+            } else {
+                FirebaseStorage.getInstance()
+                    .getReference("companies_gigs_images")
+                    .child(gig.companyLogo!!)
+                    .downloadUrl
+                    .addOnSuccessListener { fileUri ->
+
+                        GlideApp.with(requireContext())
+                            .load(fileUri)
+                            .placeholder(getCircularProgressDrawable())
+                            .into(iv_brand_logo_giger_id)
+                    }
+            }
+        } else {
+            val companyInitials = if (gig.companyName.isNullOrBlank())
+                "C"
+            else
+                gig.companyName!![0].toString().toUpperCase()
+            val drawable = TextDrawable.builder().buildRound(
+                companyInitials,
+                ResourcesCompat.getColor(resources, R.color.lipstick, null)
+            )
+
+            iv_brand_logo_giger_id.setImageDrawable(drawable)
+        }
         tv_brand_name_giger_id.text = "@${gig.companyName}"
         tv_gig_id_giger_id.text = "${getString(R.string.gig_id)} ${gig.gigId}"
         gig.startDateTime?.let {
@@ -124,24 +163,28 @@ class GigerIdFragment : BaseFragment() {
             tv_issued_date_giger_id.text =
                 "${getString(R.string.issued_on)} ${parseTime("dd MMM yyyy", it.toDate())}"
         }
-    }
-
-    private fun initClicks() {
         iv_share_giger_id.setOnClickListener {
             viewModelGigerID.showProgress(true)
             viewModelGigerID.checkForPermissionsAndInitSharing(checkForRequiredPermissions())
         }
+    }
+
+    private fun initClicks() {
+
         ic_close_giger_id.setOnClickListener {
             popBackState()
         }
     }
 
 
-    fun genQrCode() {
-        val content =
-            arguments?.getString(GigPageFragment.INTENT_EXTRA_GIG_ID)
+    fun genQrCode(url: String?) {
         val writer = QRCodeWriter()
-        val bitMatrix = writer.encode(content, BarcodeFormat.QR_CODE, 512, 512)
+        val bitMatrix = writer.encode(
+            url,
+            BarcodeFormat.QR_CODE,
+            512,
+            512
+        )
         val width = bitMatrix.width
         val height = bitMatrix.height
         val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565)
@@ -155,11 +198,11 @@ class GigerIdFragment : BaseFragment() {
 
 
     @Throws(FileNotFoundException::class)
-    suspend fun imageToPDF(imagePath: String): File? {
+    suspend fun imageToPDF(imagePath: String, fileName: String?): File? {
         try {
             val document = Document()
             val dirPath = context?.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)
-                .toString() + "/${System.currentTimeMillis()}.pdf"
+                .toString() + "/${fileName ?: ""}.pdf"
             PdfWriter.getInstance(document, FileOutputStream(dirPath)) //  Change pdf's name.
             document.open()
             val documentWidth: Float =

@@ -82,12 +82,12 @@
             android:layout_marginTop="2dp"
             android:fontFamily="@font/lato"
             android:letterSpacing="0"
+            android:text="@string/err_driving_license"
             android:textColor="@color/app_red"
             android:textSize="12sp"
             android:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/doYouHavePassbookLabel"
-            tools:text="Error : Uploaded Image is not a Driving License Image" />
+            app:layout_constraintTop_toBottomOf="@id/doYouHavePassbookLabel" />
 
 
         <RadioGroup
@@ -159,7 +159,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/lato"
-                    android:text="@string/ifsc"
+                    android:text="@string/ifsc_eg_sbin0000572_bkid0000048"
                     android:textSize="12sp" />
 
 
@@ -235,7 +235,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:fontFamily="@font/lato"
-                    android:text="@string/account_no"
+                    android:text="@string/account_number_eg_10_16_digit_number_30000011111111111"
                     android:textSize="12sp" />
 
 
@@ -260,6 +260,7 @@
                     android:layout_marginTop="2dp"
                     android:fontFamily="@font/lato"
                     android:letterSpacing="0"
+
                     android:textColor="@color/app_red"
                     android:textSize="12sp"
                     android:visibility="gone"
@@ -307,7 +308,6 @@
             app:inner_color="@color/warm_grey"
             app:layout_constraintBottom_toBottomOf="parent"
             app:outer_color="@color/light_grey"
-
             app:slider_height="60dp"
             app:slider_icon="@drawable/ic_arrow_forward_white"
             app:slider_icon_color="@color/white"

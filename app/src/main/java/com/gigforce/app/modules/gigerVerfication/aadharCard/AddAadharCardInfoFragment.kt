@@ -27,10 +27,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.storage.FirebaseStorage
 import com.ncorti.slidetoact.SlideToActView
 import kotlinx.android.synthetic.main.fragment_add_aadhar_card_info.*
-import kotlinx.android.synthetic.main.fragment_add_aadhar_card_info.progressBar
-import kotlinx.android.synthetic.main.fragment_add_aadhar_card_info.toolbar
 import kotlinx.android.synthetic.main.fragment_add_aadhar_card_info_main.*
-import kotlinx.android.synthetic.main.fragment_add_aadhar_card_info_main.whyWeNeedThisTV
 import kotlinx.android.synthetic.main.fragment_add_aadhar_card_view.*
 import kotlinx.android.synthetic.main.fragment_verification_image_holder.view.*
 
@@ -83,22 +80,20 @@ class AddAadharCardInfoFragment : BaseFragment() {
             findNavController().popBackStack(R.id.gigerVerificationFragment, false)
         }
 
-        helpIconIV.setOnClickListener {
+        whyWeNeedThisViewTV.setOnClickListener {
+            showWhyWeNeedThisBottomSheet()
+        }
 
-            WhyWeNeedThisBottomSheet.launch(
-                childFragmentManager = childFragmentManager,
-                title = getString(R.string.why_do_we_need_this),
-                content = getString(R.string.why_we_need_this_aadhar)
-            )
+        helpIconViewIV.setOnClickListener {
+            showWhyWeNeedThisBottomSheet()
+        }
+
+        helpIconIV.setOnClickListener {
+            showWhyWeNeedThisBottomSheet()
         }
 
         whyWeNeedThisTV.setOnClickListener {
-
-            WhyWeNeedThisBottomSheet.launch(
-                childFragmentManager = childFragmentManager,
-                title = getString(R.string.why_do_we_need_this),
-                content = getString(R.string.why_we_need_this_aadhar)
-            )
+            showWhyWeNeedThisBottomSheet()
         }
 
         aadharAvailaibilityOptionRG.setOnCheckedChangeListener { _, checkedId ->
@@ -108,8 +103,8 @@ class AddAadharCardInfoFragment : BaseFragment() {
                 showImageInfoLayout()
 
                 if (aadharDataCorrectCB.isChecked
-                    && aadharFrontImagePath != null
-                    && aadharBackImagePath != null
+                    && ((aadharSubmitSliderBtn.text == getString(R.string.update)
+                            || (aadharFrontImagePath != null && aadharBackImagePath != null)))
                 ) {
                     enableSubmitButton()
                 } else {
@@ -136,9 +131,8 @@ class AddAadharCardInfoFragment : BaseFragment() {
         aadharDataCorrectCB.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
 
-                if (aadharYesRB.isChecked
-                    && aadharFrontImagePath != null
-                    && aadharBackImagePath != null
+                if (aadharYesRB.isChecked && ((aadharSubmitSliderBtn.text == getString(R.string.update)
+                            || (aadharFrontImagePath != null && aadharBackImagePath != null)))
                 )
                     enableSubmitButton()
                 else if (aadharNoRB.isChecked)
@@ -175,7 +169,7 @@ class AddAadharCardInfoFragment : BaseFragment() {
                         if (aadharCardET.text!!.length != 12) {
 
                             aadharEditLayout.post {
-                                aadharEditLayout.scrollTo(0,topSeaparator.y.toInt())
+                                aadharEditLayout.scrollTo(0, topSeaparator.y.toInt())
                             }
 
                             MaterialAlertDialogBuilder(requireContext())
@@ -187,7 +181,8 @@ class AddAadharCardInfoFragment : BaseFragment() {
                             return
                         }
 
-                        if (aadharFrontImagePath == null || aadharBackImagePath == null) {
+
+                        if (aadharSubmitSliderBtn.text != getString(R.string.update) && (aadharFrontImagePath == null || aadharBackImagePath == null)) {
 
                             MaterialAlertDialogBuilder(requireContext())
                                 .setTitle(getString(R.string.alert))
@@ -226,10 +221,19 @@ class AddAadharCardInfoFragment : BaseFragment() {
 
                     setDataOnEditLayout(aadharCardDataModel)
                     aadharAvailaibilityOptionRG.check(R.id.aadharYesRB)
+                    aadharSubmitSliderBtn.isEnabled = true
                 }
                 .setNegativeButton(getString(R.string.cancel)) { _, _ -> }
                 .show()
         }
+    }
+
+    private fun showWhyWeNeedThisBottomSheet() {
+        WhyWeNeedThisBottomSheet.launch(
+            childFragmentManager = childFragmentManager,
+            title = getString(R.string.why_do_we_need_this),
+            content = getString(R.string.why_we_need_this_aadhar)
+        )
     }
 
     private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance()
@@ -246,7 +250,7 @@ class AddAadharCardInfoFragment : BaseFragment() {
                     if (it.aadharCardDataModel.userHasAadharCard != null) {
                         if (it.aadharCardDataModel.userHasAadharCard) {
                             setDataOnViewLayout(it)
-                        } else{
+                        } else {
                             setDataOnEditLayout(null)
                             aadharAvailaibilityOptionRG.check(R.id.aadharNoRB)
                         }
@@ -257,7 +261,7 @@ class AddAadharCardInfoFragment : BaseFragment() {
                         aadharAvailaibilityOptionRG.clearCheck()
                         hideAadharImageAndInfoLayout()
                     }
-                } else{
+                } else {
                     setDataOnEditLayout(null)
                     aadharAvailaibilityOptionRG.clearCheck()
                     hideAadharImageAndInfoLayout()
@@ -293,15 +297,17 @@ class AddAadharCardInfoFragment : BaseFragment() {
         )
 
         if (aadharDetails.frontImage != null) {
-            if(aadharDetails.frontImage.startsWith("http", true)){
-                Glide.with(requireContext()).load(aadharDetails.frontImage).placeholder(getCircularProgressDrawable()).into(aadharViewFrontImageIV)
-            }else {
+            if (aadharDetails.frontImage.startsWith("http", true)) {
+                Glide.with(requireContext()).load(aadharDetails.frontImage)
+                    .placeholder(getCircularProgressDrawable()).into(aadharViewFrontImageIV)
+            } else {
                 firebaseStorage
                     .reference
                     .child("verification")
                     .child(aadharDetails.frontImage)
                     .downloadUrl.addOnSuccessListener {
-                        Glide.with(requireContext()).load(it).placeholder(getCircularProgressDrawable()).into(aadharViewFrontImageIV)
+                        Glide.with(requireContext()).load(it)
+                            .placeholder(getCircularProgressDrawable()).into(aadharViewFrontImageIV)
                     }.addOnFailureListener {
                         print("ee")
                     }
@@ -310,15 +316,17 @@ class AddAadharCardInfoFragment : BaseFragment() {
         aadharViewFrontErrorMessage.gone()
 
         if (aadharDetails.backImage != null) {
-            if(aadharDetails.backImage.startsWith("http", true)){
-                Glide.with(requireContext()).load(aadharDetails.backImage).placeholder(getCircularProgressDrawable()).into(aadharViewBackImageIV)
-            }else {
+            if (aadharDetails.backImage.startsWith("http", true)) {
+                Glide.with(requireContext()).load(aadharDetails.backImage)
+                    .placeholder(getCircularProgressDrawable()).into(aadharViewBackImageIV)
+            } else {
                 firebaseStorage
                     .reference
                     .child("verification")
                     .child(aadharDetails.backImage)
                     .downloadUrl.addOnSuccessListener {
-                        Glide.with(requireContext()).load(it).placeholder(getCircularProgressDrawable()).into(aadharViewBackImageIV)
+                        Glide.with(requireContext()).load(it)
+                            .placeholder(getCircularProgressDrawable()).into(aadharViewBackImageIV)
                     }.addOnFailureListener {
                         print("ee")
                     }
@@ -356,9 +364,9 @@ class AddAadharCardInfoFragment : BaseFragment() {
 
 
         if (aadharData.frontImage != null) {
-            if(aadharData.frontImage.startsWith("http", true)){
+            if (aadharData.frontImage.startsWith("http", true)) {
                 showFrontAadharCard(Uri.parse(aadharData.frontImage))
-            }else {
+            } else {
                 firebaseStorage
                     .reference
                     .child("verification")
@@ -372,9 +380,9 @@ class AddAadharCardInfoFragment : BaseFragment() {
         }
 
         if (aadharData.backImage != null) {
-            if(aadharData.backImage.startsWith("http", true)){
+            if (aadharData.backImage.startsWith("http", true)) {
                 showBackAadharCard(Uri.parse(aadharData.backImage))
-            }else {
+            } else {
                 firebaseStorage
                     .reference
                     .child("verification")

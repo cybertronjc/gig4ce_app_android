@@ -26,7 +26,7 @@ class AddAboutMeBottomSheet : ProfileBaseBottomSheetFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         profileViewModel!!.userProfileData.observe(this, Observer { profile ->
-            about_me_text.setText(profile.aboutMe)
+            about_me_text.setText(profile?.aboutMe!!)
         })
 
         cancel_button.setOnClickListener {

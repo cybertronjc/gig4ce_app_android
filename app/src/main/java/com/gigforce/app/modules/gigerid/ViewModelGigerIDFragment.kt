@@ -3,6 +3,7 @@ package com.gigforce.app.modules.gigerid
 import android.view.View
 import androidx.lifecycle.ViewModel
 import com.gigforce.app.modules.gigPage.models.Gig
+import com.gigforce.app.modules.gigerid.models.URLQrCode
 import com.gigforce.app.modules.profile.models.ProfileData
 import com.gigforce.app.utils.PermissionUtils
 import com.gigforce.app.utils.SingleLiveEvent
@@ -11,20 +12,24 @@ import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.storage.StorageReference
 
 class ViewModelGigerIDFragment(private val gigerIDCallbacks: GigerIDCallbacks) : ViewModel(),
-        GigerIDCallbacks.ResponseCallbacks {
+    GigerIDCallbacks.ResponseCallbacks {
     private val _observableGigDetails: SingleLiveEvent<Gig> by lazy {
         SingleLiveEvent<Gig>();
     }
     val observableGigDetails: SingleLiveEvent<Gig> get() = _observableGigDetails
+    private val _observableURLS: SingleLiveEvent<URLQrCode> by lazy {
+        SingleLiveEvent<URLQrCode>();
+    }
+    val observableURLS: SingleLiveEvent<URLQrCode> get() = _observableURLS
     private val _observableProfilePic: SingleLiveEvent<StorageReference> by lazy {
         SingleLiveEvent<StorageReference>();
     }
     val observableProfilePic: SingleLiveEvent<StorageReference> get() = _observableProfilePic
 
-    private val _observablePermGranted: SingleLiveEvent<Boolean> by lazy {
-        SingleLiveEvent<Boolean>();
+    private val _observablePermGranted: SingleLiveEvent<String> by lazy {
+        SingleLiveEvent<String>();
     }
-    val observablePermGranted: SingleLiveEvent<Boolean> get() = _observablePermGranted
+    val observablePermGranted: SingleLiveEvent<String> get() = _observablePermGranted
 
     private val _observablePermResultsNotGranted: SingleLiveEvent<Boolean> by lazy {
         SingleLiveEvent<Boolean>();
@@ -47,6 +52,8 @@ class ViewModelGigerIDFragment(private val gigerIDCallbacks: GigerIDCallbacks) :
     }
     val observableProgress: SingleLiveEvent<Int> get() = _observableProgress
 
+    private var fileNameToShare: String = ""
+
     fun getProfileData() {
         gigerIDCallbacks.getProfileData(this)
     }
@@ -54,20 +61,20 @@ class ViewModelGigerIDFragment(private val gigerIDCallbacks: GigerIDCallbacks) :
 
     fun checkForPermissionsAndInitSharing(checkForPermission: Boolean) {
         if (checkForPermission) {
-            observablePermGranted.value = true
+            observablePermGranted.value = fileNameToShare
         }
 
     }
 
     fun checkIfPermGranted(
-            requestCode: Int,
-            grantResults: IntArray?
+        requestCode: Int,
+        grantResults: IntArray?
     ) {
         if (requestCode == PermissionUtils.reqCodePerm && PermissionUtils.permissionsGrantedCheck(
-                        grantResults!!
-                )
+                grantResults!!
+            )
         ) {
-            observablePermGranted.value = true
+            observablePermGranted.value = fileNameToShare
         } else {
             observablePermResultsNotGranted.value = true
         }
@@ -89,14 +96,16 @@ class ViewModelGigerIDFragment(private val gigerIDCallbacks: GigerIDCallbacks) :
     }
 
     override fun getProfileSuccess(
-            querySnapshot: DocumentSnapshot?,
-            error: FirebaseFirestoreException?
+        querySnapshot: DocumentSnapshot?,
+        error: FirebaseFirestoreException?
     ) {
         if (error != null) {
             observableError.value = error.message
         } else {
-            observableUserProfileDataSuccess.value =
-                    querySnapshot?.toObject(ProfileData::class.java)
+            val profileData = querySnapshot?.toObject(ProfileData::class.java)
+            profileData?.id=querySnapshot?.id
+            observableUserProfileDataSuccess.value = profileData
+            fileNameToShare += profileData?.name + "_"
         }
 
     }
@@ -106,14 +115,30 @@ class ViewModelGigerIDFragment(private val gigerIDCallbacks: GigerIDCallbacks) :
     }
 
     override fun getGigDetailsResponse(
-            querySnapshot: DocumentSnapshot?,
-            error: FirebaseFirestoreException?
+        querySnapshot: DocumentSnapshot?,
+        error: FirebaseFirestoreException?
     ) {
         if (error != null) {
             observableError.value = error.message
         } else {
-            observableGigDetails.value = querySnapshot?.toObject(Gig::class.java)
+            val gigDetails = querySnapshot?.toObject(Gig::class.java)
+            observableGigDetails.value = gigDetails
+            fileNameToShare += gigDetails?.gigId
         }
+    }
+
+    override fun getUrlResponse(
+        querySnapshot: DocumentSnapshot?,
+        error: FirebaseFirestoreException?
+    ) {
+        if (error != null) {
+        } else {
+            _observableURLS.value = querySnapshot?.toObject(URLQrCode::class.java)
+        }
+    }
+
+    fun getURl() {
+        gigerIDCallbacks.getURls(this)
     }
 
     fun getGigDetails(string: String?) {

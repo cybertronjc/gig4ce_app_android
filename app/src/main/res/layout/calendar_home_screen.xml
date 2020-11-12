@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/coodinate_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -18,28 +17,53 @@
             android:layout_marginStart="18dp"
             android:layout_marginTop="13dp"
             android:fontFamily="@font/lato"
-            android:letterSpacing="0"
-            android:text="Good morning!"
+            android:letterSpacing="0.01"
+            android:text="@string/good_morning"
             android:textColor="#cd000000"
             android:textSize="22sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/month_year"
+        <LinearLayout
+            android:id="@+id/date_container"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="20dp"
-            android:fontFamily="@font/lato"
-            android:gravity="center_horizontal"
-            android:paddingBottom="2dp"
-            android:text="April 2020"
-            android:textColor="#333333"
-            android:textSize="14sp"
-
+            android:orientation="horizontal"
+            android:clickable="true"
+            android:focusable="true"
+            android:paddingTop="20dp"
+            android:paddingEnd="10dp"
+            android:paddingBottom="10dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv1HS1" />
+            app:layout_constraintTop_toBottomOf="@+id/tv1HS1"
+            android:gravity="center">
+            <TextView
+                android:id="@+id/month_year"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:fontFamily="@font/lato"
+                android:gravity="center_horizontal"
+                android:letterSpacing="0"
+                android:paddingBottom="2dp"
+                android:text="April 2020"
+                android:textColor="#333333"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv1HS1" />
+
+            <ImageView
+                android:id="@+id/month_selector_arrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                app:layout_constraintStart_toEndOf="@+id/month_year"
+                app:layout_constraintTop_toBottomOf="@+id/tv1HS1"
+                app:srcCompat="@drawable/homescreen_month_dropdown" />
+
+        </LinearLayout>
+
+
 
         <ImageView
             android:id="@+id/chat_icon_iv"
@@ -57,6 +81,7 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="8dp"
             android:src="@drawable/ic_landinghome_search"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/chat_icon_iv"
             app:layout_constraintEnd_toStartOf="@+id/chat_icon_iv"
             app:layout_constraintTop_toTopOf="@+id/chat_icon_iv" />
@@ -90,17 +115,9 @@
             android:layout_marginTop="9dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/month_year" />
+            app:layout_constraintTop_toBottomOf="@id/date_container" />
 
-        <ImageView
-            android:id="@+id/month_selector_arrow"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="24dp"
-            app:layout_constraintStart_toEndOf="@+id/month_year"
-            app:layout_constraintTop_toBottomOf="@+id/tv1HS1"
-            app:srcCompat="@drawable/homescreen_month_dropdown" />
+
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -133,8 +150,8 @@
         android:id="@+id/bottom_sheet_top_shadow"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone"
-        android:elevation="30dp">
+        android:elevation="30dp"
+        android:visibility="gone">
 
         <View
             android:id="@+id/bottom_sheet_shadow_view"
@@ -160,9 +177,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:elevation="10dp"
-            android:src="@drawable/ic_oval_top_landingscreen"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_oval_top_landingscreen" />
 
         <View
             android:id="@+id/below_oval"

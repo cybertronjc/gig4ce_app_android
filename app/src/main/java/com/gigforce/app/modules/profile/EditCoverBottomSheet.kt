@@ -110,7 +110,7 @@ class EditCoverBottomSheet(): ProfileBaseBottomSheetFragment() {
         })
 
         profileViewModel.userProfileData.observe(this, Observer { profile ->
-            bio.setText(profile.bio)
+            bio.setText(profile?.bio!!)
 
             userTags = profile.tags!!
 
@@ -156,7 +156,7 @@ class EditCoverBottomSheet(): ProfileBaseBottomSheetFragment() {
                 profileViewModel.setProfileBio(bio.text.toString())
                 bioValid = true
             } else {
-                Toast.makeText(requireContext(), "bio can not be > 150 characters", Toast.LENGTH_LONG).show()
+                Toast.makeText(requireContext(), getString(R.string.bio_limit), Toast.LENGTH_LONG).show()
             }
             profileViewModel.setProfileTag(tagsToAdd)
             profileViewModel.removeProfileTag(tagsToRemove)
@@ -184,7 +184,7 @@ class EditCoverBottomSheet(): ProfileBaseBottomSheetFragment() {
                 }
                 add_tag_new_tag.setText("")
             } else {
-                Toast.makeText(requireContext(), "Invalid tag, tag can not be empty or contain #", Toast.LENGTH_LONG).show()
+                Toast.makeText(requireContext(), getString(R.string.tag_cannot_be_empty), Toast.LENGTH_LONG).show()
             }
         }
     }

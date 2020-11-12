@@ -31,7 +31,7 @@
 
 
         <ImageView
-            android:id="@+id/helpIconIV"
+            android:id="@+id/helpIconViewIV"
             android:layout_width="14dp"
             android:layout_height="14dp"
             android:layout_marginTop="22dp"
@@ -56,7 +56,7 @@
             android:text="@string/why_do_we_need_this"
             android:textColor="@color/battle_ship_grey"
             android:textSize="12sp"
-            app:layout_constraintEnd_toStartOf="@+id/helpIconIV"
+            app:layout_constraintEnd_toStartOf="@+id/helpIconViewIV"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
@@ -160,7 +160,7 @@
                     android:layout_marginLeft="2dp"
                     android:layout_marginTop="8dp"
                     android:fontFamily="@font/lato"
-                    android:text="@string/aadhar_number"
+                    android:text="@string/aadhar_number_eg_444433332222"
                     android:textSize="12sp" />
 
 

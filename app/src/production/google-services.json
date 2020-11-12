@@ -15,11 +15,19 @@
       },
       "oauth_client": [
         {
-          "client_id": "1008010793707-orbge8894cqikvtt7h4ogih967mh4h3c.apps.googleusercontent.com",
+          "client_id": "1008010793707-0rqdmqim302c3amj262gn111rqkkojgc.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.gigforce.app",
-            "certificate_hash": "8afa647f38e029a25acf2e945c43a9e0623aa477"
+            "certificate_hash": "c9cd043805e7dc6273eec3d69f0c325a52b72659"
+          }
+        },
+        {
+          "client_id": "1008010793707-187sa4fklp3f1i0hodefq8a71ghh313b.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.gigforce.app",
+            "certificate_hash": "edcb19b44d6f9acba080aab4d1b5abe7ffc784c4"
           }
         },
         {

@@ -167,7 +167,7 @@
                 android:id="@+id/areaLabel"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="@string/area"
+                android:text="@string/area_"
                 app:layout_constraintEnd_toStartOf="@+id/locationLabel"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -220,7 +220,7 @@
                 android:id="@+id/stateLabel"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="@string/state"
+                android:text="@string/state_"
                 app:layout_constraintEnd_toStartOf="@+id/pinLabel"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -230,7 +230,7 @@
                 android:id="@+id/pinLabel"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="@string/pincode"
+                android:text="@string/pincode_"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/stateLabel"
                 app:layout_constraintTop_toTopOf="parent" />

@@ -2,15 +2,16 @@ package com.gigforce.app.utils
 
 import android.app.Activity
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Point
+import android.graphics.*
+import android.text.Html
 import android.util.DisplayMetrics
 import android.util.Size
 import android.view.View
 import android.view.WindowManager
+import android.widget.EditText
 import android.widget.PopupMenu
+import android.widget.TextView
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 
 
 fun getScreenWidth(ctx: Activity): Size {
@@ -79,6 +80,14 @@ fun getScreenShot(view: View): Bitmap {
     return returnedBitmap
 }
 
+fun getCircularProgressDrawable(context: Context): CircularProgressDrawable {
+    val circularProgressDrawable = CircularProgressDrawable(context)
+    circularProgressDrawable.strokeWidth = 5f
+    circularProgressDrawable.centerRadius = 20f
+    circularProgressDrawable.start()
+    return circularProgressDrawable
+}
+
 fun getBitmapFromView(view: View, height: Int, width: Int): Bitmap {
     val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
     val canvas = Canvas(bitmap);
@@ -91,4 +100,18 @@ fun getBitmapFromView(view: View, height: Int, width: Int): Bitmap {
     return bitmap;
 }
 
+fun TextView.setDrawableColor(color: Int) {
+    compoundDrawables.filterNotNull().forEach {
+        it.colorFilter = PorterDuffColorFilter(color, PorterDuff.Mode.SRC_IN)
+    }
+}
+
+
+fun addAsteriskHint(normalTextColor: String, color: String, vararg ets: EditText) {
+    for (et in ets) {
+        val hint = et.hint.toString()
+        et.hint =
+            Html.fromHtml("<font color=$normalTextColor>$hint </font><font color=$color> *</font>")
+    }
+}
 

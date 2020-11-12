@@ -18,13 +18,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
 import androidx.annotation.ColorRes
 import androidx.annotation.DimenRes
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.observe
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -34,21 +41,35 @@ import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.app.core.genericadapter.RecyclerGenericAdapter
 import com.gigforce.app.core.gone
-import com.gigforce.app.core.toDate
 import com.gigforce.app.core.visible
+import com.gigforce.app.modules.assessment.AssessmentFragment
 import com.gigforce.app.modules.gigPage.GigAttendancePageFragment
+import com.gigforce.app.modules.gigPage.GigNavigation
 import com.gigforce.app.modules.gigPage.GigPageFragment
-import com.gigforce.app.modules.gigPage.GigPageNavigationFragment
 import com.gigforce.app.modules.gigPage.GigViewModel
 import com.gigforce.app.modules.gigPage.models.Gig
+import com.gigforce.app.modules.gigPage2.GigPage2Fragment
 import com.gigforce.app.modules.landingscreen.LandingScreenFragment
-import com.gigforce.app.utils.DateHelper
-import com.gigforce.app.utils.Lce
-import com.gigforce.app.utils.TextDrawable
+import com.gigforce.app.modules.landingscreen.LandingScreenViewModel
+import com.gigforce.app.modules.learning.LearningConstants
+import com.gigforce.app.modules.learning.LearningViewModel
+import com.gigforce.app.modules.learning.MainLearningViewModel
+import com.gigforce.app.modules.learning.models.Course
+import com.gigforce.app.modules.learning.models.CourseContent
+import com.gigforce.app.utils.*
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.*
+import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.cv_role
+import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.explore_by_industry
+import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.iv_role
+import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.learning_learning_error
+import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.learning_progress_bar
+import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.learning_rv
+import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.ll_search_role
+import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.tv_subtitle_role
+import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.tv_title_role
+import kotlinx.android.synthetic.main.landingscreen_fragment.*
 import java.text.SimpleDateFormat
-import java.time.LocalDateTime
 import java.util.*
 
 class BSCalendarScreenFragment : BaseFragment() {
@@ -59,6 +80,9 @@ class BSCalendarScreenFragment : BaseFragment() {
 
     private lateinit var viewModel: BSCalendarScreenViewModel
     private val gigViewModel: GigViewModel by viewModels()
+    private val learningViewModel: LearningViewModel by viewModels()
+    private val mainLearningViewModel: MainLearningViewModel by viewModels()
+    private val landingScreenViewModel: LandingScreenViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -69,9 +93,38 @@ class BSCalendarScreenFragment : BaseFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(BSCalendarScreenViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(BSCalendarScreenViewModel::class.java)
         initializeBottomSheet()
         initGigViewModel()
+        initLearningViewModel()
+    }
+
+    private fun initLearningViewModel() {
+        learningViewModel
+            .roleBasedCourses
+            .observe(viewLifecycleOwner, Observer {
+
+                when (it) {
+                    Lce.Loading -> showLearningAsLoading()
+                    is Lce.Content -> showUserLearningCourses(it.content)
+                    is Lce.Error -> showErrorWhileLoadingCourse(it.error)
+                }
+            })
+
+        mainLearningViewModel
+            .allAssessments
+            .observe(viewLifecycleOwner, Observer {
+
+                when (it) {
+                    Lce.Loading -> showAssessmentProgress()
+                    is Lce.Content -> showAssessments(it.content)
+                    is Lce.Error -> showAssessmentError(it.error)
+                }
+            })
+
+
+        // mainLearningViewModel.getAssessmentsFromAllAssignedCourses()
+        learningViewModel.getRoleBasedCourses()
     }
 
     private fun initGigViewModel() {
@@ -90,6 +143,186 @@ class BSCalendarScreenFragment : BaseFragment() {
         gigViewModel.watchUpcomingGigs()
     }
 
+    private fun showLearningAsLoading() {
+
+        learning_rv.gone()
+        learning_learning_error.gone()
+        learning_progress_bar.visible()
+    }
+
+    private fun showErrorWhileLoadingCourse(error: String) {
+
+        learning_progress_bar.gone()
+        learning_rv.gone()
+        learning_learning_error.visible()
+
+        learning_learning_error.text = error
+    }
+
+    private fun showUserLearningCourses(content: List<Course>) {
+
+        learning_progress_bar.gone()
+        learning_learning_error.gone()
+        learning_rv.visible()
+
+        if (content.isEmpty()) {
+            learning_tv.gone()
+            learning_container.gone()
+        } else {
+            learning_tv.visible()
+            learning_container.visible()
+
+
+            val itemWidth = ((width / 3) * 2).toInt()
+            val recyclerGenericAdapter: RecyclerGenericAdapter<Course> =
+                RecyclerGenericAdapter<Course>(
+                    activity?.applicationContext,
+                    PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
+                        navigate(R.id.mainLearningFragment)
+                    },
+                    RecyclerGenericAdapter.ItemInterface<Course?> { obj, viewHolder, position ->
+                        var view = getView(viewHolder, R.id.card_view)
+                        val lp = view.layoutParams
+                        lp.height = lp.height
+                        lp.width = itemWidth
+                        view.layoutParams = lp
+
+                        var title = getTextView(viewHolder, R.id.title_)
+                        title.text = obj?.name
+
+                        var subtitle = getTextView(viewHolder, R.id.title)
+                        subtitle.text = obj?.level
+
+                        var comImg = getImageView(viewHolder, R.id.completed_iv)
+                        comImg.isVisible = obj?.completed ?: false
+
+
+                        var img = getImageView(viewHolder, R.id.learning_img)
+
+                        if (!obj!!.coverPicture.isNullOrBlank()) {
+                            if (obj!!.coverPicture!!.startsWith("http", true)) {
+
+                                GlideApp.with(requireContext())
+                                    .load(obj!!.coverPicture!!)
+                                    .placeholder(getCircularProgressDrawable())
+                                    .error(R.drawable.ic_learning_default_back)
+                                    .into(img)
+                            } else {
+                                FirebaseStorage.getInstance()
+                                    .getReference(LearningConstants.LEARNING_IMAGES_FIREBASE_FOLDER)
+                                    .child(obj!!.coverPicture!!)
+                                    .downloadUrl
+                                    .addOnSuccessListener { fileUri ->
+
+                                        GlideApp.with(requireContext())
+                                            .load(fileUri)
+                                            .placeholder(getCircularProgressDrawable())
+                                            .error(R.drawable.ic_learning_default_back)
+                                            .into(img)
+                                    }
+                            }
+                        } else {
+                            GlideApp.with(requireContext())
+                                .load(R.drawable.ic_learning_default_back)
+                                .into(img)
+                        }
+
+                        //img.setImageResource(obj?.imgIcon!!)
+                    })!!
+            recyclerGenericAdapter.setList(content)
+            recyclerGenericAdapter.setLayout(R.layout.learning_bs_item)
+            learning_rv.layoutManager = LinearLayoutManager(
+                activity?.applicationContext,
+                LinearLayoutManager.HORIZONTAL,
+                false
+            )
+            learning_rv.adapter = recyclerGenericAdapter
+
+        }
+    }
+
+    private fun showAssessmentProgress() {
+        assessment_rv.gone()
+        learning_assessment_error.gone()
+        learning_assessment_progress_bar.visible()
+    }
+
+    private fun showAssessmentError(error: String) {
+
+        assessment_rv.gone()
+        learning_assessment_progress_bar.gone()
+        learning_assessment_error.visible()
+
+        learning_assessment_error.text = error
+    }
+
+
+    private fun showAssessments(content: List<CourseContent>) {
+
+        learning_assessment_progress_bar.gone()
+        learning_assessment_error.gone()
+
+        if (content.isEmpty()) {
+            assessment_tv.gone()
+            assessment_layout.gone()
+        } else {
+
+            assessment_tv.visible()
+            assessment_layout.visible()
+
+            val displayMetrics = DisplayMetrics()
+            activity?.windowManager?.defaultDisplay?.getMetrics(displayMetrics)
+            val width = displayMetrics.widthPixels
+            val itemWidth = ((width / 5) * 3.5).toInt()
+
+
+            val recyclerGenericAdapter: RecyclerGenericAdapter<CourseContent> =
+                RecyclerGenericAdapter<CourseContent>(
+                    activity?.applicationContext,
+                    PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
+                        val assessment = item as CourseContent
+
+                        showToast("Disabled ,will be enabled soon")
+//
+//                        navigate(R.id.assessment_fragment,  bundleOf(
+//                            AssessmentFragment.INTENT_LESSON_ID to assessment.id
+//                        )
+//                        )
+                    },
+                    RecyclerGenericAdapter.ItemInterface<CourseContent> { obj, viewHolder, position ->
+                        val lp = getView(viewHolder, R.id.assessment_cl).layoutParams
+                        lp.height = lp.height
+                        lp.width = itemWidth
+                        getView(viewHolder, R.id.assessment_cl).layoutParams = lp
+                        getTextView(viewHolder, R.id.title).text = obj?.title
+                        getTextView(viewHolder, R.id.time).text = "02:00"
+
+
+                        getTextView(viewHolder, R.id.status).text = "PENDING"
+                        getTextView(
+                            viewHolder,
+                            R.id.status
+                        ).setBackgroundResource(R.drawable.rect_assessment_status_pending)
+                        (getView(
+                            viewHolder,
+                            R.id.side_bar_status
+                        ) as CardView).setCardBackgroundColor(resources.getColor(R.color.status_bg_pending))
+
+
+                    })
+            recyclerGenericAdapter.list = content
+            recyclerGenericAdapter.setLayout(R.layout.assessment_bs_item)
+            assessment_rv.layoutManager = LinearLayoutManager(
+                activity?.applicationContext,
+                LinearLayoutManager.HORIZONTAL,
+                false
+            )
+            assessment_rv.adapter = recyclerGenericAdapter
+        }
+
+    }
+
+
     override fun isDeviceLanguageChangedDialogRequired(): Boolean {
         return false
     }
@@ -102,20 +335,22 @@ class BSCalendarScreenFragment : BaseFragment() {
         width = displayMetrics.widthPixels
         initializeVerificationAlert()
         initializeFeaturesBottomSheet()
-        initializeLearningModule()
         initializeAssessmentBottomSheet()
-        application_version.text = "version " + getCurrentVersion()
+        application_version.text = getString(R.string.version) + " " + getCurrentVersion()
         listener()
+        initializeExploreByRole()
+        initializeExploreByIndustry()
+        initBottomMenuClicks()
     }
 
     private fun initializeVerificationAlert() {
-        var clickhere: String = "Click here";
+        var clickhere: String = getString(R.string.click_here);
         var content: SpannableString = SpannableString(clickhere);
         content.setSpan(UnderlineSpan(), 0, content.length, 0);
         kyc_tv.text =
-            Html.fromHtml("Kyc Verification is not done , <font color='#060606'><u>Click here</u></font> to  complete.")
+            Html.fromHtml(getString(R.string.kyc_not_done))
         video_resume_tv.text =
-            Html.fromHtml("Your Video resume is Pending , <font color='#060606'><u>Click here</u></font> to  complete.")
+            Html.fromHtml(getString(R.string.video_resume_pending_html))
     }
 
     private fun listener() {
@@ -128,6 +363,7 @@ class BSCalendarScreenFragment : BaseFragment() {
         show_upcominggig_layout.setOnClickListener() {
             showKYCAndHideUpcomingLayout(false)
         }
+
     }
 
     private fun showKYCAndHideUpcomingLayout(show: Boolean) {
@@ -156,10 +392,7 @@ class BSCalendarScreenFragment : BaseFragment() {
                     activity?.applicationContext,
                     PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
                         val gig = item as Gig
-                        navigate(R.id.presentGigPageFragment, Bundle().apply {
-                            this.putString(GigPageFragment.INTENT_EXTRA_GIG_ID, gig.gigId)
-                        })
-
+                        GigNavigation.openGigMainPage(findNavController(), gig.gigId)
 //                    showKYCAndHideUpcomingLayout(
 //                        true
 //                    )
@@ -178,9 +411,11 @@ class BSCalendarScreenFragment : BaseFragment() {
                         if (obj!!.isGigOfToday()) {
 
                             val gigTiming = if (obj.endDateTime != null)
-                                "${timeFormatter.format(obj.startDateTime!!.toDate())} - ${timeFormatter.format(
+                                "${timeFormatter.format(obj.startDateTime!!.toDate())} - ${
+                                timeFormatter.format(
                                     obj.endDateTime!!.toDate()
-                                )}"
+                                )
+                                }"
                             else
                                 "${timeFormatter.format(obj.startDateTime!!.toDate())} - "
                             getTextView(viewHolder, R.id.textView67).text = gigTiming
@@ -195,12 +430,15 @@ class BSCalendarScreenFragment : BaseFragment() {
                                 getView(viewHolder, R.id.checkInTV).isEnabled = false
                             } else if (obj.isCheckInAndCheckOutMarked()) {
                                 getView(viewHolder, R.id.checkInTV).isEnabled = false
+                                (getView(viewHolder, R.id.checkInTV) as Button).text = "Checked Out"
                             } else if (obj.isCheckInMarked()) {
                                 getView(viewHolder, R.id.checkInTV).isEnabled = true
-                                (getView(viewHolder, R.id.checkInTV) as Button).text = "Check Out"
+                                (getView(viewHolder, R.id.checkInTV) as Button).text =
+                                    getString(R.string.check_out)
                             } else {
                                 getView(viewHolder, R.id.checkInTV).isEnabled = true
-                                (getView(viewHolder, R.id.checkInTV) as Button).text = "Check In"
+                                (getView(viewHolder, R.id.checkInTV) as Button).text =
+                                    getString(R.string.check_in)
                             }
 
                         } else {
@@ -215,17 +453,17 @@ class BSCalendarScreenFragment : BaseFragment() {
                         )
 
                         val callView = getView(viewHolder, R.id.callCardView)
-                        if(obj.gigContactDetails?.contactNumber != 0L) {
+                        if (obj.gigContactDetails?.contactNumber != 0L) {
 
 
                             callView.visible()
                             callView.setOnClickListener(
-                                    CallClickListener(
-                                            upcoming_gig_rv,
-                                            position
-                                    )
+                                CallClickListener(
+                                    upcoming_gig_rv,
+                                    position
+                                )
                             )
-                        }else{
+                        } else {
                             callView.gone()
                         }
 
@@ -299,10 +537,7 @@ class BSCalendarScreenFragment : BaseFragment() {
         View.OnClickListener {
         override fun onClick(v: View?) {
             val gig = (rv.adapter as RecyclerGenericAdapter<Gig>).list.get(position)
-
-            navigate(R.id.gigAttendancePageFragment, Bundle().apply {
-                this.putString(GigAttendancePageFragment.INTENT_EXTRA_GIG_ID, gig.gigId)
-            })
+            GigNavigation.openGigAttendancePage(findNavController(), gig.gigId)
         }
     }
 
@@ -310,8 +545,11 @@ class BSCalendarScreenFragment : BaseFragment() {
         override fun onClick(v: View?) {
             val gig = (rv.adapter as RecyclerGenericAdapter<Gig>).list.get(position)
 
-            if(gig.gigContactDetails?.contactNumber == 0L) return
-            val intent = Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", gig.gigContactDetails?.contactNumber?.toString(), null))
+            if (gig.gigContactDetails?.contactNumber == 0L) return
+            val intent = Intent(
+                Intent.ACTION_DIAL,
+                Uri.fromParts("tel", gig.gigContactDetails?.contactNumber?.toString(), null)
+            )
             startActivity(intent)
         }
     }
@@ -391,14 +629,26 @@ class BSCalendarScreenFragment : BaseFragment() {
     private fun initializeFeaturesBottomSheet() {
         var datalist: ArrayList<FeatureModel> = ArrayList<FeatureModel>()
         datalist.add(FeatureModel("My Gig", R.drawable.mygig, R.id.gig_history_fragment))
-        datalist.add(FeatureModel("Wallet", R.drawable.wallet, -1/*R.id.walletBalancePage*/))
+        datalist.add(FeatureModel("Wallet", R.drawable.wallet, R.id.walletBalancePage))
         datalist.add(FeatureModel("Profile", R.drawable.profile, R.id.profileFragment))
-        datalist.add(FeatureModel("Learning", R.drawable.learning, -1/*R.id.mainLearningFragment*/))
-
+        datalist.add(FeatureModel("Learning", R.drawable.learning, R.id.mainLearningFragment))
         datalist.add(FeatureModel("Settings", R.drawable.settings, R.id.settingFragment))
         datalist.add(FeatureModel("Chat", R.drawable.chat, R.id.contactScreenFragment))
-        datalist.add(FeatureModel("Landing HS", R.drawable.chat, R.id.landinghomefragment))
+        datalist.add(
+            FeatureModel(
+                "Home Screen",
+                R.drawable.ic_home_black,
+                R.id.landinghomefragment
+            )
+        )
         datalist.add(FeatureModel("Explore", R.drawable.ic_landinghome_search, -1))
+        datalist.add(
+            FeatureModel(
+                "Verification",
+                R.drawable.ic_shield_black,
+                R.id.gigerVerificationFragment
+            )
+        )
 
         val itemWidth = ((width / 7) * 1.6).toInt()
         val recyclerGenericAdapter: RecyclerGenericAdapter<FeatureModel> =
@@ -406,8 +656,15 @@ class BSCalendarScreenFragment : BaseFragment() {
                 activity?.applicationContext,
                 PFRecyclerViewAdapter.OnViewHolderClick<FeatureModel?> { view, position, item ->
                     if (item?.navigationID != -1) {
-                        navigate(item?.navigationID!!)
-                    }else{
+                        if (item?.title?.equals("Wallet") ?: false || item?.title?.equals("Chat") ?: false) {
+                            if (AppConstants.UNLOCK_FEATURE) {
+                                navigate(item?.navigationID!!)
+                            } else showToast("This page are inactive. We’ll activate it in a few weeks")
+                        } else
+                            item?.navigationID?.let { navigate(it) }
+
+                    } else {
+
                         showToast("This page are inactive. We’ll activate it in a few weeks")
                     }
                 },
@@ -444,73 +701,6 @@ class BSCalendarScreenFragment : BaseFragment() {
 //        }
 //    }
 
-    private fun initializeLearningModule() {
-
-        val itemWidth = ((width / 3) * 2).toInt()
-        // model will change when integrated with DB
-        var datalist: ArrayList<LandingScreenFragment.TitleSubtitleModel> =
-            ArrayList<LandingScreenFragment.TitleSubtitleModel>()
-
-        datalist.add(
-            LandingScreenFragment.TitleSubtitleModel(
-                "Retail Sales Executive",
-                "Demonstrate products to customers", R.drawable.learning2
-            )
-        )
-
-        datalist.add(
-            LandingScreenFragment.TitleSubtitleModel(
-                "Quick Service Restaurant",
-                "Manage food displays",
-                R.drawable.learning1
-            )
-        )
-        datalist.add(
-            LandingScreenFragment.TitleSubtitleModel(
-                "Delivery",
-                "Maintaining hygiene and safety",
-                R.drawable.learning_bg
-            )
-        )
-        datalist.add(
-            LandingScreenFragment.TitleSubtitleModel(
-                "Retail Sales Executive",
-                "Help customers choose the right products",
-                R.drawable.learning2
-            )
-        )
-        val recyclerGenericAdapter: RecyclerGenericAdapter<LandingScreenFragment.TitleSubtitleModel> =
-            RecyclerGenericAdapter<LandingScreenFragment.TitleSubtitleModel>(
-                activity?.applicationContext,
-                PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
-                    showToast("This page are inactive. We’ll activate it in a few weeks")
-                  //  navigate(R.id.mainLearningFragment)
-                },
-                RecyclerGenericAdapter.ItemInterface<LandingScreenFragment.TitleSubtitleModel?> { obj, viewHolder, position ->
-                    var view = getView(viewHolder, R.id.card_view)
-                    val lp = view.layoutParams
-                    lp.height = lp.height
-                    lp.width = itemWidth
-                    view.layoutParams = lp
-
-                    var title = getTextView(viewHolder, R.id.title_)
-                    title.text = obj?.title
-
-                    var subtitle = getTextView(viewHolder, R.id.title)
-                    subtitle.text = obj?.subtitle
-
-                    var img = getImageView(viewHolder, R.id.learning_img)
-                    img.setImageResource(obj?.imgIcon!!)
-                })!!
-        recyclerGenericAdapter.setList(datalist)
-        recyclerGenericAdapter.setLayout(R.layout.learning_bs_item)
-        learning_rv.layoutManager = LinearLayoutManager(
-            activity?.applicationContext,
-            LinearLayoutManager.HORIZONTAL,
-            false
-        )
-        learning_rv.adapter = recyclerGenericAdapter
-    }
 
     class Assessment(var title: String, var time: String, var status: Boolean) {
 
@@ -555,9 +745,9 @@ class BSCalendarScreenFragment : BaseFragment() {
             RecyclerGenericAdapter<Assessment>(
                 activity?.applicationContext,
                 PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
-                    showToast("This page are inactive. We’ll activate it in a few weeks")
-                    //navigate(R.id.assessment_fragment)
-                     },
+                    //                    showToast("This page are inactive. We’ll activate it in a few weeks")
+                    navigate(R.id.assessment_fragment)
+                },
                 RecyclerGenericAdapter.ItemInterface<Assessment?> { obj, viewHolder, position ->
                     val lp = getView(viewHolder, R.id.assessment_cl).layoutParams
                     lp.height = lp.height
@@ -567,7 +757,7 @@ class BSCalendarScreenFragment : BaseFragment() {
                     getTextView(viewHolder, R.id.time).text = obj?.time
 
                     if (obj?.status!!) {
-                        getTextView(viewHolder, R.id.status).text = "COMPLETED"
+                        getTextView(viewHolder, R.id.status).text = getString(R.string.completed)
                         getTextView(
                             viewHolder,
                             R.id.status
@@ -578,7 +768,7 @@ class BSCalendarScreenFragment : BaseFragment() {
                         ) as CardView).setCardBackgroundColor(resources.getColor(R.color.status_bg_completed))
 
                     } else {
-                        getTextView(viewHolder, R.id.status).text = "PENDING"
+                        getTextView(viewHolder, R.id.status).text = getString(R.string.pending)
                         getTextView(
                             viewHolder,
                             R.id.status
@@ -600,4 +790,147 @@ class BSCalendarScreenFragment : BaseFragment() {
         assessment_rv.adapter = recyclerGenericAdapter
     }
 
+
+    private fun showGlideImage(url: String, imgview: ImageView) {
+        GlideApp.with(requireContext())
+            .load(url)
+            .placeholder(getCircularProgressDrawable())
+            .into(imgview)
+    }
+
+    private fun initializeExploreByIndustry() {
+
+        val itemWidth = ((width / 3) * 2).toInt()
+        // model will change when integrated with DB
+//        var datalist: ArrayList<UpcomingGigModel> = ArrayList<UpcomingGigModel>()
+        var datalist: ArrayList<LandingScreenFragment.TitleSubtitleModel> =
+            ArrayList<LandingScreenFragment.TitleSubtitleModel>()
+
+        datalist.add(
+            LandingScreenFragment.TitleSubtitleModel(
+                "Delivery",
+                "",
+                "https://firebasestorage.googleapis.com/v0/b/gigforce-dev.appspot.com/o/temp_files%2Findustry.jpg?alt=media&token=039ddf50-9597-4ee4-bc12-0abdea74fd16"
+            )
+        )
+
+        datalist.add(
+            LandingScreenFragment.TitleSubtitleModel(
+                "Retail",
+                "",
+                "https://firebasestorage.googleapis.com/v0/b/gigforce-dev.appspot.com/o/temp_files%2Findustry3.jpg?alt=media&token=1813f5dd-5596-4a04-a0e1-3c8400a3d82d"
+            )
+        )
+
+
+        datalist.add(
+            LandingScreenFragment.TitleSubtitleModel(
+                "Quick Service Restuarant",
+                "",
+                "https://firebasestorage.googleapis.com/v0/b/gigforce-dev.appspot.com/o/temp_files%2Findustry1.jpg?alt=media&token=2634019b-9777-4dbb-9103-1d63eb44df97"
+            )
+        )
+
+        datalist.add(
+            LandingScreenFragment.TitleSubtitleModel(
+                "Telesales and Support",
+                "",
+                "https://firebasestorage.googleapis.com/v0/b/gigforce-dev.appspot.com/o/temp_files%2Findustry2.jpg?alt=media&token=00412b0a-fbbe-4790-9a9b-050fefaf5d02"
+            )
+        )
+
+        val recyclerGenericAdapter: RecyclerGenericAdapter<LandingScreenFragment.TitleSubtitleModel> =
+            RecyclerGenericAdapter<LandingScreenFragment.TitleSubtitleModel>(
+                activity?.applicationContext,
+                PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
+                    //                    if(AppConstants.UNLOCK_FEATURE){
+//                    }else
+                    showToast("This is under development. Please check again in a few days.")
+                },
+                RecyclerGenericAdapter.ItemInterface<LandingScreenFragment.TitleSubtitleModel?> { obj, viewHolder, position ->
+                    var view = getView(viewHolder, R.id.card_view)
+                    val lp = view.layoutParams
+                    lp.height = lp.height
+                    lp.width = itemWidth
+                    view.layoutParams = lp
+
+                    var title = getTextView(viewHolder, R.id.title)
+                    title.text = obj?.title
+                    obj?.imgStr?.let {
+                        var img = getImageView(viewHolder, R.id.img_view)
+                        showGlideImage(it, img)
+                    }
+//                    img.setImageResource(obj?.imgIcon!!)
+                })!!
+        recyclerGenericAdapter.setList(datalist)
+        recyclerGenericAdapter.setLayout(R.layout.explore_by_industry_item)
+        explore_by_industry.layoutManager = LinearLayoutManager(
+            activity?.applicationContext,
+            LinearLayoutManager.HORIZONTAL,
+            false
+        )
+        explore_by_industry.adapter = recyclerGenericAdapter
+    }
+
+    private fun initBottomMenuClicks() {
+
+
+        contact_us_bs_calendar_screen.setOnClickListener {
+            navigate(R.id.fakeGigContactScreenFragment)
+        }
+
+        invite_contact_bs_calendar_screen.setOnClickListener {
+            navigate(R.id.referrals_fragment)
+        }
+
+
+
+        help_topic_bs_calendar_screen.setOnClickListener {
+            navigate(R.id.helpVideosFragment)
+        }
+
+
+    }
+
+    private fun initializeExploreByRole() {
+        ll_search_role.setOnClickListener {
+            if (AppConstants.UNLOCK_FEATURE) {
+                navigate(R.id.fragment_explore_by_role)
+            } else {
+                showToast("This is under development. Please check again in a few days.")
+            }
+        }
+        landingScreenViewModel.observerRole.observe(viewLifecycleOwner, Observer { gig ->
+            run {
+                showGlideImage(gig?.role_image ?: "", iv_role)
+                tv_title_role.text = gig?.role_title
+                if (!gig?.job_description.isNullOrEmpty()) {
+                    tv_subtitle_role.visible()
+                    tv_subtitle_role.text = gig?.job_description?.get(0)
+                }
+                cv_role.setOnClickListener {
+                    if (AppConstants.UNLOCK_FEATURE) {
+                        navigate(
+                            R.id.fragment_role_details, bundleOf(
+                                StringConstants.ROLE_ID.value to gig?.id!!
+                            )
+                        )
+                    } else {
+                        showToast("This is under development. Please check again in a few days.")
+                    }
+                }
+            }
+
+
+        })
+        landingScreenViewModel.getRoles()
+        val itemWidth = ((width / 3) * 2).toInt()
+        val lp = cv_role.layoutParams
+        lp.height = lp.height
+        lp.width = itemWidth
+
+        cv_role.layoutParams = lp
+
+
+    }
 }

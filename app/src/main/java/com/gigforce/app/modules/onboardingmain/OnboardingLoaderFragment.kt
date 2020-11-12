@@ -10,8 +10,12 @@ import androidx.lifecycle.ViewModelProviders
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.modules.auth.ui.main.LoginSuccessfulViewModel
+import com.gigforce.app.utils.StringConstants
+import com.gigforce.app.modules.profile.models.ProfileData
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 
-class OnboardingLoaderFragment: BaseFragment() {
+class OnboardingLoaderFragment : BaseFragment() {
     companion object {
         fun newInstance() = OnboardingLoaderFragment()
     }
@@ -45,8 +49,10 @@ class OnboardingLoaderFragment: BaseFragment() {
     }
     private fun observer() {
         viewModel.userProfileAndGigData.observe(viewLifecycleOwner, Observer { profileAndGig ->
-            if (profileAndGig.profile != null ) {
+            if (profileAndGig.profile != null) {
+                setUserInCrashlytics(profileAndGig.profile)
                 if (profileAndGig.profile.status) {
+
                     if (profileAndGig.profile.isonboardingdone) {
                         saveOnBoardingCompleted()
 
@@ -62,6 +68,25 @@ class OnboardingLoaderFragment: BaseFragment() {
                     showToast(profileAndGig.profile.errormsg)
             }
         })
+    }
+
+    private fun setUserInCrashlytics(profile: ProfileData) {
+        val username = profile?.name
+        val uid = FirebaseAuth.getInstance().currentUser?.uid ?: ""
+        var mobileNo = ""
+        profile?.contact?.let {
+            for (contact in it) {
+                mobileNo += contact.phone + ','
+            }
+            if (mobileNo.contains(",")) {
+                mobileNo.substring(0, mobileNo.length - 2)
+            }
+
+        }
+        FirebaseCrashlytics.getInstance().setUserId(uid)
+        FirebaseCrashlytics.getInstance().setCustomKey("username", username)
+        FirebaseCrashlytics.getInstance().setCustomKey("mobileno", mobileNo)
+
     }
 
     private fun navigateToCalendarGomeScreen() {

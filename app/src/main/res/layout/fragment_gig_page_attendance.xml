@@ -8,6 +8,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:fillViewport="true"
         tools:context=".modules.gigPage.GigAttendancePageFragment">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -172,7 +173,7 @@
                     android:layout_height="17dp"
                     android:layout_marginStart="25dp"
                     android:layout_marginTop="14dp"
-                    android:src="@drawable/ic_location"
+                    app:srcCompat="@drawable/ic_location"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/seaprator1" />
 
@@ -359,7 +360,7 @@
                     android:layout_height="17dp"
                     android:layout_marginStart="25dp"
                     android:layout_marginTop="14dp"
-                    android:src="@drawable/ic_clock_pink"
+                    app:srcCompat="@drawable/ic_clock_pink"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/durationTextTV" />
 
@@ -385,7 +386,8 @@
                     android:layout_height="17dp"
                     android:layout_marginStart="25dp"
                     android:layout_marginTop="14dp"
-                    android:src="@drawable/ic_credit_card"
+
+                    app:srcCompat="@drawable/ic_credit_card"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/shiftTV" />
 
@@ -483,7 +485,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/lato"
                         android:letterSpacing="0"
-                        android:text="00:00:00"
+                        android:text="--:--:--"
                         android:textColor="@color/black_85"
                         android:textSize="20sp"
                         app:layout_constraintEnd_toStartOf="@+id/view4"
@@ -520,7 +522,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/lato"
                         android:letterSpacing="0"
-                        android:text="00:00:00"
+                        android:text="--:--:--"
                         android:textColor="@color/black_85"
                         android:textSize="20sp"
                         app:layout_constraintEnd_toStartOf="@id/checkOutIV"
@@ -565,20 +567,26 @@
                 android:layout_width="match_parent"
                 android:layout_height="69dp"
                 android:layout_marginTop="20dp"
-                app:border_radius="8dp"
                 android:layout_marginBottom="24dp"
+                app:border_radius="8dp"
+                app:text_size="16sp"
+                app:text_style="bold"
                 app:inner_color="@color/lipstick"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/contact_supervisor"
+                app:layout_constraintVertical_bias="0.885"
                 app:outer_color="@color/light_pink"
                 app:slider_height="60dp"
                 app:slider_icon="@drawable/ic_arrow_forward_white"
                 app:slider_icon_color="@color/white"
-                app:text="Check - in" />
+                app:text="Check - in"
+                android:visibility="gone"
+                tools:layout_editor_absoluteX="0dp" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

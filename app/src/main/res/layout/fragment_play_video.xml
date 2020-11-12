@@ -1,16 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
+    android:layout_height="match_parent"
     tools:context=".modules.learning.learningVideo.PlayVideoDialogFragment">
 
-    <com.google.android.exoplayer2.ui.PlayerView
-        android:id="@+id/playerView"
-        android:layout_width="match_parent"
-        android:layout_height="303dp"
-        app:controller_layout_id="@layout/fragment_play_video_controls" />
+    <include
+        android:id="@+id/fragment_play_video_main_layout"
+        layout="@layout/fragment_play_video_main"
+        android:visibility="gone" />
 
-</LinearLayout>
+    <ProgressBar
+        android:id="@+id/fragment_play_video_progress_bar"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_gravity="center"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/fragment_play_video_error"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:drawableTop="@drawable/ic_cross_grey"
+        android:drawablePadding="10dp"
+        tools:text="Unable to load your stuff" />
+
+</FrameLayout>

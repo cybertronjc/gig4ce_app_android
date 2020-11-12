@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.os.IBinder
 import android.os.Parcelable
 import android.text.format.DateUtils
+import android.text.format.DateUtils
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
@@ -19,6 +20,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.gigforce.app.R
 import com.google.firebase.Timestamp
 import java.io.Serializable
+import java.text.SimpleDateFormat
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.LocalDateTime

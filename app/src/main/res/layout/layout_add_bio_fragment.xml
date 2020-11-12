@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/tb_add_bio"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_gradient_e42c64_990077"
+            app:contentInsetLeft="0dp"
+            app:contentInsetStart="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/size_42"
+                android:layout_marginBottom="@dimen/size_14"
+
+                >
+
+                <ImageView
+                    android:id="@+id/iv_close_add_bio"
+                    android:layout_width="@dimen/size_24"
+                    android:layout_height="@dimen/size_24"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="@dimen/size_13"
+                    app:srcCompat="@drawable/ic_close"
+                    app:tint="@color/white" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="@dimen/size_24"
+                    android:layout_toEndOf="@+id/iv_close_add_bio"
+                    android:gravity="center_horizontal"
+                    android:lineSpacingExtra="@dimen/font_21"
+                    android:padding="@dimen/size_5"
+                    android:text="@string/new_bio"
+                    android:textColor="#ffffff"
+                    android:textSize="20sp" />
+            </RelativeLayout>
+
+
+        </androidx.appcompat.widget.Toolbar>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintTop_toBottomOf="@+id/tb_add_bio">
+
+            <com.gigforce.app.utils.LinedEditText
+                android:id="@+id/et_add_bio"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/size_29"
+                android:layout_marginEnd="@dimen/size_27"
+                android:background="@null"
+                android:fontFamily="@font/lato"
+                android:gravity="top|center_vertical"
+                android:hint="@string/add_bio_star"
+                android:imeOptions="actionNone"
+                android:lineSpacingExtra="@dimen/size_57"
+                android:lines="5"
+                android:maxLines="5"
+                android:paddingTop="@dimen/size_39"
+                android:textSize="@dimen/font_14" />
+
+            <TextView
+                android:id="@+id/tv_save_add_bio"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/et_add_bio"
+                android:layout_marginStart="@dimen/size_28"
+                android:layout_marginTop="-13dp"
+                android:layout_marginEnd="@dimen/size_27"
+                android:alpha="0.4"
+                android:background="@drawable/border_lipstick_rad_4"
+                android:enabled="false"
+                android:gravity="center_horizontal"
+                android:minHeight="@dimen/size_36"
+                android:paddingTop="@dimen/size_10"
+                android:paddingBottom="@dimen/size_9"
+                android:text="@string/save"
+                android:textColor="#e42b6a"
+                android:textSize="@dimen/font_14"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+
+        </RelativeLayout>
+
+        <ProgressBar
+            android:id="@+id/pb_add_bio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

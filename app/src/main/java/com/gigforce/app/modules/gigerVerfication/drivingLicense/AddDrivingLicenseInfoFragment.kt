@@ -32,6 +32,8 @@ import com.google.firebase.storage.FirebaseStorage
 import com.ncorti.slidetoact.SlideToActView
 import kotlinx.android.synthetic.main.fragment_add_driving_license_info.*
 import kotlinx.android.synthetic.main.fragment_add_driving_license_info_main.*
+import kotlinx.android.synthetic.main.fragment_add_driving_license_info_main.helpIconIV
+import kotlinx.android.synthetic.main.fragment_add_driving_license_info_main.whyWeNeedThisTV
 import kotlinx.android.synthetic.main.fragment_add_driving_license_info_view.*
 import kotlinx.android.synthetic.main.fragment_verification_image_holder.view.*
 import java.util.*
@@ -100,22 +102,20 @@ class AddDrivingLicenseInfoFragment : BaseFragment() {
             findNavController().popBackStack(R.id.gigerVerificationFragment, false)
         }
 
-        helpIconIV.setOnClickListener {
+        helpIconViewIV.setOnClickListener {
+            showWhyWeNeedThisDialog()
+        }
 
-            WhyWeNeedThisBottomSheet.launch(
-                childFragmentManager = childFragmentManager,
-                title = getString(R.string.why_do_we_need_this),
-                content = getString(R.string.why_we_need_this_dl)
-            )
+        whyWeNeedThisViewTV.setOnClickListener {
+            showWhyWeNeedThisDialog()
+        }
+
+        helpIconIV.setOnClickListener {
+            showWhyWeNeedThisDialog()
         }
 
         whyWeNeedThisTV.setOnClickListener {
-
-            WhyWeNeedThisBottomSheet.launch(
-                childFragmentManager = childFragmentManager,
-                title = getString(R.string.why_do_we_need_this),
-                content = getString(R.string.why_we_need_this_dl)
-            )
+            showWhyWeNeedThisDialog()
         }
 
         dlAvailaibilityOptionRG.setOnCheckedChangeListener { _, checkedId ->
@@ -124,8 +124,8 @@ class AddDrivingLicenseInfoFragment : BaseFragment() {
                 showDLImageAndInfoLayout()
 
                 if (confirmDLDataCB.isChecked
-                    && dlFrontImagePath != null
-                    && dlBackImagePath != null
+                    && ((dlSubmitSliderBtn.text == getString(R.string.update)
+                            || (dlFrontImagePath != null && dlBackImagePath != null)))
                 ) {
                     enableSubmitButton()
                 } else
@@ -153,8 +153,8 @@ class AddDrivingLicenseInfoFragment : BaseFragment() {
             if (isChecked) {
 
                 if (dlYesRB.isChecked
-                    && dlFrontImagePath != null
-                    && dlBackImagePath != null
+                    && ((dlSubmitSliderBtn.text == getString(R.string.update)
+                            || (dlFrontImagePath != null && dlBackImagePath != null)))
                 )
                     enableSubmitButton()
                 else if (dlNoRB.isChecked)
@@ -196,7 +196,7 @@ class AddDrivingLicenseInfoFragment : BaseFragment() {
                             return
                         }
 
-                        if (dlFrontImagePath == null || dlBackImagePath == null) {
+                        if (dlSubmitSliderBtn.text != getString(R.string.update) && (dlFrontImagePath == null || dlBackImagePath == null)) {
 
                             MaterialAlertDialogBuilder(requireContext())
                                 .setTitle(getString(R.string.alert))
@@ -241,6 +241,7 @@ class AddDrivingLicenseInfoFragment : BaseFragment() {
                     dlMainLayout.visible()
 
                     setDataOnEditLayout(drivingLicenseDetail)
+                    dlSubmitSliderBtn.isEnabled = true
                 }
                 .setNegativeButton(getString(R.string.cancel)) { _, _ -> }
                 .show()
@@ -267,6 +268,14 @@ class AddDrivingLicenseInfoFragment : BaseFragment() {
         dlBackImageHolder.uploadImageLayout.reuploadBtn.setOnClickListener {
             openCameraAndGalleryOptionForBackSideImage()
         }
+    }
+
+    private fun showWhyWeNeedThisDialog() {
+        WhyWeNeedThisBottomSheet.launch(
+            childFragmentManager = childFragmentManager,
+            title = getString(R.string.why_do_we_need_this),
+            content = getString(R.string.why_we_need_this_dl)
+        )
     }
 
     override fun onBackPressed(): Boolean {

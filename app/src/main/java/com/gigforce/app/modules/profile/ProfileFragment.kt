@@ -3,21 +3,25 @@ package com.gigforce.app.modules.profile
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import androidx.activity.addCallback
 import androidx.coordinatorlayout.widget.CoordinatorLayout
-import androidx.fragment.app.Fragment
+import androidx.core.content.res.ResourcesCompat
+import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
+import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
+import com.gigforce.app.modules.gigerVerfication.GigerVerificationStatus
 import com.gigforce.app.modules.photocrop.PhotoCrop
+import com.gigforce.app.modules.profile.models.ProfileData
 import com.gigforce.app.utils.GlideApp
+import com.gigforce.app.utils.StringConstants
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.chip.Chip
 import com.google.firebase.storage.FirebaseStorage
@@ -25,46 +29,52 @@ import com.google.firebase.storage.StorageReference
 import kotlinx.android.synthetic.main.fragment_profile_main_expanded.*
 import kotlinx.android.synthetic.main.fragment_profile_main_expanded.view.*
 import kotlinx.android.synthetic.main.profile_main_card_background.view.*
+import kotlinx.android.synthetic.main.verified_button.view.*
 import java.text.SimpleDateFormat
 import java.util.*
 
 
 class ProfileFragment : BaseFragment() {
 
+
     companion object {
         fun newInstance() = ProfileFragment()
     }
+
 
     private lateinit var storage: FirebaseStorage
     private lateinit var layout: View
     private lateinit var profileAvatarName: String
     private lateinit var dWidth: Display
-    private lateinit var win:Window
+    private lateinit var win: Window
     private var PHOTO_CROP: Int = 45
     private var isShow: Boolean = true
     private var scrollRange: Int = -1
     private var PROFILE_PICTURE_FOLDER: String = "profile_pics"
+
+    private val gigerVerificationViewModel : GigVerificationViewModel by viewModels()
+    val viewModel: ProfileViewModel by activityViewModels<ProfileViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         makeStatusBarTransparent()
     }
 
-    private fun makeStatusBarTransparent(){
+    private fun makeStatusBarTransparent() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             win = requireActivity().window
             win.setFlags(
                 WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
+                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+            )
             win.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             win.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             win.setStatusBarColor(requireActivity().getColor(R.color.white))
-
         }
     }
 
 
-    private fun restoreStatusBar(){
+    private fun restoreStatusBar() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             win = requireActivity().window
             win.clearFlags(
@@ -106,14 +116,26 @@ class ProfileFragment : BaseFragment() {
         layout.appbar.post(Runnable {
             val heightPx: Int = dWidth.width * 1 / 3
             setAppBarOffset(heightPx)
+
+            if (!viewModel.profileAppBarExpanded) {
+                appbar.setExpanded(true)
+                viewModel.profileAppBarExpanded = true
+            }
         })
+
         layout.profile_avatar.layoutParams.height = dWidth.width
+
+        layout.main_expanded_is_verified.setOnClickListener{
+            navigate(R.id.gigerVerificationFragment)
+        }
+
         return layout
     }
 
     private fun setAppBarOffset(offsetPx: Int) {
         val params = layout.appbar.layoutParams as CoordinatorLayout.LayoutParams
         val behavior = params.behavior as AppBarLayout.Behavior?
+
 
         behavior!!.onNestedPreScroll(
             layout.coordinator,
@@ -129,12 +151,48 @@ class ProfileFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val viewModel: ProfileViewModel by activityViewModels<ProfileViewModel>()
-        location_card.setOnClickListener{
+        gigerVerificationViewModel.gigerVerificationStatus.observe(viewLifecycleOwner, Observer {
+
+            val requiredDocsVerified = it.selfieVideoDataModel?.videoPath != null
+                    && it.panCardDetails?.state == GigerVerificationStatus.STATUS_VERIFIED
+                    && it.bankUploadDetailsDataModel?.state == GigerVerificationStatus.STATUS_VERIFIED
+                    && (it.aadharCardDataModel?.state == GigerVerificationStatus.STATUS_VERIFIED || it.drivingLicenseDataModel?.state == GigerVerificationStatus.STATUS_VERIFIED)
+
+            val requiredDocsUploaded = it.selfieVideoDataModel?.videoPath != null
+                    && it.panCardDetails?.panCardImagePath != null
+                    && it.bankUploadDetailsDataModel?.passbookImagePath != null
+                    && (it.aadharCardDataModel?.frontImage != null || it.drivingLicenseDataModel?.backImage != null)
+
+            if (requiredDocsVerified) {
+                layout.main_expanded_is_verified.verification_status_tv.text = getString(R.string.verified_text)
+                layout.main_expanded_is_verified.verification_status_tv.setTextColor(ResourcesCompat.getColor(resources,R.color.green,null))
+                layout.main_expanded_is_verified.status_iv.setImageResource(R.drawable.ic_check)
+                layout.main_expanded_is_verified.verification_status_cardview.strokeColor = ResourcesCompat.getColor(resources,R.color.green,null)
+            } else if (requiredDocsUploaded){
+                layout.main_expanded_is_verified.verification_status_tv.text = getString(R.string.under_verification)
+                layout.main_expanded_is_verified.verification_status_tv.setTextColor(ResourcesCompat.getColor(resources,R.color.app_orange,null))
+                layout.main_expanded_is_verified.status_iv.setImageResource(R.drawable.ic_clock_orange)
+                layout.main_expanded_is_verified.verification_status_cardview.strokeColor = ResourcesCompat.getColor(resources,R.color.app_orange,null)
+            } else{
+                layout.main_expanded_is_verified.verification_status_tv.text = "Not Verified"
+                layout.main_expanded_is_verified.verification_status_tv.setTextColor(ResourcesCompat.getColor(resources,R.color.red,null))
+                layout.main_expanded_is_verified.status_iv.setImageResource(R.drawable.ic_cross_red)
+                layout.main_expanded_is_verified.verification_status_cardview.strokeColor = ResourcesCompat.getColor(resources,R.color.red,null)
+            }
+        })
+
+        gigerVerificationViewModel.startListeningForGigerVerificationStatusChanges()
+
+
+
+
+        location_card.setOnClickListener {
             showToast("This is work in progress. Please check again in a few days")
         }
         // load user data
-        viewModel.getProfileData().observe(viewLifecycleOwner, Observer { profile ->
+        viewModel.getProfileData().observe(viewLifecycleOwner, Observer { profileObs ->
+            val profile: ProfileData = profileObs!!
+            viewModel.profileID = profile?.id ?: ""
             layout.gigger_rating.text =
                 if (profile.rating != null) profile.rating!!.getTotal().toString()
                 else "-"
@@ -143,10 +201,9 @@ class ProfileFragment : BaseFragment() {
             layout.connection_count.text = profile.connections.toString()
             layout.main_expanded_user_name.text = profile.name
 
+
             Log.d("ProfileFragment", profile.isVerified.toString())
-            if (profile.isVerified) {
-                //layout.main_expanded_is_verified.setBackgroundColor(Color.parseColor("#00FF00"))
-            }
+
 
             if (profile.bio.trim().isEmpty()) {
                 layout.add_bio_default.visibility = View.VISIBLE
@@ -213,16 +270,24 @@ class ProfileFragment : BaseFragment() {
                 }
             }
 
-            layout.main_about_card.card_title.text = "About me"
+            layout.main_about_card.card_title.text = getString(R.string.about_me)
             layout.main_about_card.card_content.text = mainAboutString
             layout.main_about_card.card_icon.setImageResource(R.drawable.about_me_new)
             if (mainAboutString.trim().isEmpty())
-                layout.main_about_card.card_view_more.text = "Add bio"
+                layout.main_about_card.card_view_more.text = getString(R.string.add_bio_profile)
             layout.main_about_card.card_view_more.setOnClickListener {
-                findNavController().navigate(R.id.aboutExpandedFragment)
+                findNavController().navigate(
+                    R.id.aboutExpandedFragment, bundleOf(
+                        Pair(StringConstants.PROFILE_ID.value, viewModel.profileID)
+                    )
+                )
             }
             layout.main_about_card.setOnClickListener {
-                findNavController().navigate(R.id.aboutExpandedFragment)
+                findNavController().navigate(
+                    R.id.aboutExpandedFragment, bundleOf(
+                        Pair(StringConstants.PROFILE_ID.value, viewModel.profileID)
+                    )
+                )
             }
 
             val format = SimpleDateFormat("dd/MM/yyyy", Locale.US)
@@ -256,17 +321,17 @@ class ProfileFragment : BaseFragment() {
             profile.achievements?.let {
                 val achievements = it.sortedByDescending { achievement -> achievement.year }
                 for ((index, value) in achievements.withIndex()) {
-                    mainEducationString += if (index == 0) "Achievements: " + value.title + "\n"
+                    mainEducationString += if (index == 0) getString(R.string.achievements_colon) + " " + value.title + "\n"
                     else "\t\t\t\t\t\t\t\t\t\t\t\t" + value.title + "\n"
                 }
             }
 
             Log.d("ProfileFragment", mainEducationString)
-            layout.main_education_card.card_title.text = "Education"
+            layout.main_education_card.card_title.text = getString(R.string.education)
             layout.main_education_card.card_content.text = mainEducationString
             layout.main_education_card.card_icon.setImageResource(R.drawable.ic_education_new)
             if (mainEducationString.trim().isEmpty())
-                layout.main_education_card.card_view_more.text = "Add Education"
+                layout.main_education_card.card_view_more.text = getString(R.string.add_education)
             layout.main_education_card.card_view_more.setOnClickListener {
                 findNavController().navigate(R.id.educationExpandedFragment)
             }
@@ -282,16 +347,18 @@ class ProfileFragment : BaseFragment() {
                     mainExperienceString += experiences[0].employmentType + "\n"
                     mainExperienceString += experiences[0].location + "\n"
                     mainExperienceString += format.format(experiences[0].startDate!!) + "-"
-                    mainExperienceString += if(experiences[0].endDate != null) format.format(experiences[0].endDate!!) + "\n"
-                                            else "current" + "\n"
+                    mainExperienceString += if (experiences[0].endDate != null) format.format(
+                        experiences[0].endDate!!
+                    ) + "\n"
+                    else "current" + "\n"
                 }
             }
 
-            layout.main_experience_card.card_title.text = "Experience"
+            layout.main_experience_card.card_title.text = getString(R.string.experience)
             layout.main_experience_card.card_content.text = mainExperienceString
             layout.main_experience_card.card_icon.setImageResource(R.drawable.ic_experience)
             if (mainExperienceString.trim().isEmpty())
-                layout.main_experience_card.card_view_more.text = "Add Experience"
+                layout.main_experience_card.card_view_more.text = getString(R.string.add_experience)
             layout.main_experience_card.card_view_more.setOnClickListener {
                 findNavController().navigate(R.id.experienceExpandedFragment)
             }
@@ -335,7 +402,7 @@ class ProfileFragment : BaseFragment() {
             startActivityForResult(photoCropIntent, PHOTO_CROP)
         }
 
-        layout.edit_cover.setOnClickListener{
+        layout.edit_cover.setOnClickListener {
             this.findNavController().navigate(R.id.editTagBottomSheet)
         }
 
@@ -364,15 +431,12 @@ class ProfileFragment : BaseFragment() {
 //                }
 //            }
 //        })
-        appbar.addOnOffsetChangedListener(object:AppBarLayout.OnOffsetChangedListener {
-            override fun onOffsetChanged(appBarLayout:AppBarLayout, verticalOffset:Int) {
-                if (Math.abs(verticalOffset)-appBarLayout.getTotalScrollRange() == 0)
-                {
+        appbar.addOnOffsetChangedListener(object : AppBarLayout.OnOffsetChangedListener {
+            override fun onOffsetChanged(appBarLayout: AppBarLayout, verticalOffset: Int) {
+                if (Math.abs(verticalOffset) - appBarLayout.getTotalScrollRange() == 0) {
                     main_expanded_user_name.animate().alpha(0.0f).setDuration(100)
                     main_expanded_user_name.visibility = View.INVISIBLE
-                }
-                else
-                {
+                } else {
                     main_expanded_user_name.animate().alpha(1.0f).setDuration(0)
                     main_expanded_user_name.visibility = View.VISIBLE
 
@@ -388,11 +452,11 @@ class ProfileFragment : BaseFragment() {
         if (Path != "avatar.jpg" && Path != "") {
             var profilePicRef: StorageReference =
                 storage.reference.child(PROFILE_PICTURE_FOLDER).child(Path)
-            if(layout.profile_avatar!=null)
+            if (layout.profile_avatar != null)
                 GlideApp.with(this.requireContext())
                     .load(profilePicRef)
                     .into(layout.profile_avatar)
-        }else{
+        } else {
             GlideApp.with(requireContext())
                 .load(R.drawable.avatar)
                 .into(layout.profile_avatar)
@@ -443,40 +507,35 @@ class ProfileFragment : BaseFragment() {
 
 }
 
-internal abstract class AppBarStateChangeListener:AppBarLayout.OnOffsetChangedListener {
+internal abstract class AppBarStateChangeListener : AppBarLayout.OnOffsetChangedListener {
     private var mCurrentState = State.IDLE
+
     enum class State {
         EXPANDED,
         COLLAPSED,
         IDLE
     }
-    override fun onOffsetChanged(appBarLayout:AppBarLayout, i:Int) {
-        if (i == 0)
-        {
-            if (mCurrentState != State.EXPANDED)
-            {
+
+    override fun onOffsetChanged(appBarLayout: AppBarLayout, i: Int) {
+        if (i == 0) {
+            if (mCurrentState != State.EXPANDED) {
                 onStateChanged(appBarLayout, State.EXPANDED)
             }
             mCurrentState = State.EXPANDED
-        }
-        else if (Math.abs(i) >= appBarLayout.getTotalScrollRange())
-        {
-            if (mCurrentState != State.COLLAPSED)
-            {
+        } else if (Math.abs(i) >= appBarLayout.getTotalScrollRange()) {
+            if (mCurrentState != State.COLLAPSED) {
                 onStateChanged(appBarLayout, State.COLLAPSED)
             }
             mCurrentState = State.COLLAPSED
-        }
-        else
-        {
-            if (mCurrentState != State.IDLE)
-            {
+        } else {
+            if (mCurrentState != State.IDLE) {
                 onStateChanged(appBarLayout, State.IDLE)
             }
             mCurrentState = State.IDLE
         }
     }
-    abstract fun onStateChanged(appBarLayout:AppBarLayout, state:State)
+
+    abstract fun onStateChanged(appBarLayout: AppBarLayout, state: State)
 }
 //And then you can use it:
 //appBarLayout.addOnOffsetChangedListener(new AppBarStateChangeListener() {

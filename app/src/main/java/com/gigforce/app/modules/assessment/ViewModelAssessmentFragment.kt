@@ -4,12 +4,28 @@ import android.graphics.Rect
 import android.view.View
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.gigforce.app.modules.assessment.models.AssementQuestionsReponse
+import com.google.firebase.firestore.FirebaseFirestoreException
+import com.google.firebase.firestore.QuerySnapshot
 
-class ViewModelAssessmentFragment : ViewModel() {
+data class observableDialogResultWrapper(
+    var result : Boolean,
+    var nextNextLessonId : String?
+)
 
+class ViewModelAssessmentFragment(private val modelCallbacks: ModelCallbacks) : ViewModel(),
+    ModelCallbacks.ModelResponseCallbacks {
 
-    internal val observableDialogResult: MutableLiveData<Boolean> by lazy {
+    var nextLessonId : String? = null
+
+    internal val observableDialogResult: MutableLiveData<observableDialogResultWrapper> by lazy {
+        MutableLiveData<observableDialogResultWrapper>();
+    }
+    internal val observableQuizSubmit: MutableLiveData<Boolean> by lazy {
         MutableLiveData<Boolean>();
+    }
+    internal val observableError: MutableLiveData<String> by lazy {
+        MutableLiveData<String>();
     }
     internal val observableDialogInit: MutableLiveData<Nothing> by lazy {
         MutableLiveData<Nothing>();
@@ -23,18 +39,20 @@ class ViewModelAssessmentFragment : ViewModel() {
     internal val observableShowHideQuestionHeader: MutableLiveData<Int> by lazy {
         MutableLiveData<Int>();
     }
-
+    internal val observableAssessmentData: MutableLiveData<AssementQuestionsReponse> by lazy {
+        MutableLiveData<AssementQuestionsReponse>();
+    }
 
     fun shouldQuestionHeaderBeVisible(top: Float?, bottom: Float?, scrollBounds: Rect) {
         observableShowHideQuestionHeader.value =
             if (scrollBounds.top < top!! && scrollBounds.bottom > bottom!!) View.GONE else View.VISIBLE
     }
 
-    fun switchAsPerState(state: Int) {
+    fun switchAsPerState(state: Int, nextNextLessonId: String?) {
         when (state) {
             AssessmentDialog.STATE_INIT -> observableDialogInit.value = null
-            AssessmentDialog.STATE_PASS -> observableDialogResult.value = true
-            AssessmentDialog.STATE_REAPPEAR -> observableDialogResult.value = false
+            AssessmentDialog.STATE_PASS -> observableDialogResult.value = observableDialogResultWrapper(true,nextNextLessonId)
+            AssessmentDialog.STATE_REAPPEAR -> observableDialogResult.value = observableDialogResultWrapper(false,nextNextLessonId)
         }
     }
 
@@ -43,6 +61,30 @@ class ViewModelAssessmentFragment : ViewModel() {
             observableRunSwipeDownAnim.value = null
         }
         observableShowHideSwipeDownIcon.value = if (reached) View.GONE else View.VISIBLE
+    }
+
+    fun getQuestionaire(lessonId : String) {
+        modelCallbacks.getQuestionaire(lessonId,this)
+    }
+
+    fun submitAnswers(id: String?) {
+
+        modelCallbacks.submitAnswers(id!!, observableAssessmentData.value!!, this)
+    }
+
+    override fun QuestionairreSuccess(value: QuerySnapshot?, e: FirebaseFirestoreException?) {
+        value?.toObjects(AssementQuestionsReponse::class.java)?.let {
+            if(it.size>0)
+                observableAssessmentData.value = it[0]
+        }
+    }
+
+    override fun submitAnswerSuccess() {
+        observableQuizSubmit.value = true
+    }
+
+    override fun submitAnswerFailure(err: String) {
+        observableError.value = err
     }
 
 }

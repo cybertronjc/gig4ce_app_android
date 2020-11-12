@@ -3,6 +3,8 @@ package com.gigforce.app.modules.chatmodule.ui
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.widget.PopupMenu
+import android.widget.PopupMenu
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,13 +17,15 @@ import com.gigforce.app.modules.chatmodule.viewModels.ChatHeadersViewModel
 import com.gigforce.app.modules.chatmodule.viewModels.ChatViewModel
 import com.gigforce.app.utils.AppConstants
 import com.gigforce.app.utils.VerticalItemDecorator
+import com.gigforce.app.utils.openPopupMenu
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.contact_screen_fragment.*
+import kotlinx.android.synthetic.main.toolbar.*
 
 /*
     This is supposed to be Chat Headers Screen
  */
-class ContactScreenFragment : BaseFragment(), OnContactClickListener {
+class ContactScreenFragment : BaseFragment(), OnContactClickListener, PopupMenu.OnMenuItemClickListener {
 
     private val viewModel : ChatHeadersViewModel by activityViewModels<ChatHeadersViewModel>()
     private lateinit var mAdapter : ContactRecyclerAdapter
@@ -70,16 +74,16 @@ class ContactScreenFragment : BaseFragment(), OnContactClickListener {
     private fun attachListeners(){
 
         fab.setOnClickListener { view ->
-            navigate(R.id.chatNewContactFragment)
-            Snackbar.make(view, "To be Implemented", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
 
+            navigate(R.id.chatNewContactFragment)
+            Snackbar.make(view, getString(R.string.add_new_contact), Snackbar.LENGTH_LONG)
+                .setAction(getString(R.string.action), null).show()
         }
         iv_backArrow.setOnClickListener {
-            showToast("onBackPressed operation")
+            showToast(getString(R.string.onback_operation))
         }
         iv_search.setOnClickListener {
-            showToast("Search Operation...")
+            showToast(getString(R.string.search_operation))
         }
         back_arrow.setOnClickListener{
             activity?.onBackPressed()
@@ -106,11 +110,11 @@ class ContactScreenFragment : BaseFragment(), OnContactClickListener {
         return when (item.itemId)
         {
             R.id.action_invite_friends -> {
-                showToast("Invite Friends...")
+                showToast(getString(R.string.invite_friends))
                 true
             }
             R.id.action_referesh -> {
-                showToast("Refresh...")
+                showToast(getString(R.string.refresh))
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -133,5 +137,15 @@ class ContactScreenFragment : BaseFragment(), OnContactClickListener {
             bundle.putSerializable("otherUserId", chatHeader.otherUserId)
             navigate(R.id.chatScreenFragment, bundle)
         }
+    }
+
+    override fun onMenuItemClick(item: MenuItem?): Boolean {
+when(item?.itemId){
+    R.id.mnu_invite_friend->{
+        navigate(R.id.referrals_fragment)
+    }
+
+}
+        return false
     }
 }

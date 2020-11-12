@@ -2,16 +2,20 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/parent_rv_question_wise_sum_assess_result"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+   >
 
 
     <com.gigforce.app.utils.widgets.CircularView
         android:id="@+id/fl_rv_question_wise_sum_assess_result"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:layout_gravity="start"
+        android:paddingStart="@dimen/size_12"
+        android:paddingTop="@dimen/size_7"
 
-        android:padding="@dimen/size_10">
+        android:paddingEnd="@dimen/size_12"
+        android:paddingBottom="@dimen/size_7">
 
         <TextView
             android:id="@+id/tv_q_no_rv_ques_sum_assess_result"

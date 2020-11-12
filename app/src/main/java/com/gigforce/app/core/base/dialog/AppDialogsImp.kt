@@ -5,11 +5,13 @@ import android.app.Dialog
 import android.util.DisplayMetrics
 import android.view.Gravity
 import android.view.View
+import android.view.ViewGroup
 import android.view.Window
 import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.marginRight
 import com.gigforce.app.R
 
 open class AppDialogsImp(var activity: Activity) : AppDialogsInterface {
@@ -17,8 +19,8 @@ open class AppDialogsImp(var activity: Activity) : AppDialogsInterface {
     //Confirmation dialog start
     // this dialog having right side yes button with gradient. Need to create one having swipable functionality
     override fun showConfirmationDialogType1(
-            title: String,
-            buttonClickListener: ConfirmationDialogOnClickListener
+        title: String,
+        buttonClickListener: ConfirmationDialogOnClickListener
     ) {
         var customialog: Dialog? = activity?.let { Dialog(it) }
         customialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -37,8 +39,8 @@ open class AppDialogsImp(var activity: Activity) : AppDialogsInterface {
     }
 
     override fun showConfirmationDialogType2(
-            title: String,
-            buttonClickListener: ConfirmationDialogOnClickListener
+        title: String,
+        buttonClickListener: ConfirmationDialogOnClickListener
     ) {
         var customialog: Dialog? = activity?.let { Dialog(it) }
         customialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -58,9 +60,11 @@ open class AppDialogsImp(var activity: Activity) : AppDialogsInterface {
     }
 
     override fun showConfirmationDialogType3(
-            title: String,
-            subTitle: String,
-            buttonClickListener: ConfirmationDialogOnClickListener
+        title: String,
+        subTitle: String,
+        yesButtonText:String,
+        noButtonTxt:String,
+        buttonClickListener: ConfirmationDialogOnClickListener
     ) {
         var customialog: Dialog? = activity?.let { Dialog(it) }
         customialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -76,8 +80,17 @@ open class AppDialogsImp(var activity: Activity) : AppDialogsInterface {
         titleDialog.text = title
         val subTitleDialog = customialog?.findViewById(R.id.sub_title) as TextView
         subTitleDialog.text = subTitle
+
         val yesBtn = customialog?.findViewById(R.id.yes) as TextView
+        yesBtn.text = yesButtonText
+        var yesBtnlp = yesBtn?.layoutParams
+        yesBtnlp?.width = (width - 32-350)/2
+
         val noBtn = customialog?.findViewById(R.id.cancel) as TextView
+        noBtn.text = noButtonTxt
+        var noBtnlp = noBtn?.layoutParams
+        noBtnlp?.width = (width - 32-350)/2
+
         yesBtn.setOnClickListener(View.OnClickListener {
             buttonClickListener.clickedOnYes(customialog)
         })
@@ -86,8 +99,8 @@ open class AppDialogsImp(var activity: Activity) : AppDialogsInterface {
     }
 
     override fun showConfirmationDialogType5(
-            title: String,
-            buttonClickListener: ConfirmationDialogOnClickListener
+        title: String,
+        buttonClickListener: ConfirmationDialogOnClickListener
     ) {
         var customialog: Dialog? = activity?.let { Dialog(it) }
         customialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -111,9 +124,9 @@ open class AppDialogsImp(var activity: Activity) : AppDialogsInterface {
     }
 
     override fun showConfirmationDialogType4(
-            title: String,
-            subTitle: String,
-            optionSelected: OptionSelected
+        title: String,
+        subTitle: String,
+        optionSelected: OptionSelected
     ) {
         var customialog: Dialog? = activity?.let { Dialog(it) }
         customialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -131,17 +144,18 @@ open class AppDialogsImp(var activity: Activity) : AppDialogsInterface {
         customialog?.show()
     }
 
-    override fun showConfirmationDialogType7(title: String, buttonClickListener: ConfirmationDialogOnClickListener) {
+    override fun showConfirmationDialogType7(
+        title: String,
+        buttonClickListener: ConfirmationDialogOnClickListener
+    ) {
         var customialog: Dialog? = activity?.let { Dialog(it) }
         customialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
         customialog?.setCancelable(false)
         customialog?.setContentView(R.layout.confirmation_dialog_type7)
-        val displayMetrics = DisplayMetrics()
-        activity?.windowManager?.getDefaultDisplay()?.getMetrics(displayMetrics)
-        var width = displayMetrics.widthPixels
-        var parentLayout = customialog?.findViewById<ConstraintLayout>(R.id.parent_cl)
-        var lp = parentLayout?.layoutParams
-        lp?.width = width - 32
+        val window = customialog?.window;
+
+        window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+
 
         val titleDialog = customialog?.findViewById(R.id.title) as TextView
         titleDialog.gravity = Gravity.CENTER

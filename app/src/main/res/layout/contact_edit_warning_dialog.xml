@@ -2,11 +2,14 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    android:id="@+id/parent_cl"
     android:layout_height="wrap_content">
 
     <TextView
         android:id="@+id/caution_text"
-        android:layout_width="336dp"
+        android:layout_width="0dp"
         android:layout_height="56dp"
         android:background="@color/lipstick"
         android:drawableStart="@drawable/ic_warning"
@@ -24,14 +27,14 @@
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/message_text"
         style="@style/Widget.MaterialComponents.TextView"
-        android:layout_width="298dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="16dp"
         android:letterSpacing="0"
         android:lineSpacingExtra="7sp"
-        android:text="@string/change_contact_message"
+        android:text="@string/please_note_that_you_are_not_allowed_to_change_the_mobile_number_you_logged_in_with"
         android:textColor="#313131"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -40,7 +43,7 @@
 
     <TextView
         android:id="@+id/cancel_button"
-        android:layout_width="120dp"
+        android:layout_width="0dp"
         android:layout_height="40dp"
         android:layout_marginStart="32dp"
         android:layout_marginTop="26dp"
@@ -48,33 +51,41 @@
         android:background="@drawable/rect_button_outline"
         android:fontFamily="@font/lato_bold"
         android:gravity="center"
+
+        android:text="@string/cancel"
         android:letterSpacing="0"
-        android:text="CANCEL"
+        android:maxWidth="120dp"
+
         android:textColor="@color/colorLightAccent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/submit_button"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/message_text"
-        app:layout_constraintVertical_bias="0.613" />
+        app:layout_constraintVertical_bias="0.613"
+        app:layout_constraintVertical_chainStyle="packed" />
 
     <TextView
         android:id="@+id/submit_button"
-        android:layout_width="120dp"
+        android:layout_width="0dp"
         android:layout_height="40dp"
-        android:layout_marginStart="24dp"
         android:layout_marginTop="26dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginBottom="32dp"
-        android:background="@drawable/bg_delete_dialog_yes"
+
+        android:background="@drawable/rect_button_gradient"
         android:fontFamily="@font/lato_bold"
         android:gravity="center"
+        android:text="@string/proceed"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="32dp"
         android:letterSpacing="0"
-        android:text="PROCEED"
+        android:maxWidth="120dp"
+
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/cancel_button"
-        app:layout_constraintTop_toBottomOf="@id/message_text" />
+        app:layout_constraintTop_toBottomOf="@id/message_text"
+        app:layout_constraintVertical_chainStyle="packed" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

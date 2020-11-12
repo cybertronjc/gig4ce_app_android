@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -147,7 +145,7 @@
                 android:layout_marginTop="12dp"
                 android:layout_marginRight="16dp"
                 android:fontFamily="@font/lato"
-                android:text="@string/pan_number"
+                android:text="@string/pan_number_eg_bttps4444a"
                 android:textSize="12sp" />
 
 

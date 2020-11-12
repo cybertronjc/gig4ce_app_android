@@ -30,9 +30,6 @@ import com.ncorti.slidetoact.SlideToActView
 import kotlinx.android.synthetic.main.fragment_add_bank_details_info.*
 import kotlinx.android.synthetic.main.fragment_add_bank_details_info_main.*
 import kotlinx.android.synthetic.main.fragment_add_bank_details_info_view.*
-import kotlinx.android.synthetic.main.fragment_add_bank_details_info_view.editLayout
-import kotlinx.android.synthetic.main.fragment_add_bank_details_info_view.statusTV
-import kotlinx.android.synthetic.main.fragment_add_pan_card_info_view.*
 import kotlinx.android.synthetic.main.fragment_verification_image_holder.view.*
 import java.util.*
 
@@ -71,23 +68,20 @@ class AddBankDetailsInfoFragment : BaseFragment() {
             findNavController().popBackStack(R.id.gigerVerificationFragment, false)
         }
 
+        helpIconViewIV.setOnClickListener {
+            showWhyWeNeedThisDialog()
+        }
+
+        whyWeNeedThisViewTV.setOnClickListener {
+            showWhyWeNeedThisDialog()
+        }
 
         helpIconIV.setOnClickListener {
-
-            WhyWeNeedThisBottomSheet.launch(
-                childFragmentManager = childFragmentManager,
-                title = getString(R.string.why_do_we_need_this),
-                content = getString(R.string.why_we_need_this_bank)
-            )
+            showWhyWeNeedThisDialog()
         }
 
         whyWeNeedThisTV.setOnClickListener {
-
-            WhyWeNeedThisBottomSheet.launch(
-                childFragmentManager = childFragmentManager,
-                title = getString(R.string.why_do_we_need_this),
-                content = getString(R.string.why_we_need_this_bank)
-            )
+            showWhyWeNeedThisDialog()
         }
 
         passbookSubmitSliderBtn.isEnabled = false
@@ -109,7 +103,11 @@ class AddBankDetailsInfoFragment : BaseFragment() {
                 showPassbookImageLayout()
                 showPassbookInfoLayout()
 
-                if (bankDetailsDataConfirmationCB.isChecked && clickedImagePath != null) {
+                if (bankDetailsDataConfirmationCB.isChecked
+                    && (passbookSubmitSliderBtn.text == getString(R.string.update)
+                            || clickedImagePath != null)
+
+                ) {
                     enableSubmitButton()
                 } else
                     disableSubmitButton()
@@ -136,7 +134,9 @@ class AddBankDetailsInfoFragment : BaseFragment() {
 
                 if (passbookAvailaibilityOptionRG.checkedRadioButtonId == R.id.passbookNoRB)
                     enableSubmitButton()
-                else if (passbookAvailaibilityOptionRG.checkedRadioButtonId == R.id.passbookYesRB && clickedImagePath != null)
+                else if (passbookAvailaibilityOptionRG.checkedRadioButtonId == R.id.passbookYesRB &&
+                     (passbookSubmitSliderBtn.text == getString(R.string.update) || clickedImagePath != null)
+                )
                     enableSubmitButton()
                 else
                     disableSubmitButton()
@@ -180,7 +180,7 @@ class AddBankDetailsInfoFragment : BaseFragment() {
                             return
                         }
 
-                        if (bankNameEditText.text.toString().length < 6) {
+                        if (bankNameEditText.text.toString().length < 3) {
 
                             MaterialAlertDialogBuilder(requireContext())
                                 .setTitle(getString(R.string.alert))
@@ -204,7 +204,7 @@ class AddBankDetailsInfoFragment : BaseFragment() {
                             return
                         }
 
-                        if (clickedImagePath == null) {
+                        if (passbookSubmitSliderBtn.text != getString(R.string.update) && clickedImagePath == null) {
 
                             MaterialAlertDialogBuilder(requireContext())
                                 .setTitle(getString(R.string.alert))
@@ -227,7 +227,7 @@ class AddBankDetailsInfoFragment : BaseFragment() {
                             accountNo = accNo
                         )
 
-                    } else if(passbookNoRB.isChecked) {
+                    } else if (passbookNoRB.isChecked) {
 
                         viewModel.updateBankPassbookImagePath(
                             userHasPassBook = false,
@@ -252,11 +252,20 @@ class AddBankDetailsInfoFragment : BaseFragment() {
 
                     setDataOnEditLayout(bankDetailsDataModel)
                     passbookAvailaibilityOptionRG.check(R.id.passbookYesRB)
+                    passbookSubmitSliderBtn.isEnabled = true
                 }
                 .setNegativeButton(getString(R.string.cancel)) { _, _ -> }
                 .show()
         }
 
+    }
+
+    private fun showWhyWeNeedThisDialog() {
+        WhyWeNeedThisBottomSheet.launch(
+            childFragmentManager = childFragmentManager,
+            title = getString(R.string.why_do_we_need_this),
+            content = getString(R.string.why_we_need_this_bank)
+        )
     }
 
     private fun initViewModel() {
@@ -321,9 +330,10 @@ class AddBankDetailsInfoFragment : BaseFragment() {
 
         if (bankDetails.passbookImagePath != null) {
 
-            if(bankDetails.passbookImagePath.startsWith("http", true)){
-                Glide.with(requireContext()).load(bankDetails.passbookImagePath).placeholder(getCircularProgressDrawable()).into(bankViewImageIV)
-            }else {
+            if (bankDetails.passbookImagePath.startsWith("http", true)) {
+                Glide.with(requireContext()).load(bankDetails.passbookImagePath)
+                    .placeholder(getCircularProgressDrawable()).into(bankViewImageIV)
+            } else {
                 firebaseStorage
                     .reference
                     .child("verification")
@@ -379,9 +389,9 @@ class AddBankDetailsInfoFragment : BaseFragment() {
 
         if (bankData.passbookImagePath != null) {
 
-            if(bankData.passbookImagePath.startsWith("http", true)){
+            if (bankData.passbookImagePath.startsWith("http", true)) {
                 showPassbookInfoCard(Uri.parse(bankData.passbookImagePath))
-            }else {
+            } else {
                 firebaseStorage
                     .reference
                     .child("verification")

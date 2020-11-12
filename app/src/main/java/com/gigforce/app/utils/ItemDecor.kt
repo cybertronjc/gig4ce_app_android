@@ -1,55 +1,48 @@
 package com.gigforce.app.utils
 
+import android.content.Context
 import android.graphics.Rect
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ItemDecoration
+import com.gigforce.app.R
 
-class ItemDecor(private val mSizeGridSpacingPx: Int, private val mGridSize: Int) :
+class ItemDecor(context: Context?) :
     ItemDecoration() {
-    private var mNeedLeftSpacing = false
+    var size24 = 0;
+    var size17 = 0;
+    var size5 = 0;
+
+
+    init {
+        size24 = context?.resources?.getDimensionPixelSize(R.dimen.size_24) ?: 0
+        size17 = context?.resources?.getDimensionPixelSize(R.dimen.size_17) ?: 0
+        size5 = context?.resources?.getDimensionPixelSize(R.dimen.size_5) ?: 0
+
+
+    }
+
+
     override fun getItemOffsets(
         outRect: Rect,
         view: View,
         parent: RecyclerView,
         state: RecyclerView.State
     ) {
-        val frameWidth =
-            ((parent.width - mSizeGridSpacingPx.toFloat() * (mGridSize - 1)) / mGridSize).toInt()
-        val padding = parent.width / mGridSize - frameWidth
-        val itemPosition =
-            (view.layoutParams as RecyclerView.LayoutParams).viewAdapterPosition
-        if (itemPosition < mGridSize) {
-            outRect.top = mSizeGridSpacingPx
+
+
+        if (parent.getChildAdapterPosition(view) < 5) {
+            outRect.top = size17
         } else {
-            outRect.top = mSizeGridSpacingPx
+            outRect.top = size24
         }
-        if (itemPosition % mGridSize == 0) {
-            outRect.left = mSizeGridSpacingPx
-            outRect.right = padding
-            mNeedLeftSpacing = true
-        } else if ((itemPosition + 1) % mGridSize == 0) {
-            mNeedLeftSpacing = false
-            outRect.right = mSizeGridSpacingPx
-            outRect.left = padding
-        } else if (mNeedLeftSpacing) {
-            mNeedLeftSpacing = false
-            outRect.left = mSizeGridSpacingPx - padding
-            if ((itemPosition + 2) % mGridSize == 0) {
-                outRect.right = mSizeGridSpacingPx - padding
-            } else {
-                outRect.right = mSizeGridSpacingPx / 2
-            }
-        } else if ((itemPosition + 2) % mGridSize == 0) {
-            mNeedLeftSpacing = false
-            outRect.left = mSizeGridSpacingPx / 2
-            outRect.right = mSizeGridSpacingPx - padding
-        } else {
-            mNeedLeftSpacing = false
-            outRect.left = mSizeGridSpacingPx / 2
-            outRect.right = mSizeGridSpacingPx / 2
-        }
-        outRect.bottom = mSizeGridSpacingPx
+        outRect.left =
+            size5
+        outRect.right =
+            size5
+        outRect.bottom = 0
+
+
     }
 
 }

@@ -36,7 +36,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="19dp"
             android:fontFamily="@font/lato"
-            android:text="Language"
+            android:text="@string/language"
             android:letterSpacing="0"
             android:textColor="@color/black"
             android:textSize="20sp"
@@ -83,6 +83,22 @@
             android:enabled="false"
             style="@style/Theme.RadioButtonLipstickPink"
             android:text="हिंदी"
+            android:textSize="14sp" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/setting_bg" />
+
+        <RadioButton
+            android:id="@+id/kn"
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/height_select_lang_item"
+            android:layout_marginLeft="15dp"
+            android:paddingLeft="11dp"
+            android:hint="@string/kannada"
+            android:enabled="false"
+            style="@style/Theme.RadioButtonLipstickPink"
+            android:text="@string/kannada"
             android:textSize="14sp" />
 
         <View

@@ -6,30 +6,20 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import android.widget.DatePicker
-import android.widget.Toast
-import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
-import com.afollestad.materialdialogs.MaterialDialog
 import com.gigforce.app.R
 import com.gigforce.app.modules.profile.models.Education
 import com.gigforce.app.utils.DropdownAdapter
-import kotlinx.android.synthetic.main.add_education_bottom_sheet.*
 import kotlinx.android.synthetic.main.delete_confirmation_dialog.*
 import kotlinx.android.synthetic.main.edit_education_bottom_sheet.*
 import kotlinx.android.synthetic.main.edit_education_bottom_sheet.cancel
-import kotlinx.android.synthetic.main.edit_education_bottom_sheet.end_date
-import kotlinx.android.synthetic.main.edit_education_bottom_sheet.form_error
-import kotlinx.android.synthetic.main.edit_education_bottom_sheet.start_date
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-class EditEducationBottomSheet: ProfileBaseBottomSheetFragment() {
+class EditEducationBottomSheet : ProfileBaseBottomSheetFragment() {
     companion object {
         fun newInstance() = EditEducationBottomSheet()
     }
@@ -71,13 +61,26 @@ class EditEducationBottomSheet: ProfileBaseBottomSheetFragment() {
     private fun initialize() {
         val format = SimpleDateFormat("dd/MM/yyyy")
 
-        degrees.addAll(listOf("<10th", "10th", "12th", "Certificate", "Diploma", "Bachelor", "Masters", "PhD"))
+        degrees.addAll(
+            listOf(
+                "<10th",
+                "10th",
+                "12th",
+                getString(R.string.certificate),
+                getString(R.string.diploma),
+                getString(
+                    R.string.bachelor
+                ),
+                getString(R.string.masters),
+                getString(R.string.phd)
+            )
+        )
         val degreeAdapter = DropdownAdapter(this.requireContext(), degrees)
         val degreeSpinner = degree
         degreeSpinner.setAdapter(degreeAdapter)
 
         profileViewModel.userProfileData.observe(this, Observer { profile ->
-            profile.educations?.let {
+            profile?.educations?.let {
                 val educations = it.sortedByDescending { education -> education.startYear!! }
                 education = educations[arrayLocation!!.toInt()]
                 institution.setText(education.institution)
@@ -96,21 +99,31 @@ class EditEducationBottomSheet: ProfileBaseBottomSheetFragment() {
         var calendar = Calendar.getInstance(TimeZone.getDefault())
 
         end_date.setOnClickListener {
-            DatePickerDialog(this.requireContext(), DatePickerDialog.OnDateSetListener{
-                    datePicker: DatePicker, i: Int, i1: Int, i2: Int ->
-                Log.d("TEMP", "tmp date")
-                selectedEndDate = "$i2/${i1+1}/$i"
-                end_date.setText(selectedEndDate)
-            }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show()
+            DatePickerDialog(
+                this.requireContext(),
+                DatePickerDialog.OnDateSetListener { datePicker: DatePicker, i: Int, i1: Int, i2: Int ->
+                    Log.d("TEMP", "tmp date")
+                    selectedEndDate = "$i2/${i1 + 1}/$i"
+                    end_date.setText(selectedEndDate)
+                },
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH)
+            ).show()
         }
 
         start_date.setOnClickListener {
-            DatePickerDialog(this.requireContext(), DatePickerDialog.OnDateSetListener{
-                    datePicker: DatePicker, i: Int, i1: Int, i2: Int ->
-                Log.d("TEMP", "tmp date")
-                selectedStartDate = "$i2/${i1+1}/$i"
-                start_date.setText(selectedStartDate)
-            }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show()
+            DatePickerDialog(
+                this.requireContext(),
+                DatePickerDialog.OnDateSetListener { datePicker: DatePicker, i: Int, i1: Int, i2: Int ->
+                    Log.d("TEMP", "tmp date")
+                    selectedStartDate = "$i2/${i1 + 1}/$i"
+                    start_date.setText(selectedStartDate)
+                },
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH)
+            ).show()
         }
 
         delete.setOnClickListener {
@@ -119,7 +132,7 @@ class EditEducationBottomSheet: ProfileBaseBottomSheetFragment() {
             dialog.yes.setOnClickListener {
                 profileViewModel.removeProfileEducation(education)
                 findNavController().navigate(R.id.educationExpandedFragment)
-                dialog .dismiss()
+                dialog.dismiss()
             }
             dialog.show()
         }
@@ -152,7 +165,9 @@ class EditEducationBottomSheet: ProfileBaseBottomSheetFragment() {
                 course,
                 degree.text.toString(),
                 selectedStartDate,
-                selectedEndDate))
+                selectedEndDate
+            )
+        )
             return true
         else {
             showError(form_error, institution, course, degree, start_date, end_date)

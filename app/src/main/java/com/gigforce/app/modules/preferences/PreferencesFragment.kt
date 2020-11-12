@@ -9,7 +9,6 @@ import android.view.Window
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,8 +17,8 @@ import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.app.core.genericadapter.RecyclerGenericAdapter
-import com.gigforce.app.utils.GlideApp
 import com.gigforce.app.core.setDarkStatusBarTheme
+import com.gigforce.app.utils.GlideApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
@@ -75,15 +74,16 @@ class PreferencesFragment : BaseFragment() {
     override fun isConfigRequired(): Boolean {
         return true
     }
+
     private fun displayImage(profileImg: String) {
-        if (profileImg != "avatar.jpg" && profileImg != "")  {
+        if (profileImg != "avatar.jpg" && profileImg != "") {
             val profilePicRef: StorageReference =
                 storage.reference.child("profile_pics").child(profileImg)
             GlideApp.with(this.requireContext())
                 .load(profilePicRef)
                 .apply(RequestOptions().circleCrop())
                 .into(profile_image)
-        }else{
+        } else {
             GlideApp.with(this.requireContext())
                 .load(R.drawable.avatar)
                 .apply(RequestOptions().circleCrop())
@@ -128,8 +128,21 @@ class PreferencesFragment : BaseFragment() {
 
     private fun setPreferenecesList() {
         arrPrefrancesList.clear()
-        arrPrefrancesList.addAll(viewModel.getPrefrencesData())
+        arrPrefrancesList.addAll(getPrefrencesData())
         recyclerGenericAdapter.notifyDataSetChanged()
+    }
+    fun getPrefrencesData(): ArrayList<PreferencesScreenItem> {
+        val prefrencesItems = ArrayList<PreferencesScreenItem>()
+        // prefrencesItems.add(PreferencesScreenItem(R.drawable.ic_link_black,"Category",""))
+        // prefrencesItems.add(PreferencesScreenItem(R.drawable.ic_group_black,"Roles","At atm"))
+        prefrencesItems.add(PreferencesScreenItem(R.drawable.ic_clock_black,getString(R.string.day_and_time),viewModel.getDateTimeSubtitle()))
+        prefrencesItems.add(PreferencesScreenItem(R.drawable.ic_location_pin_black,getString(R.string.location),viewModel.getLocation()))
+        prefrencesItems.add(PreferencesScreenItem(R.drawable.ic_credit_card_black,getString(R.string.earning),viewModel.getEarning()))
+        prefrencesItems.add(PreferencesScreenItem(0,getString(R.string.others),""))
+        prefrencesItems.add(PreferencesScreenItem(R.drawable.ic_language_black,getString(R.string.app_language),viewModel.getLanguage()))
+        // prefrencesItems.add(PreferencesScreenItem(R.drawable.ic_notifications_on_black,"Notification",""))
+        prefrencesItems.add(PreferencesScreenItem(R.drawable.ic_power_button_black,getString(R.string.sign_out),""))
+        return prefrencesItems
     }
 
     private fun observePreferenceData() {
@@ -137,10 +150,9 @@ class PreferencesFragment : BaseFragment() {
             if (preferenceData != null) {
                 viewModel.setPreferenceDataModel(preferenceData)
                 setPreferenecesList()
+            } else if (configDataModel == null) {
+                showToast(getString(R.string.config_data_not_loaded))
             }
-            else if(configDataModel==null){
-                    showToast("Config data not loaded!!")
-                }
         })
     }
 
@@ -239,8 +251,7 @@ class PreferencesFragment : BaseFragment() {
 //        titleDialog?.text = "Missing out on gigs?"
         val title = dialog?.findViewById(R.id.title) as TextView
         title.text =
-            "Are you sure?\n" +
-                    "Signing out means missing out on gigs around you."
+            getString(R.string.are_you_sure) + "\n" + getString(R.string.signing_out_means_missing_out_on_gigs)
         val yesBtn = dialog.findViewById(R.id.yes) as TextView
         val noBtn = dialog.findViewById(R.id.cancel) as TextView
         yesBtn.setOnClickListener {

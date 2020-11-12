@@ -5,14 +5,21 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.res.ResourcesCompat
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
+import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
+import com.gigforce.app.modules.gigerVerfication.GigerVerificationStatus
 import com.gigforce.app.modules.landingscreen.LandingPageConstants
 import com.gigforce.app.modules.landingscreen.LandingPageConstants.INTENT_EXTRA_CAME_FROM_LANDING_SCREEN
+import com.gigforce.app.modules.profile.models.ProfileData
 import kotlinx.android.synthetic.main.fragment_profile_education_expanded.*
 import kotlinx.android.synthetic.main.fragment_profile_education_expanded.view.*
 import kotlinx.android.synthetic.main.profile_card_background.view.*
+import kotlinx.android.synthetic.main.top_profile_bar.view.*
+import kotlinx.android.synthetic.main.verified_button.view.*
 import java.text.SimpleDateFormat
 
 class EducationExpandedFragment : ProfileBaseFragment() {
@@ -35,6 +42,7 @@ class EducationExpandedFragment : ProfileBaseFragment() {
 
     private var cameFromLandingPage = false
     private var action: Int = -1
+    private val gigerVerificationViewModel : GigVerificationViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -65,14 +73,55 @@ class EducationExpandedFragment : ProfileBaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         initialize()
         setListeners()
+        initViewModel()
     }
 
+    private fun initViewModel() {
+
+            gigerVerificationViewModel.gigerVerificationStatus.observe(viewLifecycleOwner, Observer {
+
+                val requiredDocsVerified = it.selfieVideoDataModel?.videoPath != null
+                        && it.panCardDetails?.state == GigerVerificationStatus.STATUS_VERIFIED
+                        && it.bankUploadDetailsDataModel?.state == GigerVerificationStatus.STATUS_VERIFIED
+                        && (it.aadharCardDataModel?.state == GigerVerificationStatus.STATUS_VERIFIED || it.drivingLicenseDataModel?.state == GigerVerificationStatus.STATUS_VERIFIED)
+
+                val requiredDocsUploaded = it.selfieVideoDataModel?.videoPath != null
+                        && it.panCardDetails?.panCardImagePath != null
+                        && it.bankUploadDetailsDataModel?.passbookImagePath != null
+                        && (it.aadharCardDataModel?.frontImage != null || it.drivingLicenseDataModel?.backImage != null)
+
+                if (requiredDocsVerified) {
+                    education_top_profile.about_me_verification_layout.verification_status_tv.text = getString(R.string.verified_text)
+                    education_top_profile.about_me_verification_layout.verification_status_tv.setTextColor(
+                        ResourcesCompat.getColor(resources,R.color.green,null))
+                    education_top_profile.about_me_verification_layout.status_iv.setImageResource(R.drawable.ic_check)
+                    education_top_profile.about_me_verification_layout.verification_status_cardview.strokeColor = ResourcesCompat.getColor(resources,R.color.green,null)
+                } else if (requiredDocsUploaded){
+                    education_top_profile.about_me_verification_layout.verification_status_tv.text = getString(R.string.under_verification)
+                    education_top_profile.about_me_verification_layout.verification_status_tv.setTextColor(
+                        ResourcesCompat.getColor(resources,R.color.app_orange,null))
+                    education_top_profile.about_me_verification_layout.status_iv.setImageResource(R.drawable.ic_clock_orange)
+                    education_top_profile.about_me_verification_layout.verification_status_cardview.strokeColor = ResourcesCompat.getColor(resources,R.color.app_orange,null)
+                } else{
+                    education_top_profile.about_me_verification_layout.verification_status_tv.text = "Not Verified"
+                    education_top_profile.about_me_verification_layout.verification_status_tv.setTextColor(
+                        ResourcesCompat.getColor(resources,R.color.red,null))
+                    education_top_profile.about_me_verification_layout.status_iv.setImageResource(R.drawable.ic_cross_red)
+                    education_top_profile.about_me_verification_layout.verification_status_cardview.strokeColor = ResourcesCompat.getColor(resources,R.color.red,null)
+                }
+            })
+
+            gigerVerificationViewModel.startListeningForGigerVerificationStatusChanges()
+        }
+
+
     private fun initialize() {
-        profileViewModel.userProfileData.observe(viewLifecycleOwner, Observer { profile ->
+        profileViewModel.userProfileData.observe(viewLifecycleOwner, Observer { profileObs->
+            val profile: ProfileData = profileObs!!
             var educationString: String = ""
             val format = SimpleDateFormat("dd/MM/yyyy")
 
-            profile.educations?.let {
+            profile?.educations?.let {
                 val educations = it.sortedByDescending { education -> education.startYear!! }
                 for (education in educations) {
                     educationString += education.institution + "\n"
@@ -83,9 +132,9 @@ class EducationExpandedFragment : ProfileBaseFragment() {
                 }
             }
             education_card.nextDestination = R.id.editEducationBottomSheet
-            education_card.cardTitle = "Education"
+            education_card.cardTitle = getString(R.string.education)
             education_card.cardContent = educationString
-            education_card.cardBottom = "Add education"
+            education_card.cardBottom = getString(R.string.add_education)
 
             var skillString: String = ""
             profile.skills?.let {
@@ -95,9 +144,9 @@ class EducationExpandedFragment : ProfileBaseFragment() {
             }
             skill_card.nextDestination = R.id.editSkillBottomSheet
             skill_card.hasContentTitles = false
-            skill_card.cardTitle = "Skills"
+            skill_card.cardTitle = getString(R.string.skills)
             skill_card.cardContent = skillString
-            skill_card.cardBottom = "Add skills"
+            skill_card.cardBottom = getString(R.string.add_skill)
 
             var achievementString: String = ""
             profile.achievements?.let {
@@ -111,9 +160,9 @@ class EducationExpandedFragment : ProfileBaseFragment() {
                 }
             }
             achievement_card.nextDestination = R.id.editAchievementBottomSheet
-            achievement_card.cardTitle = "Achievement"
+            achievement_card.cardTitle = getString(R.string.achievement)
             achievement_card.cardContent = achievementString
-            achievement_card.cardBottom = "Add achievements"
+            achievement_card.cardBottom = getString(R.string.add_achievement)
 
             education_top_profile.userName = profile.name
             education_top_profile.imageName = profile.profileAvatarName
@@ -146,6 +195,10 @@ class EducationExpandedFragment : ProfileBaseFragment() {
         }
         education_card.card_bottom.setOnClickListener {
             this.findNavController().navigate(R.id.addEducationBottomSheetFragment)
+        }
+
+        education_top_profile.about_me_verification_layout.setOnClickListener {
+            navigate(R.id.gigerVerificationFragment)
         }
     }
 

@@ -4,18 +4,27 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.view.MotionEvent
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
+import androidx.navigation.NavDeepLinkBuilder
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
+import com.clevertap.android.sdk.CleverTapAPI
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.popAllBackStates
+import com.gigforce.app.modules.gigPage.GigNavigation
 import com.gigforce.app.modules.landingscreen.LandingScreenFragment
 import com.gigforce.app.modules.onboardingmain.OnboardingMainFragment
+import com.gigforce.app.notification.NotificationConstants
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.iid.FirebaseInstanceId
+import kotlinx.android.synthetic.main.activity_main.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -34,11 +43,79 @@ class MainActivity : AppCompatActivity() {
         }
         super.onCreate(savedInstanceState)
         this.setContentView(R.layout.activity_main)
+
         navController = this.findNavController(R.id.nav_fragment)
-        checkForAllAuthentication()
+        navController.handleDeepLink(intent)
+
+        if (intent.getStringExtra(IS_DEEPLINK) == "true") {
+            handleDeepLink()
+        } else {
+            proceedWithNormalNavigation()
+        }
     }
 
+    private fun handleDeepLink() {
 
+        val clickAction = intent.getStringExtra(NotificationConstants.INTENT_EXTRA_CLICK_ACTION)
+        Log.d("MainActivity","Click action received $clickAction ")
+
+        when (intent.getStringExtra(NotificationConstants.INTENT_EXTRA_CLICK_ACTION)) {
+            NotificationConstants.CLICK_ACTIONS.OPEN_GIG_ATTENDANCE_PAGE -> {
+                Log.d("MainActivity","redirecting to attendance page")
+                navController.popAllBackStates()
+                GigNavigation.openGigAttendancePage(navController, intent.extras)
+            }
+            NotificationConstants.CLICK_ACTIONS.OPEN_VERIFICATION_PAGE -> {
+                Log.d("MainActivity","redirecting to gig verification page")
+                navController.popAllBackStates()
+                navController.navigate(
+                    R.id.gigerVerificationFragment,
+                    intent.extras
+                )
+            }
+            else -> {
+                navController.popAllBackStates()
+                navController.navigate(
+                    R.id.landinghomefragment,
+                    intent.extras
+                )
+            }
+        }
+    }
+
+    private fun proceedWithNormalNavigation() {
+        checkForAllAuthentication()
+        GetFirebaseInstanceID()
+        CleverTapAPI.getDefaultInstance(applicationContext)?.pushEvent("MAIN_ACTIVITY_CREATED")
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        navController.handleDeepLink(intent)
+
+        if (intent?.getStringExtra(IS_DEEPLINK) == "true") {
+            handleDeepLink()
+        }
+    }
+
+    private fun GetFirebaseInstanceID() {
+        FirebaseInstanceId.getInstance().instanceId
+            .addOnCompleteListener(OnCompleteListener { task ->
+                if (!task.isSuccessful) {
+                    Log.w("Firebase/InstanceId", "getInstanceId failed", task.exception)
+                    return@OnCompleteListener
+                }
+
+                // Get new Instance ID token
+                val token = task.result?.token
+
+                // Log and toast
+                val msg = token //getString(R.string.msg_token_fmt, token)
+                Log.v("Firebase/InstanceId", "Firebase Token Received")
+                Log.v("Firebase/InstanceId", msg)
+              //  Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
+            })
+    }
 
     private fun checkForAllAuthentication() {
         navController.popAllBackStates()
@@ -114,5 +191,9 @@ class MainActivity : AppCompatActivity() {
             imm.hideSoftInputFromWindow(currentFocus!!.windowToken, 0)
         }*/
         return super.dispatchTouchEvent(ev)
+    }
+
+    companion object {
+        const val IS_DEEPLINK = "is_deeplink"
     }
 }

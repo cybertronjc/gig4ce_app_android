@@ -15,12 +15,15 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.gigforce.app.R
 import com.gigforce.app.core.toDate
+import com.gigforce.app.core.toLocalDate
 import com.gigforce.app.modules.calendarscreen.maincalendarscreen.verticalcalendar.MainHomeCompleteGigModel
 import com.gigforce.app.modules.custom_gig_preferences.CustomPreferencesViewModel
 import com.gigforce.app.modules.custom_gig_preferences.UnavailableDataModel
 import com.gigforce.app.modules.gigPage.GigPageFragment
+import com.gigforce.app.modules.gigPage.GigsRepository
 import com.gigforce.app.modules.preferences.PreferencesRepository
 import com.gigforce.app.modules.preferences.prefdatamodel.PreferencesDataModel
 import com.gigforce.app.modules.gigPage.models.Gig
@@ -33,6 +36,7 @@ import com.riningan.widget.ExtendedBottomSheetBehavior
 import kotlinx.android.synthetic.main.gigs_today_warning_dialog.*
 import kotlinx.android.synthetic.main.reason_for_gig_cancel_dialog.*
 import kotlinx.android.synthetic.main.roster_day_fragment.*
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -41,11 +45,15 @@ import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
 @RequiresApi(Build.VERSION_CODES.O)
-class RosterDayViewModel: ViewModel() {
+class RosterDayViewModel constructor(
+    private val gigsRepository: GigsRepository = GigsRepository()
+): ViewModel() {
 
     var currentDateTime: MutableLiveData<LocalDateTime> = MutableLiveData(LocalDateTime.now())
 
     var isDayAvailable: MutableLiveData<Boolean> = MutableLiveData(true)
+
+    var showDeclineGigDialog: MutableLiveData<Boolean> = MutableLiveData()
 
     private var userPref: MutableLiveData<PreferencesDataModel> = MutableLiveData<PreferencesDataModel>()
     var preferencesRepository = PreferencesRepository()
@@ -57,7 +65,8 @@ class RosterDayViewModel: ViewModel() {
     var isLoadedFirstTime = true
 
     var itemHeight = 70
-    lateinit var nestedScrollView: NestedScrollView
+    var nestedScrollView: NestedScrollView? = null
+
 
     //lateinit var bsBehavior: BottomSheetBehavior<View>
 //    lateinit var bsBehavior: ExtendedBottomSheetBehavior<View>
@@ -178,10 +187,14 @@ class RosterDayViewModel: ViewModel() {
         }
 
         // check from custom preferences
+        dayAvailable = true
+
         for (unavailable in viewModelCustomPreference.customPreferencesDataModel.unavailable) {
-            if (date.toDate == unavailable.date)
+            if (date.toLocalDate().equals(unavailable.date.toLocalDate()) ) {
                 dayAvailable = !unavailable.dayUnavailable
+            }
         }
+
 
         isDayAvailable.postValue(dayAvailable)
         return dayAvailable
@@ -258,7 +271,7 @@ class RosterDayViewModel: ViewModel() {
 
     fun switchDayAvailability(
         context: Context, parentView: ConstraintLayout, currentDayAvailability: Boolean,
-        viewModelCustomPreference: CustomPreferencesViewModel) {
+        viewModelCustomPreference: CustomPreferencesViewModel) = viewModelScope.launch {
 //        try {
 //            viewModelCustomPreference.customPreferencesDataModel
 //        } catch (e:UninitializedPropertyAccessException) {
@@ -278,9 +291,12 @@ class RosterDayViewModel: ViewModel() {
             // today is active
             // make inactive
 
+
+            val upcomingActiveGigs = gigsRepository.getTodaysUpcomingGigs(activeDateTime.toLocalDate())
+
             Log.d("SwitchDayAvailability", "Trying to mark inactive")
-            val confirmCancellation = if (upcomingGigs.size > 0) showGigsTodayWarning(
-                context, upcomingGigs, parentView, activeDateTime, viewModelCustomPreference) else true
+            val confirmCancellation = if (upcomingActiveGigs.size > 0) showGigsTodayWarning(
+                context, upcomingGigs,upcomingActiveGigs.size ,parentView, activeDateTime, viewModelCustomPreference) else true
 
             if (confirmCancellation) {
 
@@ -324,7 +340,10 @@ class RosterDayViewModel: ViewModel() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun showGigsTodayWarning(
-        context: Context, upcomingGigs: ArrayList<Gig>, gigParentView: ConstraintLayout,
+        context: Context,
+        upcomingGigs: ArrayList<Gig>,
+        upcomingGigsCount : Int,
+         gigParentView: ConstraintLayout,
         activeDateTime: LocalDateTime, viewModelCustomPreference: CustomPreferencesViewModel
     ): Boolean {
         var flag = false
@@ -338,8 +357,7 @@ class RosterDayViewModel: ViewModel() {
         dialog.setContentView(R.layout.gigs_today_warning_dialog)
 
         dialog.dialog_content.setText(
-            "You have " + upcomingGigs.size.toString() +
-                    " Gig(s) active on the day. Please cancel them individually."
+            "You have $upcomingGigsCount Gig(s) active on the day. Please cancel them individually."
         )
 
         dialog.cancel.setOnClickListener {
@@ -348,6 +366,8 @@ class RosterDayViewModel: ViewModel() {
         }
 
         dialog.yes.setOnClickListener {
+
+            showDeclineGigDialog.value = true
             //flag = if (upcomingGigs.size > 0) showReasonForGigCancel(context, upcomingGigs, gigParentView) else true
             confirmCancellation(activeDateTime, viewModelCustomPreference)
             dialog .dismiss()
@@ -530,13 +550,18 @@ class RosterDayViewModel: ViewModel() {
 
         val gigs = getFilteredGigs(date, "upcoming")
 
-        if (gigs.size != 0) {
-            val sortedUpcomingGigs = gigs.sortedBy { gig -> gig.startHour }
-
-//            nestedScrollView.scrollTo(0, (8 * itemHeight).px)
-            nestedScrollView.scrollTo(0, ((sortedUpcomingGigs[0].startHour - 4) * itemHeight).px)
-        } else {
-            nestedScrollView.scrollTo(0, (8 * itemHeight).px)
+        nestedScrollView?.let {
+            gigs?.let {it1->
+                if(it1.size!=0){
+                    val sortedUpcomingGigs = gigs.sortedBy { gig -> gig.startHour }
+                    it.scrollTo(
+                        0,
+                        ((sortedUpcomingGigs[0].startHour - 4) * itemHeight).px
+                    )
+                }else {
+                    it.scrollTo(0, (8 * itemHeight).px)
+                }
+            }
         }
     }
 }

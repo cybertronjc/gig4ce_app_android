@@ -1,20 +1,26 @@
 package com.gigforce.app.modules.assessment
 
+import android.app.ActionBar
+import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.app.R
+import com.gigforce.app.modules.assessment.models.OptionsArr
 import kotlinx.android.synthetic.main.layout_message_rv_answers_access_frag.view.*
 import kotlinx.android.synthetic.main.layout_rv_answers_adapter.view.*
 
 class AssessmentAnswersAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-    private lateinit var items: ArrayList<String>
-    private var showHelper = false;
+    private var items: ArrayList<OptionsArr>? = null
+    private var showAnswerStatus = false;
     private lateinit var adapterCallbacks: AssessAdapterCallbacks
+    private var message: String? = null
 
     interface AssessAdapterCallbacks {
         fun submitAnswer()
+        fun setAnswered(isCorrect: Boolean, position: Int)
     }
 
 
@@ -37,35 +43,101 @@ class AssessmentAnswersAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>()
     }
 
     override fun getItemCount(): Int {
-        return items.size.plus(1)
+        return if (items == null) 0 else items?.size?.plus(1)!!
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+
         when (getItemViewType(position)) {
             DEFAULT_ROW -> {
-                holder.itemView.tv_number_rv_access_frag.text = (65 + position).toChar() + "."
-                holder.itemView.setOnClickListener {
-                    if (!showHelper) {
-                        if (holder.adapterPosition == 0) {
-                            var green = holder.itemView.context.getColor(
-                                R.color.app_green
+                val obj = items!![position - 1]
+
+                holder.itemView.tv_number_rv_access_frag.text = (65 + (position - 1)).toChar() + "."
+                holder.itemView.tv_option_rv_access_frag.text = obj.que
+                holder.itemView.tv_helper_rv_access_frag.text =
+                    items!![holder.adapterPosition - 1].reason
+                if (obj.selectedAnswer != null && obj.selectedAnswer!!) {
+                    val color =
+                        if (obj.is_answer == true) ColorAndBg(
+                            holder.itemView.context.getColor(R.color.app_green),
+                            holder.itemView.context.getDrawable(R.drawable.border_option_green)!!
+                        ) else
+                            ColorAndBg(
+                                holder.itemView.context.getColor(R.color.red),
+                                holder.itemView.context.getDrawable(R.drawable.border_option_red)!!
                             )
-                            holder.itemView.tv_number_rv_access_frag.setTextColor(green)
-                            holder.itemView.tv_option_rv_access_frag.setTextColor(green)
-                            holder.itemView.tv_helper_rv_access_frag.visibility = View.VISIBLE
-                            items.subList(0, 3).clear()
-                            notifyItemRangeRemoved(1, 3);
-                            showHelper = true;
-                            notifyItemChanged(items.size);
-                            adapterCallbacks.submitAnswer()
-                        }
-                    }
+
+                    holder.itemView.tv_number_rv_access_frag.setTextColor(color.color)
+                    holder.itemView.tv_option_rv_access_frag.setTextColor(color.color)
+                    holder.itemView.tv_option_rv_access_frag.background = color.drawable
+
+
+                    holder.itemView.tv_helper_rv_access_frag.visibility =
+                        if (obj.reason.isEmpty()) View.GONE else (if (obj.showReason == true) View.VISIBLE else View.GONE)
+
+                } else {
+                    val color =
+                        if (obj.clickStatus == true) ColorAndBg(
+                            holder.itemView.context.getColor(R.color.black_85),
+                            holder.itemView.context.getDrawable(R.drawable.border_tv_rv_answers_assess_frag)!!
+                        )
+                        else (when {
+                            obj.is_answer == true -> ColorAndBg(
+                                holder.itemView.context.getColor(R.color.app_green),
+                                holder.itemView.context.getDrawable(R.drawable.border_option_green)!!
+                            )
+                            obj.showReason == false -> ColorAndBg(
+                                holder.itemView.context.getColor(R.color.black_85),
+                                holder.itemView.context.getDrawable(R.drawable.border_tv_rv_answers_assess_frag)!!
+                            )
+                            else -> ColorAndBg(
+                                holder.itemView.context.getColor(R.color.red),
+                                holder.itemView.context.getDrawable(R.drawable.border_option_red)!!
+                            )
+                        })
+
+
+                    holder.itemView.tv_number_rv_access_frag.setTextColor(color.color)
+                    holder.itemView.tv_option_rv_access_frag.setTextColor(color.color)
+                    holder.itemView.tv_option_rv_access_frag.background = color.drawable
+
+                    holder.itemView.tv_helper_rv_access_frag.visibility =
+                        if (obj.clickStatus == true || obj.reason.isEmpty()) View.GONE else (if (obj.showReason == true) View.VISIBLE else View.GONE)
+
+//                    holder.itemView.tv_helper_rv_access_frag.text = ""
+
                 }
+                if (items!![holder.adapterPosition - 1].clickStatus!!) {
+                    holder.itemView.setOnClickListener {
+
+                        items!![holder.adapterPosition - 1].selectedAnswer = true
+                        adapterCallbacks.setAnswered(
+                            items!![holder.adapterPosition - 1].is_answer!!,
+                            holder.adapterPosition - 1
+                        )
+//                        notifyItemChanged(holder.adapterPosition)
+
+
+                    }
+                } else {
+                    holder.itemView.setOnClickListener(null)
+                }
+
             }
             MESSAGE_ROW -> {
-                holder.itemView.tv_message_rv_answers_access_frag.visibility =
-                    if (showHelper) View.VISIBLE else View.GONE
-                holder.itemView.tv_message_rv_answers_access_frag.text = "Wow ! You Are Correct"
+                var params: ViewGroup.LayoutParams? = null
+                if (showAnswerStatus) {
+                    params = ViewGroup.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ActionBar.LayoutParams.WRAP_CONTENT
+                    )
+                } else {
+                    params = holder.itemView.layoutParams
+                    params.height = 0
+                }
+
+                holder.itemView.layoutParams = params
+                holder.itemView.tv_message_rv_answers_access_frag.text = message ?: ""
             }
 
         }
@@ -74,11 +146,13 @@ class AssessmentAnswersAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>()
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (position == items.size) MESSAGE_ROW else DEFAULT_ROW
+        return if (position == 0) MESSAGE_ROW else DEFAULT_ROW
     }
 
-    fun addData(items: ArrayList<String>) {
+    fun addData(items: ArrayList<OptionsArr>, showAnswerStatus: Boolean, message: String) {
         this.items = items;
+        this.showAnswerStatus = showAnswerStatus
+        this.message = message;
         notifyDataSetChanged()
     }
 
@@ -92,3 +166,5 @@ class AssessmentAnswersAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>()
     }
 
 }
+
+data class ColorAndBg(val color: Int, val drawable: Drawable)
