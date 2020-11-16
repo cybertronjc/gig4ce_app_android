@@ -9,14 +9,12 @@ apply plugin: 'com.google.gms.google-services'
 android {
     signingConfigs {
         debug {
-//          storeFile file('/home/himanshu/Projects/Android/GigForce/KeyStores/gigforceapp.jks')
-//            storeFile file('/Users/apple/Documents/gigforceapp.jks')
-            storeFile file('C:\\rohit\\gigforceapp.jks')
 
+            storeFile file('../keystore/gigforceapp.jks')
             storePassword 'gigforce'
             keyAlias 'key0'
             keyPassword 'gigforce'
-            }
+        }
 //        production {
 //            storeFile file('/Users/apple/Downloads/gigforceprodapp.jks')
 //            storePassword 'gigforce'
@@ -296,9 +294,6 @@ dependencies {
     // explicitly depend on RxJava's latest version for bug fixes and new features.
     // (see https://github.com/ReactiveX/RxJava/releases for latest 3.x.x version)
     implementation 'io.reactivex.rxjava3:rxjava:3.0.0'
-
-
-
 
 
 }
