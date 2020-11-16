@@ -29,6 +29,8 @@ allprojects {
         google()
         jcenter()
         maven { url "https://jitpack.io" }
+        maven { url "https://oss.jfrog.org/libs-snapshot" }
+
 
         //maven { url "https://mymavenrepo.com/repo/jeYsRLYFzkhy617P4O1I/" }
 
