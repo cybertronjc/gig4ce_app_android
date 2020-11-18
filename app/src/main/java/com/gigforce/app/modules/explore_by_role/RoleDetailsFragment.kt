@@ -92,6 +92,7 @@ class RoleDetailsFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener {
     fun initAsPerLoginState() {
         if (FirebaseAuth.getInstance().currentUser?.uid == null) {
             viewModel.setNewUser(true)
+            iv_options_role_details.gone()
             tv_mark_as_interest_role_details.setOnClickListener {
                 navFragmentsData?.setData(
                         bundleOf(
