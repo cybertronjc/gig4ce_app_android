@@ -1,6 +1,5 @@
 package com.gigforce.app.modules.landingscreen
 
-import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.gigforce.app.R
 import com.gigforce.app.modules.landingscreen.models.Role
 import com.gigforce.app.modules.landingscreen.models.Tip
+import com.gigforce.app.modules.landingscreen.models.WorkOrder
 import com.gigforce.app.modules.preferences.PreferencesRepository
 import com.gigforce.app.modules.preferences.prefdatamodel.PreferencesDataModel
 import com.gigforce.app.modules.profile.AboutExpandedFragment
@@ -20,7 +20,6 @@ import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.QuerySnapshot
 import kotlinx.coroutines.launch
-import java.lang.Exception
 
 class LandingScreenViewModel constructor(
     private val profileFirebaseRepository: ProfileFirebaseRepository = ProfileFirebaseRepository(),
@@ -31,6 +30,12 @@ class LandingScreenViewModel constructor(
         SingleLiveEvent<Role>();
     }
     val observerRole: SingleLiveEvent<Role> get() = _observerRole
+
+    private val _observerWorkOrder: SingleLiveEvent<WorkOrder> by lazy {
+        SingleLiveEvent<WorkOrder>();
+    }
+    val observerWorkOrder: SingleLiveEvent<WorkOrder> get() = _observerWorkOrder
+
 
     companion object {
 
@@ -313,6 +318,10 @@ class LandingScreenViewModel constructor(
 
     }
 
+    fun getWorkOrder() {
+        callbacks?.getWorkOrder(this)
+    }
+
     override fun onCleared() {
         super.onCleared()
         prefListenerRegistration?.remove()
@@ -323,16 +332,29 @@ class LandingScreenViewModel constructor(
         querySnapshot: QuerySnapshot?,
         error: FirebaseFirestoreException?
     ) {
-        if (error != null) {
-
-        } else {
+        if (error == null) {
             try {
                 val role = querySnapshot?.toObjects(Role::class.java)?.get(0)
                 role?.id = querySnapshot?.documents?.get(0)?.id
                 observerRole.value = role
-            }catch (e:Exception){
+            } catch (e: Exception) {
+            }
+        }
+    }
+
+    override fun getWorkOrderResponse(
+        querySnapshot: QuerySnapshot?,
+        error: FirebaseFirestoreException?
+    ) {
+        if (error == null) {
+            if (querySnapshot?.documents?.isNotEmpty() == true) {
+                val documentSnapshot = querySnapshot.documents[0]
+                val workOrder = documentSnapshot.toObject(WorkOrder::class.java)
+                workOrder?.id = documentSnapshot.id
+                _observerWorkOrder.value = workOrder
 
             }
+
         }
     }
 }

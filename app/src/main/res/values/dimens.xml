@@ -112,4 +112,5 @@
     <dimen name="size_62">62dp</dimen>
     <dimen name="size_57">57dp</dimen>
     <dimen name="size_68">68dp</dimen>
+    <dimen name="size_247">247dp</dimen>
 </resources>

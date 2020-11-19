@@ -96,6 +96,7 @@ class LandingScreenFragment : BaseFragment() {
 
         initUI()
         initializeExploreByRole()
+        initializeClientActivation()
         initializeExploreByIndustry()
         initializeLearningModule()
         listener()
@@ -748,6 +749,36 @@ class LandingScreenFragment : BaseFragment() {
         lp.width = itemWidth
 
         cv_role.layoutParams = lp
+    }
+
+    private fun initializeClientActivation() {
+        landingScreenViewModel.observerWorkOrder.observe(viewLifecycleOwner, Observer { workOrder ->
+            run {
+                showGlideImage(workOrder?.work_order_icon ?: "", iv_client_activation)
+                tv_client_activation.text = workOrder?.work_order_title
+                tv_sub_client_activation.text = workOrder?.profile_name
+
+                cv_client_activation.setOnClickListener {
+                    if (AppConstants.UNLOCK_FEATURE) {
+                        navigate(
+                            R.id.fragment_client_activation,
+                            bundleOf(StringConstants.WORK_ORDER_ID.value to workOrder?.id)
+                        )
+
+                    } else {
+                        showToast("This is under development. Please check again in a few days.")
+                    }
+                }
+            }
+
+
+        })
+        landingScreenViewModel.getWorkOrder()
+        val itemWidth = ((width / 3) * 2).toInt()
+        val lp = cv_client_activation.layoutParams
+        lp.height = lp.height
+        lp.width = itemWidth
+        cv_client_activation.layoutParams = lp
     }
 
 

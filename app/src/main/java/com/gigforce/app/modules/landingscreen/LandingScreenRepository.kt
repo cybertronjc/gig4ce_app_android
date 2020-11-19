@@ -1,7 +1,6 @@
 package com.gigforce.app.modules.landingscreen
 
 import com.gigforce.app.core.base.basefirestore.BaseFirestoreDBRepository
-import com.gigforce.app.modules.landingscreen.models.Role
 import com.google.firebase.firestore.ListenerRegistration
 
 class LandingScreenRepository : BaseFirestoreDBRepository(), LandingScreenCallbacks {
@@ -12,8 +11,8 @@ class LandingScreenRepository : BaseFirestoreDBRepository(), LandingScreenCallba
     }
 
     override fun getRoles(
-        enableLimit: Boolean,
-        responseCallbacks: LandingScreenCallbacks.ResponseCallbacks
+            enableLimit: Boolean,
+            responseCallbacks: LandingScreenCallbacks.ResponseCallbacks
     ) {
         val collection = db.collection("Roles")
         if (enableLimit) {
@@ -24,12 +23,15 @@ class LandingScreenRepository : BaseFirestoreDBRepository(), LandingScreenCallba
 //            listener?.remove()
             run {
                 responseCallbacks.getRolesResponse(success, error)
-//                val role: Role =
-//                    success?.toObjects(Role::class.java)?.get(0)!!
-//                role.role_title="DELIVERY EXECUTIVE"
-//                db.collection("Roles").document().set(role)
+
             }
         }
 
+    }
+
+    override fun getWorkOrder(responseCallbacks: LandingScreenCallbacks.ResponseCallbacks) {
+        db.collection("Work_Order").limit(1).addSnapshotListener { success, error ->
+            responseCallbacks.getWorkOrderResponse(success, error)
+        }
     }
 }
