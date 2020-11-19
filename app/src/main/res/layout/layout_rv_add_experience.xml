@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bottom_up_sheet">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:isScrollContainer="true"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/form_error_add_experience"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/bs_top_margin"
+            android:letterSpacing="0.05"
+            android:text="@string/error_empty_mandatory_fields"
+            android:textColor="#d4e02020"
+            android:textSize="14sp"
+            android:visibility="gone" />
+
+
+        <EditText
+            android:id="@+id/title_add_experience"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@null"
+            android:ems="10"
+            android:fontFamily="@font/lato"
+            android:hint="@string/title_madatory"
+            android:inputType="textPersonName" />
+
+        <View
+            android:id="@+id/line_et_title_add_experience"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/size_2"
+            android:layout_marginTop="@dimen/size_18"
+            android:background="#68979797" />
+
+
+        <EditText
+            android:id="@+id/company_add_experience"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/size_23"
+            android:background="@null"
+
+            android:ems="10"
+            android:fontFamily="@font/lato"
+            android:hint="@string/company_name_mandatory"
+            android:inputType="textPersonName" />
+
+        <View
+            android:id="@+id/line_et_company_add_experience"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/size_2"
+            android:layout_marginTop="@dimen/size_18"
+            android:background="#68979797" />
+
+
+        <AutoCompleteTextView
+            android:id="@+id/employment_type_add_experience"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/size_23"
+            android:background="@null"
+            android:drawableEnd="@drawable/ic_down"
+
+            android:focusable="false"
+            android:fontFamily="@font/lato"
+            android:hint="@string/add_experience_employment_type"
+            android:longClickable="false"
+            android:paddingStart="3dp" />
+
+
+        <View
+            android:id="@+id/line_employment_type_add_experience"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/size_2"
+            android:layout_marginTop="@dimen/size_18"
+            android:background="#68979797" />
+
+        <EditText
+            android:id="@+id/location_add_experience"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/size_23"
+            android:background="@null"
+
+            android:ems="10"
+            android:fontFamily="@font/lato"
+            android:hint="@string/add_experience_location"
+            android:inputType="textPersonName" />
+
+        <View
+            android:id="@+id/line_et_location_add_experience"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/size_2"
+            android:layout_marginTop="@dimen/size_18"
+            android:background="#68979797" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/start_date_add_experience"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+
+                android:layout_weight="1"
+                android:backgroundTint="#68979797"
+                android:drawableEnd="@drawable/ic_calendar_small"
+                android:ems="10"
+                android:focusable="false"
+                android:fontFamily="@font/lato"
+                android:hint="@string/add_experience_start_date"
+                android:inputType="date"
+                android:paddingBottom="@dimen/size_18" />
+
+            <EditText
+                android:id="@+id/end_date_add_experience"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+
+                android:backgroundTint="#68979797"
+                android:drawableEnd="@drawable/ic_calendar_small"
+                android:ems="10"
+                android:focusable="false"
+                android:fontFamily="@font/lato"
+                android:hint="@string/add_experience_end_date"
+                android:inputType="date"
+                android:paddingBottom="@dimen/size_18" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <com.google.android.material.checkbox.MaterialCheckBox
+                android:id="@+id/fresher_cb"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+
+                android:ems="10"
+                android:fontFamily="@font/lato"
+                android:text="@string/i_am_fresher" />
+
+
+
+            <com.google.android.material.checkbox.MaterialCheckBox
+                android:id="@+id/currently_work_here_add_experience"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+
+                android:ems="10"
+                android:fontFamily="@font/lato"
+                android:text="@string/add_experience_currently_working" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/bt_add_experience_add_more"
+                style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/lato"
+
+                android:text="@string/add_more_text"
+                android:textAlignment="textStart"
+                android:textColor="@color/colorPrimary"
+                app:icon="@drawable/ic_add"
+                app:iconTint="@color/colorPrimary" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/bt_remove_experience_add_more"
+                style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:drawableEnd="@drawable/ic_delete"
+
+                android:drawablePadding="@dimen/size_8"
+                android:drawableTint="@color/colorPrimary"
+                android:fontFamily="@font/lato"
+                android:text="@string/remove_caps"
+                android:textAlignment="textEnd"
+                android:textColor="@color/colorPrimary" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

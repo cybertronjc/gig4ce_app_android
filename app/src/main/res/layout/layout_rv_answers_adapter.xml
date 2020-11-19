@@ -41,10 +41,10 @@
         tools:text="Openly approaching a customer with a smile, introducing yourself, and then offering to help is the right approach. If she needs help she will ask. If she wants to be left alone, she can always tell you that."
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/size_8"
         android:background="@drawable/bg_helper_answer_rv_access_frag"
         android:letterSpacing="0"
         android:paddingStart="@dimen/size_8"
+
         android:paddingTop="@dimen/size_17"
         android:paddingBottom="@dimen/size_14"
         android:textColor="@color/black_85"

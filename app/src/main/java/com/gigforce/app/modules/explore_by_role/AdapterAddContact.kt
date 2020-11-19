@@ -44,6 +44,8 @@ class AdapterAddContact : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     interface AdapterAddContactsCallbacks {
         fun submitClicked(items: MutableList<ContactModel>)
+        fun goBack()
+
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -54,6 +56,10 @@ class AdapterAddContact : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                     View.OnClickListener {
 
                         adapterAddContactsCallbacks?.submitClicked(items!!)
+                    })
+                PushDownAnim.setPushDownAnimTo(viewholder.itemView.tv_cancel).setOnClickListener(
+                    View.OnClickListener {
+                        adapterAddContactsCallbacks?.goBack()
                     })
             }
             else -> {

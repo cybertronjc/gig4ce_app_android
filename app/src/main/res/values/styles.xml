@@ -475,4 +475,11 @@
         <item name="cornerFamilyTopLeft">rounded</item>
         <item name="cornerSize">5%</item>
     </style>
+
+    <style name="AttendanceSingleChoiceChip" parent="@style/Widget.MaterialComponents.Chip.Choice">
+        <item name="chipBackgroundColor">@color/attendance_chip_bck_colors</item>
+        <item name="android:textColor">@color/attendance_chip_text_colors</item>
+        <item name="chipStrokeColor">@color/attendance_chip_stroke_colors</item>
+    </style>
+
 </resources>

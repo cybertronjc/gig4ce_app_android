@@ -45,8 +45,9 @@ class PhotoCrop : AppCompatActivity() {
         var profilePictureOptionsBottomSheetFragment: ProfilePictureOptionsBottomSheetFragment =
             ProfilePictureOptionsBottomSheetFragment()
 
-
+        const val UPLOAD_DOCUMENT = "upload_document"
         const val INTENT_EXTRA_PURPOSE = "purpose"
+
         const val INTENT_EXTRA_FIREBASE_FOLDER_NAME = "fbDir"
         const val INTENT_EXTRA_FIREBASE_FILE_NAME = "file"
         const val INTENT_EXTRA_DETECT_FACE = "detectFace"
@@ -191,6 +192,10 @@ class PhotoCrop : AppCompatActivity() {
         data: Intent?
     ): Unit {
         super.onActivityResult(requestCode, resultCode, data)
+        if (purpose == PURPOSE_VERIFICATION && resultCode == Activity.RESULT_CANCELED) {
+            finish()
+            return
+        }
         var bundle = data?.extras
         if (null != bundle) logBundle(bundle)
 
@@ -210,12 +215,11 @@ class PhotoCrop : AppCompatActivity() {
                 "request code=" + requestCode.toString() + "  ImURI: " + outputFileUri.toString()
             )
             outputFileUri = ImagePicker.getImageFromResult(this, resultCode, data);
-            if(outputFileUri!=null) {
-                outputFileUri?.let { it -> startCrop(it)}
+            if (outputFileUri != null) {
+                outputFileUri?.let { it -> startCrop(it) }
 
-            }
-            else{
-                Toast.makeText(this,"Issue in capturing image!!",Toast.LENGTH_LONG).show()
+            } else {
+                Toast.makeText(this, "Issue in capturing image!!", Toast.LENGTH_LONG).show()
             }
         }
 
@@ -288,7 +292,12 @@ class PhotoCrop : AppCompatActivity() {
         val bytes = ByteArrayOutputStream()
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, bytes)
         val path =
-            MediaStore.Images.Media.insertImage(context.contentResolver, bitmap, System.currentTimeMillis().toString(), null)
+            MediaStore.Images.Media.insertImage(
+                context.contentResolver,
+                bitmap,
+                System.currentTimeMillis().toString(),
+                null
+            )
 
         return Uri.parse(path.toString())
     }
@@ -368,6 +377,12 @@ class PhotoCrop : AppCompatActivity() {
          */
         try {
             uploadTask.addOnSuccessListener { taskSnapshot: TaskSnapshot ->
+                taskSnapshot.storage.downloadUrl.addOnSuccessListener {
+                    resultIntent.putExtra("image_url", it.toString())
+                    setResult(Activity.RESULT_OK, resultIntent)
+                    onBackPressed()
+                }
+
                 progress_circular.visibility = View.GONE
                 val fname: String = taskSnapshot.metadata?.reference?.name.toString()
                 updateViewModel(purpose, fname)
@@ -377,8 +392,8 @@ class PhotoCrop : AppCompatActivity() {
                     "PHOTO_CROP",
                     "uploaded file in foldername" + CLOUD_OUTPUT_FOLDER + " file: " + fname
                 )
-                setResult(Activity.RESULT_OK, resultIntent)
-                onBackPressed()
+
+
             }
         } catch (e: Exception) {
             Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show()
@@ -433,7 +448,7 @@ class PhotoCrop : AppCompatActivity() {
     var outputFileUri: Uri? = null
     open fun getImageFromPhone() {
         var chooseImageIntent = ImagePicker.getPickImageIntent(this);
-    startActivityForResult(chooseImageIntent, CODE_IMG_GALLERY);
+        startActivityForResult(chooseImageIntent, CODE_IMG_GALLERY);
 
 
 //        val pickIntent = Intent()

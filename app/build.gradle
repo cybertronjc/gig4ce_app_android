@@ -37,8 +37,8 @@ android {
         applicationId "com.gigforce.app"
         minSdkVersion 23
         targetSdkVersion 29
-        versionCode 68
-        versionName "1.25.0"
+        versionCode 72
+        versionName "1.26.3"
 
         vectorDrawables.useSupportLibrary = true
 
@@ -72,6 +72,7 @@ android {
             dimension "default"
            signingConfig signingConfigs.production
             buildConfigField "String", 'REFERRAL_BASE_URL', '"https://gig4ce.page.link/"'
+            buildConfigField "String", 'GENERATE_PAYSLIP_URL', '"https://45nydq0i5g.execute-api.ap-south-1.amazonaws.com/default/get-or-create-payment-advice-prod"'
         }
 
         /**
@@ -82,6 +83,7 @@ android {
             versionNameSuffix '-Dev'
             signingConfig signingConfigs.debug
             buildConfigField "String", 'REFERRAL_BASE_URL', '"https://gigforce.page.link/"'
+            buildConfigField "String", 'GENERATE_PAYSLIP_URL', '"https://d38v9ehujf.execute-api.ap-south-1.amazonaws.com/default/get-or-create-payment-advice-dev"'
         }
     }
 

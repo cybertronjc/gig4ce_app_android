@@ -703,6 +703,18 @@
         android:id="@+id/gigDetailsFragment"
         android:name="com.gigforce.app.modules.gigPage2.GigDetailsFragment"
         android:label="GigDetailsFragment" />
+    <fragment
+        android:id="@+id/gigMonthlyAttendanceFragment"
+        android:name="com.gigforce.app.modules.gigPage2.GigMonthlyAttendanceFragment"
+        android:label="GigMonthlyAttendanceFragment" />
+    <fragment
+        android:id="@+id/gigRegulariseAttendanceFragment"
+        android:name="com.gigforce.app.modules.gigPage2.GigRegulariseAttendanceFragment"
+        android:label="GigRegulariseAttendanceFragment" />
+    <dialog
+        android:id="@+id/gigsAttendanceForADayDetailsBottomSheet"
+        android:name="com.gigforce.app.modules.gigPage2.GigsAttendanceForADayDetailsBottomSheet"
+        android:label="GigsAttendanceForADayDetailsBottomSheet" />
 
     <fragment
         android:id="@+id/fragment_add_language"
@@ -719,6 +731,20 @@
         android:name="com.gigforce.app.modules.explore_by_role.AddEducationFragment"
         android:label="fragment_new_education"
         tools:layout="@layout/layout_add_education_fragment" />
+    <fragment
+        android:id="@+id/fragment_add_experience"
+        android:name="com.gigforce.app.modules.explore_by_role.AddExperienceFragment"
+        android:label="fragment_add_experience"
+        tools:layout="@layout/layout_add_experience_fragment" />
+    <fragment
+        android:id="@+id/fragment_questionnaire"
+        android:name="com.gigforce.app.modules.explore_by_role.QuestionaireFragment"
+        android:label="fragment_questionnaire"
+        tools:layout="@layout/layout_questionaire_fragment" />
+    <fragment
+        android:id="@+id/payslipMonthlyFragment"
+        android:name="com.gigforce.app.modules.wallet.PayslipMonthlyFragment"
+        android:label="PayslipMonthlyFragment" />
     <fragment
         android:id="@+id/chatNewContactFragment"
         android:name="com.gigforce.app.modules.chatmodule.ui.ContactsFragment"

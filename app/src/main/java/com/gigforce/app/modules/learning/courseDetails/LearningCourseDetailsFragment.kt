@@ -482,8 +482,23 @@ class LearningCourseDetailsFragment : BaseFragment() {
 
                     var img = getImageView(viewHolder, R.id.learning_img)
 
+
+
                     var completedIV = getImageView(viewHolder, R.id.module_completed_iv)
-                    completedIV.isVisible = obj?.completed ?: false
+                    var completedPercTV = getTextView(viewHolder, R.id.module_completed_perc_tv)
+
+                    if(obj.totalLessons != 0 && obj.lessonsCompleted == obj.totalLessons){
+                        completedPercTV.text = "100%"
+                        completedPercTV.setTextColor(ResourcesCompat.getColor(resources,R.color.green,null))
+                        completedIV.setImageResource(R.drawable.ic_successful_green_tick)
+                    } else{
+                        val completedPercentage = if(obj.totalLessons != 0) (obj.lessonsCompleted * 100) / obj.totalLessons else 0
+
+                        completedPercTV.setTextColor(ResourcesCompat.getColor(resources,R.color.app_orange,null))
+                        completedPercTV.text = "$completedPercentage%"
+                        completedIV.setImageResource(R.drawable.ic_clock_orange)
+                    }
+
 
                     var borderView = getView(viewHolder, R.id.borderFrameLayout)
                     if (viewModel.currentlySelectedModulePosition == position) {
@@ -498,7 +513,7 @@ class LearningCourseDetailsFragment : BaseFragment() {
 
                             GlideApp.with(requireContext())
                                 .load(obj.coverPicture)
-                                .placeholder(getCircularProgressDrawable())
+                                .thumbnail(GlideApp.with(requireContext()).load(R.drawable.ic_loading))
                                 .error(R.drawable.ic_learning_default_back)
                                 .into(img)
                         } else {
@@ -510,7 +525,7 @@ class LearningCourseDetailsFragment : BaseFragment() {
 
                                     GlideApp.with(requireContext())
                                         .load(fileUri)
-                                        .placeholder(getCircularProgressDrawable())
+                                        .thumbnail(GlideApp.with(requireContext()).load(R.drawable.ic_loading))
                                         .error(R.drawable.ic_learning_default_back)
                                         .into(img)
                                 }

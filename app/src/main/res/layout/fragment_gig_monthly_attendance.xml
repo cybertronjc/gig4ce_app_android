@@ -27,7 +27,7 @@
         android:drawableEnd="@drawable/ic_baseline_arrow_drop_down_16"
         app:layout_constraintTop_toBottomOf="@id/attendance_top_bar"
         app:layout_constraintStart_toStartOf="parent"
-        tools:text="Apr 2020"/>
+        tools:text="Oct 2020"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/attendance_overview_layout"
@@ -64,7 +64,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toEndOf="@id/calendar_iv"
             android:layout_marginStart="8dp"
-            tools:text="Overview" />
+            android:text="Overview" />
 
 
         <TextView
@@ -92,7 +92,7 @@
             app:layout_constraintTop_toBottomOf="@id/calendar_iv"
             app:layout_constraintStart_toEndOf="@id/total_days_label"
             android:layout_marginStart="18dp"
-            tools:text=": 15/30 days" />
+            tools:text=": 0 days" />
 
         <TextView
             android:id="@+id/total_working_days_label"
@@ -105,7 +105,6 @@
             android:fontFamily="@font/lato"
             app:layout_constraintTop_toBottomOf="@id/total_days_tv"
             app:layout_constraintStart_toStartOf="parent"
-
             android:text="@string/total_working_days" />
 
         <TextView
@@ -120,7 +119,7 @@
             app:layout_constraintTop_toBottomOf="@id/total_days_tv"
             app:layout_constraintStart_toEndOf="@id/total_days_label"
             android:layout_marginStart="18dp"
-            tools:text=": 15/30 days" />
+            android:text=": 0 days" />
 
 
         <TextView
@@ -149,7 +148,7 @@
             app:layout_constraintTop_toBottomOf="@id/total_working_days_tv"
             app:layout_constraintStart_toEndOf="@id/total_days_label"
             android:layout_marginStart="18dp"
-            tools:text=": 15/30 days" />
+            android:text=": --" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -165,42 +164,38 @@
         app:singleSelection="true">
 
         <com.google.android.material.chip.Chip
+            style="@style/AttendanceSingleChoiceChip"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="All"
-            android:textColor="@color/colorAccent"
             android:fontFamily="@font/lato_bold"
-            app:chipBackgroundColor="@color/light_pink"
             android:textAlignment="center"
             android:minWidth="82dp"
+            android:checked="true"
             app:chipStrokeWidth="1dp"
-            app:chipStrokeColor="@color/colorPrimary"/>
+            />
 
 
         <com.google.android.material.chip.Chip
+            style="@style/AttendanceSingleChoiceChip"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Worked"
-            android:textColor="@color/black_three"
             android:fontFamily="@font/lato_bold"
-            app:chipBackgroundColor="@color/white"
             android:textAlignment="center"
             android:minWidth="82dp"
-            app:chipStrokeWidth="1dp"
-            app:chipStrokeColor="@color/grey_c7"/>
+            app:chipStrokeWidth="1dp" />
 
 
         <com.google.android.material.chip.Chip
+            style="@style/AttendanceSingleChoiceChip"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Off"
-            android:textColor="@color/black_three"
             android:fontFamily="@font/lato_bold"
-            app:chipBackgroundColor="@color/white"
             android:textAlignment="center"
             android:minWidth="82dp"
-            app:chipStrokeWidth="1dp"
-            app:chipStrokeColor="@color/grey_c7"/>
+            app:chipStrokeWidth="1dp" />
 
 
     </com.google.android.material.chip.ChipGroup>
@@ -218,9 +213,8 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/attendance_monthly_rv"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="15dp"
-            android:visibility="gone" />
+            android:layout_height="match_parent"
+            android:visibility="visible" />
 
         <ProgressBar
             android:id="@+id/attendance_montly_progress_bar"
