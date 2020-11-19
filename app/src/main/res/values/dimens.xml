@@ -113,4 +113,8 @@
     <dimen name="size_57">57dp</dimen>
     <dimen name="size_68">68dp</dimen>
     <dimen name="size_247">247dp</dimen>
+    <dimen name="size_72">72dp</dimen>
+    <dimen name="size_90">90dp</dimen>
+    <dimen name="size_91">91dp</dimen>
+    <dimen name="size_38">38dp</dimen>
 </resources>
