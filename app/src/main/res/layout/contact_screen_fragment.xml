@@ -2,7 +2,6 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-
     android:layout_height="match_parent">
 
     <androidx.cardview.widget.CardView
@@ -36,7 +35,7 @@
                 android:layout_marginStart="28dp"
                 android:fontFamily="@font/lato_bold"
                 android:letterSpacing="0"
-                android:text="@string/contacts"
+                android:text="Chat"
                 android:textColor="#000000"
                 android:textSize="24sp"
                 app:layout_constraintBottom_toBottomOf="@+id/back_arrow"
@@ -128,7 +127,7 @@
                     android:layout_marginTop="16dp"
                     android:layout_marginRight="16px"
                     android:padding="@dimen/size_16"
-                    android:tint="@color/black"
+                    app:tint="@color/black"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:srcCompat="@drawable/ic_three_dots" />
@@ -140,9 +139,10 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_contacts"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/app_bar_contact" />
 
 
@@ -152,8 +152,10 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
+        android:src="@drawable/chat"
         app:backgroundTint="@color/colorPrimary"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
+        app:layout_constraintRight_toRightOf="parent"
+        app:tint="@color/white" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

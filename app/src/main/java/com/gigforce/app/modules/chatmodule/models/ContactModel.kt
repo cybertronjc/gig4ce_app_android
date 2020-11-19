@@ -4,16 +4,15 @@ import com.google.firebase.firestore.DocumentId
 
 data class ContactModel(
  @DocumentId
- val id: String?,
- val mobile: String,
- val name: String? = null,
- val fb_uid: String? = null,
- val contactId: String? = null,
- val headerId: String? = null,
- val imageUrl : String? = null,
- val date : String? = null,
- val time : String? = null,
- val isGigForceUser : Boolean = false
-){
-
-}
+ var id: String? = null,
+ var mobile: String = "",
+ var name: String? = null,
+ var fb_uid: String? = null,
+ var contactId: String? = null,
+ var headerId: String? = null,
+ var imageUrl : String? = null,
+ var date : String? = null,
+ var time : String? = null,
+ var uid : String? = null,
+ var isGigForceUser : Boolean = false
+)

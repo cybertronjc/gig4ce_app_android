@@ -59,7 +59,7 @@
         tools:layout="@layout/onboarding_loader_fragment" />
     <fragment
         android:id="@+id/chatScreenFragment"
-        android:name="com.gigforce.app.modules.chatmodule.ui.ChatScreenFragment"
+        android:name="com.gigforce.app.modules.chatmodule.ui.ChatFragment"
         tools:layout="@layout/fragment_chat_screen" />
 
     <fragment
@@ -69,7 +69,7 @@
 
     <fragment
         android:id="@+id/contactScreenFragment"
-        android:name="com.gigforce.app.modules.chatmodule.ui.ContactScreenFragment"
+        android:name="com.gigforce.app.modules.chatmodule.ui.ChatListFragment"
         tools:layout="@layout/contact_screen_fragment" />
 
     <fragment
@@ -721,7 +721,7 @@
         tools:layout="@layout/layout_add_education_fragment" />
     <fragment
         android:id="@+id/chatNewContactFragment"
-        android:name="com.gigforce.app.modules.chatmodule.ui.ChatNewContactFragment"
+        android:name="com.gigforce.app.modules.chatmodule.ui.ContactsFragment"
         android:label="ChatNewContactFragment" />
 
 

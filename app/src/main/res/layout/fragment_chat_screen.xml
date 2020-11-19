@@ -43,7 +43,7 @@
                     android:id="@+id/civ_personImage"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:src="@drawable/aftab" />
+/>
             </androidx.cardview.widget.CardView>
 
             <TextView
@@ -135,6 +135,7 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginEnd="8dp"
+            app:tint="@color/black"
             android:src="@drawable/ic_baseline_add_24" />
 
         <ImageView

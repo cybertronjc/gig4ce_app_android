@@ -1,20 +1,30 @@
 package com.gigforce.app.modules.chatmodule.ui.adapters
 
+import android.content.Context
 import android.graphics.Color
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.cardview.widget.CardView
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.res.ResourcesCompat
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.RequestManager
 import com.gigforce.app.R
+import com.gigforce.app.core.gone
 import com.gigforce.app.core.toDisplayText
+import com.gigforce.app.core.visible
 import com.gigforce.app.modules.chatmodule.models.*
 import java.time.LocalDate
 
 class ChatRecyclerAdapter constructor(
+    private val context: Context,
+    private val requestManager: RequestManager,
     private val onMessageClickListener: OnChatMessageClickListener
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -35,7 +45,7 @@ class ChatRecyclerAdapter constructor(
                 LayoutInflater.from(parent.context)
                     .inflate(R.layout.item_chat_text_with_image, parent, false)
             )
-            VIEW_TYPE_CHAT_VIDEO -> ImageMessageViewHolder(
+            VIEW_TYPE_CHAT_VIDEO -> VideoMessageViewHolder(
                 LayoutInflater.from(parent.context)
                     .inflate(R.layout.item_chat_text_with_video, parent, false)
             )
@@ -287,23 +297,25 @@ class ChatRecyclerAdapter constructor(
         }
     }
 
-    private inner class DocumentMessageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
-        private val linearLayout: LinearLayout = itemView.findViewById(R.id.ll_msgContainer)
-        private val textView: TextView = itemView.findViewById(R.id.tv_msgValue)
+    private inner class DocumentMessageViewHolder(itemView: View) :
+        RecyclerView.ViewHolder(itemView), View.OnClickListener {
+        private val linearLayout: ConstraintLayout = itemView.findViewById(R.id.ll_msgContainer)
+        private val textView: TextView = itemView.findViewById(R.id.tv_file_name)
         private val textViewTime: TextView = itemView.findViewById(R.id.tv_msgTimeValue)
         private val cardView: CardView = itemView.findViewById(R.id.cv_msgContainer)
+        private val progressbar: View = itemView.findViewById(R.id.progress)
 
         init {
             itemView.setOnClickListener(this)
         }
 
         fun bindValues(msg: Message) {
+            progressbar.isVisible = msg.attachmentPath == null
+
             when (msg.flowType) {
                 "in" -> {
-                    textView.text = msg.content
-
+                    textView.text = msg.attachmentName
                     textViewTime.text = msg.timestamp?.toDisplayText()
-
                     linearLayout.setBackgroundColor(Color.parseColor("#19eeeeee"))
                     textView.setTextColor(Color.parseColor("#000000"))
 
@@ -315,7 +327,7 @@ class ChatRecyclerAdapter constructor(
                     cardView.layoutParams = layoutParams
                 }
                 "out" -> {
-                    textView.text = msg.content
+                    textView.text = msg.attachmentName
                     textViewTime.text = msg.timestamp?.toDisplayText()
                     linearLayout.setBackgroundColor(Color.parseColor("#E91E63"))
                     textView.setTextColor(Color.parseColor("#ffffff"))
@@ -334,30 +346,48 @@ class ChatRecyclerAdapter constructor(
 
         override fun onClick(v: View?) {
             val currentPos = adapterPosition
-            onMessageClickListener.chatMessageClicked(MessageType.TEXT_WITH_VIDEO,currentPos, chatMessages[currentPos])
+            onMessageClickListener.chatMessageClicked(
+                MessageType.TEXT_WITH_VIDEO,
+                currentPos,
+                chatMessages[currentPos]
+            )
         }
     }
 
-    private inner class ImageMessageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
+    private inner class ImageMessageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
+        View.OnClickListener {
 
         private val linearLayout: LinearLayout = itemView.findViewById(R.id.ll_msgContainer)
-        private val textView: TextView = itemView.findViewById(R.id.tv_msgValue)
+        private val imageView: ImageView = itemView.findViewById(R.id.iv_image)
         private val textViewTime: TextView = itemView.findViewById(R.id.tv_msgTimeValue)
         private val cardView: CardView = itemView.findViewById(R.id.cv_msgContainer)
+        private val imageLoadingProgressBar: View = itemView.findViewById(R.id.loading_progress_bar)
 
         init {
             itemView.setOnClickListener(this)
         }
 
         fun bindValues(msg: Message) {
+
+            if (msg.attachmentPath.isNullOrBlank()) {
+                imageView.setImageDrawable(null)
+                imageView.setBackgroundColor(
+                    ResourcesCompat.getColor(
+                        context.resources,
+                        R.color.white,
+                        null
+                    )
+                )
+               imageLoadingProgressBar.visible()
+            } else {
+                imageLoadingProgressBar.gone()
+                requestManager.load(msg.attachmentPath).into(imageView)
+            }
+
             when (msg.flowType) {
                 "in" -> {
-                    textView.text = msg.content
-
                     textViewTime.text = msg.timestamp?.toDisplayText()
-
                     linearLayout.setBackgroundColor(Color.parseColor("#19eeeeee"))
-                    textView.setTextColor(Color.parseColor("#000000"))
 
                     val layoutParams = LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.WRAP_CONTENT,
@@ -367,10 +397,8 @@ class ChatRecyclerAdapter constructor(
                     cardView.layoutParams = layoutParams
                 }
                 "out" -> {
-                    textView.text = msg.content
                     textViewTime.text = msg.timestamp?.toDisplayText()
                     linearLayout.setBackgroundColor(Color.parseColor("#E91E63"))
-                    textView.setTextColor(Color.parseColor("#ffffff"))
                     textViewTime.setTextColor(Color.parseColor("#ffffff"))
 
                     val layoutParams = LinearLayout.LayoutParams(
@@ -386,11 +414,16 @@ class ChatRecyclerAdapter constructor(
 
         override fun onClick(v: View?) {
             val currentPos = adapterPosition
-            onMessageClickListener.chatMessageClicked(MessageType.TEXT_WITH_VIDEO,currentPos, chatMessages[currentPos])
+            onMessageClickListener.chatMessageClicked(
+                MessageType.TEXT_WITH_IMAGE,
+                currentPos,
+                chatMessages[currentPos]
+            )
         }
     }
 
-    private inner class LocationMessageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
+    private inner class LocationMessageViewHolder(itemView: View) :
+        RecyclerView.ViewHolder(itemView), View.OnClickListener {
 
         private val linearLayout: LinearLayout = itemView.findViewById(R.id.ll_msgContainer)
         private val textView: TextView = itemView.findViewById(R.id.tv_msgValue)
@@ -434,7 +467,11 @@ class ChatRecyclerAdapter constructor(
 
         override fun onClick(v: View?) {
             val currentPos = adapterPosition
-            onMessageClickListener.chatMessageClicked(MessageType.TEXT_WITH_VIDEO,currentPos, chatMessages[currentPos])
+            onMessageClickListener.chatMessageClicked(
+                MessageType.TEXT_WITH_VIDEO,
+                currentPos,
+                chatMessages[currentPos]
+            )
         }
     }
 
@@ -485,14 +522,18 @@ class ChatRecyclerAdapter constructor(
 
         override fun onClick(v: View?) {
             val currentPos = adapterPosition
-            onMessageClickListener.chatMessageClicked(MessageType.TEXT_WITH_VIDEO,currentPos, chatMessages[currentPos])
+            onMessageClickListener.chatMessageClicked(
+                MessageType.TEXT_WITH_VIDEO,
+                currentPos,
+                chatMessages[currentPos]
+            )
         }
     }
 
     private inner class VideoMessageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
         View.OnClickListener {
 
-        private val linearLayout: LinearLayout = itemView.findViewById(R.id.ll_msgContainer)
+        private val linearLayout: ConstraintLayout = itemView.findViewById(R.id.ll_msgContainer)
         private val textView: TextView = itemView.findViewById(R.id.tv_msgValue)
         private val textViewTime: TextView = itemView.findViewById(R.id.tv_msgTimeValue)
         private val cardView: CardView = itemView.findViewById(R.id.cv_msgContainer)
@@ -534,7 +575,11 @@ class ChatRecyclerAdapter constructor(
 
         override fun onClick(v: View?) {
             val currentPos = adapterPosition
-            onMessageClickListener.chatMessageClicked(MessageType.TEXT_WITH_VIDEO,currentPos, chatMessages[currentPos])
+            onMessageClickListener.chatMessageClicked(
+                MessageType.TEXT_WITH_VIDEO,
+                currentPos,
+                chatMessages[currentPos]
+            )
         }
     }
 

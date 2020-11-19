@@ -467,6 +467,12 @@
 
     <style name="circleImageView" parent="">
         <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">10%</item>
+        <item name="cornerSize">50%</item>
+    </style>
+
+    <style name="chatImageView" parent="">
+        <item name="cornerFamilyTopRight">rounded</item>
+        <item name="cornerFamilyTopLeft">rounded</item>
+        <item name="cornerSize">5%</item>
     </style>
 </resources>

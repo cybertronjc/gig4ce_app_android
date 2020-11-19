@@ -16,7 +16,8 @@ enum class MessageType {
 
 //Base Class for Chat Messages
 open class ChatMessage(
-    private val messageType: MessageType
+    private val messageType: MessageType,
+    private val message : Message? = null
 ) {
 
     fun getMessageType(): MessageType = messageType
@@ -27,41 +28,64 @@ open class ChatMessage(
             throw IllegalArgumentException("date item cannot be converted into chat message")
         }
 
-        TODO()
+        return message!!
     }
 
+    companion object {
+
+        fun fromMessage(message: Message) : ChatMessage = when(message.type){
+            Message.MESSAGE_TYPE_TEXT -> TextChatMessage(message)
+            Message.MESSAGE_TYPE_TEXT_WITH_IMAGE -> ImageChatMessage(message)
+            Message.MESSAGE_TYPE_TEXT_WITH_VIDEO -> VideoChatMessage(message)
+            Message.MESSAGE_TYPE_TEXT_WITH_AUDIO -> AudioChatMessage(message)
+            Message.MESSAGE_TYPE_TEXT_WITH_DOCUMENT -> DocumentChatMessage(message)
+            Message.MESSAGE_TYPE_TEXT_WITH_CONTACT -> ContactChatMessage(message)
+            else -> UnsupportedChatMessage()
+        }
+    }
 }
 
 class DateChatMessage : ChatMessage(
     MessageType.DATE
 )
 
-class TextChatMessage : ChatMessage(
-    MessageType.TEXT
+class TextChatMessage(message: Message) : ChatMessage(
+    MessageType.TEXT,
+    message
 )
 
-class ImageChatMessage : ChatMessage(
-    MessageType.TEXT_WITH_IMAGE
+class ImageChatMessage(message: Message) : ChatMessage(
+    MessageType.TEXT_WITH_IMAGE,
+    message
 )
 
-class VideoChatMessage : ChatMessage(
-    MessageType.TEXT_WITH_VIDEO
+class VideoChatMessage(message: Message) : ChatMessage(
+    MessageType.TEXT_WITH_VIDEO,
+    message
 )
 
-class LocationChatMessage : ChatMessage(
-    MessageType.TEXT_WITH_LOCATION
+class LocationChatMessage(message: Message) : ChatMessage(
+    MessageType.TEXT_WITH_LOCATION,
+    message
 )
 
-class ContactChatMessage : ChatMessage(
-    MessageType.TEXT_WITH_CONTACT
+class ContactChatMessage(message: Message) : ChatMessage(
+    MessageType.TEXT_WITH_CONTACT,
+    message
 )
 
-class AudioChatMessage : ChatMessage(
-    MessageType.TEXT_WITH_AUDIO
+class AudioChatMessage(message: Message) : ChatMessage(
+    MessageType.TEXT_WITH_AUDIO,
+    message
 )
 
-class DocumentChatMessage : ChatMessage(
-    MessageType.TEXT_WITH_DOCUMENT
+class DocumentChatMessage(message: Message) : ChatMessage(
+    MessageType.TEXT_WITH_DOCUMENT,
+    message
+)
+
+class UnsupportedChatMessage : ChatMessage(
+    MessageType.NOT_SUPPORTED
 )
 
 class ChatDateItem constructor(
