@@ -245,8 +245,18 @@ class ChatFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
         MessageType.TEXT_WITH_LOCATION -> TODO()
         MessageType.TEXT_WITH_CONTACT -> TODO()
         MessageType.TEXT_WITH_AUDIO -> TODO()
-        MessageType.TEXT_WITH_DOCUMENT -> TODO()
+        MessageType.TEXT_WITH_DOCUMENT -> {
+            if(message.toMessage().attachmentPath != null){
+                downloadAndShowAttachment()
+            } else{
+                //File Not available
+            }
+        }
         MessageType.NOT_SUPPORTED -> TODO()
+    }
+
+    private fun downloadAndShowAttachment() {
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

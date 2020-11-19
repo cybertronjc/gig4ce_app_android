@@ -255,6 +255,7 @@ class ChatMessagesViewModel constructor(
             val docReference = getReference(headerId).addOrThrow(message)
             val pathOnServer = uploadChatAttachment(fileName, uri)
             updatePathInMessage(docReference.id, pathOnServer)
+            updatePathInOtherUserMessageToo(docReference.id, pathOnServer)
         } catch (e: Exception) {
             //handle error
         }
