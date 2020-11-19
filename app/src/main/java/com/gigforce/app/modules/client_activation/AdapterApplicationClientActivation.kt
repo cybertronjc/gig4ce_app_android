@@ -1,0 +1,54 @@
+package com.gigforce.app.modules.client_activation
+
+import android.graphics.drawable.Drawable
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
+import com.gigforce.app.R
+import com.gigforce.app.modules.landingscreen.models.Dependency
+import com.gigforce.app.utils.getCircularProgressDrawable
+import kotlinx.android.synthetic.main.layout_rv_status_pending.view.*
+
+class AdapterApplicationClientActivation :
+    RecyclerView.Adapter<AdapterApplicationClientActivation.ViewHolder>() {
+    var items: List<Dependency> = arrayListOf()
+
+    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        return ViewHolder(
+            LayoutInflater.from(parent.context)
+                .inflate(R.layout.layout_rv_status_pending, parent, false)
+        );
+    }
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val dependency = items[position]
+        holder.itemView.iv_status_application.setImageDrawable(
+            if (dependency.drawable == null) getCircularProgressDrawable(
+                holder.itemView.context
+            ) else {
+                dependency.drawable
+            }
+        )
+        holder.itemView.tv_status_application.text = dependency.title
+
+    }
+
+    override fun getItemCount(): Int {
+        return items.size;
+    }
+
+    fun addData(items: List<Dependency>) {
+        this.items = items;
+        notifyDataSetChanged()
+    }
+
+    fun setImageDrawable(feature: String, drawable: Drawable) {
+        val i = items.indexOf(Dependency(feature = feature))
+        items.get(i).drawable = drawable
+        notifyItemChanged(i);
+    }
+
+}

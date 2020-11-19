@@ -21,6 +21,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
+        android:layout_marginStart="@dimen/size_18"
         android:layout_toStartOf="@+id/iv_next_screen_application"
         android:layout_toEndOf="@+id/iv_status_application"
         android:fontFamily="@font/lato"
@@ -38,5 +39,13 @@
         android:layout_marginEnd="@dimen/size_15"
         android:src="@drawable/ic_next_screen"
         app:srcCompat="@drawable/ic_next_screen" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_below="@+id/iv_next_screen_application"
+        android:layout_marginStart="@dimen/size_53"
+        android:layout_marginTop="@dimen/size_16"
+        android:background="#c8c7cc" />
 
 </RelativeLayout>

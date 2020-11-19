@@ -38,7 +38,7 @@
                 android:textColor="@color/white"
                 android:textSize="@dimen/font_20"
                 android:textStyle="normal"
-                tools:text="Application -  21 North" />
+                android:text="Application" />
 
         </RelativeLayout>
 

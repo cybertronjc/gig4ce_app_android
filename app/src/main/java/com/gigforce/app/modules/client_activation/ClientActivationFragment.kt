@@ -13,6 +13,7 @@ import android.widget.TableLayout
 import android.widget.TableRow
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -59,7 +60,11 @@ class ClientActivationFragment : BaseFragment() {
             onBackPressed()
         }
         tv_mark_as_interest_role_details.setOnClickListener {
-            navigate(R.id.fragment_application_client_activation)
+            navigate(
+                R.id.fragment_application_client_activation, bundleOf(
+                    StringConstants.WORK_ORDER_ID.value to mWordOrderID
+                )
+            )
         }
     }
 
@@ -376,4 +381,12 @@ class ClientActivationFragment : BaseFragment() {
 
         }
     }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString(StringConstants.WORK_ORDER_ID.value, mWordOrderID)
+
+
+    }
+
 }
