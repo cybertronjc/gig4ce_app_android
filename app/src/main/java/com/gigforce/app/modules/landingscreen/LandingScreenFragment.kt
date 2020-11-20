@@ -131,6 +131,7 @@ class LandingScreenFragment : BaseFragment() {
                 }
             }
         }
+    }
 
     private fun checkIfRoleSharedViaDeeplink() {
         if (navFragmentsData?.getData()
@@ -153,7 +154,7 @@ class LandingScreenFragment : BaseFragment() {
         }
     }
 
-    }
+
 
     private fun checkforForceupdate() {
         ConfigRepository().getForceUpdateCurrentVersion(object :
