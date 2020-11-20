@@ -54,6 +54,7 @@ class ClientActivationFragment : BaseFragment() {
         initClicks()
     }
 
+
     private fun setupBulletPontsRv() {
 
         rv_bullet_points.adapter = adapterBulletPoints

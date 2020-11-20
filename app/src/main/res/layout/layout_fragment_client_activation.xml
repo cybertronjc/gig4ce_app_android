@@ -84,7 +84,7 @@
                 android:id="@+id/rl_pref_loc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-
+                android:layout_marginTop="@dimen/size_15"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_role_client_activation">
@@ -111,7 +111,8 @@
                     android:id="@+id/rv_preferred_locations_client_activation"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/size_15"
+
+                    android:layout_centerVertical="true"
                     android:layout_toStartOf="@+id/tv_applied_client_activation"
                     android:clipToPadding="false"
                     android:paddingStart="@dimen/size_21"
