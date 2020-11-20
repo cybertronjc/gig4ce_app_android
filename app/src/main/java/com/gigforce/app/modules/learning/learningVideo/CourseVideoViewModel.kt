@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.gigforce.app.modules.learning.LearningRepository
 import com.gigforce.app.modules.learning.models.CourseContent
 import com.gigforce.app.utils.Lce
+import com.gigforce.app.utils.Lse
 import com.gigforce.app.utils.SingleLiveEvent2
 import kotlinx.coroutines.launch
 
@@ -122,6 +123,37 @@ class CourseVideoViewModel constructor(
             _videoSaveState.value = Lce.content(VideoSaveState.VideoStateSaved)
         } catch (e: Exception) {
             _videoSaveState.value = Lce.error(e.message!!)
+        }
+    }
+
+    private val _saveLessonFeedbackState = MutableLiveData<Lse>()
+    val saveLessonFeedbackState: LiveData<Lse> = _saveLessonFeedbackState
+
+    fun saveVideoFeedback(
+        lessonId: String,
+        lessonRating: Float? = null,
+        explanation: Boolean? = null,
+        completeness: Boolean? = null,
+        easyToUnderStand: Boolean? = null,
+        videoQuality: Boolean? = null,
+        soundQuality: Boolean? = null
+    ) = viewModelScope.launch {
+
+        _saveLessonFeedbackState.value = Lse.loading()
+        try {
+
+            learningRepository.recordLessonFeedback(
+                lessonId,
+                lessonRating,
+                explanation,
+                completeness,
+                easyToUnderStand,
+                videoQuality,
+                soundQuality
+            )
+            _saveLessonFeedbackState.value = Lse.success()
+        } catch (e: Exception) {
+            _saveLessonFeedbackState.value = Lse.error(e.message!!)
         }
     }
 }

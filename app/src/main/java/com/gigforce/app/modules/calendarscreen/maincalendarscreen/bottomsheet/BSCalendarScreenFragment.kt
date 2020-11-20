@@ -31,6 +31,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.observe
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -43,9 +44,11 @@ import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.assessment.AssessmentFragment
 import com.gigforce.app.modules.gigPage.GigAttendancePageFragment
+import com.gigforce.app.modules.gigPage.GigNavigation
 import com.gigforce.app.modules.gigPage.GigPageFragment
 import com.gigforce.app.modules.gigPage.GigViewModel
 import com.gigforce.app.modules.gigPage.models.Gig
+import com.gigforce.app.modules.gigPage2.GigPage2Fragment
 import com.gigforce.app.modules.landingscreen.LandingScreenFragment
 import com.gigforce.app.modules.landingscreen.LandingScreenViewModel
 import com.gigforce.app.modules.learning.LearningConstants
@@ -391,10 +394,7 @@ class BSCalendarScreenFragment : BaseFragment() {
                     activity?.applicationContext,
                     PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
                         val gig = item as Gig
-                        navigate(R.id.presentGigPageFragment, Bundle().apply {
-                            this.putString(GigPageFragment.INTENT_EXTRA_GIG_ID, gig.gigId)
-                        })
-
+                        GigNavigation.openGigMainPage(findNavController(), gig.gigId)
 //                    showKYCAndHideUpcomingLayout(
 //                        true
 //                    )
@@ -432,6 +432,7 @@ class BSCalendarScreenFragment : BaseFragment() {
                                 getView(viewHolder, R.id.checkInTV).isEnabled = false
                             } else if (obj.isCheckInAndCheckOutMarked()) {
                                 getView(viewHolder, R.id.checkInTV).isEnabled = false
+                                (getView(viewHolder, R.id.checkInTV) as Button).text = "Checked Out"
                             } else if (obj.isCheckInMarked()) {
                                 getView(viewHolder, R.id.checkInTV).isEnabled = true
                                 (getView(viewHolder, R.id.checkInTV) as Button).text =
@@ -538,10 +539,7 @@ class BSCalendarScreenFragment : BaseFragment() {
         View.OnClickListener {
         override fun onClick(v: View?) {
             val gig = (rv.adapter as RecyclerGenericAdapter<Gig>).list.get(position)
-
-            navigate(R.id.gigAttendancePageFragment, Bundle().apply {
-                this.putString(GigAttendancePageFragment.INTENT_EXTRA_GIG_ID, gig.gigId)
-            })
+            GigNavigation.openGigAttendancePage(findNavController(), gig.gigId)
         }
     }
 
@@ -633,7 +631,7 @@ class BSCalendarScreenFragment : BaseFragment() {
     private fun initializeFeaturesBottomSheet() {
         var datalist: ArrayList<FeatureModel> = ArrayList<FeatureModel>()
         datalist.add(FeatureModel("My Gig", R.drawable.mygig, R.id.gig_history_fragment))
-        datalist.add(FeatureModel("Wallet", R.drawable.wallet, R.id.walletBalancePage))
+        datalist.add(FeatureModel("Wallet", R.drawable.wallet, R.id.payslipMonthlyFragment))
         datalist.add(FeatureModel("Profile", R.drawable.profile, R.id.profileFragment))
         datalist.add(FeatureModel("Learning", R.drawable.learning, R.id.mainLearningFragment))
         datalist.add(FeatureModel("Settings", R.drawable.settings, R.id.settingFragment))
@@ -660,7 +658,7 @@ class BSCalendarScreenFragment : BaseFragment() {
                 activity?.applicationContext,
                 PFRecyclerViewAdapter.OnViewHolderClick<FeatureModel?> { view, position, item ->
                     if (item?.navigationID != -1) {
-                        if (item?.title?.equals("Wallet") ?: false || item?.title?.equals("Chat") ?: false) {
+                        if (/*item?.title?.equals("Wallet") ?: false ||*/ item?.title?.equals("Chat") ?: false) {
                             if (AppConstants.UNLOCK_FEATURE) {
                                 navigate(item?.navigationID!!)
                             } else showToast("This page are inactive. We’ll activate it in a few weeks")

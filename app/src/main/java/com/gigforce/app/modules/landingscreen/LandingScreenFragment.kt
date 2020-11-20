@@ -1,6 +1,8 @@
 package com.gigforce.app.modules.landingscreen
 
+import android.app.Dialog
 import android.content.*
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
@@ -24,6 +26,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
+import com.gigforce.app.core.base.dialog.ConfirmationDialogOnClickListener
 import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.app.core.genericadapter.RecyclerGenericAdapter
 import com.gigforce.app.core.gone
@@ -39,12 +42,17 @@ import com.gigforce.app.modules.learning.LearningConstants
 import com.gigforce.app.modules.learning.LearningViewModel
 import com.gigforce.app.modules.learning.models.Course
 import com.gigforce.app.modules.preferences.PreferencesFragment
+import com.gigforce.app.modules.profile.AboutExpandedFragment
+import com.gigforce.app.modules.profile.EducationExpandedFragment
+import com.gigforce.app.modules.profile.ExperienceExpandedFragment
 import com.gigforce.app.modules.profile.ProfileViewModel
 import com.gigforce.app.modules.profile.models.ProfileData
 import com.gigforce.app.utils.AppConstants
 import com.gigforce.app.utils.GlideApp
 import com.gigforce.app.utils.Lce
 import com.gigforce.app.utils.StringConstants
+import com.gigforce.app.utils.configrepository.ConfigRepository
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
@@ -59,6 +67,7 @@ class LandingScreenFragment : BaseFragment() {
 
         private const val SCREEN_VERIFICATION = 10
         private const val SCREEN_GIG = 11
+
     }
 
     private lateinit var viewModel: LandingScreenViewModel
@@ -93,7 +102,7 @@ class LandingScreenFragment : BaseFragment() {
         val displayMetrics = DisplayMetrics()
         activity?.windowManager?.getDefaultDisplay()?.getMetrics(displayMetrics)
         width = displayMetrics.widthPixels
-
+        setTipsInViewModel()
         initUI()
         initializeExploreByRole()
         initializeClientActivation()
@@ -102,21 +111,26 @@ class LandingScreenFragment : BaseFragment() {
         listener()
         observers()
         broadcastReceiverForLanguageCahnge()
+        checkforForceupdate()
         checkIfRoleSharedViaDeeplink()
 //        checkforLanguagedSelectedForLastLogin()
+        exploreByIndustryLayout?.let {
+            when (comingFromOrGoingToScreen) {
+                SCREEN_VERIFICATION -> landingScrollView.post {
+                    it.y?.let {
+                        landingScrollView.scrollTo(0, it.toInt())
+                    }
+                }
+                SCREEN_GIG -> landingScrollView.post {
+                    it.y?.let {
+                        landingScrollView.scrollTo(0, it.toInt())
+                    }
 
-
-        when (comingFromOrGoingToScreen) {
-            SCREEN_VERIFICATION -> landingScrollView.post {
-                landingScrollView.scrollTo(0, exploreByIndustryLayout.y.toInt())
-            }
-            SCREEN_GIG -> landingScrollView.post {
-                landingScrollView.scrollTo(0, exploreByIndustryLayout.y.toInt())
-            }
-            else -> {
+                }
+                else -> {
+                }
             }
         }
-    }
 
     private fun checkIfRoleSharedViaDeeplink() {
         if (navFragmentsData?.getData()
@@ -137,6 +151,81 @@ class LandingScreenFragment : BaseFragment() {
 
 
         }
+    }
+
+    }
+
+    private fun checkforForceupdate() {
+        ConfigRepository().getForceUpdateCurrentVersion(object :
+                ConfigRepository.LatestAPPUpdateListener {
+            override fun getCurrentAPPVersion(latestAPPUpdateModel: ConfigRepository.LatestAPPUpdateModel) {
+                if (latestAPPUpdateModel.active && isNotLatestVersion(latestAPPUpdateModel))
+                    showConfirmationDialogType3(
+                            getString(R.string.new_version_available),
+                            getString(R.string.new_version_available_detail),
+                            getString(R.string.update_now),
+                            getString(R.string.cancel_update),
+                            object : ConfirmationDialogOnClickListener {
+                                override fun clickedOnYes(dialog: Dialog?) {
+                                    redirectToStore("https://play.google.com/store/apps/details?id=com.gigforce.app")
+                                }
+
+                                override fun clickedOnNo(dialog: Dialog?) {
+                                    if (latestAPPUpdateModel?.force_update_required)
+                                        activity?.finish()
+                                    dialog?.dismiss()
+                                }
+
+                            })
+            }
+        })
+    }
+    private fun isNotLatestVersion(latestAPPUpdateModel: ConfigRepository.LatestAPPUpdateModel): Boolean {
+        try {
+            var currentAppVersion = getAppVersion()
+            if(currentAppVersion.contains("Dev")){
+                currentAppVersion = currentAppVersion?.split("-")[0]
+            }
+            var appVersion = currentAppVersion?.split(".")?.toTypedArray()
+            var serverAPPVersion =
+                    latestAPPUpdateModel?.force_update_current_version?.split(".")?.toTypedArray()
+            if (appVersion?.size == 0 || serverAPPVersion?.size == 0) {
+                FirebaseCrashlytics.getInstance().log("isNotLatestVersion method : appVersion or serverAPPVersion has zero size!!")
+                return false
+            } else {
+                if (appVersion.get(0).toInt() < serverAPPVersion.get(0).toInt()) {
+                    return true
+                } else if (appVersion.get(0).toInt()== serverAPPVersion.get(0).toInt() && appVersion.get(1).toInt() < serverAPPVersion.get(1).toInt()) {
+                    return true
+                } else if (appVersion.get(0).toInt()== serverAPPVersion.get(0).toInt() && appVersion.get(1).toInt() == serverAPPVersion.get(1).toInt() && appVersion.get(2).toInt() < serverAPPVersion.get(2).toInt()) {
+                    return true
+                } else return false
+
+            }
+        } catch (e: Exception) {
+            FirebaseCrashlytics.getInstance().log("isNotLatestVersion Method Exception")
+
+            return false
+        }
+    }
+    fun getAppVersion(): String {
+        var result = "";
+
+        try {
+            result = context?.getPackageManager()
+                    ?.getPackageInfo(context?.getPackageName(), 0)
+                    ?.versionName ?: "";
+        } catch (e: PackageManager.NameNotFoundException) {
+
+        }
+
+        return result;
+    }
+
+    fun redirectToStore(playStoreUrl: String) {
+        var intent = Intent(Intent.ACTION_VIEW, Uri.parse(playStoreUrl))
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent)
     }
 
     private fun initUI() {
@@ -286,6 +375,119 @@ class LandingScreenFragment : BaseFragment() {
             })
 
         helpViewModel.getTopHelpVideos()
+    }
+
+    fun setTipsInViewModel() {
+        val tipsList = listOf<Tip>(
+            Tip(
+                key = "ADD_EDUCATION_TIP",
+                title = getString(R.string.gig_force_tip),
+                subTitle = getString(R.string.tip_one),
+                whereToRedirect = R.id.educationExpandedFragment,
+                tip_id = 1097,
+                intentExtraMap = mapOf(
+                    LandingPageConstants.INTENT_EXTRA_CAME_FROM_LANDING_SCREEN to true,
+                    LandingPageConstants.INTENT_EXTRA_ACTION to EducationExpandedFragment.ACTION_OPEN_EDIT_EDUCATION_BOTTOM_SHEET
+                )
+            ), Tip(
+                key = "ADD_WORK_EXP_TIP",
+                title = getString(R.string.gig_force_tip),
+                subTitle = getString(R.string.tip_two),
+                whereToRedirect = R.id.experienceExpandedFragment,
+                tip_id = 1098,
+                intentExtraMap = mapOf(
+                    LandingPageConstants.INTENT_EXTRA_CAME_FROM_LANDING_SCREEN to true,
+                    LandingPageConstants.INTENT_EXTRA_ACTION to ExperienceExpandedFragment.ACTION_OPEN_EDIT_EXPERIENCE_BOTTOM_SHEET
+                )
+            ), Tip(
+                key = "ADD_SKILLS_TIP",
+                title = getString(R.string.gig_force_tip),
+                subTitle = getString(R.string.tip_three),
+                whereToRedirect = R.id.educationExpandedFragment,
+                tip_id = 1099,
+                intentExtraMap = mapOf(
+                    LandingPageConstants.INTENT_EXTRA_CAME_FROM_LANDING_SCREEN to true,
+                    LandingPageConstants.INTENT_EXTRA_ACTION to EducationExpandedFragment.ACTION_OPEN_EDIT_SKILLS_BOTTOM_SHEET
+                )
+            ), Tip(
+                key = "ADD_ACHIEVEMENTS_TIP",
+                title = getString(R.string.gig_force_tip),
+                subTitle = getString(R.string.tip_four),
+                whereToRedirect = R.id.educationExpandedFragment,
+                tip_id = 1100,
+                intentExtraMap = mapOf(
+                    LandingPageConstants.INTENT_EXTRA_CAME_FROM_LANDING_SCREEN to true,
+                    LandingPageConstants.INTENT_EXTRA_ACTION to EducationExpandedFragment.ACTION_OPEN_EDIT_ACHIEVEMENTS_BOTTOM_SHEET
+                )
+            )
+            , Tip(
+                key = "ADD_PROFILE_PHOTO_TIP",
+                title = getString(R.string.gig_force_tip),
+                subTitle = getString(R.string.tip_five),
+                tip_id = 1101,
+                whereToRedirect = R.id.profileFragment
+            ), Tip(
+                key = "ADD_LANGUAGE_TIP",
+                title = getString(R.string.gig_force_tip),
+                subTitle = getString(R.string.tip_six),
+                whereToRedirect = R.id.aboutExpandedFragment,
+                tip_id = 1102,
+                intentExtraMap = mapOf(
+                    LandingPageConstants.INTENT_EXTRA_CAME_FROM_LANDING_SCREEN to true,
+                    LandingPageConstants.INTENT_EXTRA_ACTION to AboutExpandedFragment.ACTION_OPEN_EDIT_LANGUAGE_BOTTOM_SHEET
+                )
+            ), Tip(
+                key = "ADD_ABOUT_ME_TIP",
+                title = getString(R.string.gig_force_tip),
+                subTitle = getString(R.string.tip_seven),
+                whereToRedirect = R.id.aboutExpandedFragment,
+                tip_id = 1103,
+                intentExtraMap = mapOf(
+                    LandingPageConstants.INTENT_EXTRA_CAME_FROM_LANDING_SCREEN to true,
+                    LandingPageConstants.INTENT_EXTRA_ACTION to AboutExpandedFragment.ACTION_OPEN_EDIT_ABOUT_ME_BOTTOM_SHEET
+                )
+            ),
+            Tip(
+                key = "ADD_PERMANENT_ADD_TIP",
+                title = getString(R.string.gig_force_tip),
+                subTitle = getString(R.string.tip_eight),
+                tip_id = 1104,
+                whereToRedirect = R.id.permanentAddressViewFragment
+            )
+            , Tip(
+                key = "ADD_PREFERRED_DISTANCE_TIP",
+                title = getString(R.string.gig_force_tip),
+                subTitle = getString(R.string.tip_nine),
+                tip_id = 1105,
+                whereToRedirect = R.id.arrountCurrentAddress
+            ), Tip(
+                key = "ADD_DAILY_EARNING_EXPECTATION_TIP",
+                title = getString(R.string.gig_force_tip),
+                subTitle = getString(R.string.tip_ten),
+                tip_id = 1106,
+                whereToRedirect = R.id.earningFragment
+            )
+            , Tip(
+                key = "ADD_WEEKDAY_TIP",
+                title = getString(R.string.gig_force_tip),
+                subTitle = getString(R.string.tip_eleven),
+                tip_id = 1107,
+                whereToRedirect = R.id.weekDayFragment
+            ), Tip(
+                key = "ADD_WEEKEND_TIP",
+                title = getString(R.string.gig_force_tip),
+                subTitle = getString(R.string.tip_twelve),
+                tip_id = 1108,
+                whereToRedirect = R.id.weekEndFragment
+            ), Tip(
+                key = "ADD_WFH_TIP",
+                title = getString(R.string.gig_force_tip),
+                subTitle = getString(R.string.tip_thirteen),
+                tip_id = 1109,
+                whereToRedirect = R.id.locationFragment
+            )
+        )
+        viewModel.setTips(tipsList)
     }
 
     private fun setTipsOnView(tips_: List<Tip>) {

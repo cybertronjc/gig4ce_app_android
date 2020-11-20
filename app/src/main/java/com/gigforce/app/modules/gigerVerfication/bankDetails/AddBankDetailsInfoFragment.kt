@@ -68,23 +68,20 @@ class AddBankDetailsInfoFragment : BaseFragment() {
             findNavController().popBackStack(R.id.gigerVerificationFragment, false)
         }
 
+        helpIconViewIV.setOnClickListener {
+            showWhyWeNeedThisDialog()
+        }
+
+        whyWeNeedThisViewTV.setOnClickListener {
+            showWhyWeNeedThisDialog()
+        }
 
         helpIconIV.setOnClickListener {
-
-            WhyWeNeedThisBottomSheet.launch(
-                childFragmentManager = childFragmentManager,
-                title = getString(R.string.why_do_we_need_this),
-                content = getString(R.string.why_we_need_this_bank)
-            )
+            showWhyWeNeedThisDialog()
         }
 
         whyWeNeedThisTV.setOnClickListener {
-
-            WhyWeNeedThisBottomSheet.launch(
-                childFragmentManager = childFragmentManager,
-                title = getString(R.string.why_do_we_need_this),
-                content = getString(R.string.why_we_need_this_bank)
-            )
+            showWhyWeNeedThisDialog()
         }
 
         passbookSubmitSliderBtn.isEnabled = false
@@ -261,6 +258,14 @@ class AddBankDetailsInfoFragment : BaseFragment() {
                 .show()
         }
 
+    }
+
+    private fun showWhyWeNeedThisDialog() {
+        WhyWeNeedThisBottomSheet.launch(
+            childFragmentManager = childFragmentManager,
+            title = getString(R.string.why_do_we_need_this),
+            content = getString(R.string.why_we_need_this_bank)
+        )
     }
 
     private fun initViewModel() {

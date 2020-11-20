@@ -4,15 +4,12 @@ package com.gigforce.app.modules.learning.learningVideo
 import android.app.Dialog
 import android.content.pm.ActivityInfo
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
-import android.widget.TextView
-import androidx.appcompat.app.AlertDialog
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
@@ -23,13 +20,10 @@ import androidx.navigation.findNavController
 import com.gigforce.app.R
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
-import com.gigforce.app.modules.assessment.AssessmentFragment
 import com.gigforce.app.modules.learning.models.CourseContent
-import com.gigforce.app.modules.learning.slides.SlidesFragment
 import com.gigforce.app.modules.learning.slides.types.VideoWithTextFragment
 import com.gigforce.app.utils.Lce
 import com.google.android.exoplayer2.C
-import com.google.android.exoplayer2.ExoPlaybackException
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.source.MediaSource
@@ -40,7 +34,7 @@ import kotlinx.android.synthetic.main.fragment_play_video.*
 import kotlinx.android.synthetic.main.fragment_play_video_main.*
 
 
-class PlayVideoDialogFragment : DialogFragment() {
+class PlayVideoDialogFragment : DialogFragment(), RateLessonDialogFragmentClosingListener {
 
     private var playWhenReady = true
     private var currentWindow = 0
@@ -54,7 +48,7 @@ class PlayVideoDialogFragment : DialogFragment() {
     private val viewModel: CourseVideoViewModel by viewModels()
     private var videoStateSaved: Boolean = false
 
-    private val navigationController : NavController by lazy {
+    private val navigationController: NavController by lazy {
         requireActivity().findNavController(R.id.nav_fragment)
     }
 
@@ -103,11 +97,17 @@ class PlayVideoDialogFragment : DialogFragment() {
 
         initViewModel()
 
+        close_click_layout.setOnClickListener {
+            backPressed()
+        }
+
         playerView
             .findViewById<View>(R.id.toggle_full_screen)
             .setOnClickListener {
                 changeOrientation()
             }
+
+
     }
 
     private fun changeOrientation() {
@@ -126,9 +126,9 @@ class PlayVideoDialogFragment : DialogFragment() {
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        return object : Dialog(requireContext(),theme){
+        return object : Dialog(requireContext(), theme) {
             override fun onBackPressed() {
-               backPressed()
+                backPressed()
             }
         }
     }
@@ -173,64 +173,6 @@ class PlayVideoDialogFragment : DialogFragment() {
                     is Lce.Error -> showErrorInLoadingVideo(it.error)
                 }
             })
-
-        viewModel.openNextDestination.observe(viewLifecycleOwner, Observer { cc ->
-
-
-            val view = layoutInflater.inflate(R.layout.layout_video_completed, null)
-
-            val dialog = AlertDialog.Builder(requireContext())
-                .setView(view)
-                .show()
-
-            val submitTV = view.findViewById<TextView>(R.id.tv_action_assess_dialog)
-            submitTV.text = when (cc?.type) {
-                CourseContent.TYPE_ASSESSMENT -> "Next Assessment"
-                CourseContent.TYPE_VIDEO -> "Next Lesson"
-                CourseContent.TYPE_SLIDE -> "Next Slide"
-                else -> "Okay"
-            }
-
-            submitTV.setOnClickListener {
-                    dialog.dismiss()
-                    dismiss()
-
-
-                    when (cc?.type) {
-                        CourseContent.TYPE_VIDEO -> {
-                            PlayVideoDialogFragment.launch(
-                                childFragmentManager = childFragmentManager,
-                                moduleId = cc.moduleId,
-                                lessonId = cc.id
-                            )
-                        }
-                        CourseContent.TYPE_ASSESSMENT -> {
-                            navigationController.navigate(
-                                R.id.assessment_fragment, bundleOf(
-                                    AssessmentFragment.INTENT_LESSON_ID to cc.id,
-                                    AssessmentFragment.INTENT_MODULE_ID to cc.moduleId
-                                )
-                            )
-                        }
-                        CourseContent.TYPE_SLIDE -> {
-                            navigationController.navigate(
-                                R.id.slidesFragment,
-                                bundleOf(
-                                    SlidesFragment.INTENT_EXTRA_SLIDE_TITLE to cc.title,
-                                    SlidesFragment.INTENT_EXTRA_MODULE_ID to cc.moduleId,
-                                    SlidesFragment.INTENT_EXTRA_LESSON_ID to cc.id
-                                )
-                            )
-                        }
-                        else ->{
-                            clearBackStackToContentList()
-                            dismiss()
-                        }
-                    }
-
-                }
-
-        })
 
         viewModel.getVideoDetails(mModuleId, mLessonId)
     }
@@ -278,6 +220,10 @@ class PlayVideoDialogFragment : DialogFragment() {
         val videoUri = Uri.parse(content.videoUrl)
         initializePlayer(videoUri, content.completionProgress)
         changeOrientation()
+
+        if (!content.canUserFastForward) {
+            playerView.setControlDispatcher(PositionLimitingControlDispatcher())
+        }
     }
 
 
@@ -321,7 +267,7 @@ class PlayVideoDialogFragment : DialogFragment() {
             currentOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
             adjustUiforOrientation()
         } else {
-            if (player == null || videoStateSaved){
+            if (player == null || videoStateSaved) {
                 clearBackStackToContentList()
                 dismiss()
             }
@@ -353,8 +299,7 @@ class PlayVideoDialogFragment : DialogFragment() {
         if (playbackPosition != 0L) {
             player?.seekTo(currentWindow, playbackPosition)
             player?.playWhenReady = true
-        }
-        else {
+        } else {
             player?.seekTo(currentWindow, lastTimePlayBackPosition)
             player?.playWhenReady = playWhenReady
         }
@@ -421,13 +366,20 @@ class PlayVideoDialogFragment : DialogFragment() {
 
             if (playbackState == Player.STATE_IDLE || !playWhenReady) {
                 playerView.keepScreenOn = false
-            }else if (playbackState == Player.STATE_ENDED) {
+            } else if (playbackState == Player.STATE_ENDED) {
                 playerView.keepScreenOn = false
-                viewModel.markVideoAsComplete(mModuleId, mLessonId)
-            }else { // STATE_IDLE, STATE_ENDED
+
+                //Open Complete dialog
+                changeOrientation()
+                RateLessonDialogFragment.launch(childFragmentManager, this@PlayVideoDialogFragment,mModuleId, mLessonId)
+            } else { // STATE_IDLE, STATE_ENDED
                 // This prevents the screen from getting dim/lock
                 playerView.keepScreenOn = true
             }
         }
+    }
+
+    override fun rateLessonDialogDismissed() {
+        dismiss()
     }
 }

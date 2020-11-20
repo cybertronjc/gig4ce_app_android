@@ -53,7 +53,9 @@ data class ModuleProgress(
 
     @get:PropertyName("slide_progress")
     @set:PropertyName("slide_progress")
-    var slidesProgress : List<SlideProgress> = emptyList()
+    var slidesProgress : List<SlideProgress> = emptyList(),
 
-
-    )
+    @get:PropertyName("isActive")
+    @set:PropertyName("isActive")
+    var isActive : Boolean = true
+)

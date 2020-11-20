@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">गिगफोसृ</string>
-    <string name="hello_blank_fragment"></string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_profile">-</string>
     <string name="english">Hindi</string>
     <string name="hindi">हिंदी</string>
@@ -9,20 +9,18 @@
     <string name="punjabi">पंजाबी</string>
     <string name="francais">फ्रेंच</string>
     <string name="marathi">मराठी</string>
+    <string name="kannada">ಕನ್ನಡ</string>
     <string name="intro_slide1_title">आपका स्वागत है Gigforce में</string>
-    <string name="intro_slide1_subtitle">एक नौकरी जो आपके पास हमेशा होती है</string>
     <string name="intro_slide2_title">एक पेशेवर बनें</string>
     <string name="intro_slide2_subtitle">एक प्रोफ़ाइल बनाएं और अपने कौशल को अपग्रेड करने के लिए ट्रेन करें</string>
     <string name="intro_slide3_title">काम होने दो</string>
-    <string name="intro_slide3_subtitle">अपनी प्राथमिकता तय करें और जिग्स आपको पाएंगे</string>
     <string name="ob_slide1_title">ज्ञानप्राप्ति</string>
-    <string name="ob_slide1_subtitle">कैसे - १
-</string>
+    <string name="ob_slide1_subtitle">कैसे - १</string>
     <string name="ob_slide2_title">ज्ञानप्राप्ति</string>
     <string name="ob_slide2_subtitle">कैसे - २</string>
     <string name="ob_slide3_title">ज्ञानप्राप्ति</string>
     <string name="ob_slide3_subtitle">कैसे - ३</string>
-    <string name="hello_world">नमस्ते दुनिया!</string>
+    <string name="hello_world">नमस्ते!</string>
     <string name="messages_header">संदेश</string>
     <string name="sync_header">सिंक</string>
     <string name="signature_title">आपके हस्ताक्षर</string>
@@ -38,7 +36,7 @@
     <string name="default_distance_text">220KM दूर है</string>
     <string name="education_card_education_text">शिक्षा</string>
     <string name="education_card_content_placeholder">शिक्षा सामग्री यहां डालनी है</string>
-    <string name="view_more_text"><u>और देखो</u></string>
+    <string name="view_more_text">और देखें</string>
     <string name="empty_dash_string">-</string>
     <string name="about_card_about_text">मेरे बारे में</string>
     <string name="about_card_content_placeholder">मेरे बारे में लिखें</string>
@@ -50,7 +48,8 @@
     <string name="education_expanded_add_education_text">शिक्षा जोड़े</string>
     <string name="education_expanded_add_skill_text">
     + कौशल जोड़ें</string>
-    <string name="education_expanded_add_achievement_text">+ उपलब्धि जोड़ें</string>
+    <string name="education_expanded_add_achievement_text">
+    + उपलब्धि जोड़ें</string>
     <string name="education_expanded_user_name">नाम</string>
     <string name="nav_education_text">शिक्षा</string>
     <string name="nav_about_text">मेरे बारे में</string>
@@ -63,7 +62,7 @@
     <string name="add_achievement_sheet_title">शीर्षक *</string>
     <string name="add_achievement_sheet_issuing_authority">जारी करने वाला प्राधिकरण *</string>
     <string name="add_achievement_sheet_location">स्थान</string>
-    <string name="add_achievement_sheet_year">वर्ष * (उदा</string>>
+    <string name="add_achievement_sheet_year">वर्ष * (उदा। 2011)</string>
     <string name="add_education_sheet_new_education">नई शिक्षा</string>
     <string name="add_education_sheet_institution">संस्थान *</string>
     <string name="add_education_sheet_course">कोर्स *</string>
@@ -76,8 +75,7 @@
     <string name="about_expanded_bio_text">जैव</string>
     <string name="about_expanded_language_text">भाषा ज्ञात</string>
     <string name="about_expanded_add_language_text">
-    + भाषा जोड़ें
-</string>
+    + भाषा जोड़ें</string>
     <string name="about_expanded_contact_text">संपर्क विवरण</string>
     <string name="about_expanded_add_contact_text">संपर्क जोड़ें</string>
     <string name="add_language_new_language">नई भाषा</string>
@@ -143,19 +141,18 @@
     <string name="go_back">वापस जाओ</string>
     <string name="add">जोड़ना</string>
     <string name="veriScreenTitle">हैलो गिगर!</string>
-    <string name="veri_address_title">चरण 1: कृपया अपना पता जोड़ें</string>
-    <string name="veri_add_address">पता</string>
-    <string name="veri_add_doc_front">सामने</string>
-    <string name="veri_add_doc_back">पीछे की तरफ</string>
-    <string name="veri_pan_title">चरण 5: अपना पैन अपलोड करें</string>
-    <string name="veri_aadhaar_title">चरण 2: अपना आधार अपलोड करें</string>
-    <string name="veri_no_aadhaar">नहीं आधार! छोड़ें >></string>
-    <string name="veri_dl_title">चरण 3: अपना ड्राइविंग लाइसेंस अपलोड करें</string>
-    <string name="veri_bank_title">चरण 4: कृपया अपना बैंक विवरण जोड़ें</string>
-    <string name="veri_add_bank">बैंक विवरण जोड़ें</string>
-    <string name="veri_done">हुर्रे !!! \ nKC दस्तावेज़ प्रस्तुत किए गए</string>
-    <string name="veri_hint_address_line1">पता पंक्ति 1</string>
-    <string name="veri_hint_address_line2">पता पंक्ति नं। 2</string>
+    <string name="veri_address_title">"चरण 1: कृपया अपना पता जोड़ें"</string>
+    <string name="veri_add_address">"पता"</string>
+    <string name="veri_add_doc_front">"सामने"</string>
+    <string name="veri_add_doc_back">"बैक साइड"</string>
+    <string name="veri_pan_title">"चरण 5: अपना पैन अपलोड करें"</string>
+    <string name="veri_aadhaar_title">"चरण 2: अपना आधार अपलोड करें"</string>
+    <string name="veri_no_aadhaar">"नहीं अनादर! छोड़ो >>"</string>
+    <string name="veri_dl_title">"चरण 3: अपना ड्राइविंग लाइसेंस अपलोड करें"</string>
+    <string name="veri_bank_title">"चरण 4: कृपया अपना बैंक विवरण जोड़ें"</string>
+    <string name="veri_add_bank">"बैंक विवरण जोड़ें"</string>
+    <string name="veri_hint_address_line1">"पता पंक्ति 1"</string>
+    <string name="veri_hint_address_line2">"पता पंक्ति नं। 2"</string>
     <string name="veri_hint_city">शहर</string>
     <string name="veri_hint_state">राज्य</string>
     <string name="veri_hint_pin">पिन कोड</string>
@@ -173,10 +170,10 @@
     <string name="bio_hint_text">अपने आप को एक पंक्ति में बताएं</string>
     <string name="add_tags">टैग लगा दो</string>
     <string name="hs_rv_title">डंज़ो डेलीवरी</string>
-    <string name="hs_rv_date">ग्यारह</string>
+    <string name="hs_rv_subtitle">2 और</string>
+    <string name="hs_rv_date">43831</string>
     <string name="hs_rv_month">अप्रैल</string>
-    <string name="hs_rv_comment">अंतिम प्रसव 20 मिनट पहले हुआ था</string>
-    <string name="homescreen_bs_alert">Kyc सत्यापन नहीं किया गया है, पूरा करने के लिए यहां क्लिक करें</string>
+    <string name="homescreen_bs_alert">Kyc सत्यापन नहीं किया गया है, पूरा करने के लिए यहां क्लिक करें।</string>
     <string name="homescreen_bs_features">विशेषताएं</string>
     <string name="select_skill">कौशल का चयन करें</string>
     <string name="add_mother_tongue_text">मेरी मातृभाषा के रूप में जोड़ें</string>
@@ -205,14 +202,11 @@
     <string name="error_empty_mandatory_fields">* कृपया अनिवार्य फ़ील्ड भरें</string>
     <string name="about_me_hint">हमें अपने बारे में विस्तार से बताएं</string>
     <string name="delete_confirmation_text">क्या आप सुनिश्चित रूप से इस आइटम को मिटाना चाहते हैं?</string>
-    <string name="if_otp_not_received">यदि आपने OTP प्राप्त नहीं किया है,</string>
+    <string name="if_otp_not_received">"यदि आपने OTP प्राप्त नहीं किया है,"</string>
     <string name="resend">पुन: भेजें</string>
     <string name="upcoming_gig">आगामी गिग</string>
     <string name="features">विशेषताएं</string>
-    <string name="learning">सीखना</string>
-    <string name="assessment">मूल्यांकन</string>
-    <string name="kyc_verification_not_done">Kyc सत्यापन नहीं किया गया है, पूरा करने के लिए यहां क्लिक करें</string>
-    <string name="video_resume_pending">आपका वीडियो फिर से शुरू हो रहा है, पूरा करने के लिए यहां क्लिक करें</string>
+    <string name="kyc_verification_not_done">Kyc सत्यापन नहीं किया गया है, पूरा करने के लिए यहां क्लिक करें।</string>
     <string name="next">आगे</string>
     <string name="cover_error_text">* पाठ 150 अक्षरों से अधिक नहीं होना चाहिए</string>
     <string name="update_contact_details">संपर्क विवरण अपडेट करें</string>
@@ -230,7 +224,7 @@
     <string name="preferred_distance">पसंदीदा दूरी</string>
     <string name="earning">कमाई</string>
     <string name="submit_documents">दस्तावेज जमा करें</string>
-    <string name="giger_verification_desc">हमें आपकी जानकारी को सत्यापित करने की आवश्यकता है</string>
+    <string name="giger_verification_desc">हमें आपकी जानकारी को सत्यापित करने की आवश्यकता है। कृपया giger सत्यापन की प्रक्रिया के लिए नीचे दिए गए दस्तावेज़ जमा करें</string>
     <string name="selfie_video">सेल्फी वीडियो *</string>
     <string name="tap_to_upload">अपलोड करें</string>
     <string name="bank_details">बैंक विवरण</string>
@@ -238,8 +232,8 @@
     <string name="aadhar_card">आधार कार्ड *</string>
     <string name="pan_card">पैन कार्ड</string>
     <string name="do_you_have_pan_card">क्या आपके पास पैन कार्ड है?</string>
-    <string name="yes_i_have_pan_card">हां, मेरे पास पैन कार्ड है</string>
-    <string name="no_i_don_t_have_pan_card">नहीं, मेरे पास पैन कार्ड नहीं है</string>
+    <string name="yes_i_have_pan_card">हां, मेरे पास पैन कार्ड है।</string>
+    <string name="no_i_don_t_have_pan_card">नहीं, मेरे पास पैन कार्ड नहीं है।</string>
     <string name="please_upload_your_pan">कृपया अपने पैन कार्ड को \nवेरिफिकेशन के लिए अपलोड करें</string>
     <string name="do_you_have_driving_license">क्या आपके पास ड्राइविंग लाइसेंस है?</string>
     <string name="yes_i_have_driving_license">हां, मेरे पास ड्राइविंग लाइसेंस है</string>
@@ -253,7 +247,7 @@
     <string name="upload_aadhar_card_front_side">आधार कार्ड अपलोड करें (सामने)</string>
     <string name="upload_your_aadhar_card">कृपया अपने आधार कार्ड को \n वेरिफिकेशन के लिए अपलोड करें</string>
     <string name="upload_aadhar_card_back_side">आधार कार्ड अपलोड करें (पिछला पक्ष)</string>
-    <string name="reupload"><u>Reupload</u></string>
+    <string name="reupload"><u> पुन: अपलोड </u></string>
     <string name="save_all_caps">सहेजें</string>
     <string name="upload_pan_card">पैन कार्ड अपलोड करें</string>
     <string name="please_confirm_the_following_information">कृपया निम्न जानकारी की पुष्टि करें</string>
@@ -261,7 +255,7 @@
     <string name="father_s_name_with_colon">पिता का नाम :</string>
     <string name="date_of_birth">जन्म की तारीख:</string>
     <string name="pan_with_colon">स्थायी खाता संख्या:</string>
-    <string name="yes_i_confirm_the_data_is_correct">हां, मैं पुष्टि करता हूं कि डेटा सही है</string>
+    <string name="yes_i_confirm_the_data_is_correct">हां, मैं पुष्टि करता हूं कि डेटा सही है।</string>
     <string name="why_do_we_need_this">हमें इसकी आवश्यकता क्यों है?</string>
     <string name="license_number_with_colon">लाइसेंस संख्या :</string>
     <string name="address_with_colon">पता:</string>
@@ -275,7 +269,7 @@
     <string name="cif_number_with_colon">CIF नंबर:</string>
     <string name="account_number_with_colon">खाता संख्या:</string>
     <string name="ifsc_with_colon">IFSC:</string>
-    <string name="upload_bank_passbook">बैंक पासबुक अपलोड करें (मुखपृष्ठ)</string>
+    <string name="upload_bank_passbook">चेक / बैंक पासबुक अपलोड करें (फ्रंट पेज)</string>
     <string name="upload_bank_passbook_sublabel">कृपया \ n वेरिफिकेशन के लिए अपनी बैंक पासबुक अपलोड करें</string>
     <string name="edit">एडिट</string>
     <string name="name">नाम</string>
@@ -306,24 +300,19 @@
     <string name="uploaded">अपलोड किए गए</string>
     <string name="let_s_go">चलो चलते हैं</string>
     <string name="thank_you">धन्यवाद !</string>
-    <string name="documents_uploaded_long">जैसे-जैसे आपके दस्तावेज़ सत्यापित होते जाएंगे, आप अपने गिग्स को शुरू कर पाएंगे</string>
-    <string name="sample_info"><b>Lorem Ipsum</b> is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</string>
-    <string name="money_received_info"><b>Money Received:</b> The amount received in the gigforce wallet from the client for the completed gigs.</string>
-    <string name="money_withdrawn_info"><em>Money Withdrawn:</em> The amount transferred from the gigforce wallet to the giger’s account.</string>
-    <string name="earning_info"><b>Earning:</b> Sum of the amount received for gigs completed in this month + Sum of the amount yet to be received for completed gigs in this month</string>
-    <string name="wallet_balance_info">वॉलेट बैलेंस: आज तक गिगफोलेट वॉलेट में प्राप्त राशि का योग - आज तक किसी भी स्थानांतरण के माध्यम से वॉलेट से घटाया गया राशि का योग</string>
-    <string name="monthly_earning_info"><b>Monthly earning:</b> Total of the amount received in a month  and the amount pending to be paid for completed gigs. </string>
-    <string name="monthly_goal_info"><b>Monthly goal or monthly earning goal:</b> a goal set by the user for monthly earning. This is the basis for showing giger’s </string>
-    <string name="payment_due_info"><b>Payment disputed / Payment due:</b> The amount to be paid for a completed gig that is not approved by the client.</string>
-    <string name="invoice_info"><b>Invoice:</b> The receipt of completion of a gig and acknowledgment of the payment to be made to the giger.</string>
-    <string name="invoice_generated_info"><b>Invoice generated:</b> The gig where a receipt of completion of a gig and acknowledgment of the payment to be made to the giger.</string>
-    <string name="pending_invoice_info"><b>Pending invoice:</b> The gigs which are completed but the invoice is not generated.</string>
-    <string name="please_let_us_know_more_about_your_gig">कृपया हमें अपने गिग के बारे में अधिक जानकारी दें</string>
-    string>
-    <string name="gig_location">टमटम का स्थान</string>
+    <string name="sample_info"><b> लोरम इप्सम </b> केवल मुद्रण और टंकण उद्योग का डमी पाठ है। लोरम इप्सम 1500 के बाद से कभी भी उद्योग का मानक डमी पाठ रहा है, जब एक अज्ञात प्रिंटर ने एक प्रकार की गली ली और एक प्रकार की पुस्तक बनाने के लिए इसे तराशा।</string>
+    <string name="money_received_info"><b> धन प्राप्त: </b> पूर्ण किए गए गिग्स के लिए ग्राहक से गिगफोलेट बटुए में प्राप्त राशि।</string>
+    <string name="money_withdrawn_info"><em> धन की निकासी: </em> वह राशि जो गिगफोलेट वॉलेट से बाघ के खाते में स्थानांतरित की जाती है।</string>
+    <string name="earning_info"><b> कमाई: </b> इस महीने में पूरी हुई राशि के लिए प्राप्त राशि का योग + इस महीने में पूरी की गई राशि के लिए प्राप्त होने वाली राशि का योग</string>
+    <string name="monthly_earning_info"><b> मासिक आय: </b> एक महीने में प्राप्त होने वाली कुल राशि और पूर्ण की गई राशि के भुगतान के लिए लंबित राशि।</string>
+    <string name="monthly_goal_info"><b> मासिक लक्ष्य या मासिक आय लक्ष्य: </b> मासिक कमाई के लिए उपयोगकर्ता द्वारा निर्धारित लक्ष्य। यह giger दिखाने का आधार है</string>
+    <string name="payment_due_info"><b> भुगतान विवादित / भुगतान देय: </b> ग्राहक द्वारा अनुमोदित एक पूर्ण टमटम के लिए भुगतान की जाने वाली राशि।</string>
+    <string name="invoice_info"><b> इनवॉइस: </b> टमटम पूरा होने की रसीद और भुगतान करने की स्वीकृति पावती के लिए।</string>
+    <string name="invoice_generated_info"><b> उत्पन्न चालान: </b> वह टमटम जहां टमटम की प्राप्ति की एक रसीद होती है और भुगतान करने की पावती की सूचना दी जाती है।</string>
+    <string name="pending_invoice_info"><b> लंबित इनवॉइस: </b> वे गिग्स जो पूर्ण हो गए हैं, लेकिन इनवॉइस उत्पन्न नहीं हुआ है।</string>
+    <string name="please_let_us_know_more_about_your_gig">कृपया हमें अपने गिग के बारे में अधिक जानकारी दें।</string>
     <string name="pan_card_image">पैन कार्ड की छवि</string>
-    <string name="please_provide_following_details">कृपया निम्नलिखित विवरण प्रदान करें</string>
-    string>
+    <string name="please_provide_following_details">कृपया निम्नलिखित विवरण प्रदान करें।</string>
     <string name="back_button">पिछला बटन</string>
     <string name="assessment_dialog_background">मूल्यांकन संवाद पृष्ठभूमि</string>
     <string name="good_luck">शुभ लाभ!!!</string>
@@ -365,8 +354,7 @@
     <string name="ifsc_code">IFSC कोड:</string>
     <string name="bank_name_with_colon">बैंक का नाम :</string>
     <string name="bank_account_no">बैंक खाता नम्बर :</string>
-    <string name="please_provide_the_following_information">निम्नलिखित जानकारी प्रदान करें</string>
-    string>
+    <string name="please_provide_the_following_information">निम्नलिखित जानकारी प्रदान करें।</string>
     <string name="aadhar_number">आधार संख्या:</string>
     <string name="state_pascal_case">राज्य</string>
     <string name="driving_license_number">ड्राइविंग लाइसेंस नंबर *</string>
@@ -376,11 +364,9 @@
     <string name="dl_no_w_colon">डीएल नंबर:</string>
     <string name="pan_number">पैन नंबर *</string>
     <string name="video_recorded">वीडियो रिकॉर्ड किया गया</string>
-    <string name="why_do_we_need_this_pan">प्रोफाइल सत्यापन के लिए पैन कार्ड अनिवार्य है</string>
-    string>
+    <string name="why_do_we_need_this_pan">प्रोफाइल सत्यापन के लिए पैन कार्ड अनिवार्य है। यह आपके नाम और जन्म तिथि को सत्यापित करने में मदद करता है और आपके बटुए को भुगतान करने में भी मदद करता है।</string>
     <string name="alert">चेतावनी</string>
-    <string name="you_are_reuploading_pan_card">आप अपना पैन विवरण पुनः अपलोड कर रहे हैं</string>
-    string>
+    <string name="you_are_reuploading_pan_card">आप अपना पैन विवरण पुनः अपलोड कर रहे हैं। उन्हें एक बार फिर से सत्यापित किया जाएगा, जिसमें 7 दिन लग सकते हैं।</string>
     <string name="enter_valid_pan">मान्य पैन कार्ड नंबर दर्ज करें</string>
     <string name="click_select_pan_image">सबसे पहले अपनी पैन कार्ड छवि पर क्लिक करें या चयन करें</string>
     <string name="pan_details_uploaded">पैन कार्ड विवरण अपलोड किया गया</string>
@@ -391,19 +377,10 @@
     <string name="why_we_need_this_aadhar">प्रोफ़ाइल सत्यापन के लिए आधार या ड्राइवर का लाइसेंस या तो अपलोड करना अनिवार्य है</string>
     string>
     <string name="aadhar_card_details_uploaded">आधार कार्ड विवरण अपलोड किया गया</string>
-    <string name="you_are_reuploading_aadhar">आप अपने आधार विवरण को पुनः अपलोड कर रहे हैं</string>
-    string>
-    <string name="select_or_capture_both_sides_of_aadhar">आधार कार्ड के दोनों किनारों को चुनें या कैप्चर करें</string>
-    <string name="enter_valid_aadhar_no">मान्य आधार कार्ड सं</string>
+    <string name="you_are_reuploading_aadhar">आप अपने आधार विवरण को पुनः अपलोड कर रहे हैं। उन्हें एक बार फिर से सत्यापित किया जाएगा, जिसमें 7 दिन लग सकते हैं।</string>
     <string name="video_uploaded">वीडियो अपलोड किया गया</string>
-    <string name="why_we_need_this_dl">प्रोफ़ाइल सत्यापन के लिए ड्राइवर का लाइसेंस या आधार कार्ड अपलोड करना अनिवार्य है</string>
-    string>
-    <string name="dl_image_front_side">ड्राइविंग लाइसेंस (फ्रंट साइड)</string>
-    <string name="dl_image_back_side">ड्राइविंग लाइसेंस (बैक साइड)</string>
-    <string name="dl_details_uploaded">ड्राइविंग लाइसेंस विवरण अपलोड किया गया</string>
-    <string name="reuploading_driving_license">आप अपने ड्राइविंग लाइसेंस के विवरण को फिर से अपलोड कर रहे हैं</string>
-    string>
-    <string name="capture_both_sides_dl">ड्राइविंग लाइसेंस के दोनों किनारों को चुनें या कब्जा करें</string>
+    <string name="why_we_need_this_dl">प्रोफ़ाइल सत्यापन के लिए ड्राइवर का लाइसेंस या आधार कार्ड अपलोड करना अनिवार्य है। ड्राइविंग लाइसेंस आपके नाम, जन्म तिथि, पते और अन्य विवरणों को सत्यापित करने में मदद करता है।</string>
+     <string name="dl_details_uploaded">ड्राइविंग लाइसेंस विवरण अपलोड किया गया</string>
     <string name="enter_valid_dl">वैध ड्राइविंग लाइसेंस दर्ज करें</string>
     <string name="select_dl_state">ड्राइविंग लाइसेंस राज्य चुनें</string>
     <string name="why_we_need_this_bank">बैंक विवरण को स्वीकृत करने और आपके खाते में गिग्स से भुगतान भेजने के लिए अनिवार्य है</string>
@@ -411,18 +388,14 @@
     <string name="enter_valid_ifsc">मान्य ifSC कोड दर्ज करें</string>
     <string name="enter_bank_name">बैंक का नाम दर्ज करें</string>
     <string name="bank_name_too_short">बैंक का नाम बहुत छोटा है</string>
-    <string name="enter_valid_acc_no">एक वैध खाता संख्या दर्ज करें</string>
-    <string name="click_or_select_bank_passbook">पहले अपनी पासबुक छवि पर क्लिक करें या चयन करें</string>
-    <string name="your_are_reuploading_bank_details">आप अपने बैंक विवरण पुनः अपलोड कर रहे हैं</string>
-    string>
+    <string name="your_are_reuploading_bank_details">आप अपने बैंक विवरण पुनः अपलोड कर रहे हैं। उन्हें एक बार फिर से सत्यापित किया जाएगा, जिसमें 7 दिन लग सकते हैं।</string>
     <string name="bank_details_uploaded">बैंक विवरण अपलोड किया गया</string>
     <string name="under_verification">सत्यापन के तहत</string>
     <string name="verifying">सत्यापन</string>
     <string name="valid_upto">तक वैध है :</string>
     <string name="giger_since">कब से है</string>
     <string name="gig_id">गिग आईडी:</string>
-    <string name="gigforce_pvt_ltd">गिगफोर्स प्रा</string>string>
-    <string name="issued_on">जारी करनेका दिन</string>
+    <string name="gigforce_pvt_ltd">गिगफोर्स प्रा। लिमिटेड</string>
     <string name="go_to_settings">सेटिंग्स में जाओ</string>
     <string name="camera_and_audtio_permission_required_to_access_camera">कैमरा और ऑडियो अनुमति वीडियो रिकॉर्ड करने के लिए आवश्यक है</string>
     <string name="select_start_date">कृपया प्रारंभ तिथि पहले चुनें</string>
@@ -453,19 +426,14 @@
     <string name="ques">सवाल</string>
     <string name="answer_the_ques">कृपया जारी रखने के लिए प्रश्न का उत्तर दें !!!</string>
     <string name="scenario">परिदृश्य:</string>
-    <string name="record_a_10_second_video_of_yourself_nface_the_camera_and_say_hi_i_m_your_name_and_i_like_to_do_mention_2_things_you_like_to_do_selfie_video">अपने आप की एक 10 सेकंड का वीडियो रिकॉर्ड करें और कैमरे के सामने कहें "हाय, आई एम (आपका नाम) और मैं ऐसा करना पसंद करता हूं (2 चीजें जो आप करना चाहते हैं उनका उल्लेख करें)</string>
+    <string name="record_a_10_second_video_of_yourself_nface_the_camera_and_say_hi_i_m_your_name_and_i_like_to_do_mention_2_things_you_like_to_do_selfie_video">अपने आप को एक 10 सेकंड का वीडियो रिकॉर्ड करें और कैमरे का सामना करें "हाय, आई एम (आपका नाम) और मैं ऐसा करना पसंद करता हूं (2 चीजें जो आप करना चाहते हैं उनका उल्लेख करें)</string>
     string>
     <string name="pan_number_eg_bttps4444a">पैन नंबर (जैसे: BTTPS4444A)</string>
-    <string name="aadhar_number_eg_444433332222">आधार संख्या * (उदाहरण: ४४४४३३३३२२२२)</string>
-    <string name="driving_license_number_n_eg_if_the_driving_licence_number_is_rj_13_dlc_12_123456_rj1320120123456">ड्राइविंग लाइसेंस नंबर * (डीएल के स्वीकृत प्रारूप इस प्रकार हैं: RJ0520091048627</string>
-    string>
+    <string name="driving_license_number_n_eg_if_the_driving_licence_number_is_rj_13_dlc_12_123456_rj1320120123456">ड्राइविंग लाइसेंस नंबर * (डीएल के स्वीकृत प्रारूप निम्नानुसार हैं: RJ0520091048627। अन्य प्रारूपों के लिए कृपया मदद के लिए अपने पर्यवेक्षक को कॉल करें)</string>
     <string name="ifsc_eg_sbin0000572_bkid0000048">IFSC * (उदाहरण: SBIN0000572, BKID0000048)</string>
-    <string name="account_number_eg_10_16_digit_number_30000011111111111">खाता संख्या * (उदाहरण: 10-16 अंक संख्या: 30000011111111111)</string>
-    <string name="please_note_that_you_are_not_allowed_to_change_the_mobile_number_you_logged_in_with">कृपया ध्यान दें कि आपके द्वारा लॉग इन किए गए मोबाइल नंबर को बदलने की अनुमति नहीं है</string>
-    string>
+    <string name="please_note_that_you_are_not_allowed_to_change_the_mobile_number_you_logged_in_with">कृपया ध्यान दें कि आपके द्वारा लॉग इन किए गए मोबाइल नंबर को बदलने की अनुमति नहीं है।</string>
     <string name="email_madatory">ईमेल</string>
-    <string name="phone_mandatory">फ़ोन:</string>
-    <string name="assessment_colon">मूल्यांकन:</string>
+    <string name="phone_mandatory">फ़ोन</string>
     <string name="total_questions">कुल सवाल</string>
     <string name="time_duration">समय अवधि</string>
     <string name="level">स्तर</string>
@@ -473,43 +441,40 @@
     <string name="questions">प्रशन</string>
     <string name="and_from">और यहां ये</string>
     <string name="that">उस</string>
-    <string name="answer_is_correct">उत्तर सही है</string>string>
+    <string name="answer_is_correct">उत्तर सही है।</string>
     <string name="attempt">प्रयास</string>
     <string name="is_string">है</string>
     <string name="seconds">सेकंड</string>
-    <string name="assessment_not_completed">मूल्यांकन सफलतापूर्वक पूरा नहीं हुआ</string>
+    <string name="secs">सेकेंड</string>
     <string name="hundred_percent">1</string>
-    <string name="woe_you_are_correct">वाह ! तुम सही हो</string>string>
-    <string name="you_are_incorrect">उफ़! आप गलत हैं</string>string>
-    <string name="time_is_up">समय समाप्त!!!!!</string>
     <string-array name="india_banks">
         <item>ABHYUDAYA CO-OP बैंक लिमिटेड</item>
-        <item>अब्बू डीएचएबी वाणिज्यिक बैंक</item>
+        <item>अबु धाबी वाणिज्यिक बैंक</item>
         <item>अकोला जिले के केन्द्रीय सहकारी बैंक</item>
         <item>अकोला जनता वाणिज्यिक सहकारी बैंक</item>
         <item>ALLAHABAD बैंक</item>
-        <item>ALMORA शहरी सहकारी बैंक लिमिटेड</item>string>
-        <item>अंधरा बैंक</item>
-        <item>अंधरा प्रतापी ग्रामीण बैंक</item>
+        <item>ALMORA शहरी सहकारी बैंक लिमिटेड</item>
+        <item>आंध्र बैंक</item>
+        <item>आंध्र प्रतापी ग्रामीण बैंक</item>
         <item>APNA SAHAKARI बैंक लिमिटेड</item>
-        <item>ऑस्ट्रिया और न्यू ज़ीलैंड बैंक ग्रुप लिमिटेड</item>string>
+        <item>ऑस्ट्रेलिया और न्यू ज़ीलैंड बैंक ग्रुप लिमिटेड</item>
         <item>ऐक्सिस बैंक</item>
-        <item>बैंक आंतरिक भारत</item>
+        <item>आंतरिक भारत बैंक</item>
         <item>बैंक ऑफ अमरीका</item>
         <item>बहरीन और कुवैत का बैंक</item>
-        <item>बारकोड का बैंक</item>
+        <item>बड़ौदा का बैंक</item>
         <item>CEYLON का बैंक</item>
         <item>बैंक ऑफ इंडिया</item>
         <item>महराष्ट्र का बैंक</item>
-        <item>टोक्यो-मित्सुबिशी UFJ लिमिटेड का बैंक</item>string>
+        <item>टोक्यो-मित्सुबिशी UFJ लिमिटेड का बैंक</item>
         <item>BARCLAYS बैंक पीएलसी</item>
         <item>बेसिन कैथोलिक CO-OP बैंक लिमिटेड</item>
         <item>BHARATIYA MAHILA बैंक लिमिटेड</item>
         <item>बी एन पी परिबास</item>
-        <item>कैलेंडर बैंक</item>
+        <item>Calyon बैंक</item>
         <item>केनरा बैंक</item>
-        <item>राजधानी स्थानीय क्षेत्र बैंक लिमिटेड</item>string>
-        <item>कैथोलिक क्षेत्रीय बैंक लिमिटेड</item>string>
+        <item>राजधानी स्थानीय क्षेत्र बैंक लिमिटेड</item>
+        <item>कैथोलिक क्षेत्रीय बैंक लिमिटेड</item>
         <item>भारत का केन्द्रीय बैंक</item>
         <item>CHINATRUST वाणिज्यिक बैंक</item>
         <item>CITIBANK एनए</item>
@@ -542,11 +507,11 @@
         <item>जालगांव जनशक्ति सहकारी बैंक लि</item>
         <item>जनकल्याण सहकारी बैंक लिमिटेड</item>
         <item>जनसेवा सहकारी बैंक (बोरिवली) लि</item>
-        <item>जनसेवा सहकारी बैंक लि</item>string>
+        <item>जनसेवा सहकारी बैंक लि</item>
         <item>जनशक्ति सहकारी बैंक लिमिटेड (PUNE)</item>
-        <item>JPMORGAN चेस बैंक एन</item>string>
-        <item>कल्लनपन्न अवाड इच जनत स बंक</item>
-        <item>कपोल सीओ ओपी बैंक</item>
+        <item>JP MORGAN चेस बैंक</item>
+        <item>KALLAPPANNA AWADE ICH जनत बैंक</item>
+        <item>कपोल co-op बैंक</item>
         <item>कर्नाटक बैंक लिमिटेड</item>
         <item>KARNATAKA VIKAS GRAMEENA बैंक</item>
         <item>करूर वैश्य बैंक</item>
@@ -556,11 +521,11 @@
         <item>महराष्ट्र राज्य सहकारी बैंक</item>
         <item>MASHREQBANK PSC</item>
         <item>MIZUHO कॉर्पोरेट बैंक लिमिटेड</item>
-        <item>मुंबई डिस्ट्रिक्ट सेंट्रल CO-OP</item>string>
+        <item>मुंबई डिस्ट्रिक्ट सेंट्रल CO-OP</item>
         <item>नागपुर नागरी सहकारी बैंक लि</item>
-        <item>राष्ट्रीय ऑस्ट्रिया बैंक</item>
-        <item>नई भारत सहकारी बैंक लि</item>string>
-        <item>एनकेजीएसबी सीओ-ओपी बैंक लि</item>
+        <item>राष्ट्रीय ऑस्ट्रेलिया बैंक</item>
+        <item>नई भारत सहकारी बैंक लि</item>
+        <item>एनकेजीएसबी CO-OP बैंक लि</item>
         <item>उत्तर मालाबार ग्रामीण बैंक</item>
         <item>नुतन नागरकी सहकारी बैंक लि</item>
         <item>ओमान इंटरनेशनल बैंक एसएओजी</item>
@@ -568,80 +533,80 @@
         <item>PARSIK JANATA SAHAKARI बैंक लिमिटेड</item>
         <item>प्रथमा बैंक</item>
         <item>प्रधान सहकारी बैंक लिमिटेड</item>
-        <item>PUNJAB और MAHARASHTRA CO-OP बैंक लिमिटेड</item>string>
-        <item>पुंजब एंड सेंड बैंक</item>
+        <item>PUNJAB और MAHARASHTRA CO-OP बैंक लिमिटेड</item>
+        <item>पुंजब एंड सिंध बैंक</item>
         <item>पूंजाब नेशनल बैंक</item>
         <item>रेबॉब इंटरनेशनल (CCRB)</item>
-        <item>RAJGURUNAGAR SAHAKARI बैंक लिमिटेड</item>string>
+        <item>RAJGURUNAGAR SAHAKARI बैंक लिमिटेड</item>
         <item>राजकोट नागर सहकारी बैंक लिमिटेड</item>
         <item>भारतीय रिजर्व बैंक</item>
-        <item>Sberbank</item>
+        <item>SBER BANK</item>
         <item>SHINHAN बैंक</item>
         <item>SHRI CHHATRAPATI RAJARSHI SHAHU URBAN CO-OP बैंक लिमिटेड</item>
         <item>सोसाइटी जनरल</item>
-        <item>सोलापुर जनता सहकारी बैंक लि</item>string>
+        <item>सोलापुर जनता सहकारी बैंक लि</item>
         <item>दक्षिण भारतीय बैंक</item>
         <item>स्टैंडर्ड चार्टर्ड बैंक</item>
         <item>बीकानेर और जयपुर के स्टेट बैंक</item>
         <item>स्टेट बैंक ऑफ हैदराबाद</item>
         <item>भारतीय स्टेट बैंक</item>
-        <item>स्टेट बैंक ऑफ मौरिस लि</item>
-        <item>राज्य सरकार का राज्य बैंक</item>
+        <item>स्टेट बैंक ऑफ मॉरीशस लि</item>
+        <item>स्टेट बैंक ऑफ मैसूर</item>
         <item>स्टेट बैंक ऑफ पटियाला</item>
         <item>त्रावणकोर के राज्य बैंक</item>
         <item>सुमितोमो मित्सुई बैंक कॉर्पोरेशन</item>
         <item>सिंडिकेट बैंक</item>
         <item>तमिलाड मर्केंटाइल बैंक लि</item>
         <item>थान भरत सहकारी बैंक लि</item>
-        <item>द ए</item>string>
-        <item>AHMEDABAD मर्सेन्टाइल सहकारी बैंक लिमिटेड</item>string>
-        <item>अंधरा प्रधान राज्य सहकारी बैंक लि</item>
+        <item>द ए</item>
+        <item>AHMEDABAD मर्सेन्टाइल सहकारी बैंक लिमिटेड</item>
+        <item>आंध्र प्रदेश सहकारी बैंक लि</item>
         <item>नोवा स्कॉशिया का बैंक</item>
         <item>RAJASTHAN लिमिटेड का बैंक</item>
         <item>भारत सहकारी बैंक (मुंबई) लि</item>
-        <item>COSMOS सहकारी बैंक लिमिटेड</item>string>
-        <item>दिल्ली राज्य सहकारी बैंक लि</item>string>
+        <item>COSMOS सहकारी बैंक लिमिटेड</item>
+        <item>दिल्ली राज्य सहकारी बैंक लि</item>
         <item>फेडरल बैंक लि</item>
         <item>GADCHIROLI DISTRICT CENTRAL सहकारी बैंक लि</item>
-        <item>महान बॉम्बे सीओ-ओपी</item>string>
+        <item>महान बॉम्बे सीओ-ओपी</item>
         <item>गुजरात स्टेट को-ऑपरेटिव बैंक लिमिटेड</item>
-        <item>जालौन के लोग सीओ-ओपी बैंक</item>
+        <item>JALGAON PEOPLES CO-OP बैंक</item>
         <item>जम्मू और कश्मीर बैंक लि</item>
-        <item>KALUPUR वाणिज्यिक कंपनी</item>string>
-        <item>कल्याण जन सहचरी बैंक लिमिटेड</item>string>
+        <item>KALUPUR वाणिज्यिक कंपनी</item>
+        <item>कल्याण जन सहचरी बैंक लिमिटेड</item>
         <item>कांगड़ा सेंट्रल को-ऑपरेटिव बैंक लिमिटेड</item>
         <item>कांगड़ा सहकारी बैंक लि</item>
         <item>KARAD URBAN CO-OP बैंक लिमिटेड</item>
-        <item>KARNATAKA स्टेट एपेक्स कॉप</item>string>
+        <item>KARNATAKA स्टेट एपेक्स कॉप</item>
         <item>LAKSHMI VILAS बैंक लिमिटेड</item>
         <item>MEHSANA शहरी सहकारी बैंक लिमिटेड</item>
         <item>मुंबई सीओ सहकारी बैंक लिमिटेड मुंबई</item>
         <item>NAINITAL बैंक लिमिटेड</item>
-        <item>नैसिक MERCHANTS CO-OP बैंक लिमिटेड</item>string>
-        <item>राजस्थानी राज्य सहकारी बैंक लि</item>string>
+        <item>नासिक MERCHANTS CO-OP बैंक लिमिटेड</item>
+        <item>राजस्थानी राज्य सहकारी बैंक लि</item>
         <item>रत्नाकर बैंक लि</item>
-        <item>स्कॉटलैंड के रॉयल बैंक एन</item>string>
-        <item>SAHBRAO DESHMUKH CO-OP</item>string>
+        <item>स्कॉटलैंड के रॉयल बैंक एन</item>
+        <item>SAHBRAO DESHMUKH CO-OP</item>
         <item>सरस्वत सहकारी बैंक लिमिटेड</item>
         <item>सेवा विकास सहकारी बैंक लिमिटेड (SVB)</item>
-        <item>श्रीराम विस्टा सहकारी सहकारी बैंक लि</item>
-        <item>सुरत डिस्ट्रिक्ट सीओ सहकारी बैंक लि</item>string>
+        <item>श्रीराम विट्ठल सहकारी सहकारी बैंक लि</item>
+        <item>सुरत डिस्ट्रिक्ट CO सहकारी बैंक लि</item>
         <item>SURAT PEOPLES CO-OP बैंक लिमिटेड</item>
-        <item>THE SUTEX CO</item>string>
+        <item>THE SUTEX CO</item>
         <item>TAMILNADU राज्य सहकारी सहकारी बैंक लिमिटेड</item>
-        <item>थेन डिस्ट्रिक्ट सेंट्रल CO-OP बैंक लिमिटेड</item>
-        <item>तीन जनहित सहकारी बैंक लिमिटेड</item>
-        <item>वर्चस्व सीओ-ओपी</item>string>
-        <item>विशाखेश्वर सहकारी बैंक लि</item>string>
-        <item>वेस्ट बैंक स्टेट सहकारी बैंक लिमिटेड</item>
-        <item>TJSB SAHAKARI बैंक लिमिटेड</item>string>
-        <item>टमकोर अनाज मर्चेंट सहकारी बैंक लि</item>string>
+        <item>ठाणे डिस्ट्रिक्ट सेंट्रल CO-OP बैंक लिमिटेड</item>
+        <item>ठाणे जनहित सहकारी बैंक लिमिटेड</item>
+        <item>VARACHHA सीओ-ओपी</item>
+        <item>विश्वेश्वर सहकारी बैंक लि</item>
+        <item>पश्चिम बंगाल राज्य सहकारी बैंक लिमिटेड</item>
+        <item>TJSB SAHAKARI बैंक लिमिटेड</item>
+        <item>टमकोर अनाज मर्चेंट सहकारी बैंक लि</item>
         <item>यूबीएस एजी</item>
         <item>यूको बैंक</item>
         <item>भारत की यूनिअन बैंक</item>
         <item>यूनाइटेड बैंक ऑफ इंडिया</item>
         <item>संयुक्त प्रवासी बैंक</item>
-        <item>VASAI VIKAS SAHAKARI बैंक लिमिटेड</item>string>
+        <item>VASAI VIKAS SAHAKARI बैंक लिमिटेड</item>
         <item>विजय बंक</item>
         <item>वेस्ट बैंक स्टेट सहकारी बैंक</item>
         <item>वेस्टपैक बैंकिंग कॉर्पोरेशन</item>
@@ -717,8 +682,7 @@
     <string name="add_hashtags">हैशटैग जोड़ें</string>
     <string name="err_driving_license">त्रुटि: अपलोड की गई छवि ड्राइविंग लाइसेंस छवि नहीं है</string>
     <string name="recommended_learnings">अनुशंसित जानें</string>
-    <string name="most_popular_learnings">सर्वाधिक लोकप्रिय सीख</string>
-    <string name="achieve_retail_goal">अपने खुदरा लक्ष्य बाजार को कैसे प्राप्त करें?</string>
+    <string name="achieve_retail_goal">अपने खुदरा बाजार लक्ष्य को कैसे प्राप्त करें?</string>
     <string name="industry_based">उद्योग आधारित</string>
     <string name="apply_driving_license">ड्राइविंग लाइसेंस के लिए आवेदन कैसे करें?</string>
     <string name="role_based">भूमिका आधारित</string>
@@ -735,8 +699,8 @@
     <string name="housekeeping">गृह व्यवस्था</string>
     <string name="clean_floors">विभिन्न मंजिलों को साफ करने के लिए सही अभिकर्मक का चयन?</string>
     <string name="lessons">पाठ</string>
-    <string name="invite_friends">मित्रों को आमंत्रित करें</string>string>
-    <string name="refresh">Referesh</string>string>
+    <string name="invite_friends">मित्रों को आमंत्रित करें...</string>
+    <string name="refresh">Refresh ...</string>
     <string name="contacts">संपर्क</string>
     <string name="last_seen_at">आखरी बार देखा गया</string>
     <string name="na">NA</string>
@@ -744,11 +708,8 @@
     <string name="not_working">काम नहीं कर रहा</string>
     <string name="marked_working">काम करना चिह्नित</string>
     <string name="sure_working_on_this_day">क्या आप वाकई इस दिन काम नहीं करना चाहते हैं?</string>
-    <string name="screen_pending_show_gigs">इस दिन सूअरों की सूची दिखाने के लिए स्क्रीन लंबित है</string>
-    string>
-    <string name="alright_no_new_gigs_assigned_on_this_day">ठीक है, इस दिन आपको कोई नया जिग सौंपा नहीं जाएगा</string>
-    string>
-    <string name="want_to_decline">आपको सौंपा गया है</string>string>
+    <string name="alright_no_new_gigs_assigned_on_this_day">ठीक है, इस दिन आपको कोई नया जिग सौंपा नहीं जाएगा। हालाँकि, आपके पास \ "है</string>
+    <string name="want_to_decline">आपको सौंपा गया है। यदि आप इसे अस्वीकार करना चाहते हैं तो कृपया इसे अलग से करें।</string>
     <string name="hello">हैलो!</string>
     <string name="welcome_to_gigforce">Gigforce में आपका स्वागत है!</string>
     <string name="let_s_talk_about_what_s_a_gig_and_how_do_you_start_working_as_a_giger_at_gigforce">चलो क्या एक टमटम के बारे में बात करते हैं और आप कैसे एक खेल के रूप में काम करना शुरू करते हैं</string>
@@ -765,8 +726,7 @@
     <string name="set_your_preferences">अपनी प्राथमिकताएँ निर्धारित करें</string>
     <string name="add_your_preferences_to_get_gigs_that_suit_you">अपनी पसंद को जोड़ने के लिए अपनी पसंद के अनुसार जिग्स लें</string>
     <string name="help">मदद</string>
-    <string name="see_more">और देखें</string>
-    <string name="browse_all_help_topic">सभी सहायता विषय ब्राउज़ करें</string>
+    <string name="see_more_underline"><u> और दिखाएं </u></string>
     <string name="contact_us">संपर्क करें</string>
     <string name="invite_your_contacts">अपने संपर्कों को आमंत्रित करें</string>
     <string name="username">उपयोगकर्ता नाम</string>
@@ -782,7 +742,7 @@
     <string name="yes">हाँ</string>
     <string name="no">नहीं</string>
     <string name="none">कोई नहीं</string>
-    <string name="weekday">कार्य दिवस</string>
+    <string name="weekday">काम करने के दिन</string>
     <string name="_00_04days">00-04days</string>
     <string name="weekends">सप्ताहांत</string>
     <string name="rs">रुपये</string>
@@ -794,7 +754,7 @@
     <string name="eight_to_fifteen">08-15 दिन</string>
     <string name="fifteen_to_thirty">15-30 दिन</string>
     <string name="working">काम कर रहे</string>
-    <string name="prefered_no_days_work">पसंदीदा दिन</string>
+    <string name="prefered_no_days_work">पसंदीदा नहीं</string>string>
     <string name="daily_goal">दैनिक लक्ष्य</string>
     <string name="rs0_rs2000">Rs0 - Rs2000</string>
     <string name="per_day_goal">प्रति दिन का लक्ष्य</string>
@@ -819,10 +779,7 @@
     <string name="nov">नवंबर</string>
     <string name="dec">दिसंबर</string>
     <string name="mon">सोमवार</string>
-    <string name="tue">मंगल</string>
-    <string name="wed">बुध</string>
-    <string name="thur">Thur</string>
-    <string name="fri">शुक्र</string>
+    <string name="tue">मंगल</string>>
     <string name="sat">बैठ गया</string>
     <string name="sun">रवि</string>
     <string name="available">उपलब्ध</string>
@@ -839,7 +796,7 @@
     <string name="add_new_contact">नए संपर्क को जोड़े</string>
     <string name="action">कार्य</string>
     <string name="onback_operation">onBackPressed ऑपरेशन</string>
-    <string name="search_operation">सर्च ऑपरेशन</string>string>
+    <string name="search_operation">खोज अभियान ...</string>
     <string name="today">आज</string>
     <string name="what_would_you_need_help_with">आपको किसकी सहायता की आवश्यकता होगी?</string>
     <string name="my_current_gig">माय करंट गिग</string>
@@ -854,18 +811,20 @@
     <string name="good_morning">शुभ प्रभात!</string>
     <string name="version">संस्करण</string>
     <string name="click_here">यहाँ क्लिक करें</string>
-    <string name="kyc_not_done">Kyc Verification is not done </string>
-    <string name="video_resume_pending_html">Your Video resume is Pending </string>
+    <string name="kyc_not_done">सत्यापन नहीं किया गया है, <font color='#060606'> <u> पूरा करने के लिए </u> </font>
+    यहाँ क्लिक करें</string>
+    <string name="video_resume_pending_html">आपका वीडियो परिचय लंबित है, <font color='#060606'> <u> यहां क्लिक करें </u> </font>
+    को पूरा करने के लिए।</string>
     <string name="check_out">चेक आउट</string>
     <string name="check_in">चेक इन</string>
     <string name="upcoming_gig_">आगामी गिग</string>
     <string name="explore_by_role_">भूमिका द्वारा अन्वेषण करें</string>
     <string name="monthy_goal">मंथली गोल</string>
     <string name="per_month_goal">प्रति माह का लक्ष्य</string>
-    <string name="same_as_permanent_address_">स्थायी पते के रूप में भी</string>
+    <string name="same_as_permanent_address_">स्थायी पते समान</string>
     <string name="save_">सहेजें</string>
-    <string name="more_detail">अधिक विस्तार की आवश्यकता है !!</string>
-    <string name="pincode_not_correct">पिनकोड सही नहीं है !!</string>
+    <string name="more_detail">अधिक विस्तार की आवश्यकता है</string>
+    <string name="pincode_not_correct">पिनकोड सही नहीं है</string>
     <string name="first_line_">पहली पंक्ति</string>
     <string name="second_line_">दूसरी पंक्ति</string>
     <string name="area_">क्षेत्र</string>
@@ -876,7 +835,7 @@
     <string name="adhaar_card_">आधार कार्ड</string>
     <string name="document_under_verification_">सत्यापन के तहत दस्तावेज़</string>
     <string name="km">किमी</string>
-    <string name="prefered_distance_zero">पसंदीदा दूरी 0 है, इसलिए आप इसे सक्षम नहीं कर सकते हैं</string>
+    <string name="prefered_distance_zero">पसंदीदा दूरी 0 है, इसलिए आप इसे सक्षम नहीं कर सकते हैं।</string>
     <string name="preferred_distance_">पसंदीदा दूरी</string>
     <string name="around_current_address_">लगभग वर्तमान पता</string>
     <string name="day_and_time">दिन और समय</string>
@@ -885,15 +844,187 @@
     <string name="invite_a_friend">किसी मित्र को आमंत्रित करें</string>
     <string name="refresh_">ताज़ा करें</string>
     <string name="refer_your_friends">अपने दोस्तों को देखें</string>
-    <string name="share_the_joy_of_working_with_gigforce_and_invite_your_friends">Gigforce के साथ काम करने की खुशी साझा करें और अपने दोस्तों को आमंत्रित करें</string>
+    <string name="share_the_joy_of_working_with_gigforce_and_invite_your_friends">Gigforce के साथ काम करने की खुशी साझा करें और अपने दोस्तों को आमंत्रित करें।</string>
     <string name="share_now">अब साझा करें</string>
     <string name="thankyou">धन्यवाद</string>
     <string name="link_copied">लिंक कॉपी किया गया</string>
-    <string name="looking_for_dynamic_working_hours">लचीला काम के घंटे की तलाश में? मुझे Gigforce में शामिल हों:</string>
-    <string name="dl_hint_square_bracket">ड्राइविंग लाइसेंस नंबर * [उदा: अगर ड्राइविंग लाइसेंस नंबर RJ-13 / DLC / 12/123456, RJ1320120123456] है</string>
+    <string name="dl_hint_square_bracket">ड्राइविंग लाइसेंस नंबर * \ n (डीएल स्वीकृत प्रारूप हैं: आरजे -13 / डीएलसी / 12/123456, आरजे 1320120123456, आरजे -052009123456, और जीजे 18 एन2012123456। अन्य प्रारूपों के लिए कृपया मदद के लिए अपने पर्यवेक्षक को कॉल करें।)</string>
     <string name="plus_see_more">और देखें</string>
     <string name="plus_see_less">कम देखें</string>
     <string name="new_version_available">नया संस्करण उपलब्ध है</string>
-    <string name="new_version_available_detail">कृपया, रीपोस्टिंग जारी रखने के लिए ऐप को नए संस्करण में अपडेट करें</string>
+    <string name="you_helped">आपने मदद की</string>
+    <string name="and">तथा</string>
+    <string name="more_comma">अधिक,</string>
+    <string name="find_gigs_on">गिगफोर्स पर गिग्स पाते हैं।</string>
+    <string name="more">अधिक</string>
+    <string name="cancel_update">रद्द करें</string>
+    <string name="update_now">अभी Update करें</string>
+    <string name="do_it_later"><u> बाद में करें </u></string>
+    <string name="submit_all_caps">प्रस्तुत</string>
+    <string name="yes_i_confirm_that_i_want_to_decline_this_gig">हां, मैं पुष्टि करता हूं कि मैं इस गिग को कम करना चाहता हूं।</string>
+    <string name="reason">कारण</string>
+    <string name="this_gig_is_unsuitable_for_me">यह टमटम मेरे लिए अनुपयुक्त है</string>
+    <string name="i_can_t_reach_the_location_today">मैं आज स्थान पर नहीं पहुँच सकता</string>
+    <string name="i_m_on_sick_leave_today">मैं आज बीमार हूँ</string>
+    <string name="please_let_us_know_your_reason_why_are_you_declining_this_gig">कृपया हमें अपना कारण बताएं, आप इस टमटम को क्यों कम कर रहे हैं।</string>
+    <string name="cancelling_out_a_gig">एक टमटम को रद्द करना!</string>
+    <string name="i_am_on_leave_today">मैं आज छुट्टी पर हूं</string>
+    <string name="sort_by_popular">इसके अनुसार छाँटें: लोकप्रिय</string>
+    <string name="read_more">अधिक</string>
+    <string name="read_less">कम से</string>
+    <string name="what_does_a">क्या करता है</string>
+    <string name="do_question_mark">करना?</string>
+    <string name="earnings">कमाई</string>
+    <string name="plus_more">अधि</string>
+    <string name="requirements">आवश्यकताएँ</string>
+    <string name="responsibilities">जिम्मेदारियों</string>
+    <string name="mark_as_interest">मुझें यह पसंद है</string>
+    <string name="marked_as_interest">आपको यह पसंद है</string>
+    <string name="marked_as_interest_exlamation">आपको यह पसंद है</string>
+    <string name="our_team_will_soon_contact_you_for_more_details_and_further_procedure">अधिक विवरण और आगे की प्रक्रिया के लिए हमारी टीम जल्द ही आपसे संपर्क करेगी।</string>
+    <string name="update_your_profile">अपनी प्रोफ़ाइल update करें</string>
+    <string name="explore_learning">शिक्षा का अन्वेषण करें</string>
+    <string name="explore_more_role">भूमिका का अन्वेषण करें</string>
+    <string name="default_notification_channel_id">19871629</string>
+    <string name="learning_assign_to_you">आपको सौंपा गया अध्ययन</string>
+    <string name="as_you_clear_more_assessments">जैसा कि आप अधिक परीक्षण पास करते हैं, उपयुक्त गिग्स को जल्द ही सौंपा जाएगा</string>
+    <string name="you_have_scored">आपने स्कोर किया है</string>
+    <string name="in_your_assessment">आपके आकलन में</string>
+    <string name="new_cert_added_underlined"><u> प्रोफ़ाइल में नया प्रमाणपत्र जोड़ा गया है। </u></string>
+    <string name="watch_lesson_again">फिर से अध्याय देखें</string>
+    <string name="skip">छोड़ें</string>
+    <string name="new_bio">नई परिचय</string>
+    <string name="signed">हस्ताक्षर किए</string>
+    <string name="unsigned">अहस्ताक्षरित</string>
+    <string name="add_bio_star">परिचय जोड़ें</string>
+    <string name="new_language">नई भाषा</string>
+    <string name="total_number_of_days">कुल दिनों की संख्या</string>
+    <string name="total_working_days">कुल कार्य दिवस</string>
+    <string name="number_of_offs">छुट्टियों की संख्या</string>
+    <string name="telgu">तेलुगू</string>
+    <string name="intro_slide1_subtitle">एक नौकरी जो आपके पास हमेशा होती है</string>
+    <string name="intro_slide3_subtitle">अपनी प्राथमिकता तय करें और  गिग्स आपको पाएंगे</string>
+    <string name="about_expanded_bio_text">परिचय</string>
+    <string name="add_language_speaking_level">मौखिक स्तर</string>
+    <string name="confirm_login">पुष्टीकरण</string>
+    <string name="why_video_resume">क्यों वीडियो बायोडाटा जरूरी है?</string>
+    <string name="desc1_video_resume">अपने बारे में अधिक जानकारी दें</string>
+    <string name="otp_verify">सत्यापन करें</string>
+    <string name="otp_send_otp">OTP भेज दिया</string>
+    <string name="to_be_filled_from_profile_data">प्रोफ़ाइल से भरा जाना है</string>
+    <string name="veri_done">बढ़िया! \ nKC दस्तावेज़ प्रस्तुत किए गए</string>
+    <string name="update_document_picture">चित्र अपलोड करें</string>
+    <string name="document_picture">छवि</string>
+    <string name="hs_rv_comment">अंतिम कार्य 20 मिनट पहले हुआ था</string>
+    <string name="edit_aboutme_text">परिचय</string>
+    <string name="same_as_permanent_address">स्थायी पते समान</string>
+    <string name="learning">शिक्षण</string>
+    <string name="assessment">प्रश्नोत्तरी</string>
+    <string name="video_resume_pending">आपका वीडियो बायोडाटा पूरा करने के लिए क्लिक करें</string>
+    <string name="change_contact_message">इन विवरणों को अद्यतन करने के लिए गिगर को अपनी आधार कार्ड छवियों को फिर से अपलोड करना होगा और फिर से सत्यापन प्रक्रिया से गुजरना होगा</string>
+    <string name="w_my_wallet">मेरा खाता</string>
+    <string name="w_my_wallet_balance">खाता संतुलन</string>
+    <string name="upload_your_driving_license">कृपया सत्यापन के लिए अपना ड्राइविंग लाइसेंस अपलोड करें</string>
+    <string name="upload_your_aadhar_card">कृपया अपने आधार कार्ड को वेरिफिकेशन \n के लिए अपलोड करें</string>
+    <string name="assessment_based_on_learnings">शिक्षा आकलन</string>
+    <string name="explore_learnings">शिक्षा का अन्वेषण करें</string>
+    <string name="let_s_go">ठीक है</string>
+    <string name="documents_uploaded_long">जैसे-जैसे आपके दस्तावेज़ सत्यापित होते जाएंगे, आप अपने गिग्स को शुरू कर पाएंगे</string>
+    <string name="wallet_balance_info">खाता बैलेंस: आज तक गिगफोलेट खाते  में प्राप्त राशि का योग - आज तक खाते से निकाले गए धन का योग</string>
+    <string name="gig_location">गिग का स्थान</string>
+    <string name="assessment_dialog_background">प्रश्नोत्तरी संवाद पृष्ठभूमि</string>
+    <string name="good_luck">शुभ लाभ!</string>
+    <string name="start_assessment">प्रश्नोत्तरी शुरू करें</string>
+    <string name="assess_complete">प्रश्नोत्तरी सफलतापूर्वक पूरी हुई</string>
+    <string name="you_ll_soon_be_sent_invites_for_best_gigs_around_for_you">आपको जल्द ही आपके लिए सबसे अच्छे गिग्स के लिए निमंत्रण भेजा जाएगा</string>
+    <string name="my_gigs">मेरा  गिग</string>
+    <string name="on_going_gigs">जारी गिग्स</string>
+    <string name="no_gigs_present">कोई  गिग्स मौजूद नहीं</string>
+    <string name="pending">अपूर्ण</string>
+    <string name="completed">पूर्ण</string>
+    <string name="verified_giger_s_get_recruited_first">सत्यापित giger के पहले भर्ती हो जाती हैं</string>
+    <string name="click_select_pan_image">सबसे पहले अपनी पैन कार्ड छवि पर क्लिक करें</string>
+    <string name="pan_details_uploaded">पैन कार्ड विवरण अपलोड हुआ</string>
+    <string name="aadhar_card_front_image">आधार कार्ड (सामने)</string>
+    <string name="aadhar_card_back_image">आधार कार्ड (पीछे)</string>
+    <string name="why_we_need_this_aadhar">प्रोफ़ाइल सत्यापन के लिए आधार या ड्राइवर लाइसेंस अपलोड करना अनिवार्य है</string>
+    <string name="select_or_capture_both_sides_of_aadhar">आधार कार्ड के दोनों पक्ष की फ़ोटो लें</string>
+    <string name="enter_valid_aadhar_no">मान्य आधार कार्ड नंबर दर्ज करें</string>
+    <string name="dl_image_front_side">ड्राइविंग लाइसेंस (सामने)</string>
+    <string name="dl_image_back_side">ड्राइविंग लाइसेंस (पीछे)</string>
+    <string name="reuploading_driving_license">आप ड्राइविंग लाइसेंस को फिर से अपलोड कर रहे हैं</string>
+    <string name="capture_both_sides_dl">ड्राइविंग लाइसेंस के दोनों पक्ष की फ़ोटो लें</string>
+    <string name="why_we_need_this_bank">बैंक विवरण को स्वीकृत करने और आपके खाते में गिग्स से भुगतान भेजने के लिए अनिवार्य है</string>
+    <string name="enter_valid_ifsc">मान्य IFSC कोड दर्ज करें</string>
+    <string name="enter_valid_acc_no">वैध खाता संख्या दर्ज करें</string>
+    <string name="click_or_select_bank_passbook">पहले अपनी पासबुक छवि का चयन करें</string>
+    <string name="under_verification">सत्यापन प्रक्रिया शुरू</string>
+    <string name="issued_on">जारी करने का दिन</string>
+    <string name="how_to_rec_selfie_video_content">\n 10 सेकंड की एक वीडियो बनाएं और कहें "हाय, मैं (आपका नाम) हूँ और मुझे  (2 चीजें जो आप करना पसंद करते हैं) करना पसंद है</string>
+    <string name="add_bio">परिचय जोड़ें</string>
+    <string name="pending_rating_from_client">क्लाइंट से रेटिंग शेष है</string>
+    <string name="you_have_rated_this_gig_as">आपने रेट किया</string>
+    <string name="rating_you_received">आपने क्लाइंट से रेटिंग प्राप्त की</string>
+    <string name="is_whats_app_number">WhatsApp नंबर है</string>
+    <string name="this_is_my_whatsapp_number">यह मेरा WhatsApp नंबर है</string>
+    <string name="edit_contact">संपादित करें</string>
+    <string name="edit_email">संपादित करें</string>
+    <string name="answer_the_ques">कृपया जारी रखने के लिए सवाल का उत्तर दें !!!</string>
+    <string name="record_a_10_second_video_of_yourself_nface_the_camera_and_say_hi_i_m_your_name_and_i_like_to_do_mention_2_things_you_like_to_do_selfie_video">\n 10 सेकंड की एक वीडियो बनाएं और कहें "हाय, मैं (आपका नाम) हूँ और मुझे  (2 चीजें जो आप करना पसंद करते हैं) करना पसंद है</string>
+    <string name="aadhar_number_eg_444433332222">आधार संख्या * (उदा: ४४४४३३३३२२२२)</string>
+    <string name="account_number_eg_10_16_digit_number_30000011111111111">खाता संख्या * (उदा: 10-16 अंक संख्या: 30000011111111111)</string>
+    <string name="assessment_colon">प्रश्नोत्तरी:</string>
+    <string name="assessment_not_completed">प्रश्नोत्तरी सफलतापूर्वक पूरी नहीं हुई</string>
+    <string name="woe_you_are_correct">वाह! आप सही हो</string>
+    <string name="you_are_incorrect">गलत</string>
+    <string name="time_is_up">समय समाप्त!</string>
+    <string name="bio_profile">परिचय</string>
+    <string name="add_bio_profile">परिचय जोड़ें</string>
+    <string name="speaking">मौखिक</string>
+    <string name="writing">लेखन</string>
+    <string name="language">भाषा</string>
+    <string name="add_languages">भाषा जोड़ें</string>
+    <string name="beginner">शुरुआती</string>
+    <string name="checked">जाँच की गई</string>
+    <string name="shopkeeping">दुकान रखना</string>
+    <string name="tele_calling">टेली कॉलिंग</string>
+    <string name="bartener">बॉर्टिन्डर</string>
+    <string name="fleet_management">बेड़ा प्रबंधन</string>
+    <string name="e_commerce_delivery">ई-डिलीवरी </string>
+    <string name="house_keeping">गृह रखने वाले</string>
+    <string name="bio_limit">परिचय नहीं हो सकता</string>
+    <string name="tag_cannot_be_empty">अमान्य टैग| टैग रिक्त नहीं हो सकता है या # शामिल नहीं हो सकता</string>
+    <string name="bachelor">स्नातक</string>
+    <string name="add_tag">टैग जोड़ें</string>
+    <string name="add_lang">भाषा जोड़ें</string>
+    <string name="most_popular_learnings">सर्वाधिक लोकप्रिय पाठ्यक्रम</string>
+    <string name="accept_ride">कैसे एक सवारी को स्वीकार करें</string>
+    <string name="maintaining_safety">गिग्स पर स्वच्छता और सुरक्षा बनाए रखना</string>
+    <string name="clean_floors">विभिन्न फर्श को साफ करने के लिए सही अभिकर्मक का चयन?</string>
+    <string name="type_a_message">संदेश लिखें</string>
+    <string name="screen_pending_show_gigs">इस दिन गिग्स की सूची दिखाने के लिए स्क्रीन लंबित है</string>
+    <string name="let_s_talk_about_what_s_a_gig_and_how_do_you_start_working_as_a_giger_at_gigforce">चलो gig और आप कैसे काम करना शुरू करते हैं, उस बारे में बात करते हैं</string>
+    <string name="play_now">शुरू करें</string>
+    <string name="explore_gigs_start_earning">कमाई शुरू करने के लिए गिग्स चुने</string>
+    <string name="view">दिखाएं</string>
+    <string name="add_your_preferences_to_get_gigs_that_suit_you">अपनी पसंद के अनुसार  गिग्स चुने</string>
+    <string name="see_more">और दिखाएं</string>
+    <string name="browse_all_help_topic">सभी सहायता विषय दिखाएं</string>
+    <string name="signing_out_means_missing_out_on_gigs">यदि आप छोड़ देते हैं तो आप आस-पास आने वाले gigs के बारे में जानकारी खो देंगे</string>
+    <string name="config_data_not_loaded">डेटा लोड नहीं है !!</string>
+    <string name="prefered_no_days_work">पसंदीदा संख्या</string>
+    <string name="rs0_rs60000">रु 0 - रु 60000</string>
+    <string name="wed">बुधवार</string>
+    <string name="thur">गुरूवार</string>
+    <string name="fri">शुक्रवार</string>
+    <string name="monthly_goal">मासिक लक्ष्य</string>
+    <string name="my_current_gig">मेरे वर्तमान गिग</string>
+    <string name="my_past_gig">मेरे अतीत गिग</string>
+    <string name="my_upcoming_gig">मेरे आगामी गिग</string>
+    <string name="my_wallet">मेरा खाता</string>
+    <string name="assessment_">प्रश्नोत्तरी</string>
+    <string name="document_under_verification_">दस्तावेज़ सत्यापन चल रहा है</string>
+    <string name="looking_for_dynamic_working_hours">सुविधाजनक काम के घंटे की तलाश में? Gigforce में शामिल हों:</string>
+    <string name="new_version_available_detail">कृपया, रीपोस्टिंग जारी रखने के लिए ऐप को अपडेट करें</string>
 
 </resources>

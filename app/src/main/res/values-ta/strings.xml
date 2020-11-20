@@ -736,7 +736,7 @@
     <string name="video_resume_pending_html"><![CDATA[Your Video resume is Pending , <font color=\'#060606\'><u>Click here</u></font> to  complete.]]></string>
     <string name="check_out">Check Out</string>
     <string name="check_in">Check In</string>
-    <string name="upcoming_gig_">Upcoming Gig</string>
+    <string name="upcoming_gig_">Scheduled gigs</string>
     <string name="explore_by_role_">Explore By Role</string>
     <string name="monthy_goal">Monthy Goal</string>
     <string name="per_month_goal">Per month goal</string>
@@ -786,5 +786,9 @@
     <string name="cancelling_out_a_gig">Cancelling out a gig !</string>
     <string name="i_am_on_leave_today">I am on leave today</string>
     <string name="as_you_clear_more_assessments">As you clear more assessments suitable gigs will get assigned soon</string>
+    <string name="total_number_of_days">Total number of days</string>
+    <string name="total_working_days">Total working days</string>
+    <string name="number_of_offs">Number of offs</string>
+    <string name="download_payslip">Download Payslip</string>
 
 </resources>

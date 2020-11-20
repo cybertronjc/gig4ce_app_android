@@ -80,22 +80,20 @@ class AddAadharCardInfoFragment : BaseFragment() {
             findNavController().popBackStack(R.id.gigerVerificationFragment, false)
         }
 
-        helpIconIV.setOnClickListener {
+        whyWeNeedThisViewTV.setOnClickListener {
+            showWhyWeNeedThisBottomSheet()
+        }
 
-            WhyWeNeedThisBottomSheet.launch(
-                childFragmentManager = childFragmentManager,
-                title = getString(R.string.why_do_we_need_this),
-                content = getString(R.string.why_we_need_this_aadhar)
-            )
+        helpIconViewIV.setOnClickListener {
+            showWhyWeNeedThisBottomSheet()
+        }
+
+        helpIconIV.setOnClickListener {
+            showWhyWeNeedThisBottomSheet()
         }
 
         whyWeNeedThisTV.setOnClickListener {
-
-            WhyWeNeedThisBottomSheet.launch(
-                childFragmentManager = childFragmentManager,
-                title = getString(R.string.why_do_we_need_this),
-                content = getString(R.string.why_we_need_this_aadhar)
-            )
+            showWhyWeNeedThisBottomSheet()
         }
 
         aadharAvailaibilityOptionRG.setOnCheckedChangeListener { _, checkedId ->
@@ -228,6 +226,14 @@ class AddAadharCardInfoFragment : BaseFragment() {
                 .setNegativeButton(getString(R.string.cancel)) { _, _ -> }
                 .show()
         }
+    }
+
+    private fun showWhyWeNeedThisBottomSheet() {
+        WhyWeNeedThisBottomSheet.launch(
+            childFragmentManager = childFragmentManager,
+            title = getString(R.string.why_do_we_need_this),
+            content = getString(R.string.why_we_need_this_aadhar)
+        )
     }
 
     private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance()

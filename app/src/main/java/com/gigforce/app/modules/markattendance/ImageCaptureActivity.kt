@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import com.gigforce.app.R
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
@@ -36,7 +37,10 @@ class ImageCaptureActivity : AppCompatActivity() {
 
     private fun listener() {
         capture_icon.setOnClickListener {
-            cameraView.takePicture()
+
+            if(!show_img_cl.isVisible) {
+                cameraView.takePicture()
+            }
         }
 
         upload_img.setOnClickListener {
@@ -118,6 +122,7 @@ class ImageCaptureActivity : AppCompatActivity() {
 
         private fun previewImage(result: PictureResult) {
             show_img_cl.visible()
+
             try {
 
 

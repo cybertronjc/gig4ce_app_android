@@ -9,24 +9,26 @@ apply plugin: 'com.google.gms.google-services'
 android {
     signingConfigs {
         debug {
-
             storeFile file('../keystore/gigforceapp.jks')
             storePassword 'gigforce'
             keyAlias 'key0'
             keyPassword 'gigforce'
-        }
-//        production {
-//            storeFile file('/Users/apple/Downloads/gigforceprodapp.jks')
-//            storePassword 'gigforce'
-//            keyAlias 'gigforce'
-//            keyPassword 'gigforce'
-//        }
+            }
+
         production {
             storeFile file('/Users/apple/Documents/gigforce-upload.jks')
             storePassword 'gig4ce'
             keyAlias 'PlayStoreUploadKey'
             keyPassword 'gig4ce'
         }
+
+
+        //        production {
+//            storeFile file('/Users/apple/Downloads/gigforceprodapp.jks')
+//            storePassword 'gigforce'
+//            keyAlias 'gigforce'
+//            keyPassword 'gigforce'
+//        }
     }
 
     compileSdkVersion 29
@@ -35,8 +37,8 @@ android {
         applicationId "com.gigforce.app"
         minSdkVersion 23
         targetSdkVersion 29
-        versionCode 64
-        versionName "1.24.2"
+        versionCode 72
+        versionName "1.26.3"
 
         vectorDrawables.useSupportLibrary = true
 
@@ -68,7 +70,9 @@ android {
          */
         production {
             dimension "default"
-//           signingConfig signingConfigs.production
+           signingConfig signingConfigs.production
+            buildConfigField "String", 'REFERRAL_BASE_URL', '"https://gig4ce.page.link/"'
+            buildConfigField "String", 'GENERATE_PAYSLIP_URL', '"https://45nydq0i5g.execute-api.ap-south-1.amazonaws.com/default/get-or-create-payment-advice-prod"'
         }
 
         /**
@@ -78,6 +82,8 @@ android {
             dimension "default"
             versionNameSuffix '-Dev'
             signingConfig signingConfigs.debug
+            buildConfigField "String", 'REFERRAL_BASE_URL', '"https://gigforce.page.link/"'
+            buildConfigField "String", 'GENERATE_PAYSLIP_URL', '"https://d38v9ehujf.execute-api.ap-south-1.amazonaws.com/default/get-or-create-payment-advice-dev"'
         }
     }
 
@@ -155,7 +161,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0' // changed from 1.1.0
     implementation 'com.jaeger.statusbarutil:library:1.4.0'
     implementation 'androidx.cardview:cardview:1.0.0'
-    implementation 'com.google.android.material:material:1.1.0'
+    implementation 'com.google.android.material:material:1.2.1'
     // Navigation library
     def nav_version = "2.3.0"
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
@@ -294,6 +300,9 @@ dependencies {
     // explicitly depend on RxJava's latest version for bug fixes and new features.
     // (see https://github.com/ReactiveX/RxJava/releases for latest 3.x.x version)
     implementation 'io.reactivex.rxjava3:rxjava:3.0.0'
+
+
+
 
 
 }

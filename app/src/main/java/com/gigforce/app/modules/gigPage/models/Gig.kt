@@ -76,11 +76,18 @@ data class Gig(
     var gigType: String? = null,
     var gigHighlights: List<String> = emptyList(),
     var gigRequirements: List<String> = emptyList(),
+    var gigResponsibilities: List<String> = listOf(
+        "Deliver excellent service to ensure high levels of customer satisfaction.",
+        "Motivate the sales team to meet sales objectives by training and mentoring staff.",
+        "Create business strategies to attract new customers, expand store traffic, and enhance profitability."
+    ),
     var attendance: GigAttendance? = null,
     var gigContactDetails: GigContactDetails? = null,
 
     var declinedBy: String? = null,
-    var declineReason: String? = null
+    var declineReason: String? = null,
+
+    var regularisationRequest : GigRegularisationRequest? =null
 ) {
 
     @get:Exclude
@@ -222,6 +229,11 @@ data class Gig(
         val currentTime = LocalDateTime.now()
 
         return minCheckInTime.isAfter(currentTime)
+    }
+
+    @Exclude
+    fun hasRequestRegularisation(): Boolean {
+        return regularisationRequest != null
     }
 
     override fun equals(other: Any?): Boolean {

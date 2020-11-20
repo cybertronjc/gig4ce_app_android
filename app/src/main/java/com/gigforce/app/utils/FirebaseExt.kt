@@ -51,3 +51,11 @@ suspend fun DocumentReference.getOrThrow() = suspendCoroutine<DocumentSnapshot> 
         cont.resumeWithException(it)
     }
 }
+
+suspend fun DocumentReference.updateOrThrow(field : String, obj : Any) = suspendCoroutine<Void> { cont ->
+    update(field, obj).addOnSuccessListener {
+        cont.resume(it)
+    }.addOnFailureListener {
+        cont.resumeWithException(it)
+    }
+}
