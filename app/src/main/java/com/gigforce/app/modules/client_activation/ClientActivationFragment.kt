@@ -59,12 +59,7 @@ class ClientActivationFragment : BaseFragment() {
         rv_bullet_points.adapter = adapterBulletPoints
         rv_bullet_points.layoutManager =
             LinearLayoutManager(requireContext())
-//        rv_bullet_points.addItemDecoration(
-//            HorizontaltemDecoration(
-//                requireContext(),
-//                R.dimen.size_11
-//            )
-//        )
+
     }
 
     private fun initClicks() {
@@ -104,28 +99,19 @@ class ClientActivationFragment : BaseFragment() {
             it?.queries?.forEach { element ->
                 viewRoleDesc.tv_what_client_activation.text = element.query
                 viewRoleDesc.tv_what_value_client_activation.text = element.answer
-                GlideApp.with(requireContext())
-                    .load(element.icon)
-                    .placeholder(getCircularProgressDrawable())
-                    .into(viewRoleDesc.iv_what)
-                ll_role_desc.addView(viewRoleDesc)
+                if (!element.icon.isNullOrEmpty()) {
+                    GlideApp.with(requireContext())
+                        .load(element.icon)
+                        .placeholder(getCircularProgressDrawable())
+                        .into(viewRoleDesc.iv_what)
+                    ll_role_desc.addView(viewRoleDesc)
+                } else {
+                    viewRoleDesc.iv_what.setImageResource(R.drawable.ic_play_gradient)
+                }
+
             }
             adapterBulletPoints.addData(it?.info!!)
 
-//            setOnExpandListener(
-//                it?.requirements?.requirements, tl_requirements_role_details_client_activation,
-//                it?.requirements?.showLessPoints!!, it.requirements?.lessPointsNumber!!
-//            );
-//
-//            setOnExpandListener(
-//                it.responsibilties?.responsibilities, tl_responsibilities_client_activation,
-//                it.requirements?.showLessPoints!!, it.responsibilties?.lessPointsNumber!!
-//            )
-//
-//            setOnExpandListener(
-//                it.faqs?.questions, tl_faqs_client_activation,
-//                it.faqs?.showLessPoints!!, it.responsibilties?.lessPointsNumber!!
-//            )
 
 
             if (!it?.requiredLessons?.lessons.isNullOrEmpty()) {
