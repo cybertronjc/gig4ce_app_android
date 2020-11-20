@@ -79,6 +79,9 @@ class ClientActivationFragment : BaseFragment() {
     }
 
     private fun initObservers() {
+        viewModel.observableError.observe(viewLifecycleOwner, Observer {
+            showToast(it?:"")
+        })
         viewModel.observableWorkOrder.observe(viewLifecycleOwner, Observer {
             tv_role_client_activation.text = it?.work_order_title;
             it?.locations?.map { item -> item.location }?.let { locations ->

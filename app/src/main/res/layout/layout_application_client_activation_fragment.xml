@@ -20,7 +20,7 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                android:id="@+id/iv_back_client_activation"
+                android:id="@+id/iv_back_application_client_activation"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
@@ -32,7 +32,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toEndOf="@+id/iv_back_client_activation"
+                android:layout_toEndOf="@+id/iv_back_application_client_activation"
                 android:fontFamily="@font/lato"
                 android:gravity="center_horizontal"
                 android:text="Application"

@@ -1,19 +1,25 @@
 package com.gigforce.app.modules.client_activation
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
+import com.gigforce.app.modules.photocrop.PhotoCrop
 import com.gigforce.app.modules.profile.ProfileViewModel
 import com.gigforce.app.utils.StringConstants
 import kotlinx.android.synthetic.main.layout_application_client_activation_fragment.*
 
-class ApplicationClientActivationFragment : BaseFragment() {
+class ApplicationClientActivationFragment : BaseFragment(),
+    AdapterApplicationClientActivation.AdapterApplicationClientActivationCallbacks {
+    private var profileAvatarName: String? = null
     private val viewModel: ApplicationClientActivationViewModel by viewModels()
     private val profileViewModel: ProfileViewModel by viewModels()
 
@@ -41,20 +47,34 @@ class ApplicationClientActivationFragment : BaseFragment() {
         getDataFromIntents(savedInstanceState)
         setupRecycler()
         initObservers()
+        initClicks()
 
     }
 
+    private fun initClicks() {
+        iv_back_application_client_activation.setOnClickListener {
+            onBackPressed()
+        }
+    }
+
     private fun initObservers() {
+        viewModel.observableError.observe(viewLifecycleOwner, Observer {
+            showToast(it?:"")
+        })
 
         viewModel.observableWorkOrderDependency.observe(viewLifecycleOwner, Observer {
             h_pb_application_frag.max = it?.dependency?.size!!
-            h_pb_application_frag.progress = 0;
             tv_thanks_application.text = it?.title
             tv_completion_application.text = it?.sub_title
-            tv_steps_pending_application_value.text =
-                "0/" + it?.dependency?.size!!
+
             adapter.addData(it?.dependency!!);
             profileViewModel.getProfileData().observe(viewLifecycleOwner, Observer { profileData ->
+                h_pb_application_frag.progress = 0;
+                tv_steps_pending_application_value.text =
+                    "0/" + it?.dependency?.size!!
+                profileAvatarName = profileData.profileAvatarName;
+                profileViewModel.profileID = profileData?.id ?: ""
+                adapter.setCallbacks(this)
                 if (profileData.profileAvatarName.isNotEmpty() && profileData.profileAvatarName != "avatar.jpg") {
                     h_pb_application_frag.progress = h_pb_application_frag.progress + 1
                     tv_steps_pending_application_value.text =
@@ -148,6 +168,33 @@ class ApplicationClientActivationFragment : BaseFragment() {
 //        )
 
     }
+
+    override fun onItemClick(feature: String) {
+        when (feature) {
+            "profile_pic" -> {
+                val photoCropIntent = Intent(context, PhotoCrop::class.java)
+                photoCropIntent.putExtra("purpose", "profilePictureCrop")
+                photoCropIntent.putExtra("uid", viewModel.repository.getUID())
+                photoCropIntent.putExtra("fbDir", "/profile_pics/")
+                photoCropIntent.putExtra("detectFace", 1)
+                photoCropIntent.putExtra("folder", PROFILE_PICTURE_FOLDER)
+                photoCropIntent.putExtra("file", profileAvatarName)
+
+                startActivityForResult(photoCropIntent, PHOTO_CROP)
+            }
+            "about_me" -> {
+
+                findNavController().navigate(
+                    R.id.aboutExpandedFragment, bundleOf(
+                        Pair(StringConstants.PROFILE_ID.value, profileViewModel.profileID)
+                    )
+                )
+            }
+        }
+    }
+
+    private var PHOTO_CROP: Int = 45
+    private var PROFILE_PICTURE_FOLDER: String = "profile_pics"
 
 
 }

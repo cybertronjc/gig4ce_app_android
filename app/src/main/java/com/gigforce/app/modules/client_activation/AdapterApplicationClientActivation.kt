@@ -12,6 +12,7 @@ import kotlinx.android.synthetic.main.layout_rv_status_pending.view.*
 
 class AdapterApplicationClientActivation :
     RecyclerView.Adapter<AdapterApplicationClientActivation.ViewHolder>() {
+    private var callbacks: AdapterApplicationClientActivationCallbacks?=null
     var items: List<Dependency> = arrayListOf()
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
@@ -35,6 +36,10 @@ class AdapterApplicationClientActivation :
         holder.itemView.tv_status_application.text = dependency.title
         holder.itemView.divider_bottom.visibility =
             if (position == items.size - 1) View.GONE else View.VISIBLE
+        holder.itemView.setOnClickListener {
+            if (holder.adapterPosition == -1) return@setOnClickListener
+            callbacks?.onItemClick(items[holder.adapterPosition].feature!!)
+        }
 
     }
 
@@ -53,7 +58,12 @@ class AdapterApplicationClientActivation :
         notifyItemChanged(i);
     }
 
-    interface AdapterApplicationClientActivationCallbacks{
+    fun setCallbacks(callbacks: AdapterApplicationClientActivationCallbacks) {
+        this.callbacks = callbacks;
+    }
+
+    interface AdapterApplicationClientActivationCallbacks {
+        fun onItemClick(feature: String);
 
     }
 
