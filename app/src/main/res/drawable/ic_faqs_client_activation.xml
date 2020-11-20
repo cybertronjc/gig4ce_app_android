@@ -16,7 +16,7 @@
     <item
         android:width="@dimen/size_14"
         android:height="@dimen/size_14"
-        android:drawable="@drawable/ic_question"
+        android:drawable="@drawable/ic_question_mark"
         android:gravity="center" />
 
 </layer-list>

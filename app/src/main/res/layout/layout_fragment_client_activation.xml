@@ -80,39 +80,43 @@
                 app:layout_constraintTop_toBottomOf="@+id/cl_header_client_activation"
                 tools:text="DRIVER - North 21 " />
 
-            <TextView
-                android:id="@+id/tv_applied_client_activation"
-                android:layout_width="wrap_content"
+            <RelativeLayout
+                android:id="@+id/rl_pref_loc"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:baselineAlignBottom="true"
-                android:drawablePadding="@dimen/size_4"
-                android:fontFamily="@font/lato"
-                android:gravity="center"
-                android:paddingStart="@dimen/size_8"
-                android:paddingTop="@dimen/size_10"
-                android:paddingEnd="@dimen/size_18"
-                android:text="Pending"
-                android:textColor="@color/yellow"
-                android:textSize="@dimen/font_12"
-                android:textStyle="normal"
 
-                app:drawableStartCompat="@drawable/ic_status_pending"
-                app:layout_constraintBottom_toBottomOf="@+id/rv_preferred_locations_client_activation"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/rv_preferred_locations_client_activation" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_preferred_locations_client_activation"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/size_15"
-                android:clipToPadding="false"
-                android:paddingStart="@dimen/size_21"
-                android:paddingEnd="@dimen/size_8"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/tv_applied_client_activation"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_role_client_activation" />
+                app:layout_constraintTop_toBottomOf="@id/tv_role_client_activation">
+
+                <TextView
+                    android:id="@+id/tv_applied_client_activation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+
+                    android:layout_centerVertical="true"
+                    android:drawablePadding="@dimen/size_4"
+                    android:fontFamily="@font/lato"
+                    android:gravity="center"
+                    android:paddingStart="@dimen/size_8"
+                    android:paddingEnd="@dimen/size_18"
+                    android:text="Pending"
+                    android:textColor="@color/yellow"
+                    android:textSize="@dimen/font_12"
+                    android:textStyle="normal"
+                    app:drawableStartCompat="@drawable/ic_status_pending" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_preferred_locations_client_activation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/size_15"
+                    android:layout_toStartOf="@+id/tv_applied_client_activation"
+                    android:clipToPadding="false"
+                    android:paddingStart="@dimen/size_21"
+                    android:paddingEnd="@dimen/size_8" />
+            </RelativeLayout>
 
 
             <TextView
@@ -133,7 +137,7 @@
                 android:textStyle="italic"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/rv_preferred_locations_client_activation"
+                app:layout_constraintTop_toBottomOf="@+id/rl_pref_loc"
                 tools:text="Earn upto 2000 /Day by working as Retail Executive /n Monthly earn up to Rs. 31000" />
 
             <LinearLayout
@@ -221,8 +225,8 @@
                     android:id="@+id/textView121"
                     android:layout_width="match_parent"
                     android:layout_height="3dp"
-                    android:visibility="gone"
                     android:background="@color/app_gray_color1_34"
+                    android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintLeft_toRightOf="parent" />
@@ -238,120 +242,135 @@
                 android:background="#68979797"
                 app:layout_constraintTop_toBottomOf="@+id/learning_cl" />
 
-            <TextView
-                android:id="@+id/tv_requirements_client_activation"
-                android:layout_width="0dp"
+            <!--            <TextView-->
+            <!--                android:id="@+id/tv_requirements_client_activation"-->
+            <!--                android:layout_width="0dp"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_marginStart="@dimen/size_17"-->
+            <!--                android:layout_marginTop="@dimen/size_27"-->
+            <!--                android:layout_marginEnd="@dimen/size_16"-->
+            <!--                android:drawablePadding="@dimen/size_9"-->
+            <!--                android:fontFamily="@font/lato_bold"-->
+            <!--                android:gravity="center|start"-->
+            <!--                android:text="@string/requirements"-->
+            <!--                android:textColor="#000000"-->
+            <!--                android:textSize="@dimen/font_14"-->
+            <!--                app:drawableStartCompat="@drawable/ic_document_gradient"-->
+            <!--                app:layout_constraintEnd_toEndOf="parent"-->
+            <!--                app:layout_constraintStart_toStartOf="parent"-->
+            <!--                app:layout_constraintTop_toBottomOf="@+id/divider_one" />-->
+
+            <!--            <TableLayout-->
+            <!--                android:id="@+id/tl_requirements_role_details_client_activation"-->
+            <!--                android:layout_width="0dp"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_marginTop="@dimen/size_19"-->
+            <!--                android:animateLayoutChanges="true"-->
+            <!--                android:paddingStart="@dimen/size_27"-->
+            <!--                android:paddingEnd="@dimen/size_20"-->
+            <!--                app:layout_constraintEnd_toEndOf="parent"-->
+            <!--                app:layout_constraintStart_toStartOf="parent"-->
+            <!--                app:layout_constraintTop_toBottomOf="@+id/tv_requirements_client_activation" />-->
+
+            <!--            <View-->
+            <!--                android:id="@+id/divider_two"-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="@dimen/size_1"-->
+            <!--                android:layout_marginStart="@dimen/size_17"-->
+            <!--                android:layout_marginTop="@dimen/size_24"-->
+            <!--                android:layout_marginEnd="@dimen/size_15"-->
+            <!--                android:background="#68979797"-->
+            <!--                app:layout_constraintTop_toBottomOf="@+id/tl_requirements_role_details_client_activation" />-->
+
+            <!--            <TextView-->
+            <!--                android:id="@+id/tv_responsibilities_client_activation"-->
+            <!--                android:layout_width="0dp"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_marginStart="@dimen/size_17"-->
+            <!--                android:layout_marginTop="@dimen/size_27"-->
+            <!--                android:layout_marginEnd="@dimen/size_16"-->
+            <!--                android:drawablePadding="@dimen/size_9"-->
+            <!--                android:fontFamily="@font/lato_bold"-->
+            <!--                android:gravity="center|start"-->
+            <!--                android:text="@string/responsibilities"-->
+            <!--                android:textColor="#000000"-->
+            <!--                android:textSize="@dimen/font_14"-->
+            <!--                app:drawableStartCompat="@drawable/ic_play_gradient"-->
+            <!--                app:layout_constraintEnd_toEndOf="parent"-->
+            <!--                app:layout_constraintStart_toStartOf="parent"-->
+            <!--                app:layout_constraintTop_toBottomOf="@+id/divider_two" />-->
+
+            <!--            <TableLayout-->
+            <!--                android:id="@+id/tl_responsibilities_client_activation"-->
+            <!--                android:layout_width="0dp"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_marginTop="@dimen/size_19"-->
+            <!--                android:animateLayoutChanges="true"-->
+            <!--                android:paddingStart="@dimen/size_29"-->
+            <!--                android:paddingEnd="@dimen/size_20"-->
+            <!--                app:layout_constraintEnd_toEndOf="parent"-->
+            <!--                app:layout_constraintStart_toStartOf="parent"-->
+            <!--                app:layout_constraintTop_toBottomOf="@+id/tv_responsibilities_client_activation" />-->
+
+            <!--            <View-->
+            <!--                android:id="@+id/divider_three"-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="@dimen/size_1"-->
+            <!--                android:layout_marginStart="@dimen/size_17"-->
+            <!--                android:layout_marginTop="@dimen/size_24"-->
+            <!--                android:layout_marginEnd="@dimen/size_15"-->
+            <!--                android:background="#68979797"-->
+            <!--                app:layout_constraintTop_toBottomOf="@+id/tl_responsibilities_client_activation" />-->
+
+            <!--            <TextView-->
+            <!--                android:id="@+id/tv_faqs_client_activation"-->
+            <!--                android:layout_width="0dp"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_marginStart="@dimen/size_17"-->
+            <!--                android:layout_marginTop="@dimen/size_27"-->
+            <!--                android:layout_marginEnd="@dimen/size_16"-->
+            <!--                android:drawablePadding="@dimen/size_9"-->
+            <!--                android:fontFamily="@font/lato_bold"-->
+            <!--                android:gravity="center|start"-->
+            <!--                android:text="@string/frequently_asked_questions"-->
+            <!--                android:textColor="#000000"-->
+            <!--                android:textSize="@dimen/font_14"-->
+            <!--                app:drawableStartCompat="@drawable/ic_faqs_client_activation"-->
+            <!--                app:layout_constraintEnd_toEndOf="parent"-->
+            <!--                app:layout_constraintStart_toStartOf="parent"-->
+            <!--                app:layout_constraintTop_toBottomOf="@+id/divider_three" />-->
+
+            <!--            <TableLayout-->
+            <!--                android:id="@+id/tl_faqs_client_activation"-->
+            <!--                android:layout_width="0dp"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_marginTop="@dimen/size_19"-->
+            <!--                android:animateLayoutChanges="true"-->
+            <!--                android:paddingStart="@dimen/size_29"-->
+            <!--                android:paddingEnd="@dimen/size_20"-->
+            <!--                app:layout_constraintEnd_toEndOf="parent"-->
+            <!--                app:layout_constraintStart_toStartOf="parent"-->
+            <!--                app:layout_constraintTop_toBottomOf="@+id/tv_faqs_client_activation" />-->
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_bullet_points"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/size_17"
-                android:layout_marginTop="@dimen/size_27"
-                android:layout_marginEnd="@dimen/size_16"
-                android:drawablePadding="@dimen/size_9"
-                android:fontFamily="@font/lato_bold"
-                android:gravity="center|start"
-                android:text="@string/requirements"
-                android:textColor="#000000"
-                android:textSize="@dimen/font_14"
-                app:drawableEndCompat="@drawable/ic_keyboard_arrow_down_c7c7cc"
-                app:drawableStartCompat="@drawable/ic_document_gradient"
+                android:nestedScrollingEnabled="false"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/divider_one" />
 
-            <TableLayout
-                android:id="@+id/tl_requirements_role_details_client_activation"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/size_19"
-                android:animateLayoutChanges="true"
-                android:paddingStart="@dimen/size_27"
-                android:paddingEnd="@dimen/size_20"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_requirements_client_activation" />
-
             <View
-                android:id="@+id/divider_two"
+                android:id="@+id/divider_four"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/size_1"
                 android:layout_marginStart="@dimen/size_17"
                 android:layout_marginTop="@dimen/size_24"
                 android:layout_marginEnd="@dimen/size_15"
                 android:background="#68979797"
-                app:layout_constraintTop_toBottomOf="@+id/tl_requirements_role_details_client_activation" />
-
-            <TextView
-                android:id="@+id/tv_responsibilities_client_activation"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/size_17"
-                android:layout_marginTop="@dimen/size_27"
-                android:layout_marginEnd="@dimen/size_16"
-                android:drawablePadding="@dimen/size_9"
-                android:fontFamily="@font/lato_bold"
-                android:gravity="center|start"
-                android:text="@string/responsibilities"
-                android:textColor="#000000"
-                android:textSize="@dimen/font_14"
-                app:drawableEndCompat="@drawable/ic_keyboard_arrow_down_c7c7cc"
-                app:drawableStartCompat="@drawable/ic_play_gradient"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/divider_two" />
-
-            <TableLayout
-                android:id="@+id/tl_responsibilities_client_activation"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/size_19"
-                android:animateLayoutChanges="true"
-                android:paddingStart="@dimen/size_29"
-                android:paddingEnd="@dimen/size_20"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_responsibilities_client_activation" />
-
-            <View
-                android:id="@+id/divider_three"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/size_1"
-                android:layout_marginStart="@dimen/size_17"
-                android:layout_marginTop="@dimen/size_24"
-                android:layout_marginEnd="@dimen/size_15"
-                android:background="#68979797"
-                app:layout_constraintTop_toBottomOf="@+id/tl_responsibilities_client_activation" />
-
-            <TextView
-                android:id="@+id/tv_faqs_client_activation"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/size_17"
-                android:layout_marginTop="@dimen/size_27"
-                android:layout_marginEnd="@dimen/size_16"
-                android:drawablePadding="@dimen/size_9"
-                android:fontFamily="@font/lato_bold"
-                android:gravity="center|start"
-                android:text="@string/frequently_asked_questions"
-                android:textColor="#000000"
-                android:textSize="@dimen/font_14"
-                app:drawableEndCompat="@drawable/ic_keyboard_arrow_down_c7c7cc"
-                app:drawableStartCompat="@drawable/ic_faqs_client_activation"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/divider_three" />
-
-            <TableLayout
-                android:id="@+id/tl_faqs_client_activation"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/size_19"
-                android:animateLayoutChanges="true"
-                android:paddingStart="@dimen/size_29"
-                android:paddingEnd="@dimen/size_20"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_faqs_client_activation" />
-
-
+                app:layout_constraintTop_toBottomOf="@+id/rv_bullet_points" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 

@@ -25,10 +25,13 @@
             android:id="@+id/tv_what_client_activation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@color/fui_transparent"
             android:layout_marginStart="@dimen/size_14"
             android:layout_marginTop="@dimen/size_27"
             android:layout_marginEnd="@dimen/size_43"
             android:paddingStart="@dimen/size_9"
+
+            android:textStyle="bold"
             android:textColor="#000000"
             android:textSize="@dimen/font_14" />
     </LinearLayout>
