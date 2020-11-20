@@ -33,6 +33,8 @@ class AdapterApplicationClientActivation :
             }
         )
         holder.itemView.tv_status_application.text = dependency.title
+        holder.itemView.divider_bottom.visibility =
+            if (position == items.size - 1) View.GONE else View.VISIBLE
 
     }
 
@@ -49,6 +51,10 @@ class AdapterApplicationClientActivation :
         val i = items.indexOf(Dependency(feature = feature))
         items.get(i).drawable = drawable
         notifyItemChanged(i);
+    }
+
+    interface AdapterApplicationClientActivationCallbacks{
+
     }
 
 }

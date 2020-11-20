@@ -319,7 +319,7 @@ class ClientActivationFragment : BaseFragment() {
                 RecyclerGenericAdapter<Course>(
                     activity?.applicationContext,
                     PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
-                        navigate(R.id.mainLearningFragment)
+//                        navigate(R.id.mainLearningFragment)
                     },
                     RecyclerGenericAdapter.ItemInterface<Course?> { obj, viewHolder, position ->
                         var view = getView(viewHolder, R.id.card_view)

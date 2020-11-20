@@ -35,115 +35,159 @@
                 android:layout_toEndOf="@+id/iv_back_client_activation"
                 android:fontFamily="@font/lato"
                 android:gravity="center_horizontal"
+                android:text="Application"
                 android:textColor="@color/white"
                 android:textSize="@dimen/font_20"
-                android:textStyle="normal"
-                android:text="Application" />
+                android:textStyle="normal" />
 
         </RelativeLayout>
 
 
     </androidx.appcompat.widget.Toolbar>
 
-    <ImageView
-        android:id="@+id/iv_application_client_activation"
-        android:layout_width="@dimen/size_90"
-        android:layout_height="@dimen/size_91"
-        android:layout_marginTop="@dimen/size_16"
-        android:src="@drawable/ic_application_client_application"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_client_activation" />
-
-    <TextView
-        android:id="@+id/tv_thanks_application"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/size_24"
-        android:fontFamily="@font/lato"
-        android:paddingStart="@dimen/size_38"
-        android:paddingEnd="@dimen/size_35"
-        android:textColor="@color/black"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/iv_application_client_activation"
-        tools:text="Thanks for showing interest in  " />
-
-    <TextView
-        android:id="@+id/tv_completion_application"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/size_14"
-        android:fontFamily="@font/lato"
-        android:paddingStart="@dimen/size_16"
-        android:paddingEnd="@dimen/size_10"
-        android:textColor="@color/black"
-        android:textSize="14sp"
-        android:textStyle="normal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_thanks_application"
-        tools:text="Please complete the below information to submit
-your Application" />
-
-    <TextView
-        android:id="@+id/tv_steps_pending_application"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/size_18"
-        android:layout_marginTop="@dimen/size_20"
-        android:fontFamily="@font/lato"
-        android:textColor="@color/warm_grey"
-        android:textSize="14sp"
-        android:textStyle="normal"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_completion_application"
-        tools:text="Steps Pending " />
-
-    <TextView
-        android:id="@+id/tv_steps_pending_application_value"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/size_20"
-        android:layout_marginEnd="@dimen/size_22"
-        android:fontFamily="@font/lato"
-        android:textColor="@color/warm_grey"
-        android:textSize="14sp"
-        android:textStyle="normal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_completion_application"
-        tools:text="2/5" />
-
-    <ProgressBar
-        android:id="@+id/h_pb_application_frag"
-        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-        android:layout_width="0dp"
-        android:layout_height="@dimen/size_9"
-        android:layout_gravity="center"
-        android:layout_marginTop="@dimen/size_9"
-        android:indeterminate="false"
-        android:progress="0"
-        android:progressDrawable="@drawable/curved_h_progress_bar"
-        app:layout_constraintEnd_toEndOf="@id/tv_steps_pending_application_value"
-        app:layout_constraintStart_toStartOf="@id/tv_steps_pending_application"
-        app:layout_constraintTop_toBottomOf="@+id/tv_steps_pending_application" />
-
-    <View
-        android:id="@+id/divider_one"
-        android:layout_width="0dp"
-        android:layout_height="1px"
-        android:layout_marginTop="@dimen/size_24"
-        android:background="#c8c7cc"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/h_pb_application_frag" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_status_pending"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/divider_one" />
+        android:clipToPadding="false"
+        android:paddingBottom="@dimen/size_70"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_client_activation">
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="parent">
+
+            <ImageView
+                android:id="@+id/iv_application_client_activation"
+                android:layout_width="@dimen/size_90"
+                android:layout_height="@dimen/size_91"
+                android:layout_marginTop="@dimen/size_16"
+                android:src="@drawable/ic_application_client_application"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_thanks_application"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/size_24"
+                android:fontFamily="@font/lato"
+                android:paddingStart="@dimen/size_38"
+                android:paddingEnd="@dimen/size_35"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/iv_application_client_activation"
+                tools:text="Thanks for showing interest in  " />
+
+            <TextView
+                android:id="@+id/tv_completion_application"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/size_14"
+                android:fontFamily="@font/lato"
+                android:paddingStart="@dimen/size_16"
+                android:paddingEnd="@dimen/size_10"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                android:textStyle="normal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_thanks_application"
+                tools:text="Please complete the below information to submit
+your Application" />
+
+            <TextView
+                android:id="@+id/tv_steps_pending_application"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/size_18"
+                android:layout_marginTop="@dimen/size_20"
+                android:fontFamily="@font/lato"
+                android:text="@string/steps_pending"
+                android:textColor="@color/warm_grey"
+                android:textSize="14sp"
+                android:textStyle="normal"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_completion_application" />
+
+            <TextView
+                android:id="@+id/tv_steps_pending_application_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/size_20"
+                android:layout_marginEnd="@dimen/size_22"
+                android:fontFamily="@font/lato"
+                android:textColor="@color/warm_grey"
+                android:textSize="14sp"
+                android:textStyle="normal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_completion_application" />
+
+            <ProgressBar
+                android:id="@+id/h_pb_application_frag"
+                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/size_9"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/size_9"
+                android:indeterminate="false"
+                android:progress="0"
+                android:progressDrawable="@drawable/curved_h_progress_bar"
+                app:layout_constraintEnd_toEndOf="@id/tv_steps_pending_application_value"
+                app:layout_constraintStart_toStartOf="@id/tv_steps_pending_application"
+                app:layout_constraintTop_toBottomOf="@+id/tv_steps_pending_application" />
+
+            <View
+                android:id="@+id/divider_one"
+                android:layout_width="0dp"
+                android:layout_height="1px"
+                android:layout_marginTop="@dimen/size_24"
+                android:background="#c8c7cc"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/h_pb_application_frag" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_status_pending"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/divider_one" />
+
+            <View
+                android:id="@+id/divider_two"
+                android:layout_width="0dp"
+                android:layout_height="1px"
+                android:background="#c8c7cc"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/rv_status_pending" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/size_15"
+        android:layout_marginEnd="@dimen/size_17"
+        android:layout_marginBottom="@dimen/size_16"
+        android:background="@drawable/bg_submit_application_client_activation"
+        android:fontFamily="@font/lato"
+        android:gravity="center"
+        android:minHeight="@dimen/size_44"
+        android:text="@string/submit"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:textStyle="normal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

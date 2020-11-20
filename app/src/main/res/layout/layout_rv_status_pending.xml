@@ -41,6 +41,7 @@
         app:srcCompat="@drawable/ic_next_screen" />
 
     <View
+        android:id="@+id/divider_bottom"
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:layout_below="@+id/iv_next_screen_application"

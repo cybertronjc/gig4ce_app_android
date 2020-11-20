@@ -1,12 +1,9 @@
 package com.gigforce.app.modules.client_activation
 
 import androidx.lifecycle.ViewModel
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.gigforce.app.R
+import com.gigforce.app.modules.gigerVerfication.VerificationBaseModel
 import com.gigforce.app.modules.landingscreen.models.WorkOrderDependency
-import com.gigforce.app.utils.HorizontaltemDecoration
 import com.gigforce.app.utils.SingleLiveEvent
-import kotlinx.android.synthetic.main.layout_fragment_client_activation.*
 
 class ApplicationClientActivationViewModel : ViewModel() {
     val repository = ApplicationClientActivationRepository()
@@ -20,6 +17,12 @@ class ApplicationClientActivationViewModel : ViewModel() {
         SingleLiveEvent<String>();
     }
     val observableError: SingleLiveEvent<String> get() = _observableError
+
+
+    private val _observableVerification: SingleLiveEvent<VerificationBaseModel> by lazy {
+        SingleLiveEvent<VerificationBaseModel>();
+    }
+    val observableVerification: SingleLiveEvent<VerificationBaseModel> get() = _observableVerification
 
     fun getWorkOrderDependency(workOrderId: String) {
         repository.getCollectionReference().whereEqualTo("type", "dependency")
@@ -39,6 +42,19 @@ class ApplicationClientActivationViewModel : ViewModel() {
     }
 
 
+    fun getVerification() {
+        repository.db.collection("Verification").document(repository.getUID())
+            .addSnapshotListener { element, err ->
+                run {
+                    if (err == null) {
+                        _observableVerification.value =
+                            element?.toObject(VerificationBaseModel::class.java);
+                    } else {
+                        _observableError.value = err.message
+                    }
+                }
+            }
+    }
 
 
 }

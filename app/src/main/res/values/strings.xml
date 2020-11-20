@@ -1027,6 +1027,8 @@
     <string name="whats_ur_work">What\'s your work status?</string>
     <string name="explore_gigs">Explore Gigs</string>
     <string name="frequently_asked_questions">Frequently Asked Questions</string>
+    <string name="steps_pending">Steps Pending</string>
+    <string name="submit">Submit</string>
 
 
 </resources>

@@ -91,11 +91,12 @@
                 android:paddingStart="@dimen/size_8"
                 android:paddingTop="@dimen/size_10"
                 android:paddingEnd="@dimen/size_18"
-                android:text="Applied"
-                android:textColor="#2c9700"
+                android:text="Pending"
+                android:textColor="@color/yellow"
                 android:textSize="@dimen/font_12"
                 android:textStyle="normal"
-                app:drawableStartCompat="@drawable/ic_applied"
+
+                app:drawableStartCompat="@drawable/ic_status_pending"
                 app:layout_constraintBottom_toBottomOf="@+id/rv_preferred_locations_client_activation"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/rv_preferred_locations_client_activation" />
