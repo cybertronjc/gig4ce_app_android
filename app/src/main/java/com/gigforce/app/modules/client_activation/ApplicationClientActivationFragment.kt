@@ -5,10 +5,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
@@ -59,7 +57,7 @@ class ApplicationClientActivationFragment : BaseFragment(),
 
     private fun initObservers() {
         viewModel.observableError.observe(viewLifecycleOwner, Observer {
-            showToast(it?:"")
+            showToast(it ?: "")
         })
 
         viewModel.observableWorkOrderDependency.observe(viewLifecycleOwner, Observer {
@@ -183,12 +181,7 @@ class ApplicationClientActivationFragment : BaseFragment(),
                 startActivityForResult(photoCropIntent, PHOTO_CROP)
             }
             "about_me" -> {
-
-                navigate(
-                    R.id.aboutExpandedFragment, bundleOf(
-                        Pair(StringConstants.PROFILE_ID.value, profileViewModel.profileID)
-                    )
-                )
+                navigate(R.id.profileFragment)
             }
         }
     }
