@@ -184,7 +184,7 @@ class ApplicationClientActivationFragment : BaseFragment(),
             }
             "about_me" -> {
 
-                findNavController().navigate(
+                navigate(
                     R.id.aboutExpandedFragment, bundleOf(
                         Pair(StringConstants.PROFILE_ID.value, profileViewModel.profileID)
                     )
