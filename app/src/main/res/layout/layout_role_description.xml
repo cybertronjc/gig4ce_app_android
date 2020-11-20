@@ -30,7 +30,6 @@
             android:layout_marginTop="@dimen/size_27"
             android:layout_marginEnd="@dimen/size_43"
             android:paddingStart="@dimen/size_9"
-
             android:textStyle="bold"
             android:textColor="#000000"
             android:textSize="@dimen/font_14" />

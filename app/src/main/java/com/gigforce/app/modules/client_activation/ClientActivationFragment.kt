@@ -104,10 +104,11 @@ class ClientActivationFragment : BaseFragment() {
                         .load(element.icon)
                         .placeholder(getCircularProgressDrawable())
                         .into(viewRoleDesc.iv_what)
-                    ll_role_desc.addView(viewRoleDesc)
+
                 } else {
                     viewRoleDesc.iv_what.setImageResource(R.drawable.ic_play_gradient)
                 }
+                ll_role_desc.addView(viewRoleDesc)
 
             }
             adapterBulletPoints.addData(it?.info!!)
