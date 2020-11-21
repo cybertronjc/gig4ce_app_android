@@ -18,7 +18,7 @@ import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.explore_by_role.AdapterPreferredLocation
 import com.gigforce.app.modules.learning.LearningConstants
-import com.gigforce.app.modules.learning.models.Course
+import com.gigforce.app.modules.learning.models.LessonModel
 import com.gigforce.app.utils.GlideApp
 import com.gigforce.app.utils.HorizontaltemDecoration
 import com.gigforce.app.utils.Lce
@@ -116,11 +116,11 @@ class ClientActivationFragment : BaseFragment() {
 
 
 
-            if (!it?.requiredLessons?.lessons.isNullOrEmpty()) {
+//            if (!(it?.requiredLessons?.lessons.isNullOrEmpty())) {
                 learning_cl.visible()
                 textView120.text = it?.requiredLessons?.title
                 initializeLearningModule(it?.requiredLessons?.lessons!!)
-            }
+//            }
         })
         viewModel.getWorkOrder(docID = mWordOrderID)
 
@@ -262,7 +262,7 @@ class ClientActivationFragment : BaseFragment() {
 //        }
 //    }
 
-    private fun initializeLearningModule(courses: List<String>) {
+    private fun initializeLearningModule(lessons: List<String>) {
         viewModel.observableCourses.observe(viewLifecycleOwner, Observer {
             when (it) {
                 Lce.Loading -> showLearningAsLoading()
@@ -270,7 +270,7 @@ class ClientActivationFragment : BaseFragment() {
                 is Lce.Error -> showErrorWhileLoadingCourse(it.error)
             }
         })
-        viewModel.getCoursesList(courses)
+        viewModel.getCoursesList(lessons)
 
 
     }
@@ -293,7 +293,7 @@ class ClientActivationFragment : BaseFragment() {
         learning_learning_error.text = error
     }
 
-    private fun showUserLearningCourses(content: List<Course>) {
+    private fun showUserLearningCourses(content: List<LessonModel>) {
 
         learning_progress_bar.gone()
         learning_learning_error.gone()
@@ -310,13 +310,13 @@ class ClientActivationFragment : BaseFragment() {
             val itemWidth = ((width / 3) * 2).toInt()
             // model will change when integrated with DB
 
-            val recyclerGenericAdapter: RecyclerGenericAdapter<Course> =
-                RecyclerGenericAdapter<Course>(
+            val recyclerGenericAdapter: RecyclerGenericAdapter<LessonModel> =
+                RecyclerGenericAdapter<LessonModel>(
                     activity?.applicationContext,
                     PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
 //                        navigate(R.id.mainLearningFragment)
                     },
-                    RecyclerGenericAdapter.ItemInterface<Course?> { obj, viewHolder, position ->
+                    RecyclerGenericAdapter.ItemInterface<LessonModel?> { obj, viewHolder, position ->
                         var view = getView(viewHolder, R.id.card_view)
                         val lp = view.layoutParams
                         lp.height = lp.height
@@ -327,8 +327,8 @@ class ClientActivationFragment : BaseFragment() {
                         title.text = obj?.name
 
                         var subtitle = getTextView(viewHolder, R.id.title)
-                        subtitle.text = obj?.level
-
+                        subtitle.text = obj?.description
+//
                         var comImg = getImageView(viewHolder, R.id.completed_iv)
                         comImg.isVisible = obj?.completed ?: false
 

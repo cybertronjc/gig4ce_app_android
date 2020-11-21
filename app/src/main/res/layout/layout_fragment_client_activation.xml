@@ -119,7 +119,15 @@
                     android:paddingEnd="@dimen/size_8" />
             </RelativeLayout>
 
-
+            <LinearLayout
+                android:id="@+id/ll_role_desc"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/rl_pref_loc"
+                 />
             <TextView
                 android:id="@+id/tv_earning_client_activation"
                 android:layout_width="0dp"
@@ -138,26 +146,18 @@
                 android:textStyle="italic"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/rl_pref_loc"
+                app:layout_constraintTop_toBottomOf="@id/ll_role_desc"
                 tools:text="Earn upto 2000 /Day by working as Retail Executive /n Monthly earn up to Rs. 31000" />
 
-            <LinearLayout
-                android:id="@+id/ll_role_desc"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_earning_client_activation" />
+
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/learning_cl"
                 android:layout_width="match_parent"
                 android:layout_height="233dp"
-                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ll_role_desc">
+                app:layout_constraintTop_toBottomOf="@+id/tv_earning_client_activation">
 
                 <ImageView
                     android:id="@+id/imageView36"
