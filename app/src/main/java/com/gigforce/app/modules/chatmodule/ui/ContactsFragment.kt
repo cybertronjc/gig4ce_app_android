@@ -11,8 +11,10 @@ import android.os.IBinder
 import android.provider.Settings
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.PopupMenu
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -21,6 +23,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
+import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.chatmodule.models.ContactModel
 import com.gigforce.app.modules.chatmodule.service.FetchContactsService
@@ -35,7 +38,9 @@ import kotlinx.android.synthetic.main.fragment_chat_new_contact.*
 /*
     /////////////////////////////////////////////////////////////////////////////////
  */
-class ContactsFragment : BaseFragment(), OnContactClickListener {
+class ContactsFragment : BaseFragment(), OnContactClickListener, PopupMenu.OnMenuItemClickListener {
+
+
 
     private val TAG: String = "chats/new/contact"
     private val viewModel: ContactsViewModel by viewModels()
@@ -78,35 +83,8 @@ class ContactsFragment : BaseFragment(), OnContactClickListener {
         super.onViewCreated(view, savedInstanceState)
         findViews(view)
         initViewModel()
-      //  checkForPermissionElseSyncContacts()
+       checkForPermissionElseSyncContacts()
     }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
-        // Gets the ListView from the View list of the parent activity
-        activity?.also {
-            handleOnActivityCreated()
-        }
-    }
-
-    private fun handleOnActivityCreated(){
-        // check for permissions
-        if(this.requireContext().checkSelfPermission(android.Manifest.permission.READ_CONTACTS)
-            != PackageManager.PERMISSION_GRANTED)
-        {
-            Log.v(TAG, "Permission Required. Requesting Permission")
-            requestPermissions(arrayOf(android.Manifest.permission.READ_CONTACTS), 1)
-            return
-        }
-
-        Intent(this.context, FetchContactsService::class.java).also {
-            Log.v(TAG, "Binding Service")
-            requireActivity().bindService(it, mConnection, Context.BIND_AUTO_CREATE)
-        }
-
-    }
-
 
     private fun findViews(view: View) {
         contactRecyclerView = view.findViewById(R.id.rv_contactsList)
@@ -116,6 +94,7 @@ class ContactsFragment : BaseFragment(), OnContactClickListener {
             false
         )
         contactRecyclerView.adapter = contactsAdapter
+        processing_contacts_progressbar.visible()
 
         askContactsPermission.setOnClickListener {
 
@@ -125,6 +104,14 @@ class ContactsFragment : BaseFragment(), OnContactClickListener {
                 data = uri
                 startActivityForResult(this, REQUEST_CONTACTS_PERMISSION)
             }
+        }
+
+        imageView41.setOnClickListener {
+
+            val popUp = PopupMenu(activity?.applicationContext, it)
+            popUp.setOnMenuItemClickListener(this)
+            popUp.inflate(R.menu.menu_chat_contact)
+            popUp.show()
         }
     }
 
@@ -136,6 +123,7 @@ class ContactsFragment : BaseFragment(), OnContactClickListener {
 
     private fun showContactsOnView(it: List<ContactModel>?) {
         val contacts = it ?: return
+        processing_contacts_progressbar.gone()
         contactsAdapter.setData(contacts)
     }
 
@@ -206,9 +194,21 @@ class ContactsFragment : BaseFragment(), OnContactClickListener {
         navigate(R.id.chatScreenFragment, bundle)
     }
 
-
     companion object {
-
         const val REQUEST_CONTACTS_PERMISSION = 101
+    }
+
+    override fun onMenuItemClick(item: MenuItem?): Boolean {
+      return when(item?.itemId) {
+            R.id.action_referesh -> {
+                checkForPermissionElseSyncContacts()
+                true
+            }
+            else -> {
+                showToast("Coming soon")
+                false
+            }
+        }
+
     }
 }

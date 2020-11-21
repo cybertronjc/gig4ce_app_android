@@ -30,7 +30,7 @@ class ChatListFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
 
     private val viewModel: ChatHeadersViewModel by activityViewModels<ChatHeadersViewModel>()
     private val mAdapter: ChatListRecyclerAdapter by lazy {
-        ChatListRecyclerAdapter(initGlide()!!, this)
+        ChatListRecyclerAdapter(requireContext(),initGlide()!!, this)
     }
 
     /*

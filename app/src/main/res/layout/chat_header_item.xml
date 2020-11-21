@@ -58,6 +58,32 @@
         android:textSize="16sp"
         tools:text="Rahulxededdeded d Yeadav" />
 
+    <ImageView
+        android:id="@+id/unseen_msg_count_iv"
+        android:layout_width="22dp"
+        android:layout_height="22dp"
+        android:layout_alignParentEnd="true"
+        android:fontFamily="@font/lato"
+        android:textColor="@color/gray_chat_module"
+        android:textSize="12sp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_timeValue"
+        tools:text="now" />
+
+
+    <ImageView
+        android:id="@+id/last_mesage_type"
+        android:layout_width="14dp"
+        android:layout_height="14dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="6dp"
+        android:src="@drawable/ic_play"
+        app:tint="@color/black"
+        app:layout_constraintStart_toEndOf="@id/contact_image_view"
+        app:layout_constraintTop_toBottomOf="@id/tv_nameValue"/>
+
     <TextView
         android:id="@+id/tv_subtitle"
         android:layout_width="0dp"
@@ -68,8 +94,8 @@
         android:layout_marginEnd="16dp"
         android:textColor="@color/gray_chat_module1"
         android:textSize="12sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/contact_image_view"
+        app:layout_constraintEnd_toStartOf="@id/unseen_msg_count_iv"
+        app:layout_constraintStart_toEndOf="@id/last_mesage_type"
         app:layout_constraintTop_toBottomOf="@id/tv_nameValue"
         tools:text="Last messsage that I sent" />
 

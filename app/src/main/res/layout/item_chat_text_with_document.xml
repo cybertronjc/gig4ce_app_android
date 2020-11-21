@@ -54,7 +54,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 android:text="NA"
                 android:textColor="@color/gray_chat_module"
-                android:textSize="10sp" />
+                android:textSize="8sp" />
 
             <ProgressBar
                 style="?android:attr/progressBarStyleHorizontal"

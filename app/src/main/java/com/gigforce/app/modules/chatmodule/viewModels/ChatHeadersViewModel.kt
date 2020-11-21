@@ -6,19 +6,20 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.gigforce.app.modules.chatmodule.models.ChatHeader
 import com.gigforce.app.modules.chatmodule.models.UserInfo
-import com.gigforce.app.modules.chatmodule.repository.ChatHeaderFirebaseRepository
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.Query
 
-class ChatHeadersViewModel: ViewModel() {
+class ChatHeadersViewModel : ViewModel() {
 
     private val uid = FirebaseAuth.getInstance().currentUser?.uid!!
 
     private var firebaseDB = FirebaseFirestore.getInstance()
 
-    private val chatHeaders: MutableLiveData<ArrayList<ChatHeader>> = MutableLiveData(ArrayList<ChatHeader>())
+    private val chatHeaders: MutableLiveData<ArrayList<ChatHeader>> =
+        MutableLiveData(ArrayList<ChatHeader>())
+
     // private var chatHeaderRepository = ChatHeaderFirebaseRepository()
     private var chatHeadersSnapshotListener: ListenerRegistration? = null
 
@@ -33,27 +34,31 @@ class ChatHeadersViewModel: ViewModel() {
 
         chatHeadersSnapshotListener = reference
             .addSnapshotListener { querySnapshot, exception ->
-                exception ?. let {
+                exception?.let {
                     Log.e("chatheaders/viewmodel", exception.message!!)
                     return@addSnapshotListener
                 }
 
                 // extract chatHeaders from querySnapshot
-                querySnapshot ?. let {
-                    val tempChatHeaders: ArrayList<ChatHeader>  = ArrayList<ChatHeader>()
-                    for(doc in querySnapshot.documents) {
+                querySnapshot?.let {
+                    val tempChatHeaders: ArrayList<ChatHeader> = ArrayList<ChatHeader>()
+                    for (doc in querySnapshot.documents) {
                         tempChatHeaders.add(
-                            ChatHeader(doc.id,
-                            forUserId = doc.getString("forUserId")?:"",
-                            otherUserId = doc.getString("otherUserId")?:"",
-                            unseenCount = doc.getDouble("unseenCount")?.toInt()?:0,
-                            lastMsgText = doc.getString("lastMsgText")?:"",
-                            lastMsgTimestamp = doc.getTimestamp("lastMsgTimestamp"),
-                            otherUser = UserInfo(
-                                name = doc.getString("otherUser.name")?:"",
-                                type = doc.getString("otherUser.type")?:"",
-                                profilePic = doc.getString("otherUser.profilePic")?:""
-                            )))
+                            ChatHeader(
+                                doc.id,
+                                forUserId = doc.getString("forUserId") ?: "",
+                                otherUserId = doc.getString("otherUserId") ?: "",
+                                unseenCount = doc.getDouble("unseenCount")?.toInt() ?: 0,
+                                lastMsgText = doc.getString("lastMsgText") ?: "",
+                                lastMessageType = doc.getString("lastMessageType") ?: "",
+                                lastMsgTimestamp = doc.getTimestamp("lastMsgTimestamp"),
+                                otherUser = UserInfo(
+                                    name = doc.getString("otherUser.name") ?: "",
+                                    type = doc.getString("otherUser.type") ?: "",
+                                    profilePic = doc.getString("otherUser.profilePic") ?: ""
+                                )
+                            )
+                        )
                     }
                     chatHeaders.postValue(tempChatHeaders)
                 }

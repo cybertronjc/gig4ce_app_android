@@ -32,7 +32,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="NA"
-                android:textSize="10sp"
+                android:textSize="8sp"
                 android:textColor="@color/gray_chat_module"
                 android:fontFamily="@font/lato"
                 android:layout_gravity="end"

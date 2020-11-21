@@ -2,7 +2,6 @@ package com.gigforce.app.modules.chatmodule.ui
 
 import android.app.Activity.RESULT_OK
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.database.Cursor
 import android.net.Uri
 import android.os.Bundle
@@ -13,7 +12,6 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
-import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
@@ -36,8 +34,7 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 
-class ChatFragment : BaseFragment(),
-    PopupMenu.OnMenuItemClickListener,
+class GroupChatFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
     OnChatMessageClickListener {
 
     private val viewModel: ChatMessagesViewModel by activityViewModels<ChatMessagesViewModel>()
@@ -48,8 +45,6 @@ class ChatFragment : BaseFragment(),
     private lateinit var forUserId: String
     private lateinit var chatHeaderId: String
     private lateinit var otherUserId: String
-
-    private var selectedOperation = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -115,8 +110,8 @@ class ChatFragment : BaseFragment(),
 
                     mAdapter.updateChatMessages(msgs)
 
+                    //TODO improve UX here
                     rv_chats.smoothScrollToPosition(0)
-                    viewModel.setMessagesUnseenCountToZero()
                 }
             })
         viewModel.startListeningForNewMessages()
@@ -190,7 +185,7 @@ class ChatFragment : BaseFragment(),
         }
 
         iv_greyPlus.setOnClickListener {
-            val popUp = PopupMenu(requireContext(), it)
+            val popUp = PopupMenu(activity?.applicationContext, it)
             popUp.setOnMenuItemClickListener(this)
             popUp.inflate(R.menu.menu_chat_bottom)
             popUp.show()
@@ -198,7 +193,7 @@ class ChatFragment : BaseFragment(),
     }
 
     private fun manageMenu(view: View) {
-        val popUp = PopupMenu(requireContext(), view)
+        val popUp = PopupMenu(activity?.applicationContext, view)
         popUp.setOnMenuItemClickListener(this)
         popUp.inflate(R.menu.menu_chat)
         popUp.show()
@@ -224,45 +219,20 @@ class ChatFragment : BaseFragment(),
             true
         }
         R.id.action_document -> {
-
-            if (isStoragePermissionGranted())
-                startPickingDocument()
-            else {
-                selectedOperation = OPERATION_PICK_DOCUMENT
-                askForStoragePermission()
-            }
+            startPickingDocument()
             true
         }
         R.id.action_pick_image -> {
-            if (isStoragePermissionGranted())
-                pickImage()
-            else {
-                selectedOperation = OPERATION_PICK_IMAGE
-                askForStoragePermission()
-            }
+            pickImage()
             true
         }
         R.id.action_video -> {
-            if (isStoragePermissionGranted())
-                pickVideo()
-            else {
-                selectedOperation = OPERATION_PICK_VIDEO
-                askForStoragePermission()
-            }
-
+            pickVideo()
             true
         }
         else -> {
             false
         }
-    }
-
-    private fun askForStoragePermission() {
-        Log.v(TAG, "Permission Required. Requesting Permission")
-        requestPermissions(
-            arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE,android.Manifest.permission.WRITE_EXTERNAL_STORAGE,android.Manifest.permission.CAMERA),
-            REQUEST_STORAGE_PERMISSION
-        )
     }
 
     private fun pickVideo() = Intent(Intent.ACTION_GET_CONTENT).apply {
@@ -363,42 +333,6 @@ class ChatFragment : BaseFragment(),
         viewModel.downloadAttachment(filePath, requireContext().filesDir)
     }
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-
-
-        if (requestCode == REQUEST_STORAGE_PERMISSION) {
-            var allPermsGranted = true
-            for (i in grantResults.indices) {
-                if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
-                    allPermsGranted = false
-                    break
-                }
-            }
-
-            if (allPermsGranted) {
-                if (selectedOperation == OPERATION_PICK_IMAGE) {
-                    pickImage()
-                    selectedOperation = -1
-                }
-                else if (selectedOperation == OPERATION_PICK_VIDEO) {
-                    pickVideo()
-                    selectedOperation = -1
-                }
-                else if (selectedOperation == OPERATION_PICK_DOCUMENT) {
-                    startPickingDocument()
-                    selectedOperation = -1
-                }
-            } else
-                showToast("Please grant storage permission, to pick files")
-        }
-    }
-
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
@@ -457,29 +391,12 @@ class ChatFragment : BaseFragment(),
         return ""
     }
 
-    private fun isStoragePermissionGranted(): Boolean {
-
-        return ContextCompat.checkSelfPermission(
-            requireContext(),
-            android.Manifest.permission.READ_EXTERNAL_STORAGE
-        ) == PackageManager.PERMISSION_GRANTED
-                && ContextCompat.checkSelfPermission(
-                    requireContext(),
-                    android.Manifest.permission.WRITE_EXTERNAL_STORAGE
-                ) == PackageManager.PERMISSION_GRANTED
-                && ContextCompat.checkSelfPermission(
-                    requireContext(),
-                    android.Manifest.permission.CAMERA
-                ) == PackageManager.PERMISSION_GRANTED
-    }
-
     companion object {
         const val TAG = "ChatFragment"
 
         const val REQUEST_PICK_DOCUMENT = 102
         const val REQUEST_PICK_IMAGE = 103
         const val REQUEST_PICK_VIDEO = 104
-        const val REQUEST_STORAGE_PERMISSION = 105
 
         const val DOC = "application/msword"
         const val DOCX = "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
@@ -488,9 +405,5 @@ class ChatFragment : BaseFragment(),
         const val TEXT = "text/*"
         const val PDF = "application/pdf"
         const val XLS = "application/vnd.ms-excel"
-
-        private var OPERATION_PICK_IMAGE = 0
-        private var OPERATION_PICK_VIDEO = 1
-        private var OPERATION_PICK_DOCUMENT = 2
     }
 }

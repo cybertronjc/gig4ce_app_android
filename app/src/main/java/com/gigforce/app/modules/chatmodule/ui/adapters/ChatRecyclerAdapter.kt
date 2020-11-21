@@ -2,6 +2,7 @@ package com.gigforce.app.modules.chatmodule.ui.adapters
 
 import android.content.Context
 import android.graphics.Color
+import android.graphics.ColorFilter
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +15,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.RequestManager
 import com.gigforce.app.R
 import com.gigforce.app.core.gone
@@ -194,6 +196,7 @@ class ChatRecyclerAdapter constructor(
                     textView.text = msg.content
 
                     textViewTime.text = msg.timestamp?.toDisplayText()
+                    textViewTime.setTextColor(Color.parseColor("#979797"))
 
                     linearLayout.setBackgroundColor(Color.parseColor("#19eeeeee"))
                     textView.setTextColor(Color.parseColor("#000000"))
@@ -251,6 +254,7 @@ class ChatRecyclerAdapter constructor(
                     textView.text = msg.content
 
                     textViewTime.text = msg.timestamp?.toDisplayText()
+                    textViewTime.setTextColor(Color.parseColor("#979797"))
 
                     linearLayout.setBackgroundColor(Color.parseColor("#19eeeeee"))
                     textView.setTextColor(Color.parseColor("#000000"))
@@ -316,6 +320,7 @@ class ChatRecyclerAdapter constructor(
                 "in" -> {
                     textView.text = msg.attachmentName
                     textViewTime.text = msg.timestamp?.toDisplayText()
+                    textViewTime.setTextColor(Color.parseColor("#979797"))
                     linearLayout.setBackgroundColor(Color.parseColor("#19eeeeee"))
                     textView.setTextColor(Color.parseColor("#000000"))
 
@@ -347,7 +352,7 @@ class ChatRecyclerAdapter constructor(
         override fun onClick(v: View?) {
             val currentPos = adapterPosition
             onMessageClickListener.chatMessageClicked(
-                MessageType.TEXT_WITH_VIDEO,
+                MessageType.TEXT_WITH_DOCUMENT,
                 currentPos,
                 chatMessages[currentPos]
             )
@@ -378,15 +383,24 @@ class ChatRecyclerAdapter constructor(
                         null
                     )
                 )
-               imageLoadingProgressBar.visible()
+                imageLoadingProgressBar.visible()
             } else {
                 imageLoadingProgressBar.gone()
-                requestManager.load(msg.attachmentPath).into(imageView)
+
+                if(msg.thumbnail.isNullOrBlank()) {
+                    requestManager.load(msg.attachmentPath)
+                        .placeholder(getCircularProgressDrawable()).into(imageView)
+                } else{
+                    requestManager.load(msg.thumbnail)
+                        .placeholder(getCircularProgressDrawable()).into(imageView)
+                }
             }
 
             when (msg.flowType) {
+
                 "in" -> {
                     textViewTime.text = msg.timestamp?.toDisplayText()
+                    textViewTime.setTextColor(Color.parseColor("#979797"))
                     linearLayout.setBackgroundColor(Color.parseColor("#19eeeeee"))
 
                     val layoutParams = LinearLayout.LayoutParams(
@@ -436,6 +450,7 @@ class ChatRecyclerAdapter constructor(
                     textView.text = msg.content
 
                     textViewTime.text = msg.timestamp?.toDisplayText()
+                    textViewTime.setTextColor(Color.parseColor("#979797"))
 
                     linearLayout.setBackgroundColor(Color.parseColor("#19eeeeee"))
                     textView.setTextColor(Color.parseColor("#000000"))
@@ -491,9 +506,12 @@ class ChatRecyclerAdapter constructor(
                     textView.text = msg.content
 
                     textViewTime.text = msg.timestamp?.toDisplayText()
+                    textViewTime.setTextColor(Color.parseColor("#979797"))
 
                     linearLayout.setBackgroundColor(Color.parseColor("#19eeeeee"))
                     textView.setTextColor(Color.parseColor("#000000"))
+
+
 
                     val layoutParams = LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.WRAP_CONTENT,
@@ -504,10 +522,13 @@ class ChatRecyclerAdapter constructor(
                 }
                 "out" -> {
                     textView.text = msg.content
+
                     textViewTime.text = msg.timestamp?.toDisplayText()
+                    textViewTime.setTextColor(Color.parseColor("#ffffff"))
+
                     linearLayout.setBackgroundColor(Color.parseColor("#E91E63"))
                     textView.setTextColor(Color.parseColor("#ffffff"))
-                    textViewTime.setTextColor(Color.parseColor("#ffffff"))
+
 
                     val layoutParams = LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.WRAP_CONTENT,
@@ -533,20 +554,47 @@ class ChatRecyclerAdapter constructor(
     private inner class VideoMessageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
         View.OnClickListener {
 
-        private val linearLayout: ConstraintLayout = itemView.findViewById(R.id.ll_msgContainer)
-        private val textView: TextView = itemView.findViewById(R.id.tv_msgValue)
+        private val linearLayout: LinearLayout = itemView.findViewById(R.id.ll_msgContainer)
+        private val imageView: ImageView = itemView.findViewById(R.id.iv_image)
         private val textViewTime: TextView = itemView.findViewById(R.id.tv_msgTimeValue)
         private val cardView: CardView = itemView.findViewById(R.id.cv_msgContainer)
+        private val attachmentNameTV: TextView = itemView.findViewById(R.id.tv_file_name)
+        private val uploadingProgress: View = itemView.findViewById(R.id.uploading_progress)
+
+        init {
+            itemView.setOnClickListener(this)
+        }
 
         fun bindValues(msg: Message) {
+
+            if (msg.attachmentPath.isNullOrBlank()) {
+                uploadingProgress.visible()
+            } else {
+                uploadingProgress.gone()
+            }
+
+            if (msg.thumbnail.isNullOrBlank()) {
+                imageView.setImageDrawable(null)
+                imageView.setBackgroundColor(
+                    ResourcesCompat.getColor(
+                        context.resources,
+                        R.color.white,
+                        null
+                    )
+                )
+            } else {
+                requestManager.load(msg.thumbnail).into(imageView)
+            }
+
+            attachmentNameTV.text = msg.attachmentName
+
             when (msg.flowType) {
                 "in" -> {
-                    textView.text = msg.content
-
                     textViewTime.text = msg.timestamp?.toDisplayText()
-
+                    textViewTime.setTextColor(Color.parseColor("#979797"))
                     linearLayout.setBackgroundColor(Color.parseColor("#19eeeeee"))
-                    textView.setTextColor(Color.parseColor("#000000"))
+                    textViewTime.setTextColor(Color.parseColor("#000000"))
+                    attachmentNameTV.setTextColor(Color.parseColor("#E91E63"))
 
                     val layoutParams = LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.WRAP_CONTENT,
@@ -556,11 +604,10 @@ class ChatRecyclerAdapter constructor(
                     cardView.layoutParams = layoutParams
                 }
                 "out" -> {
-                    textView.text = msg.content
                     textViewTime.text = msg.timestamp?.toDisplayText()
                     linearLayout.setBackgroundColor(Color.parseColor("#E91E63"))
-                    textView.setTextColor(Color.parseColor("#ffffff"))
                     textViewTime.setTextColor(Color.parseColor("#ffffff"))
+                    attachmentNameTV.setTextColor(Color.parseColor("#ffffff"))
 
                     val layoutParams = LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.WRAP_CONTENT,
@@ -581,6 +628,14 @@ class ChatRecyclerAdapter constructor(
                 chatMessages[currentPos]
             )
         }
+    }
+
+    fun getCircularProgressDrawable(): CircularProgressDrawable {
+        val circularProgressDrawable = CircularProgressDrawable(context)
+        circularProgressDrawable.strokeWidth = 5f
+        circularProgressDrawable.centerRadius = 20f
+        circularProgressDrawable.start()
+        return circularProgressDrawable
     }
 
 

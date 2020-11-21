@@ -59,6 +59,12 @@ class ContactsRecyclerAdapter(
 
         fun bindValues(contact: ContactModel) {
             contactNameTV.text = contact.name
+
+            if(contact.imageUrl != null){
+                requestManager.load(contact.imageUrl!!).into(contactAvatarIV)
+            } else{
+                requestManager.load(R.drawable.ic_user_icon).into(contactAvatarIV)
+            }
         }
 
         override fun onClick(v: View?) {

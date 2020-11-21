@@ -47,7 +47,7 @@ class Message(
      */
     @get:PropertyName("thumbnail")
     @set:PropertyName("thumbnail")
-    var thumbnail: String = "",
+    var thumbnail: String? = null,
 
 
     @get:PropertyName("attachmentName")
