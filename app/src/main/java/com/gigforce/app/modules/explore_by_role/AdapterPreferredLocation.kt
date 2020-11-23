@@ -9,7 +9,7 @@ import kotlinx.android.synthetic.main.layout_rv_role_details.view.*
 
 class AdapterPreferredLocation : RecyclerView.Adapter<AdapterPreferredLocation.ViewHolder>() {
 
-    private var items: List<String>? = null
+    private var items: List<String?>? = null
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
@@ -29,7 +29,7 @@ class AdapterPreferredLocation : RecyclerView.Adapter<AdapterPreferredLocation.V
 
     }
 
-    fun addData(items: List<String>) {
+    fun addData(items: List<String?>) {
         this.items = items
         notifyDataSetChanged()
     }

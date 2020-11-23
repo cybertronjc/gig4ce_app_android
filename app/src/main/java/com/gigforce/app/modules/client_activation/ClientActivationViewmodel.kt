@@ -1,19 +1,27 @@
 package com.gigforce.app.modules.client_activation
 
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.gigforce.app.modules.landingscreen.models.WorkOrder
 import com.gigforce.app.modules.learning.models.LessonModel
 import com.gigforce.app.utils.Lce
 import com.gigforce.app.utils.SingleLiveEvent
+import com.gigforce.app.utils.StringConstants
 
-class ClientActivationViewmodel : ViewModel() {
-
+class ClientActivationViewmodel(
+    private val savedStateHandle: SavedStateHandle
+) : ViewModel() {
+    var initialized: Boolean = false
     val clientActivationRepository = ClientActivationRepository()
 
-    private val _observableWorkOrder: SingleLiveEvent<WorkOrder> by lazy {
-        SingleLiveEvent<WorkOrder>();
-    }
-    val observableWorkOrder: SingleLiveEvent<WorkOrder> get() = _observableWorkOrder
+    private val _observableWorkOrder: MutableLiveData<WorkOrder>
+        get() = savedStateHandle.getLiveData(
+            StringConstants.SAVED_STATE_CLIENT_ACT.value,
+            WorkOrder()
+        )
+    val observableWorkOrder: MutableLiveData<WorkOrder> = _observableWorkOrder
+
 
     private val _observableCourses: SingleLiveEvent<Lce<List<LessonModel>>> by lazy {
         SingleLiveEvent<Lce<List<LessonModel>>>();
@@ -28,26 +36,34 @@ class ClientActivationViewmodel : ViewModel() {
         clientActivationRepository.getCollectionReference().document(docID)
             .addSnapshotListener { success, error ->
                 run {
+
                     if (error != null) {
                         _observableError.value = error.message
                     } else {
-                        _observableWorkOrder.value = success?.toObject(WorkOrder::class.java)
+                        val toObject = success?.toObject(WorkOrder::class.java)
+                        savedStateHandle.set(StringConstants.SAVED_STATE_CLIENT_ACT.value, toObject)
+                        _observableWorkOrder.value = toObject
                     }
-
+                    initialized = true
                 }
             }
 
     }
 
     fun getCoursesList(lessons: List<String>) {
-        _observableCourses.value = Lce.loading()
 
+        _observableCourses.value = Lce.loading()
         clientActivationRepository.db.collection("Course_blocks").whereIn("docId", lessons)
             .addSnapshotListener { success, error ->
                 if (error != null) {
                     _observableCourses.value = Lce.error(error.message.toString())
                 } else {
-                    _observableCourses.value = Lce.content(success?.toObjects(LessonModel::class.java)!!);
+                    val toObjects = success?.toObjects(LessonModel::class.java)
+                    _observableCourses.value = Lce.content(toObjects!!);
+                    savedStateHandle.set(
+                        StringConstants.SAVED_STATE_VIDEOS_CLIENT_ACT.value,
+                        toObjects
+                    )
                 }
 
             }

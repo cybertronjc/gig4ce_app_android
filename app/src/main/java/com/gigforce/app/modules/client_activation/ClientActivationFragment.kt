@@ -7,8 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.SavedStateViewModelFactory
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
@@ -29,13 +30,10 @@ import kotlinx.android.synthetic.main.layout_role_description.view.*
 
 class ClientActivationFragment : BaseFragment() {
     private lateinit var mWordOrderID: String
-    private val viewModel: ClientActivationViewmodel by viewModels()
-    private val adapterPreferredLocation: AdapterPreferredLocation by lazy {
-        AdapterPreferredLocation()
-    }
-    private val adapterBulletPoints: AdapterBulletPoints by lazy {
-        AdapterBulletPoints()
-    }
+    private lateinit var viewModel: ClientActivationViewmodel
+    private val adapterPreferredLocation: AdapterPreferredLocation? = null
+    private lateinit var adapterBulletPoints: AdapterBulletPoints;
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -48,6 +46,11 @@ class ClientActivationFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         getDataFromIntents(savedInstanceState)
+        viewModel =
+            ViewModelProvider(
+                this,
+                SavedStateViewModelFactory(requireActivity().application, this)
+            ).get(ClientActivationViewmodel::class.java)
         setupPreferredLocationRv()
         setupBulletPontsRv()
         initObservers()
@@ -56,10 +59,12 @@ class ClientActivationFragment : BaseFragment() {
 
 
     private fun setupBulletPontsRv() {
+        adapterBulletPoints = AdapterBulletPoints();
 
         rv_bullet_points.adapter = adapterBulletPoints
         rv_bullet_points.layoutManager =
             LinearLayoutManager(requireContext())
+
 
     }
 
@@ -72,6 +77,7 @@ class ClientActivationFragment : BaseFragment() {
                 R.id.fragment_application_client_activation, bundleOf(
                     StringConstants.WORK_ORDER_ID.value to mWordOrderID
                 )
+
             )
         }
     }
@@ -91,9 +97,10 @@ class ClientActivationFragment : BaseFragment() {
             showToast(it ?: "")
         })
         viewModel.observableWorkOrder.observe(viewLifecycleOwner, Observer {
+            if (it.info == null) return@Observer
             tv_role_client_activation.text = it?.work_order_title;
             it?.locations?.map { item -> item.location }?.let { locations ->
-                adapterPreferredLocation.addData(locations)
+                adapterPreferredLocation?.addData(locations)
             }
             tv_earning_client_activation.text = it?.payoutNote
             val viewRoleDesc = layoutInflater.inflate(R.layout.layout_role_description, null)
@@ -112,17 +119,19 @@ class ClientActivationFragment : BaseFragment() {
                 ll_role_desc.addView(viewRoleDesc)
 
             }
+
             adapterBulletPoints.addData(it?.info!!)
 
 
-
 //            if (!(it?.requiredLessons?.lessons.isNullOrEmpty())) {
-                learning_cl.visible()
-                textView120.text = it?.requiredLessons?.title
-                initializeLearningModule(it?.requiredLessons?.lessons!!)
+            learning_cl.visible()
+            textView120.text = it?.requiredLessons?.title
+            initializeLearningModule(it?.requiredLessons?.lessons!!)
 //            }
         })
-        viewModel.getWorkOrder(docID = mWordOrderID)
+        if (!viewModel.initialized)
+            viewModel.getWorkOrder(docID = mWordOrderID)
+
 
     }
 
