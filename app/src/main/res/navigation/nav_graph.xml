@@ -761,6 +761,12 @@
         android:name="com.gigforce.app.modules.wallet.PayslipMonthlyFragment"
         android:label="PayslipMonthlyFragment" />
 
+    <fragment
+        android:id="@+id/application_questionnaire"
+        android:name="com.gigforce.app.modules.questionnaire.QuestionnaireFragment"
+        android:label="application_questionnaire"
+        tools:layout="@layout/layout_questionnaire_fragment"/>
+
 
 </navigation>
 

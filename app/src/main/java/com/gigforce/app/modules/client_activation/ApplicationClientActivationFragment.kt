@@ -16,7 +16,7 @@ import com.gigforce.app.utils.StringConstants
 import kotlinx.android.synthetic.main.layout_application_client_activation_fragment.*
 
 class ApplicationClientActivationFragment : BaseFragment(),
-    AdapterApplicationClientActivation.AdapterApplicationClientActivationCallbacks {
+        AdapterApplicationClientActivation.AdapterApplicationClientActivationCallbacks {
     private var profileAvatarName: String? = null
     private val viewModel: ApplicationClientActivationViewModel by viewModels()
     private val profileViewModel: ProfileViewModel by viewModels()
@@ -29,14 +29,14 @@ class ApplicationClientActivationFragment : BaseFragment(),
 
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         return inflateView(
-            R.layout.layout_application_client_activation_fragment,
-            inflater,
-            container
+                R.layout.layout_application_client_activation_fragment,
+                inflater,
+                container
         )
     }
 
@@ -69,62 +69,62 @@ class ApplicationClientActivationFragment : BaseFragment(),
             profileViewModel.getProfileData().observe(viewLifecycleOwner, Observer { profileData ->
                 h_pb_application_frag.progress = 0;
                 tv_steps_pending_application_value.text =
-                    "0/" + it?.dependency?.size!!
+                        "0/" + it?.dependency?.size!!
                 profileAvatarName = profileData.profileAvatarName;
                 profileViewModel.profileID = profileData?.id ?: ""
                 adapter.setCallbacks(this)
                 if (profileData.profileAvatarName.isNotEmpty() && profileData.profileAvatarName != "avatar.jpg") {
                     h_pb_application_frag.progress = h_pb_application_frag.progress + 1
                     tv_steps_pending_application_value.text =
-                        "" + (h_pb_application_frag.progress) + "/" + it?.dependency?.size!!
+                            "" + (h_pb_application_frag.progress) + "/" + it?.dependency?.size!!
                     adapter.setImageDrawable(
-                        "profile_pic", resources.getDrawable(R.drawable.ic_applied)
+                            "profile_pic", resources.getDrawable(R.drawable.ic_applied)
                     )
 
                 } else {
                     adapter.setImageDrawable(
-                        "profile_pic", resources.getDrawable(R.drawable.ic_status_pending)
+                            "profile_pic", resources.getDrawable(R.drawable.ic_status_pending)
                     )
                 }
                 if (!profileData.aboutMe.isNullOrEmpty()) {
                     h_pb_application_frag.progress = h_pb_application_frag.progress + 1
                     tv_steps_pending_application_value.text =
-                        "" + (h_pb_application_frag.progress) + "/" + it?.dependency?.size!!
+                            "" + (h_pb_application_frag.progress) + "/" + it?.dependency?.size!!
                     adapter.setImageDrawable(
-                        "about_me", resources.getDrawable(
+                            "about_me", resources.getDrawable(
                             R.drawable.ic_applied
-                        )
+                    )
                     )
                 } else {
                     adapter.setImageDrawable(
-                        "about_me", resources.getDrawable(R.drawable.ic_status_pending)
+                            "about_me", resources.getDrawable(R.drawable.ic_status_pending)
                     )
                 }
 
                 viewModel.observableVerification.observe(
-                    viewLifecycleOwner,
-                    Observer { verificationData ->
-                        run {
-                            if (verificationData?.driving_license?.verified == true) {
-                                h_pb_application_frag.progress = h_pb_application_frag.progress + 1
-                                tv_steps_pending_application_value.text =
-                                    "" + (h_pb_application_frag.progress) + "/" + it?.dependency?.size!!
-                                adapter.setImageDrawable(
-                                    "driving_licence", resources.getDrawable(
-                                        R.drawable.ic_applied
+                        viewLifecycleOwner,
+                        Observer { verificationData ->
+                            run {
+                                if (verificationData?.driving_license?.verified == true) {
+                                    h_pb_application_frag.progress = h_pb_application_frag.progress + 1
+                                    tv_steps_pending_application_value.text =
+                                            "" + (h_pb_application_frag.progress) + "/" + it?.dependency?.size!!
+                                    adapter.setImageDrawable(
+                                            "driving_licence", resources.getDrawable(
+                                            R.drawable.ic_applied
                                     )
-                                )
-                            } else {
-                                adapter.setImageDrawable(
-                                    "driving_licence", resources.getDrawable(
-                                        R.drawable.ic_status_pending
                                     )
-                                )
+                                } else {
+                                    adapter.setImageDrawable(
+                                            "driving_licence", resources.getDrawable(
+                                            R.drawable.ic_status_pending
+                                    )
+                                    )
+                                }
+
                             }
 
-                        }
-
-                    })
+                        })
                 viewModel.getVerification()
 
 
@@ -157,7 +157,7 @@ class ApplicationClientActivationFragment : BaseFragment(),
     private fun setupRecycler() {
         rv_status_pending.adapter = adapter
         rv_status_pending.layoutManager =
-            LinearLayoutManager(requireContext())
+                LinearLayoutManager(requireContext())
 //        rv_status_pending.addItemDecoration(
 //            HorizontaltemDecoration(
 //                requireContext(),
@@ -183,6 +183,7 @@ class ApplicationClientActivationFragment : BaseFragment(),
             "about_me" -> {
                 navigate(R.id.profileFragment)
             }
+            "questionnary" -> navigate(R.id.application_questionnaire)
         }
     }
 

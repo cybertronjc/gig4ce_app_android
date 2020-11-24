@@ -994,7 +994,6 @@
     <string name="title_madatory">Title*</string>
     <string name="i_am_fresher">I am Fresher</string>
     <string name="back_cap">Back</string>
-    <string name="questionnaire">Questionnaire</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="have_dl">Has Driving License for more than 1 year?</string>
@@ -1047,6 +1046,8 @@
     <string name="frequently_asked_questions">Frequently Asked Questions</string>
     <string name="steps_pending">Steps Pending</string>
     <string name="submit">Submit</string>
+    <string name="questionnaire">Questionnaire</string>
+    <string name="next_camel_case">Next</string>
 
 
 </resources>

@@ -104,6 +104,7 @@ class ClientActivationFragment : BaseFragment() {
             }
             tv_earning_client_activation.text = it?.payoutNote
             val viewRoleDesc = layoutInflater.inflate(R.layout.layout_role_description, null)
+            ll_role_desc.removeAllViews()
             it?.queries?.forEach { element ->
                 viewRoleDesc.tv_what_client_activation.text = element.query
                 viewRoleDesc.tv_what_value_client_activation.text = element.answer

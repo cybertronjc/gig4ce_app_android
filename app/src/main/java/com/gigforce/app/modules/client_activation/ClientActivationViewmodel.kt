@@ -17,7 +17,7 @@ class ClientActivationViewmodel(
 
     private val _observableWorkOrder: MutableLiveData<WorkOrder>
         get() = savedStateHandle.getLiveData(
-            StringConstants.SAVED_STATE_CLIENT_ACT.value,
+            StringConstants.SAVED_STATE.value,
             WorkOrder()
         )
     val observableWorkOrder: MutableLiveData<WorkOrder> = _observableWorkOrder
@@ -41,7 +41,7 @@ class ClientActivationViewmodel(
                         _observableError.value = error.message
                     } else {
                         val toObject = success?.toObject(WorkOrder::class.java)
-                        savedStateHandle.set(StringConstants.SAVED_STATE_CLIENT_ACT.value, toObject)
+                        savedStateHandle.set(StringConstants.SAVED_STATE.value, toObject)
                         _observableWorkOrder.value = toObject
                     }
                     initialized = true
