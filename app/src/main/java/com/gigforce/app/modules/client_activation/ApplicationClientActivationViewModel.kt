@@ -26,7 +26,7 @@ class ApplicationClientActivationViewModel : ViewModel() {
 
     fun getWorkOrderDependency(workOrderId: String) {
         repository.getCollectionReference().whereEqualTo("type", "dependency")
-            .whereEqualTo("work_order_id", workOrderId).addSnapshotListener { success, error ->
+            .whereEqualTo("workOrderId", workOrderId).addSnapshotListener { success, error ->
                 if (error != null) {
                     observableError.value = error.message
 

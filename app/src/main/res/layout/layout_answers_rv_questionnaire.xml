@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/tv_answer_questionnaire"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/border_lipstick_rad_4"
+    android:background="@drawable/border_27979797_rad_4"
     android:drawablePadding="@dimen/size_7"
     android:fontFamily="@font/lato"
     android:gravity="center_vertical"
@@ -15,5 +15,4 @@
     android:textColor="@color/black"
     android:textSize="14sp"
     android:textStyle="normal"
-    app:drawableStartCompat="@drawable/ic_thumbs_up"
     tools:text="Yes, I have Driving license for more than 1 year." />

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:layout_marginTop="@dimen/size_18"
 
-    android:layout_marginBottom="@dimen/size_18"
+    android:layout_marginBottom="@dimen/size_89"
     app:cardCornerRadius="@dimen/size_5">
 
     <ScrollView
@@ -16,7 +16,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
+            android:layout_marginBottom="@dimen/size_16"
             android:orientation="vertical">
 
             <ImageView

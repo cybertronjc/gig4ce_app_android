@@ -12,6 +12,20 @@ class RatioLayoutManager constructor(
         reverseLayout: Boolean = false,
         private val ratio: Float
 ) : LinearLayoutManager(context, orientation, reverseLayout) {
+    private var isScrollEnabled = true
+
+    fun setScrollEnabled(flag: Boolean) {
+        isScrollEnabled = flag
+    }
+
+    override fun canScrollVertically(): Boolean {
+        return isScrollEnabled && super.canScrollVertically()
+    }
+
+    override fun canScrollHorizontally(): Boolean {
+        return isScrollEnabled && super.canScrollHorizontally()
+
+    }
 
 
     private val horizontalSpace get() = width - paddingStart - paddingEnd
