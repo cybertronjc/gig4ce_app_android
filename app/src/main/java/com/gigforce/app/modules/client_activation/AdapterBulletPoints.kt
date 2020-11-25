@@ -43,13 +43,29 @@ class AdapterBulletPoints : RecyclerView.Adapter<AdapterBulletPoints.ViewHolder>
         } else {
             holder.itemView.iv_bullets.setImageResource(R.drawable.ic_play_gradient)
         }
-        setItem(
-                bulletPoint.pointsData,
-                holder.itemView.tl_bullets,
-                bulletPoint.requiredShowPoints,
-                bulletPoint.showPoints,
-                holder.itemView.context
-        )
+        if (bulletPoint.type == "expanded") {
+            setItem(
+                    bulletPoint.pointsData,
+                    holder.itemView.tl_bullets,
+                    bulletPoint.requiredShowPoints,
+                    bulletPoint.showPoints,
+                    holder.itemView.context
+            )
+        } else if(bulletPoint.type=="collapsed"){
+            holder.itemView.setOnClickListener {
+                setItem(
+                        bulletPoint.faqs?.map { item ->
+                            item.htmlString
+
+                        },
+                        holder.itemView.tl_bullets,
+                        bulletPoint.requiredShowPoints,
+                        bulletPoint.showPoints,
+                        holder.itemView.context
+                )
+            }
+        }
+
         holder.itemView.divider_three.visibility =
                 if (position == items.size - 1) View.GONE else View.VISIBLE
 
@@ -58,7 +74,6 @@ class AdapterBulletPoints : RecyclerView.Adapter<AdapterBulletPoints.ViewHolder>
     override fun getItemCount(): Int {
         return items.size
     }
-
 
 
     fun addData(items: List<BulletPoints>) {
