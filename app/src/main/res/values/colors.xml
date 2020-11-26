@@ -112,6 +112,7 @@
     <color name="gig_pink_light">#e8e8e8</color>
     <color name="gig_orange">#fa6400</color>
     <color name="gig_orange_light">#fee1cd</color>
+    <color name="black_two">#313131</color>
 
 
 </resources>

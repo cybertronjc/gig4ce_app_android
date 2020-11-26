@@ -772,6 +772,12 @@
         android:label="fragment_upload_dl_cl_act"
         tools:layout="@layout/layout_fragment_client_activation" />
 
+    <fragment
+        android:id="@+id/fragment_gig_activation"
+        android:name="com.gigforce.app.modules.client_activation.GigActivationFragment"
+        android:label="fragment_gig_activation"
+        tools:layout="@layout/layout_fragment_activation_gig" />
+
 
 </navigation>
 

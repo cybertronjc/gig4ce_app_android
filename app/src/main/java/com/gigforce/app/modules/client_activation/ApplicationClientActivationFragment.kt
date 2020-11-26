@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -26,6 +27,7 @@ class ApplicationClientActivationFragment : BaseFragment(),
         AdapterApplicationClientActivation()
     }
     private lateinit var mWordOrderID: String
+    private lateinit var mNextDep: String
 
 
     override fun onCreateView(
@@ -52,6 +54,13 @@ class ApplicationClientActivationFragment : BaseFragment(),
     private fun initClicks() {
         iv_back_application_client_activation.setOnClickListener {
             onBackPressed()
+        }
+        tv_action_application_client_activation.setOnClickListener {
+            navigate(R.id.fragment_gig_activation, bundleOf(
+                    StringConstants.NEXT_DEP.value to mNextDep,
+                    StringConstants.WORK_ORDER_ID.value to mWordOrderID
+
+            ))
         }
     }
 
@@ -140,6 +149,7 @@ class ApplicationClientActivationFragment : BaseFragment(),
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString(StringConstants.WORK_ORDER_ID.value, mWordOrderID)
+        outState.putString(StringConstants.NEXT_DEP.value, mNextDep)
 
 
     }
@@ -147,10 +157,14 @@ class ApplicationClientActivationFragment : BaseFragment(),
     private fun getDataFromIntents(savedInstanceState: Bundle?) {
         savedInstanceState?.let {
             mWordOrderID = it.getString(StringConstants.WORK_ORDER_ID.value) ?: return@let
+            mNextDep = it.getString(StringConstants.NEXT_DEP.value) ?: return@let
+
         }
 
         arguments?.let {
             mWordOrderID = it.getString(StringConstants.WORK_ORDER_ID.value) ?: return@let
+            mNextDep = it.getString(StringConstants.NEXT_DEP.value) ?: return@let
+
         }
     }
 

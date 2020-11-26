@@ -16,7 +16,8 @@ data class WorkOrder(
         var queries: List<Queries>? = null,
         var id: String? = null,
         var info: List<BulletPoints>? = null,
-        var subTitle: String = ""
+        var subTitle: String = "",
+        var nextDependency: String = ""
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
             parcel.readString(),
@@ -31,7 +32,9 @@ data class WorkOrder(
             parcel.createTypedArrayList(Queries),
             parcel.readString(),
             parcel.createTypedArrayList(BulletPoints),
-            parcel.readString() ?: "") {
+            parcel.readString() ?: "",
+            parcel.readString() ?: ""
+    ) {
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -48,6 +51,7 @@ data class WorkOrder(
         parcel.writeString(id)
         parcel.writeTypedList(info)
         parcel.writeString(subTitle)
+        parcel.writeString(nextDependency)
     }
 
     override fun describeContents(): Int {

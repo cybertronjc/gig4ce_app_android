@@ -177,6 +177,7 @@ your Application" />
     </ScrollView>
 
     <TextView
+        android:id="@+id/tv_action_application_client_activation"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/size_15"

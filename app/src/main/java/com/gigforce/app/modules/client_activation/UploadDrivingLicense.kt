@@ -9,19 +9,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
-import com.gigforce.app.modules.gigerVerfication.GigerVerificationStatus
 import com.gigforce.app.modules.gigerVerfication.VerificationValidations
 import com.gigforce.app.modules.gigerVerfication.WhyWeNeedThisBottomSheet
 import com.gigforce.app.modules.gigerVerfication.drivingLicense.AddDrivingLicenseInfoFragment
-import com.gigforce.app.modules.gigerVerfication.drivingLicense.DrivingLicenseDataModel
 import com.gigforce.app.modules.gigerVerfication.drivingLicense.DrivingLicenseSides
 import com.gigforce.app.modules.gigerVerfication.panCard.AddPanCardInfoFragment
 import com.gigforce.app.modules.photocrop.PhotoCrop
@@ -38,9 +34,7 @@ class UploadDrivingLicense : BaseFragment() {
 
     private var dlFrontImagePath: Uri? = null
     private var dlBackImagePath: Uri? = null
-    private var drivingLicenseDetail: DrivingLicenseDataModel? = null
     private var currentlyClickingImageOfSide: DrivingLicenseSides? = null
-    private var gigerVerificationStatus: GigerVerificationStatus? = null
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflateView(R.layout.layout_fragment_upload_driving_license_activation, inflater, container)
     }
@@ -102,7 +96,7 @@ class UploadDrivingLicense : BaseFragment() {
         }
 
         iv_back_application_client_activation.setOnClickListener {
-            onBackPressed()
+            popBackState()
         }
 
 
@@ -235,7 +229,6 @@ class UploadDrivingLicense : BaseFragment() {
         showToast(getString(R.string.dl_details_uploaded))
         popBackState()
     }
-
 
 
     private fun showLoadingState() {

@@ -36,9 +36,9 @@ class ClientActivationFragment : BaseFragment() {
 
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         return inflateView(R.layout.layout_fragment_client_activation, inflater, container)
     }
@@ -47,10 +47,10 @@ class ClientActivationFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         getDataFromIntents(savedInstanceState)
         viewModel =
-            ViewModelProvider(
-                this,
-                SavedStateViewModelFactory(requireActivity().application, this)
-            ).get(ClientActivationViewmodel::class.java)
+                ViewModelProvider(
+                        this,
+                        SavedStateViewModelFactory(requireActivity().application, this)
+                ).get(ClientActivationViewmodel::class.java)
         setupPreferredLocationRv()
         setupBulletPontsRv()
         initObservers()
@@ -63,7 +63,7 @@ class ClientActivationFragment : BaseFragment() {
 
         rv_bullet_points.adapter = adapterBulletPoints
         rv_bullet_points.layoutManager =
-            LinearLayoutManager(requireContext())
+                LinearLayoutManager(requireContext())
 
 
     }
@@ -74,9 +74,10 @@ class ClientActivationFragment : BaseFragment() {
         }
         tv_mark_as_interest_role_details.setOnClickListener {
             navigate(
-                R.id.fragment_application_client_activation, bundleOf(
-                    StringConstants.WORK_ORDER_ID.value to mWordOrderID
-                )
+                    R.id.fragment_application_client_activation, bundleOf(
+                    StringConstants.WORK_ORDER_ID.value to mWordOrderID,
+                    StringConstants.NEXT_DEP.value to viewModel.observableWorkOrder.value?.nextDependency
+            )
 
             )
         }
@@ -110,9 +111,9 @@ class ClientActivationFragment : BaseFragment() {
                 viewRoleDesc.tv_what_value_client_activation.text = element.answer
                 if (!element.icon.isNullOrEmpty()) {
                     GlideApp.with(requireContext())
-                        .load(element.icon)
-                        .placeholder(getCircularProgressDrawable())
-                        .into(viewRoleDesc.iv_what)
+                            .load(element.icon)
+                            .placeholder(getCircularProgressDrawable())
+                            .into(viewRoleDesc.iv_what)
 
                 } else {
                     viewRoleDesc.iv_what.setImageResource(R.drawable.ic_play_gradient)
@@ -139,12 +140,12 @@ class ClientActivationFragment : BaseFragment() {
     private fun setupPreferredLocationRv() {
         rv_preferred_locations_client_activation.adapter = adapterPreferredLocation
         rv_preferred_locations_client_activation.layoutManager =
-            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+                LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         rv_preferred_locations_client_activation.addItemDecoration(
-            HorizontaltemDecoration(
-                requireContext(),
-                R.dimen.size_11
-            )
+                HorizontaltemDecoration(
+                        requireContext(),
+                        R.dimen.size_11
+                )
         )
 
     }
@@ -321,66 +322,66 @@ class ClientActivationFragment : BaseFragment() {
             // model will change when integrated with DB
 
             val recyclerGenericAdapter: RecyclerGenericAdapter<LessonModel> =
-                RecyclerGenericAdapter<LessonModel>(
-                    activity?.applicationContext,
-                    PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
+                    RecyclerGenericAdapter<LessonModel>(
+                            activity?.applicationContext,
+                            PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
 //                        navigate(R.id.mainLearningFragment)
-                    },
-                    RecyclerGenericAdapter.ItemInterface<LessonModel?> { obj, viewHolder, position ->
-                        var view = getView(viewHolder, R.id.card_view)
-                        val lp = view.layoutParams
-                        lp.height = lp.height
-                        lp.width = itemWidth
-                        view.layoutParams = lp
+                            },
+                            RecyclerGenericAdapter.ItemInterface<LessonModel?> { obj, viewHolder, position ->
+                                var view = getView(viewHolder, R.id.card_view)
+                                val lp = view.layoutParams
+                                lp.height = lp.height
+                                lp.width = itemWidth
+                                view.layoutParams = lp
 
-                        var title = getTextView(viewHolder, R.id.title_)
-                        title.text = obj?.name
+                                var title = getTextView(viewHolder, R.id.title_)
+                                title.text = obj?.name
 
-                        var subtitle = getTextView(viewHolder, R.id.title)
-                        subtitle.text = obj?.description
+                                var subtitle = getTextView(viewHolder, R.id.title)
+                                subtitle.text = obj?.description
 //
-                        var comImg = getImageView(viewHolder, R.id.completed_iv)
-                        comImg.isVisible = obj?.completed ?: false
+                                var comImg = getImageView(viewHolder, R.id.completed_iv)
+                                comImg.isVisible = obj?.completed ?: false
 
-                        var img = getImageView(viewHolder, R.id.learning_img)
+                                var img = getImageView(viewHolder, R.id.learning_img)
 
-                        if (!obj!!.coverPicture.isNullOrBlank()) {
-                            if (obj!!.coverPicture!!.startsWith("http", true)) {
-
-                                GlideApp.with(requireContext())
-                                    .load(obj!!.coverPicture!!)
-                                    .placeholder(getCircularProgressDrawable())
-                                    .error(R.drawable.ic_learning_default_back)
-                                    .into(img)
-                            } else {
-                                FirebaseStorage.getInstance()
-                                    .getReference(LearningConstants.LEARNING_IMAGES_FIREBASE_FOLDER)
-                                    .child(obj!!.coverPicture!!)
-                                    .downloadUrl
-                                    .addOnSuccessListener { fileUri ->
+                                if (!obj!!.coverPicture.isNullOrBlank()) {
+                                    if (obj!!.coverPicture!!.startsWith("http", true)) {
 
                                         GlideApp.with(requireContext())
-                                            .load(fileUri)
-                                            .placeholder(getCircularProgressDrawable())
-                                            .error(R.drawable.ic_learning_default_back)
-                                            .into(img)
+                                                .load(obj!!.coverPicture!!)
+                                                .placeholder(getCircularProgressDrawable())
+                                                .error(R.drawable.ic_learning_default_back)
+                                                .into(img)
+                                    } else {
+                                        FirebaseStorage.getInstance()
+                                                .getReference(LearningConstants.LEARNING_IMAGES_FIREBASE_FOLDER)
+                                                .child(obj!!.coverPicture!!)
+                                                .downloadUrl
+                                                .addOnSuccessListener { fileUri ->
+
+                                                    GlideApp.with(requireContext())
+                                                            .load(fileUri)
+                                                            .placeholder(getCircularProgressDrawable())
+                                                            .error(R.drawable.ic_learning_default_back)
+                                                            .into(img)
+                                                }
                                     }
-                            }
-                        } else {
+                                } else {
 
-                            GlideApp.with(requireContext())
-                                .load(R.drawable.ic_learning_default_back)
-                                .into(img)
-                        }
+                                    GlideApp.with(requireContext())
+                                            .load(R.drawable.ic_learning_default_back)
+                                            .into(img)
+                                }
 
-                        //img.setImageResource(obj?.imgIcon!!)
-                    })!!
+                                //img.setImageResource(obj?.imgIcon!!)
+                            })!!
             recyclerGenericAdapter.setList(content)
             recyclerGenericAdapter.setLayout(R.layout.learning_bs_item)
             learning_rv.layoutManager = LinearLayoutManager(
-                activity?.applicationContext,
-                LinearLayoutManager.HORIZONTAL,
-                false
+                    activity?.applicationContext,
+                    LinearLayoutManager.HORIZONTAL,
+                    false
             )
             learning_rv.adapter = recyclerGenericAdapter
 
