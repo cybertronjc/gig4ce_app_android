@@ -1048,6 +1048,7 @@
     <string name="submit">Submit</string>
     <string name="questionnaire">Questionnaire</string>
     <string name="next_camel_case">Next</string>
+    <string name="upload_driving_license">Upload Driving License</string>
 
 
 </resources>

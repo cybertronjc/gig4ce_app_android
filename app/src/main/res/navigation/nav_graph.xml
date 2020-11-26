@@ -765,7 +765,12 @@
         android:id="@+id/application_questionnaire"
         android:name="com.gigforce.app.modules.questionnaire.QuestionnaireFragment"
         android:label="application_questionnaire"
-        tools:layout="@layout/layout_questionnaire_fragment"/>
+        tools:layout="@layout/layout_questionnaire_fragment" />
+    <fragment
+        android:id="@+id/fragment_upload_dl_cl_act"
+        android:name="com.gigforce.app.modules.client_activation.UploadDrivingLicense"
+        android:label="fragment_upload_dl_cl_act"
+        tools:layout="@layout/layout_fragment_client_activation" />
 
 
 </navigation>

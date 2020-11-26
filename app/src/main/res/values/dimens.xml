@@ -120,4 +120,5 @@
     <dimen name="size_142">142dp</dimen>
     <dimen name="size_89">89dp</dimen>
     <dimen name="size_156">156dp</dimen>
+    <dimen name="size_40">40dp</dimen>
 </resources>

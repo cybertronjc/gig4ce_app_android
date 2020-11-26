@@ -184,6 +184,7 @@ class ApplicationClientActivationFragment : BaseFragment(),
                 navigate(R.id.profileFragment)
             }
             "questionnary" -> navigate(R.id.application_questionnaire)
+            "driving_licence" -> navigate(R.id.fragment_upload_dl_cl_act)
         }
     }
 
