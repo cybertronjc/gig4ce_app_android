@@ -3,7 +3,7 @@ package com.gigforce.app.modules.client_activation
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import com.gigforce.app.modules.landingscreen.models.WorkOrder
+import com.gigforce.app.modules.client_activation.models.WorkOrder
 import com.gigforce.app.modules.learning.models.LessonModel
 import com.gigforce.app.utils.Lce
 import com.gigforce.app.utils.SingleLiveEvent

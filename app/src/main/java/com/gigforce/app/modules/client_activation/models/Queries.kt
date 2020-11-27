@@ -1,4 +1,4 @@
-package com.gigforce.app.modules.landingscreen.models
+package com.gigforce.app.modules.client_activation.models
 
 import android.os.Parcel
 import android.os.Parcelable

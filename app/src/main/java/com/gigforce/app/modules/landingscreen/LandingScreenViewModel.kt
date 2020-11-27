@@ -4,9 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.gigforce.app.modules.landingscreen.models.Role
+import com.gigforce.app.modules.client_activation.models.Role
 import com.gigforce.app.modules.landingscreen.models.Tip
-import com.gigforce.app.modules.landingscreen.models.WorkOrder
+import com.gigforce.app.modules.client_activation.models.WorkOrder
 import com.gigforce.app.modules.preferences.PreferencesRepository
 import com.gigforce.app.modules.preferences.prefdatamodel.PreferencesDataModel
 import com.gigforce.app.modules.profile.ProfileFirebaseRepository

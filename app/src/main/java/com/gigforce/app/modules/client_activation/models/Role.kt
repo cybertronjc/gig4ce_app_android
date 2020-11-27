@@ -1,6 +1,4 @@
-package com.gigforce.app.modules.landingscreen.models
-
-import com.gigforce.app.modules.profile.models.RoleInterests
+package com.gigforce.app.modules.client_activation.models
 
 data class Role(
     var id: String? = "",

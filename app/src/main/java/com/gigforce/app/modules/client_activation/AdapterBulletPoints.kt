@@ -16,7 +16,7 @@ import androidx.appcompat.widget.AppCompatTextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.gigforce.app.R
-import com.gigforce.app.modules.landingscreen.models.BulletPoints
+import com.gigforce.app.modules.client_activation.models.BulletPoints
 import com.gigforce.app.utils.getCircularProgressDrawable
 import com.gigforce.app.utils.getScreenWidth
 import kotlinx.android.synthetic.main.layout_rv_bullet_points.view.*

@@ -12,7 +12,7 @@ import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
-import com.gigforce.app.modules.landingscreen.models.Role
+import com.gigforce.app.modules.client_activation.models.Role
 import com.gigforce.app.modules.profile.ProfileViewModel
 import com.gigforce.app.utils.GridSpacingItemDecoration
 import com.gigforce.app.utils.ViewModelProviderFactory

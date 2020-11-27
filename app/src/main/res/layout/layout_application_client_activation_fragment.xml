@@ -183,7 +183,8 @@ your Application" />
         android:layout_marginStart="@dimen/size_15"
         android:layout_marginEnd="@dimen/size_17"
         android:layout_marginBottom="@dimen/size_16"
-        android:background="@drawable/bg_submit_application_client_activation"
+        android:background="@drawable/selector_bg_application_client_activation"
+        android:enabled="false"
         android:fontFamily="@font/lato"
         android:gravity="center"
         android:minHeight="@dimen/size_44"
@@ -194,4 +195,16 @@ your Application" />
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <ProgressBar
+        android:id="@+id/pb_application_client_activation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

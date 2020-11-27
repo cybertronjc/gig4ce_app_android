@@ -11,9 +11,14 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
+import com.gigforce.app.core.gone
+import com.gigforce.app.core.visible
+import com.gigforce.app.modules.client_activation.models.JpApplication
+import com.gigforce.app.modules.client_activation.models.JpDraft
 import com.gigforce.app.modules.photocrop.PhotoCrop
 import com.gigforce.app.modules.profile.ProfileViewModel
 import com.gigforce.app.utils.StringConstants
+import io.reactivex.Observable
 import kotlinx.android.synthetic.main.layout_application_client_activation_fragment.*
 
 class ApplicationClientActivationFragment : BaseFragment(),
@@ -55,18 +60,21 @@ class ApplicationClientActivationFragment : BaseFragment(),
         iv_back_application_client_activation.setOnClickListener {
             onBackPressed()
         }
-        tv_action_application_client_activation.setOnClickListener {
+
+    }
+
+    private fun initObservers() {
+        viewModel.observableError.observe(viewLifecycleOwner, Observer {
+            pb_application_client_activation.gone()
+            showToast(it ?: "")
+        })
+        viewModel.observableApplicationStatus.observe(viewLifecycleOwner, Observer {
+            pb_application_client_activation.gone()
             navigate(R.id.fragment_gig_activation, bundleOf(
                     StringConstants.NEXT_DEP.value to mNextDep,
                     StringConstants.WORK_ORDER_ID.value to mWordOrderID
 
             ))
-        }
-    }
-
-    private fun initObservers() {
-        viewModel.observableError.observe(viewLifecycleOwner, Observer {
-            showToast(it ?: "")
         })
 
         viewModel.observableWorkOrderDependency.observe(viewLifecycleOwner, Observer {
@@ -83,41 +91,30 @@ class ApplicationClientActivationFragment : BaseFragment(),
                 profileViewModel.profileID = profileData?.id ?: ""
                 adapter.setCallbacks(this)
                 if (profileData.profileAvatarName.isNotEmpty() && profileData.profileAvatarName != "avatar.jpg") {
-                    h_pb_application_frag.progress = h_pb_application_frag.progress + 1
-                    tv_steps_pending_application_value.text =
-                            "" + (h_pb_application_frag.progress) + "/" + it?.dependency?.size!!
                     adapter.setImageDrawable(
                             "profile_pic", resources.getDrawable(R.drawable.ic_applied)
                     )
-
                 } else {
                     adapter.setImageDrawable(
                             "profile_pic", resources.getDrawable(R.drawable.ic_status_pending)
                     )
                 }
                 if (!profileData.aboutMe.isNullOrEmpty()) {
-                    h_pb_application_frag.progress = h_pb_application_frag.progress + 1
-                    tv_steps_pending_application_value.text =
-                            "" + (h_pb_application_frag.progress) + "/" + it?.dependency?.size!!
                     adapter.setImageDrawable(
                             "about_me", resources.getDrawable(
                             R.drawable.ic_applied
-                    )
-                    )
+                    ))
                 } else {
                     adapter.setImageDrawable(
                             "about_me", resources.getDrawable(R.drawable.ic_status_pending)
                     )
                 }
-
                 viewModel.observableVerification.observe(
                         viewLifecycleOwner,
                         Observer { verificationData ->
                             run {
                                 if (verificationData?.driving_license?.verified == true) {
-                                    h_pb_application_frag.progress = h_pb_application_frag.progress + 1
-                                    tv_steps_pending_application_value.text =
-                                            "" + (h_pb_application_frag.progress) + "/" + it?.dependency?.size!!
+
                                     adapter.setImageDrawable(
                                             "driving_licence", resources.getDrawable(
                                             R.drawable.ic_applied
@@ -130,6 +127,31 @@ class ApplicationClientActivationFragment : BaseFragment(),
                                     )
                                     )
                                 }
+
+                            }
+
+
+                            Observable.fromIterable(adapter.items).all { item -> item.isDone }.subscribe({ success ->
+                                tv_action_application_client_activation.isEnabled = success
+                            }, { err -> })
+                            Observable.fromIterable(adapter.items).filter { item -> item.isDone }.toList().subscribe({ success ->
+                                run {
+                                    h_pb_application_frag.progress = success.size
+                                    tv_steps_pending_application_value.text =
+                                            "" + (h_pb_application_frag.progress) + "/" + it?.dependency?.size!!
+                                }
+                            }, { _ -> })
+                            tv_action_application_client_activation.setOnClickListener {
+                                val jpApplication = JpApplication(JPId = mWordOrderID, gigerId = profileData?.id
+                                        ?: "", stepsTotal = adapter.items.size)
+                                adapter.items.forEach { dependency ->
+                                    jpApplication.draft.add(JpDraft(dependency.isDone, dependency.title
+                                            ?: "", dependency.feature
+                                            ?: ""))
+                                }
+                                viewModel.apply(jpApplication)
+                                pb_application_client_activation.visible()
+
 
                             }
 
