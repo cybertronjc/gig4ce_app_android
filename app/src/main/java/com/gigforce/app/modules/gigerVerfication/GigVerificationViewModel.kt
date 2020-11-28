@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gigforce.app.R
+import com.gigforce.app.modules.client_activation.models.DrivingCertificate
 import com.gigforce.app.modules.gigerVerfication.aadharCard.AadharCardDataModel
 import com.gigforce.app.modules.gigerVerfication.bankDetails.BankDetailsDataModel
 import com.gigforce.app.modules.gigerVerfication.drivingLicense.DrivingLicenseDataModel
@@ -326,49 +327,22 @@ open class GigVerificationViewModel constructor(
 
     fun uploadDLCer(
             userHasDL: Boolean,
-            frontImagePath: Uri?,
-            backImagePath: Uri?,
-            dlState: String?,
-            dlNo: String?
+            frontImagePath: Uri?
     ) = viewModelScope.launch {
 
         _documentUploadState.postValue(Lse.loading())
 
         try {
             val model = getVerificationModel()
-            if (!userHasDL) {
-                model.drivingCert = DrivingLicenseDataModel(
-                        userHasDL = false,
-                        verified = false,
-                        frontImage = null,
-                        backImage = null,
-                        dlState = null,
-                        dlNo = null
-                )
-            } else {
 
-                val frontImageFileNameAtServer = if (userHasDL && frontImagePath != null)
-                    uploadImage(frontImagePath)
-                else
-                    model.drivingCert?.frontImage
+            val frontImageFileNameAtServer =
+                    uploadImage(frontImagePath!!)
 
-                val backImageFileNameAtServer = if (userHasDL && backImagePath != null)
-                    uploadImage(backImagePath)
-                else
-                    model.drivingCert?.backImage
+            model.drivingCert = DrivingCertificate(
+                    verified = false,
+                    frontImage = frontImageFileNameAtServer
 
-                model.drivingCert = DrivingLicenseDataModel(
-                        userHasDL = true,
-                        verified = false,
-                        frontImage = frontImageFileNameAtServer,
-                        backImage = backImageFileNameAtServer,
-                        dlState = dlState,
-                        dlNo = dlNo,
-                        state = -1,
-                        verifiedString = "Under Verification"
-                )
-                model.sync_status = false
-            }
+            )
             gigerVerificationRepository.getDBCollection().setOrThrow(model)
             _documentUploadState.postValue(Lse.success())
         } catch (e: Exception) {

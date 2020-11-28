@@ -34,7 +34,12 @@ class GigActivationFragment : BaseFragment(), AdapterGigActivation.AdapterGigAct
                 ).get(GigActivationViewModel::class.java)
         setupRecycler()
         initObservers()
+        initClicks()
 
+    }
+
+    private fun initClicks() {
+        iv_back_application_gig_activation.setOnClickListener { popBackState() }
     }
 
     private fun initObservers() {

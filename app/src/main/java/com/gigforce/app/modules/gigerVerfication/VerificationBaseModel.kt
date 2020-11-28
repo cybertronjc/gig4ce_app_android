@@ -1,6 +1,7 @@
 package com.gigforce.app.modules.gigerVerfication
 
 import androidx.annotation.Keep
+import com.gigforce.app.modules.client_activation.models.DrivingCertificate
 import com.gigforce.app.modules.gigerVerfication.aadharCard.AadharCardDataModel
 import com.gigforce.app.modules.gigerVerfication.bankDetails.BankDetailsDataModel
 import com.gigforce.app.modules.gigerVerfication.drivingLicense.DrivingLicenseDataModel
@@ -16,5 +17,5 @@ data class VerificationBaseModel(
         var selfie_video: SelfieVideoDataModel? = null,
         var sync_status: Boolean = false,
         var contract: Contract? = null,
-        var drivingCert: DrivingLicenseDataModel? = null
+        var drivingCert: DrivingCertificate? = null
 )

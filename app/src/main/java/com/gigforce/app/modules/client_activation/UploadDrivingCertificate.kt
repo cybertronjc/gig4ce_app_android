@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
@@ -16,7 +15,6 @@ import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
-import com.gigforce.app.modules.gigerVerfication.VerificationValidations
 import com.gigforce.app.modules.gigerVerfication.WhyWeNeedThisBottomSheet
 import com.gigforce.app.modules.gigerVerfication.drivingLicense.AddDrivingLicenseInfoFragment
 import com.gigforce.app.modules.gigerVerfication.drivingLicense.DrivingLicenseSides
@@ -24,15 +22,12 @@ import com.gigforce.app.modules.gigerVerfication.panCard.AddPanCardInfoFragment
 import com.gigforce.app.modules.photocrop.PhotoCrop
 import com.gigforce.app.utils.Lse
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import kotlinx.android.synthetic.main.layout_driving_license_upload_client_activation.*
 import kotlinx.android.synthetic.main.layout_driving_license_upload_client_activation.dlAvailaibilityOptionRG
-import kotlinx.android.synthetic.main.layout_driving_license_upload_client_activation.dlBackImageHolder
 import kotlinx.android.synthetic.main.layout_driving_license_upload_client_activation.dlFrontImageHolder
-import kotlinx.android.synthetic.main.layout_driving_license_upload_client_activation.dlInfoLayout
 import kotlinx.android.synthetic.main.layout_driving_license_upload_client_activation.dlNoRB
 import kotlinx.android.synthetic.main.layout_driving_license_upload_client_activation.dlYesRB
-import kotlinx.android.synthetic.main.layout_driving_license_upload_client_activation.drivingLicenseEditText
 import kotlinx.android.synthetic.main.layout_driving_license_upload_client_activation.helpIconIV
-import kotlinx.android.synthetic.main.layout_driving_license_upload_client_activation.stateSpinner
 import kotlinx.android.synthetic.main.layout_driving_license_upload_client_activation.whyWeNeedThisTV
 import kotlinx.android.synthetic.main.layout_fragment_upload_driving_certificate.*
 import kotlinx.android.synthetic.main.layout_fragment_upload_driving_license_activation.dlMainLayout
@@ -40,14 +35,12 @@ import kotlinx.android.synthetic.main.layout_fragment_upload_driving_license_act
 import kotlinx.android.synthetic.main.layout_fragment_upload_driving_license_activation.progressBar
 import kotlinx.android.synthetic.main.layout_upload_driving_certificate.*
 import kotlinx.android.synthetic.main.upload_car_client_activation.view.*
-import java.util.*
 
 class UploadDrivingCertificate : BaseFragment() {
 
     private val viewModel: GigVerificationViewModel by viewModels()
 
     private var dlFrontImagePath: Uri? = null
-    private var dlBackImagePath: Uri? = null
     private var currentlyClickingImageOfSide: DrivingLicenseSides? = null
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflateView(R.layout.layout_fragment_upload_driving_certificate, inflater, container)
@@ -63,22 +56,15 @@ class UploadDrivingCertificate : BaseFragment() {
     private fun initViews() {
         hideDLImageAndInfoLayout()
         disableSubmitButton()
-        val adapter =
-                ArrayAdapter<String>(
-                        requireContext(),
-                        R.layout.layout_sp_state_dl,
-                        resources.getStringArray(R.array.indian_states)
-                )
-        stateSpinner.adapter = adapter
-        dlFrontImageHolder.documentUploadLabelTV.text =
-                getString(R.string.upload_driving_license_front_side)
-        dlFrontImageHolder.documentUploadSubLabelTV.text =
-                getString(R.string.upload_your_driving_license)
-
-        dlBackImageHolder.documentUploadLabelTV.text =
-                getString(R.string.upload_driving_license_back_side)
-        dlBackImageHolder.documentUploadSubLabelTV.text =
-                getString(R.string.upload_your_driving_license)
+//        val adapter =
+//                ArrayAdapter<String>(
+//                        requireContext(),
+//                        R.layout.layout_sp_state_dl,
+//                        resources.getStringArray(R.array.indian_states)
+//                )
+//        stateSpinner.adapter = adapter
+        dlFrontImageHolder.documentUploadLabelTV.text = getString(R.string.upload_driving_cert)
+        dlFrontImageHolder.documentUploadSubLabelTV.text = getString(R.string.please_upload_driving_cert)
 
         helpIconIV.setOnClickListener {
             showWhyWeNeedThisDialog()
@@ -96,7 +82,7 @@ class UploadDrivingCertificate : BaseFragment() {
                 tv_action_upld_dl_cert.visible()
                 ll_no_driving_license.gone()
 
-                if ((dlFrontImagePath != null && dlBackImagePath != null)
+                if ((dlFrontImagePath != null)
                 ) {
                     enableSubmitButton()
                 } else
@@ -130,29 +116,29 @@ class UploadDrivingCertificate : BaseFragment() {
         tv_action_upld_dl_cert.setOnClickListener {
             if (dlYesRB.isChecked) {
 
-                if (stateSpinner.selectedItemPosition == 0) {
-                    MaterialAlertDialogBuilder(requireContext())
-                            .setTitle(getString(R.string.alert))
-                            .setMessage(getString(R.string.select_dl_state))
-                            .setPositiveButton(getString(R.string.okay)) { _, _ -> }
-                            .show()
-                    return@setOnClickListener
-                }
+//                if (stateSpinner.selectedItemPosition == 0) {
+//                    MaterialAlertDialogBuilder(requireContext())
+//                            .setTitle(getString(R.string.alert))
+//                            .setMessage(getString(R.string.select_dl_state))
+//                            .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+//                            .show()
+//                    return@setOnClickListener
+//                }
 
-                val dlNo =
-                        drivingLicenseEditText.text.toString().toUpperCase(Locale.getDefault())
-                if (!VerificationValidations.isDLNumberValid(dlNo)) {
+//                val dlNo =
+//                        drivingLicenseEditText.text.toString().toUpperCase(Locale.getDefault())
+//                if (!VerificationValidations.isDLNumberValid(dlNo)) {
+//
+//                    MaterialAlertDialogBuilder(requireContext())
+//                            .setTitle(getString(R.string.alert))
+//                            .setMessage(getString(R.string.enter_valid_dl))
+//                            .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+//                            .show()
+//
+//                    return@setOnClickListener
+//                }
 
-                    MaterialAlertDialogBuilder(requireContext())
-                            .setTitle(getString(R.string.alert))
-                            .setMessage(getString(R.string.enter_valid_dl))
-                            .setPositiveButton(getString(R.string.okay)) { _, _ -> }
-                            .show()
-
-                    return@setOnClickListener
-                }
-
-                if ((dlFrontImagePath == null || dlBackImagePath == null)) {
+                if ((dlFrontImagePath == null)) {
 
                     MaterialAlertDialogBuilder(requireContext())
                             .setTitle(getString(R.string.alert))
@@ -167,19 +153,15 @@ class UploadDrivingCertificate : BaseFragment() {
 
                 viewModel.uploadDLCer(
                         true,
-                        dlFrontImagePath,
-                        dlBackImagePath,
-                        state,
-                        dlNo
+                        dlFrontImagePath
+
                 )
 
             } else if (dlNoRB.isChecked) {
                 viewModel.uploadDLCer(
                         false,
-                        null,
-                        null,
-                        null,
                         null
+
                 )
             }
 
@@ -192,23 +174,23 @@ class UploadDrivingCertificate : BaseFragment() {
             openCameraAndGalleryOptionForFrontSideImage()
         }
 
-        dlBackImageHolder.uploadDocumentCardView.setOnClickListener {
-            openCameraAndGalleryOptionForBackSideImage()
-        }
+//        dlBackImageHolder.uploadDocumentCardView.setOnClickListener {
+//            openCameraAndGalleryOptionForBackSideImage()
+//        }
 
         dlFrontImageHolder.uploadImageLayout.imageLabelTV.text =
                 getString(R.string.dl_image_front_side)
 
-        dlBackImageHolder.uploadImageLayout.imageLabelTV.text =
-                getString(R.string.dl_image_back_side)
+//        dlBackImageHolder.uploadImageLayout.imageLabelTV.text =
+//                getString(R.string.dl_image_back_side)
 
         dlFrontImageHolder.uploadImageLayout.reuploadBtn.setOnClickListener {
             openCameraAndGalleryOptionForFrontSideImage()
         }
 
-        dlBackImageHolder.uploadImageLayout.reuploadBtn.setOnClickListener {
-            openCameraAndGalleryOptionForBackSideImage()
-        }
+//        dlBackImageHolder.uploadImageLayout.reuploadBtn.setOnClickListener {
+//            openCameraAndGalleryOptionForBackSideImage()
+//        }
 
 
     }
@@ -308,14 +290,16 @@ class UploadDrivingCertificate : BaseFragment() {
                     dlFrontImagePath =
                             data?.getParcelableExtra(PhotoCrop.INTENT_EXTRA_RESULTING_FILE_URI)
                     showFrontDrivingLicense(dlFrontImagePath!!)
-                } else if (DrivingLicenseSides.BACK_SIDE == currentlyClickingImageOfSide) {
-                    dlBackImagePath =
-                            data?.getParcelableExtra(PhotoCrop.INTENT_EXTRA_RESULTING_FILE_URI)
-                    showBackDrivingLicense(dlBackImagePath!!)
                 }
 
+//                else if (DrivingLicenseSides.BACK_SIDE == currentlyClickingImageOfSide) {
+//                    dlBackImagePath =
+//                            data?.getParcelableExtra(PhotoCrop.INTENT_EXTRA_RESULTING_FILE_URI)
+//                    showBackDrivingLicense(dlBackImagePath!!)
+//                }
+
                 if (dlFrontImagePath != null
-                        && dlBackImagePath != null
+
                 ) {
                     enableSubmitButton()
                 }
@@ -335,15 +319,15 @@ class UploadDrivingCertificate : BaseFragment() {
 
 
     private fun showDLImageAndInfoLayout() {
-        dlBackImageHolder.visibility = View.VISIBLE
+//        dlBackImageHolder.visibility = View.VISIBLE
         dlFrontImageHolder.visibility = View.VISIBLE
         showImageInfoLayout()
     }
 
     private fun hideDLImageAndInfoLayout() {
-        dlBackImageHolder.visibility = View.GONE
+//        dlBackImageHolder.visibility = View.GONE
         dlFrontImageHolder.visibility = View.GONE
-        dlInfoLayout.visibility = View.GONE
+//        dlInfoLayout.visibility = View.GONE
     }
 
     private fun enableSubmitButton() {
@@ -359,7 +343,7 @@ class UploadDrivingCertificate : BaseFragment() {
     }
 
     private fun showImageInfoLayout() {
-        dlInfoLayout.visibility = View.VISIBLE
+//        dlInfoLayout.visibility = View.VISIBLE
     }
 
 
@@ -373,13 +357,13 @@ class UploadDrivingCertificate : BaseFragment() {
                 .into(dlFrontImageHolder.uploadImageLayout.clickedImageIV)
     }
 
-    private fun showBackDrivingLicense(aadharBackImagePath: Uri) {
-        dlBackImageHolder.uploadDocumentCardView.visibility = View.GONE
-        dlBackImageHolder.uploadImageLayout.visibility = View.VISIBLE
-
-        Glide.with(requireContext())
-                .load(aadharBackImagePath)
-                .placeholder(getCircularProgressDrawable())
-                .into(dlBackImageHolder.uploadImageLayout.clickedImageIV)
-    }
+//    private fun showBackDrivingLicense(aadharBackImagePath: Uri) {
+//        dlBackImageHolder.uploadDocumentCardView.visibility = View.GONE
+//        dlBackImageHolder.uploadImageLayout.visibility = View.VISIBLE
+//
+//        Glide.with(requireContext())
+//                .load(aadharBackImagePath)
+//                .placeholder(getCircularProgressDrawable())
+//                .into(dlBackImageHolder.uploadImageLayout.clickedImageIV)
+//    }
 }

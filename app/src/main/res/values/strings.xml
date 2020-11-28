@@ -1062,6 +1062,8 @@
     <string name="to_verify_your_automatic_cars_driving_skills_we_need_a_driving_test_clearance_certificate_from_registered_driving_school">To verify your Automatic cars Driving skills, we need a Driving test clearance certificate from registered Driving School.</string>
     <string name="schedule_test">Schedule test</string>
     <string name="note_it_is_mandatory_to_submit_required_docs_at_time_of_driving_test">Note: It is mandatory to submit required docs at time of Driving test</string>
+    <string name="upload_driving_cert">Upload Driving Certificate</string>
+    <string name="please_upload_driving_cert">Please upload your Driving Certificate your verification.</string>
 
 
 </resources>

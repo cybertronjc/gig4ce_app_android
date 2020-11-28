@@ -15,7 +15,7 @@
         android:layout_marginTop="@dimen/size_24"
         android:fontFamily="@font/lato_bold"
         android:letterSpacing="0"
-        android:text="@string/driving_license"
+        android:text="@string/upload_driving_certificate"
         android:textColor="@color/black"
         android:textSize="16sp"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -169,140 +169,19 @@
             android:textStyle="normal" />
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/dlInfoLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:visibility="visible"
-        app:layout_constraintTop_toBottomOf="@id/dlAvailaibilityOptionRG">
-
-        <View
-            android:id="@+id/topSeaparator"
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:layout_marginTop="12dp"
-            android:background="#cdccd1" />
-
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:fontFamily="@font/lato"
-            android:letterSpacing="-0.01"
-            android:text="@string/please_confirm_the_following_information"
-            android:textColor="@color/black" />
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingStart="16dp"
-            android:paddingTop="8dp"
-            android:paddingEnd="16dp"
-            android:paddingBottom="8dp">
-
-            <TextView
-                android:id="@+id/stateLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="4dp"
-                android:layout_marginTop="8dp"
-                android:text="@string/state_pascal_case"
-                android:textSize="12sp"
-
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/dobET" />
-
-            <androidx.appcompat.widget.AppCompatSpinner
-                android:id="@+id/stateSpinner"
-                style="@style/Widget.AppCompat.Spinner.Underlined"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
-                android:textColor="@color/black"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/genderLabel" />
-
-            <TextView
-                android:id="@+id/dlStateEditErrorMessage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:fontFamily="@font/lato"
-                android:letterSpacing="0"
-                android:textColor="@color/app_red"
-                android:textSize="12sp"
-                android:visibility="gone"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/dlNoTV"
-                tools:text="Error : Uploaded Image is not a Driving License Image" />
-
-
-            <TextView
-                android:id="@+id/dlNoLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="2dp"
-                android:layout_marginTop="12dp"
-                android:fontFamily="@font/lato"
-                android:text="@string/dl_hint_square_bracket"
-                android:textSize="12sp" />
-
-
-            <androidx.appcompat.widget.AppCompatEditText
-                android:id="@+id/drivingLicenseEditText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:imeActionLabel="Done"
-                android:imeOptions="actionGo"
-                android:inputType="textNoSuggestions"
-                android:letterSpacing="0"
-                android:maxLength="25"
-                android:maxLines="1"
-                android:textAllCaps="true"
-                android:textSize="@dimen/font_14"
-                app:backgroundTint="@color/colorPrimary" />
-
-            <TextView
-                android:id="@+id/dlNoEditErrorMessage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:fontFamily="@font/lato"
-                android:letterSpacing="0"
-                android:textColor="@color/app_red"
-                android:textSize="12sp"
-                android:visibility="gone"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/dlNoTV"
-                tools:text="Error : Uploaded Image is not a Driving License Image" />
-
-
-        </LinearLayout>
-    </LinearLayout>
-
-    <View
-        android:id="@+id/topSeaparator2"
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:layout_marginTop="12dp"
-        android:background="#cdccd1"
-        app:layout_constraintTop_toBottomOf="@id/dlInfoLayout" />
 
     <include
         android:id="@+id/dlFrontImageHolder"
-        layout="@layout/fragment_verification_image_holder"
+        layout="@layout/layout_button_upload_dl_cert"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="visible"
-        app:layout_constraintTop_toBottomOf="@id/topSeaparator2" />
+        android:layout_marginStart="@dimen/size_16"
+        android:layout_marginTop="@dimen/size_22"
+        android:layout_marginEnd="@dimen/size_16"
 
+        android:visibility="visible"
+        app:layout_constraintTop_toBottomOf="@id/dlAvailaibilityOptionRG"
+        tools:layout_editor_absoluteX="0dp" />
 
     <TextView
         android:id="@+id/dlFrontEditErrorMessage"
@@ -317,31 +196,6 @@
         android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/dlFrontImageHolder"
-        tools:text="Error : Uploaded Image is not a Driving License Image" />
-
-
-    <include
-        android:id="@+id/dlBackImageHolder"
-        layout="@layout/fragment_verification_image_holder"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="visible"
-        app:layout_constraintTop_toBottomOf="@id/dlFrontEditErrorMessage" />
-
-
-    <TextView
-        android:id="@+id/dlBackEditErrorMessage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="18dp"
-        android:layout_marginTop="2dp"
-        android:fontFamily="@font/lato"
-        android:letterSpacing="0"
-        android:textColor="@color/app_red"
-        android:textSize="12sp"
-        android:visibility="gone"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/dlBackImageHolder"
         tools:text="Error : Uploaded Image is not a Driving License Image" />
 
 
