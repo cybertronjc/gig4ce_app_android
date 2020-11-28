@@ -149,7 +149,7 @@ class UploadDrivingCertificate : BaseFragment() {
                     return@setOnClickListener
                 }
 
-                val state = stateSpinner.selectedItem.toString()
+//                val state = stateSpinner.selectedItem.toString()
 
                 viewModel.uploadDLCer(
                         true,

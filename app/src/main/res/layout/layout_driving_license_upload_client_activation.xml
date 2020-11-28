@@ -229,8 +229,6 @@
     </LinearLayout>
 
 
-
-
     <View
         android:id="@+id/topSeaparator2"
         android:layout_width="match_parent"
@@ -241,9 +239,11 @@
 
     <include
         android:id="@+id/dlFrontImageHolder"
-        layout="@layout/fragment_verification_image_holder"
+        layout="@layout/image_uploader_driving_license"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/size_16"
+        android:layout_marginEnd="@dimen/size_16"
         android:visibility="visible"
         app:layout_constraintTop_toBottomOf="@id/topSeaparator2" />
 
@@ -256,6 +256,7 @@
         android:layout_marginTop="2dp"
         android:fontFamily="@font/lato"
         android:letterSpacing="0"
+
         android:textColor="@color/app_red"
         android:textSize="12sp"
         android:visibility="gone"
@@ -266,9 +267,12 @@
 
     <include
         android:id="@+id/dlBackImageHolder"
-        layout="@layout/fragment_verification_image_holder"
+        layout="@layout/image_uploader_driving_license"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/size_16"
+        android:layout_marginEnd="@dimen/size_16"
+        android:layout_marginTop="@dimen/size_16"
         android:visibility="visible"
         app:layout_constraintTop_toBottomOf="@id/dlFrontEditErrorMessage" />
 
