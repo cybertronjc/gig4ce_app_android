@@ -20,7 +20,7 @@
     <color name="red">#FF0000</color>
     <color name="app_red">#E02020</color>
     <color name="app_orange">#fa6400</color>
-
+    <color name="schedule_doc_sub_bg">#f7f7f7</color>
     <color name="setting_bg">#f7f7f7</color>
     <color name="gray_color">#6d7278</color>
     <color name="preferences_item_seprator">#c8c7cc</color>
