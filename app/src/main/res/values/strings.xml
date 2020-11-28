@@ -1050,6 +1050,13 @@
     <string name="next_camel_case">Next</string>
     <string name="upload_driving_license">Upload Driving License</string>
     <string name="application_status">Application Status</string>
+    <string name="schedule_doc_submission">Schedule Document Submission</string>
+    <string name="set_doc_preference">Set your Preference Document Submission</string>
+    <string name="set_doc_note">Note : You need to submit original Driving Licence and  Cheque of Rs 20,000 to Gigforce</string>
+    <string name="select_partner_school">Select Partner School</string>
+    <string name="tap_to_select">Tap to Select</string>
+    <string name="select_date_of_visit">Select Date of Visit</string>
+    <string name="select_slot_of_visit">Select Slot of Visit</string>
 
 
 </resources>
