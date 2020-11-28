@@ -22,7 +22,6 @@ import com.gigforce.app.modules.gigerVerfication.panCard.AddPanCardInfoFragment
 import com.gigforce.app.modules.photocrop.PhotoCrop
 import com.gigforce.app.utils.Lse
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import kotlinx.android.synthetic.main.layout_driving_license_upload_client_activation.*
 import kotlinx.android.synthetic.main.layout_driving_license_upload_client_activation.dlAvailaibilityOptionRG
 import kotlinx.android.synthetic.main.layout_driving_license_upload_client_activation.dlFrontImageHolder
 import kotlinx.android.synthetic.main.layout_driving_license_upload_client_activation.dlNoRB
@@ -50,19 +49,20 @@ class UploadDrivingCertificate : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         initViews()
         initViewModel()
+        initClicks()
 
+    }
+
+    private fun initClicks() {
+
+        tv_schedule_test.setOnClickListener {
+            navigate(R.id.fragment_doc_sub)
+        }
     }
 
     private fun initViews() {
         hideDLImageAndInfoLayout()
         disableSubmitButton()
-//        val adapter =
-//                ArrayAdapter<String>(
-//                        requireContext(),
-//                        R.layout.layout_sp_state_dl,
-//                        resources.getStringArray(R.array.indian_states)
-//                )
-//        stateSpinner.adapter = adapter
         dlFrontImageHolder.documentUploadLabelTV.text = getString(R.string.upload_driving_cert)
         dlFrontImageHolder.documentUploadSubLabelTV.text = getString(R.string.please_upload_driving_cert)
 
@@ -115,29 +115,6 @@ class UploadDrivingCertificate : BaseFragment() {
 
         tv_action_upld_dl_cert.setOnClickListener {
             if (dlYesRB.isChecked) {
-
-//                if (stateSpinner.selectedItemPosition == 0) {
-//                    MaterialAlertDialogBuilder(requireContext())
-//                            .setTitle(getString(R.string.alert))
-//                            .setMessage(getString(R.string.select_dl_state))
-//                            .setPositiveButton(getString(R.string.okay)) { _, _ -> }
-//                            .show()
-//                    return@setOnClickListener
-//                }
-
-//                val dlNo =
-//                        drivingLicenseEditText.text.toString().toUpperCase(Locale.getDefault())
-//                if (!VerificationValidations.isDLNumberValid(dlNo)) {
-//
-//                    MaterialAlertDialogBuilder(requireContext())
-//                            .setTitle(getString(R.string.alert))
-//                            .setMessage(getString(R.string.enter_valid_dl))
-//                            .setPositiveButton(getString(R.string.okay)) { _, _ -> }
-//                            .show()
-//
-//                    return@setOnClickListener
-//                }
-
                 if ((dlFrontImagePath == null)) {
 
                     MaterialAlertDialogBuilder(requireContext())
@@ -149,7 +126,6 @@ class UploadDrivingCertificate : BaseFragment() {
                     return@setOnClickListener
                 }
 
-//                val state = stateSpinner.selectedItem.toString()
 
                 viewModel.uploadDLCer(
                         true,

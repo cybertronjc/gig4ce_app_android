@@ -785,5 +785,12 @@
         tools:layout="@layout/layout_fragment_upload_driving_certificate" />
 
 
+    <fragment
+        android:id="@+id/fragment_doc_sub"
+        android:name="com.gigforce.app.modules.client_activation.DocsSubSchedulerFragment"
+        android:label="fragment_doc_sub"
+        tools:layout="@layout/fragment_docs_sub_scheduler" />
+
+
 </navigation>
 
