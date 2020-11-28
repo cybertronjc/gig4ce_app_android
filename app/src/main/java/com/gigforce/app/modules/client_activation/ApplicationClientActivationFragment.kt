@@ -81,6 +81,7 @@ class ApplicationClientActivationFragment : BaseFragment(),
             h_pb_application_frag.max = it?.dependency?.size!!
             tv_thanks_application.text = it?.title
             tv_completion_application.text = it?.sub_title
+            mNextDep = it.nextDependency;
 
             adapter.addData(it?.dependency!!);
             profileViewModel.getProfileData().observe(viewLifecycleOwner, Observer { profileData ->

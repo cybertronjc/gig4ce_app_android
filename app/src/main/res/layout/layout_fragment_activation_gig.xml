@@ -32,6 +32,7 @@
                 app:tint="@color/white" />
 
             <TextView
+                android:id="@+id/tv_title_toolbar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_toEndOf="@+id/iv_back_application_client_activation"
@@ -47,84 +48,148 @@
 
     </androidx.appcompat.widget.Toolbar>
 
-    <ImageView
-        android:id="@+id/iv_gig_activation"
-        android:layout_width="@dimen/size_138"
-        android:layout_height="@dimen/size_141"
-        android:layout_marginTop="@dimen/size_26"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tb_gig_activation" />
-
-    <TextView
-        android:id="@+id/tv_application_gig_activation"
+    <ScrollView
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/size_19"
-        android:layout_marginTop="@dimen/size_19"
-        android:layout_marginEnd="@dimen/size_21"
-        android:fontFamily="@font/lato"
-        android:textColor="@color/black_85"
-        android:textSize="16sp"
-        android:textStyle="normal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/iv_gig_activation"
-        tools:text="Your Application  for 21North is successfully submitted and under review.
+        app:layout_constraintTop_toBottomOf="@+id/tb_gig_activation">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/iv_gig_activation"
+                android:layout_width="@dimen/size_138"
+                android:layout_height="@dimen/size_141"
+                android:layout_marginTop="24dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_application_gig_activation"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/size_19"
+                android:layout_marginTop="@dimen/size_19"
+                android:layout_marginEnd="@dimen/size_21"
+                android:fontFamily="@font/lato"
+                android:textColor="@color/black_85"
+                android:textSize="16sp"
+                android:textStyle="normal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/iv_gig_activation"
+                tools:text="Your Application  for 21North is successfully submitted and under review.
 " />
 
-    <TextView
-        android:id="@+id/tv_complete_gig_activation"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/size_19"
-        android:layout_marginTop="@dimen/size_8"
-        android:layout_marginEnd="@dimen/size_33"
-        android:fontFamily="@font/lato"
-        android:textColor="@color/black_85"
-        android:textSize="16sp"
-        android:textStyle="normal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_application_gig_activation"
-        tools:text="Please complete the below mentioned steps
+            <TextView
+                android:id="@+id/tv_complete_gig_activation"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/size_19"
+                android:layout_marginTop="@dimen/size_8"
+                android:layout_marginEnd="@dimen/size_33"
+                android:fontFamily="@font/lato"
+                android:textColor="@color/black_85"
+                android:textSize="16sp"
+                android:textStyle="normal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_application_gig_activation"
+                tools:text="Please complete the below mentioned steps
 to get selected." />
 
-    <TextView
-        android:id="@+id/tv_application_stat_gig_activation"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/size_19"
-        android:layout_marginTop="@dimen/size_23"
-        android:fontFamily="@font/lato"
-        android:gravity="start|center_vertical"
-        android:text="@string/application_status"
-        android:textColor="@color/black_two"
-        android:textSize="14sp"
+            <TextView
+                android:id="@+id/tv_application_stat_gig_activation"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/size_19"
+                android:layout_marginTop="@dimen/size_23"
+                android:fontFamily="@font/lato"
+                android:gravity="start|center_vertical"
+                android:text="@string/application_status"
+                android:textColor="@color/black_two"
+                android:textSize="14sp"
+                android:textStyle="normal"
 
-        android:textStyle="normal"
+                app:layout_constraintEnd_toStartOf="@+id/tv_verification_gig_activation"
+                app:layout_constraintHorizontal_weight="6"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_complete_gig_activation" />
 
-        app:layout_constraintEnd_toStartOf="@+id/tv_verification_gig_activation"
-        app:layout_constraintHorizontal_weight="6"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_complete_gig_activation" />
+            <TextView
+                android:id="@+id/tv_verification_gig_activation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/size_23"
+                android:layout_marginEnd="@dimen/size_14"
+                android:drawablePadding="@dimen/size_7"
+                android:fontFamily="@font/lato"
+                android:gravity="end|center_vertical"
+                android:textColor="#e42c64"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                app:drawableStartCompat="@drawable/ic_status_pending"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_weight="4"
+                app:layout_constraintStart_toEndOf="@+id/tv_application_stat_gig_activation"
+                app:layout_constraintTop_toBottomOf="@+id/tv_complete_gig_activation"
+                tools:text="Under Verficaton  " />
 
-    <TextView
-        android:id="@+id/tv_verification_gig_activation"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/size_23"
-        android:drawableStart="@drawable/ic_status_pending"
-        android:drawablePadding="@dimen/size_7"
-        android:fontFamily="@font/lato"
-        android:gravity="end|center_vertical"
-        android:textColor="#e42c64"
-        android:textSize="12sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_weight="4"
-        app:layout_constraintStart_toEndOf="@+id/tv_application_stat_gig_activation"
-        app:layout_constraintTop_toBottomOf="@+id/tv_complete_gig_activation"
-        tools:text="Under Verficaton  " />
+            <View
+                android:id="@+id/divider1"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/size_1"
+                android:layout_marginTop="@dimen/size_16"
+                android:background="#979797"
+                app:layout_constraintTop_toBottomOf="@+id/tv_verification_gig_activation" />
+
+            <TextView
+                android:id="@+id/tv_requirements_gig_activation"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/size_18"
+                android:layout_marginTop="@dimen/size_18"
+                android:layout_marginBottom="@dimen/size_20"
+                android:fontFamily="@font/lato"
+                android:gravity="start"
+                android:text="@string/requirements_for_the_role"
+                android:textColor="@color/black_two"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/divider1" />
+
+            <View
+                android:id="@+id/divider2"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/size_1"
+                android:layout_marginTop="@dimen/size_16"
+                android:background="#c8c7cc"
+                app:layout_constraintTop_toBottomOf="@+id/tv_requirements_gig_activation" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_gig_activation"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/divider2" />
+
+            <View
+                android:id="@+id/divider3"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/size_1"
+                android:layout_marginTop="@dimen/size_16"
+                android:background="#c8c7cc"
+                app:layout_constraintTop_toBottomOf="@+id/rv_gig_activation" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

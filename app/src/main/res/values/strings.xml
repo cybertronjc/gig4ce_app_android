@@ -1050,6 +1050,7 @@
     <string name="next_camel_case">Next</string>
     <string name="upload_driving_license">Upload Driving License</string>
     <string name="application_status">Application Status</string>
+    <string name="requirements_for_the_role">Requirements for the role</string>
 
 
 </resources>

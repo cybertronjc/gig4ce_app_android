@@ -8,5 +8,6 @@ data class WorkOrderDependency(
         var sub_title: String? = null,
         var title: String? = null,
         var type: String? = null,
-        var work_order_id: String? = null
+        var workOrderId: String? = null,
+        var nextDependency: String = ""
 )

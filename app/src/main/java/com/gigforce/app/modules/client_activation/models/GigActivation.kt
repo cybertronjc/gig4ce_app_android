@@ -5,17 +5,22 @@ import android.os.Parcelable
 
 data class GigActivation(var icon: String = "", var status: String = "", var subTitle: String = "", var title: String = "",
                          var trainingTitle: String = "", var type: String = "", var workOrderId: String = "",
-                         var requirements: RequirmentsGigActivation? = null
-):Parcelable {
+                         var requirements: RequirmentsGigActivation? = null, var dependency: List<DependencyGigActivation> = listOf(),
+                         var instruction: String = ""
+) : Parcelable {
     constructor(parcel: Parcel) : this(
-            parcel.readString()?:"",
-            parcel.readString()?:"",
-            parcel.readString()?:"",
-            parcel.readString()?:"",
-            parcel.readString()?:"",
-            parcel.readString()?:"",
-            parcel.readString()?:"",
-            parcel.readParcelable(RequirmentsGigActivation::class.java.classLoader)) {
+            parcel.readString() ?: "",
+            parcel.readString() ?: "",
+            parcel.readString() ?: "",
+            parcel.readString() ?: "",
+            parcel.readString() ?: "",
+            parcel.readString() ?: "",
+            parcel.readString() ?: "",
+            parcel.readParcelable(RequirmentsGigActivation::class.java.classLoader),
+            parcel.createTypedArrayList(DependencyGigActivation) ?: listOf(),
+            parcel.readString() ?: ""
+
+    ) {
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -27,6 +32,8 @@ data class GigActivation(var icon: String = "", var status: String = "", var sub
         parcel.writeString(type)
         parcel.writeString(workOrderId)
         parcel.writeParcelable(requirements, flags)
+        parcel.writeTypedList(dependency)
+        parcel.writeString(instruction)
     }
 
     override fun describeContents(): Int {

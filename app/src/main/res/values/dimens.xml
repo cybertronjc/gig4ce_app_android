@@ -123,4 +123,5 @@
     <dimen name="size_40">40dp</dimen>
     <dimen name="size_138">138dp</dimen>
     <dimen name="size_141">141dp</dimen>
+    <dimen name="size_59">59dp</dimen>
 </resources>
