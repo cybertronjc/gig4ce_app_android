@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -9,13 +7,12 @@
     android:animateLayoutChanges="true"
     tools:context=".modules.gigerVerfication.drivingLicense.AddDrivingLicenseInfoFragment">
 
-
     <TextView
         android:id="@+id/drivingLicenseLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="22dp"
+        android:layout_marginTop="@dimen/size_24"
         android:fontFamily="@font/lato_bold"
         android:letterSpacing="0"
         android:text="@string/driving_license"
@@ -29,7 +26,7 @@
         android:id="@+id/helpIconIV"
         android:layout_width="14dp"
         android:layout_height="14dp"
-        android:layout_marginTop="22dp"
+        android:layout_marginTop="@dimen/size_27"
         android:layout_marginEnd="13dp"
         android:clickable="true"
         android:focusable="true"
@@ -42,7 +39,7 @@
         android:id="@+id/whyWeNeedThisTV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="@dimen/size_17"
         android:layout_marginEnd="4dp"
         android:fontFamily="@font/lato"
         android:letterSpacing="-0.01"
@@ -59,10 +56,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="@dimen/size_18"
         android:fontFamily="@font/lato"
         android:letterSpacing="-0.01"
-        android:text="@string/do_you_have_driving_license"
+        android:text="@string/to_verify_your_automatic_cars_driving_skills_we_need_a_driving_test_clearance_certificate_from_registered_driving_school"
         android:textColor="@color/black"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/drivingLicenseLabel" />
@@ -109,6 +106,68 @@
 
     </RadioGroup>
 
+    <LinearLayout
+        android:id="@+id/ll_no_driving_license"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dlAvailaibilityOptionRG">
+
+        <RelativeLayout
+            android:id="@+id/rl_no_dl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/size_16"
+            android:layout_marginTop="@dimen/size_22"
+            android:layout_marginEnd="@dimen/size_16"
+            android:background="#d8d8d8">
+
+            <TextView
+                android:id="@+id/tv_no_driving_cert"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/size_11"
+                android:layout_marginTop="@dimen/size_18"
+                android:layout_marginEnd="@dimen/size_16"
+                android:layout_marginBottom="@dimen/size_27"
+                android:background="@drawable/ic_time_upload_driving_cert"
+                android:gravity="center"
+                android:text="i"
+                android:textColor="@color/lipstick"
+                android:textSize="14sp"
+                android:textStyle="normal" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/size_18"
+                android:layout_marginBottom="@dimen/size_17"
+                android:layout_toEndOf="@+id/tv_no_driving_cert"
+                android:fontFamily="@font/lato"
+                android:gravity="center_horizontal"
+                android:letterSpacing="-0.01"
+                android:text="You can give Driving test at our partner schools and get your certificate."
+                android:textColor="@color/battleship_grey"
+                android:textSize="14sp"
+                android:textStyle="normal" />
+
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/size_16"
+            android:layout_marginTop="@dimen/size_16"
+            android:layout_marginEnd="@dimen/size_23"
+            android:fontFamily="@font/lato"
+            android:text="@string/note_it_is_mandatory_to_submit_required_docs_at_time_of_driving_test"
+            android:textColor="@color/black"
+            android:textSize="12sp"
+            android:textStyle="normal" />
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/dlInfoLayout"
@@ -228,9 +287,6 @@
         </LinearLayout>
     </LinearLayout>
 
-
-
-
     <View
         android:id="@+id/topSeaparator2"
         android:layout_width="match_parent"
@@ -290,4 +346,3 @@
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
-

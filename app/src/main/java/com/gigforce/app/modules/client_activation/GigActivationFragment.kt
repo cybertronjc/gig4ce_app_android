@@ -15,7 +15,7 @@ import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.utils.StringConstants
 import kotlinx.android.synthetic.main.layout_fragment_activation_gig.*
 
-class GigActivationFragment : BaseFragment() {
+class GigActivationFragment : BaseFragment(), AdapterGigActivation.AdapterGigActivationCallbacks {
     private lateinit var viewModel: GigActivationViewModel
     private lateinit var mNextDep: String
     private lateinit var mWordOrderID: String
@@ -53,6 +53,7 @@ class GigActivationFragment : BaseFragment() {
                 tv_verification_gig_activation.text = gigAcivation.status
                 tv_complete_gig_activation.text = gigAcivation.instruction
                 adapter.addData(gigAcivation.dependency)
+                adapter.setCallbacks(this)
 
             }
         })
@@ -87,6 +88,12 @@ class GigActivationFragment : BaseFragment() {
             mWordOrderID = it.getString(StringConstants.WORK_ORDER_ID.value) ?: return@let
             mNextDep = it.getString(StringConstants.NEXT_DEP.value) ?: return@let
 
+        }
+    }
+
+    override fun onItemClick(feature: String) {
+        when (feature) {
+            "driving_certificate" -> navigate(R.id.fragment_upload_cert)
         }
     }
 }

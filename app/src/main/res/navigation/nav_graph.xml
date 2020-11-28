@@ -778,6 +778,12 @@
         android:label="fragment_gig_activation"
         tools:layout="@layout/layout_fragment_activation_gig" />
 
+    <fragment
+        android:id="@+id/fragment_upload_cert"
+        android:name="com.gigforce.app.modules.client_activation.UploadDrivingCertificate"
+        android:label="fragment_upload_cert"
+        tools:layout="@layout/layout_fragment_upload_driving_certificate" />
+
 
 </navigation>
 
