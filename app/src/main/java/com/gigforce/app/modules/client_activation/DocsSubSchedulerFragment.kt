@@ -8,6 +8,8 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
+import com.gigforce.app.core.gone
+import com.gigforce.app.core.visible
 import com.gigforce.app.modules.client_activation.models.PartnerSchoolDetails
 import com.gigforce.app.utils.StringConstants
 import kotlinx.android.synthetic.main.fragment_docs_sub_scheduler.*
@@ -71,6 +73,9 @@ class DocsSubSchedulerFragment : BaseFragment(), SelectPartnerSchoolBottomSheet.
         textView137.text = Html.fromHtml(address.schoolName + "<br>" + address.landmark + "<br>" + address.city + "<br>"
                 + address.schoolTiming + "<br>" + address.contact.map { "<b>" + it.name + "</b>" }.reduce { a, o -> a + o }
         )
+        imageView34.gone()
+        iv_contact.visible()
+        iv_location.visible()
 
 
     }

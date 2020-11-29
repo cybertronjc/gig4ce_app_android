@@ -92,7 +92,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
-            android:src="@drawable/ic_applied"
+            android:src="@drawable/ic_location"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/view5" />
 
@@ -121,13 +121,35 @@
 
         <TextView
             android:id="@+id/textView137"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:text="@string/tap_to_select"
             android:textSize="@dimen/font_12"
+            app:layout_constraintEnd_toStartOf="@+id/iv_location"
             app:layout_constraintStart_toStartOf="@+id/textView136"
             app:layout_constraintTop_toBottomOf="@+id/textView136" />
+
+        <ImageView
+            android:id="@+id/iv_location"
+            android:layout_width="@dimen/size_24"
+            android:layout_height="@dimen/size_24"
+            android:layout_marginEnd="@dimen/size_8"
+            android:background="@drawable/circle_ffd9e6"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/textView137"
+
+            app:layout_constraintEnd_toStartOf="@+id/iv_contact" />
+
+        <ImageView
+            android:id="@+id/iv_contact"
+            android:layout_width="@dimen/size_24"
+            android:layout_height="@dimen/size_24"
+            android:layout_marginEnd="@dimen/size_24"
+            android:background="@drawable/circle_ffd9e6"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/textView137"
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <ImageView
             android:id="@+id/imageView34"
