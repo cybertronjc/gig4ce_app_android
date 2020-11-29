@@ -37,6 +37,7 @@ class AdapterPartnerSchool : RecyclerView.Adapter<AdapterPartnerSchool.ViewHolde
         holder.itemView.setOnClickListener {
             selectedItem = holder.adapterPosition
             notifyDataSetChanged()
+            callbacks.onItemClick(holder.adapterPosition)
         }
 
     }
@@ -50,12 +51,17 @@ class AdapterPartnerSchool : RecyclerView.Adapter<AdapterPartnerSchool.ViewHolde
         notifyDataSetChanged()
     }
 
+    fun getSelectedItem(): PartnerSchoolDetails {
+        return items[selectedItem]
+    }
+
     fun setCallbacks(callbacks: AdapterPartnerSchoolCallbacks) {
         this.callbacks = callbacks;
     }
 
+
     interface AdapterPartnerSchoolCallbacks {
-        fun onItemClick(feature: String);
+        fun onItemClick(position: Int);
 
     }
 

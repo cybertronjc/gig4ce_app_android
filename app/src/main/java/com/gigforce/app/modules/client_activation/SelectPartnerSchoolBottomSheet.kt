@@ -12,12 +12,15 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.gigforce.app.R
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
+import com.gigforce.app.modules.client_activation.models.PartnerSchoolDetails
 import com.gigforce.app.utils.HorizontaltemDecoration
 import com.gigforce.app.utils.StringConstants
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.ncorti.slidetoact.SlideToActView
 import kotlinx.android.synthetic.main.layout_select_partner_bottom_sheet.*
 
-class SelectPartnerSchoolBottomSheet : BottomSheetDialogFragment() {
+class SelectPartnerSchoolBottomSheet : BottomSheetDialogFragment(), AdapterPartnerSchool.AdapterPartnerSchoolCallbacks {
+    private lateinit var callbacks: SelectPartnerBsCallbacks
     private lateinit var mWordOrderID: String
 
     private lateinit var viewModel: SelectPartnerSchoolViewModel
@@ -31,6 +34,7 @@ class SelectPartnerSchoolBottomSheet : BottomSheetDialogFragment() {
 
     private fun setupRecyclerView() {
         rv_partner_school_address.adapter = adapter
+        adapter.setCallbacks(this)
         rv_partner_school_address.layoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         rv_partner_school_address.addItemDecoration(
@@ -52,7 +56,20 @@ class SelectPartnerSchoolBottomSheet : BottomSheetDialogFragment() {
                 ).get(SelectPartnerSchoolViewModel::class.java)
         setupRecyclerView()
         initObservers()
+        initClicks()
 
+    }
+
+    private fun initClicks() {
+
+        slider_okay_partner_school.onSlideCompleteListener =
+                object : SlideToActView.OnSlideCompleteListener {
+
+                    override fun onSlideComplete(view: SlideToActView) {
+                        callbacks.setPartnerAddress(adapter.getSelectedItem())
+                        this@SelectPartnerSchoolBottomSheet.dismiss()
+                    }
+                }
     }
 
     private fun initObservers() {
@@ -88,5 +105,18 @@ class SelectPartnerSchoolBottomSheet : BottomSheetDialogFragment() {
         arguments?.let {
             mWordOrderID = it.getString(StringConstants.WORK_ORDER_ID.value) ?: return@let
         }
+    }
+
+    fun setCallbacks(callbacks: SelectPartnerBsCallbacks) {
+        this.callbacks = callbacks;
+    }
+
+    public interface SelectPartnerBsCallbacks {
+
+        fun setPartnerAddress(address: PartnerSchoolDetails);
+    }
+
+    override fun onItemClick(position: Int) {
+        slider_okay_partner_school.isLocked = position != -1
     }
 }
