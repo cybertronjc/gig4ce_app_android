@@ -1076,6 +1076,7 @@
     <string name="all_set_for_test">All Set for Driving Test</string>
     <string name="change_slot">Change Slot</string>
     <string name="i_will_submit_dl_and_cheque_in_same_centre_only">I will submit DL and cheque in same centre only</string>
+    <string name="confirm">Confirm</string>
 
 
 </resources>
