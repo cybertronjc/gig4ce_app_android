@@ -5,6 +5,7 @@ import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.lifecycle.Observer
 import androidx.lifecycle.SavedStateViewModelFactory
 import androidx.lifecycle.ViewModelProvider
@@ -98,7 +99,14 @@ class GigActivationFragment : BaseFragment(), AdapterGigActivation.AdapterGigAct
 
     override fun onItemClick(feature: String) {
         when (feature) {
-            "driving_certificate" -> navigate(R.id.fragment_upload_cert)
+            "driving_certificate" -> navigate(R.id.fragment_upload_cert, bundleOf(StringConstants.WORK_ORDER_ID.value to mWordOrderID))
         }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString(StringConstants.WORK_ORDER_ID.value, mWordOrderID)
+
+
     }
 }

@@ -56,6 +56,7 @@ class ApplicationClientActivationFragment : BaseFragment(),
 
     }
 
+
     private fun initClicks() {
         iv_back_application_client_activation.setOnClickListener {
             onBackPressed()

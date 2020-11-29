@@ -4,21 +4,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
+import androidx.core.os.bundleOf
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
+import com.gigforce.app.utils.StringConstants
+import kotlinx.android.synthetic.main.fragment_docs_sub_scheduler.*
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [DocsSubSchedulerFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class DocsSubSchedulerFragment : BaseFragment() {
+
+    private lateinit var mWordOrderID: String
 
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
@@ -28,7 +23,34 @@ class DocsSubSchedulerFragment : BaseFragment() {
         return inflateView(R.layout.fragment_docs_sub_scheduler, inflater, container)
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        getDataFromIntents(savedInstanceState)
+        view7.setOnClickListener {
+            SelectPartnerSchoolBottomSheet.newInstance(bundleOf(
+                    StringConstants.WORK_ORDER_ID.value to mWordOrderID
+            )).show(parentFragmentManager, SelectPartnerSchoolBottomSheet.javaClass.name)
+        }
+    }
+
     companion object {
         fun newInstance() = DocsSubSchedulerFragment()
+    }
+
+    private fun getDataFromIntents(savedInstanceState: Bundle?) {
+        savedInstanceState?.let {
+            mWordOrderID = it.getString(StringConstants.WORK_ORDER_ID.value) ?: return@let
+        }
+
+        arguments?.let {
+            mWordOrderID = it.getString(StringConstants.WORK_ORDER_ID.value) ?: return@let
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString(StringConstants.WORK_ORDER_ID.value, mWordOrderID)
+
+
     }
 }

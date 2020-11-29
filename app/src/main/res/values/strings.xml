@@ -1064,6 +1064,8 @@
     <string name="note_it_is_mandatory_to_submit_required_docs_at_time_of_driving_test">Note: It is mandatory to submit required docs at time of Driving test</string>
     <string name="upload_driving_cert">Upload Driving Certificate</string>
     <string name="please_upload_driving_cert">Please upload your Driving Certificate your verification.</string>
+    <string name="choose_address">Choose Address</string>
+    <string name="select_a_partner_school_address_to_driving_test_certification_and_doc_submission">Select a Partner School Address to Driving test certification and Doc submission</string>
 
 
 </resources>

@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
@@ -21,6 +22,7 @@ import com.gigforce.app.modules.gigerVerfication.drivingLicense.DrivingLicenseSi
 import com.gigforce.app.modules.gigerVerfication.panCard.AddPanCardInfoFragment
 import com.gigforce.app.modules.photocrop.PhotoCrop
 import com.gigforce.app.utils.Lse
+import com.gigforce.app.utils.StringConstants
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.android.synthetic.main.layout_driving_license_upload_client_activation.dlAvailaibilityOptionRG
 import kotlinx.android.synthetic.main.layout_driving_license_upload_client_activation.dlFrontImageHolder
@@ -37,6 +39,7 @@ import kotlinx.android.synthetic.main.upload_car_client_activation.view.*
 
 class UploadDrivingCertificate : BaseFragment() {
 
+    private lateinit var mWordOrderID: String
     private val viewModel: GigVerificationViewModel by viewModels()
 
     private var dlFrontImagePath: Uri? = null
@@ -47,16 +50,28 @@ class UploadDrivingCertificate : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        getDataFromIntents(savedInstanceState)
+
         initViews()
         initViewModel()
         initClicks()
 
     }
 
+    private fun getDataFromIntents(savedInstanceState: Bundle?) {
+        savedInstanceState?.let {
+            mWordOrderID = it.getString(StringConstants.WORK_ORDER_ID.value) ?: return@let
+        }
+
+        arguments?.let {
+            mWordOrderID = it.getString(StringConstants.WORK_ORDER_ID.value) ?: return@let
+        }
+    }
+
     private fun initClicks() {
 
         tv_schedule_test.setOnClickListener {
-            navigate(R.id.fragment_doc_sub)
+            navigate(R.id.fragment_doc_sub, bundleOf(StringConstants.WORK_ORDER_ID.value to mWordOrderID))
         }
     }
 
@@ -342,4 +357,12 @@ class UploadDrivingCertificate : BaseFragment() {
 //                .placeholder(getCircularProgressDrawable())
 //                .into(dlBackImageHolder.uploadImageLayout.clickedImageIV)
 //    }
+
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString(StringConstants.WORK_ORDER_ID.value, mWordOrderID)
+
+
+    }
 }
