@@ -1,5 +1,7 @@
 package com.gigforce.app.modules.client_activation
 
+import android.util.Log
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.gigforce.app.modules.client_activation.models.JpApplication
 import com.gigforce.app.modules.client_activation.models.WorkOrderDependency
@@ -29,6 +31,9 @@ class ApplicationClientActivationViewModel : ViewModel() {
         SingleLiveEvent<VerificationBaseModel>();
     }
     val observableVerification: SingleLiveEvent<VerificationBaseModel> get() = _observableVerification
+
+    private val _observableJpApplication: MutableLiveData<JpApplication> = MutableLiveData()
+    val observableJpApplication: MutableLiveData<JpApplication> = _observableJpApplication
 
     fun getWorkOrderDependency(workOrderId: String) {
         repository.getCollectionReference().whereEqualTo("type", "dependency")
@@ -73,6 +78,25 @@ class ApplicationClientActivationViewModel : ViewModel() {
             }
 
         }
+    }
+
+    fun getApplication(workOrderId: String) {
+        repository.db.collection("JP_Applications").document(workOrderId).addSnapshotListener { success, err ->
+            run {
+                Log.e("check", err?.message ?: "")
+                if (err == null) {
+                    if (success?.data != null) {
+                        observableJpApplication.value = success?.toObject(JpApplication::class.java)
+                    }
+                } else {
+                    observableError.value = err.message
+                }
+            }
+        }
+    }
+
+    fun getUID(): String {
+        return repository.getUID()
     }
 
 

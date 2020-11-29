@@ -73,13 +73,9 @@ class ClientActivationFragment : BaseFragment() {
             onBackPressed()
         }
         tv_mark_as_interest_role_details.setOnClickListener {
-            navigate(
-                    R.id.fragment_application_client_activation, bundleOf(
-                    StringConstants.WORK_ORDER_ID.value to mWordOrderID,
-                    StringConstants.NEXT_DEP.value to viewModel.observableWorkOrder.value?.nextDependency
-            )
+            pb_client_activation.visible()
 
-            )
+            viewModel.getApplication(mWordOrderID)
         }
     }
 
@@ -130,6 +126,24 @@ class ClientActivationFragment : BaseFragment() {
             textView120.text = it?.requiredLessons?.title
             initializeLearningModule(it?.requiredLessons?.lessons!!)
 //            }
+        })
+
+        viewModel.observableJpApplication.observe(viewLifecycleOwner, Observer {
+            if (it == null || it.stepDone == 1) {
+                navigate(
+                        R.id.fragment_application_client_activation, bundleOf(
+                        StringConstants.WORK_ORDER_ID.value to mWordOrderID,
+                        StringConstants.NEXT_DEP.value to viewModel.observableWorkOrder.value?.nextDependency
+                )
+
+                )
+            } else if (it.stepDone == 2) {
+                navigate(
+                        R.id.fragment_gig_activation, bundleOf(
+                        StringConstants.WORK_ORDER_ID.value to mWordOrderID,
+                        StringConstants.NEXT_DEP.value to viewModel.observableWorkOrder.value?.nextDependency
+                ))
+            }
         })
         if (!viewModel.initialized)
             viewModel.getWorkOrder(docID = mWordOrderID)

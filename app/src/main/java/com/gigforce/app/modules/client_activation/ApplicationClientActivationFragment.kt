@@ -62,6 +62,30 @@ class ApplicationClientActivationFragment : BaseFragment(),
             onBackPressed()
         }
 
+        tv_action_application_client_activation.setOnClickListener {
+            if (viewModel.observableJpApplication.value != null) {
+                val value = viewModel.observableJpApplication.value
+                value?.stepDone = 2
+                viewModel.apply(value!!)
+
+            } else {
+                val jpApplication = JpApplication(JPId = mWordOrderID, gigerId = viewModel.getUID(), stepsTotal = adapter.items.size)
+                adapter.items.forEach { dependency ->
+                    val list = mutableListOf<JpDraft>()
+                    list.add(JpDraft(dependency.isDone, dependency.title
+                            ?: "", dependency.feature
+                            ?: ""))
+                    jpApplication.draft = list
+                }
+                jpApplication.stepDone = 2
+                viewModel.apply(jpApplication)
+            }
+
+            pb_application_client_activation.visible()
+
+
+        }
+
     }
 
     private fun initObservers() {
@@ -81,7 +105,7 @@ class ApplicationClientActivationFragment : BaseFragment(),
         viewModel.observableWorkOrderDependency.observe(viewLifecycleOwner, Observer {
             h_pb_application_frag.max = it?.dependency?.size!!
             tv_thanks_application.text = it?.title
-            tv_completion_application.text = it?.sub_title
+            tv_completion_application.text = it?.subTitle
             mNextDep = it.nextDependency;
 
             adapter.addData(it?.dependency!!);
@@ -133,31 +157,17 @@ class ApplicationClientActivationFragment : BaseFragment(),
                             }
 
 
-                            Observable.fromIterable(adapter.items).all { item -> item.isDone }.subscribe({ success ->
-                                tv_action_application_client_activation.isEnabled = success
-                            }, { err -> })
-                            Observable.fromIterable(adapter.items).filter { item -> item.isDone }.toList().subscribe({ success ->
-                                run {
-                                    h_pb_application_frag.progress = success.size
-                                    tv_steps_pending_application_value.text =
-                                            "" + (h_pb_application_frag.progress) + "/" + it?.dependency?.size!!
-                                }
-                            }, { _ -> })
-                            tv_action_application_client_activation.setOnClickListener {
-                                val jpApplication = JpApplication(JPId = mWordOrderID, gigerId = profileData?.id
-                                        ?: "", stepsTotal = adapter.items.size)
-                                adapter.items.forEach { dependency ->
-                                    jpApplication.draft.add(JpDraft(dependency.isDone, dependency.title
-                                            ?: "", dependency.feature
-                                            ?: ""))
-                                }
-                                viewModel.apply(jpApplication)
-                                pb_application_client_activation.visible()
-
-
-                            }
+                            checkAndUpdateUI(it.dependency?.size ?: 0)
+                            viewModel.getApplication(mWordOrderID)
 
                         })
+
+
+                adapter.setImageDrawable(
+                        "questionnary", resources.getDrawable(
+                        R.drawable.ic_status_pending
+                ))
+
                 viewModel.getVerification()
 
 
@@ -165,8 +175,37 @@ class ApplicationClientActivationFragment : BaseFragment(),
 
 
         })
+        viewModel.observableJpApplication.observe(viewLifecycleOwner, Observer { data ->
+            val index = data.draft.indexOf(JpDraft(type = "questionnary"))
+            if (index != -1) {
+                if (data.draft[index].isDone) {
+                    adapter.setImageDrawable(
+                            "questionnary", resources.getDrawable(
+                            R.drawable.ic_applied
+                    ))
+                }
+                checkAndUpdateUI(data.draft.size)
+
+
+            }
+
+        })
         viewModel.getWorkOrderDependency(workOrderId = mWordOrderID)
 
+
+    }
+
+    fun checkAndUpdateUI(size: Int) {
+        Observable.fromIterable(adapter.items).all { item -> item.isDone }.subscribe({ success ->
+            tv_action_application_client_activation.isEnabled = success
+        }, { err -> })
+        Observable.fromIterable(adapter.items).filter { item -> item.isDone }.toList().subscribe({ success ->
+            run {
+                h_pb_application_frag.progress = success.size
+                tv_steps_pending_application_value.text =
+                        "" + (h_pb_application_frag.progress) + "/" + size
+            }
+        }, { _ -> })
 
     }
 
@@ -221,7 +260,10 @@ class ApplicationClientActivationFragment : BaseFragment(),
             "about_me" -> {
                 navigate(R.id.profileFragment)
             }
-            "questionnary" -> navigate(R.id.application_questionnaire)
+            "questionnary" -> navigate(R.id.application_questionnaire, bundleOf(
+                    StringConstants.WORK_ORDER_ID.value to mWordOrderID,
+                    StringConstants.WORK_DEP_DATA.value to viewModel.observableWorkOrderDependency.value?.dependency
+            ))
             "driving_licence" -> navigate(R.id.fragment_upload_dl_cl_act)
         }
     }

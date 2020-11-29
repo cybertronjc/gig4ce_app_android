@@ -13,14 +13,17 @@ import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
-import com.gigforce.app.utils.PushDownAnim
-import com.gigforce.app.utils.RVPagerSnapFancyDecorator
-import com.gigforce.app.utils.RatioLayoutManager
-import com.gigforce.app.utils.getScreenWidth
+import com.gigforce.app.core.gone
+import com.gigforce.app.core.visible
+import com.gigforce.app.modules.landingscreen.models.Dependency
+import com.gigforce.app.utils.*
 import kotlinx.android.synthetic.main.layout_questionnaire_fragment.*
 
 
 class QuestionnaireFragment : BaseFragment() {
+    private lateinit var mWordOrderID: String
+    private lateinit var list: ArrayList<Dependency>
+
     private lateinit var viewModel: ViewModelQuestionnaire
     private var selectedPosition = 0;
     private val adapter: AdapterQuestionnaire by lazy {
@@ -34,6 +37,8 @@ class QuestionnaireFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        getDataFromIntents(savedInstanceState)
+
         viewModel =
                 ViewModelProvider(
                         this,
@@ -44,8 +49,39 @@ class QuestionnaireFragment : BaseFragment() {
         initClicks()
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString(StringConstants.WORK_ORDER_ID.value, mWordOrderID)
+        outState.putParcelableArrayList(StringConstants.WORK_DEP_DATA.value, list)
+
+
+    }
+
+    private fun getDataFromIntents(savedInstanceState: Bundle?) {
+        savedInstanceState?.let {
+            mWordOrderID = it.getString(StringConstants.WORK_ORDER_ID.value) ?: return@let
+            list = it.getParcelableArrayList(StringConstants.WORK_DEP_DATA.value)
+                    ?: return@let
+
+        }
+
+        arguments?.let {
+            mWordOrderID = it.getString(StringConstants.WORK_ORDER_ID.value) ?: return@let
+            list = it.getParcelableArrayList(StringConstants.WORK_DEP_DATA.value)
+                    ?: return@let
+
+
+        }
+    }
+
+
     private fun initClicks() {
         PushDownAnim.setPushDownAnimTo(tv_action_questionnaire).setOnClickListener(View.OnClickListener {
+            if (selectedPosition == viewModel.observableQuestionnaireResponse.value!!.questions.size - 1) {
+                pb_questionnaire.visible()
+                viewModel.addQuestionnaire(mWordOrderID, list, viewModel.observableQuestionnaireResponse.value?.questions)
+                return@OnClickListener
+            }
             if (viewModel.observableQuestionnaireResponse.value?.questions?.get(selectedPosition)?.selectedAnswer != -1) {
                 selectedPosition += 1
                 rv_questionnaire.smoothScrollToPosition(selectedPosition + 1)
@@ -57,12 +93,24 @@ class QuestionnaireFragment : BaseFragment() {
     }
 
     private fun initObservers() {
+        viewModel.observableError.observe(viewLifecycleOwner, Observer {
+            pb_questionnaire.gone()
+            showToast(it ?: "")
+        })
+        viewModel.observableAddApplicationSuccess.observe(viewLifecycleOwner, Observer {
+            pb_questionnaire.gone()
+            if (it) {
+                popBackState()
+            }
+        })
         viewModel.observableQuestionnaireResponse.observe(viewLifecycleOwner, Observer {
+            pb_questionnaire.gone()
+
             setupTabs(it.questions.size)
             adapter.addData(it.questions)
         })
         if (!viewModel.initialized) {
-            viewModel.getQuestionnaire()
+            viewModel.getQuestionnaire(mWordOrderID)
         }
 
 
