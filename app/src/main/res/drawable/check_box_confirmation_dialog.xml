@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@drawable/ic_defualt_check_box_confirmation_dialog" android:state_checked="false" />
+    <item android:drawable="@drawable/ic_checked_chec_box_cnf_dialog" android:state_checked="true" />
+    <item android:drawable="@drawable/ic_defualt_check_box_confirmation_dialog" />
+</selector>

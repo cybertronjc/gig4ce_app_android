@@ -3,86 +3,70 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/schedule_doc_sub_bg"
-    tools:context=".modules.client_activation.DocsSubSchedulerFragment">
-
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout4"
-        android:layout_width="match_parent"
-        android:layout_height="69dp"
-        android:background="@color/colorLightAccent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <ImageView
-            android:id="@+id/imageView11"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:src="@drawable/ct_ic_arrow_back_white_24dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/textView22"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:fontFamily="@font/lato"
-            android:text="@string/schedule_doc_submission"
-            android:textColor="@color/white"
-            android:textSize="20sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/imageView11"
-            app:layout_constraintTop_toTopOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    android:layout_height="wrap_content"
+    android:background="@drawable/ic_bg_white_top_rad_5">
 
     <TextView
-        android:id="@+id/textView99"
+        android:id="@+id/driving_license_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginStart="@dimen/size_25"
+        android:layout_marginTop="@dimen/size_27"
         android:fontFamily="@font/lato"
-        android:text="@string/set_doc_preference"
-        android:textColor="@color/black"
-        android:textSize="14sp"
-
+        android:gravity="center_horizontal"
+        android:text="@string/driving_test_details"
+        android:textColor="@color/black_85"
+        android:textSize="16sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout4" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView135"
-        android:layout_width="match_parent"
+        android:id="@+id/tv_all_set"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:paddingLeft="16dp"
-        android:paddingRight="50dp"
-        android:text="@string/set_doc_note"
+        android:layout_marginStart="@dimen/size_25"
+        android:layout_marginTop="@dimen/size_8"
+        android:fontFamily="@font/lato"
+        android:text="@string/all_set_for_test"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        android:textStyle="normal"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView99" />
+        app:layout_constraintTop_toBottomOf="@+id/driving_license_title" />
 
+    <TextView
+        android:id="@+id/tv_change_slot"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/size_29"
+        android:layout_marginEnd="@dimen/size_15"
+        android:fontFamily="@font/lato"
+        android:gravity="end"
+        android:text="@string/change_slot"
+        android:textColor="@color/lipstick"
+        android:textSize="14sp"
+        android:textStyle="normal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/select_partner_school"
         android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="16dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/size_32"
         android:background="@color/white"
-        app:layout_constraintBottom_toTopOf="@+id/slider_checkout"
+        app:layout_constraintBottom_toTopOf="@+id/cb_centre"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView135">
+        app:layout_constraintTop_toBottomOf="@+id/tv_all_set">
 
         <View
             android:id="@+id/view5"
             android:layout_width="wrap_content"
             android:layout_height="2dp"
             android:background="@color/gray_color1"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -104,6 +88,7 @@
             android:layout_height="0dp"
             app:layout_constraintBottom_toTopOf="@+id/view6"
             app:layout_constraintEnd_toEndOf="parent"
+
             app:layout_constraintStart_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/view5" />
 
@@ -152,15 +137,6 @@
             app:layout_constraintBottom_toBottomOf="@+id/textView137"
             app:layout_constraintEnd_toEndOf="parent" />
 
-        <ImageView
-            android:id="@+id/imageView34"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="16dp"
-            android:src="@drawable/ic_baseline_keyboard_arrow_right_24"
-            app:layout_constraintBottom_toBottomOf="@+id/textView137"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/textView136" />
 
         <View
             android:id="@+id/view6"
@@ -209,15 +185,6 @@
             app:layout_constraintStart_toStartOf="@+id/textView139"
             app:layout_constraintTop_toBottomOf="@+id/textView139" />
 
-        <ImageView
-            android:id="@+id/imageView35"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="16dp"
-            android:src="@drawable/ic_baseline_keyboard_arrow_right_24"
-            app:layout_constraintBottom_toBottomOf="@+id/textView139"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/textView138" />
 
         <View
             android:layout_width="match_parent"
@@ -257,15 +224,6 @@
             app:layout_constraintStart_toStartOf="@+id/textView142"
             app:layout_constraintTop_toBottomOf="@+id/textView142" />
 
-        <ImageView
-            android:id="@+id/imageView36"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="16dp"
-            android:src="@drawable/ic_baseline_keyboard_arrow_right_24"
-            app:layout_constraintBottom_toBottomOf="@+id/textView143"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/textView142" />
 
         <View
             android:id="@+id/view9"
@@ -289,13 +247,31 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
+    <CheckBox
+        android:id="@+id/cb_centre"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/size_15"
+        android:layout_marginTop="@dimen/size_108"
+        android:layout_marginBottom="@dimen/size_14"
+        android:button="@drawable/check_box_confirmation_dialog"
+        android:fontFamily="@font/lato"
+        android:paddingStart="@dimen/size_15"
+        android:paddingEnd="@dimen/size_29"
+        android:text="@string/i_will_submit_dl_and_cheque_in_same_centre_only"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        android:textStyle="normal"
+        app:layout_constraintBottom_toTopOf="@+id/slider_checkout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/select_partner_school" />
 
     <com.ncorti.slidetoact.SlideToActView
         android:id="@+id/slider_checkout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/size_24"
         android:layout_marginBottom="@dimen/size_27"
+
         app:border_radius="8dp"
         app:icon_margin="@dimen/size_7"
         app:inner_color="#d72467"

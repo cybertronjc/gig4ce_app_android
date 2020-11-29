@@ -6,15 +6,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
-import androidx.lifecycle.ViewModelProviders
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.client_activation.models.PartnerSchoolDetails
-import com.gigforce.app.modules.preferences.SharedPreferenceViewModel
-import com.gigforce.app.modules.preferences.prefdatamodel.PreferencesDataModel
 import com.gigforce.app.utils.StringConstants
+import com.ncorti.slidetoact.SlideToActView
 import kotlinx.android.synthetic.main.fragment_docs_sub_scheduler.*
 
 
@@ -22,8 +20,8 @@ class DocsSubSchedulerFragment : BaseFragment(), SelectPartnerSchoolBottomSheet.
 
     private var partnerAddress: PartnerSchoolDetails? = null
     private lateinit var mWordOrderID: String
-    private lateinit var viewModel: SharedPreferenceViewModel
-    private lateinit var viewDataModel: PreferencesDataModel
+    private var selectedTimeSlot: String? = null
+
 
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
@@ -35,8 +33,6 @@ class DocsSubSchedulerFragment : BaseFragment(), SelectPartnerSchoolBottomSheet.
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(SharedPreferenceViewModel::class.java)
-        viewDataModel = viewModel.getPreferenceDataModel()
         getDataFromIntents(savedInstanceState)
         view7.setOnClickListener {
             val newInstance = SelectPartnerSchoolBottomSheet.newInstance(bundleOf(
@@ -56,6 +52,18 @@ class DocsSubSchedulerFragment : BaseFragment(), SelectPartnerSchoolBottomSheet.
             newInstance.setCallbacks(this)
             newInstance.show(parentFragmentManager, TimeSlotsDialog::class.java.name)
         }
+        slider_checkout.onSlideCompleteListener =
+                object : SlideToActView.OnSlideCompleteListener {
+
+                    override fun onSlideComplete(view: SlideToActView) {
+                        val confirmationDialogDrivingTest = ConfirmationDialogDrivingTest()
+                        confirmationDialogDrivingTest.arguments = bundleOf(
+                                StringConstants.SELECTED_PARTNER.value to partnerAddress,
+                                StringConstants.SELECTED_TIME_SLOT.value to selectedTimeSlot
+                        )
+                        confirmationDialogDrivingTest.show(parentFragmentManager, ConfirmationDialogDrivingTest::class.java.name)
+                    }
+                }
 
     }
 
@@ -89,7 +97,7 @@ class DocsSubSchedulerFragment : BaseFragment(), SelectPartnerSchoolBottomSheet.
     override fun setPartnerAddress(address: PartnerSchoolDetails) {
         this.partnerAddress = address;
         textView137.text = Html.fromHtml(address.schoolName + "<br>" + address.landmark + "<br>" + address.city + "<br>"
-                + address.schoolTiming + "<br>" + address.contact.map { "<b>" + it.name + "</b>" }.reduce { a, o -> a + o }
+                + address.schoolTiming + "<br>" + address.contact.map { "<b><font color=\'#000000\'>" + it.name + "</font></b>" }.reduce { a, o -> a + o }
         )
         imageView34.gone()
         iv_contact.visible()
@@ -99,7 +107,9 @@ class DocsSubSchedulerFragment : BaseFragment(), SelectPartnerSchoolBottomSheet.
     }
 
     override fun setSelectedTimeSlot(time: String) {
+        this.selectedTimeSlot = time
         textView143.text = time
+        imageView36.gone()
     }
 
 

@@ -1070,6 +1070,12 @@
     <string name="done">Done</string>
     <string name="cancel_lower_case">Cancel</string>
     <string name="no_time_slot">No Time Slot Selected</string>
+    <string name="okay_lower_case">Okay</string>
+    <string name="checkout">Checkout</string>
+    <string name="driving_test_details">Driving Test Details</string>
+    <string name="all_set_for_test">All Set for Driving Test</string>
+    <string name="change_slot">Change Slot</string>
+    <string name="i_will_submit_dl_and_cheque_in_same_centre_only">I will submit DL and cheque in same centre only</string>
 
 
 </resources>
