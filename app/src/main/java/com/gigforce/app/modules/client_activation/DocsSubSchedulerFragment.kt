@@ -6,19 +6,24 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
+import androidx.lifecycle.ViewModelProviders
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.client_activation.models.PartnerSchoolDetails
+import com.gigforce.app.modules.preferences.SharedPreferenceViewModel
+import com.gigforce.app.modules.preferences.prefdatamodel.PreferencesDataModel
 import com.gigforce.app.utils.StringConstants
 import kotlinx.android.synthetic.main.fragment_docs_sub_scheduler.*
 
 
-class DocsSubSchedulerFragment : BaseFragment(), SelectPartnerSchoolBottomSheet.SelectPartnerBsCallbacks {
+class DocsSubSchedulerFragment : BaseFragment(), SelectPartnerSchoolBottomSheet.SelectPartnerBsCallbacks, TimeSlotsDialog.TimeSlotDialogCallbacks {
 
     private var partnerAddress: PartnerSchoolDetails? = null
     private lateinit var mWordOrderID: String
+    private lateinit var viewModel: SharedPreferenceViewModel
+    private lateinit var viewDataModel: PreferencesDataModel
 
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
@@ -30,6 +35,8 @@ class DocsSubSchedulerFragment : BaseFragment(), SelectPartnerSchoolBottomSheet.
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel = ViewModelProviders.of(this).get(SharedPreferenceViewModel::class.java)
+        viewDataModel = viewModel.getPreferenceDataModel()
         getDataFromIntents(savedInstanceState)
         view7.setOnClickListener {
             val newInstance = SelectPartnerSchoolBottomSheet.newInstance(bundleOf(
@@ -39,6 +46,17 @@ class DocsSubSchedulerFragment : BaseFragment(), SelectPartnerSchoolBottomSheet.
             newInstance.show(parentFragmentManager, SelectPartnerSchoolBottomSheet.javaClass.name)
         }
         initViews()
+        initClicks()
+    }
+
+    private fun initClicks() {
+        view_select_time_slots.setOnClickListener {
+            val newInstance = TimeSlotsDialog.newInstance()
+            newInstance
+            newInstance.setCallbacks(this)
+            newInstance.show(parentFragmentManager, TimeSlotsDialog::class.java.name)
+        }
+
     }
 
     private fun initViews() {
@@ -79,4 +97,10 @@ class DocsSubSchedulerFragment : BaseFragment(), SelectPartnerSchoolBottomSheet.
 
 
     }
+
+    override fun setSelectedTimeSlot(time: String) {
+        textView143.text = time
+    }
+
+
 }

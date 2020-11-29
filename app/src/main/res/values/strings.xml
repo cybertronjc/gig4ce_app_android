@@ -1066,6 +1066,10 @@
     <string name="please_upload_driving_cert">Please upload your Driving Certificate your verification.</string>
     <string name="choose_address">Choose Address</string>
     <string name="select_a_partner_school_address_to_driving_test_certification_and_doc_submission">Select a Partner School Address to Driving test certification and Doc submission</string>
+    <string name="select_preferred_time_slot">Select preferred Time Slot</string>
+    <string name="done">Done</string>
+    <string name="cancel_lower_case">Cancel</string>
+    <string name="no_time_slot">No Time Slot Selected</string>
 
 
 </resources>

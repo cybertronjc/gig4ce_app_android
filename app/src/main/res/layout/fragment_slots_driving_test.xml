@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:id="@+id/ll_time_lots"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#e42c64"
+            android:fontFamily="@font/lato"
+            android:padding="@dimen/size_16"
+            android:text="@string/select_preferred_time_slot"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:textStyle="normal" />
+
+        <RadioGroup
+            android:id="@+id/groupradio"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+
+            >
+
+            <RadioButton
+                style="@style/Theme.RadioButtonLipstickPink"
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/height_select_lang_item"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="@dimen/size_5"
+                android:fontFamily="@font/lato"
+                android:hint="09:00 am -10 :00 am"
+                android:letterSpacing="0"
+                android:paddingLeft="16dp"
+                android:text="09:00 am -10 :00 am "
+                android:textSize="14sp" />
+
+            <RadioButton
+                style="@style/Theme.RadioButtonLipstickPink"
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/height_select_lang_item"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="@dimen/size_5"
+                android:fontFamily="@font/lato"
+
+                android:hint="10:00 am-11:00 am"
+                android:letterSpacing="0"
+                android:paddingLeft="16dp"
+                android:text="10:00 am-11:00 am"
+                android:textSize="14sp" />
+
+            <RadioButton
+                style="@style/Theme.RadioButtonLipstickPink"
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/height_select_lang_item"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="@dimen/size_5"
+                android:fontFamily="@font/lato"
+                android:hint="11:00am- 12:00pm"
+                android:letterSpacing="0"
+
+                android:paddingLeft="16dp"
+                android:text="11:00am- 12:00pm"
+                android:textSize="14sp" />
+
+            <RadioButton
+                style="@style/Theme.RadioButtonLipstickPink"
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/height_select_lang_item"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="@dimen/size_5"
+                android:fontFamily="@font/lato"
+
+                android:hint="12:00pm-01:00pm"
+                android:letterSpacing="0"
+                android:paddingLeft="16dp"
+                android:text="12:00pm-01:00pm"
+                android:textSize="14sp" />
+
+            <RadioButton
+                style="@style/Theme.RadioButtonLipstickPink"
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/height_select_lang_item"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="@dimen/size_5"
+                android:fontFamily="@font/lato"
+                android:hint="01:00pm-02:00pm"
+
+                android:letterSpacing="0"
+                android:paddingLeft="16dp"
+                android:text="01:00pm-02:00pm"
+                android:textSize="14sp" />
+
+            <RadioButton
+                style="@style/Theme.RadioButtonLipstickPink"
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/height_select_lang_item"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="@dimen/size_5"
+                android:fontFamily="@font/lato"
+                android:hint="03:00pm-04:00pm"
+                android:letterSpacing="0"
+
+                android:paddingLeft="16dp"
+                android:text="03:00pm-04:00pm"
+                android:textSize="14sp" />
+
+            <RadioButton
+                style="@style/Theme.RadioButtonLipstickPink"
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/height_select_lang_item"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="@dimen/size_5"
+
+                android:fontFamily="@font/lato"
+                android:hint="04:00 pm-05:00 pm"
+                android:letterSpacing="0"
+                android:paddingLeft="16dp"
+                android:text="04:00 pm-05:00 pm"
+                android:textSize="14sp" />
+        </RadioGroup>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_cancel_time_slots"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ll_time_lots"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="@dimen/size_16"
+        android:layout_marginTop="@dimen/size_21"
+        android:layout_marginBottom="@dimen/size_12"
+        android:fontFamily="@font/lato"
+        android:gravity="center_horizontal"
+        android:text="@string/cancel_lower_case"
+        android:textColor="@color/warm_grey"
+        android:textSize="14sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tv_done_time_slots"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ll_time_lots"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="@dimen/size_21"
+        android:layout_marginEnd="@dimen/size_16"
+        android:layout_marginBottom="@dimen/size_12"
+        android:fontFamily="@font/lato"
+        android:gravity="center_horizontal"
+        android:text="@string/done"
+        android:textColor="#e42c64"
+        android:textSize="14sp"
+        android:textStyle="bold" />
+
+</RelativeLayout>
