@@ -132,8 +132,8 @@ class ClientActivationFragment : BaseFragment() {
             if (it == null || it.stepDone == 1) {
                 navigate(
                         R.id.fragment_application_client_activation, bundleOf(
-                        StringConstants.WORK_ORDER_ID.value to mWordOrderID,
-                        StringConstants.NEXT_DEP.value to viewModel.observableWorkOrder.value?.nextDependency
+                        StringConstants.WORK_ORDER_ID.value to mWordOrderID
+//                        StringConstants.NEXT_DEP.value to viewModel.observableWorkOrder.value?.nextDependency
                 )
 
                 )

@@ -2,14 +2,12 @@ package com.gigforce.app.modules.client_activation.models
 
 import android.os.Parcel
 import android.os.Parcelable
-import com.gigforce.app.modules.questionnaire.models.Questions
 
-data class JpDraft(@JvmField var isDone: Boolean = false, var title: String = "", var type: String = "", var questionnaireData
-: List<Questions>? = null) : Parcelable {
+data class JpDraft(@JvmField var isDone: Boolean = false, var title: String = "", var type: String = "") : Parcelable {
     constructor(parcel: Parcel) : this(
             parcel.readByte() != 0.toByte(),
             parcel.readString() ?: "",
-            parcel.readString() ?: "", null) {
+            parcel.readString() ?: "") {
     }
 
     override fun equals(other: Any?): Boolean {

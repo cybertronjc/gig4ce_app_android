@@ -28,7 +28,10 @@ class GigActivationViewModel(private val savedStateHandle: SavedStateHandle) : V
 
         repository.getCollectionReference().whereEqualTo("workOrderId", workOrderId).whereEqualTo("type", type).addSnapshotListener { success, err ->
             if (err == null) {
-                observableGigActivation.value = success?.toObjects(GigActivation::class.java)?.get(0)
+                if(success?.documents?.isNotEmpty()==true){
+                    observableGigActivation.value = success?.toObjects(GigActivation::class.java)?.get(0)
+
+                }
             } else {
                 observableError.value = err.message
             }
