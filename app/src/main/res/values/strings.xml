@@ -1077,6 +1077,18 @@
     <string name="change_slot">Change Slot</string>
     <string name="i_will_submit_dl_and_cheque_in_same_centre_only">I will submit DL and cheque in same centre only</string>
     <string name="confirm">Confirm</string>
+    <string name="schedule_driving_test">Schedule Driving Test</string>
+    <string name="driving_test_certification_and_doc_submission">Driving test certification and Doc submission</string>
+    <string name="i_have_completed_my_driving_test">I have completed my driving test.</string>
+    <string name="i_have_submitted_bank_cheque_and_original_dl">I have submitted bank cheque and original DL.</string>
+    <string name="i_have_collected_21north_kit">I have collected 21North kit.</string>
+    <string name="i_have_collect_receipt_of_my_documents">I have collect receipt of my documents.</string>
+    <string name="please_enter_the_otp_received_on_driving_school_parnter">Please enter the OTP received on Driving School parnter</string>
+    <string name="confirm_otp">Confirm OTP</string>
+    <string name="resend_otp">Resend OTP</string>
+    <string name="congratulations">Congratulations</string>
+    <string name="congratulations_your_driving_certificate_successfully_uploaded_your_docs_are_safe_with_us">Congratulations! Your Driving Certificate successfully uploaded.Your docs are safe with us.</string>
+    <string name="driving_certificate">Driving Certificate</string>
 
 
 </resources>

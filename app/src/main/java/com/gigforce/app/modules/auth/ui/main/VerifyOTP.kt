@@ -16,7 +16,6 @@ import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.modules.auth.ui.main.LoginViewModel.Companion.STATE_SIGNIN_FAILED
 import com.gigforce.app.modules.auth.ui.main.LoginViewModel.Companion.STATE_SIGNIN_SUCCESS
-import com.gigforce.app.utils.StringConstants
 import kotlinx.android.synthetic.main.otp_verification.*
 import java.util.regex.Matcher
 import java.util.regex.Pattern
@@ -33,7 +32,7 @@ class VerifyOTP : BaseFragment() {
     lateinit var viewModel: LoginViewModel
     var otpresentcounter = 0;
     private val OTP_NUMBER =
-        Pattern.compile("[0-9]{6}\$")
+            Pattern.compile("[0-9]{6}\$")
     lateinit var match: Matcher;
     var timerStarted = false
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,9 +44,9 @@ class VerifyOTP : BaseFragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         viewModel = ViewModelProviders.of(this).get(LoginViewModel::class.java)
         viewModel.verificationId = verificationId.toString()
@@ -92,7 +91,7 @@ class VerifyOTP : BaseFragment() {
         spannableString1.setSpan(UnderlineSpan(), 0, str.length, 0)
         reenter_mobile.text = spannableString1
         textView29?.text =
-            "One Time Password (OTP) has been sent to your mobile " + mobile_number + ". Please enter the same here to login."
+                "One Time Password (OTP) has been sent to your mobile " + mobile_number + ". Please enter the same here to login."
     }
 
     private fun observer() {
@@ -151,7 +150,7 @@ class VerifyOTP : BaseFragment() {
 
     private fun navigateToLoginScreen() {
         val bundle = bundleOf(
-            "mobileno" to mobile_number
+                "mobileno" to mobile_number
 
         )
         popAllBackStates()

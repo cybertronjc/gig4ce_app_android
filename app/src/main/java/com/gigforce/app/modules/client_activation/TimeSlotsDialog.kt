@@ -16,7 +16,6 @@ import kotlinx.android.synthetic.main.fragment_slots_driving_test.*
 
 class TimeSlotsDialog : DialogFragment() {
     private lateinit var callbacks: TimeSlotDialogCallbacks
-    val slotsRecyclerAdapter = SlotsRecyclerAdapter()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_slots_driving_test, container, false)

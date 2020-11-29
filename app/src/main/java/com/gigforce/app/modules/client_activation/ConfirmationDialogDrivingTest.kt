@@ -10,9 +10,12 @@ import com.gigforce.app.R
 import com.gigforce.app.modules.client_activation.models.PartnerSchoolDetails
 import com.gigforce.app.utils.StringConstants
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.ncorti.slidetoact.SlideToActView
 import kotlinx.android.synthetic.main.layout_confirm_driving_slot.*
 
 class ConfirmationDialogDrivingTest : BottomSheetDialogFragment(), TimeSlotsDialog.TimeSlotDialogCallbacks {
+    private lateinit var callbacks: ConfirmationDialogDrivingTestCallbacks
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.layout_confirm_driving_slot, container, false)
     }
@@ -37,10 +40,27 @@ class ConfirmationDialogDrivingTest : BottomSheetDialogFragment(), TimeSlotsDial
             newInstance.show(parentFragmentManager, TimeSlotsDialog::class.java.name)
         }
 
+        slider_confirm.onSlideCompleteListener =
+                object : SlideToActView.OnSlideCompleteListener {
+
+                    override fun onSlideComplete(view: SlideToActView) {
+                        callbacks.moveToNextStep()
+                        this@ConfirmationDialogDrivingTest.dismiss()
+                    }
+                }
+
 
     }
 
     override fun setSelectedTimeSlot(time: String) {
         textView143.text = time
+    }
+
+    fun setCallbacks(callbacks: ConfirmationDialogDrivingTestCallbacks) {
+        this.callbacks = callbacks
+    }
+
+    public interface ConfirmationDialogDrivingTestCallbacks {
+        fun moveToNextStep()
     }
 }

@@ -262,12 +262,12 @@
         android:textColor="@color/black"
         android:textSize="14sp"
         android:textStyle="normal"
-        app:layout_constraintBottom_toTopOf="@+id/slider_checkout"
+        app:layout_constraintBottom_toTopOf="@+id/slider_confirm"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/select_partner_school" />
 
     <com.ncorti.slidetoact.SlideToActView
-        android:id="@+id/slider_checkout"
+        android:id="@+id/slider_confirm"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/size_27"

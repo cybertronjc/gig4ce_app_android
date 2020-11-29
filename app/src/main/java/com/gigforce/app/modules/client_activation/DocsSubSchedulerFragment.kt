@@ -16,7 +16,7 @@ import com.ncorti.slidetoact.SlideToActView
 import kotlinx.android.synthetic.main.fragment_docs_sub_scheduler.*
 
 
-class DocsSubSchedulerFragment : BaseFragment(), SelectPartnerSchoolBottomSheet.SelectPartnerBsCallbacks, TimeSlotsDialog.TimeSlotDialogCallbacks {
+class DocsSubSchedulerFragment : BaseFragment(), SelectPartnerSchoolBottomSheet.SelectPartnerBsCallbacks, TimeSlotsDialog.TimeSlotDialogCallbacks, ConfirmationDialogDrivingTest.ConfirmationDialogDrivingTestCallbacks {
 
     private var partnerAddress: PartnerSchoolDetails? = null
     private lateinit var mWordOrderID: String
@@ -57,11 +57,14 @@ class DocsSubSchedulerFragment : BaseFragment(), SelectPartnerSchoolBottomSheet.
 
                     override fun onSlideComplete(view: SlideToActView) {
                         val confirmationDialogDrivingTest = ConfirmationDialogDrivingTest()
+
+                        confirmationDialogDrivingTest.setCallbacks(this@DocsSubSchedulerFragment)
                         confirmationDialogDrivingTest.arguments = bundleOf(
                                 StringConstants.SELECTED_PARTNER.value to partnerAddress,
                                 StringConstants.SELECTED_TIME_SLOT.value to selectedTimeSlot
                         )
                         confirmationDialogDrivingTest.show(parentFragmentManager, ConfirmationDialogDrivingTest::class.java.name)
+
                     }
                 }
 
@@ -110,6 +113,10 @@ class DocsSubSchedulerFragment : BaseFragment(), SelectPartnerSchoolBottomSheet.
         this.selectedTimeSlot = time
         textView143.text = time
         imageView36.gone()
+    }
+
+    override fun moveToNextStep() {
+        navigate(R.id.fragment_schedule_test)
     }
 
 
