@@ -104,6 +104,14 @@
             app:destination="@id/loginSuccessfulFragment" />
     </fragment>
     <fragment
+        android:id="@+id/tempFragment"
+        android:name="com.gigforce.app.TempFragment"
+        android:label="TempFragment"
+        tools:layout="@layout/calendar_dialog">
+    </fragment>
+
+
+    <fragment
         android:id="@+id/profileFragment"
         android:name="com.gigforce.app.modules.profile.ProfileFragment"
         android:label="profile_fragment"

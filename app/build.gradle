@@ -8,12 +8,12 @@ apply plugin: 'com.google.gms.google-services'
 
 android {
     signingConfigs {
-        debug {
-            storeFile file('../keystore/gigforceapp.jks')
-            storePassword 'gigforce'
-            keyAlias 'key0'
-            keyPassword 'gigforce'
-            }
+//        debug {
+//            storeFile file('../keystore/gigforceapp.jks')
+//            storePassword 'gigforce'
+//            keyAlias 'key0'
+//            keyPassword 'gigforce'
+//            }
 
         production {
             storeFile file('/Users/apple/Documents/gigforce-upload.jks')

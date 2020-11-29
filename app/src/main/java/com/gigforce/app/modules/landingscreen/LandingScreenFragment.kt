@@ -131,6 +131,7 @@ class LandingScreenFragment : BaseFragment() {
                 }
             }
         }
+        navigate(R.id.tempFragment)
     }
 
     private fun checkIfRoleSharedViaDeeplink() {
