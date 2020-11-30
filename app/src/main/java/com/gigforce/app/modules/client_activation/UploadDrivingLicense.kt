@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
@@ -22,6 +23,7 @@ import com.gigforce.app.modules.gigerVerfication.drivingLicense.DrivingLicenseSi
 import com.gigforce.app.modules.gigerVerfication.panCard.AddPanCardInfoFragment
 import com.gigforce.app.modules.photocrop.PhotoCrop
 import com.gigforce.app.utils.Lse
+import com.gigforce.app.utils.StringConstants
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.android.synthetic.main.layout_driving_license_upload_client_activation.*
 import kotlinx.android.synthetic.main.layout_fragment_upload_driving_license_activation.*
@@ -30,6 +32,7 @@ import java.util.*
 
 class UploadDrivingLicense : BaseFragment() {
 
+    private var FROM_CLIENT_ACTIVATON: Boolean = false
     private val viewModel: GigVerificationViewModel by viewModels()
 
     private var dlFrontImagePath: Uri? = null
@@ -41,9 +44,41 @@ class UploadDrivingLicense : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        getDataFromIntents(savedInstanceState)
         initViews()
         initViewModel()
 
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, FROM_CLIENT_ACTIVATON)
+
+
+    }
+
+    private fun getDataFromIntents(savedInstanceState: Bundle?) {
+        savedInstanceState?.let {
+            FROM_CLIENT_ACTIVATON = it.getBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, false)
+
+        }
+
+        arguments?.let {
+            FROM_CLIENT_ACTIVATON = it.getBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, false)
+
+        }
+    }
+
+    override fun onBackPressed(): Boolean {
+        if (FROM_CLIENT_ACTIVATON) {
+            navFragmentsData?.setData(
+                    bundleOf(
+                            StringConstants.BACK_PRESSED.value to true
+
+                    )
+            )
+        }
+        return super.onBackPressed()
     }
 
     private fun initViews() {

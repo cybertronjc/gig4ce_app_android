@@ -5,10 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import androidx.core.os.bundleOf
 import androidx.lifecycle.Observer
 import androidx.lifecycle.SavedStateViewModelFactory
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -22,6 +22,7 @@ import kotlinx.android.synthetic.main.layout_questionnaire_fragment.*
 
 
 class QuestionnaireFragment : BaseFragment() {
+    private var FROM_CLIENT_ACTIVATON: Boolean = false
     private lateinit var mWordOrderID: String
     private lateinit var list: ArrayList<Dependency>
 
@@ -54,7 +55,21 @@ class QuestionnaireFragment : BaseFragment() {
         super.onSaveInstanceState(outState)
         outState.putString(StringConstants.WORK_ORDER_ID.value, mWordOrderID)
         outState.putParcelableArrayList(StringConstants.WORK_DEP_DATA.value, list)
+        outState.putBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, FROM_CLIENT_ACTIVATON)
 
+
+    }
+
+    override fun onBackPressed(): Boolean {
+        if (FROM_CLIENT_ACTIVATON) {
+            navFragmentsData?.setData(
+                    bundleOf(
+                            StringConstants.BACK_PRESSED.value to true
+
+                    )
+            )
+        }
+        return super.onBackPressed()
 
     }
 
@@ -63,6 +78,8 @@ class QuestionnaireFragment : BaseFragment() {
             mWordOrderID = it.getString(StringConstants.WORK_ORDER_ID.value) ?: return@let
             list = it.getParcelableArrayList(StringConstants.WORK_DEP_DATA.value)
                     ?: return@let
+            FROM_CLIENT_ACTIVATON = it.getBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, false)
+
 
         }
 
@@ -70,6 +87,7 @@ class QuestionnaireFragment : BaseFragment() {
             mWordOrderID = it.getString(StringConstants.WORK_ORDER_ID.value) ?: return@let
             list = it.getParcelableArrayList(StringConstants.WORK_DEP_DATA.value)
                     ?: return@let
+            FROM_CLIENT_ACTIVATON = it.getBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, false)
 
 
         }
@@ -101,7 +119,7 @@ class QuestionnaireFragment : BaseFragment() {
         viewModel.observableAddApplicationSuccess.observe(viewLifecycleOwner, Observer {
             pb_questionnaire.gone()
             if (it) {
-              popBackState()
+                popBackState()
 
             }
         })

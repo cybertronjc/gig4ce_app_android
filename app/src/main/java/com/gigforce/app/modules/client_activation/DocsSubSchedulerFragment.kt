@@ -8,16 +8,20 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
+import com.gigforce.app.core.base.components.CalendarView
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.client_activation.models.PartnerSchoolDetails
 import com.gigforce.app.utils.StringConstants
+import com.gigforce.app.utils.widgets.GigforceDatePickerDialog
 import com.ncorti.slidetoact.SlideToActView
 import kotlinx.android.synthetic.main.fragment_docs_sub_scheduler.*
 
 
-class DocsSubSchedulerFragment : BaseFragment(), SelectPartnerSchoolBottomSheet.SelectPartnerBsCallbacks, TimeSlotsDialog.TimeSlotDialogCallbacks, ConfirmationDialogDrivingTest.ConfirmationDialogDrivingTestCallbacks {
+class DocsSubSchedulerFragment : BaseFragment(), SelectPartnerSchoolBottomSheet.SelectPartnerBsCallbacks, TimeSlotsDialog.TimeSlotDialogCallbacks, ConfirmationDialogDrivingTest.ConfirmationDialogDrivingTestCallbacks, GigforceDatePickerDialog.GigforceDatePickerDialogCallbacks {
 
+    private var dateString: String? = null
+    private var monthModel: CalendarView.MonthModel? = null
     private var partnerAddress: PartnerSchoolDetails? = null
     private lateinit var mWordOrderID: String
     private var selectedTimeSlot: String? = null
@@ -56,17 +60,17 @@ class DocsSubSchedulerFragment : BaseFragment(), SelectPartnerSchoolBottomSheet.
                 object : SlideToActView.OnSlideCompleteListener {
 
                     override fun onSlideComplete(view: SlideToActView) {
-                        val confirmationDialogDrivingTest = ConfirmationDialogDrivingTest()
 
-                        confirmationDialogDrivingTest.setCallbacks(this@DocsSubSchedulerFragment)
-                        confirmationDialogDrivingTest.arguments = bundleOf(
-                                StringConstants.SELECTED_PARTNER.value to partnerAddress,
-                                StringConstants.SELECTED_TIME_SLOT.value to selectedTimeSlot
-                        )
-                        confirmationDialogDrivingTest.show(parentFragmentManager, ConfirmationDialogDrivingTest::class.java.name)
 
                     }
                 }
+
+        view_date_picker.setOnClickListener {
+            var gigforceDatePickerDialog = GigforceDatePickerDialog()
+            gigforceDatePickerDialog
+            gigforceDatePickerDialog.setCallbacks(this)
+            gigforceDatePickerDialog.show(parentFragmentManager, GigforceDatePickerDialog::class.java.name)
+        }
 
     }
 
@@ -84,7 +88,6 @@ class DocsSubSchedulerFragment : BaseFragment(), SelectPartnerSchoolBottomSheet.
         savedInstanceState?.let {
             mWordOrderID = it.getString(StringConstants.WORK_ORDER_ID.value) ?: return@let
         }
-
         arguments?.let {
             mWordOrderID = it.getString(StringConstants.WORK_ORDER_ID.value) ?: return@let
         }
@@ -105,6 +108,7 @@ class DocsSubSchedulerFragment : BaseFragment(), SelectPartnerSchoolBottomSheet.
         imageView34.gone()
         iv_contact.visible()
         iv_location.visible()
+        checkIfCompleteProcessComplete()
 
 
     }
@@ -113,10 +117,35 @@ class DocsSubSchedulerFragment : BaseFragment(), SelectPartnerSchoolBottomSheet.
         this.selectedTimeSlot = time
         textView143.text = time
         imageView36.gone()
+        checkIfCompleteProcessComplete()
     }
 
     override fun moveToNextStep() {
         navigate(R.id.fragment_schedule_test)
+    }
+
+    override fun selectedDate(monthModel: CalendarView.MonthModel) {
+        this.monthModel = monthModel
+        val date = monthModel.days[0]
+        val dateString = date.date.toString() + "/" + (date.month + 1) + "/" + date.year
+        this.dateString = dateString;
+        textView139.text = dateString
+        checkIfCompleteProcessComplete()
+    }
+
+    private fun checkIfCompleteProcessComplete() {
+        slider_checkout.isLocked = !(dateString != null && partnerAddress != null && selectedTimeSlot != null)
+        if (!slider_checkout.isLocked) {
+            val confirmationDialogDrivingTest = ConfirmationDialogDrivingTest()
+            confirmationDialogDrivingTest.setCallbacks(this@DocsSubSchedulerFragment)
+            confirmationDialogDrivingTest.arguments = bundleOf(
+                    StringConstants.SELECTED_PARTNER.value to partnerAddress,
+                    StringConstants.SELECTED_TIME_SLOT.value to selectedTimeSlot,
+                    StringConstants.SELECTED_DATE.value to dateString,
+                    StringConstants.WORK_ORDER_ID.value to mWordOrderID
+            )
+            confirmationDialogDrivingTest.show(parentFragmentManager, ConfirmationDialogDrivingTest::class.java.name)
+        }
     }
 
 

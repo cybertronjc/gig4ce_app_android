@@ -9,7 +9,7 @@ data class Dependency(
         var priority: Int = 0,
         var title: String? = null,
         var drawable: Drawable? = null,
-        var isDone: Boolean = true
+        var isDone: Boolean = false
 
 ) : Parcelable {
     constructor(parcel: Parcel) : this(

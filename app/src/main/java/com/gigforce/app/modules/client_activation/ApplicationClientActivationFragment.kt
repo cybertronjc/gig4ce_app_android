@@ -1,13 +1,14 @@
 package com.gigforce.app.modules.client_activation
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
@@ -15,7 +16,6 @@ import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.client_activation.models.JpDraft
 import com.gigforce.app.modules.photocrop.PhotoCrop
-import com.gigforce.app.modules.profile.ProfileViewModel
 import com.gigforce.app.utils.StringConstants
 import io.reactivex.Observable
 import kotlinx.android.synthetic.main.layout_application_client_activation_fragment.*
@@ -23,8 +23,11 @@ import kotlinx.android.synthetic.main.layout_application_client_activation_fragm
 class ApplicationClientActivationFragment : BaseFragment(),
         AdapterApplicationClientActivation.AdapterApplicationClientActivationCallbacks {
     private var profileAvatarName: String? = null
-    private val viewModel: ApplicationClientActivationViewModel by viewModels()
-    private val profileViewModel: ProfileViewModel by viewModels()
+    private lateinit var viewModel: ApplicationClientActivationViewModel
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+    }
 
 
     private val adapter: AdapterApplicationClientActivation by lazy {
@@ -48,11 +51,27 @@ class ApplicationClientActivationFragment : BaseFragment(),
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel = ViewModelProvider(
+                this,
+                ViewModelProvider.AndroidViewModelFactory(requireActivity().application)
+        ).get(ApplicationClientActivationViewModel::class.java)
         getDataFromIntents(savedInstanceState)
+        checkForBackPress()
         setupRecycler()
         initObservers()
         initClicks()
 
+
+    }
+
+    private fun checkForBackPress() {
+
+        if (navFragmentsData?.getData() != null) {
+            if (navFragmentsData?.getData()?.getBoolean(StringConstants.BACK_PRESSED.value, false) == true) {
+                viewModel.redirectToNextStep = false
+                navFragmentsData?.setData(bundleOf())
+            }
+        }
     }
 
 
@@ -62,6 +81,7 @@ class ApplicationClientActivationFragment : BaseFragment(),
         }
 
         tv_action_application_client_activation.setOnClickListener {
+            viewModel.redirectToNextStep = false
             viewModel.apply(mWordOrderID, adapter.items.map { dependency ->
 
                 JpDraft(dependency.isDone, dependency.title
@@ -77,7 +97,10 @@ class ApplicationClientActivationFragment : BaseFragment(),
     }
 
     private fun initObservers() {
+
+
         viewModel.observableError.observe(viewLifecycleOwner, Observer {
+
             pb_application_client_activation.gone()
             showToast(it ?: "")
         })
@@ -97,55 +120,67 @@ class ApplicationClientActivationFragment : BaseFragment(),
             mNextDep = it.nextDependency;
 
             adapter.addData(it?.dependency!!);
-            profileViewModel.getProfileData().observe(viewLifecycleOwner, Observer { profileData ->
+            viewModel.userProfileData.observe(viewLifecycleOwner, Observer { profileData ->
+
                 h_pb_application_frag.progress = 0;
                 tv_steps_pending_application_value.text =
                         "0/" + it?.dependency?.size!!
-                profileAvatarName = profileData.profileAvatarName;
-                profileViewModel.profileID = profileData?.id ?: ""
+                profileAvatarName = profileData?.profileAvatarName;
+                viewModel.profileID = profileData?.id ?: ""
                 adapter.setCallbacks(this)
-                if (profileData.profileAvatarName.isNotEmpty() && profileData.profileAvatarName != "avatar.jpg") {
+                if (profileData?.profileAvatarName?.isNotEmpty() == true && profileData.profileAvatarName != "avatar.jpg") {
                     adapter.setImageDrawable(
-                            "profile_pic", resources.getDrawable(R.drawable.ic_applied)
-                    )
+                            "profile_pic", resources.getDrawable(R.drawable.ic_applied), true)
                 } else {
                     adapter.setImageDrawable(
-                            "profile_pic", resources.getDrawable(R.drawable.ic_status_pending)
-                    )
+                            "profile_pic", resources.getDrawable(R.drawable.ic_status_pending), false)
                 }
-                if (!profileData.aboutMe.isNullOrEmpty()) {
+                if (!profileData?.aboutMe.isNullOrEmpty()) {
                     adapter.setImageDrawable(
                             "about_me", resources.getDrawable(
                             R.drawable.ic_applied
-                    ))
+                    ), true)
                 } else {
                     adapter.setImageDrawable(
-                            "about_me", resources.getDrawable(R.drawable.ic_status_pending)
-                    )
+                            "about_me", resources.getDrawable(R.drawable.ic_status_pending), false)
+
                 }
                 viewModel.observableVerification.observe(
                         viewLifecycleOwner,
                         Observer { verificationData ->
                             run {
-                                if (verificationData?.driving_license?.verified == true) {
+                                if (verificationData?.driving_license != null) {
 
                                     adapter.setImageDrawable(
                                             "driving_licence", resources.getDrawable(
                                             R.drawable.ic_applied
-                                    )
-                                    )
+                                    ), true)
                                 } else {
                                     adapter.setImageDrawable(
                                             "driving_licence", resources.getDrawable(
                                             R.drawable.ic_status_pending
-                                    )
-                                    )
+                                    ), false)
+
                                 }
 
                             }
 
+                            viewModel.observableJpApplication.observe(viewLifecycleOwner, Observer { data ->
+                                if (data == null) return@Observer
+                                if (!data.questionnaireSubmission.isNullOrEmpty()) {
+                                    adapter.setImageDrawable(
+                                            "questionnary", resources.getDrawable(
+                                            R.drawable.ic_applied
+                                    ), true)
+                                }
+                                adapter.setImageDrawable(
+                                        "learning", resources.getDrawable(
+                                        R.drawable.ic_status_pending), true
+                                )
+                                checkForRedirection()
+                                checkAndUpdateUI(data.draft.size)
 
-                            checkAndUpdateUI(it.dependency?.size ?: 0)
+                            })
                             viewModel.getApplication(mWordOrderID)
 
                         })
@@ -154,26 +189,60 @@ class ApplicationClientActivationFragment : BaseFragment(),
                 adapter.setImageDrawable(
                         "questionnary", resources.getDrawable(
                         R.drawable.ic_status_pending
-                ))
+                ), false)
 
                 viewModel.getVerification()
 
 
             })
-
-
-        })
-        viewModel.observableJpApplication.observe(viewLifecycleOwner, Observer { data ->
-            if (!data.questionnaireSubmission.isNullOrEmpty()) {
-                adapter.setImageDrawable(
-                        "questionnary", resources.getDrawable(
-                        R.drawable.ic_applied
-                ))
-            }
-            checkAndUpdateUI(data.draft.size)
+            viewModel.getProfileData()
 
         })
+
         viewModel.getWorkOrderDependency(workOrderId = mWordOrderID)
+
+
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == PHOTO_CROP && resultCode == Activity.RESULT_CANCELED) {
+            viewModel.redirectToNextStep = false
+        } else if (requestCode == PHOTO_CROP && resultCode == Activity.RESULT_OK) {
+            viewModel.getWorkOrderDependency(workOrderId = mWordOrderID)
+
+        }
+    }
+
+    private fun checkForRedirection() {
+        if (!viewModel.redirectToNextStep) return
+        for (i in adapter.items.indices) {
+            if (!adapter.items[i].isDone) {
+                when (adapter.items[i].feature) {
+                    "profile_pic" -> {
+                        val photoCropIntent = Intent(context, PhotoCrop::class.java)
+                        photoCropIntent.putExtra("purpose", "profilePictureCrop")
+                        photoCropIntent.putExtra("uid", viewModel.repository.getUID())
+                        photoCropIntent.putExtra("fbDir", "/profile_pics/")
+                        photoCropIntent.putExtra("detectFace", 1)
+                        photoCropIntent.putExtra("folder", PROFILE_PICTURE_FOLDER)
+                        photoCropIntent.putExtra("file", profileAvatarName)
+                        startActivityForResult(photoCropIntent, PHOTO_CROP)
+                    }
+                    "about_me" -> {
+                        navigate(R.id.fragment_add_bio, bundleOf(StringConstants.FROM_CLIENT_ACTIVATON.value to true))
+                    }
+                    "questionnary" -> navigate(R.id.application_questionnaire, bundleOf(
+                            StringConstants.WORK_ORDER_ID.value to mWordOrderID,
+                            StringConstants.WORK_DEP_DATA.value to viewModel.observableWorkOrderDependency.value?.dependency,
+                            StringConstants.FROM_CLIENT_ACTIVATON.value to true
+                    ))
+                    "driving_licence" -> navigate(R.id.fragment_upload_dl_cl_act, bundleOf(StringConstants.FROM_CLIENT_ACTIVATON.value to true))
+                }
+                break
+            }
+
+        }
 
 
     }
@@ -214,6 +283,10 @@ class ApplicationClientActivationFragment : BaseFragment(),
         }
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+    }
+
     private fun setupRecycler() {
         rv_status_pending.adapter = adapter
         rv_status_pending.layoutManager =
@@ -228,6 +301,8 @@ class ApplicationClientActivationFragment : BaseFragment(),
     }
 
     override fun onItemClick(feature: String) {
+        viewModel.redirectToNextStep = true
+
         when (feature) {
             "profile_pic" -> {
                 val photoCropIntent = Intent(context, PhotoCrop::class.java)
@@ -237,17 +312,16 @@ class ApplicationClientActivationFragment : BaseFragment(),
                 photoCropIntent.putExtra("detectFace", 1)
                 photoCropIntent.putExtra("folder", PROFILE_PICTURE_FOLDER)
                 photoCropIntent.putExtra("file", profileAvatarName)
-
                 startActivityForResult(photoCropIntent, PHOTO_CROP)
             }
             "about_me" -> {
-                navigate(R.id.profileFragment)
+                navigate(R.id.fragment_add_bio, bundleOf(StringConstants.FROM_CLIENT_ACTIVATON.value to true))
             }
             "questionnary" -> navigate(R.id.application_questionnaire, bundleOf(
                     StringConstants.WORK_ORDER_ID.value to mWordOrderID,
-                    StringConstants.WORK_DEP_DATA.value to viewModel.observableWorkOrderDependency.value?.dependency
+                    StringConstants.WORK_DEP_DATA.value to viewModel.observableWorkOrderDependency.value?.dependency, StringConstants.FROM_CLIENT_ACTIVATON.value to true
             ))
-            "driving_licence" -> navigate(R.id.fragment_upload_dl_cl_act)
+            "driving_licence" -> navigate(R.id.fragment_upload_dl_cl_act, bundleOf(StringConstants.FROM_CLIENT_ACTIVATON.value to true))
         }
     }
 

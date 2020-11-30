@@ -84,16 +84,7 @@ class CalendarView : LinearLayout {
         linearSnapHelper.attachToRecyclerView(calendar_rv)
         var scrollListener = object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                var currentVisiblePosition =
-                    (calendar_rv.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
-                try {
-                    if (changedMonthModelListener != null)
-                        changedMonthModelListener.onMonthChange(
-                            recyclerGenericAdapter.list.get(
-                                currentVisiblePosition
-                            )
-                        )
-                }catch (e:Exception){}
+
 //                if(newState == RecyclerView.SCROLL_STATE_IDLE)
 //                Toast.makeText(context,"working scrolled state changed "+currentVisiblePosition,Toast.LENGTH_LONG).show()
 
@@ -105,6 +96,17 @@ class CalendarView : LinearLayout {
 //                    visibleOnce = true
 //                    Toast.makeText(context, "working scrolled", Toast.LENGTH_LONG).show()
 //                }
+
+                val currentVisiblePosition =
+                        (calendar_rv.layoutManager as LinearLayoutManager).findFirstCompletelyVisibleItemPosition()
+                try {
+                    if (changedMonthModelListener != null)
+                        changedMonthModelListener.onMonthChange(
+                                recyclerGenericAdapter.list.get(
+                                        currentVisiblePosition
+                                )
+                        )
+                }catch (e:Exception){}
 
             }
         }

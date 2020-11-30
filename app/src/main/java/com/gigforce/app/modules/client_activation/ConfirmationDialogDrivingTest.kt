@@ -29,10 +29,13 @@ class ConfirmationDialogDrivingTest : BottomSheetDialogFragment(), TimeSlotsDial
         tv_change_slot.paintFlags = tv_change_slot.paintFlags or Paint.UNDERLINE_TEXT_FLAG;
         val selectedPartner = arguments?.getParcelable<PartnerSchoolDetails>(StringConstants.SELECTED_PARTNER.value)
         val timeSlot = arguments?.getString(StringConstants.SELECTED_TIME_SLOT.value)
+        val dateSelected = arguments?.getString(StringConstants.SELECTED_DATE.value)
         textView137.text = Html.fromHtml(selectedPartner?.schoolName + "<br>" + selectedPartner?.landmark + "<br>" + selectedPartner?.city + "<br>"
                 + selectedPartner?.schoolTiming + "<br>" + selectedPartner?.contact?.map { "<b><font color=\'#000000\'>" + it.name + "</font></b>" }?.reduce { a, o -> a + o }
         )
         textView143.text = timeSlot
+        textView139.text = dateSelected
+
 
         tv_change_slot.setOnClickListener {
             val newInstance = TimeSlotsDialog.newInstance()

@@ -220,6 +220,7 @@
             app:layout_constraintTop_toTopOf="@+id/textView138" />
 
         <View
+            android:id="@+id/view_date_picker"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintBottom_toTopOf="@+id/view8"
@@ -289,7 +290,6 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-
     <com.ncorti.slidetoact.SlideToActView
         android:id="@+id/slider_checkout"
         android:layout_width="match_parent"
@@ -304,6 +304,7 @@
         app:slider_height="60dp"
         app:slider_icon="@drawable/ic_arrow_forward_white"
         app:slider_icon_color="@color/white"
+        app:slider_locked="true"
         app:text="@string/checkout"
         app:text_size="@dimen/font_16" />
 

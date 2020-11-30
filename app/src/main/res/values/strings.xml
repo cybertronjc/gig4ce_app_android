@@ -1089,6 +1089,7 @@
     <string name="congratulations">Congratulations</string>
     <string name="congratulations_your_driving_certificate_successfully_uploaded_your_docs_are_safe_with_us">Congratulations! Your Driving Certificate successfully uploaded.Your docs are safe with us.</string>
     <string name="driving_certificate">Driving Certificate</string>
+    <string name="select_preferred_date">Select preferred Date</string>
 
 
 </resources>

@@ -27,9 +27,9 @@ class AddBioFragment : BaseFragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         return inflateView(R.layout.layout_add_bio_fragment, inflater, container)
     }
@@ -57,10 +57,10 @@ class AddBioFragment : BaseFragment() {
     private fun initClicks() {
         iv_close_add_bio.setOnClickListener {
             navFragmentsData?.setData(
-                bundleOf(
-                    StringConstants.BACK_PRESSED.value to true
+                    bundleOf(
+                            StringConstants.BACK_PRESSED.value to true
 
-                )
+                    )
             )
             popBackState()
         }
@@ -70,10 +70,10 @@ class AddBioFragment : BaseFragment() {
         })
         PushDownAnim.setPushDownAnimTo(tv_cancel_add_bio).setOnClickListener(View.OnClickListener {
             navFragmentsData?.setData(
-                bundleOf(
-                    StringConstants.BACK_PRESSED.value to true
+                    bundleOf(
+                            StringConstants.BACK_PRESSED.value to true
 
-                )
+                    )
             )
             popBackState()
         })
@@ -106,8 +106,8 @@ class AddBioFragment : BaseFragment() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             win = requireActivity().window
             win.setFlags(
-                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+                    WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+                    WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
             )
             win.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             win.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
@@ -120,17 +120,17 @@ class AddBioFragment : BaseFragment() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             win = requireActivity().window
             win.clearFlags(
-                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+                    WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
             )
         }
     }
 
     override fun onBackPressed(): Boolean {
         navFragmentsData?.setData(
-            bundleOf(
-                StringConstants.BACK_PRESSED.value to true
+                bundleOf(
+                        StringConstants.BACK_PRESSED.value to true
 
-            )
+                )
         )
         return super.onBackPressed()
     }
@@ -149,5 +149,7 @@ class AddBioFragment : BaseFragment() {
         super.onDestroy()
         restoreStatusBar()
     }
+
+
 
 }

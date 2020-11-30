@@ -52,10 +52,10 @@ class AdapterApplicationClientActivation :
         notifyDataSetChanged()
     }
 
-    fun setImageDrawable(feature: String, drawable: Drawable) {
+    fun setImageDrawable(feature: String, drawable: Drawable,isDone:Boolean) {
         val i = items.indexOf(Dependency(feature = feature))
         items[i].drawable = drawable
-        items[i].isDone = true
+        items[i].isDone = isDone
         notifyItemChanged(i);
     }
 
