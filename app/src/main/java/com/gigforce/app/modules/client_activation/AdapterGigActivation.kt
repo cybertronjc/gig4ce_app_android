@@ -53,7 +53,7 @@ class AdapterGigActivation : RecyclerView.Adapter<AdapterGigActivation.ViewHolde
     }
 
     fun setImageDrawable(feature: String, drawable: Int) {
-        val i = items.indexOf(DependencyGigActivation(title = feature))
+        val i = items.indexOf(DependencyGigActivation(docType = feature))
         items[i].drawable = drawable
         items[i].isDone = true
         notifyItemChanged(i);

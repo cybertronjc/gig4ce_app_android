@@ -13,7 +13,6 @@ import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
-import com.gigforce.app.modules.client_activation.models.JpApplication
 import com.gigforce.app.modules.client_activation.models.JpDraft
 import com.gigforce.app.modules.photocrop.PhotoCrop
 import com.gigforce.app.modules.profile.ProfileViewModel
@@ -63,23 +62,12 @@ class ApplicationClientActivationFragment : BaseFragment(),
         }
 
         tv_action_application_client_activation.setOnClickListener {
-            if (viewModel.observableJpApplication.value != null) {
-                val value = viewModel.observableJpApplication.value
-                value?.stepDone = 2
-                viewModel.apply(value!!)
+            viewModel.apply(mWordOrderID, adapter.items.map { dependency ->
 
-            } else {
-                val jpApplication = JpApplication(JPId = mWordOrderID, gigerId = viewModel.getUID(), stepsTotal = adapter.items.size)
-                adapter.items.forEach { dependency ->
-                    val list = mutableListOf<JpDraft>()
-                    list.add(JpDraft(dependency.isDone, dependency.title
-                            ?: "", dependency.feature
-                            ?: ""))
-                    jpApplication.draft = list
-                }
-                jpApplication.stepDone = 2
-                viewModel.apply(jpApplication)
-            }
+                JpDraft(dependency.isDone, dependency.title
+                        ?: "", dependency.feature
+                        ?: "")
+            }.toMutableList())
 
             pb_application_client_activation.visible()
 
@@ -176,18 +164,13 @@ class ApplicationClientActivationFragment : BaseFragment(),
 
         })
         viewModel.observableJpApplication.observe(viewLifecycleOwner, Observer { data ->
-            val index = data.draft.indexOf(JpDraft(type = "questionnary"))
-            if (index != -1) {
-                if (data.draft[index].isDone) {
-                    adapter.setImageDrawable(
-                            "questionnary", resources.getDrawable(
-                            R.drawable.ic_applied
-                    ))
-                }
-                checkAndUpdateUI(data.draft.size)
-
-
+            if (!data.questionnaireSubmission.isNullOrEmpty()) {
+                adapter.setImageDrawable(
+                        "questionnary", resources.getDrawable(
+                        R.drawable.ic_applied
+                ))
             }
+            checkAndUpdateUI(data.draft.size)
 
         })
         viewModel.getWorkOrderDependency(workOrderId = mWordOrderID)
@@ -270,6 +253,10 @@ class ApplicationClientActivationFragment : BaseFragment(),
 
     private var PHOTO_CROP: Int = 45
     private var PROFILE_PICTURE_FOLDER: String = "profile_pics"
+    override fun onBackPressed(): Boolean {
+        popBackState()
+        return true
+    }
 
 
 }

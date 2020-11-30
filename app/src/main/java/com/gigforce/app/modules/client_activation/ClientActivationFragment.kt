@@ -133,16 +133,16 @@ class ClientActivationFragment : BaseFragment() {
                 navigate(
                         R.id.fragment_application_client_activation, bundleOf(
                         StringConstants.WORK_ORDER_ID.value to mWordOrderID
-//                        StringConstants.NEXT_DEP.value to viewModel.observableWorkOrder.value?.nextDependency
-                )
-
-                )
+                ))
+                viewModel.observableJpApplication.removeObservers(viewLifecycleOwner)
             } else if (it.stepDone == 2) {
                 navigate(
                         R.id.fragment_gig_activation, bundleOf(
                         StringConstants.WORK_ORDER_ID.value to mWordOrderID,
                         StringConstants.NEXT_DEP.value to viewModel.observableWorkOrder.value?.nextDependency
                 ))
+                viewModel.observableJpApplication.removeObservers(viewLifecycleOwner)
+
             }
         })
         if (!viewModel.initialized)

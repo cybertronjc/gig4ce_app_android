@@ -3,10 +3,14 @@ package com.gigforce.app.modules.client_activation
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.gigforce.app.modules.client_activation.models.JpApplication
+import com.gigforce.app.modules.client_activation.models.JpDraft
 import com.gigforce.app.modules.client_activation.models.WorkOrderDependency
 import com.gigforce.app.modules.gigerVerfication.VerificationBaseModel
 import com.gigforce.app.utils.SingleLiveEvent
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 
 class ApplicationClientActivationViewModel : ViewModel() {
     val repository = ApplicationClientActivationRepository()
@@ -67,26 +71,38 @@ class ApplicationClientActivationViewModel : ViewModel() {
                 }
     }
 
-    fun apply(jpApplication: JpApplication) {
-        repository.db.collection("JP_Applications").document(jpApplication.JPId).set(
-                jpApplication
-        ).addOnCompleteListener {
-            if (it.isSuccessful) {
-                _observableApplicationStatus.value = true
-            } else {
-                _observableError.value = it.exception?.message ?: ""
-            }
+    fun apply(mWorkOrderID: String, draft: MutableList<JpDraft>) = viewModelScope.launch {
 
+
+        val model = getJPApplication(mWorkOrderID)
+
+
+        model.stepDone = 2
+        model.draft = draft
+        if (model.id.isEmpty()) {
+            repository.db.collection("JP_Applications").document().set(model).addOnCompleteListener {
+                if (it.isSuccessful) {
+                    observableApplicationStatus.value = true
+                }
+            }
+        } else {
+            repository.db.collection("JP_Applications").document(model.id).set(model).addOnCompleteListener {
+                if (it.isSuccessful) {
+                    observableApplicationStatus.value = true
+                }
+            }
         }
+
+
     }
 
     fun getApplication(workOrderId: String) {
-        repository.db.collection("JP_Applications").document(workOrderId).addSnapshotListener { success, err ->
+        repository.db.collection("JP_Applications").whereEqualTo("jpid", workOrderId).whereEqualTo("gigerId", repository.getUID()).addSnapshotListener { success, err ->
             run {
                 Log.e("check", err?.message ?: "")
                 if (err == null) {
-                    if (success?.data != null) {
-                        observableJpApplication.value = success?.toObject(JpApplication::class.java)
+                    if (!success?.documents.isNullOrEmpty()) {
+                        observableJpApplication.value = success?.toObjects(JpApplication::class.java)?.get(0)
                     }
                 } else {
                     observableError.value = err.message
@@ -95,8 +111,16 @@ class ApplicationClientActivationViewModel : ViewModel() {
         }
     }
 
-    fun getUID(): String {
-        return repository.getUID()
+
+    suspend fun getJPApplication(workOrderID: String): JpApplication {
+        val items = repository.getCollectionReference().whereEqualTo("jpid", workOrderID).whereEqualTo("gigerId", repository.getUID()).get()
+                .await()
+        if (items.documents.isNullOrEmpty()) {
+            return JpApplication(JPId = workOrderID, gigerId = repository.getUID())
+        }
+        val toObject = items.toObjects(JpApplication::class.java).get(0)
+        toObject.id = items.documents[0].id
+        return toObject
     }
 
 

@@ -4,7 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.gigforce.app.modules.client_activation.models.JpApplication
-import com.gigforce.app.modules.client_activation.models.JpDraft
+import com.gigforce.app.modules.client_activation.models.QuestionsSubmission
 import com.gigforce.app.modules.landingscreen.models.Dependency
 import com.gigforce.app.modules.questionnaire.models.QuestionnaireResponse
 import com.gigforce.app.modules.questionnaire.models.Questions
@@ -39,41 +39,35 @@ class ViewModelQuestionnaire(private val savedStateHandle: SavedStateHandle) : V
     }
 
     fun addQuestionnaire(mWordOrderID: String, list: ArrayList<Dependency>, questions: List<Questions>?) {
-//        var listener: ListenerRegistration? = null
-//        val listJp = list.map {
-//            if (it.feature == "questionnary") {
-//                JpDraft(true, it.title ?: "", it.feature ?: "", questions)
-//
-//            } else {
-//                JpDraft(it.isDone, it.title ?: "", it.feature ?: "")
-//            }
-//
-//        }
-//
-//        listener = questionnaireRepository.db.collection("JP_Applications").document(mWordOrderID).addSnapshotListener { success, err ->
-//            listener?.remove()
-//            if (success?.data.isNullOrEmpty()) {
-//                questionnaireRepository.db.collection("JP_Applications").document().set(JpApplication(JPId = mWordOrderID, gigerId = questionnaireRepository.getUID(),
-//                        draft = listJp.toMutableList())).addOnCompleteListener {
-//                    if (it.isSuccessful) {
-//                        _observableAddApplicationSuccess.value = true
-//                    } else {
-//                        _observableError.value = it.exception?.message
-//
-//                    }
-//                }
-//
-//            } else {
-//                questionnaireRepository.db.collection("JP_Applications").document(mWordOrderID).update("draft", listJp).addOnCompleteListener {
-//                    if (it.isSuccessful) {
-//                        _observableAddApplicationSuccess.value = true
-//
-//                    } else {
-//                        _observableError.value = it.exception?.message
-//                    }
-//                }
-//            }
-//        }
+        var listener: ListenerRegistration? = null
+        listener = questionnaireRepository.db.collection("JP_Applications").whereEqualTo("jpid", mWordOrderID).whereEqualTo("gigerId", questionnaireRepository.getUID()).addSnapshotListener { success, err ->
+            listener?.remove()
+            if (success?.documents.isNullOrEmpty()) {
+                questionnaireRepository.db.collection("JP_Applications").document().set(JpApplication(JPId = mWordOrderID, gigerId = questionnaireRepository.getUID(),
+                        questionnaireSubmission = questions?.map {
+                            QuestionsSubmission(it.question, it.selectedAnswer)
+                        }!!)).addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        _observableAddApplicationSuccess.value = true
+                    } else {
+                        _observableError.value = it.exception?.message
+
+                    }
+                }
+
+            } else {
+                questionnaireRepository.db.collection("JP_Applications").document(success?.documents!![0].id).update("questionnaireSubmission", questions?.map {
+                    QuestionsSubmission(it.question, it.selectedAnswer)
+                }).addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        _observableAddApplicationSuccess.value = true
+
+                    } else {
+                        _observableError.value = it.exception?.message
+                    }
+                }
+            }
+        }
     }
 
 }

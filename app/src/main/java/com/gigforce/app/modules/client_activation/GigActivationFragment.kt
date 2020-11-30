@@ -64,6 +64,12 @@ class GigActivationFragment : BaseFragment(), AdapterGigActivation.AdapterGigAct
             }
         })
         viewModel.getActivationData(mWordOrderID, mNextDep)
+        viewModel.observableJpApplication.observe(viewLifecycleOwner, Observer {
+            if (it?.drivingCert != null && it?.drivingCert?.verified == true) {
+                adapter.setImageDrawable("driving_certificate", R.drawable.ic_applied)
+            }
+        })
+        viewModel.getApplication(mWordOrderID)
     }
 
     private val adapter: AdapterGigActivation by lazy {

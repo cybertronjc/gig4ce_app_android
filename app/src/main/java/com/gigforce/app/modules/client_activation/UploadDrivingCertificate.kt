@@ -15,7 +15,6 @@ import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
-import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
 import com.gigforce.app.modules.gigerVerfication.WhyWeNeedThisBottomSheet
 import com.gigforce.app.modules.gigerVerfication.drivingLicense.AddDrivingLicenseInfoFragment
 import com.gigforce.app.modules.gigerVerfication.drivingLicense.DrivingLicenseSides
@@ -40,7 +39,7 @@ import kotlinx.android.synthetic.main.upload_car_client_activation.view.*
 class UploadDrivingCertificate : BaseFragment() {
 
     private lateinit var mWordOrderID: String
-    private val viewModel: GigVerificationViewModel by viewModels()
+    private val viewModel: UploadDrivingCertificateViewmodel by viewModels()
 
     private var dlFrontImagePath: Uri? = null
     private var currentlyClickingImageOfSide: DrivingLicenseSides? = null
@@ -143,15 +142,16 @@ class UploadDrivingCertificate : BaseFragment() {
 
 
                 viewModel.uploadDLCer(
-                        true,
+                        mWordOrderID,
                         dlFrontImagePath
 
                 )
 
             } else if (dlNoRB.isChecked) {
                 viewModel.uploadDLCer(
-                        false,
+                        mWordOrderID,
                         null
+
 
                 )
             }
@@ -208,7 +208,7 @@ class UploadDrivingCertificate : BaseFragment() {
                     }
                 })
 
-        viewModel.getVerificationStatus()
+//        viewModel.getVerificationStatus()
     }
 
 

@@ -36,4 +36,10 @@ data class DependencyGigActivation(var docType: String = "", var title: String =
             return arrayOfNulls(size)
         }
     }
+
+    override fun equals(other: Any?): Boolean {
+        val obj = other as DependencyGigActivation
+        return obj.docType == docType
+    }
+
 }

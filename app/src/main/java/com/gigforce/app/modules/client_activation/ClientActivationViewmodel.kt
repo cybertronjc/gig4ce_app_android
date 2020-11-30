@@ -78,12 +78,14 @@ class ClientActivationViewmodel(
     }
 
     fun getApplication(workOrderId: String) {
-        clientActivationRepository.db.collection("JP_Applications").document(workOrderId).addSnapshotListener { success, err ->
+        clientActivationRepository.db.collection("JP_Applications").whereEqualTo("jpid", workOrderId).whereEqualTo("gigerId", clientActivationRepository.getUID()).addSnapshotListener { success, err ->
             run {
-                Log.e("check", err?.message ?: "")
                 if (err == null) {
-                    if (success?.data != null) {
-                        observableJpApplication.value = success?.toObject(JpApplication::class.java)
+                    if (!success?.documents.isNullOrEmpty()) {
+                        observableJpApplication.value = success?.toObjects(JpApplication::class.java)?.get(0)
+                    }else{
+                        observableJpApplication.value = null
+
                     }
                 } else {
                     observableJpApplication.value = null

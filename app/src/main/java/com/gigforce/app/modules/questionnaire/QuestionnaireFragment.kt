@@ -8,6 +8,7 @@ import android.widget.LinearLayout
 import androidx.lifecycle.Observer
 import androidx.lifecycle.SavedStateViewModelFactory
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -100,7 +101,8 @@ class QuestionnaireFragment : BaseFragment() {
         viewModel.observableAddApplicationSuccess.observe(viewLifecycleOwner, Observer {
             pb_questionnaire.gone()
             if (it) {
-                popBackState()
+              popBackState()
+
             }
         })
         viewModel.observableQuestionnaireResponse.observe(viewLifecycleOwner, Observer {
