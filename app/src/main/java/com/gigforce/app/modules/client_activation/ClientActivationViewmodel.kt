@@ -1,6 +1,5 @@
 package com.gigforce.app.modules.client_activation
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -10,6 +9,7 @@ import com.gigforce.app.modules.learning.models.LessonModel
 import com.gigforce.app.utils.Lce
 import com.gigforce.app.utils.SingleLiveEvent
 import com.gigforce.app.utils.StringConstants
+import com.google.firebase.firestore.ListenerRegistration
 
 class ClientActivationViewmodel(
         private val savedStateHandle: SavedStateHandle
@@ -78,12 +78,14 @@ class ClientActivationViewmodel(
     }
 
     fun getApplication(workOrderId: String) {
-        clientActivationRepository.db.collection("JP_Applications").whereEqualTo("jpid", workOrderId).whereEqualTo("gigerId", clientActivationRepository.getUID()).addSnapshotListener { success, err ->
+        var listener: ListenerRegistration? = null
+        listener = clientActivationRepository.db.collection("JP_Applications").whereEqualTo("jpid", workOrderId).whereEqualTo("gigerId", clientActivationRepository.getUID()).addSnapshotListener { success, err ->
+            listener?.remove()
             run {
                 if (err == null) {
                     if (!success?.documents.isNullOrEmpty()) {
                         observableJpApplication.value = success?.toObjects(JpApplication::class.java)?.get(0)
-                    }else{
+                    } else {
                         observableJpApplication.value = null
 
                     }
