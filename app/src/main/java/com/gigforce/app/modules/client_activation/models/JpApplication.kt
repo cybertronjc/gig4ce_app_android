@@ -8,6 +8,6 @@ data class JpApplication(var id: String = "", var JPId: String = "", var approve
                          var questionnaireSubmission: List<QuestionsSubmission> = listOf(),
                          var drivingCert: DrivingCertificate? = null,
                          var partnerSchoolDetails: PartnerSchoolDetails? = null, var selectedDate: String = "", var selectedTime: String = "",
-                         var subDLChequeInSameCentre: Boolean? = null
+                         var subDLChequeInSameCentre: Boolean? = null, var slotBooked: Boolean = false
 
 )

@@ -65,7 +65,7 @@ class GigforceDatePickerDialog : DialogFragment() {
         })
         calendarView.setOnDateClickListner(object : CalendarView.MonthChangeAndDateClickedListener {
             override fun onMonthChange(monthModel: CalendarView.MonthModel) {
-                callbacks.selectedDate(monthModel)
+                callbacks.selectedDate(monthModel.days[monthModel.days.size / 2].date.toString() + "/" + (monthModel.currentMonth + 1) + "/" + monthModel.year)
                 dismiss()
             }
         })
@@ -89,7 +89,7 @@ class GigforceDatePickerDialog : DialogFragment() {
 
     public interface GigforceDatePickerDialogCallbacks {
 
-        fun selectedDate(monthModel: CalendarView.MonthModel)
+        fun selectedDate(monthModel: String)
     }
 
 }

@@ -6,6 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.base.components.CalendarView
@@ -19,6 +21,7 @@ import kotlinx.android.synthetic.main.fragment_docs_sub_scheduler.*
 
 
 class DocsSubSchedulerFragment : BaseFragment(), SelectPartnerSchoolBottomSheet.SelectPartnerBsCallbacks, TimeSlotsDialog.TimeSlotDialogCallbacks, ConfirmationDialogDrivingTest.ConfirmationDialogDrivingTestCallbacks, GigforceDatePickerDialog.GigforceDatePickerDialogCallbacks {
+    private val viewModel: DocSubSchedulerViewModel by viewModels()
 
     private var dateString: String? = null
     private var monthModel: CalendarView.MonthModel? = null
@@ -47,6 +50,24 @@ class DocsSubSchedulerFragment : BaseFragment(), SelectPartnerSchoolBottomSheet.
         }
         initViews()
         initClicks()
+        initObservers()
+    }
+
+    private fun initObservers() {
+
+        viewModel.observableJpApplication.observe(viewLifecycleOwner, Observer {
+            if (it.slotBooked) {
+                val address = it.partnerSchoolDetails
+                textView137.text = Html.fromHtml(address?.schoolName + "<br>" + address?.landmark + "<br>" + address?.city + "<br>"
+                        + address?.schoolTiming + "<br>" + address?.contact?.map { "<b><font color=\'#000000\'>" + it.name + "</font></b>" }?.reduce { a, o -> a + o }
+                )
+                textView143.text = it.selectedTime
+                imageView36.gone()
+                textView139.text = it.selectedDate
+                imageView36.gone()
+            }
+        })
+        viewModel.getApplication(mWordOrderID)
     }
 
     private fun initClicks() {
@@ -124,12 +145,12 @@ class DocsSubSchedulerFragment : BaseFragment(), SelectPartnerSchoolBottomSheet.
         navigate(R.id.fragment_schedule_test)
     }
 
-    override fun selectedDate(monthModel: CalendarView.MonthModel) {
-        this.monthModel = monthModel
-        val date = monthModel.days[0]
-        val dateString = date.date.toString() + "/" + (date.month + 1) + "/" + date.year
-        this.dateString = dateString;
+    override fun selectedDate(date: String) {
+
+
+        this.dateString = date;
         textView139.text = dateString
+        imageView36.gone()
         checkIfCompleteProcessComplete()
     }
 

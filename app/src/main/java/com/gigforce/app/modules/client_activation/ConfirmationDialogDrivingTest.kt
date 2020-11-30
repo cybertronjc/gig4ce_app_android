@@ -6,15 +6,23 @@ import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import com.gigforce.app.R
+import com.gigforce.app.core.gone
+import com.gigforce.app.core.visible
 import com.gigforce.app.modules.client_activation.models.PartnerSchoolDetails
 import com.gigforce.app.utils.StringConstants
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.ncorti.slidetoact.SlideToActView
 import kotlinx.android.synthetic.main.layout_confirm_driving_slot.*
+import kotlinx.android.synthetic.main.layout_fragment_schedule_driving_test.*
 
 class ConfirmationDialogDrivingTest : BottomSheetDialogFragment(), TimeSlotsDialog.TimeSlotDialogCallbacks {
+    private lateinit var mWordOrderID: String
     private lateinit var callbacks: ConfirmationDialogDrivingTestCallbacks
+    private val viewModel: ConfirmationDialogDrivingTestViewModel by viewModels()
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.layout_confirm_driving_slot, container, false)
@@ -22,7 +30,41 @@ class ConfirmationDialogDrivingTest : BottomSheetDialogFragment(), TimeSlotsDial
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        getDataFromIntents(savedInstanceState)
         initView()
+        initObservers()
+    }
+
+    private fun getDataFromIntents(savedInstanceState: Bundle?) {
+        savedInstanceState?.let {
+            mWordOrderID = it.getString(StringConstants.WORK_ORDER_ID.value) ?: return@let
+
+        }
+
+        arguments?.let {
+            mWordOrderID = it.getString(StringConstants.WORK_ORDER_ID.value) ?: return@let
+
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString(StringConstants.WORK_ORDER_ID.value, mWordOrderID)
+
+
+    }
+
+    private fun initObservers() {
+        viewModel.observableJpApplication.observe(viewLifecycleOwner, Observer {
+
+
+            if (it) {
+                pb_conf_dialog.gone()
+                this@ConfirmationDialogDrivingTest.dismiss()
+
+            }
+        })
+
     }
 
     private fun initView() {
@@ -47,8 +89,8 @@ class ConfirmationDialogDrivingTest : BottomSheetDialogFragment(), TimeSlotsDial
                 object : SlideToActView.OnSlideCompleteListener {
 
                     override fun onSlideComplete(view: SlideToActView) {
-                        callbacks.moveToNextStep()
-                        this@ConfirmationDialogDrivingTest.dismiss()
+                        pb_conf_dialog.visible()
+                        viewModel.apply(mWordOrderID, selectedPartner!!, dateSelected!!, timeSlot!!, cb_centre.isChecked)
                     }
                 }
 
