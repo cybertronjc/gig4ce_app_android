@@ -51,8 +51,8 @@ class LoginViewModel() : ViewModel() {
         }
 
         override fun onCodeSent(
-            _verificationId: String,
-            _token: PhoneAuthProvider.ForceResendingToken
+                _verificationId: String,
+                _token: PhoneAuthProvider.ForceResendingToken
         ) {
             super.onCodeSent(_verificationId, _token)
             verificationId = _verificationId
@@ -64,11 +64,11 @@ class LoginViewModel() : ViewModel() {
 
     fun sendVerificationCode(phoneNumber: String) {
         PhoneAuthProvider.getInstance().verifyPhoneNumber(
-            phoneNumber, // Phone number to verify
-            60, // Timeout duration
-            TimeUnit.SECONDS, // Unit of timeout
-            activity!!, // Activity (for callback binding)
-            callbacks // OnVerificationStateChangedCallbacks
+                phoneNumber, // Phone number to verify
+                60, // Timeout duration
+                TimeUnit.SECONDS, // Unit of timeout
+                activity!!, // Activity (for callback binding)
+                callbacks // OnVerificationStateChangedCallbacks
         ) // ForceResendingToken from callbacks
     }
 
@@ -78,25 +78,45 @@ class LoginViewModel() : ViewModel() {
         signInWithPhoneAuthCredential(credential)
     }
 
+    fun verifyPhoneNumberWithCodeScheduleDrivingTest(code: String) {
+        val credential = PhoneAuthProvider.getCredential(verificationId!!, code)
+        signInWithPhoneAuthCredentialScheduleDrivingTest(credential)
+    }
+
+    private fun signInWithPhoneAuthCredentialScheduleDrivingTest(credential: PhoneAuthCredential) {
+        FirebaseAuth.getInstance()
+                .signInWithCredential(credential)
+                .addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        Log.d(TAG, "signInWithCredential:success")
+                        liveState.postValue(LoginResponse(STATE_SIGNIN_SUCCESS, it.toString()))
+
+                    } else {
+                        Log.w(TAG, "signInWithCredential:failure", it.exception)
+                        liveState.postValue(LoginResponse(STATE_SIGNIN_FAILED, ""))
+                    }
+                }
+    }
+
     private fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential) {
         FirebaseAuth.getInstance()
-            .signInWithCredential(credential)
-            .addOnCompleteListener {
-                if (it.isSuccessful) {
-                    Log.d(TAG, "signInWithCredential:success")
-                } else {
-                    Log.w(TAG, "signInWithCredential:failure", it.exception)
-                    liveState.postValue(LoginResponse(STATE_SIGNIN_FAILED, ""))
+                .signInWithCredential(credential)
+                .addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        Log.d(TAG, "signInWithCredential:success")
+                    } else {
+                        Log.w(TAG, "signInWithCredential:failure", it.exception)
+                        liveState.postValue(LoginResponse(STATE_SIGNIN_FAILED, ""))
+                    }
                 }
-            }
-            .addOnSuccessListener {
-                registerFirebaseToken()
-                Log.d(TAG, "Signed in successfully")
-            }
-            .addOnFailureListener {
-                Log.d(TAG, "Signed in failed")
-                liveState.postValue(LoginResponse(STATE_SIGNIN_FAILED, it.toString()))
-            }
+                .addOnSuccessListener {
+                    registerFirebaseToken()
+                    Log.d(TAG, "Signed in successfully")
+                }
+                .addOnFailureListener {
+                    Log.d(TAG, "Signed in failed")
+                    liveState.postValue(LoginResponse(STATE_SIGNIN_FAILED, it.toString()))
+                }
     }
 
     private fun registerFirebaseToken() {
@@ -119,19 +139,19 @@ class LoginViewModel() : ViewModel() {
 
     private fun registerTokenOnServer(uid: String, fcmToken: String) {
         FirebaseFirestore.getInstance().collection("firebase_tokens")
-            .document(fcmToken)
-            .set(
-                hashMapOf(
-                    "uid" to uid,
-                    "type" to "fcm",
-                    "timestamp" to Date().time
-                )
-            ).addOnSuccessListener {
-                Log.v(TAG, "Token Updated on Firestore Successfully")
-                liveState.postValue(LoginResponse(STATE_SIGNIN_SUCCESS, ""))
-            }.addOnFailureListener {
-                Log.e(TAG, "Token Update Failed on Firestore", it)
-                liveState.postValue(LoginResponse(STATE_SIGNIN_SUCCESS, ""))
-            }
+                .document(fcmToken)
+                .set(
+                        hashMapOf(
+                                "uid" to uid,
+                                "type" to "fcm",
+                                "timestamp" to Date().time
+                        )
+                ).addOnSuccessListener {
+                    Log.v(TAG, "Token Updated on Firestore Successfully")
+                    liveState.postValue(LoginResponse(STATE_SIGNIN_SUCCESS, ""))
+                }.addOnFailureListener {
+                    Log.e(TAG, "Token Update Failed on Firestore", it)
+                    liveState.postValue(LoginResponse(STATE_SIGNIN_SUCCESS, ""))
+                }
     }
 }

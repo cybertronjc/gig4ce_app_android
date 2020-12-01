@@ -3,6 +3,7 @@ package com.gigforce.app.modules.client_activation
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.gigforce.app.modules.client_activation.models.DrivingCertificate
 import com.gigforce.app.modules.client_activation.models.JpApplication
 import com.gigforce.app.modules.client_activation.models.PartnerSchoolDetails
 import kotlinx.coroutines.launch
@@ -19,11 +20,15 @@ class ConfirmationDialogDrivingTestViewModel : ViewModel() {
 
 
         val model = getJPApplication(mWorkOrderID)
-        model.partnerSchoolDetails = partnerDetails
-        model.slotBooked = true
-        model.selectedDate = date
-        model.selectedTime = slot
-        model.subDLChequeInSameCentre = drivingLicenseCheck;
+        if (model.drivingCert == null) {
+            model.drivingCert = DrivingCertificate()
+        }
+        model.drivingCert?.partnerSchoolDetails = partnerDetails
+        model.drivingCert?.slotBooked = true
+        model.drivingCert?.selectedDate = date
+        model.drivingCert?.selectedTime = slot
+        model.drivingCert?.subDLChequeInSameCentre = drivingLicenseCheck;
+        model.drivingCert?.status = "Slot Booked"
 
         if (model.id.isEmpty()) {
             repository.db.collection("JP_Applications").document().set(model).addOnCompleteListener {

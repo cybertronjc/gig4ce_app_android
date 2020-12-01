@@ -55,7 +55,6 @@ class GigActivationFragment : BaseFragment(), AdapterGigActivation.AdapterGigAct
                 ).into(iv_gig_activation)
                 tv_application_gig_activation.text = Html.fromHtml(gigAcivation.subTitle)
                 tv_title_toolbar.text = gigAcivation.title
-//                tv_application_stat_gig_activation.text = gigAcivation.status
                 tv_verification_gig_activation.text = gigAcivation.status
                 tv_complete_gig_activation.text = gigAcivation.instruction
                 adapter.addData(gigAcivation.dependency)
@@ -65,9 +64,15 @@ class GigActivationFragment : BaseFragment(), AdapterGigActivation.AdapterGigAct
         })
         viewModel.getActivationData(mWordOrderID, mNextDep)
         viewModel.observableJpApplication.observe(viewLifecycleOwner, Observer {
-            if (it?.drivingCert != null && it?.drivingCert?.verified == true) {
-                adapter.setImageDrawable("driving_certificate", R.drawable.ic_applied)
+            if (it?.drivingCert != null) {
+                if (it.drivingCert?.verified == true) {
+                    adapter.setImageDrawable("driving_certificate", R.drawable.ic_applied, true)
+                }
+                adapter.setStatus("driving_certificate", it.drivingCert?.status
+                        ?: "", if (it.drivingCert?.verified == true) R.color.black else R.color.yellow)
             }
+
+
         })
         viewModel.getApplication(mWordOrderID)
     }
@@ -105,7 +110,8 @@ class GigActivationFragment : BaseFragment(), AdapterGigActivation.AdapterGigAct
 
     override fun onItemClick(feature: String) {
         when (feature) {
-            "driving_certificate" -> navigate(R.id.fragment_upload_cert, bundleOf(StringConstants.WORK_ORDER_ID.value to mWordOrderID))
+            "driving_certificate" ->
+                navigate(if (viewModel.observableJpApplication.value?.drivingCert != null) R.id.fragment_doc_sub else R.id.fragment_upload_cert, bundleOf(StringConstants.WORK_ORDER_ID.value to mWordOrderID))
         }
     }
 

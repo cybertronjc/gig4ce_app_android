@@ -56,15 +56,16 @@ class DocsSubSchedulerFragment : BaseFragment(), SelectPartnerSchoolBottomSheet.
     private fun initObservers() {
 
         viewModel.observableJpApplication.observe(viewLifecycleOwner, Observer {
-            if (it.slotBooked) {
-                val address = it.partnerSchoolDetails
+            if (it.drivingCert?.slotBooked == true) {
+                val address = it.drivingCert?.partnerSchoolDetails
                 textView137.text = Html.fromHtml(address?.schoolName + "<br>" + address?.landmark + "<br>" + address?.city + "<br>"
                         + address?.schoolTiming + "<br>" + address?.contact?.map { "<b><font color=\'#000000\'>" + it.name + "</font></b>" }?.reduce { a, o -> a + o }
                 )
-                textView143.text = it.selectedTime
+                textView143.text = it.drivingCert?.selectedTime
                 imageView36.gone()
-                textView139.text = it.selectedDate
+                textView139.text = it.drivingCert?.selectedDate
                 imageView36.gone()
+                slider_checkout.isLocked=false
             }
         })
         viewModel.getApplication(mWordOrderID)
@@ -82,7 +83,7 @@ class DocsSubSchedulerFragment : BaseFragment(), SelectPartnerSchoolBottomSheet.
 
                     override fun onSlideComplete(view: SlideToActView) {
 
-
+                        navigate(R.id.fragment_schedule_test, bundleOf(StringConstants.WORK_ORDER_ID.value to mWordOrderID))
                     }
                 }
 

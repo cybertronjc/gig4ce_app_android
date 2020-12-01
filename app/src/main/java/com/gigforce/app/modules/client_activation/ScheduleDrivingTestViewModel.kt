@@ -1,18 +1,26 @@
 package com.gigforce.app.modules.client_activation
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gigforce.app.modules.client_activation.models.JpApplication
+import com.gigforce.app.utils.SingleLiveEvent
+import com.google.firebase.auth.PhoneAuthProvider
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import java.util.concurrent.TimeUnit
 
-class DocSubSchedulerViewModel : ViewModel() {
-    val repository: DocSubSchedulerRepository = DocSubSchedulerRepository()
-    private val _observableJpApplication: MutableLiveData<JpApplication> = MutableLiveData()
-    val observableJpApplication: MutableLiveData<JpApplication> = _observableJpApplication
+class ScheduleDrivingTestViewModel : ViewModel() {
+    val repository = ScheduleDrivingTestRepository()
 
+    private val _observableError: SingleLiveEvent<String> by lazy {
+        SingleLiveEvent<String>();
+    }
+    val observableError: SingleLiveEvent<String> get() = _observableError
 
+    private val _observableJpApplication: SingleLiveEvent<JpApplication> by lazy {
+        SingleLiveEvent<JpApplication>();
+    }
+    val observableJpApplication: SingleLiveEvent<JpApplication> get() = _observableJpApplication
     fun getApplication(mWorkOrderID: String) = viewModelScope.launch {
         val model = getJPApplication(mWorkOrderID)
         _observableJpApplication.value = model
@@ -29,5 +37,8 @@ class DocSubSchedulerViewModel : ViewModel() {
         toObject.id = items.documents[0].id
         return toObject
     }
+
+
+
 
 }

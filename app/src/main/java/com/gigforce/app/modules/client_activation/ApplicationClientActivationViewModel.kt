@@ -10,15 +10,12 @@ import com.gigforce.app.modules.client_activation.models.WorkOrderDependency
 import com.gigforce.app.modules.gigerVerfication.VerificationBaseModel
 import com.gigforce.app.modules.profile.models.ProfileData
 import com.gigforce.app.utils.SingleLiveEvent
-import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.EventListener
-import com.google.firebase.firestore.FirebaseFirestoreException
-import com.google.firebase.firestore.ListenerRegistration
+import com.google.firebase.firestore.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
 class ApplicationClientActivationViewModel : ViewModel() {
-     var profileID: String?=null
+    var profileID: String? = null
 
     val repository = ApplicationClientActivationRepository()
 
@@ -109,24 +106,11 @@ class ApplicationClientActivationViewModel : ViewModel() {
 
     }
 
-    fun getApplication(workOrderId: String) {
+    fun getApplication(workOrderId: String) = viewModelScope.launch {
 
-        var listener: ListenerRegistration? = null
-        listener = repository.db.collection("JP_Applications").whereEqualTo("jpid", workOrderId).whereEqualTo("gigerId", repository.getUID()).addSnapshotListener { success, err ->
-            run {
-                listener?.remove()
-                if (err == null) {
-                    if (!success?.documents.isNullOrEmpty()) {
-                        observableJpApplication.value = success?.toObjects(JpApplication::class.java)?.get(0)
-                    } else {
-                        observableJpApplication.value = null
+        val model = getApplicationFromServer(workOrderId)
+        observableJpApplication.value = model
 
-                    }
-                } else {
-                    observableJpApplication.value = null
-                }
-            }
-        }
     }
 
 
@@ -135,6 +119,17 @@ class ApplicationClientActivationViewModel : ViewModel() {
                 .await()
         if (items.documents.isNullOrEmpty()) {
             return JpApplication(JPId = workOrderID, gigerId = repository.getUID())
+        }
+        val toObject = items.toObjects(JpApplication::class.java).get(0)
+        toObject.id = items.documents[0].id
+        return toObject
+    }
+
+    suspend fun getApplicationFromServer(workOrderID: String): JpApplication? {
+        val items = repository.db.collection("JP_Applications").whereEqualTo("jpid", workOrderID).whereEqualTo("gigerId", repository.getUID()).get(Source.SERVER)
+                .await()
+        if (items.documents.isNullOrEmpty()) {
+            return null;
         }
         val toObject = items.toObjects(JpApplication::class.java).get(0)
         toObject.id = items.documents[0].id

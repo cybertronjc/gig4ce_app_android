@@ -119,7 +119,9 @@ class QuestionnaireFragment : BaseFragment() {
         viewModel.observableAddApplicationSuccess.observe(viewLifecycleOwner, Observer {
             pb_questionnaire.gone()
             if (it) {
+
                 popBackState()
+
 
             }
         })

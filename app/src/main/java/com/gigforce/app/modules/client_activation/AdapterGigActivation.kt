@@ -6,7 +6,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.app.R
 import com.gigforce.app.modules.client_activation.models.DependencyGigActivation
-import kotlinx.android.synthetic.main.layout_fragment_activation_gig.view.*
 import kotlinx.android.synthetic.main.layout_rv_gig_activation.view.*
 import kotlinx.android.synthetic.main.layout_rv_status_pending.view.divider_bottom
 
@@ -33,6 +32,8 @@ class AdapterGigActivation : RecyclerView.Adapter<AdapterGigActivation.ViewHolde
                     dependency.drawable
                 }
         )
+        holder.itemView.tv_status.text = dependency.status
+        holder.itemView.tv_status.setTextColor(holder.itemView.resources.getColor(dependency.color))
         holder.itemView.tv_rv_gig_activation.text = dependency.title
         holder.itemView.divider_bottom.visibility =
                 if (position == items.size - 1) View.GONE else View.VISIBLE
@@ -52,10 +53,17 @@ class AdapterGigActivation : RecyclerView.Adapter<AdapterGigActivation.ViewHolde
         notifyDataSetChanged()
     }
 
-    fun setImageDrawable(feature: String, drawable: Int) {
+    fun setImageDrawable(feature: String, drawable: Int, isDone: Boolean) {
         val i = items.indexOf(DependencyGigActivation(docType = feature))
         items[i].drawable = drawable
-        items[i].isDone = true
+        items[i].isDone = isDone
+        notifyItemChanged(i);
+    }
+
+    fun setStatus(feature: String, status: String, color: Int) {
+        val i = items.indexOf(DependencyGigActivation(docType = feature))
+        items[i].status = status
+        items[i].color = color
         notifyItemChanged(i);
     }
 
