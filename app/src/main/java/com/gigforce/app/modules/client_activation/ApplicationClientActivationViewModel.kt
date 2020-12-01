@@ -8,6 +8,7 @@ import com.gigforce.app.modules.client_activation.models.JpApplication
 import com.gigforce.app.modules.client_activation.models.JpDraft
 import com.gigforce.app.modules.client_activation.models.WorkOrderDependency
 import com.gigforce.app.modules.gigerVerfication.VerificationBaseModel
+import com.gigforce.app.modules.landingscreen.models.Dependency
 import com.gigforce.app.modules.profile.models.ProfileData
 import com.gigforce.app.utils.SingleLiveEvent
 import com.google.firebase.firestore.*
@@ -79,6 +80,50 @@ class ApplicationClientActivationViewModel : ViewModel() {
                         }
                     }
                 }
+    }
+
+    fun checkForJPApplication(mWorkerId: String) = viewModelScope.launch {
+        val model = getApplicationFromServer(mWorkerId)
+        if (model == null) {
+            repository.db.collection("JP_Applications").document().set(JpApplication(JPId = mWorkerId, gigerId = repository.getUID())).addOnCompleteListener {
+                if (it.isSuccessful) {
+                    observableApplicationStatus.value = true
+                }
+            }
+        } else {
+            repository.db.collection("JP_Applications").document(model.id).set(model).addOnCompleteListener {
+                if (it.isSuccessful) {
+                    observableApplicationStatus.value = true
+                }
+            }
+        }
+
+
+    }
+
+
+    fun updateDraftJpApplication(mWorkOrderID: String, draft: List<Dependency>) = viewModelScope.launch {
+
+
+        val model = getJPApplication(mWorkOrderID)
+
+
+//        model.draft = draft
+//        if (model.id.isEmpty()) {
+//            repository.db.collection("JP_Applications").document().set(model).addOnCompleteListener {
+//                if (it.isSuccessful) {
+//                    observableJpApplication.value = model
+//                }
+//            }
+//        } else {
+//            repository.db.collection("JP_Applications").document(model.id).set(model).addOnCompleteListener {
+//                if (it.isSuccessful) {
+//                    observableJpApplication.value = model
+//                }
+//            }
+//        }
+
+
     }
 
     fun apply(mWorkOrderID: String, draft: MutableList<JpDraft>) = viewModelScope.launch {

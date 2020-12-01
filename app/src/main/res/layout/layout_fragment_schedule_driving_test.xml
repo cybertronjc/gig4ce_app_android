@@ -50,7 +50,7 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tb_schedule_test">
@@ -246,7 +246,7 @@ will apply auto to the fields
                 android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/verify_otp_button" />
+                app:layout_constraintTop_toBottomOf="@+id/verify_otp_button_schedule" />
 
             <TextView
                 android:id="@+id/verify_otp_button_schedule"

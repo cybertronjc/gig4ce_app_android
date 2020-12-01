@@ -96,7 +96,7 @@ class ClientActivationFragment : BaseFragment() {
         viewModel.observableWorkOrder.observe(viewLifecycleOwner, Observer {
             if (it.info == null) return@Observer
             tv_role_client_activation.text = it?.work_order_title;
-            it?.locations?.map { item -> item.location }?.let { locations ->
+            it?.locationList?.map { item -> item.location }?.let { locations ->
                 adapterPreferredLocation?.addData(locations)
             }
             tv_earning_client_activation.text = it?.payoutNote

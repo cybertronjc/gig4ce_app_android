@@ -12,9 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
-import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
-import com.gigforce.app.modules.client_activation.models.JpDraft
 import com.gigforce.app.modules.photocrop.PhotoCrop
 import com.gigforce.app.utils.StringConstants
 import io.reactivex.Observable
@@ -61,8 +59,8 @@ class ApplicationClientActivationFragment : BaseFragment(),
         initObservers()
         initClicks()
 
-
     }
+
 
     private fun checkForBackPress() {
 
@@ -82,12 +80,12 @@ class ApplicationClientActivationFragment : BaseFragment(),
 
         tv_action_application_client_activation.setOnClickListener {
             viewModel.redirectToNextStep = false
-            viewModel.apply(mWordOrderID, adapter.items.map { dependency ->
-
-                JpDraft(dependency.isDone, dependency.title
-                        ?: "", dependency.feature
-                        ?: "")
-            }.toMutableList())
+//            viewModel.apply(mWordOrderID, adapter.items.map { dependency ->
+//
+//                JpDraft(dependency.isDone, dependency.title
+//                        ?: "", dependency.feature
+//                        ?: "")
+//            }.toMutableList())
 
             pb_application_client_activation.visible()
 
@@ -97,109 +95,125 @@ class ApplicationClientActivationFragment : BaseFragment(),
     }
 
     private fun initObservers() {
-
-
-        viewModel.observableError.observe(viewLifecycleOwner, Observer {
-
-            pb_application_client_activation.gone()
-            showToast(it ?: "")
-        })
-        viewModel.observableApplicationStatus.observe(viewLifecycleOwner, Observer {
-            pb_application_client_activation.gone()
-            navigate(R.id.fragment_gig_activation, bundleOf(
-                    StringConstants.NEXT_DEP.value to mNextDep,
-                    StringConstants.WORK_ORDER_ID.value to mWordOrderID
-
-            ))
-        })
-
-        viewModel.observableWorkOrderDependency.observe(viewLifecycleOwner, Observer {
-            h_pb_application_frag.max = it?.dependency?.size!!
-            tv_thanks_application.text = it?.title
-            tv_completion_application.text = it?.subTitle
-            mNextDep = it.nextDependency;
-
-            adapter.addData(it?.dependency!!);
-            viewModel.userProfileData.observe(viewLifecycleOwner, Observer { profileData ->
-
-                h_pb_application_frag.progress = 0;
-                tv_steps_pending_application_value.text =
-                        "0/" + it?.dependency?.size!!
-                profileAvatarName = profileData?.profileAvatarName;
-                viewModel.profileID = profileData?.id ?: ""
-                adapter.setCallbacks(this)
-                if (profileData?.profileAvatarName?.isNotEmpty() == true && profileData.profileAvatarName != "avatar.jpg") {
-                    adapter.setImageDrawable(
-                            "profile_pic", resources.getDrawable(R.drawable.ic_applied), true)
-                } else {
-                    adapter.setImageDrawable(
-                            "profile_pic", resources.getDrawable(R.drawable.ic_status_pending), false)
+        viewModel.observableJpApplication.observe(viewLifecycleOwner, Observer { jpApplication ->
+            run {
+                if (jpApplication.draft.isNullOrEmpty()) {
+//                    viewModel.observableWorkOrderDependency.observe(viewLifecycleOwner, Observer {
+//                        viewModel.updateDraftJpApplication(mWordOrderID, it.dependency)
+//                    })
+//                    viewModel.apply()
                 }
-                if (!profileData?.aboutMe.isNullOrEmpty()) {
-                    adapter.setImageDrawable(
-                            "about_me", resources.getDrawable(
-                            R.drawable.ic_applied
-                    ), true)
-                } else {
-                    adapter.setImageDrawable(
-                            "about_me", resources.getDrawable(R.drawable.ic_status_pending), false)
 
-                }
-                viewModel.observableVerification.observe(
-                        viewLifecycleOwner,
-                        Observer { verificationData ->
-                            run {
-                                if (verificationData?.driving_license != null) {
+            }
 
-                                    adapter.setImageDrawable(
-                                            "driving_licence", resources.getDrawable(
-                                            R.drawable.ic_applied
-                                    ), true)
-                                } else {
-                                    adapter.setImageDrawable(
-                                            "driving_licence", resources.getDrawable(
-                                            R.drawable.ic_status_pending
-                                    ), false)
-
-                                }
-
-                            }
-
-                            viewModel.observableJpApplication.observe(viewLifecycleOwner, Observer { data ->
-                                if (data == null) return@Observer
-                                if (!data.questionnaireSubmission.isNullOrEmpty()) {
-                                    adapter.setImageDrawable(
-                                            "questionnary", resources.getDrawable(
-                                            R.drawable.ic_applied
-                                    ), true)
-                                }
-                                adapter.setImageDrawable(
-                                        "learning", resources.getDrawable(
-                                        R.drawable.ic_status_pending), true
-                                )
-                                checkForRedirection()
-                                checkAndUpdateUI(data.draft.size)
-
-                            })
-                            viewModel.getApplication(mWordOrderID)
-
-                        })
-
-
-                adapter.setImageDrawable(
-                        "questionnary", resources.getDrawable(
-                        R.drawable.ic_status_pending
-                ), false)
-
-                viewModel.getVerification()
-
-
-            })
-            viewModel.getProfileData()
 
         })
+        viewModel.checkForJPApplication(mWordOrderID)
 
-        viewModel.getWorkOrderDependency(workOrderId = mWordOrderID)
+
+//        viewModel.observableError.observe(viewLifecycleOwner, Observer {
+//
+//            pb_application_client_activation.gone()
+//            showToast(it ?: "")
+//        })
+//        viewModel.observableApplicationStatus.observe(viewLifecycleOwner, Observer {
+//            pb_application_client_activation.gone()
+//            navigate(R.id.fragment_gig_activation, bundleOf(
+//                    StringConstants.NEXT_DEP.value to mNextDep,
+//                    StringConstants.WORK_ORDER_ID.value to mWordOrderID
+//
+//            ))
+//        })
+//
+//        viewModel.getApplication()
+//
+//        viewModel.observableWorkOrderDependency.observe(viewLifecycleOwner, Observer {
+//            h_pb_application_frag.max = it?.dependency?.size!!
+//            tv_thanks_application.text = it?.title
+//            tv_completion_application.text = it?.subTitle
+//            mNextDep = it.nextDependency;
+//
+//            adapter.addData(it?.dependency!!);
+//            viewModel.userProfileData.observe(viewLifecycleOwner, Observer { profileData ->
+//
+//                h_pb_application_frag.progress = 0;
+//                tv_steps_pending_application_value.text =
+//                        "0/" + it?.dependency?.size!!
+//                profileAvatarName = profileData?.profileAvatarName;
+//                viewModel.profileID = profileData?.id ?: ""
+//                adapter.setCallbacks(this)
+//                if (profileData?.profileAvatarName?.isNotEmpty() == true && profileData.profileAvatarName != "avatar.jpg") {
+//                    adapter.setImageDrawable(
+//                            "profile_pic", resources.getDrawable(R.drawable.ic_applied), true)
+//                } else {
+//                    adapter.setImageDrawable(
+//                            "profile_pic", resources.getDrawable(R.drawable.ic_status_pending), false)
+//                }
+//                if (!profileData?.aboutMe.isNullOrEmpty()) {
+//                    adapter.setImageDrawable(
+//                            "about_me", resources.getDrawable(
+//                            R.drawable.ic_applied
+//                    ), true)
+//                } else {
+//                    adapter.setImageDrawable(
+//                            "about_me", resources.getDrawable(R.drawable.ic_status_pending), false)
+//
+//                }
+//                viewModel.observableVerification.observe(
+//                        viewLifecycleOwner,
+//                        Observer { verificationData ->
+//                            run {
+//                                if (verificationData?.driving_license != null) {
+//
+//                                    adapter.setImageDrawable(
+//                                            "driving_licence", resources.getDrawable(
+//                                            R.drawable.ic_applied
+//                                    ), true)
+//                                } else {
+//                                    adapter.setImageDrawable(
+//                                            "driving_licence", resources.getDrawable(
+//                                            R.drawable.ic_status_pending
+//                                    ), false)
+//
+//                                }
+//
+//                            }
+//
+//                            viewModel.observableJpApplication.observe(viewLifecycleOwner, Observer { data ->
+//                                if (data == null) return@Observer
+//                                if (!data.questionnaireSubmission.isNullOrEmpty()) {
+//                                    adapter.setImageDrawable(
+//                                            "questionnary", resources.getDrawable(
+//                                            R.drawable.ic_applied
+//                                    ), true)
+//                                }
+//                                adapter.setImageDrawable(
+//                                        "learning", resources.getDrawable(
+//                                        R.drawable.ic_status_pending), true
+//                                )
+//                                checkForRedirection()
+//                                checkAndUpdateUI(data.draft.size)
+//
+//                            })
+//                            viewModel.getApplication(mWordOrderID)
+//
+//                        })
+//
+//
+//                adapter.setImageDrawable(
+//                        "questionnary", resources.getDrawable(
+//                        R.drawable.ic_status_pending
+//                ), false)
+//
+//                viewModel.getVerification()
+//
+//
+//            })
+//            viewModel.getProfileData()
+//
+//        })
+//
+//        viewModel.getWorkOrderDependency(workOrderId = mWordOrderID)
 
 
     }

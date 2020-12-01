@@ -956,9 +956,9 @@ class LandingScreenFragment : BaseFragment() {
     private fun initializeClientActivation() {
         landingScreenViewModel.observerWorkOrder.observe(viewLifecycleOwner, Observer { workOrder ->
             run {
-                showGlideImage(workOrder?.work_order_icon ?: "", iv_client_activation)
-                tv_client_activation.text = workOrder?.work_order_title
-                tv_sub_client_activation.text = workOrder?.profile_name
+                showGlideImage(workOrder?.coverImg ?: "", iv_client_activation)
+                tv_client_activation.text = workOrder?.businessName
+                tv_sub_client_activation.text = workOrder?.title
 
                 cv_client_activation.setOnClickListener {
                     if (AppConstants.UNLOCK_FEATURE) {
