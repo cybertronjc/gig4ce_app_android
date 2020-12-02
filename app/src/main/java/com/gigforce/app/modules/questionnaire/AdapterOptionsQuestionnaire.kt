@@ -127,8 +127,8 @@ class AdapterOptionsQuestionnaire : RecyclerView.Adapter<RecyclerView.ViewHolder
 
                     val dpd = DatePickerDialog(holder.itemView.context, { view, year, monthOfYear, dayOfMonth ->
                         val calendar = Calendar.getInstance()
-                        calendar[year, month] = day
-                        val dateFormat: DateFormat = SimpleDateFormat("dd-mm-yyyy")
+                        calendar[year, monthOfYear] = dayOfMonth
+                        val dateFormat: DateFormat = SimpleDateFormat("dd-MM-yyyy")
                         val dateString: String = dateFormat.format(calendar.time)
                         holder.itemView.tv_date_value.text = dateString
                         callbacks.onClick(
