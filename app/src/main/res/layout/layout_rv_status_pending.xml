@@ -16,19 +16,38 @@
         android:layout_marginTop="@dimen/size_16"
         android:layout_marginBottom="@dimen/size_16" />
 
-    <TextView
-        android:id="@+id/tv_status_application"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_marginStart="@dimen/size_18"
         android:layout_toStartOf="@+id/iv_next_screen_application"
         android:layout_toEndOf="@+id/iv_status_application"
-        android:fontFamily="@font/lato"
-        android:textColor="@color/black"
-        android:textSize="14sp"
-        android:textStyle="normal"
-        tools:text="Profile Photo" />
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_status_application"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/lato"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            android:textStyle="normal"
+            tools:text="Profile Photo" />
+
+        <TextView
+            android:id="@+id/tv_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/size_6"
+            android:fontFamily="@font/lato"
+            android:textColor="#f7b500"
+            android:textSize="12sp"
+            android:textStyle="normal"
+            android:visibility="gone"
+            tools:text="Slot booked " />
+    </LinearLayout>
+
 
     <ImageView
         android:id="@+id/iv_next_screen_application"

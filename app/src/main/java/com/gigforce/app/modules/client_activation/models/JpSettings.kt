@@ -2,7 +2,7 @@ package com.gigforce.app.modules.client_activation.models
 
 import com.gigforce.app.modules.landingscreen.models.Dependency
 
-data class WorkOrderDependency(
+data class JpSettings(
     var requiredFeatures: List<Dependency>? = null,
     var coverImg: String? = null,
     var subTitle: String? = null,

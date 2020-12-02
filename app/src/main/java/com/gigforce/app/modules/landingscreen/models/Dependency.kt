@@ -7,8 +7,13 @@ data class Dependency(
     var docType: String = "",
     var type: String? = null,
     var title: String? = null,
-    @JvmField var isDone: Boolean = false,
-    @get:Exclude var drawable: Drawable? = null
+    var status: String = "",
+    @JvmField var isSlotBooked: Boolean = false,
+
+    @JvmField
+    var isDone: Boolean = false,
+    @get:Exclude
+    var drawable: Drawable? = null
 
 ) {
     override fun equals(other: Any?): Boolean {

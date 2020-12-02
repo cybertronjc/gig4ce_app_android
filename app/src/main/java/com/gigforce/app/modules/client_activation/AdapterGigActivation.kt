@@ -32,6 +32,9 @@ class AdapterGigActivation : RecyclerView.Adapter<AdapterGigActivation.ViewHolde
                 dependency.drawable
             }
         )
+        holder.itemView.tv_status.visibility =
+            if (!dependency.status.isNullOrEmpty()) View.VISIBLE else View.GONE
+        holder.itemView.tv_status.text = dependency.status
         holder.itemView.tv_status_application.text = dependency.title
         holder.itemView.divider_bottom.visibility =
             if (position == items.size - 1) View.GONE else View.VISIBLE
@@ -39,7 +42,8 @@ class AdapterGigActivation : RecyclerView.Adapter<AdapterGigActivation.ViewHolde
             if (holder.adapterPosition == -1) return@setOnClickListener
             callbacks?.onItemClick(
                 items[holder.adapterPosition].docType!!,
-                items[holder.adapterPosition].title!!
+                items[holder.adapterPosition].title!!,
+                dependency.isSlotBooked
             )
         }
 
@@ -66,7 +70,7 @@ class AdapterGigActivation : RecyclerView.Adapter<AdapterGigActivation.ViewHolde
     }
 
     interface AdapterApplicationClientActivationCallbacks {
-        fun onItemClick(feature: String, title: String);
+        fun onItemClick(feature: String, title: String, isSlotBooked: Boolean);
 
     }
 

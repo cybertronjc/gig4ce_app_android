@@ -20,7 +20,7 @@ class AdapterPartnerSchool : RecyclerView.Adapter<AdapterPartnerSchool.ViewHolde
         return ViewHolder(
                 LayoutInflater.from(parent.context)
                         .inflate(R.layout.layout_rv_partner_school_address, parent, false)
-        );
+        )
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {

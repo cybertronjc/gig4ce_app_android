@@ -11,6 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.SavedStateViewModelFactory
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
@@ -36,9 +37,9 @@ class ClientActivationFragment : BaseFragment() {
 
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         return inflateView(R.layout.layout_fragment_client_activation, inflater, container)
     }
@@ -47,10 +48,10 @@ class ClientActivationFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         getDataFromIntents(savedInstanceState)
         viewModel =
-                ViewModelProvider(
-                        this,
-                        SavedStateViewModelFactory(requireActivity().application, this)
-                ).get(ClientActivationViewmodel::class.java)
+            ViewModelProvider(
+                this,
+                SavedStateViewModelFactory(requireActivity().application, this)
+            ).get(ClientActivationViewmodel::class.java)
         setupPreferredLocationRv()
         setupBulletPontsRv()
         initObservers()
@@ -63,12 +64,13 @@ class ClientActivationFragment : BaseFragment() {
 
         rv_bullet_points.adapter = adapterBulletPoints
         rv_bullet_points.layoutManager =
-                LinearLayoutManager(requireContext())
+            LinearLayoutManager(requireContext())
 
 
     }
 
     private fun initClicks() {
+
         iv_back_client_activation.setOnClickListener {
             onBackPressed()
         }
@@ -95,7 +97,11 @@ class ClientActivationFragment : BaseFragment() {
         })
         viewModel.observableWorkOrder.observe(viewLifecycleOwner, Observer {
             if (it.info == null) return@Observer
-            tv_role_client_activation.text = it?.work_order_title;
+
+            Glide.with(this).load(it.coverImg).placeholder(
+                com.gigforce.app.utils.getCircularProgressDrawable(requireContext())
+            ).into(iv_main_client_activation)
+            tv_role_client_activation.text = it?.title ?: "";
             it?.locationList?.map { item -> item.location }?.let { locations ->
                 adapterPreferredLocation?.addData(locations)
             }
@@ -107,9 +113,9 @@ class ClientActivationFragment : BaseFragment() {
                 viewRoleDesc.tv_what_value_client_activation.text = element.answer
                 if (!element.icon.isNullOrEmpty()) {
                     GlideApp.with(requireContext())
-                            .load(element.icon)
-                            .placeholder(getCircularProgressDrawable())
-                            .into(viewRoleDesc.iv_what)
+                        .load(element.icon)
+                        .placeholder(getCircularProgressDrawable())
+                        .into(viewRoleDesc.iv_what)
 
                 } else {
                     viewRoleDesc.iv_what.setImageResource(R.drawable.ic_play_gradient)
@@ -124,23 +130,25 @@ class ClientActivationFragment : BaseFragment() {
 //            if (!(it?.requiredLessons?.lessons.isNullOrEmpty())) {
             learning_cl.visible()
             textView120.text = it?.requiredLessons?.title
-            initializeLearningModule(it?.requiredLessons?.lessons!!)
+            initializeLearningModule(it?.requiredLessons?.lessons ?: listOf())
 //            }
         })
 
         viewModel.observableJpApplication.observe(viewLifecycleOwner, Observer {
             if (it == null || it.stepDone == 1) {
                 navigate(
-                        R.id.fragment_application_client_activation, bundleOf(
+                    R.id.fragment_application_client_activation, bundleOf(
                         StringConstants.WORK_ORDER_ID.value to viewModel.observableWorkOrder.value?.profileId
-                ))
+                    )
+                )
                 viewModel.observableJpApplication.removeObservers(viewLifecycleOwner)
             } else if (it.stepDone == 2) {
                 navigate(
-                        R.id.fragment_gig_activation, bundleOf(
-                        StringConstants.WORK_ORDER_ID.value to  viewModel.observableWorkOrder.value?.profileId,
+                    R.id.fragment_gig_activation, bundleOf(
+                        StringConstants.WORK_ORDER_ID.value to viewModel.observableWorkOrder.value?.profileId,
                         StringConstants.NEXT_DEP.value to viewModel.observableWorkOrder.value?.nextDependency
-                ))
+                    )
+                )
                 viewModel.observableJpApplication.removeObservers(viewLifecycleOwner)
 
             }
@@ -154,12 +162,12 @@ class ClientActivationFragment : BaseFragment() {
     private fun setupPreferredLocationRv() {
         rv_preferred_locations_client_activation.adapter = adapterPreferredLocation
         rv_preferred_locations_client_activation.layoutManager =
-                LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         rv_preferred_locations_client_activation.addItemDecoration(
-                HorizontaltemDecoration(
-                        requireContext(),
-                        R.dimen.size_11
-                )
+            HorizontaltemDecoration(
+                requireContext(),
+                R.dimen.size_11
+            )
         )
 
     }
@@ -336,66 +344,66 @@ class ClientActivationFragment : BaseFragment() {
             // model will change when integrated with DB
 
             val recyclerGenericAdapter: RecyclerGenericAdapter<LessonModel> =
-                    RecyclerGenericAdapter<LessonModel>(
-                            activity?.applicationContext,
-                            PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
+                RecyclerGenericAdapter<LessonModel>(
+                    activity?.applicationContext,
+                    PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
 //                        navigate(R.id.mainLearningFragment)
-                            },
-                            RecyclerGenericAdapter.ItemInterface<LessonModel?> { obj, viewHolder, position ->
-                                var view = getView(viewHolder, R.id.card_view)
-                                val lp = view.layoutParams
-                                lp.height = lp.height
-                                lp.width = itemWidth
-                                view.layoutParams = lp
+                    },
+                    RecyclerGenericAdapter.ItemInterface<LessonModel?> { obj, viewHolder, position ->
+                        var view = getView(viewHolder, R.id.card_view)
+                        val lp = view.layoutParams
+                        lp.height = lp.height
+                        lp.width = itemWidth
+                        view.layoutParams = lp
 
-                                var title = getTextView(viewHolder, R.id.title_)
-                                title.text = obj?.name
+                        var title = getTextView(viewHolder, R.id.title_)
+                        title.text = obj?.name
 
-                                var subtitle = getTextView(viewHolder, R.id.title)
-                                subtitle.text = obj?.description
+                        var subtitle = getTextView(viewHolder, R.id.title)
+                        subtitle.text = obj?.description
 //
-                                var comImg = getImageView(viewHolder, R.id.completed_iv)
-                                comImg.isVisible = obj?.completed ?: false
+                        var comImg = getImageView(viewHolder, R.id.completed_iv)
+                        comImg.isVisible = obj?.completed ?: false
 
-                                var img = getImageView(viewHolder, R.id.learning_img)
+                        var img = getImageView(viewHolder, R.id.learning_img)
 
-                                if (!obj!!.coverPicture.isNullOrBlank()) {
-                                    if (obj!!.coverPicture!!.startsWith("http", true)) {
+                        if (!obj!!.coverPicture.isNullOrBlank()) {
+                            if (obj!!.coverPicture!!.startsWith("http", true)) {
+
+                                GlideApp.with(requireContext())
+                                    .load(obj!!.coverPicture!!)
+                                    .placeholder(getCircularProgressDrawable())
+                                    .error(R.drawable.ic_learning_default_back)
+                                    .into(img)
+                            } else {
+                                FirebaseStorage.getInstance()
+                                    .getReference(LearningConstants.LEARNING_IMAGES_FIREBASE_FOLDER)
+                                    .child(obj!!.coverPicture!!)
+                                    .downloadUrl
+                                    .addOnSuccessListener { fileUri ->
 
                                         GlideApp.with(requireContext())
-                                                .load(obj!!.coverPicture!!)
-                                                .placeholder(getCircularProgressDrawable())
-                                                .error(R.drawable.ic_learning_default_back)
-                                                .into(img)
-                                    } else {
-                                        FirebaseStorage.getInstance()
-                                                .getReference(LearningConstants.LEARNING_IMAGES_FIREBASE_FOLDER)
-                                                .child(obj!!.coverPicture!!)
-                                                .downloadUrl
-                                                .addOnSuccessListener { fileUri ->
-
-                                                    GlideApp.with(requireContext())
-                                                            .load(fileUri)
-                                                            .placeholder(getCircularProgressDrawable())
-                                                            .error(R.drawable.ic_learning_default_back)
-                                                            .into(img)
-                                                }
-                                    }
-                                } else {
-
-                                    GlideApp.with(requireContext())
-                                            .load(R.drawable.ic_learning_default_back)
+                                            .load(fileUri)
+                                            .placeholder(getCircularProgressDrawable())
+                                            .error(R.drawable.ic_learning_default_back)
                                             .into(img)
-                                }
+                                    }
+                            }
+                        } else {
 
-                                //img.setImageResource(obj?.imgIcon!!)
-                            })!!
+                            GlideApp.with(requireContext())
+                                .load(R.drawable.ic_learning_default_back)
+                                .into(img)
+                        }
+
+                        //img.setImageResource(obj?.imgIcon!!)
+                    })!!
             recyclerGenericAdapter.setList(content)
             recyclerGenericAdapter.setLayout(R.layout.learning_bs_item)
             learning_rv.layoutManager = LinearLayoutManager(
-                    activity?.applicationContext,
-                    LinearLayoutManager.HORIZONTAL,
-                    false
+                activity?.applicationContext,
+                LinearLayoutManager.HORIZONTAL,
+                false
             )
             learning_rv.adapter = recyclerGenericAdapter
 

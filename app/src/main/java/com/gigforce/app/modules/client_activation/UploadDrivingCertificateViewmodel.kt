@@ -86,6 +86,7 @@ class UploadDrivingCertificateViewmodel : ViewModel() {
                             jpApplication.process.forEach { draft ->
                                 if (draft.title == title) {
                                     draft.isDone = true
+
                                 }
                             }
                             repository.db.collection("JP_Applications")

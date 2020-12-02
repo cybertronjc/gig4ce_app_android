@@ -4,7 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gigforce.app.modules.client_activation.models.JpApplication
-import com.gigforce.app.modules.client_activation.models.WorkOrderDependency
+import com.gigforce.app.modules.client_activation.models.JpSettings
 import com.gigforce.app.modules.gigerVerfication.VerificationBaseModel
 import com.gigforce.app.modules.landingscreen.models.Dependency
 import com.gigforce.app.modules.profile.models.ProfileData
@@ -19,10 +19,10 @@ class ApplicationClientActivationViewModel : ViewModel() {
 
     var redirectToNextStep: Boolean = false
 
-    private val _observableWorkOrderDependency: SingleLiveEvent<WorkOrderDependency> by lazy {
-        SingleLiveEvent<WorkOrderDependency>();
+    private val _observableWorkOrderDependency: SingleLiveEvent<JpSettings> by lazy {
+        SingleLiveEvent<JpSettings>();
     }
-    val observableWorkOrderDependency: SingleLiveEvent<WorkOrderDependency> get() = _observableWorkOrderDependency
+    val observableWorkOrderDependency: SingleLiveEvent<JpSettings> get() = _observableWorkOrderDependency
 
     private val _observableError: SingleLiveEvent<String> by lazy {
         SingleLiveEvent<String>();
@@ -49,14 +49,14 @@ class ApplicationClientActivationViewModel : ViewModel() {
             observableWorkOrderDependency.value = item
     }
 
-    suspend fun getJpSettings(workOrderID: String): WorkOrderDependency? {
+    suspend fun getJpSettings(workOrderID: String): JpSettings? {
 
         val items = repository.db.collection("JP_Settings").whereEqualTo("type", "dependency")
             .whereEqualTo("jobProfileId", workOrderID).get().await()
         if (items.documents.isNullOrEmpty()) {
             return null
         }
-        return items.toObjects(WorkOrderDependency::class.java).first()
+        return items.toObjects(JpSettings::class.java).first()
 
     }
 

@@ -19,7 +19,6 @@ import io.reactivex.Observable
 import kotlinx.android.synthetic.main.layout_fragment_activation_gig.*
 
 class GigActivationFragment : BaseFragment(),
-    AdapterApplicationClientActivation.AdapterApplicationClientActivationCallbacks,
     AdapterGigActivation.AdapterApplicationClientActivationCallbacks {
     private lateinit var viewModel: GigActivationViewModel
     private lateinit var mNextDep: String
@@ -153,11 +152,11 @@ class GigActivationFragment : BaseFragment(),
 
     }
 
-    override fun onItemClick(feature: String, title: String) {
+    override fun onItemClick(feature: String, title: String, isSlotBooked: Boolean) {
         when (title) {
             "Driving Test Certificate" ->
                 navigate(
-                    if (viewModel.observableJpApplication.value?.drivingCert != null) R.id.fragment_doc_sub else R.id.fragment_upload_cert,
+                    if (isSlotBooked) R.id.fragment_doc_sub else R.id.fragment_upload_cert,
                     bundleOf(
                         StringConstants.WORK_ORDER_ID.value to mWordOrderID,
                         StringConstants.TITLE.value to title,
@@ -166,4 +165,6 @@ class GigActivationFragment : BaseFragment(),
                 )
         }
     }
+
+ 
 }

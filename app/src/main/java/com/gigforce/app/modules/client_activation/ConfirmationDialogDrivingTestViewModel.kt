@@ -81,7 +81,9 @@ class ConfirmationDialogDrivingTestViewModel : ViewModel() {
                                 items.toObjects(JpApplication::class.java)[0]
                             jpApplication.process.forEach { draft ->
                                 if (draft.title == title) {
-                                    draft.isDone = true
+                                    draft.isDone = false
+                                    draft.isSlotBooked = true
+                                    draft.status = "Slot Booked"
                                 }
                             }
                             repository.db.collection("JP_Applications")
@@ -117,7 +119,10 @@ class ConfirmationDialogDrivingTestViewModel : ViewModel() {
                             items.toObjects(JpApplication::class.java)[0]
                         jpApplication.process.forEach { draft ->
                             if (draft.title == title) {
-                                draft.isDone = true
+                                draft.isDone = false
+                                draft.isSlotBooked = true
+                                draft.status = "Slot Booked"
+
                             }
                         }
                         repository.db.collection("JP_Applications")
