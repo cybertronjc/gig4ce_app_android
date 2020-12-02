@@ -21,43 +21,54 @@ class AdapterQuestionnaire : RecyclerView.Adapter<AdapterQuestionnaire.ViewHolde
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.layout_rv_questionnaire_cards, parent, false))
+        return ViewHolder(
+            LayoutInflater.from(parent.context)
+                .inflate(R.layout.layout_rv_questionnaire_cards, parent, false)
+        )
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val question = items[position]
         holder.itemView.tv_question_no_questionnaire.text =
-                "${holder.itemView.resources.getString(R.string.ques)} ${position + 1}/${items?.size} :"
+            "${holder.itemView.resources.getString(R.string.ques)} ${position + 1}/${items?.size} :"
         holder.itemView.tv_question_questionnaire.text = question.question
         if (question.url.isNotEmpty()) {
             holder.itemView.iv_hint_questionnaire.visible()
-            Glide.with(holder.itemView).load(question.url).placeholder(getCircularProgressDrawable(holder.itemView.context)).into(holder.itemView.iv_hint_questionnaire)
+            Glide.with(holder.itemView).load(question.url)
+                .placeholder(getCircularProgressDrawable(holder.itemView.context))
+                .into(holder.itemView.iv_hint_questionnaire)
         } else {
             holder.itemView.iv_hint_questionnaire.gone()
         }
         if (horizontalItemDecoration == null) {
             horizontalItemDecoration =
-                    ItemOffsetDecoration(
-                            holder.itemView.resources.getDimensionPixelSize(
-                                    R.dimen.size_16
-                            )
+                ItemOffsetDecoration(
+                    holder.itemView.resources.getDimensionPixelSize(
+                        R.dimen.size_16
                     )
+                )
         } else {
             holder.itemView.rv_answers_questionnaire.removeItemDecoration(
-                    horizontalItemDecoration!!
+                horizontalItemDecoration!!
             )
         }
         holder.itemView.rv_answers_questionnaire.addItemDecoration(
-                horizontalItemDecoration!!
+            horizontalItemDecoration!!
         )
         val adapterAnswers = AdapterOptionsQuestionnaire()
         holder.itemView.rv_answers_questionnaire.adapter = adapterAnswers
-        holder.itemView.rv_answers_questionnaire.layoutManager = LinearLayoutManager(holder.itemView.context)
+        holder.itemView.rv_answers_questionnaire.layoutManager =
+            LinearLayoutManager(holder.itemView.context)
         adapterAnswers.addData(question)
-        adapterAnswers.setCallbacks(object : AdapterOptionsQuestionnaire.AdapterOptionsQuestionnaireCallbacks {
-            override fun onClick(position: Int) {
+        adapterAnswers.setCallbacks(object :
+            AdapterOptionsQuestionnaire.AdapterOptionsQuestionnaireCallbacks {
+            override fun onClick(position: Int, dropDown: String?) {
                 if (holder.adapterPosition == -1) return
                 items[holder.adapterPosition].selectedAnswer = position
+                if (dropDown != null) {
+                    items[holder.adapterPosition].dropDownItem = dropDown
+
+                }
                 adapterAnswers.notifyDataSetChanged()
             }
 
