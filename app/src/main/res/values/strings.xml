@@ -1091,6 +1091,7 @@
     <string name="select_preferred_date">Select preferred Date</string>
     <string name="we_have_send_otp">We have send the OTP on</string>
     <string name="under_verification">Under Verification</string>
+    <string name="select_date">Select Date</string>
 
 
 </resources>
