@@ -75,7 +75,7 @@ class ClientActivationFragment : BaseFragment() {
         tv_mark_as_interest_role_details.setOnClickListener {
             pb_client_activation.visible()
 
-            viewModel.getApplication(mWordOrderID)
+            viewModel.getApplication(viewModel.observableWorkOrder.value?.profileId!!)
         }
     }
 
@@ -132,13 +132,13 @@ class ClientActivationFragment : BaseFragment() {
             if (it == null || it.stepDone == 1) {
                 navigate(
                         R.id.fragment_application_client_activation, bundleOf(
-                        StringConstants.WORK_ORDER_ID.value to mWordOrderID
+                        StringConstants.WORK_ORDER_ID.value to viewModel.observableWorkOrder.value?.profileId
                 ))
                 viewModel.observableJpApplication.removeObservers(viewLifecycleOwner)
             } else if (it.stepDone == 2) {
                 navigate(
                         R.id.fragment_gig_activation, bundleOf(
-                        StringConstants.WORK_ORDER_ID.value to mWordOrderID,
+                        StringConstants.WORK_ORDER_ID.value to  viewModel.observableWorkOrder.value?.profileId,
                         StringConstants.NEXT_DEP.value to viewModel.observableWorkOrder.value?.nextDependency
                 ))
                 viewModel.observableJpApplication.removeObservers(viewLifecycleOwner)

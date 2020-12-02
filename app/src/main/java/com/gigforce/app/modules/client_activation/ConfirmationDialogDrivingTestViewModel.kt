@@ -16,46 +16,122 @@ class ConfirmationDialogDrivingTestViewModel : ViewModel() {
     private val _observableJpApplication: MutableLiveData<Boolean> = MutableLiveData()
     val observableJpApplication: MutableLiveData<Boolean> = _observableJpApplication
 
-    fun apply(mWorkOrderID: String, partnerDetails: PartnerSchoolDetails, date: String, slot: String, drivingLicenseCheck: Boolean) = viewModelScope.launch {
+    fun apply(
+        mWorkOrderID: String,
+        partnerDetails: PartnerSchoolDetails,
+        date: String,
+        slot: String,
+        drivingLicenseCheck: Boolean, type: String, title: String
+    ) = viewModelScope.launch {
 
 
-        val model = getJPApplication(mWorkOrderID)
-        if (model.drivingCert == null) {
-            model.drivingCert = DrivingCertificate()
-        }
-        model.drivingCert?.partnerSchoolDetails = partnerDetails
-        model.drivingCert?.slotBooked = true
-        model.drivingCert?.selectedDate = date
-        model.drivingCert?.selectedTime = slot
-        model.drivingCert?.subDLChequeInSameCentre = drivingLicenseCheck;
-        model.drivingCert?.status = "Slot Booked"
+        setInJPApplication(
+            mWorkOrderID,
+            type,
+            title,
+            partnerDetails,
+            date,
+            slot,
+            drivingLicenseCheck
+        )
 
-        if (model.id.isEmpty()) {
-            repository.db.collection("JP_Applications").document().set(model).addOnCompleteListener {
-                if (it.isSuccessful) {
-                    observableJpApplication.value = true
+    }
+
+
+    suspend fun setInJPApplication(
+        workOrderID: String,
+        type: String,
+        title: String,
+        partnerDetails: PartnerSchoolDetails,
+        date: String,
+        slot: String,
+        drivingLicenseCheck: Boolean
+    ) {
+        val items = repository.getCollectionReference().whereEqualTo("jpid", workOrderID)
+            .whereEqualTo("gigerId", repository.getUID()).get()
+            .await()
+        val submissions = repository.getCollectionReference().document(items.documents[0].id)
+            .collection("submissions").whereEqualTo("stepId", workOrderID).whereEqualTo(
+                "title", title
+            ).whereEqualTo("type", type).get().await()
+
+
+        if (submissions?.documents.isNullOrEmpty()) {
+            repository.db.collection("JP_Applications")
+                .document(items.documents[0].id).collection("submissions")
+                .document().set(
+                    mapOf(
+                        "title" to title,
+                        "type" to type,
+                        "stepId" to workOrderID,
+                        "certificate" to DrivingCertificate(
+                            partnerSchoolDetails = partnerDetails,
+                            selectedDate = date,
+                            selectedTime = slot,
+                            subDLChequeInSameCentre = drivingLicenseCheck,
+                            slotBooked = true
+                        )
+
+                    )
+                ).addOnCompleteListener { complete ->
+                    run {
+
+                        if (complete.isSuccessful) {
+                            val jpApplication =
+                                items.toObjects(JpApplication::class.java)[0]
+                            jpApplication.process.forEach { draft ->
+                                if (draft.title == title) {
+                                    draft.isDone = true
+                                }
+                            }
+                            repository.db.collection("JP_Applications")
+                                .document(items.documents[0].id)
+                                .update("process", jpApplication.process)
+                                .addOnCompleteListener {
+                                    if (it.isSuccessful) {
+                                        observableJpApplication.value = true
+
+                                    }
+                                }
+                        }
+                    }
                 }
-            }
         } else {
-            repository.db.collection("JP_Applications").document(model.id).set(model).addOnCompleteListener {
-                if (it.isSuccessful) {
-                    observableJpApplication.value = true
+            repository.db.collection("JP_Applications")
+                .document(items?.documents!![0].id)
+                .collection("submissions")
+                .document(submissions?.documents?.get(0)?.id!!)
+                .update(
+                    "certificate", DrivingCertificate(
+                        partnerSchoolDetails = partnerDetails,
+                        selectedDate = date,
+                        selectedTime = slot,
+                        subDLChequeInSameCentre = drivingLicenseCheck,
+                        slotBooked = true
+
+                    )
+                )
+                .addOnCompleteListener { complete ->
+                    if (complete.isSuccessful) {
+                        val jpApplication =
+                            items.toObjects(JpApplication::class.java)[0]
+                        jpApplication.process.forEach { draft ->
+                            if (draft.title == title) {
+                                draft.isDone = true
+                            }
+                        }
+                        repository.db.collection("JP_Applications")
+                            .document(items.documents[0].id)
+                            .update("process", jpApplication.process)
+                            .addOnCompleteListener {
+                                if (it.isSuccessful) {
+                                    observableJpApplication.value = true
+                                }
+                            }
+                    }
                 }
-            }
         }
 
 
     }
-
-    suspend fun getJPApplication(workOrderID: String): JpApplication {
-        val items = repository.db.collection("JP_Applications").whereEqualTo("jpid", workOrderID).whereEqualTo("gigerId", repository.getUID()).get()
-                .await()
-        if (items.documents.isNullOrEmpty()) {
-            return JpApplication(JPId = workOrderID, gigerId = repository.getUID())
-        }
-        val toObject = items.toObjects(JpApplication::class.java).get(0)
-        toObject.id = items.documents[0].id
-        return toObject
-    }
-
 }

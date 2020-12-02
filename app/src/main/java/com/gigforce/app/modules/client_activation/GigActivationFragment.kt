@@ -13,15 +13,22 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
+import com.gigforce.app.modules.client_activation.models.JpApplication
 import com.gigforce.app.utils.StringConstants
 import kotlinx.android.synthetic.main.layout_fragment_activation_gig.*
 
-class GigActivationFragment : BaseFragment(), AdapterGigActivation.AdapterGigActivationCallbacks {
+class GigActivationFragment : BaseFragment(),
+    AdapterApplicationClientActivation.AdapterApplicationClientActivationCallbacks,
+    AdapterGigActivation.AdapterApplicationClientActivationCallbacks {
     private lateinit var viewModel: GigActivationViewModel
     private lateinit var mNextDep: String
     private lateinit var mWordOrderID: String
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflateView(R.layout.layout_fragment_activation_gig, inflater, container)
     }
 
@@ -29,10 +36,10 @@ class GigActivationFragment : BaseFragment(), AdapterGigActivation.AdapterGigAct
         super.onViewCreated(view, savedInstanceState)
         getDataFromIntents(savedInstanceState)
         viewModel =
-                ViewModelProvider(
-                        this,
-                        SavedStateViewModelFactory(requireActivity().application, this)
-                ).get(GigActivationViewModel::class.java)
+            ViewModelProvider(
+                this,
+                SavedStateViewModelFactory(requireActivity().application, this)
+            ).get(GigActivationViewModel::class.java)
         setupRecycler()
         initObservers()
         initClicks()
@@ -50,31 +57,46 @@ class GigActivationFragment : BaseFragment(), AdapterGigActivation.AdapterGigAct
         })
         viewModel.observableGigActivation.observe(viewLifecycleOwner, Observer { gigAcivation ->
             if (gigAcivation != null) {
-                Glide.with(this).load(gigAcivation.icon).placeholder(
-                        com.gigforce.app.utils.getCircularProgressDrawable(requireContext())
+                Glide.with(this).load(gigAcivation.coverImg).placeholder(
+                    com.gigforce.app.utils.getCircularProgressDrawable(requireContext())
                 ).into(iv_gig_activation)
                 tv_application_gig_activation.text = Html.fromHtml(gigAcivation.subTitle)
                 tv_title_toolbar.text = gigAcivation.title
-                tv_verification_gig_activation.text = gigAcivation.status
                 tv_complete_gig_activation.text = gigAcivation.instruction
-                adapter.addData(gigAcivation.dependency)
-                adapter.setCallbacks(this)
+                viewModel.updateDraftJpApplication(mWordOrderID, gigAcivation.requiredFeatures)
 
             }
         })
-        viewModel.getActivationData(mWordOrderID, mNextDep)
-        viewModel.observableJpApplication.observe(viewLifecycleOwner, Observer {
-            if (it?.drivingCert != null) {
-                if (it.drivingCert?.verified == true) {
-                    adapter.setImageDrawable("driving_certificate", R.drawable.ic_applied, true)
-                }
-                adapter.setStatus("driving_certificate", it.drivingCert?.status
-                        ?: "", if (it.drivingCert?.verified == true) R.color.black else R.color.yellow)
+
+        viewModel.observableInitApplication.observe(viewLifecycleOwner, Observer {
+            if (it == true) {
+                initApplication(viewModel.observableJpApplication.value!!)
             }
-
-
         })
-        viewModel.getApplication(mWordOrderID)
+        viewModel.getActivationData(mWordOrderID)
+    }
+
+
+    private fun initApplication(jpApplication: JpApplication) {
+        adapter.addData(jpApplication.process)
+        adapter.setCallbacks(this)
+        for (i in 0 until jpApplication.process.size) {
+            if (!jpApplication.process[i].isDone) {
+                adapter.setImageDrawable(
+                    jpApplication.process[i].type!!,
+                    resources.getDrawable(R.drawable.ic_status_pending),
+                    false
+                )
+//               viewModel.setData(jpApplication.draft[i].feature)
+            } else {
+                adapter.setImageDrawable(
+                    jpApplication.process[i].type!!,
+                    resources.getDrawable(R.drawable.ic_applied),
+                    true
+                )
+            }
+        }
+
     }
 
     private val adapter: AdapterGigActivation by lazy {
@@ -84,7 +106,7 @@ class GigActivationFragment : BaseFragment(), AdapterGigActivation.AdapterGigAct
     private fun setupRecycler() {
         rv_gig_activation.adapter = adapter
         rv_gig_activation.layoutManager =
-                LinearLayoutManager(requireContext())
+            LinearLayoutManager(requireContext())
 //        rv_status_pending.addItemDecoration(
 //            HorizontaltemDecoration(
 //                requireContext(),
@@ -108,17 +130,26 @@ class GigActivationFragment : BaseFragment(), AdapterGigActivation.AdapterGigAct
         }
     }
 
-    override fun onItemClick(feature: String) {
-        when (feature) {
-            "driving_certificate" ->
-                navigate(if (viewModel.observableJpApplication.value?.drivingCert != null) R.id.fragment_doc_sub else R.id.fragment_upload_cert, bundleOf(StringConstants.WORK_ORDER_ID.value to mWordOrderID))
-        }
-    }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString(StringConstants.WORK_ORDER_ID.value, mWordOrderID)
 
 
+
+    }
+
+    override fun onItemClick(feature: String, title: String) {
+        when (title) {
+            "Driving Test Certificate" ->
+                navigate(
+                    if (viewModel.observableJpApplication.value?.drivingCert != null) R.id.fragment_doc_sub else R.id.fragment_upload_cert,
+                    bundleOf(
+                        StringConstants.WORK_ORDER_ID.value to mWordOrderID,
+                        StringConstants.TITLE.value to title,
+                        StringConstants.TYPE.value to feature
+                    )
+                )
+        }
     }
 }

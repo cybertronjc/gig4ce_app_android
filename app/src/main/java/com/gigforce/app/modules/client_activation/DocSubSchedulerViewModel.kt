@@ -3,31 +3,40 @@ package com.gigforce.app.modules.client_activation
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.gigforce.app.modules.client_activation.models.JpApplication
+import com.gigforce.app.modules.client_activation.models.DrivingCertSubmission
+import com.gigforce.app.modules.client_activation.models.DrivingCertificate
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
 class DocSubSchedulerViewModel : ViewModel() {
     val repository: DocSubSchedulerRepository = DocSubSchedulerRepository()
-    private val _observableJpApplication: MutableLiveData<JpApplication> = MutableLiveData()
-    val observableJpApplication: MutableLiveData<JpApplication> = _observableJpApplication
+    private val _observableJpApplication: MutableLiveData<DrivingCertificate> = MutableLiveData()
+    val observableJpApplication: MutableLiveData<DrivingCertificate> = _observableJpApplication
 
 
-    fun getApplication(mWorkOrderID: String) = viewModelScope.launch {
-        val model = getJPApplication(mWorkOrderID)
+    fun getApplication(mWorkOrderID: String, type: String, title: String) = viewModelScope.launch {
+        val model = getJPApplication(mWorkOrderID, type, title)
         _observableJpApplication.value = model
 
     }
 
-    suspend fun getJPApplication(workOrderID: String): JpApplication? {
-        val items = repository.db.collection("JP_Applications").whereEqualTo("jpid", workOrderID).whereEqualTo("gigerId", repository.getUID()).get()
-                .await()
-        if (items.documents.isNullOrEmpty()) {
+    suspend fun getJPApplication(
+        workOrderID: String,
+        type: String,
+        title: String
+    ): DrivingCertificate? {
+        val items = repository.db.collection("JP_Applications").whereEqualTo("jpid", workOrderID)
+            .whereEqualTo("gigerId", repository.getUID()).get()
+            .await()
+        val submissions = repository.getCollectionReference().document(items.documents[0].id)
+            .collection("submissions").whereEqualTo("stepId", workOrderID).whereEqualTo(
+                "title", title
+            ).whereEqualTo("type", type).get().await()
+        if (submissions.documents.isNullOrEmpty()) {
             return null
         }
-        val toObject = items.toObjects(JpApplication::class.java).get(0)
-        toObject.id = items.documents[0].id
-        return toObject
+
+        return submissions.toObjects(DrivingCertSubmission::class.java)[0].certificate
     }
 
 }

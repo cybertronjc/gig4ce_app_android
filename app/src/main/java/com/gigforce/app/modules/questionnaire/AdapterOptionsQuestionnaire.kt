@@ -30,7 +30,7 @@ class AdapterOptionsQuestionnaire : RecyclerView.Adapter<RecyclerView.ViewHolder
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val option = item.options[position]
         holder.itemView.tv_answer_questionnaire.text = option.question
-        holder.itemView.tv_answer_questionnaire.setCompoundDrawablesWithIntrinsicBounds(if (option.is_answer) R.drawable.ic_thumbs_up else R.drawable.ic_thumbs_down, 0, 0, 0)
+        holder.itemView.tv_answer_questionnaire.setCompoundDrawablesWithIntrinsicBounds(if (option.isAnswer) R.drawable.ic_thumbs_up else R.drawable.ic_thumbs_down, 0, 0, 0)
         holder.itemView.setOnClickListener {
             if (holder.adapterPosition == -1) return@setOnClickListener
             callbacks.onClick(holder.adapterPosition)

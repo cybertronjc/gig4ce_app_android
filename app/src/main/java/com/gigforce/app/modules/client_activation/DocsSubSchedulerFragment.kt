@@ -20,19 +20,25 @@ import com.ncorti.slidetoact.SlideToActView
 import kotlinx.android.synthetic.main.fragment_docs_sub_scheduler.*
 
 
-class DocsSubSchedulerFragment : BaseFragment(), SelectPartnerSchoolBottomSheet.SelectPartnerBsCallbacks, TimeSlotsDialog.TimeSlotDialogCallbacks, ConfirmationDialogDrivingTest.ConfirmationDialogDrivingTestCallbacks, GigforceDatePickerDialog.GigforceDatePickerDialogCallbacks {
+class DocsSubSchedulerFragment : BaseFragment(),
+    SelectPartnerSchoolBottomSheet.SelectPartnerBsCallbacks,
+    TimeSlotsDialog.TimeSlotDialogCallbacks,
+    ConfirmationDialogDrivingTest.ConfirmationDialogDrivingTestCallbacks,
+    GigforceDatePickerDialog.GigforceDatePickerDialogCallbacks {
     private val viewModel: DocSubSchedulerViewModel by viewModels()
 
     private var dateString: String? = null
     private var monthModel: CalendarView.MonthModel? = null
     private var partnerAddress: PartnerSchoolDetails? = null
     private lateinit var mWordOrderID: String
+    private lateinit var mTitle: String
+    private lateinit var mType: String
     private var selectedTimeSlot: String? = null
 
 
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
 
         return inflateView(R.layout.fragment_docs_sub_scheduler, inflater, container)
@@ -42,9 +48,11 @@ class DocsSubSchedulerFragment : BaseFragment(), SelectPartnerSchoolBottomSheet.
         super.onViewCreated(view, savedInstanceState)
         getDataFromIntents(savedInstanceState)
         view7.setOnClickListener {
-            val newInstance = SelectPartnerSchoolBottomSheet.newInstance(bundleOf(
+            val newInstance = SelectPartnerSchoolBottomSheet.newInstance(
+                bundleOf(
                     StringConstants.WORK_ORDER_ID.value to mWordOrderID
-            ))
+                )
+            )
             newInstance.setCallbacks(this)
             newInstance.show(parentFragmentManager, SelectPartnerSchoolBottomSheet.javaClass.name)
         }
@@ -56,19 +64,22 @@ class DocsSubSchedulerFragment : BaseFragment(), SelectPartnerSchoolBottomSheet.
     private fun initObservers() {
 
         viewModel.observableJpApplication.observe(viewLifecycleOwner, Observer {
-            if (it.drivingCert?.slotBooked == true) {
-                val address = it.drivingCert?.partnerSchoolDetails
-                textView137.text = Html.fromHtml(address?.schoolName + "<br>" + address?.landmark + "<br>" + address?.city + "<br>"
-                        + address?.schoolTiming + "<br>" + address?.contact?.map { "<b><font color=\'#000000\'>" + it.name + "</font></b>" }?.reduce { a, o -> a + o }
-                )
-                textView143.text = it.drivingCert?.selectedTime
+            if (it == null) return@Observer
+            if (it.slotBooked) {
+                val address = it.partnerSchoolDetails
+                textView137.text =
+                    Html.fromHtml(address?.name + "<br>" + address?.landmark + "<br>" + address?.city + "<br>"
+                            + address?.timing + "<br>" + address?.contact?.map { "<b><font color=\'#000000\'>" + it.name + "</font></b>" }
+                        ?.reduce { a, o -> a + o }
+                    )
+                textView143.text = it.selectedTime
                 imageView36.gone()
-                textView139.text = it.drivingCert?.selectedDate
+                textView139.text = it.selectedDate
                 imageView36.gone()
-                slider_checkout.isLocked=false
+                slider_checkout.isLocked = false
             }
         })
-        viewModel.getApplication(mWordOrderID)
+        viewModel.getApplication(mWordOrderID, mType, mTitle)
     }
 
     private fun initClicks() {
@@ -79,19 +90,25 @@ class DocsSubSchedulerFragment : BaseFragment(), SelectPartnerSchoolBottomSheet.
             newInstance.show(parentFragmentManager, TimeSlotsDialog::class.java.name)
         }
         slider_checkout.onSlideCompleteListener =
-                object : SlideToActView.OnSlideCompleteListener {
+            object : SlideToActView.OnSlideCompleteListener {
 
-                    override fun onSlideComplete(view: SlideToActView) {
+                override fun onSlideComplete(view: SlideToActView) {
 
-                        navigate(R.id.fragment_schedule_test, bundleOf(StringConstants.WORK_ORDER_ID.value to mWordOrderID))
-                    }
+                    navigate(
+                        R.id.fragment_schedule_test,
+                        bundleOf(StringConstants.WORK_ORDER_ID.value to mWordOrderID)
+                    )
                 }
+            }
 
         view_date_picker.setOnClickListener {
             var gigforceDatePickerDialog = GigforceDatePickerDialog()
             gigforceDatePickerDialog
             gigforceDatePickerDialog.setCallbacks(this)
-            gigforceDatePickerDialog.show(parentFragmentManager, GigforceDatePickerDialog::class.java.name)
+            gigforceDatePickerDialog.show(
+                parentFragmentManager,
+                GigforceDatePickerDialog::class.java.name
+            )
         }
 
     }
@@ -109,24 +126,33 @@ class DocsSubSchedulerFragment : BaseFragment(), SelectPartnerSchoolBottomSheet.
     private fun getDataFromIntents(savedInstanceState: Bundle?) {
         savedInstanceState?.let {
             mWordOrderID = it.getString(StringConstants.WORK_ORDER_ID.value) ?: return@let
+            mType = it.getString(StringConstants.TYPE.value) ?: return@let
+            mTitle = it.getString(StringConstants.TITLE.value) ?: return@let
         }
+
         arguments?.let {
             mWordOrderID = it.getString(StringConstants.WORK_ORDER_ID.value) ?: return@let
+            mType = it.getString(StringConstants.TYPE.value) ?: return@let
+            mTitle = it.getString(StringConstants.TITLE.value) ?: return@let
         }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString(StringConstants.WORK_ORDER_ID.value, mWordOrderID)
+        outState.putString(StringConstants.TYPE.value, mType)
+        outState.putString(StringConstants.TITLE.value, mTitle)
 
 
     }
 
     override fun setPartnerAddress(address: PartnerSchoolDetails) {
         this.partnerAddress = address;
-        textView137.text = Html.fromHtml(address.schoolName + "<br>" + address.landmark + "<br>" + address.city + "<br>"
-                + address.schoolTiming + "<br>" + address.contact.map { "<b><font color=\'#000000\'>" + it.name + "</font></b>" }.reduce { a, o -> a + o }
-        )
+        textView137.text =
+            Html.fromHtml(address.name + "<br>" + address.landmark + "<br>" + address.city + "<br>"
+                    + address.timing + "<br>" + address.contact.map { "<b><font color=\'#000000\'>" + it.name + "</font></b>" }
+                .reduce { a, o -> a + o }
+            )
         imageView34.gone()
         iv_contact.visible()
         iv_location.visible()
@@ -156,17 +182,23 @@ class DocsSubSchedulerFragment : BaseFragment(), SelectPartnerSchoolBottomSheet.
     }
 
     private fun checkIfCompleteProcessComplete() {
-        slider_checkout.isLocked = !(dateString != null && partnerAddress != null && selectedTimeSlot != null)
+        slider_checkout.isLocked =
+            !(dateString != null && partnerAddress != null && selectedTimeSlot != null)
         if (!slider_checkout.isLocked) {
             val confirmationDialogDrivingTest = ConfirmationDialogDrivingTest()
             confirmationDialogDrivingTest.setCallbacks(this@DocsSubSchedulerFragment)
             confirmationDialogDrivingTest.arguments = bundleOf(
-                    StringConstants.SELECTED_PARTNER.value to partnerAddress,
-                    StringConstants.SELECTED_TIME_SLOT.value to selectedTimeSlot,
-                    StringConstants.SELECTED_DATE.value to dateString,
-                    StringConstants.WORK_ORDER_ID.value to mWordOrderID
+                StringConstants.SELECTED_PARTNER.value to partnerAddress,
+                StringConstants.SELECTED_TIME_SLOT.value to selectedTimeSlot,
+                StringConstants.SELECTED_DATE.value to dateString,
+                StringConstants.WORK_ORDER_ID.value to mWordOrderID,
+                StringConstants.TITLE.value to mTitle,
+                StringConstants.TYPE.value to mType
             )
-            confirmationDialogDrivingTest.show(parentFragmentManager, ConfirmationDialogDrivingTest::class.java.name)
+            confirmationDialogDrivingTest.show(
+                parentFragmentManager,
+                ConfirmationDialogDrivingTest::class.java.name
+            )
         }
     }
 

@@ -26,36 +26,107 @@ class UploadDrivingCertificateViewmodel : ViewModel() {
     val documentUploadState: SingleLiveEvent<Lse> get() = _documentUploadState
 
     fun uploadDLCer(
-            mWorkOrderID: String,
-            frontImagePath: Uri?
+        mWorkOrderID: String,
+        frontImagePath: Uri?, type: String, title: String
     ) = viewModelScope.launch {
 
         _documentUploadState.postValue(Lse.loading())
 
         try {
-            val model = getJPApplication(mWorkOrderID)
 
             val frontImageFileNameAtServer =
-                    uploadImage(frontImagePath!!)
+                uploadImage(frontImagePath!!)
 
 
-            model.drivingCert = DrivingCertificate(
+            setInJPApplication(
+                mWorkOrderID, DrivingCertificate(
                     verified = false,
                     frontImage = frontImageFileNameAtServer
 
+                ), type, title
             )
-            repository.getCollectionReference().document(model.id).set(model)
-            _documentUploadState.postValue(Lse.success())
         } catch (e: Exception) {
             _documentUploadState.postValue(Lse.error("Unable to save document."))
         }
     }
 
-    suspend fun getJPApplication(workOrderID: String): JpApplication {
-        val items = repository.getCollectionReference().whereEqualTo("jpid", workOrderID).whereEqualTo("gigerId", repository.getUID()).get()
-                .await()
+    suspend fun setInJPApplication(
+        workOrderID: String,
+        cert: DrivingCertificate,
+        type: String,
+        title: String
+    ): JpApplication {
+        val items = repository.getCollectionReference().whereEqualTo("jpid", workOrderID)
+            .whereEqualTo("gigerId", repository.getUID()).get()
+            .await()
         val toObject = items.toObjects(JpApplication::class.java).get(0)
-        toObject.id = items.documents[0].id
+        val submissions = repository.getCollectionReference().document(items.documents[0].id)
+            .collection("submissions").whereEqualTo("stepId", workOrderID).whereEqualTo(
+                "title", title
+            ).whereEqualTo("type", type).get().await()
+
+
+        if (submissions?.documents.isNullOrEmpty()) {
+            repository.db.collection("JP_Applications")
+                .document(items.documents[0].id).collection("submissions")
+                .document().set(
+                    mapOf(
+                        "title" to title,
+                        "type" to type,
+                        "stepId" to workOrderID,
+                        "certificate" to cert
+
+                    )
+                ).addOnCompleteListener { complete ->
+                    run {
+
+                        if (complete.isSuccessful) {
+                            val jpApplication =
+                                items.toObjects(JpApplication::class.java)[0]
+                            jpApplication.process.forEach { draft ->
+                                if (draft.title == title) {
+                                    draft.isDone = true
+                                }
+                            }
+                            repository.db.collection("JP_Applications")
+                                .document(items.documents[0].id)
+                                .update("process", jpApplication.process)
+                                .addOnCompleteListener {
+                                    if (it.isSuccessful) {
+                                        _documentUploadState.postValue(Lse.success())
+
+                                    }
+                                }
+                        }
+                    }
+                }
+        } else {
+            repository.db.collection("JP_Applications")
+                .document(items?.documents!![0].id)
+                .collection("submissions")
+                .document(submissions?.documents?.get(0)?.id!!)
+                .update("certificate", cert)
+                .addOnCompleteListener { complete ->
+                    if (complete.isSuccessful) {
+                        val jpApplication =
+                            items.toObjects(JpApplication::class.java)[0]
+                        jpApplication.process.forEach { draft ->
+                            if (draft.title == title) {
+                                draft.isDone = true
+                            }
+                        }
+                        repository.db.collection("JP_Applications")
+                            .document(items.documents[0].id)
+                            .update("process", jpApplication.process)
+                            .addOnCompleteListener {
+                                if (it.isSuccessful) {
+                                    _documentUploadState.postValue(Lse.success())
+                                }
+                            }
+                    }
+                }
+        }
+
         return toObject
     }
 
@@ -63,33 +134,33 @@ class UploadDrivingCertificateViewmodel : ViewModel() {
     private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance()
 
     private suspend fun uploadImage(image: Uri) =
-            suspendCoroutine<String> { cont ->
-                val fileNameAtServer = prepareUniqueImageName()
-                val filePathOnServer = firebaseStorage.reference
-                        .child("verification")
-                        .child(fileNameAtServer)
+        suspendCoroutine<String> { cont ->
+            val fileNameAtServer = prepareUniqueImageName()
+            val filePathOnServer = firebaseStorage.reference
+                .child("verification")
+                .child(fileNameAtServer)
 
-                filePathOnServer
-                        .putFile(image)
+            filePathOnServer
+                .putFile(image)
+                .addOnSuccessListener {
+                    filePathOnServer
+                        .downloadUrl
                         .addOnSuccessListener {
-                            filePathOnServer
-                                    .downloadUrl
-                                    .addOnSuccessListener {
-                                        cont.resume(it.toString())
+                            cont.resume(it.toString())
 
-                                    }.addOnFailureListener {
-                                        cont.resumeWithException(it)
-                                    }
-                        }
-                        .addOnFailureListener {
+                        }.addOnFailureListener {
                             cont.resumeWithException(it)
                         }
-            }
+                }
+                .addOnFailureListener {
+                    cont.resumeWithException(it)
+                }
+        }
 
     private fun prepareUniqueImageName(): String {
         val timeStamp = SimpleDateFormat(
-                "yyyyMMdd_HHmmss",
-                Locale.getDefault()
+            "yyyyMMdd_HHmmss",
+            Locale.getDefault()
         ).format(Date())
         return repository.getUID() + timeStamp + ".jpg"
     }

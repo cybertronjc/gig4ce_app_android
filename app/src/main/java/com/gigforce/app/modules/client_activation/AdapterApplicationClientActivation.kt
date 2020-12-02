@@ -11,7 +11,7 @@ import com.gigforce.app.utils.getCircularProgressDrawable
 import kotlinx.android.synthetic.main.layout_rv_status_pending.view.*
 
 class AdapterApplicationClientActivation :
-        RecyclerView.Adapter<AdapterApplicationClientActivation.ViewHolder>() {
+    RecyclerView.Adapter<AdapterApplicationClientActivation.ViewHolder>() {
     private var callbacks: AdapterApplicationClientActivationCallbacks? = null
     var items: List<Dependency> = arrayListOf()
 
@@ -19,26 +19,29 @@ class AdapterApplicationClientActivation :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
-                LayoutInflater.from(parent.context)
-                        .inflate(R.layout.layout_rv_status_pending, parent, false)
+            LayoutInflater.from(parent.context)
+                .inflate(R.layout.layout_rv_status_pending, parent, false)
         );
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val dependency = items[position]
         holder.itemView.iv_status_application.setImageDrawable(
-                if (dependency.drawable == null) getCircularProgressDrawable(
-                        holder.itemView.context
-                ) else {
-                    dependency.drawable
-                }
+            if (dependency.drawable == null) getCircularProgressDrawable(
+                holder.itemView.context
+            ) else {
+                dependency.drawable
+            }
         )
         holder.itemView.tv_status_application.text = dependency.title
         holder.itemView.divider_bottom.visibility =
-                if (position == items.size - 1) View.GONE else View.VISIBLE
+            if (position == items.size - 1) View.GONE else View.VISIBLE
         holder.itemView.setOnClickListener {
             if (holder.adapterPosition == -1) return@setOnClickListener
-            callbacks?.onItemClick(items[holder.adapterPosition].feature!!)
+            callbacks?.onItemClick(
+                items[holder.adapterPosition].type!!,
+                items[holder.adapterPosition].title!!
+            )
         }
 
     }
@@ -52,8 +55,8 @@ class AdapterApplicationClientActivation :
         notifyDataSetChanged()
     }
 
-    fun setImageDrawable(feature: String, drawable: Drawable,isDone:Boolean) {
-        val i = items.indexOf(Dependency(feature = feature))
+    fun setImageDrawable(feature: String, drawable: Drawable, isDone: Boolean) {
+        val i = items.indexOf(Dependency(type = feature))
         items[i].drawable = drawable
         items[i].isDone = isDone
         notifyItemChanged(i);
@@ -64,7 +67,7 @@ class AdapterApplicationClientActivation :
     }
 
     interface AdapterApplicationClientActivationCallbacks {
-        fun onItemClick(feature: String);
+        fun onItemClick(feature: String, title: String);
 
     }
 

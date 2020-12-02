@@ -1,17 +1,14 @@
 package com.gigforce.app.modules.client_activation
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gigforce.app.modules.client_activation.models.JpApplication
-import com.gigforce.app.modules.client_activation.models.JpDraft
 import com.gigforce.app.modules.client_activation.models.WorkOrderDependency
 import com.gigforce.app.modules.gigerVerfication.VerificationBaseModel
 import com.gigforce.app.modules.landingscreen.models.Dependency
 import com.gigforce.app.modules.profile.models.ProfileData
 import com.gigforce.app.utils.SingleLiveEvent
-import com.google.firebase.firestore.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
@@ -37,131 +34,126 @@ class ApplicationClientActivationViewModel : ViewModel() {
     }
     val observableApplicationStatus: SingleLiveEvent<Boolean> get() = _observableApplicationStatus
 
-
-    private val _observableVerification: SingleLiveEvent<VerificationBaseModel> by lazy {
-        SingleLiveEvent<VerificationBaseModel>();
+    private val _observableInitApplication: SingleLiveEvent<Boolean> by lazy {
+        SingleLiveEvent<Boolean>();
     }
-    val observableVerification: SingleLiveEvent<VerificationBaseModel> get() = _observableVerification
+    val observableInitApplication: SingleLiveEvent<Boolean> get() = _observableInitApplication
+
 
     private val _observableJpApplication: MutableLiveData<JpApplication> = MutableLiveData()
     val observableJpApplication: MutableLiveData<JpApplication> = _observableJpApplication
 
-    fun getWorkOrderDependency(workOrderId: String) {
-        var listener: ListenerRegistration? = null
-        listener = repository.getCollectionReference().whereEqualTo("type", "dependency")
-                .whereEqualTo("workOrderId", workOrderId).addSnapshotListener { success, error ->
-                    listener?.remove()
-                    if (error != null) {
-                        observableError.value = error.message
+    fun getWorkOrderDependency(workOrderId: String) = viewModelScope.launch {
+        val item = getJpSettings(workOrderId)
+        if (item != null)
+            observableWorkOrderDependency.value = item
+    }
 
-                    } else {
-                        if (!success?.documents.isNullOrEmpty()) {
-                            _observableWorkOrderDependency.value =
-                                    success?.toObjects(WorkOrderDependency::class.java)!![0]
-                        }
+    suspend fun getJpSettings(workOrderID: String): WorkOrderDependency? {
 
-                    }
+        val items = repository.db.collection("JP_Settings").whereEqualTo("type", "dependency")
+            .whereEqualTo("jobProfileId", workOrderID).get().await()
+        if (items.documents.isNullOrEmpty()) {
+            return null
+        }
+        return items.toObjects(WorkOrderDependency::class.java).first()
 
-                }
     }
 
 
-    fun getVerification() {
-        var listener: ListenerRegistration? = null
-        listener = repository.db.collection("Verification").document(repository.getUID())
-                .addSnapshotListener { element, err ->
-                    listener?.remove()
-                    run {
-                        if (err == null) {
-                            _observableVerification.value =
-                                    element?.toObject(VerificationBaseModel::class.java);
-                        } else {
-                            _observableError.value = err.message
+    suspend fun getVerification(): VerificationBaseModel? {
+
+        return repository.db.collection("Verification").document(repository.getUID()).get().await()
+            .toObject(VerificationBaseModel::class.java)
+
+    }
+
+
+    fun updateDraftJpApplication(mWorkOrderID: String, dependency: List<Dependency>) =
+        viewModelScope.launch {
+
+
+            val model = getJPApplication(mWorkOrderID)
+
+            if (model.draft.isNullOrEmpty()) {
+                model.draft = dependency.toMutableList()
+
+            }
+            model.draft.forEach {
+                if (!it.isDone) {
+                    when (it.type) {
+                        "profile_pic" -> {
+                            val profileModel = getProfile()
+                            it.isDone =
+                                !profileModel.profileAvatarName.isNullOrEmpty() && profileModel.profileAvatarName != "avatar.jpg"
+
+                        }
+                        "about_me" -> {
+                            val profileModel = getProfile()
+                            it.isDone = !profileModel.aboutMe.isNullOrEmpty()
+
+                        }
+                        "driving_licence" -> {
+                            val verification = getVerification()
+                            it.isDone = verification?.driving_license != null
+                        }
+                        "questionnaire" -> {
+                            it.isDone =
+                                checkForQuestionnaire(mWorkOrderID, it.type ?: "", it.title ?: "")
+
+
                         }
                     }
                 }
-    }
+            }
 
-    fun checkForJPApplication(mWorkerId: String) = viewModelScope.launch {
-        val model = getApplicationFromServer(mWorkerId)
-        if (model == null) {
-            repository.db.collection("JP_Applications").document().set(JpApplication(JPId = mWorkerId, gigerId = repository.getUID())).addOnCompleteListener {
-                if (it.isSuccessful) {
-                    observableApplicationStatus.value = true
-                }
+
+            if (model.id.isEmpty()) {
+                repository.db.collection("JP_Applications").document().set(model)
+                    .addOnCompleteListener {
+                        if (it.isSuccessful) {
+
+                            observableJpApplication.value = model
+                            observableInitApplication.value = true
+
+                        }
+                    }
+            } else {
+                repository.db.collection("JP_Applications").document(model.id).set(model)
+                    .addOnCompleteListener {
+                        if (it.isSuccessful) {
+                            observableJpApplication.value = model
+                            observableInitApplication.value = true
+
+                        }
+                    }
             }
-        } else {
-            repository.db.collection("JP_Applications").document(model.id).set(model).addOnCompleteListener {
-                if (it.isSuccessful) {
-                    observableApplicationStatus.value = true
-                }
-            }
+
+
         }
 
 
-    }
+    fun apply(mWorkOrderID: String) = viewModelScope.launch {
 
-
-    fun updateDraftJpApplication(mWorkOrderID: String, draft: List<Dependency>) = viewModelScope.launch {
-
-
-        val model = getJPApplication(mWorkOrderID)
-
-
-//        model.draft = draft
-//        if (model.id.isEmpty()) {
-//            repository.db.collection("JP_Applications").document().set(model).addOnCompleteListener {
-//                if (it.isSuccessful) {
-//                    observableJpApplication.value = model
-//                }
-//            }
-//        } else {
-//            repository.db.collection("JP_Applications").document(model.id).set(model).addOnCompleteListener {
-//                if (it.isSuccessful) {
-//                    observableJpApplication.value = model
-//                }
-//            }
-//        }
-
-
-    }
-
-    fun apply(mWorkOrderID: String, draft: MutableList<JpDraft>) = viewModelScope.launch {
-
-
-        val model = getJPApplication(mWorkOrderID)
-
-
-        model.stepDone = 2
-        model.draft = draft
-        if (model.id.isEmpty()) {
-            repository.db.collection("JP_Applications").document().set(model).addOnCompleteListener {
+        val application = getJPApplication(mWorkOrderID)
+        repository.db.collection("JP_Applications").document(application.id)
+            .update("stepDone", observableWorkOrderDependency.value?.step)
+            .addOnCompleteListener {
                 if (it.isSuccessful) {
                     observableApplicationStatus.value = true
                 }
             }
-        } else {
-            repository.db.collection("JP_Applications").document(model.id).set(model).addOnCompleteListener {
-                if (it.isSuccessful) {
-                    observableApplicationStatus.value = true
-                }
-            }
-        }
 
-
-    }
-
-    fun getApplication(workOrderId: String) = viewModelScope.launch {
-
-        val model = getApplicationFromServer(workOrderId)
-        observableJpApplication.value = model
 
     }
 
 
     suspend fun getJPApplication(workOrderID: String): JpApplication {
-        val items = repository.db.collection("JP_Applications").whereEqualTo("jpid", workOrderID).whereEqualTo("gigerId", repository.getUID()).get()
-                .await()
+
+        val items = repository.db.collection("JP_Applications").whereEqualTo("jpid", workOrderID)
+            .whereEqualTo("gigerId", repository.getUID()).get()
+            .await()
+
         if (items.documents.isNullOrEmpty()) {
             return JpApplication(JPId = workOrderID, gigerId = repository.getUID())
         }
@@ -170,43 +162,32 @@ class ApplicationClientActivationViewModel : ViewModel() {
         return toObject
     }
 
-    suspend fun getApplicationFromServer(workOrderID: String): JpApplication? {
-        val items = repository.db.collection("JP_Applications").whereEqualTo("jpid", workOrderID).whereEqualTo("gigerId", repository.getUID()).get(Source.SERVER)
-                .await()
+    suspend fun checkForQuestionnaire(workOrderID: String, type: String, title: String): Boolean {
+
+        val items = repository.db.collection("JP_Applications").whereEqualTo("jpid", workOrderID)
+            .whereEqualTo("gigerId", repository.getUID()).get()
+            .await()
         if (items.documents.isNullOrEmpty()) {
-            return null;
+            return false
         }
-        val toObject = items.toObjects(JpApplication::class.java).get(0)
-        toObject.id = items.documents[0].id
-        return toObject
+        val documentSnapshot = items.documents[0]
+        return !repository.db.collection("JP_Applications").document(documentSnapshot.id)
+            .collection("submissions").whereEqualTo("stepId", workOrderID).whereEqualTo(
+                "title", title
+            ).whereEqualTo("type", type).get().await().documents.isNullOrEmpty()
+
+
     }
+
+
+    suspend fun getProfile(): ProfileData {
+        return repository.db.collection("Profiles").document(repository.getUID()).get().await()
+            .toObject(ProfileData::class.java)!!
+
+    }
+
 
     var userProfileData: SingleLiveEvent<ProfileData> = SingleLiveEvent<ProfileData>()
-
-
-    fun getProfileData() {
-
-        var listener: ListenerRegistration? = null
-        listener = repository.db.collection("Profiles").document(repository.getUID())
-                .addSnapshotListener(EventListener(fun(
-                        value: DocumentSnapshot?,
-                        e: FirebaseFirestoreException?
-                ) {
-                    listener?.remove()
-                    if (e != null) {
-                        Log.w("ProfileViewModel", "Listen failed", e)
-                        return
-                    } else {
-                        val obj = value!!.toObject(ProfileData::class.java)
-                        obj?.id = value.id;
-                        userProfileData.value = obj
-                    }
-
-
-                }))
-
-
-    }
 
 
 }
