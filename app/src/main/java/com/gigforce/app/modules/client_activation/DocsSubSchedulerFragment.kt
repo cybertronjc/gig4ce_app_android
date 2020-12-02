@@ -20,7 +20,6 @@ import com.gigforce.app.utils.StringConstants
 import com.gigforce.app.utils.widgets.GigforceDatePickerDialog
 import com.ncorti.slidetoact.SlideToActView
 import kotlinx.android.synthetic.main.fragment_docs_sub_scheduler.*
-import java.util.*
 
 
 class DocsSubSchedulerFragment : BaseFragment(),
@@ -76,29 +75,25 @@ class DocsSubSchedulerFragment : BaseFragment(),
                         ?.reduce { a, o -> a + o }
                     )
                 iv_location.visible()
-                iv_contact.gone()
+                iv_contact.visible()
                 iv_location.setOnClickListener {
-                    val uri: String =
-                        java.lang.String.format(
-                            Locale.ENGLISH,
-                            "geo:%f,%f",
-                            address?.lat,
-                            address?.lon
-                        )
+                    val uri =
+                        "http://maps.google.com/maps?saddr=" + "&daddr=" + address?.lat + "," + address?.lon
                     val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
                     startActivity(intent)
                 }
                 iv_contact.setOnClickListener {
-                    if (address?.contact.isNullOrEmpty()) {
+                    if (!address?.contact.isNullOrEmpty()) {
                         val callIntent = Intent(Intent.ACTION_DIAL);
                         callIntent.data = Uri.parse("tel: " + address?.contact!![0].number);
                         startActivity(callIntent);
                     }
                 }
                 textView143.text = it.selectedTime
-//                imageView36.gone()
+                imageView36.gone()
                 textView139.text = it.selectedDate
-//                imageView36.gone()
+                imageView35.gone()
+                imageView34.gone()
                 slider_checkout.isLocked = false
             }
         })
@@ -179,18 +174,13 @@ class DocsSubSchedulerFragment : BaseFragment(),
                 .reduce { a, o -> a + o }
             )
         iv_location.setOnClickListener {
-            val uri: String =
-                java.lang.String.format(
-                    Locale.ENGLISH,
-                    "geo:%f,%f",
-                    address?.lat,
-                    address?.lon
-                )
+            val uri =
+                "http://maps.google.com/maps?saddr=" + "&daddr=" + address?.lat + "," + address?.lon
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
             startActivity(intent)
         }
         iv_contact.setOnClickListener {
-            if (address.contact.isNullOrEmpty()) {
+            if (!address.contact.isNullOrEmpty()) {
                 val callIntent = Intent(Intent.ACTION_DIAL);
                 callIntent.data = Uri.parse("tel: " + address.contact[0].number);
                 startActivity(callIntent);
@@ -200,14 +190,14 @@ class DocsSubSchedulerFragment : BaseFragment(),
         iv_contact.visible()
         iv_location.visible()
         checkIfCompleteProcessComplete()
-
+        imageView34.gone()
 
     }
 
     override fun setSelectedTimeSlot(time: String) {
         this.selectedTimeSlot = time
         textView143.text = time
-//        imageView36.gone()
+        imageView36.gone()
         checkIfCompleteProcessComplete()
     }
 
@@ -220,7 +210,7 @@ class DocsSubSchedulerFragment : BaseFragment(),
 
         this.dateString = date;
         textView139.text = dateString
-//        imageView36.gone()
+        imageView35.gone()
         checkIfCompleteProcessComplete()
     }
 
