@@ -5,14 +5,17 @@ import android.os.Parcelable
 
 data class PartnerSchoolDetails(
     var city: String = "", var landmark: String = "", var name:
-    String = "", var timing: String = "", var contact: List<ContactPartnerSchool> = listOf()
+    String = "", var timing: String = "", var contact: List<ContactPartnerSchool> = listOf(),
+    var lat: String = "", var lon: String = ""
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString() ?: "",
         parcel.readString() ?: "",
         parcel.readString() ?: "",
         parcel.readString() ?: "",
-        parcel.createTypedArrayList(ContactPartnerSchool) ?: listOf()
+        parcel.createTypedArrayList(ContactPartnerSchool) ?: listOf(),
+        parcel.readString() ?: "",
+        parcel.readString() ?: ""
     ) {
     }
 
@@ -22,6 +25,8 @@ data class PartnerSchoolDetails(
         parcel.writeString(name)
         parcel.writeString(timing)
         parcel.writeTypedList(contact)
+        parcel.writeString(lat)
+        parcel.writeString(lon)
     }
 
     override fun describeContents(): Int {

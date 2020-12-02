@@ -154,7 +154,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:src="@drawable/ic_applied"
+            android:src="@drawable/ic_cal_gradient"
             app:layout_constraintStart_toStartOf="@+id/imageView13"
             app:layout_constraintTop_toBottomOf="@+id/view6" />
 
@@ -199,7 +199,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:src="@drawable/ic_applied"
+            android:src="@drawable/ic_time_grad_drawable"
             app:layout_constraintStart_toStartOf="@+id/imageView43"
             app:layout_constraintTop_toBottomOf="@+id/view8"
             tools:layout_editor_absoluteX="206dp"

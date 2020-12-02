@@ -15,6 +15,7 @@ import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.modules.client_activation.models.JpApplication
 import com.gigforce.app.utils.StringConstants
+import io.reactivex.Observable
 import kotlinx.android.synthetic.main.layout_fragment_activation_gig.*
 
 class GigActivationFragment : BaseFragment(),
@@ -70,6 +71,20 @@ class GigActivationFragment : BaseFragment(),
 
         viewModel.observableInitApplication.observe(viewLifecycleOwner, Observer {
             if (it == true) {
+                Observable.fromIterable(viewModel.observableJpApplication.value?.process)
+                    .all { item -> item.isDone }.subscribe { success, err ->
+                        run {
+                            if (success) {
+                                tv_verification_gig_activation.text = "Completed"
+                                tv_verification_gig_activation.setCompoundDrawablesWithIntrinsicBounds(
+                                    R.drawable.ic_applied,
+                                    0,
+                                    0,
+                                    0
+                                )
+                            }
+                        }
+                    }
                 initApplication(viewModel.observableJpApplication.value!!)
             }
         })
@@ -134,7 +149,6 @@ class GigActivationFragment : BaseFragment(),
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString(StringConstants.WORK_ORDER_ID.value, mWordOrderID)
-
 
 
     }

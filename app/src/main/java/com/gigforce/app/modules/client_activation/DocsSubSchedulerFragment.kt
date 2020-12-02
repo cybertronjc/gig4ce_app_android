@@ -1,5 +1,7 @@
 package com.gigforce.app.modules.client_activation
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.text.Html
 import android.view.LayoutInflater
@@ -18,6 +20,7 @@ import com.gigforce.app.utils.StringConstants
 import com.gigforce.app.utils.widgets.GigforceDatePickerDialog
 import com.ncorti.slidetoact.SlideToActView
 import kotlinx.android.synthetic.main.fragment_docs_sub_scheduler.*
+import java.util.*
 
 
 class DocsSubSchedulerFragment : BaseFragment(),
@@ -72,14 +75,35 @@ class DocsSubSchedulerFragment : BaseFragment(),
                             + address?.timing + "<br>" + address?.contact?.map { "<b><font color=\'#000000\'>" + it.name + "</font></b>" }
                         ?.reduce { a, o -> a + o }
                     )
+                iv_location.visible()
+                iv_contact.gone()
+                iv_location.setOnClickListener {
+                    val uri: String =
+                        java.lang.String.format(
+                            Locale.ENGLISH,
+                            "geo:%f,%f",
+                            address?.lat,
+                            address?.lon
+                        )
+                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
+                    startActivity(intent)
+                }
+                iv_contact.setOnClickListener {
+                    if (address?.contact.isNullOrEmpty()) {
+                        val callIntent = Intent(Intent.ACTION_DIAL);
+                        callIntent.data = Uri.parse("tel: " + address?.contact!![0].number);
+                        startActivity(callIntent);
+                    }
+                }
                 textView143.text = it.selectedTime
-                imageView36.gone()
+//                imageView36.gone()
                 textView139.text = it.selectedDate
-                imageView36.gone()
+//                imageView36.gone()
                 slider_checkout.isLocked = false
             }
         })
         viewModel.getApplication(mWordOrderID, mType, mTitle)
+
     }
 
     private fun initClicks() {
@@ -110,6 +134,7 @@ class DocsSubSchedulerFragment : BaseFragment(),
                 GigforceDatePickerDialog::class.java.name
             )
         }
+
 
     }
 
@@ -153,7 +178,25 @@ class DocsSubSchedulerFragment : BaseFragment(),
                     + address.timing + "<br>" + address.contact.map { "<b><font color=\'#000000\'>" + it.name + "</font></b>" }
                 .reduce { a, o -> a + o }
             )
-        imageView34.gone()
+        iv_location.setOnClickListener {
+            val uri: String =
+                java.lang.String.format(
+                    Locale.ENGLISH,
+                    "geo:%f,%f",
+                    address?.lat,
+                    address?.lon
+                )
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
+            startActivity(intent)
+        }
+        iv_contact.setOnClickListener {
+            if (address.contact.isNullOrEmpty()) {
+                val callIntent = Intent(Intent.ACTION_DIAL);
+                callIntent.data = Uri.parse("tel: " + address.contact[0].number);
+                startActivity(callIntent);
+            }
+        }
+//        imageView34.gone()
         iv_contact.visible()
         iv_location.visible()
         checkIfCompleteProcessComplete()
@@ -164,7 +207,7 @@ class DocsSubSchedulerFragment : BaseFragment(),
     override fun setSelectedTimeSlot(time: String) {
         this.selectedTimeSlot = time
         textView143.text = time
-        imageView36.gone()
+//        imageView36.gone()
         checkIfCompleteProcessComplete()
     }
 
@@ -177,7 +220,7 @@ class DocsSubSchedulerFragment : BaseFragment(),
 
         this.dateString = date;
         textView139.text = dateString
-        imageView36.gone()
+//        imageView36.gone()
         checkIfCompleteProcessComplete()
     }
 
