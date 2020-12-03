@@ -347,7 +347,8 @@ class ClientActivationFragment : BaseFragment() {
                 RecyclerGenericAdapter<LessonModel>(
                     activity?.applicationContext,
                     PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
-//                        navigate(R.id.mainLearningFragment)
+                        navigate(R.id.mainLearningFragment)
+
                     },
                     RecyclerGenericAdapter.ItemInterface<LessonModel?> { obj, viewHolder, position ->
                         var view = getView(viewHolder, R.id.card_view)
@@ -361,7 +362,7 @@ class ClientActivationFragment : BaseFragment() {
 
                         var subtitle = getTextView(viewHolder, R.id.title)
                         subtitle.text = obj?.description
-//
+
                         var comImg = getImageView(viewHolder, R.id.completed_iv)
                         comImg.isVisible = obj?.completed ?: false
 

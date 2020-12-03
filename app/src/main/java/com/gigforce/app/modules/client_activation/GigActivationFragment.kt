@@ -14,20 +14,21 @@ import com.bumptech.glide.Glide
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.modules.client_activation.models.JpApplication
+import com.gigforce.app.modules.learning.courseDetails.LearningCourseDetailsFragment
 import com.gigforce.app.utils.StringConstants
 import io.reactivex.Observable
 import kotlinx.android.synthetic.main.layout_fragment_activation_gig.*
 
 class GigActivationFragment : BaseFragment(),
-    AdapterGigActivation.AdapterApplicationClientActivationCallbacks {
+        AdapterGigActivation.AdapterApplicationClientActivationCallbacks {
     private lateinit var viewModel: GigActivationViewModel
     private lateinit var mNextDep: String
     private lateinit var mWordOrderID: String
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         return inflateView(R.layout.layout_fragment_activation_gig, inflater, container)
     }
@@ -36,10 +37,10 @@ class GigActivationFragment : BaseFragment(),
         super.onViewCreated(view, savedInstanceState)
         getDataFromIntents(savedInstanceState)
         viewModel =
-            ViewModelProvider(
-                this,
-                SavedStateViewModelFactory(requireActivity().application, this)
-            ).get(GigActivationViewModel::class.java)
+                ViewModelProvider(
+                        this,
+                        SavedStateViewModelFactory(requireActivity().application, this)
+                ).get(GigActivationViewModel::class.java)
         setupRecycler()
         initObservers()
         initClicks()
@@ -58,7 +59,7 @@ class GigActivationFragment : BaseFragment(),
         viewModel.observableGigActivation.observe(viewLifecycleOwner, Observer { gigAcivation ->
             if (gigAcivation != null) {
                 Glide.with(this).load(gigAcivation.coverImg).placeholder(
-                    com.gigforce.app.utils.getCircularProgressDrawable(requireContext())
+                        com.gigforce.app.utils.getCircularProgressDrawable(requireContext())
                 ).into(iv_gig_activation)
                 tv_application_gig_activation.text = Html.fromHtml(gigAcivation.subTitle)
                 tv_title_toolbar.text = gigAcivation.title
@@ -71,19 +72,19 @@ class GigActivationFragment : BaseFragment(),
         viewModel.observableInitApplication.observe(viewLifecycleOwner, Observer {
             if (it == true) {
                 Observable.fromIterable(viewModel.observableJpApplication.value?.process)
-                    .all { item -> item.isDone }.subscribe { success, err ->
-                        run {
-                            if (success) {
-                                tv_verification_gig_activation.text = "Completed"
-                                tv_verification_gig_activation.setCompoundDrawablesWithIntrinsicBounds(
-                                    R.drawable.ic_applied,
-                                    0,
-                                    0,
-                                    0
-                                )
+                        .all { item -> item.isDone }.subscribe { success, err ->
+                            run {
+                                if (success) {
+                                    tv_verification_gig_activation.text = "Completed"
+                                    tv_verification_gig_activation.setCompoundDrawablesWithIntrinsicBounds(
+                                            R.drawable.ic_applied,
+                                            0,
+                                            0,
+                                            0
+                                    )
+                                }
                             }
                         }
-                    }
                 initApplication(viewModel.observableJpApplication.value!!)
             }
         })
@@ -97,16 +98,16 @@ class GigActivationFragment : BaseFragment(),
         for (i in 0 until jpApplication.process.size) {
             if (!jpApplication.process[i].isDone) {
                 adapter.setImageDrawable(
-                    jpApplication.process[i].type!!,
-                    resources.getDrawable(R.drawable.ic_status_pending),
-                    false
+                        jpApplication.process[i].type!!,
+                        resources.getDrawable(R.drawable.ic_status_pending),
+                        false
                 )
 //               viewModel.setData(jpApplication.draft[i].feature)
             } else {
                 adapter.setImageDrawable(
-                    jpApplication.process[i].type!!,
-                    resources.getDrawable(R.drawable.ic_applied),
-                    true
+                        jpApplication.process[i].type!!,
+                        resources.getDrawable(R.drawable.ic_applied),
+                        true
                 )
             }
         }
@@ -120,7 +121,7 @@ class GigActivationFragment : BaseFragment(),
     private fun setupRecycler() {
         rv_gig_activation.adapter = adapter
         rv_gig_activation.layoutManager =
-            LinearLayoutManager(requireContext())
+                LinearLayoutManager(requireContext())
 //        rv_status_pending.addItemDecoration(
 //            HorizontaltemDecoration(
 //                requireContext(),
@@ -152,19 +153,26 @@ class GigActivationFragment : BaseFragment(),
 
     }
 
-    override fun onItemClick(feature: String, title: String, isSlotBooked: Boolean) {
+    override fun onItemClick(feature: String, title: String, courseId: String, isSlotBooked: Boolean) {
         when (title) {
             "Driving Test Certificate" ->
                 navigate(
-                    if (isSlotBooked) R.id.fragment_doc_sub else R.id.fragment_upload_cert,
-                    bundleOf(
-                        StringConstants.WORK_ORDER_ID.value to mWordOrderID,
-                        StringConstants.TITLE.value to title,
-                        StringConstants.TYPE.value to feature
-                    )
+                        if (isSlotBooked) R.id.fragment_doc_sub else R.id.fragment_upload_cert,
+                        bundleOf(
+                                StringConstants.WORK_ORDER_ID.value to mWordOrderID,
+                                StringConstants.TITLE.value to title,
+                                StringConstants.TYPE.value to feature
+                        )
                 )
+
+            "21North App training" -> {
+                navigate(
+                        R.id.learningCourseDetails,
+                        bundleOf(LearningCourseDetailsFragment.INTENT_EXTRA_COURSE_ID to courseId)
+                )
+            }
         }
     }
 
- 
+
 }

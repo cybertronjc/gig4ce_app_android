@@ -10,11 +10,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.auth.ui.main.LoginViewModel
+import com.gigforce.app.utils.ItemOffsetDecoration
 import com.gigforce.app.utils.StringConstants
 import kotlinx.android.synthetic.main.layout_fragment_schedule_driving_test.*
 import kotlinx.android.synthetic.main.layout_fragment_schedule_driving_test.resend_otp
@@ -26,6 +28,11 @@ import java.util.regex.Pattern
 
 class ScheduleDrivingTestFragment : BaseFragment() {
     private lateinit var mWordOrderID: String
+    private lateinit var mTitle: String
+    private lateinit var mType: String
+    private val adapter: AdapterScheduleTestCb by lazy {
+        AdapterScheduleTestCb()
+    }
     val viewModel: ScheduleDrivingTestViewModel by viewModels()
     val loginViewModel: LoginViewModel by viewModels()
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -36,17 +43,32 @@ class ScheduleDrivingTestFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         getDataFromIntents(savedInstanceState)
         loginViewModel.activity = requireActivity()
-
+        setupRecycler()
         initViews()
         initObservers()
         pb_schedule_test.visible()
     }
 
+    private fun setupRecycler() {
+        rv_cb_schedule_test.adapter = adapter
+        rv_cb_schedule_test.layoutManager = LinearLayoutManager(requireContext())
+        rv_cb_schedule_test.addItemDecoration(ItemOffsetDecoration(resources.getDimensionPixelSize(R.dimen.size_4)))
+    }
+
     private fun initObservers() {
+        viewModel.observableJPSettings.observe(viewLifecycleOwner, Observer {
+            adapter.addData(it.checkItems)
+            viewModel.getApplication(mWordOrderID, mType, mTitle)
+        })
         viewModel.observableJpApplication.observe(viewLifecycleOwner, Observer {
             if (it == null) return@Observer
-            if (!it.drivingCert?.partnerSchoolDetails?.contact.isNullOrEmpty()) {
-                val number = "+91" + it.drivingCert?.partnerSchoolDetails?.contact!![0].number
+            if (!it.partnerSchoolDetails?.contact.isNullOrEmpty()) {
+                var contactNumber = ""
+                if (!it.partnerSchoolDetails?.contact!![0].number.contains("+91")) {
+                    contactNumber = "+91"
+                }
+                contactNumber += it.partnerSchoolDetails?.contact!![0].number
+                val number = contactNumber
                 tv_number_otp.text = getString(R.string.we_have_send_otp) + " " + number
                 loginViewModel.sendVerificationCode(number)
                 resend_otp.setOnClickListener {
@@ -57,20 +79,29 @@ class ScheduleDrivingTestFragment : BaseFragment() {
             }
 
         })
-        loginViewModel.liveState.observeForever {
+        loginViewModel.liveState.observe(viewLifecycleOwner, Observer {
             when (it.stateResponse) {
                 LoginViewModel.STATE_CODE_SENT -> {
                     pb_schedule_test.gone()
                     counterStart()
                 }
-                LoginViewModel.STATE_VERIFY_FAILED -> showToast(it.msg)
-                LoginViewModel.STATE_VERIFY_SUCCESS -> {
+                LoginViewModel.STATE_VERIFY_FAILED -> {
+                    pb_schedule_test.gone()
                     showToast(it.msg)
                 }
-            }
-        }
+                LoginViewModel.STATE_VERIFY_SUCCESS -> {
+                    pb_schedule_test.gone()
+                    viewModel.apply(mWordOrderID, mType, mTitle, adapter.selectedItems)
 
-        viewModel.getApplication(mWordOrderID)
+                }
+            }
+        })
+        viewModel.observableApplied.observe(viewLifecycleOwner, Observer {
+            if (it == true) {
+                DrivingCertSuccessDialog().show(parentFragmentManager, DrivingCertSuccessDialog::class.java.name)
+            }
+        })
+        viewModel.getUIData(mWordOrderID)
 
 
     }
@@ -78,15 +109,22 @@ class ScheduleDrivingTestFragment : BaseFragment() {
     private fun getDataFromIntents(savedInstanceState: Bundle?) {
         savedInstanceState?.let {
             mWordOrderID = it.getString(StringConstants.WORK_ORDER_ID.value) ?: return@let
+            mType = it.getString(StringConstants.TYPE.value) ?: return@let
+            mTitle = it.getString(StringConstants.TITLE.value) ?: return@let
         }
+
         arguments?.let {
             mWordOrderID = it.getString(StringConstants.WORK_ORDER_ID.value) ?: return@let
+            mType = it.getString(StringConstants.TYPE.value) ?: return@let
+            mTitle = it.getString(StringConstants.TITLE.value) ?: return@let
         }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString(StringConstants.WORK_ORDER_ID.value, mWordOrderID)
+        outState.putString(StringConstants.TYPE.value, mType)
+        outState.putString(StringConstants.TITLE.value, mTitle)
 
 
     }

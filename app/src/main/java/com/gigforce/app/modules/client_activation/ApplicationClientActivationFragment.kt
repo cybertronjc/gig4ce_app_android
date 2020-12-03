@@ -16,13 +16,15 @@ import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.client_activation.models.JpApplication
+import com.gigforce.app.modules.landingscreen.models.Dependency
+import com.gigforce.app.modules.learning.learningVideo.PlayVideoDialogFragment
 import com.gigforce.app.modules.photocrop.PhotoCrop
 import com.gigforce.app.utils.StringConstants
 import io.reactivex.Observable
 import kotlinx.android.synthetic.main.layout_application_client_activation_fragment.*
 
 class ApplicationClientActivationFragment : BaseFragment(),
-    AdapterApplicationClientActivation.AdapterApplicationClientActivationCallbacks {
+        AdapterApplicationClientActivation.AdapterApplicationClientActivationCallbacks {
     private var profileAvatarName: String = "avatar.jpg"
     private lateinit var viewModel: ApplicationClientActivationViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,22 +41,22 @@ class ApplicationClientActivationFragment : BaseFragment(),
 
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         return inflateView(
-            R.layout.layout_application_client_activation_fragment,
-            inflater,
-            container
+                R.layout.layout_application_client_activation_fragment,
+                inflater,
+                container
         )
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(
-            this,
-            ViewModelProvider.AndroidViewModelFactory(requireActivity().application)
+                this,
+                ViewModelProvider.AndroidViewModelFactory(requireActivity().application)
         ).get(ApplicationClientActivationViewModel::class.java)
         getDataFromIntents(savedInstanceState)
         checkForBackPress()
@@ -70,7 +72,7 @@ class ApplicationClientActivationFragment : BaseFragment(),
 
         if (navFragmentsData?.getData() != null) {
             if (navFragmentsData?.getData()
-                    ?.getBoolean(StringConstants.BACK_PRESSED.value, false) == true
+                            ?.getBoolean(StringConstants.BACK_PRESSED.value, false) == true
             ) {
                 viewModel.redirectToNextStep = false
                 navFragmentsData?.setData(bundleOf())
@@ -98,11 +100,11 @@ class ApplicationClientActivationFragment : BaseFragment(),
         viewModel.observableApplicationStatus.observe(viewLifecycleOwner, Observer {
             pb_application_client_activation.gone()
             navigate(
-                R.id.fragment_gig_activation, bundleOf(
+                    R.id.fragment_gig_activation, bundleOf(
                     StringConstants.NEXT_DEP.value to mNextDep,
                     StringConstants.WORK_ORDER_ID.value to mWordOrderID
 
-                )
+            )
             )
         })
         viewModel.observableInitApplication.observe(viewLifecycleOwner, Observer {
@@ -112,11 +114,11 @@ class ApplicationClientActivationFragment : BaseFragment(),
         })
         viewModel.observableWorkOrderDependency.observe(viewLifecycleOwner, Observer {
             Glide.with(this).load(it?.coverImg).placeholder(
-                com.gigforce.app.utils.getCircularProgressDrawable(requireContext())
+                    com.gigforce.app.utils.getCircularProgressDrawable(requireContext())
             ).into(iv_application_client_activation)
             viewModel.updateDraftJpApplication(
-                mWordOrderID,
-                it?.requiredFeatures ?: listOf()
+                    mWordOrderID,
+                    it?.requiredFeatures ?: listOf()
             )
 
         })
@@ -132,16 +134,16 @@ class ApplicationClientActivationFragment : BaseFragment(),
         for (i in 0 until jpApplication.draft.size) {
             if (!jpApplication.draft[i].isDone) {
                 adapter.setImageDrawable(
-                    jpApplication.draft[i].type!!,
-                    resources.getDrawable(R.drawable.ic_status_pending),
-                    false
+                        jpApplication.draft[i].type!!,
+                        resources.getDrawable(R.drawable.ic_status_pending),
+                        false
                 )
 //               viewModel.setData(jpApplication.draft[i].feature)
             } else {
                 adapter.setImageDrawable(
-                    jpApplication.draft[i].type!!,
-                    resources.getDrawable(R.drawable.ic_applied),
-                    true
+                        jpApplication.draft[i].type!!,
+                        resources.getDrawable(R.drawable.ic_applied),
+                        true
                 )
             }
         }
@@ -176,21 +178,26 @@ class ApplicationClientActivationFragment : BaseFragment(),
                     }
                     "about_me" -> {
                         navigate(
-                            R.id.fragment_add_bio,
-                            bundleOf(StringConstants.FROM_CLIENT_ACTIVATON.value to true)
+                                R.id.fragment_add_bio,
+                                bundleOf(StringConstants.FROM_CLIENT_ACTIVATON.value to true)
                         )
                     }
                     "questionnaire" -> navigate(
-                        R.id.application_questionnaire, bundleOf(
+                            R.id.application_questionnaire, bundleOf(
                             StringConstants.WORK_ORDER_ID.value to mWordOrderID,
                             StringConstants.TITLE.value to adapter.items[i].title,
                             StringConstants.TYPE.value to adapter.items[i].type,
                             StringConstants.FROM_CLIENT_ACTIVATON.value to true
-                        )
+                    )
                     )
                     "driving_licence" -> navigate(
-                        R.id.fragment_upload_dl_cl_act,
-                        bundleOf(StringConstants.FROM_CLIENT_ACTIVATON.value to true)
+                            R.id.fragment_upload_dl_cl_act,
+                            bundleOf(StringConstants.FROM_CLIENT_ACTIVATON.value to true)
+                    )
+                    "learning" -> PlayVideoDialogFragment.launch(
+                            childFragmentManager = childFragmentManager,
+                            moduleId = adapter.items[i].moduleId,
+                            lessonId = adapter.items[i].lessonId
                     )
                 }
                 break
@@ -207,13 +214,13 @@ class ApplicationClientActivationFragment : BaseFragment(),
             tv_action_application_client_activation.isEnabled = success
         }, { err -> })
         Observable.fromIterable(adapter.items).filter { item -> item.isDone }.toList()
-            .subscribe({ success ->
-                run {
-                    h_pb_application_frag.progress = success.size
-                    tv_steps_pending_application_value.text =
-                        "" + (h_pb_application_frag.progress) + "/" + adapter.items.size
-                }
-            }, { _ -> })
+                .subscribe({ success ->
+                    run {
+                        h_pb_application_frag.progress = success.size
+                        tv_steps_pending_application_value.text =
+                                "" + (h_pb_application_frag.progress) + "/" + adapter.items.size
+                    }
+                }, { _ -> })
 
     }
 
@@ -246,7 +253,7 @@ class ApplicationClientActivationFragment : BaseFragment(),
     private fun setupRecycler() {
         rv_status_pending.adapter = adapter
         rv_status_pending.layoutManager =
-            LinearLayoutManager(requireContext())
+                LinearLayoutManager(requireContext())
 //        rv_status_pending.addItemDecoration(
 //            HorizontaltemDecoration(
 //                requireContext(),
@@ -256,10 +263,10 @@ class ApplicationClientActivationFragment : BaseFragment(),
 
     }
 
-    override fun onItemClick(feature: String, title: String) {
+    override fun onItemClick(dependency: Dependency) {
         viewModel.redirectToNextStep = true
 
-        when (feature) {
+        when (dependency.type) {
             "profile_pic" -> {
                 val photoCropIntent = Intent(context, PhotoCrop::class.java)
                 photoCropIntent.putExtra("purpose", "profilePictureCrop")
@@ -272,21 +279,26 @@ class ApplicationClientActivationFragment : BaseFragment(),
             }
             "about_me" -> {
                 navigate(
-                    R.id.fragment_add_bio,
-                    bundleOf(StringConstants.FROM_CLIENT_ACTIVATON.value to true)
+                        R.id.fragment_add_bio,
+                        bundleOf(StringConstants.FROM_CLIENT_ACTIVATON.value to true)
                 )
             }
             "questionnaire" -> navigate(
-                R.id.application_questionnaire, bundleOf(
+                    R.id.application_questionnaire, bundleOf(
                     StringConstants.WORK_ORDER_ID.value to mWordOrderID,
-                    StringConstants.TITLE.value to title,
-                    StringConstants.TYPE.value to feature,
+                    StringConstants.TITLE.value to dependency.title,
+                    StringConstants.TYPE.value to dependency.type,
                     StringConstants.FROM_CLIENT_ACTIVATON.value to true
-                )
+            )
             )
             "driving_licence" -> navigate(
-                R.id.fragment_upload_dl_cl_act,
-                bundleOf(StringConstants.FROM_CLIENT_ACTIVATON.value to true)
+                    R.id.fragment_upload_dl_cl_act,
+                    bundleOf(StringConstants.FROM_CLIENT_ACTIVATON.value to true)
+            )
+            "learning" -> PlayVideoDialogFragment.launch(
+                    childFragmentManager = childFragmentManager,
+                    moduleId = dependency.moduleId,
+                    lessonId = dependency.lessonId
             )
         }
     }

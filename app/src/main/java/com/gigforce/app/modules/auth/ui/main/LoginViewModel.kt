@@ -89,11 +89,11 @@ class LoginViewModel() : ViewModel() {
                 .addOnCompleteListener {
                     if (it.isSuccessful) {
                         Log.d(TAG, "signInWithCredential:success")
-                        liveState.postValue(LoginResponse(STATE_SIGNIN_SUCCESS, it.toString()))
+                        liveState.postValue(LoginResponse(STATE_VERIFY_SUCCESS, it.toString()))
 
                     } else {
                         Log.w(TAG, "signInWithCredential:failure", it.exception)
-                        liveState.postValue(LoginResponse(STATE_SIGNIN_FAILED, ""))
+                        liveState.postValue(LoginResponse(STATE_VERIFY_FAILED, ""))
                     }
                 }
     }

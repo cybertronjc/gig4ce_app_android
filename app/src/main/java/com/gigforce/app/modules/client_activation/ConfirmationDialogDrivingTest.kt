@@ -17,16 +17,10 @@ import com.gigforce.app.modules.client_activation.models.PartnerSchoolDetails
 import com.gigforce.app.utils.StringConstants
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.ncorti.slidetoact.SlideToActView
-import kotlinx.android.synthetic.main.fragment_docs_sub_scheduler.*
 import kotlinx.android.synthetic.main.layout_confirm_driving_slot.*
-import kotlinx.android.synthetic.main.layout_confirm_driving_slot.iv_contact
-import kotlinx.android.synthetic.main.layout_confirm_driving_slot.iv_location
-import kotlinx.android.synthetic.main.layout_confirm_driving_slot.textView137
-import kotlinx.android.synthetic.main.layout_confirm_driving_slot.textView139
-import kotlinx.android.synthetic.main.layout_confirm_driving_slot.textView143
 
 class ConfirmationDialogDrivingTest : BottomSheetDialogFragment(),
-    TimeSlotsDialog.TimeSlotDialogCallbacks {
+        TimeSlotsDialog.TimeSlotDialogCallbacks {
     private lateinit var mWordOrderID: String
     private lateinit var mTitle: String
     private lateinit var mType: String
@@ -35,9 +29,9 @@ class ConfirmationDialogDrivingTest : BottomSheetDialogFragment(),
 
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.layout_confirm_driving_slot, container, false)
     }
@@ -78,6 +72,7 @@ class ConfirmationDialogDrivingTest : BottomSheetDialogFragment(),
 
             if (it) {
                 pb_conf_dialog.gone()
+                callbacks.submissionSuccess()
                 this@ConfirmationDialogDrivingTest.dismiss()
 
             }
@@ -88,19 +83,19 @@ class ConfirmationDialogDrivingTest : BottomSheetDialogFragment(),
     private fun initView() {
         tv_change_slot.paintFlags = tv_change_slot.paintFlags or Paint.UNDERLINE_TEXT_FLAG;
         val selectedPartner =
-            arguments?.getParcelable<PartnerSchoolDetails>(StringConstants.SELECTED_PARTNER.value)
+                arguments?.getParcelable<PartnerSchoolDetails>(StringConstants.SELECTED_PARTNER.value)
         val timeSlot = arguments?.getString(StringConstants.SELECTED_TIME_SLOT.value)
         val dateSelected = arguments?.getString(StringConstants.SELECTED_DATE.value)
         textView137.text =
-            Html.fromHtml(selectedPartner?.name + "<br>" + selectedPartner?.landmark + "<br>" + selectedPartner?.city + "<br>"
-                    + selectedPartner?.name + "<br>" + selectedPartner?.contact?.map { "<b><font color=\'#000000\'>" + it.name + "</font></b>" }
-                ?.reduce { a, o -> a + o }
-            )
+                Html.fromHtml(selectedPartner?.name + "<br>" + selectedPartner?.landmark + "<br>" + selectedPartner?.city + "<br>"
+                        + selectedPartner?.name + "<br>" + selectedPartner?.contact?.map { "<b><font color=\'#000000\'>" + it.name + "</font></b>" }
+                        ?.reduce { a, o -> a + o }
+                )
         textView143.text = timeSlot
         textView139.text = dateSelected
         iv_location.setOnClickListener {
             val uri =
-                "http://maps.google.com/maps?saddr=" + "&daddr=" + selectedPartner?.lat + "," + selectedPartner?.lon
+                    "http://maps.google.com/maps?saddr=" + "&daddr=" + selectedPartner?.lat + "," + selectedPartner?.lon
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
             startActivity(intent)
         }
@@ -120,19 +115,19 @@ class ConfirmationDialogDrivingTest : BottomSheetDialogFragment(),
         }
 
         slider_confirm.onSlideCompleteListener =
-            object : SlideToActView.OnSlideCompleteListener {
+                object : SlideToActView.OnSlideCompleteListener {
 
-                override fun onSlideComplete(view: SlideToActView) {
-                    pb_conf_dialog.visible()
-                    viewModel.apply(
-                        mWordOrderID,
-                        selectedPartner!!,
-                        dateSelected!!,
-                        timeSlot!!,
-                        cb_centre.isChecked, mType, mTitle
-                    )
+                    override fun onSlideComplete(view: SlideToActView) {
+                        pb_conf_dialog.visible()
+                        viewModel.apply(
+                                mWordOrderID,
+                                selectedPartner!!,
+                                dateSelected!!,
+                                timeSlot!!,
+                                cb_centre.isChecked, mType, mTitle
+                        )
+                    }
                 }
-            }
 
 
     }
@@ -147,5 +142,6 @@ class ConfirmationDialogDrivingTest : BottomSheetDialogFragment(),
 
     public interface ConfirmationDialogDrivingTestCallbacks {
         fun moveToNextStep()
+        fun submissionSuccess()
     }
 }

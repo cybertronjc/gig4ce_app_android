@@ -50,17 +50,15 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tb_schedule_test">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:layout_height="wrap_content">
 
 
             <TextView
@@ -79,73 +77,12 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <CheckBox
-                android:id="@+id/cb_i_have_completed_my_driving_test"
-                android:layout_width="wrap_content"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_cb_schedule_test"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/size_16"
-                android:layout_marginTop="@dimen/size_37"
-                android:button="@drawable/check_box_confirmation_dialog"
-                android:fontFamily="@font/lato"
-                android:paddingStart="@dimen/size_8"
-                android:paddingEnd="@dimen/size_8"
-                android:text="@string/i_have_completed_my_driving_test"
-                android:textColor="@color/black"
-                android:textSize="14sp"
-                android:textStyle="normal"
-                app:layout_constraintStart_toStartOf="parent"
+                android:nestedScrollingEnabled="false"
                 app:layout_constraintTop_toBottomOf="@+id/tv_driving_test_certification" />
-
-            <CheckBox
-                android:id="@+id/cb_bank_cheque_dl"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/size_16"
-                android:layout_marginTop="@dimen/size_8"
-                android:button="@drawable/check_box_confirmation_dialog"
-                android:fontFamily="@font/lato"
-                android:paddingStart="@dimen/size_8"
-                android:paddingEnd="@dimen/size_8"
-                android:text="@string/i_have_submitted_bank_cheque_and_original_dl"
-                android:textColor="@color/black"
-                android:textSize="14sp"
-                android:textStyle="normal"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cb_i_have_completed_my_driving_test" />
-
-            <CheckBox
-                android:id="@+id/cb_kit_collected"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/size_16"
-                android:layout_marginTop="@dimen/size_8"
-                android:button="@drawable/check_box_confirmation_dialog"
-                android:fontFamily="@font/lato"
-                android:paddingStart="@dimen/size_8"
-                android:paddingEnd="@dimen/size_8"
-                android:text="@string/i_have_collected_21north_kit"
-                android:textColor="@color/black"
-                android:textSize="14sp"
-                android:textStyle="normal"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cb_bank_cheque_dl" />
-
-            <CheckBox
-                android:id="@+id/cb_receipt_collected"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/size_16"
-                android:layout_marginTop="@dimen/size_8"
-                android:button="@drawable/check_box_confirmation_dialog"
-                android:fontFamily="@font/lato"
-                android:paddingStart="@dimen/size_8"
-                android:paddingEnd="@dimen/size_8"
-                android:text="@string/i_have_collect_receipt_of_my_documents"
-                android:textColor="@color/black"
-                android:textSize="14sp"
-                android:textStyle="normal"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cb_kit_collected" />
 
             <TextView
                 android:id="@+id/textView29"
@@ -161,7 +98,7 @@
                 android:textSize="16sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cb_receipt_collected" />
+                app:layout_constraintTop_toBottomOf="@+id/rv_cb_schedule_test" />
 
             <TextView
                 android:id="@+id/tv_number_otp"

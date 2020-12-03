@@ -5,24 +5,28 @@ import android.os.Parcelable
 import com.google.firebase.firestore.PropertyName
 
 data class LessonModel(
-    @get:PropertyName("Name")
-    @set:PropertyName("Name")
-    var name: String = "",
-    @get:PropertyName("cover_pic")
-    @set:PropertyName("cover_pic")
-    var coverPicture: String? = null,
-    @get:PropertyName("completed")
-    @set:PropertyName("completed")
-    var completed: Boolean = false,
-    @get:PropertyName("description")
-    @set:PropertyName("description")
-    var description: String = ""
+        @get:PropertyName("Name")
+        @set:PropertyName("Name")
+        var name: String = "",
+        @get:PropertyName("cover_pic")
+        @set:PropertyName("cover_pic")
+        var coverPicture: String? = null,
+        @get:PropertyName("completed")
+        @set:PropertyName("completed")
+        var completed: Boolean = false,
+        @get:PropertyName("description")
+        @set:PropertyName("description")
+        var description: String = "",
+        var module_id: String = "",
+        var lesson_id: String = ""
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
-        parcel.readString() ?: "",
-        parcel.readString(),
-        parcel.readByte() != 0.toByte(),
-        parcel.readString() ?: ""
+            parcel.readString() ?: "",
+            parcel.readString(),
+            parcel.readByte() != 0.toByte(),
+            parcel.readString() ?: "",
+            parcel.readString() ?: "",
+            parcel.readString() ?: ""
     ) {
     }
 
@@ -31,6 +35,8 @@ data class LessonModel(
         parcel.writeString(coverPicture)
         parcel.writeByte(if (completed) 1 else 0)
         parcel.writeString(description)
+        parcel.writeString(module_id)
+        parcel.writeString(lesson_id)
     }
 
     override fun describeContents(): Int {
