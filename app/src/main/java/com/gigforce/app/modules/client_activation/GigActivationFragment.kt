@@ -99,7 +99,8 @@ class GigActivationFragment : BaseFragment(),
         adapter.addData(jpApplication.process)
 
         sv_gig_activation.post {
-            sv_gig_activation.fullScroll(ScrollView.FOCUS_DOWN);
+            if (sv_gig_activation != null)
+                sv_gig_activation.fullScroll(ScrollView.FOCUS_DOWN);
         }
         adapter.setCallbacks(this)
         for (i in 0 until jpApplication.process.size) {

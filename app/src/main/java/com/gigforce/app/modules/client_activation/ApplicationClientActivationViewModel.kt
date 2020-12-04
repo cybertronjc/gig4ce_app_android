@@ -103,7 +103,7 @@ class ApplicationClientActivationViewModel : ViewModel() {
                                                 ?: "")
                             }
                             "learning" -> {
-                                it.isDone = checkForCourseCompletion(it.courseId)
+                                it.isDone = checkForCourseCompletion(it.moduleId)
                             }
 
 
@@ -197,6 +197,25 @@ class ApplicationClientActivationViewModel : ViewModel() {
         return repository.db.collection("Profiles").document(repository.getUID()).get().await()
                 .toObject(ProfileData::class.java)!!
 
+    }
+
+
+    suspend fun checkIfCourseCompleted(moduleId:String):Boolean{
+        val data = repository.db.collection("Course_Progress").whereEqualTo("uid",repository.getUID()).whereEqualTo("type","module").whereEqualTo("module_id",moduleId).get().await()
+        if(data.documents.isNullOrEmpty()){
+            return false
+        }
+        var allCourseProgress = data.toObjects(GigActivationViewModel.CourseProgress::class.java).first()
+        allCourseProgress.lessonProgress.let {
+            var completed = true
+            for(lesson in it){
+                if(lesson.lessonType == "assessment" && !lesson.completed){
+                    return false
+                }
+            }
+            return completed
+        }
+        return false
     }
 
 
