@@ -189,7 +189,7 @@ class GigActivationFragment : BaseFragment(),
                         )
                 )
 
-            "training" -> {
+            "learning" -> {
                 navigate(
                         R.id.learningCourseDetails,
                         bundleOf(LearningCourseDetailsFragment.INTENT_EXTRA_COURSE_ID to dependency.courseId,
@@ -206,7 +206,7 @@ class GigActivationFragment : BaseFragment(),
             if (!adapter.items[i].isDone) {
                 when (adapter.items[i].type) {
 
-                    "training" ->
+                    "learning" ->
                         if (checForOtherIndices(i, adapter.items)) {
                             navigate(
                                     R.id.learningCourseDetails,

@@ -103,7 +103,7 @@ class ApplicationClientActivationViewModel : ViewModel() {
                                                 ?: "")
                             }
                             "learning" -> {
-                                it.isDone = checkForCourseCompletion(it.moduleId)
+                                it.isDone = checkIfCourseCompleted(it.moduleId)
                             }
 
 
