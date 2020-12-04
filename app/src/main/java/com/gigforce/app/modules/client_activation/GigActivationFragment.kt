@@ -205,19 +205,34 @@ class GigActivationFragment : BaseFragment(),
             if (!adapter.items[i].isDone) {
                 when (adapter.items[i].type) {
 
-                    "training" -> navigate(
-                            R.id.learningCourseDetails,
-                            bundleOf(LearningCourseDetailsFragment.INTENT_EXTRA_COURSE_ID to adapter.items[i].courseId,
-                                    StringConstants.FROM_CLIENT_ACTIVATON.value to true
+                    "training" ->
+                        if (checForOtherIndices(i, adapter.items)) {
+                            navigate(
+                                    R.id.learningCourseDetails,
+                                    bundleOf(LearningCourseDetailsFragment.INTENT_EXTRA_COURSE_ID to adapter.items[i].courseId,
+                                            StringConstants.FROM_CLIENT_ACTIVATON.value to true
+                                    )
                             )
-                    )
+                        }
                 }
-                break
+
+
             }
 
         }
 
 
+    }
+
+    private fun checForOtherIndices(index: Int, items: List<Dependency>): Boolean {
+        var allTrue = true
+        for (i in items.indices) {
+            if (index != i && !items[i].isDone) {
+                allTrue = false
+                break
+            }
+        }
+        return allTrue
     }
 
 

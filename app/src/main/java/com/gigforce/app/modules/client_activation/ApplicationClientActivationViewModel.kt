@@ -141,7 +141,7 @@ class ApplicationClientActivationViewModel : ViewModel() {
         if (items.documents.isNullOrEmpty()) {
             return false
         }
-        return items.documents.all { it.data?:it.data!!["completed"] != null && it.data?:it.data!!["completed"] == true }
+        return items.documents.all {it.data!!["completed"] != null && it.data!!["completed"] == true }
 
     }
 
