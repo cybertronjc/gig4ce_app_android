@@ -13,15 +13,24 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
+import com.gigforce.app.modules.client_activation.models.JpApplication
+import com.gigforce.app.modules.landingscreen.models.Dependency
+import com.gigforce.app.modules.learning.courseDetails.LearningCourseDetailsFragment
 import com.gigforce.app.utils.StringConstants
+import io.reactivex.Observable
 import kotlinx.android.synthetic.main.layout_fragment_activation_gig.*
 
-class GigActivationFragment : BaseFragment(), AdapterGigActivation.AdapterGigActivationCallbacks {
+class GigActivationFragment : BaseFragment(),
+        AdapterGigActivation.AdapterApplicationClientActivationCallbacks {
     private lateinit var viewModel: GigActivationViewModel
     private lateinit var mNextDep: String
     private lateinit var mWordOrderID: String
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
+    ): View? {
         return inflateView(R.layout.layout_fragment_activation_gig, inflater, container)
     }
 
@@ -50,20 +59,60 @@ class GigActivationFragment : BaseFragment(), AdapterGigActivation.AdapterGigAct
         })
         viewModel.observableGigActivation.observe(viewLifecycleOwner, Observer { gigAcivation ->
             if (gigAcivation != null) {
-                Glide.with(this).load(gigAcivation.icon).placeholder(
+                Glide.with(this).load(gigAcivation.coverImg).placeholder(
                         com.gigforce.app.utils.getCircularProgressDrawable(requireContext())
                 ).into(iv_gig_activation)
                 tv_application_gig_activation.text = Html.fromHtml(gigAcivation.subTitle)
                 tv_title_toolbar.text = gigAcivation.title
-//                tv_application_stat_gig_activation.text = gigAcivation.status
-                tv_verification_gig_activation.text = gigAcivation.status
                 tv_complete_gig_activation.text = gigAcivation.instruction
-                adapter.addData(gigAcivation.dependency)
-                adapter.setCallbacks(this)
+                viewModel.updateDraftJpApplication(mWordOrderID, gigAcivation.requiredFeatures)
 
             }
         })
-        viewModel.getActivationData(mWordOrderID, mNextDep)
+
+        viewModel.observableInitApplication.observe(viewLifecycleOwner, Observer {
+            if (it == true) {
+                Observable.fromIterable(viewModel.observableJpApplication.value?.process)
+                        .all { item -> item.isDone }.subscribe { success, err ->
+                            run {
+                                if (success) {
+                                    tv_verification_gig_activation.text = "Completed"
+                                    tv_verification_gig_activation.setCompoundDrawablesWithIntrinsicBounds(
+                                            R.drawable.ic_applied,
+                                            0,
+                                            0,
+                                            0
+                                    )
+                                }
+                            }
+                        }
+                initApplication(viewModel.observableJpApplication.value!!)
+            }
+        })
+        viewModel.getActivationData(mWordOrderID)
+    }
+
+
+    private fun initApplication(jpApplication: JpApplication) {
+        adapter.addData(jpApplication.process)
+        adapter.setCallbacks(this)
+        for (i in 0 until jpApplication.process.size) {
+            if (!jpApplication.process[i].isDone) {
+                adapter.setImageDrawable(
+                        jpApplication.process[i].type!!,
+                        resources.getDrawable(R.drawable.ic_status_pending),
+                        false
+                )
+//               viewModel.setData(jpApplication.draft[i].feature)
+            } else {
+                adapter.setImageDrawable(
+                        jpApplication.process[i].type!!,
+                        resources.getDrawable(R.drawable.ic_applied),
+                        true
+                )
+            }
+        }
+
     }
 
     private val adapter: AdapterGigActivation by lazy {
@@ -97,11 +146,6 @@ class GigActivationFragment : BaseFragment(), AdapterGigActivation.AdapterGigAct
         }
     }
 
-    override fun onItemClick(feature: String) {
-        when (feature) {
-            "driving_certificate" -> navigate(R.id.fragment_upload_cert, bundleOf(StringConstants.WORK_ORDER_ID.value to mWordOrderID))
-        }
-    }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
@@ -109,4 +153,29 @@ class GigActivationFragment : BaseFragment(), AdapterGigActivation.AdapterGigAct
 
 
     }
+
+    override fun onItemClick(dependency: Dependency) {
+        when (dependency.type) {
+            "document" ->
+                navigate(
+                        if (dependency.isSlotBooked) R.id.fragment_doc_sub else R.id.fragment_upload_cert,
+                        bundleOf(
+                                StringConstants.WORK_ORDER_ID.value to mWordOrderID,
+                                StringConstants.TITLE.value to dependency.title,
+                                StringConstants.TYPE.value to dependency.docType
+                        )
+                )
+
+            "training" -> {
+                navigate(
+                        R.id.learningCourseDetails,
+                        bundleOf(LearningCourseDetailsFragment.INTENT_EXTRA_COURSE_ID to dependency.courseId,
+                                StringConstants.FROM_CLIENT_ACTIVATON.value to true
+                        )
+                )
+            }
+        }
+    }
+
+
 }

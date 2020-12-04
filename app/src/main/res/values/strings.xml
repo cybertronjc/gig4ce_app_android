@@ -452,7 +452,6 @@
     <string name="click_or_select_bank_passbook">Click Or Select your Passbook Image first</string>
     <string name="your_are_reuploading_bank_details">You are re-uploading your Bank details. They will be verified once again, which may take up to 7 days.</string>
     <string name="bank_details_uploaded">Bank details Uploaded</string>
-    <string name="under_verification">Under Verification</string>
     <string name="verifying">Verifying</string>
     <string name="valid_upto">Valid Upto :</string>
     <string name="giger_since">Giger Since</string>
@@ -1070,6 +1069,29 @@
     <string name="done">Done</string>
     <string name="cancel_lower_case">Cancel</string>
     <string name="no_time_slot">No Time Slot Selected</string>
+    <string name="okay_lower_case">Okay</string>
+    <string name="checkout">Checkout</string>
+    <string name="driving_test_details">Driving Test Details</string>
+    <string name="all_set_for_test">All Set for Driving Test</string>
+    <string name="change_slot">Change Slot</string>
+    <string name="i_will_submit_dl_and_cheque_in_same_centre_only">I will submit DL and cheque in same centre only</string>
+    <string name="confirm">Confirm</string>
+    <string name="schedule_driving_test">Schedule Driving Test</string>
+    <string name="driving_test_certification_and_doc_submission">Driving test certification and Doc submission</string>
+    <string name="i_have_completed_my_driving_test">I have completed my driving test.</string>
+    <string name="i_have_submitted_bank_cheque_and_original_dl">I have submitted bank cheque and original DL.</string>
+    <string name="i_have_collected_21north_kit">I have collected 21North kit.</string>
+    <string name="i_have_collect_receipt_of_my_documents">I have collect receipt of my documents.</string>
+    <string name="please_enter_the_otp_received_on_driving_school_parnter">Please enter the OTP received on Driving School parnter</string>
+    <string name="confirm_otp">Confirm OTP</string>
+    <string name="resend_otp">Resend OTP</string>
+    <string name="congratulations">Congratulations</string>
+    <string name="congratulations_your_driving_certificate_successfully_uploaded_your_docs_are_safe_with_us">Congratulations! Your Driving Certificate successfully uploaded.Your docs are safe with us.</string>
+    <string name="driving_certificate">Driving Certificate</string>
+    <string name="select_preferred_date">Select preferred Date</string>
+    <string name="we_have_send_otp">We have send the OTP on</string>
+    <string name="under_verification">Under Verification</string>
+    <string name="select_date">Select Date</string>
 
 
 </resources>

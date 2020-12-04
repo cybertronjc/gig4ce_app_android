@@ -3,7 +3,7 @@ package com.gigforce.app.modules.client_activation.models
 import android.os.Parcel
 import android.os.Parcelable
 
-data class Locations(var location: String? = null, var locationId: String? = null) : Parcelable {
+data class Locations(var location: String? = null, var payoutNote: String? = null) : Parcelable {
     constructor(parcel: Parcel) : this(
             parcel.readString(),
             parcel.readString()) {
@@ -11,7 +11,7 @@ data class Locations(var location: String? = null, var locationId: String? = nul
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(location)
-        parcel.writeString(locationId)
+        parcel.writeString(payoutNote)
     }
 
     override fun describeContents(): Int {

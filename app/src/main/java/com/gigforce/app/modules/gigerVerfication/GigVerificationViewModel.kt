@@ -330,24 +330,24 @@ open class GigVerificationViewModel constructor(
             frontImagePath: Uri?
     ) = viewModelScope.launch {
 
-        _documentUploadState.postValue(Lse.loading())
-
-        try {
-            val model = getVerificationModel()
-
-            val frontImageFileNameAtServer =
-                    uploadImage(frontImagePath!!)
-
-            model.drivingCert = DrivingCertificate(
-                    verified = false,
-                    frontImage = frontImageFileNameAtServer
-
-            )
-            gigerVerificationRepository.getDBCollection().setOrThrow(model)
-            _documentUploadState.postValue(Lse.success())
-        } catch (e: Exception) {
-            _documentUploadState.postValue(Lse.error("Unable to save document."))
-        }
+//        _documentUploadState.postValue(Lse.loading())
+//
+//        try {
+//            val model = getVerificationModel()
+//
+//            val frontImageFileNameAtServer =
+//                    uploadImage(frontImagePath!!)
+//
+//            model.drivingCert = DrivingCertificate(
+//                    verified = false,
+//                    frontImage = frontImageFileNameAtServer
+//
+//            )
+//            gigerVerificationRepository.getDBCollection().setOrThrow(model)
+//            _documentUploadState.postValue(Lse.success())
+//        } catch (e: Exception) {
+//            _documentUploadState.postValue(Lse.error("Unable to save document."))
+//        }
     }
 
 

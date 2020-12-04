@@ -4,7 +4,7 @@ import com.gigforce.app.core.base.basefirestore.BaseFirestoreDBRepository
 
 class ClientActivationRepository : BaseFirestoreDBRepository() {
     override fun getCollectionName(): String {
-        return "Work_Order"
+        return "Job_Profiles"
     }
 
 

@@ -10,20 +10,19 @@ import androidx.appcompat.widget.AppCompatEditText
 import com.gigforce.app.R
 
 
-class OtpEditText(context: Context, attrs: AttributeSet): AppCompatEditText(context, attrs)
-{
-    private var mSpace:Float = 24f
+class OtpEditText(context: Context, attrs: AttributeSet) : AppCompatEditText(context, attrs) {
+    private var mSpace: Float = 24f
     private var mLineSpacing: Float = 8f
     private var mNumChars = 6
     private var mMaxLength = 6
-    private var mLineStroke:Float = 2f
+    private var mLineStroke: Float = 2f
 
     private lateinit var mLinesPaint: Paint
-    private var mClickListener:OnClickListener? = null
+    private var mClickListener: OnClickListener? = null
 
     init {
         val multi = context.resources.displayMetrics.density
-        mLineStroke = multi*mLineStroke
+        mLineStroke = multi * mLineStroke
         mLinesPaint = Paint(paint).apply {
             this.strokeWidth = mLineStroke
             this.color = resources.getColor(R.color.colorPrimary)
@@ -37,7 +36,7 @@ class OtpEditText(context: Context, attrs: AttributeSet): AppCompatEditText(cont
         super.setOnClickListener(OnClickListener {
             val view = it
             setSelection(text!!.length)
-            mClickListener ?.let {
+            mClickListener?.let {
                 it.onClick(view)
             }
         })
@@ -74,19 +73,19 @@ class OtpEditText(context: Context, attrs: AttributeSet): AppCompatEditText(cont
 
         for (i in 0 until mNumChars) {
             canvas!!.drawLine(
-                startX.toFloat(),
-                bottom.toFloat(), startX + mCharSize,
-                bottom.toFloat(), mLinesPaint
+                    startX.toFloat(),
+                    bottom.toFloat(), startX + mCharSize,
+                    bottom.toFloat(), mLinesPaint
             )
             if (getText()!!.length > i) {
                 val middle = startX + mCharSize / 2
                 canvas.drawText(
-                    text,
-                    i,
-                    i + 1,
-                    middle - textWidths[0] / 2,
-                    bottom - mLineSpacing,
-                    paint
+                        text,
+                        i,
+                        i + 1,
+                        middle - textWidths[0] / 2,
+                        bottom - mLineSpacing,
+                        paint
                 )
             }
             if (mSpace < 0) {
@@ -95,5 +94,11 @@ class OtpEditText(context: Context, attrs: AttributeSet): AppCompatEditText(cont
                 startX += (mCharSize + mSpace.toInt()).toInt()
             }
         }
+    }
+
+    fun setNumChars(numChars: Int) {
+        this.mNumChars = numChars;
+        invalidate()
+
     }
 }

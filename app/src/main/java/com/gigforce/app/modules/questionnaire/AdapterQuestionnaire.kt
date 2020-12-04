@@ -13,15 +13,19 @@ import com.gigforce.app.modules.questionnaire.models.Questions
 import com.gigforce.app.utils.ItemOffsetDecoration
 import com.gigforce.app.utils.getCircularProgressDrawable
 import kotlinx.android.synthetic.main.layout_rv_questionnaire_cards.view.*
+import java.util.*
 
 class AdapterQuestionnaire : RecyclerView.Adapter<AdapterQuestionnaire.ViewHolder>() {
     private var horizontalItemDecoration: ItemOffsetDecoration? = null
-    private lateinit var items: List<Questions>
+     lateinit var items: List<Questions>
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.layout_rv_questionnaire_cards, parent, false))
+        return ViewHolder(
+                LayoutInflater.from(parent.context)
+                        .inflate(R.layout.layout_rv_questionnaire_cards, parent, false)
+        )
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -31,7 +35,9 @@ class AdapterQuestionnaire : RecyclerView.Adapter<AdapterQuestionnaire.ViewHolde
         holder.itemView.tv_question_questionnaire.text = question.question
         if (question.url.isNotEmpty()) {
             holder.itemView.iv_hint_questionnaire.visible()
-            Glide.with(holder.itemView).load(question.url).placeholder(getCircularProgressDrawable(holder.itemView.context)).into(holder.itemView.iv_hint_questionnaire)
+            Glide.with(holder.itemView).load(question.url)
+                    .placeholder(getCircularProgressDrawable(holder.itemView.context))
+                    .into(holder.itemView.iv_hint_questionnaire)
         } else {
             holder.itemView.iv_hint_questionnaire.gone()
         }
@@ -52,12 +58,27 @@ class AdapterQuestionnaire : RecyclerView.Adapter<AdapterQuestionnaire.ViewHolde
         )
         val adapterAnswers = AdapterOptionsQuestionnaire()
         holder.itemView.rv_answers_questionnaire.adapter = adapterAnswers
-        holder.itemView.rv_answers_questionnaire.layoutManager = LinearLayoutManager(holder.itemView.context)
+        holder.itemView.rv_answers_questionnaire.layoutManager =
+                LinearLayoutManager(holder.itemView.context)
         adapterAnswers.addData(question)
-        adapterAnswers.setCallbacks(object : AdapterOptionsQuestionnaire.AdapterOptionsQuestionnaireCallbacks {
-            override fun onClick(position: Int) {
+        adapterAnswers.setCallbacks(object :
+                AdapterOptionsQuestionnaire.AdapterOptionsQuestionnaireCallbacks {
+            override fun onClick(position: Int, value: String?, date: Date?, type: String) {
                 if (holder.adapterPosition == -1) return
                 items[holder.adapterPosition].selectedAnswer = position
+                when (type) {
+                    "date" -> {
+                        items[holder.adapterPosition].selectedDate = date
+                        items[holder.adapterPosition].dropDownItem = value ?: ""
+                    }
+                    "state_city_dropdown" -> {
+                        items[holder.adapterPosition].dropDownItem = value ?: ""
+                        items[holder.adapterPosition].selectedDate = date
+                    }
+
+
+                }
+
                 adapterAnswers.notifyDataSetChanged()
             }
 

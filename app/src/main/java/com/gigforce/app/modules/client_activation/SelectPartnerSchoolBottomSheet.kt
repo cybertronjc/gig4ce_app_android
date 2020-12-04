@@ -77,7 +77,7 @@ class SelectPartnerSchoolBottomSheet : BottomSheetDialogFragment(), AdapterPartn
             if (it == null) return@Observer
             pb_select_partner_bottom_sheet.gone()
             rv_partner_school_address.visible()
-            adapter.addData(it.schoolAddress)
+            adapter.addData(it.addressList)
 
         })
         viewModel.observableError.observe(viewLifecycleOwner, Observer {
@@ -85,7 +85,7 @@ class SelectPartnerSchoolBottomSheet : BottomSheetDialogFragment(), AdapterPartn
             pb_select_partner_bottom_sheet.gone()
 
         })
-        viewModel.getPartnerSchoolDetails("drivingCertificate", mWordOrderID)
+        viewModel.getPartnerSchoolDetails("driving_certificate", mWordOrderID)
     }
 
     companion object {

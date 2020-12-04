@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gigforce.app.modules.client_activation.models.Role
 import com.gigforce.app.modules.landingscreen.models.Tip
-import com.gigforce.app.modules.client_activation.models.WorkOrder
+import com.gigforce.app.modules.client_activation.models.JobProfile
 import com.gigforce.app.modules.preferences.PreferencesRepository
 import com.gigforce.app.modules.preferences.prefdatamodel.PreferencesDataModel
 import com.gigforce.app.modules.profile.ProfileFirebaseRepository
@@ -29,10 +29,10 @@ class LandingScreenViewModel constructor(
     }
     val observerRole: SingleLiveEvent<Role> get() = _observerRole
 
-    private val _observerWorkOrder: SingleLiveEvent<WorkOrder> by lazy {
-        SingleLiveEvent<WorkOrder>();
+    private val _observerWorkOrder: SingleLiveEvent<JobProfile> by lazy {
+        SingleLiveEvent<JobProfile>();
     }
-    val observerWorkOrder: SingleLiveEvent<WorkOrder> get() = _observerWorkOrder
+    val observerWorkOrder: SingleLiveEvent<JobProfile> get() = _observerWorkOrder
 
 
     companion object {
@@ -228,7 +228,7 @@ class LandingScreenViewModel constructor(
         if (error == null) {
             if (querySnapshot?.documents?.isNotEmpty() == true) {
                 val documentSnapshot = querySnapshot.documents[0]
-                val workOrder = documentSnapshot.toObject(WorkOrder::class.java)
+                val workOrder = documentSnapshot.toObject(JobProfile::class.java)
                 workOrder?.id = documentSnapshot.id
                 _observerWorkOrder.value = workOrder
 

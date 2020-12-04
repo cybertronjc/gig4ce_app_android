@@ -799,6 +799,12 @@
         android:label="fragment_doc_sub"
         tools:layout="@layout/fragment_docs_sub_scheduler" />
 
+    <fragment
+        android:id="@+id/fragment_schedule_test"
+        android:name="com.gigforce.app.modules.client_activation.ScheduleDrivingTestFragment"
+        android:label="fragment_schedule_test"
+        tools:layout="@layout/layout_fragment_schedule_driving_test" />
+
 
 </navigation>
 

@@ -61,7 +61,7 @@
         app:slider_icon="@drawable/ic_arrow_forward_white"
         app:slider_icon_color="@color/white"
         app:slider_locked="true"
-        app:text="@string/okay"
+        app:text="@string/okay_lower_case"
         app:text_size="@dimen/font_16" />
 
 

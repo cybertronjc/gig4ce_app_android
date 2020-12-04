@@ -38,7 +38,8 @@ class AdapterApplicationClientActivation :
                 if (position == items.size - 1) View.GONE else View.VISIBLE
         holder.itemView.setOnClickListener {
             if (holder.adapterPosition == -1) return@setOnClickListener
-            callbacks?.onItemClick(items[holder.adapterPosition].feature!!)
+            callbacks?.onItemClick(dependency)
+
         }
 
     }
@@ -52,10 +53,10 @@ class AdapterApplicationClientActivation :
         notifyDataSetChanged()
     }
 
-    fun setImageDrawable(feature: String, drawable: Drawable) {
-        val i = items.indexOf(Dependency(feature = feature))
+    fun setImageDrawable(feature: String, drawable: Drawable, isDone: Boolean) {
+        val i = items.indexOf(Dependency(type = feature))
         items[i].drawable = drawable
-        items[i].isDone = true
+        items[i].isDone = isDone
         notifyItemChanged(i);
     }
 
@@ -64,7 +65,7 @@ class AdapterApplicationClientActivation :
     }
 
     interface AdapterApplicationClientActivationCallbacks {
-        fun onItemClick(feature: String);
+        fun onItemClick(dependency: Dependency);
 
     }
 

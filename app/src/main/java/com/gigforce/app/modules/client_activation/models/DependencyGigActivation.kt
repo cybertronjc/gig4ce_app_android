@@ -2,9 +2,10 @@ package com.gigforce.app.modules.client_activation.models
 
 import android.os.Parcel
 import android.os.Parcelable
+import com.gigforce.app.R
 
 data class DependencyGigActivation(var docType: String = "", var title: String = "", var type: String = "",
-                                   var trainingData: List<String> = listOf(), var drawable: Int = -1, var isDone: Boolean = false) : Parcelable {
+                                   var trainingData: List<String> = listOf(), var drawable: Int = -1, var isDone: Boolean = false, var status: String = "", var color: Int = R.color.black) : Parcelable {
     constructor(parcel: Parcel) : this(
             parcel.readString() ?: "",
             parcel.readString() ?: "",
@@ -36,4 +37,10 @@ data class DependencyGigActivation(var docType: String = "", var title: String =
             return arrayOfNulls(size)
         }
     }
+
+    override fun equals(other: Any?): Boolean {
+        val obj = other as DependencyGigActivation
+        return obj.docType == docType
+    }
+
 }

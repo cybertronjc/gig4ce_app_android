@@ -69,10 +69,11 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/select_partner_school"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:layout_marginTop="16dp"
         android:background="@color/white"
+        app:layout_constraintBottom_toTopOf="@+id/slider_checkout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView135">
@@ -146,7 +147,7 @@
             android:layout_width="@dimen/size_24"
             android:layout_height="@dimen/size_24"
             android:layout_marginEnd="@dimen/size_24"
-            android:background="@drawable/circle_ffd9e6"
+            android:src="@drawable/ic_call_drawable"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/textView137"
             app:layout_constraintEnd_toEndOf="parent" />
@@ -177,7 +178,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:src="@drawable/ic_applied"
+            android:src="@drawable/ic_cal_gradient"
             app:layout_constraintStart_toStartOf="@+id/imageView13"
             app:layout_constraintTop_toBottomOf="@+id/view6" />
 
@@ -219,6 +220,7 @@
             app:layout_constraintTop_toTopOf="@+id/textView138" />
 
         <View
+            android:id="@+id/view_date_picker"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintBottom_toTopOf="@+id/view8"
@@ -231,7 +233,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:src="@drawable/ic_applied"
+            android:src="@drawable/ic_time_grad_drawable"
             app:layout_constraintStart_toStartOf="@+id/imageView43"
             app:layout_constraintTop_toBottomOf="@+id/view8"
             tools:layout_editor_absoluteX="206dp"
@@ -249,7 +251,7 @@
         <TextView
             android:id="@+id/textView143"
             android:layout_width="wrap_content"
-            android:layout_height="15dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:text="@string/tap_to_select"
             android:textSize="@dimen/font_12"
@@ -286,6 +288,26 @@
             tools:layout_editor_absoluteX="0dp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <com.ncorti.slidetoact.SlideToActView
+        android:id="@+id/slider_checkout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/size_24"
+        android:layout_marginBottom="@dimen/size_27"
+        android:visibility="gone"
+        app:border_radius="8dp"
+        app:icon_margin="@dimen/size_7"
+        app:inner_color="#d72467"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:outer_color="#ffd9e6"
+        app:slider_height="60dp"
+        app:slider_icon="@drawable/ic_arrow_forward_white"
+        app:slider_icon_color="@color/white"
+        app:slider_locked="true"
+        app:text="@string/checkout"
+        app:text_size="@dimen/font_16" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

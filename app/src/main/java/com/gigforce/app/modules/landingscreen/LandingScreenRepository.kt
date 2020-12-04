@@ -11,8 +11,8 @@ class LandingScreenRepository : BaseFirestoreDBRepository(), LandingScreenCallba
     }
 
     override fun getRoles(
-            enableLimit: Boolean,
-            responseCallbacks: LandingScreenCallbacks.ResponseCallbacks
+        enableLimit: Boolean,
+        responseCallbacks: LandingScreenCallbacks.ResponseCallbacks
     ) {
         val collection = db.collection("Roles")
         if (enableLimit) {
@@ -30,8 +30,9 @@ class LandingScreenRepository : BaseFirestoreDBRepository(), LandingScreenCallba
     }
 
     override fun getWorkOrder(responseCallbacks: LandingScreenCallbacks.ResponseCallbacks) {
-        db.collection("Work_Order").limit(1).addSnapshotListener { success, error ->
-            responseCallbacks.getWorkOrderResponse(success, error)
-        }
+        db.collection("Job_Profiles").whereEqualTo("isActive", true).limit(1)
+            .addSnapshotListener { success, error ->
+                responseCallbacks.getWorkOrderResponse(success, error)
+            }
     }
 }

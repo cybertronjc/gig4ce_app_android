@@ -20,15 +20,15 @@ class AdapterPartnerSchool : RecyclerView.Adapter<AdapterPartnerSchool.ViewHolde
         return ViewHolder(
                 LayoutInflater.from(parent.context)
                         .inflate(R.layout.layout_rv_partner_school_address, parent, false)
-        );
+        )
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val partner = items[position]
-        holder.itemView.tv_name_partner_school.text = partner.schoolName
+        holder.itemView.tv_name_partner_school.text = partner.name
         holder.itemView.tv_landmark_partner_school.text = partner.landmark
         holder.itemView.tv_city_partner_school.text = partner.city
-        holder.itemView.tv_timing_partner_school.text = partner.schoolTiming
+        holder.itemView.tv_timing_partner_school.text = partner.timing
         holder.itemView.tv_owner_partner_school.text =
                 partner.contact.map {
                     it.name

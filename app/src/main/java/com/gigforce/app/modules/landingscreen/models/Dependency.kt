@@ -1,17 +1,28 @@
 package com.gigforce.app.modules.landingscreen.models
 
 import android.graphics.drawable.Drawable
+import com.google.firebase.firestore.Exclude
 
 data class Dependency(
-        var feature: String? = null,
-        var priority: Int = 0,
+        var docType: String = "",
+        var type: String? = null,
         var title: String? = null,
-        var drawable: Drawable? = null,
-        var isDone: Boolean = true
+        var status: String = "",
+        var courseId: String = "",
+        var moduleId: String = "",
+        var lessonId: String = "",
+        @JvmField
+        var isSlotBooked: Boolean = false,
+
+        @JvmField
+        var isDone: Boolean = false,
+
+        @get:Exclude
+        var drawable: Drawable? = null
+
 ) {
     override fun equals(other: Any?): Boolean {
         val dependency = other as Dependency
-        return dependency.feature == feature
-
+        return dependency.type == type
     }
 }

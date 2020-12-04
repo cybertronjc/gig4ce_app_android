@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:width="@dimen/size_24"
+        android:height="@dimen/size_24"
+        android:gravity="center">
+        <shape xmlns:android="http://schemas.android.com/apk/res/android"
+            android:shape="oval">
+            <solid android:color="#ffd9e6" />
+
+        </shape>
+    </item>
+    <item
+        android:width="@dimen/size_10"
+        android:height="@dimen/size_10"
+
+        android:drawable="@drawable/ic_call_doc_scheduler"
+        android:gravity="center" />
+
+</layer-list>
