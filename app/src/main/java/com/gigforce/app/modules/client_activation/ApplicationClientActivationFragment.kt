@@ -196,7 +196,9 @@ class ApplicationClientActivationFragment : BaseFragment(),
                     )
                     "learning" -> navigate(
                             R.id.learningCourseDetails,
-                            bundleOf(LearningCourseDetailsFragment.INTENT_EXTRA_COURSE_ID to adapter.items[i].courseId)
+                            bundleOf(LearningCourseDetailsFragment.INTENT_EXTRA_COURSE_ID to adapter.items[i].courseId,
+                                    StringConstants.FROM_CLIENT_ACTIVATON.value to true
+                            )
                     )
                 }
                 break
@@ -296,7 +298,8 @@ class ApplicationClientActivationFragment : BaseFragment(),
             )
             "learning" -> navigate(
                     R.id.learningCourseDetails,
-                    bundleOf(LearningCourseDetailsFragment.INTENT_EXTRA_COURSE_ID to dependency.courseId)
+                    bundleOf(LearningCourseDetailsFragment.INTENT_EXTRA_COURSE_ID to dependency.courseId,
+                            StringConstants.FROM_CLIENT_ACTIVATON.value to true)
             )
         }
     }

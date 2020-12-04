@@ -17,6 +17,7 @@ import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.auth.ui.main.LoginViewModel
 import com.gigforce.app.utils.ItemOffsetDecoration
+import com.gigforce.app.utils.Lce
 import com.gigforce.app.utils.StringConstants
 import com.google.firebase.auth.PhoneAuthProvider
 import kotlinx.android.synthetic.main.layout_fragment_schedule_driving_test.*
@@ -92,21 +93,38 @@ class ScheduleDrivingTestFragment : BaseFragment() {
 
         })
         viewModel.liveState.observe(viewLifecycleOwner, Observer {
-            when (it.stateResponse) {
-                LoginViewModel.STATE_CODE_SENT -> {
-                    pb_schedule_test.gone()
-                    counterStart()
+
+            when (it) {
+                Lce.Loading -> {
+
+
                 }
-                LoginViewModel.STATE_VERIFY_FAILED -> {
-                    pb_schedule_test.gone()
-                    showToast(it.msg)
+                is Lce.Content -> {
+                    when (it.content) {
+                        ScheduleDrivingTestViewModel.CODE_SENT -> {
+                            pb_schedule_test.gone()
+                            counterStart()
+                        }
+                        ScheduleDrivingTestViewModel.VERIFY_FAILED -> {
+                            pb_schedule_test.gone()
+                            showToast("Something Went Wrong")
+                        }
+                        LoginViewModel.STATE_VERIFY_SUCCESS -> {
+                            pb_schedule_test.visible()
+                            viewModel.apply(mWordOrderID, mType, mTitle, adapter.selectedItems)
+
+                        }
+                    }
                 }
-                LoginViewModel.STATE_VERIFY_SUCCESS -> {
-                    pb_schedule_test.visible()
-                    viewModel.apply(mWordOrderID, mType, mTitle, adapter.selectedItems)
+
+
+                is Lce.Error -> {
+
 
                 }
             }
+
+
         })
         viewModel.observableApplied.observe(viewLifecycleOwner, Observer {
             pb_schedule_test.gone()

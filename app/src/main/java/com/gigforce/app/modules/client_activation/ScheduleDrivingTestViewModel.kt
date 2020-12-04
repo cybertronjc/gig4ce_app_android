@@ -3,12 +3,8 @@ package com.gigforce.app.modules.client_activation
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.gigforce.app.modules.auth.ui.main.LoginResponse
-import com.gigforce.app.modules.auth.ui.main.LoginViewModel
-import com.gigforce.app.modules.client_activation.models.DocReceiving
-import com.gigforce.app.modules.client_activation.models.DrivingCertSubmission
-import com.gigforce.app.modules.client_activation.models.DrivingCertificate
-import com.gigforce.app.modules.client_activation.models.JpApplication
+import com.gigforce.app.modules.client_activation.models.*
+import com.gigforce.app.utils.Lce
 import com.gigforce.app.utils.SingleLiveEvent
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.FirebaseAuth
@@ -27,7 +23,7 @@ class ScheduleDrivingTestViewModel : ViewModel() {
         SingleLiveEvent<String>();
     }
 
-    val liveState: MutableLiveData<LoginResponse> = MutableLiveData<LoginResponse>()
+    val liveState: MutableLiveData<Lce<Int>> = MutableLiveData<Lce<Int>>()
 
     val observableError: SingleLiveEvent<String> get() = _observableError
 
@@ -49,12 +45,12 @@ class ScheduleDrivingTestViewModel : ViewModel() {
     var verificationId: String? = null
     val callbacks = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
         override fun onVerificationCompleted(credential: PhoneAuthCredential) {
-            liveState.postValue(LoginResponse(LoginViewModel.STATE_VERIFY_SUCCESS, ""))
-            signInWithPhoneAuthCredentialScheduleDrivingTest(credential)
+            liveState.postValue(Lce.content(VERIFY_SUCCESS))
+//            signInWithPhoneAuthCredentialScheduleDrivingTest(credential)
         }
 
         override fun onVerificationFailed(e: FirebaseException) {
-            liveState.postValue(LoginResponse(LoginViewModel.STATE_VERIFY_FAILED, e.toString()))
+            liveState.postValue(Lce.content(VERIFY_FAILED))
         }
 
         override fun onCodeSent(
@@ -63,7 +59,7 @@ class ScheduleDrivingTestViewModel : ViewModel() {
         ) {
             super.onCodeSent(_verificationId, _token)
             verificationId = _verificationId
-            liveState.postValue(LoginResponse(LoginViewModel.STATE_CODE_SENT, ""))
+            liveState.postValue(Lce.content(CODE_SENT))
         }
     }
 
@@ -104,7 +100,7 @@ class ScheduleDrivingTestViewModel : ViewModel() {
     }
 
     fun apply(
-            mWorkOrderID: String, type: String, title: String, options: List<String>
+            mWorkOrderID: String, type: String, title: String, options: List<CheckItem>
     ) = viewModelScope.launch {
 
 
@@ -121,7 +117,7 @@ class ScheduleDrivingTestViewModel : ViewModel() {
     suspend fun setInJPApplication(
             workOrderID: String,
             type: String,
-            title: String, options: List<String>
+            title: String, options: List<CheckItem>
     ) {
         val items = repository.getCollectionReference().whereEqualTo("jpid", workOrderID)
                 .whereEqualTo("gigerId", repository.getUID()).get()
@@ -143,10 +139,22 @@ class ScheduleDrivingTestViewModel : ViewModel() {
                         val jpApplication =
                                 items.toObjects(JpApplication::class.java)[0]
                         jpApplication.process.forEach { draft ->
+                            if (draft.type == "onsite_document") {
+
+                                options.forEach { item ->
+                                    run {
+                                        if (item.isForKitCollection) {
+                                            draft.isDone=true
+                                        }
+
+                                    }
+                                }
+                            }
+
                             if (draft.title == title) {
                                 draft.isDone = true
                                 draft.isSlotBooked = true
-                                draft.status="Done"
+                                draft.status = "Done"
 
 
                             }
@@ -176,12 +184,18 @@ class ScheduleDrivingTestViewModel : ViewModel() {
                 .signInWithCredential(credential)
                 .addOnCompleteListener {
                     if (it.isSuccessful) {
-                        liveState.postValue(LoginResponse(LoginViewModel.STATE_VERIFY_SUCCESS, it.toString()))
+                        liveState.postValue(Lce.content(VERIFY_SUCCESS))
 
                     } else {
-                        liveState.postValue(LoginResponse(LoginViewModel.STATE_VERIFY_FAILED, ""))
+                        liveState.postValue(Lce.content(VERIFY_FAILED))
                     }
                 }
+    }
+
+    companion object {
+        val CODE_SENT = 2;
+        val VERIFY_FAILED = 3;
+        val VERIFY_SUCCESS = 4;
     }
 
 
