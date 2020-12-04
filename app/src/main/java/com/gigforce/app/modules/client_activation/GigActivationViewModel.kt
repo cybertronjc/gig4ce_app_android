@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.gigforce.app.modules.client_activation.models.GigActivation
 import com.gigforce.app.modules.client_activation.models.JpApplication
 import com.gigforce.app.modules.landingscreen.models.Dependency
+import com.gigforce.app.modules.learning.models.progress.LessonProgress
 import com.gigforce.app.utils.SingleLiveEvent
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
@@ -93,7 +94,8 @@ class GigActivationViewModel(private val savedStateHandle: SavedStateHandle) : V
                             }
 
                             "learning" -> {
-                                it.isDone = checkForCourseCompletion(it.courseId)
+//                                it.isDone = checkForCourseCompletion(it.courseId)
+                                it.isDone = checkIfCourseCompleted(it.moduleId)
                             }
 
                         }
@@ -157,4 +159,22 @@ class GigActivationViewModel(private val savedStateHandle: SavedStateHandle) : V
         return items.documents.all { it.data?:it.data!!["completed"] != null && it.data?:it.data!!["completed"] == true }
 
     }
+
+    suspend fun checkIfCourseCompleted(moduleId:String):Boolean{
+        val data = repository.db.collection("Course_Progress").whereEqualTo("uid",repository.getUID()).whereEqualTo("type","module").whereEqualTo("module_id",moduleId).get().await()
+        if(data.documents.isNullOrEmpty()){
+            return false
+        }
+        data.documents[0].let {
+            var completed = true
+            for(lesson in it.data!!["lesson_progress"] as ArrayList<LessonProgress>){
+                    if(lesson.lessonType == "assessment" && !lesson.completed){
+                        false
+                    }
+            }
+            return completed
+        }
+        return false
+    }
+
 }
