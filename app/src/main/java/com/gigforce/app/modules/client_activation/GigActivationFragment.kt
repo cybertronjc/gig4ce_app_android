@@ -5,6 +5,7 @@ import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ScrollView
 import androidx.core.os.bundleOf
 import androidx.lifecycle.Observer
 import androidx.lifecycle.SavedStateViewModelFactory
@@ -37,6 +38,7 @@ class GigActivationFragment : BaseFragment(),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         getDataFromIntents(savedInstanceState)
+        checkForBackPress()
         viewModel =
                 ViewModelProvider(
                         this,
@@ -95,6 +97,10 @@ class GigActivationFragment : BaseFragment(),
 
     private fun initApplication(jpApplication: JpApplication) {
         adapter.addData(jpApplication.process)
+
+        sv_gig_activation.post {
+            sv_gig_activation.fullScroll(ScrollView.FOCUS_DOWN);
+        }
         adapter.setCallbacks(this)
         for (i in 0 until jpApplication.process.size) {
             if (!jpApplication.process[i].isDone) {
@@ -112,8 +118,23 @@ class GigActivationFragment : BaseFragment(),
                 )
             }
         }
+        checkForRedirection()
 
     }
+
+
+    private fun checkForBackPress() {
+
+        if (navFragmentsData?.getData() != null) {
+            if (navFragmentsData?.getData()
+                            ?.getBoolean(StringConstants.BACK_PRESSED.value, false) == true
+            ) {
+                viewModel.redirectToNextStep = false
+                navFragmentsData?.setData(bundleOf())
+            }
+        }
+    }
+
 
     private val adapter: AdapterGigActivation by lazy {
         AdapterGigActivation()
@@ -155,6 +176,7 @@ class GigActivationFragment : BaseFragment(),
     }
 
     override fun onItemClick(dependency: Dependency) {
+        viewModel.redirectToNextStep = true
         when (dependency.type) {
             "document" ->
                 navigate(
@@ -175,6 +197,27 @@ class GigActivationFragment : BaseFragment(),
                 )
             }
         }
+    }
+
+    private fun checkForRedirection() {
+        if (!viewModel.redirectToNextStep) return
+        for (i in adapter.items.indices) {
+            if (!adapter.items[i].isDone) {
+                when (adapter.items[i].type) {
+
+                    "training" -> navigate(
+                            R.id.learningCourseDetails,
+                            bundleOf(LearningCourseDetailsFragment.INTENT_EXTRA_COURSE_ID to adapter.items[i].courseId,
+                                    StringConstants.FROM_CLIENT_ACTIVATON.value to true
+                            )
+                    )
+                }
+                break
+            }
+
+        }
+
+
     }
 
 

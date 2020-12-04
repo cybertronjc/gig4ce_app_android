@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
@@ -29,7 +30,7 @@ import java.util.concurrent.TimeUnit
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
-class ScheduleDrivingTestFragment : BaseFragment() {
+class ScheduleDrivingTestFragment : BaseFragment(), DrivingCertSuccessDialog.DrivingCertSuccessDialogCallbacks {
     private var countDownTimer: CountDownTimer? = null
     private lateinit var mWordOrderID: String
     private lateinit var mTitle: String
@@ -130,7 +131,11 @@ class ScheduleDrivingTestFragment : BaseFragment() {
             pb_schedule_test.gone()
             if (it == true) {
                 countDownTimer?.cancel()
-                DrivingCertSuccessDialog().show(parentFragmentManager, DrivingCertSuccessDialog::class.java.name)
+                var drivingCertSuccessDialog = DrivingCertSuccessDialog()
+                drivingCertSuccessDialog.isCancelable = false
+                drivingCertSuccessDialog.setCallbacks(this)
+                drivingCertSuccessDialog
+                drivingCertSuccessDialog.show(parentFragmentManager, DrivingCertSuccessDialog::class.java.name)
             }
         })
         viewModel.getUIData(mWordOrderID)
@@ -241,6 +246,10 @@ class ScheduleDrivingTestFragment : BaseFragment() {
 
         return super.onBackPressed()
 
+    }
+
+    override fun onClickOkay() {
+        findNavController().popBackStack(R.id.landinghomefragment,true)
     }
 
 

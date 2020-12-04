@@ -14,6 +14,7 @@ import kotlinx.coroutines.tasks.await
 class GigActivationViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel() {
     var initialized: Boolean = false
     val repository = GigActivationRepository()
+    var redirectToNextStep: Boolean = true
 
     private val _observableError: SingleLiveEvent<String> by lazy {
         SingleLiveEvent<String>();

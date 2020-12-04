@@ -59,6 +59,8 @@ class DocsSubSchedulerFragment : BaseFragment(),
             if (it == null) return@Observer
 
             val address = it.partnerSchoolDetails
+            partnerAddress = address
+
             textView137.text =
                     Html.fromHtml(address?.name + "<br>" + address?.landmark + "<br>" + address?.city + "<br>"
                             + address?.timing + "<br>" + address?.contact?.map { "<b><font color=\'#000000\'>" + it.name + "</font></b>" }
@@ -80,8 +82,10 @@ class DocsSubSchedulerFragment : BaseFragment(),
                 }
             }
             textView143.text = it.slotTime
+            selectedTimeSlot = it.slotTime
             imageView36.gone()
             textView139.text = it.slotDate
+            dateString = it.slotDate
             imageView35.gone()
             imageView34.gone()
             slider_checkout.isLocked = false
@@ -136,9 +140,9 @@ class DocsSubSchedulerFragment : BaseFragment(),
     }
 
     private fun initViews() {
-        if (partnerAddress != null) {
-            setPartnerAddress(partnerAddress!!)
-        }
+//        if (partnerAddress != null) {
+//            setPartnerAddress(partnerAddress!!)
+//        }
     }
 
     companion object {
