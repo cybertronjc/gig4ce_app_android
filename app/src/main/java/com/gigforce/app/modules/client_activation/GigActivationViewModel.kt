@@ -15,6 +15,7 @@ import kotlinx.coroutines.tasks.await
 class GigActivationViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel() {
     var initialized: Boolean = false
     val repository = GigActivationRepository()
+    var redirectToNextStep: Boolean = true
 
     private val _observableError: SingleLiveEvent<String> by lazy {
         SingleLiveEvent<String>();
@@ -156,7 +157,7 @@ class GigActivationViewModel(private val savedStateHandle: SavedStateHandle) : V
         if (items.documents.isNullOrEmpty()) {
             return false
         }
-        return items.documents.all { it.data?:it.data!!["completed"] != null && it.data?:it.data!!["completed"] == true }
+        return items.documents.all { it.data!!["completed"] != null && it.data!!["completed"] == true }
 
     }
 

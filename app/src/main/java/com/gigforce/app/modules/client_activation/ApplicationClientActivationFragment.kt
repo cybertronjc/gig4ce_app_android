@@ -99,6 +99,7 @@ class ApplicationClientActivationFragment : BaseFragment(),
     private fun initObservers() {
         viewModel.observableApplicationStatus.observe(viewLifecycleOwner, Observer {
             pb_application_client_activation.gone()
+            popBackState()
             navigate(
                     R.id.fragment_gig_activation, bundleOf(
                     StringConstants.NEXT_DEP.value to mNextDep,

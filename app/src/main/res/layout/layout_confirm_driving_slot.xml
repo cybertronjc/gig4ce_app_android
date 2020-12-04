@@ -257,6 +257,7 @@
         android:button="@drawable/check_box_confirmation_dialog"
         android:fontFamily="@font/lato"
         android:paddingStart="@dimen/size_15"
+        android:buttonTint="@color/lipstick"
         android:paddingEnd="@dimen/size_29"
         android:text="@string/i_will_submit_dl_and_cheque_in_same_centre_only"
         android:textColor="@color/black"
