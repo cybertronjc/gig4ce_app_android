@@ -6,11 +6,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gigforce.app.modules.client_activation.models.GigActivation
 import com.gigforce.app.modules.client_activation.models.JpApplication
+import com.gigforce.app.modules.client_activation.models.JpSettings
 import com.gigforce.app.modules.landingscreen.models.Dependency
 import com.gigforce.app.modules.learning.models.progress.LessonProgress
 import com.gigforce.app.utils.SingleLiveEvent
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import org.json.JSONArray
 
 class GigActivationViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel() {
     var initialized: Boolean = false
@@ -166,16 +168,19 @@ class GigActivationViewModel(private val savedStateHandle: SavedStateHandle) : V
         if(data.documents.isNullOrEmpty()){
             return false
         }
-        data.documents[0].let {
+        var allCourseProgress = data.toObjects(CourseProgress::class.java).first()
+        allCourseProgress.lessonProgress.let {
             var completed = true
-            for(lesson in it.data!!["lesson_progress"] as ArrayList<LessonProgress>){
-                    if(lesson.lessonType == "assessment" && !lesson.completed){
-                        false
-                    }
+            for(lesson in it){
+                if(lesson.lessonType == "assessment" && !lesson.completed){
+                    return false
+                }
             }
             return completed
         }
         return false
     }
-
+data class CourseProgress(
+    var lessonProgress: ArrayList<LessonProgress> = ArrayList<LessonProgress>()
+)
 }
