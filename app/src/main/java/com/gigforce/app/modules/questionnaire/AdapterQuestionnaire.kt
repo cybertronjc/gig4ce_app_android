@@ -17,7 +17,7 @@ import java.util.*
 
 class AdapterQuestionnaire : RecyclerView.Adapter<AdapterQuestionnaire.ViewHolder>() {
     private var horizontalItemDecoration: ItemOffsetDecoration? = null
-    private lateinit var items: List<Questions>
+     lateinit var items: List<Questions>
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
@@ -71,7 +71,7 @@ class AdapterQuestionnaire : RecyclerView.Adapter<AdapterQuestionnaire.ViewHolde
                         items[holder.adapterPosition].selectedDate = date
                         items[holder.adapterPosition].dropDownItem = value ?: ""
                     }
-                    "dropdown" -> {
+                    "state_city_dropdown" -> {
                         items[holder.adapterPosition].dropDownItem = value ?: ""
                         items[holder.adapterPosition].selectedDate = date
                     }

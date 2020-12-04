@@ -40,11 +40,7 @@ class AdapterGigActivation : RecyclerView.Adapter<AdapterGigActivation.ViewHolde
                 if (position == items.size - 1) View.GONE else View.VISIBLE
         holder.itemView.setOnClickListener {
             if (holder.adapterPosition == -1) return@setOnClickListener
-            callbacks?.onItemClick(
-                    items[holder.adapterPosition].docType!!,
-                    items[holder.adapterPosition].title!!,
-                    dependency.course,
-                    dependency.isSlotBooked
+            callbacks?.onItemClick(items.get(holder.adapterPosition)
             )
         }
 
@@ -71,7 +67,7 @@ class AdapterGigActivation : RecyclerView.Adapter<AdapterGigActivation.ViewHolde
     }
 
     interface AdapterApplicationClientActivationCallbacks {
-        fun onItemClick(feature: String, title: String, courseID: String, isSlotBooked: Boolean);
+        fun onItemClick(dependency: Dependency);
 
     }
 

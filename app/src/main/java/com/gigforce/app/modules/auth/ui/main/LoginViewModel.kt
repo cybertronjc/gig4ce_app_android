@@ -78,25 +78,6 @@ class LoginViewModel() : ViewModel() {
         signInWithPhoneAuthCredential(credential)
     }
 
-    fun verifyPhoneNumberWithCodeScheduleDrivingTest(code: String) {
-        val credential = PhoneAuthProvider.getCredential(verificationId!!, code)
-        signInWithPhoneAuthCredentialScheduleDrivingTest(credential)
-    }
-
-    private fun signInWithPhoneAuthCredentialScheduleDrivingTest(credential: PhoneAuthCredential) {
-        FirebaseAuth.getInstance()
-                .signInWithCredential(credential)
-                .addOnCompleteListener {
-                    if (it.isSuccessful) {
-                        Log.d(TAG, "signInWithCredential:success")
-                        liveState.postValue(LoginResponse(STATE_VERIFY_SUCCESS, it.toString()))
-
-                    } else {
-                        Log.w(TAG, "signInWithCredential:failure", it.exception)
-                        liveState.postValue(LoginResponse(STATE_VERIFY_FAILED, ""))
-                    }
-                }
-    }
 
     private fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential) {
         FirebaseAuth.getInstance()

@@ -8,7 +8,7 @@ data class Dependency(
         var type: String? = null,
         var title: String? = null,
         var status: String = "",
-        var course: String = "",
+        var courseId: String = "",
         var moduleId: String = "",
         var lessonId: String = "",
         @JvmField

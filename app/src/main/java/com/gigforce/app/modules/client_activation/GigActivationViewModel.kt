@@ -37,22 +37,22 @@ class GigActivationViewModel(private val savedStateHandle: SavedStateHandle) : V
     fun getActivationData(workOrderId: String) {
 
         repository.getCollectionReference().whereEqualTo("jobProfileId", workOrderId)
-            .whereEqualTo("type", "documents").addSnapshotListener { success, err ->
-                if (err == null) {
-                    if (success?.documents?.isNotEmpty() == true) {
-                        observableGigActivation.value =
-                            success?.toObjects(GigActivation::class.java)?.get(0)
+                .whereEqualTo("type", "documents").addSnapshotListener { success, err ->
+                    if (err == null) {
+                        if (success?.documents?.isNotEmpty() == true) {
+                            observableGigActivation.value =
+                                    success?.toObjects(GigActivation::class.java)?.get(0)
 
+                        }
+                    } else {
+                        observableError.value = err.message
                     }
-                } else {
-                    observableError.value = err.message
                 }
-            }
 
     }
 
     fun getApplication(
-        mWorkOrderID: String
+            mWorkOrderID: String
     ) = viewModelScope.launch {
         observableJpApplication.value = getJPApplication(mWorkOrderID)
 
@@ -60,85 +60,101 @@ class GigActivationViewModel(private val savedStateHandle: SavedStateHandle) : V
 
     suspend fun getJPApplication(workOrderID: String): JpApplication {
         val items = repository.db.collection("JP_Applications").whereEqualTo("jpid", workOrderID)
-            .whereEqualTo("gigerId", repository.getUID()).get()
-            .await()
+                .whereEqualTo("gigerId", repository.getUID()).get()
+                .await()
         val toObject = items.toObjects(JpApplication::class.java).get(0)
         toObject.id = items.documents[0].id
         return toObject
     }
 
     fun updateDraftJpApplication(mWorkOrderID: String, dependency: List<Dependency>) =
-        viewModelScope.launch {
+            viewModelScope.launch {
 
 
-            val model = getJPApplication(mWorkOrderID)
+                val model = getJPApplication(mWorkOrderID)
 
-            if (model.process.isNullOrEmpty()) {
-                model.process = dependency.toMutableList()
+                if (model.process.isNullOrEmpty()) {
+                    model.process = dependency.toMutableList()
 
-            }
-            model.process.forEach {
-                if (!it.isDone) {
-                    when (it.type) {
-                        "driving_certificate" -> {
+                }
+                model.status = "process"
+                model.process.forEach {
+                    if (!it.isDone) {
+                        when (it.type) {
 
-                            it.isDone = checkForDrivingCertificate(
-                                mWorkOrderID,
-                                it.type ?: "",
-                                it.title ?: ""
-                            )
+                            "document","onsite_document" -> {
+
+                                it.isDone = checkForDrivingCertificate(
+                                        mWorkOrderID,
+                                        it.type ?: "",
+                                        it.title ?: ""
+                                )
+
+                            }
+
+                            "learning" -> {
+                                it.isDone = checkForCourseCompletion(it.courseId)
+                            }
 
                         }
-
                     }
-                }
 
 
-                if (model.id.isEmpty()) {
-                    repository.db.collection("JP_Applications").document().set(model)
-                        .addOnCompleteListener {
-                            if (it.isSuccessful) {
+                    if (model.id.isEmpty()) {
+                        repository.db.collection("JP_Applications").document().set(model)
+                                .addOnCompleteListener {
+                                    if (it.isSuccessful) {
 
-                                observableJpApplication.value = model
-                                observableInitApplication.value = true
+                                        observableJpApplication.value = model
+                                        observableInitApplication.value = true
 
-                            }
-                        }
-                } else {
-                    repository.db.collection("JP_Applications").document(model.id).set(model)
-                        .addOnCompleteListener {
-                            if (it.isSuccessful) {
-                                observableJpApplication.value = model
-                                observableInitApplication.value = true
+                                    }
+                                }
+                    } else {
+                        repository.db.collection("JP_Applications").document(model.id).set(model)
+                                .addOnCompleteListener {
+                                    if (it.isSuccessful) {
+                                        observableJpApplication.value = model
+                                        observableInitApplication.value = true
 
-                            }
-                        }
+                                    }
+                                }
+                    }
+
+
                 }
 
 
             }
-
-
-        }
 
     suspend fun checkForDrivingCertificate(
-        workOrderID: String,
-        type: String,
-        title: String
+            workOrderID: String,
+            type: String,
+            title: String
     ): Boolean {
 
         val items = repository.db.collection("JP_Applications").whereEqualTo("jpid", workOrderID)
-            .whereEqualTo("gigerId", repository.getUID()).get()
-            .await()
+                .whereEqualTo("gigerId", repository.getUID()).get()
+                .await()
         if (items.documents.isNullOrEmpty()) {
             return false
         }
         val documentSnapshot = items.documents[0]
         return !repository.db.collection("JP_Applications").document(documentSnapshot.id)
-            .collection("submissions").whereEqualTo("stepId", workOrderID).whereEqualTo(
-                "title", title
-            ).whereEqualTo("type", type).get().await().documents.isNullOrEmpty()
+                .collection("submissions").whereEqualTo("stepId", workOrderID).whereEqualTo(
+                        "title", title
+                ).whereEqualTo("type", type).get().await().documents.isNullOrEmpty()
 
+
+    }
+
+
+    suspend fun checkForCourseCompletion(courseId: String): Boolean {
+        val items = repository.db.collection("Course_Progress").whereEqualTo("course_id", courseId).get().await()
+        if (items.documents.isNullOrEmpty()) {
+            return false
+        }
+        return items.documents.all { it.data?:it.data!!["completed"] != null && it.data?:it.data!!["completed"] == true }
 
     }
 }

@@ -57,36 +57,36 @@ class DocsSubSchedulerFragment : BaseFragment(),
 
         viewModel.observableJpApplication.observe(viewLifecycleOwner, Observer {
             if (it == null) return@Observer
-            if (it.slotBooked) {
-                val address = it.partnerSchoolDetails
-                textView137.text =
-                        Html.fromHtml(address?.name + "<br>" + address?.landmark + "<br>" + address?.city + "<br>"
-                                + address?.timing + "<br>" + address?.contact?.map { "<b><font color=\'#000000\'>" + it.name + "</font></b>" }
-                                ?.reduce { a, o -> a + o }
-                        )
-                iv_location.visible()
-                iv_contact.visible()
-                iv_location.setOnClickListener {
-                    val uri =
-                            "http://maps.google.com/maps?saddr=" + "&daddr=" + address?.lat + "," + address?.lon
-                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
-                    startActivity(intent)
-                }
-                iv_contact.setOnClickListener {
-                    if (!address?.contact.isNullOrEmpty()) {
-                        val callIntent = Intent(Intent.ACTION_DIAL);
-                        callIntent.data = Uri.parse("tel: " + address?.contact!![0].number);
-                        startActivity(callIntent);
-                    }
-                }
-                textView143.text = it.slotTime
-                imageView36.gone()
-                textView139.text = it.slotDate
-                imageView35.gone()
-                imageView34.gone()
-                slider_checkout.isLocked = false
-                slider_checkout.visibility = View.VISIBLE
+
+            val address = it.partnerSchoolDetails
+            textView137.text =
+                    Html.fromHtml(address?.name + "<br>" + address?.landmark + "<br>" + address?.city + "<br>"
+                            + address?.timing + "<br>" + address?.contact?.map { "<b><font color=\'#000000\'>" + it.name + "</font></b>" }
+                            ?.reduce { a, o -> a + o }
+                    )
+            iv_location.visible()
+            iv_contact.visible()
+            iv_location.setOnClickListener {
+                val uri =
+                        "http://maps.google.com/maps?saddr=" + "&daddr=" + address?.lat + "," + address?.lon
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
+                startActivity(intent)
             }
+            iv_contact.setOnClickListener {
+                if (!address?.contact.isNullOrEmpty()) {
+                    val callIntent = Intent(Intent.ACTION_DIAL);
+                    callIntent.data = Uri.parse("tel: " + address?.contact!![0].number);
+                    startActivity(callIntent);
+                }
+            }
+            textView143.text = it.slotTime
+            imageView36.gone()
+            textView139.text = it.slotDate
+            imageView35.gone()
+            imageView34.gone()
+            slider_checkout.isLocked = false
+            slider_checkout.visibility = View.VISIBLE
+
         })
         viewModel.getApplication(mWordOrderID, mType, mTitle)
 

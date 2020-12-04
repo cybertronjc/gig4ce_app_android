@@ -3,11 +3,17 @@ package com.gigforce.app.modules.client_activation
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.gigforce.app.modules.auth.ui.main.LoginResponse
+import com.gigforce.app.modules.auth.ui.main.LoginViewModel
 import com.gigforce.app.modules.client_activation.models.DocReceiving
 import com.gigforce.app.modules.client_activation.models.DrivingCertSubmission
 import com.gigforce.app.modules.client_activation.models.DrivingCertificate
 import com.gigforce.app.modules.client_activation.models.JpApplication
 import com.gigforce.app.utils.SingleLiveEvent
+import com.google.firebase.FirebaseException
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.PhoneAuthCredential
+import com.google.firebase.auth.PhoneAuthProvider
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
@@ -20,6 +26,9 @@ class ScheduleDrivingTestViewModel : ViewModel() {
     private val _observableError: SingleLiveEvent<String> by lazy {
         SingleLiveEvent<String>();
     }
+
+    val liveState: MutableLiveData<LoginResponse> = MutableLiveData<LoginResponse>()
+
     val observableError: SingleLiveEvent<String> get() = _observableError
 
     private val _observableJpApplication: SingleLiveEvent<DrivingCertificate> by lazy {
@@ -37,6 +46,26 @@ class ScheduleDrivingTestViewModel : ViewModel() {
 
     }
 
+    var verificationId: String? = null
+    val callbacks = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+        override fun onVerificationCompleted(credential: PhoneAuthCredential) {
+            liveState.postValue(LoginResponse(LoginViewModel.STATE_VERIFY_SUCCESS, ""))
+            signInWithPhoneAuthCredentialScheduleDrivingTest(credential)
+        }
+
+        override fun onVerificationFailed(e: FirebaseException) {
+            liveState.postValue(LoginResponse(LoginViewModel.STATE_VERIFY_FAILED, e.toString()))
+        }
+
+        override fun onCodeSent(
+                _verificationId: String,
+                _token: PhoneAuthProvider.ForceResendingToken
+        ) {
+            super.onCodeSent(_verificationId, _token)
+            verificationId = _verificationId
+            liveState.postValue(LoginResponse(LoginViewModel.STATE_CODE_SENT, ""))
+        }
+    }
 
     suspend fun getJPApplication(
             workOrderID: String,
@@ -115,9 +144,10 @@ class ScheduleDrivingTestViewModel : ViewModel() {
                                 items.toObjects(JpApplication::class.java)[0]
                         jpApplication.process.forEach { draft ->
                             if (draft.title == title) {
-                                draft.isDone = false
+                                draft.isDone = true
                                 draft.isSlotBooked = true
-                                draft.status = "Slot Booked"
+                                draft.status="Done"
+
 
                             }
                         }
@@ -133,6 +163,25 @@ class ScheduleDrivingTestViewModel : ViewModel() {
                 }
 
 
+    }
+
+
+    fun verifyPhoneNumberWithCodeScheduleDrivingTest(code: String) {
+        val credential = PhoneAuthProvider.getCredential(verificationId!!, code)
+        signInWithPhoneAuthCredentialScheduleDrivingTest(credential)
+    }
+
+    private fun signInWithPhoneAuthCredentialScheduleDrivingTest(credential: PhoneAuthCredential) {
+        FirebaseAuth.getInstance()
+                .signInWithCredential(credential)
+                .addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        liveState.postValue(LoginResponse(LoginViewModel.STATE_VERIFY_SUCCESS, it.toString()))
+
+                    } else {
+                        liveState.postValue(LoginResponse(LoginViewModel.STATE_VERIFY_FAILED, ""))
+                    }
+                }
     }
 
 

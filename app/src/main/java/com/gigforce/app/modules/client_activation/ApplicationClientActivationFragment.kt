@@ -17,7 +17,7 @@ import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.client_activation.models.JpApplication
 import com.gigforce.app.modules.landingscreen.models.Dependency
-import com.gigforce.app.modules.learning.learningVideo.PlayVideoDialogFragment
+import com.gigforce.app.modules.learning.courseDetails.LearningCourseDetailsFragment
 import com.gigforce.app.modules.photocrop.PhotoCrop
 import com.gigforce.app.utils.StringConstants
 import io.reactivex.Observable
@@ -194,10 +194,9 @@ class ApplicationClientActivationFragment : BaseFragment(),
                             R.id.fragment_upload_dl_cl_act,
                             bundleOf(StringConstants.FROM_CLIENT_ACTIVATON.value to true)
                     )
-                    "learning" -> PlayVideoDialogFragment.launch(
-                            childFragmentManager = childFragmentManager,
-                            moduleId = adapter.items[i].moduleId,
-                            lessonId = adapter.items[i].lessonId
+                    "learning" -> navigate(
+                            R.id.learningCourseDetails,
+                            bundleOf(LearningCourseDetailsFragment.INTENT_EXTRA_COURSE_ID to adapter.items[i].courseId)
                     )
                 }
                 break
@@ -295,10 +294,9 @@ class ApplicationClientActivationFragment : BaseFragment(),
                     R.id.fragment_upload_dl_cl_act,
                     bundleOf(StringConstants.FROM_CLIENT_ACTIVATON.value to true)
             )
-            "learning" -> PlayVideoDialogFragment.launch(
-                    childFragmentManager = childFragmentManager,
-                    moduleId = dependency.moduleId,
-                    lessonId = dependency.lessonId
+            "learning" -> navigate(
+                    R.id.learningCourseDetails,
+                    bundleOf(LearningCourseDetailsFragment.INTENT_EXTRA_COURSE_ID to dependency.courseId)
             )
         }
     }

@@ -10,8 +10,10 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.SavedStateViewModelFactory
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.SmoothScroller
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.gone
@@ -22,6 +24,7 @@ import kotlinx.android.synthetic.main.layout_questionnaire_fragment.*
 
 
 class QuestionnaireFragment : BaseFragment() {
+    private lateinit var ratioLayoutManager: RatioLayoutManager
     private var FROM_CLIENT_ACTIVATON: Boolean = false
     private lateinit var mWordOrderID: String
     private lateinit var mType: String
@@ -37,9 +40,9 @@ class QuestionnaireFragment : BaseFragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         return inflateView(R.layout.layout_questionnaire_fragment, inflater, container)
 
@@ -50,10 +53,10 @@ class QuestionnaireFragment : BaseFragment() {
         getDataFromIntents(savedInstanceState)
 
         viewModel =
-            ViewModelProvider(
-                this,
-                SavedStateViewModelFactory(requireActivity().application, this)
-            ).get(ViewModelQuestionnaire::class.java)
+                ViewModelProvider(
+                        this,
+                        SavedStateViewModelFactory(requireActivity().application, this)
+                ).get(ViewModelQuestionnaire::class.java)
         setupRecycler()
         initObservers()
         initClicks()
@@ -72,10 +75,10 @@ class QuestionnaireFragment : BaseFragment() {
     override fun onBackPressed(): Boolean {
         if (FROM_CLIENT_ACTIVATON) {
             navFragmentsData?.setData(
-                bundleOf(
-                    StringConstants.BACK_PRESSED.value to true
+                    bundleOf(
+                            StringConstants.BACK_PRESSED.value to true
 
-                )
+                    )
             )
         }
         return super.onBackPressed()
@@ -88,7 +91,7 @@ class QuestionnaireFragment : BaseFragment() {
             mType = it.getString(StringConstants.TYPE.value) ?: return@let
             mTitle = it.getString(StringConstants.TITLE.value) ?: return@let
             FROM_CLIENT_ACTIVATON =
-                it.getBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, false)
+                    it.getBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, false)
 
 
         }
@@ -98,7 +101,7 @@ class QuestionnaireFragment : BaseFragment() {
             mType = it.getString(StringConstants.TYPE.value) ?: return@let
             mTitle = it.getString(StringConstants.TITLE.value) ?: return@let
             FROM_CLIENT_ACTIVATON =
-                it.getBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, false)
+                    it.getBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, false)
 
 
         }
@@ -106,26 +109,41 @@ class QuestionnaireFragment : BaseFragment() {
 
 
     private fun initClicks() {
-        PushDownAnim.setPushDownAnimTo(tv_action_questionnaire)
-            .setOnClickListener(View.OnClickListener {
-                if (selectedPosition == viewModel.observableQuestionnaireResponse.value!!.questions.size - 1) {
-                    pb_questionnaire.visible()
-                    viewModel.addQuestionnaire(
-                        mWordOrderID,
-                        mTitle,
-                        mType,
-                        viewModel.observableQuestionnaireResponse.value?.questions
-                    )
-                    return@OnClickListener
-                }
-                if (viewModel.observableQuestionnaireResponse.value?.questions?.get(selectedPosition)?.selectedAnswer != -1) {
-                    selectedPosition += 1
-                    rv_questionnaire.smoothScrollToPosition(selectedPosition + 1)
-                } else {
-                    showToast(getString(R.string.answer_the_ques))
-                }
+        val smoothScroller: SmoothScroller = object : LinearSmoothScroller(context) {
 
-            })
+
+            override fun getHorizontalSnapPreference(): Int {
+                return SNAP_TO_START
+            }
+        }
+        PushDownAnim.setPushDownAnimTo(tv_action_questionnaire)
+                .setOnClickListener(View.OnClickListener {
+                    if (selectedPosition == adapter.items.size - 1) {
+                        pb_questionnaire.visible()
+                        viewModel.addQuestionnaire(
+                                mWordOrderID,
+                                mTitle,
+                                mType,
+                                adapter.items
+                        )
+                        return@OnClickListener
+                    }
+                    if (adapter.items[selectedPosition].selectedAnswer != -1) {
+                        selectedPosition += 1
+                        ratioLayoutManager.setScrollEnabled(true)
+                        smoothScroller.targetPosition = selectedPosition
+                        ratioLayoutManager.startSmoothScroll(smoothScroller)
+                        rv_questionnaire.postDelayed({
+                            ratioLayoutManager.setScrollEnabled(false)
+
+                        }, 500)
+
+
+                    } else {
+                        showToast(getString(R.string.answer_the_ques))
+                    }
+
+                })
     }
 
     private fun initObservers() {
@@ -158,28 +176,28 @@ class QuestionnaireFragment : BaseFragment() {
     private fun setupRecycler() {
         rv_questionnaire.adapter = adapter
         val ratioToCover = 0.85f
-        val ratioLayoutManager = RatioLayoutManager(
-            requireContext(),
-            LinearLayoutManager.HORIZONTAL,
-            false,
-            ratioToCover
+        ratioLayoutManager = RatioLayoutManager(
+                requireContext(),
+                LinearLayoutManager.HORIZONTAL,
+                false,
+                ratioToCover
         )
         ratioLayoutManager.setScrollEnabled(false)
         rv_questionnaire.layoutManager = ratioLayoutManager
         val snapHelper = PagerSnapHelper()
         snapHelper.attachToRecyclerView(rv_questionnaire)
         rv_questionnaire.addItemDecoration(
-            RVPagerSnapFancyDecorator(
-                requireContext(),
-                (getScreenWidth(requireActivity()).width * ratioToCover).toInt(),
-                0.015f
-            )
+                RVPagerSnapFancyDecorator(
+                        requireContext(),
+                        (getScreenWidth(requireActivity()).width * ratioToCover).toInt(),
+                        0.015f
+                )
         )
         rv_questionnaire.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 tb_layout_questionnaire.getTabAt(ratioLayoutManager.findFirstCompletelyVisibleItemPosition())
-                    ?.select();
+                        ?.select();
             }
         })
 

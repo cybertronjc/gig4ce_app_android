@@ -63,7 +63,7 @@ class AdapterOptionsQuestionnaire : RecyclerView.Adapter<RecyclerView.ViewHolder
             TYPE_TEXT -> {
                 holder.itemView.tv_answer_questionnaire.setBackgroundResource(if (item.selectedAnswer == position) R.drawable.border_lipstick_rad_4 else R.drawable.border_27979797_rad_4)
 
-                holder.itemView.tv_answer_questionnaire.text = option.question
+                holder.itemView.tv_answer_questionnaire.text = option.answer
                 holder.itemView.tv_answer_questionnaire.setCompoundDrawablesWithIntrinsicBounds(
                         if (option.isAnswer) R.drawable.ic_thumbs_up else R.drawable.ic_thumbs_down,
                         0,
@@ -82,7 +82,7 @@ class AdapterOptionsQuestionnaire : RecyclerView.Adapter<RecyclerView.ViewHolder
                     option.options.add(0, "Select")
 
                 }
-                holder.itemView.tv_question.text = option.question
+                holder.itemView.tv_question.text = option.answer
                 holder.itemView.ll_questionnaire.setBackgroundResource(if (item.selectedAnswer == position) R.drawable.border_lipstick_rad_4 else R.drawable.border_27979797_rad_4)
 
                 holder.itemView.sp_options.adapter = GenericSpinnerAdapter(
@@ -115,7 +115,7 @@ class AdapterOptionsQuestionnaire : RecyclerView.Adapter<RecyclerView.ViewHolder
 
             }
             DATE -> {
-                holder.itemView.tv_date_label.text = option.question
+                holder.itemView.tv_date_label.text = option.answer
                 holder.itemView.ll_date.setBackgroundResource(if (item.selectedAnswer == position) R.drawable.border_lipstick_rad_4 else R.drawable.border_27979797_rad_4)
                 holder.itemView.setOnClickListener {
 
@@ -157,8 +157,8 @@ class AdapterOptionsQuestionnaire : RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (item.options[position].type == "text") TYPE_TEXT
-        else if (item.options[position].type == "dropdown") TYPE_DROPDOWN
+        return if (item.options[position].type == "mcq") TYPE_TEXT
+        else if (item.options[position].type == "state_city_dropdown") TYPE_DROPDOWN
         else if (item.options[position].type == "date") DATE else TYPE_TEXT
     }
 

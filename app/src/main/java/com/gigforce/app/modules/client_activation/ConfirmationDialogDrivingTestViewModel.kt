@@ -70,8 +70,9 @@ class ConfirmationDialogDrivingTestViewModel : ViewModel() {
                                             partnerSchoolDetails = partnerDetails,
                                             slotDate = date,
                                             slotTime = slot,
-                                            subDLChequeInSameCentre = drivingLicenseCheck
-//                                            slotBooked = true
+                                            subDLChequeInSameCentre = drivingLicenseCheck,
+                                            slotBooked = true
+
                                     )
 
                             )
@@ -110,8 +111,8 @@ class ConfirmationDialogDrivingTestViewModel : ViewModel() {
                             partnerSchoolDetails = partnerDetails,
                             slotDate = date,
                             slotTime = slot,
-                            subDLChequeInSameCentre = drivingLicenseCheck
-//                            slotBooked = true
+                            subDLChequeInSameCentre = drivingLicenseCheck,
+                            slotBooked = true
 
                     )
                     )
@@ -122,8 +123,8 @@ class ConfirmationDialogDrivingTestViewModel : ViewModel() {
                             jpApplication.process.forEach { draft ->
                                 if (draft.title == title) {
                                     draft.isDone = false
-//                                    draft.isSlotBooked = true
-//                                    draft.status = "Slot Booked"
+                                    draft.isSlotBooked = true
+                                    draft.status = "Slot Booked"
 
                                 }
                             }

@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.modules.client_activation.models.JpApplication
+import com.gigforce.app.modules.landingscreen.models.Dependency
 import com.gigforce.app.modules.learning.courseDetails.LearningCourseDetailsFragment
 import com.gigforce.app.utils.StringConstants
 import io.reactivex.Observable
@@ -153,22 +154,22 @@ class GigActivationFragment : BaseFragment(),
 
     }
 
-    override fun onItemClick(feature: String, title: String, courseId: String, isSlotBooked: Boolean) {
-        when (title) {
-            "Driving Test Certificate" ->
+    override fun onItemClick(dependency: Dependency) {
+        when (dependency.type) {
+            "document" ->
                 navigate(
-                        if (isSlotBooked) R.id.fragment_doc_sub else R.id.fragment_upload_cert,
+                        if (dependency.isSlotBooked) R.id.fragment_doc_sub else R.id.fragment_upload_cert,
                         bundleOf(
                                 StringConstants.WORK_ORDER_ID.value to mWordOrderID,
-                                StringConstants.TITLE.value to title,
-                                StringConstants.TYPE.value to feature
+                                StringConstants.TITLE.value to dependency.title,
+                                StringConstants.TYPE.value to dependency.docType
                         )
                 )
 
-            "21North App training" -> {
+            "training" -> {
                 navigate(
                         R.id.learningCourseDetails,
-                        bundleOf(LearningCourseDetailsFragment.INTENT_EXTRA_COURSE_ID to courseId)
+                        bundleOf(LearningCourseDetailsFragment.INTENT_EXTRA_COURSE_ID to dependency.courseId)
                 )
             }
         }
