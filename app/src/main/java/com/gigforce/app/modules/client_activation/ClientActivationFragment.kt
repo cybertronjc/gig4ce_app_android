@@ -91,6 +91,7 @@ class ClientActivationFragment : BaseFragment() {
     private fun initObservers() {
         viewModel.observableError.observe(viewLifecycleOwner, Observer {
             showToast(it ?: "")
+            pb_client_activation.gone()
         })
         viewModel.observableWorkOrder.observe(viewLifecycleOwner, Observer { it ->
             if (it.info == null) return@Observer
@@ -135,6 +136,7 @@ class ClientActivationFragment : BaseFragment() {
         })
 
         viewModel.observableJpApplication.observe(viewLifecycleOwner, Observer { jpApplication ->
+            pb_client_activation.gone()
 
             run {
                 tv_mark_as_interest_role_details.setOnClickListener {

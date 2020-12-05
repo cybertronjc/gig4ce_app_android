@@ -56,6 +56,7 @@ class DocsSubSchedulerFragment : BaseFragment(),
     private fun initObservers() {
 
         viewModel.observableJpApplication.observe(viewLifecycleOwner, Observer {
+            pb_docs_submission.gone()
             if (it == null) return@Observer
 
             val address = it.partnerSchoolDetails

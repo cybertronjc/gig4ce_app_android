@@ -113,7 +113,9 @@ class ApplicationClientActivationFragment : BaseFragment(),
             )
         })
         viewModel.observableInitApplication.observe(viewLifecycleOwner, Observer {
+            pb_application_client_activation.gone()
             if (it == true) {
+
                 initApplication(viewModel.observableJpApplication.value!!)
             }
         })

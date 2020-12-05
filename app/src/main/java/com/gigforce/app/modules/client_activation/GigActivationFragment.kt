@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
+import com.gigforce.app.core.gone
 import com.gigforce.app.modules.client_activation.models.JpApplication
 import com.gigforce.app.modules.landingscreen.models.Dependency
 import com.gigforce.app.modules.learning.courseDetails.LearningCourseDetailsFragment
@@ -74,6 +75,7 @@ class GigActivationFragment : BaseFragment(),
 
         viewModel.observableInitApplication.observe(viewLifecycleOwner, Observer {
             if (it == true) {
+                pb_gig_activation.gone()
                 Observable.fromIterable(viewModel.observableJpApplication.value?.process)
                         .all { item -> item.isDone }.subscribe { success, err ->
                             run {
