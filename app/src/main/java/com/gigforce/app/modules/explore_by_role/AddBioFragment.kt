@@ -19,6 +19,7 @@ import kotlinx.android.synthetic.main.layout_add_bio_fragment.*
 
 
 class AddBioFragment : BaseFragment() {
+    private var FROM_CLIENT_ACTIVATION: Boolean = false
     private val viewModelFactory by lazy {
         ViewModelProviderFactory(AddBioViewModel(AddBioRepository()))
     }
@@ -39,11 +40,19 @@ class AddBioFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        getDataFromIntents(savedInstanceState)
         initClicks()
         initObservers()
     }
 
     private fun initObservers() {
+        if (FROM_CLIENT_ACTIVATION) {
+            viewModel.observableProfileData.observe(viewLifecycleOwner, Observer {
+                et_add_bio.setText(it?.aboutMe ?: "")
+            })
+            viewModel.getProfileData()
+        }
+
         viewModel.observableError.observe(viewLifecycleOwner, Observer {
             showToast(it!!)
         })
@@ -126,12 +135,13 @@ class AddBioFragment : BaseFragment() {
     }
 
     override fun onBackPressed(): Boolean {
-        navFragmentsData?.setData(
-                bundleOf(
-                        StringConstants.BACK_PRESSED.value to true
+        if (FROM_CLIENT_ACTIVATION) {
+            bundleOf(
+                    StringConstants.BACK_PRESSED.value to true
 
-                )
-        )
+            )
+        }
+
         return super.onBackPressed()
     }
 
@@ -150,6 +160,19 @@ class AddBioFragment : BaseFragment() {
         restoreStatusBar()
     }
 
+    private fun getDataFromIntents(savedInstanceState: Bundle?) {
+        savedInstanceState?.let {
+            FROM_CLIENT_ACTIVATION = it.getBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, false)
+
+
+        }
+
+        arguments?.let {
+            FROM_CLIENT_ACTIVATION = it.getBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, false)
+
+
+        }
+    }
 
 
 }

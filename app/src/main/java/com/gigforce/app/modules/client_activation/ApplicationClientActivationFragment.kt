@@ -18,14 +18,13 @@ import com.gigforce.app.core.visible
 import com.gigforce.app.modules.client_activation.models.JpApplication
 import com.gigforce.app.modules.landingscreen.models.Dependency
 import com.gigforce.app.modules.learning.courseDetails.LearningCourseDetailsFragment
-import com.gigforce.app.modules.photocrop.PhotoCrop
+import com.gigforce.app.modules.profile.ProfileFragment
 import com.gigforce.app.utils.StringConstants
 import io.reactivex.Observable
 import kotlinx.android.synthetic.main.layout_application_client_activation_fragment.*
 
 class ApplicationClientActivationFragment : BaseFragment(),
         AdapterApplicationClientActivation.AdapterApplicationClientActivationCallbacks {
-    private var profileAvatarName: String = "avatar.jpg"
     private lateinit var viewModel: ApplicationClientActivationViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -168,14 +167,11 @@ class ApplicationClientActivationFragment : BaseFragment(),
             if (!adapter.items[i].isDone) {
                 when (adapter.items[i].type) {
                     "profile_pic" -> {
-                        val photoCropIntent = Intent(context, PhotoCrop::class.java)
-                        photoCropIntent.putExtra("purpose", "profilePictureCrop")
-                        photoCropIntent.putExtra("uid", viewModel.repository.getUID())
-                        photoCropIntent.putExtra("fbDir", "/profile_pics/")
-                        photoCropIntent.putExtra("detectFace", 1)
-                        photoCropIntent.putExtra("folder", PROFILE_PICTURE_FOLDER)
-                        photoCropIntent.putExtra("file", profileAvatarName)
-                        startActivityForResult(photoCropIntent, PHOTO_CROP)
+                        navigate(R.id.profileFragment, bundleOf(
+                                StringConstants.FROM_CLIENT_ACTIVATON.value to true,
+                                StringConstants.ACTION.value to ProfileFragment.UPLOAD_PROFILE_PIC
+
+                        ))
                     }
                     "about_me" -> {
                         navigate(
@@ -212,17 +208,22 @@ class ApplicationClientActivationFragment : BaseFragment(),
 
     fun checkAndUpdateUI() {
         h_pb_application_frag.max = adapter.items.size
+
         Observable.fromIterable(adapter.items).all { item -> item.isDone }.subscribe({ success ->
             tv_action_application_client_activation.isEnabled = success
         }, { err -> })
-        Observable.fromIterable(adapter.items).filter { item -> item.isDone }.toList()
+        Observable.fromIterable(adapter.items).filter { item -> !item.isDone }.toList()
                 .subscribe({ success ->
                     run {
-                        h_pb_application_frag.progress = success.size
+                        h_pb_application_frag.progress = adapter.items.size - success.size
                         tv_steps_pending_application_value.text =
-                                "" + (h_pb_application_frag.progress) + "/" + adapter.items.size
+                                "" + success.size + "/" + adapter.items.size
+                        h_pb_application_frag.visible()
                     }
-                }, { _ -> })
+                }, { _ ->
+
+                    h_pb_application_frag.visible()
+                })
 
     }
 
@@ -270,14 +271,12 @@ class ApplicationClientActivationFragment : BaseFragment(),
 
         when (dependency.type) {
             "profile_pic" -> {
-                val photoCropIntent = Intent(context, PhotoCrop::class.java)
-                photoCropIntent.putExtra("purpose", "profilePictureCrop")
-                photoCropIntent.putExtra("uid", viewModel.repository.getUID())
-                photoCropIntent.putExtra("fbDir", "/profile_pics/")
-                photoCropIntent.putExtra("detectFace", 1)
-                photoCropIntent.putExtra("folder", PROFILE_PICTURE_FOLDER)
-                photoCropIntent.putExtra("file", profileAvatarName)
-                startActivityForResult(photoCropIntent, PHOTO_CROP)
+                navigate(R.id.profileFragment, bundleOf(
+                        StringConstants.FROM_CLIENT_ACTIVATON.value to true,
+                        StringConstants.ACTION.value to  ProfileFragment.UPLOAD_PROFILE_PIC
+
+                ))
+
             }
             "about_me" -> {
                 navigate(

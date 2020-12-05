@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
 class ApplicationClientActivationViewModel : ViewModel() {
-    var profileID: String? = null
+    var profileAvatarName: String = "avatar.jpg"
 
     val repository = ApplicationClientActivationRepository()
 
@@ -84,6 +84,7 @@ class ApplicationClientActivationViewModel : ViewModel() {
                         when (it.type) {
                             "profile_pic" -> {
                                 val profileModel = getProfile()
+                                profileAvatarName = profileModel.profileAvatarName
                                 it.isDone =
                                         !profileModel.profileAvatarName.isNullOrEmpty() && profileModel.profileAvatarName != "avatar.jpg"
 
@@ -141,7 +142,7 @@ class ApplicationClientActivationViewModel : ViewModel() {
         if (items.documents.isNullOrEmpty()) {
             return false
         }
-        return items.documents.all {it.data!!["completed"] != null && it.data!!["completed"] == true }
+        return items.documents.all { it.data!!["completed"] != null && it.data!!["completed"] == true }
 
     }
 
@@ -200,16 +201,16 @@ class ApplicationClientActivationViewModel : ViewModel() {
     }
 
 
-    suspend fun checkIfCourseCompleted(moduleId:String):Boolean{
-        val data = repository.db.collection("Course_Progress").whereEqualTo("uid",repository.getUID()).whereEqualTo("type","module").whereEqualTo("module_id",moduleId).get().await()
-        if(data.documents.isNullOrEmpty()){
+    suspend fun checkIfCourseCompleted(moduleId: String): Boolean {
+        val data = repository.db.collection("Course_Progress").whereEqualTo("uid", repository.getUID()).whereEqualTo("type", "module").whereEqualTo("module_id", moduleId).get().await()
+        if (data.documents.isNullOrEmpty()) {
             return false
         }
         var allCourseProgress = data.toObjects(GigActivationViewModel.CourseProgress::class.java).first()
         allCourseProgress.lessonProgress.let {
             var completed = true
-            for(lesson in it){
-                if(lesson.lessonType == "assessment" && !lesson.completed){
+            for (lesson in it) {
+                if (lesson.lessonType == "assessment" && !lesson.completed) {
                     return false
                 }
             }

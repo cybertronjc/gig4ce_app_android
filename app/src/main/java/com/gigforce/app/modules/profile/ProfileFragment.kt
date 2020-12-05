@@ -46,12 +46,14 @@ class ProfileFragment : BaseFragment() {
     private fun getDataFromIntents(savedInstanceState: Bundle?) {
         savedInstanceState?.let {
             FROM_CLIENT_ACTIVATION = it.getBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, false)
+            ACTION_TO_PERFORM = it.getInt(StringConstants.ACTION.value, -1)
 
 
         }
 
         arguments?.let {
             FROM_CLIENT_ACTIVATION = it.getBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, false)
+            ACTION_TO_PERFORM = it.getInt(StringConstants.ACTION.value, -1)
 
 
         }
@@ -60,9 +62,11 @@ class ProfileFragment : BaseFragment() {
 
     companion object {
         fun newInstance() = ProfileFragment()
+        val UPLOAD_PROFILE_PIC = 1
     }
 
 
+    private var ACTION_TO_PERFORM: Int = -1;
     private lateinit var storage: FirebaseStorage
     private lateinit var layout: View
     private lateinit var profileAvatarName: String
@@ -73,6 +77,7 @@ class ProfileFragment : BaseFragment() {
     private var scrollRange: Int = -1
     private var PROFILE_PICTURE_FOLDER: String = "profile_pics"
     private var FROM_CLIENT_ACTIVATION = false
+    private var profilePicUploadInProgress = false
 
     private val gigerVerificationViewModel: GigVerificationViewModel by viewModels()
     val viewModel: ProfileViewModel by activityViewModels<ProfileViewModel>()
@@ -409,12 +414,23 @@ class ProfileFragment : BaseFragment() {
             if (profileAvatarName != "")
                 loadImage(profileAvatarName)
             layout.loader_progress.visibility = View.GONE
+            if (ACTION_TO_PERFORM != -1) {
+                when (ACTION_TO_PERFORM) {
+                    UPLOAD_PROFILE_PIC -> {
+                        profilePicUpload()
+                    }
+                }
+
+            }
+
+
         })
 
         /*
         Clicking on profile picture opens Photo Crop Activity
          */
         layout.profile_avatar.setOnClickListener {
+
             val photoCropIntent = Intent(context, PhotoCrop::class.java)
             photoCropIntent.putExtra("purpose", "profilePictureCrop")
             photoCropIntent.putExtra("uid", viewModel.uid)
@@ -439,9 +455,24 @@ class ProfileFragment : BaseFragment() {
         listener()
     }
 
+    fun profilePicUpload() {
+        if (profilePicUploadInProgress) return
+        val photoCropIntent = Intent(context, PhotoCrop::class.java)
+        photoCropIntent.putExtra("purpose", "profilePictureCrop")
+        photoCropIntent.putExtra("uid", viewModel.uid)
+        photoCropIntent.putExtra("fbDir", "/profile_pics/")
+        photoCropIntent.putExtra("detectFace", 1)
+        photoCropIntent.putExtra("folder", PROFILE_PICTURE_FOLDER)
+        photoCropIntent.putExtra("file", profileAvatarName)
+        startActivityForResult(photoCropIntent, PHOTO_CROP)
+        profilePicUploadInProgress = true
+    }
+
     override fun onBackPressed(): Boolean {
         if (FROM_CLIENT_ACTIVATION) {
             navFragmentsData?.setData(bundleOf(StringConstants.BACK_PRESSED.value to true))
+            popBackState()
+            return true
         }
 
         return super.onBackPressed()
@@ -532,6 +563,18 @@ class ProfileFragment : BaseFragment() {
             Log.v("PROFILE_FRAG_OAR", "filename is:" + imageName)
             if (null != imageName) {
                 loadImage(imageName)
+            }
+            if (ACTION_TO_PERFORM != -1) {
+                when (ACTION_TO_PERFORM) {
+                    UPLOAD_PROFILE_PIC -> popBackState()
+                }
+            }
+        }
+        if (requestCode == PHOTO_CROP && resultCode == Activity.RESULT_CANCELED) {
+            if (ACTION_TO_PERFORM != -1) {
+                when (ACTION_TO_PERFORM) {
+                    UPLOAD_PROFILE_PIC -> onBackPressed()
+                }
             }
         }
     }

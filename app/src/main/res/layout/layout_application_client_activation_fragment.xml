@@ -143,6 +143,7 @@ your Application" />
                 android:indeterminate="false"
                 android:progress="0"
                 android:progressDrawable="@drawable/curved_h_progress_bar"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="@id/tv_steps_pending_application_value"
                 app:layout_constraintStart_toStartOf="@id/tv_steps_pending_application"
                 app:layout_constraintTop_toBottomOf="@+id/tv_steps_pending_application" />
