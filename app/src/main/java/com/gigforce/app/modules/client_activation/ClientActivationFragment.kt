@@ -75,11 +75,7 @@ class ClientActivationFragment : BaseFragment() {
         iv_back_client_activation.setOnClickListener {
             onBackPressed()
         }
-        tv_mark_as_interest_role_details.setOnClickListener {
-            pb_client_activation.visible()
 
-            viewModel.getApplication(viewModel.observableWorkOrder.value?.profileId!!)
-        }
     }
 
     private fun getDataFromIntents(savedInstanceState: Bundle?) {
@@ -133,26 +129,36 @@ class ClientActivationFragment : BaseFragment() {
             textView120.text = it?.requiredMedia?.title
             initializeLearningModule(it?.requiredMedia?.media?.map { it.lessonId } ?: listOf())
 //            }
+
+            viewModel.getApplication(it?.profileId ?: "")
+
         })
 
-        viewModel.observableJpApplication.observe(viewLifecycleOwner, Observer {
-            if (it == null || it.stepDone == 1) {
-                navigate(
-                        R.id.fragment_application_client_activation, bundleOf(
-                        StringConstants.WORK_ORDER_ID.value to viewModel.observableWorkOrder.value?.profileId
-                )
-                )
-                viewModel.observableJpApplication.removeObservers(viewLifecycleOwner)
-            } else if (it.stepDone == 2) {
-                navigate(
-                        R.id.fragment_gig_activation, bundleOf(
-                        StringConstants.WORK_ORDER_ID.value to viewModel.observableWorkOrder.value?.profileId,
-                        StringConstants.NEXT_DEP.value to viewModel.observableWorkOrder.value?.nextDependency
-                )
-                )
-                viewModel.observableJpApplication.removeObservers(viewLifecycleOwner)
+        viewModel.observableJpApplication.observe(viewLifecycleOwner, Observer { jpApplication ->
 
+            run {
+                tv_mark_as_interest_role_details.setOnClickListener {
+
+                    if (jpApplication == null || jpApplication.stepDone == 1) {
+                        navigate(
+                                R.id.fragment_application_client_activation, bundleOf(
+                                StringConstants.WORK_ORDER_ID.value to viewModel.observableWorkOrder.value?.profileId
+                        ))
+                        viewModel.observableJpApplication.removeObservers(viewLifecycleOwner)
+                    } else if (jpApplication.stepDone == 2) {
+                        navigate(
+                                R.id.fragment_gig_activation, bundleOf(
+                                StringConstants.WORK_ORDER_ID.value to viewModel.observableWorkOrder.value?.profileId,
+                                StringConstants.NEXT_DEP.value to viewModel.observableWorkOrder.value?.nextDependency
+                        ))
+                    }
+                }
+                if (jpApplication == null) return@Observer
+                tv_applied_client_activation.text = jpApplication.status
+                tv_applied_client_activation.setCompoundDrawablesWithIntrinsicBounds(if (jpApplication.status == "Applied") R.drawable.ic_applied else R.drawable.ic_status_pending, 0, 0, 0)
             }
+
+
         })
         if (!viewModel.initialized)
             viewModel.getWorkOrder(docID = mWordOrderID)

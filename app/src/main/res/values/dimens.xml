@@ -128,4 +128,8 @@
     <dimen name="size_174">174dp</dimen>
     <dimen name="size_55">55dp</dimen>
     <dimen name="size_31">31dp</dimen>
+    <dimen name="size_202">202dp</dimen>
+    <dimen name="size_131">131dp</dimen>
+    <dimen name="size_150">150dp</dimen>
+    <dimen name="size_83">83dp</dimen>
 </resources>

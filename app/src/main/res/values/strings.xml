@@ -1092,6 +1092,17 @@
     <string name="we_have_send_otp">We have send the OTP on</string>
     <string name="under_verification">Under Verification</string>
     <string name="select_date">Select Date</string>
+    <string name="no_worries">No Worries!!</string>
+    <string name="you_can_reapply_for_this_role_once_you_are_eligible_we_are_always_here_to_help_you">You can reapply for this role once you are eligible.We are always here to help you.</string>
+    <string name="meanwhile_you_can_refer_your_contacts_who_can_be_eligible_for_this_role">Meanwhile you can refer your contacts who can be eligible for this role</string>
+    <string name="refer_a_friend">Refer a Friend</string>
+    <string name="take_me_to_home">Take me to Home</string>
+    <string name="driving_license_is_mandatory_for_the_driver_role_you_will_not_be_eligible_to_submit_application">Driving License is mandatory for the Driver role. You will not be eligible to submit application.</string>
+    <string name="_21_north_driver">21 North - Driver</string>
+    <string name="you_have_successfully_completed_all_the_check_points_required_for_the_application_you_can_submit_yourapplication_now">You have successfully completed all the check- -points required for the application. You can submit yourApplication now.</string>
+    <string name="submit_your_application">Submit your Application</string>
+    <string name="review_your_application">Review your Application</string>
+    <string name="pending_activation">Pending Activation</string>
 
 
 </resources>

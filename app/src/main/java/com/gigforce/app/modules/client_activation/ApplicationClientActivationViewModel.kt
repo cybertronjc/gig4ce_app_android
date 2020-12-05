@@ -75,6 +75,7 @@ class ApplicationClientActivationViewModel : ViewModel() {
 
                 val model = getJPApplication(mWorkOrderID)
 
+
                 if (model.draft.isNullOrEmpty()) {
                     model.draft = dependency.toMutableList()
 
@@ -91,12 +92,13 @@ class ApplicationClientActivationViewModel : ViewModel() {
                             }
                             "about_me" -> {
                                 val profileModel = getProfile()
-                                it.isDone = !profileModel.aboutMe.isNullOrEmpty()
+                                it.isDone = !profileModel.languages.isNullOrEmpty() && !profileModel.contactPhone.isNullOrEmpty()
 
                             }
                             "driving_licence" -> {
                                 val verification = getVerification()
-                                it.isDone = verification?.driving_license != null
+                                it.isDone = verification?.driving_license != null && (verification.driving_license?.state
+                                        ?: 0) >= 1
                             }
                             "questionnaire" -> {
                                 it.isDone =
@@ -137,21 +139,15 @@ class ApplicationClientActivationViewModel : ViewModel() {
 
             }
 
-    suspend fun checkForCourseCompletion(courseId: String): Boolean {
-        val items = repository.db.collection("Course_Progress").whereEqualTo("course_id", courseId).get().await()
-        if (items.documents.isNullOrEmpty()) {
-            return false
-        }
-        return items.documents.all { it.data!!["completed"] != null && it.data!!["completed"] == true }
-
-    }
-
 
     fun apply(mWorkOrderID: String) = viewModelScope.launch {
 
         val application = getJPApplication(mWorkOrderID)
         repository.db.collection("JP_Applications").document(application.id)
-                .update("stepDone", observableWorkOrderDependency.value?.step)
+                .update(mapOf("stepsTotal" to (observableWorkOrderDependency.value?.step ?: 0),
+                        "stepDone" to observableWorkOrderDependency.value?.step
+
+                ))
                 .addOnCompleteListener {
                     if (it.isSuccessful) {
                         observableApplicationStatus.value = true

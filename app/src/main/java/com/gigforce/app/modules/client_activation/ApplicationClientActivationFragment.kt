@@ -16,6 +16,7 @@ import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.client_activation.models.JpApplication
+import com.gigforce.app.modules.landingscreen.LandingPageConstants
 import com.gigforce.app.modules.landingscreen.models.Dependency
 import com.gigforce.app.modules.learning.courseDetails.LearningCourseDetailsFragment
 import com.gigforce.app.modules.profile.ProfileFragment
@@ -24,12 +25,9 @@ import io.reactivex.Observable
 import kotlinx.android.synthetic.main.layout_application_client_activation_fragment.*
 
 class ApplicationClientActivationFragment : BaseFragment(),
-        AdapterApplicationClientActivation.AdapterApplicationClientActivationCallbacks {
+        AdapterApplicationClientActivation.AdapterApplicationClientActivationCallbacks, ReviewApplicationDialogClientActivation.ReviewApplicationDialogCallbacks {
+    private var dialog: ReviewApplicationDialogClientActivation? = null
     private lateinit var viewModel: ApplicationClientActivationViewModel
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
 
 
     private val adapter: AdapterApplicationClientActivation by lazy {
@@ -86,9 +84,16 @@ class ApplicationClientActivationFragment : BaseFragment(),
         }
 
         tv_action_application_client_activation.setOnClickListener {
+            dialog = ReviewApplicationDialogClientActivation()
+            dialog?.setCallbacks(this)
+            dialog?.isCancelable = false
+
+
+            dialog?.arguments = bundleOf(StringConstants.DATA.value to viewModel.observableWorkOrderDependency.value)
+            dialog?.show(parentFragmentManager, ReviewApplicationDialogClientActivation::class.java.name)
+
             viewModel.redirectToNextStep = false
-            viewModel.apply(mWordOrderID)
-            pb_application_client_activation.visible()
+            parent_application_client_activation.visibility = View.INVISIBLE
 
 
         }
@@ -175,8 +180,9 @@ class ApplicationClientActivationFragment : BaseFragment(),
                     }
                     "about_me" -> {
                         navigate(
-                                R.id.fragment_add_bio,
-                                bundleOf(StringConstants.FROM_CLIENT_ACTIVATON.value to true)
+                                R.id.aboutExpandedFragment, bundleOf(
+                                LandingPageConstants.INTENT_EXTRA_CAME_FROM_LANDING_SCREEN to true,
+                                StringConstants.FROM_CLIENT_ACTIVATON.value to true)
                         )
                     }
                     "questionnaire" -> navigate(
@@ -273,15 +279,16 @@ class ApplicationClientActivationFragment : BaseFragment(),
             "profile_pic" -> {
                 navigate(R.id.profileFragment, bundleOf(
                         StringConstants.FROM_CLIENT_ACTIVATON.value to true,
-                        StringConstants.ACTION.value to  ProfileFragment.UPLOAD_PROFILE_PIC
+                        StringConstants.ACTION.value to ProfileFragment.UPLOAD_PROFILE_PIC
 
                 ))
 
             }
             "about_me" -> {
                 navigate(
-                        R.id.fragment_add_bio,
-                        bundleOf(StringConstants.FROM_CLIENT_ACTIVATON.value to true)
+                        R.id.aboutExpandedFragment, bundleOf(
+                        LandingPageConstants.INTENT_EXTRA_CAME_FROM_LANDING_SCREEN to true,
+                        StringConstants.FROM_CLIENT_ACTIVATON.value to true)
                 )
             }
             "questionnaire" -> navigate(
@@ -309,6 +316,20 @@ class ApplicationClientActivationFragment : BaseFragment(),
     override fun onBackPressed(): Boolean {
         popBackState()
         return true
+    }
+
+    override fun onClickSubmit() {
+        viewModel.apply(mWordOrderID)
+        dialog?.dismiss()
+        pb_application_client_activation.visible()
+
+    }
+
+    override fun onClickReview() {
+        dialog?.dismiss()
+        parent_application_client_activation.visible()
+
+
     }
 
 

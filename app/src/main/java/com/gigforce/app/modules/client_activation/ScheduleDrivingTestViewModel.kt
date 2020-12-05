@@ -144,7 +144,7 @@ class ScheduleDrivingTestViewModel : ViewModel() {
                                 options.forEach { item ->
                                     run {
                                         if (item.isForKitCollection) {
-                                            draft.isDone=true
+                                            draft.isDone = true
                                         }
 
                                     }
@@ -159,9 +159,16 @@ class ScheduleDrivingTestViewModel : ViewModel() {
 
                             }
                         }
+                        if (jpApplication.process.all {
+                                    it.isDone
+                                }) {
+                            jpApplication.status = "Applied"
+                        }
                         repository.db.collection("JP_Applications")
                                 .document(items.documents[0].id)
-                                .update("process", jpApplication.process)
+                                .update(mapOf("process" to jpApplication.process,
+                                        "status" to jpApplication.status
+                                ))
                                 .addOnCompleteListener {
                                     if (it.isSuccessful) {
                                         observableApplied.value = true

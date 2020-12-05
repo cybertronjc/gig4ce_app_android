@@ -12,9 +12,12 @@ import android.widget.ArrayAdapter
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
+import com.gigforce.app.core.gone
+import com.gigforce.app.core.visible
 import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
 import com.gigforce.app.modules.gigerVerfication.VerificationValidations
 import com.gigforce.app.modules.gigerVerfication.WhyWeNeedThisBottomSheet
@@ -30,7 +33,7 @@ import kotlinx.android.synthetic.main.layout_fragment_upload_driving_license_act
 import kotlinx.android.synthetic.main.upload_car_client_activation.view.*
 import java.util.*
 
-class UploadDrivingLicense : BaseFragment() {
+class UploadDrivingLicense : BaseFragment(), RejectionDialog.RejectionDialogCallbacks {
 
     private var FROM_CLIENT_ACTIVATON: Boolean = false
     private val viewModel: GigVerificationViewModel by viewModels()
@@ -113,6 +116,7 @@ class UploadDrivingLicense : BaseFragment() {
 
             if (checkedId == R.id.dlYesRB) {
                 showDLImageAndInfoLayout()
+                ll_no_driving_license.gone()
 
                 if ((dlFrontImagePath != null && dlBackImagePath != null)
                 ) {
@@ -121,8 +125,10 @@ class UploadDrivingLicense : BaseFragment() {
                     disableSubmitButton()
 
             } else if (checkedId == R.id.dlNoRB) {
+                ll_no_driving_license.visible()
                 hideDLImageAndInfoLayout()
                 disableSubmitButton()
+
 
             } else {
                 hideDLImageAndInfoLayout()
@@ -175,22 +181,28 @@ class UploadDrivingLicense : BaseFragment() {
 
                 val state = stateSpinner.selectedItem.toString()
 
-                viewModel.updateDLData(
+                viewModel.updateDLDataClientActivation(
                         true,
                         dlFrontImagePath,
                         dlBackImagePath,
                         state,
                         dlNo
+
                 )
 
             } else if (dlNoRB.isChecked) {
-                viewModel.updateDLData(
-                        false,
-                        null,
-                        null,
-                        null,
-                        null
-                )
+
+                val rejectionDialog = RejectionDialog()
+                rejectionDialog.setCallbacks(this)
+                rejectionDialog
+                rejectionDialog.show(parentFragmentManager, DrivingCertSuccessDialog::class.java.name)
+//                viewModel.updateDLData(
+//                        false,
+//                        null,
+//                        null,
+//                        null,
+//                        null
+//                )
             }
 
         }
@@ -391,6 +403,14 @@ class UploadDrivingLicense : BaseFragment() {
                 .load(aadharBackImagePath)
                 .placeholder(getCircularProgressDrawable())
                 .into(dlBackImageHolder.uploadImageLayout.clickedImageIV)
+    }
+
+    override fun onClickRefer() {
+        navigate(R.id.referrals_fragment)
+    }
+
+    override fun onClickTakMeHome() {
+        findNavController().popBackStack(R.id.landinghomefragment, true)
     }
 
 }

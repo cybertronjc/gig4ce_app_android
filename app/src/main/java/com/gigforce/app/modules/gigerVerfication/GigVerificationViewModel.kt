@@ -273,6 +273,59 @@ open class GigVerificationViewModel constructor(
         }
     }
 
+    fun updateDLDataClientActivation(
+            userHasDL: Boolean,
+            frontImagePath: Uri?,
+            backImagePath: Uri?,
+            dlState: String?,
+            dlNo: String?
+    ) = viewModelScope.launch {
+
+        _documentUploadState.postValue(Lse.loading())
+
+        try {
+            val model = getVerificationModel()
+            if (!userHasDL) {
+                model.driving_license = DrivingLicenseDataModel(
+                        userHasDL = false,
+                        verified = false,
+                        frontImage = null,
+                        backImage = null,
+                        dlState = null,
+                        dlNo = null
+                )
+            } else {
+
+                val frontImageFileNameAtServer = if (userHasDL && frontImagePath != null)
+                    uploadImage(frontImagePath)
+                else
+                    model.driving_license?.frontImage
+
+
+                val backImageFileNameAtServer = if (userHasDL && backImagePath != null)
+                    uploadImage(backImagePath)
+                else
+                    model.driving_license?.backImage
+
+                model.driving_license = DrivingLicenseDataModel(
+                        userHasDL = true,
+                        verified = false,
+                        frontImage = frontImageFileNameAtServer,
+                        backImage = backImageFileNameAtServer,
+                        dlState = dlState,
+                        dlNo = dlNo,
+                        state = 1,
+                        verifiedString = "Under Verification"
+                )
+                model.sync_status = false
+            }
+            gigerVerificationRepository.getDBCollection().setOrThrow(model)
+            _documentUploadState.postValue(Lse.success())
+        } catch (e: Exception) {
+            _documentUploadState.postValue(Lse.error("Unable to save document."))
+        }
+    }
+
     fun updateDLData(
             userHasDL: Boolean,
             frontImagePath: Uri?,
@@ -300,6 +353,7 @@ open class GigVerificationViewModel constructor(
                     uploadImage(frontImagePath)
                 else
                     model.driving_license?.frontImage
+
 
                 val backImageFileNameAtServer = if (userHasDL && backImagePath != null)
                     uploadImage(backImagePath)

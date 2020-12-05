@@ -102,7 +102,7 @@
                     android:gravity="center"
                     android:paddingStart="@dimen/size_8"
                     android:paddingEnd="@dimen/size_18"
-                    android:text="Pending"
+                    android:text="@string/pending_activation"
                     android:textColor="@color/yellow"
                     android:textSize="@dimen/font_12"
                     android:textStyle="normal"
@@ -127,8 +127,8 @@
                 android:orientation="vertical"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/rl_pref_loc"
-                 />
+                app:layout_constraintTop_toBottomOf="@+id/rl_pref_loc" />
+
             <TextView
                 android:id="@+id/tv_earning_client_activation"
                 android:layout_width="0dp"
@@ -149,7 +149,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/ll_role_desc"
                 tools:text="Earn upto 2000 /Day by working as Retail Executive /n Monthly earn up to Rs. 31000" />
-
 
 
             <androidx.constraintlayout.widget.ConstraintLayout

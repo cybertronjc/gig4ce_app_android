@@ -131,7 +131,7 @@ class ScheduleDrivingTestFragment : BaseFragment(), DrivingCertSuccessDialog.Dri
             pb_schedule_test.gone()
             if (it == true) {
                 countDownTimer?.cancel()
-                var drivingCertSuccessDialog = DrivingCertSuccessDialog()
+                val drivingCertSuccessDialog = DrivingCertSuccessDialog()
                 drivingCertSuccessDialog.isCancelable = false
                 drivingCertSuccessDialog.setCallbacks(this)
                 drivingCertSuccessDialog

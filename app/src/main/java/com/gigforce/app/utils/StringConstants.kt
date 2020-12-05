@@ -47,7 +47,8 @@ enum class StringConstants(val value: String) {
     FROM_CLIENT_ACTIVATON("FROM_CLIENT_ACTIVATON"),
     TITLE("TITLE"),
     TYPE("TYPE"),
-    ACTION("ACTION")
+    ACTION("ACTION"),
+    DATA("DATA")
 
 
 }
