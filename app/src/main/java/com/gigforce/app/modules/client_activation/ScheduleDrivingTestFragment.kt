@@ -197,6 +197,7 @@ class ScheduleDrivingTestFragment : BaseFragment(), DrivingCertSuccessDialog.Dri
                 showToast("Wrong OTP")
             }
         }
+        iv_back_application_gig_activation.setOnClickListener { popBackState() }
     }
 
     private fun counterStart() {
@@ -249,7 +250,7 @@ class ScheduleDrivingTestFragment : BaseFragment(), DrivingCertSuccessDialog.Dri
     }
 
     override fun onClickOkay() {
-        findNavController().popBackStack(R.id.landinghomefragment,true)
+        findNavController().popBackStack(R.id.landinghomefragment, true)
     }
 
 

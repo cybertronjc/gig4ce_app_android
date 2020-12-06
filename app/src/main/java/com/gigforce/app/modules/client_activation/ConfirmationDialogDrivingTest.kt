@@ -21,6 +21,9 @@ import kotlinx.android.synthetic.main.layout_confirm_driving_slot.*
 
 class ConfirmationDialogDrivingTest : BottomSheetDialogFragment(),
         TimeSlotsDialog.TimeSlotDialogCallbacks {
+    private var dateSelected: String? = null
+    private var timeSlot: String? = null
+    private var selectedPartner: PartnerSchoolDetails? = null
     private lateinit var mWordOrderID: String
     private lateinit var mTitle: String
     private lateinit var mType: String
@@ -82,10 +85,10 @@ class ConfirmationDialogDrivingTest : BottomSheetDialogFragment(),
 
     private fun initView() {
         tv_change_slot.paintFlags = tv_change_slot.paintFlags or Paint.UNDERLINE_TEXT_FLAG;
-        val selectedPartner =
+        selectedPartner =
                 arguments?.getParcelable<PartnerSchoolDetails>(StringConstants.SELECTED_PARTNER.value)
-        val timeSlot = arguments?.getString(StringConstants.SELECTED_TIME_SLOT.value)
-        val dateSelected = arguments?.getString(StringConstants.SELECTED_DATE.value)
+        timeSlot = arguments?.getString(StringConstants.SELECTED_TIME_SLOT.value)
+        dateSelected = arguments?.getString(StringConstants.SELECTED_DATE.value)
         textView137.text =
                 Html.fromHtml(selectedPartner?.name + "<br>" + selectedPartner?.landmark + "<br>" + selectedPartner?.city + "<br>"
                         + selectedPartner?.name + "<br>" + selectedPartner?.contact?.map { "<b><font color=\'#000000\'>" + it.name + "</font></b>" }
@@ -109,9 +112,8 @@ class ConfirmationDialogDrivingTest : BottomSheetDialogFragment(),
 
 
         tv_change_slot.setOnClickListener {
-            val newInstance = TimeSlotsDialog.newInstance()
-            newInstance.setCallbacks(this)
-            newInstance.show(parentFragmentManager, TimeSlotsDialog::class.java.name)
+            callbacks.changeSlot()
+            dismiss()
         }
 
         slider_confirm.onSlideCompleteListener =
@@ -129,6 +131,10 @@ class ConfirmationDialogDrivingTest : BottomSheetDialogFragment(),
                     }
                 }
 
+        cb_centre.setOnClickListener {
+            slider_confirm.isLocked = !cb_centre.isChecked
+        }
+
 
     }
 
@@ -143,5 +149,6 @@ class ConfirmationDialogDrivingTest : BottomSheetDialogFragment(),
     public interface ConfirmationDialogDrivingTestCallbacks {
         fun moveToNextStep()
         fun submissionSuccess()
+        fun changeSlot()
     }
 }

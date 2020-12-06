@@ -18,6 +18,8 @@
             android:id="@+id/iv_bullets"
             android:layout_width="@dimen/size_24"
             android:layout_height="@dimen/size_24"
+            android:scaleType="centerCrop"
+            android:adjustViewBounds="true"
             android:layout_marginStart="@dimen/size_16"
             android:layout_marginTop="@dimen/size_24" />
 
@@ -28,7 +30,6 @@
             android:layout_marginStart="@dimen/size_17"
             android:layout_marginTop="@dimen/size_27"
             android:layout_marginEnd="@dimen/size_16"
-            android:fontFamily="@font/lato_bold"
             android:gravity="center|start"
             android:textColor="#000000"
             android:textSize="@dimen/font_14" />
@@ -50,9 +51,7 @@
         android:id="@+id/divider_three"
         android:layout_width="match_parent"
         android:layout_height="@dimen/size_1"
-        android:layout_marginStart="@dimen/size_17"
         android:layout_marginTop="@dimen/size_24"
-        android:layout_marginEnd="@dimen/size_15"
         android:background="#68979797"
         app:layout_constraintTop_toBottomOf="@+id/tl_bullets" />
 </LinearLayout>

@@ -46,9 +46,9 @@ class UploadDrivingCertificate : BaseFragment() {
     private var dlFrontImagePath: Uri? = null
     private var currentlyClickingImageOfSide: DrivingLicenseSides? = null
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         return inflateView(R.layout.layout_fragment_upload_driving_certificate, inflater, container)
     }
@@ -80,14 +80,15 @@ class UploadDrivingCertificate : BaseFragment() {
     private fun initClicks() {
 
         tv_schedule_test.setOnClickListener {
+            popBackState()
             navigate(
-                R.id.fragment_doc_sub,
-                bundleOf(
-                    StringConstants.WORK_ORDER_ID.value to mWordOrderID,
+                    R.id.fragment_doc_sub,
+                    bundleOf(
+                            StringConstants.WORK_ORDER_ID.value to mWordOrderID,
 
-                    StringConstants.TITLE.value to mTitle,
-                    StringConstants.TYPE.value to mType
-                )
+                            StringConstants.TITLE.value to mTitle,
+                            StringConstants.TYPE.value to mType
+                    )
             )
         }
     }
@@ -97,7 +98,7 @@ class UploadDrivingCertificate : BaseFragment() {
         disableSubmitButton()
         dlFrontImageHolder.documentUploadLabelTV.text = getString(R.string.upload_driving_cert)
         dlFrontImageHolder.documentUploadSubLabelTV.text =
-            getString(R.string.please_upload_driving_cert)
+                getString(R.string.please_upload_driving_cert)
 
         helpIconIV.setOnClickListener {
             showWhyWeNeedThisDialog()
@@ -151,27 +152,27 @@ class UploadDrivingCertificate : BaseFragment() {
                 if ((dlFrontImagePath == null)) {
 
                     MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(getString(R.string.alert))
-                        .setMessage(getString(R.string.capture_both_sides_dl))
-                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
-                        .show()
+                            .setTitle(getString(R.string.alert))
+                            .setMessage(getString(R.string.capture_both_sides_dl))
+                            .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                            .show()
 
                     return@setOnClickListener
                 }
 
 
                 viewModel.uploadDLCer(
-                    mWordOrderID,
-                    dlFrontImagePath, mType,
-                    mTitle
+                        mWordOrderID,
+                        dlFrontImagePath, mType,
+                        mTitle
 
                 )
 
             } else if (dlNoRB.isChecked) {
                 viewModel.uploadDLCer(
-                    mWordOrderID,
-                    null, mType,
-                    mTitle
+                        mWordOrderID,
+                        null, mType,
+                        mTitle
 
 
                 )
@@ -191,7 +192,7 @@ class UploadDrivingCertificate : BaseFragment() {
 //        }
 
         dlFrontImageHolder.uploadImageLayout.imageLabelTV.text =
-            getString(R.string.dl_image_front_side)
+                getString(R.string.dl_image_front_side)
 
 //        dlBackImageHolder.uploadImageLayout.imageLabelTV.text =
 //                getString(R.string.dl_image_back_side)
@@ -210,9 +211,9 @@ class UploadDrivingCertificate : BaseFragment() {
 
     private fun showWhyWeNeedThisDialog() {
         WhyWeNeedThisBottomSheet.launch(
-            childFragmentManager = childFragmentManager,
-            title = getString(R.string.why_do_we_need_this),
-            content = getString(R.string.why_we_need_this_dl)
+                childFragmentManager = childFragmentManager,
+                title = getString(R.string.why_do_we_need_this),
+                content = getString(R.string.why_we_need_this_dl)
         )
     }
 
@@ -221,13 +222,13 @@ class UploadDrivingCertificate : BaseFragment() {
 
 
         viewModel.documentUploadState
-            .observe(viewLifecycleOwner, Observer {
-                when (it) {
-                    Lse.Loading -> showLoadingState()
-                    Lse.Success -> documentUploaded()
-                    is Lse.Error -> errorOnUploadingDocuments(it.error)
-                }
-            })
+                .observe(viewLifecycleOwner, Observer {
+                    when (it) {
+                        Lse.Loading -> showLoadingState()
+                        Lse.Success -> documentUploaded()
+                        is Lse.Error -> errorOnUploadingDocuments(it.error)
+                    }
+                })
 
 //        viewModel.getVerificationStatus()
     }
@@ -238,10 +239,10 @@ class UploadDrivingCertificate : BaseFragment() {
         dlMainLayout.visibility = View.VISIBLE
 
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle(getString(R.string.alert))
-            .setMessage(error)
-            .setPositiveButton(getString(R.string.okay)) { _, _ -> }
-            .show()
+                .setTitle(getString(R.string.alert))
+                .setMessage(error)
+                .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                .show()
     }
 
     private fun documentUploaded() {
@@ -260,16 +261,16 @@ class UploadDrivingCertificate : BaseFragment() {
 
         val photoCropIntent = Intent(requireContext(), PhotoCrop::class.java)
         photoCropIntent.putExtra(
-            PhotoCrop.INTENT_EXTRA_PURPOSE,
-            PhotoCrop.PURPOSE_VERIFICATION
+                PhotoCrop.INTENT_EXTRA_PURPOSE,
+                PhotoCrop.PURPOSE_VERIFICATION
         )
         photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_FIREBASE_FOLDER_NAME, "/verification/")
         photoCropIntent.putExtra("folder", "verification")
         photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_DETECT_FACE, 0)
         photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_FIREBASE_FILE_NAME, "aadhar_card_front.jpg")
         startActivityForResult(
-            photoCropIntent,
-            AddDrivingLicenseInfoFragment.REQUEST_CODE_UPLOAD_DL
+                photoCropIntent,
+                AddDrivingLicenseInfoFragment.REQUEST_CODE_UPLOAD_DL
         )
 
     }
@@ -279,16 +280,16 @@ class UploadDrivingCertificate : BaseFragment() {
 
         val photoCropIntent = Intent(requireContext(), PhotoCrop::class.java)
         photoCropIntent.putExtra(
-            PhotoCrop.INTENT_EXTRA_PURPOSE,
-            PhotoCrop.PURPOSE_VERIFICATION
+                PhotoCrop.INTENT_EXTRA_PURPOSE,
+                PhotoCrop.PURPOSE_VERIFICATION
         )
         photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_FIREBASE_FOLDER_NAME, "/verification/")
         photoCropIntent.putExtra("folder", "verification")
         photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_DETECT_FACE, 0)
         photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_FIREBASE_FILE_NAME, "aadhar_card_back.jpg")
         startActivityForResult(
-            photoCropIntent,
-            AddDrivingLicenseInfoFragment.REQUEST_CODE_UPLOAD_DL
+                photoCropIntent,
+                AddDrivingLicenseInfoFragment.REQUEST_CODE_UPLOAD_DL
         )
     }
 
@@ -300,7 +301,7 @@ class UploadDrivingCertificate : BaseFragment() {
 
                 if (DrivingLicenseSides.FRONT_SIDE == currentlyClickingImageOfSide) {
                     dlFrontImagePath =
-                        data?.getParcelableExtra(PhotoCrop.INTENT_EXTRA_RESULTING_FILE_URI)
+                            data?.getParcelableExtra(PhotoCrop.INTENT_EXTRA_RESULTING_FILE_URI)
                     showFrontDrivingLicense(dlFrontImagePath!!)
                 }
 
@@ -364,9 +365,9 @@ class UploadDrivingCertificate : BaseFragment() {
         dlFrontImageHolder.uploadImageLayout.visibility = View.VISIBLE
 
         Glide.with(requireContext())
-            .load(aadharFrontImagePath)
-            .placeholder(getCircularProgressDrawable())
-            .into(dlFrontImageHolder.uploadImageLayout.clickedImageIV)
+                .load(aadharFrontImagePath)
+                .placeholder(getCircularProgressDrawable())
+                .into(dlFrontImageHolder.uploadImageLayout.clickedImageIV)
     }
 
 //    private fun showBackDrivingLicense(aadharBackImagePath: Uri) {

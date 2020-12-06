@@ -4,6 +4,7 @@ import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -65,7 +66,7 @@ class ReviewApplicationDialogClientActivation : DialogFragment() {
 
 //        tv_take_me_home_rejection_dialog.paintFlags = tv_take_me_home_rejection_dialog.paintFlags or Paint.UNDERLINE_TEXT_FLAG;
         tv_title_submit_application.text = jpSettings.completionTitle
-        tv_content_submit_application.text = jpSettings.completionMessage
+        tv_content_submit_application.text = Html.fromHtml(jpSettings.completionMessage)
         Glide.with(this).load(jpSettings?.completionImage).placeholder(
                 com.gigforce.app.utils.getCircularProgressDrawable(requireContext())
         ).into(iv_submit_application)

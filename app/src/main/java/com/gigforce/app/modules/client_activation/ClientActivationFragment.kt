@@ -1,5 +1,6 @@
 package com.gigforce.app.modules.client_activation
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.view.LayoutInflater
@@ -33,7 +34,7 @@ import kotlinx.android.synthetic.main.layout_role_description.view.*
 class ClientActivationFragment : BaseFragment() {
     private lateinit var mWordOrderID: String
     private lateinit var viewModel: ClientActivationViewmodel
-    private val adapterPreferredLocation: AdapterPreferredLocation? = null
+    private var adapterPreferredLocation: AdapterPreferredLocation? = null
     private lateinit var adapterBulletPoints: AdapterBulletPoints;
 
 
@@ -73,7 +74,7 @@ class ClientActivationFragment : BaseFragment() {
     private fun initClicks() {
 
         iv_back_client_activation.setOnClickListener {
-            onBackPressed()
+            popBackState()
         }
 
     }
@@ -88,6 +89,7 @@ class ClientActivationFragment : BaseFragment() {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private fun initObservers() {
         viewModel.observableError.observe(viewLifecycleOwner, Observer {
             showToast(it ?: "")
@@ -99,7 +101,7 @@ class ClientActivationFragment : BaseFragment() {
             Glide.with(this).load(it.coverImg).placeholder(
                     com.gigforce.app.utils.getCircularProgressDrawable(requireContext())
             ).into(iv_main_client_activation)
-            tv_role_client_activation.text = it?.title ?: "";
+            tv_role_client_activation.text = (it?.title ?: "") + " - " + (it?.businessName ?: "");
             it?.locationList?.map { item -> item.location }?.let { locations ->
                 adapterPreferredLocation?.addData(locations)
             }
@@ -155,9 +157,11 @@ class ClientActivationFragment : BaseFragment() {
                         ))
                     }
                 }
+                tv_mark_as_interest_role_details.text = getString(R.string.apply_now)
                 if (jpApplication == null) return@Observer
                 tv_applied_client_activation.text = jpApplication.status
-                tv_applied_client_activation.setCompoundDrawablesWithIntrinsicBounds(if (jpApplication.status == "Applied") R.drawable.ic_applied else R.drawable.ic_status_pending, 0, 0, 0)
+                tv_mark_as_interest_role_details.text = getString(R.string.complete_application)
+                tv_applied_client_activation.setCompoundDrawablesWithIntrinsicBounds(if (jpApplication.status == "Activated") R.drawable.ic_applied else R.drawable.ic_status_pending, 0, 0, 0)
             }
 
 
@@ -169,6 +173,7 @@ class ClientActivationFragment : BaseFragment() {
     }
 
     private fun setupPreferredLocationRv() {
+        adapterPreferredLocation = AdapterPreferredLocation()
         rv_preferred_locations_client_activation.adapter = adapterPreferredLocation
         rv_preferred_locations_client_activation.layoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)

@@ -145,6 +145,7 @@ class ScheduleDrivingTestViewModel : ViewModel() {
                                     run {
                                         if (item.isForKitCollection) {
                                             draft.isDone = true
+                                            draft.status="Done"
                                         }
 
                                     }

@@ -3,6 +3,7 @@ package com.gigforce.app.modules.client_activation
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,7 +17,6 @@ import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.client_activation.models.JpApplication
-import com.gigforce.app.modules.landingscreen.LandingPageConstants
 import com.gigforce.app.modules.landingscreen.models.Dependency
 import com.gigforce.app.modules.learning.courseDetails.LearningCourseDetailsFragment
 import com.gigforce.app.modules.profile.ProfileFragment
@@ -123,6 +123,9 @@ class ApplicationClientActivationFragment : BaseFragment(),
             Glide.with(this).load(it?.coverImg).placeholder(
                     com.gigforce.app.utils.getCircularProgressDrawable(requireContext())
             ).into(iv_application_client_activation)
+            tv_thanks_application.text = Html.fromHtml(it?.title ?: "")
+            tv_completion_application.text = it?.subTitle ?: ""
+            tv_title_application_client_activation.text = it?.businessTitle ?: ""
             viewModel.updateDraftJpApplication(
                     mWordOrderID,
                     it?.requiredFeatures ?: listOf()
@@ -182,8 +185,7 @@ class ApplicationClientActivationFragment : BaseFragment(),
                     }
                     "about_me" -> {
                         navigate(
-                                R.id.aboutExpandedFragment, bundleOf(
-                                LandingPageConstants.INTENT_EXTRA_CAME_FROM_LANDING_SCREEN to true,
+                                R.id.fragment_add_bio, bundleOf(
                                 StringConstants.FROM_CLIENT_ACTIVATON.value to true)
                         )
                     }
@@ -288,8 +290,7 @@ class ApplicationClientActivationFragment : BaseFragment(),
             }
             "about_me" -> {
                 navigate(
-                        R.id.aboutExpandedFragment, bundleOf(
-                        LandingPageConstants.INTENT_EXTRA_CAME_FROM_LANDING_SCREEN to true,
+                        R.id.fragment_add_bio, bundleOf(
                         StringConstants.FROM_CLIENT_ACTIVATON.value to true)
                 )
             }

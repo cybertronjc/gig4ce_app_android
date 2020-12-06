@@ -83,6 +83,9 @@ class QuestionnaireFragment : BaseFragment(), AdapterQuestionnaire.AdapterQuesti
 
                     )
             )
+
+            popBackState()
+            return true
         }
         return super.onBackPressed()
 
@@ -147,6 +150,10 @@ class QuestionnaireFragment : BaseFragment(), AdapterQuestionnaire.AdapterQuesti
                     }
 
                 })
+
+        iv_back_application_client_activation.setOnClickListener {
+            onBackPressed()
+        }
     }
 
     private fun initObservers() {

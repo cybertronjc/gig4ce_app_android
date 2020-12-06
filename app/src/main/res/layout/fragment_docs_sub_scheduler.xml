@@ -41,42 +41,144 @@
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <TextView
-        android:id="@+id/textView99"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="24dp"
-        android:fontFamily="@font/lato"
-        android:text="@string/set_doc_preference"
-        android:textColor="@color/black"
-        android:textSize="14sp"
 
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout4" />
-
-    <TextView
-        android:id="@+id/textView135"
+    <RelativeLayout
+        android:id="@+id/rl_top_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:paddingLeft="16dp"
-        android:paddingRight="50dp"
-        android:text="@string/set_doc_note"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView99" />
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout4">
+
+        <TextView
+            android:id="@+id/set_preference_fot_test"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/size_16"
+            android:layout_marginTop="@dimen/size_24"
+            android:layout_marginBottom="@dimen/size_24"
+            android:layout_toStartOf="@+id/tv_why_we_need_docs_scheduler"
+            android:fontFamily="@font/lato"
+            android:text="@string/preference_test"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            android:textStyle="normal" />
+
+        <ImageView
+            android:id="@+id/helpIconIV"
+            android:layout_width="14dp"
+            android:layout_height="14dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="22dp"
+            android:layout_marginEnd="13dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:src="@drawable/ic_time"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <TextView
+            android:id="@+id/tv_why_we_need_docs_scheduler"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="4dp"
+            android:layout_toStartOf="@+id/helpIconIV"
+            android:fontFamily="@font/lato"
+            android:letterSpacing="-0.01"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:text="@string/why_do_we_need_this"
+            android:textColor="@color/battle_ship_grey"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toStartOf="@+id/helpIconIV"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textView99"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="24dp"
+            android:fontFamily="@font/lato"
+            android:text="@string/set_doc_preference"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            android:visibility="gone"
+
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/textView135"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="50dp"
+            android:text="@string/set_doc_note"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView99" />
+
+
+        <TextView
+            android:id="@+id/driving_license_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/size_25"
+            android:layout_marginTop="@dimen/size_24"
+            android:fontFamily="@font/lato"
+            android:gravity="center_horizontal"
+            android:text="@string/driving_test_details"
+            android:textColor="@color/black_85"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_all_set"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/driving_license_title"
+            android:layout_marginStart="@dimen/size_25"
+            android:layout_marginTop="@dimen/size_8"
+            android:layout_marginBottom="@dimen/size_16"
+            android:fontFamily="@font/lato"
+            android:text="@string/all_set_for_test"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            android:textStyle="normal"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/tv_change_slot"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="@dimen/size_29"
+            android:layout_marginEnd="@dimen/size_15"
+            android:fontFamily="@font/lato"
+            android:gravity="end"
+            android:text="@string/change_slot"
+            android:textColor="@color/lipstick"
+            android:textSize="14sp"
+            android:textStyle="normal"
+            android:visibility="gone" />
+    </RelativeLayout>
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/select_partner_school"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="16dp"
         android:background="@color/white"
         app:layout_constraintBottom_toTopOf="@+id/slider_checkout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView135">
+        app:layout_constraintTop_toBottomOf="@+id/rl_top_header">
 
         <View
             android:id="@+id/view5"
@@ -188,6 +290,8 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:text="@string/select_date_of_visit"
+            android:textColor="@color/black"
+            android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@+id/imageView43"
             app:layout_constraintTop_toTopOf="@+id/imageView43" />
 
@@ -245,6 +349,8 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:text="@string/select_slot_of_visit"
+            android:textColor="@color/black"
+            android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@+id/imageView44"
             app:layout_constraintTop_toTopOf="@+id/imageView44" />
 

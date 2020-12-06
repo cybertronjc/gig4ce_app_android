@@ -98,7 +98,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:fontFamily="@font/lato"
-            android:text="@string/select_partner_school"
+            android:text="@string/partner_address"
             android:textColor="@color/black"
             android:textSize="16sp"
             android:textStyle="bold"
@@ -163,7 +163,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
-            android:text="@string/select_date_of_visit"
+            android:text="@string/date_of_visit"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+
             app:layout_constraintStart_toEndOf="@+id/imageView43"
             app:layout_constraintTop_toTopOf="@+id/imageView43" />
 
@@ -210,7 +213,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
-            android:text="@string/select_slot_of_visit"
+            android:text="@string/slot_of_visit"
+            android:textColor="@color/black"
+            android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@+id/imageView44"
             app:layout_constraintTop_toTopOf="@+id/imageView44" />
 
@@ -255,9 +260,9 @@
         android:layout_marginTop="@dimen/size_108"
         android:layout_marginBottom="@dimen/size_14"
         android:button="@drawable/check_box_confirmation_dialog"
+        android:buttonTint="@color/lipstick"
         android:fontFamily="@font/lato"
         android:paddingStart="@dimen/size_15"
-        android:buttonTint="@color/lipstick"
         android:paddingEnd="@dimen/size_29"
         android:text="@string/i_will_submit_dl_and_cheque_in_same_centre_only"
         android:textColor="@color/black"
@@ -272,7 +277,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/size_27"
-
         app:border_radius="8dp"
         app:icon_margin="@dimen/size_7"
         app:inner_color="#d72467"
@@ -281,6 +285,7 @@
         app:slider_height="60dp"
         app:slider_icon="@drawable/ic_arrow_forward_white"
         app:slider_icon_color="@color/white"
+        app:slider_locked="true"
         app:text="@string/confirm"
         app:text_size="@dimen/font_16" />
 

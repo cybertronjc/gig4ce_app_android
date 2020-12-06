@@ -1,6 +1,7 @@
 package com.gigforce.app.modules.client_activation
 
 import android.content.Intent
+import android.graphics.Paint
 import android.net.Uri
 import android.os.Bundle
 import android.text.Html
@@ -91,13 +92,33 @@ class DocsSubSchedulerFragment : BaseFragment(),
             imageView34.gone()
             slider_checkout.isLocked = false
             slider_checkout.visibility = View.VISIBLE
+            stateChangeSlot()
+            textView136.text = getString(R.string.partner_address)
+            textView142.text = getString(R.string.slot_of_visit)
+            textView138.text = getString(R.string.date_of_visit)
 
         })
         viewModel.getApplication(mWordOrderID, mType, mTitle)
 
     }
 
+    fun stateChangeSlot() {
+        set_preference_fot_test.gone()
+        helpIconIV.gone()
+        tv_why_we_need_docs_scheduler.gone()
+        driving_license_title.visible()
+        tv_all_set.visible()
+        tv_change_slot.visible()
+    }
+
     private fun initClicks() {
+
+        tv_change_slot.setOnClickListener {
+            changeSlot()
+
+        }
+        tv_change_slot.paintFlags = tv_change_slot.paintFlags or Paint.UNDERLINE_TEXT_FLAG;
+
         view_select_time_slots.setOnClickListener {
             val newInstance = TimeSlotsDialog.newInstance()
             newInstance
@@ -135,6 +156,9 @@ class DocsSubSchedulerFragment : BaseFragment(),
             )
             newInstance.setCallbacks(this)
             newInstance.show(parentFragmentManager, SelectPartnerSchoolBottomSheet.javaClass.name)
+        }
+        imageView11.setOnClickListener {
+            popBackState()
         }
 
 
@@ -197,6 +221,8 @@ class DocsSubSchedulerFragment : BaseFragment(),
         iv_contact.visible()
         iv_location.visible()
         checkIfCompleteProcessComplete()
+        textView136.text = getString(R.string.partner_address)
+
         imageView34.gone()
 
     }
@@ -206,6 +232,9 @@ class DocsSubSchedulerFragment : BaseFragment(),
         textView143.text = time
         imageView36.gone()
         checkIfCompleteProcessComplete()
+        stateChangeSlot()
+        textView142.text = getString(R.string.slot_of_visit)
+
     }
 
     override fun moveToNextStep() {
@@ -213,8 +242,23 @@ class DocsSubSchedulerFragment : BaseFragment(),
     }
 
     override fun submissionSuccess() {
-        slider_checkout.visible()
-        slider_checkout.isLocked = false
+
+        popBackState()
+//        slider_checkout.visible()
+//        slider_checkout.isLocked = false
+    }
+
+    override fun changeSlot() {
+        partnerAddress = null
+        dateString = ""
+        selectedTimeSlot = ""
+        val newInstance = SelectPartnerSchoolBottomSheet.newInstance(
+                bundleOf(
+                        StringConstants.WORK_ORDER_ID.value to mWordOrderID
+                )
+        )
+        newInstance.setCallbacks(this)
+        newInstance.show(parentFragmentManager, SelectPartnerSchoolBottomSheet.javaClass.name)
     }
 
     override fun selectedDate(date: String) {
@@ -224,11 +268,13 @@ class DocsSubSchedulerFragment : BaseFragment(),
         textView139.text = dateString
         imageView35.gone()
         checkIfCompleteProcessComplete()
+        textView138.text = getString(R.string.date_of_visit)
+
     }
 
     private fun checkIfCompleteProcessComplete() {
         slider_checkout.isLocked =
-                !(dateString != null && partnerAddress != null && selectedTimeSlot != null)
+                !(!dateString.isNullOrEmpty() && partnerAddress != null && !selectedTimeSlot.isNullOrEmpty())
         if (!slider_checkout.isLocked) {
             val confirmationDialogDrivingTest = ConfirmationDialogDrivingTest()
             confirmationDialogDrivingTest.setCallbacks(this@DocsSubSchedulerFragment)

@@ -16,7 +16,8 @@ data class JpSettings(
         var completionMessage: String = "",
         var completionTitle: String = "",
         var completionImage: String = "",
-        var step: Int = 2
+        var step: Int = 2,
+        var businessTitle: String = ""
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
             parcel.createTypedArrayList(Dependency),
@@ -30,7 +31,8 @@ data class JpSettings(
             parcel.readString() ?: "",
             parcel.readString() ?: "",
             parcel.readString() ?: "",
-            parcel.readInt()) {
+            parcel.readInt(),
+            parcel.readString() ?: "") {
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -46,6 +48,7 @@ data class JpSettings(
         parcel.writeString(completionTitle)
         parcel.writeString(completionImage)
         parcel.writeInt(step)
+        parcel.writeString(businessTitle)
     }
 
     override fun describeContents(): Int {

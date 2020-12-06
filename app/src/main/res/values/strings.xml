@@ -1103,6 +1103,11 @@
     <string name="submit_your_application">Submit your Application</string>
     <string name="review_your_application">Review your Application</string>
     <string name="pending_activation">Pending Activation</string>
+    <string name="complete_application">Complete Application</string>
+    <string name="preference_test">Set your Preference for Test</string>
+    <string name="partner_address">Partner School\'s Address</string>
+    <string name="slot_of_visit">Slot Of Visit</string>
+    <string name="date_of_visit">Date of Visit</string>
 
 
 </resources>

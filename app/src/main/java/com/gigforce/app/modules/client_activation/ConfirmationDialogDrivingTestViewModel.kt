@@ -83,7 +83,7 @@ class ConfirmationDialogDrivingTestViewModel : ViewModel() {
                                 val jpApplication =
                                         items.toObjects(JpApplication::class.java)[0]
                                 jpApplication.process.forEach { draft ->
-                                    if (draft.title == title) {
+                                    if (draft.title == title || draft.type == "onsite_document") {
                                         draft.isDone = false
                                         draft.isSlotBooked = true
                                         draft.status = "Slot Booked"

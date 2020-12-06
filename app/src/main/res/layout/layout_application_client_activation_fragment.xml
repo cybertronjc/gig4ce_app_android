@@ -27,14 +27,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
+                android:scaleType="centerCrop"
+                android:adjustViewBounds="true"
                 android:paddingStart="@dimen/size_16"
                 android:paddingEnd="@dimen/size_19"
                 app:srcCompat="@drawable/ic_arrow_back_24"
                 app:tint="@color/white" />
 
             <TextView
+                android:id="@+id/tv_title_application_client_activation"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="-4dp"
                 android:layout_toEndOf="@+id/iv_back_application_client_activation"
                 android:fontFamily="@font/lato"
                 android:gravity="center_horizontal"
@@ -84,7 +88,6 @@
                 android:paddingEnd="@dimen/size_35"
                 android:textColor="@color/black"
                 android:textSize="16sp"
-                android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/iv_application_client_activation"

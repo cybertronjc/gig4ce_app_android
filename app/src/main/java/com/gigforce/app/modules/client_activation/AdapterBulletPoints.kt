@@ -93,7 +93,7 @@ class AdapterBulletPoints : RecyclerView.Adapter<AdapterBulletPoints.ViewHolder>
             if (moreText) {
                 addBulletsTill(
                         0,
-                        if (role?.size!! > maxPoints) 1 else role.size!! - 1,
+                        if (role?.size!! > maxPoints) maxPoints else role.size!! - 1,
                         layout,
                         role,
                         true, context
@@ -120,7 +120,7 @@ class AdapterBulletPoints : RecyclerView.Adapter<AdapterBulletPoints.ViewHolder>
                     moreTextView.setOnClickListener {
                         layout.removeViewInLayout(moreTextView)
                         addBulletsTill(
-                                maxPoints,
+                                maxPoints+1,
                                 role.size!! - 1,
                                 layout,
                                 role,

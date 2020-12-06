@@ -56,28 +56,32 @@
 
     <TextView
         android:id="@+id/doYouHaveDLLabel"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="12dp"
+        android:layout_marginEnd="@dimen/size_16"
         android:fontFamily="@font/lato"
         android:letterSpacing="-0.01"
         android:text="@string/do_you_have_driving_license"
         android:textColor="@color/black"
-        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/drivingLicenseLabel" />
 
 
     <TextView
         android:id="@+id/dlEditOverallErrorMessage"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="2dp"
+        android:layout_marginEnd="@dimen/size_16"
         android:fontFamily="@font/lato"
         android:letterSpacing="0"
         android:textColor="@color/app_red"
         android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/doYouHaveDLLabel"
         tools:text="Error : Uploaded Image is not a Driving License Image" />
@@ -160,17 +164,17 @@
 
         </RelativeLayout>
 
-<!--        <TextView-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginStart="@dimen/size_16"-->
-<!--            android:layout_marginTop="@dimen/size_16"-->
-<!--            android:layout_marginEnd="@dimen/size_23"-->
-<!--            android:fontFamily="@font/lato"-->
-<!--            android:text="@string/note_it_is_mandatory_to_submit_required_docs_at_time_of_driving_test"-->
-<!--            android:textColor="@color/black"-->
-<!--            android:textSize="12sp"-->
-<!--            android:textStyle="normal" />-->
+        <!--        <TextView-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_marginStart="@dimen/size_16"-->
+        <!--            android:layout_marginTop="@dimen/size_16"-->
+        <!--            android:layout_marginEnd="@dimen/size_23"-->
+        <!--            android:fontFamily="@font/lato"-->
+        <!--            android:text="@string/note_it_is_mandatory_to_submit_required_docs_at_time_of_driving_test"-->
+        <!--            android:textColor="@color/black"-->
+        <!--            android:textSize="12sp"-->
+        <!--            android:textStyle="normal" />-->
     </LinearLayout>
 
 

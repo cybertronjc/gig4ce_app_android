@@ -19,7 +19,6 @@ import com.gigforce.app.modules.client_activation.models.JpApplication
 import com.gigforce.app.modules.landingscreen.models.Dependency
 import com.gigforce.app.modules.learning.courseDetails.LearningCourseDetailsFragment
 import com.gigforce.app.utils.StringConstants
-import io.reactivex.Observable
 import kotlinx.android.synthetic.main.layout_fragment_activation_gig.*
 
 class GigActivationFragment : BaseFragment(),
@@ -68,6 +67,7 @@ class GigActivationFragment : BaseFragment(),
                 tv_application_gig_activation.text = Html.fromHtml(gigAcivation.subTitle)
                 tv_title_toolbar.text = gigAcivation.title
                 tv_complete_gig_activation.text = gigAcivation.instruction
+
                 viewModel.updateDraftJpApplication(mWordOrderID, gigAcivation.requiredFeatures)
 
             }
@@ -76,21 +76,9 @@ class GigActivationFragment : BaseFragment(),
         viewModel.observableInitApplication.observe(viewLifecycleOwner, Observer {
             if (it == true) {
                 pb_gig_activation.gone()
-                Observable.fromIterable(viewModel.observableJpApplication.value?.process)
-                        .all { item -> item.isDone }.subscribe { success, err ->
-                            run {
-                                if (success) {
-                                    tv_verification_gig_activation.text = "Completed"
-                                    tv_verification_gig_activation.setCompoundDrawablesWithIntrinsicBounds(
-                                            R.drawable.ic_applied,
-                                            0,
-                                            0,
-                                            0
-                                    )
-                                }
-                            }
-                        }
-                initApplication(viewModel.observableJpApplication.value!!)
+                tv_verification_gig_activation.text = viewModel.observableJpApplication.value?.status
+                tv_verification_gig_activation.setCompoundDrawablesWithIntrinsicBounds(if (viewModel.observableJpApplication.value?.status == "Activated") R.drawable.ic_applied else R.drawable.ic_status_pending, 0, 0, 0)
+                         initApplication(viewModel.observableJpApplication.value!!)
             }
         })
         viewModel.getActivationData(mWordOrderID)
@@ -181,6 +169,22 @@ class GigActivationFragment : BaseFragment(),
     override fun onItemClick(dependency: Dependency) {
         viewModel.redirectToNextStep = true
         when (dependency.type) {
+            "onsite_document" -> {
+                if (dependency.isSlotBooked) {
+                    val index = adapter.items.indexOf(Dependency(type = "document"))
+                    if (index != -1) {
+                        navigate(
+                                R.id.fragment_doc_sub,
+                                bundleOf(
+                                        StringConstants.WORK_ORDER_ID.value to mWordOrderID,
+                                        StringConstants.TITLE.value to adapter.items[index].title,
+                                        StringConstants.TYPE.value to adapter.items[index].docType
+                                )
+                        )
+                    }
+
+                }
+            }
             "document" ->
                 navigate(
                         if (dependency.isSlotBooked) R.id.fragment_doc_sub else R.id.fragment_upload_cert,

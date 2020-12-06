@@ -77,10 +77,9 @@ class GigActivationViewModel(private val savedStateHandle: SavedStateHandle) : V
 
                 if (model.process.isNullOrEmpty()) {
                     model.process = dependency.toMutableList()
-                    model.status = "Application pending"
                 }
                 if (model.process.all { it.isDone }) {
-                    model.status = "Applied"
+                    model.status = "Activated"
                 }
 
                 model.process.forEach {
