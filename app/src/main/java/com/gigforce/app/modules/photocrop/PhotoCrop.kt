@@ -43,7 +43,7 @@ class PhotoCrop : AppCompatActivity() {
 
     companion object {
         var profilePictureOptionsBottomSheetFragment: ProfilePictureOptionsBottomSheetFragment =
-            ProfilePictureOptionsBottomSheetFragment()
+                ProfilePictureOptionsBottomSheetFragment()
 
         const val UPLOAD_DOCUMENT = "upload_document"
         const val INTENT_EXTRA_PURPOSE = "purpose"
@@ -92,7 +92,7 @@ class PhotoCrop : AppCompatActivity() {
     }
 
     val detector = FirebaseVision.getInstance()
-        .getVisionFaceDetector(options)
+            .getVisionFaceDetector(options)
 
     /**
      * Every call to start crop needs to have an extra with the key "purpose"
@@ -114,6 +114,10 @@ class PhotoCrop : AppCompatActivity() {
             savedInstanceState.getString(INTENT_EXTRA_PURPOSE)!!
         else
             intent.getStringExtra(INTENT_EXTRA_PURPOSE)
+
+        if (purpose != PURPOSE_VERIFICATION) {
+            cl_photo_crop.setBackgroundColor(getColor(R.color.gray_chat_module))
+        }
 
         Log.e("PHOTO_CROP", "purpose = " + purpose + " comparing with: profilePictureCrop")
         /**
@@ -187,9 +191,9 @@ class PhotoCrop : AppCompatActivity() {
 
 
     override fun onActivityResult(
-        requestCode: Int,
-        resultCode: Int,
-        data: Intent?
+            requestCode: Int,
+            resultCode: Int,
+            data: Intent?
     ): Unit {
         super.onActivityResult(requestCode, resultCode, data)
         if (purpose == PURPOSE_VERIFICATION && resultCode == Activity.RESULT_CANCELED) {
@@ -211,8 +215,8 @@ class PhotoCrop : AppCompatActivity() {
 //                )
 //            }
             Log.v(
-                "IMAGE_CAPTURE",
-                "request code=" + requestCode.toString() + "  ImURI: " + outputFileUri.toString()
+                    "IMAGE_CAPTURE",
+                    "request code=" + requestCode.toString() + "  ImURI: " + outputFileUri.toString()
             )
             outputFileUri = ImagePicker.getImageFromResult(this, resultCode, data);
             if (outputFileUri != null) {
@@ -253,29 +257,29 @@ class PhotoCrop : AppCompatActivity() {
                 //  Face detect - Check if face is present in the cropped image or not.
                 if (detectFace == 1) {
                     val result = detector.detectInImage(fvImage!!)
-                        .addOnSuccessListener { faces ->
-                            // Task completed successfully
-                            if (faces.size > 0) {
-                                Toast.makeText(
-                                    this,
-                                    "Face Detected. Uploading...",
-                                    Toast.LENGTH_LONG
-                                ).show()
-                                upload(imageUriResultCrop, baos.toByteArray(), CLOUD_OUTPUT_FOLDER)
+                            .addOnSuccessListener { faces ->
+                                // Task completed successfully
+                                if (faces.size > 0) {
+                                    Toast.makeText(
+                                            this,
+                                            "Face Detected. Uploading...",
+                                            Toast.LENGTH_LONG
+                                    ).show()
+                                    upload(imageUriResultCrop, baos.toByteArray(), CLOUD_OUTPUT_FOLDER)
 
-                            } else {
-                                Toast.makeText(
-                                    this,
-                                    "Something seems off. Please take a smart selfie with good lights.",
-                                    Toast.LENGTH_LONG
-                                ).show()
+                                } else {
+                                    Toast.makeText(
+                                            this,
+                                            "Something seems off. Please take a smart selfie with good lights.",
+                                            Toast.LENGTH_LONG
+                                    ).show()
+                                }
                             }
-                        }
-                        .addOnFailureListener { e ->
-                            // Task failed with an exception
-                            Log.d("CStatus", "Face detection failed! still uploading the image")
-                            upload(imageUriResultCrop, baos.toByteArray(), CLOUD_OUTPUT_FOLDER)
-                        }
+                            .addOnFailureListener { e ->
+                                // Task failed with an exception
+                                Log.d("CStatus", "Face detection failed! still uploading the image")
+                                upload(imageUriResultCrop, baos.toByteArray(), CLOUD_OUTPUT_FOLDER)
+                            }
                 } else {
                     //just upload wihtout face detection eg for pan, aadhar, other docs.
                     upload(imageUriResultCrop, baos.toByteArray(), CLOUD_OUTPUT_FOLDER)
@@ -292,12 +296,12 @@ class PhotoCrop : AppCompatActivity() {
         val bytes = ByteArrayOutputStream()
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, bytes)
         val path =
-            MediaStore.Images.Media.insertImage(
-                context.contentResolver,
-                bitmap,
-                System.currentTimeMillis().toString(),
-                null
-            )
+                MediaStore.Images.Media.insertImage(
+                        context.contentResolver,
+                        bitmap,
+                        System.currentTimeMillis().toString(),
+                        null
+                )
 
         return Uri.parse(path.toString())
     }
@@ -306,13 +310,13 @@ class PhotoCrop : AppCompatActivity() {
         Log.v("Start Crop", "started")
         //can use this for a new name every time
         val timeStamp = SimpleDateFormat(
-            "yyyyMMdd_HHmmss",
-            Locale.getDefault()
+                "yyyyMMdd_HHmmss",
+                Locale.getDefault()
         ).format(Date())
         val imageFileName = PREFIX + "_" + timeStamp + "_"
         val uCrop: UCrop = UCrop.of(
-            uri,
-            Uri.fromFile(File(cacheDir, imageFileName + EXTENSION))
+                uri,
+                Uri.fromFile(File(cacheDir, imageFileName + EXTENSION))
         )
         resultIntent.putExtra("filename", imageFileName + EXTENSION)
         uCrop.withAspectRatio(cropX, cropY)
@@ -389,8 +393,8 @@ class PhotoCrop : AppCompatActivity() {
                 //loadImage(folder, fname)
                 Toast.makeText(this, "Successfully Uploaded", Toast.LENGTH_LONG).show()
                 Log.v(
-                    "PHOTO_CROP",
-                    "uploaded file in foldername" + CLOUD_OUTPUT_FOLDER + " file: " + fname
+                        "PHOTO_CROP",
+                        "uploaded file in foldername" + CLOUD_OUTPUT_FOLDER + " file: " + fname
                 )
 
 
@@ -435,10 +439,10 @@ class PhotoCrop : AppCompatActivity() {
         else enableRemoveProfilePicture()
         Log.d("PHOTO_CROP", "loading - " + path)
         var profilePicRef: StorageReference =
-            storage.reference.child(folder).child(path)
+                storage.reference.child(folder).child(path)
         GlideApp.with(this)
-            .load(profilePicRef)
-            .into(imageView)
+                .load(profilePicRef)
+                .into(imageView)
     }
 
     /**
@@ -474,8 +478,8 @@ class PhotoCrop : AppCompatActivity() {
     private fun logBundle(bundle: Bundle) {
         for (key in bundle.keySet()!!) {
             Log.e(
-                "PHOTO_CROP_EXTRAS",
-                key + " : " + if (bundle.get(key) != null) bundle.get(key) else "NULL"
+                    "PHOTO_CROP_EXTRAS",
+                    key + " : " + if (bundle.get(key) != null) bundle.get(key) else "NULL"
             )
         }
     }
@@ -491,9 +495,9 @@ class PhotoCrop : AppCompatActivity() {
 
     private fun toggleBottomSheet() {
         if (bottomSheetBehavior.state == BottomSheetBehavior.STATE_EXPANDED) bottomSheetBehavior.state =
-            BottomSheetBehavior.STATE_COLLAPSED
+                BottomSheetBehavior.STATE_COLLAPSED
         else if (bottomSheetBehavior.state == BottomSheetBehavior.STATE_COLLAPSED) bottomSheetBehavior.state =
-            BottomSheetBehavior.STATE_EXPANDED
+                BottomSheetBehavior.STATE_EXPANDED
     }
 
     private fun hasCameraPermission(): Boolean {
@@ -506,23 +510,23 @@ class PhotoCrop : AppCompatActivity() {
 
     private fun askPermissions(rationale: String, requestCode: Int, perm: String) {
         EasyPermissions.requestPermissions(
-            this,
-            rationale,
-            requestCode,
-            perm
+                this,
+                rationale,
+                requestCode,
+                perm
         )
     }
 
     private fun checkPermissions() {
         if (!hasCameraPermission()) askPermissions(
-            "Camera Permission",
-            101,
-            Manifest.permission.CAMERA
+                "Camera Permission",
+                101,
+                Manifest.permission.CAMERA
         )
         if (!hasGalleryPermission()) askPermissions(
-            "Select Image",
-            102,
-            Manifest.permission.READ_EXTERNAL_STORAGE
+                "Select Image",
+                102,
+                Manifest.permission.READ_EXTERNAL_STORAGE
         )
 
     }

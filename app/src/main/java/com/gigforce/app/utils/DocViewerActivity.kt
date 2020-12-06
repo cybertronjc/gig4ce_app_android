@@ -14,29 +14,34 @@ class DocViewerActivity : AppCompatActivity() {
     private var pdfView: WebView? = null
     private var progress: ProgressBar? = null
     private val removePdfTopIcon =
-        "javascript:(function() {" + "document.querySelector('[role=\"toolbar\"]').remove();})()"
+            "javascript:(function() {" + "document.querySelector('[role=\"toolbar\"]').remove();})()"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.acitivity_doc_viewer)
         pdfView = findViewById(R.id.webview)
         progress = findViewById(R.id.pb_doc)
-        showPdfFile(intent.getStringExtra(StringConstants.DOC_URL.value));
+        val stringExtra = intent.getStringExtra(StringConstants.DOC_URL.value)
+        showPdfFile(stringExtra, stringExtra.contains(".jpg") || stringExtra.contains(".png"));
     }
 
-    private fun showPdfFile(imageString: String?) {
+    private fun showPdfFile(imageString: String?, isImage: Boolean) {
         showProgress()
         pdfView!!.invalidate()
         pdfView!!.settings.javaScriptEnabled = true
         pdfView!!.settings.setSupportZoom(true)
-
+        pdfView!!.settings.builtInZoomControls = true;
+        pdfView!!.settings.loadWithOverviewMode = true;
+        pdfView!!.settings.useWideViewPort = true;
 
         pdfView!!.loadUrl(
-            "https://docs.google.com/gview?embedded=true&url=${
-                URLEncoder.encode(
-                    imageString,
-                    "UTF-8"
-                )
-            }"
+                if (isImage) imageString else
+                    "https://docs.google.com/gview?embedded=true&url=${
+                        URLEncoder.encode(
+                                imageString,
+                                "UTF-8"
+                        )
+                    }"
         )
         pdfView!!.webViewClient = object : WebViewClient() {
             var checkOnPageStartedCalled = false
@@ -49,7 +54,7 @@ class DocViewerActivity : AppCompatActivity() {
                     pdfView!!.loadUrl(removePdfTopIcon)
                     hideProgress()
                 } else {
-                    showPdfFile(imageString)
+                    showPdfFile(imageString, isImage)
                 }
             }
         }

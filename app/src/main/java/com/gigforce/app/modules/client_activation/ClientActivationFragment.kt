@@ -1,6 +1,7 @@
 package com.gigforce.app.modules.client_activation
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.view.LayoutInflater
@@ -23,10 +24,7 @@ import com.gigforce.app.modules.explore_by_role.AdapterPreferredLocation
 import com.gigforce.app.modules.learning.LearningConstants
 import com.gigforce.app.modules.learning.learningVideo.PlayVideoDialogFragment
 import com.gigforce.app.modules.learning.models.LessonModel
-import com.gigforce.app.utils.GlideApp
-import com.gigforce.app.utils.HorizontaltemDecoration
-import com.gigforce.app.utils.Lce
-import com.gigforce.app.utils.StringConstants
+import com.gigforce.app.utils.*
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.layout_fragment_client_activation.*
 import kotlinx.android.synthetic.main.layout_role_description.view.*
@@ -360,13 +358,26 @@ class ClientActivationFragment : BaseFragment() {
             val recyclerGenericAdapter: RecyclerGenericAdapter<LessonModel> =
                     RecyclerGenericAdapter<LessonModel>(
                             activity?.applicationContext,
-                            PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
-                                PlayVideoDialogFragment.launch(
-                                        childFragmentManager = childFragmentManager,
-                                        lessonId = viewModel.observableWorkOrder.value?.requiredMedia?.media?.get(position)?.lessonId
-                                                ?: "", moduleId = ""
+                            PFRecyclerViewAdapter.OnViewHolderClick<LessonModel> { view, position, item ->
+                                if (item.type == "document") {
+                                    val docIntent = Intent(
+                                            requireContext(),
+                                            DocViewerActivity::class.java
+                                    )
+                                    docIntent.putExtra(
+                                            StringConstants.DOC_URL.value,
+                                            item.url
+                                    )
+                                    startActivity(docIntent)
+                                } else {
+                                    PlayVideoDialogFragment.launch(
+                                            childFragmentManager = childFragmentManager,
+                                            lessonId = viewModel.observableWorkOrder.value?.requiredMedia?.media?.get(position)?.lessonId
+                                                    ?: "", moduleId = ""
 
-                                )
+                                    )
+
+                                }
 
                             },
                             RecyclerGenericAdapter.ItemInterface<LessonModel?> { obj, viewHolder, position ->

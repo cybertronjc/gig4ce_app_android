@@ -18,7 +18,9 @@ data class LessonModel(
         @set:PropertyName("description")
         var description: String = "",
         var module_id: String = "",
-        var lesson_id: String = ""
+        var lesson_id: String = "",
+        var type: String = "",
+        var url: String = ""
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
             parcel.readString() ?: "",
