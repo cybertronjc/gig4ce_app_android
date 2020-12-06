@@ -8,6 +8,8 @@ data class Questions(
         var options: List<Options> = listOf(),
         var dropDownItem: String = "",
         var selectedAnswer: Int = -1,
-        var selectedDate: Date? = null
+        var selectedDate: Date? = null,
+        var selectedState: String = "",
+        var selectedCity: String = ""
 
 )

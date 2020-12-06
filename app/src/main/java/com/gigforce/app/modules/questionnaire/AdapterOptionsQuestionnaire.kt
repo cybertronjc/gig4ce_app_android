@@ -109,7 +109,10 @@ class AdapterOptionsQuestionnaire : RecyclerView.Adapter<RecyclerView.ViewHolder
                                         id: Long
                                 ) {
                                     item.options[holder.adapterPosition].selectedItemPosition = position
-                                    val cityForState = getCityForState(holder.itemView.sp_state.selectedItem as States)
+                                    val states = holder.itemView.sp_state.selectedItem as States
+                                    val cityForState = getCityForState(states)
+                                    item.selectedState = states.id
+
                                     if (cityForState.isNotEmpty()) {
                                         holder.itemView.pb_state_city.gone()
                                         holder.itemView.ll_questionnaire.setBackgroundResource(if (item.selectedAnswer == position) R.drawable.border_lipstick_rad_4 else R.drawable.border_27979797_rad_4)
@@ -117,6 +120,18 @@ class AdapterOptionsQuestionnaire : RecyclerView.Adapter<RecyclerView.ViewHolder
                                         holder.itemView.tv_city.visible()
                                         holder.itemView.sp_city.visible()
                                         holder.itemView.sp_city.adapter = arrayAdapter
+                                        holder.itemView.sp_city.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                                            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+
+                                                val city = holder.itemView.sp_city.selectedItem as Cities
+                                                item.selectedCity = city.name
+                                                item.selectedAnswer = 0
+
+                                            }
+
+                                            override fun onNothingSelected(parent: AdapterView<*>?) {
+                                            }
+                                        }
 
                                     } else {
                                         holder.itemView.tv_city.gone()
