@@ -18,12 +18,15 @@ import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
+import com.gigforce.app.modules.client_activation.models.States
 import com.gigforce.app.modules.landingscreen.models.Dependency
 import com.gigforce.app.utils.*
 import kotlinx.android.synthetic.main.layout_questionnaire_fragment.*
 
 
-class QuestionnaireFragment : BaseFragment() {
+class QuestionnaireFragment : BaseFragment(), AdapterQuestionnaire.AdapterQuestionnaireCallbacks {
+    private var parentPosition: Int = -1
+    private var childPosition: Int = -1
     private lateinit var ratioLayoutManager: RatioLayoutManager
     private var FROM_CLIENT_ACTIVATON: Boolean = false
     private lateinit var mWordOrderID: String
@@ -147,6 +150,13 @@ class QuestionnaireFragment : BaseFragment() {
     }
 
     private fun initObservers() {
+        viewModel.observableStates.observe(viewLifecycleOwner, Observer {
+            adapter.setStates(it, parentPosition)
+        })
+
+        viewModel.observableCities.observe(viewLifecycleOwner, Observer {
+            adapter.setCities(it, parentPosition)
+        })
         viewModel.observableError.observe(viewLifecycleOwner, Observer {
             pb_questionnaire.gone()
             showToast(it ?: "")
@@ -175,6 +185,7 @@ class QuestionnaireFragment : BaseFragment() {
 
     private fun setupRecycler() {
         rv_questionnaire.adapter = adapter
+        adapter.setCallbacks(this)
         val ratioToCover = 0.85f
         ratioLayoutManager = RatioLayoutManager(
                 requireContext(),
@@ -214,6 +225,18 @@ class QuestionnaireFragment : BaseFragment() {
             tabStrip.getChildAt(i).setOnTouchListener { _, _ -> true }
         }
 
+    }
+
+    override fun getStates(childPosition: Int, parentPosition: Int) {
+        this.childPosition = childPosition;
+        this.parentPosition = parentPosition;
+        viewModel.getState()
+
+    }
+
+    override fun getCities(state: States, parentPosition: Int) {
+        this.parentPosition = parentPosition
+        viewModel.getCities(state)
     }
 
 }

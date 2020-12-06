@@ -5,10 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.app.R
+import com.gigforce.app.core.gone
+import com.gigforce.app.core.visible
+import com.gigforce.app.modules.client_activation.models.Cities
+import com.gigforce.app.modules.client_activation.models.States
 import com.gigforce.app.modules.questionnaire.models.Questions
-import com.gigforce.app.utils.GenericSpinnerAdapter
 import kotlinx.android.synthetic.main.layout_answers_rv_questionnaire.view.*
 import kotlinx.android.synthetic.main.layout_date_rv_questionnaire.view.*
 import kotlinx.android.synthetic.main.layout_drop_down_questionnaire.view.*
@@ -19,7 +23,7 @@ import java.util.*
 class AdapterOptionsQuestionnaire : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private lateinit var callbacks: AdapterOptionsQuestionnaireCallbacks
     private lateinit var item: Questions
-
+    private var stateCityMap: MutableMap<States, List<Cities>?> = mutableMapOf()
 
     class ViewHolderText(itemView: View) : RecyclerView.ViewHolder(itemView)
     class ViewHolderDropDown(itemView: View) : RecyclerView.ViewHolder(itemView)
@@ -78,40 +82,55 @@ class AdapterOptionsQuestionnaire : RecyclerView.Adapter<RecyclerView.ViewHolder
 
             }
             TYPE_DROPDOWN -> {
-                if (option.options[0] != "Select") {
-                    option.options.add(0, "Select")
+                if (stateCityMap.isEmpty()) {
+                    callbacks.getStates(position)
+                    holder.itemView.tv_state.gone()
+                    holder.itemView.sp_state.gone()
+                    holder.itemView.pb_state_city.visible()
+                } else {
+                    holder.itemView.tv_state.visible()
+                    holder.itemView.sp_state.visible()
+                    holder.itemView.ll_questionnaire.setBackgroundResource(if (item.selectedAnswer == position) R.drawable.border_lipstick_rad_4 else R.drawable.border_27979797_rad_4)
+                    val arrayAdapter: ArrayAdapter<States> = ArrayAdapter(holder.itemView.context, android.R.layout.simple_spinner_dropdown_item, stateCityMap.keys.toList())
+                    holder.itemView.sp_state.adapter = arrayAdapter
+                    if (option.selectedItemPosition != -1) {
+                        holder.itemView.sp_state.setSelection(option.selectedItemPosition)
+                    }
+                    holder.itemView.sp_state.onItemSelectedListener =
+                            object : AdapterView.OnItemSelectedListener {
+                                override fun onNothingSelected(parent: AdapterView<*>?) {
+
+                                }
+
+                                override fun onItemSelected(
+                                        parent: AdapterView<*>?,
+                                        view: View?,
+                                        position: Int,
+                                        id: Long
+                                ) {
+                                    item.options[holder.adapterPosition].selectedItemPosition = position
+                                    val cityForState = getCityForState(holder.itemView.sp_state.selectedItem as States)
+                                    if (cityForState.isNotEmpty()) {
+                                        holder.itemView.pb_state_city.gone()
+                                        holder.itemView.ll_questionnaire.setBackgroundResource(if (item.selectedAnswer == position) R.drawable.border_lipstick_rad_4 else R.drawable.border_27979797_rad_4)
+                                        val arrayAdapter: ArrayAdapter<Cities> = ArrayAdapter(holder.itemView.context, android.R.layout.simple_spinner_dropdown_item, cityForState)
+                                        holder.itemView.tv_city.visible()
+                                        holder.itemView.sp_city.visible()
+                                        holder.itemView.sp_city.adapter = arrayAdapter
+
+                                    } else {
+                                        holder.itemView.tv_city.gone()
+                                        holder.itemView.sp_city.gone()
+                                        holder.itemView.pb_state_city.visible()
+
+                                    }
+
+                                }
+
+
+                            }
 
                 }
-                holder.itemView.tv_question.text = option.answer
-                holder.itemView.ll_questionnaire.setBackgroundResource(if (item.selectedAnswer == position) R.drawable.border_lipstick_rad_4 else R.drawable.border_27979797_rad_4)
-
-                holder.itemView.sp_options.adapter = GenericSpinnerAdapter(
-                        holder.itemView.context,
-                        R.layout.layout_custom_spinner_drop_down, option.options
-                )
-                holder.itemView.sp_options.onItemSelectedListener =
-                        object : AdapterView.OnItemSelectedListener {
-                            override fun onNothingSelected(parent: AdapterView<*>?) {
-
-                            }
-
-                            override fun onItemSelected(
-                                    parent: AdapterView<*>?,
-                                    view: View?,
-                                    position: Int,
-                                    id: Long
-                            ) {
-                                holder.itemView.setOnClickListener {
-                                    if (holder.adapterPosition == -1) return@setOnClickListener
-                                    callbacks.onClick(
-                                            holder.adapterPosition,
-                                            holder.itemView.sp_options.selectedItem.toString(), null, option.type
-                                    )
-                                }
-                            }
-
-                        }
-
 
             }
             DATE -> {
@@ -170,12 +189,37 @@ class AdapterOptionsQuestionnaire : RecyclerView.Adapter<RecyclerView.ViewHolder
 
     }
 
+    private fun getCityForState(states: States): List<Cities> {
+        if (stateCityMap[states] != null) {
+            return stateCityMap[states]!!
+        }
+        callbacks.getCities(states)
+        return listOf()
+    }
+
     fun setCallbacks(callbacks: AdapterOptionsQuestionnaireCallbacks) {
         this.callbacks = callbacks;
     }
 
+    fun setStates(states: List<States>) {
+        stateCityMap.clear()
+        states.forEach {
+            stateCityMap[it] = null
+        }
+        notifyDataSetChanged()
+
+    }
+
+    fun setCities(states: States, cities: List<Cities>) {
+        stateCityMap[states] = cities
+        notifyDataSetChanged()
+    }
+
     public interface AdapterOptionsQuestionnaireCallbacks {
         fun onClick(position: Int, value: String?, date: Date?, typ: String)
+        fun getStates(position: Int)
+        fun getCities(states: States)
+
     }
 
 

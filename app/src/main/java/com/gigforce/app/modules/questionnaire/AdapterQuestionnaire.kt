@@ -9,6 +9,8 @@ import com.bumptech.glide.Glide
 import com.gigforce.app.R
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
+import com.gigforce.app.modules.client_activation.models.Cities
+import com.gigforce.app.modules.client_activation.models.States
 import com.gigforce.app.modules.questionnaire.models.Questions
 import com.gigforce.app.utils.ItemOffsetDecoration
 import com.gigforce.app.utils.getCircularProgressDrawable
@@ -16,8 +18,12 @@ import kotlinx.android.synthetic.main.layout_rv_questionnaire_cards.view.*
 import java.util.*
 
 class AdapterQuestionnaire : RecyclerView.Adapter<AdapterQuestionnaire.ViewHolder>() {
+    private lateinit var callbacks: AdapterQuestionnaireCallbacks
     private var horizontalItemDecoration: ItemOffsetDecoration? = null
-     lateinit var items: List<Questions>
+    lateinit var items: List<Questions>
+    private var states: List<States>? = null
+    private var cities: List<Cities>? = null
+    private var state: States? = null
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
@@ -57,6 +63,12 @@ class AdapterQuestionnaire : RecyclerView.Adapter<AdapterQuestionnaire.ViewHolde
                 horizontalItemDecoration!!
         )
         val adapterAnswers = AdapterOptionsQuestionnaire()
+        if (!states.isNullOrEmpty()) {
+            adapterAnswers.setStates(states!!)
+        }
+        if (!cities.isNullOrEmpty()) {
+            adapterAnswers.setCities(state!!, cities!!)
+        }
         holder.itemView.rv_answers_questionnaire.adapter = adapterAnswers
         holder.itemView.rv_answers_questionnaire.layoutManager =
                 LinearLayoutManager(holder.itemView.context)
@@ -82,6 +94,15 @@ class AdapterQuestionnaire : RecyclerView.Adapter<AdapterQuestionnaire.ViewHolde
                 adapterAnswers.notifyDataSetChanged()
             }
 
+            override fun getStates(position: Int) {
+                callbacks.getStates(position, holder.adapterPosition)
+            }
+
+            override fun getCities(states: States) {
+                this@AdapterQuestionnaire.state = states
+                callbacks.getCities(states, holder.adapterPosition)
+            }
+
         })
 
     }
@@ -93,5 +114,25 @@ class AdapterQuestionnaire : RecyclerView.Adapter<AdapterQuestionnaire.ViewHolde
     fun addData(items: List<Questions>) {
         this.items = items
         notifyDataSetChanged()
+    }
+
+    fun setCallbacks(callbacks: AdapterQuestionnaireCallbacks) {
+        this.callbacks = callbacks
+    }
+
+    fun setStates(it: List<States>?, parentPosition: Int) {
+        this.states = it
+        notifyItemChanged(parentPosition)
+    }
+
+    fun setCities(it: List<Cities>?, parentPosition: Int) {
+        this.cities = it;
+        notifyItemChanged(parentPosition)
+    }
+
+    public interface AdapterQuestionnaireCallbacks {
+        fun getStates(childPosition: Int, parentPosition: Int)
+        fun getCities(state: States, parentPosition: Int)
+
     }
 }

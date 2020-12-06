@@ -9,18 +9,43 @@
     tools:ignore="MissingDefaultResource">
 
     <TextView
-        android:id="@+id/tv_question"
+        android:id="@+id/tv_state"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/size_16" />
+        android:layout_margin="@dimen/size_16"
+        android:text="@string/state" />
 
     <androidx.appcompat.widget.AppCompatSpinner
-        android:id="@+id/sp_options"
+        android:id="@+id/sp_state"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/size_16"
         android:layout_marginEnd="@dimen/size_16"
         android:layout_marginBottom="@dimen/size_16"
         android:background="@null" />
+
+    <TextView
+        android:id="@+id/tv_city"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/size_16"
+        android:text="@string/city"
+        android:visibility="gone" />
+
+    <androidx.appcompat.widget.AppCompatSpinner
+        android:id="@+id/sp_city"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/size_16"
+        android:layout_marginEnd="@dimen/size_16"
+        android:layout_marginBottom="@dimen/size_16"
+        android:background="@null"
+        android:visibility="gone" />
+
+    <ProgressBar
+        android:id="@+id/pb_state_city"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center" />
 
 </LinearLayout>
