@@ -83,14 +83,14 @@ class AdapterOptionsQuestionnaire : RecyclerView.Adapter<RecyclerView.ViewHolder
             }
             TYPE_DROPDOWN -> {
                 if (stateCityMap.isEmpty()) {
-                    callbacks.getStates(position)
+                    callbacks.getStates(stateCityMap, position)
                     holder.itemView.tv_state.gone()
                     holder.itemView.sp_state.gone()
                     holder.itemView.pb_state_city.visible()
                 } else {
                     holder.itemView.tv_state.visible()
                     holder.itemView.sp_state.visible()
-                    holder.itemView.ll_questionnaire.setBackgroundResource(if (item.selectedAnswer == position) R.drawable.border_lipstick_rad_4 else R.drawable.border_27979797_rad_4)
+                    holder.itemView.ll_questionnaire.setBackgroundResource(R.drawable.border_lipstick_rad_4)
                     val arrayAdapter: ArrayAdapter<States> = ArrayAdapter(holder.itemView.context, android.R.layout.simple_spinner_dropdown_item, stateCityMap.keys.toList())
                     holder.itemView.sp_state.adapter = arrayAdapter
                     if (option.selectedItemPosition != -1) {
@@ -108,6 +108,8 @@ class AdapterOptionsQuestionnaire : RecyclerView.Adapter<RecyclerView.ViewHolder
                                         position: Int,
                                         id: Long
                                 ) {
+                                    if (holder.adapterPosition == -1) return
+                                    item.selectedAnswer = holder.adapterPosition
                                     item.options[holder.adapterPosition].selectedItemPosition = position
                                     val states = holder.itemView.sp_state.selectedItem as States
                                     val cityForState = getCityForState(states)
@@ -115,7 +117,6 @@ class AdapterOptionsQuestionnaire : RecyclerView.Adapter<RecyclerView.ViewHolder
 
                                     if (cityForState.isNotEmpty()) {
                                         holder.itemView.pb_state_city.gone()
-                                        holder.itemView.ll_questionnaire.setBackgroundResource(if (item.selectedAnswer == position) R.drawable.border_lipstick_rad_4 else R.drawable.border_27979797_rad_4)
                                         val arrayAdapter: ArrayAdapter<Cities> = ArrayAdapter(holder.itemView.context, android.R.layout.simple_spinner_dropdown_item, cityForState)
                                         holder.itemView.tv_city.visible()
                                         holder.itemView.sp_city.visible()
@@ -125,7 +126,6 @@ class AdapterOptionsQuestionnaire : RecyclerView.Adapter<RecyclerView.ViewHolder
 
                                                 val city = holder.itemView.sp_city.selectedItem as Cities
                                                 item.selectedCity = city.name
-                                                item.selectedAnswer = 0
 
                                             }
 
@@ -159,7 +159,7 @@ class AdapterOptionsQuestionnaire : RecyclerView.Adapter<RecyclerView.ViewHolder
                     val day = c.get(Calendar.DAY_OF_MONTH)
 
 
-                    val dpd = DatePickerDialog(holder.itemView.context, { view, year, monthOfYear, dayOfMonth ->
+                    val dpd = DatePickerDialog(holder.itemView.context, R.style.DatePickerDialogTheme, { view, year, monthOfYear, dayOfMonth ->
                         val calendar = Calendar.getInstance()
                         calendar[year, monthOfYear] = dayOfMonth
                         val dateFormat: DateFormat = SimpleDateFormat("dd-MM-yyyy")
@@ -173,7 +173,10 @@ class AdapterOptionsQuestionnaire : RecyclerView.Adapter<RecyclerView.ViewHolder
 
                     }, year, month, day)
 
+
                     dpd.show()
+                    dpd.getButton(DatePickerDialog.BUTTON_NEGATIVE).setTextColor(holder.itemView.resources.getColor(R.color.colorPrimary));
+                    dpd.getButton(DatePickerDialog.BUTTON_POSITIVE).setTextColor(holder.itemView.resources.getColor(R.color.colorPrimary));
 
                 }
             }
@@ -208,7 +211,7 @@ class AdapterOptionsQuestionnaire : RecyclerView.Adapter<RecyclerView.ViewHolder
         if (stateCityMap[states] != null) {
             return stateCityMap[states]!!
         }
-        callbacks.getCities(states)
+        callbacks.getCities(stateCityMap, states)
         return listOf()
     }
 
@@ -230,10 +233,18 @@ class AdapterOptionsQuestionnaire : RecyclerView.Adapter<RecyclerView.ViewHolder
         notifyDataSetChanged()
     }
 
+    fun getStateCityMap(): MutableMap<States, List<Cities>?> {
+        return stateCityMap
+    }
+
+    fun setStateCityMap(map: MutableMap<States, List<Cities>?>) {
+        this.stateCityMap = map
+    }
+
     public interface AdapterOptionsQuestionnaireCallbacks {
         fun onClick(position: Int, value: String?, date: Date?, typ: String)
-        fun getStates(position: Int)
-        fun getCities(states: States)
+        fun getStates(stateCityMap: MutableMap<States, List<Cities>?>, position: Int)
+        fun getCities(stateCityMap: MutableMap<States, List<Cities>?>, states: States)
 
     }
 

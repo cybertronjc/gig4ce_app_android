@@ -24,6 +24,7 @@ class AdapterQuestionnaire : RecyclerView.Adapter<AdapterQuestionnaire.ViewHolde
     private var states: List<States>? = null
     private var cities: List<Cities>? = null
     private var state: States? = null
+    private var stateCityMap: MutableMap<States, List<Cities>?>? = null
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
@@ -63,7 +64,11 @@ class AdapterQuestionnaire : RecyclerView.Adapter<AdapterQuestionnaire.ViewHolde
                 horizontalItemDecoration!!
         )
         val adapterAnswers = AdapterOptionsQuestionnaire()
-        if (!states.isNullOrEmpty()) {
+        if(!stateCityMap.isNullOrEmpty()){
+            adapterAnswers.setStateCityMap(stateCityMap!!)
+
+        }
+        if (!states.isNullOrEmpty() && adapterAnswers.getStateCityMap().isNullOrEmpty()) {
             adapterAnswers.setStates(states!!)
         }
         if (!cities.isNullOrEmpty()) {
@@ -94,11 +99,13 @@ class AdapterQuestionnaire : RecyclerView.Adapter<AdapterQuestionnaire.ViewHolde
                 adapterAnswers.notifyDataSetChanged()
             }
 
-            override fun getStates(position: Int) {
+            override fun getStates(stateCityMap: MutableMap<States, List<Cities>?>, position: Int) {
+                this@AdapterQuestionnaire.stateCityMap = stateCityMap
                 callbacks.getStates(position, holder.adapterPosition)
             }
 
-            override fun getCities(states: States) {
+            override fun getCities(stateCityMap: MutableMap<States, List<Cities>?>, states: States) {
+                this@AdapterQuestionnaire.stateCityMap = stateCityMap
                 this@AdapterQuestionnaire.state = states
                 callbacks.getCities(states, holder.adapterPosition)
             }

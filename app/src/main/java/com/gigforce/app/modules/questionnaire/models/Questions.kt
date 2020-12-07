@@ -1,5 +1,7 @@
 package com.gigforce.app.modules.questionnaire.models
 
+import com.gigforce.app.modules.questionnaire.AdapterOptionsQuestionnaire
+import com.google.firebase.firestore.Exclude
 import java.util.*
 
 data class Questions(
@@ -11,5 +13,6 @@ data class Questions(
         var selectedDate: Date? = null,
         var selectedState: String = "",
         var selectedCity: String = ""
+
 
 )
