@@ -21,6 +21,7 @@ import com.gigforce.app.utils.ItemOffsetDecoration
 import com.gigforce.app.utils.Lce
 import com.gigforce.app.utils.StringConstants
 import com.google.firebase.auth.PhoneAuthProvider
+import kotlinx.android.synthetic.main.fragment_language_preferences.view.*
 import kotlinx.android.synthetic.main.layout_fragment_schedule_driving_test.*
 import kotlinx.android.synthetic.main.layout_fragment_schedule_driving_test.resend_otp
 import kotlinx.android.synthetic.main.layout_fragment_schedule_driving_test.timer_tv
@@ -73,6 +74,8 @@ class ScheduleDrivingTestFragment : BaseFragment(), DrivingCertSuccessDialog.Dri
     private fun initObservers() {
         viewModel.observableJPSettings.observe(viewLifecycleOwner, Observer {
             adapter.addData(it.checkItems)
+            tv_title_toolbar.text=it.title
+            tv_driving_test_certification.text=it.subtitle
             viewModel.getApplication(mWordOrderID, mType, mTitle)
         })
         viewModel.observableJpApplication.observe(viewLifecycleOwner, Observer {
