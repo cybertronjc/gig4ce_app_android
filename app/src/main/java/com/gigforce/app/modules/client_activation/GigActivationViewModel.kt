@@ -99,6 +99,9 @@ class GigActivationViewModel(private val savedStateHandle: SavedStateHandle) : V
                             "learning" -> {
 //                                it.isDone = checkForCourseCompletion(it.courseId)
                                 it.isDone = checkIfCourseCompleted(it.moduleId)
+                                if (it.isDone) {
+                                    it.status = ""
+                                }
                             }
 
                         }

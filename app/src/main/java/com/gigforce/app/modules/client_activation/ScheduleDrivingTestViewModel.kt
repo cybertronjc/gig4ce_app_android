@@ -145,7 +145,7 @@ class ScheduleDrivingTestViewModel : ViewModel() {
                                     run {
                                         if (item.isForKitCollection) {
                                             draft.isDone = true
-                                            draft.status="Done"
+                                            draft.status=""
                                         }
 
                                     }
@@ -155,7 +155,7 @@ class ScheduleDrivingTestViewModel : ViewModel() {
                             if (draft.title == title) {
                                 draft.isDone = true
                                 draft.isSlotBooked = true
-                                draft.status = "Done"
+                                draft.status = ""
 
 
                             }

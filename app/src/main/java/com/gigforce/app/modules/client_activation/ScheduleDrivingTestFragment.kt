@@ -30,7 +30,7 @@ import java.util.concurrent.TimeUnit
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
-class ScheduleDrivingTestFragment : BaseFragment(), DrivingCertSuccessDialog.DrivingCertSuccessDialogCallbacks {
+class ScheduleDrivingTestFragment : BaseFragment(), DrivingCertSuccessDialog.DrivingCertSuccessDialogCallbacks, AdapterScheduleTestCb.AdapterScheduleTestCbCallbacks {
     private var countDownTimer: CountDownTimer? = null
     private lateinit var mWordOrderID: String
     private lateinit var mTitle: String
@@ -55,6 +55,7 @@ class ScheduleDrivingTestFragment : BaseFragment(), DrivingCertSuccessDialog.Dri
 
     private fun setupRecycler() {
         rv_cb_schedule_test.adapter = adapter
+        adapter.setCallbacks(this)
         rv_cb_schedule_test.layoutManager = LinearLayoutManager(requireContext())
         rv_cb_schedule_test.addItemDecoration(ItemOffsetDecoration(resources.getDimensionPixelSize(R.dimen.size_4)))
     }
@@ -250,7 +251,11 @@ class ScheduleDrivingTestFragment : BaseFragment(), DrivingCertSuccessDialog.Dri
     }
 
     override fun onClickOkay() {
-        findNavController().popBackStack(R.id.landinghomefragment, true)
+        findNavController().popBackStack(R.id.fragment_doc_sub, true)
+    }
+
+    override fun enableConfirmOtpButton(enable: Boolean) {
+        verify_otp_button_schedule.isEnabled = enable
     }
 
 

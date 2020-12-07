@@ -10,6 +10,7 @@ import kotlinx.android.synthetic.main.layout_rv_check_schedule_test.view.*
 
 class AdapterScheduleTestCb : RecyclerView.Adapter<AdapterScheduleTestCb.ViewHolder>() {
 
+    private lateinit var callbacks: AdapterScheduleTestCbCallbacks
     var items: List<CheckItem> = listOf()
 
     var selectedItems: MutableList<CheckItem> = mutableListOf()
@@ -25,6 +26,8 @@ class AdapterScheduleTestCb : RecyclerView.Adapter<AdapterScheduleTestCb.ViewHol
         holder.itemView.cb_schedule_test.text = item.content
         holder.itemView.cb_schedule_test.setOnClickListener {
             if (holder.adapterPosition == -1) return@setOnClickListener
+            items[holder.adapterPosition].isCheckedBoolean = holder.itemView.cb_schedule_test.isChecked
+            callbacks.enableConfirmOtpButton(items.all { it.isCheckedBoolean })
             if (holder.itemView.cb_schedule_test.isChecked) {
                 selectedItems.add(items[holder.adapterPosition])
             } else {
@@ -41,6 +44,14 @@ class AdapterScheduleTestCb : RecyclerView.Adapter<AdapterScheduleTestCb.ViewHol
         selectedItems.clear()
         this.items = items;
         notifyDataSetChanged()
+    }
+
+    fun setCallbacks(callbacks: AdapterScheduleTestCbCallbacks) {
+        this.callbacks = callbacks
+    }
+
+    interface AdapterScheduleTestCbCallbacks {
+        fun enableConfirmOtpButton(enable: Boolean)
     }
 
 

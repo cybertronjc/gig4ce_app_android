@@ -85,8 +85,9 @@ class UploadDrivingCertificateViewmodel : ViewModel() {
                                 val jpApplication =
                                         items.toObjects(JpApplication::class.java)[0]
                                 jpApplication.process.forEach { draft ->
-                                    if (draft.title == title) {
+                                    if (draft.title == title || draft.type == "onsite_document") {
                                         draft.isDone = true
+                                        draft.status = ""
 
                                     }
                                 }
@@ -113,8 +114,9 @@ class UploadDrivingCertificateViewmodel : ViewModel() {
                             val jpApplication =
                                     items.toObjects(JpApplication::class.java)[0]
                             jpApplication.process.forEach { draft ->
-                                if (draft.title == title) {
+                                if (draft.title == title || draft.type == "onsite_document") {
                                     draft.isDone = true
+                                    draft.status = ""
                                 }
                             }
                             repository.db.collection("JP_Applications")

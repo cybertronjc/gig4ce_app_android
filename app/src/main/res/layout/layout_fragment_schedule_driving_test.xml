@@ -193,6 +193,8 @@ will apply auto to the fields
                 android:layout_marginStart="@dimen/size_16"
                 android:layout_marginTop="@dimen/size_13"
                 android:layout_marginEnd="@dimen/size_16"
+                android:background="@drawable/selector_bg_application_client_activation"
+                android:enabled="false"
                 android:text="@string/confirm_otp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
