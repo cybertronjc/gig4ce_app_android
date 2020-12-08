@@ -2,18 +2,23 @@ package com.gigforce.app.modules.client_activation
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import com.gigforce.app.modules.client_activation.models.*
 import com.gigforce.app.utils.Lce
 import com.gigforce.app.utils.SingleLiveEvent
+import com.gigforce.app.utils.network.Resource
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthProvider
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
 class ScheduleDrivingTestViewModel : ViewModel() {
+    var applicationId = ""
+    var submissionId = ""
     val repository = ScheduleDrivingTestRepository()
 
     private val _observableJPSettings = MutableLiveData<DocReceiving>()
@@ -71,6 +76,10 @@ class ScheduleDrivingTestViewModel : ViewModel() {
         val items = repository.db.collection("JP_Applications").whereEqualTo("jpid", workOrderID)
                 .whereEqualTo("gigerId", repository.getUID()).get()
                 .await()
+        if (items.documents.isNullOrEmpty()) {
+            return null
+        }
+        applicationId = items.documents[0].id
         val submissions = repository.getCollectionReference().document(items.documents[0].id)
                 .collection("submissions").whereEqualTo("stepId", workOrderID).whereEqualTo(
                         "title", title
@@ -78,6 +87,7 @@ class ScheduleDrivingTestViewModel : ViewModel() {
         if (submissions.documents.isNullOrEmpty()) {
             return null
         }
+        submissionId = submissions.documents[0].id
 
         return submissions.toObjects(DrivingCertSubmission::class.java)[0].certificate
     }
@@ -145,7 +155,7 @@ class ScheduleDrivingTestViewModel : ViewModel() {
                                     run {
                                         if (item.isForKitCollection) {
                                             draft.isDone = true
-                                            draft.status=""
+                                            draft.status = ""
                                         }
 
                                     }
@@ -198,6 +208,15 @@ class ScheduleDrivingTestViewModel : ViewModel() {
                         liveState.postValue(Lce.content(VERIFY_FAILED))
                     }
                 }
+    }
+
+    fun downloadCertificate(_id: String, drivingCertificateID: String) = liveData(Dispatchers.IO) {
+        emit(Resource.loading(data = null))
+        try {
+            emit(Resource.success(data = repository.getDrivingCertificate(_id, drivingCertificateID)))
+        } catch (exception: Exception) {
+            emit(Resource.error(data = null, message = exception.message ?: "Error Occurred!"))
+        }
     }
 
     companion object {

@@ -1108,6 +1108,7 @@
     <string name="partner_address">Partner School\'s Address</string>
     <string name="slot_of_visit">Slot Of Visit</string>
     <string name="date_of_visit">Date of Visit</string>
+    <string name="downloaded_certificate_exists">Downloaded Certificate Already Exists!!!</string>
 
 
 </resources>

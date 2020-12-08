@@ -8,6 +8,7 @@ import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
@@ -20,8 +21,8 @@ import com.gigforce.app.modules.auth.ui.main.LoginViewModel
 import com.gigforce.app.utils.ItemOffsetDecoration
 import com.gigforce.app.utils.Lce
 import com.gigforce.app.utils.StringConstants
+import com.gigforce.app.utils.network.Status
 import com.google.firebase.auth.PhoneAuthProvider
-import kotlinx.android.synthetic.main.fragment_language_preferences.view.*
 import kotlinx.android.synthetic.main.layout_fragment_schedule_driving_test.*
 import kotlinx.android.synthetic.main.layout_fragment_schedule_driving_test.resend_otp
 import kotlinx.android.synthetic.main.layout_fragment_schedule_driving_test.timer_tv
@@ -74,8 +75,8 @@ class ScheduleDrivingTestFragment : BaseFragment(), DrivingCertSuccessDialog.Dri
     private fun initObservers() {
         viewModel.observableJPSettings.observe(viewLifecycleOwner, Observer {
             adapter.addData(it.checkItems)
-            tv_title_toolbar.text=it.title
-            tv_driving_test_certification.text=it.subtitle
+            tv_title_toolbar.text = it.title
+            tv_driving_test_certification.text = it.subtitle
             viewModel.getApplication(mWordOrderID, mType, mTitle)
         })
         viewModel.observableJpApplication.observe(viewLifecycleOwner, Observer {
@@ -115,8 +116,44 @@ class ScheduleDrivingTestFragment : BaseFragment(), DrivingCertSuccessDialog.Dri
                             showToast("Something Went Wrong")
                         }
                         LoginViewModel.STATE_VERIFY_SUCCESS -> {
-                            pb_schedule_test.visible()
-                            viewModel.apply(mWordOrderID, mType, mTitle, adapter.selectedItems)
+
+                            viewModel.downloadCertificate(viewModel.applicationId, viewModel.submissionId).observe(viewLifecycleOwner, Observer {
+                                it?.let { resource ->
+                                    when (resource.status) {
+                                        Status.SUCCESS -> {
+                                            pb_schedule_test.visible()
+                                            viewModel.apply(mWordOrderID, mType, mTitle, adapter.selectedItems)
+
+                                            viewModel.observableApplied.observe(viewLifecycleOwner, Observer { application ->
+                                                pb_schedule_test.gone()
+                                                if (application == true) {
+                                                    countDownTimer?.cancel()
+                                                    val drivingCertSuccessDialog = DrivingCertSuccessDialog()
+                                                    drivingCertSuccessDialog.isCancelable = false
+                                                    drivingCertSuccessDialog.arguments = bundleOf(
+                                                            StringConstants.DOC_URL.value to it.data?.downloadLink
+                                                    )
+                                                    drivingCertSuccessDialog.setCallbacks(this)
+                                                    drivingCertSuccessDialog
+                                                    drivingCertSuccessDialog.show(parentFragmentManager, DrivingCertSuccessDialog::class.java.name)
+                                                }
+                                            })
+                                            viewModel.apply(mWordOrderID, mType, mTitle, adapter.selectedItems)
+
+                                        }
+                                        Status.ERROR -> {
+                                            pb_schedule_test.gone()
+                                            showToast(it.message ?: "")
+
+
+
+                                        }
+                                        Status.LOADING -> {
+                                            pb_schedule_test.visible()
+                                        }
+                                    }
+                                }
+                            })
 
                         }
                     }
@@ -131,17 +168,10 @@ class ScheduleDrivingTestFragment : BaseFragment(), DrivingCertSuccessDialog.Dri
 
 
         })
-        viewModel.observableApplied.observe(viewLifecycleOwner, Observer {
-            pb_schedule_test.gone()
-            if (it == true) {
-                countDownTimer?.cancel()
-                val drivingCertSuccessDialog = DrivingCertSuccessDialog()
-                drivingCertSuccessDialog.isCancelable = false
-                drivingCertSuccessDialog.setCallbacks(this)
-                drivingCertSuccessDialog
-                drivingCertSuccessDialog.show(parentFragmentManager, DrivingCertSuccessDialog::class.java.name)
-            }
-        })
+
+
+
+
         viewModel.getUIData(mWordOrderID)
 
 
