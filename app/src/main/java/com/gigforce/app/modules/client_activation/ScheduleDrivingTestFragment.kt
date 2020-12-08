@@ -122,7 +122,6 @@ class ScheduleDrivingTestFragment : BaseFragment(), DrivingCertSuccessDialog.Dri
                                     when (resource.status) {
                                         Status.SUCCESS -> {
                                             pb_schedule_test.visible()
-                                            viewModel.apply(mWordOrderID, mType, mTitle, adapter.selectedItems)
 
                                             viewModel.observableApplied.observe(viewLifecycleOwner, Observer { application ->
                                                 pb_schedule_test.gone()
