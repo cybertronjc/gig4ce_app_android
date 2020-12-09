@@ -135,12 +135,14 @@ class AddBioFragment : BaseFragment() {
     }
 
     override fun onBackPressed(): Boolean {
-        if (FROM_CLIENT_ACTIVATION) {
-            bundleOf(
-                    StringConstants.BACK_PRESSED.value to true
+//        if (FROM_CLIENT_ACTIVATION) {
+            navFragmentsData?.setData(
+                    bundleOf(
+                            StringConstants.BACK_PRESSED.value to true
 
+                    )
             )
-        }
+//        }
 
         return super.onBackPressed()
     }

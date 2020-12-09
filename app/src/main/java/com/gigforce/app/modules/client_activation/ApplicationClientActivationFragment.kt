@@ -84,13 +84,14 @@ class ApplicationClientActivationFragment : BaseFragment(),
         }
 
         tv_action_application_client_activation.setOnClickListener {
-            dialog = ReviewApplicationDialogClientActivation()
-            dialog?.setCallbacks(this)
-            dialog?.isCancelable = false
-
-
-            dialog?.arguments = bundleOf(StringConstants.DATA.value to viewModel.observableWorkOrderDependency.value)
-            dialog?.show(parentFragmentManager, ReviewApplicationDialogClientActivation::class.java.name)
+//            dialog = ReviewApplicationDialogClientActivation()
+//            dialog?.setCallbacks(this)
+//            dialog?.isCancelable = false
+//
+//
+//            dialog?.arguments = bundleOf(StringConstants.DATA.value to viewModel.observableWorkOrderDependency.value)
+//            dialog?.show(parentFragmentManager, ReviewApplicationDialogClientActivation::class.java.name)
+            onClickSubmit()
 
             viewModel.redirectToNextStep = false
             parent_application_client_activation.visibility = View.INVISIBLE
@@ -306,11 +307,13 @@ class ApplicationClientActivationFragment : BaseFragment(),
                     R.id.fragment_upload_dl_cl_act,
                     bundleOf(StringConstants.FROM_CLIENT_ACTIVATON.value to true)
             )
-            "learning" -> navigate(
-                    R.id.learningCourseDetails,
-                    bundleOf(LearningCourseDetailsFragment.INTENT_EXTRA_COURSE_ID to dependency.courseId,
-                            StringConstants.FROM_CLIENT_ACTIVATON.value to true)
-            )
+            "learning" ->
+
+                navigate(
+                        R.id.learningCourseDetails,
+                        bundleOf(LearningCourseDetailsFragment.INTENT_EXTRA_COURSE_ID to dependency.courseId,
+                                StringConstants.FROM_CLIENT_ACTIVATON.value to true)
+                )
         }
     }
 

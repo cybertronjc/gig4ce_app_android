@@ -17,6 +17,7 @@
         app:srcCompat="@drawable/ic_rejected" />
 
     <TextView
+        android:id="@+id/tv_content_title_rejection_dialog"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
@@ -24,11 +25,21 @@
         android:fontFamily="@font/lato"
         android:letterSpacing="-0.05"
         android:text="@string/no_worries"
+        android:layout_marginStart="@dimen/size_16"
+        android:layout_marginEnd="@dimen/size_16"
+        android:gravity="center"
         android:textColor="#dd2865"
         android:textSize="16sp"
         android:textStyle="bold" />
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_wrong_questions_rejection_dialog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
+
     <TextView
+        android:id="@+id/tv_sub_one_rejection_dialog"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/size_51"
@@ -42,6 +53,7 @@
         android:textStyle="normal" />
 
     <TextView
+        android:id="@+id/tv_sub_two_rejection_dialog"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/size_38"

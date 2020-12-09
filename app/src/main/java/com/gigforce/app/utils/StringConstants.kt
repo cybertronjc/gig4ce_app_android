@@ -48,7 +48,9 @@ enum class StringConstants(val value: String) {
     TITLE("TITLE"),
     TYPE("TYPE"),
     ACTION("ACTION"),
-    DATA("DATA")
+    DATA("DATA"),
+    REJECTION_TYPE("REJECTION_TYPE"),
+    WRONG_ANSWERS("WRONG_ANSWERS")
 
 
 }

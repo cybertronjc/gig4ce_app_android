@@ -145,7 +145,6 @@ class ScheduleDrivingTestFragment : BaseFragment(), DrivingCertSuccessDialog.Dri
                                             showToast(it.message ?: "")
 
 
-
                                         }
                                         Status.LOADING -> {
                                             pb_schedule_test.visible()
@@ -225,6 +224,7 @@ class ScheduleDrivingTestFragment : BaseFragment(), DrivingCertSuccessDialog.Dri
                         pb_schedule_test.visibility = View.GONE
                     }
                 }, 3000)
+                pb_schedule_test.visible()
                 viewModel.verifyPhoneNumberWithCodeScheduleDrivingTest(otpIn.toString())
             } else {
                 showToast("Wrong OTP")

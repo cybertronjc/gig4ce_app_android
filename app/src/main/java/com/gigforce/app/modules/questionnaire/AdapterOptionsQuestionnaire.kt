@@ -172,7 +172,12 @@ class AdapterOptionsQuestionnaire : RecyclerView.Adapter<RecyclerView.ViewHolder
                         // Display Selected date in textbox
 
                     }, year, month, day)
-
+                    if (option.minDate != null) {
+                        dpd.datePicker.minDate = option.minDate?.time!!
+                    }
+                    if (option.maxDate != null) {
+                        dpd.datePicker.maxDate = option.maxDate?.time!!
+                    }
 
                     dpd.show()
                     dpd.getButton(DatePickerDialog.BUTTON_NEGATIVE).setTextColor(holder.itemView.resources.getColor(R.color.colorPrimary));

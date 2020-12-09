@@ -78,7 +78,7 @@ class GigActivationFragment : BaseFragment(),
                 pb_gig_activation.gone()
                 tv_verification_gig_activation.text = viewModel.observableJpApplication.value?.status
                 tv_verification_gig_activation.setCompoundDrawablesWithIntrinsicBounds(if (viewModel.observableJpApplication.value?.status == "Activated") R.drawable.ic_applied else R.drawable.ic_status_pending, 0, 0, 0)
-                         initApplication(viewModel.observableJpApplication.value!!)
+                initApplication(viewModel.observableJpApplication.value!!)
             }
         })
         viewModel.getActivationData(mWordOrderID)
@@ -186,8 +186,17 @@ class GigActivationFragment : BaseFragment(),
                 }
             }
             "document" ->
+//                navigate(
+//                        if (dependency.isSlotBooked) R.id.fragment_doc_sub else R.id.fragment_upload_cert,
+//                        bundleOf(
+//                                StringConstants.WORK_ORDER_ID.value to mWordOrderID,
+//                                StringConstants.TITLE.value to dependency.title,
+//                                StringConstants.TYPE.value to dependency.docType
+//                        )
+//                )
+
                 navigate(
-                        if (dependency.isSlotBooked) R.id.fragment_doc_sub else R.id.fragment_upload_cert,
+                        R.id.fragment_doc_sub,
                         bundleOf(
                                 StringConstants.WORK_ORDER_ID.value to mWordOrderID,
                                 StringConstants.TITLE.value to dependency.title,

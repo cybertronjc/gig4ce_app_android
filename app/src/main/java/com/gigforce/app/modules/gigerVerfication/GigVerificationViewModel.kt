@@ -6,7 +6,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gigforce.app.R
-import com.gigforce.app.modules.client_activation.models.DrivingCertificate
 import com.gigforce.app.modules.gigerVerfication.aadharCard.AadharCardDataModel
 import com.gigforce.app.modules.gigerVerfication.bankDetails.BankDetailsDataModel
 import com.gigforce.app.modules.gigerVerfication.drivingLicense.DrivingLicenseDataModel
@@ -314,7 +313,7 @@ open class GigVerificationViewModel constructor(
                         backImage = backImageFileNameAtServer,
                         dlState = dlState,
                         dlNo = dlNo,
-                        state = 1,
+                        state = -1,
                         verifiedString = "Under Verification"
                 )
                 model.sync_status = false

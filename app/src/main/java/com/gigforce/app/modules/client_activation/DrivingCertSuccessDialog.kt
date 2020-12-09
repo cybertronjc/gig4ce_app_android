@@ -48,11 +48,11 @@ class DrivingCertSuccessDialog : DialogFragment() {
     }
 
     private fun initClicks() {
-        tv_okay_driving_cert_success.setOnClickListener {
-            dismiss()
-            callbacks.onClickOkay()
-        }
-        PushDownAnim.setPushDownAnimTo(tv_download_cert)
+//        tv_okay_driving_cert_success.setOnClickListener {
+//            dismiss()
+//            callbacks.onClickOkay()
+//        }
+        PushDownAnim.setPushDownAnimTo(tv_okay_driving_cert_success)
                 .setOnClickListener(View.OnClickListener {
                     if (PermissionUtils.checkForPermissionFragment(
                                     this,
@@ -77,7 +77,7 @@ class DrivingCertSuccessDialog : DialogFragment() {
                         grantResults!!
                 )
         ) {
-            tv_download_cert.performClick()
+            tv_okay_driving_cert_success.performClick()
         } else {
             Toast.makeText(requireContext(), getString(R.string.perm_not_granted), Toast.LENGTH_LONG).show()
         }
@@ -111,14 +111,14 @@ class DrivingCertSuccessDialog : DialogFragment() {
     }
 
     private fun downloadCertificate(url: String) {
-        if (File(
-                        Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS),
-                        "DrivingCertificate.pdf"
-                ).exists()
-        ) {
-            Toast.makeText(requireContext(), getString(R.string.downloaded_certificate_exists), Toast.LENGTH_LONG).show()
-            return
-        }
+//        if (File(
+//                        Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS),
+//                        "DrivingCertificate.pdf"
+//                ).exists()
+//        ) {
+//            Toast.makeText(requireContext(), getString(R.string.downloaded_certificate_exists), Toast.LENGTH_LONG).show()
+//            return
+//        }
 
 //        val url = URLEncoder.encode(downloadUrl, "UTF-8")
         val downloadmanager = context?.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
@@ -160,7 +160,8 @@ class DrivingCertSuccessDialog : DialogFragment() {
         progressBarDialog.setButton(
                 DialogInterface.BUTTON_POSITIVE, "OK"
         ) { dialog: DialogInterface?, whichButton: Int ->
-
+            dismiss()
+            callbacks.onClickOkay()
         }
         progressBarDialog.progress = 0
         Thread {

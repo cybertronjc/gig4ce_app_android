@@ -52,6 +52,7 @@
         android:fontFamily="@font/lato"
         android:gravity="center_horizontal"
         android:letterSpacing="-0.01"
+        android:visibility="gone"
         android:text="@string/driving_certificate"
         android:textColor="@color/lipstick"
         android:textSize="14sp"

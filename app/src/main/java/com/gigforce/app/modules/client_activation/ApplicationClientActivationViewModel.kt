@@ -81,7 +81,7 @@ class ApplicationClientActivationViewModel : ViewModel() {
 
                 }
                 model.draft.forEach {
-                    if (!it.isDone) {
+                    if (!it.isDone || it.refresh) {
                         when (it.type) {
                             "profile_pic" -> {
                                 val profileModel = getProfile()
@@ -92,13 +92,13 @@ class ApplicationClientActivationViewModel : ViewModel() {
                             }
                             "about_me" -> {
                                 val profileModel = getProfile()
-                                it.isDone = !profileModel.languages.isNullOrEmpty() && !profileModel.contactPhone.isNullOrEmpty()
+                                it.isDone = !profileModel.aboutMe.isNullOrEmpty()
 
                             }
                             "driving_licence" -> {
                                 val verification = getVerification()
                                 it.isDone = verification?.driving_license != null && (verification.driving_license?.state
-                                        ?: 0) >= 1
+                                        ?: -2) >= -1
                             }
                             "questionnaire" -> {
                                 it.isDone =

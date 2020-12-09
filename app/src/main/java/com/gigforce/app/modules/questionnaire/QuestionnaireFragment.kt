@@ -9,6 +9,7 @@ import androidx.core.os.bundleOf
 import androidx.lifecycle.Observer
 import androidx.lifecycle.SavedStateViewModelFactory
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.PagerSnapHelper
@@ -18,13 +19,15 @@ import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
+import com.gigforce.app.modules.client_activation.DrivingCertSuccessDialog
+import com.gigforce.app.modules.client_activation.RejectionDialog
 import com.gigforce.app.modules.client_activation.models.States
 import com.gigforce.app.modules.landingscreen.models.Dependency
 import com.gigforce.app.utils.*
 import kotlinx.android.synthetic.main.layout_questionnaire_fragment.*
 
 
-class QuestionnaireFragment : BaseFragment(), AdapterQuestionnaire.AdapterQuestionnaireCallbacks {
+class QuestionnaireFragment : BaseFragment(), AdapterQuestionnaire.AdapterQuestionnaireCallbacks, RejectionDialog.RejectionDialogCallbacks {
     private var parentPosition: Int = -1
     private var childPosition: Int = -1
     private lateinit var ratioLayoutManager: RatioLayoutManager
@@ -122,16 +125,35 @@ class QuestionnaireFragment : BaseFragment(), AdapterQuestionnaire.AdapterQuesti
                 return SNAP_TO_START
             }
         }
+        iv_back_application_client_activation.setOnClickListener {
+            onBackPressed()
+        }
         PushDownAnim.setPushDownAnimTo(tv_action_questionnaire)
                 .setOnClickListener(View.OnClickListener {
                     if (selectedPosition == adapter.items.size - 1) {
-                        pb_questionnaire.visible()
-                        viewModel.addQuestionnaire(
-                                mWordOrderID,
-                                mTitle,
-                                mType,
-                                adapter.items
-                        )
+                        val items = adapter.items.filter { questions ->
+                            questions.type == "mcq" && !questions.options[questions.selectedAnswer].isAnswer
+                        }
+                        if (items.isEmpty()) {
+                            pb_questionnaire.visible()
+                            viewModel.addQuestionnaire(
+                                    mWordOrderID,
+                                    mTitle,
+                                    mType,
+                                    adapter.items
+                            )
+                        } else {
+                            val rejectionDialog = RejectionDialog()
+                            rejectionDialog.setCallbacks(this)
+                            rejectionDialog
+                            rejectionDialog.arguments = bundleOf(
+                                    StringConstants.REJECTION_TYPE.value to RejectionDialog.REJECTION_QUESTIONNAIRE,
+                                    StringConstants.WRONG_ANSWERS.value to items.map { it.question }
+                            )
+                            rejectionDialog.show(parentFragmentManager, DrivingCertSuccessDialog::class.java.name)
+
+                        }
+
                         return@OnClickListener
                     }
                     if (adapter.items[selectedPosition].selectedAnswer != -1) {
@@ -147,13 +169,13 @@ class QuestionnaireFragment : BaseFragment(), AdapterQuestionnaire.AdapterQuesti
 
                     } else {
                         showToast(getString(R.string.answer_the_ques))
+
                     }
+
 
                 })
 
-        iv_back_application_client_activation.setOnClickListener {
-            onBackPressed()
-        }
+
     }
 
     private fun initObservers() {
@@ -246,4 +268,11 @@ class QuestionnaireFragment : BaseFragment(), AdapterQuestionnaire.AdapterQuesti
         viewModel.getCities(state)
     }
 
+    override fun onClickRefer() {
+        navigate(R.id.referrals_fragment)
+    }
+
+    override fun onClickTakMeHome() {
+        findNavController().popBackStack(R.id.landinghomefragment, true)
+    }
 }

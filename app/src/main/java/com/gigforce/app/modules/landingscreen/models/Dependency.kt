@@ -20,7 +20,9 @@ data class Dependency(
         var isDone: Boolean = false,
 
         @get:Exclude
-        var drawable: Drawable? = null
+        var drawable: Drawable? = null,
+        @JvmField
+        var refresh: Boolean = false
 
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
@@ -32,6 +34,8 @@ data class Dependency(
             parcel.readString() ?: "",
             parcel.readString() ?: "",
             parcel.readByte() != 0.toByte(),
+            parcel.readByte() != 0.toByte(),
+            null,
             parcel.readByte() != 0.toByte()
     )
 
@@ -50,6 +54,7 @@ data class Dependency(
         parcel.writeString(lessonId)
         parcel.writeByte(if (isSlotBooked) 1 else 0)
         parcel.writeByte(if (isDone) 1 else 0)
+        parcel.writeByte(if (refresh) 1 else 0)
     }
 
     override fun describeContents(): Int {
