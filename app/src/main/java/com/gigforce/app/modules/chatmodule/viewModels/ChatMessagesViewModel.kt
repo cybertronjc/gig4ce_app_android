@@ -3,35 +3,32 @@ package com.gigforce.app.modules.chatmodule.viewModels
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
+import android.media.MediaMetadataRetriever
 import android.media.ThumbnailUtils
 import android.net.Uri
-import android.os.Build
-import android.provider.MediaStore
 import android.util.Log
 import android.util.Size
-import androidx.annotation.RequiresApi
+import androidx.core.net.toFile
 import androidx.core.net.toUri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.gigforce.app.modules.chatmodule.models.ContactModel
-import com.gigforce.app.modules.chatmodule.models.Message
+import com.gigforce.app.modules.chatmodule.*
+import com.gigforce.app.modules.chatmodule.models.*
+import com.gigforce.app.modules.chatmodule.repository.ChatRepository
 import com.gigforce.app.modules.profile.ProfileFirebaseRepository
 import com.gigforce.app.modules.wallet.remote.GeneratePaySlipService
 import com.gigforce.app.utils.*
 import com.gigforce.app.utils.network.RetrofitFactory
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.CollectionReference
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.*
 import com.google.firebase.storage.FirebaseStorage
 import com.otaliastudios.transcoder.Transcoder
 import com.otaliastudios.transcoder.TranscoderListener
 import kotlinx.coroutines.*
-import okhttp3.ResponseBody
-import java.io.*
+import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.coroutines.resume
@@ -42,12 +39,14 @@ import kotlin.coroutines.suspendCoroutine
 class ChatMessagesViewModel constructor(
     private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance(),
     private val profileFirebaseRepository: ProfileFirebaseRepository = ProfileFirebaseRepository(),
-    private var paySlipService: GeneratePaySlipService = RetrofitFactory.generatePaySlipService()
+    private var paySlipService: GeneratePaySlipService = RetrofitFactory.generatePaySlipService(),
+    private var chatRepository: ChatRepository = ChatRepository()
 ) : ViewModel() {
 
     private val TAG: String = "chats/viewmodel"
     private val uid = FirebaseAuth.getInstance().currentUser?.uid!!
     private var firebaseDB = FirebaseFirestore.getInstance()
+    private val currentUser = FirebaseAuth.getInstance().currentUser
 
     var headerId: String = ""
     var otherUserName: String? = null
@@ -58,20 +57,44 @@ class ChatMessagesViewModel constructor(
     private var _messages = MutableLiveData<List<Message>>()
     val messages: LiveData<List<Message>> = _messages
 
+    private var _headerInfo = MutableLiveData<ChatHeader>()
+    val headerInfo: LiveData<ChatHeader> = _headerInfo
+
+    private var messagesListener: ListenerRegistration? = null
+    private var headerInfoChangeListener: ListenerRegistration? = null
+
     fun startListeningForNewMessages() {
 
         if (!headerId.isBlank()) {
-
             //Header Id will be blank in case there had been no convo between users
+            initForHeader()
+        } else {
+            checkIfHeaderIsPresentInHeadersList()
+        }
+    }
+
+    private fun checkIfHeaderIsPresentInHeadersList() = viewModelScope.launch {
+        val querySnap = firebaseDB.collection("chats")
+            .document(uid)
+            .collection("headers")
+            .whereEqualTo("otherUserId", otherUserId)
+            .getOrThrow()
+
+        if (!querySnap.isEmpty) {
+            headerId = querySnap.documents[0].id
             initForHeader()
         }
     }
 
-    private fun getReference(headerId: String): CollectionReference {
+    private fun getHeaderReference(headerId: String): DocumentReference {
         return firebaseDB.collection("chats")
             .document(uid)
             .collection("headers")
             .document(headerId)
+    }
+
+    private fun getReference(headerId: String): CollectionReference {
+        return getHeaderReference(headerId)
             .collection("chat_messages")
     }
 
@@ -89,14 +112,25 @@ class ChatMessagesViewModel constructor(
                 - Performance Optimization for Change in Message (loop over Documents should not be everytime)
          */
 
-        getReference(headerId)
-            .orderBy("timestamp", Query.Direction.DESCENDING)
+        headerInfoChangeListener = getHeaderReference(headerId)
+            .addSnapshotListener { snapshot, error ->
+
+                snapshot?.let {
+                    val chatHeader = it.toObject(ChatHeader::class.java)!!.apply {
+                        id = it.id
+                    }
+                    _headerInfo.value = chatHeader
+                }
+            }
+
+
+        messagesListener = getReference(headerId)
+            .orderBy("timestamp", Query.Direction.ASCENDING)
             .addSnapshotListener { snapshot, exception ->
                 Log.v(TAG, "new Snapshot Received")
                 Log.v(TAG, "${snapshot?.documents?.size} Documents")
 
                 snapshot?.let {
-
                     val messages = it.documents.map {
                         it.toObject(Message::class.java)!!.apply {
                             this.id = it.id
@@ -106,6 +140,9 @@ class ChatMessagesViewModel constructor(
                 }
             }
     }
+
+    private var _sendingMessage = MutableLiveData<ChatMessage>()
+    val sendingMessage: LiveData<ChatMessage> = _sendingMessage
 
     fun sendNewText(
         text: String
@@ -119,6 +156,7 @@ class ChatMessagesViewModel constructor(
             }
 
             val message = Message(
+                id = UUID.randomUUID().toString(),
                 headerId = headerId,
                 forUserId = forUserId,
                 otherUserId = otherUserId,
@@ -128,7 +166,7 @@ class ChatMessagesViewModel constructor(
                 timestamp = Timestamp.now()
             )
 
-            getReference(headerId).addOrThrow(message)
+            getReference(headerId).document(message.id).setOrThrow(message)
 
             //Update Header for current User
             firebaseDB.collection("chats")
@@ -189,20 +227,21 @@ class ChatMessagesViewModel constructor(
     private suspend fun createHeaderInOtherUsersCollection() {
         val profileData = profileFirebaseRepository.getProfileData()
 
-        val fullPath = if (profileData.profileAvatarName.isBlank()) {
-            null
-        } else {
-            firebaseStorage
-                .reference
-                .child("profile_pics")
-                .child(profileData.profileAvatarName)
-                .getDownloadUrlOrThrow()
-        }
+        val fullPath =
+            if (profileData.profileAvatarName.isBlank() || profileData.profileAvatarName == "avatar.jpg") {
+                null
+            } else {
+                firebaseStorage
+                    .reference
+                    .child("profile_pics")
+                    .child(profileData.profileAvatarName)
+                    .getDownloadUrlOrThrow()
+            }
 
         val query = firebaseDB.collection("chats")
             .document(otherUserId)
             .collection("contacts")
-            .whereEqualTo("uid", otherUserId)
+            .whereEqualTo("uid", forUserId)
             .getOrThrow()
 
         val contactModel = if (query.isEmpty) {
@@ -213,23 +252,26 @@ class ChatMessagesViewModel constructor(
             }
         }
 
-        val userName = contactModel?.name
+        var userName = contactModel?.name
         if (userName == null) {
-
+            userName = contactModel?.mobile
         }
 
-        val otherUserHeaderDoc = hashMapOf(
-            "lastMsgText" to "",
-            "forUserId" to otherUserId,
-            "otherUserId" to forUserId,
-            "lastMsgTimestamp" to null,
-            "type" to "user",
-            "unseenCount" to 0,
-            "otherUser" to hashMapOf(
-                "name" to userName,
-                "profilePic" to fullPath.toString(),
-                "type" to "user",
-                "unseenCount" to 0
+        if (userName == null) {
+            userName = currentUser?.phoneNumber
+        }
+
+        val chatHeader = ChatHeader(
+            forUserId = otherUserId,
+            otherUserId = forUserId,
+            lastMsgTimestamp = null,
+            chatType = ChatConstants.CHAT_TYPE_USER,
+            unseenCount = 0,
+            otherUser = UserInfo(
+                id = contactModel?.id ?: "",
+                name = userName ?: "",
+                profilePic = fullPath?.toString() ?: "",
+                type = "user"
             )
         )
 
@@ -237,12 +279,14 @@ class ChatMessagesViewModel constructor(
             .document(otherUserId)
             .collection("headers")
             .document(headerId)
-            .setOrThrow(otherUserHeaderDoc)
+            .setOrThrow(chatHeader)
     }
 
     fun sendNewDocumentMessage(
+        context: Context,
         text: String = "",
-        fileName: String,
+        documentDirectoryRef: File,
+        fileName: String?,
         uri: Uri
     ) = GlobalScope.launch {
 
@@ -252,6 +296,7 @@ class ChatMessagesViewModel constructor(
             }
 
             val message = Message(
+                id = UUID.randomUUID().toString(),
                 headerId = headerId,
                 forUserId = forUserId,
                 otherUserId = otherUserId,
@@ -262,11 +307,19 @@ class ChatMessagesViewModel constructor(
                 attachmentPath = null,
                 attachmentName = fileName
             )
+            _sendingMessage.postValue(ChatMessage.fromMessage(message))
 
-            val docReference = getReference(headerId).addOrThrow(message)
-            val pathOnServer = uploadChatAttachment(fileName, uri)
-            updatePathInMessage(docReference.id, pathOnServer)
-            updatePathInOtherUserMessageToo(docReference.id, pathOnServer)
+            val newFileName = if (fileName.isNullOrBlank()) {
+                "$uid-${DateHelper.getFullDateTimeStamp()}.mp4"//Fix it
+            } else {
+                "$uid-${DateHelper.getFullDateTimeStamp()}-$fileName"
+            }
+            val documentFile = File(documentDirectoryRef, newFileName)
+            FileUtils.copyFile(context.applicationContext, fileName!!, uri, documentFile)
+
+            val pathOnServer = uploadChatAttachment(newFileName, uri)
+            message.attachmentPath = pathOnServer
+            getReference(headerId).document(message.id).setOrThrow(message)
         } catch (e: Exception) {
             //handle error
         }
@@ -283,7 +336,20 @@ class ChatMessagesViewModel constructor(
                 createHeaderForBothUsers()
             }
 
+            val thumbnail =
+                try {
+                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+                        ThumbnailUtils.createImageThumbnail(File(uri.path), Size(96, 96), null)
+                    } else {
+                        ImageUtils.resizeBitmap(uri.path!!, 96, 96)
+                    }
+                } catch (e: Exception) {
+                    null
+                }
+
+            val file = uri.toFile()
             val message = Message(
+                id = UUID.randomUUID().toString(),
                 headerId = headerId,
                 forUserId = forUserId,
                 otherUserId = otherUserId,
@@ -291,84 +357,83 @@ class ChatMessagesViewModel constructor(
                 type = Message.MESSAGE_TYPE_TEXT_WITH_IMAGE,
                 content = text,
                 timestamp = Timestamp.now(),
-                attachmentPath = null
+                attachmentPath = null,
+                thumbnailBitmap = thumbnail?.copy(thumbnail.config, true)
             )
-
-            val thumbnail =
-                try {
-                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
-                        ThumbnailUtils.createImageThumbnail(File(uri.path), Size(96, 96), null)
-                    } else {
-                        ThumbnailUtils.createImageThumbnail(
-                            uri.path!!,
-                            MediaStore.Video.Thumbnails.MICRO_KIND
-                        )
-                    }
-                } catch (e : Exception){
-                    null
-                }
+            _sendingMessage.postValue(ChatMessage.fromMessage(message))
 
             val thumbnailPathOnServer = if (thumbnail != null) {
-                val imageInBytes = convertToByteArray(thumbnail)
-                uploadChatAttachment("thumb.png", imageInBytes)
+                val imageInBytes = ImageUtils.convertToByteArray(thumbnail)
+                uploadChatAttachment("thumb-${file.name}", imageInBytes)
             } else {
                 null
             }
+            val pathOnServer = uploadChatAttachment(file.name, uri)
 
-            val docReference = getReference(headerId).addOrThrow(message)
-            val pathOnServer = uploadChatAttachment("image.jpg", uri)
-            updatePathInMessage(docReference.id, pathOnServer,thumbnailPathOnServer)
-            updatePathInOtherUserMessageToo(docReference.id, pathOnServer,thumbnailPathOnServer)
+            message.thumbnail = thumbnailPathOnServer
+            message.attachmentPath = pathOnServer
+
+            getReference(headerId).document(message.id).setOrThrow(message)
         } catch (e: Exception) {
             //handle error
-        }
-    }
-
-    private suspend fun updatePathInOtherUserMessageToo(
-        id: String,
-        pathOnServer: String,
-        thumbnailPath: String? = null
-    ) {
-        val otherMessageId = firebaseDB.collection("chats")
-            .document(uid)
-            .collection("headers")
-            .document(headerId)
-            .collection("chat_messages")
-            .document(id)
-            .getOrThrow()
-            .get("otherMessageId") as String?
-
-        if (otherMessageId != null) {
-
-            firebaseDB.collection("chats")
-                .document(otherUserId)
-                .collection("headers")
-                .document(headerId)
-                .collection("chat_messages")
-                .document(otherMessageId)
-                .updateOrThrow(
-                    mapOf(
-                        "attachmentPath" to pathOnServer,
-                        "thumbnail" to thumbnailPath
-                    )
-                )
         }
     }
 
     @Suppress("DEPRECATION")
     fun sendNewVideoMessage(
         context: Context,
+        videosDirectoryRef: File,
         text: String = "",
-        fileName: String,
+        fileName: String?,
         uri: Uri
     ) = GlobalScope.launch(Dispatchers.IO) {
 
         try {
+
             if (headerId.isEmpty()) {
                 createHeaderForBothUsers()
             }
 
+            val videoLength = try {
+                val retriever = MediaMetadataRetriever()
+                retriever.setDataSource(context, uri)
+                val duration =
+                    retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)
+                retriever.release()
+                duration?.toLong() ?: 0L
+            } catch (e: Exception) {
+                Log.e("ChatGroupRepo", "Error while fetching video length", e)
+                0L
+            }
+
+            val mMMR = MediaMetadataRetriever()
+            mMMR.setDataSource(context, uri)
+            val thumbnail: Bitmap? =
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O_MR1) {
+                    mMMR.getScaledFrameAtTime(
+                        -1,
+                        MediaMetadataRetriever.OPTION_CLOSEST_SYNC,
+                        196,
+                        196
+                    )
+                } else {
+                    try {
+                        val bigThumbnail = mMMR.frameAtTime
+                        val smallThumbnail = ThumbnailUtils.extractThumbnail(bigThumbnail, 196, 196)
+
+                        if (!bigThumbnail.isRecycled)
+                            bigThumbnail.recycle()
+
+                        smallThumbnail
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                        null
+                    }
+                }
+
+
             val message = Message(
+                id = UUID.randomUUID().toString(),
                 headerId = headerId,
                 forUserId = forUserId,
                 otherUserId = otherUserId,
@@ -377,52 +442,62 @@ class ChatMessagesViewModel constructor(
                 content = text,
                 timestamp = Timestamp.now(),
                 attachmentPath = null,
-                attachmentName = fileName
+                attachmentName = fileName,
+                videoLength = videoLength,
+                thumbnailBitmap = thumbnail
             )
 
-            val docReference = getReference(headerId).addOrThrow(message)
+            _sendingMessage.postValue(ChatMessage.fromMessage(message))
+
+            if (!videosDirectoryRef.exists())
+                videosDirectoryRef.mkdirs()
+
+            val newFileName = if (fileName.isNullOrBlank()) {
+                "$uid-${DateHelper.getFullDateTimeStamp()}.mp4"
+            } else {
+
+                if (fileName.endsWith(".mp4", true)) {
+                    "$uid-${DateHelper.getFullDateTimeStamp()}-$fileName"
+                } else {
+                    "$uid-${DateHelper.getFullDateTimeStamp()}-$fileName.mp4"
+                }
+            }
 
             val transcodedFile = File(
-                context.filesDir,
-                "vid_${DateHelper.getFullDateTimeStamp()}.mp4"
+                videosDirectoryRef,
+                newFileName
             )
             transcodeVideo(context, uri, transcodedFile)
             val compressedFileUri = transcodedFile.toUri()
 
-            val thumbnail =
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
-                    ThumbnailUtils.createVideoThumbnail(transcodedFile, Size(96, 96), null)
-                } else {
-                    ThumbnailUtils.createVideoThumbnail(
-                        transcodedFile.absolutePath,
-                        MediaStore.Video.Thumbnails.MICRO_KIND
-                    )
-                }
-
+//            val thumbnail =
+//                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+//                    ThumbnailUtils.createVideoThumbnail(transcodedFile, Size(96, 96), null)
+//                } else {
+//                    ThumbnailUtils.createVideoThumbnail(
+//                        transcodedFile.absolutePath,
+//                        MediaStore.Video.Thumbnails.MINI_KIND
+//                    )
+//                }
 
             val thumbnailPathOnServer = if (thumbnail != null) {
-                val imageInBytes = convertToByteArray(thumbnail)
-                uploadChatAttachment("thumb.png", imageInBytes)
+                val imageInBytes = ImageUtils.convertToByteArray(thumbnail)
+                val fileNameAtServer = prepareUniqueImageName("thumb.png")
+                uploadChatAttachment(fileNameAtServer, imageInBytes)
             } else {
                 null
             }
+            val pathOnServer = uploadChatAttachment(newFileName, compressedFileUri)
 
-            val pathOnServer = uploadChatAttachment("video.mp4", compressedFileUri)
+            message.thumbnail = thumbnailPathOnServer
+            message.attachmentPath = pathOnServer
 
-            updatePathInMessage(docReference.id, pathOnServer, thumbnailPathOnServer)
-            updatePathInOtherUserMessageToo(docReference.id, pathOnServer, thumbnailPathOnServer)
+            getReference(headerId).document(message.id).setOrThrow(message)
         } catch (e: Exception) {
             //handle error
         }
     }
 
-    private fun convertToByteArray(thumbnail: Bitmap): ByteArray {
-        val stream = ByteArrayOutputStream()
-        thumbnail.compress(Bitmap.CompressFormat.PNG, 100, stream)
-        val byteArray = stream.toByteArray()
-        thumbnail.recycle()
-        return byteArray
-    }
 
     suspend fun transcodeVideo(context: Context, uri: Uri, dest: File) =
         suspendCancellableCoroutine<File> { cont ->
@@ -431,15 +506,10 @@ class ChatMessagesViewModel constructor(
                 .addDataSource(context, uri)
                 .setListener(object : TranscoderListener {
                     override fun onTranscodeCompleted(successCode: Int) {
-                        //  _selfieVideoUploadState.value = "Video Compressed"
                         cont.resume(dest)
                     }
 
-                    override fun onTranscodeProgress(progress: Double) {
-//                        val progressInTens = progress * 100
-//                        _selfieVideoUploadState.value =
-//                            "Compressing Video ${String.format("%.2f", progressInTens)} %"
-                    }
+                    override fun onTranscodeProgress(progress: Double) {}
 
                     override fun onTranscodeCanceled() {
                         cont.resumeWithException(CancellationException("Video Compresssion Cancelled"))
@@ -459,10 +529,9 @@ class ChatMessagesViewModel constructor(
 
     private suspend fun uploadChatAttachment(fileNameWithExtension: String, image: Uri) =
         suspendCoroutine<String> { cont ->
-            val fileNameAtServer = prepareUniqueImageName(fileNameWithExtension)
             val filePathOnServer = firebaseStorage.reference
                 .child("chat_attachments")
-                .child(fileNameAtServer)
+                .child(fileNameWithExtension)
 
             filePathOnServer
                 .putFile(image)
@@ -483,10 +552,9 @@ class ChatMessagesViewModel constructor(
 
     private suspend fun uploadChatAttachment(fileNameWithExtension: String, data: ByteArray) =
         suspendCoroutine<String> { cont ->
-            val fileNameAtServer = prepareUniqueImageName(fileNameWithExtension)
             val filePathOnServer = firebaseStorage.reference
                 .child("chat_attachments")
-                .child(fileNameAtServer)
+                .child(fileNameWithExtension)
 
             filePathOnServer
                 .putBytes(data)
@@ -515,16 +583,6 @@ class ChatMessagesViewModel constructor(
         return "$forUserId$timeStamp$extension"
     }
 
-    private suspend fun updatePathInMessage(
-        id: String,
-        pathOnServer: String,
-        thumbnailPath: String? = null
-    ) {
-        getReference(headerId).document(id)
-            .updateOrThrow(mapOf("attachmentPath" to pathOnServer, "thumbnail" to thumbnailPath))
-    }
-
-
     private suspend fun createHeader(
         forUserId: String,
         otherUserId: String,
@@ -532,18 +590,17 @@ class ChatMessagesViewModel constructor(
         otherUserProfilePicture: String?
     ): String {
 
-        val headerDoc = hashMapOf(
-            "lastMsgText" to "",
-            "forUserId" to forUserId,
-            "otherUserId" to otherUserId,
-            "lastMsgTimestamp" to null,
-            "type" to "user",
-            "unseenCount" to 0,
-            "otherUser" to hashMapOf(
-                "name" to otherUserName,
-                "profilePic" to otherUserProfilePicture,
-                "type" to "user",
-                "unseenCount" to 0
+        val chatHeader = ChatHeader(
+            forUserId = forUserId,
+            otherUserId = otherUserId,
+            lastMsgTimestamp = null,
+            chatType = ChatConstants.CHAT_TYPE_USER,
+            unseenCount = 0,
+            otherUser = UserInfo(
+                id = "",
+                name = otherUserName ?: "",
+                profilePic = otherUserProfilePicture ?: "",
+                type = "user"
             )
         )
 
@@ -551,7 +608,7 @@ class ChatMessagesViewModel constructor(
             .collection("chats")
             .document(uid)
             .collection("headers")
-            .addOrThrow(headerDoc)
+            .addOrThrow(chatHeader)
 
         return docRef.id
     }
@@ -581,85 +638,8 @@ class ChatMessagesViewModel constructor(
     }
 
 
-    private val _downloadChatAttachment = MutableLiveData<Lce<File>>()
-    val downloadChatAttachment: LiveData<Lce<File>> = _downloadChatAttachment
-
-    fun downloadAttachment(
-        fullAttachmentPath: String,
-        filesDir: File
-    ) = viewModelScope.launch {
-        _downloadChatAttachment.value = Lce.loading()
-
-        try {
-
-            val file = downloadAndSaveAttachment(fullAttachmentPath, filesDir)
-            _downloadChatAttachment.value = Lce.content(file)
-            _downloadChatAttachment.value = null
-        } catch (e: Exception) {
-            _downloadChatAttachment.value = Lce.error(e.message!!)
-            _downloadChatAttachment.value = null
-
-        }
-    }
-
-    private suspend fun downloadAndSaveAttachment(pdfDownloadLink: String, filesDir: File): File {
-        val fileName: String = pdfDownloadLink.substring(
-            pdfDownloadLink.lastIndexOf('/') + 1,
-            pdfDownloadLink.length
-        )
-
-        val paySlipFile = File(filesDir, fileName)
-        if (paySlipFile.exists()) {
-            Log.d("PayslipMonthlyViewModel", "File Present in local")
-            //File Present in Local
-            return paySlipFile
-        } else {
-            val response = paySlipService.downloadPaySlip(pdfDownloadLink)
-
-            if (response.isSuccessful) {
-                val body = response.body()!!
-                writeResponseBodyToDisk(body, paySlipFile)
-                return paySlipFile
-            } else {
-                throw Exception("Unable to dowload payslip, ${response.message()}")
-            }
-        }
-    }
-
-    private fun writeResponseBodyToDisk(body: ResponseBody, destFile: File): Boolean {
-        return try {
-            var inputStream: InputStream? = null
-            var outputStream: OutputStream? = null
-            try {
-                val fileReader = ByteArray(4096)
-                val fileSize: Long = body.contentLength()
-                var fileSizeDownloaded: Long = 0
-                inputStream = body.byteStream()
-                outputStream = FileOutputStream(destFile)
-                while (true) {
-                    val read: Int = inputStream.read(fileReader)
-                    if (read == -1) {
-                        break
-                    }
-                    outputStream.write(fileReader, 0, read)
-                    fileSizeDownloaded += read.toLong()
-                    Log.d("DownloadPath", "file download: $fileSizeDownloaded of $fileSize")
-                }
-                outputStream.flush()
-                true
-            } catch (e: IOException) {
-                false
-            } finally {
-                inputStream?.close()
-                outputStream?.close()
-            }
-        } catch (e: IOException) {
-            false
-        }
-    }
-
-    fun setMessagesUnseenCountToZero() = GlobalScope.launch{
-        if(headerId.isBlank()){
+    fun setMessagesUnseenCountToZero() = GlobalScope.launch {
+        if (headerId.isBlank()) {
             return@launch
         }
 
@@ -670,9 +650,114 @@ class ChatMessagesViewModel constructor(
                 .document(headerId)
                 .updateOrThrow("unseenCount", 0)
         } catch (e: Exception) {
-            Log.e(TAG, "Unable to set unseen count to zero",e)
+            Log.e(TAG, "Unable to set unseen count to zero", e)
         }
     }
 
+    private val _chatAttachmentDownloadState: MutableLiveData<ChatAttachmentDownloadState> =
+        MutableLiveData()
+    val chatAttachmentDownloadState: LiveData<ChatAttachmentDownloadState> =
+        _chatAttachmentDownloadState
 
+    fun downloadAndSaveFile(appDirectoryFileRef: File, position: Int, message: Message) =
+        viewModelScope.launch {
+            val downloadLink = message.attachmentPath ?: return@launch
+            if (!appDirectoryFileRef.exists())
+                appDirectoryFileRef.mkdirs()
+
+            _chatAttachmentDownloadState.value = DownloadStarted(position)
+
+            try {
+
+                val fileName: String = FirebaseUtils.extractFilePath(downloadLink)
+                val fileRef = if (message.type == Message.MESSAGE_TYPE_TEXT_WITH_IMAGE) {
+                    val imagesDirectoryRef =
+                        File(appDirectoryFileRef, ChatConstants.DIRECTORY_IMAGES)
+
+                    if (!imagesDirectoryRef.exists())
+                        imagesDirectoryRef.mkdirs()
+
+                    File(imagesDirectoryRef, fileName)
+                } else if (message.type == Message.MESSAGE_TYPE_TEXT_WITH_VIDEO) {
+                    val videosDirectoryRef =
+                        File(appDirectoryFileRef, ChatConstants.DIRECTORY_VIDEOS)
+                    if (!videosDirectoryRef.exists())
+                        videosDirectoryRef.mkdirs()
+
+                    File(videosDirectoryRef, fileName)
+                } else if (message.type == Message.MESSAGE_TYPE_TEXT_WITH_DOCUMENT) {
+                    val imagesDirectoryRef =
+                        File(appDirectoryFileRef, ChatConstants.DIRECTORY_DOCUMENTS)
+                    File(imagesDirectoryRef, fileName)
+                } else {
+                    throw IllegalArgumentException("other types not supperted yet")
+                }
+
+                val response = paySlipService.downloadPaySlip(downloadLink)
+                if (response.isSuccessful) {
+                    val body = response.body()!!
+                    FileUtils.writeResponseBodyToDisk(body, fileRef)
+                    _chatAttachmentDownloadState.value = DownloadCompleted(position)
+                    _chatAttachmentDownloadState.value = null
+                } else {
+                    throw Exception("Unable to dowload payslip, ${response.message()}")
+                }
+            } catch (e: Exception) {
+                _chatAttachmentDownloadState.value = ErrorWhileDownloadingAttachment(
+                    position,
+                    e.message ?: "Unable to download attachment"
+                )
+                _chatAttachmentDownloadState.value = null
+            }
+        }
+
+    private var _blockingOrUnblockingUser = MutableLiveData<Lse>()
+    val blockingOrUnblockingUser: LiveData<Lse> = _blockingOrUnblockingUser
+
+    fun blockOrUnBlockUser() = viewModelScope.launch {
+
+        if (headerId.isBlank())
+            return@launch
+
+        _blockingOrUnblockingUser.value = Lse.loading()
+        try {
+            chatRepository.blockOrUnblockUser(headerId)
+            _blockingOrUnblockingUser.value = Lse.success()
+            _blockingOrUnblockingUser.value = null
+        } catch (e: Exception) {
+            _blockingOrUnblockingUser.value =
+                Lse.error(e.message ?: "unable to block or unblock user")
+            _blockingOrUnblockingUser.value = null
+        }
+    }
+
+    fun reportAndBlockUser(
+        chatHeader: String,
+        otherUserId: String,
+        reason: String
+    ) = viewModelScope.launch {
+
+        if (chatHeader.isBlank())
+            return@launch
+
+        _blockingOrUnblockingUser.value = Lse.loading()
+        try {
+            chatRepository.reportAndBlockUser(chatHeader, otherUserId, reason)
+            _blockingOrUnblockingUser.value = Lse.success()
+            _blockingOrUnblockingUser.value = null
+        } catch (e: Exception) {
+            _blockingOrUnblockingUser.value =
+                Lse.error(e.message ?: "unable to block or unblock user")
+            _blockingOrUnblockingUser.value = null
+        }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+
+        messagesListener?.remove()
+        messagesListener = null
+
+        headerInfoChangeListener?.remove()
+    }
 }

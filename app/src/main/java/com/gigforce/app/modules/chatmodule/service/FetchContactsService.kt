@@ -7,11 +7,13 @@ import android.database.Cursor
 import android.os.*
 import android.provider.ContactsContract
 import android.util.Log
+import android.widget.SimpleCursorAdapter
 import androidx.lifecycle.MutableLiveData
 import androidx.loader.app.LoaderManager
 import androidx.loader.content.CursorLoader
 import androidx.loader.content.Loader
 import com.gigforce.app.R
+import com.gigforce.app.modules.chatmodule.SyncPref
 import com.gigforce.app.modules.chatmodule.models.ContactModel
 import com.gigforce.app.modules.chatmodule.repository.ChatContactsRepository
 import kotlinx.coroutines.GlobalScope
@@ -21,21 +23,14 @@ import kotlinx.coroutines.launch
 private val PROJECTION: Array<out String> = arrayOf(
     ContactsContract.Contacts._ID,
     ContactsContract.Contacts.LOOKUP_KEY,
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
-        ContactsContract.Contacts.DISPLAY_NAME_PRIMARY
-    else
-        ContactsContract.Contacts.DISPLAY_NAME,
+    ContactsContract.Contacts.DISPLAY_NAME_PRIMARY,
     ContactsContract.Contacts.HAS_PHONE_NUMBER,
     ContactsContract.CommonDataKinds.Phone.NUMBER
 )
 
 // Defines the text expression
 @SuppressLint("InlinedApi")
-private val SELECTION: String =
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
-        "${ContactsContract.Contacts.HAS_PHONE_NUMBER} > 0 and ${ContactsContract.Contacts.DISPLAY_NAME_PRIMARY} LIKE ?"
-    else
-        "${ContactsContract.Contacts.DISPLAY_NAME} LIKE ?"
+private val SELECTION: String = "${ContactsContract.Contacts.HAS_PHONE_NUMBER} > 0 and ${ContactsContract.Contacts.DISPLAY_NAME_PRIMARY} LIKE ?"
 
 /*
  * Defines an array that contains resource ids for the layout views
@@ -53,8 +48,7 @@ private const val CONTACT_KEY_INDEX: Int = 1
 // SERVICE
 //////////////////////////////////////////////////
 
-class FetchContactsService : Service(),
-    LoaderManager.LoaderCallbacks<Cursor> {
+class FetchContactsService : Service(), LoaderManager.LoaderCallbacks<Cursor> {
 
     private val TAG:String = "service/fetch/contacts"
 
@@ -66,7 +60,7 @@ class FetchContactsService : Service(),
     private val selectionArgs = arrayOf(searchString)
 
     private val chatContactsRepository : ChatContactsRepository by lazy {
-        ChatContactsRepository()
+        ChatContactsRepository(SyncPref.getInstance(applicationContext))
     }
 
     val phoneContacts:MutableLiveData<ArrayList<ContactModel>> = MutableLiveData()
@@ -76,6 +70,8 @@ class FetchContactsService : Service(),
     }
 
     override fun onCreateLoader(id: Int, args: Bundle?): Loader<Cursor> {
+
+
 
         selectionArgs[0] = "%$searchString%"
 
@@ -107,13 +103,6 @@ class FetchContactsService : Service(),
 
         cursor.moveToFirst()
 
-        /*
-            var colNames = ""
-            for(i in 1..cursor.columnCount){
-                colNames += "${cursor.getColumnName(i - 1)} \t"
-            }
-            Log.v(TAG, "Printing ... ${colNames}")
-        */
 
         val contacts:ArrayList<ContactModel> = ArrayList<ContactModel>()
 
@@ -124,22 +113,11 @@ class FetchContactsService : Service(),
             val contactId = cursor.getString(cursor.getColumnIndex((ContactsContract.Contacts._ID)))
 
             contacts.add(ContactModel(
-                null,
-                cleanPhoneNo(phone),
-                name,
+                id = null,
+                mobile = cleanPhoneNo(phone),
+                name = name,
                 contactId = contactId
             ))
-
-            /*
-                var value = ""
-
-                for(i in 1..cursor.columnCount){
-                    value += "\t"+cursor.getStringOrNull(i - 1)
-                }
-                Log.v(TAG, "Printing ... ${value}\n")
-            */
-
-            // Move Cursor to Next Position
             cursor.moveToNext()
         }
         return  contacts.distinctBy { it.mobile }
@@ -157,8 +135,6 @@ class FetchContactsService : Service(),
             }
            // phoneContacts.postValue(processCursor)
         }
-
-
     }
 
     override fun onLoaderReset(loader: Loader<Cursor>) {

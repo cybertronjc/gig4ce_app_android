@@ -6,6 +6,7 @@
         android:id="@+id/action_new_group"
         android:orderInCategory="100"
         android:title="New Group"
+        android:visible="false"
         app:showAsAction="collapseActionView" />
 
     <item

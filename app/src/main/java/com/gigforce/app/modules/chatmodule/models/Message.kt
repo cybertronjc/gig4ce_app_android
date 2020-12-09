@@ -1,7 +1,9 @@
 package com.gigforce.app.modules.chatmodule.models
 
+import android.graphics.Bitmap
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentId
+import com.google.firebase.firestore.Exclude
 import com.google.firebase.firestore.PropertyName
 
 class Message(
@@ -41,6 +43,10 @@ class Message(
     @get:PropertyName("content")
     @set:PropertyName("content")
     var content: String = "",
+
+    @get:PropertyName("videoLength")
+    @set:PropertyName("videoLength")
+    var videoLength: Long = 0,
 
     /**
      * Attachment Path- full path of image, video etc
@@ -83,11 +89,14 @@ class Message(
 
     @get:PropertyName("longitude")
     @set:PropertyName("longitude")
-    var longitude: Double = 0.0
-    ){
+    var longitude: Double = 0.0,
 
+    @get:Exclude
+    @set:Exclude
+    var thumbnailBitmap: Bitmap? = null
+) {
 
-    companion object{
+    companion object {
 
 
         const val MESSAGE_TYPE_TEXT = "text"

@@ -16,6 +16,7 @@ import android.widget.*
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.net.toUri
 import com.gigforce.app.R
 import com.gigforce.app.core.ImagePicker
 import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
@@ -50,6 +51,7 @@ class PhotoCrop : AppCompatActivity() {
 
         const val INTENT_EXTRA_FIREBASE_FOLDER_NAME = "fbDir"
         const val INTENT_EXTRA_FIREBASE_FILE_NAME = "file"
+        const val INTENT_EXTRA_OUTPUT_FILE = "outputfile"
         const val INTENT_EXTRA_DETECT_FACE = "detectFace"
         const val INTENT_EXTRA_RESULTING_FILE_URI = "uri"
 
@@ -77,6 +79,7 @@ class PhotoCrop : AppCompatActivity() {
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<LinearLayout>
     private val TEMP_FILE: String = "profile_picture"
     private lateinit var purpose: String
+    private var outputFile: File? = null
 
     private val gigerVerificationViewModel: GigVerificationViewModel by viewModels()
 
@@ -110,6 +113,11 @@ class PhotoCrop : AppCompatActivity() {
         var constLayout: ConstraintLayout = this.findViewById(R.id.constraintLayout)
         var linearLayoutBottomSheet: LinearLayout = findViewById(R.id.linear_layout_bottomsheet)
         bottomSheetBehavior = BottomSheetBehavior.from(linearLayoutBottomSheet)
+
+        val fileSerialized = intent.getSerializableExtra(INTENT_EXTRA_OUTPUT_FILE)
+        if (fileSerialized != null)
+            outputFile = fileSerialized as File
+
         purpose = if (savedInstanceState != null)
             savedInstanceState.getString(INTENT_EXTRA_PURPOSE)!!
         else
@@ -310,11 +318,23 @@ class PhotoCrop : AppCompatActivity() {
             Locale.getDefault()
         ).format(Date())
         val imageFileName = PREFIX + "_" + timeStamp + "_"
+
+        val outFileUri : Uri = if(outputFile != null){
+            outputFile!!.toUri()
+        } else{
+            Uri.fromFile(File(cacheDir, imageFileName + EXTENSION))
+        }
+
         val uCrop: UCrop = UCrop.of(
             uri,
-            Uri.fromFile(File(cacheDir, imageFileName + EXTENSION))
+            outFileUri
         )
-        resultIntent.putExtra("filename", imageFileName + EXTENSION)
+
+        if(outputFile != null){
+            resultIntent.putExtra("filename", outputFile!!.name)
+        }else {
+            resultIntent.putExtra("filename", imageFileName + EXTENSION)
+        }
         uCrop.withAspectRatio(cropX, cropY)
         uCrop.withMaxResultSize(1920, 1080)
         uCrop.withOptions(getCropOptions())

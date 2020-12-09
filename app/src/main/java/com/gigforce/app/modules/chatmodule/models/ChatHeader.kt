@@ -10,6 +10,10 @@ data class ChatHeader(
     @set:PropertyName("id")
     var id: String = "",
 
+    @get:PropertyName("isBlocked")
+    @set:PropertyName("isBlocked")
+    var isBlocked: Boolean = false,
+
     @get:PropertyName("forUserId")
     @set:PropertyName("forUserId")
     var forUserId: String = "",
@@ -36,12 +40,35 @@ data class ChatHeader(
 
     @get:PropertyName("otherUser")
     @set:PropertyName("otherUser")
-    var otherUser: UserInfo? = null
-) : BaseFirestoreDataModel(tableName = "headers") {
-}
+    var otherUser: UserInfo? = null,
+
+    @get:PropertyName("chatType")
+    @set:PropertyName("chatType")
+    var chatType: String = "",
+
+    @get:PropertyName("groupId")
+    @set:PropertyName("groupId")
+    var groupId: String = "",
+
+    @get:PropertyName("groupName")
+    @set:PropertyName("groupName")
+    var groupName: String = "",
+
+    @get:PropertyName("groupAvatar")
+    @set:PropertyName("groupAvatar")
+    var groupAvatar: String = "",
+
+    @get:PropertyName("removedFromGroup")
+    @set:PropertyName("removedFromGroup")
+    var removedFromGroup: Boolean = false,
+
+    @get:PropertyName("groupDeactivated")
+    @set:PropertyName("groupDeactivated")
+    var groupDeactivated: Boolean = false
+
+) : BaseFirestoreDataModel(tableName = "headers")
 
 data class UserInfo(
-    @DocumentId
     @get:PropertyName("id")
     @set:PropertyName("id")
     var id: String = "",
@@ -57,4 +84,4 @@ data class UserInfo(
     @get:PropertyName("type")
     @set:PropertyName("type")
     var type: String = ""
-) {}
+)

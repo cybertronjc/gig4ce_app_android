@@ -2,9 +2,11 @@ package com.gigforce.app.modules.chatmodule.ui
 
 import android.app.Activity.RESULT_OK
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.database.Cursor
 import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
 import android.provider.OpenableColumns
 import android.util.Log
 import android.view.LayoutInflater
@@ -12,85 +14,135 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
+import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
-import androidx.fragment.app.activityViewModels
+import androidx.core.net.toUri
+import androidx.core.os.bundleOf
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gigforce.app.BuildConfig
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
-import com.gigforce.app.modules.chatmodule.models.ChatMessage
+import com.gigforce.app.core.gone
+import com.gigforce.app.core.visible
+import com.gigforce.app.modules.chatmodule.ChatConstants
+import com.gigforce.app.modules.chatmodule.DownloadCompleted
+import com.gigforce.app.modules.chatmodule.DownloadStarted
+import com.gigforce.app.modules.chatmodule.ErrorWhileDownloadingAttachment
+import com.gigforce.app.modules.chatmodule.models.ChatGroup
+import com.gigforce.app.modules.chatmodule.models.GroupChatMessage
 import com.gigforce.app.modules.chatmodule.models.MessageType
-import com.gigforce.app.modules.chatmodule.ui.adapters.ChatRecyclerAdapter
-import com.gigforce.app.modules.chatmodule.ui.adapters.OnChatMessageClickListener
-import com.gigforce.app.modules.chatmodule.viewModels.ChatMessagesViewModel
+import com.gigforce.app.modules.chatmodule.ui.adapters.GroupChatRecyclerAdapter
+import com.gigforce.app.modules.chatmodule.ui.adapters.clickListeners.OnGroupChatMessageClickListener
+import com.gigforce.app.modules.chatmodule.viewModels.GroupChatViewModel
 import com.gigforce.app.modules.photocrop.PhotoCrop
 import com.gigforce.app.modules.verification.UtilMethods
 import com.gigforce.app.utils.*
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import kotlinx.android.synthetic.main.fragment_chat_screen.*
+import com.google.firebase.auth.FirebaseAuth
+import com.vinners.cmi.ui.activity.GroupChatViewModelFactory
+import kotlinx.android.synthetic.main.fragment_group_chat.*
+import kotlinx.android.synthetic.main.fragment_group_chat_main.*
 import java.io.File
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 
 
-class GroupChatFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
-    OnChatMessageClickListener {
+class GroupChatFragment : BaseFragment(),
+    PopupMenu.OnMenuItemClickListener,
+    OnGroupChatMessageClickListener {
 
-    private val viewModel: ChatMessagesViewModel by activityViewModels<ChatMessagesViewModel>()
+    private val viewModel: GroupChatViewModel by lazy {
+        ViewModelProvider(this,GroupChatViewModelFactory(requireContext())).get(GroupChatViewModel::class.java)
+    }
 
-    private lateinit var mAdapter: ChatRecyclerAdapter
-    private var imageUrl: String? = null
-    private lateinit var username: String
-    private lateinit var forUserId: String
-    private lateinit var chatHeaderId: String
-    private lateinit var otherUserId: String
+    private val appDirectoryFileRef: File by lazy {
+        Environment.getExternalStoragePublicDirectory(ChatConstants.DIRECTORY_APP_DATA_ROOT)!!
+    }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            imageUrl = it.getString(AppConstants.IMAGE_URL)
-            username = it.getSerializable(AppConstants.CONTACT_NAME).toString()
-            chatHeaderId = it.getString("chatHeaderId") ?: ""
-            forUserId = it.getSerializable("forUserId").toString()
-            otherUserId = it.getSerializable("otherUserId").toString()
-
-            viewModel.headerId = chatHeaderId
-            viewModel.otherUserName = username
-            viewModel.otherUserProfilePicture = imageUrl
-            viewModel.forUserId = forUserId
-            viewModel.otherUserId = otherUserId
+    private val imagesDirectoryFileRef: File by lazy {
+        if (!appDirectoryFileRef.exists()) {
+            appDirectoryFileRef.mkdirs()
         }
+
+        File(appDirectoryFileRef, ChatConstants.DIRECTORY_IMAGES)
+    }
+
+    private val videosDirectoryFileRef: File by lazy {
+        if (!appDirectoryFileRef.exists()) {
+            appDirectoryFileRef.mkdirs()
+        }
+
+        File(appDirectoryFileRef, ChatConstants.DIRECTORY_VIDEOS)
+    }
+
+    private val documentDirectoryFileRef: File by lazy {
+        if (!appDirectoryFileRef.exists()) {
+            appDirectoryFileRef.mkdirs()
+        }
+
+        File(appDirectoryFileRef, ChatConstants.DIRECTORY_DOCUMENTS)
+    }
+
+    private val uid: String by lazy {
+        FirebaseAuth.getInstance().currentUser!!.uid
+    }
+
+    private var selectedOperation = -1
+
+    private val mAdapter: GroupChatRecyclerAdapter by lazy {
+        GroupChatRecyclerAdapter(
+            requireContext(),
+            appDirectoryFileRef,
+            initGlide()!!,
+            this
+        )
+    }
+
+    private lateinit var groupId: String
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString(INTENT_EXTRA_GROUP_ID, groupId)
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflateView(R.layout.fragment_chat_screen, inflater, container)
+        return inflateView(R.layout.fragment_group_chat, inflater, container)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        getDataFromIntents(arguments, savedInstanceState)
         init()
-        manageTime()
         subscribeViewModel()
         manageNewMessageToContact()
         manageBackIcon()
     }
 
+    private fun getDataFromIntents(arguments: Bundle?, savedInstanceState: Bundle?) {
+        arguments?.let {
+            groupId = it.getString(INTENT_EXTRA_GROUP_ID) ?: return@let
+        }
+
+        savedInstanceState?.let {
+            groupId = it.getString(INTENT_EXTRA_GROUP_ID) ?: return@let
+        }
+    }
 
     private fun init() {
-        mAdapter = ChatRecyclerAdapter(requireContext(), initGlide()!!, this)
-        initIntent()
         initListeners()
         initRecycler()
     }
 
     private fun initRecycler() {
-        val layoutManager = LinearLayoutManager(activity?.applicationContext)
-        layoutManager.reverseLayout = true
-        layoutManager.stackFromEnd = true
+        val layoutManager = LinearLayoutManager(requireContext())
+
+//       layoutManager.stackFromEnd = true
+//        layoutManager.reverseLayout = true
         rv_chats.layoutManager = layoutManager
 
         rv_chats.addItemDecoration(VerticalItemDecorator(30))
@@ -101,44 +153,105 @@ class GroupChatFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
     private fun subscribeViewModel() {
 
         viewModel
-            .messages
+            .chatGroupDetails
+            .observe(viewLifecycleOwner, Observer {
+
+                when (it) {
+                    Lce.Loading -> {
+                        group_chat_main.gone()
+                        group_chat_error.gone()
+                        group_chat_progress_bar.visible()
+                    }
+                    is Lce.Content -> {
+                        group_chat_progress_bar.gone()
+                        group_chat_error.gone()
+                        group_chat_main.visible()
+
+                        showGroupDetails(it.content)
+                    }
+                    is Lce.Error -> {
+                        group_chat_progress_bar.gone()
+                        group_chat_main.gone()
+
+                        group_chat_error.visible()
+                        group_chat_error.text = it.error
+                    }
+                }
+            })
+
+        viewModel
+            .sendingMessage
+            .observe(viewLifecycleOwner, Observer {
+                mAdapter.addItem(it)
+            })
+
+        viewModel
+            .groupMessages
             .observe(viewLifecycleOwner, Observer {
                 if (it != null) {
                     val msgs = it.map {
-                        ChatMessage.fromMessage(it)
+                        GroupChatMessage.fromMessage(it)
                     }
 
                     mAdapter.updateChatMessages(msgs)
 
-                    //TODO improve UX here
-                    rv_chats.smoothScrollToPosition(0)
-                }
-            })
-        viewModel.startListeningForNewMessages()
-
-        viewModel.downloadChatAttachment
-            .observe(viewLifecycleOwner, Observer {
-                it ?: return@Observer
-
-                when (it) {
-                    Lce.Loading -> {
-                        showDownloadingDialog()
-                    }
-                    is Lce.Content -> {
-                        UtilMethods.hideLoading()
-                        openDocument(it.content)
-                    }
-                    is Lce.Error -> {
-                        UtilMethods.hideLoading()
-
-                        MaterialAlertDialogBuilder(requireContext())
-                            .setTitle("Alert")
-                            .setMessage(it.error)
-                            .setPositiveButton("Okay") { _, _ -> }
-                            .show()
+                    if (mAdapter.itemCount != 0) {
+                        rv_chats.smoothScrollToPosition(mAdapter.itemCount - 1)
+                        viewModel.setMessagesUnseenCountToZero()
                     }
                 }
             })
+
+        viewModel.chatAttachmentDownloadState.observe(viewLifecycleOwner, Observer {
+            it ?: return@Observer
+
+            when (it) {
+                is DownloadStarted -> {
+                    mAdapter.setItemAsDownloading(it.index)
+                }
+                is DownloadCompleted -> {
+                    mAdapter.notifyItemChanged(it.index)
+                }
+                is ErrorWhileDownloadingAttachment -> {
+                    mAdapter.setItemAsNotDownloading(it.index)
+                }
+            }
+        })
+
+        viewModel.setGroupId(groupId)
+        viewModel.startWatchingGroupDetails()
+        viewModel.startListeningForGroupMessages()
+    }
+
+    private fun showGroupDetails(content: ChatGroup) {
+
+        val req = initGlide()
+
+        if (content.groupAvatar.isNotBlank()) {
+            val uri = Uri.parse(content.groupAvatar)
+            req!!.load(uri).into(civ_personImage)
+        } else {
+            req!!.load(R.drawable.ic_group).into(civ_personImage)
+        }
+
+        tv_nameValueInChat.text = content.name
+
+        val userRemovedFromGroup = content.groupMembers.find {
+            it.uid == uid
+        } == null
+
+        if (content.groupDeactivated) {
+            group_deactivated_container.visible()
+            group_blocked_label.text = "This group is deactivated"
+            container_footer.gone()
+        } else if (userRemovedFromGroup) {
+            group_deactivated_container.visible()
+            group_blocked_label.text = "You have been removed from this group"
+            container_footer.gone()
+        } else {
+            group_deactivated_container.gone()
+            container_footer.visible()
+        }
     }
 
     private fun showDownloadingDialog() {
@@ -172,13 +285,6 @@ class GroupChatFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
 
     }
 
-    private fun initIntent() {
-        val req = initGlide()
-        val uri = Uri.parse(imageUrl)
-        req!!.load(uri).into(civ_personImage)
-        tv_nameValueInChat.text = username
-    }
-
     private fun initListeners() {
         iv_verticalDots.setOnClickListener {
             manageMenu(it)
@@ -190,6 +296,14 @@ class GroupChatFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
             popUp.inflate(R.menu.menu_chat_bottom)
             popUp.show()
         }
+
+        tv_view_details.setOnClickListener {
+            navigate(
+                R.id.groupDetailsFragment, bundleOf(
+                    GroupDetailsFragment.INTENT_EXTRA_GROUP_ID to groupId
+                )
+            )
+        }
     }
 
     private fun manageMenu(view: View) {
@@ -197,16 +311,6 @@ class GroupChatFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
         popUp.setOnMenuItemClickListener(this)
         popUp.inflate(R.menu.menu_chat)
         popUp.show()
-    }
-
-    private fun manageTime(): LocalDateTime {
-        var current: LocalDateTime = LocalDateTime.now()
-        val formatter = DateTimeFormatter.ofPattern("HH:mm")
-        val formatted = current.format(formatter)
-
-        println("Current Date and Time is: $formatted")
-        tv_lastSeenValue.text = "last seen at $formatted"
-        return current
     }
 
     override fun onMenuItemClick(item: MenuItem?): Boolean = when (item?.itemId) {
@@ -223,7 +327,12 @@ class GroupChatFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
             true
         }
         R.id.action_pick_image -> {
-            pickImage()
+            if (isStoragePermissionGranted())
+                pickImage()
+            else {
+                selectedOperation = ChatConstants.OPERATION_PICK_IMAGE
+                askForStoragePermission()
+            }
             true
         }
         R.id.action_video -> {
@@ -236,11 +345,22 @@ class GroupChatFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
     }
 
     private fun pickVideo() = Intent(Intent.ACTION_GET_CONTENT).apply {
+
+        if (!videosDirectoryFileRef.exists())
+            videosDirectoryFileRef.mkdirs()
+
         type = "video/*"
         startActivityForResult(this, REQUEST_PICK_VIDEO)
     }
 
     private fun pickImage() {
+
+        if (!imagesDirectoryFileRef.exists())
+            imagesDirectoryFileRef.mkdirs()
+
+        val newFileName = "$uid-${DateHelper.getFullDateTimeStamp()}.png"
+        val imagefile = File(imagesDirectoryFileRef, newFileName)
+
         val photoCropIntent = Intent(requireContext(), PhotoCrop::class.java)
         photoCropIntent.putExtra(
             PhotoCrop.INTENT_EXTRA_PURPOSE,
@@ -249,6 +369,7 @@ class GroupChatFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
         photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_FIREBASE_FOLDER_NAME, "/verification/")
         photoCropIntent.putExtra("folder", "verification")
         photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_DETECT_FACE, 0)
+        photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_OUTPUT_FILE, imagefile)
         photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_FIREBASE_FILE_NAME, "aadhar_card_front.jpg")
         startActivityForResult(
             photoCropIntent,
@@ -257,6 +378,10 @@ class GroupChatFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
     }
 
     private fun startPickingDocument() = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+
+        if (!documentDirectoryFileRef.exists())
+            documentDirectoryFileRef.mkdirs()
+
         addCategory(Intent.CATEGORY_OPENABLE)
         type = "*/*"
         putExtra(Intent.EXTRA_MIME_TYPES, arrayOf(DOC, DOCX, XLS, PDF))
@@ -268,7 +393,6 @@ class GroupChatFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
         iv_sendMessage.setOnClickListener {
             if (validateNewMessageTask()) {
                 val message = et_typedMessageValue.text.toString()
-                val msgTime = manageTime()
                 viewModel.sendNewText(message)
                 et_typedMessageValue.setText("")
             }
@@ -288,51 +412,6 @@ class GroupChatFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
         }
     }
 
-    override fun chatMessageClicked(
-        messageType: MessageType,
-        position: Int,
-        message: ChatMessage
-    ) = when (messageType) {
-        MessageType.DATE -> TODO()
-        MessageType.TEXT -> TODO()
-        MessageType.TEXT_WITH_IMAGE -> {
-
-            if (message.toMessage().attachmentPath != null) {
-                ViewFullScreenImageDialogFragment.showImage(
-                    childFragmentManager,
-                    Uri.parse(message.toMessage().attachmentPath)
-                )
-            } else {
-                //File Not available
-            }
-        }
-        MessageType.TEXT_WITH_VIDEO -> {
-            if (message.toMessage().attachmentPath != null) {
-                ViewFullScreenVideoDialogFragment.launch(
-                    childFragmentManager,
-                    Uri.parse(message.toMessage().attachmentPath)
-                )
-            } else {
-                //File Not available
-            }
-        }
-        MessageType.TEXT_WITH_LOCATION -> TODO()
-        MessageType.TEXT_WITH_CONTACT -> TODO()
-        MessageType.TEXT_WITH_AUDIO -> TODO()
-        MessageType.TEXT_WITH_DOCUMENT -> {
-            if (message.toMessage().attachmentPath != null) {
-                downloadAndShowAttachment(message.toMessage().attachmentPath!!)
-            } else {
-                //File Not available
-            }
-        }
-        MessageType.NOT_SUPPORTED -> TODO()
-    }
-
-    private fun downloadAndShowAttachment(filePath: String) {
-        viewModel.downloadAttachment(filePath, requireContext().filesDir)
-    }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
@@ -343,9 +422,7 @@ class GroupChatFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
                 val myFile = File(uriString)
 
                 var displayName: String? = getDisplayName(uriString, uri, myFile)
-
                 viewModel.sendNewDocumentMessage("", displayName!!, uri)
-
                 Log.d(TAG, displayName + "")
                 Log.d(TAG, uriString)
             }
@@ -363,8 +440,14 @@ class GroupChatFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
                 val uriString = uri.toString()
                 val myFile = File(uriString)
 
-                var displayName: String? = getDisplayName(uriString, uri, myFile)
-                viewModel.sendNewVideoMessage(requireContext(), "", displayName!!, uri)
+                val displayName: String? = getDisplayName(uriString, uri, myFile)
+                viewModel.sendNewVideoMessage(
+                    requireContext(),
+                    "",
+                    videosDirectoryFileRef,
+                    displayName!!,
+                    uri
+                )
             }
         }
     }
@@ -391,19 +474,158 @@ class GroupChatFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
         return ""
     }
 
+    override fun chatMessageClicked(
+        messageType: MessageType,
+        position: Int,
+        message: GroupChatMessage,
+        fileDownloaded: Boolean,
+        downloadedFile: File?
+    ) {
+
+        when (messageType) {
+            MessageType.TEXT_WITH_IMAGE -> {
+
+                if (fileDownloaded) {
+                    ViewFullScreenImageDialogFragment.showImage(
+                        childFragmentManager,
+                        downloadedFile!!.toUri()
+                    )
+                } else {
+                    if (message.toMessage().attachmentPath != null) {
+                        viewModel.downloadAndSaveFile(
+                            appDirectoryFileRef,
+                            position,
+                            message.toMessage()
+                        )
+                    }
+                }
+            }
+            MessageType.TEXT_WITH_VIDEO -> {
+
+                if (fileDownloaded) {
+                    ViewFullScreenVideoDialogFragment.launch(
+                        childFragmentManager,
+                        downloadedFile!!.toUri()
+                    )
+                } else {
+                    if (message.toMessage().attachmentPath != null) {
+                        viewModel.downloadAndSaveFile(
+                            appDirectoryFileRef,
+                            position,
+                            message.toMessage()
+                        )
+                    } else {
+
+                    }
+                }
+            }
+            MessageType.TEXT_WITH_DOCUMENT -> {
+
+                if (fileDownloaded) {
+                    openDocument(downloadedFile!!)
+                } else {
+                    if (message.toMessage().attachmentPath != null) {
+                        viewModel.downloadAndSaveFile(
+                            appDirectoryFileRef,
+                            position,
+                            message.toMessage()
+                        )
+                    } else {
+
+                    }
+                }
+            }
+            MessageType.NOT_SUPPORTED -> TODO()
+            MessageType.DATE -> TODO()
+            MessageType.TEXT -> TODO()
+            MessageType.TEXT_WITH_LOCATION -> TODO()
+            MessageType.TEXT_WITH_CONTACT -> TODO()
+            MessageType.TEXT_WITH_AUDIO -> TODO()
+        }
+    }
+
+    private fun isStoragePermissionGranted(): Boolean {
+
+        return ContextCompat.checkSelfPermission(
+            requireContext(),
+            android.Manifest.permission.READ_EXTERNAL_STORAGE
+        ) == PackageManager.PERMISSION_GRANTED
+                && ContextCompat.checkSelfPermission(
+            requireContext(),
+            android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+        ) == PackageManager.PERMISSION_GRANTED
+                && ContextCompat.checkSelfPermission(
+            requireContext(),
+            android.Manifest.permission.CAMERA
+        ) == PackageManager.PERMISSION_GRANTED
+    }
+
+    private fun askForStoragePermission() {
+        Log.v(ChatFragment.TAG, "Permission Required. Requesting Permission")
+        requestPermissions(
+            arrayOf(
+                android.Manifest.permission.READ_EXTERNAL_STORAGE,
+                android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                android.Manifest.permission.CAMERA
+            ),
+            REQUEST_STORAGE_PERMISSION
+        )
+    }
+
+    override fun onBackPressed(): Boolean {
+        findNavController().popBackStack(R.id.contactScreenFragment, false)
+        return true
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        if (requestCode == REQUEST_STORAGE_PERMISSION) {
+            var allPermsGranted = true
+            for (i in grantResults.indices) {
+                if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
+                    allPermsGranted = false
+                    break
+                }
+            }
+
+            if (allPermsGranted) {
+                if (selectedOperation == ChatConstants.OPERATION_PICK_IMAGE) {
+                    pickImage()
+                    selectedOperation = -1
+                } else if (selectedOperation == ChatConstants.OPERATION_PICK_VIDEO) {
+                    pickVideo()
+                    selectedOperation = -1
+                } else if (selectedOperation == ChatConstants.OPERATION_PICK_DOCUMENT) {
+                    startPickingDocument()
+                    selectedOperation = -1
+                }
+            } else
+                showToast("Please grant storage permission, to pick files")
+        }
+    }
+
+
     companion object {
-        const val TAG = "ChatFragment"
+        private const val TAG = "ChatFragment"
+        const val INTENT_EXTRA_GROUP_ID = "group_id"
 
-        const val REQUEST_PICK_DOCUMENT = 102
-        const val REQUEST_PICK_IMAGE = 103
-        const val REQUEST_PICK_VIDEO = 104
+        private const val REQUEST_PICK_DOCUMENT = 102
+        private const val REQUEST_PICK_IMAGE = 103
+        private const val REQUEST_PICK_VIDEO = 104
+        private const val REQUEST_STORAGE_PERMISSION = 105
 
-        const val DOC = "application/msword"
-        const val DOCX = "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-        const val IMAGE = "image/*"
-        const val AUDIO = "audio/*"
-        const val TEXT = "text/*"
-        const val PDF = "application/pdf"
-        const val XLS = "application/vnd.ms-excel"
+        private const val DOC = "application/msword"
+        private const val DOCX =
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        private const val IMAGE = "image/*"
+        private const val AUDIO = "audio/*"
+        private const val TEXT = "text/*"
+        private const val PDF = "application/pdf"
+        private const val XLS = "application/vnd.ms-excel"
     }
 }

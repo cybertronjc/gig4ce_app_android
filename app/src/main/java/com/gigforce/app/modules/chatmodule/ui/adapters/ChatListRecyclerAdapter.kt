@@ -14,6 +14,7 @@ import com.bumptech.glide.RequestManager
 import com.gigforce.app.R
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
+import com.gigforce.app.modules.chatmodule.ChatConstants
 import com.gigforce.app.modules.chatmodule.models.ChatHeader
 import com.gigforce.app.modules.chatmodule.models.Message
 import com.gigforce.app.utils.TextDrawable
@@ -21,7 +22,7 @@ import java.text.SimpleDateFormat
 
 
 class ChatListRecyclerAdapter(
-    private val context : Context,
+    private val context: Context,
     private val requestManager: RequestManager,
     private val onChatItemClickListener: OnChatItemClickListener
 ) : RecyclerView.Adapter<ChatListRecyclerAdapter.ContactViewHolder>() {
@@ -51,7 +52,6 @@ class ChatListRecyclerAdapter(
         notifyDataSetChanged()
     }
 
-
     inner class ContactViewHolder(
         itemView: View,
         private val requestManager: RequestManager
@@ -62,8 +62,9 @@ class ChatListRecyclerAdapter(
         private var txtSubtitle: TextView = itemView.findViewById(R.id.tv_subtitle)
         private var textViewTime: TextView = itemView.findViewById(R.id.tv_timeValue)
         private var viewPinkCircle: View = itemView.findViewById(R.id.online_pink_circle)
-        private var lastMessageType : ImageView = itemView.findViewById(R.id.last_mesage_type)
-        private var unseenMessageCountIV : ImageView = itemView.findViewById(R.id.unseen_msg_count_iv)
+        private var lastMessageType: ImageView = itemView.findViewById(R.id.last_mesage_type)
+        private var unseenMessageCountIV: ImageView =
+            itemView.findViewById(R.id.unseen_msg_count_iv)
 
         init {
             itemView.setOnClickListener(this)
@@ -71,34 +72,51 @@ class ChatListRecyclerAdapter(
 
         fun bindValues(chatHeader: ChatHeader) {
 
-            if(chatHeader.unseenCount != 0){
+            if (chatHeader.unseenCount != 0) {
                 val drawable = TextDrawable.builder().buildRound(
                     chatHeader.unseenCount.toString(),
                     ResourcesCompat.getColor(context.resources, R.color.lipstick, null)
                 )
                 unseenMessageCountIV.setImageDrawable(drawable)
-            } else{
+            } else {
                 unseenMessageCountIV.setImageDrawable(null)
             }
 
-            val userAvatarUrl = chatHeader.otherUser?.profilePic
-            if (userAvatarUrl.isNullOrBlank()) {
-                //Show Default User avatar
-            } else {
-                requestManager.load(userAvatarUrl).into(circleImageView)
+            if (chatHeader.chatType == ChatConstants.CHAT_TYPE_USER) {
+
+                textViewName.text = chatHeader.otherUser!!.name
+                val userAvatarUrl = chatHeader.otherUser?.profilePic
+                if (userAvatarUrl.isNullOrBlank()) {
+                    //Show Default User avatar
+                    requestManager.load(R.drawable.ic_user).into(circleImageView)
+
+                } else {
+                    requestManager.load(userAvatarUrl).into(circleImageView)
+                }
+
+            } else if (chatHeader.chatType == ChatConstants.CHAT_TYPE_GROUP) {
+
+                textViewName.text = chatHeader.groupName
+                val userAvatarUrl = chatHeader.groupAvatar
+                if (userAvatarUrl.isBlank()) {
+                    //Show Default User avatar
+                    requestManager.load(R.drawable.ic_group).into(circleImageView)
+                } else {
+                    requestManager.load(userAvatarUrl).into(circleImageView)
+                }
             }
 
             if (chatHeader.otherUser!!.name == "Help") {
                 textViewName.setTextColor(Color.parseColor("#E91E63"))
                 viewPinkCircle.visibility = View.GONE
-            } else{
+            } else {
 
                 when (chatHeader.lastMessageType) {
                     Message.MESSAGE_TYPE_TEXT -> {
                         lastMessageType.gone()
                         txtSubtitle.text = chatHeader.lastMsgText
                     }
-                    Message.MESSAGE_TYPE_TEXT_WITH_VIDEO ->{
+                    Message.MESSAGE_TYPE_TEXT_WITH_VIDEO -> {
                         lastMessageType.visible()
                         lastMessageType.setImageResource(R.drawable.ic_play)
                         txtSubtitle.text = "Video"
@@ -120,14 +138,11 @@ class ChatListRecyclerAdapter(
                 }
             }
 
-            textViewName.text = chatHeader.otherUser!!.name
-
-
             val chatDate = chatHeader.lastMsgTimestamp?.toDate()
             if (chatDate != null) {
 
                 if (DateUtils.isToday(chatDate.time)) {
-                    textViewTime.text = SimpleDateFormat("hh:mm").format(chatDate)
+                    textViewTime.text = SimpleDateFormat("hh:mm aa").format(chatDate)
                 } else {
                     textViewTime.text = SimpleDateFormat("dd MMM").format(chatDate)
                 }
@@ -141,7 +156,7 @@ class ChatListRecyclerAdapter(
         }
     }
 
-    interface OnChatItemClickListener{
+    interface OnChatItemClickListener {
 
         fun onChatItemClicked(chatHeader: ChatHeader)
     }

@@ -486,7 +486,7 @@
     <style name="chatImageView" parent="">
         <item name="cornerFamilyTopRight">rounded</item>
         <item name="cornerFamilyTopLeft">rounded</item>
-        <item name="cornerSize">5%</item>
+        <item name="cornerSize">2%</item>
     </style>
 
     <style name="AttendanceSingleChoiceChip" parent="@style/Widget.MaterialComponents.Chip.Choice">

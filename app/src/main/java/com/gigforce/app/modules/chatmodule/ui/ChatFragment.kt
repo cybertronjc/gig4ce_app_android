@@ -6,30 +6,46 @@ import android.content.pm.PackageManager
 import android.database.Cursor
 import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
 import android.provider.OpenableColumns
+import android.provider.Settings
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
+import androidx.appcompat.view.menu.MenuBuilder
+import androidx.appcompat.view.menu.MenuPopupHelper
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
-import androidx.fragment.app.activityViewModels
+import androidx.core.net.toUri
+import androidx.core.view.isVisible
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gigforce.app.BuildConfig
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
+import com.gigforce.app.core.gone
+import com.gigforce.app.core.visible
+import com.gigforce.app.modules.chatmodule.ChatConstants
+import com.gigforce.app.modules.chatmodule.DownloadCompleted
+import com.gigforce.app.modules.chatmodule.DownloadStarted
+import com.gigforce.app.modules.chatmodule.ErrorWhileDownloadingAttachment
 import com.gigforce.app.modules.chatmodule.models.ChatMessage
 import com.gigforce.app.modules.chatmodule.models.MessageType
 import com.gigforce.app.modules.chatmodule.ui.adapters.ChatRecyclerAdapter
-import com.gigforce.app.modules.chatmodule.ui.adapters.OnChatMessageClickListener
+import com.gigforce.app.modules.chatmodule.ui.adapters.clickListeners.OnChatMessageClickListener
 import com.gigforce.app.modules.chatmodule.viewModels.ChatMessagesViewModel
 import com.gigforce.app.modules.photocrop.PhotoCrop
-import com.gigforce.app.modules.verification.UtilMethods
-import com.gigforce.app.utils.*
+import com.gigforce.app.utils.DateHelper
+import com.gigforce.app.utils.VerticalItemDecorator
+import com.gigforce.app.utils.ViewFullScreenImageDialogFragment
+import com.gigforce.app.utils.ViewFullScreenVideoDialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.firebase.auth.FirebaseAuth
+import kotlinx.android.synthetic.main.fragment_chat_new_contact.*
 import kotlinx.android.synthetic.main.fragment_chat_screen.*
 import java.io.File
 import java.time.LocalDateTime
@@ -40,9 +56,49 @@ class ChatFragment : BaseFragment(),
     PopupMenu.OnMenuItemClickListener,
     OnChatMessageClickListener {
 
-    private val viewModel: ChatMessagesViewModel by activityViewModels<ChatMessagesViewModel>()
+    private val viewModel: ChatMessagesViewModel by viewModels()
 
-    private lateinit var mAdapter: ChatRecyclerAdapter
+    private val appDirectoryFileRef: File by lazy {
+        Environment.getExternalStoragePublicDirectory(ChatConstants.DIRECTORY_APP_DATA_ROOT)!!
+    }
+
+    private val imagesDirectoryFileRef: File by lazy {
+        if (!appDirectoryFileRef.exists()) {
+            appDirectoryFileRef.mkdirs()
+        }
+
+        File(appDirectoryFileRef, ChatConstants.DIRECTORY_IMAGES)
+    }
+
+    private val videosDirectoryFileRef: File by lazy {
+        if (!appDirectoryFileRef.exists()) {
+            appDirectoryFileRef.mkdirs()
+        }
+
+        File(appDirectoryFileRef, ChatConstants.DIRECTORY_VIDEOS)
+    }
+
+    private val documentDirectoryFileRef: File by lazy {
+        if (!appDirectoryFileRef.exists()) {
+            appDirectoryFileRef.mkdirs()
+        }
+
+        File(appDirectoryFileRef, ChatConstants.DIRECTORY_DOCUMENTS)
+    }
+
+    private val uid: String by lazy {
+        FirebaseAuth.getInstance().currentUser!!.uid
+    }
+
+    private val mAdapter: ChatRecyclerAdapter by lazy {
+        ChatRecyclerAdapter(
+            requireContext(),
+            appDirectoryFileRef,
+            initGlide()!!,
+            this
+        )
+    }
+
     private var imageUrl: String? = null
     private lateinit var username: String
     private lateinit var forUserId: String
@@ -51,23 +107,6 @@ class ChatFragment : BaseFragment(),
 
     private var selectedOperation = -1
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            imageUrl = it.getString(AppConstants.IMAGE_URL)
-            username = it.getSerializable(AppConstants.CONTACT_NAME).toString()
-            chatHeaderId = it.getString("chatHeaderId") ?: ""
-            forUserId = it.getSerializable("forUserId").toString()
-            otherUserId = it.getSerializable("otherUserId").toString()
-
-            viewModel.headerId = chatHeaderId
-            viewModel.otherUserName = username
-            viewModel.otherUserProfilePicture = imageUrl
-            viewModel.forUserId = forUserId
-            viewModel.otherUserId = otherUserId
-        }
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -75,26 +114,62 @@ class ChatFragment : BaseFragment(),
         return inflateView(R.layout.fragment_chat_screen, inflater, container)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        getDataFromIntents(arguments, savedInstanceState)
         init()
         manageTime()
         subscribeViewModel()
         manageNewMessageToContact()
         manageBackIcon()
+
+
     }
 
+    private fun getDataFromIntents(arguments: Bundle?, savedInstanceState: Bundle?) {
+        arguments?.let {
+            imageUrl = it.getString(INTENT_EXTRA_OTHER_USER_IMAGE)
+            username = it.getString(INTENT_EXTRA_OTHER_USER_NAME) ?: ""
+            chatHeaderId = it.getString(INTENT_EXTRA_CHAT_HEADER_ID) ?: ""
+            forUserId = it.getString(INTENT_EXTRA_FOR_USER_ID)!!
+            otherUserId = it.getString(INTENT_EXTRA_OTHER_USER_ID)!!
+        }
+
+        savedInstanceState?.let {
+            imageUrl = it.getString(INTENT_EXTRA_OTHER_USER_IMAGE)
+            username = it.getString(INTENT_EXTRA_OTHER_USER_NAME) ?: ""
+            chatHeaderId = it.getString(INTENT_EXTRA_CHAT_HEADER_ID) ?: ""
+            forUserId = it.getString(INTENT_EXTRA_FOR_USER_ID)!!
+            otherUserId = it.getString(INTENT_EXTRA_OTHER_USER_ID)!!
+        }
+
+        viewModel.headerId = chatHeaderId
+        viewModel.otherUserName = username
+        viewModel.otherUserProfilePicture = imageUrl
+        viewModel.forUserId = forUserId
+        viewModel.otherUserId = otherUserId
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.apply {
+            putString(INTENT_EXTRA_OTHER_USER_IMAGE, imageUrl)
+            putString(INTENT_EXTRA_OTHER_USER_NAME, username)
+            putString(INTENT_EXTRA_CHAT_HEADER_ID, chatHeaderId)
+            putString(INTENT_EXTRA_FOR_USER_ID, forUserId)
+            putString(INTENT_EXTRA_OTHER_USER_ID, otherUserId)
+        }
+    }
 
     private fun init() {
-        mAdapter = ChatRecyclerAdapter(requireContext(), initGlide()!!, this)
         initIntent()
         initListeners()
         initRecycler()
     }
 
     private fun initRecycler() {
-        val layoutManager = LinearLayoutManager(activity?.applicationContext)
-        layoutManager.reverseLayout = true
+        val layoutManager = LinearLayoutManager(requireContext())
+        layoutManager.reverseLayout = false
         layoutManager.stackFromEnd = true
         rv_chats.layoutManager = layoutManager
 
@@ -112,42 +187,72 @@ class ChatFragment : BaseFragment(),
                     val msgs = it.map {
                         ChatMessage.fromMessage(it)
                     }
-
                     mAdapter.updateChatMessages(msgs)
 
-                    rv_chats.smoothScrollToPosition(0)
-                    viewModel.setMessagesUnseenCountToZero()
+                    if (mAdapter.itemCount != 0) {
+                        rv_chats.smoothScrollToPosition(mAdapter.itemCount - 1)
+                        viewModel.setMessagesUnseenCountToZero()
+                    }
                 }
             })
+
+        viewModel.sendingMessage
+            .observe(viewLifecycleOwner, Observer {
+                mAdapter.addItem(it)
+                rv_chats.smoothScrollToPosition(mAdapter.itemCount - 1)
+            })
+
+        viewModel.headerInfo
+            .observe(viewLifecycleOwner, Observer {
+
+                if (it.isBlocked) {
+                    contact_blocked_container.visible()
+                    container_footer.gone()
+                } else {
+                    contact_blocked_container.gone()
+                    container_footer.visible()
+                }
+            })
+
+        viewModel.chatAttachmentDownloadState.observe(viewLifecycleOwner, Observer {
+            it ?: return@Observer
+
+            when (it) {
+                is DownloadStarted -> {
+                    mAdapter.setItemAsDownloading(it.index)
+                }
+                is DownloadCompleted -> {
+                    mAdapter.notifyItemChanged(it.index)
+                }
+                is ErrorWhileDownloadingAttachment -> {
+                    mAdapter.setItemAsNotDownloading(it.index)
+                }
+            }
+        })
         viewModel.startListeningForNewMessages()
 
-        viewModel.downloadChatAttachment
+        viewModel.chatAttachmentDownloadState
             .observe(viewLifecycleOwner, Observer {
                 it ?: return@Observer
 
                 when (it) {
-                    Lce.Loading -> {
-                        showDownloadingDialog()
+                    is DownloadStarted -> {
+                        mAdapter.setItemAsDownloading(it.index)
                     }
-                    is Lce.Content -> {
-                        UtilMethods.hideLoading()
-                        openDocument(it.content)
+                    is DownloadCompleted -> {
+                        mAdapter.setItemAsNotDownloading(it.index)
                     }
-                    is Lce.Error -> {
-                        UtilMethods.hideLoading()
+                    is ErrorWhileDownloadingAttachment -> {
+                        mAdapter.setItemAsNotDownloading(it.index)
 
                         MaterialAlertDialogBuilder(requireContext())
-                            .setTitle("Alert")
+                            .setTitle("Unable to download attachment")
                             .setMessage(it.error)
                             .setPositiveButton("Okay") { _, _ -> }
                             .show()
                     }
                 }
             })
-    }
-
-    private fun showDownloadingDialog() {
-        UtilMethods.showLoading(requireContext())
     }
 
     private fun openDocument(file: File) {
@@ -179,8 +284,13 @@ class ChatFragment : BaseFragment(),
 
     private fun initIntent() {
         val req = initGlide()
-        val uri = Uri.parse(imageUrl)
-        req!!.load(uri).into(civ_personImage)
+
+        if (imageUrl.isNullOrBlank()) {
+            req!!.load(R.drawable.ic_user).into(civ_personImage)
+        } else {
+            val uri = Uri.parse(imageUrl)
+            req!!.load(uri).into(civ_personImage)
+        }
         tv_nameValueInChat.text = username
     }
 
@@ -201,6 +311,8 @@ class ChatFragment : BaseFragment(),
         val popUp = PopupMenu(requireContext(), view)
         popUp.setOnMenuItemClickListener(this)
         popUp.inflate(R.menu.menu_chat)
+        popUp.menu.findItem(R.id.action_block).title =
+            if (contact_blocked_container.isVisible) "Unblock" else "Block"
         popUp.show()
     }
 
@@ -210,25 +322,29 @@ class ChatFragment : BaseFragment(),
         val formatted = current.format(formatter)
 
         println("Current Date and Time is: $formatted")
-        tv_lastSeenValue.text = "last seen at $formatted"
+        // tv_lastSeenValue.text = "last seen at : -"
         return current
     }
 
     override fun onMenuItemClick(item: MenuItem?): Boolean = when (item?.itemId) {
         R.id.action_block -> {
-            showToast("Block")
+            viewModel.blockOrUnBlockUser()
             true
         }
         R.id.action_report -> {
-            showToast("Report")
+            ReportUserDialogFragment.launch(
+                viewModel.headerId,
+                viewModel.otherUserId,
+                childFragmentManager
+            )
             true
         }
         R.id.action_document -> {
 
             if (isStoragePermissionGranted())
-                startPickingDocument()
+                pickDocument()
             else {
-                selectedOperation = OPERATION_PICK_DOCUMENT
+                selectedOperation = ChatConstants.OPERATION_PICK_DOCUMENT
                 askForStoragePermission()
             }
             true
@@ -237,7 +353,7 @@ class ChatFragment : BaseFragment(),
             if (isStoragePermissionGranted())
                 pickImage()
             else {
-                selectedOperation = OPERATION_PICK_IMAGE
+                selectedOperation = ChatConstants.OPERATION_PICK_IMAGE
                 askForStoragePermission()
             }
             true
@@ -246,7 +362,7 @@ class ChatFragment : BaseFragment(),
             if (isStoragePermissionGranted())
                 pickVideo()
             else {
-                selectedOperation = OPERATION_PICK_VIDEO
+                selectedOperation = ChatConstants.OPERATION_PICK_VIDEO
                 askForStoragePermission()
             }
 
@@ -260,17 +376,32 @@ class ChatFragment : BaseFragment(),
     private fun askForStoragePermission() {
         Log.v(TAG, "Permission Required. Requesting Permission")
         requestPermissions(
-            arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE,android.Manifest.permission.WRITE_EXTERNAL_STORAGE,android.Manifest.permission.CAMERA),
+            arrayOf(
+                android.Manifest.permission.READ_EXTERNAL_STORAGE,
+                android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                android.Manifest.permission.CAMERA
+            ),
             REQUEST_STORAGE_PERMISSION
         )
     }
 
     private fun pickVideo() = Intent(Intent.ACTION_GET_CONTENT).apply {
+
+        if (!videosDirectoryFileRef.exists())
+            videosDirectoryFileRef.mkdirs()
+
         type = "video/*"
         startActivityForResult(this, REQUEST_PICK_VIDEO)
     }
 
     private fun pickImage() {
+
+        if (!imagesDirectoryFileRef.exists())
+            imagesDirectoryFileRef.mkdirs()
+
+        val newFileName = "$uid-${DateHelper.getFullDateTimeStamp()}.png"
+        val imagefile = File(imagesDirectoryFileRef, newFileName)
+
         val photoCropIntent = Intent(requireContext(), PhotoCrop::class.java)
         photoCropIntent.putExtra(
             PhotoCrop.INTENT_EXTRA_PURPOSE,
@@ -279,6 +410,7 @@ class ChatFragment : BaseFragment(),
         photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_FIREBASE_FOLDER_NAME, "/verification/")
         photoCropIntent.putExtra("folder", "verification")
         photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_DETECT_FACE, 0)
+        photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_OUTPUT_FILE, imagefile)
         photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_FIREBASE_FILE_NAME, "aadhar_card_front.jpg")
         startActivityForResult(
             photoCropIntent,
@@ -286,7 +418,11 @@ class ChatFragment : BaseFragment(),
         )
     }
 
-    private fun startPickingDocument() = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+    private fun pickDocument() = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+
+        if (!documentDirectoryFileRef.exists())
+            documentDirectoryFileRef.mkdirs()
+
         addCategory(Intent.CATEGORY_OPENABLE)
         type = "*/*"
         putExtra(Intent.EXTRA_MIME_TYPES, arrayOf(DOC, DOCX, XLS, PDF))
@@ -321,46 +457,70 @@ class ChatFragment : BaseFragment(),
     override fun chatMessageClicked(
         messageType: MessageType,
         position: Int,
-        message: ChatMessage
-    ) = when (messageType) {
-        MessageType.DATE -> TODO()
-        MessageType.TEXT -> TODO()
-        MessageType.TEXT_WITH_IMAGE -> {
+        message: ChatMessage,
+        fileDownloaded: Boolean,
+        downloadedFile: File?
+    ) {
+        when (messageType) {
+            MessageType.TEXT_WITH_IMAGE -> {
 
-            if (message.toMessage().attachmentPath != null) {
-                ViewFullScreenImageDialogFragment.showImage(
-                    childFragmentManager,
-                    Uri.parse(message.toMessage().attachmentPath)
-                )
-            } else {
-                //File Not available
-            }
-        }
-        MessageType.TEXT_WITH_VIDEO -> {
-            if (message.toMessage().attachmentPath != null) {
-                ViewFullScreenVideoDialogFragment.launch(
-                    childFragmentManager,
-                    Uri.parse(message.toMessage().attachmentPath)
-                )
-            } else {
-                //File Not available
-            }
-        }
-        MessageType.TEXT_WITH_LOCATION -> TODO()
-        MessageType.TEXT_WITH_CONTACT -> TODO()
-        MessageType.TEXT_WITH_AUDIO -> TODO()
-        MessageType.TEXT_WITH_DOCUMENT -> {
-            if (message.toMessage().attachmentPath != null) {
-                downloadAndShowAttachment(message.toMessage().attachmentPath!!)
-            } else {
-                //File Not available
-            }
-        }
-        MessageType.NOT_SUPPORTED -> TODO()
-    }
+                if (fileDownloaded) {
+                    ViewFullScreenImageDialogFragment.showImage(
+                        childFragmentManager,
+                        downloadedFile!!.toUri()
+                    )
+                } else {
+                    if (message.toMessage().attachmentPath != null) {
+                        viewModel.downloadAndSaveFile(
+                            appDirectoryFileRef,
+                            position,
+                            message.toMessage()
+                        )
+                    } else {
 
-    private fun downloadAndShowAttachment(filePath: String) {
-        viewModel.downloadAttachment(filePath, requireContext().filesDir)
+                    }
+                }
+            }
+            MessageType.TEXT_WITH_VIDEO -> {
+
+                if (fileDownloaded) {
+                    ViewFullScreenVideoDialogFragment.launch(
+                        childFragmentManager,
+                        downloadedFile!!.toUri()
+                    )
+                } else {
+                    if (message.toMessage().attachmentPath != null) {
+                        viewModel.downloadAndSaveFile(
+                            appDirectoryFileRef,
+                            position,
+                            message.toMessage()
+                        )
+                    } else {
+
+                    }
+                }
+            }
+            MessageType.TEXT_WITH_DOCUMENT -> {
+
+                if (fileDownloaded) {
+                    openDocument(downloadedFile!!)
+                } else {
+                    if (message.toMessage().attachmentPath != null) {
+                        viewModel.downloadAndSaveFile(
+                            appDirectoryFileRef,
+                            position,
+                            message.toMessage()
+                        )
+                    }
+                }
+            }
+            MessageType.NOT_SUPPORTED -> TODO()
+            MessageType.DATE -> TODO()
+            MessageType.TEXT -> TODO()
+            MessageType.TEXT_WITH_LOCATION -> TODO()
+            MessageType.TEXT_WITH_CONTACT -> TODO()
+            MessageType.TEXT_WITH_AUDIO -> TODO()
+        }
     }
 
     override fun onRequestPermissionsResult(
@@ -381,16 +541,14 @@ class ChatFragment : BaseFragment(),
             }
 
             if (allPermsGranted) {
-                if (selectedOperation == OPERATION_PICK_IMAGE) {
+                if (selectedOperation == ChatConstants.OPERATION_PICK_IMAGE) {
                     pickImage()
                     selectedOperation = -1
-                }
-                else if (selectedOperation == OPERATION_PICK_VIDEO) {
+                } else if (selectedOperation == ChatConstants.OPERATION_PICK_VIDEO) {
                     pickVideo()
                     selectedOperation = -1
-                }
-                else if (selectedOperation == OPERATION_PICK_DOCUMENT) {
-                    startPickingDocument()
+                } else if (selectedOperation == ChatConstants.OPERATION_PICK_DOCUMENT) {
+                    pickDocument()
                     selectedOperation = -1
                 }
             } else
@@ -408,14 +566,27 @@ class ChatFragment : BaseFragment(),
                 val uriString = uri.toString()
                 val myFile = File(uriString)
 
-                var displayName: String? = getDisplayName(uriString, uri, myFile)
+                val displayName: String? = getDisplayName(uriString, uri, myFile)
 
-                viewModel.sendNewDocumentMessage("", displayName!!, uri)
+                if (!documentDirectoryFileRef.exists())
+                    documentDirectoryFileRef.mkdirs()
+
+                viewModel.sendNewDocumentMessage(
+                    requireContext(),
+                    "",
+                    documentDirectoryFileRef,
+                    displayName,
+                    uri
+                )
 
                 Log.d(TAG, displayName + "")
                 Log.d(TAG, uriString)
             }
             REQUEST_PICK_IMAGE -> {
+
+                if (!imagesDirectoryFileRef.exists())
+                    imagesDirectoryFileRef.mkdirs()
+
                 val clickedImageUri: Uri =
                     data?.getParcelableExtra(PhotoCrop.INTENT_EXTRA_RESULTING_FILE_URI) ?: return
                 viewModel.sendNewImageMessage(
@@ -429,8 +600,14 @@ class ChatFragment : BaseFragment(),
                 val uriString = uri.toString()
                 val myFile = File(uriString)
 
-                var displayName: String? = getDisplayName(uriString, uri, myFile)
-                viewModel.sendNewVideoMessage(requireContext(), "", displayName!!, uri)
+                val displayName: String? = getDisplayName(uriString, uri, myFile)
+                viewModel.sendNewVideoMessage(
+                    requireContext(),
+                    videosDirectoryFileRef,
+                    "",
+                    displayName!!,
+                    uri
+                )
             }
         }
     }
@@ -443,7 +620,6 @@ class ChatFragment : BaseFragment(),
         if (uriString.startsWith("content://")) {
             var cursor: Cursor? = null
             try {
-
                 cursor = requireContext().contentResolver.query(uri, null, null, null, null)
                 if (cursor != null && cursor.moveToFirst()) {
                     return cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME))
@@ -464,33 +640,36 @@ class ChatFragment : BaseFragment(),
             android.Manifest.permission.READ_EXTERNAL_STORAGE
         ) == PackageManager.PERMISSION_GRANTED
                 && ContextCompat.checkSelfPermission(
-                    requireContext(),
-                    android.Manifest.permission.WRITE_EXTERNAL_STORAGE
-                ) == PackageManager.PERMISSION_GRANTED
+            requireContext(),
+            android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+        ) == PackageManager.PERMISSION_GRANTED
                 && ContextCompat.checkSelfPermission(
-                    requireContext(),
-                    android.Manifest.permission.CAMERA
-                ) == PackageManager.PERMISSION_GRANTED
+            requireContext(),
+            android.Manifest.permission.CAMERA
+        ) == PackageManager.PERMISSION_GRANTED
     }
 
     companion object {
         const val TAG = "ChatFragment"
 
-        const val REQUEST_PICK_DOCUMENT = 102
-        const val REQUEST_PICK_IMAGE = 103
-        const val REQUEST_PICK_VIDEO = 104
-        const val REQUEST_STORAGE_PERMISSION = 105
+        const val INTENT_EXTRA_CHAT_HEADER_ID = "chatHeaderId"
+        const val INTENT_EXTRA_FOR_USER_ID = "forUserId"
+        const val INTENT_EXTRA_OTHER_USER_ID = "otherUserId"
+        const val INTENT_EXTRA_OTHER_USER_NAME = "contactName"
+        const val INTENT_EXTRA_OTHER_USER_IMAGE = "imageUrl"
 
-        const val DOC = "application/msword"
-        const val DOCX = "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-        const val IMAGE = "image/*"
-        const val AUDIO = "audio/*"
-        const val TEXT = "text/*"
-        const val PDF = "application/pdf"
-        const val XLS = "application/vnd.ms-excel"
+        private const val REQUEST_PICK_DOCUMENT = 102
+        private const val REQUEST_PICK_IMAGE = 103
+        private const val REQUEST_PICK_VIDEO = 104
+        private const val REQUEST_STORAGE_PERMISSION = 105
 
-        private var OPERATION_PICK_IMAGE = 0
-        private var OPERATION_PICK_VIDEO = 1
-        private var OPERATION_PICK_DOCUMENT = 2
+        private const val DOC = "application/msword"
+        private const val DOCX =
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        private const val IMAGE = "image/*"
+        private const val AUDIO = "audio/*"
+        private const val TEXT = "text/*"
+        private const val PDF = "application/pdf"
+        private const val XLS = "application/vnd.ms-excel"
     }
 }

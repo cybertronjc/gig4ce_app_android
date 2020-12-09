@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -32,6 +33,7 @@ import com.gigforce.app.core.gone
 import com.gigforce.app.core.toBundle
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.calendarscreen.maincalendarscreen.CalendarHomeScreen
+import com.gigforce.app.modules.chatmodule.viewModels.ChatHeadersViewModel
 import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
 import com.gigforce.app.modules.gigerVerfication.GigerVerificationStatus.Companion.STATUS_VERIFIED
 import com.gigforce.app.modules.help.HelpVideo
@@ -46,10 +48,7 @@ import com.gigforce.app.modules.profile.EducationExpandedFragment
 import com.gigforce.app.modules.profile.ExperienceExpandedFragment
 import com.gigforce.app.modules.profile.ProfileViewModel
 import com.gigforce.app.modules.profile.models.ProfileData
-import com.gigforce.app.utils.AppConstants
-import com.gigforce.app.utils.GlideApp
-import com.gigforce.app.utils.Lce
-import com.gigforce.app.utils.StringConstants
+import com.gigforce.app.utils.*
 import com.gigforce.app.utils.configrepository.ConfigRepository
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.iid.FirebaseInstanceId
@@ -77,6 +76,7 @@ class LandingScreenFragment : BaseFragment() {
     private val landingScreenViewModel: LandingScreenViewModel by viewModels()
     private val learningViewModel: LearningViewModel by viewModels()
     private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance()
+    private val chatHeadersViewModel: ChatHeadersViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -133,47 +133,54 @@ class LandingScreenFragment : BaseFragment() {
 
     private fun checkforForceupdate() {
         ConfigRepository().getForceUpdateCurrentVersion(object :
-                ConfigRepository.LatestAPPUpdateListener {
+            ConfigRepository.LatestAPPUpdateListener {
             override fun getCurrentAPPVersion(latestAPPUpdateModel: ConfigRepository.LatestAPPUpdateModel) {
                 if (latestAPPUpdateModel.active && isNotLatestVersion(latestAPPUpdateModel))
                     showConfirmationDialogType3(
-                            getString(R.string.new_version_available),
-                            getString(R.string.new_version_available_detail),
-                            getString(R.string.update_now),
-                            getString(R.string.cancel_update),
-                            object : ConfirmationDialogOnClickListener {
-                                override fun clickedOnYes(dialog: Dialog?) {
-                                    redirectToStore("https://play.google.com/store/apps/details?id=com.gigforce.app")
-                                }
+                        getString(R.string.new_version_available),
+                        getString(R.string.new_version_available_detail),
+                        getString(R.string.update_now),
+                        getString(R.string.cancel_update),
+                        object : ConfirmationDialogOnClickListener {
+                            override fun clickedOnYes(dialog: Dialog?) {
+                                redirectToStore("https://play.google.com/store/apps/details?id=com.gigforce.app")
+                            }
 
-                                override fun clickedOnNo(dialog: Dialog?) {
-                                    if (latestAPPUpdateModel?.force_update_required)
-                                        activity?.finish()
-                                    dialog?.dismiss()
-                                }
+                            override fun clickedOnNo(dialog: Dialog?) {
+                                if (latestAPPUpdateModel?.force_update_required)
+                                    activity?.finish()
+                                dialog?.dismiss()
+                            }
 
-                            })
+                        })
             }
         })
     }
+
     private fun isNotLatestVersion(latestAPPUpdateModel: ConfigRepository.LatestAPPUpdateModel): Boolean {
         try {
             var currentAppVersion = getAppVersion()
-            if(currentAppVersion.contains("Dev")){
+            if (currentAppVersion.contains("Dev")) {
                 currentAppVersion = currentAppVersion?.split("-")[0]
             }
             var appVersion = currentAppVersion?.split(".")?.toTypedArray()
             var serverAPPVersion =
-                    latestAPPUpdateModel?.force_update_current_version?.split(".")?.toTypedArray()
+                latestAPPUpdateModel?.force_update_current_version?.split(".")?.toTypedArray()
             if (appVersion?.size == 0 || serverAPPVersion?.size == 0) {
-                FirebaseCrashlytics.getInstance().log("isNotLatestVersion method : appVersion or serverAPPVersion has zero size!!")
+                FirebaseCrashlytics.getInstance()
+                    .log("isNotLatestVersion method : appVersion or serverAPPVersion has zero size!!")
                 return false
             } else {
                 if (appVersion.get(0).toInt() < serverAPPVersion.get(0).toInt()) {
                     return true
-                } else if (appVersion.get(0).toInt()== serverAPPVersion.get(0).toInt() && appVersion.get(1).toInt() < serverAPPVersion.get(1).toInt()) {
+                } else if (appVersion.get(0).toInt() == serverAPPVersion.get(0)
+                        .toInt() && appVersion.get(1).toInt() < serverAPPVersion.get(1).toInt()
+                ) {
                     return true
-                } else if (appVersion.get(0).toInt()== serverAPPVersion.get(0).toInt() && appVersion.get(1).toInt() == serverAPPVersion.get(1).toInt() && appVersion.get(2).toInt() < serverAPPVersion.get(2).toInt()) {
+                } else if (appVersion.get(0).toInt() == serverAPPVersion.get(0)
+                        .toInt() && appVersion.get(1).toInt() == serverAPPVersion.get(1)
+                        .toInt() && appVersion.get(2).toInt() < serverAPPVersion.get(2).toInt()
+                ) {
                     return true
                 } else return false
 
@@ -184,13 +191,14 @@ class LandingScreenFragment : BaseFragment() {
             return false
         }
     }
+
     fun getAppVersion(): String {
         var result = "";
 
         try {
             result = context?.getPackageManager()
-                    ?.getPackageInfo(context?.getPackageName(), 0)
-                    ?.versionName ?: "";
+                ?.getPackageInfo(context?.getPackageName(), 0)
+                ?.versionName ?: "";
         } catch (e: PackageManager.NameNotFoundException) {
 
         }
@@ -333,8 +341,24 @@ class LandingScreenFragment : BaseFragment() {
                 }
 
             })
-
         verificationViewModel.startListeningForGigerVerificationStatusChanges()
+
+
+        chatHeadersViewModel.unreadMessageCount
+            .observe(viewLifecycleOwner, Observer {
+
+                if (it == 0) {
+                    unread_message_count_tv.setImageDrawable(null)
+                } else {
+                    val drawable = TextDrawable.builder().buildRound(
+                        it.toString(),
+                        ResourcesCompat.getColor(requireContext().resources, R.color.lipstick, null)
+                    )
+                    unread_message_count_tv.setImageDrawable(drawable)
+                }
+            })
+
+        chatHeadersViewModel.startWatchingChatHeaders()
 
 
         landingScreenViewModel
@@ -394,8 +418,7 @@ class LandingScreenFragment : BaseFragment() {
                     LandingPageConstants.INTENT_EXTRA_CAME_FROM_LANDING_SCREEN to true,
                     LandingPageConstants.INTENT_EXTRA_ACTION to EducationExpandedFragment.ACTION_OPEN_EDIT_ACHIEVEMENTS_BOTTOM_SHEET
                 )
-            )
-            , Tip(
+            ), Tip(
                 key = "ADD_PROFILE_PHOTO_TIP",
                 title = getString(R.string.gig_force_tip),
                 subTitle = getString(R.string.tip_five),
@@ -428,8 +451,7 @@ class LandingScreenFragment : BaseFragment() {
                 subTitle = getString(R.string.tip_eight),
                 tip_id = 1104,
                 whereToRedirect = R.id.permanentAddressViewFragment
-            )
-            , Tip(
+            ), Tip(
                 key = "ADD_PREFERRED_DISTANCE_TIP",
                 title = getString(R.string.gig_force_tip),
                 subTitle = getString(R.string.tip_nine),
@@ -441,8 +463,7 @@ class LandingScreenFragment : BaseFragment() {
                 subTitle = getString(R.string.tip_ten),
                 tip_id = 1106,
                 whereToRedirect = R.id.earningFragment
-            )
-            , Tip(
+            ), Tip(
                 key = "ADD_WEEKDAY_TIP",
                 title = getString(R.string.gig_force_tip),
                 subTitle = getString(R.string.tip_eleven),
@@ -661,7 +682,7 @@ class LandingScreenFragment : BaseFragment() {
             about_us_cl.visibility = View.GONE
         }
         chat_icon_iv.setOnClickListener {
-//            navigate(R.id.fakeGigContactScreenFragment)
+            navigate(R.id.contactScreenFragment)
         }
 
         contact_us.setOnClickListener {

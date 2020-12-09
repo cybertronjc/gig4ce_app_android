@@ -1,4 +1,4 @@
-package com.gigforce.app.modules.chatmodule.ui.adapters
+package com.gigforce.app.modules.chatmodule.ui.adapters.diffUtils
 
 import androidx.recyclerview.widget.DiffUtil
 import com.gigforce.app.modules.chatmodule.models.ChatMessage
@@ -16,12 +16,16 @@ class ChatDiffUtilCallback(
     }
 
     override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-        return newChatList[oldItemPosition].getMessageType().equals(newChatList[newItemPosition].getMessageType())
+        return oldChatList[oldItemPosition].toMessage().id == newChatList[newItemPosition].toMessage().id
     }
 
     override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-        val oldMessage = oldChatList[oldItemPosition]
-        val newMessage = newChatList[newItemPosition]
-        return true
+        val oldMessage = oldChatList[oldItemPosition].toMessage()
+        val newMessage = newChatList[newItemPosition].toMessage()
+
+        return oldMessage.id == newMessage.id &&
+                oldMessage.attachmentPath == newMessage.attachmentPath &&
+                oldMessage.thumbnail == newMessage.thumbnail &&
+                (oldMessage.thumbnailBitmap == null && newMessage.thumbnailBitmap != null)
     }
 }

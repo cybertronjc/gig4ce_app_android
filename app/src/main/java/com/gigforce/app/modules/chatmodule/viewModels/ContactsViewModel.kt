@@ -4,50 +4,58 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.gigforce.app.modules.chatmodule.models.ContactModel
 import com.gigforce.app.modules.chatmodule.repository.ChatContactsRepository
+import com.gigforce.app.utils.Lse
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.QuerySnapshot
+import kotlinx.coroutines.launch
 
 class ContactsViewModel constructor(
-    private val chatContactsRepository: ChatContactsRepository = ChatContactsRepository()
+    private val chatContactsRepository: ChatContactsRepository
 ) : ViewModel() {
 
     private val TAG: String = "vm/chats/newcontact"
-
-    private val uid by lazy {
-        FirebaseAuth.getInstance().uid
-    }
+    var contactsSynced = false
 
     private val _contacts: MutableLiveData<List<ContactModel>> = MutableLiveData()
     val contacts: LiveData<List<ContactModel>> = _contacts
 
-    private var contactList: List<ContactModel> = emptyList()
-    private var contactListLoaded = false
     private var contactsChangeListener: ListenerRegistration? = null
 
     init {
+        subscribe()
+    }
 
-        if (contactsChangeListener == null)
-            subscribe()
-        else{
-            //
+    private val _syncContacts: MutableLiveData<Lse> = MutableLiveData()
+    val syncContacts: LiveData<Lse> = _syncContacts
+
+    fun syncContacts(contacts: List<ContactModel>) = viewModelScope.launch {
+        _syncContacts.value = Lse.loading()
+
+        try {
+            Log.d(TAG, "syncing Contacts...")
+            chatContactsRepository.updateContacts(contacts)
+            contactsSynced = true
+
+            _syncContacts.value = Lse.success()
+            _syncContacts.value = null
+        } catch (e: Exception) {
+            Log.e(TAG, "Error while syncing contacts", e)
+            _syncContacts.value = Lse.error(e.message ?: "Unable to sync contacts")
+            _syncContacts.value = null
         }
     }
 
     private fun subscribe() {
-
         contactsChangeListener = chatContactsRepository
             .getUserContacts()
             .addSnapshotListener { value, error ->
 
-                if (error != null) {
-
-                } else {
-                    contactListLoaded = true
+                if (value != null)
                     convertToContactsAndEmit(value)
-                }
             }
     }
 
@@ -58,9 +66,9 @@ class ContactsViewModel constructor(
             it.toObject(ContactModel::class.java)!!.apply {
                 id = it.id
             }
-        }.filter { it.isGigForceUser }
+        }.sortedBy { it.name }
 
-        Log.d(TAG,"emitting values...")
+        Log.d(TAG, "emitting values...")
         _contacts.postValue(contacts)
     }
 

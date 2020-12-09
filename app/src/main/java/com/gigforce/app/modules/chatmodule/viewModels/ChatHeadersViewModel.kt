@@ -17,15 +17,17 @@ class ChatHeadersViewModel : ViewModel() {
 
     private var firebaseDB = FirebaseFirestore.getInstance()
 
-    private val chatHeaders: MutableLiveData<ArrayList<ChatHeader>> =
-        MutableLiveData(ArrayList<ChatHeader>())
-
     // private var chatHeaderRepository = ChatHeaderFirebaseRepository()
     private var chatHeadersSnapshotListener: ListenerRegistration? = null
 
-    val ChatHeaders: LiveData<ArrayList<ChatHeader>> get() = chatHeaders
+    private val _chatHeaders: MutableLiveData<ArrayList<ChatHeader>> =
+        MutableLiveData(ArrayList<ChatHeader>())
+    val chatHeaders: LiveData<ArrayList<ChatHeader>> get() = _chatHeaders
 
-    init {
+    private val _unreadMessageCount: MutableLiveData<Int> = MutableLiveData()
+    val unreadMessageCount: LiveData<Int> = _unreadMessageCount
+
+    fun startWatchingChatHeaders() {
         val reference = firebaseDB
             .collection("chats")
             .document(uid)
@@ -50,8 +52,12 @@ class ChatHeadersViewModel : ViewModel() {
                                 otherUserId = doc.getString("otherUserId") ?: "",
                                 unseenCount = doc.getDouble("unseenCount")?.toInt() ?: 0,
                                 lastMsgText = doc.getString("lastMsgText") ?: "",
+                                chatType = doc.getString("chatType") ?: "",
                                 lastMessageType = doc.getString("lastMessageType") ?: "",
                                 lastMsgTimestamp = doc.getTimestamp("lastMsgTimestamp"),
+                                groupId = doc.getString("groupId") ?: "",
+                                groupName = doc.getString("groupName") ?: "",
+                                groupAvatar = doc.getString("groupAvatar") ?: "",
                                 otherUser = UserInfo(
                                     name = doc.getString("otherUser.name") ?: "",
                                     type = doc.getString("otherUser.type") ?: "",
@@ -60,7 +66,14 @@ class ChatHeadersViewModel : ViewModel() {
                             )
                         )
                     }
-                    chatHeaders.postValue(tempChatHeaders)
+                    _chatHeaders.postValue(tempChatHeaders)
+
+                    var unreadMessageCount = 0
+                    tempChatHeaders.forEach {
+                        unreadMessageCount += it.unseenCount
+                    }
+
+                    _unreadMessageCount.postValue(unreadMessageCount)
                 }
             }
     }

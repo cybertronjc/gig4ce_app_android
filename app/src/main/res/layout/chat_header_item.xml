@@ -8,7 +8,7 @@
     android:clickable="true"
     android:focusable="true"
     android:paddingTop="18dp"
-    android:paddingBottom="18dp"
+    android:paddingBottom="2dp"
     android:paddingStart="16dp"
     >
 
@@ -19,7 +19,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:shapeAppearanceOverlay="@style/circleImageView"
-        app:srcCompat="@drawable/ic_user_icon" />
+        tools:srcCompat="@drawable/ic_user" />
 
     <View
         android:id="@+id/online_pink_circle"

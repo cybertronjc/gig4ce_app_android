@@ -749,6 +749,18 @@
         android:id="@+id/chatNewContactFragment"
         android:name="com.gigforce.app.modules.chatmodule.ui.ContactsFragment"
         android:label="ChatNewContactFragment" />
+    <fragment
+        android:id="@+id/groupChatFragment"
+        android:name="com.gigforce.app.modules.chatmodule.ui.GroupChatFragment"
+        android:label="GroupChatFragment" />
+    <fragment
+        android:id="@+id/groupDetailsFragment"
+        android:name="com.gigforce.app.modules.chatmodule.ui.GroupDetailsFragment"
+        android:label="GroupDetailsFragment" />
+    <fragment
+        android:id="@+id/groupMediaListFragment"
+        android:name="com.gigforce.app.modules.chatmodule.ui.GroupMediaListFragment"
+        android:label="GroupMediaListFragment" />
 
 
 </navigation>
