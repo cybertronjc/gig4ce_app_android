@@ -55,7 +55,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/doYouHaveDLLabel"
+        android:id="@+id/doYouHaveDLLabel_client_act"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -71,7 +71,7 @@
 
 
     <TextView
-        android:id="@+id/dlEditOverallErrorMessage"
+        android:id="@+id/dlEditOverallErrorMessage_client_act"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -83,7 +83,7 @@
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/doYouHaveDLLabel"
+        app:layout_constraintTop_toBottomOf="@id/doYouHaveDLLabel_client_act"
         tools:text="Error : Uploaded Image is not a Driving License Image" />
 
 
@@ -93,7 +93,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="15dp"
-        app:layout_constraintTop_toBottomOf="@id/doYouHaveDLLabel">
+        app:layout_constraintTop_toBottomOf="@id/doYouHaveDLLabel_client_act">
 
         <com.google.android.material.radiobutton.MaterialRadioButton
             android:id="@+id/dlYesRB"
@@ -238,7 +238,7 @@
                 app:layout_constraintTop_toBottomOf="@id/genderLabel" />
 
             <TextView
-                android:id="@+id/dlStateEditErrorMessage"
+                android:id="@+id/dlStateEditErrorMessage_client_act"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
@@ -279,7 +279,7 @@
                 app:backgroundTint="@color/colorPrimary" />
 
             <TextView
-                android:id="@+id/dlNoEditErrorMessage"
+                android:id="@+id/dlNoEditErrorMessage_client_act"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
@@ -317,7 +317,7 @@
 
 
     <TextView
-        android:id="@+id/dlFrontEditErrorMessage"
+        android:id="@+id/dlFrontEditErrorMessage_client_act"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="18dp"
@@ -342,11 +342,11 @@
         android:layout_marginTop="@dimen/size_16"
         android:layout_marginEnd="@dimen/size_16"
         android:visibility="visible"
-        app:layout_constraintTop_toBottomOf="@id/dlFrontEditErrorMessage" />
+        app:layout_constraintTop_toBottomOf="@id/dlFrontEditErrorMessage_client_act" />
 
 
     <TextView
-        android:id="@+id/dlBackEditErrorMessage"
+        android:id="@+id/dlBackEditErrorMessage_client_act"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="18dp"

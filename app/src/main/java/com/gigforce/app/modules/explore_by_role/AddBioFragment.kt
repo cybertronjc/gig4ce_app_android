@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.*
+import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -47,6 +48,8 @@ class AddBioFragment : BaseFragment() {
 
     private fun initObservers() {
         if (FROM_CLIENT_ACTIVATION) {
+            iv_close_add_bio.setImageResource(R.drawable.ic_arrow_back_24)
+            iv_close_add_bio.setColorFilter(ContextCompat.getColor(requireContext(), R.color.white), android.graphics.PorterDuff.Mode.MULTIPLY);
             viewModel.observableProfileData.observe(viewLifecycleOwner, Observer {
                 et_add_bio.setText(it?.aboutMe ?: "")
             })

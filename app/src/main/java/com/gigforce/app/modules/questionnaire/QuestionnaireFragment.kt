@@ -148,7 +148,7 @@ class QuestionnaireFragment : BaseFragment(), AdapterQuestionnaire.AdapterQuesti
                             rejectionDialog
                             rejectionDialog.arguments = bundleOf(
                                     StringConstants.REJECTION_TYPE.value to RejectionDialog.REJECTION_QUESTIONNAIRE,
-                                    StringConstants.WRONG_ANSWERS.value to items.map { it.question }
+                                    StringConstants.WRONG_ANSWERS.value to items.map { it.rejectionPoint }
                             )
                             rejectionDialog.show(parentFragmentManager, DrivingCertSuccessDialog::class.java.name)
 

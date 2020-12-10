@@ -10,5 +10,6 @@ data class GigActivation(
     var jobProfileId: String = "",
     var step: Int = 0,
     var requiredFeatures: List<Dependency> = listOf(),
-    var instruction: String = ""
+    var instruction: String = "",
+    var videoUrl: String = ""
 )

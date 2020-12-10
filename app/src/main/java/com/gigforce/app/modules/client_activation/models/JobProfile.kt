@@ -4,39 +4,43 @@ import android.os.Parcel
 import android.os.Parcelable
 
 data class JobProfile(
-        var businessId: String? = null,
-        var businessName: String? = null,
-        var requiredMedia: RequiredMedia? = null,
-        var locationList: List<Locations>? = null,
-        var payoutNote: String? = null,
-        var queries: List<Queries>? = null,
-        var id: String? = null,
-        var info: List<BulletPoints>? = null,
-        var title: String = "",
-        var nextDependency: String = "",
-        var coverImg: String = "",
-        var defaultPayoutRequired: Boolean = false,
-        var profileId: String = "",
-        var profileName: String = "",
-        var totalSteps: Int = 0
+    var businessId: String? = null,
+    var businessName: String? = null,
+    var requiredMedia: RequiredMedia? = null,
+    var locationList: List<Locations>? = null,
+    var payoutNote: String? = null,
+    var queries: List<Queries>? = null,
+    var id: String? = null,
+    var info: List<BulletPoints>? = null,
+    var title: String = "",
+    var nextDependency: String = "",
+    var coverImg: String = "",
+    var defaultPayoutRequired: Boolean = false,
+    var profileId: String = "",
+    var profileName: String = "",
+    var totalSteps: Int = 0,
+    var cardImage: String = "",
+    var subTitle: String = ""
 //        var tags: List<String> = listOf()
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
-            parcel.readString(),
-            parcel.readString(),
-            parcel.readParcelable(RequiredMedia::class.java.classLoader),
-            parcel.createTypedArrayList(Locations),
-            parcel.readString(),
-            parcel.createTypedArrayList(Queries),
-            parcel.readString(),
-            parcel.createTypedArrayList(BulletPoints),
-            parcel.readString() ?: "",
-            parcel.readString() ?: "",
-            parcel.readString() ?: "",
-            parcel.readByte() != 0.toByte(),
-            parcel.readString() ?: "",
-            parcel.readString() ?: "",
-            parcel.readInt()
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readParcelable(RequiredMedia::class.java.classLoader),
+        parcel.createTypedArrayList(Locations),
+        parcel.readString(),
+        parcel.createTypedArrayList(Queries),
+        parcel.readString(),
+        parcel.createTypedArrayList(BulletPoints),
+        parcel.readString() ?: "",
+        parcel.readString() ?: "",
+        parcel.readString() ?: "",
+        parcel.readByte() != 0.toByte(),
+        parcel.readString() ?: "",
+        parcel.readString() ?: "",
+        parcel.readInt(),
+        parcel.readString() ?: "",
+        parcel.readString() ?: ""
     ) {
     }
 
@@ -56,6 +60,8 @@ data class JobProfile(
         parcel.writeString(profileId)
         parcel.writeString(profileName)
         parcel.writeInt(totalSteps)
+        parcel.writeString(cardImage)
+        parcel.writeString(subTitle)
     }
 
     override fun describeContents(): Int {

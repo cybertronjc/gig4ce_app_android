@@ -64,10 +64,21 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <include
-                android:id="@+id/dlMainLayout"
-                layout="@layout/layout_driving_license_upload_client_activation"
-                android:visibility="visible" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+
+                <include
+                    android:id="@+id/dlMainLayout"
+                    layout="@layout/layout_driving_license_upload_client_activation"
+                    android:visibility="gone" />
+
+                <include
+                    android:id="@+id/dlViewLayout_client_activation"
+                    layout="@layout/layout_driving_license_info_client_activation"
+                    android:visibility="gone" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>
 
 
