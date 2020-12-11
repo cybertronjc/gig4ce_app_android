@@ -147,14 +147,15 @@ class ClientActivationFragment : BaseFragment() {
             run {
                 tv_mark_as_interest_role_details.setOnClickListener {
 
-                    if (jpApplication == null || jpApplication.stepDone == 1) {
+//                    if (jpApplication == null || jpApplication.stepDone == 1) {
+                    if(jpApplication == null || jpApplication.status == "" || jpApplication.status == "Draft"){
                         navigate(
                             R.id.fragment_application_client_activation, bundleOf(
                                 StringConstants.WORK_ORDER_ID.value to viewModel.observableWorkOrder.value?.profileId
                             )
                         )
                         viewModel.observableJpApplication.removeObservers(viewLifecycleOwner)
-                    } else if (jpApplication.stepDone == 2) {
+                    } else if (jpApplication.status == "Applied") {
                         navigate(
                             R.id.fragment_gig_activation, bundleOf(
                                 StringConstants.WORK_ORDER_ID.value to viewModel.observableWorkOrder.value?.profileId,

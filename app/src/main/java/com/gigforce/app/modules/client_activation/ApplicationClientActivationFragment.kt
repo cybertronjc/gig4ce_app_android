@@ -60,6 +60,7 @@ class ApplicationClientActivationFragment : BaseFragment(),
         setupRecycler()
         initObservers()
         initClicks()
+        viewModel.draftApplication(mWordOrderID)
         mNextDep = ""
 
     }

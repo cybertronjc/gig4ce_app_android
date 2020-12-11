@@ -145,7 +145,7 @@ class ApplicationClientActivationViewModel : ViewModel() {
         val application = getJPApplication(mWorkOrderID)
         repository.db.collection("JP_Applications").document(application.id)
                 .update(mapOf("stepsTotal" to (observableWorkOrderDependency.value?.step ?: 0),
-                        "stepDone" to observableWorkOrderDependency.value?.step
+                        "stepDone" to observableWorkOrderDependency.value?.step,"status" to "Applied"
 
                 ))
                 .addOnCompleteListener {
@@ -153,8 +153,20 @@ class ApplicationClientActivationViewModel : ViewModel() {
                         observableApplicationStatus.value = true
                     }
                 }
+    }
 
-
+    fun draftApplication(mWorkOrderID: String)= viewModelScope.launch {
+        val application = getJPApplication(mWorkOrderID)
+        if(application.status == ""){
+            repository.db.collection("JP_Applications").document(application.id)
+                .update(mapOf("status" to "Draft"
+                ))
+                .addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        observableApplicationStatus.value = true
+                    }
+                }
+        }
     }
 
 
@@ -202,8 +214,8 @@ class ApplicationClientActivationViewModel : ViewModel() {
         if (data.documents.isNullOrEmpty()) {
             return false
         }
-        var allCourseProgress = data.toObjects(GigActivationViewModel.CourseProgress::class.java).first()
-        allCourseProgress.lessonProgress.let {
+        var allCourseProgress = data.toObjects(GigActivationViewModel.CourseProgress::class.java).get(0)
+        allCourseProgress.lesson_progress.let {
             var completed = true
             for (lesson in it) {
                 if (lesson.lessonType == "assessment" && !lesson.completed) {

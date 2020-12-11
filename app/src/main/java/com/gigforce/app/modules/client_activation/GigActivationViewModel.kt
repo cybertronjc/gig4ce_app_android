@@ -79,7 +79,7 @@ class GigActivationViewModel(private val savedStateHandle: SavedStateHandle) : V
                     model.process = dependency.toMutableList()
                 }
                 if (model.process.all { it.isDone }) {
-                    model.status = "Activated"
+                    model.status = "Inprocess"
                 }
 
                 model.process.forEach {
@@ -171,8 +171,8 @@ class GigActivationViewModel(private val savedStateHandle: SavedStateHandle) : V
         if (data.documents.isNullOrEmpty()) {
             return false
         }
-        var allCourseProgress = data.toObjects(CourseProgress::class.java).first()
-        allCourseProgress.lessonProgress.let {
+        val courseProgress = data.toObjects(CourseProgress::class.java).get(0)
+        courseProgress.lesson_progress.let {
             var completed = true
             for (lesson in it) {
                 if (lesson.lessonType == "assessment" && !lesson.completed) {
@@ -185,6 +185,6 @@ class GigActivationViewModel(private val savedStateHandle: SavedStateHandle) : V
     }
 
     data class CourseProgress(
-            var lessonProgress: ArrayList<LessonProgress> = ArrayList<LessonProgress>()
+            var lesson_progress: ArrayList<LessonProgress> = ArrayList<LessonProgress>()
     )
 }
