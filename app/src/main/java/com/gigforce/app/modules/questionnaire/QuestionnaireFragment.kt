@@ -72,6 +72,7 @@ class QuestionnaireFragment : BaseFragment(), AdapterQuestionnaire.AdapterQuesti
         initClicks()
     }
 
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString(StringConstants.WORK_ORDER_ID.value, mWordOrderID)
@@ -153,6 +154,7 @@ class QuestionnaireFragment : BaseFragment(), AdapterQuestionnaire.AdapterQuesti
                         rejectionDialog
                         rejectionDialog.arguments = bundleOf(
                             StringConstants.REJECTION_TYPE.value to RejectionDialog.REJECTION_QUESTIONNAIRE,
+                            StringConstants.TITLE.value to viewModel.observableQuestionnaireResponse.value?.rejectionTitle,
                             StringConstants.WRONG_ANSWERS.value to items.map { it.rejectionPoint }
                         )
                         rejectionDialog.show(
@@ -228,7 +230,7 @@ class QuestionnaireFragment : BaseFragment(), AdapterQuestionnaire.AdapterQuesti
         })
         viewModel.observableQuestionnaireResponse.observe(viewLifecycleOwner, Observer {
             pb_questionnaire.gone()
-
+            tv_tile_questionnaire.text = it.title
             setupTabs(it.questions.size)
             adapter.addData(it.questions)
         })

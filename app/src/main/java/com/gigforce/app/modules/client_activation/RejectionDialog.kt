@@ -3,6 +3,7 @@ package com.gigforce.app.modules.client_activation
 import android.app.Dialog
 import android.graphics.Paint
 import android.os.Bundle
+import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,14 +24,19 @@ class RejectionDialog : DialogFragment() {
         const val REJECTION_QUESTIONNAIRE = 1
     }
 
-    private lateinit var WRONGQUESTIONS: ArrayList<String>
+    private var WRONGQUESTIONS: ArrayList<String>? = null
     private var REJECTIONTYPE: Int = REJECTION_NORMAL
+    private var REJECTION_TITLE: String? = null
     private lateinit var callbacks: RejectionDialogCallbacks
     private val adapter: AdapterRejectedAnswers by lazy {
         AdapterRejectedAnswers()
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.layout_rejection_dialog, container, false)
     }
 
@@ -38,7 +44,11 @@ class RejectionDialog : DialogFragment() {
         super.onStart()
         val dialog: Dialog? = dialog
         if (dialog != null) {
-            dialog.window?.setLayout(getScreenWidth(requireActivity()).width - resources.getDimensionPixelSize(R.dimen.size_48), ViewGroup.LayoutParams.WRAP_CONTENT)
+            dialog.window?.setLayout(
+                getScreenWidth(requireActivity()).width - resources.getDimensionPixelSize(
+                    R.dimen.size_48
+                ), ViewGroup.LayoutParams.WRAP_CONTENT
+            )
         }
     }
 
@@ -62,15 +72,22 @@ class RejectionDialog : DialogFragment() {
         setupRecyclerWrongAnswers()
         tv_sub_one_rejection_dialog.gone()
         tv_sub_two_rejection_dialog.gone()
-        tv_content_title_rejection_dialog.text="Due to answers of the following questions your application is not approved"
+        tv_content_title_rejection_dialog.text = Html.fromHtml(REJECTION_TITLE)
+
         rv_wrong_questions_rejection_dialog.visible()
     }
 
     private fun setupRecyclerWrongAnswers() {
         rv_wrong_questions_rejection_dialog.adapter = adapter
         rv_wrong_questions_rejection_dialog.layoutManager = LinearLayoutManager(requireContext())
-        rv_wrong_questions_rejection_dialog.addItemDecoration(ItemOffsetDecoration(resources.getDimensionPixelSize(R.dimen.size_16)))
-        adapter.addData(WRONGQUESTIONS)
+        rv_wrong_questions_rejection_dialog.addItemDecoration(
+            ItemOffsetDecoration(
+                resources.getDimensionPixelSize(
+                    R.dimen.size_16
+                )
+            )
+        )
+        adapter.addData(WRONGQUESTIONS ?: listOf())
 
 
     }
@@ -79,13 +96,16 @@ class RejectionDialog : DialogFragment() {
         savedInstanceState?.let {
             REJECTIONTYPE = it.getInt(StringConstants.REJECTION_TYPE.value)
             WRONGQUESTIONS = it.getStringArrayList(StringConstants.WRONG_ANSWERS.value)
-                    ?: arrayListOf()
+                ?: arrayListOf()
+            REJECTION_TITLE = it.getString(StringConstants.TITLE.value) ?: ""
         }
 
         arguments?.let {
             REJECTIONTYPE = it.getInt(StringConstants.REJECTION_TYPE.value)
             WRONGQUESTIONS = it.getStringArrayList(StringConstants.WRONG_ANSWERS.value)
-                    ?: arrayListOf()
+                ?: arrayListOf()
+            REJECTION_TITLE = it.getString(StringConstants.TITLE.value) ?: ""
+
         }
     }
 
@@ -93,13 +113,15 @@ class RejectionDialog : DialogFragment() {
         super.onSaveInstanceState(outState)
         outState.putStringArrayList(StringConstants.WRONG_ANSWERS.value, WRONGQUESTIONS)
         outState.putInt(StringConstants.FROM_CLIENT_ACTIVATON.value, REJECTIONTYPE)
+        outState.putString(StringConstants.TITLE.value, REJECTION_TITLE)
 
 
     }
 
 
     private fun initView() {
-        tv_take_me_home_rejection_dialog.paintFlags = tv_take_me_home_rejection_dialog.paintFlags or Paint.UNDERLINE_TEXT_FLAG;
+        tv_take_me_home_rejection_dialog.paintFlags =
+            tv_take_me_home_rejection_dialog.paintFlags or Paint.UNDERLINE_TEXT_FLAG;
 
     }
 

@@ -45,6 +45,7 @@ class GigActivationFragment : BaseFragment(),
     private var currentWindow = 0
     private var playbackPosition: Long = 0
     var playerViewHeight = 0
+    private var isPlayingVideo: Boolean? = null
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -110,10 +111,10 @@ class GigActivationFragment : BaseFragment(),
                 playerView.layoutParams = layoutParams
                 cl_content_gig_activation.visible()
                 tb_gig_activation.visible()
-                        sv_gig_activation.post {
-            if (sv_gig_activation != null)
-                sv_gig_activation.fullScroll(ScrollView.FOCUS_UP);
-        }
+                sv_gig_activation.post {
+                    if (sv_gig_activation != null)
+                        sv_gig_activation.fullScroll(ScrollView.FOCUS_UP);
+                }
 
 
 
@@ -234,14 +235,16 @@ class GigActivationFragment : BaseFragment(),
 
     private fun getDataFromIntents(savedInstanceState: Bundle?) {
         savedInstanceState?.let {
-            mWordOrderID = it.getString(StringConstants.WORK_ORDER_ID.value) ?: return@let
-            mNextDep = it.getString(StringConstants.NEXT_DEP.value) ?: return@let
+            mWordOrderID = it.getString(StringConstants.WORK_ORDER_ID.value) ?: ""
+            mNextDep = it.getString(StringConstants.NEXT_DEP.value) ?: ""
+            playbackPosition = it.getLong("key_play_back_position")
 
         }
 
         arguments?.let {
-            mWordOrderID = it.getString(StringConstants.WORK_ORDER_ID.value) ?: return@let
-            mNextDep = it.getString(StringConstants.NEXT_DEP.value) ?: return@let
+            mWordOrderID = it.getString(StringConstants.WORK_ORDER_ID.value) ?: ""
+            mNextDep = it.getString(StringConstants.NEXT_DEP.value) ?: ""
+            playbackPosition = it.getLong("key_play_back_position")
 
         }
     }
@@ -250,6 +253,7 @@ class GigActivationFragment : BaseFragment(),
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString(StringConstants.WORK_ORDER_ID.value, mWordOrderID)
+        outState.putLong("key_play_back_position", playbackPosition)
 
 
     }
@@ -349,14 +353,20 @@ class GigActivationFragment : BaseFragment(),
 
 
     private fun initializePlayer(uri: Uri) {
-        player = SimpleExoPlayer.Builder(requireContext()).build()
+        if (player == null) {
+            player = SimpleExoPlayer.Builder(requireContext()).build()
+        }
         player?.addListener(PlayerEventListener())
         playerView.player = player
 
         playerView.resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FILL
         player?.videoScalingMode = C.VIDEO_SCALING_MODE_SCALE_TO_FIT
         val mediaSource = buildMediaSource(uri)
-        player?.playWhenReady = true
+        if (playbackPosition != 0L) {
+            player?.seekTo(currentWindow, playbackPosition)
+        }
+        if (isPlayingVideo == null || isPlayingVideo == true)
+            player?.playWhenReady = true
         player?.prepare(mediaSource, false, false)
     }
 
@@ -365,7 +375,7 @@ class GigActivationFragment : BaseFragment(),
 
         override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
             super.onPlayerStateChanged(playWhenReady, playbackState)
-
+            isPlayingVideo = playWhenReady && playbackState == Player.STATE_READY
             if (playbackState == Player.STATE_IDLE || !playWhenReady) {
                 playerView.keepScreenOn = false
             } else playerView.keepScreenOn = playbackState != Player.STATE_ENDED
@@ -384,7 +394,8 @@ class GigActivationFragment : BaseFragment(),
 
     override fun onResume() {
         super.onResume()
-        player?.playWhenReady = true
+        if (isPlayingVideo == true)
+            player?.playWhenReady = true
     }
 
     override fun onPause() {
@@ -392,9 +403,20 @@ class GigActivationFragment : BaseFragment(),
         player?.playWhenReady = false
     }
 
+    override fun onStop() {
+        super.onStop()
+        if (player != null) {
+            playbackPosition = player?.currentPosition ?: 0L
+            player?.playWhenReady = false
+        }
+
+
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         releasePlayer()
     }
+
 
 }

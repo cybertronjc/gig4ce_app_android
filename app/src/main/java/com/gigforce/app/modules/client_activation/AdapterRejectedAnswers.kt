@@ -1,5 +1,6 @@
 package com.gigforce.app.modules.client_activation
 
+import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,7 +18,7 @@ class AdapterRejectedAnswers : RecyclerView.Adapter<AdapterRejectedAnswers.ViewH
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.itemView.tv_rejected_item.text = items[position]
+        holder.itemView.tv_rejected_item.text = Html.fromHtml(items[position])
     }
 
     override fun getItemCount(): Int {
