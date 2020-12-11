@@ -3,6 +3,7 @@ package com.gigforce.app.modules.client_activation
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.text.Html
 import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
@@ -108,7 +109,7 @@ class ClientActivationFragment : BaseFragment() {
             it?.locationList?.map { item -> item.location }?.let { locations ->
                 adapterPreferredLocation?.addData(locations)
             }
-            tv_earning_client_activation.text = it?.payoutNote
+            tv_earning_client_activation.text = Html.fromHtml(it?.payoutNote)
             val viewRoleDesc = layoutInflater.inflate(R.layout.layout_role_description, null)
             ll_role_desc.removeAllViews()
             it?.queries?.forEach { element ->
@@ -133,7 +134,7 @@ class ClientActivationFragment : BaseFragment() {
 //            if (!(it?.requiredLessons?.lessons.isNullOrEmpty())) {
             learning_cl.visible()
             textView120.text = it?.requiredMedia?.title
-            initializeLearningModule(it?.requiredMedia?.media?.map { it.lessonId } ?: listOf())
+            initializeLearningModule(it?.requiredMedia?.media?.map { it.courseId } ?: listOf())
 //            }
 
             viewModel.getApplication(it?.profileId ?: "")
@@ -164,14 +165,22 @@ class ClientActivationFragment : BaseFragment() {
                 }
                 tv_mark_as_interest_role_details.text = getString(R.string.apply_now)
                 if (jpApplication == null) return@Observer
-                tv_applied_client_activation.text = jpApplication.status
-                tv_mark_as_interest_role_details.text = getString(R.string.complete_application)
-                tv_applied_client_activation.setCompoundDrawablesWithIntrinsicBounds(
-                    if (jpApplication.status == "Activated") R.drawable.ic_applied else R.drawable.ic_status_pending,
+                if(jpApplication.status == "")
+                    tv_applied_client_activation.gone()
+                else
+                tv_applied_client_activation.visible()
+                tv_applied_client_activation.text = if(jpApplication.status == "Draft" || jpApplication.status == "Applied") "Pending" else jpApplication.status
+                tv_applied_client_activation.setCompoundDrawablesWithIntrinsicBounds(if(jpApplication.status == "Draft" || jpApplication.status == "Applied" || jpApplication.status == "Inprocess")R.drawable.ic_status_pending else if (jpApplication.status == "Activated") R.drawable.ic_applied else R.drawable.ic_application_rejected,
                     0,
                     0,
                     0
                 )
+                setTextViewColor(tv_applied_client_activation,if(jpApplication.status == "Draft" || jpApplication.status == "Applied" || jpApplication.status == "Inprocess")R.color.pending_color else if (jpApplication.status == "Activated") R.color.activated_color else R.color.rejected_color)
+                var actionButtonText = if(jpApplication.status == "Draft") getString(R.string.complete_application) else if(jpApplication.status == "Applied") getString(R.string.complete_activation) else if(jpApplication.status == "") getString(R.string.apply_now) else ""
+                if(actionButtonText == "")
+                    tv_mark_as_interest_role_details.gone()
+                else
+                    tv_mark_as_interest_role_details.text = actionButtonText
             }
 
 

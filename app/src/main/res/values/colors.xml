@@ -114,6 +114,8 @@
     <color name="gig_orange_light">#fee1cd</color>
     <color name="black_two">#313131</color>
     <color name="battleship_grey">#6d7278</color>
-
+    <color name="pending_color">#F7B500</color>
+    <color name="activated_color">#4E9405</color>
+    <color name="rejected_color">#FF000F</color>
 
 </resources>

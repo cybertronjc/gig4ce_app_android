@@ -29,10 +29,10 @@ class LandingScreenViewModel constructor(
     }
     val observerRole: SingleLiveEvent<Role> get() = _observerRole
 
-    private val _observerWorkOrder: SingleLiveEvent<JobProfile> by lazy {
-        SingleLiveEvent<JobProfile>();
+    private val _observerWorkOrder: SingleLiveEvent<ArrayList<JobProfile>> by lazy {
+        SingleLiveEvent<ArrayList<JobProfile>>();
     }
-    val observerWorkOrder: SingleLiveEvent<JobProfile> get() = _observerWorkOrder
+    val observerWorkOrder: SingleLiveEvent<ArrayList<JobProfile>> get() = _observerWorkOrder
 
 
     companion object {
@@ -227,10 +227,18 @@ class LandingScreenViewModel constructor(
     ) {
         if (error == null) {
             if (querySnapshot?.documents?.isNotEmpty() == true) {
-                val documentSnapshot = querySnapshot.documents[0]
-                val workOrder = documentSnapshot.toObject(JobProfile::class.java)
-                workOrder?.id = documentSnapshot.id
-                _observerWorkOrder.value = workOrder
+                var allClientActivations = ArrayList<JobProfile>()
+                for(clientActi in querySnapshot.documents){
+                    val jobProfileData = clientActi.toObject(JobProfile::class.java)
+                    jobProfileData?.let {
+                        jobProfileData.id = clientActi.id
+                        allClientActivations.add(jobProfileData)
+                    }
+                }
+                _observerWorkOrder.value = allClientActivations
+//                val workOrder = documentSnapshot
+//                workOrder?.id = documentSnapshot.id
+
 
             }
 

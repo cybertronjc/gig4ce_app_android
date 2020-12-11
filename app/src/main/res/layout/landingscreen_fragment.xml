@@ -404,102 +404,44 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <LinearLayout
-                    android:id="@+id/ll_see_more_client_activation"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignTop="@+id/cv_client_activation"
-                    android:layout_alignBottom="@+id/cv_client_activation"
-                    android:layout_alignParentEnd="true"
-                    android:layout_toEndOf="@+id/cv_client_activation"
-                    android:gravity="center"
-                    android:orientation="vertical"
-                    android:paddingStart="@dimen/size_41"
-                    android:paddingEnd="@dimen/size_24">
-
-
-                    <ImageView
-                        android:layout_width="@dimen/size_24"
-                        android:layout_height="@dimen/size_24"
-                        app:srcCompat="@drawable/ic_search_lipstick" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_horizontal"
-                        android:text="@string/see_more_underline"
-                        android:textColor="@color/lipstick"
-                        android:textSize="@dimen/font_14" />
-                </LinearLayout>
-
-
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/cv_client_activation"
-                    android:layout_width="wrap_content"
+                <FrameLayout
+                    android:id="@+id/client_activation_frame"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/tv_title_client_activation"
-                    android:layout_alignParentStart="true"
                     android:layout_marginTop="@dimen/size_16"
                     android:layout_marginBottom="@dimen/size_16"
-                    android:minWidth="@dimen/size_144"
-                    app:cardCornerRadius="4dp">
+                    android:minHeight="170dp">
 
-                    <androidx.constraintlayout.widget.ConstraintLayout
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/client_activation_rv"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="15dp"
+                        android:clipToPadding="false"
+                        android:paddingBottom="@dimen/size_4"
+                        android:paddingLeft="@dimen/size_16"
+                        android:nestedScrollingEnabled="false"
+                        android:paddingRight="20dp"
+                        android:visibility="gone"/>
 
+                    <ProgressBar
+                        android:id="@+id/client_activation_progress_bar"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center"
+                        android:visibility="gone" />
 
-                        <ImageView
-                            android:id="@+id/iv_client_activation"
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/size_144"
-                            android:adjustViewBounds="true"
-                            android:scaleType="centerCrop"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias="0.0"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                    <TextView
+                        android:id="@+id/client_activation_error"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:drawableTop="@drawable/ic_cross_grey"
+                        android:drawablePadding="10dp"
+                        tools:text="Unable to load your stuff" />
 
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="@color/white"
-                            android:paddingTop="@dimen/size_9"
-                            android:paddingBottom="@dimen/size_9"
-                            app:layout_constraintLeft_toLeftOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/iv_client_activation">
-
-                            <TextView
-                                android:id="@+id/tv_client_activation"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="4dp"
-                                android:layout_marginBottom="8dp"
-                                android:fontFamily="@font/lato"
-                                android:letterSpacing="0"
-                                android:textColor="#d9000000"
-                                android:textSize="14sp"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent"
-                                tools:text="Driver" />
-
-                            <TextView
-                                android:id="@+id/tv_sub_client_activation"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:ellipsize="end"
-                                android:singleLine="true"
-                                android:textColor="#000000"
-                                android:textSize="10sp"
-                                android:visibility="gone"
-                                app:layout_constraintStart_toStartOf="@+id/tv_client_activation"
-                                app:layout_constraintTop_toBottomOf="@+id/tv_client_activation"
-                                tools:text="Lorem Ipsum is simply dummy" />
-                        </androidx.constraintlayout.widget.ConstraintLayout>
-
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                </androidx.cardview.widget.CardView>
+                </FrameLayout>
             </RelativeLayout>
             <View
                 android:layout_width="match_parent"

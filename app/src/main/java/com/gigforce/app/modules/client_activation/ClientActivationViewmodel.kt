@@ -60,7 +60,7 @@ class ClientActivationViewmodel(
     fun getCoursesList(lessons: List<String>) {
         if (!lessons.isNullOrEmpty()) {
             _observableCourses.value = Lce.loading()
-            clientActivationRepository.db.collection("Course_blocks").whereIn("lesson_id", lessons)
+            clientActivationRepository.db.collection("Course_blocks").whereIn("course_id", lessons).whereEqualTo("lesson_type","video")
                 .addSnapshotListener { success, error ->
                     if (error != null) {
                         _observableCourses.value = Lce.error(error.message.toString())

@@ -32,7 +32,8 @@
             android:layout_marginEnd="@dimen/size_16"
             android:gravity="center|start"
             android:textColor="#000000"
-            android:textSize="@dimen/font_14" />
+            android:textSize="@dimen/font_14"
+            android:textStyle="bold"/>
     </LinearLayout>
 
     <TableLayout

@@ -20,6 +20,7 @@ data class JobProfile(
     var profileName: String = "",
     var totalSteps: Int = 0,
     var cardImage: String = "",
+    var cardTitle:String = "",
     var subTitle: String = ""
 //        var tags: List<String> = listOf()
 ) : Parcelable {
@@ -61,6 +62,7 @@ data class JobProfile(
         parcel.writeString(profileName)
         parcel.writeInt(totalSteps)
         parcel.writeString(cardImage)
+        parcel.writeString(cardTitle)
         parcel.writeString(subTitle)
     }
 
