@@ -29,12 +29,9 @@ import androidx.lifecycle.Observer
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gigforce.app.R
+import com.gigforce.app.core.*
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.base.dialog.ConfirmationDialogOnClickListener
-import com.gigforce.app.core.gone
-import com.gigforce.app.core.toLocalDate
-import com.gigforce.app.core.toLocalDateTime
-import com.gigforce.app.core.visible
 import com.gigforce.app.modules.gigPage.*
 import com.gigforce.app.modules.gigPage.models.Gig
 import com.gigforce.app.modules.gigPage.models.GigAttendance
@@ -441,10 +438,12 @@ class GigPage2Fragment : BaseFragment(), OtherOptionClickListener,
                 "C"
             else
                 gig.companyName!![0].toString().toUpperCase()
-            val drawable = TextDrawable.builder().beginConfig().textColor(R.color.colorPrimary).endConfig().buildRound(
-                companyInitials,
-                ResourcesCompat.getColor(resources, R.color.white, null)
-            )
+            val drawable =
+                TextDrawable.builder().beginConfig().textColor(R.color.colorPrimary).endConfig()
+                    .buildRound(
+                        companyInitials,
+                        ResourcesCompat.getColor(resources, R.color.white, null)
+                    )
 
             company_logo_iv.setImageDrawable(drawable)
         }
@@ -558,18 +557,51 @@ class GigPage2Fragment : BaseFragment(), OtherOptionClickListener,
 
         if (gig.isCheckInMarked()) {
             val gigStartDateTime = gig.attendance?.checkInTime!!
-            val currentTime = Date().time
-
-            val diffInMillisec: Long = currentTime - gigStartDateTime.time
-            val diffInHours: Long = TimeUnit.MILLISECONDS.toHours(diffInMillisec)
-            val diffInMin: Long = TimeUnit.MILLISECONDS.toMinutes(diffInMillisec) % 60
-
-            gig_timer_tv.text = "$diffInHours Hrs : $diffInMin Mins"
+            updateCurrentGigTimer(gigStartDateTime)
+            startCountUpTimer()
             gig_checkin_time_tv.text = "Since ${timeFormatter.format(gigStartDateTime)}, Today"
         } else {
             gig_timer_tv.text = "No Checkin yet"
             gig_checkin_time_tv.gone()
         }
+    }
+
+    private var countUpTimer: CountUpTimer? = null
+    private fun startCountUpTimer() {
+
+        if (countUpTimer == null) {
+            countUpTimer = object : CountUpTimer(3000000) {
+
+                override fun onTick(second: Int) {
+                    val startDateTime = viewModel.currentGig!!.startDateTime?.toDate()
+
+                    if (startDateTime != null)
+                        updateCurrentGigTimer(startDateTime)
+                }
+
+                override fun onFinish() {
+                    super.onFinish()
+                }
+            }
+            countUpTimer?.start()
+        }
+    }
+
+    private fun updateCurrentGigTimer(gigStartDateTime: Date) {
+        val currentTime = Date().time
+
+        val diffInMillisec: Long = currentTime - gigStartDateTime.time
+
+
+
+        val diffInHours: Long = if (diffInMillisec > 3600000)
+            TimeUnit.MILLISECONDS.toHours(diffInMillisec)
+        else
+            0L
+        val diffInMin: Long = TimeUnit.MILLISECONDS.toMinutes(diffInMillisec) % 60
+        val diffInSec: Long = TimeUnit.MILLISECONDS.toSeconds(diffInMillisec) % 60
+
+        gig_timer_tv.text = "$diffInHours Hrs : $diffInMin Mins : $diffInSec Sec"
     }
 
     private fun showFutureGigDetails(gig: Gig) {
@@ -602,7 +634,7 @@ class GigPage2Fragment : BaseFragment(), OtherOptionClickListener,
         val diffInMillisec: Long = gigStartDateTime.time - currentTime
         val diffInHours: Long = TimeUnit.MILLISECONDS.toHours(diffInMillisec)
 
-        if(diffInHours > 24){
+        if (diffInHours > 24) {
             val days = diffInHours / 24
             val hours = diffInHours % 24
 
@@ -675,6 +707,17 @@ class GigPage2Fragment : BaseFragment(), OtherOptionClickListener,
 
     override fun gigDeclined() {
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+        
+    }
+
+    override fun onPause() {
+        super.onPause()
+        countUpTimer?.cancel()
+        countUpTimer = null
     }
 
     override fun onRequestPermissionsResult(
