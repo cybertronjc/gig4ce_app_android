@@ -83,7 +83,6 @@ class AuthFlowFragment : BaseFragment() {
                 navigateWithAllPopupStack(R.id.loginSuccessfulFragment)
             }
         }
-        FirebaseAuth.getInstance().removeAuthStateListener(authStateListener!!)
 
     }
 

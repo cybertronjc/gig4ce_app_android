@@ -59,7 +59,7 @@ class GigActivationFragment : BaseFragment(),
         getDataFromIntents(savedInstanceState)
         val layoutParams: ConstraintLayout.LayoutParams =
             playerView.layoutParams as ConstraintLayout.LayoutParams
-        playerViewHeight = getScreenWidth(requireActivity()).height / 3
+        playerViewHeight = (getScreenWidth(requireActivity()).height *45)/ 100
         layoutParams.height = playerViewHeight
         playerView.layoutParams = layoutParams
 
