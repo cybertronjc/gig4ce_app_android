@@ -14,6 +14,8 @@ import com.google.firebase.auth.FirebaseUser
 
 class AuthFlowFragment : BaseFragment() {
 
+    private var authStateListener: FirebaseAuth.AuthStateListener? = null
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -37,9 +39,7 @@ class AuthFlowFragment : BaseFragment() {
                 )//, null, navOptionsPopToHome)
             }
             else -> {
-                FirebaseAuth.getInstance().addAuthStateListener {
-                    onAuthStateChanged(it.currentUser)
-                }
+                initAuthListener()
             }
         }
 
@@ -49,6 +49,14 @@ class AuthFlowFragment : BaseFragment() {
         return false
     }
 
+    private fun initAuthListener() {
+        authStateListener =
+            FirebaseAuth.AuthStateListener { firebaseAuth ->
+                onAuthStateChanged(firebaseAuth.currentUser)
+            }
+        FirebaseAuth.getInstance().addAuthStateListener(authStateListener!!)
+
+    }
 
 
     override fun onCreateView(
@@ -82,6 +90,8 @@ class AuthFlowFragment : BaseFragment() {
                 navigateWithAllPopupStack(R.id.loginSuccessfulFragment)
             }
         }
+        FirebaseAuth.getInstance().removeAuthStateListener(authStateListener!!)
+
     }
 
 }

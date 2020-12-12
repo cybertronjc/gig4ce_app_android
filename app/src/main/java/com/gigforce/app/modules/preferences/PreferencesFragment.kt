@@ -1,6 +1,7 @@
 package com.gigforce.app.modules.preferences
 
 import android.app.Dialog
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +14,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.request.RequestOptions
+import com.firebase.ui.auth.AuthUI
+import com.gigforce.app.MainActivity
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
@@ -284,9 +287,14 @@ class PreferencesFragment : BaseFragment() {
         val yesBtn = dialog.findViewById(R.id.yes) as TextView
         val noBtn = dialog.findViewById(R.id.cancel) as TextView
         yesBtn.setOnClickListener {
-            FirebaseAuth.getInstance().signOut()
+            AuthUI.getInstance()
+                .signOut(requireContext())
+                .addOnCompleteListener { // user is now signed out
+                    startActivity(Intent(requireActivity(), MainActivity::class.java))
+                    requireActivity().finish()
+                }
             removeIntroComplete()
-            popFragmentFromStack(R.id.settingFragment)
+            FirebaseAuth.getInstance().signOut()
             dialog.dismiss()
         }
         noBtn.setOnClickListener { dialog.dismiss() }
