@@ -12,8 +12,8 @@ class SelectPartnerSchoolViewModel(private val savedStateHandle: SavedStateHandl
 
     private val _observablePartnerSchool: MutableLiveData<PartnerSchool>
         get() = savedStateHandle.getLiveData(
-                StringConstants.SAVED_STATE.value,
-                null
+            StringConstants.SAVED_STATE.value,
+            null
         )
     val observablePartnerSchool: MutableLiveData<PartnerSchool> = _observablePartnerSchool
 
@@ -24,9 +24,11 @@ class SelectPartnerSchoolViewModel(private val savedStateHandle: SavedStateHandl
     val observableError: SingleLiveEvent<String> get() = _observableError
 
     fun getPartnerSchoolDetails(type: String, workOrderId: String) {
-        repository.getCollectionReference().whereEqualTo("type", type).whereEqualTo("jobProfileId", workOrderId).addSnapshotListener { success, err ->
+        repository.db.collection("JP_Settings").whereEqualTo("type", type)
+            .whereEqualTo("jobProfileId", workOrderId).addSnapshotListener { success, err ->
             if (err == null) {
-                _observablePartnerSchool.value = success?.toObjects(PartnerSchool::class.java)?.get(0)
+                _observablePartnerSchool.value =
+                    success?.toObjects(PartnerSchool::class.java)?.get(0)
             } else {
                 _observableError.value = err.message
 

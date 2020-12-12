@@ -375,6 +375,7 @@ class GigActivationFragment : BaseFragment(),
 
         override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
             super.onPlayerStateChanged(playWhenReady, playbackState)
+            if (playerView == null) return
             isPlayingVideo = playWhenReady && playbackState == Player.STATE_READY
             if (playbackState == Player.STATE_IDLE || !playWhenReady) {
                 playerView.keepScreenOn = false
@@ -383,7 +384,7 @@ class GigActivationFragment : BaseFragment(),
     }
 
     private fun releasePlayer() {
-        if (player != null) {
+        if (player != null && playerView != null) {
             playbackPosition = player!!.currentPosition
             currentWindow = player!!.currentWindowIndex
             playWhenReady = player!!.playWhenReady
