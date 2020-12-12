@@ -166,17 +166,24 @@ class ApplicationClientActivationViewModel : ViewModel() {
 
 
     suspend fun getJPApplication(workOrderID: String): JpApplication {
+        try {
+            val items =
+                repository.db.collection("JP_Applications").whereEqualTo("jpid", workOrderID)
+                    .whereEqualTo("gigerId", repository.getUID()).get()
+                    .await()
 
-        val items = repository.db.collection("JP_Applications").whereEqualTo("jpid", workOrderID)
-            .whereEqualTo("gigerId", repository.getUID()).get()
-            .await()
-
-        if (items.documents.isNullOrEmpty()) {
-            return JpApplication(JPId = workOrderID, gigerId = repository.getUID())
+            if (items.documents.isNullOrEmpty()) {
+                return JpApplication(JPId = workOrderID, gigerId = repository.getUID())
+            }
+            val toObject = items.toObjects(JpApplication::class.java).get(0)
+            toObject.id = items.documents[0].id
+            return toObject
+        } catch (e: Exception) {
+            _observableError.value = e.message;
         }
-        val toObject = items.toObjects(JpApplication::class.java).get(0)
-        toObject.id = items.documents[0].id
-        return toObject
+        return JpApplication()
+
+
     }
 
     suspend fun checkForQuestionnaire(workOrderID: String, type: String, title: String): Boolean {
@@ -205,23 +212,30 @@ class ApplicationClientActivationViewModel : ViewModel() {
 
 
     suspend fun checkIfCourseCompleted(moduleId: String): Boolean {
-        val data =
-            repository.db.collection("Course_Progress").whereEqualTo("uid", repository.getUID())
-                .whereEqualTo("type", "module").whereEqualTo("module_id", moduleId).get().await()
-        if (data.documents.isNullOrEmpty()) {
+        try {
+            val data =
+                repository.db.collection("Course_Progress").whereEqualTo("uid", repository.getUID())
+                    .whereEqualTo("type", "module").whereEqualTo("module_id", moduleId).get()
+                    .await()
+            if (data.documents.isNullOrEmpty()) {
+                return false
+            }
+            var allCourseProgress =
+                data.toObjects(GigActivationViewModel.CourseProgress::class.java).first()
+            allCourseProgress.lessonProgress.let {
+                var completed = true
+                for (lesson in it) {
+                    if (lesson.lessonType == "assessment" && !lesson.completed) {
+                        return false
+                    }
+                }
+                return completed
+            }
+        } catch (e: java.lang.Exception) {
+            _observableError.value = e.message
             return false
         }
-        var allCourseProgress =
-            data.toObjects(GigActivationViewModel.CourseProgress::class.java).first()
-        allCourseProgress.lessonProgress.let {
-            var completed = true
-            for (lesson in it) {
-                if (lesson.lessonType == "assessment" && !lesson.completed) {
-                    return false
-                }
-            }
-            return completed
-        }
+
         return false
     }
 
