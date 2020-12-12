@@ -287,16 +287,12 @@ class PreferencesFragment : BaseFragment() {
         val yesBtn = dialog.findViewById(R.id.yes) as TextView
         val noBtn = dialog.findViewById(R.id.cancel) as TextView
         yesBtn.setOnClickListener {
-            AuthUI.getInstance()
-                .signOut(requireContext())
-                .addOnCompleteListener { // user is now signed out
-                    startActivity(Intent(requireActivity(), MainActivity::class.java))
-                    requireActivity().finish()
-                }
-            removeIntroComplete()
             FirebaseAuth.getInstance().signOut()
+            removeIntroComplete()
+            popFragmentFromStack(R.id.settingFragment)
             dialog.dismiss()
         }
+
         noBtn.setOnClickListener { dialog.dismiss() }
         dialog.show()
     }

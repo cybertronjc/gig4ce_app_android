@@ -80,39 +80,6 @@ class VerifyOTP : BaseFragment() {
 //        }
     }
 
-    private fun initAuthListener() {
-        authStateListener =
-            AuthStateListener { firebaseAuth ->
-                onAuthStateChanged(firebaseAuth.currentUser)
-            }
-        FirebaseAuth.getInstance().addAuthStateListener(authStateListener!!)
-
-    }
-
-    private fun onAuthStateChanged(currentUser: FirebaseUser?) {
-        if (currentUser == null) {
-            navigate(
-                R.id.Login
-            )
-        } else {
-            var fragments = getFragmentManager()?.getFragments()
-            if (fragments != null && fragments?.size == 1) {
-                popAllBackStates()
-                navigateWithAllPopupStack(
-                    R.id.onboardingLoaderfragment
-                )
-//                val onboardingCompleted = isOnBoardingCompleted()
-//                if (!onboardingCompleted!!) {
-//                    navigateWithAllPopupStack(R.id.onboardingfragment)
-//                }
-//                else
-//                    navigateWithAllPopupStack(R.id.landinghomefragment)
-            } else {
-                navigateWithAllPopupStack(R.id.loginSuccessfulFragment)
-            }
-        }
-        FirebaseAuth.getInstance().removeAuthStateListener(authStateListener!!)
-    }
 
     private fun saveNewUsedMobileNumber() {
         var oldData = getAllMobileNumber()
@@ -141,7 +108,6 @@ class VerifyOTP : BaseFragment() {
                 showWrongOTPLayout(true)
             } else if (it.stateResponse == STATE_SIGNIN_SUCCESS) {
 //                navigate(R.id.action_verifyOTP_to_onOTPSuccess)
-                initAuthListener()
             }
         })
 

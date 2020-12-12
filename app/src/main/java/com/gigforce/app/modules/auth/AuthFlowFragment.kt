@@ -39,7 +39,9 @@ class AuthFlowFragment : BaseFragment() {
                 )//, null, navOptionsPopToHome)
             }
             else -> {
-                initAuthListener()
+                FirebaseAuth.getInstance().addAuthStateListener {
+                    onAuthStateChanged(it.currentUser)
+                }
             }
         }
 
@@ -47,15 +49,6 @@ class AuthFlowFragment : BaseFragment() {
 
     override fun isDeviceLanguageChangedDialogRequired(): Boolean {
         return false
-    }
-
-    private fun initAuthListener() {
-        authStateListener =
-            FirebaseAuth.AuthStateListener { firebaseAuth ->
-                onAuthStateChanged(firebaseAuth.currentUser)
-            }
-        FirebaseAuth.getInstance().addAuthStateListener(authStateListener!!)
-
     }
 
 
