@@ -133,8 +133,7 @@ class LearningCourseDetailsFragment : BaseFragment() {
                     PlayVideoDialogFragment.launch(
                             childFragmentManager = childFragmentManager,
                             moduleId = it.moduleId,
-                            lessonId = it.id,
-                        it.
+                            lessonId = it.id
                     )
 
 //                    navigate(

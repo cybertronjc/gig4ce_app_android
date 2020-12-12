@@ -104,7 +104,11 @@ data class CourseContent(
 
     @get:PropertyName("canUserFastForward")
     @set:PropertyName("canUserFastForward")
-    var canUserFastForward : Boolean = true
+    var canUserFastForward : Boolean = true,
+
+    @get:PropertyName("feedbackDialogRequire")
+    @set:PropertyName("feedbackDialogRequire")
+    var shouldShowFeedbackDialog : Boolean = false
 
     ) {
 
