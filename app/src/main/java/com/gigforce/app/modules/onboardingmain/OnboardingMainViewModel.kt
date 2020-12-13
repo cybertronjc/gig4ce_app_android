@@ -133,7 +133,7 @@ class OnboardingMainViewModel : ViewModel() {
         profileFirebaseRepository.setDataAsKeyValue("workStatus", selectedDataFromRecycler)
     }
 
-    fun setOnboardingCompleted(invite: String?, roleID: String) {
+    fun setOnboardingCompleted(invite: String?, roleID: String, jobProfileId: String) {
         if (!invite.isNullOrEmpty()) {
             var listener: ListenerRegistration? = null
             listener = profileFirebaseRepository.getCollectionReference()
@@ -150,7 +150,8 @@ class OnboardingMainViewModel : ViewModel() {
                                         Invites(
                                             profileFirebaseRepository.getUID(),
                                             Date(),
-                                            roleID
+                                            roleID,
+                                            jobProfileId
                                         )
                                     )
                                 )
@@ -163,7 +164,7 @@ class OnboardingMainViewModel : ViewModel() {
                                     FieldValue.arrayUnion(
                                         Invites(
                                             profileFirebaseRepository.getUID(),
-                                            Date(), roleID
+                                            Date(), roleID, jobProfileId
                                         )
                                     )
                                 )

@@ -2,12 +2,19 @@ package com.gigforce.app.modules.client_activation
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.location.Location
+import android.net.Uri
 import android.os.Bundle
 import android.text.Html
 import android.util.DisplayMetrics
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.PopupMenu
+import androidx.core.content.FileProvider
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
@@ -30,11 +37,25 @@ import com.google.android.flexbox.AlignItems
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.flexbox.JustifyContent
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.dynamiclinks.DynamicLink
+import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
+import com.google.firebase.dynamiclinks.ktx.dynamicLinks
+import com.google.firebase.dynamiclinks.ktx.shortLinkAsync
+import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.layout_fragment_client_activation.*
+import kotlinx.android.synthetic.main.layout_fragment_client_activation.tv_mark_as_interest_role_details
 import kotlinx.android.synthetic.main.layout_role_description.view.*
+import kotlinx.android.synthetic.main.layout_role_details_fragment.*
+import java.io.File
+import java.io.FileOutputStream
 
-class ClientActivationFragment : BaseFragment() {
+class ClientActivationFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
+    LocationUpdates.LocationUpdateCallbacks {
+    private var mInviteUserID: String? = null
+    private var mClientViaDeeplink: Boolean? = null
+
     private lateinit var mWordOrderID: String
     private lateinit var viewModel: ClientActivationViewmodel
     private var adapterPreferredLocation: AdapterPreferredLocation? = null
@@ -57,10 +78,11 @@ class ClientActivationFragment : BaseFragment() {
                 this,
                 SavedStateViewModelFactory(requireActivity().application, this)
             ).get(ClientActivationViewmodel::class.java)
+        viewModel.setRepository(if (FirebaseAuth.getInstance().currentUser?.uid == null) ClientActivationNewUserRepo() else ClientActivationRepository())
         setupPreferredLocationRv()
         setupBulletPontsRv()
-        initObservers()
         initClicks()
+        initObservers()
     }
 
 
@@ -80,15 +102,27 @@ class ClientActivationFragment : BaseFragment() {
             popBackState()
         }
 
+        iv_options_client_activation.setOnClickListener {
+            openPopupMenu(it, R.menu.menu_assessment_result, this, activity)
+        }
+
     }
 
     private fun getDataFromIntents(savedInstanceState: Bundle?) {
         savedInstanceState?.let {
             mWordOrderID = it.getString(StringConstants.WORK_ORDER_ID.value) ?: return@let
+            mClientViaDeeplink =
+                it.getBoolean(StringConstants.CLIENT_ACTIVATION_VIA_DEEP_LINK.value, false)
+            mInviteUserID = it.getString(StringConstants.INVITE_USER_ID.value) ?: return@let
+
+
         }
 
         arguments?.let {
             mWordOrderID = it.getString(StringConstants.WORK_ORDER_ID.value) ?: return@let
+            mClientViaDeeplink =
+                it.getBoolean(StringConstants.CLIENT_ACTIVATION_VIA_DEEP_LINK.value, false)
+            mInviteUserID = it.getString(StringConstants.INVITE_USER_ID.value) ?: return@let
         }
     }
 
@@ -140,12 +174,35 @@ class ClientActivationFragment : BaseFragment() {
             viewModel.getApplication(it?.profileId ?: "")
 
         })
+        viewModel.observableAddInterest.observe(viewLifecycleOwner, Observer {
+            pb_client_activation.gone()
+            if (it == true) {
+                navigate(
+                    R.id.fragment_application_client_activation, bundleOf(
+                        StringConstants.WORK_ORDER_ID.value to viewModel.observableWorkOrder.value?.profileId
+                    )
+                )
+            }
+        })
 
         viewModel.observableJpApplication.observe(viewLifecycleOwner, Observer { jpApplication ->
             pb_client_activation.gone()
 
             run {
-                tv_mark_as_interest_role_details.setOnClickListener {
+                if (FirebaseAuth.getInstance().currentUser?.uid == null) {
+                    iv_options_client_activation.gone()
+                    tv_mark_as_interest_role_details.setOnClickListener {
+                        navFragmentsData?.setData(
+                            bundleOf(
+                                StringConstants.WORK_ORDER_ID.value to mWordOrderID,
+                                StringConstants.CLIENT_ACTIVATION_VIA_DEEP_LINK.value to mClientViaDeeplink,
+                                StringConstants.INVITE_USER_ID.value to mInviteUserID
+                            )
+                        )
+                        navigate(R.id.Login)
+                    }
+                } else {
+                    tv_mark_as_interest_role_details.setOnClickListener {
 
 //                    if (jpApplication == null || jpApplication.stepDone == 1) {
                     if(jpApplication == null || jpApplication.status == "" || jpApplication.status == "Draft"){
@@ -182,6 +239,8 @@ class ClientActivationFragment : BaseFragment() {
                     tv_mark_as_interest_role_details.gone()
                 else
                     tv_mark_as_interest_role_details.text = actionButtonText
+            }
+
             }
 
 
@@ -457,7 +516,7 @@ class ClientActivationFragment : BaseFragment() {
 
                         //img.setImageResource(obj?.imgIcon!!)
                     })!!
-            recyclerGenericAdapter.setList(content)
+            recyclerGenericAdapter.list = content
             recyclerGenericAdapter.setLayout(R.layout.learning_bs_item)
             learning_rv.layoutManager = LinearLayoutManager(
                 activity?.applicationContext,
@@ -472,8 +531,113 @@ class ClientActivationFragment : BaseFragment() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString(StringConstants.WORK_ORDER_ID.value, mWordOrderID)
+        outState.putBoolean(
+            StringConstants.CLIENT_ACTIVATION_VIA_DEEP_LINK.value,
+            mClientViaDeeplink ?: false
+        )
+        outState.putString(StringConstants.INVITE_USER_ID.value, mInviteUserID)
 
 
+    }
+
+    override fun onMenuItemClick(item: MenuItem?): Boolean {
+        when (item?.itemId) {
+            R.id.action_share -> {
+                pb_client_activation.visible()
+                Firebase.dynamicLinks.shortLinkAsync {
+                    longLink =
+                        Uri.parse(buildDeepLink(Uri.parse("http://www.gig4ce.com/?job_profile_id=$mWordOrderID&invite=${viewModel.getUID()}")).toString())
+                }.addOnSuccessListener { result ->
+                    // Short link created
+                    val shortLink = result.shortLink
+                    shareToAnyApp(shortLink.toString())
+                }.addOnFailureListener {
+                    // Error
+                    // ...
+                    showToast(it.message!!);
+                }
+                return true
+            }
+        }
+        return false;
+    }
+
+    fun buildDeepLink(deepLink: Uri): Uri {
+        val dynamicLink = FirebaseDynamicLinks.getInstance().createDynamicLink()
+            .setLink(Uri.parse(deepLink.toString()))
+            .setDomainUriPrefix("https://gigforce.page.link/")
+            // Open links with this app on Android
+            .setAndroidParameters(DynamicLink.AndroidParameters.Builder().build())
+            // Open links with com.example.ios on iOS
+            .setIosParameters(DynamicLink.IosParameters.Builder("com.gigforce.ios").build())
+            .setSocialMetaTagParameters(
+                DynamicLink.SocialMetaTagParameters.Builder()
+                    .setTitle("Gigforce")
+                    .setDescription("Flexible work and learning platform")
+                    .setImageUrl(Uri.parse("https://firebasestorage.googleapis.com/v0/b/gig4ce-app.appspot.com/o/app_assets%2Fgigforce.jpg?alt=media&token=f7d4463b-47e4-4b8e-9b55-207594656161"))
+                    .build()
+            ).buildDynamicLink()
+
+        return dynamicLink.uri;
+    }
+
+    fun shareToAnyApp(url: String) {
+        try {
+            val shareIntent = Intent(Intent.ACTION_SEND)
+            shareIntent.type = "image/png"
+            shareIntent.putExtra(
+                Intent.EXTRA_SUBJECT,
+                getString(R.string.app_name)
+            )
+            val shareMessage = getString(R.string.looking_for_dynamic_working_hours) + " " + url
+            shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage)
+            val bitmap =
+                BitmapFactory.decodeResource(requireContext().resources, R.drawable.bg_gig_type)
+
+            //save bitmap to app cache folder
+
+            //save bitmap to app cache folder
+            val outputFile = File(requireContext().cacheDir, "share" + ".png")
+            val outPutStream = FileOutputStream(outputFile)
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, outPutStream)
+            outPutStream.flush()
+            outPutStream.close()
+            outputFile.setReadable(true, false)
+            shareIntent.putExtra(
+                Intent.EXTRA_STREAM, FileProvider.getUriForFile(
+                    requireContext(),
+                    requireContext().packageName + ".provider",
+                    outputFile
+                )
+            )
+            startActivity(Intent.createChooser(shareIntent, "choose one"))
+        } catch (e: Exception) {
+            //e.toString();
+        }
+        pb_client_activation.gone()
+    }
+
+    var locationUpdates: LocationUpdates? = LocationUpdates()
+    var location: Location? = null
+    override fun onDestroy() {
+        super.onDestroy()
+        locationUpdates!!.stopLocationUpdates(requireActivity())
+    }
+
+    override fun onResume() {
+        super.onResume()
+        locationUpdates!!.startUpdates(requireActivity())
+        locationUpdates!!.setLocationUpdateCallbacks(this)
+    }
+
+
+    override fun locationReceiver(location: Location?) {
+        this.location = location
+
+
+    }
+
+    override fun lastLocationReceiver(location: Location?) {
     }
 
 }

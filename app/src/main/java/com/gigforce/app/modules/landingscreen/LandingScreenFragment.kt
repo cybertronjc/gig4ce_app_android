@@ -115,7 +115,7 @@ class LandingScreenFragment : BaseFragment() {
         observers()
         broadcastReceiverForLanguageCahnge()
         checkforForceupdate()
-        checkIfRoleSharedViaDeeplink()
+        checkForDeepLink()
 //        checkforLanguagedSelectedForLastLogin()
         exploreByIndustryLayout?.let {
             when (comingFromOrGoingToScreen) {
@@ -137,8 +137,7 @@ class LandingScreenFragment : BaseFragment() {
 
     }
 
-
-    private fun checkIfRoleSharedViaDeeplink() {
+    private fun checkForDeepLink() {
         if (navFragmentsData?.getData()
                 ?.getBoolean(StringConstants.ROLE_VIA_DEEPLINK.value, false)!!
         ) {
@@ -155,6 +154,21 @@ class LandingScreenFragment : BaseFragment() {
             )
             navFragmentsData?.getData()?.putBoolean(StringConstants.ROLE_VIA_DEEPLINK.value, false)
 
+
+        } else if (navFragmentsData?.getData()
+                ?.getBoolean(StringConstants.CLIENT_ACTIVATION_VIA_DEEP_LINK.value, false)!!
+        ) {
+            navigate(
+                R.id.fragment_client_activation, bundleOf(
+                    StringConstants.WORK_ORDER_ID.value to navFragmentsData?.getData()
+                        ?.getString(StringConstants.WORK_ORDER_ID.value),
+                    StringConstants.CLIENT_ACTIVATION_VIA_DEEP_LINK.value to true,
+                    StringConstants.INVITE_USER_ID.value to navFragmentsData?.getData()
+                        ?.getString(StringConstants.INVITE_USER_ID.value)
+                )
+
+            )
+            navFragmentsData?.getData()?.putBoolean(StringConstants.CLIENT_ACTIVATION_VIA_DEEP_LINK.value, false)
 
         }
     }
@@ -202,16 +216,13 @@ class LandingScreenFragment : BaseFragment() {
             } else {
                 if (appVersion.get(0).toInt() < serverAPPVersion.get(0).toInt()) {
                     return true
-                } else if (appVersion.get(0).toInt() == serverAPPVersion.get(0).toInt() && appVersion.get(
-                        1
-                    ).toInt() < serverAPPVersion.get(1).toInt()
+                } else if (appVersion.get(0).toInt() == serverAPPVersion.get(0)
+                        .toInt() && appVersion.get(1).toInt() < serverAPPVersion.get(1).toInt()
                 ) {
                     return true
-                } else if (appVersion.get(0).toInt() == serverAPPVersion.get(0).toInt() && appVersion.get(
-                        1
-                    ).toInt() == serverAPPVersion.get(1).toInt() && appVersion.get(2).toInt() < serverAPPVersion.get(
-                        2
-                    ).toInt()
+                } else if (appVersion.get(0).toInt() == serverAPPVersion.get(0)
+                        .toInt() && appVersion.get(1).toInt() == serverAPPVersion.get(1)
+                        .toInt() && appVersion.get(2).toInt() < serverAPPVersion.get(2).toInt()
                 ) {
                     return true
                 } else return false
@@ -699,7 +710,7 @@ class LandingScreenFragment : BaseFragment() {
             about_us_cl.visibility = View.GONE
         }
         chat_icon_iv.setOnClickListener {
-            //            navigate(R.id.fakeGigContactScreenFragment)
+//            navigate(R.id.fakeGigContactScreenFragment)
         }
 
         contact_us.setOnClickListener {

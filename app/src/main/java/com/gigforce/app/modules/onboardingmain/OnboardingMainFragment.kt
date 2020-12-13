@@ -241,7 +241,8 @@ class OnboardingMainFragment : BaseFragment() {
         val inviteId = sharedDataInterface.getData(StringConstants.INVITE_USER_ID.value)
         viewModel.setOnboardingCompleted(
             inviteId,
-            navFragmentsData?.getData()?.getString(StringConstants.ROLE_ID.value) ?: ""
+            navFragmentsData?.getData()?.getString(StringConstants.ROLE_ID.value) ?: "",
+            navFragmentsData?.getData()?.getString(StringConstants.WORK_ORDER_ID.value) ?: ""
         )
         sharedDataInterface.remove(StringConstants.INVITE_USER_ID.value)
         saveOnBoardingCompleted()

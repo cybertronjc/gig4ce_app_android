@@ -1110,6 +1110,7 @@
     <string name="date_of_visit">Date of Visit</string>
     <string name="downloaded_certificate_exists">Downloaded Certificate Already Exists!!!</string>
     <string name="complete_activation">Complete Activation</string>
+    <string name="set_location_to_high_accuracy">Please turn on your location and set it to high accuracy to continue!!</string>
 
 
 </resources>

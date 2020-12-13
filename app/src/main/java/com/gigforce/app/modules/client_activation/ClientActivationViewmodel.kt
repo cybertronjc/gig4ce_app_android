@@ -1,5 +1,6 @@
 package com.gigforce.app.modules.client_activation
 
+import android.location.Location
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -9,14 +10,22 @@ import com.gigforce.app.modules.learning.models.LessonModel
 import com.gigforce.app.utils.Lce
 import com.gigforce.app.utils.SingleLiveEvent
 import com.gigforce.app.utils.StringConstants
+import com.google.android.gms.tasks.Task
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.ListenerRegistration
+import com.google.firebase.firestore.QuerySnapshot
+import java.lang.Exception
 
 class ClientActivationViewmodel(
     private val savedStateHandle: SavedStateHandle
-) : ViewModel() {
-    var initialized: Boolean = false
-    val clientActivationRepository = ClientActivationRepository()
+) : ViewModel(), ClientActivationNavCallbacks.ClientActivationResponseCallbacks {
 
+    private lateinit var clientActivationNavCallbacks: ClientActivationNavCallbacks
+    fun setRepository(callbacks: ClientActivationNavCallbacks) {
+        this.clientActivationNavCallbacks = callbacks;
+    }
+
+    var initialized: Boolean = false
     private val _observableWorkOrder: MutableLiveData<JobProfile>
         get() = savedStateHandle.getLiveData(
             StringConstants.SAVED_STATE.value,
@@ -39,66 +48,90 @@ class ClientActivationViewmodel(
     }
     val observableError: SingleLiveEvent<String> get() = _observableError
 
-    fun getWorkOrder(docID: String) {
-        clientActivationRepository.getCollectionReference().document(docID)
-            .addSnapshotListener { success, error ->
-                run {
+    private val _observableAddInterest: SingleLiveEvent<Boolean> by lazy {
+        SingleLiveEvent<Boolean>();
+    }
+    val observableAddInterest: SingleLiveEvent<Boolean> get() = _observableAddInterest
 
-                    if (error != null) {
-                        _observableError.value = error.message
-                    } else {
-                        val toObject = success?.toObject(JobProfile::class.java)
-                        savedStateHandle.set(StringConstants.SAVED_STATE.value, toObject)
-                        _observableWorkOrder.value = toObject
-                    }
-                    initialized = true
-                }
-            }
+    fun getWorkOrder(docID: String) {
+        clientActivationNavCallbacks.getWorkOrder(docID, this)
+
 
     }
 
     fun getCoursesList(lessons: List<String>) {
         if (!lessons.isNullOrEmpty()) {
             _observableCourses.value = Lce.loading()
-            clientActivationRepository.db.collection("Course_blocks").whereIn("course_id", lessons).whereEqualTo("lesson_type","video")
-                .addSnapshotListener { success, error ->
-                    if (error != null) {
-                        _observableCourses.value = Lce.error(error.message.toString())
-                    } else {
-                        val toObjects = success?.toObjects(LessonModel::class.java)
-                        _observableCourses.value = Lce.content(toObjects!!);
-                        savedStateHandle.set(
-                            StringConstants.SAVED_STATE_VIDEOS_CLIENT_ACT.value,
-                            toObjects
-                        )
-                    }
-
-                }
+            clientActivationNavCallbacks.getCoursesList(lessons, this)
         }
 
     }
 
     fun getApplication(workOrderId: String) {
-        var listener: ListenerRegistration? = null
-        listener = clientActivationRepository.db.collection("JP_Applications")
-            .whereEqualTo("jpid", workOrderId)
-            .whereEqualTo("gigerId", clientActivationRepository.getUID())
-            .addSnapshotListener { success, err ->
-                listener?.remove()
-                run {
-                    if (err == null) {
-                        if (!success?.documents.isNullOrEmpty()) {
-                            observableJpApplication.value =
-                                success?.toObjects(JpApplication::class.java)?.get(0)
-                        } else {
-                            observableJpApplication.value = null
+        clientActivationNavCallbacks.getApplication(workOrderId, this)
 
-                        }
-                    } else {
-                        observableJpApplication.value = null
-                    }
-                }
+    }
+
+    fun getUID(): String {
+        return clientActivationNavCallbacks.getUserID()
+    }
+
+    override fun lessonResponse(snapShot: QuerySnapshot?, exception: Exception?) {
+        if (exception != null) {
+            _observableCourses.value = Lce.error(exception.message.toString())
+        } else {
+            if (!snapShot?.documentChanges.isNullOrEmpty()) {
+                val toObjects = snapShot?.toObjects(LessonModel::class.java)
+                _observableCourses.value = Lce.content(toObjects!!);
+                savedStateHandle.set(
+                    StringConstants.SAVED_STATE_VIDEOS_CLIENT_ACT.value,
+                    toObjects
+                )
+            } else {
+                _observableCourses.value = Lce.error("No Videos Found!!!")
+
             }
+
+        }
+    }
+
+    override fun workOrderResponse(snapShot: DocumentSnapshot?, exception: Exception?) {
+        if (exception != null) {
+            _observableError.value = exception.message
+        } else {
+            val toObject = snapShot?.toObject(JobProfile::class.java)
+            savedStateHandle.set(StringConstants.SAVED_STATE.value, toObject)
+            _observableWorkOrder.value = toObject
+        }
+        initialized = true
+    }
+
+    override fun applicationResponse(snapShot: QuerySnapshot?, exception: Exception?) {
+
+        if (exception == null) {
+            if (!snapShot?.documents.isNullOrEmpty()) {
+                observableJpApplication.value =
+                    snapShot?.toObjects(JpApplication::class.java)?.get(0)
+            } else {
+                observableJpApplication.value = null
+
+            }
+        } else {
+            observableJpApplication.value = null
+        }
+
+    }
+
+    override fun addMarkInterestStatus(it: Task<Void>) {
+        if (it.isSuccessful) {
+            _observableAddInterest.value = true
+        } else {
+            _observableError.value = it.exception?.message
+        }
+    }
+
+    fun addInviteUserId(mInviteUserID: String, mWordOrderID: String, location: Location) {
+        clientActivationNavCallbacks.addInviteUserID(mWordOrderID, mInviteUserID, location, this)
     }
 
 

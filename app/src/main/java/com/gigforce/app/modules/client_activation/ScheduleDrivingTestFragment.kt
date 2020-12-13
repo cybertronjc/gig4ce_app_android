@@ -4,7 +4,9 @@ import android.graphics.Paint
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Handler
+import android.text.Editable
 import android.text.Html
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -36,6 +38,7 @@ import java.util.regex.Pattern
 class ScheduleDrivingTestFragment : BaseFragment(),
     DrivingCertSuccessDialog.DrivingCertSuccessDialogCallbacks,
     AdapterScheduleTestCb.AdapterScheduleTestCbCallbacks {
+    private var enableOtpEditText: Boolean = false
     private var countDownTimer: CountDownTimer? = null
     private lateinit var mWordOrderID: String
     private lateinit var mTitle: String
@@ -219,6 +222,18 @@ class ScheduleDrivingTestFragment : BaseFragment(),
     lateinit var match: Matcher;
 
     private fun initViews() {
+        txt_otp.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                verify_otp_button_schedule.isEnabled = enableOtpEditText && (s?.length ?: 0) >= 6
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            }
+
+        })
 
         resend_otp.paintFlags = resend_otp.paintFlags or Paint.UNDERLINE_TEXT_FLAG;
         otpnotcorrect_schedule_test.text =
@@ -299,7 +314,7 @@ class ScheduleDrivingTestFragment : BaseFragment(),
     }
 
     override fun enableConfirmOtpButton(enable: Boolean) {
-        verify_otp_button_schedule.isEnabled = enable
+        this.enableOtpEditText = enable
     }
 
 
