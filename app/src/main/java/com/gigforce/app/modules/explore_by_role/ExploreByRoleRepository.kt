@@ -39,7 +39,7 @@ class ExploreByRoleRepository : BaseFirestoreDBRepository(), ExploreByRoleCallba
                 "role_interests",
                 FieldValue.arrayUnion(
                     RoleInterests(
-                        roleID,
+                        interestID = roleID,
                         lat = location?.latitude.toString(),
                         lon = location?.longitude.toString(),
                         invitedBy = inviteID ?: ""

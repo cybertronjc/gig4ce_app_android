@@ -1,23 +1,18 @@
 package com.gigforce.app.modules.client_activation
 
 import android.location.Location
-import com.gigforce.app.core.base.basefirestore.BaseFirestoreDBRepository
-import com.gigforce.app.modules.profile.models.ClientActs
-import com.gigforce.app.modules.profile.models.RoleInterests
-import com.google.firebase.firestore.FieldValue
-
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
 
-class ClientActivationRepository : BaseFirestoreDBRepository(), ClientActivationNavCallbacks {
-    override fun getCollectionName(): String {
-        return "Job_Profiles"
-    }
+class ClientActivationNewUserRepo : ClientActivationNavCallbacks {
+    private var firebaseDB = FirebaseFirestore.getInstance()
+
 
     override fun getWorkOrder(
         docID: String,
         responseCallbacks: ClientActivationNavCallbacks.ClientActivationResponseCallbacks
     ) {
-        getCollectionReference().document(docID)
+        firebaseDB.collection("Job_Profiles").document(docID)
             .addSnapshotListener { success, error ->
                 run {
                     responseCallbacks.workOrderResponse(success, error)
@@ -31,7 +26,7 @@ class ClientActivationRepository : BaseFirestoreDBRepository(), ClientActivation
         lessons: List<String>,
         responseCallbacks: ClientActivationNavCallbacks.ClientActivationResponseCallbacks
     ) {
-        db.collection("Course_blocks").whereIn("lesson_id", lessons)
+        firebaseDB.collection("Course_blocks").whereIn("lesson_id", lessons)
             .addSnapshotListener { success, error ->
                 responseCallbacks.lessonResponse(success, error)
 
@@ -44,9 +39,9 @@ class ClientActivationRepository : BaseFirestoreDBRepository(), ClientActivation
         responseCallbacks: ClientActivationNavCallbacks.ClientActivationResponseCallbacks
     ) {
         var listener: ListenerRegistration? = null
-        listener = db.collection("JP_Applications")
+        listener = firebaseDB.collection("JP_Applications")
             .whereEqualTo("jpid", workOrderId)
-            .whereEqualTo("gigerId", getUID())
+            .whereEqualTo("gigerId", getUserID())
             .addSnapshotListener { success, err ->
                 listener?.remove()
                 run {
@@ -57,28 +52,15 @@ class ClientActivationRepository : BaseFirestoreDBRepository(), ClientActivation
 
     override fun addInviteUserID(
         mWorkOrderId: String,
-        mInviteUserId: String, location: Location,
+        mInviteUserId: String,
+        location: Location,
         responseCallbacks: ClientActivationNavCallbacks.ClientActivationResponseCallbacks
     ) {
-        db.collection("Profiles").document(getUID())
-            .update(
-                "invited_client_activations",
-                FieldValue.arrayUnion(
-                    ClientActs(
-                        jobProfileId = mWorkOrderId,
-                        lat = location.latitude.toString(),
-                        lon = location.longitude.toString(),
-                        invitedBy = mInviteUserId ?: ""
-                    )
-                )
-            )
-            .addOnCompleteListener {
-                responseCallbacks.addMarkInterestStatus(it)
-            }
+
     }
 
     override fun getUserID(): String {
-        return getUID()
+        return ""
     }
 
 

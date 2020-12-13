@@ -49,13 +49,28 @@ class MainActivity : AppCompatActivity(), NavFragmentsData {
         navController = this.findNavController(R.id.nav_fragment)
         navController.handleDeepLink(intent)
         when {
+            intent.getBooleanExtra(StringConstants.NAV_TO_CLIENT_ACT.value, false) -> {
+                navController.popBackStack()
+                navController.navigate(
+                    R.id.fragment_client_activation, bundleOf(
+                        StringConstants.WORK_ORDER_ID.value to intent.getStringExtra(StringConstants.WORK_ORDER_ID.value),
+                        StringConstants.INVITE_USER_ID.value to intent.getStringExtra(
+                            StringConstants.INVITE_USER_ID.value
+                        ),
+                        StringConstants.CLIENT_ACTIVATION_VIA_DEEP_LINK.value to true
+                    )
+                )
+            }
+
             intent.getBooleanExtra(StringConstants.NAV_TO_ROLE.value, false) -> {
 //                LandingScreenFragmentDirections.openRoleDetailsHome( intent.getStringExtra(StringConstants.ROLE_ID.value),true)
                 navController.popBackStack()
                 navController.navigate(
                     R.id.fragment_role_details, bundleOf(
                         StringConstants.ROLE_ID.value to intent.getStringExtra(StringConstants.ROLE_ID.value),
-                        StringConstants.INVITE_USER_ID.value to intent.getStringExtra(StringConstants.INVITE_USER_ID.value),
+                        StringConstants.INVITE_USER_ID.value to intent.getStringExtra(
+                            StringConstants.INVITE_USER_ID.value
+                        ),
                         StringConstants.ROLE_VIA_DEEPLINK.value to true
                     )
                 )
