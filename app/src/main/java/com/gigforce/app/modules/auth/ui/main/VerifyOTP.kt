@@ -16,9 +16,13 @@ import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.modules.auth.ui.main.LoginViewModel.Companion.STATE_SIGNIN_FAILED
 import com.gigforce.app.modules.auth.ui.main.LoginViewModel.Companion.STATE_SIGNIN_SUCCESS
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuth.AuthStateListener
+import com.google.firebase.auth.FirebaseUser
 import kotlinx.android.synthetic.main.otp_verification.*
 import java.util.regex.Matcher
 import java.util.regex.Pattern
+
 
 class VerifyOTP : BaseFragment() {
 
@@ -26,13 +30,15 @@ class VerifyOTP : BaseFragment() {
         fun newInstance() = VerifyOTP()
     }
 
+
+    private var authStateListener: FirebaseAuth.AuthStateListener? = null
     private var verificationId: String = ""
     private var mobile_number: String = ""
     var layout: View? = null;
     lateinit var viewModel: LoginViewModel
     var otpresentcounter = 0;
     private val OTP_NUMBER =
-            Pattern.compile("[0-9]{6}\$")
+        Pattern.compile("[0-9]{6}\$")
     lateinit var match: Matcher;
     var timerStarted = false
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,9 +50,9 @@ class VerifyOTP : BaseFragment() {
     }
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         viewModel = ViewModelProviders.of(this).get(LoginViewModel::class.java)
         viewModel.verificationId = verificationId.toString()
@@ -67,11 +73,13 @@ class VerifyOTP : BaseFragment() {
         listeners()
         observer()
         saveNewUsedMobileNumber()
+
 //        if(otpresentcounter>=2){
 //            layout.otptimertv.text = "try later!"
 //            Toast.makeText(layout.context, "Too many invalid attempts, Try again later!", Toast.LENGTH_SHORT).show()
 //        }
     }
+
 
     private fun saveNewUsedMobileNumber() {
         var oldData = getAllMobileNumber()
@@ -91,7 +99,7 @@ class VerifyOTP : BaseFragment() {
         spannableString1.setSpan(UnderlineSpan(), 0, str.length, 0)
         reenter_mobile.text = spannableString1
         textView29?.text =
-                "One Time Password (OTP) has been sent to your mobile " + mobile_number + ". Please enter the same here to login."
+            "One Time Password (OTP) has been sent to your mobile " + mobile_number + ". Please enter the same here to login."
     }
 
     private fun observer() {
@@ -150,7 +158,7 @@ class VerifyOTP : BaseFragment() {
 
     private fun navigateToLoginScreen() {
         val bundle = bundleOf(
-                "mobileno" to mobile_number
+            "mobileno" to mobile_number
 
         )
         popAllBackStates()

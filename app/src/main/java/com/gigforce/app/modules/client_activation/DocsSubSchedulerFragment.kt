@@ -23,10 +23,10 @@ import kotlinx.android.synthetic.main.fragment_docs_sub_scheduler.*
 
 
 class DocsSubSchedulerFragment : BaseFragment(),
-        SelectPartnerSchoolBottomSheet.SelectPartnerBsCallbacks,
-        TimeSlotsDialog.TimeSlotDialogCallbacks,
-        ConfirmationDialogDrivingTest.ConfirmationDialogDrivingTestCallbacks,
-        GigforceDatePickerDialog.GigforceDatePickerDialogCallbacks {
+    SelectPartnerSchoolBottomSheet.SelectPartnerBsCallbacks,
+    TimeSlotsDialog.TimeSlotDialogCallbacks,
+    ConfirmationDialogDrivingTest.ConfirmationDialogDrivingTestCallbacks,
+    GigforceDatePickerDialog.GigforceDatePickerDialogCallbacks {
     private val viewModel: DocSubSchedulerViewModel by viewModels()
 
     private var dateString: String? = null
@@ -38,8 +38,8 @@ class DocsSubSchedulerFragment : BaseFragment(),
 
 
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
 
         return inflateView(R.layout.fragment_docs_sub_scheduler, inflater, container)
@@ -55,50 +55,57 @@ class DocsSubSchedulerFragment : BaseFragment(),
     }
 
     private fun initObservers() {
+        viewModel.observablePartnerSchool.observe(viewLifecycleOwner, Observer {
+            set_preference_fot_test.text = Html.fromHtml(it.headerTitle)
 
-        viewModel.observableJpApplication.observe(viewLifecycleOwner, Observer {
-            pb_docs_submission.gone()
-            if (it == null) return@Observer
+            viewModel.observableJpApplication.observe(viewLifecycleOwner, Observer {
 
-            val address = it.partnerSchoolDetails
-            partnerAddress = address
+                pb_docs_submission.gone()
+                if (it == null) return@Observer
 
-            textView137.text =
+                val address = it.partnerSchoolDetails
+
+                partnerAddress = address
+
+                textView137.text =
                     Html.fromHtml(address?.name + "<br>" + address?.landmark + "<br>" + address?.city + "<br>"
                             + address?.timing + "<br>" + address?.contact?.map { "<b><font color=\'#000000\'>" + it.name + "</font></b>" }
-                            ?.reduce { a, o -> a + o }
+                        ?.reduce { a, o -> a + o }
                     )
-            iv_location.visible()
-            iv_contact.visible()
-            iv_location.setOnClickListener {
-                val uri =
+                iv_location.visible()
+                iv_contact.visible()
+                iv_location.setOnClickListener {
+                    val uri =
                         "http://maps.google.com/maps?saddr=" + "&daddr=" + address?.lat + "," + address?.lon
-                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
-                startActivity(intent)
-            }
-            iv_contact.setOnClickListener {
-                if (!address?.contact.isNullOrEmpty()) {
-                    val callIntent = Intent(Intent.ACTION_DIAL);
-                    callIntent.data = Uri.parse("tel: " + address?.contact!![0].number);
-                    startActivity(callIntent);
+                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
+                    startActivity(intent)
                 }
-            }
-            textView143.text = it.slotTime
-            selectedTimeSlot = it.slotTime
-            imageView36.gone()
-            textView139.text = it.slotDate
-            dateString = it.slotDate
-            imageView35.gone()
-            imageView34.gone()
-            slider_checkout.isLocked = false
-            slider_checkout.visibility = View.VISIBLE
-            stateChangeSlot()
-            textView136.text = getString(R.string.partner_address)
-            textView142.text = getString(R.string.slot_of_visit)
-            textView138.text = getString(R.string.date_of_visit)
+                iv_contact.setOnClickListener {
+                    if (!address?.contact.isNullOrEmpty()) {
+                        val callIntent = Intent(Intent.ACTION_DIAL);
+                        callIntent.data = Uri.parse("tel: " + address?.contact!![0].number);
+                        startActivity(callIntent);
+                    }
+                }
+                textView143.text = it.slotTime
+                selectedTimeSlot = it.slotTime
+                imageView36.gone()
+                textView139.text = it.slotDate
+                dateString = it.slotDate
+                imageView35.gone()
+                imageView34.gone()
+                slider_checkout.isLocked = false
+                slider_checkout.visibility = View.VISIBLE
+//            stateChangeSlot()
+                textView136.text = getString(R.string.partner_address)
+                textView142.text = getString(R.string.slot_of_visit)
+                textView138.text = getString(R.string.date_of_visit)
 
+            })
+            viewModel.getApplication(mWordOrderID, mType, mTitle)
         })
-        viewModel.getApplication(mWordOrderID, mType, mTitle)
+        viewModel.getPartnerSchoolDetails(mType, mWordOrderID);
+
 
     }
 
@@ -126,33 +133,36 @@ class DocsSubSchedulerFragment : BaseFragment(),
             newInstance.show(parentFragmentManager, TimeSlotsDialog::class.java.name)
         }
         slider_checkout.onSlideCompleteListener =
-                object : SlideToActView.OnSlideCompleteListener {
+            object : SlideToActView.OnSlideCompleteListener {
 
-                    override fun onSlideComplete(view: SlideToActView) {
+                override fun onSlideComplete(view: SlideToActView) {
 
-                        navigate(
-                                R.id.fragment_schedule_test,
-                                bundleOf(StringConstants.WORK_ORDER_ID.value to mWordOrderID,
-                                        StringConstants.TITLE.value to mTitle,
-                                        StringConstants.TYPE.value to mType)
+                    navigate(
+                        R.id.fragment_schedule_test,
+                        bundleOf(
+                            StringConstants.WORK_ORDER_ID.value to mWordOrderID,
+                            StringConstants.TITLE.value to mTitle,
+                            StringConstants.TYPE.value to mType
                         )
-                    }
+                    )
                 }
+            }
 
         view_date_picker.setOnClickListener {
             var gigforceDatePickerDialog = GigforceDatePickerDialog()
             gigforceDatePickerDialog
             gigforceDatePickerDialog.setCallbacks(this)
             gigforceDatePickerDialog.show(
-                    parentFragmentManager,
-                    GigforceDatePickerDialog::class.java.name
+                parentFragmentManager,
+                GigforceDatePickerDialog::class.java.name
             )
         }
         view7.setOnClickListener {
             val newInstance = SelectPartnerSchoolBottomSheet.newInstance(
-                    bundleOf(
-                            StringConstants.WORK_ORDER_ID.value to mWordOrderID
-                    )
+                bundleOf(
+                    StringConstants.WORK_ORDER_ID.value to mWordOrderID,
+                    StringConstants.TYPE.value to mType
+                )
             )
             newInstance.setCallbacks(this)
             newInstance.show(parentFragmentManager, SelectPartnerSchoolBottomSheet.javaClass.name)
@@ -200,13 +210,13 @@ class DocsSubSchedulerFragment : BaseFragment(),
     override fun setPartnerAddress(address: PartnerSchoolDetails) {
         this.partnerAddress = address;
         textView137.text =
-                Html.fromHtml(address.name + "<br>" + address.landmark + "<br>" + address.city + "<br>"
-                        + address.timing + "<br>" + address.contact.map { "<b><font color=\'#000000\'>" + it.name + "</font></b>" }
-                        .reduce { a, o -> a + o }
-                )
+            Html.fromHtml(address.name + "<br>" + address.landmark + "<br>" + address.city + "<br>"
+                    + address.timing + "<br>" + address.contact.map { "<b><font color=\'#000000\'>" + it.name + "</font></b>" }
+                .reduce { a, o -> a + o }
+            )
         iv_location.setOnClickListener {
             val uri =
-                    "http://maps.google.com/maps?saddr=" + "&daddr=" + address?.lat + "," + address?.lon
+                "http://maps.google.com/maps?saddr=" + "&daddr=" + address?.lat + "," + address?.lon
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
             startActivity(intent)
         }
@@ -232,7 +242,7 @@ class DocsSubSchedulerFragment : BaseFragment(),
         textView143.text = time
         imageView36.gone()
         checkIfCompleteProcessComplete()
-        stateChangeSlot()
+//        stateChangeSlot()
         textView142.text = getString(R.string.slot_of_visit)
 
     }
@@ -253,9 +263,9 @@ class DocsSubSchedulerFragment : BaseFragment(),
         dateString = ""
         selectedTimeSlot = ""
         val newInstance = SelectPartnerSchoolBottomSheet.newInstance(
-                bundleOf(
-                        StringConstants.WORK_ORDER_ID.value to mWordOrderID
-                )
+            bundleOf(
+                StringConstants.WORK_ORDER_ID.value to mWordOrderID
+            )
         )
         newInstance.setCallbacks(this)
         newInstance.show(parentFragmentManager, SelectPartnerSchoolBottomSheet.javaClass.name)
@@ -274,21 +284,21 @@ class DocsSubSchedulerFragment : BaseFragment(),
 
     private fun checkIfCompleteProcessComplete() {
         slider_checkout.isLocked =
-                !(!dateString.isNullOrEmpty() && partnerAddress != null && !selectedTimeSlot.isNullOrEmpty())
+            !(!dateString.isNullOrEmpty() && partnerAddress != null && !selectedTimeSlot.isNullOrEmpty())
         if (!slider_checkout.isLocked) {
             val confirmationDialogDrivingTest = ConfirmationDialogDrivingTest()
             confirmationDialogDrivingTest.setCallbacks(this@DocsSubSchedulerFragment)
             confirmationDialogDrivingTest.arguments = bundleOf(
-                    StringConstants.SELECTED_PARTNER.value to partnerAddress,
-                    StringConstants.SELECTED_TIME_SLOT.value to selectedTimeSlot,
-                    StringConstants.SELECTED_DATE.value to dateString,
-                    StringConstants.WORK_ORDER_ID.value to mWordOrderID,
-                    StringConstants.TITLE.value to mTitle,
-                    StringConstants.TYPE.value to mType
+                StringConstants.SELECTED_PARTNER.value to partnerAddress,
+                StringConstants.SELECTED_TIME_SLOT.value to selectedTimeSlot,
+                StringConstants.SELECTED_DATE.value to dateString,
+                StringConstants.WORK_ORDER_ID.value to mWordOrderID,
+                StringConstants.TITLE.value to mTitle,
+                StringConstants.TYPE.value to mType
             )
             confirmationDialogDrivingTest.show(
-                    parentFragmentManager,
-                    ConfirmationDialogDrivingTest::class.java.name
+                parentFragmentManager,
+                ConfirmationDialogDrivingTest::class.java.name
             )
         } else {
             when {

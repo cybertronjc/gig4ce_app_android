@@ -201,7 +201,7 @@ class QuestionnaireFragment : BaseFragment(), AdapterQuestionnaire.AdapterQuesti
                 currentDate.add(Calendar.YEAR, -yearToMinus)
                 currentDate.add(Calendar.MONTH, -monthToMinus)
                 currentDate.add(Calendar.DAY_OF_YEAR, -daysToMinus)
-                return (selectedDate.before(currentDate.time))
+                return (currentDate.time.before(selectedDate))
             }
         }
         return false

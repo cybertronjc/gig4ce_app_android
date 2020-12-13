@@ -114,7 +114,9 @@ class Login : BaseFragment() {
             when (it.stateResponse) {
                 LoginViewModel.STATE_CODE_SENT -> navigateToOTPVarificationScreen()
                 LoginViewModel.STATE_VERIFY_FAILED -> showToast(it.msg)
-                LoginViewModel.STATE_VERIFY_SUCCESS -> navigateToOTPVarificationScreen()
+                LoginViewModel.STATE_VERIFY_SUCCESS ->
+
+                    navigateToOTPVarificationScreen()
             }
         }
     }

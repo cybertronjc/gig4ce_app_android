@@ -17,6 +17,7 @@ import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
+import com.gigforce.app.modules.auth.ui.main.LoginResponse
 import com.gigforce.app.modules.auth.ui.main.LoginViewModel
 import com.gigforce.app.utils.ItemOffsetDecoration
 import com.gigforce.app.utils.Lce
@@ -32,7 +33,9 @@ import java.util.concurrent.TimeUnit
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
-class ScheduleDrivingTestFragment : BaseFragment(), DrivingCertSuccessDialog.DrivingCertSuccessDialogCallbacks, AdapterScheduleTestCb.AdapterScheduleTestCbCallbacks {
+class ScheduleDrivingTestFragment : BaseFragment(),
+    DrivingCertSuccessDialog.DrivingCertSuccessDialogCallbacks,
+    AdapterScheduleTestCb.AdapterScheduleTestCbCallbacks {
     private var countDownTimer: CountDownTimer? = null
     private lateinit var mWordOrderID: String
     private lateinit var mTitle: String
@@ -41,7 +44,11 @@ class ScheduleDrivingTestFragment : BaseFragment(), DrivingCertSuccessDialog.Dri
         AdapterScheduleTestCb()
     }
     val viewModel: ScheduleDrivingTestViewModel by viewModels()
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflateView(R.layout.layout_fragment_schedule_driving_test, inflater, container)
     }
 
@@ -64,11 +71,11 @@ class ScheduleDrivingTestFragment : BaseFragment(), DrivingCertSuccessDialog.Dri
 
     fun sendVerificationCode(phoneNumber: String) {
         PhoneAuthProvider.getInstance().verifyPhoneNumber(
-                phoneNumber, // Phone number to verify
-                60, // Timeout duration
-                TimeUnit.SECONDS, // Unit of timeout
-                requireActivity(), // Activity (for callback binding)
-                viewModel.callbacks // OnVerificationStateChangedCallbacks
+            phoneNumber, // Phone number to verify
+            60, // Timeout duration
+            TimeUnit.SECONDS, // Unit of timeout
+            requireActivity(), // Activity (for callback binding)
+            viewModel.callbacks // OnVerificationStateChangedCallbacks
         ) // ForceResendingToken from callbacks
     }
 
@@ -100,68 +107,72 @@ class ScheduleDrivingTestFragment : BaseFragment(), DrivingCertSuccessDialog.Dri
         })
         viewModel.liveState.observe(viewLifecycleOwner, Observer {
 
-            when (it) {
-                Lce.Loading -> {
+            when (it.stateResponse) {
 
 
+                ScheduleDrivingTestViewModel.CODE_SENT -> {
+                    pb_schedule_test.gone()
+                    showToast(it.msg)
+                    counterStart()
                 }
-                is Lce.Content -> {
-                    when (it.content) {
-                        ScheduleDrivingTestViewModel.CODE_SENT -> {
-                            pb_schedule_test.gone()
-                            counterStart()
-                        }
-                        ScheduleDrivingTestViewModel.VERIFY_FAILED -> {
-                            pb_schedule_test.gone()
-                            showToast("Something Went Wrong")
-                        }
-                        LoginViewModel.STATE_VERIFY_SUCCESS -> {
-
-                            viewModel.downloadCertificate(viewModel.applicationId, viewModel.submissionId).observe(viewLifecycleOwner, Observer {
-                                it?.let { resource ->
-                                    when (resource.status) {
-                                        Status.SUCCESS -> {
-                                            pb_schedule_test.visible()
-
-                                            viewModel.observableApplied.observe(viewLifecycleOwner, Observer { application ->
+                ScheduleDrivingTestViewModel.VERIFY_FAILED -> {
+                    pb_schedule_test.gone()
+                    showToast(it.msg)
+                }
+                ScheduleDrivingTestViewModel.VERIFY_SUCCESS -> {
+                    pb_schedule_test.visible()
+                    showToast(it.msg)
+                    countDownTimer?.cancel()
+                    showResendOTPMessage(false)
+                    viewModel.downloadCertificate(viewModel.applicationId, viewModel.submissionId)
+                        .observe(viewLifecycleOwner, Observer {
+                            it?.let { resource ->
+                                when (resource.status) {
+                                    Status.SUCCESS -> {
+                                        viewModel.observableApplied.observe(
+                                            viewLifecycleOwner,
+                                            Observer { application ->
                                                 pb_schedule_test.gone()
                                                 if (application == true) {
                                                     countDownTimer?.cancel()
-                                                    val drivingCertSuccessDialog = DrivingCertSuccessDialog()
+                                                    val drivingCertSuccessDialog =
+                                                        DrivingCertSuccessDialog()
                                                     drivingCertSuccessDialog.isCancelable = false
                                                     drivingCertSuccessDialog.arguments = bundleOf(
-                                                            StringConstants.DOC_URL.value to it.data?.downloadLink
+                                                        StringConstants.DOC_URL.value to it.data?.downloadLink
                                                     )
                                                     drivingCertSuccessDialog.setCallbacks(this)
                                                     drivingCertSuccessDialog
-                                                    drivingCertSuccessDialog.show(parentFragmentManager, DrivingCertSuccessDialog::class.java.name)
+                                                    drivingCertSuccessDialog.show(
+                                                        parentFragmentManager,
+                                                        DrivingCertSuccessDialog::class.java.name
+                                                    )
                                                 }
                                             })
-                                            viewModel.apply(mWordOrderID, mType, mTitle, adapter.selectedItems)
+                                        viewModel.apply(
+                                            mWordOrderID,
+                                            mType,
+                                            mTitle,
+                                            adapter.selectedItems
+                                        )
 
-                                        }
-                                        Status.ERROR -> {
-                                            pb_schedule_test.gone()
-                                            showToast(it.message ?: "")
+                                    }
+                                    Status.ERROR -> {
+                                        pb_schedule_test.gone()
+                                        showToast(it.message ?: "")
 
 
-                                        }
-                                        Status.LOADING -> {
-                                            pb_schedule_test.visible()
-                                        }
+                                    }
+                                    Status.LOADING -> {
+                                        pb_schedule_test.visible()
                                     }
                                 }
-                            })
-
-                        }
-                    }
-                }
-
-
-                is Lce.Error -> {
-
+                            }
+                        })
 
                 }
+
+
             }
 
 
@@ -204,13 +215,14 @@ class ScheduleDrivingTestFragment : BaseFragment(), DrivingCertSuccessDialog.Dri
     }
 
     private val OTP_NUMBER =
-            Pattern.compile("[0-9]{6}\$")
+        Pattern.compile("[0-9]{6}\$")
     lateinit var match: Matcher;
 
     private fun initViews() {
 
         resend_otp.paintFlags = resend_otp.paintFlags or Paint.UNDERLINE_TEXT_FLAG;
-        otpnotcorrect_schedule_test.text = Html.fromHtml("If you didn’t receive the OTP, <font color=\'#d72467\'>RESEND</font>")
+        otpnotcorrect_schedule_test.text =
+            Html.fromHtml("If you didn’t receive the OTP, <font color=\'#d72467\'>RESEND</font>")
         verify_otp_button_schedule?.setOnClickListener {
             val otpIn = txt_otp?.text
             match = OTP_NUMBER.matcher(otpIn)
@@ -221,7 +233,7 @@ class ScheduleDrivingTestFragment : BaseFragment(), DrivingCertSuccessDialog.Dri
                     // This method will be executed once the timer is over
                     if (verify_otp_button_schedule != null) {
                         verify_otp_button_schedule.setEnabled(true)
-                        pb_schedule_test.visibility = View.GONE
+
                     }
                 }, 3000)
                 pb_schedule_test.visible()
@@ -237,25 +249,25 @@ class ScheduleDrivingTestFragment : BaseFragment(), DrivingCertSuccessDialog.Dri
         showResendOTPMessage(false)
 
         countDownTimer =
-                object : CountDownTimer(30000, 1000) {
-                    override fun onTick(millisUntilFinished: Long) {
-                        var time = (millisUntilFinished / 1000)
-                        var timeStr: String = "00:"
-                        if (time.toString().length < 2) {
-                            timeStr = timeStr + "0" + time
-                        } else {
-                            timeStr = timeStr + time
-                        }
-                        timer_tv?.text = timeStr
-
+            object : CountDownTimer(30000, 1000) {
+                override fun onTick(millisUntilFinished: Long) {
+                    var time = (millisUntilFinished / 1000)
+                    var timeStr: String = "00:"
+                    if (time.toString().length < 2) {
+                        timeStr = timeStr + "0" + time
+                    } else {
+                        timeStr = timeStr + time
                     }
+                    timer_tv?.text = timeStr
 
-                    override fun onFinish() {
-                        showResendOTPMessage(true)
-                        if (reenter_mobile != null)
-                            reenter_mobile.visibility = View.VISIBLE
-                    }
-                }.start()
+                }
+
+                override fun onFinish() {
+                    showResendOTPMessage(true)
+                    if (reenter_mobile != null)
+                        reenter_mobile.visibility = View.VISIBLE
+                }
+            }.start()
     }
 
     fun showResendOTPMessage(isShow: Boolean) {
