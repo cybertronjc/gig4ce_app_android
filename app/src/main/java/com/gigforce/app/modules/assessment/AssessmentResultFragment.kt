@@ -429,7 +429,8 @@ class AssessmentResultFragment : BaseFragment(), PopupMenu.OnMenuItemClickListen
                         PlayVideoDialogFragment.launch(
                             childFragmentManager = childFragmentManager,
                             moduleId = cc.moduleId,
-                            lessonId = cc.id
+                            lessonId = cc.id,
+                            shouldShowFeedbackDialog = cc.shouldShowFeedbackDialog
                         )
                     }
                     CourseContent.TYPE_ASSESSMENT -> {
@@ -472,7 +473,8 @@ class AssessmentResultFragment : BaseFragment(), PopupMenu.OnMenuItemClickListen
                     PlayVideoDialogFragment.launch(
                         childFragmentManager = childFragmentManager,
                         moduleId = cc.moduleId,
-                        lessonId = cc.id
+                        lessonId = cc.id,
+                        shouldShowFeedbackDialog = cc.shouldShowFeedbackDialog
                     )
                 }
                 CourseContent.TYPE_ASSESSMENT -> {

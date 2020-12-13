@@ -20,7 +20,10 @@ data class LessonModel(
         var module_id: String = "",
         var lesson_id: String = "",
         var type: String = "",
-        var url: String = ""
+        var url: String = "",
+        @get:PropertyName("feedbackDialogRequire")
+        @set:PropertyName("feedbackDialogRequire")
+        var shouldShowFeedbackDialog : Boolean = false
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
             parcel.readString() ?: "",

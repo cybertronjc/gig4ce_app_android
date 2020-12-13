@@ -52,6 +52,7 @@ class PlayVideoDialogFragment : DialogFragment(), RateLessonDialogFragmentClosin
     private val viewModel: CourseVideoViewModel by viewModels()
     private var videoStateSaved: Boolean = false
     private var nextLessonContent: CourseContent? = null
+    private var shouldShowFeedbackDialog : Boolean = false
 
     private val navigationController: NavController by lazy {
         requireActivity().findNavController(R.id.nav_fragment)
@@ -70,12 +71,16 @@ class PlayVideoDialogFragment : DialogFragment(), RateLessonDialogFragmentClosin
 
             mLessonId = it.getString(INTENT_EXTRA_LESSON_ID) ?: return@let
             mModuleId = it.getString(INTENT_EXTRA_MODULE_ID) ?: return@let
+            shouldShowFeedbackDialog = it.getBoolean(
+                INTENT_EXTRA_SHOULD_SHOW_FEEDBACK_DIALOG_ON_COMPLETION)
         }
 
         arguments?.let {
 
             mLessonId = it.getString(INTENT_EXTRA_LESSON_ID) ?: return@let
             mModuleId = it.getString(INTENT_EXTRA_MODULE_ID) ?: return@let
+            shouldShowFeedbackDialog = it.getBoolean(
+                INTENT_EXTRA_SHOULD_SHOW_FEEDBACK_DIALOG_ON_COMPLETION)
         }
 
         return inflater.inflate(R.layout.fragment_play_video, container, false)
@@ -90,6 +95,7 @@ class PlayVideoDialogFragment : DialogFragment(), RateLessonDialogFragmentClosin
         outState.putLong("key_play_back_position", playbackPosition)
         outState.putString(INTENT_EXTRA_LESSON_ID, mLessonId)
         outState.putString(INTENT_EXTRA_MODULE_ID, mModuleId)
+        outState.putBoolean(INTENT_EXTRA_SHOULD_SHOW_FEEDBACK_DIALOG_ON_COMPLETION, shouldShowFeedbackDialog)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -209,7 +215,8 @@ class PlayVideoDialogFragment : DialogFragment(), RateLessonDialogFragmentClosin
                             PlayVideoDialogFragment.launch(
                                 childFragmentManager = childFragmentManager,
                                 moduleId = nextLessonContent!!.moduleId,
-                                lessonId = nextLessonContent!!.id
+                                lessonId = nextLessonContent!!.id,
+                                shouldShowFeedbackDialog = nextLessonContent!!.shouldShowFeedbackDialog
                             )
                         }
                         CourseContent.TYPE_ASSESSMENT -> {
@@ -406,26 +413,7 @@ class PlayVideoDialogFragment : DialogFragment(), RateLessonDialogFragmentClosin
         return ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(uri)
     }
 
-    companion object {
-        const val INTENT_EXTRA_LESSON_ID = "lesson_id"
-        const val INTENT_EXTRA_MODULE_ID = "module_id"
-        const val TAG = "PlayVideoDialogFragment"
 
-        fun launch(
-            childFragmentManager: FragmentManager,
-            moduleId: String,
-            lessonId: String
-        ) {
-            val frag = PlayVideoDialogFragment()
-            val bundle = bundleOf(
-                INTENT_EXTRA_MODULE_ID to moduleId,
-                INTENT_EXTRA_LESSON_ID to lessonId
-            )
-
-            frag.arguments = bundle
-            frag.show(childFragmentManager, TAG)
-        }
-    }
 
     inner class PlayerEventListener : Player.EventListener {
 
@@ -444,7 +432,7 @@ class PlayVideoDialogFragment : DialogFragment(), RateLessonDialogFragmentClosin
                 viewModel.currentVideoLesson?.let {
                     Log.d(TAG, mLessonId)
 
-                    if (it.shouldShowFeedbackDialog) {
+                    if (shouldShowFeedbackDialog) {
                         RateLessonDialogFragment.launch(
                             childFragmentManager,
                             this@PlayVideoDialogFragment,
@@ -468,5 +456,29 @@ class PlayVideoDialogFragment : DialogFragment(), RateLessonDialogFragmentClosin
 
     override fun rateLessonDialogDismissed() {
         dismiss()
+    }
+
+    companion object {
+        const val INTENT_EXTRA_LESSON_ID = "lesson_id"
+        const val INTENT_EXTRA_MODULE_ID = "module_id"
+        const val INTENT_EXTRA_SHOULD_SHOW_FEEDBACK_DIALOG_ON_COMPLETION = "show_feedback_dialog_on_completion"
+        const val TAG = "PlayVideoDialogFragment"
+
+        fun launch(
+            childFragmentManager: FragmentManager,
+            moduleId: String,
+            lessonId: String,
+            shouldShowFeedbackDialog : Boolean
+        ) {
+            val frag = PlayVideoDialogFragment()
+            val bundle = bundleOf(
+                INTENT_EXTRA_MODULE_ID to moduleId,
+                INTENT_EXTRA_LESSON_ID to lessonId,
+                INTENT_EXTRA_SHOULD_SHOW_FEEDBACK_DIALOG_ON_COMPLETION to shouldShowFeedbackDialog
+            )
+
+            frag.arguments = bundle
+            frag.show(childFragmentManager, TAG)
+        }
     }
 }

@@ -91,7 +91,8 @@ class CourseContentListFragment : BaseFragment() {
                     PlayVideoDialogFragment.launch(
                         childFragmentManager = childFragmentManager,
                         moduleId = it.moduleId,
-                        lessonId = it.id
+                        lessonId = it.id,
+                        shouldShowFeedbackDialog = it.shouldShowFeedbackDialog
                     )
                 }
                 else -> {

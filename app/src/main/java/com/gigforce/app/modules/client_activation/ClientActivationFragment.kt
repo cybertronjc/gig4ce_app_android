@@ -400,11 +400,9 @@ class ClientActivationFragment : BaseFragment() {
                         } else {
                             PlayVideoDialogFragment.launch(
                                 childFragmentManager = childFragmentManager,
-                                lessonId = viewModel.observableWorkOrder.value?.requiredMedia?.media?.get(
-                                    position
-                                )?.lessonId
-                                    ?: "", moduleId = ""
-
+                                lessonId = viewModel.observableWorkOrder.value?.requiredMedia?.media?.get(position)?.lessonId ?: "",
+                                moduleId = "",
+                                shouldShowFeedbackDialog = item.shouldShowFeedbackDialog
                             )
 
                         }
