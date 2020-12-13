@@ -14,7 +14,6 @@ import com.google.firebase.auth.FirebaseUser
 
 class AuthFlowFragment : BaseFragment() {
 
-    private var authStateListener: FirebaseAuth.AuthStateListener? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

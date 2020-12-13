@@ -31,7 +31,6 @@ class VerifyOTP : BaseFragment() {
     }
 
 
-    private var authStateListener: FirebaseAuth.AuthStateListener? = null
     private var verificationId: String = ""
     private var mobile_number: String = ""
     var layout: View? = null;
