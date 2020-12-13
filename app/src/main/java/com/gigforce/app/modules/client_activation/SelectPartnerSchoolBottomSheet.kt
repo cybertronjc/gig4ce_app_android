@@ -19,16 +19,23 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.ncorti.slidetoact.SlideToActView
 import kotlinx.android.synthetic.main.layout_select_partner_bottom_sheet.*
 
-class SelectPartnerSchoolBottomSheet : BottomSheetDialogFragment(), AdapterPartnerSchool.AdapterPartnerSchoolCallbacks {
+class SelectPartnerSchoolBottomSheet : BottomSheetDialogFragment(),
+    AdapterPartnerSchool.AdapterPartnerSchoolCallbacks {
     private lateinit var callbacks: SelectPartnerBsCallbacks
     private lateinit var mWordOrderID: String
+    private lateinit var mType: String
 
     private lateinit var viewModel: SelectPartnerSchoolViewModel
     private val adapter = AdapterPartnerSchool()
 
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.layout_select_partner_bottom_sheet, container, false
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        return inflater.inflate(
+            R.layout.layout_select_partner_bottom_sheet, container, false
         )
     }
 
@@ -36,12 +43,12 @@ class SelectPartnerSchoolBottomSheet : BottomSheetDialogFragment(), AdapterPartn
         rv_partner_school_address.adapter = adapter
         adapter.setCallbacks(this)
         rv_partner_school_address.layoutManager =
-                LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         rv_partner_school_address.addItemDecoration(
-                HorizontaltemDecoration(
-                        requireContext(),
-                        R.dimen.size_16
-                )
+            HorizontaltemDecoration(
+                requireContext(),
+                R.dimen.size_16
+            )
         )
 
     }
@@ -50,26 +57,34 @@ class SelectPartnerSchoolBottomSheet : BottomSheetDialogFragment(), AdapterPartn
         super.onViewCreated(view, savedInstanceState)
         getDataFromIntents(savedInstanceState)
         viewModel =
-                ViewModelProvider(
-                        this,
-                        SavedStateViewModelFactory(requireActivity().application, this)
-                ).get(SelectPartnerSchoolViewModel::class.java)
+            ViewModelProvider(
+                this,
+                SavedStateViewModelFactory(requireActivity().application, this)
+            ).get(SelectPartnerSchoolViewModel::class.java)
         setupRecyclerView()
         initObservers()
         initClicks()
 
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString(StringConstants.WORK_ORDER_ID.value, mWordOrderID)
+        outState.putString(StringConstants.TYPE.value, mType)
+
+
+    }
+
     private fun initClicks() {
 
         slider_okay_partner_school.onSlideCompleteListener =
-                object : SlideToActView.OnSlideCompleteListener {
+            object : SlideToActView.OnSlideCompleteListener {
 
-                    override fun onSlideComplete(view: SlideToActView) {
-                        callbacks.setPartnerAddress(adapter.getSelectedItem())
-                        this@SelectPartnerSchoolBottomSheet.dismiss()
-                    }
+                override fun onSlideComplete(view: SlideToActView) {
+                    callbacks.setPartnerAddress(adapter.getSelectedItem())
+                    this@SelectPartnerSchoolBottomSheet.dismiss()
                 }
+            }
     }
 
     private fun initObservers() {
@@ -85,7 +100,7 @@ class SelectPartnerSchoolBottomSheet : BottomSheetDialogFragment(), AdapterPartn
             pb_select_partner_bottom_sheet.gone()
 
         })
-        viewModel.getPartnerSchoolDetails("driving_certificate", mWordOrderID)
+        viewModel.getPartnerSchoolDetails(mType, mWordOrderID)
     }
 
     companion object {
@@ -99,11 +114,14 @@ class SelectPartnerSchoolBottomSheet : BottomSheetDialogFragment(), AdapterPartn
 
     private fun getDataFromIntents(savedInstanceState: Bundle?) {
         savedInstanceState?.let {
-            mWordOrderID = it.getString(StringConstants.WORK_ORDER_ID.value) ?: return@let
+            mWordOrderID = it.getString(StringConstants.WORK_ORDER_ID.value) ?: ""
+            mType = it.getString(StringConstants.TYPE.value) ?: ""
         }
 
         arguments?.let {
             mWordOrderID = it.getString(StringConstants.WORK_ORDER_ID.value) ?: return@let
+            mType = it.getString(StringConstants.TYPE.value) ?: ""
+
         }
     }
 

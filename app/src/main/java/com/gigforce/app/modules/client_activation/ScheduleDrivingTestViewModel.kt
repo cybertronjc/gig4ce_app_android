@@ -4,6 +4,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
+import com.gigforce.app.modules.auth.ui.main.LoginResponse
+import com.gigforce.app.modules.auth.ui.main.LoginViewModel
 import com.gigforce.app.modules.client_activation.models.*
 import com.gigforce.app.utils.Lce
 import com.gigforce.app.utils.SingleLiveEvent
@@ -28,7 +30,7 @@ class ScheduleDrivingTestViewModel : ViewModel() {
         SingleLiveEvent<String>();
     }
 
-    val liveState: MutableLiveData<Lce<Int>> = MutableLiveData<Lce<Int>>()
+    val liveState: MutableLiveData<LoginResponse> = MutableLiveData<LoginResponse>()
 
     val observableError: SingleLiveEvent<String> get() = _observableError
 
@@ -50,40 +52,40 @@ class ScheduleDrivingTestViewModel : ViewModel() {
     var verificationId: String? = null
     val callbacks = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
         override fun onVerificationCompleted(credential: PhoneAuthCredential) {
-            liveState.postValue(Lce.content(VERIFY_SUCCESS))
+            liveState.postValue(LoginResponse(VERIFY_SUCCESS, "OTP Verified"))
 //            signInWithPhoneAuthCredentialScheduleDrivingTest(credential)
         }
 
         override fun onVerificationFailed(e: FirebaseException) {
-            liveState.postValue(Lce.content(VERIFY_FAILED))
+            liveState.postValue(LoginResponse(VERIFY_FAILED, e.message ?: ""))
         }
 
         override fun onCodeSent(
-                _verificationId: String,
-                _token: PhoneAuthProvider.ForceResendingToken
+            _verificationId: String,
+            _token: PhoneAuthProvider.ForceResendingToken
         ) {
             super.onCodeSent(_verificationId, _token)
             verificationId = _verificationId
-            liveState.postValue(Lce.content(CODE_SENT))
+            liveState.postValue(LoginResponse(CODE_SENT, "OTP Sent Successfully"));
         }
     }
 
     suspend fun getJPApplication(
-            workOrderID: String,
-            type: String,
-            title: String
+        workOrderID: String,
+        type: String,
+        title: String
     ): DrivingCertificate? {
         val items = repository.db.collection("JP_Applications").whereEqualTo("jpid", workOrderID)
-                .whereEqualTo("gigerId", repository.getUID()).get()
-                .await()
+            .whereEqualTo("gigerId", repository.getUID()).get()
+            .await()
         if (items.documents.isNullOrEmpty()) {
             return null
         }
         applicationId = items.documents[0].id
         val submissions = repository.getCollectionReference().document(items.documents[0].id)
-                .collection("submissions").whereEqualTo("stepId", workOrderID).whereEqualTo(
-                        "title", title
-                ).whereEqualTo("type", type).get().await()
+            .collection("submissions").whereEqualTo("stepId", workOrderID).whereEqualTo(
+                "title", title
+            ).whereEqualTo("type", type).get().await()
         if (submissions.documents.isNullOrEmpty()) {
             return null
         }
@@ -95,98 +97,101 @@ class ScheduleDrivingTestViewModel : ViewModel() {
     fun getUIData(workOrderId: String) {
 
         repository.db.collection("JP_Settings").whereEqualTo("jobProfileId", workOrderId)
-                .whereEqualTo("type", "doc_receiving").addSnapshotListener { success, err ->
-                    if (err == null) {
-                        if (success?.documents?.isNotEmpty() == true) {
-                            _observableJPSettings.value =
-                                    success?.toObjects(DocReceiving::class.java)?.get(0)
+            .whereEqualTo("type", "doc_receiving").addSnapshotListener { success, err ->
+                if (err == null) {
+                    if (success?.documents?.isNotEmpty() == true) {
+                        _observableJPSettings.value =
+                            success?.toObjects(DocReceiving::class.java)?.get(0)
 
-                        }
-                    } else {
-                        _observableError.value = err.message
                     }
+                } else {
+                    _observableError.value = err.message
                 }
+            }
 
     }
 
     fun apply(
-            mWorkOrderID: String, type: String, title: String, options: List<CheckItem>
+        mWorkOrderID: String, type: String, title: String, options: List<CheckItem>
     ) = viewModelScope.launch {
 
 
         setInJPApplication(
-                mWorkOrderID,
-                type,
-                title,
-                options
+            mWorkOrderID,
+            type,
+            title,
+            options
         )
 
     }
 
 
     suspend fun setInJPApplication(
-            workOrderID: String,
-            type: String,
-            title: String, options: List<CheckItem>
+        workOrderID: String,
+        type: String,
+        title: String, options: List<CheckItem>
     ) {
         val items = repository.getCollectionReference().whereEqualTo("jpid", workOrderID)
-                .whereEqualTo("gigerId", repository.getUID()).get()
-                .await()
+            .whereEqualTo("gigerId", repository.getUID()).get()
+            .await()
         val submissions = repository.getCollectionReference().document(items.documents[0].id)
-                .collection("submissions").whereEqualTo("stepId", workOrderID).whereEqualTo(
-                        "title", title
-                ).whereEqualTo("type", type).get().await()
+            .collection("submissions").whereEqualTo("stepId", workOrderID).whereEqualTo(
+                "title", title
+            ).whereEqualTo("type", type).get().await()
 
         repository.db.collection("JP_Applications")
-                .document(items?.documents!![0].id)
-                .collection("submissions")
-                .document(submissions?.documents?.get(0)?.id!!)
-                .update(
-                        "certificate.options", options
-                )
-                .addOnCompleteListener { complete ->
-                    if (complete.isSuccessful) {
-                        val jpApplication =
-                                items.toObjects(JpApplication::class.java)[0]
-                        jpApplication.process.forEach { draft ->
-                            if (draft.type == "onsite_document") {
+            .document(items?.documents!![0].id)
+            .collection("submissions")
+            .document(submissions?.documents?.get(0)?.id!!)
+            .update(
+                "certificate.options", options
+            )
+            .addOnCompleteListener { complete ->
+                if (complete.isSuccessful) {
+                    val jpApplication =
+                        items.toObjects(JpApplication::class.java)[0]
+                    jpApplication.process.forEach { draft ->
+                        if (draft.type == "onsite_document") {
 
-                                options.forEach { item ->
-                                    run {
-                                        if (item.isForKitCollection) {
-                                            draft.isDone = true
-                                            draft.status = ""
-                                        }
-
+                            options.forEach { item ->
+                                run {
+                                    if (item.isForKitCollection) {
+                                        draft.isDone = true
+                                        draft.status = ""
                                     }
+
                                 }
                             }
-
-                            if (draft.title == title) {
-                                draft.isDone = true
-                                draft.isSlotBooked = true
-                                draft.status = ""
-
-
-                            }
                         }
-                        if (jpApplication.process.all {
-                                    it.isDone
-                                }) {
-                            jpApplication.status = "Applied"
+
+                        if (draft.title == title) {
+                            draft.isDone = true
+                            draft.isSlotBooked = true
+                            draft.status = ""
+
+
                         }
-                        repository.db.collection("JP_Applications")
-                                .document(items.documents[0].id)
-                                .update(mapOf("process" to jpApplication.process,
-                                        "status" to jpApplication.status
-                                ))
-                                .addOnCompleteListener {
-                                    if (it.isSuccessful) {
-                                        observableApplied.value = true
-                                    }
-                                }
                     }
+                    if (jpApplication.process.all {
+                            it.isDone
+                        }) {
+                        jpApplication.status = "Applied"
+                    }
+                    repository.db.collection("JP_Applications")
+                        .document(items.documents[0].id)
+                        .update(
+                            mapOf(
+                                "process" to jpApplication.process,
+                                "status" to jpApplication.status
+                            )
+                        )
+                        .addOnCompleteListener {
+                            if (it.isSuccessful) {
+                                observableApplied.value = true
+                            }
+                        }
                 }
+            }
 
 
     }
@@ -199,21 +204,28 @@ class ScheduleDrivingTestViewModel : ViewModel() {
 
     private fun signInWithPhoneAuthCredentialScheduleDrivingTest(credential: PhoneAuthCredential) {
         FirebaseAuth.getInstance()
-                .signInWithCredential(credential)
-                .addOnCompleteListener {
-                    if (it.isSuccessful) {
-                        liveState.postValue(Lce.content(VERIFY_SUCCESS))
+            .signInWithCredential(credential)
+            .addOnCompleteListener {
+                if (it.isSuccessful) {
+                    liveState.postValue(LoginResponse(VERIFY_SUCCESS, "OTP Verified"))
 
-                    } else {
-                        liveState.postValue(Lce.content(VERIFY_FAILED))
-                    }
+                } else {
+                    liveState.postValue(LoginResponse(VERIFY_FAILED, it.exception?.message ?: ""))
                 }
+            }
     }
 
     fun downloadCertificate(_id: String, drivingCertificateID: String) = liveData(Dispatchers.IO) {
         emit(Resource.loading(data = null))
         try {
-            emit(Resource.success(data = repository.getDrivingCertificate(_id, drivingCertificateID)))
+            emit(
+                Resource.success(
+                    data = repository.getDrivingCertificate(
+                        _id,
+                        drivingCertificateID
+                    )
+                )
+            )
         } catch (exception: Exception) {
             emit(Resource.error(data = null, message = exception.message ?: "Error Occurred!"))
         }

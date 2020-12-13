@@ -59,7 +59,7 @@ class GigActivationFragment : BaseFragment(),
         getDataFromIntents(savedInstanceState)
         val layoutParams: ConstraintLayout.LayoutParams =
             playerView.layoutParams as ConstraintLayout.LayoutParams
-        playerViewHeight = getScreenWidth(requireActivity()).height / 3
+        playerViewHeight = (getScreenWidth(requireActivity()).height *45)/ 100
         layoutParams.height = playerViewHeight
         playerView.layoutParams = layoutParams
 
@@ -375,6 +375,7 @@ class GigActivationFragment : BaseFragment(),
 
         override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
             super.onPlayerStateChanged(playWhenReady, playbackState)
+            if (playerView == null) return
             isPlayingVideo = playWhenReady && playbackState == Player.STATE_READY
             if (playbackState == Player.STATE_IDLE || !playWhenReady) {
                 playerView.keepScreenOn = false
@@ -383,7 +384,7 @@ class GigActivationFragment : BaseFragment(),
     }
 
     private fun releasePlayer() {
-        if (player != null) {
+        if (player != null && playerView != null) {
             playbackPosition = player!!.currentPosition
             currentWindow = player!!.currentWindowIndex
             playWhenReady = player!!.playWhenReady

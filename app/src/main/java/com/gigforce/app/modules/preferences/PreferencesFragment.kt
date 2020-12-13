@@ -1,6 +1,7 @@
 package com.gigforce.app.modules.preferences
 
 import android.app.Dialog
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +14,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.request.RequestOptions
+import com.firebase.ui.auth.AuthUI
+import com.gigforce.app.MainActivity
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
@@ -289,6 +292,7 @@ class PreferencesFragment : BaseFragment() {
             popFragmentFromStack(R.id.settingFragment)
             dialog.dismiss()
         }
+
         noBtn.setOnClickListener { dialog.dismiss() }
         dialog.show()
     }
