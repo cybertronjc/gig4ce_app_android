@@ -436,6 +436,66 @@
             app:layout_constraintTop_toBottomOf="@+id/industry" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <RelativeLayout
+        android:id="@+id/rl_cient_activation_bs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="@dimen/size_215">
+
+        <TextView
+            android:id="@+id/tv_title_client_activation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="17dp"
+            android:fontFamily="@font/lato"
+            android:letterSpacing="0"
+            android:text="@string/explore_gigs"
+            android:textColor="#080808"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <FrameLayout
+            android:id="@+id/client_activation_frame"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_title_client_activation"
+            android:layout_marginTop="@dimen/size_16"
+            android:layout_marginBottom="@dimen/size_16"
+            android:minHeight="170dp">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/client_activation_rv_bs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="15dp"
+                android:clipToPadding="false"
+                android:paddingBottom="@dimen/size_4"
+                android:paddingLeft="@dimen/size_16"
+                android:nestedScrollingEnabled="false"
+                android:paddingRight="20dp"
+                android:visibility="gone"/>
+
+            <ProgressBar
+                android:id="@+id/client_activation_progress_bar_bs"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/client_activation_error_bs"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:drawableTop="@drawable/ic_cross_grey"
+                android:drawablePadding="10dp"
+                tools:text="Unable to load your stuff" />
+
+        </FrameLayout>
+    </RelativeLayout>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="169dp">

@@ -43,6 +43,7 @@ import com.gigforce.app.core.genericadapter.RecyclerGenericAdapter
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.assessment.AssessmentFragment
+import com.gigforce.app.modules.client_activation.models.JobProfile
 import com.gigforce.app.modules.gigPage.GigAttendancePageFragment
 import com.gigforce.app.modules.gigPage.GigNavigation
 import com.gigforce.app.modules.gigPage.GigPageFragment
@@ -97,6 +98,7 @@ class BSCalendarScreenFragment : BaseFragment() {
         initializeBottomSheet()
         initGigViewModel()
         initLearningViewModel()
+        initializeClientActivation()
     }
 
     private fun initLearningViewModel() {
@@ -123,7 +125,7 @@ class BSCalendarScreenFragment : BaseFragment() {
             })
 
 
-         mainLearningViewModel.getAssessmentsFromAllAssignedCourses()
+        mainLearningViewModel.getAssessmentsFromAllAssignedCourses()
         learningViewModel.getRoleBasedCourses()
 
     }
@@ -658,7 +660,9 @@ class BSCalendarScreenFragment : BaseFragment() {
                 activity?.applicationContext,
                 PFRecyclerViewAdapter.OnViewHolderClick<FeatureModel?> { view, position, item ->
                     if (item?.navigationID != -1) {
-                        if (/*item?.title?.equals("Wallet") ?: false ||*/ item?.title?.equals("Chat") ?: false) {
+                        if (/*item?.title?.equals("Wallet") ?: false ||*/ item?.title?.equals("Chat")
+                                ?: false
+                        ) {
                             if (AppConstants.UNLOCK_FEATURE) {
                                 navigate(item?.navigationID!!)
                             } else showToast("This page are inactive. We’ll activate it in a few weeks")
@@ -934,5 +938,74 @@ class BSCalendarScreenFragment : BaseFragment() {
         cv_role.layoutParams = lp
 
 
+    }
+
+    private fun initializeClientActivation() {
+        landingScreenViewModel.observerWorkOrder.observe(viewLifecycleOwner, Observer { workOrder ->
+
+
+            run {
+                workOrder?.let {
+                    showClientActivations(workOrder)
+                }
+
+            }
+
+
+        })
+        landingScreenViewModel.getWorkOrder()
+
+    }
+
+    private fun showClientActivations(jobProfiles: ArrayList<JobProfile>) {
+
+        client_activation_progress_bar_bs.gone()
+        client_activation_error_bs.gone()
+        client_activation_rv_bs.visible()
+
+        if (jobProfiles.isEmpty()) {
+            rl_cient_activation_bs.gone()
+        } else {
+            rl_cient_activation_bs.visible()
+
+            val itemWidth = ((width / 3) * 2).toInt()
+            // model will change when integrated with DB
+
+            val recyclerGenericAdapter: RecyclerGenericAdapter<JobProfile> =
+                RecyclerGenericAdapter<JobProfile>(
+                    activity?.applicationContext,
+                    PFRecyclerViewAdapter.OnViewHolderClick<JobProfile?> { view, position, item ->
+                        navigate(
+                            R.id.fragment_client_activation,
+                            bundleOf(StringConstants.WORK_ORDER_ID.value to item?.id)
+                        )
+                    },
+                    RecyclerGenericAdapter.ItemInterface<JobProfile?> { obj, viewHolder, position ->
+
+                        var view = getView(viewHolder, R.id.top_to_cardview)
+                        val lp = view.layoutParams
+                        lp.height = lp.height
+                        lp.width = itemWidth
+                        view.layoutParams = lp
+
+                        showGlideImage(
+                            obj?.cardImage ?: "",
+                            getImageView(viewHolder, R.id.iv_client_activation)
+                        )
+                        getTextView(viewHolder, R.id.tv_client_activation).text = obj?.cardTitle
+                        getTextView(viewHolder, R.id.tv_sub_client_activation).text = obj?.title
+
+                        //img.setImageResource(obj?.imgIcon!!)
+                    })!!
+            recyclerGenericAdapter.setList(jobProfiles)
+            recyclerGenericAdapter.setLayout(R.layout.client_activation_item)
+            client_activation_rv_bs.layoutManager = LinearLayoutManager(
+                activity?.applicationContext,
+                LinearLayoutManager.HORIZONTAL,
+                false
+            )
+            client_activation_rv_bs.adapter = recyclerGenericAdapter
+
+        }
     }
 }
