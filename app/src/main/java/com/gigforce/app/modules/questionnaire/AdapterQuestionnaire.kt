@@ -41,7 +41,7 @@ class AdapterQuestionnaire : RecyclerView.Adapter<AdapterQuestionnaire.ViewHolde
         holder.itemView.tv_question_no_questionnaire.text = Html.fromHtml(
             "${holder.itemView.resources.getString(R.string.ques)} ${position + 1}/${items?.size} :"
         )
-        holder.itemView.tv_question_questionnaire.text = question.question
+        holder.itemView.tv_question_questionnaire.text = Html.fromHtml(question.question)
         if (question.url.isNotEmpty()) {
             holder.itemView.iv_hint_questionnaire.visible()
             Glide.with(holder.itemView).load(question.url)
