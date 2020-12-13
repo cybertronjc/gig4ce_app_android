@@ -187,7 +187,8 @@ class RateLessonDialogFragment : DialogFragment() {
                 PlayVideoDialogFragment.launch(
                     childFragmentManager = childFragmentManager,
                     moduleId = nextLessonContent!!.moduleId,
-                    lessonId = nextLessonContent!!.id
+                    lessonId = nextLessonContent!!.id,
+                    shouldShowFeedbackDialog = nextLessonContent!!.shouldShowFeedbackDialog
                 )
             }
             CourseContent.TYPE_ASSESSMENT -> {
