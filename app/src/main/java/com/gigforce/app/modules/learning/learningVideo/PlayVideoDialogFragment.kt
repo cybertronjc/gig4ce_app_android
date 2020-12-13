@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import androidx.appcompat.app.AlertDialog
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
@@ -20,7 +21,9 @@ import androidx.navigation.findNavController
 import com.gigforce.app.R
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
+import com.gigforce.app.modules.assessment.AssessmentFragment
 import com.gigforce.app.modules.learning.models.CourseContent
+import com.gigforce.app.modules.learning.slides.SlidesFragment
 import com.gigforce.app.modules.learning.slides.types.VideoWithTextFragment
 import com.gigforce.app.utils.Lce
 import com.google.android.exoplayer2.C
@@ -32,6 +35,7 @@ import com.google.android.exoplayer2.ui.AspectRatioFrameLayout
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import kotlinx.android.synthetic.main.fragment_play_video.*
 import kotlinx.android.synthetic.main.fragment_play_video_main.*
+import kotlinx.android.synthetic.main.layout_learning_lesson_complete.*
 
 
 class PlayVideoDialogFragment : DialogFragment(), RateLessonDialogFragmentClosingListener {
@@ -47,6 +51,7 @@ class PlayVideoDialogFragment : DialogFragment(), RateLessonDialogFragmentClosin
     private var player: SimpleExoPlayer? = null
     private val viewModel: CourseVideoViewModel by viewModels()
     private var videoStateSaved: Boolean = false
+    private var nextLessonContent: CourseContent? = null
 
     private val navigationController: NavController by lazy {
         requireActivity().findNavController(R.id.nav_fragment)
@@ -174,8 +179,72 @@ class PlayVideoDialogFragment : DialogFragment(), RateLessonDialogFragmentClosin
                 }
             })
 
+        viewModel.openNextDestination.observe(viewLifecycleOwner, Observer { cc ->
+            showLessonCompleteDialog()
+            nextLessonContent = cc
+        })
+
         viewModel.getVideoDetails(mModuleId, mLessonId)
     }
+
+    private var lessonCompleteDialog: AlertDialog? = null
+    private var lessonCompleteDialogView: View? = null
+
+    private fun showLessonCompleteDialog() {
+
+        if (lessonCompleteDialogView == null) {
+
+            lessonCompleteDialogView = layoutInflater.inflate(R.layout.layout_learning_lesson_complete, null)
+            lessonCompleteDialog = AlertDialog.Builder(requireContext())
+                .setView(lessonCompleteDialogView)
+                .show()
+
+            lessonCompleteDialogView?.findViewById<View>(R.id.tv_action_next_lesson)
+                ?.setOnClickListener {
+                    lessonCompleteDialog?.dismiss()
+                    backPressed()
+
+                    when (nextLessonContent?.type) {
+                        CourseContent.TYPE_VIDEO -> {
+                            PlayVideoDialogFragment.launch(
+                                childFragmentManager = childFragmentManager,
+                                moduleId = nextLessonContent!!.moduleId,
+                                lessonId = nextLessonContent!!.id
+                            )
+                        }
+                        CourseContent.TYPE_ASSESSMENT -> {
+                            navigationController.navigate(
+                                R.id.assessment_fragment, bundleOf(
+                                    AssessmentFragment.INTENT_LESSON_ID to nextLessonContent!!.id,
+                                    AssessmentFragment.INTENT_MODULE_ID to nextLessonContent!!.moduleId
+                                )
+                            )
+                        }
+                        CourseContent.TYPE_SLIDE -> {
+                            navigationController.navigate(
+                                R.id.slidesFragment, bundleOf(
+                                    SlidesFragment.INTENT_EXTRA_SLIDE_TITLE to nextLessonContent!!.title,
+                                    SlidesFragment.INTENT_EXTRA_MODULE_ID to nextLessonContent!!.moduleId,
+                                    SlidesFragment.INTENT_EXTRA_LESSON_ID to nextLessonContent!!.id
+                                )
+                            )
+                        }
+                        else -> {
+                            clearBackStackToContentList()
+                            dismiss()
+                        }
+                    }
+                }
+        } else {
+            if (lessonCompleteDialog!!.isShowing.not()) {
+                lessonCompleteDialog!!.show()
+            }
+
+            lessonCompleteDialog?.pb_lesson_complete_dialog?.gone()
+            lessonCompleteDialog?.parent_assessment_dialog?.visible()
+        }
+    }
+
 
     private fun clearBackStackToContentList() {
         try {
@@ -371,7 +440,25 @@ class PlayVideoDialogFragment : DialogFragment(), RateLessonDialogFragmentClosin
 
                 //Open Complete dialog
                 changeOrientation()
-                RateLessonDialogFragment.launch(childFragmentManager, this@PlayVideoDialogFragment,mModuleId, mLessonId)
+
+                viewModel.currentVideoLesson?.let {
+                    Log.d(TAG, mLessonId)
+
+                    if (it.shouldShowFeedbackDialog) {
+                        RateLessonDialogFragment.launch(
+                            childFragmentManager,
+                            this@PlayVideoDialogFragment,
+                            mModuleId,
+                            mLessonId
+                        )
+                    } else {
+                        showLessonCompleteDialog()
+                        viewModel.markVideoAsComplete(
+                            moduleId = mModuleId,
+                            lessonId = mLessonId
+                        )
+                    }
+                }
             } else { // STATE_IDLE, STATE_ENDED
                 // This prevents the screen from getting dim/lock
                 playerView.keepScreenOn = true

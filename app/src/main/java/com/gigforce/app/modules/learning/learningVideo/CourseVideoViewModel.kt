@@ -21,7 +21,8 @@ class CourseVideoViewModel constructor(
     private val learningRepository: LearningRepository = LearningRepository()
 ) : ViewModel() {
 
-    private var mCourseContent: CourseContent? = null
+    private var videoLesson: CourseContent? = null
+    val currentVideoLesson : CourseContent? get() = videoLesson
 
     private val _videoDetails = MutableLiveData<Lce<CourseContent>>()
     val videoDetails: LiveData<Lce<CourseContent>> = _videoDetails
@@ -41,7 +42,7 @@ class CourseVideoViewModel constructor(
                 _videoDetails.postValue(Lce.error("No Video Lesson Found"))
             else {
                 val moduleProgress = learningRepository.getModuleProgress(moduleId)
-                val videoLesson = videoLessons.first()
+                videoLesson = videoLessons.first()
 
                 val videoProgress = moduleProgress?.lessonsProgress?.find {
                     it.lessonId == lessonId
@@ -62,12 +63,12 @@ class CourseVideoViewModel constructor(
                         )
                     }
 
-                    videoLesson.currentlyOnGoing = videoProgress.ongoing
-                    videoLesson.completed = videoProgress.completed
-                    videoLesson.completionProgress = videoProgress.completionProgress
-                    videoLesson.lessonTotalLength = videoProgress.lessonTotalLength
+                    videoLesson?.currentlyOnGoing = videoProgress.ongoing
+                    videoLesson?.completed = videoProgress.completed
+                    videoLesson?.completionProgress = videoProgress.completionProgress
+                    videoLesson?.lessonTotalLength = videoProgress.lessonTotalLength
                 }
-                _videoDetails.postValue(Lce.content(videoLesson))
+                _videoDetails.postValue(Lce.content(videoLesson!!))
 
             }
         } catch (e: Exception) {
