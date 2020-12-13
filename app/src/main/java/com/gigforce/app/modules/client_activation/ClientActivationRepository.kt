@@ -31,7 +31,7 @@ class ClientActivationRepository : BaseFirestoreDBRepository(), ClientActivation
         lessons: List<String>,
         responseCallbacks: ClientActivationNavCallbacks.ClientActivationResponseCallbacks
     ) {
-        db.collection("Course_blocks").whereIn("lesson_id", lessons)
+        db.collection("Course_blocks").whereIn("course_id", lessons).whereEqualTo("lesson_type","video")
             .addSnapshotListener { success, error ->
                 responseCallbacks.lessonResponse(success, error)
 
