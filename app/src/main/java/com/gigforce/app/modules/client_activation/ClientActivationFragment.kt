@@ -22,6 +22,7 @@ import androidx.lifecycle.SavedStateViewModelFactory
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.gigforce.app.BuildConfig
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
@@ -565,6 +566,7 @@ class ClientActivationFragment : BaseFragment(), PopupMenu.OnMenuItemClickListen
     fun buildDeepLink(deepLink: Uri): Uri {
         val dynamicLink = FirebaseDynamicLinks.getInstance().createDynamicLink()
             .setLink(Uri.parse(deepLink.toString()))
+            .setDomainUriPrefix(BuildConfig.REFERRAL_BASE_URL)
             .setDomainUriPrefix("https://gigforce.page.link/")
             // Open links with this app on Android
             .setAndroidParameters(DynamicLink.AndroidParameters.Builder().build())
