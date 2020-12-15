@@ -5,7 +5,8 @@ import android.os.Parcelable
 
 data class PartnerSchool(
     var jobProfileId: String = "", var type: String = "", var addressList
-    : List<PartnerSchoolDetails> = listOf(), var headerTitle: String = ""
+    : List<PartnerSchoolDetails> = listOf(), var headerTitle: String = "",
+    var checkoutConfig: DocReceiving? = null
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString() ?: "",

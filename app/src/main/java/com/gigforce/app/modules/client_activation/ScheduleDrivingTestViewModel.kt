@@ -96,12 +96,12 @@ class ScheduleDrivingTestViewModel : ViewModel() {
 
     fun getUIData(workOrderId: String) {
 
-        repository.db.collection("JP_Settings").whereEqualTo("jobProfileId", workOrderId)
-            .whereEqualTo("type", "doc_receiving").addSnapshotListener { success, err ->
+        repository.db.collection("JP_Settings").limit(1).whereEqualTo("jobProfileId", workOrderId)
+            .whereEqualTo("type", "driving_certificate").addSnapshotListener { success, err ->
                 if (err == null) {
                     if (success?.documents?.isNotEmpty() == true) {
                         _observableJPSettings.value =
-                            success.toObjects(DocReceiving::class.java)[0]
+                            success.toObjects(PartnerSchool::class.java)[0].checkoutConfig
 
                     }
                 } else {
