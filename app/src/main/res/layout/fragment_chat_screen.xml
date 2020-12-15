@@ -53,7 +53,7 @@
                 android:fontFamily="@font/lato"
                 android:text="NA"
                 android:textColor="#d72467"
-                android:textSize="16sp"
+                android:textSize="22sp"
                 app:layout_constraintStart_toEndOf="@+id/first_member"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -61,7 +61,7 @@
                 android:id="@+id/tv_lastSeenValue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="NA"
+                android:visibility="gone"
                 android:textColor="@color/gray_chat_module"
                 android:textSize="12sp"
                 app:layout_constraintStart_toStartOf="@+id/tv_nameValueInChat"

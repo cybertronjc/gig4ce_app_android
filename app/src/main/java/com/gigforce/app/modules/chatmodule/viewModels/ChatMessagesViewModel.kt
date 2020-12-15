@@ -2,8 +2,6 @@ package com.gigforce.app.modules.chatmodule.viewModels
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.Bitmap
-import android.media.MediaMetadataRetriever
 import android.media.ThumbnailUtils
 import android.net.Uri
 import android.util.Log
@@ -384,7 +382,7 @@ class ChatMessagesViewModel constructor(
         context: Context,
         videosDirectoryRef: File,
         text: String = "",
-        fileName: String?,
+        videoInfo: VideoInfo,
         uri: Uri
     ) = GlobalScope.launch(Dispatchers.IO) {
 
@@ -394,44 +392,7 @@ class ChatMessagesViewModel constructor(
                 createHeaderForBothUsers()
             }
 
-            val videoLength = try {
-                val retriever = MediaMetadataRetriever()
-                retriever.setDataSource(context, uri)
-                val duration =
-                    retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)
-                retriever.release()
-                duration?.toLong() ?: 0L
-            } catch (e: Exception) {
-                Log.e("ChatGroupRepo", "Error while fetching video length", e)
-                0L
-            }
-
-            val mMMR = MediaMetadataRetriever()
-            mMMR.setDataSource(context, uri)
-            val thumbnail: Bitmap? =
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O_MR1) {
-                    mMMR.getScaledFrameAtTime(
-                        -1,
-                        MediaMetadataRetriever.OPTION_CLOSEST_SYNC,
-                        196,
-                        196
-                    )
-                } else {
-                    try {
-                        val bigThumbnail = mMMR.frameAtTime
-                        val smallThumbnail = ThumbnailUtils.extractThumbnail(bigThumbnail, 196, 196)
-
-                        if (!bigThumbnail.isRecycled)
-                            bigThumbnail.recycle()
-
-                        smallThumbnail
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                        null
-                    }
-                }
-
-
+            val thumbnailForUi = videoInfo.thumbnail?.copy(videoInfo.thumbnail.config,videoInfo.thumbnail.isMutable)
             val message = Message(
                 id = UUID.randomUUID().toString(),
                 headerId = headerId,
@@ -442,9 +403,9 @@ class ChatMessagesViewModel constructor(
                 content = text,
                 timestamp = Timestamp.now(),
                 attachmentPath = null,
-                attachmentName = fileName,
-                videoLength = videoLength,
-                thumbnailBitmap = thumbnail
+                attachmentName = videoInfo.name,
+                videoLength = videoInfo.duration,
+                thumbnailBitmap = thumbnailForUi
             )
 
             _sendingMessage.postValue(ChatMessage.fromMessage(message))
@@ -452,36 +413,33 @@ class ChatMessagesViewModel constructor(
             if (!videosDirectoryRef.exists())
                 videosDirectoryRef.mkdirs()
 
-            val newFileName = if (fileName.isNullOrBlank()) {
+            val newFileName = if (videoInfo.name.isBlank()) {
                 "$uid-${DateHelper.getFullDateTimeStamp()}.mp4"
             } else {
 
-                if (fileName.endsWith(".mp4", true)) {
-                    "$uid-${DateHelper.getFullDateTimeStamp()}-$fileName"
+                if (videoInfo.name.endsWith(".mp4", true)) {
+                    "$uid-${DateHelper.getFullDateTimeStamp()}-${videoInfo.name}"
                 } else {
-                    "$uid-${DateHelper.getFullDateTimeStamp()}-$fileName.mp4"
+                    "$uid-${DateHelper.getFullDateTimeStamp()}-${videoInfo.name}.mp4"
                 }
             }
 
-            val transcodedFile = File(
-                videosDirectoryRef,
-                newFileName
-            )
-            transcodeVideo(context, uri, transcodedFile)
-            val compressedFileUri = transcodedFile.toUri()
+            val shouldCompressVideo = shouldCompressVideo(videoInfo)
+            val compressedFileUri = if (shouldCompressVideo) {
+                val transcodedFile = File(
+                    videosDirectoryRef,
+                    newFileName
+                )
+                transcodeVideo(context, uri, transcodedFile)
+                transcodedFile.toUri()
+            } else {
+                val file = File(videosDirectoryRef, newFileName)
+                FileUtils.copyFile(context,newFileName,uri,file)
+                file.toUri()
+            }
 
-//            val thumbnail =
-//                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
-//                    ThumbnailUtils.createVideoThumbnail(transcodedFile, Size(96, 96), null)
-//                } else {
-//                    ThumbnailUtils.createVideoThumbnail(
-//                        transcodedFile.absolutePath,
-//                        MediaStore.Video.Thumbnails.MINI_KIND
-//                    )
-//                }
-
-            val thumbnailPathOnServer = if (thumbnail != null) {
-                val imageInBytes = ImageUtils.convertToByteArray(thumbnail)
+            val thumbnailPathOnServer = if (videoInfo.thumbnail != null) {
+                val imageInBytes = ImageUtils.convertToByteArray(videoInfo.thumbnail)
                 val fileNameAtServer = prepareUniqueImageName("thumb.png")
                 uploadChatAttachment(fileNameAtServer, imageInBytes)
             } else {
@@ -496,6 +454,20 @@ class ChatMessagesViewModel constructor(
         } catch (e: Exception) {
             //handle error
         }
+    }
+
+    private fun shouldCompressVideo(videoInfo: VideoInfo): Boolean {
+        if (videoInfo.size != 0L) {
+            if (videoInfo.size <= ChatConstants.MB_10) {
+                return false
+            } else if (videoInfo.size <= ChatConstants.MB_15 && videoInfo.duration <= ChatConstants.TWO_MINUTES) {
+                return false
+            } else if (videoInfo.size <= ChatConstants.MB_25 && videoInfo.duration <= ChatConstants.FIVE_MINUTES) {
+                return false
+            }
+        }
+
+        return true
     }
 
 

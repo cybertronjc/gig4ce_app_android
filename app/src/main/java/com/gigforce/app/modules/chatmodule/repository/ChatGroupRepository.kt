@@ -6,6 +6,7 @@ import androidx.core.net.toFile
 import androidx.core.net.toUri
 import com.gigforce.app.modules.chatmodule.ChatConstants
 import com.gigforce.app.modules.chatmodule.models.*
+import com.gigforce.app.modules.chatmodule.viewModels.ChatMessagesViewModel
 import com.gigforce.app.modules.profile.ProfileFirebaseRepository
 import com.gigforce.app.utils.*
 import com.google.firebase.Timestamp
@@ -219,32 +220,38 @@ class ChatGroupRepository constructor(
         groupId: String,
         groupMembers: List<ContactModel>,
         videosDirectoryRef: File,
-        fileName: String?,
-        fileUri: Uri,
+        videoInfo: VideoInfo,
+        uri: Uri,
         message: GroupMessage
     ) {
 
-        val newFileName = if (fileName.isNullOrBlank()) {
+        val newFileName = if (videoInfo.name.isBlank()) {
             "${getUID()}-${DateHelper.getFullDateTimeStamp()}.mp4"
         } else {
 
-            if (fileName.endsWith(".mp4", true)) {
-                "${getUID()}-${DateHelper.getFullDateTimeStamp()}-$fileName"
+            if (videoInfo.name.endsWith(".mp4", true)) {
+                "${getUID()}-${DateHelper.getFullDateTimeStamp()}-${videoInfo.name}"
             } else {
-                "${getUID()}-${DateHelper.getFullDateTimeStamp()}-$fileName.mp4"
+                "${getUID()}-${DateHelper.getFullDateTimeStamp()}-${videoInfo.name}.mp4"
             }
         }
 
         if (!videosDirectoryRef.exists())
             videosDirectoryRef.mkdirs()
 
-        val transcodedFile = File(
-            videosDirectoryRef,
-            newFileName
-        )
-
-        transcodeVideo(context, fileUri, transcodedFile)
-        val compressedFileUri = transcodedFile.toUri()
+        val shouldCompressVideo = shouldCompressVideo(videoInfo)
+        val compressedFileUri = if (shouldCompressVideo) {
+            val transcodedFile = File(
+                videosDirectoryRef,
+                newFileName
+            )
+            transcodeVideo(context, uri, transcodedFile)
+            transcodedFile.toUri()
+        } else {
+            val file = File(videosDirectoryRef, newFileName)
+            FileUtils.copyFile(context,newFileName,uri,file)
+            file.toUri()
+        }
 
         val thumbnailPathOnServer = if (message.thumbnailBitmap != null) {
             val imageInBytes = ImageUtils.convertToByteArray(message.thumbnailBitmap!!)
@@ -263,7 +270,7 @@ class ChatGroupRepository constructor(
             groupId,
             ChatConstants.ATTACHMENT_TYPE_VIDEO,
             message.id,
-            fileName,
+            videoInfo.name,
             pathOnServer,
             thumbnailPathOnServer,
             message.videoAttachmentLength
@@ -429,6 +436,20 @@ class ChatGroupRepository constructor(
         batch.update(userHeaderRef, "removedFromGroup", true)
 
         batch.commit()
+    }
+
+    private fun shouldCompressVideo(videoInfo: VideoInfo): Boolean {
+        if (videoInfo.size != 0L) {
+            if (videoInfo.size <= ChatConstants.MB_10) {
+                return false
+            } else if (videoInfo.size <= ChatConstants.MB_15 && videoInfo.duration <= ChatConstants.TWO_MINUTES) {
+                return false
+            } else if (videoInfo.size <= ChatConstants.MB_25 && videoInfo.duration <= ChatConstants.FIVE_MINUTES) {
+                return false
+            }
+        }
+
+        return true
     }
 
     companion object {

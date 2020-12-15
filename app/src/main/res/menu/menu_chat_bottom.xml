@@ -4,20 +4,18 @@
     <item
         android:id="@+id/action_pick_image"
         android:title="Image"
-        android:icon="@drawable/image_placeholder"
+        android:icon="@drawable/ic_photo_landscape"
         app:showAsAction="collapseActionView" />
     <item
         android:id="@+id/action_video"
         android:title="Video"
-        android:icon="@drawable/ic_play"
-        app:iconTint="@color/black"
+        android:icon="@drawable/ic_play_black"
         app:showAsAction="collapseActionView" />
     <item
         android:id="@+id/action_document"
         android:orderInCategory="100"
         android:title="Document"
-        android:icon="@drawable/ic_play"
-        app:iconTint="@color/black"
+        android:icon="@drawable/ic_document_outlined_black"
         app:showAsAction="collapseActionView" />
 
 </menu>

@@ -327,49 +327,12 @@ class GroupChatViewModel constructor(
         context: Context,
         text: String = "",
         videosDirectoryRef: File,
-        fileName: String?,
+        videoInfo: VideoInfo,
         uri: Uri
     ) = GlobalScope.launch(Dispatchers.IO) {
 
         try {
-
-            val videoLength = try {
-                val retriever = MediaMetadataRetriever()
-                retriever.setDataSource(context, uri)
-                val duration =
-                    retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)
-                retriever.release()
-                duration?.toLong() ?: 0L
-            } catch (e: Exception) {
-                Log.e("ChatGroupRepo", "Error while fetching video length", e)
-                0L
-            }
-
-            val mMMR = MediaMetadataRetriever()
-            mMMR.setDataSource(context, uri)
-            val thumbnail: Bitmap? =
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O_MR1) {
-                    mMMR.getScaledFrameAtTime(
-                        -1,
-                        MediaMetadataRetriever.OPTION_CLOSEST_SYNC,
-                        196,
-                        196
-                    )
-                } else {
-                    try {
-                        val bigThumbnail = mMMR.frameAtTime
-                        val smallThumbnail = ThumbnailUtils.extractThumbnail(bigThumbnail, 196, 196)
-
-                        if (!bigThumbnail.isRecycled)
-                            bigThumbnail.recycle()
-
-                        smallThumbnail
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                        null
-                    }
-                }
-
+            val thumbnailForUi = videoInfo.thumbnail?.copy(videoInfo.thumbnail.config,videoInfo.thumbnail.isMutable)
 
             val message = GroupMessage(
                 id = UUID.randomUUID().toString(),
@@ -377,10 +340,10 @@ class GroupChatViewModel constructor(
                 senderInfo = createCurrentUserSenderInfo(),
                 type = Message.MESSAGE_TYPE_TEXT_WITH_VIDEO,
                 content = text,
-                attachmentName = fileName,
+                attachmentName = videoInfo.name,
                 timestamp = Timestamp.now(),
-                videoAttachmentLength = videoLength,
-                thumbnailBitmap = thumbnail
+                videoAttachmentLength = videoInfo.duration,
+                thumbnailBitmap = thumbnailForUi
             )
             _sendingMessage.postValue(GroupChatMessage.fromMessage(message))
 
@@ -389,8 +352,8 @@ class GroupChatViewModel constructor(
                 context = context.applicationContext,
                 groupId =  groupId,
                 videosDirectoryRef = videosDirectoryRef,
-                fileName = fileName,
-                fileUri = uri,
+                videoInfo = videoInfo,
+                uri = uri,
                 message = message,
                 groupMembers = groupMembers
             )

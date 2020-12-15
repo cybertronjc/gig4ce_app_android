@@ -18,7 +18,7 @@ import com.google.firebase.firestore.Query
 import com.google.firebase.storage.FirebaseStorage
 
 class ChatContactsRepository constructor(
-    private val syncPref: SyncPref ,
+    private val syncPref: SyncPref,
     private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance(),
     private val syncContactsService: SyncContactsService = RetrofitFactory.generateSyncContactsService()
 ) : BaseFirestoreDBRepository() {
@@ -103,7 +103,7 @@ class ChatContactsRepository constructor(
             newContacts.filter { newContact -> oldContacts.find { it.mobile == newContact.mobile } == null }
         if (newAddedContacts.isNotEmpty()) {
 
-            newAddedContacts.filter {
+            val newAddedContactsFiltered = newAddedContacts.filter {
 
                 if (it.mobile.length == 12) {
                     if (currentUser.phoneNumber == null) {
@@ -115,10 +115,24 @@ class ChatContactsRepository constructor(
                 } else {
                     true
                 }
+            }
 
-            }.forEach { pickedContact ->
-                val contactRef = userChatContactsCollectionRef.document(pickedContact.mobile)
-                batch.set(contactRef, pickedContact)
+            if (newAddedContactsFiltered.isNotEmpty()) {
+
+                val currentUserChatHeaders = getChatHeadersForUser(currentUser.uid)
+                newAddedContactsFiltered.forEach { pickedContact ->
+                    val matchedHeader = currentUserChatHeaders.find { header ->
+                        header.otherUser?.name?.contains(pickedContact.mobile) ?: false
+                    }
+                    if (matchedHeader != null) {
+                        //There's header wihtout name
+                        val chatHeaderRef = userChatHeadersCollectionRef.document(matchedHeader.id)
+                        batch.update(chatHeaderRef, "otherUser.name", pickedContact.name)
+                    }
+
+                    val contactRef = userChatContactsCollectionRef.document(pickedContact.mobile)
+                    batch.set(contactRef, pickedContact)
+                }
             }
         }
 

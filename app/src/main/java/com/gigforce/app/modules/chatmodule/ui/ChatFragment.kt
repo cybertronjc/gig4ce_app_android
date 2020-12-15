@@ -4,11 +4,13 @@ import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.database.Cursor
+import android.graphics.Bitmap
+import android.media.MediaMetadataRetriever
+import android.media.ThumbnailUtils
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.provider.OpenableColumns
-import android.provider.Settings
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -35,6 +37,7 @@ import com.gigforce.app.modules.chatmodule.DownloadStarted
 import com.gigforce.app.modules.chatmodule.ErrorWhileDownloadingAttachment
 import com.gigforce.app.modules.chatmodule.models.ChatMessage
 import com.gigforce.app.modules.chatmodule.models.MessageType
+import com.gigforce.app.modules.chatmodule.models.VideoInfo
 import com.gigforce.app.modules.chatmodule.ui.adapters.ChatRecyclerAdapter
 import com.gigforce.app.modules.chatmodule.ui.adapters.clickListeners.OnChatMessageClickListener
 import com.gigforce.app.modules.chatmodule.viewModels.ChatMessagesViewModel
@@ -45,11 +48,11 @@ import com.gigforce.app.utils.ViewFullScreenImageDialogFragment
 import com.gigforce.app.utils.ViewFullScreenVideoDialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
-import kotlinx.android.synthetic.main.fragment_chat_new_contact.*
 import kotlinx.android.synthetic.main.fragment_chat_screen.*
 import java.io.File
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+
 
 
 class ChatFragment : BaseFragment(),
@@ -107,6 +110,7 @@ class ChatFragment : BaseFragment(),
 
     private var selectedOperation = -1
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -122,8 +126,6 @@ class ChatFragment : BaseFragment(),
         subscribeViewModel()
         manageNewMessageToContact()
         manageBackIcon()
-
-
     }
 
     private fun getDataFromIntents(arguments: Bundle?, savedInstanceState: Bundle?) {
@@ -300,10 +302,21 @@ class ChatFragment : BaseFragment(),
         }
 
         iv_greyPlus.setOnClickListener {
-            val popUp = PopupMenu(requireContext(), it)
-            popUp.setOnMenuItemClickListener(this)
-            popUp.inflate(R.menu.menu_chat_bottom)
-            popUp.show()
+            val popUpMenu = PopupMenu(requireContext(), it)
+            popUpMenu.setOnMenuItemClickListener(this)
+            popUpMenu.inflate(R.menu.menu_chat_bottom)
+
+            try {
+                val popUp = PopupMenu::class.java.getDeclaredField("mPopup")
+                popUp.isAccessible = true
+                val menu = popUp.get(popUpMenu)
+                menu.javaClass.getDeclaredMethod("setForceShowIcon" ,Boolean::class.java)
+                    .invoke(menu,true)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            } finally {
+                popUpMenu.show()
+            }
         }
     }
 
@@ -322,7 +335,7 @@ class ChatFragment : BaseFragment(),
         val formatted = current.format(formatter)
 
         println("Current Date and Time is: $formatted")
-        // tv_lastSeenValue.text = "last seen at : -"
+       // tv_lastSeenValue.text = "last seen at : -"
         return current
     }
 
@@ -598,14 +611,14 @@ class ChatFragment : BaseFragment(),
                 val uri = data?.data ?: return
 
                 val uriString = uri.toString()
-                val myFile = File(uriString)
+                val myFile = File(uri.path)
 
-                val displayName: String? = getDisplayName(uriString, uri, myFile)
+                val videoInfo = getVideoInfo(uriString, uri, myFile)
                 viewModel.sendNewVideoMessage(
                     requireContext(),
                     videosDirectoryFileRef,
                     "",
-                    displayName!!,
+                    videoInfo,
                     uri
                 )
             }
@@ -624,6 +637,7 @@ class ChatFragment : BaseFragment(),
                 if (cursor != null && cursor.moveToFirst()) {
                     return cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME))
                 }
+
             } finally {
                 cursor?.close()
             }
@@ -631,6 +645,82 @@ class ChatFragment : BaseFragment(),
             return myFile.name
         }
         return ""
+    }
+
+    private fun getVideoInfo(
+        uriString: String,
+        uri: Uri,
+        myFile: File
+    ): VideoInfo {
+        var fileName = ""
+        var fileSize = 0L
+
+        if (uriString.startsWith("content://")) {
+            var cursor: Cursor? = null
+            try {
+                cursor = requireContext().contentResolver.query(uri, null, null, null, null)
+                if (cursor != null && cursor.moveToFirst()) {
+                    fileName = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME))
+                    val sizeInString = cursor.getString(cursor.getColumnIndex(OpenableColumns.SIZE))
+
+                    fileSize = try {
+                        sizeInString.toLong()
+                    } catch (e: Exception) {
+                        0L
+                    }
+                }
+            } finally {
+                cursor?.close()
+            }
+        } else if (uriString.startsWith("file://")) {
+            fileName = myFile.name
+            fileSize = myFile.length()
+        }
+
+        val videoLength = try {
+            val retriever = MediaMetadataRetriever()
+            retriever.setDataSource(requireContext(), uri)
+            val duration =
+                retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)
+            retriever.release()
+            duration?.toLong() ?: 0L
+        } catch (e: Exception) {
+            Log.e("ChatGroupRepo", "Error while fetching video length", e)
+            0L
+        }
+
+        val mMMR = MediaMetadataRetriever()
+        mMMR.setDataSource(requireContext(), uri)
+        val thumbnail: Bitmap? =
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O_MR1) {
+                mMMR.getScaledFrameAtTime(
+                    -1,
+                    MediaMetadataRetriever.OPTION_CLOSEST_SYNC,
+                    196,
+                    196
+                )
+            } else {
+                try {
+                    val bigThumbnail = mMMR.frameAtTime
+                    val smallThumbnail = ThumbnailUtils.extractThumbnail(bigThumbnail, 196, 196)
+
+                    if (!bigThumbnail.isRecycled)
+                        bigThumbnail.recycle()
+
+                    smallThumbnail
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    null
+                }
+            }
+        mMMR.release()
+
+        return VideoInfo(
+            name = fileName,
+            duration = videoLength,
+            size = fileSize,
+            thumbnail = thumbnail
+        )
     }
 
     private fun isStoragePermissionGranted(): Boolean {

@@ -12,6 +12,8 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.RequestManager
 import com.gigforce.app.R
+import com.gigforce.app.core.gone
+import com.gigforce.app.core.visible
 import com.gigforce.app.modules.chatmodule.models.ContactModel
 import com.gigforce.app.modules.chatmodule.ui.adapters.clickListeners.OnGroupMembersClickListener
 import com.gigforce.app.modules.chatmodule.ui.adapters.diffUtils.ContactsDiffUtilCallback
@@ -109,6 +111,7 @@ class GroupMembersRecyclerAdapter(
         private val uidTV: TextView = itemView.findViewById(R.id.last_online_time_tv)
         private val isUserManagerView: View = itemView.findViewById(R.id.manager_text_view)
         private val chatOverlay: View = itemView.findViewById(R.id.chat_overlay)
+        private val chatIcon: View = itemView.findViewById(R.id.chat_icon)
 
         init {
             itemView.setOnLongClickListener(this)
@@ -119,6 +122,14 @@ class GroupMembersRecyclerAdapter(
             contactNameTV.text = contact.name
             uidTV.text = contact.mobile
             isUserManagerView.isVisible = contact.isUserGroupManager
+            val isUserTheCurrentUser = contact.uid == currentUserUid
+            if(isUserTheCurrentUser){
+                chatOverlay.gone()
+                chatIcon.gone()
+            } else{
+                chatOverlay.visible()
+                chatIcon.visible()
+            }
 
             if (contact.imageUrl != null) {
                 requestManager.load(contact.imageUrl!!).into(contactAvatarIV)

@@ -24,4 +24,10 @@ object ChatConstants {
     const val OPERATION_PICK_IMAGE = 0
     const val OPERATION_PICK_VIDEO = 1
     const val OPERATION_PICK_DOCUMENT = 2
+
+    const val MB_10 = 10000000
+    const val MB_15 = 15000000
+    const val MB_25 = 25000000
+    const val TWO_MINUTES = 120000
+    const val FIVE_MINUTES = 300000
 }
