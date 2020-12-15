@@ -51,7 +51,7 @@ class ApplicationClientActivationViewModel : ViewModel() {
 
     suspend fun getJpSettings(workOrderID: String): JpSettings? {
 
-        val items = repository.db.collection("JP_Settings").whereEqualTo("type", "dependency")
+        val items = repository.db.collection("JP_Settings").whereEqualTo("type", "application")
             .whereEqualTo("jobProfileId", workOrderID).get().await()
         if (items.documents.isNullOrEmpty()) {
             return null
@@ -76,11 +76,11 @@ class ApplicationClientActivationViewModel : ViewModel() {
             val model = getJPApplication(mWorkOrderID)
 
 
-            if (model.draft.isNullOrEmpty()) {
-                model.draft = dependency.toMutableList()
+            if (model.application.isNullOrEmpty()) {
+                model.application = dependency.toMutableList()
 
             }
-            model.draft.forEach {
+            model.application.forEach {
                 if (!it.isDone || it.refresh) {
                     when (it.type) {
                         "profile_pic" -> {
@@ -150,7 +150,6 @@ class ApplicationClientActivationViewModel : ViewModel() {
             .update(
                 mapOf(
                     "stepsTotal" to (observableWorkOrderDependency.value?.step ?: 0),
-                    "stepDone" to observableWorkOrderDependency.value?.step,
                     "status" to "Applied"
 
                 )
@@ -196,7 +195,7 @@ class ApplicationClientActivationViewModel : ViewModel() {
         }
         val documentSnapshot = items.documents[0]
         return !repository.db.collection("JP_Applications").document(documentSnapshot.id)
-            .collection("submissions").whereEqualTo("stepId", workOrderID).whereEqualTo(
+            .collection("Submissions").whereEqualTo("stepId", workOrderID).whereEqualTo(
                 "title", title
             ).whereEqualTo("type", type).get().await().documents.isNullOrEmpty()
 
@@ -236,7 +235,7 @@ class ApplicationClientActivationViewModel : ViewModel() {
             return false
         }
 
-        return false
+
     }
 
 

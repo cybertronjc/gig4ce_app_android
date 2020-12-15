@@ -30,7 +30,7 @@ class DocSubSchedulerViewModel : ViewModel() {
             .whereEqualTo("gigerId", repository.getUID()).get()
             .await()
         val submissions = repository.getCollectionReference().document(items.documents[0].id)
-            .collection("submissions").whereEqualTo("stepId", workOrderID).whereEqualTo(
+            .collection("Submissions").whereEqualTo("stepId", workOrderID).whereEqualTo(
                 "title", title
             ).whereEqualTo("type", type).get().await()
         if (submissions.documents.isNullOrEmpty()) {

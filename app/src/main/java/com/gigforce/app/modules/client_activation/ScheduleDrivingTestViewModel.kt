@@ -83,7 +83,7 @@ class ScheduleDrivingTestViewModel : ViewModel() {
         }
         applicationId = items.documents[0].id
         val submissions = repository.getCollectionReference().document(items.documents[0].id)
-            .collection("submissions").whereEqualTo("stepId", workOrderID).whereEqualTo(
+            .collection("Submissions").whereEqualTo("stepId", workOrderID).whereEqualTo(
                 "title", title
             ).whereEqualTo("type", type).get().await()
         if (submissions.documents.isNullOrEmpty()) {
@@ -101,7 +101,7 @@ class ScheduleDrivingTestViewModel : ViewModel() {
                 if (err == null) {
                     if (success?.documents?.isNotEmpty() == true) {
                         _observableJPSettings.value =
-                            success?.toObjects(DocReceiving::class.java)?.get(0)
+                            success.toObjects(DocReceiving::class.java)[0]
 
                     }
                 } else {
@@ -135,13 +135,13 @@ class ScheduleDrivingTestViewModel : ViewModel() {
             .whereEqualTo("gigerId", repository.getUID()).get()
             .await()
         val submissions = repository.getCollectionReference().document(items.documents[0].id)
-            .collection("submissions").whereEqualTo("stepId", workOrderID).whereEqualTo(
+            .collection("Submissions").whereEqualTo("stepId", workOrderID).whereEqualTo(
                 "title", title
             ).whereEqualTo("type", type).get().await()
 
         repository.db.collection("JP_Applications")
             .document(items?.documents!![0].id)
-            .collection("submissions")
+            .collection("Submissions")
             .document(submissions?.documents?.get(0)?.id!!)
             .update(
                 "certificate.options", options
@@ -150,7 +150,7 @@ class ScheduleDrivingTestViewModel : ViewModel() {
                 if (complete.isSuccessful) {
                     val jpApplication =
                         items.toObjects(JpApplication::class.java)[0]
-                    jpApplication.process.forEach { draft ->
+                    jpApplication.activation.forEach { draft ->
                         if (draft.type == "onsite_document") {
 
                             options.forEach { item ->
@@ -172,7 +172,7 @@ class ScheduleDrivingTestViewModel : ViewModel() {
 
                         }
                     }
-                    if (jpApplication.process.all {
+                    if (jpApplication.activation.all {
                             it.isDone
                         }) {
                         jpApplication.status = "Applied"
@@ -181,7 +181,7 @@ class ScheduleDrivingTestViewModel : ViewModel() {
                         .document(items.documents[0].id)
                         .update(
                             mapOf(
-                                "process" to jpApplication.process,
+                                "activation" to jpApplication.activation,
                                 "status" to jpApplication.status
                             )
                         )

@@ -204,7 +204,7 @@ class ClientActivationFragment : BaseFragment(), PopupMenu.OnMenuItemClickListen
                 } else {
                     tv_mark_as_interest_role_details.setOnClickListener {
 
-                        if (jpApplication == null || jpApplication.stepDone == 1) {
+                        if (jpApplication == null || jpApplication.status == "Draft") {
                             if (mClientViaDeeplink == true) {
                                 if (location == null) {
                                     showToast(getString(R.string.set_location_to_high_accuracy))
@@ -227,7 +227,7 @@ class ClientActivationFragment : BaseFragment(), PopupMenu.OnMenuItemClickListen
                                 )
                             }
 
-                        } else if (jpApplication.stepDone == 2) {
+                        } else if (jpApplication.status == "Applied") {
                             navigate(
                                 R.id.fragment_gig_activation, bundleOf(
                                     StringConstants.WORK_ORDER_ID.value to viewModel.observableWorkOrder.value?.profileId,
@@ -494,17 +494,17 @@ class ClientActivationFragment : BaseFragment(), PopupMenu.OnMenuItemClickListen
                         var img = getImageView(viewHolder, R.id.learning_img)
 
                         if (!obj!!.coverPicture.isNullOrBlank()) {
-                            if (obj!!.coverPicture!!.startsWith("http", true)) {
+                            if (obj.coverPicture!!.startsWith("http", true)) {
 
                                 GlideApp.with(requireContext())
-                                    .load(obj!!.coverPicture!!)
+                                    .load(obj.coverPicture!!)
                                     .placeholder(getCircularProgressDrawable())
                                     .error(R.drawable.ic_learning_default_back)
                                     .into(img)
                             } else {
                                 FirebaseStorage.getInstance()
                                     .getReference(LearningConstants.LEARNING_IMAGES_FIREBASE_FOLDER)
-                                    .child(obj!!.coverPicture!!)
+                                    .child(obj.coverPicture!!)
                                     .downloadUrl
                                     .addOnSuccessListener { fileUri ->
 

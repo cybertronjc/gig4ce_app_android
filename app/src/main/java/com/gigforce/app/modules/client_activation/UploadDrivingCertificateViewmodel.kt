@@ -61,14 +61,14 @@ class UploadDrivingCertificateViewmodel : ViewModel() {
                 .await()
         val toObject = items.toObjects(JpApplication::class.java).get(0)
         val submissions = repository.getCollectionReference().document(items.documents[0].id)
-                .collection("submissions").whereEqualTo("stepId", workOrderID).whereEqualTo(
+                .collection("Submissions").whereEqualTo("stepId", workOrderID).whereEqualTo(
                         "title", title
                 ).whereEqualTo("type", type).get().await()
 
 
         if (submissions?.documents.isNullOrEmpty()) {
             repository.db.collection("JP_Applications")
-                    .document(items.documents[0].id).collection("submissions")
+                    .document(items.documents[0].id).collection("Submissions")
                     .document().set(
                             mapOf(
                                     "title" to title,
@@ -84,7 +84,7 @@ class UploadDrivingCertificateViewmodel : ViewModel() {
                             if (complete.isSuccessful) {
                                 val jpApplication =
                                         items.toObjects(JpApplication::class.java)[0]
-                                jpApplication.process.forEach { draft ->
+                                jpApplication.activation.forEach { draft ->
                                     if (draft.title == title || draft.type == "onsite_document") {
                                         draft.isDone = true
                                         draft.status = ""
@@ -93,7 +93,7 @@ class UploadDrivingCertificateViewmodel : ViewModel() {
                                 }
                                 repository.db.collection("JP_Applications")
                                         .document(items.documents[0].id)
-                                        .update("process", jpApplication.process)
+                                        .update("activation", jpApplication.activation)
                                         .addOnCompleteListener {
                                             if (it.isSuccessful) {
                                                 _documentUploadState.postValue(Lse.success())
@@ -106,14 +106,14 @@ class UploadDrivingCertificateViewmodel : ViewModel() {
         } else {
             repository.db.collection("JP_Applications")
                     .document(items?.documents!![0].id)
-                    .collection("submissions")
+                    .collection("Submissions")
                     .document(submissions?.documents?.get(0)?.id!!)
                     .update("certificate", cert)
                     .addOnCompleteListener { complete ->
                         if (complete.isSuccessful) {
                             val jpApplication =
                                     items.toObjects(JpApplication::class.java)[0]
-                            jpApplication.process.forEach { draft ->
+                            jpApplication.activation.forEach { draft ->
                                 if (draft.title == title || draft.type == "onsite_document") {
                                     draft.isDone = true
                                     draft.status = ""
@@ -121,7 +121,7 @@ class UploadDrivingCertificateViewmodel : ViewModel() {
                             }
                             repository.db.collection("JP_Applications")
                                     .document(items.documents[0].id)
-                                    .update("process", jpApplication.process)
+                                    .update("activation", jpApplication.activation)
                                     .addOnCompleteListener {
                                         if (it.isSuccessful) {
                                             _documentUploadState.postValue(Lse.success())

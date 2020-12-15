@@ -39,11 +39,11 @@ class GigActivationViewModel(private val savedStateHandle: SavedStateHandle) : V
     fun getActivationData(workOrderId: String) {
 
         repository.getCollectionReference().whereEqualTo("jobProfileId", workOrderId)
-                .whereEqualTo("type", "documents").addSnapshotListener { success, err ->
+                .whereEqualTo("type", "activation").addSnapshotListener { success, err ->
                     if (err == null) {
                         if (success?.documents?.isNotEmpty() == true) {
                             observableGigActivation.value =
-                                    success?.toObjects(GigActivation::class.java)?.get(0)
+                                success.toObjects(GigActivation::class.java)[0]
 
                         }
                     } else {
@@ -75,14 +75,14 @@ class GigActivationViewModel(private val savedStateHandle: SavedStateHandle) : V
 
                 val model = getJPApplication(mWorkOrderID)
 
-                if (model.process.isNullOrEmpty()) {
-                    model.process = dependency.toMutableList()
+                if (model.activation.isNullOrEmpty()) {
+                    model.activation = dependency.toMutableList()
                 }
-                if (model.process.all { it.isDone }) {
+                if (model.activation.all { it.isDone }) {
                     model.status = "Inprocess"
                 }
 
-                model.process.forEach {
+                model.activation.forEach {
                     if (!it.isDone) {
                         when (it.type) {
 
@@ -149,7 +149,7 @@ class GigActivationViewModel(private val savedStateHandle: SavedStateHandle) : V
         }
         val documentSnapshot = items.documents[0]
         return !repository.db.collection("JP_Applications").document(documentSnapshot.id)
-                .collection("submissions").whereEqualTo("stepId", workOrderID).whereEqualTo(
+                .collection("Submissions").whereEqualTo("stepId", workOrderID).whereEqualTo(
                         "title", title
                 ).whereEqualTo("type", type).get().await().documents.isNullOrEmpty()
 
