@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/lipstick_two"
+        android:gravity="center_vertical"
+        android:minHeight="72dp"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginStart="16dp"
+            android:scaleX="0.6"
+            android:scaleY="0.6"
+            android:src="@drawable/ct_ic_arrow_back_white_24dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:fontFamily="@font/lato"
+            android:gravity="center_horizontal"
+            android:lineSpacingExtra="4sp"
+            android:text="Add Interest"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:textStyle="normal" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:fontFamily="@font/lato"
+        android:lineSpacingExtra="3sp"
+        android:text="Select Jobs you are interested in "
+        android:textColor="#333333"
+        android:textSize="14sp"
+        android:textStyle="bold" />
+
+    <com.google.android.material.chip.ChipGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="12dp"
+        app:chipSpacingHorizontal="14dp">
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_interest_driving"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="Driving" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_interest_bike_rider"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="Bike Rider" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_interest_delivery_executive"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="Delivery Executive" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_interest_delivery_cleaning"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="Cleaning" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_interest_warehouse_helper"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="Warehouse Helper" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_interest_security"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="Security" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_interest_factory_worker"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="Factory Worker" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_interest_sales"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="Sales" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_interest_others"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="Others" />
+    </com.google.android.material.chip.ChipGroup>
+
+</LinearLayout>
