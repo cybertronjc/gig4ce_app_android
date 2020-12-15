@@ -15,7 +15,6 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -128,47 +127,54 @@ class LandingScreenFragment : BaseFragment() {
 
     private fun checkforForceupdate() {
         ConfigRepository().getForceUpdateCurrentVersion(object :
-                ConfigRepository.LatestAPPUpdateListener {
+            ConfigRepository.LatestAPPUpdateListener {
             override fun getCurrentAPPVersion(latestAPPUpdateModel: ConfigRepository.LatestAPPUpdateModel) {
                 if (latestAPPUpdateModel.active && isNotLatestVersion(latestAPPUpdateModel))
                     showConfirmationDialogType3(
-                            getString(R.string.new_version_available),
-                            getString(R.string.new_version_available_detail),
-                            getString(R.string.update_now),
-                            getString(R.string.cancel_update),
-                            object : ConfirmationDialogOnClickListener {
-                                override fun clickedOnYes(dialog: Dialog?) {
-                                    redirectToStore("https://play.google.com/store/apps/details?id=com.gigforce.app")
-                                }
+                        getString(R.string.new_version_available),
+                        getString(R.string.new_version_available_detail),
+                        getString(R.string.update_now),
+                        getString(R.string.cancel_update),
+                        object : ConfirmationDialogOnClickListener {
+                            override fun clickedOnYes(dialog: Dialog?) {
+                                redirectToStore("https://play.google.com/store/apps/details?id=com.gigforce.app")
+                            }
 
-                                override fun clickedOnNo(dialog: Dialog?) {
-                                    if (latestAPPUpdateModel?.force_update_required)
-                                        activity?.finish()
-                                    dialog?.dismiss()
-                                }
+                            override fun clickedOnNo(dialog: Dialog?) {
+                                if (latestAPPUpdateModel?.force_update_required)
+                                    activity?.finish()
+                                dialog?.dismiss()
+                            }
 
-                            })
+                        })
             }
         })
     }
+
     private fun isNotLatestVersion(latestAPPUpdateModel: ConfigRepository.LatestAPPUpdateModel): Boolean {
         try {
             var currentAppVersion = getAppVersion()
-            if(currentAppVersion.contains("Dev")){
+            if (currentAppVersion.contains("Dev")) {
                 currentAppVersion = currentAppVersion?.split("-")[0]
             }
             var appVersion = currentAppVersion?.split(".")?.toTypedArray()
             var serverAPPVersion =
-                    latestAPPUpdateModel?.force_update_current_version?.split(".")?.toTypedArray()
+                latestAPPUpdateModel?.force_update_current_version?.split(".")?.toTypedArray()
             if (appVersion?.size == 0 || serverAPPVersion?.size == 0) {
-                FirebaseCrashlytics.getInstance().log("isNotLatestVersion method : appVersion or serverAPPVersion has zero size!!")
+                FirebaseCrashlytics.getInstance()
+                    .log("isNotLatestVersion method : appVersion or serverAPPVersion has zero size!!")
                 return false
             } else {
                 if (appVersion.get(0).toInt() < serverAPPVersion.get(0).toInt()) {
                     return true
-                } else if (appVersion.get(0).toInt()== serverAPPVersion.get(0).toInt() && appVersion.get(1).toInt() < serverAPPVersion.get(1).toInt()) {
+                } else if (appVersion.get(0).toInt() == serverAPPVersion.get(0)
+                        .toInt() && appVersion.get(1).toInt() < serverAPPVersion.get(1).toInt()
+                ) {
                     return true
-                } else if (appVersion.get(0).toInt()== serverAPPVersion.get(0).toInt() && appVersion.get(1).toInt() == serverAPPVersion.get(1).toInt() && appVersion.get(2).toInt() < serverAPPVersion.get(2).toInt()) {
+                } else if (appVersion.get(0).toInt() == serverAPPVersion.get(0)
+                        .toInt() && appVersion.get(1).toInt() == serverAPPVersion.get(1)
+                        .toInt() && appVersion.get(2).toInt() < serverAPPVersion.get(2).toInt()
+                ) {
                     return true
                 } else return false
 
@@ -179,13 +185,14 @@ class LandingScreenFragment : BaseFragment() {
             return false
         }
     }
+
     fun getAppVersion(): String {
         var result = "";
 
         try {
             result = context?.getPackageManager()
-                    ?.getPackageInfo(context?.getPackageName(), 0)
-                    ?.versionName ?: "";
+                ?.getPackageInfo(context?.getPackageName(), 0)
+                ?.versionName ?: "";
         } catch (e: PackageManager.NameNotFoundException) {
 
         }
@@ -294,12 +301,21 @@ class LandingScreenFragment : BaseFragment() {
     lateinit var viewModelProfile: ProfileViewModel
     private fun observers() {
         // load user data
-        viewModelProfile = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
+        viewModelProfile = ViewModelProvider(this).get(ProfileViewModel::class.java)
         viewModelProfile.getProfileData().observe(viewLifecycleOwner, Observer { profileObs ->
             val profile: ProfileData = profileObs!!
             displayImage(profile.profileAvatarName)
             if (profile.name != null && !profile.name.equals(""))
                 profile_name.text = profile.name
+
+            ambassador_layout.visible()
+            if (profile.isUserAmbassador) {
+                join_as_amb_label.text = "Ambassador Program"
+                amb_join_open_btn.text = "Open"
+            } else {
+                join_as_amb_label.text = "Join Us as an Ambassador"
+                amb_join_open_btn.text = "Join Now"
+            }
         })
 
         verificationViewModel
@@ -578,6 +594,15 @@ class LandingScreenFragment : BaseFragment() {
             } else {
                 showToast("This is under development. Please check again in a few days.")
             }
+        }
+        amb_join_open_btn.setOnClickListener {
+
+            if (amb_join_open_btn.text == "Open") {
+                TODO()
+            } else {
+
+            }
+
         }
     }
 

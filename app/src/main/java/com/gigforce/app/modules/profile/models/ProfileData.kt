@@ -36,7 +36,11 @@ data class ProfileData(
 
     @get:PropertyName("companies")
     @set:PropertyName("companies")
-    var companies: ArrayList<Company>? = null
+    var companies: ArrayList<Company>? = null,
+
+    @get:PropertyName("isUserAmbassador")
+    @set:PropertyName("isUserAmbassador")
+    var isUserAmbassador: Boolean = false
 ) {
 
 }

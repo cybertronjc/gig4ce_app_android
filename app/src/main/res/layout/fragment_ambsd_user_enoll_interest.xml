@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
 
@@ -36,6 +36,30 @@
             android:textStyle="normal" />
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_margin="16dp">
+
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="match_parent"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/lato"
+            android:textStyle="normal"
+            android:textSize="14sp"
+            android:textColor="#333333"
+            android:lineHeight="17sp"
+            android:lineSpacingExtra="3sp"
+            android:text="Nunc justo eros, vehicula vel vehicula ut,lacinia a erat. Nam fringilla eros."
+            />
+
+    </LinearLayout>
+    
+    
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -51,80 +75,71 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
         android:layout_marginTop="12dp"
+        android:layout_marginEnd="16dp"
         app:chipSpacingHorizontal="14dp">
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_interest_driving"
-            style="@style/Widget.MaterialComponents.Chip.Choice"
+            style="@style/AppSingleChoiceChip"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:checked="true"
             android:text="Driving" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_interest_bike_rider"
-            style="@style/Widget.MaterialComponents.Chip.Choice"
+            style="@style/AppSingleChoiceChip"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:checked="true"
             android:text="Bike Rider" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_interest_delivery_executive"
-            style="@style/Widget.MaterialComponents.Chip.Choice"
+            style="@style/AppSingleChoiceChip"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:checked="true"
             android:text="Delivery Executive" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_interest_delivery_cleaning"
-            style="@style/Widget.MaterialComponents.Chip.Choice"
+            style="@style/AppSingleChoiceChip"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:checked="true"
             android:text="Cleaning" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_interest_warehouse_helper"
-            style="@style/Widget.MaterialComponents.Chip.Choice"
+            style="@style/AppSingleChoiceChip"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:checked="true"
             android:text="Warehouse Helper" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_interest_security"
-            style="@style/Widget.MaterialComponents.Chip.Choice"
+            style="@style/AppSingleChoiceChip"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:checked="true"
             android:text="Security" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_interest_factory_worker"
-            style="@style/Widget.MaterialComponents.Chip.Choice"
+            style="@style/AppSingleChoiceChip"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:checked="true"
             android:text="Factory Worker" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_interest_sales"
-            style="@style/Widget.MaterialComponents.Chip.Choice"
+            style="@style/AppSingleChoiceChip"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:checked="true"
             android:text="Sales" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_interest_others"
-            style="@style/Widget.MaterialComponents.Chip.Choice"
+            style="@style/AppSingleChoiceChip"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:checked="true"
             android:text="Others" />
     </com.google.android.material.chip.ChipGroup>
 

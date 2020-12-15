@@ -469,4 +469,11 @@
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">10%</item>
     </style>
+
+    <style name="AppSingleChoiceChip" parent="@style/Widget.MaterialComponents.Chip.Choice">
+        <item name="chipBackgroundColor">@color/app_chip_bck_colors</item>
+        <item name="android:textColor">@color/app_chip_text_colors</item>
+        <item name="chipStrokeColor">@color/app_chip_stroke_colors</item>
+    </style>
+
 </resources>
