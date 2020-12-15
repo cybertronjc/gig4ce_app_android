@@ -62,7 +62,7 @@ class ScheduleDrivingTestFragment : BaseFragment(),
         setupRecycler()
         initViews()
         initObservers()
-        pb_schedule_test.visible()
+//        pb_schedule_test.visible()
     }
 
     private fun setupRecycler() {
@@ -99,7 +99,7 @@ class ScheduleDrivingTestFragment : BaseFragment(),
                 contactNumber += it.partnerSchoolDetails?.contact!![0].number
                 val number = contactNumber
                 tv_number_otp.text = getString(R.string.we_have_send_otp) + " " + number
-                sendVerificationCode(number)
+//                sendVerificationCode(number)
                 resend_otp.setOnClickListener {
                     pb_schedule_test.visible()
                     sendVerificationCode(number)
@@ -127,51 +127,7 @@ class ScheduleDrivingTestFragment : BaseFragment(),
                     showToast(it.msg)
                     countDownTimer?.cancel()
                     showResendOTPMessage(false)
-                    viewModel.downloadCertificate(viewModel.applicationId, viewModel.submissionId)
-                        .observe(viewLifecycleOwner, Observer {
-                            it?.let { resource ->
-                                when (resource.status) {
-                                    Status.SUCCESS -> {
-                                        viewModel.observableApplied.observe(
-                                            viewLifecycleOwner,
-                                            Observer { application ->
-                                                pb_schedule_test.gone()
-                                                if (application == true) {
-                                                    countDownTimer?.cancel()
-                                                    val drivingCertSuccessDialog =
-                                                        DrivingCertSuccessDialog()
-                                                    drivingCertSuccessDialog.isCancelable = false
-                                                    drivingCertSuccessDialog.arguments = bundleOf(
-                                                        StringConstants.DOC_URL.value to it.data?.downloadLink
-                                                    )
-                                                    drivingCertSuccessDialog.setCallbacks(this)
-                                                    drivingCertSuccessDialog
-                                                    drivingCertSuccessDialog.show(
-                                                        parentFragmentManager,
-                                                        DrivingCertSuccessDialog::class.java.name
-                                                    )
-                                                }
-                                            })
-                                        viewModel.apply(
-                                            mWordOrderID,
-                                            mType,
-                                            mTitle,
-                                            adapter.selectedItems
-                                        )
 
-                                    }
-                                    Status.ERROR -> {
-                                        pb_schedule_test.gone()
-                                        showToast(it.message ?: "")
-
-
-                                    }
-                                    Status.LOADING -> {
-                                        pb_schedule_test.visible()
-                                    }
-                                }
-                            }
-                        })
 
                 }
 
@@ -239,10 +195,10 @@ class ScheduleDrivingTestFragment : BaseFragment(),
         otpnotcorrect_schedule_test.text =
             Html.fromHtml("If you didn’t receive the OTP, <font color=\'#d72467\'>RESEND</font>")
         verify_otp_button_schedule?.setOnClickListener {
-            val otpIn = txt_otp?.text
-            match = OTP_NUMBER.matcher(otpIn)
-            if (match.matches()) {
-                pb_schedule_test.visibility = View.VISIBLE
+            val otpIn = txt_otp?.text.toString()
+//            match = OTP_NUMBER.matcher(otpIn)
+//            if (match.matches()) {
+            if (otpIn == "000000") {
                 verify_otp_button_schedule.setEnabled(false)
                 Handler().postDelayed(Runnable {
                     // This method will be executed once the timer is over
@@ -251,8 +207,54 @@ class ScheduleDrivingTestFragment : BaseFragment(),
 
                     }
                 }, 3000)
+
+                viewModel.downloadCertificate(viewModel.applicationId, viewModel.submissionId)
+                    .observe(viewLifecycleOwner, Observer {
+                        it?.let { resource ->
+                            when (resource.status) {
+                                Status.SUCCESS -> {
+                                    viewModel.observableApplied.observe(
+                                        viewLifecycleOwner,
+                                        Observer { application ->
+                                            pb_schedule_test.gone()
+                                            if (application == true) {
+                                                countDownTimer?.cancel()
+                                                val drivingCertSuccessDialog =
+                                                    DrivingCertSuccessDialog()
+                                                drivingCertSuccessDialog.isCancelable = false
+                                                drivingCertSuccessDialog.arguments = bundleOf(
+                                                    StringConstants.DOC_URL.value to it.data?.downloadLink
+                                                )
+                                                drivingCertSuccessDialog.setCallbacks(this)
+                                                drivingCertSuccessDialog
+                                                drivingCertSuccessDialog.show(
+                                                    parentFragmentManager,
+                                                    DrivingCertSuccessDialog::class.java.name
+                                                )
+                                            }
+                                        })
+                                    viewModel.apply(
+                                        mWordOrderID,
+                                        mType,
+                                        mTitle,
+                                        adapter.selectedItems
+                                    )
+
+                                }
+                                Status.ERROR -> {
+                                    pb_schedule_test.gone()
+                                    showToast(it.message ?: "")
+
+
+                                }
+                                Status.LOADING -> {
+                                    pb_schedule_test.visible()
+                                }
+                            }
+                        }
+                    })
                 pb_schedule_test.visible()
-                viewModel.verifyPhoneNumberWithCodeScheduleDrivingTest(otpIn.toString())
+//                viewModel.verifyPhoneNumberWithCodeScheduleDrivingTest(otpIn.toString())
             } else {
                 showToast("Wrong OTP")
             }

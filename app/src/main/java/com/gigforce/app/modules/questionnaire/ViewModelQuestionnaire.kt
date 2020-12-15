@@ -63,17 +63,17 @@ class ViewModelQuestionnaire(private val savedStateHandle: SavedStateHandle) : V
         listener = questionnaireRepository.db.collection("JP_Applications")
                 .whereEqualTo("jpid", mWordOrderID)
                 .whereEqualTo("gigerId", questionnaireRepository.getUID())
-                .addSnapshotListener { jp_application, err ->
+                .addSnapshotListener { jp_application, _ ->
                     listener?.remove()
 
                     listener = questionnaireRepository.db.collection("JP_Applications")
-                            .document(jp_application?.documents!![0].id).collection("submissions")
+                            .document(jp_application?.documents!![0].id).collection("Submissions")
                             .whereEqualTo("stepId", mWordOrderID).whereEqualTo("title", title)
-                            .whereEqualTo("type", type).addSnapshotListener { questionnaire, err ->
+                            .whereEqualTo("type", type).addSnapshotListener { questionnaire, err_ ->
                                 listener?.remove()
                                 if (questionnaire?.documents.isNullOrEmpty()) {
                                     questionnaireRepository.db.collection("JP_Applications")
-                                            .document(jp_application.documents[0].id).collection("submissions")
+                                            .document(jp_application.documents[0].id).collection("Submissions")
                                             .document().set(
                                                     mapOf(
                                                             "title" to title,
@@ -88,14 +88,14 @@ class ViewModelQuestionnaire(private val savedStateHandle: SavedStateHandle) : V
                                                     if (complete.isSuccessful) {
                                                         val jpApplication =
                                                                 jp_application.toObjects(JpApplication::class.java)[0]
-                                                        jpApplication.draft.forEach { draft ->
+                                                        jpApplication.application.forEach { draft ->
                                                             if (draft.title == title) {
                                                                 draft.isDone = true
                                                             }
                                                         }
                                                         questionnaireRepository.db.collection("JP_Applications")
                                                                 .document(jp_application.documents[0].id)
-                                                                .update("draft", jpApplication.draft)
+                                                                .update("application", jpApplication.application)
                                                                 .addOnCompleteListener {
                                                                     if (it.isSuccessful) {
                                                                         _observableAddApplicationSuccess.value =
@@ -107,22 +107,22 @@ class ViewModelQuestionnaire(private val savedStateHandle: SavedStateHandle) : V
                                             }
                                 } else {
                                     questionnaireRepository.db.collection("JP_Applications")
-                                            .document(jp_application?.documents!![0].id)
-                                            .collection("submissions")
+                                            .document(jp_application.documents[0].id)
+                                            .collection("Submissions")
                                             .document(questionnaire?.documents?.get(0)?.id!!)
                                             .update("answers", questions)
                                             .addOnCompleteListener { complete ->
                                                 if (complete.isSuccessful) {
                                                     val jpApplication =
                                                             jp_application.toObjects(JpApplication::class.java)[0]
-                                                    jpApplication.draft.forEach { draft ->
+                                                    jpApplication.application.forEach { draft ->
                                                         if (draft.title == title) {
                                                             draft.isDone = true
                                                         }
                                                     }
                                                     questionnaireRepository.db.collection("JP_Applications")
                                                             .document(jp_application.documents[0].id)
-                                                            .update("draft", jpApplication.draft)
+                                                            .update("application", jpApplication.application)
                                                             .addOnCompleteListener {
                                                                 if (it.isSuccessful) {
                                                                     _observableAddApplicationSuccess.value =

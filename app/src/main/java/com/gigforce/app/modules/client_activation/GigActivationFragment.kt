@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.lifecycle.Observer
 import androidx.lifecycle.SavedStateViewModelFactory
@@ -59,7 +60,7 @@ class GigActivationFragment : BaseFragment(),
         getDataFromIntents(savedInstanceState)
         val layoutParams: ConstraintLayout.LayoutParams =
             playerView.layoutParams as ConstraintLayout.LayoutParams
-        playerViewHeight = (getScreenWidth(requireActivity()).height *45)/ 100
+        playerViewHeight = (getScreenWidth(requireActivity()).height * 45) / 100
         layoutParams.height = playerViewHeight
         playerView.layoutParams = layoutParams
 
@@ -175,25 +176,26 @@ class GigActivationFragment : BaseFragment(),
 
 
     private fun initApplication(jpApplication: JpApplication) {
-        adapter.addData(jpApplication.process)
+        adapter.addData(jpApplication.activation)
 
 //        sv_gig_activation.post {
 //            if (sv_gig_activation != null)
 //                sv_gig_activation.fullScroll(ScrollView.FOCUS_DOWN);
 //        }
         adapter.setCallbacks(this)
-        for (i in 0 until jpApplication.process.size) {
-            if (!jpApplication.process[i].isDone) {
+        for (i in 0 until jpApplication.activation.size) {
+            if (!jpApplication.activation[i].isDone) {
                 adapter.setImageDrawable(
-                    jpApplication.process[i].type!!,
-                    resources.getDrawable(R.drawable.ic_status_pending),
+                    jpApplication.activation[i].type!!,
+                    ContextCompat.getDrawable(requireActivity(), R.drawable.ic_status_pending)!!
+                    ,
                     false
                 )
 //               viewModel.setData(jpApplication.draft[i].feature)
             } else {
                 adapter.setImageDrawable(
-                    jpApplication.process[i].type!!,
-                    resources.getDrawable(R.drawable.ic_applied),
+                    jpApplication.activation[i].type!!,
+                    ContextCompat.getDrawable(requireActivity(), R.drawable.ic_applied)!!,
                     true
                 )
             }

@@ -207,12 +207,29 @@ class ClientActivationFragment : BaseFragment(), PopupMenu.OnMenuItemClickListen
 
 //                    if (jpApplication == null || jpApplication.stepDone == 1) {
                     if(jpApplication == null || jpApplication.status == "" || jpApplication.status == "Draft"){
-                        navigate(
-                            R.id.fragment_application_client_activation, bundleOf(
-                                StringConstants.WORK_ORDER_ID.value to viewModel.observableWorkOrder.value?.profileId
+                        if (mClientViaDeeplink == true) {
+                            if (location == null) {
+                                showToast(getString(R.string.set_location_to_high_accuracy))
+                                return@setOnClickListener
+
+                            }
+                            pb_client_activation.visible()
+                            viewModel.addInviteUserId(
+                                mInviteUserID ?: "",
+                                mWordOrderID,
+                                location!!
                             )
-                        )
-                        viewModel.observableJpApplication.removeObservers(viewLifecycleOwner)
+
+
+                        } else {
+                            navigate(
+                                R.id.fragment_application_client_activation, bundleOf(
+                                    StringConstants.WORK_ORDER_ID.value to viewModel.observableWorkOrder.value?.profileId
+                                )
+                            )
+                            viewModel.observableJpApplication.removeObservers(viewLifecycleOwner)
+                        }
+
                     } else if (jpApplication.status == "Applied") {
                         navigate(
                             R.id.fragment_gig_activation, bundleOf(
@@ -487,17 +504,17 @@ class ClientActivationFragment : BaseFragment(), PopupMenu.OnMenuItemClickListen
                         var img = getImageView(viewHolder, R.id.learning_img)
 
                         if (!obj!!.coverPicture.isNullOrBlank()) {
-                            if (obj!!.coverPicture!!.startsWith("http", true)) {
+                            if (obj.coverPicture!!.startsWith("http", true)) {
 
                                 GlideApp.with(requireContext())
-                                    .load(obj!!.coverPicture!!)
+                                    .load(obj.coverPicture!!)
                                     .placeholder(getCircularProgressDrawable())
                                     .error(R.drawable.ic_learning_default_back)
                                     .into(img)
                             } else {
                                 FirebaseStorage.getInstance()
                                     .getReference(LearningConstants.LEARNING_IMAGES_FIREBASE_FOLDER)
-                                    .child(obj!!.coverPicture!!)
+                                    .child(obj.coverPicture!!)
                                     .downloadUrl
                                     .addOnSuccessListener { fileUri ->
 

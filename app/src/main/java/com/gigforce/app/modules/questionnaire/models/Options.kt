@@ -7,9 +7,7 @@ data class Options(
         var answer: String = "",
         var type: String = "",
         var options: MutableList<String> = mutableListOf(),
-        var selectedItemPosition: Int = -1,
-        var minDate: Date? = null,
-        var maxDate: Date? = null
+        var selectedItemPosition: Int = -1
 
 
 )
