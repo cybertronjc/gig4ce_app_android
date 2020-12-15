@@ -41,7 +41,7 @@ class GigforceDatePickerDialog : DialogFragment() {
     }
 
     private lateinit var callbacks: GigforceDatePickerDialogCallbacks
-    val dateFormat = SimpleDateFormat("MMMM YYYY")
+    val dateFormat = SimpleDateFormat("MMMM yyyy")
 
     var calendar = Calendar.getInstance()
     fun listener() {

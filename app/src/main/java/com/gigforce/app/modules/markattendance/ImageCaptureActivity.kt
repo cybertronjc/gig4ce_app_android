@@ -127,9 +127,12 @@ class ImageCaptureActivity : AppCompatActivity() {
 
 
                 result.toBitmap(BitmapCallback {
-                    show_pic.scaleType =
-                        if (it?.width!! > it.height) ImageView.ScaleType.FIT_CENTER else ImageView.ScaleType.CENTER_CROP
-                    show_pic.setImageBitmap(it)
+                    it?.let {it1->
+                        show_pic.scaleType =
+                            if (it1.width > it1.height) ImageView.ScaleType.FIT_CENTER else ImageView.ScaleType.CENTER_CROP
+                                show_pic.setImageBitmap(it1)
+                    }
+
 //                    show_pic_bg.setImageBitmap(it)
                 });
             } catch (e: UnsupportedOperationException) {
