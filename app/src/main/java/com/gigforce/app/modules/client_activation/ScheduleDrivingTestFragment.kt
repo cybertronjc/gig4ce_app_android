@@ -317,6 +317,7 @@ class ScheduleDrivingTestFragment : BaseFragment(),
 
     override fun enableConfirmOtpButton(enable: Boolean) {
         this.enableOtpEditText = enable
+        txt_otp.setText(txt_otp.text)
     }
 
 

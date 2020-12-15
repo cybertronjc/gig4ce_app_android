@@ -227,7 +227,7 @@ class ClientActivationFragment : BaseFragment(), PopupMenu.OnMenuItemClickListen
                                 )
                             }
 
-                        } else if (jpApplication.status == "Applied") {
+                        } else if (jpApplication.status == "Applied"||jpApplication.status == "Inprocess") {
                             navigate(
                                 R.id.fragment_gig_activation, bundleOf(
                                     StringConstants.WORK_ORDER_ID.value to viewModel.observableWorkOrder.value?.profileId,
