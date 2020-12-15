@@ -584,7 +584,6 @@ class ClientActivationFragment : BaseFragment(), PopupMenu.OnMenuItemClickListen
         val dynamicLink = FirebaseDynamicLinks.getInstance().createDynamicLink()
             .setLink(Uri.parse(deepLink.toString()))
             .setDomainUriPrefix(BuildConfig.REFERRAL_BASE_URL)
-            .setDomainUriPrefix("https://gigforce.page.link/")
             // Open links with this app on Android
             .setAndroidParameters(DynamicLink.AndroidParameters.Builder().build())
             // Open links with com.example.ios on iOS
