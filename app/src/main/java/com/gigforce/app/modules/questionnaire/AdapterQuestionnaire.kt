@@ -22,10 +22,10 @@ class AdapterQuestionnaire : RecyclerView.Adapter<AdapterQuestionnaire.ViewHolde
     private lateinit var callbacks: AdapterQuestionnaireCallbacks
     private var horizontalItemDecoration: ItemOffsetDecoration? = null
     lateinit var items: List<Questions>
-    private var states: List<States>? = null
-    private var cities: List<Cities>? = null
+    private var states: MutableList<States>? = null
+    private var cities: MutableList<Cities>? = null
     private var state: States? = null
-    private var stateCityMap: MutableMap<States, List<Cities>?>? = null
+    private var stateCityMap: MutableMap<States, MutableList<Cities>?>? = null
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
@@ -101,13 +101,16 @@ class AdapterQuestionnaire : RecyclerView.Adapter<AdapterQuestionnaire.ViewHolde
                 adapterAnswers.notifyDataSetChanged()
             }
 
-            override fun getStates(stateCityMap: MutableMap<States, List<Cities>?>, position: Int) {
+            override fun getStates(
+                stateCityMap: MutableMap<States, MutableList<Cities>?>,
+                position: Int
+            ) {
                 this@AdapterQuestionnaire.stateCityMap = stateCityMap
                 callbacks.getStates(position, holder.adapterPosition)
             }
 
             override fun getCities(
-                stateCityMap: MutableMap<States, List<Cities>?>,
+                stateCityMap: MutableMap<States, MutableList<Cities>?>,
                 states: States
             ) {
                 this@AdapterQuestionnaire.stateCityMap = stateCityMap
@@ -132,12 +135,12 @@ class AdapterQuestionnaire : RecyclerView.Adapter<AdapterQuestionnaire.ViewHolde
         this.callbacks = callbacks
     }
 
-    fun setStates(it: List<States>?, parentPosition: Int) {
+    fun setStates(it: MutableList<States>?, parentPosition: Int) {
         this.states = it
         notifyItemChanged(parentPosition)
     }
 
-    fun setCities(it: List<Cities>?, parentPosition: Int) {
+    fun setCities(it: MutableList<Cities>?, parentPosition: Int) {
         this.cities = it;
         notifyItemChanged(parentPosition)
     }

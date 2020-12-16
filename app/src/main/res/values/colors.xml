@@ -118,4 +118,6 @@
     <color name="activated_color">#4E9405</color>
     <color name="rejected_color">#FF000F</color>
 
+    <color name="thumbs_down_color">#27979797</color>
+
 </resources>

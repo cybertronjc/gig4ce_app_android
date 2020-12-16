@@ -9,12 +9,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.gigforce.app.R
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.utils.ItemOffsetDecoration
 import com.gigforce.app.utils.StringConstants
 import com.gigforce.app.utils.getScreenWidth
+import kotlinx.android.synthetic.main.layout_fragment_client_activation.*
 import kotlinx.android.synthetic.main.layout_rejection_dialog.*
 
 class RejectionDialog : DialogFragment() {
@@ -27,6 +29,7 @@ class RejectionDialog : DialogFragment() {
     private var WRONGQUESTIONS: ArrayList<String>? = null
     private var REJECTIONTYPE: Int = REJECTION_NORMAL
     private var REJECTION_TITLE: String? = null
+    private var REJECTION_ILLUSTRATION: String? = null
     private lateinit var callbacks: RejectionDialogCallbacks
     private val adapter: AdapterRejectedAnswers by lazy {
         AdapterRejectedAnswers()
@@ -73,7 +76,9 @@ class RejectionDialog : DialogFragment() {
         tv_sub_one_rejection_dialog.gone()
         tv_sub_two_rejection_dialog.gone()
         tv_content_title_rejection_dialog.text = Html.fromHtml(REJECTION_TITLE)
-
+        Glide.with(this).load(REJECTION_ILLUSTRATION).placeholder(
+            com.gigforce.app.utils.getCircularProgressDrawable(requireContext())
+        ).into(iv_rejection_illustration)
         rv_wrong_questions_rejection_dialog.visible()
     }
 
@@ -98,6 +103,9 @@ class RejectionDialog : DialogFragment() {
             WRONGQUESTIONS = it.getStringArrayList(StringConstants.WRONG_ANSWERS.value)
                 ?: arrayListOf()
             REJECTION_TITLE = it.getString(StringConstants.TITLE.value) ?: ""
+            REJECTION_ILLUSTRATION =
+                it.getString(StringConstants.REJECTION_ILLUSTRATION.value) ?: ""
+
         }
 
         arguments?.let {
@@ -105,6 +113,8 @@ class RejectionDialog : DialogFragment() {
             WRONGQUESTIONS = it.getStringArrayList(StringConstants.WRONG_ANSWERS.value)
                 ?: arrayListOf()
             REJECTION_TITLE = it.getString(StringConstants.TITLE.value) ?: ""
+            REJECTION_ILLUSTRATION =
+                it.getString(StringConstants.REJECTION_ILLUSTRATION.value) ?: ""
 
         }
     }
@@ -114,6 +124,7 @@ class RejectionDialog : DialogFragment() {
         outState.putStringArrayList(StringConstants.WRONG_ANSWERS.value, WRONGQUESTIONS)
         outState.putInt(StringConstants.FROM_CLIENT_ACTIVATON.value, REJECTIONTYPE)
         outState.putString(StringConstants.TITLE.value, REJECTION_TITLE)
+        outState.putString(StringConstants.REJECTION_ILLUSTRATION.value, REJECTION_ILLUSTRATION)
 
 
     }

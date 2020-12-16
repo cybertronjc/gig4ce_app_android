@@ -1111,6 +1111,8 @@
     <string name="downloaded_certificate_exists">Downloaded Certificate Already Exists!!!</string>
     <string name="complete_activation">Complete Activation</string>
     <string name="set_location_to_high_accuracy">Please turn on your location and set it to high accuracy to continue!!</string>
+    <string name="current_state">Current State</string>
+    <string name="current_city">Current City</string>
 
 
 </resources>

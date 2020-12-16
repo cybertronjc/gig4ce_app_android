@@ -10,10 +10,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.SavedStateViewModelFactory
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.LinearSmoothScroller
-import androidx.recyclerview.widget.PagerSnapHelper
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.*
 import androidx.recyclerview.widget.RecyclerView.SmoothScroller
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
@@ -21,13 +18,13 @@ import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.client_activation.DrivingCertSuccessDialog
 import com.gigforce.app.modules.client_activation.RejectionDialog
+import com.gigforce.app.modules.client_activation.models.Cities
 import com.gigforce.app.modules.client_activation.models.States
 import com.gigforce.app.modules.landingscreen.models.Dependency
 import com.gigforce.app.modules.questionnaire.models.Questions
 import com.gigforce.app.utils.*
 import kotlinx.android.synthetic.main.layout_questionnaire_fragment.*
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 class QuestionnaireFragment : BaseFragment(), AdapterQuestionnaire.AdapterQuestionnaireCallbacks,
@@ -135,7 +132,7 @@ class QuestionnaireFragment : BaseFragment(), AdapterQuestionnaire.AdapterQuesti
         }
         PushDownAnim.setPushDownAnimTo(tv_action_questionnaire)
             .setOnClickListener(View.OnClickListener {
-                if (selectedPosition == adapter.items.size - 1) {
+                if (selectedPosition == adapter.items.size - 1 && adapter.items[selectedPosition].selectedAnswer != -1) {
                     val items = adapter.items.filter { questions ->
                         questions.type == "mcq" && !questions.options[questions.selectedAnswer].isAnswer ||
                                 questions.type == "date" && checkForDateRange(questions)
@@ -155,6 +152,7 @@ class QuestionnaireFragment : BaseFragment(), AdapterQuestionnaire.AdapterQuesti
                         rejectionDialog.arguments = bundleOf(
                             StringConstants.REJECTION_TYPE.value to RejectionDialog.REJECTION_QUESTIONNAIRE,
                             StringConstants.TITLE.value to viewModel.observableQuestionnaireResponse.value?.rejectionTitle,
+                            StringConstants.REJECTION_ILLUSTRATION.value to viewModel.observableQuestionnaireResponse.value?.rejectionIllustration,
                             StringConstants.WRONG_ANSWERS.value to items.map { it.rejectionPoint }
                         )
                         rejectionDialog.show(
@@ -171,6 +169,7 @@ class QuestionnaireFragment : BaseFragment(), AdapterQuestionnaire.AdapterQuesti
                     ratioLayoutManager.setScrollEnabled(true)
                     smoothScroller.targetPosition = selectedPosition
                     ratioLayoutManager.startSmoothScroll(smoothScroller)
+                    adapter.notifyItemChanged(selectedPosition)
                     rv_questionnaire.postDelayed({
                         ratioLayoutManager.setScrollEnabled(false)
 
@@ -209,11 +208,25 @@ class QuestionnaireFragment : BaseFragment(), AdapterQuestionnaire.AdapterQuesti
 
     private fun initObservers() {
         viewModel.observableStates.observe(viewLifecycleOwner, Observer {
+            if (it.isNullOrEmpty()) return@Observer
+            val stateHeader = getString(R.string.current_state)
+            if (it[0] != States(name = stateHeader)) {
+                it.add(0, States(name = stateHeader))
+            }
             adapter.setStates(it, parentPosition)
         })
 
         viewModel.observableCities.observe(viewLifecycleOwner, Observer {
-            adapter.setCities(it, parentPosition)
+
+            val cityHeader = getString(R.string.current_city)
+            if (it.isNullOrEmpty()) {
+                adapter.setCities(mutableListOf(Cities(name = cityHeader)), parentPosition)
+            } else if (it[0] != Cities(name = cityHeader)) {
+                it.add(0, Cities(name = cityHeader))
+                adapter.setCities(it, parentPosition)
+
+            }
+
         })
         viewModel.observableError.observe(viewLifecycleOwner, Observer {
             pb_questionnaire.gone()
@@ -242,6 +255,8 @@ class QuestionnaireFragment : BaseFragment(), AdapterQuestionnaire.AdapterQuesti
     }
 
     private fun setupRecycler() {
+        (rv_questionnaire.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
+
         rv_questionnaire.adapter = adapter
         adapter.setCallbacks(this)
         val ratioToCover = 0.85f

@@ -5,5 +5,6 @@ data class QuestionnaireResponse(
     var questions: List<Questions> = listOf(),
     var jobProfileId: String = "",
     var title: String = "",
-    var rejectionTitle: String = ""
+    var rejectionTitle: String = "",
+    var rejectionIllustration: String = ""
 )
