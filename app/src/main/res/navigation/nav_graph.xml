@@ -719,6 +719,14 @@
         android:name="com.gigforce.app.modules.explore_by_role.AddEducationFragment"
         android:label="fragment_new_education"
         tools:layout="@layout/layout_add_education_fragment" />
+    <fragment
+        android:id="@+id/ambassadorProgramDetailsFragment"
+        android:name="com.gigforce.app.modules.ambassador_user_enrollment.ambassador_enrollment.AmbassadorProgramDetailsFragment"
+        android:label="AmbassadorProgramDetailsFragment" />
+    <fragment
+        android:id="@+id/ambassadorEnrollmentRequirementFragment"
+        android:name="com.gigforce.app.modules.ambassador_user_enrollment.ambassador_enrollment.AmbassadorEnrollmentRequirementFragment"
+        android:label="AmbassadorEnrollmentRequirementFragment" />
 
 
 </navigation>

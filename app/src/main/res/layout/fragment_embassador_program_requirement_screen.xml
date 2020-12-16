@@ -47,7 +47,7 @@
         android:layout_height="96dp"
         android:layout_gravity="center"
         android:layout_marginTop="16dp"
-        android:src="@drawable/bg_gig_type"
+        android:src="@drawable/ic_apply_ambassador"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbar_layout" />
@@ -66,7 +66,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/apply_image"
-        tools:text="Thanks for showing interest in  " />
+        android:text="Thanks for showing interest in  " />
 
     <TextView
         android:id="@+id/complete_form_label"
@@ -83,7 +83,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/thanks_for_label"
-        tools:text="Please complete the below information to submit
+        android:text="Please complete the below information to submit
 your Application" />
 
     <TextView
@@ -99,7 +99,7 @@ your Application" />
         android:textStyle="normal"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/complete_form_label"
-        tools:text="Steps Completed" />
+        android:text="Steps Completed" />
 
     <TextView
         android:id="@+id/steps_completed_tv"
@@ -164,7 +164,7 @@ your Application" />
             android:textColor="@color/black"
             android:textSize="14sp"
             android:textStyle="normal"
-            tools:text="Profile Photo" />
+            android:text="Profile Photo" />
 
 
         <ImageView
@@ -201,7 +201,7 @@ your Application" />
             android:textColor="@color/black"
             android:textSize="14sp"
             android:textStyle="normal"
-            tools:text="Current Address" />
+            android:text="Current Address" />
 
 
         <ImageView
@@ -239,7 +239,7 @@ your Application" />
             android:textColor="@color/black"
             android:textSize="14sp"
             android:textStyle="normal"
-            tools:text="Bank Details" />
+            android:text="Bank Details" />
 
 
         <ImageView

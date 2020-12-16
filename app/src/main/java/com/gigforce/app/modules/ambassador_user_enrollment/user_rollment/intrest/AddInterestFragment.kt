@@ -64,7 +64,6 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 
 class AddInterestFragment : BaseFragment(),
-    OtherOptionClickListener,
     PopupMenu.OnMenuItemClickListener,
     DeclineGigDialogFragmentResultListener {
 
@@ -109,21 +108,21 @@ class AddInterestFragment : BaseFragment(),
 
     private fun initUi() {
 
-        details_label.setOnClickListener {
-            navigate(
-                R.id.gigDetailsFragment, bundleOf(
-                    GigDetailsFragment.INTENT_EXTRA_GIG_ID to viewModel.currentGig?.gigId
-                )
-            )
-        }
-
-        expand_iv.setOnClickListener {
-            navigate(
-                R.id.gigDetailsFragment, bundleOf(
-                    GigDetailsFragment.INTENT_EXTRA_GIG_ID to viewModel.currentGig?.gigId
-                )
-            )
-        }
+//        details_label.setOnClickListener {
+//            navigate(
+//                R.id.gigDetailsFragment, bundleOf(
+//                    GigDetailsFragment.INTENT_EXTRA_GIG_ID to viewModel.currentGig?.gigId
+//                )
+//            )
+//        }
+//
+//        expand_iv.setOnClickListener {
+//            navigate(
+//                R.id.gigDetailsFragment, bundleOf(
+//                    GigDetailsFragment.INTENT_EXTRA_GIG_ID to viewModel.currentGig?.gigId
+//                )
+//            )
+//        }
 
         gig_cross_btn.setOnClickListener {
             activity?.onBackPressed()
@@ -383,13 +382,13 @@ class AddInterestFragment : BaseFragment(),
             LinearLayoutManager.HORIZONTAL,
             false
         )
-        val adapter = OtherOptionsAdapter(
-            requireContext(),
-            optionList
-        ).apply {
-            setListener(this@AddInterestFragment)
-        }
-        other_options_recycler_view.adapter = adapter
+//        val adapter = OtherOptionsAdapter(
+//            requireContext(),
+//            optionList
+//        ).apply {
+//            setListener(this@AddInterestFragment)
+//        }
+     //   other_options_recycler_view.adapter = adapter
     }
 
     private fun showPastGigDetails(gig: Gig) {
@@ -552,22 +551,7 @@ class AddInterestFragment : BaseFragment(),
         gig_date_tv.text = "${dateFormatter.format(gig.startDateTime!!.toDate())}"
     }
 
-    override fun onOptionClicked(option: OtherOption) {
 
-        when (option.id) {
-            ID_HELP -> {
-                navigate(R.id.fakeGigContactScreenFragment)
-            }
-            ID_IDENTITY_CARD -> {
-                navigate(R.id.giger_id_fragment, Bundle().apply {
-                    this.putString(GigPageFragment.INTENT_EXTRA_GIG_ID, viewModel.currentGig?.gigId)
-                })
-            }
-            else -> {
-            }
-        }
-
-    }
 
     override fun onMenuItemClick(item: MenuItem?): Boolean {
         item ?: return false

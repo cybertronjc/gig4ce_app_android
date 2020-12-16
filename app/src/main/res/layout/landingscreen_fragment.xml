@@ -680,7 +680,7 @@
 
                     <TextView
                         android:id="@+id/amb_subtitle"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/lato"
                         android:textStyle="normal"
@@ -690,6 +690,7 @@
                         android:lineSpacingExtra="3sp"
                         android:layout_marginStart="4dp"
                         app:layout_constraintStart_toEndOf="@+id/imageView11"
+                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/join_as_amb_label"
                         android:text="More you create profiles , more you earn ."
                         />

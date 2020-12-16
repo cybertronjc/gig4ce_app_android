@@ -68,12 +68,8 @@ class AmbassadorProgramDetailsFragment : BaseFragment(),
 
 
     private fun initUi() {
-        toolbar?.setNavigationOnClickListener {
-            activity?.onBackPressed()
-        }
 
         roleBasedLearningTV.text = "Related Learnings"
-        toolbar?.setOnMenuItemClickListener(this)
         ambRequirementsSeeMoreTV.setOnClickListener {
 
             if (viewModel.currentGig == null)
@@ -81,7 +77,7 @@ class AmbassadorProgramDetailsFragment : BaseFragment(),
 
             if (ambReqContainer.childCount == 4) {
                 //Collapsed
-                inflateambRequirements(
+                inflateAmbRequirements(
                     viewModel.currentGig!!.gigRequirements.subList(
                         4,
                         viewModel.currentGig!!.gigRequirements.size
@@ -91,8 +87,12 @@ class AmbassadorProgramDetailsFragment : BaseFragment(),
             } else {
                 //Expanded
                 ambReqContainer.removeViews(4, ambReqContainer.childCount - 4)
-                gigRequirementsSeeMoreTV.text = getString(R.string.plus_see_more)
+                ambRequirementsSeeMoreTV.text = getString(R.string.plus_see_more)
             }
+        }
+
+        btn_apply_now.setOnClickListener {
+            navigate(R.id.ambassadorEnrollmentRequirementFragment)
         }
     }
 
@@ -228,97 +228,66 @@ class AmbassadorProgramDetailsFragment : BaseFragment(),
     private fun setGigDetailsOnView(gig: Gig) {
 
 
-        if (gig.isPresentGig() || gig.isPastGig()) {
-            toolbar?.menu?.findItem(R.id.action_decline_gig)?.setVisible(false)
-        } else {
-            toolbar.menu?.findItem(R.id.action_decline_gig)?.setVisible(true)
-        }
-
-        toolbar?.title = gig.title
-        roleNameTV.text = gig.title
-        company_rating_tv.text = if (gig.gigRating != 0.0f) gig.gigRating.toString() else "-"
-
-        inflateGigChips(gig)
-
-        gig_req_container.removeAllViews()
-        if (gig.gigRequirements.size > 4) {
-            inflateambRequirements(gig.gigRequirements.take(4))
-            gigRequirementsSeeMoreTV.visible()
-        } else {
-            inflateambRequirements(gig.gigRequirements)
-            gigRequirementsSeeMoreTV.gone()
-        }
-
-        gig_resp_container.removeAllViews()
-        if (gig.gigResponsibilities.size > 4) {
-            inflateGigResponsibilities(gig.gigResponsibilities.take(4))
-            gigResponsiblitiesSeeMoreTV.visible()
-        } else {
-            inflateGigResponsibilities(gig.gigResponsibilities)
-            gigResponsiblitiesSeeMoreTV.gone()
-        }
-
-        val earningRow = if (gig.isMonthlyGig) {
-            "<b>Typical per month earning</b> : ${if (gig.gigAmount != 0.0) "Rs. ${gig.gigAmount}" else "As per contract"}"
-        } else {
-            "<b>Typical per day earning</b> : ${if (gig.gigAmount != 0.0) "Rs. ${gig.gigAmount}" else "As per contract"}"
-        }
-
-        gig_earning_container.removeAllViews()
-        inflateGigPayments(
-            listOf(
-                earningRow
-            )
-        )
-
-        gig_others_container.removeAllViews()
-        inflateGigOthers(
-            listOf(
-                "Dummy Other row",
-                "Dummy Other row 2"
-            )
-        )
-
-        gig_faq_container.removeAllViews()
-        inflateGigFaqs(
-            listOf(
-                "Dummy Faq row",
-                "Dummy Faq row 2"
-            )
-        )
+//        if (gig.isPresentGig() || gig.isPastGig()) {
+//            toolbar?.menu?.findItem(R.id.action_decline_gig)?.setVisible(false)
+//        } else {
+//            toolbar.menu?.findItem(R.id.action_decline_gig)?.setVisible(true)
+//        }
+//
+//        toolbar?.title = gig.title
+//        roleNameTV.text = gig.title
+//        company_rating_tv.text = if (gig.gigRating != 0.0f) gig.gigRating.toString() else "-"
+//
+//        inflateGigChips(gig)
+//
+//        gig_req_container.removeAllViews()
+//        if (gig.gigRequirements.size > 4) {
+//            inflateambRequirements(gig.gigRequirements.take(4))
+//            gigRequirementsSeeMoreTV.visible()
+//        } else {
+//            inflateambRequirements(gig.gigRequirements)
+//            gigRequirementsSeeMoreTV.gone()
+//        }
+//
+//        gig_resp_container.removeAllViews()
+//        if (gig.gigResponsibilities.size > 4) {
+//            inflateGigResponsibilities(gig.gigResponsibilities.take(4))
+//            gigResponsiblitiesSeeMoreTV.visible()
+//        } else {
+//            inflateGigResponsibilities(gig.gigResponsibilities)
+//            gigResponsiblitiesSeeMoreTV.gone()
+//        }
+//
+//        val earningRow = if (gig.isMonthlyGig) {
+//            "<b>Typical per month earning</b> : ${if (gig.gigAmount != 0.0) "Rs. ${gig.gigAmount}" else "As per contract"}"
+//        } else {
+//            "<b>Typical per day earning</b> : ${if (gig.gigAmount != 0.0) "Rs. ${gig.gigAmount}" else "As per contract"}"
+//        }
+//
+//        gig_earning_container.removeAllViews()
+//        inflateGigPayments(
+//            listOf(
+//                earningRow
+//            )
+//        )
+//
+//        gig_others_container.removeAllViews()
+//        inflateGigOthers(
+//            listOf(
+//                "Dummy Other row",
+//                "Dummy Other row 2"
+//            )
+//        )
+//
+//        gig_faq_container.removeAllViews()
+//        inflateGigFaqs(
+//            listOf(
+//                "Dummy Faq row",
+//                "Dummy Faq row 2"
+//            )
+//        )
     }
 
-    private fun inflateGigChips(gig: Gig) {
-        var chip: Chip
-        if (gig.gigType != null) {
-            var chip = layoutInflater.inflate(
-                R.layout.fragment_gig_page_2_details_chips,
-                gig_chip_group,
-                false
-            ) as Chip
-            chip.text = gig.gigType
-            gig_chip_group.addView(chip)
-        }
-
-        chip = layoutInflater.inflate(
-            R.layout.fragment_gig_page_2_details_chips,
-            gig_chip_group,
-            false
-        ) as Chip
-        chip.text = if (gig.isMonthlyGig) "Monthly" else "daily"
-        gig_chip_group.addView(chip)
-
-
-        if (gig.gigAmount != 0.0) {
-            chip = layoutInflater.inflate(
-                R.layout.fragment_gig_page_2_details_chips,
-                gig_chip_group,
-                false
-            ) as Chip
-            chip.text = "Rs ${gig.gigAmount}"
-            gig_chip_group.addView(chip)
-        }
-    }
 
     private fun inflateAmbRequirements(ambRequirements: List<String>) = ambRequirements.forEach {
 
@@ -343,12 +312,12 @@ class AmbassadorProgramDetailsFragment : BaseFragment(),
         }
     }
 
-    private fun inflateGigResponsibilities(gigResp: List<String>) = gigResp.forEach {
+    private fun inflateAmbResponsibilities(ambResp: List<String>) = ambResp.forEach {
 
         if (it.contains(":")) {
-            gig_resp_container.inflate(R.layout.gig_requirement_item, true)
+            ambRespContainer.inflate(R.layout.gig_requirement_item, true)
             val gigItem: LinearLayout =
-                gig_resp_container.getChildAt(gig_resp_container.childCount - 1) as LinearLayout
+                ambRespContainer.getChildAt(ambRespContainer.childCount - 1) as LinearLayout
             val gigTitleTV: TextView = gigItem.findViewById(R.id.title)
             val contentTV: TextView = gigItem.findViewById(R.id.content)
 
@@ -358,60 +327,13 @@ class AmbassadorProgramDetailsFragment : BaseFragment(),
             gigTitleTV.text = fromHtml(title)
             contentTV.text = fromHtml(content)
         } else {
-            gig_resp_container.inflate(R.layout.gig_details_item, true)
+            ambRespContainer.inflate(R.layout.gig_details_item, true)
             val gigItem: LinearLayout =
-                gig_resp_container.getChildAt(gig_resp_container.childCount - 1) as LinearLayout
+                ambRespContainer.getChildAt(ambRespContainer.childCount - 1) as LinearLayout
             val gigTextTV: TextView = gigItem.findViewById(R.id.text)
             gigTextTV.text = fromHtml(it)
         }
     }
-
-    private fun inflateGigPayments(gigResp: List<String>) = gigResp.forEach {
-
-        if (it.contains(":")) {
-            gig_earning_container.inflate(R.layout.gig_requirement_item, true)
-            val gigItem: LinearLayout =
-                gig_earning_container.getChildAt(gig_earning_container.childCount - 1) as LinearLayout
-            val gigTitleTV: TextView = gigItem.findViewById(R.id.title)
-            val contentTV: TextView = gigItem.findViewById(R.id.content)
-
-            val title = it.substringBefore(":").trim()
-            val content = it.substringAfter(":").trim()
-
-            gigTitleTV.text = fromHtml(title)
-            contentTV.text = fromHtml(content)
-        } else {
-            gig_earning_container.inflate(R.layout.gig_details_item, true)
-            val gigItem: LinearLayout =
-                gig_earning_container.getChildAt(gig_earning_container.childCount - 1) as LinearLayout
-            val gigTextTV: TextView = gigItem.findViewById(R.id.text)
-            gigTextTV.text = fromHtml(it)
-        }
-    }
-
-    private fun inflateGigOthers(gigResp: List<String>) = gigResp.forEach {
-
-        if (it.contains(":")) {
-            gig_others_container.inflate(R.layout.gig_requirement_item, true)
-            val gigItem: LinearLayout =
-                gig_others_container.getChildAt(gig_others_container.childCount - 1) as LinearLayout
-            val gigTitleTV: TextView = gigItem.findViewById(R.id.title)
-            val contentTV: TextView = gigItem.findViewById(R.id.content)
-
-            val title = it.substringBefore(":").trim()
-            val content = it.substringAfter(":").trim()
-
-            gigTitleTV.text = fromHtml(title)
-            contentTV.text = fromHtml(content)
-        } else {
-            gig_others_container.inflate(R.layout.gig_details_item, true)
-            val gigItem: LinearLayout =
-                gig_others_container.getChildAt(gig_others_container.childCount - 1) as LinearLayout
-            val gigTextTV: TextView = gigItem.findViewById(R.id.text)
-            gigTextTV.text = fromHtml(it)
-        }
-    }
-
 
     private fun inflateGigFaqs(gigResp: List<String>) = gigResp.forEach {
 
@@ -459,24 +381,7 @@ class AmbassadorProgramDetailsFragment : BaseFragment(),
                 true
             }
             R.id.action_decline_gig -> {
-                if (viewModel.currentGig == null)
-                    return true
 
-                if (viewModel.currentGig!!.startDateTime!!.toLocalDateTime() < LocalDateTime.now()) {
-                    //Past or ongoing gig
-
-                    MaterialAlertDialogBuilder(requireContext())
-                        .setTitle("Alert")
-                        .setMessage("Cannot decline past or ongoing gig")
-                        .setPositiveButton(getString(R.string.okay_text)) { _, _ -> }
-                        .show()
-
-                    return true
-                }
-
-                if (viewModel.currentGig != null) {
-                    declineGigDialog()
-                }
                 true
             }
             else -> false

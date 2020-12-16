@@ -64,11 +64,11 @@ class AmbassadorEnrollmentRequirementFragment : BaseFragment(),
 
                 if (it.address.current.isEmpty()) {
                     current_address_check_iv.background =
-                        ContextCompat.getDrawable(requireContext(), R.drawable.round_green)
+                        ContextCompat.getDrawable(requireContext(), R.drawable.round_yellow)
                     current_address_check_iv.setImageResource(R.drawable.ic_baseline_check_32)
                 } else {
                     current_address_check_iv.background =
-                        ContextCompat.getDrawable(requireContext(), R.drawable.round_yellow)
+                        ContextCompat.getDrawable(requireContext(), R.drawable.round_green)
                     current_address_check_iv.setImageResource(R.drawable.ic_baseline_check_32)
                 }
             })

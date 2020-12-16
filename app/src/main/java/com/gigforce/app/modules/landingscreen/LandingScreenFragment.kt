@@ -600,8 +600,8 @@ class LandingScreenFragment : BaseFragment() {
             if (amb_join_open_btn.text == "Open") {
                 TODO()
             } else {
+                navigate(R.id.ambassadorProgramDetailsFragment)
             }
-
         }
     }
 
