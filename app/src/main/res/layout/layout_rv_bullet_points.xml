@@ -18,7 +18,7 @@
             android:id="@+id/iv_bullets"
             android:layout_width="@dimen/size_24"
             android:layout_height="@dimen/size_24"
-            android:scaleType="centerCrop"
+            android:scaleType="fitCenter"
             android:adjustViewBounds="true"
             android:layout_marginStart="@dimen/size_16"
             android:layout_marginTop="@dimen/size_24" />

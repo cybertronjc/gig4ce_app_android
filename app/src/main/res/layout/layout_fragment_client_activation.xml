@@ -163,13 +163,15 @@
 
                 <ImageView
                     android:id="@+id/imageView36"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="@dimen/size_24"
+                    android:layout_height="@dimen/size_24"
                     android:layout_marginStart="16dp"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitCenter"
                     android:layout_marginTop="24dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/ic_group_learning" />
+                   />
 
                 <TextView
                     android:id="@+id/textView120"

@@ -21,7 +21,7 @@
             android:layout_marginStart="@dimen/size_16"
             android:layout_marginTop="@dimen/size_24"
             android:adjustViewBounds="true"
-            android:scaleType="centerCrop" />
+            android:scaleType="fitCenter" />
 
         <TextView
             android:id="@+id/tv_what_client_activation"

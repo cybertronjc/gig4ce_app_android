@@ -59,10 +59,10 @@ class GigActivationFragment : BaseFragment(),
         super.onViewCreated(view, savedInstanceState)
         getDataFromIntents(savedInstanceState)
         val layoutParams: ConstraintLayout.LayoutParams =
-            playerView.layoutParams as ConstraintLayout.LayoutParams
+            cv_player_view.layoutParams as ConstraintLayout.LayoutParams
         playerViewHeight = (getScreenWidth(requireActivity()).height * 45) / 100
         layoutParams.height = playerViewHeight
-        playerView.layoutParams = layoutParams
+        cv_player_view.layoutParams = layoutParams
 
         checkForBackPress()
         viewModel =
@@ -107,9 +107,9 @@ class GigActivationFragment : BaseFragment(),
             ActivityInfo.SCREEN_ORIENTATION_PORTRAIT -> {
                 Log.d(VideoWithTextFragment.TAG, "PORTRAIT")
                 val layoutParams: ConstraintLayout.LayoutParams =
-                    playerView.layoutParams as ConstraintLayout.LayoutParams
+                    cv_player_view.layoutParams as ConstraintLayout.LayoutParams
                 layoutParams.height = playerViewHeight
-                playerView.layoutParams = layoutParams
+                cv_player_view.layoutParams = layoutParams
                 cl_content_gig_activation.visible()
                 tb_gig_activation.visible()
                 sv_gig_activation.post {
@@ -125,8 +125,8 @@ class GigActivationFragment : BaseFragment(),
             ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE -> {
                 Log.d(VideoWithTextFragment.TAG, "LANDSCAPE")
 
-                playerView?.layoutParams?.height = LinearLayout.LayoutParams.MATCH_PARENT
-                playerView?.layoutParams?.width = LinearLayout.LayoutParams.MATCH_PARENT
+                cv_player_view?.layoutParams?.height = LinearLayout.LayoutParams.MATCH_PARENT
+                cv_player_view?.layoutParams?.width = LinearLayout.LayoutParams.MATCH_PARENT
                 cl_content_gig_activation.gone()
                 tb_gig_activation.gone()
 
