@@ -362,7 +362,7 @@ class GigActivationFragment : BaseFragment(),
         playerView.player = player
 
         playerView.resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FILL
-        player?.videoScalingMode = C.VIDEO_SCALING_MODE_SCALE_TO_FIT
+        player?.videoScalingMode = C.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING
         val mediaSource = buildMediaSource(uri)
         if (playbackPosition != 0L) {
             player?.seekTo(currentWindow, playbackPosition)

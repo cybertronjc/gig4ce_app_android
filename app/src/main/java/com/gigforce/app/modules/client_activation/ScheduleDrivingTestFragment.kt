@@ -208,31 +208,31 @@ class ScheduleDrivingTestFragment : BaseFragment(),
                     }
                 }, 3000)
 
-                viewModel.downloadCertificate(viewModel.applicationId, viewModel.submissionId)
-                    .observe(viewLifecycleOwner, Observer {
-                        it?.let { resource ->
-                            when (resource.status) {
-                                Status.SUCCESS -> {
-                                    viewModel.observableApplied.observe(
-                                        viewLifecycleOwner,
-                                        Observer { application ->
-                                            pb_schedule_test.gone()
-                                            if (application == true) {
+//                viewModel.downloadCertificate(viewModel.applicationId, viewModel.submissionId)
+//                    .observe(viewLifecycleOwner, Observer {
+//                        it?.let { resource ->
+//                            when (resource.status) {
+//                                Status.SUCCESS -> {
+//                                    viewModel.observableApplied.observe(
+//                                        viewLifecycleOwner,
+//                                        Observer { application ->
+//                                            pb_schedule_test.gone()
+//                                            if (application == true) {
                                                 countDownTimer?.cancel()
                                                 val drivingCertSuccessDialog =
                                                     DrivingCertSuccessDialog()
                                                 drivingCertSuccessDialog.isCancelable = false
-                                                drivingCertSuccessDialog.arguments = bundleOf(
-                                                    StringConstants.DOC_URL.value to it.data?.downloadLink
-                                                )
+//                                                drivingCertSuccessDialog.arguments = bundleOf(
+//                                                    StringConstants.DOC_URL.value to it.data?.downloadLink
+//                                                )
                                                 drivingCertSuccessDialog.setCallbacks(this)
                                                 drivingCertSuccessDialog
                                                 drivingCertSuccessDialog.show(
                                                     parentFragmentManager,
                                                     DrivingCertSuccessDialog::class.java.name
                                                 )
-                                            }
-                                        })
+//                                            }
+//                                        })
                                     viewModel.apply(
                                         mWordOrderID,
                                         mType,
@@ -240,19 +240,19 @@ class ScheduleDrivingTestFragment : BaseFragment(),
                                         adapter.selectedItems
                                     )
 
-                                }
-                                Status.ERROR -> {
-                                    pb_schedule_test.gone()
-                                    showToast(it.message ?: "")
-
-
-                                }
-                                Status.LOADING -> {
-                                    pb_schedule_test.visible()
-                                }
-                            }
-                        }
-                    })
+//                                }
+//                                Status.ERROR -> {
+//                                    pb_schedule_test.gone()
+//                                    showToast(it.message ?: "")
+//
+//
+//                                }
+//                                Status.LOADING -> {
+//                                    pb_schedule_test.visible()
+//                                }
+//                            }
+//                        }
+//                    })
                 pb_schedule_test.visible()
 //                viewModel.verifyPhoneNumberWithCodeScheduleDrivingTest(otpIn.toString())
             } else {

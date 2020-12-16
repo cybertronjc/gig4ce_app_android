@@ -28,15 +28,27 @@ class DrivingCertSuccessDialog : DialogFragment() {
     private lateinit var mDocURL: String
     private lateinit var callbacks: DrivingCertSuccessDialogCallbacks
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.layout_dialog_driving_certificate_success, container, false)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        return inflater.inflate(
+            R.layout.layout_dialog_driving_certificate_success,
+            container,
+            false
+        )
     }
 
     override fun onStart() {
         super.onStart()
         val dialog: Dialog? = dialog
         if (dialog != null) {
-            dialog.window?.setLayout(getScreenWidth(requireActivity()).width - resources.getDimensionPixelSize(R.dimen.size_32), ViewGroup.LayoutParams.WRAP_CONTENT)
+            dialog.window?.setLayout(
+                getScreenWidth(requireActivity()).width - resources.getDimensionPixelSize(
+                    R.dimen.size_32
+                ), ViewGroup.LayoutParams.WRAP_CONTENT
+            )
         }
     }
 
@@ -60,25 +72,31 @@ class DrivingCertSuccessDialog : DialogFragment() {
                                     Manifest.permission.WRITE_EXTERNAL_STORAGE
                             )
                     ) {
-                        downloadCertificate(mDocURL)
+                        dismiss()
+                        callbacks.onClickOkay()
+//                        downloadCertificate(mDocURL)
                     }
                 })
 
     }
 
     override fun onRequestPermissionsResult(
-            requestCode: Int,
-            permissions: Array<out String>,
-            grantResults: IntArray
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == PermissionUtils.reqCodePerm && PermissionUtils.permissionsGrantedCheck(
-                        grantResults!!
-                )
+                grantResults!!
+            )
         ) {
             rl_okay_driving_cert_success.performClick()
         } else {
-            Toast.makeText(requireContext(), getString(R.string.perm_not_granted), Toast.LENGTH_LONG).show()
+            Toast.makeText(
+                requireContext(),
+                getString(R.string.perm_not_granted),
+                Toast.LENGTH_LONG
+            ).show()
         }
     }
 
@@ -129,26 +147,26 @@ class DrivingCertSuccessDialog : DialogFragment() {
         request.setVisibleInDownloadsUi(false)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             request.setDestinationInExternalPublicDir(
-                    Environment.DIRECTORY_DOCUMENTS,
-                    "DrivingCertificate.pdf"
+                Environment.DIRECTORY_DOCUMENTS,
+                "DrivingCertificate.pdf"
             )
         } else {
             request.setDestinationInExternalPublicDir(
-                    Environment.DIRECTORY_DOWNLOADS,
-                    "DrivingCertificate.pdf"
+                Environment.DIRECTORY_DOWNLOADS,
+                "DrivingCertificate.pdf"
             )
         }
         if (downloadmanager != null) {
             try {
                 Toast.makeText(
-                        context,
-                        "Your Driving Certificate is Downloading",
-                        Toast.LENGTH_SHORT
+                    context,
+                    "Your Driving Certificate is Downloading",
+                    Toast.LENGTH_SHORT
                 ).show()
                 downloadmanager.enqueue(request)
             } catch (e: Exception) {
                 Toast.makeText(context, "NetWork Error. Please try again", Toast.LENGTH_SHORT)
-                        .show()
+                    .show()
             }
         } else {
             Toast.makeText(context, "Network Error. Please try again", Toast.LENGTH_SHORT).show()
@@ -157,7 +175,7 @@ class DrivingCertSuccessDialog : DialogFragment() {
         progressBarDialog.setTitle("Downloading Driving Certificate, Please Wait...")
         progressBarDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL)
         progressBarDialog.setButton(
-                DialogInterface.BUTTON_POSITIVE, "OK"
+            DialogInterface.BUTTON_POSITIVE, "OK"
         ) { dialog: DialogInterface?, whichButton: Int ->
             dismiss()
             callbacks.onClickOkay()
@@ -176,14 +194,14 @@ class DrivingCertSuccessDialog : DialogFragment() {
                 var bytes_downloaded = 0
                 if (cursor != null) {
                     bytes_downloaded = cursor.getInt(
-                            cursor
-                                    .getColumnIndex(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR)
+                        cursor
+                            .getColumnIndex(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR)
                     )
                 }
                 var bytes_total = 0
                 if (cursor != null) {
                     bytes_total =
-                            cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_TOTAL_SIZE_BYTES))
+                        cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_TOTAL_SIZE_BYTES))
                 }
                 if (cursor != null && cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS)) == DownloadManager.STATUS_SUCCESSFUL) {
                     downloading = false
