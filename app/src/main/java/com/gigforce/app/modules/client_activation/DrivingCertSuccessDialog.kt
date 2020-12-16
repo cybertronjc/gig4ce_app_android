@@ -22,7 +22,6 @@ import com.gigforce.app.utils.PushDownAnim
 import com.gigforce.app.utils.StringConstants
 import com.gigforce.app.utils.getScreenWidth
 import kotlinx.android.synthetic.main.layout_dialog_driving_certificate_success.*
-import java.io.File
 
 class DrivingCertSuccessDialog : DialogFragment() {
 
@@ -52,7 +51,7 @@ class DrivingCertSuccessDialog : DialogFragment() {
 //            dismiss()
 //            callbacks.onClickOkay()
 //        }
-        PushDownAnim.setPushDownAnimTo(tv_okay_driving_cert_success)
+        PushDownAnim.setPushDownAnimTo(rl_okay_driving_cert_success)
                 .setOnClickListener(View.OnClickListener {
                     if (PermissionUtils.checkForPermissionFragment(
                                     this,
@@ -77,7 +76,7 @@ class DrivingCertSuccessDialog : DialogFragment() {
                         grantResults!!
                 )
         ) {
-            tv_okay_driving_cert_success.performClick()
+            rl_okay_driving_cert_success.performClick()
         } else {
             Toast.makeText(requireContext(), getString(R.string.perm_not_granted), Toast.LENGTH_LONG).show()
         }
