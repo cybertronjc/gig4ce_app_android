@@ -219,7 +219,7 @@ class AddSelfieVideoFragment : BaseFragment(), CaptureVideoFragmentEventListener
                         requireContext().filesDir,
                         "vid_${DateHelper.getFullDateTimeStamp()}.mp4"
                     )
-                    viewModel.uploadSelfieVideo(mCapturedVideoPath!!, transcodedFile)
+                    viewModel?.uploadSelfieVideo(mCapturedVideoPath!!, transcodedFile)
                 }
             }
 

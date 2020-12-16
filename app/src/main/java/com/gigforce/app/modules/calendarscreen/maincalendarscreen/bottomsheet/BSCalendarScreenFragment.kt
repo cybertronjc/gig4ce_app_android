@@ -637,7 +637,9 @@ class BSCalendarScreenFragment : BaseFragment() {
         datalist.add(FeatureModel("Profile", R.drawable.profile, R.id.profileFragment))
         datalist.add(FeatureModel("Learning", R.drawable.learning, R.id.mainLearningFragment))
         datalist.add(FeatureModel("Settings", R.drawable.settings, R.id.settingFragment))
-        datalist.add(FeatureModel("Chat", R.drawable.chat, R.id.contactScreenFragment))
+        if (AppConstants.UNLOCK_FEATURE) {
+            datalist.add(FeatureModel("Chat", R.drawable.chat, R.id.contactScreenFragment))
+        }
 //        datalist.add(
 //            FeatureModel(
 //                "Home Screen",
@@ -660,17 +662,8 @@ class BSCalendarScreenFragment : BaseFragment() {
                 activity?.applicationContext,
                 PFRecyclerViewAdapter.OnViewHolderClick<FeatureModel?> { view, position, item ->
                     if (item?.navigationID != -1) {
-                        if (/*item?.title?.equals("Wallet") ?: false ||*/ item?.title?.equals("Chat")
-                                ?: false
-                        ) {
-                            if (AppConstants.UNLOCK_FEATURE) {
-                                navigate(item?.navigationID!!)
-                            } else showToast("This page are inactive. We’ll activate it in a few weeks")
-                        } else
-                            item?.navigationID?.let { navigate(it) }
-
+                        item?.navigationID?.let { navigate(it) }
                     } else {
-
                         showToast("This page are inactive. We’ll activate it in a few weeks")
                     }
                 },
@@ -849,8 +842,6 @@ class BSCalendarScreenFragment : BaseFragment() {
             RecyclerGenericAdapter<LandingScreenFragment.TitleSubtitleModel>(
                 activity?.applicationContext,
                 PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
-                    //                    if(AppConstants.UNLOCK_FEATURE){
-//                    }else
                     showToast("This is under development. Please check again in a few days.")
                 },
                 RecyclerGenericAdapter.ItemInterface<LandingScreenFragment.TitleSubtitleModel?> { obj, viewHolder, position ->
@@ -899,44 +890,38 @@ class BSCalendarScreenFragment : BaseFragment() {
     }
 
     private fun initializeExploreByRole() {
-        ll_search_role.setOnClickListener {
-            if (AppConstants.UNLOCK_FEATURE) {
+        if (AppConstants.UNLOCK_FEATURE) {
+            ll_search_role.setOnClickListener {
                 navigate(R.id.fragment_explore_by_role)
-            } else {
-                showToast("This is under development. Please check again in a few days.")
             }
-        }
-        landingScreenViewModel.observerRole.observe(viewLifecycleOwner, Observer { gig ->
-            run {
-                showGlideImage(gig?.role_image ?: "", iv_role)
-                tv_title_role.text = gig?.role_title
-                if (!gig?.job_description.isNullOrEmpty()) {
-                    tv_subtitle_role.visible()
-                    tv_subtitle_role.text = gig?.job_description?.get(0)
-                }
-                cv_role.setOnClickListener {
-                    if (AppConstants.UNLOCK_FEATURE) {
-                        navigate(
-                            R.id.fragment_role_details, bundleOf(
-                                StringConstants.ROLE_ID.value to gig?.id!!
+            landingScreenViewModel.observerRole.observe(viewLifecycleOwner, Observer { gig ->
+                run {
+                    showGlideImage(gig?.role_image ?: "", iv_role)
+                    tv_title_role.text = gig?.role_title
+                    if (!gig?.job_description.isNullOrEmpty()) {
+                        tv_subtitle_role.visible()
+                        tv_subtitle_role.text = gig?.job_description?.get(0)
+                    }
+                    cv_role.setOnClickListener {
+                            navigate(
+                                R.id.fragment_role_details, bundleOf(
+                                    StringConstants.ROLE_ID.value to gig?.id!!
+                                )
                             )
-                        )
-                    } else {
-                        showToast("This is under development. Please check again in a few days.")
                     }
                 }
-            }
+            })
+            landingScreenViewModel.getRoles()
+            val itemWidth = ((width / 3) * 2).toInt()
+            val lp = cv_role.layoutParams
+            lp.height = lp.height
+            lp.width = itemWidth
+            cv_role.layoutParams = lp
 
-
-        })
-        landingScreenViewModel.getRoles()
-        val itemWidth = ((width / 3) * 2).toInt()
-        val lp = cv_role.layoutParams
-        lp.height = lp.height
-        lp.width = itemWidth
-
-        cv_role.layoutParams = lp
-
+        } else {
+            explore_by_role_rl.gone()
+//            showToast("This is under development. Please check again in a few days.")
+        }
 
     }
 

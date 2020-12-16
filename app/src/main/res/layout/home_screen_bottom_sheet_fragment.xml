@@ -284,6 +284,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <RelativeLayout
+        android:id="@+id/explore_by_role_rl"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:minHeight="@dimen/size_215">

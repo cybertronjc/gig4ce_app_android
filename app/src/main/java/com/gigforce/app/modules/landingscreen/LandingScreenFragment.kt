@@ -168,7 +168,8 @@ class LandingScreenFragment : BaseFragment() {
                 )
 
             )
-            navFragmentsData?.getData()?.putBoolean(StringConstants.CLIENT_ACTIVATION_VIA_DEEP_LINK.value, false)
+            navFragmentsData?.getData()
+                ?.putBoolean(StringConstants.CLIENT_ACTIVATION_VIA_DEEP_LINK.value, false)
 
         }
     }
@@ -710,7 +711,7 @@ class LandingScreenFragment : BaseFragment() {
             about_us_cl.visibility = View.GONE
         }
         chat_icon_iv.setOnClickListener {
-//            navigate(R.id.fakeGigContactScreenFragment)
+            //            navigate(R.id.fakeGigContactScreenFragment)
         }
 
         contact_us.setOnClickListener {
@@ -740,11 +741,7 @@ class LandingScreenFragment : BaseFragment() {
             playVideo("FbiyRe49wjY")
         }
         ll_search_role.setOnClickListener {
-            if (AppConstants.UNLOCK_FEATURE) {
                 navigate(R.id.fragment_explore_by_role)
-            } else {
-                showToast("This is under development. Please check again in a few days.")
-            }
         }
     }
 
@@ -874,10 +871,7 @@ class LandingScreenFragment : BaseFragment() {
     private fun initializeExploreByIndustry() {
 
         val itemWidth = ((width / 3) * 2).toInt()
-        // model will change when integrated with DB
-//        var datalist: ArrayList<UpcomingGigModel> = ArrayList<UpcomingGigModel>()
         var datalist: ArrayList<TitleSubtitleModel> = ArrayList<TitleSubtitleModel>()
-
         datalist.add(
             TitleSubtitleModel(
                 "Delivery",
@@ -885,7 +879,6 @@ class LandingScreenFragment : BaseFragment() {
                 "https://firebasestorage.googleapis.com/v0/b/gigforce-dev.appspot.com/o/temp_files%2Findustry.jpg?alt=media&token=039ddf50-9597-4ee4-bc12-0abdea74fd16"
             )
         )
-
         datalist.add(
             TitleSubtitleModel(
                 "Retail",
@@ -893,8 +886,6 @@ class LandingScreenFragment : BaseFragment() {
                 "https://firebasestorage.googleapis.com/v0/b/gigforce-dev.appspot.com/o/temp_files%2Findustry3.jpg?alt=media&token=1813f5dd-5596-4a04-a0e1-3c8400a3d82d"
             )
         )
-
-
         datalist.add(
             TitleSubtitleModel(
                 "Quick Service Restuarant",
@@ -902,7 +893,6 @@ class LandingScreenFragment : BaseFragment() {
                 "https://firebasestorage.googleapis.com/v0/b/gigforce-dev.appspot.com/o/temp_files%2Findustry1.jpg?alt=media&token=2634019b-9777-4dbb-9103-1d63eb44df97"
             )
         )
-
         datalist.add(
             TitleSubtitleModel(
                 "Telesales and Support",
@@ -910,14 +900,10 @@ class LandingScreenFragment : BaseFragment() {
                 "https://firebasestorage.googleapis.com/v0/b/gigforce-dev.appspot.com/o/temp_files%2Findustry2.jpg?alt=media&token=00412b0a-fbbe-4790-9a9b-050fefaf5d02"
             )
         )
-
         val recyclerGenericAdapter: RecyclerGenericAdapter<TitleSubtitleModel> =
             RecyclerGenericAdapter<TitleSubtitleModel>(
                 activity?.applicationContext,
                 PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
-                    //                    if(AppConstants.UNLOCK_FEATURE){
-//                    }else
-                    showToast("This is under development. Please check again in a few days.")
                 },
                 RecyclerGenericAdapter.ItemInterface<TitleSubtitleModel?> { obj, viewHolder, position ->
                     var view = getView(viewHolder, R.id.card_view)
@@ -932,7 +918,6 @@ class LandingScreenFragment : BaseFragment() {
                         var img = getImageView(viewHolder, R.id.img_view)
                         showGlideImage(it, img)
                     }
-//                    img.setImageResource(obj?.imgIcon!!)
                 })!!
         recyclerGenericAdapter.setList(datalist)
         recyclerGenericAdapter.setLayout(R.layout.explore_by_industry_item)
@@ -945,71 +930,50 @@ class LandingScreenFragment : BaseFragment() {
     }
 
     private fun initializeExploreByRole() {
-        landingScreenViewModel.observerRole.observe(viewLifecycleOwner, Observer { gig ->
-            run {
-                showGlideImage(gig?.role_image ?: "", iv_role)
-                tv_title_role.text = gig?.role_title
-                if (!gig?.job_description.isNullOrEmpty()) {
-                    tv_subtitle_role.visible()
-                    tv_subtitle_role.text = gig?.job_description?.get(0)
-                }
-                cv_role.setOnClickListener {
-                    if (AppConstants.UNLOCK_FEATURE) {
+        if (AppConstants.UNLOCK_FEATURE) {
+            landingScreenViewModel.observerRole.observe(viewLifecycleOwner, Observer { gig ->
+                run {
+                    showGlideImage(gig?.role_image ?: "", iv_role)
+                    tv_title_role.text = gig?.role_title
+                    if (!gig?.job_description.isNullOrEmpty()) {
+                        tv_subtitle_role.visible()
+                        tv_subtitle_role.text = gig?.job_description?.get(0)
+                    }
+                    cv_role.setOnClickListener {
+
                         findNavController().navigate(
                             LandingScreenFragmentDirections.openRoleDetailsHome(
                                 gig?.id!!
                             )
                         )
-                    } else {
-                        showToast("This is under development. Please check again in a few days.")
+
                     }
                 }
-            }
+            })
+            landingScreenViewModel.getRoles()
+            val itemWidth = ((width / 3) * 2).toInt()
+            val lp = cv_role.layoutParams
+            lp.height = lp.height
+            lp.width = itemWidth
 
+            cv_role.layoutParams = lp
+        } else {
+            rl_explore_by_role.gone()
+//            showToast("This is under development. Please check again in a few days.")
+        }
 
-        })
-        landingScreenViewModel.getRoles()
-        val itemWidth = ((width / 3) * 2).toInt()
-        val lp = cv_role.layoutParams
-        lp.height = lp.height
-        lp.width = itemWidth
-
-        cv_role.layoutParams = lp
     }
 
     private fun initializeClientActivation() {
         landingScreenViewModel.observerWorkOrder.observe(viewLifecycleOwner, Observer { workOrder ->
-
-
             run {
                 workOrder?.let {
                     showClientActivations(workOrder)
                 }
-//                showGlideImage(workOrder?.cardImage ?: "", iv_client_activation)
-//                tv_client_activation.text = workOrder?.cardTitle
-//                tv_sub_client_activation.text = workOrder?.title
-//
-//                cv_client_activation.setOnClickListener {
-//                    if (AppConstants.UNLOCK_FEATURE) {
-//                        navigate(
-//                                R.id.fragment_client_activation,
-//                                bundleOf(StringConstants.WORK_ORDER_ID.value to workOrder?.id)
-//                        )
-//
-//                    } else {
-//                        showToast("This is under development. Please check again in a few days.")
-//                    }
-//                }
+
             }
-
-
         })
         landingScreenViewModel.getWorkOrder()
-//        val itemWidth = ((width / 3) * 2).toInt()
-//        val lp = cv_client_activation.layoutParams
-//        lp.height = lp.height
-//        lp.width = itemWidth
-//        cv_client_activation.layoutParams = lp
     }
 
     private fun showClientActivations(jobProfiles: ArrayList<JobProfile>) {
