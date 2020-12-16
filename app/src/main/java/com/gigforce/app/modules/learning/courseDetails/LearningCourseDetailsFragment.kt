@@ -54,9 +54,9 @@ class LearningCourseDetailsFragment : BaseFragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ) = inflateView(R.layout.fragment_learning_course_details, inflater, container)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -155,7 +155,7 @@ class LearningCourseDetailsFragment : BaseFragment() {
 
 
         learningBackButton.setOnClickListener {
-            parentFragmentManager.popBackStack()
+            onBackPressed()
         }
 
         assessmentSeeMoreButton.setOnClickListener {
@@ -255,8 +255,8 @@ class LearningCourseDetailsFragment : BaseFragment() {
             }
         } else {
             GlideApp.with(requireContext())
-                .load(R.drawable.ic_learning_default_back)
-                .into(videoThumnailIV)
+                    .load(R.drawable.ic_learning_default_back)
+                    .into(videoThumnailIV)
         }
 
         videoTitleTV.text = course.name
@@ -685,6 +685,8 @@ class LearningCourseDetailsFragment : BaseFragment() {
     override fun onBackPressed(): Boolean {
         if (FROM_CLIENT_ACTIVATION) {
             navFragmentsData?.setData(bundleOf(StringConstants.BACK_PRESSED.value to true))
+            popBackState()
+            return true
         }
         return super.onBackPressed()
     }
