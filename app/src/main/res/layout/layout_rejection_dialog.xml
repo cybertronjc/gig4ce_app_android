@@ -12,12 +12,14 @@
         android:orientation="vertical">
 
         <ImageView
-            android:layout_width="@dimen/size_202"
-            android:layout_height="@dimen/size_131"
+            android:id="@+id/iv_rejection_illustration"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginStart="@dimen/size_50"
             android:layout_marginTop="@dimen/size_40"
             android:layout_marginEnd="@dimen/size_60"
+            android:minHeight="149dp"
             app:srcCompat="@drawable/ic_rejected" />
 
         <TextView

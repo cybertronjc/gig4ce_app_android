@@ -1,6 +1,7 @@
 package com.gigforce.app.utils
 
 import android.content.Context
+import android.graphics.Typeface
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,20 +10,20 @@ import android.widget.ListView
 import android.widget.TextView
 import com.gigforce.app.R
 
-class GenericSpinnerAdapter(context: Context, resource: Int, objects: List<String>) :
-    ArrayAdapter<String?>(context, resource, objects) {
-    private var items: List<String>? = null
+class GenericSpinnerAdapter<T>(context: Context, resource: Int, objects: List<T>) :
+    ArrayAdapter<T>(context, resource, objects) {
+    private var items: List<T>? = null
     var layout = 0
-    fun getItems(): List<String>? {
+    fun getItems(): List<T>? {
         return items
     }
 
-    fun setItems(items: List<String>?) {
+    fun setItems(items: List<T>?) {
         this.items = items
         notifyDataSetChanged()
     }
 
-    private fun init(objects: List<String>, resource: Int) {
+    private fun init(objects: List<T>, resource: Int) {
         items = objects
         layout = resource
     }
@@ -30,8 +31,7 @@ class GenericSpinnerAdapter(context: Context, resource: Int, objects: List<Strin
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val customView = LayoutInflater.from(context).inflate(layout, parent, false)
         val tv = customView as TextView
-        tv.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_down, 0)
-        tv.text = items!![position]
+
         return super.getView(position, tv, parent)
     }
 
@@ -42,7 +42,8 @@ class GenericSpinnerAdapter(context: Context, resource: Int, objects: List<Strin
         if (position == 0) {
             tv.height = 0
         } else {
-            tv.text = items!![position]
+            tv.text = items!![position].toString()
+
         }
         if (parent != null && parent is ListView) {
             var lv: ListView? = null

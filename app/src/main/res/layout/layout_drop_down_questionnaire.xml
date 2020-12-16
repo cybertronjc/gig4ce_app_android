@@ -4,43 +4,39 @@
     android:id="@+id/ll_questionnaire"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/border_27979797_rad_4"
+    android:layout_marginTop="@dimen/size_37"
     android:orientation="vertical"
     tools:ignore="MissingDefaultResource">
 
-    <TextView
-        android:id="@+id/tv_state"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/size_16"
-        android:text="@string/state" />
 
     <androidx.appcompat.widget.AppCompatSpinner
         android:id="@+id/sp_state"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/size_16"
-        android:layout_marginEnd="@dimen/size_16"
-        android:overlapAnchor="false"
-        android:layout_marginBottom="@dimen/size_16"
-        />
+        android:minHeight="@dimen/size_48"
 
-    <TextView
-        android:id="@+id/tv_city"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/size_16"
-        android:text="@string/city"
-        android:visibility="gone" />
+        android:background="@drawable/border_61979797_rad_4"
+        android:overlapAnchor="false"
+        android:paddingStart="@dimen/size_16"
+        android:paddingTop="@dimen/size_17"
+        android:paddingEnd="@dimen/size_36"
+        android:paddingBottom="@dimen/size_16" />
+
 
     <androidx.appcompat.widget.AppCompatSpinner
         android:id="@+id/sp_city"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/size_16"
-        android:layout_marginEnd="@dimen/size_16"
-        android:layout_marginBottom="@dimen/size_16"
+        android:layout_marginTop="@dimen/size_16"
+        android:minHeight="@dimen/size_48"
+
+        android:background="@drawable/border_61979797_rad_4"
         android:overlapAnchor="false"
+        android:paddingStart="@dimen/size_16"
+        android:paddingTop="@dimen/size_17"
+        android:paddingEnd="@dimen/size_36"
+        android:paddingBottom="@dimen/size_16"
+        android:layout_marginBottom="@dimen/size_41"
         android:visibility="gone" />
 
     <ProgressBar
