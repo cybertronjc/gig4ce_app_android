@@ -10,7 +10,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@drawable/toolbar_bg_client_activation"
-        android:minHeight="@dimen/size_72"
+        android:minHeight="@dimen/size_60"
         app:contentInsetLeft="0dp"
         app:contentInsetStart="0dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -64,17 +64,27 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <com.google.android.exoplayer2.ui.PlayerView
-                android:id="@+id/playerView"
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cv_player_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/size_8"
-                app:controller_layout_id="@layout/fragment_play_video_controls"
+                app:cardCornerRadius="@dimen/size_8"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-                app:show_buffering="always" />
+
+                <com.google.android.exoplayer2.ui.PlayerView
+                    android:id="@+id/playerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+                    android:layout_weight="3"
+                    app:controller_layout_id="@layout/fragment_play_video_controls"
+
+                    app:show_buffering="always" />
+            </androidx.cardview.widget.CardView>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/cl_content_gig_activation"
@@ -82,7 +92,7 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/playerView">
+                app:layout_constraintTop_toBottomOf="@+id/cv_player_view">
 
                 <ImageView
                     android:id="@+id/iv_gig_activation"

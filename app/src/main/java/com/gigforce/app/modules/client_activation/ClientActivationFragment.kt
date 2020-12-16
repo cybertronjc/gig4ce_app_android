@@ -13,6 +13,7 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.PopupMenu
 import androidx.core.content.FileProvider
 import androidx.core.os.bundleOf
@@ -150,6 +151,7 @@ class ClientActivationFragment : BaseFragment(), PopupMenu.OnMenuItemClickListen
             it?.queries?.forEach { element ->
                 viewRoleDesc.tv_what_client_activation.text = element.query
                 viewRoleDesc.tv_what_value_client_activation.text = element.answer
+
                 if (!element.icon.isNullOrEmpty()) {
                     GlideApp.with(requireContext())
                         .load(element.icon)
@@ -169,6 +171,15 @@ class ClientActivationFragment : BaseFragment(), PopupMenu.OnMenuItemClickListen
 //            if (!(it?.requiredLessons?.lessons.isNullOrEmpty())) {
             learning_cl.visible()
             textView120.text = it?.requiredMedia?.title
+            if (!it?.requiredMedia?.icon.isNullOrEmpty()) {
+                GlideApp.with(requireContext())
+                    .load(it?.requiredMedia?.icon)
+                    .placeholder(getCircularProgressDrawable())
+                    .into(imageView36)
+
+            } else {
+                imageView36.setImageResource(R.drawable.ic_play_gradient)
+            }
             initializeLearningModule(it?.requiredMedia?.media?.map { it.courseId } ?: listOf())
 //            }
 
