@@ -40,7 +40,7 @@
         android:id="@+id/tl_bullets"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/size_19"
+        android:layout_marginTop="@dimen/size_7"
         android:animateLayoutChanges="true"
         android:paddingStart="@dimen/size_29"
         android:paddingEnd="@dimen/size_20"
