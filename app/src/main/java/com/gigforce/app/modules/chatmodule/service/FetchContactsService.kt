@@ -131,7 +131,12 @@ class FetchContactsService : Service(), LoaderManager.LoaderCallbacks<Cursor> {
             Log.d(TAG, "Size : ${processCursor}")
 
             GlobalScope.launch {
-                chatContactsRepository.updateContacts(processCursor)
+
+                try {
+                    chatContactsRepository.updateContacts(processCursor)
+                } catch (e: Exception){
+                    e.printStackTrace()
+                }
             }
            // phoneContacts.postValue(processCursor)
         }

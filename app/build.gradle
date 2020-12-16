@@ -73,7 +73,7 @@ android {
             signingConfig signingConfigs.production
             buildConfigField "String", 'REFERRAL_BASE_URL', '"https://gig4ce.page.link/"'
             buildConfigField "String", 'GENERATE_PAYSLIP_URL', '"https://45nydq0i5g.execute-api.ap-south-1.amazonaws.com/default/get-or-create-payment-advice-prod"'
-            buildConfigField "String", 'SYNC_CHAT_CONTACTS_URL', '"https://7jdkaxt35e.execute-api.ap-south-1.amazonaws.com/default/sync-user-uploaded-contacts_with_gig_gorce_users"'
+            buildConfigField "String", 'SYNC_CHAT_CONTACTS_URL', '"https://qslv7bpakk.execute-api.ap-south-1.amazonaws.com/default/sync-user-uploaded-contacts_with_gig_force_users_prod"'
         }
 
         /**

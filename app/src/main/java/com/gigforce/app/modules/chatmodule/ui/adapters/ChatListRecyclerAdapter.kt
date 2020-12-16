@@ -10,6 +10,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.RequestManager
 import com.gigforce.app.R
 import com.gigforce.app.core.gone
@@ -89,9 +90,8 @@ class ChatListRecyclerAdapter(
                 if (userAvatarUrl.isNullOrBlank()) {
                     //Show Default User avatar
                     requestManager.load(R.drawable.ic_user).into(circleImageView)
-
                 } else {
-                    requestManager.load(userAvatarUrl).into(circleImageView)
+                    requestManager.load(userAvatarUrl).placeholder(getCircularProgressDrawable()).into(circleImageView)
                 }
 
             } else if (chatHeader.chatType == ChatConstants.CHAT_TYPE_GROUP) {
@@ -154,6 +154,14 @@ class ChatListRecyclerAdapter(
         override fun onClick(v: View?) {
             onChatItemClickListener.onChatItemClicked(chatList[adapterPosition])
         }
+    }
+
+    fun getCircularProgressDrawable(): CircularProgressDrawable {
+        val circularProgressDrawable = CircularProgressDrawable(context)
+        circularProgressDrawable.strokeWidth = 5f
+        circularProgressDrawable.centerRadius = 20f
+        circularProgressDrawable.start()
+        return circularProgressDrawable
     }
 
     interface OnChatItemClickListener {

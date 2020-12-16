@@ -119,7 +119,7 @@ class ChatContactsRepository constructor(
 
             if (newAddedContactsFiltered.isNotEmpty()) {
 
-                val currentUserChatHeaders = getChatHeadersForUser(currentUser.uid)
+                val currentUserChatHeaders = getChatHeadersOfCurrentUser()
                 newAddedContactsFiltered.forEach { pickedContact ->
                     val matchedHeader = currentUserChatHeaders.find { header ->
                         header.otherUser?.name?.contains(pickedContact.mobile) ?: false
@@ -166,6 +166,25 @@ class ChatContactsRepository constructor(
             return headers
         }
     }
+
+    private suspend fun getChatHeadersOfCurrentUser(): List<ChatHeader> {
+        val userChatHeaders = userChatHeadersCollectionRef
+            .getOrThrow()
+
+        if (userChatHeaders.isEmpty)
+            return emptyList()
+        else {
+            val headers = userChatHeaders.documents.map { docSnap ->
+                docSnap.toObject(ChatHeader::class.java)!!.apply {
+                    id = docSnap.id
+                }
+            }
+
+            return headers
+        }
+    }
+
+
 
     companion object {
         const val COLLECTION_CHATS = "chats"
