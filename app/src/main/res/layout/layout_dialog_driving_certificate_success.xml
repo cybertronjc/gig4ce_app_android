@@ -60,6 +60,7 @@
 
 
     <TextView
+        android:id="@+id/tv_okay_driving_cert_success"
         android:layout_width="match_parent"
         android:layout_height="36dp"
         android:layout_marginStart="@dimen/size_18"

@@ -63,42 +63,44 @@ class DrivingCertSuccessDialog : DialogFragment() {
 //            dismiss()
 //            callbacks.onClickOkay()
 //        }
-        PushDownAnim.setPushDownAnimTo(rl_okay_driving_cert_success)
+        PushDownAnim.setPushDownAnimTo(tv_okay_driving_cert_success)
                 .setOnClickListener(View.OnClickListener {
-                    if (PermissionUtils.checkForPermissionFragment(
-                                    this,
-                                    PermissionUtils.reqCodePerm,
-                                    Manifest.permission.READ_EXTERNAL_STORAGE,
-                                    Manifest.permission.WRITE_EXTERNAL_STORAGE
-                            )
-                    ) {
-                        dismiss()
-                        callbacks.onClickOkay()
-//                        downloadCertificate(mDocURL)
-                    }
+                    dismiss()
+                    callbacks.onClickOkay()
+
+//                    if (PermissionUtils.checkForPermissionFragment(
+//                                    this,
+//                                    PermissionUtils.reqCodePerm,
+//                                    Manifest.permission.READ_EXTERNAL_STORAGE,
+//                                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+//                            )
+//                    ) {
+//
+////                        downloadCertificate(mDocURL)
+//                    }
                 })
 
     }
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == PermissionUtils.reqCodePerm && PermissionUtils.permissionsGrantedCheck(
-                grantResults!!
-            )
-        ) {
-            rl_okay_driving_cert_success.performClick()
-        } else {
-            Toast.makeText(
-                requireContext(),
-                getString(R.string.perm_not_granted),
-                Toast.LENGTH_LONG
-            ).show()
-        }
-    }
+//    override fun onRequestPermissionsResult(
+//        requestCode: Int,
+//        permissions: Array<out String>,
+//        grantResults: IntArray
+//    ) {
+//        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+//        if (requestCode == PermissionUtils.reqCodePerm && PermissionUtils.permissionsGrantedCheck(
+//                grantResults!!
+//            )
+//        ) {
+//            tv_okay_driving_cert_success.performClick()
+//        } else {
+//            Toast.makeText(
+//                requireContext(),
+//                getString(R.string.perm_not_granted),
+//                Toast.LENGTH_LONG
+//            ).show()
+//        }
+//    }
 
     fun setCallbacks(callbacks: DrivingCertSuccessDialogCallbacks) {
         this.callbacks = callbacks
