@@ -99,7 +99,7 @@ class ApplicationClientActivationViewModel : ViewModel() {
                             val verification = getVerification()
                             it.isDone =
                                 verification?.driving_license != null && (verification.driving_license?.state
-                                    ?: -2) >= -1
+                                    ?: -2) >= -1 && verification?.driving_license?.backImage != "" && verification?.driving_license?.frontImage != ""
                         }
                         "questionnaire" -> {
                             it.isDone =

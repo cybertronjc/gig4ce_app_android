@@ -52,34 +52,36 @@
         android:fontFamily="@font/lato"
         android:gravity="center_horizontal"
         android:letterSpacing="-0.01"
-        android:visibility="gone"
         android:text="@string/driving_certificate"
         android:textColor="@color/lipstick"
         android:textSize="14sp"
-        android:textStyle="normal" />
+        android:textStyle="normal"
+        android:visibility="gone" />
 
-    <TextView
-        android:id="@+id/tv_okay_driving_cert_success"
+
+    <RelativeLayout
+        android:id="@+id/rl_okay_driving_cert_success"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/size_18"
         android:layout_marginTop="@dimen/size_30"
         android:layout_marginEnd="@dimen/size_12"
         android:layout_marginBottom="@dimen/size_14"
-        android:background="@drawable/ic_rectangle_copy"
-        android:fontFamily="@font/lato"
-        android:gravity="center_horizontal"
-        android:paddingStart="@dimen/size_30"
-        android:paddingTop="@dimen/size_10"
-        android:paddingEnd="@dimen/size_30"
-        android:paddingBottom="@dimen/size_9"
-        android:text="@string/okay"
+        android:background="@drawable/ic_rectangle_copy">
 
-        android:textColor="@color/white"
-        android:textSize="@dimen/font_14"
-        android:textStyle="normal"
-
-
-        />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/lato"
+            android:gravity="center_horizontal"
+            android:paddingStart="@dimen/size_30"
+            android:paddingTop="@dimen/size_10"
+            android:paddingEnd="@dimen/size_30"
+            android:paddingBottom="@dimen/size_9"
+            android:text="@string/okay"
+            android:textColor="@color/white"
+            android:textSize="@dimen/font_14"
+            android:textStyle="normal"/>
+    </RelativeLayout>
 
 </LinearLayout>

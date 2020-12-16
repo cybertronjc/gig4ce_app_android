@@ -34,6 +34,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:adjustViewBounds="true"
+                    android:minHeight="309dp"
                     android:paddingStart="@dimen/size_8"
                     android:paddingTop="@dimen/size_28"
                     android:paddingEnd="@dimen/size_8"
@@ -84,6 +85,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/size_8"
                 android:drawablePadding="@dimen/size_4"
                 android:fontFamily="@font/lato"
                 android:gravity="start"
@@ -93,12 +95,12 @@
                 android:textColor="@color/yellow"
                 android:textSize="@dimen/font_12"
                 android:textStyle="normal"
-                android:layout_marginRight="@dimen/size_8"
+                android:visibility="gone"
                 app:drawableStartCompat="@drawable/ic_status_pending"
                 app:layout_constraintBottom_toTopOf="@+id/tv_role_client_activation"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/tv_businessname_client_activation"
-                android:visibility="gone"/>
+                app:layout_constraintTop_toTopOf="@+id/tv_businessname_client_activation" />
+
             <RelativeLayout
                 android:id="@+id/rl_pref_loc"
                 android:layout_width="match_parent"
@@ -107,7 +109,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_role_client_activation">
-
 
 
                 <androidx.recyclerview.widget.RecyclerView
@@ -154,7 +155,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/learning_cl"
                 android:layout_width="match_parent"
-                android:layout_height="233dp"
+                android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/ll_role_desc">
@@ -189,7 +190,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:minHeight="170dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView120">
@@ -402,30 +402,31 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:background="#20000000"
         app:layout_constraintEnd_toEndOf="parent"
-        android:background="#20000000">
-    <ImageView
-        android:id="@+id/iv_back_client_activation"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingStart="@dimen/size_16"
-        android:paddingTop="@dimen/size_16"
-        android:paddingEnd="@dimen/size_18"
-        android:paddingBottom="@dimen/size_16"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_arrow_back_24" />
+        app:layout_constraintTop_toTopOf="parent">
 
-    <ImageView
-        android:id="@+id/iv_options_client_activation"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/size_16"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_three_dots"
-        app:tint="@color/black_85" />
+        <ImageView
+            android:id="@+id/iv_back_client_activation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="@dimen/size_16"
+            android:paddingTop="@dimen/size_16"
+            android:paddingEnd="@dimen/size_18"
+            android:paddingBottom="@dimen/size_16"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_arrow_back_24" />
+
+        <ImageView
+            android:id="@+id/iv_options_client_activation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/size_16"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_three_dots"
+            app:tint="@color/black_85" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

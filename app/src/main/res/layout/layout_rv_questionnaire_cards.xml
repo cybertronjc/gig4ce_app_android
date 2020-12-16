@@ -22,9 +22,13 @@
             <ImageView
                 android:id="@+id/iv_hint_questionnaire"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/size_156"
-                android:layout_marginStart="@dimen/size_56"
-                android:layout_marginEnd="@dimen/size_66" />
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/size_52"
+                android:layout_marginTop="@dimen/size_51"
+                android:layout_marginEnd="@dimen/size_66"
+                android:adjustViewBounds="true"
+                android:minHeight="@dimen/size_156"
+                android:scaleType="fitCenter" />
 
             <TextView
                 android:id="@+id/tv_question_no_questionnaire"
