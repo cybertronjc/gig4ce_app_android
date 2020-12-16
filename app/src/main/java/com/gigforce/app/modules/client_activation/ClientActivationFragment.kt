@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory
 import android.location.Location
 import android.net.Uri
 import android.os.Bundle
+import android.text.Html
 import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -142,7 +143,7 @@ class ClientActivationFragment : BaseFragment(), PopupMenu.OnMenuItemClickListen
             it?.locationList?.map { item -> item.location }?.let { locations ->
                 adapterPreferredLocation?.addData(locations)
             }
-            tv_earning_client_activation.text = it?.payoutNote
+            tv_earning_client_activation.text = Html.fromHtml(it?.payoutNote)
             val viewRoleDesc = layoutInflater.inflate(R.layout.layout_role_description, null)
             ll_role_desc.removeAllViews()
             it?.queries?.forEach { element ->
