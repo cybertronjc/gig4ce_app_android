@@ -81,7 +81,7 @@ class AddInterestFragment : BaseFragment(),
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ) = inflateView(R.layout.fragment_gig_page_2, inflater, container)
+    ) = inflateView(R.layout.fragment_ambsd_user_enoll_interest, inflater, container)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

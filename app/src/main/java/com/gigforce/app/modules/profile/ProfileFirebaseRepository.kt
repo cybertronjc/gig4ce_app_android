@@ -167,4 +167,11 @@ class ProfileFirebaseRepository: BaseFirestoreDBRepository() {
         firebaseDB.collection(profileCollectionName).document(uid).update("address",FieldValue.delete())
         firebaseDB.collection(profileCollectionName).document(uid).update("address",address)
     }
+
+    suspend fun setUserAsAmbassador(){
+        firebaseDB
+            .collection(profileCollectionName)
+            .document(uid)
+            .update("isUserAmbassador", true)
+    }
 }

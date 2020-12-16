@@ -1,5 +1,6 @@
 package com.gigforce.app.modules.profile.models
 
+import com.google.firebase.firestore.Exclude
 import com.google.firebase.firestore.PropertyName
 
 data class ProfileData(
@@ -43,4 +44,6 @@ data class ProfileData(
     var isUserAmbassador: Boolean = false
 ) {
 
+    @Exclude
+    fun hasUserUploadedProfilePicture() = profileAvatarName.isNotBlank() && profileAvatarName != "avatar.jpg"
 }

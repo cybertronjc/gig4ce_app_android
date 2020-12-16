@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardBackgroundColor="@color/white"
+    app:cardCornerRadius="3dp"
+    tools:context=".modules.gigPage.RateGigDialogFragment">
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="16dp">
+
+        <ImageView
+            android:id="@+id/ambassador_success_banner"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:src="@drawable/bg_gig_type"
+            android:layout_marginTop="32dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <TextView
+            android:id="@+id/happy_earning_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/lato"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:textColor="#dd2865"
+            android:letterSpacing="-0.05"
+            android:lineSpacingExtra="3sp"
+            android:text="Happy Earning!"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ambassador_success_banner"
+            />
+
+        <TextView
+            android:id="@+id/your_are_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/lato"
+            android:textStyle="normal"
+            android:textSize="14sp"
+            android:textColor="@color/black"
+            android:lineSpacingExtra="3sp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/happy_earning_label"
+            android:text="You are selected for the Ambassador role at Gig4ce . "
+            />
+
+        <LinearLayout
+            android:id="@+id/ambsd_guildliness_on_success_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="12dp"
+            android:orientation="vertical"
+            app:layout_constraintTop_toBottomOf="@id/your_are_label" />
+
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/submitBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="24dp"
+            android:background="@drawable/gradient_button"
+            android:fontFamily="@font/lato_bold"
+            android:gravity="center"
+            android:enabled="true"
+            android:text="@string/submit_all_caps"
+            android:textColor="@color/white"
+            app:layout_constraintTop_toBottomOf="@id/ambsd_guildliness_on_success_container" />
+
+        <TextView
+            android:id="@+id/view_gig_details_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:padding="6dp"
+            android:enabled="false"
+            android:gravity="center"
+            android:text="@string/view_gig_details"
+            android:textColor="@color/colorPrimary"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/submitBtn" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>

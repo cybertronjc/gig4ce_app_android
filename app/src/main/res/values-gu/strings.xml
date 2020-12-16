@@ -389,5 +389,6 @@
     <string name="total_number_of_days">Total number of days</string>
     <string name="total_working_days">Total working days</string>
     <string name="number_of_offs">Number of offs</string>
+    <string name="view_gig_details">View Gig Details</string>
 
 </resources>
