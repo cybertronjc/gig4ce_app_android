@@ -5,29 +5,32 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
 import com.gigforce.app.modules.gigerVerfication.GigerVerificationStatus
+import com.gigforce.app.modules.gigerVerfication.bankDetails.AddBankDetailsInfoFragment
 import com.gigforce.app.modules.profile.ProfileViewModel
 import com.gigforce.app.modules.profile.models.ProfileData
 import kotlinx.android.synthetic.main.fragment_embassador_program_requirement_screen.*
 
+@ExperimentalStdlibApi
 class AmbassadorEnrollmentRequirementFragment : BaseFragment(),
-    AmbassadorEnrolledSuccessfullyDialogFragmentListeners {
+        AmbassadorEnrolledSuccessfullyDialogFragmentListeners {
 
     private val profileViewModel: ProfileViewModel by viewModels()
     private val gigVerificationViewModel: GigVerificationViewModel by viewModels()
 
-    private var profileData : ProfileData? = null
-    private var gigerVerificationStatus : GigerVerificationStatus? = null
+    private var profileData: ProfileData? = null
+    private var gigerVerificationStatus: GigerVerificationStatus? = null
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ) = inflateView(R.layout.fragment_embassador_program_requirement_screen, inflater, container)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -42,70 +45,84 @@ class AmbassadorEnrollmentRequirementFragment : BaseFragment(),
         }
 
         apply_amb_btn.setOnClickListener {
-            AmbassadorEnrolledDialogFragment.launch(childFragmentManager,this@AmbassadorEnrollmentRequirementFragment)
+            AmbassadorEnrolledDialogFragment.launch(childFragmentManager, this@AmbassadorEnrollmentRequirementFragment)
+        }
+
+        bank_details_layout.setOnClickListener {
+            navigate(R.id.addBankDetailsInfoFragment, bundleOf(
+                    AddBankDetailsInfoFragment.INTENT_EXTRA_USER_CAME_FROM_AMBASSADOR_ENROLLMENT to true
+            ))
+        }
+
+        current_address_layout.setOnClickListener {
+            navigate(R.id.currentAddressViewFragment)
+        }
+
+        profile_photo_layout.setOnClickListener {
+
         }
     }
 
     private fun initViewModel() {
         profileViewModel.getProfileData()
-            .observe(viewLifecycleOwner, Observer {
-                this.profileData = it
-                updateProgress()
+                .observe(viewLifecycleOwner, Observer {
+                    this.profileData = it
+                    updateProgress()
 
-                if (it.hasUserUploadedProfilePicture()) {
-                    profile_pic_check_iv.background =
-                        ContextCompat.getDrawable(requireContext(), R.drawable.round_green)
-                    profile_pic_check_iv.setImageResource(R.drawable.ic_baseline_check_32)
-                } else {
-                    profile_pic_check_iv.background =
-                        ContextCompat.getDrawable(requireContext(), R.drawable.round_yellow)
-                    profile_pic_check_iv.setImageResource(R.drawable.ic_baseline_check_32)
-                }
+                    if (it.hasUserUploadedProfilePicture()) {
+                        profile_pic_check_iv.background =
+                                ContextCompat.getDrawable(requireContext(), R.drawable.round_green)
+                        profile_pic_check_iv.setImageResource(R.drawable.ic_baseline_check_32)
+                    } else {
+                        profile_pic_check_iv.background =
+                                ContextCompat.getDrawable(requireContext(), R.drawable.round_yellow)
+                        profile_pic_check_iv.setImageResource(R.drawable.ic_baseline_check_32)
+                    }
 
-                if (it.address.current.isEmpty()) {
-                    current_address_check_iv.background =
-                        ContextCompat.getDrawable(requireContext(), R.drawable.round_yellow)
-                    current_address_check_iv.setImageResource(R.drawable.ic_baseline_check_32)
-                } else {
-                    current_address_check_iv.background =
-                        ContextCompat.getDrawable(requireContext(), R.drawable.round_green)
-                    current_address_check_iv.setImageResource(R.drawable.ic_baseline_check_32)
-                }
-            })
+                    if (it.address.current.isEmpty()) {
+                        current_address_check_iv.background =
+                                ContextCompat.getDrawable(requireContext(), R.drawable.round_yellow)
+                        current_address_check_iv.setImageResource(R.drawable.ic_baseline_check_32)
+                    } else {
+                        current_address_check_iv.background =
+                                ContextCompat.getDrawable(requireContext(), R.drawable.round_green)
+                        current_address_check_iv.setImageResource(R.drawable.ic_baseline_check_32)
+                    }
+                })
 
         gigVerificationViewModel.gigerVerificationStatus
-            .observe(viewLifecycleOwner, Observer {
-                this.gigerVerificationStatus = it
-                updateProgress()
+                .observe(viewLifecycleOwner, Observer {
+                    this.gigerVerificationStatus = it
+                    updateProgress()
 
-                if (it.bankDetailsUploaded) {
-                    bank_details_check_iv.background =
-                        ContextCompat.getDrawable(requireContext(), R.drawable.round_green)
-                    bank_details_check_iv.setImageResource(R.drawable.ic_baseline_check_32)
-                } else {
-                    bank_details_check_iv.background =
-                        ContextCompat.getDrawable(requireContext(), R.drawable.round_yellow)
-                    bank_details_check_iv.setImageResource(R.drawable.ic_baseline_check_32)
-                }
-            })
+                    if (it.bankDetailsUploaded) {
+                        bank_details_check_iv.background =
+                                ContextCompat.getDrawable(requireContext(), R.drawable.round_green)
+                        bank_details_check_iv.setImageResource(R.drawable.ic_baseline_check_32)
+                    } else {
+                        bank_details_check_iv.background =
+                                ContextCompat.getDrawable(requireContext(), R.drawable.round_yellow)
+                        bank_details_check_iv.setImageResource(R.drawable.ic_baseline_check_32)
+                    }
+                })
 
         gigVerificationViewModel.startListeningForGigerVerificationStatusChanges()
     }
 
     private fun updateProgress() {
-        if(gigerVerificationStatus == null || profileData == null)
+        if (gigerVerificationStatus == null || profileData == null)
             return
 
         val totalSteps = 3
         var completedSteps = 0
 
-        if(gigerVerificationStatus!!.bankDetailsUploaded)
+        if (gigerVerificationStatus!!.bankDetailsUploaded)
             completedSteps++
 
-        if(profileData!!.hasUserUploadedProfilePicture())
+        if (profileData!!.hasUserUploadedProfilePicture())
             completedSteps++
 
-        if(!profileData!!.address.current.isEmpty())
+        if (!profileData!!.address.current.isEmpty())
             completedSteps++
 
         steps_completed_tv.text = "$completedSteps/$totalSteps"
@@ -114,7 +131,7 @@ class AmbassadorEnrollmentRequirementFragment : BaseFragment(),
     }
 
     override fun onStartingOnBoardingGigersClicked() {
-        TODO()
+        navigate(R.id.ambassadorEnrolledUsersListFragment)
     }
 
     override fun onViewGigDetailsClicked() {

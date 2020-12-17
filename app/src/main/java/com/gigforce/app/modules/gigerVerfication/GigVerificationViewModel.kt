@@ -183,6 +183,35 @@ open class GigVerificationViewModel constructor(
         }
     }
 
+    fun updatePanImagePath(
+        userHasPan: Boolean,
+        panImage: Uri?,
+        panCardNo: String?,
+        userId: String
+    ) = viewModelScope.launch {
+        _documentUploadState.postValue(Lse.loading())
+
+        try {
+
+            val fileNameAtServer = if (userHasPan && panImage != null)
+                uploadImage(panImage)
+            else {
+                val model = getVerificationModel()
+                model.pan_card?.panCardImagePath
+            }
+
+            gigerVerificationRepository.updatePanInfo(
+                userId = userId,
+                userHasPanCard = userHasPan,
+                fileNameAtServer = fileNameAtServer,
+                panCardNo = panCardNo
+            )
+            _documentUploadState.postValue(Lse.success())
+        } catch (e: Exception) {
+            _documentUploadState.postValue(Lse.error("Unable to save document."))
+        }
+    }
+
     fun updateBankPassbookImagePath(
         userHasPassBook: Boolean,
         passbookImagePath: Uri?,
@@ -219,6 +248,41 @@ open class GigVerificationViewModel constructor(
             _documentUploadState.postValue(Lse.error("Unable to save document."))
         }
 
+    }
+
+    fun updateBankPassbookImagePath(
+        userHasPassBook: Boolean,
+        passbookImagePath: Uri?,
+        ifscCode: String?,
+        bankName: String?,
+        accountNo: String?,
+        userId: String
+    ) = viewModelScope.launch {
+        _documentUploadState.postValue(Lse.loading())
+
+        try {
+
+
+            val fileNameAtServer = if (userHasPassBook && passbookImagePath != null)
+                uploadImage(passbookImagePath)
+            else {
+                val model = getVerificationModel()
+                model.bank_details?.passbookImagePath
+            }
+
+            gigerVerificationRepository.updateBankDetails(
+                userId = userId,
+                userHasPassBook = userHasPassBook,
+                passbookImagePath = fileNameAtServer,
+                ifscCode = ifscCode,
+                bankName = bankName,
+                accountNo = accountNo
+            )
+
+            _documentUploadState.postValue(Lse.success())
+        } catch (e: Exception) {
+            _documentUploadState.postValue(Lse.error("Unable to save document."))
+        }
     }
 
     fun updateAadharData(
@@ -272,6 +336,50 @@ open class GigVerificationViewModel constructor(
         }
     }
 
+    fun updateAadharData(
+        userHasAadhar: Boolean,
+        frontImagePath: Uri?,
+        backImagePath: Uri?,
+        aadharCardNumber: String?,
+        userId: String
+    ) = viewModelScope.launch {
+        _documentUploadState.postValue(Lse.loading())
+
+        try {
+            if (!userHasAadhar) {
+                gigerVerificationRepository.updateAadharInfo(
+                    userId = userId,
+                    userHasAadharCard = userHasAadhar,
+                    frontImagePathAtServer = null,
+                    backImagePathAtServer = null,
+                    aadharNo = aadharCardNumber
+                )
+            } else {
+                val model = getVerificationModel()
+                val frontImageFileNameAtServer = if (userHasAadhar && frontImagePath != null)
+                    uploadImage(frontImagePath)
+                else
+                    model.aadhar_card?.frontImage
+
+                val backImageFileNameAtServer = if (userHasAadhar && backImagePath != null)
+                    uploadImage(backImagePath)
+                else
+                    model.aadhar_card?.backImage
+
+                gigerVerificationRepository.updateAadharInfo(
+                    userId = userId,
+                    userHasAadharCard = userHasAadhar,
+                    frontImagePathAtServer = frontImageFileNameAtServer,
+                    backImagePathAtServer = backImageFileNameAtServer,
+                    aadharNo = aadharCardNumber
+                )
+            }
+            _documentUploadState.postValue(Lse.success())
+        } catch (e: Exception) {
+            _documentUploadState.postValue(Lse.error("Unable to save document."))
+        }
+    }
+
     fun updateDLData(
         userHasDL: Boolean,
         frontImagePath: Uri?,
@@ -318,6 +426,56 @@ open class GigVerificationViewModel constructor(
                 model.sync_status = false
             }
             gigerVerificationRepository.getDBCollection().setOrThrow(model)
+            _documentUploadState.postValue(Lse.success())
+        } catch (e: Exception) {
+            _documentUploadState.postValue(Lse.error("Unable to save document."))
+        }
+    }
+
+    fun updateDLData(
+        userHasDL: Boolean,
+        frontImagePath: Uri?,
+        backImagePath: Uri?,
+        dlState: String?,
+        dlNo: String?,
+        userId: String
+    ) = viewModelScope.launch {
+
+        _documentUploadState.postValue(Lse.loading())
+
+        try {
+
+            if (!userHasDL) {
+                gigerVerificationRepository.updateDlDetails(
+                    userId = userId,
+                    userHasDL = userHasDL,
+                    frontImageFileNameAtServer = null,
+                    backImageFileNameAtServer = null,
+                    dlState = null,
+                    dlNo = null
+                )
+            } else {
+                val model = getVerificationModel()
+
+                val frontImageFileNameAtServer = if (userHasDL && frontImagePath != null)
+                    uploadImage(frontImagePath)
+                else
+                    model.driving_license?.frontImage
+
+                val backImageFileNameAtServer = if (userHasDL && backImagePath != null)
+                    uploadImage(backImagePath)
+                else
+                    model.driving_license?.backImage
+
+                gigerVerificationRepository.updateDlDetails(
+                    userId = userId,
+                    userHasDL = userHasDL,
+                    frontImageFileNameAtServer = frontImageFileNameAtServer,
+                    backImageFileNameAtServer = backImageFileNameAtServer,
+                    dlState = dlState,
+                    dlNo = dlNo
+                )
+            }
             _documentUploadState.postValue(Lse.success())
         } catch (e: Exception) {
             _documentUploadState.postValue(Lse.error("Unable to save document."))

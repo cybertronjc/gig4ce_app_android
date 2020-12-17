@@ -39,8 +39,7 @@
         android:layout_marginTop="14dp"
         android:layout_marginEnd="14dp"
         android:fontFamily="@font/lato"
-        android:text="As the public face of the company the Sales Associate is responsible for dealing with any and all customer questions about the products and services the company offers. A Sales Associate is expected to be
-more"
+        android:text="You have to onboard potential Gigers on Gigforce app by creating their app. You will be paid based on the number of Profiles created"
         android:textColor="@color/black_85"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"

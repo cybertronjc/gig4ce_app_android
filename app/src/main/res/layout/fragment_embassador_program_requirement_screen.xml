@@ -141,6 +141,8 @@ your Application" />
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:padding="@dimen/size_16"
+        android:clickable="true"
+        android:focusable="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/pb_amb_req">
@@ -181,6 +183,8 @@ your Application" />
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:padding="@dimen/size_16"
+        android:clickable="true"
+        android:focusable="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/profile_photo_layout">
@@ -218,6 +222,8 @@ your Application" />
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:padding="@dimen/size_16"
+        android:clickable="true"
+        android:focusable="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/current_address_layout">

@@ -598,7 +598,7 @@ class LandingScreenFragment : BaseFragment() {
         amb_join_open_btn.setOnClickListener {
 
             if (amb_join_open_btn.text == "Open") {
-                TODO()
+                navigate(R.id.ambassadorEnrolledUsersListFragment)
             } else {
                 navigate(R.id.ambassadorProgramDetailsFragment)
             }

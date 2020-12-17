@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".modules.gigerVerfication.bankDetails.AddBankDetailsInfoFragment">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?android:attr/actionBarSize"
+            android:background="@color/white"
+            app:navigationIcon="@drawable/ic_arrow_back_black"
+            app:contentInsetStartWithNavigation="@dimen/size_19"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            app:title="@string/giger_verification"
+            app:titleTextColor="@color/black" />
+    </com.google.android.material.appbar.AppBarLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <include
+            android:id="@+id/bankEditLayout"
+            android:visibility="visible"
+            layout="@layout/fragment_ambsd_add_bank_details_info_main"/>
+
+        <include
+            android:id="@+id/bankViewLayout"
+            android:visibility="gone"
+            layout="@layout/fragment_add_bank_details_info_view"/>
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:visibility="gone"
+            android:layout_centerInParent="true"/>
+
+
+    </RelativeLayout>
+
+</LinearLayout>

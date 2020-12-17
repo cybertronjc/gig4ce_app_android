@@ -22,11 +22,7 @@ import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.app.core.genericadapter.RecyclerGenericAdapter
 import com.gigforce.app.core.gone
-import com.gigforce.app.core.toLocalDateTime
 import com.gigforce.app.core.visible
-import com.gigforce.app.modules.gigPage.DeclineGigDialogFragment
-import com.gigforce.app.modules.gigPage.DeclineGigDialogFragmentResultListener
-import com.gigforce.app.modules.gigPage.GigViewModel
 import com.gigforce.app.modules.gigPage.models.Gig
 import com.gigforce.app.modules.learning.LearningConstants
 import com.gigforce.app.modules.learning.LearningViewModel
@@ -35,23 +31,14 @@ import com.gigforce.app.modules.learning.models.Course
 import com.gigforce.app.modules.roster.inflate
 import com.gigforce.app.utils.GlideApp
 import com.gigforce.app.utils.Lce
-import com.google.android.material.chip.Chip
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.fragment_ambassador_program_details.*
 import kotlinx.android.synthetic.main.fragment_main_learning_role_based_learnings.*
-import java.text.SimpleDateFormat
-import java.time.LocalDateTime
-import java.util.*
 
 class AmbassadorProgramDetailsFragment : BaseFragment(),
-    Toolbar.OnMenuItemClickListener{
+    Toolbar.OnMenuItemClickListener {
 
-    private val viewModel: GigViewModel by viewModels()
     private val learningViewModel: LearningViewModel by viewModels()
-
-    private val dateFormatter = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-    private val timeFormatter = SimpleDateFormat("hh.mm aa", Locale.getDefault())
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -64,6 +51,16 @@ class AmbassadorProgramDetailsFragment : BaseFragment(),
         initUi()
         initViewModel()
         initLearningViewModel()
+        setAmbassadorProgramDetails()
+    }
+
+    private fun setAmbassadorProgramDetails() {
+        inflateAmbResponsibilities(
+            listOf(
+                "1. You have to look for people who are looking for Jobs like Driver, Warehouse Helper, Delivery Executive etc",
+                "2. If they are interested, you have to create their profiles on Gigforce app. Creating profile means entering their basic details and uploading  verifiying Documents like Adhaar, PAN, Bank passbook etc."
+            )
+        )
     }
 
 
@@ -72,23 +69,10 @@ class AmbassadorProgramDetailsFragment : BaseFragment(),
         roleBasedLearningTV.text = "Related Learnings"
         ambRequirementsSeeMoreTV.setOnClickListener {
 
-            if (viewModel.currentGig == null)
-                return@setOnClickListener
+        }
 
-            if (ambReqContainer.childCount == 4) {
-                //Collapsed
-                inflateAmbRequirements(
-                    viewModel.currentGig!!.gigRequirements.subList(
-                        4,
-                        viewModel.currentGig!!.gigRequirements.size
-                    )
-                )
-                ambRequirementsSeeMoreTV.text = getString(R.string.plus_see_less)
-            } else {
-                //Expanded
-                ambReqContainer.removeViews(4, ambReqContainer.childCount - 4)
-                ambRequirementsSeeMoreTV.text = getString(R.string.plus_see_more)
-            }
+        back_btn_iv.setOnClickListener {
+            activity?.onBackPressed()
         }
 
         btn_apply_now.setOnClickListener {
@@ -97,14 +81,7 @@ class AmbassadorProgramDetailsFragment : BaseFragment(),
     }
 
     private fun initViewModel() {
-        viewModel.gigDetails
-            .observe(viewLifecycleOwner, Observer {
-                when (it) {
-                    Lce.Loading -> showGigDetailsAsLoading()
-                    is Lce.Content -> setGigDetailsOnView(it.content)
-                    is Lce.Error -> showErrorWhileLoadingGigData(it.error)
-                }
-            })
+
     }
 
     private fun initLearningViewModel() {

@@ -9,6 +9,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
+import com.gigforce.app.modules.gigerVerfication.bankDetails.AddBankDetailsInfoFragment
 import com.gigforce.app.modules.preferences.SharedPreferenceViewModel
 import com.gigforce.app.modules.preferences.prefdatamodel.PreferencesDataModel
 import com.gigforce.app.modules.profile.models.AddressModel
@@ -18,11 +19,13 @@ import kotlinx.android.synthetic.main.current_address_view_fragment.*
 class CurrentAddressViewFragment: BaseFragment() {
     companion object {
         fun newInstance() = LocationFragment()
+        const val INTENT_EXTRA_USER_CAME_FROM_AMBASSADOR_ENROLLMENT = "user_came_from_amb_screen"
     }
 
     private lateinit var viewModel: SharedPreferenceViewModel
     private lateinit var preferenceDataModel: PreferencesDataModel
     private lateinit var profileDataModel: ProfileData
+    private var didUserCameFromAmbassadorScreen = false
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -37,6 +40,26 @@ class CurrentAddressViewFragment: BaseFragment() {
         listener()
         observePreferenceData()
         observeProfileData()
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        getDataFromIntents(arguments,savedInstanceState)
+    }
+
+    private fun getDataFromIntents(arguments: Bundle?, savedInstanceState: Bundle?) {
+        arguments?.let {
+            didUserCameFromAmbassadorScreen = it.getBoolean(INTENT_EXTRA_USER_CAME_FROM_AMBASSADOR_ENROLLMENT)
+        }
+
+        savedInstanceState?.let {
+            didUserCameFromAmbassadorScreen = it.getBoolean(INTENT_EXTRA_USER_CAME_FROM_AMBASSADOR_ENROLLMENT)
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean(INTENT_EXTRA_USER_CAME_FROM_AMBASSADOR_ENROLLMENT, didUserCameFromAmbassadorScreen)
     }
 
     private fun observePreferenceData() {
@@ -90,4 +113,5 @@ class CurrentAddressViewFragment: BaseFragment() {
         }
 
     }
+
 }

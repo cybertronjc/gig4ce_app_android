@@ -727,6 +727,10 @@
         android:id="@+id/ambassadorEnrollmentRequirementFragment"
         android:name="com.gigforce.app.modules.ambassador_user_enrollment.ambassador_enrollment.AmbassadorEnrollmentRequirementFragment"
         android:label="AmbassadorEnrollmentRequirementFragment" />
+    <fragment
+        android:id="@+id/ambassadorEnrolledUsersListFragment"
+        android:name="com.gigforce.app.modules.ambassador_user_enrollment.AmbassadorEnrolledUsersListFragment"
+        android:label="AmbassadorEnrolledUsersListFragment" />
 
 
 </navigation>
