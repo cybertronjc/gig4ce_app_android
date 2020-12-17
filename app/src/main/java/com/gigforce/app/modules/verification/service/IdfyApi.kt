@@ -1,10 +1,14 @@
 package com.gigforce.app.modules.verification.service
 
+import com.gigforce.app.modules.ambassador_user_enrollment.models.CreateUserRequest
+import com.gigforce.app.modules.ambassador_user_enrollment.models.CreateUserResponse
 import com.gigforce.app.modules.verification.models.*
 import retrofit2.http.Body
 import retrofit2.http.Headers
 import retrofit2.http.POST
 import io.reactivex.Observable
+import retrofit2.Response
+import retrofit2.http.Url
 
 interface IdfyApiAadhaar {
     @POST("sync/extract/ind_aadhaar")
@@ -37,4 +41,12 @@ interface IdfyApiPAN {
         "api-key:1bc58043-00fb-4799-bea3-93a012d174bb")
     fun postPAN(
         @Body postData: PostDataPAN): Observable<IdfyResponse> // body data
+}
+
+
+interface CreateUserAccEnrollmentAPi {
+    @POST
+    suspend fun createUser(
+        @Url fullUrl : String,
+        @Body postData: List<CreateUserRequest>): Response<List<CreateUserResponse>> // body data
 }

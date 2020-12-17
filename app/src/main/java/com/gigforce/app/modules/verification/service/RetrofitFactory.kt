@@ -84,4 +84,11 @@ object RetrofitFactory{
         .client(client)
         .build()
         .create(IdfyApiPAN::class.java)!!
+
+    fun createUserAccEnrollmentAPi() = Retrofit.Builder()
+        .baseUrl(AppConstants.IDFY_BASE_URL)
+        .addConverterFactory(gsonConverter)
+        .client(client)
+        .build()
+        .create(CreateUserAccEnrollmentAPi::class.java)!!
 }
