@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cv_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipToPadding="false"
+    tools:context=".modules.assessment.AssessmentFragment">
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/toolbar_filter_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/toolbar_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/lipstick_two"
+                android:gravity="center_vertical"
+                android:minHeight="72dp"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/ic_back_iv"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_marginStart="16dp"
+                    android:scaleX="0.6"
+                    android:scaleY="0.6"
+                    android:src="@drawable/ct_ic_arrow_back_white_24dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:fontFamily="@font/lato"
+                    android:gravity="center_horizontal"
+                    android:lineSpacingExtra="4sp"
+                    android:text="Application - Gig4ce"
+                    android:textColor="@color/white"
+                    android:textSize="20sp"
+                    android:textStyle="normal" />
+            </LinearLayout>
+
+            <com.google.android.material.chip.ChipGroup
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="18dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="18dp"
+                app:chipSpacingHorizontal="14dp">
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_interest_driving"
+                    style="@style/AppSingleChoiceChip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Profile" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_interest_bike_rider"
+                    style="@style/AppSingleChoiceChip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Sourcing" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_interest_delivery_executive"
+                    style="@style/AppSingleChoiceChip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Managing Gigs" />
+
+
+            </com.google.android.material.chip.ChipGroup>
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/createProfileBtn"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/size_16"
+        android:layout_marginTop="@dimen/size_24"
+        android:layout_marginEnd="@dimen/size_16"
+        android:layout_marginBottom="@dimen/size_16"
+        android:background="@drawable/bg_next_assess_frag"
+        android:letterSpacing="0"
+        android:minHeight="@dimen/size_48"
+        android:paddingTop="@dimen/size_8"
+        android:paddingBottom="@dimen/size_8"
+        android:text="Create Profile"
+        app:strokeColor="@color/colorPrimary"
+        app:strokeWidth="2dp"
+        android:textAllCaps="false"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/createProfileBtn"
+        app:layout_constraintTop_toBottomOf="@id/toolbar_filter_layout">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/enrolled_users_rv"
+            android:layout_width="match_parent"
+            android:padding="8dp"
+            android:layout_height="match_parent"/>
+
+        <LinearLayout
+            android:id="@+id/no_users_enrolled_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="230dp"
+                android:layout_height="180dp"
+                android:layout_gravity="center"
+                android:src="@drawable/banner_users_grid"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/lato_bold"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:layout_marginTop="30dp"
+                android:textColor="#333333"
+                android:layout_gravity="center"
+                android:lineSpacingExtra="4sp"
+                tools:text="All good here! "
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/lato"
+                android:textStyle="normal"
+                android:textSize="14sp"
+                android:textColor="#333333"
+                android:layout_marginTop="12dp"
+                android:letterSpacing="-0.01"
+                android:lineSpacingExtra="3sp"
+                android:layout_gravity="center"
+                tools:text="There are no Profiles to show."
+                />
+
+            <Button
+                android:id="@+id/apply_amb_btn"
+                android:layout_width="282dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/size_16"
+                android:layout_marginTop="@dimen/size_24"
+                android:layout_marginEnd="@dimen/size_16"
+                android:layout_marginBottom="@dimen/size_32"
+                android:background="@drawable/bg_next_assess_frag"
+                android:letterSpacing="0"
+                android:minHeight="@dimen/size_48"
+                android:paddingTop="@dimen/size_8"
+                android:paddingBottom="@dimen/size_8"
+                android:text="Create Profile"
+                android:textAllCaps="false"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+
+        </LinearLayout>
+    </FrameLayout>
+
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
