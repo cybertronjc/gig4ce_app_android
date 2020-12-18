@@ -242,7 +242,7 @@ class OnboardingMainFragment : BaseFragment() {
         viewModel.setOnboardingCompleted(
             inviteId,
             navFragmentsData?.getData()?.getString(StringConstants.ROLE_ID.value) ?: "",
-            navFragmentsData?.getData()?.getString(StringConstants.WORK_ORDER_ID.value) ?: ""
+            navFragmentsData?.getData()?.getString(StringConstants.JOB_PROFILE_ID.value) ?: ""
         )
         sharedDataInterface.remove(StringConstants.INVITE_USER_ID.value)
         saveOnBoardingCompleted()

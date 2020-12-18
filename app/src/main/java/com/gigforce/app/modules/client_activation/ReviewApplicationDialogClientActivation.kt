@@ -44,7 +44,7 @@ class ReviewApplicationDialogClientActivation : DialogFragment() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putParcelable(StringConstants.WORK_ORDER_ID.value, jpSettings)
+        outState.putParcelable(StringConstants.JOB_PROFILE_ID.value, jpSettings)
 
 
     }

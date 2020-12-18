@@ -6,18 +6,26 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RadioButton
+import android.widget.RadioGroup
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import com.gigforce.app.R
-import com.gigforce.app.modules.preferences.daytime.SlotsRecyclerAdapter
+import com.gigforce.app.utils.StringConstants
 import com.gigforce.app.utils.getScreenWidth
+import kotlinx.android.synthetic.main.assessment_bs_item.*
 import kotlinx.android.synthetic.main.fragment_slots_driving_test.*
+import java.util.*
 
 
 class TimeSlotsDialog : DialogFragment() {
     private lateinit var callbacks: TimeSlotDialogCallbacks
+    private lateinit var timeSlots: ArrayList<String>
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.fragment_slots_driving_test, container, false)
     }
 
@@ -25,14 +33,53 @@ class TimeSlotsDialog : DialogFragment() {
         super.onStart()
         val dialog: Dialog? = dialog
         if (dialog != null) {
-            dialog.window?.setLayout(getScreenWidth(requireActivity()).width - resources.getDimensionPixelSize(R.dimen.size_32), ViewGroup.LayoutParams.WRAP_CONTENT)
-//            dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            dialog.window?.setLayout(
+                getScreenWidth(requireActivity()).width - resources.getDimensionPixelSize(
+                    R.dimen.size_32
+                ), ViewGroup.LayoutParams.WRAP_CONTENT
+            )
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putStringArrayList(StringConstants.TIME_SLOTS.value, timeSlots)
+
+
+    }
+
+
+    private fun getDataFromIntents(savedInstanceState: Bundle?) {
+        savedInstanceState?.let {
+            timeSlots = it.getStringArrayList(StringConstants.TIME_SLOTS.value)!!
+        }
+
+        arguments?.let {
+            timeSlots = it.getStringArrayList(StringConstants.TIME_SLOTS.value)!!
+
         }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        getDataFromIntents(savedInstanceState)
         initClicks()
+        createRadioButton()
+
+    }
+
+    private fun createRadioButton() {
+        groupradio.removeAllViews()
+
+        for (i in 0 until timeSlots.size) {
+            val radioButton: RadioButton =
+                LayoutInflater.from(requireContext()).inflate(R.layout.layout_rb_time_slots, null) as RadioButton
+            radioButton.text = timeSlots[i]
+            radioButton.hint = timeSlots[i]
+            radioButton.id = i + 100
+            groupradio.addView(radioButton)
+
+        }
     }
 
     private fun initClicks() {
@@ -41,7 +88,11 @@ class TimeSlotsDialog : DialogFragment() {
         }
         tv_done_time_slots.setOnClickListener {
             if (groupradio.checkedRadioButtonId == -1) {
-                Toast.makeText(requireContext(), getString(R.string.no_time_slot), Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    requireContext(),
+                    getString(R.string.no_time_slot),
+                    Toast.LENGTH_LONG
+                ).show()
                 return@setOnClickListener
             }
 

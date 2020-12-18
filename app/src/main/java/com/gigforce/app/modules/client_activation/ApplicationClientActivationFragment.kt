@@ -34,8 +34,7 @@ class ApplicationClientActivationFragment : BaseFragment(),
     private val adapter: AdapterApplicationClientActivation by lazy {
         AdapterApplicationClientActivation()
     }
-    private lateinit var mWordOrderID: String
-    private lateinit var mNextDep: String
+    private lateinit var mJobProfileId: String
 
 
     override fun onCreateView(
@@ -61,8 +60,7 @@ class ApplicationClientActivationFragment : BaseFragment(),
         setupRecycler()
         initObservers()
         initClicks()
-        viewModel.draftApplication(mWordOrderID)
-        mNextDep = ""
+        viewModel.draftApplication(mJobProfileId)
 
     }
 
@@ -86,13 +84,7 @@ class ApplicationClientActivationFragment : BaseFragment(),
         }
 
         tv_action_application_client_activation.setOnClickListener {
-//            dialog = ReviewApplicationDialogClientActivation()
-//            dialog?.setCallbacks(this)
-//            dialog?.isCancelable = false
-//
-//
-//            dialog?.arguments = bundleOf(StringConstants.DATA.value to viewModel.observableWorkOrderDependency.value)
-//            dialog?.show(parentFragmentManager, ReviewApplicationDialogClientActivation::class.java.name)
+
             onClickSubmit()
 
             viewModel.redirectToNextStep = false
@@ -104,13 +96,15 @@ class ApplicationClientActivationFragment : BaseFragment(),
     }
 
     private fun initObservers() {
+        viewModel.observableError.observe(viewLifecycleOwner, Observer {
+            showToast(it ?: "")
+        })
         viewModel.observableApplicationStatus.observe(viewLifecycleOwner, Observer {
             pb_application_client_activation.gone()
             popBackState()
             navigate(
                 R.id.fragment_gig_activation, bundleOf(
-                    StringConstants.NEXT_DEP.value to mNextDep,
-                    StringConstants.WORK_ORDER_ID.value to mWordOrderID
+                    StringConstants.JOB_PROFILE_ID.value to mJobProfileId
 
                 )
             )
@@ -130,13 +124,13 @@ class ApplicationClientActivationFragment : BaseFragment(),
             tv_completion_application.text = it?.subTitle ?: ""
             tv_title_application_client_activation.text = it?.businessTitle ?: ""
             viewModel.updateDraftJpApplication(
-                mWordOrderID,
+                mJobProfileId,
                 it?.requiredFeatures ?: listOf()
             )
 
         })
 
-        viewModel.getWorkOrderDependency(mWordOrderID)
+        viewModel.getWorkOrderDependency(mJobProfileId)
 
 
     }
@@ -197,7 +191,7 @@ class ApplicationClientActivationFragment : BaseFragment(),
                     }
                     "questionnaire" -> navigate(
                         R.id.application_questionnaire, bundleOf(
-                            StringConstants.WORK_ORDER_ID.value to mWordOrderID,
+                            StringConstants.JOB_PROFILE_ID.value to mJobProfileId,
                             StringConstants.TITLE.value to adapter.items[i].title,
                             StringConstants.TYPE.value to adapter.items[i].type,
                             StringConstants.FROM_CLIENT_ACTIVATON.value to true
@@ -246,40 +240,29 @@ class ApplicationClientActivationFragment : BaseFragment(),
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putString(StringConstants.WORK_ORDER_ID.value, mWordOrderID)
-        outState.putString(StringConstants.NEXT_DEP.value, mNextDep)
+        outState.putString(StringConstants.JOB_PROFILE_ID.value, mJobProfileId)
 
 
     }
 
     private fun getDataFromIntents(savedInstanceState: Bundle?) {
         savedInstanceState?.let {
-            mWordOrderID = it.getString(StringConstants.WORK_ORDER_ID.value) ?: return@let
-            mNextDep = it.getString(StringConstants.NEXT_DEP.value) ?: return@let
+            mJobProfileId = it.getString(StringConstants.JOB_PROFILE_ID.value) ?: return@let
 
         }
 
         arguments?.let {
-            mWordOrderID = it.getString(StringConstants.WORK_ORDER_ID.value) ?: return@let
-            mNextDep = it.getString(StringConstants.NEXT_DEP.value) ?: return@let
+            mJobProfileId = it.getString(StringConstants.JOB_PROFILE_ID.value) ?: return@let
 
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-    }
 
     private fun setupRecycler() {
         rv_status_pending.adapter = adapter
         rv_status_pending.layoutManager =
             LinearLayoutManager(requireContext())
-//        rv_status_pending.addItemDecoration(
-//            HorizontaltemDecoration(
-//                requireContext(),
-//                R.dimen.size_11
-//            )
-//        )
+
 
     }
 
@@ -306,7 +289,7 @@ class ApplicationClientActivationFragment : BaseFragment(),
             }
             "questionnaire" -> navigate(
                 R.id.application_questionnaire, bundleOf(
-                    StringConstants.WORK_ORDER_ID.value to mWordOrderID,
+                    StringConstants.JOB_PROFILE_ID.value to mJobProfileId,
                     StringConstants.TITLE.value to dependency.title,
                     StringConstants.TYPE.value to dependency.type,
                     StringConstants.FROM_CLIENT_ACTIVATON.value to true
@@ -336,7 +319,7 @@ class ApplicationClientActivationFragment : BaseFragment(),
     }
 
     override fun onClickSubmit() {
-        viewModel.apply(mWordOrderID)
+        viewModel.apply(mJobProfileId)
         dialog?.dismiss()
         pb_application_client_activation.visible()
 

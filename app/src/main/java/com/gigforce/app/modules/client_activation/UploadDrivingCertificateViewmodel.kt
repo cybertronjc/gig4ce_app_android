@@ -26,7 +26,7 @@ class UploadDrivingCertificateViewmodel : ViewModel() {
     val documentUploadState: SingleLiveEvent<Lse> get() = _documentUploadState
 
     fun uploadDLCer(
-            mWorkOrderID: String,
+            mJobProfileId: String,
             frontImagePath: Uri?, type: String, title: String
     ) = viewModelScope.launch {
 
@@ -39,7 +39,7 @@ class UploadDrivingCertificateViewmodel : ViewModel() {
 
 
             setInJPApplication(
-                    mWorkOrderID, DrivingCertificate(
+                    mJobProfileId, DrivingCertificate(
                     verified = false,
                     certificateUrl = frontImageFileNameAtServer
 
