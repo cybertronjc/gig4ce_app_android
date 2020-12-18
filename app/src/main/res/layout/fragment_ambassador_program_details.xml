@@ -116,7 +116,7 @@
             android:paddingEnd="16dp"
             android:paddingTop="20dp"
             android:paddingBottom="20dp"
-            android:text="Earn Rs. 50 per Giger Onboarding. No limit on earning."
+            android:text="@string/earn_rs_50_per_giger_onboarding_no_limit_on_earning"
             app:layout_constraintTop_toBottomOf="@id/gigOverViewLayout" />
 
         <include

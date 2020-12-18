@@ -57,8 +57,8 @@ class AmbassadorProgramDetailsFragment : BaseFragment(),
     private fun setAmbassadorProgramDetails() {
         inflateAmbResponsibilities(
             listOf(
-                "1. You have to look for people who are looking for Jobs like Driver, Warehouse Helper, Delivery Executive etc",
-                "2. If they are interested, you have to create their profiles on Gigforce app. Creating profile means entering their basic details and uploading  verifiying Documents like Adhaar, PAN, Bank passbook etc."
+                "You have to look for people who are looking for Jobs like Driver, Warehouse Helper, Delivery Executive etc",
+                "If they are interested, you have to create their profiles on Gigforce app. Creating profile means entering their basic details and uploading  verifiying Documents like Adhaar, PAN, Bank passbook etc."
             )
         )
     }
