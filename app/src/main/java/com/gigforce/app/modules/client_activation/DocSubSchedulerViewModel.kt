@@ -15,8 +15,8 @@ class DocSubSchedulerViewModel : ViewModel() {
     val observableJpApplication: MutableLiveData<DrivingCertificate> = _observableJpApplication
 
 
-    fun getApplication(mWorkOrderID: String, type: String, title: String) = viewModelScope.launch {
-        val model = getJPApplication(mWorkOrderID, type, title)
+    fun getApplication(mJobProfileId: String, type: String, title: String) = viewModelScope.launch {
+        val model = getJPApplication(mJobProfileId, type, title)
         _observableJpApplication.value = model
 
     }
@@ -26,18 +26,25 @@ class DocSubSchedulerViewModel : ViewModel() {
         type: String,
         title: String
     ): DrivingCertificate? {
-        val items = repository.db.collection("JP_Applications").whereEqualTo("jpid", workOrderID)
-            .whereEqualTo("gigerId", repository.getUID()).get()
-            .await()
-        val submissions = repository.getCollectionReference().document(items.documents[0].id)
-            .collection("Submissions").whereEqualTo("stepId", workOrderID).whereEqualTo(
-                "title", title
-            ).whereEqualTo("type", type).get().await()
-        if (submissions.documents.isNullOrEmpty()) {
+        try {
+            val items =
+                repository.db.collection("JP_Applications").whereEqualTo("jpid", workOrderID)
+                    .whereEqualTo("gigerId", repository.getUID()).get()
+                    .await()
+            val submissions = repository.getCollectionReference().document(items.documents[0].id)
+                .collection("Submissions").whereEqualTo("stepId", workOrderID).whereEqualTo(
+                    "title", title
+                ).whereEqualTo("type", type).get().await()
+            if (submissions.documents.isNullOrEmpty()) {
+                return null
+            }
+
+            return submissions.toObjects(DrivingCertSubmission::class.java)[0].certificate
+        } catch (e: Exception) {
+            observableError.value = e.message
             return null
         }
 
-        return submissions.toObjects(DrivingCertSubmission::class.java)[0].certificate
     }
 
     private val _observablePartnerSchool: MutableLiveData<PartnerSchool> = MutableLiveData()
@@ -48,6 +55,7 @@ class DocSubSchedulerViewModel : ViewModel() {
     val observableError: SingleLiveEvent<String> get() = _observableError
 
     fun getPartnerSchoolDetails(type: String, workOrderId: String) {
+
         repository.db.collection("JP_Settings").whereEqualTo("type", type)
             .whereEqualTo("jobProfileId", workOrderId).limit(1)
             .addSnapshotListener { success, err ->
@@ -60,6 +68,8 @@ class DocSubSchedulerViewModel : ViewModel() {
                 }
             }
     }
+
+
 
 
 }

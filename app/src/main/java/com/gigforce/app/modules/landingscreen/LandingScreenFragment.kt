@@ -160,8 +160,8 @@ class LandingScreenFragment : BaseFragment() {
         ) {
             navigate(
                 R.id.fragment_client_activation, bundleOf(
-                    StringConstants.WORK_ORDER_ID.value to navFragmentsData?.getData()
-                        ?.getString(StringConstants.WORK_ORDER_ID.value),
+                    StringConstants.JOB_PROFILE_ID.value to navFragmentsData?.getData()
+                        ?.getString(StringConstants.JOB_PROFILE_ID.value),
                     StringConstants.CLIENT_ACTIVATION_VIA_DEEP_LINK.value to true,
                     StringConstants.INVITE_USER_ID.value to navFragmentsData?.getData()
                         ?.getString(StringConstants.INVITE_USER_ID.value)
@@ -1010,7 +1010,7 @@ class LandingScreenFragment : BaseFragment() {
                     PFRecyclerViewAdapter.OnViewHolderClick<JobProfile?> { view, position, item ->
                         navigate(
                             R.id.fragment_client_activation,
-                            bundleOf(StringConstants.WORK_ORDER_ID.value to item?.id)
+                            bundleOf(StringConstants.JOB_PROFILE_ID.value to item?.id)
                         )
                     },
                     RecyclerGenericAdapter.ItemInterface<JobProfile?> { obj, viewHolder, position ->

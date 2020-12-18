@@ -43,37 +43,47 @@ class ApplicationClientActivationViewModel : ViewModel() {
     private val _observableJpApplication: MutableLiveData<JpApplication> = MutableLiveData()
     val observableJpApplication: MutableLiveData<JpApplication> = _observableJpApplication
 
-    fun getWorkOrderDependency(workOrderId: String) = viewModelScope.launch {
-        val item = getJpSettings(workOrderId)
+    fun getWorkOrderDependency(jobProfileId: String) = viewModelScope.launch {
+        val item = getJpSettings(jobProfileId)
         if (item != null)
             observableWorkOrderDependency.value = item
     }
 
-    suspend fun getJpSettings(workOrderID: String): JpSettings? {
-
-        val items = repository.db.collection("JP_Settings").whereEqualTo("type", "application")
-            .whereEqualTo("jobProfileId", workOrderID).get().await()
-        if (items.documents.isNullOrEmpty()) {
+    suspend fun getJpSettings(jobProfileId: String): JpSettings? {
+        try {
+            val items = repository.db.collection("JP_Settings").whereEqualTo("type", "application")
+                .whereEqualTo("jobProfileId", jobProfileId).get().await()
+            if (items.documents.isNullOrEmpty()) {
+                return null
+            }
+            return items.toObjects(JpSettings::class.java).first()
+        } catch (e: Exception) {
+            observableError.value = e.message
             return null
         }
-        return items.toObjects(JpSettings::class.java).first()
 
     }
 
 
     suspend fun getVerification(): VerificationBaseModel? {
+        return try {
+            repository.db.collection("Verification").document(repository.getUID()).get()
+                .await()
+                .toObject(VerificationBaseModel::class.java)
+        } catch (e: Exception) {
+            observableError.value = e.message
+            null
+        }
 
-        return repository.db.collection("Verification").document(repository.getUID()).get().await()
-            .toObject(VerificationBaseModel::class.java)
 
     }
 
 
-    fun updateDraftJpApplication(mWorkOrderID: String, dependency: List<Dependency>) =
+    fun updateDraftJpApplication(mJobProfileId: String, dependency: List<Dependency>) =
         viewModelScope.launch {
 
 
-            val model = getJPApplication(mWorkOrderID)
+            val model = getJPApplication(mJobProfileId)
 
 
             if (model.application.isNullOrEmpty()) {
@@ -85,14 +95,14 @@ class ApplicationClientActivationViewModel : ViewModel() {
                     when (it.type) {
                         "profile_pic" -> {
                             val profileModel = getProfile()
-                            profileAvatarName = profileModel.profileAvatarName
+                            profileAvatarName = profileModel?.profileAvatarName ?: ""
                             it.isDone =
-                                !profileModel.profileAvatarName.isNullOrEmpty() && profileModel.profileAvatarName != "avatar.jpg"
+                                !profileModel?.profileAvatarName.isNullOrEmpty() && profileModel?.profileAvatarName != "avatar.jpg"
 
                         }
                         "about_me" -> {
                             val profileModel = getProfile()
-                            it.isDone = !profileModel.aboutMe.isNullOrEmpty()
+                            it.isDone = !profileModel?.aboutMe.isNullOrEmpty()
 
                         }
                         "driving_licence" -> {
@@ -104,7 +114,7 @@ class ApplicationClientActivationViewModel : ViewModel() {
                         "questionnaire" -> {
                             it.isDone =
                                 checkForQuestionnaire(
-                                    mWorkOrderID, it.type ?: "", it.title
+                                    mJobProfileId, it.type ?: "", it.title
                                         ?: ""
                                 )
                         }
@@ -143,9 +153,9 @@ class ApplicationClientActivationViewModel : ViewModel() {
         }
 
 
-    fun apply(mWorkOrderID: String) = viewModelScope.launch {
+    fun apply(jobProfileId: String) = viewModelScope.launch {
 
-        val application = getJPApplication(mWorkOrderID)
+        val application = getJPApplication(jobProfileId)
         repository.db.collection("JP_Applications").document(application.id)
             .update(
                 mapOf(
@@ -160,12 +170,16 @@ class ApplicationClientActivationViewModel : ViewModel() {
                 }
             }
     }
-    fun draftApplication(mWorkOrderID: String)= viewModelScope.launch {
-        val application = getJPApplication(mWorkOrderID)
-        if(application.status == ""){
+
+    fun draftApplication(jobProfileId: String) = viewModelScope.launch {
+        val application = getJPApplication(jobProfileId)
+        if (application.status == "") {
             repository.db.collection("JP_Applications").document(application.id)
-                .update(mapOf("status" to "Draft"
-                ))
+                .update(
+                    mapOf(
+                        "status" to "Draft"
+                    )
+                )
                 .addOnCompleteListener {
                     if (it.isSuccessful) {
                         observableApplicationStatus.value = true
@@ -175,15 +189,15 @@ class ApplicationClientActivationViewModel : ViewModel() {
     }
 
 
-    suspend fun getJPApplication(workOrderID: String): JpApplication {
+    suspend fun getJPApplication(jobProfileId: String): JpApplication {
         try {
             val items =
-                repository.db.collection("JP_Applications").whereEqualTo("jpid", workOrderID)
+                repository.db.collection("JP_Applications").whereEqualTo("jpid", jobProfileId)
                     .whereEqualTo("gigerId", repository.getUID()).get()
                     .await()
 
             if (items.documents.isNullOrEmpty()) {
-                return JpApplication(JPId = workOrderID, gigerId = repository.getUID())
+                return JpApplication(JPId = jobProfileId, gigerId = repository.getUID())
             }
             val toObject = items.toObjects(JpApplication::class.java).get(0)
             toObject.id = items.documents[0].id
@@ -196,51 +210,66 @@ class ApplicationClientActivationViewModel : ViewModel() {
 
     }
 
-    suspend fun checkForQuestionnaire(workOrderID: String, type: String, title: String): Boolean {
-
-        val items = repository.db.collection("JP_Applications").whereEqualTo("jpid", workOrderID)
-            .whereEqualTo("gigerId", repository.getUID()).get()
-            .await()
-        if (items.documents.isNullOrEmpty()) {
+    suspend fun checkForQuestionnaire(jobProfileId: String, type: String, title: String): Boolean {
+        try {
+            val items =
+                repository.db.collection("JP_Applications").whereEqualTo("jpid", jobProfileId)
+                    .whereEqualTo("gigerId", repository.getUID()).get()
+                    .await()
+            if (items.documents.isNullOrEmpty()) {
+                return false
+            }
+            val documentSnapshot = items.documents[0]
+            return !repository.db.collection("JP_Applications").document(documentSnapshot.id)
+                .collection("Submissions").whereEqualTo("stepId", jobProfileId).whereEqualTo(
+                    "title", title
+                ).whereEqualTo("type", type).get().await().documents.isNullOrEmpty()
+        } catch (e: Exception) {
+            observableError.value = e.message
             return false
         }
-        val documentSnapshot = items.documents[0]
-        return !repository.db.collection("JP_Applications").document(documentSnapshot.id)
-            .collection("Submissions").whereEqualTo("stepId", workOrderID).whereEqualTo(
-                "title", title
-            ).whereEqualTo("type", type).get().await().documents.isNullOrEmpty()
 
 
     }
 
 
-    suspend fun getProfile(): ProfileData {
-        return repository.db.collection("Profiles").document(repository.getUID()).get().await()
+    suspend fun getProfile(): ProfileData? {
+        return try {
+            repository.db.collection("Profiles").document(repository.getUID()).get().await()
                 .toObject(ProfileData::class.java)!!
+        } catch (e: Exception) {
+            observableError.value = e.message
+            null
+        }
+
 
     }
 
 
     suspend fun checkIfCourseCompleted(moduleId: String): Boolean {
-        try{
-        val data = repository.db.collection("Course_Progress").whereEqualTo("uid", repository.getUID()).whereEqualTo("type", "module").whereEqualTo("module_id", moduleId).get().await()
-        if (data.documents.isNullOrEmpty()) {
+        try {
+            val data =
+                repository.db.collection("Course_Progress").whereEqualTo("uid", repository.getUID())
+                    .whereEqualTo("type", "module").whereEqualTo("module_id", moduleId).get()
+                    .await()
+            if (data.documents.isNullOrEmpty()) {
+                return false
+            }
+            var allCourseProgress =
+                data.toObjects(GigActivationViewModel.CourseProgress::class.java).get(0)
+            allCourseProgress.lesson_progress.let {
+                var completed = true
+                for (lesson in it) {
+                    if (lesson.lessonType == "assessment" && !lesson.completed) {
+                        return false
+                    }
+                }
+                return completed
+            }
+        } catch (e: java.lang.Exception) {
+            _observableError.value = e.message
             return false
         }
-        var allCourseProgress = data.toObjects(GigActivationViewModel.CourseProgress::class.java).get(0)
-        allCourseProgress.lesson_progress.let {
-            var completed = true
-            for (lesson in it) {
-                if (lesson.lessonType == "assessment" && !lesson.completed) {
-                    return false
-                }
-            }
-            return completed
-        }
-    } catch (e: java.lang.Exception) {
-        _observableError.value = e.message
-        return false
-    }
 
     }
 

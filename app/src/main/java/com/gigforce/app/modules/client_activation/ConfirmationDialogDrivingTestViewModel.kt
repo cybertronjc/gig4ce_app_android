@@ -18,7 +18,7 @@ class ConfirmationDialogDrivingTestViewModel : ViewModel() {
     val observableJpApplication: MutableLiveData<Boolean> = _observableJpApplication
 
     fun apply(
-            mWorkOrderID: String,
+            mJobProfileId: String,
             partnerDetails: PartnerSchoolDetails,
             date: String,
             slot: String,
@@ -27,7 +27,7 @@ class ConfirmationDialogDrivingTestViewModel : ViewModel() {
 
 
         setInJPApplication(
-                mWorkOrderID,
+                mJobProfileId,
                 type,
                 title,
                 partnerDetails,

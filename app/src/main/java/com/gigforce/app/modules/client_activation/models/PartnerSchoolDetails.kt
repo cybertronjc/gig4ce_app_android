@@ -4,29 +4,32 @@ import android.os.Parcel
 import android.os.Parcelable
 
 data class PartnerSchoolDetails(
-    var city: String = "", var landmark: String = "", var name:
-    String = "", var timing: String = "", var contact: List<ContactPartnerSchool> = listOf(),
-    var lat: String = "28.491269998581263" , var lon: String = "77.28332054102471"
+    var line2: String? = null, var landmark: String? = "", var name:
+    String? = null, var line3: String? = null, var contact: List<ContactPartnerSchool> = listOf(),
+    var lat: String = "28.491269998581263", var lon: String = "77.28332054102471",
+    var line1: String? = null
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
-        parcel.readString() ?: "",
-        parcel.readString() ?: "",
-        parcel.readString() ?: "",
-        parcel.readString() ?: "",
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
         parcel.createTypedArrayList(ContactPartnerSchool) ?: listOf(),
         parcel.readString() ?: "",
-        parcel.readString() ?: ""
+        parcel.readString() ?: "",
+        parcel.readString()
     ) {
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeString(city)
+        parcel.writeString(line2)
         parcel.writeString(landmark)
         parcel.writeString(name)
-        parcel.writeString(timing)
+        parcel.writeString(line3)
         parcel.writeTypedList(contact)
         parcel.writeString(lat)
         parcel.writeString(lon)
+        parcel.writeString(line1)
     }
 
     override fun describeContents(): Int {
@@ -42,5 +45,4 @@ data class PartnerSchoolDetails(
             return arrayOfNulls(size)
         }
     }
-
 }

@@ -130,8 +130,8 @@ class ClientActivationViewmodel(
         }
     }
 
-    fun addInviteUserId(mInviteUserID: String, mWordOrderID: String, location: Location) {
-        clientActivationNavCallbacks.addInviteUserID(mWordOrderID, mInviteUserID, location, this)
+    fun addInviteUserId(mInviteUserID: String, mJobProfileId: String, location: Location) {
+        clientActivationNavCallbacks.addInviteUserID(mJobProfileId, mInviteUserID, location, this)
     }
 
 

@@ -40,7 +40,7 @@ class UploadDrivingCertificate : BaseFragment() {
 
     private lateinit var mTitle: String
     private lateinit var mType: String
-    private lateinit var mWordOrderID: String
+    private lateinit var mJobProfileId: String
     private val viewModel: UploadDrivingCertificateViewmodel by viewModels()
 
     private var dlFrontImagePath: Uri? = null
@@ -65,13 +65,13 @@ class UploadDrivingCertificate : BaseFragment() {
 
     private fun getDataFromIntents(savedInstanceState: Bundle?) {
         savedInstanceState?.let {
-            mWordOrderID = it.getString(StringConstants.WORK_ORDER_ID.value) ?: return@let
+            mJobProfileId = it.getString(StringConstants.JOB_PROFILE_ID.value) ?: return@let
             mType = it.getString(StringConstants.TYPE.value) ?: return@let
             mTitle = it.getString(StringConstants.TITLE.value) ?: return@let
         }
 
         arguments?.let {
-            mWordOrderID = it.getString(StringConstants.WORK_ORDER_ID.value) ?: return@let
+            mJobProfileId = it.getString(StringConstants.JOB_PROFILE_ID.value) ?: return@let
             mType = it.getString(StringConstants.TYPE.value) ?: return@let
             mTitle = it.getString(StringConstants.TITLE.value) ?: return@let
         }
@@ -84,7 +84,7 @@ class UploadDrivingCertificate : BaseFragment() {
             navigate(
                     R.id.fragment_doc_sub,
                     bundleOf(
-                            StringConstants.WORK_ORDER_ID.value to mWordOrderID,
+                            StringConstants.JOB_PROFILE_ID.value to mJobProfileId,
 
                             StringConstants.TITLE.value to mTitle,
                             StringConstants.TYPE.value to mType
@@ -162,7 +162,7 @@ class UploadDrivingCertificate : BaseFragment() {
 
 
                 viewModel.uploadDLCer(
-                        mWordOrderID,
+                        mJobProfileId,
                         dlFrontImagePath, mType,
                         mTitle
 
@@ -170,7 +170,7 @@ class UploadDrivingCertificate : BaseFragment() {
 
             } else if (dlNoRB.isChecked) {
                 viewModel.uploadDLCer(
-                        mWordOrderID,
+                        mJobProfileId,
                         null, mType,
                         mTitle
 
@@ -383,7 +383,7 @@ class UploadDrivingCertificate : BaseFragment() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putString(StringConstants.WORK_ORDER_ID.value, mWordOrderID)
+        outState.putString(StringConstants.JOB_PROFILE_ID.value, mJobProfileId)
         outState.putString(StringConstants.TYPE.value, mType)
         outState.putString(StringConstants.TITLE.value, mTitle)
 
