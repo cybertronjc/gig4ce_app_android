@@ -40,7 +40,7 @@ class ScheduleDrivingTestFragment : BaseFragment(),
     AdapterScheduleTestCb.AdapterScheduleTestCbCallbacks {
     private var enableOtpEditText: Boolean = false
     private var countDownTimer: CountDownTimer? = null
-    private lateinit var mWordOrderID: String
+    private lateinit var mJobProfileId: String
     private lateinit var mTitle: String
     private lateinit var mType: String
     private val adapter: AdapterScheduleTestCb by lazy {
@@ -87,7 +87,7 @@ class ScheduleDrivingTestFragment : BaseFragment(),
             adapter.addData(it.checkItems)
             tv_title_toolbar.text = it.title
             tv_driving_test_certification.text = it.subtitle
-            viewModel.getApplication(mWordOrderID, mType, mTitle)
+            viewModel.getApplication(mJobProfileId, mType, mTitle)
         })
         viewModel.observableJpApplication.observe(viewLifecycleOwner, Observer {
             if (it == null) return@Observer
@@ -140,7 +140,7 @@ class ScheduleDrivingTestFragment : BaseFragment(),
 
 
 
-        viewModel.getUIData(mWordOrderID)
+        viewModel.getUIData(mJobProfileId)
 
 
     }
@@ -152,13 +152,13 @@ class ScheduleDrivingTestFragment : BaseFragment(),
 
     private fun getDataFromIntents(savedInstanceState: Bundle?) {
         savedInstanceState?.let {
-            mWordOrderID = it.getString(StringConstants.WORK_ORDER_ID.value) ?: return@let
+            mJobProfileId = it.getString(StringConstants.JOB_PROFILE_ID.value) ?: return@let
             mType = it.getString(StringConstants.TYPE.value) ?: return@let
             mTitle = it.getString(StringConstants.TITLE.value) ?: return@let
         }
 
         arguments?.let {
-            mWordOrderID = it.getString(StringConstants.WORK_ORDER_ID.value) ?: return@let
+            mJobProfileId = it.getString(StringConstants.JOB_PROFILE_ID.value) ?: return@let
             mType = it.getString(StringConstants.TYPE.value) ?: return@let
             mTitle = it.getString(StringConstants.TITLE.value) ?: return@let
         }
@@ -166,7 +166,7 @@ class ScheduleDrivingTestFragment : BaseFragment(),
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putString(StringConstants.WORK_ORDER_ID.value, mWordOrderID)
+        outState.putString(StringConstants.JOB_PROFILE_ID.value, mJobProfileId)
         outState.putString(StringConstants.TYPE.value, mType)
         outState.putString(StringConstants.TITLE.value, mTitle)
 
@@ -234,7 +234,7 @@ class ScheduleDrivingTestFragment : BaseFragment(),
                                             }
                                         })
                                     viewModel.apply(
-                                        mWordOrderID,
+                                        mJobProfileId,
                                         mType,
                                         mTitle,
                                         adapter.selectedItems

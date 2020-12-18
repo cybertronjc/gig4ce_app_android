@@ -47,7 +47,7 @@ class SplashScreen : AppCompatActivity() {
                         intent.putExtra(StringConstants.NAV_TO_CLIENT_ACT.value, true)
                         intent.putExtra(StringConstants.INVITE_USER_ID.value, inviteID)
                         intent.putExtra(
-                            StringConstants.WORK_ORDER_ID.value,
+                            StringConstants.JOB_PROFILE_ID.value,
                             jobProfileID
                         )
                         initApp(intent)

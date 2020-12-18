@@ -53,7 +53,7 @@ class MainActivity : AppCompatActivity(), NavFragmentsData {
                 navController.popBackStack()
                 navController.navigate(
                     R.id.fragment_client_activation, bundleOf(
-                        StringConstants.WORK_ORDER_ID.value to intent.getStringExtra(StringConstants.WORK_ORDER_ID.value),
+                        StringConstants.JOB_PROFILE_ID.value to intent.getStringExtra(StringConstants.JOB_PROFILE_ID.value),
                         StringConstants.INVITE_USER_ID.value to intent.getStringExtra(
                             StringConstants.INVITE_USER_ID.value
                         ),

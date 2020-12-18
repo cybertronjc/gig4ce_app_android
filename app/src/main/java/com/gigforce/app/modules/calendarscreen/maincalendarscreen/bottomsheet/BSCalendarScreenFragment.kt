@@ -977,7 +977,7 @@ class BSCalendarScreenFragment : BaseFragment() {
                     PFRecyclerViewAdapter.OnViewHolderClick<JobProfile?> { view, position, item ->
                         navigate(
                             R.id.fragment_client_activation,
-                            bundleOf(StringConstants.WORK_ORDER_ID.value to item?.id)
+                            bundleOf(StringConstants.JOB_PROFILE_ID.value to item?.id)
                         )
                     },
                     RecyclerGenericAdapter.ItemInterface<JobProfile?> { obj, viewHolder, position ->

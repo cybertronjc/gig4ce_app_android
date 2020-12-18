@@ -54,21 +54,21 @@ class ViewModelQuestionnaire(private val savedStateHandle: SavedStateHandle) : V
     }
 
     fun addQuestionnaire(
-        mWordOrderID: String,
+        mJobProfileId: String,
         title: String,
         type: String,
         questions: List<Questions>?
     ) {
         var listener: ListenerRegistration? = null
         listener = questionnaireRepository.db.collection("JP_Applications")
-            .whereEqualTo("jpid", mWordOrderID)
+            .whereEqualTo("jpid", mJobProfileId)
             .whereEqualTo("gigerId", questionnaireRepository.getUID())
             .addSnapshotListener { jp_application, _ ->
                 listener?.remove()
 
                 listener = questionnaireRepository.db.collection("JP_Applications")
                     .document(jp_application?.documents!![0].id).collection("Submissions")
-                    .whereEqualTo("stepId", mWordOrderID).whereEqualTo("title", title)
+                    .whereEqualTo("stepId", mJobProfileId).whereEqualTo("title", title)
                     .whereEqualTo("type", type).addSnapshotListener { questionnaire, err_ ->
                         listener?.remove()
                         if (questionnaire?.documents.isNullOrEmpty()) {
@@ -78,7 +78,7 @@ class ViewModelQuestionnaire(private val savedStateHandle: SavedStateHandle) : V
                                     mapOf(
                                         "title" to title,
                                         "type" to type,
-                                        "stepId" to mWordOrderID,
+                                        "stepId" to mJobProfileId,
                                         "answers" to questions
 
                                     )

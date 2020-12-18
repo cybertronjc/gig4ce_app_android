@@ -22,7 +22,7 @@ import kotlinx.android.synthetic.main.layout_select_partner_bottom_sheet.*
 class SelectPartnerSchoolBottomSheet : BottomSheetDialogFragment(),
     AdapterPartnerSchool.AdapterPartnerSchoolCallbacks {
     private lateinit var callbacks: SelectPartnerBsCallbacks
-    private lateinit var mWordOrderID: String
+    private lateinit var mJobProfileId: String
     private lateinit var mType: String
 
     private lateinit var viewModel: SelectPartnerSchoolViewModel
@@ -69,7 +69,7 @@ class SelectPartnerSchoolBottomSheet : BottomSheetDialogFragment(),
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putString(StringConstants.WORK_ORDER_ID.value, mWordOrderID)
+        outState.putString(StringConstants.JOB_PROFILE_ID.value, mJobProfileId)
         outState.putString(StringConstants.TYPE.value, mType)
 
 
@@ -90,6 +90,8 @@ class SelectPartnerSchoolBottomSheet : BottomSheetDialogFragment(),
     private fun initObservers() {
         viewModel.observablePartnerSchool.observe(viewLifecycleOwner, Observer {
             if (it == null) return@Observer
+            tv_title_partner_bs.text = it.addressHeader?.title ?: ""
+            tv_sub_title_partner_bs.text = it.addressHeader?.subTitle ?: ""
             pb_select_partner_bottom_sheet.gone()
             rv_partner_school_address.visible()
             adapter.addData(it.addressList)
@@ -100,7 +102,7 @@ class SelectPartnerSchoolBottomSheet : BottomSheetDialogFragment(),
             pb_select_partner_bottom_sheet.gone()
 
         })
-        viewModel.getPartnerSchoolDetails(mType, mWordOrderID)
+        viewModel.getPartnerSchoolDetails(mType, mJobProfileId)
     }
 
     companion object {
@@ -114,12 +116,12 @@ class SelectPartnerSchoolBottomSheet : BottomSheetDialogFragment(),
 
     private fun getDataFromIntents(savedInstanceState: Bundle?) {
         savedInstanceState?.let {
-            mWordOrderID = it.getString(StringConstants.WORK_ORDER_ID.value) ?: ""
+            mJobProfileId = it.getString(StringConstants.JOB_PROFILE_ID.value) ?: ""
             mType = it.getString(StringConstants.TYPE.value) ?: ""
         }
 
         arguments?.let {
-            mWordOrderID = it.getString(StringConstants.WORK_ORDER_ID.value) ?: return@let
+            mJobProfileId = it.getString(StringConstants.JOB_PROFILE_ID.value) ?: return@let
             mType = it.getString(StringConstants.TYPE.value) ?: ""
 
         }

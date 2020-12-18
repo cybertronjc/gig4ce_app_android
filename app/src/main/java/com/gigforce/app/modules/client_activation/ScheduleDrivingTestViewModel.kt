@@ -43,8 +43,8 @@ class ScheduleDrivingTestViewModel : ViewModel() {
         SingleLiveEvent<Boolean>();
     }
     val observableApplied: SingleLiveEvent<Boolean> get() = _observableApplied
-    fun getApplication(mWorkOrderID: String, type: String, title: String) = viewModelScope.launch {
-        val model = getJPApplication(mWorkOrderID, type, title)
+    fun getApplication(mJobProfileId: String, type: String, title: String) = viewModelScope.launch {
+        val model = getJPApplication(mJobProfileId, type, title)
         _observableJpApplication.value = model
 
     }
@@ -112,12 +112,12 @@ class ScheduleDrivingTestViewModel : ViewModel() {
     }
 
     fun apply(
-        mWorkOrderID: String, type: String, title: String, options: List<CheckItem>
+        mJobProfileId: String, type: String, title: String, options: List<CheckItem>
     ) = viewModelScope.launch {
 
 
         setInJPApplication(
-            mWorkOrderID,
+            mJobProfileId,
             type,
             title,
             options

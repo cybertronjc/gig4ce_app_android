@@ -7,6 +7,7 @@
     android:orientation="vertical">
 
     <TextView
+        android:id="@+id/tv_title_partner_bs"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/size_19"
@@ -20,6 +21,7 @@
         android:textStyle="bold" />
 
     <TextView
+        android:id="@+id/tv_sub_title_partner_bs"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/size_19"

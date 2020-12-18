@@ -23,108 +23,13 @@
 
         <RadioGroup
             android:id="@+id/groupradio"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingStart="@dimen/size_16"
+            android:paddingTop="@dimen/size_8"
+            android:paddingEnd="@dimen/size_16"
 
-            >
-
-            <RadioButton
-                style="@style/Theme.RadioButtonLipstickPink"
-                android:layout_width="fill_parent"
-                android:layout_height="@dimen/height_select_lang_item"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="@dimen/size_5"
-                android:fontFamily="@font/lato"
-                android:hint="09:00 am -10 :00 am"
-                android:letterSpacing="0"
-                android:paddingLeft="16dp"
-                android:text="09:00 am -10 :00 am "
-                android:textSize="14sp" />
-
-            <RadioButton
-                style="@style/Theme.RadioButtonLipstickPink"
-                android:layout_width="fill_parent"
-                android:layout_height="@dimen/height_select_lang_item"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="@dimen/size_5"
-                android:fontFamily="@font/lato"
-
-                android:hint="10:00 am-11:00 am"
-                android:letterSpacing="0"
-                android:paddingLeft="16dp"
-                android:text="10:00 am-11:00 am"
-                android:textSize="14sp" />
-
-            <RadioButton
-                style="@style/Theme.RadioButtonLipstickPink"
-                android:layout_width="fill_parent"
-                android:layout_height="@dimen/height_select_lang_item"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="@dimen/size_5"
-                android:fontFamily="@font/lato"
-                android:hint="11:00am- 12:00pm"
-                android:letterSpacing="0"
-
-                android:paddingLeft="16dp"
-                android:text="11:00am- 12:00pm"
-                android:textSize="14sp" />
-
-            <RadioButton
-                style="@style/Theme.RadioButtonLipstickPink"
-                android:layout_width="fill_parent"
-                android:layout_height="@dimen/height_select_lang_item"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="@dimen/size_5"
-                android:fontFamily="@font/lato"
-
-                android:hint="12:00pm-01:00pm"
-                android:letterSpacing="0"
-                android:paddingLeft="16dp"
-                android:text="12:00pm-01:00pm"
-                android:textSize="14sp" />
-
-            <RadioButton
-                style="@style/Theme.RadioButtonLipstickPink"
-                android:layout_width="fill_parent"
-                android:layout_height="@dimen/height_select_lang_item"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="@dimen/size_5"
-                android:fontFamily="@font/lato"
-                android:hint="01:00pm-02:00pm"
-
-                android:letterSpacing="0"
-                android:paddingLeft="16dp"
-                android:text="01:00pm-02:00pm"
-                android:textSize="14sp" />
-
-            <RadioButton
-                style="@style/Theme.RadioButtonLipstickPink"
-                android:layout_width="fill_parent"
-                android:layout_height="@dimen/height_select_lang_item"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="@dimen/size_5"
-                android:fontFamily="@font/lato"
-                android:hint="03:00pm-04:00pm"
-                android:letterSpacing="0"
-
-                android:paddingLeft="16dp"
-                android:text="03:00pm-04:00pm"
-                android:textSize="14sp" />
-
-            <RadioButton
-                style="@style/Theme.RadioButtonLipstickPink"
-                android:layout_width="fill_parent"
-                android:layout_height="@dimen/height_select_lang_item"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="@dimen/size_5"
-
-                android:fontFamily="@font/lato"
-                android:hint="04:00 pm-05:00 pm"
-                android:letterSpacing="0"
-                android:paddingLeft="16dp"
-                android:text="04:00 pm-05:00 pm"
-                android:textSize="14sp" />
-        </RadioGroup>
+            />
 
     </LinearLayout>
 

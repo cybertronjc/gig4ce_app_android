@@ -11,9 +11,9 @@ import com.gigforce.app.modules.learning.models.progress.LessonProgress
 import com.gigforce.app.utils.SingleLiveEvent
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import kotlin.Exception
 
 class GigActivationViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel() {
-    var initialized: Boolean = false
     val repository = GigActivationRepository()
     var redirectToNextStep: Boolean = true
 
@@ -39,152 +39,172 @@ class GigActivationViewModel(private val savedStateHandle: SavedStateHandle) : V
     fun getActivationData(workOrderId: String) {
 
         repository.getCollectionReference().whereEqualTo("jobProfileId", workOrderId)
-                .whereEqualTo("type", "activation").addSnapshotListener { success, err ->
-                    if (err == null) {
-                        if (success?.documents?.isNotEmpty() == true) {
-                            observableGigActivation.value =
-                                success.toObjects(GigActivation::class.java)[0]
+            .whereEqualTo("type", "activation").addSnapshotListener { success, err ->
+                if (err == null) {
+                    if (success?.documents?.isNotEmpty() == true) {
+                        observableGigActivation.value =
+                            success.toObjects(GigActivation::class.java)[0]
 
-                        }
-                    } else {
-                        observableError.value = err.message
                     }
+                } else {
+                    observableError.value = err.message
                 }
+            }
 
     }
 
     fun getApplication(
-            mWorkOrderID: String
+        mJobProfileId: String
     ) = viewModelScope.launch {
-        observableJpApplication.value = getJPApplication(mWorkOrderID)
+        val jpApplication = getJPApplication(mJobProfileId)
+        if (jpApplication != null) {
+            observableJpApplication.value = jpApplication
+        } else {
+            observableError.value = "Something Went Wrong"
+        }
+
 
     }
 
-    suspend fun getJPApplication(workOrderID: String): JpApplication {
-        val items = repository.db.collection("JP_Applications").whereEqualTo("jpid", workOrderID)
-                .whereEqualTo("gigerId", repository.getUID()).get()
-                .await()
-        val toObject = items.toObjects(JpApplication::class.java).get(0)
-        toObject.id = items.documents[0].id
-        return toObject
+    suspend fun getJPApplication(workOrderID: String): JpApplication? {
+        return try {
+            val items =
+                repository.db.collection("JP_Applications").whereEqualTo("jpid", workOrderID)
+                    .whereEqualTo("gigerId", repository.getUID()).get()
+                    .await()
+            val toObject = items.toObjects(JpApplication::class.java).get(0)
+            toObject.id = items.documents[0].id
+            toObject
+        } catch (e: Exception) {
+            observableError.value = e.message
+            null
+        }
+
     }
 
-    fun updateDraftJpApplication(mWorkOrderID: String, dependency: List<Dependency>) =
-            viewModelScope.launch {
+    fun updateDraftJpApplication(mJobProfileId: String, dependency: List<Dependency>) =
+        viewModelScope.launch {
 
 
-                val model = getJPApplication(mWorkOrderID)
+            val model = getJPApplication(mJobProfileId)
+            if (model == null) {
+                observableError.value = "Application Doesn't Exists"
+                return@launch
+            }
 
-                if (model.activation.isNullOrEmpty()) {
-                    model.activation = dependency.toMutableList()
-                }
-                if (model.activation.all { it.isDone }) {
-                    model.status = "Inprocess"
-                }
+            if (model.activation.isNullOrEmpty()) {
+                model.activation = dependency.toMutableList()
+            }
+            if (model.activation.all { it.isDone }) {
+                model.status = "Inprocess"
+            }
 
-                model.activation.forEach {
-                    if (!it.isDone) {
-                        when (it.type) {
+            model.activation.forEach {
+                if (!it.isDone) {
+                    when (it.type) {
 
-                            "document", "onsite_document" -> {
+                        "document", "onsite_document" -> {
 
-                                it.isDone = checkForDrivingCertificate(
-                                        mWorkOrderID,
-                                        it.type ?: "",
-                                        it.title ?: ""
-                                )
-
-                            }
-
-                            "learning" -> {
-//                                it.isDone = checkForCourseCompletion(it.courseId)
-                                it.isDone = checkIfCourseCompleted(it.moduleId)
-                                if (it.isDone) {
-                                    it.status = ""
-                                }
-                            }
+                            it.isDone = checkForDrivingCertificate(
+                                mJobProfileId,
+                                it.type ?: "",
+                                it.title ?: ""
+                            )
 
                         }
+
+                        "learning" -> {
+                            it.isDone = checkIfCourseCompleted(it.moduleId)
+                            if (it.isDone) {
+                                it.status = ""
+                            }
+                        }
+
                     }
+                }
 
 
-                    if (model.id.isEmpty()) {
-                        repository.db.collection("JP_Applications").document().set(model)
-                                .addOnCompleteListener {
-                                    if (it.isSuccessful) {
+                if (model.id.isEmpty()) {
+                    repository.db.collection("JP_Applications").document().set(model)
+                        .addOnCompleteListener {
+                            if (it.isSuccessful) {
 
-                                        observableJpApplication.value = model
-                                        observableInitApplication.value = true
+                                observableJpApplication.value = model
+                                observableInitApplication.value = true
 
-                                    }
-                                }
-                    } else {
-                        repository.db.collection("JP_Applications").document(model.id).set(model)
-                                .addOnCompleteListener {
-                                    if (it.isSuccessful) {
-                                        observableJpApplication.value = model
-                                        observableInitApplication.value = true
+                            }
+                        }
+                } else {
+                    repository.db.collection("JP_Applications").document(model.id).set(model)
+                        .addOnCompleteListener {
+                            if (it.isSuccessful) {
+                                observableJpApplication.value = model
+                                observableInitApplication.value = true
 
-                                    }
-                                }
-                    }
-
-
+                            }
+                        }
                 }
 
 
             }
+
+
+        }
 
     suspend fun checkForDrivingCertificate(
-            workOrderID: String,
-            type: String,
-            title: String
+        workOrderID: String,
+        type: String,
+        title: String
     ): Boolean {
-
-        val items = repository.db.collection("JP_Applications").whereEqualTo("jpid", workOrderID)
-                .whereEqualTo("gigerId", repository.getUID()).get()
-                .await()
-        if (items.documents.isNullOrEmpty()) {
-            return false
-        }
-        val documentSnapshot = items.documents[0]
-        return !repository.db.collection("JP_Applications").document(documentSnapshot.id)
+        try {
+            val items =
+                repository.db.collection("JP_Applications").whereEqualTo("jpid", workOrderID)
+                    .whereEqualTo("gigerId", repository.getUID()).get()
+                    .await()
+            if (items.documents.isNullOrEmpty()) {
+                return false
+            }
+            val documentSnapshot = items.documents[0]
+            return !repository.db.collection("JP_Applications").document(documentSnapshot.id)
                 .collection("Submissions").whereEqualTo("stepId", workOrderID).whereEqualTo(
-                        "title", title
+                    "title", title
                 ).whereEqualTo("type", type).get().await().documents.isNullOrEmpty()
-
-
-    }
-
-
-    suspend fun checkForCourseCompletion(courseId: String): Boolean {
-        val items = repository.db.collection("Course_Progress").whereEqualTo("course_id", courseId).get().await()
-        if (items.documents.isNullOrEmpty()) {
+        } catch (e: Exception) {
+            observableError.value = e.message
             return false
         }
-        return items.documents.all { it.data!!["completed"] != null && it.data!!["completed"] == true }
+
 
     }
+
 
     suspend fun checkIfCourseCompleted(moduleId: String): Boolean {
-        val data = repository.db.collection("Course_Progress").whereEqualTo("uid", repository.getUID()).whereEqualTo("type", "module").whereEqualTo("module_id", moduleId).get().await()
-        if (data.documents.isNullOrEmpty()) {
+        try {
+            val data =
+                repository.db.collection("Course_Progress").whereEqualTo("uid", repository.getUID())
+                    .whereEqualTo("type", "module").whereEqualTo("module_id", moduleId).get()
+                    .await()
+            if (data.documents.isNullOrEmpty()) {
+                return false
+            }
+            val courseProgress = data.toObjects(CourseProgress::class.java).get(0)
+            courseProgress.lesson_progress.let {
+                val completed = true
+                for (lesson in it) {
+                    if (lesson.lessonType == "assessment" && !lesson.completed) {
+                        return false
+                    }
+                }
+                return completed
+            }
+        } catch (e: Exception) {
+            observableError.value = e.message
             return false
         }
-        val courseProgress = data.toObjects(CourseProgress::class.java).get(0)
-        courseProgress.lesson_progress.let {
-            var completed = true
-            for (lesson in it) {
-                if (lesson.lessonType == "assessment" && !lesson.completed) {
-                    return false
-                }
-            }
-            return completed
-        }
-        return false
+
     }
 
     data class CourseProgress(
-            var lesson_progress: ArrayList<LessonProgress> = ArrayList<LessonProgress>()
+        var lesson_progress: ArrayList<LessonProgress> = ArrayList<LessonProgress>()
     )
 }

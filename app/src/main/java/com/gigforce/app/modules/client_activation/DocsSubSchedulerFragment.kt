@@ -20,6 +20,20 @@ import com.gigforce.app.utils.StringConstants
 import com.gigforce.app.utils.widgets.GigforceDatePickerDialog
 import com.ncorti.slidetoact.SlideToActView
 import kotlinx.android.synthetic.main.fragment_docs_sub_scheduler.*
+import kotlinx.android.synthetic.main.fragment_docs_sub_scheduler.driving_license_title
+import kotlinx.android.synthetic.main.fragment_docs_sub_scheduler.iv_contact
+import kotlinx.android.synthetic.main.fragment_docs_sub_scheduler.iv_location
+import kotlinx.android.synthetic.main.fragment_docs_sub_scheduler.textView136
+import kotlinx.android.synthetic.main.fragment_docs_sub_scheduler.textView137
+import kotlinx.android.synthetic.main.fragment_docs_sub_scheduler.textView138
+import kotlinx.android.synthetic.main.fragment_docs_sub_scheduler.textView139
+import kotlinx.android.synthetic.main.fragment_docs_sub_scheduler.textView142
+import kotlinx.android.synthetic.main.fragment_docs_sub_scheduler.textView143
+import kotlinx.android.synthetic.main.fragment_docs_sub_scheduler.tv_all_set
+import kotlinx.android.synthetic.main.fragment_docs_sub_scheduler.tv_change_slot
+import kotlinx.android.synthetic.main.fragment_docs_sub_scheduler.view7
+import kotlinx.android.synthetic.main.fragment_docs_sub_scheduler.view_select_time_slots
+import kotlinx.android.synthetic.main.layout_confirm_driving_slot.*
 
 
 class DocsSubSchedulerFragment : BaseFragment(),
@@ -31,7 +45,7 @@ class DocsSubSchedulerFragment : BaseFragment(),
 
     private var dateString: String? = null
     private var partnerAddress: PartnerSchoolDetails? = null
-    private lateinit var mWordOrderID: String
+    private lateinit var mJobProfileId: String
     private lateinit var mTitle: String
     private lateinit var mType: String
     private var selectedTimeSlot: String? = null
@@ -55,7 +69,11 @@ class DocsSubSchedulerFragment : BaseFragment(),
     }
 
     private fun initObservers() {
+        viewModel.observableError.observe(viewLifecycleOwner, Observer {
+            showToast(it ?: "")
+        })
         viewModel.observablePartnerSchool.observe(viewLifecycleOwner, Observer {
+
             set_preference_fot_test.text = Html.fromHtml(it.headerTitle)
 
             viewModel.observableJpApplication.observe(viewLifecycleOwner, Observer {
@@ -63,27 +81,31 @@ class DocsSubSchedulerFragment : BaseFragment(),
                 pb_docs_submission.gone()
                 if (it == null) return@Observer
 
-                val address = it.partnerSchoolDetails
+                val selectedPartner = it.partnerSchoolDetails
 
-                partnerAddress = address
+                partnerAddress = selectedPartner
 
                 textView137.text =
-                    Html.fromHtml(address?.name + "<br>" + address?.landmark + "<br>" + address?.city + "<br>"
-                            + address?.timing + "<br>" + address?.contact?.map { "<b><font color=\'#000000\'>" + it.name + "</font></b>" }
-                        ?.reduce { a, o -> a + o }
+                    Html.fromHtml((if (selectedPartner?.name == null) "" else selectedPartner?.name + "<br>") +
+                            (if (selectedPartner?.line1 == null) "" else selectedPartner?.line1 + "<br>") +
+                            (if (selectedPartner?.line2 == null) "" else selectedPartner?.line2 + "<br>") +
+                            (if (selectedPartner?.line3 == null) "" else selectedPartner?.line3 + "<br>") +
+                            if (selectedPartner?.contact.isNullOrEmpty()) "" else
+                                selectedPartner?.contact?.map { "<b><font color=\'#000000\'>" + it.name + "</font></b><br>" }
+                                    ?.reduce { a, o -> a + o }
                     )
                 iv_location.visible()
                 iv_contact.visible()
                 iv_location.setOnClickListener {
                     val uri =
-                        "http://maps.google.com/maps?saddr=" + "&daddr=" + address?.lat + "," + address?.lon
+                        "http://maps.google.com/maps?saddr=" + "&daddr=" + selectedPartner?.lat + "," + selectedPartner?.lon
                     val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
                     startActivity(intent)
                 }
                 iv_contact.setOnClickListener {
-                    if (!address?.contact.isNullOrEmpty()) {
+                    if (!selectedPartner?.contact.isNullOrEmpty()) {
                         val callIntent = Intent(Intent.ACTION_DIAL);
-                        callIntent.data = Uri.parse("tel: " + address?.contact!![0].number);
+                        callIntent.data = Uri.parse("tel: " + selectedPartner?.contact!![0].number);
                         startActivity(callIntent);
                     }
                 }
@@ -102,9 +124,20 @@ class DocsSubSchedulerFragment : BaseFragment(),
                 textView138.text = getString(R.string.date_of_visit)
 
             })
-            viewModel.getApplication(mWordOrderID, mType, mTitle)
+
+
+            view_select_time_slots.setOnClickListener { view ->
+                val newInstance = TimeSlotsDialog.newInstance()
+                newInstance.arguments = bundleOf(
+                    StringConstants.TIME_SLOTS.value to it.timeSlots
+                )
+                newInstance
+                newInstance.setCallbacks(this)
+                newInstance.show(parentFragmentManager, TimeSlotsDialog::class.java.name)
+            }
+            viewModel.getApplication(mJobProfileId, mType, mTitle)
         })
-        viewModel.getPartnerSchoolDetails(mType, mWordOrderID);
+        viewModel.getPartnerSchoolDetails(mType, mJobProfileId);
 
 
     }
@@ -126,12 +159,7 @@ class DocsSubSchedulerFragment : BaseFragment(),
         }
         tv_change_slot.paintFlags = tv_change_slot.paintFlags or Paint.UNDERLINE_TEXT_FLAG;
 
-        view_select_time_slots.setOnClickListener {
-            val newInstance = TimeSlotsDialog.newInstance()
-            newInstance
-            newInstance.setCallbacks(this)
-            newInstance.show(parentFragmentManager, TimeSlotsDialog::class.java.name)
-        }
+
         slider_checkout.onSlideCompleteListener =
             object : SlideToActView.OnSlideCompleteListener {
 
@@ -140,7 +168,7 @@ class DocsSubSchedulerFragment : BaseFragment(),
                     navigate(
                         R.id.fragment_schedule_test,
                         bundleOf(
-                            StringConstants.WORK_ORDER_ID.value to mWordOrderID,
+                            StringConstants.JOB_PROFILE_ID.value to mJobProfileId,
                             StringConstants.TITLE.value to mTitle,
                             StringConstants.TYPE.value to mType
                         )
@@ -149,7 +177,7 @@ class DocsSubSchedulerFragment : BaseFragment(),
             }
 
         view_date_picker.setOnClickListener {
-            var gigforceDatePickerDialog = GigforceDatePickerDialog()
+            val gigforceDatePickerDialog = GigforceDatePickerDialog()
             gigforceDatePickerDialog
             gigforceDatePickerDialog.setCallbacks(this)
             gigforceDatePickerDialog.show(
@@ -160,7 +188,7 @@ class DocsSubSchedulerFragment : BaseFragment(),
         view7.setOnClickListener {
             val newInstance = SelectPartnerSchoolBottomSheet.newInstance(
                 bundleOf(
-                    StringConstants.WORK_ORDER_ID.value to mWordOrderID,
+                    StringConstants.JOB_PROFILE_ID.value to mJobProfileId,
                     StringConstants.TYPE.value to mType
                 )
             )
@@ -186,13 +214,13 @@ class DocsSubSchedulerFragment : BaseFragment(),
 
     private fun getDataFromIntents(savedInstanceState: Bundle?) {
         savedInstanceState?.let {
-            mWordOrderID = it.getString(StringConstants.WORK_ORDER_ID.value) ?: return@let
+            mJobProfileId = it.getString(StringConstants.JOB_PROFILE_ID.value) ?: return@let
             mType = it.getString(StringConstants.TYPE.value) ?: return@let
             mTitle = it.getString(StringConstants.TITLE.value) ?: return@let
         }
 
         arguments?.let {
-            mWordOrderID = it.getString(StringConstants.WORK_ORDER_ID.value) ?: return@let
+            mJobProfileId = it.getString(StringConstants.JOB_PROFILE_ID.value) ?: return@let
             mType = it.getString(StringConstants.TYPE.value) ?: return@let
             mTitle = it.getString(StringConstants.TITLE.value) ?: return@let
         }
@@ -200,7 +228,7 @@ class DocsSubSchedulerFragment : BaseFragment(),
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putString(StringConstants.WORK_ORDER_ID.value, mWordOrderID)
+        outState.putString(StringConstants.JOB_PROFILE_ID.value, mJobProfileId)
         outState.putString(StringConstants.TYPE.value, mType)
         outState.putString(StringConstants.TITLE.value, mTitle)
 
@@ -210,9 +238,13 @@ class DocsSubSchedulerFragment : BaseFragment(),
     override fun setPartnerAddress(address: PartnerSchoolDetails) {
         this.partnerAddress = address;
         textView137.text =
-            Html.fromHtml(address.name + "<br>" + address.landmark + "<br>" + address.city + "<br>"
-                    + address.timing + "<br>" + address.contact.map { "<b><font color=\'#000000\'>" + it.name + "</font></b>" }
-                .reduce { a, o -> a + o }
+            Html.fromHtml((if (address?.name == null) "" else address?.name + "<br>") +
+                    (if (address?.line1 == null) "" else address?.line1 + "<br>") +
+                    (if (address?.line2 == null) "" else address?.line2 + "<br>") +
+                    (if (address?.line3 == null) "" else address?.line3 + "<br>") +
+                    if (address?.contact.isNullOrEmpty()) "" else
+                        address?.contact?.map { "<b><font color=\'#000000\'>" + it.name + "</font></b><br>" }
+                            ?.reduce { a, o -> a + o }
             )
         iv_location.setOnClickListener {
             val uri =
@@ -264,7 +296,7 @@ class DocsSubSchedulerFragment : BaseFragment(),
         selectedTimeSlot = ""
         val newInstance = SelectPartnerSchoolBottomSheet.newInstance(
             bundleOf(
-                StringConstants.WORK_ORDER_ID.value to mWordOrderID
+                StringConstants.JOB_PROFILE_ID.value to mJobProfileId
             )
         )
         newInstance.setCallbacks(this)
@@ -292,7 +324,7 @@ class DocsSubSchedulerFragment : BaseFragment(),
                 StringConstants.SELECTED_PARTNER.value to partnerAddress,
                 StringConstants.SELECTED_TIME_SLOT.value to selectedTimeSlot,
                 StringConstants.SELECTED_DATE.value to dateString,
-                StringConstants.WORK_ORDER_ID.value to mWordOrderID,
+                StringConstants.JOB_PROFILE_ID.value to mJobProfileId,
                 StringConstants.TITLE.value to mTitle,
                 StringConstants.TYPE.value to mType
             )

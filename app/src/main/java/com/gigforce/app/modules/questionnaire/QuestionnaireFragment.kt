@@ -33,7 +33,7 @@ class QuestionnaireFragment : BaseFragment(), AdapterQuestionnaire.AdapterQuesti
     private var childPosition: Int = -1
     private lateinit var ratioLayoutManager: RatioLayoutManager
     private var FROM_CLIENT_ACTIVATON: Boolean = false
-    private lateinit var mWordOrderID: String
+    private lateinit var mJobProfileId: String
     private lateinit var mType: String
     private lateinit var mTitle: String
 
@@ -72,7 +72,7 @@ class QuestionnaireFragment : BaseFragment(), AdapterQuestionnaire.AdapterQuesti
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putString(StringConstants.WORK_ORDER_ID.value, mWordOrderID)
+        outState.putString(StringConstants.JOB_PROFILE_ID.value, mJobProfileId)
         outState.putBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, FROM_CLIENT_ACTIVATON)
         outState.putString(StringConstants.TYPE.value, mType)
         outState.putString(StringConstants.TITLE.value, mTitle)
@@ -98,7 +98,7 @@ class QuestionnaireFragment : BaseFragment(), AdapterQuestionnaire.AdapterQuesti
 
     private fun getDataFromIntents(savedInstanceState: Bundle?) {
         savedInstanceState?.let {
-            mWordOrderID = it.getString(StringConstants.WORK_ORDER_ID.value) ?: return@let
+            mJobProfileId = it.getString(StringConstants.JOB_PROFILE_ID.value) ?: return@let
             mType = it.getString(StringConstants.TYPE.value) ?: return@let
             mTitle = it.getString(StringConstants.TITLE.value) ?: return@let
             FROM_CLIENT_ACTIVATON =
@@ -108,7 +108,7 @@ class QuestionnaireFragment : BaseFragment(), AdapterQuestionnaire.AdapterQuesti
         }
 
         arguments?.let {
-            mWordOrderID = it.getString(StringConstants.WORK_ORDER_ID.value) ?: return@let
+            mJobProfileId = it.getString(StringConstants.JOB_PROFILE_ID.value) ?: return@let
             mType = it.getString(StringConstants.TYPE.value) ?: return@let
             mTitle = it.getString(StringConstants.TITLE.value) ?: return@let
             FROM_CLIENT_ACTIVATON =
@@ -140,7 +140,7 @@ class QuestionnaireFragment : BaseFragment(), AdapterQuestionnaire.AdapterQuesti
                     if (items.isEmpty()) {
                         pb_questionnaire.visible()
                         viewModel.addQuestionnaire(
-                            mWordOrderID,
+                            mJobProfileId,
                             mTitle,
                             mType,
                             adapter.items
@@ -248,7 +248,7 @@ class QuestionnaireFragment : BaseFragment(), AdapterQuestionnaire.AdapterQuesti
             adapter.addData(it.questions)
         })
         if (!viewModel.initialized) {
-            viewModel.getQuestionnaire(mWordOrderID)
+            viewModel.getQuestionnaire(mJobProfileId)
         }
 
 

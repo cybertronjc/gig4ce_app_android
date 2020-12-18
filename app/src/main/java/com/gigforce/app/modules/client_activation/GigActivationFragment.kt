@@ -40,8 +40,7 @@ import kotlinx.android.synthetic.main.layout_fragment_activation_gig.*
 class GigActivationFragment : BaseFragment(),
     AdapterGigActivation.AdapterApplicationClientActivationCallbacks {
     private lateinit var viewModel: GigActivationViewModel
-    private lateinit var mNextDep: String
-    private lateinit var mWordOrderID: String
+    private lateinit var mJobProfileId: String
     private var playWhenReady = true
     private var currentWindow = 0
     private var playbackPosition: Long = 0
@@ -152,7 +151,7 @@ class GigActivationFragment : BaseFragment(),
                 tv_complete_gig_activation.text = gigAcivation.instruction
                 val videoUri = Uri.parse(gigAcivation.videoUrl)
                 initializePlayer(videoUri)
-                viewModel.updateDraftJpApplication(mWordOrderID, gigAcivation.requiredFeatures)
+                viewModel.updateDraftJpApplication(mJobProfileId, gigAcivation.requiredFeatures)
 
             }
         })
@@ -171,17 +170,12 @@ class GigActivationFragment : BaseFragment(),
                 initApplication(viewModel.observableJpApplication.value!!)
             }
         })
-        viewModel.getActivationData(mWordOrderID)
+        viewModel.getActivationData(mJobProfileId)
     }
 
 
     private fun initApplication(jpApplication: JpApplication) {
         adapter.addData(jpApplication.activation)
-
-//        sv_gig_activation.post {
-//            if (sv_gig_activation != null)
-//                sv_gig_activation.fullScroll(ScrollView.FOCUS_DOWN);
-//        }
         adapter.setCallbacks(this)
         for (i in 0 until jpApplication.activation.size) {
             if (!jpApplication.activation[i].isDone) {
@@ -191,7 +185,6 @@ class GigActivationFragment : BaseFragment(),
                     ,
                     false
                 )
-//               viewModel.setData(jpApplication.draft[i].feature)
             } else {
                 adapter.setImageDrawable(
                     jpApplication.activation[i].type!!,
@@ -226,26 +219,18 @@ class GigActivationFragment : BaseFragment(),
         rv_gig_activation.adapter = adapter
         rv_gig_activation.layoutManager =
             LinearLayoutManager(requireContext())
-//        rv_status_pending.addItemDecoration(
-//            HorizontaltemDecoration(
-//                requireContext(),
-//                R.dimen.size_11
-//            )
-//        )
 
     }
 
     private fun getDataFromIntents(savedInstanceState: Bundle?) {
         savedInstanceState?.let {
-            mWordOrderID = it.getString(StringConstants.WORK_ORDER_ID.value) ?: ""
-            mNextDep = it.getString(StringConstants.NEXT_DEP.value) ?: ""
+            mJobProfileId = it.getString(StringConstants.JOB_PROFILE_ID.value) ?: ""
             playbackPosition = it.getLong("key_play_back_position")
 
         }
 
         arguments?.let {
-            mWordOrderID = it.getString(StringConstants.WORK_ORDER_ID.value) ?: ""
-            mNextDep = it.getString(StringConstants.NEXT_DEP.value) ?: ""
+            mJobProfileId = it.getString(StringConstants.JOB_PROFILE_ID.value) ?: ""
             playbackPosition = it.getLong("key_play_back_position")
 
         }
@@ -254,7 +239,7 @@ class GigActivationFragment : BaseFragment(),
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putString(StringConstants.WORK_ORDER_ID.value, mWordOrderID)
+        outState.putString(StringConstants.JOB_PROFILE_ID.value, mJobProfileId)
         outState.putLong("key_play_back_position", playbackPosition)
 
 
@@ -270,7 +255,7 @@ class GigActivationFragment : BaseFragment(),
                         navigate(
                             R.id.fragment_doc_sub,
                             bundleOf(
-                                StringConstants.WORK_ORDER_ID.value to mWordOrderID,
+                                StringConstants.JOB_PROFILE_ID.value to mJobProfileId,
                                 StringConstants.TITLE.value to adapter.items[index].title,
                                 StringConstants.TYPE.value to adapter.items[index].docType
                             )
@@ -283,7 +268,7 @@ class GigActivationFragment : BaseFragment(),
 //                navigate(
 //                        if (dependency.isSlotBooked) R.id.fragment_doc_sub else R.id.fragment_upload_cert,
 //                        bundleOf(
-//                                StringConstants.WORK_ORDER_ID.value to mWordOrderID,
+//                                StringConstants.JOB_PROFILE_ID.value to mJobProfileId,
 //                                StringConstants.TITLE.value to dependency.title,
 //                                StringConstants.TYPE.value to dependency.docType
 //                        )
@@ -292,7 +277,7 @@ class GigActivationFragment : BaseFragment(),
                 navigate(
                     R.id.fragment_doc_sub,
                     bundleOf(
-                        StringConstants.WORK_ORDER_ID.value to mWordOrderID,
+                        StringConstants.JOB_PROFILE_ID.value to mJobProfileId,
                         StringConstants.TITLE.value to dependency.title,
                         StringConstants.TYPE.value to dependency.docType
                     )
