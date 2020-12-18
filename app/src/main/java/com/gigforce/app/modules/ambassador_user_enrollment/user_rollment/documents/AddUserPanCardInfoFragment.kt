@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.os.bundleOf
 import androidx.core.view.isGone
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -45,7 +46,6 @@ class AddUserPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetA
     private val viewModel: GigVerificationViewModel by viewModels()
     private var clickedImagePath: Uri? = null
     private lateinit var userId : String
-    private var gigerVerificationStatus: GigerVerificationStatus? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -79,8 +79,8 @@ class AddUserPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetA
         panImageHolder.documentUploadSubLabelTV.text = getString(R.string.please_upload_your_pan)
         panSubmitSliderBtn.isEnabled = false
 
-        toolbar.setNavigationOnClickListener {
-            activity?.onBackPressed()
+        ic_back_iv.setOnClickListener {
+            findNavController().popBackStack(R.id.ambassadorEnrolledUsersListFragment, false)
         }
 
         helpIconIV.setOnClickListener {
@@ -219,20 +219,22 @@ class AddUserPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetA
     private fun panCardDocumentUploaded() {
         showToast(getString(R.string.pan_details_uploaded))
 
-
+        navigate(
+            R.id.addUserAadharCardInfoFragment, bundleOf(
+                EnrollmentConstants.INTENT_EXTRA_USER_ID to userId
+            )
+        )
     }
 
+    override fun onBackPressed(): Boolean {
+        findNavController().popBackStack(R.id.ambassadorEnrolledUsersListFragment, false)
+        return true
+    }
 
     private fun showLoadingState() {
         panEditLayout.visibility = View.GONE
         panViewLayout.gone()
         progressBar.visibility = View.VISIBLE
-    }
-
-    override fun onBackPressed(): Boolean {
-        findNavController().popBackStack(R.id.gigerVerificationFragment, false)
-        TODO()
-        return true
     }
 
 

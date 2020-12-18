@@ -96,9 +96,10 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="6dp"
                 android:layout_marginEnd="16dp"
-                android:background="@null"
+                android:background="@drawable/rectangle_round_grey"
                 android:fontFamily="@font/lato"
                 android:lineSpacingExtra="3sp"
+                android:paddingStart="8dp"
                 android:minHeight="36dp"
                 android:textColor="#333333"
                 android:textSize="14sp"
@@ -133,14 +134,16 @@
                 app:layout_constraintTop_toBottomOf="@id/user_name_et" />
 
 
-            <EditText
+            <TextView
                 android:id="@+id/date_of_birth_et"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="6dp"
                 android:layout_marginEnd="16dp"
-                android:background="@null"
+                android:gravity="center_vertical"
+                android:paddingStart="8dp"
+                android:background="@drawable/rectangle_round_grey"
                 android:fontFamily="@font/lato"
                 android:lineSpacingExtra="3sp"
                 android:minHeight="36dp"
@@ -234,9 +237,10 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="6dp"
                 android:layout_marginEnd="16dp"
-                android:background="@null"
+                android:background="@drawable/rectangle_round_grey"
                 android:fontFamily="@font/lato"
                 android:inputType="number"
+                android:paddingStart="8dp"
                 android:lineSpacingExtra="3sp"
                 android:maxLength="6"
                 android:minHeight="36dp"

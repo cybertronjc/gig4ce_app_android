@@ -8,23 +8,37 @@
     android:orientation="vertical"
     tools:context=".modules.gigerVerfication.bankDetails.AddBankDetailsInfoFragment">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appBar"
+    <LinearLayout
+        android:id="@+id/toolbar_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/lipstick_two"
+        android:gravity="center_vertical"
+        android:minHeight="72dp"
+        android:orientation="horizontal"
         app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?android:attr/actionBarSize"
-            android:background="@color/white"
-            app:navigationIcon="@drawable/ic_arrow_back_black"
-            app:contentInsetStartWithNavigation="@dimen/size_19"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-            app:title="@string/giger_verification"
-            app:titleTextColor="@color/black" />
-    </com.google.android.material.appbar.AppBarLayout>
+        <ImageView
+            android:id="@+id/ic_back_iv"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginStart="16dp"
+            android:scaleX="0.6"
+            android:scaleY="0.6"
+            android:src="@drawable/ct_ic_arrow_back_white_24dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:fontFamily="@font/lato"
+            android:gravity="center_horizontal"
+            android:lineSpacingExtra="4sp"
+            android:text="Upload Bank Details"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:textStyle="normal" />
+    </LinearLayout>
 
 
     <RelativeLayout

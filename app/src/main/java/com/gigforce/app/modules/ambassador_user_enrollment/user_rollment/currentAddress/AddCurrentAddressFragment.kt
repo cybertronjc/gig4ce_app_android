@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import com.afollestad.materialdialogs.utils.MDUtil.textChanged
@@ -126,14 +127,20 @@ class AddCurrentAddressFragment : BaseFragment() {
 
                 when (it) {
                     Lse.Loading -> {
-                        UtilMethods.showLoading(requireContext())
+                       // UtilMethods.showLoading(requireContext())
                     }
                     Lse.Success -> {
-                        UtilMethods.hideLoading()
+                       // UtilMethods.hideLoading()
                         showToast("User Current Address Details submitted")
+
+                        navigate(
+                            R.id.addUserPanCardInfoFragment, bundleOf(
+                                EnrollmentConstants.INTENT_EXTRA_USER_ID to userId
+                            )
+                        )
                     }
                     is Lse.Error -> {
-                        UtilMethods.hideLoading()
+                      //  UtilMethods.hideLoading()
                         showAlertDialog("Could not submit address info", it.error)
                     }
                 }

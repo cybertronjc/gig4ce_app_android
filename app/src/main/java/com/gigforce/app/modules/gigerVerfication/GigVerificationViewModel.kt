@@ -193,19 +193,37 @@ open class GigVerificationViewModel constructor(
 
         try {
 
+            val model = getVerificationModel(userId)
+
             val fileNameAtServer = if (userHasPan && panImage != null)
                 uploadImage(panImage)
-            else {
-                val model = getVerificationModel()
+            else
                 model.pan_card?.panCardImagePath
-            }
 
-            gigerVerificationRepository.updatePanInfo(
-                userId = userId,
+            model.pan_card = PanCardDataModel(
                 userHasPanCard = userHasPan,
-                fileNameAtServer = fileNameAtServer,
-                panCardNo = panCardNo
+                panCardImagePath = fileNameAtServer,
+                verified = false,
+                panCardNo = panCardNo,
+                state = -1,
+                verifiedString = "Under Verification"
             )
+            model.sync_status = false
+            gigerVerificationRepository.getCollectionReference().document(userId).setOrThrow(model)
+
+//            val fileNameAtServer = if (userHasPan && panImage != null)
+//                uploadImage(panImage)
+//            else {
+//                val model = getVerificationModel()
+//                model.pan_card?.panCardImagePath
+//            }
+
+//            gigerVerificationRepository.updatePanInfo(
+//                userId = userId,
+//                userHasPanCard = userHasPan,
+//                fileNameAtServer = fileNameAtServer,
+//                panCardNo = panCardNo
+//            )
             _documentUploadState.postValue(Lse.success())
         } catch (e: Exception) {
             _documentUploadState.postValue(Lse.error("Unable to save document."))
@@ -262,22 +280,44 @@ open class GigVerificationViewModel constructor(
 
         try {
 
+            val model = getVerificationModel(userId)
 
             val fileNameAtServer = if (userHasPassBook && passbookImagePath != null)
                 uploadImage(passbookImagePath)
-            else {
-                val model = getVerificationModel()
+            else
                 model.bank_details?.passbookImagePath
-            }
 
-            gigerVerificationRepository.updateBankDetails(
-                userId = userId,
+            model.bank_details = BankDetailsDataModel(
                 userHasPassBook = userHasPassBook,
                 passbookImagePath = fileNameAtServer,
+                verified = false,
                 ifscCode = ifscCode,
                 bankName = bankName,
-                accountNo = accountNo
+                accountNo = accountNo,
+                state = -1,
+                verifiedString = "Under Verification"
             )
+            model.sync_status = false
+
+            gigerVerificationRepository.getCollectionReference().document(userId).setOrThrow(model)
+
+
+
+//            val fileNameAtServer = if (userHasPassBook && passbookImagePath != null)
+//                uploadImage(passbookImagePath)
+//            else {
+//                val model = getVerificationModel()
+//                model.bank_details?.passbookImagePath
+//            }
+//
+//            gigerVerificationRepository.updateBankDetails(
+//                userId = userId,
+//                userHasPassBook = userHasPassBook,
+//                passbookImagePath = fileNameAtServer,
+//                ifscCode = ifscCode,
+//                bankName = bankName,
+//                accountNo = accountNo
+//            )
 
             _documentUploadState.postValue(Lse.success())
         } catch (e: Exception) {
@@ -346,16 +386,20 @@ open class GigVerificationViewModel constructor(
         _documentUploadState.postValue(Lse.loading())
 
         try {
+
+            val model = getVerificationModel(userId)
             if (!userHasAadhar) {
-                gigerVerificationRepository.updateAadharInfo(
-                    userId = userId,
-                    userHasAadharCard = userHasAadhar,
-                    frontImagePathAtServer = null,
-                    backImagePathAtServer = null,
-                    aadharNo = aadharCardNumber
+                model.aadhar_card = AadharCardDataModel(
+                    userHasAadharCard = false,
+                    frontImage = null,
+                    backImage = null,
+                    verified = false,
+                    aadharCardNo = null,
+                    state = -1,
+                    verifiedString = "Under Verification"
                 )
             } else {
-                val model = getVerificationModel()
+
                 val frontImageFileNameAtServer = if (userHasAadhar && frontImagePath != null)
                     uploadImage(frontImagePath)
                 else
@@ -366,14 +410,48 @@ open class GigVerificationViewModel constructor(
                 else
                     model.aadhar_card?.backImage
 
-                gigerVerificationRepository.updateAadharInfo(
-                    userId = userId,
-                    userHasAadharCard = userHasAadhar,
-                    frontImagePathAtServer = frontImageFileNameAtServer,
-                    backImagePathAtServer = backImageFileNameAtServer,
-                    aadharNo = aadharCardNumber
+                model.aadhar_card = AadharCardDataModel(
+                    userHasAadharCard = true,
+                    frontImage = frontImageFileNameAtServer,
+                    backImage = backImageFileNameAtServer,
+                    verified = false,
+                    aadharCardNo = aadharCardNumber,
+                    state = -1,
+                    verifiedString = "Under Verification"
                 )
+                model.sync_status = false
+
             }
+            gigerVerificationRepository.getCollectionReference().document(userId).setOrThrow(model)
+
+//            if (!userHasAadhar) {
+//                gigerVerificationRepository.updateAadharInfo(
+//                    userId = userId,
+//                    userHasAadharCard = userHasAadhar,
+//                    frontImagePathAtServer = null,
+//                    backImagePathAtServer = null,
+//                    aadharNo = aadharCardNumber
+//                )
+//            } else {
+//                val model = getVerificationModel()
+//                val frontImageFileNameAtServer = if (userHasAadhar && frontImagePath != null)
+//                    uploadImage(frontImagePath)
+//                else
+//                    model.aadhar_card?.frontImage
+//
+//                val backImageFileNameAtServer = if (userHasAadhar && backImagePath != null)
+//                    uploadImage(backImagePath)
+//                else
+//                    model.aadhar_card?.backImage
+//
+//                gigerVerificationRepository.updateAadharInfo(
+//                    userId = userId,
+//                    userHasAadharCard = userHasAadhar,
+//                    frontImagePathAtServer = frontImageFileNameAtServer,
+//                    backImagePathAtServer = backImageFileNameAtServer,
+//                    aadharNo = aadharCardNumber
+//                )
+//            }
             _documentUploadState.postValue(Lse.success())
         } catch (e: Exception) {
             _documentUploadState.postValue(Lse.error("Unable to save document."))
@@ -445,17 +523,17 @@ open class GigVerificationViewModel constructor(
 
         try {
 
+            val model = getVerificationModel(userId)
             if (!userHasDL) {
-                gigerVerificationRepository.updateDlDetails(
-                    userId = userId,
-                    userHasDL = userHasDL,
-                    frontImageFileNameAtServer = null,
-                    backImageFileNameAtServer = null,
+                model.driving_license = DrivingLicenseDataModel(
+                    userHasDL = false,
+                    verified = false,
+                    frontImage = null,
+                    backImage = null,
                     dlState = null,
                     dlNo = null
                 )
             } else {
-                val model = getVerificationModel()
 
                 val frontImageFileNameAtServer = if (userHasDL && frontImagePath != null)
                     uploadImage(frontImagePath)
@@ -467,15 +545,51 @@ open class GigVerificationViewModel constructor(
                 else
                     model.driving_license?.backImage
 
-                gigerVerificationRepository.updateDlDetails(
-                    userId = userId,
-                    userHasDL = userHasDL,
-                    frontImageFileNameAtServer = frontImageFileNameAtServer,
-                    backImageFileNameAtServer = backImageFileNameAtServer,
+                model.driving_license = DrivingLicenseDataModel(
+                    userHasDL = true,
+                    verified = false,
+                    frontImage = frontImageFileNameAtServer,
+                    backImage = backImageFileNameAtServer,
                     dlState = dlState,
-                    dlNo = dlNo
+                    dlNo = dlNo,
+                    state = -1,
+                    verifiedString = "Under Verification"
                 )
+                model.sync_status = false
             }
+            gigerVerificationRepository.getCollectionReference().document(userId).setOrThrow(model)
+
+//            if (!userHasDL) {
+//                gigerVerificationRepository.updateDlDetails(
+//                    userId = userId,
+//                    userHasDL = userHasDL,
+//                    frontImageFileNameAtServer = null,
+//                    backImageFileNameAtServer = null,
+//                    dlState = null,
+//                    dlNo = null
+//                )
+//            } else {
+//                val model = getVerificationModel()
+//
+//                val frontImageFileNameAtServer = if (userHasDL && frontImagePath != null)
+//                    uploadImage(frontImagePath)
+//                else
+//                    model.driving_license?.frontImage
+//
+//                val backImageFileNameAtServer = if (userHasDL && backImagePath != null)
+//                    uploadImage(backImagePath)
+//                else
+//                    model.driving_license?.backImage
+//
+//                gigerVerificationRepository.updateDlDetails(
+//                    userId = userId,
+//                    userHasDL = userHasDL,
+//                    frontImageFileNameAtServer = frontImageFileNameAtServer,
+//                    backImageFileNameAtServer = backImageFileNameAtServer,
+//                    dlState = dlState,
+//                    dlNo = dlNo
+//                )
+//            }
             _documentUploadState.postValue(Lse.success())
         } catch (e: Exception) {
             _documentUploadState.postValue(Lse.error("Unable to save document."))
@@ -515,9 +629,15 @@ open class GigVerificationViewModel constructor(
                 }
         }
 
-    suspend fun getVerificationModel(): VerificationBaseModel =
+    suspend fun getVerificationModel(userId: String? = null): VerificationBaseModel =
         suspendCoroutine { continuation ->
-            gigerVerificationRepository.getDBCollection().get().addOnSuccessListener {
+
+            val docRef =if(userId != null) {
+                gigerVerificationRepository.getCollectionReference().document(userId)
+            } else{
+                gigerVerificationRepository.getDBCollection()
+            }
+            docRef.get().addOnSuccessListener {
                 runCatching {
                     if (it.data == null)
                         VerificationBaseModel()

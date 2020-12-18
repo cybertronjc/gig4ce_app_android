@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
@@ -59,14 +60,25 @@ class CheckMobileFragment : BaseFragment() {
 
                 when (it) {
                     Lce.Loading -> {
-                        UtilMethods.showLoading(requireContext())
+                      //  UtilMethods.showLoading(requireContext())
                     }
                     is Lce.Content -> {
-                        UtilMethods.hideLoading()
+                       // UtilMethods.hideLoading()
                         showToast("Otp sent")
+
+                        if (it.content.isUserAlreadyRegistered) {
+                            //show user already registered dialog
+                        } else {
+                            navigate(
+                                R.id.confirmOtpFragment, bundleOf(
+                                    ConfirmOtpFragment.INTENT_EXTRA_MOBILE_NO to "${mobile_no_et.text}",
+                                    ConfirmOtpFragment.INTENT_EXTRA_OTP_SENT to it.content.otpSent
+                                )
+                            )
+                        }
                     }
                     is Lce.Error -> {
-                        UtilMethods.hideLoading()
+                    //    UtilMethods.hideLoading()
                         showAlertDialog("", it.error)
                     }
                 }

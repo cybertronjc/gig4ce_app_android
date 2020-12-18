@@ -7,7 +7,7 @@ import com.gigforce.app.modules.ambassador_user_enrollment.models.EnrolledUser
 import com.google.firebase.firestore.ListenerRegistration
 
 class AmbassadorEnrollViewModel constructor(
-    private val ambassadorEnrollmentRepository: AmbassadorEnrollmentRepository
+    private val ambassadorEnrollmentRepository: AmbassadorEnrollmentRepository = AmbassadorEnrollmentRepository()
 ) : ViewModel() {
 
     private val _enrolledUsers = MutableLiveData<List<EnrolledUser>>()

@@ -59,7 +59,7 @@ class AmbassadorEnrollmentRequirementFragment : BaseFragment(),
         }
 
         profile_photo_layout.setOnClickListener {
-
+            navigate(R.id.addProfilePictureFragment)
         }
     }
 

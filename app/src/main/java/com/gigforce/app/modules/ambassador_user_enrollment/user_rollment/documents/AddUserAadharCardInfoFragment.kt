@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.os.bundleOf
 import androidx.core.view.isGone
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -28,7 +29,10 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.storage.FirebaseStorage
 import com.ncorti.slidetoact.SlideToActView
 import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info.*
+import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info.ic_back_iv
+import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info.progressBar
 import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info_main.*
+import kotlinx.android.synthetic.main.fragment_ambsd_add_pan_card_info.*
 import kotlinx.android.synthetic.main.fragment_verification_image_holder.view.*
 
 enum class AadharCardSides {
@@ -36,7 +40,7 @@ enum class AadharCardSides {
     BACK_SIDE
 }
 
-class AddAadharCardInfoFragment : BaseFragment() {
+class AddUserAadharCardInfoFragment : BaseFragment() {
 
     companion object {
         const val REQUEST_CODE_UPLOAD_AADHAR_IMAGE = 2333
@@ -90,8 +94,9 @@ class AddAadharCardInfoFragment : BaseFragment() {
 
         aadharSubmitSliderBtn.isEnabled = false
 
-        toolbar.setNavigationOnClickListener {
-            findNavController().popBackStack(R.id.gigerVerificationFragment, false)
+
+        ic_back_iv.setOnClickListener {
+            findNavController().popBackStack(R.id.ambassadorEnrolledUsersListFragment, false)
         }
 
         helpIconViewIV.setOnClickListener {
@@ -236,8 +241,6 @@ class AddAadharCardInfoFragment : BaseFragment() {
                     is Lse.Error -> errorOnUploadingDocuments(it.error)
                 }
             })
-
-        viewModel.getVerificationStatus()
     }
 
     private fun errorOnUploadingDocuments(error: String) {
@@ -256,7 +259,10 @@ class AddAadharCardInfoFragment : BaseFragment() {
     private fun documentUploaded() {
         showToast(getString(R.string.aadhar_card_details_uploaded))
 
-
+        navigate(R.id.addUserDrivingLicenseInfoFragment, bundleOf(
+                EnrollmentConstants.INTENT_EXTRA_USER_ID to userId
+            )
+        )
     }
 
     private fun showLoadingState() {
@@ -266,7 +272,7 @@ class AddAadharCardInfoFragment : BaseFragment() {
     }
 
     override fun onBackPressed(): Boolean {
-        findNavController().popBackStack(R.id.gigerVerificationFragment, false)
+        findNavController().popBackStack(R.id.ambassadorEnrolledUsersListFragment, false)
         return true
     }
 

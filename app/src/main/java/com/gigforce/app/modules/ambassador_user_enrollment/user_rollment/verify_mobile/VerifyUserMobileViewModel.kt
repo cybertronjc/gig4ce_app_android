@@ -4,14 +4,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.gigforce.app.BuildConfig
-import com.gigforce.app.modules.ambassador_user_enrollment.AmbassadorEnrollmentRepository
 import com.gigforce.app.modules.ambassador_user_enrollment.models.CheckPhoneNumberAndSendOtpResponse
-import com.gigforce.app.modules.ambassador_user_enrollment.models.CreateUserRequest
+import com.gigforce.app.modules.ambassador_user_enrollment.models.CreateUserResponse
 import com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.UserEnrollmentRepository
 import com.gigforce.app.modules.profile.ProfileFirebaseRepository
-import com.gigforce.app.modules.verification.service.CreateUserAccEnrollmentAPi
-import com.gigforce.app.modules.verification.service.RetrofitFactory
 import com.gigforce.app.utils.Lce
 import kotlinx.coroutines.launch
 
@@ -44,15 +40,17 @@ class VerifyUserMobileViewModel constructor(
         }
     }
 
-    private val _createProfile = MutableLiveData<Lce<String>>()
-    val createProfile: LiveData<Lce<String>> = _createProfile
+    private val _createProfile = MutableLiveData<Lce<CreateUserResponse>>()
+    val createProfile: LiveData<Lce<CreateUserResponse>> = _createProfile
 
     fun otpMatchedCreateProfile(
         mobile: String
     ) = viewModelScope.launch {
 
         try {
-
+            _createProfile.value = Lce.loading()
+            val response = userEnrollmentRepository.createUser(mobile)
+            _createProfile.value = Lce.content(response)
         } catch (e: Exception) {
             _createProfile.value = Lce.error(e.message ?: "Unable to create user")
         }

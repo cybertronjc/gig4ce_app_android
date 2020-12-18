@@ -32,7 +32,7 @@
 
         <include
             android:id="@+id/dlMainLayout"
-            android:visibility="gone"
+            android:visibility="visible"
             layout="@layout/fragment_add_driving_license_info_main"/>
 
         <include

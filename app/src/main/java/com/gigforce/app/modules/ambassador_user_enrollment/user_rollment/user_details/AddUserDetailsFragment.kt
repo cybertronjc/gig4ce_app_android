@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import com.afollestad.materialdialogs.utils.MDUtil.textChanged
@@ -25,6 +26,7 @@ class AddUserDetailsFragment : BaseFragment() {
     private val viewModel: UserDetailsViewModel by viewModels()
 
     private lateinit var userId: String
+    private lateinit var phoneNumber : String
     private var dateOfBirth: Date? = null
 
     private val dateFormatter = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
@@ -71,16 +73,19 @@ class AddUserDetailsFragment : BaseFragment() {
     private fun getDataFromIntents(arguments: Bundle?, savedInstanceState: Bundle?) {
         arguments?.let {
             userId = it.getString(EnrollmentConstants.INTENT_EXTRA_USER_ID) ?: return@let
+            phoneNumber= it.getString(EnrollmentConstants.INTENT_EXTRA_PHONE_NUMBER) ?: return@let
         }
 
         savedInstanceState?.let {
             userId = it.getString(EnrollmentConstants.INTENT_EXTRA_USER_ID) ?: return@let
+            phoneNumber= it.getString(EnrollmentConstants.INTENT_EXTRA_PHONE_NUMBER) ?: return@let
         }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString(EnrollmentConstants.INTENT_EXTRA_USER_ID, userId)
+        outState.putString(EnrollmentConstants.INTENT_EXTRA_PHONE_NUMBER, phoneNumber)
     }
 
     private fun initListeners() {
@@ -129,6 +134,7 @@ class AddUserDetailsFragment : BaseFragment() {
 
         viewModel.updateUserDetails(
             uid = userId,
+            phoneNumber = phoneNumber,
             name = user_name_et.text.toString(),
             dateOfBirth = dateOfBirth!!,
             gender = gender_chip_group.findViewById<Chip>(gender_chip_group.checkedChipId).text.toString(),
@@ -150,15 +156,20 @@ class AddUserDetailsFragment : BaseFragment() {
 
                 when (it) {
                     Lse.Loading -> {
-                        UtilMethods.showLoading(requireContext())
+//                        UtilMethods.showLoading(requireContext())
                     }
                     Lse.Success -> {
-                        UtilMethods.hideLoading()
+  //                      UtilMethods.hideLoading()
                         showToast("User Details submitted")
+                        navigate(
+                            R.id.addProfilePictureFragment, bundleOf(
+                                EnrollmentConstants.INTENT_EXTRA_USER_ID to userId
+                            )
+                        )
                     }
                     is Lse.Error -> {
-                        UtilMethods.hideLoading()
-                        showAlertDialog("Could not submit info", it.error)
+ //                       UtilMethods.hideLoading()
+                     showAlertDialog("Could not submit info", it.error)
                     }
                 }
             })

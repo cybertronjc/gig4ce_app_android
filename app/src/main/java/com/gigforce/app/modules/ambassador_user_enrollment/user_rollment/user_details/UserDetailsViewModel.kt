@@ -1,37 +1,46 @@
 package com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.user_details
 
+import android.net.Uri
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gigforce.app.modules.profile.ProfileFirebaseRepository
+import com.gigforce.app.modules.profile.models.ProfileData
 import com.gigforce.app.utils.Lse
+import com.gigforce.app.utils.putFileOrThrow
+import com.google.firebase.firestore.ListenerRegistration
+import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.launch
 import java.util.*
 
 class UserDetailsViewModel constructor(
-        private val profileFirebaseRepository: ProfileFirebaseRepository = ProfileFirebaseRepository()
+    private val profileFirebaseRepository: ProfileFirebaseRepository = ProfileFirebaseRepository(),
+    private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance()
 ) : ViewModel() {
 
     private val _submitUserDetailsState = MutableLiveData<Lse>()
     val submitUserDetailsState: LiveData<Lse> = _submitUserDetailsState
 
     fun updateUserDetails(
-            uid: String,
-            name: String,
-            dateOfBirth: Date,
-            gender: String,
-            highestQualification: String
+        uid: String,
+        phoneNumber : String,
+        name: String,
+        dateOfBirth: Date,
+        gender: String,
+        highestQualification: String
     ) = viewModelScope.launch {
 
         _submitUserDetailsState.postValue(Lse.loading())
         try {
             profileFirebaseRepository.updateUserDetails(
-                    uid = uid,
-                    name = name,
-                    dateOfBirth = dateOfBirth,
-                    gender = gender,
-                    highestQualification = highestQualification
+                uid = uid,
+                phoneNumber = phoneNumber,
+                name = name,
+                dateOfBirth = dateOfBirth,
+                gender = gender,
+                highestQualification = highestQualification
             )
             _submitUserDetailsState.value = Lse.success()
             _submitUserDetailsState.value = null
@@ -44,28 +53,28 @@ class UserDetailsViewModel constructor(
 
 
     fun updateUserCurrentAddressDetails(
-            uid: String,
-            pinCode: String,
-            addressLine1: String,
-            addressLine2: String,
-            state: String,
-            city: String,
-            preferredDistanceInKm: Int,
-            readyToChangeLocationForWork: Boolean
+        uid: String,
+        pinCode: String,
+        addressLine1: String,
+        addressLine2: String,
+        state: String,
+        city: String,
+        preferredDistanceInKm: Int,
+        readyToChangeLocationForWork: Boolean
     ) = viewModelScope.launch {
 
         _submitUserDetailsState.postValue(Lse.loading())
         try {
 
             profileFirebaseRepository.updateCurrentAddressDetails(
-                    uid = uid,
-                    pinCode = pinCode,
-                    addressLine1 = addressLine1,
-                    addressLine2 = addressLine2,
-                    state = state,
-                    city = city,
-                    preferredDistanceInKm = preferredDistanceInKm,
-                    readyToChangeLocationForWork = readyToChangeLocationForWork
+                uid = uid,
+                pinCode = pinCode,
+                addressLine1 = addressLine1,
+                addressLine2 = addressLine2,
+                state = state,
+                city = city,
+                preferredDistanceInKm = preferredDistanceInKm,
+                readyToChangeLocationForWork = readyToChangeLocationForWork
             )
             _submitUserDetailsState.value = Lse.success()
             _submitUserDetailsState.value = null
@@ -74,5 +83,61 @@ class UserDetailsViewModel constructor(
             _submitUserDetailsState.value = Lse.error(e.message ?: "Unable to submit user details")
             _submitUserDetailsState.value = null
         }
+    }
+
+    fun uploadProfilePicture(
+        userId: String?,
+        uri: Uri?,
+        data: ByteArray
+    ) = viewModelScope.launch {
+        _submitUserDetailsState.postValue(Lse.loading())
+
+        Log.v("Upload Image", "started")
+        val mReference =
+            firebaseStorage.reference.child("profile_pics").child(uri!!.lastPathSegment!!)
+
+        /**
+         * Uploading task created and initiated here.
+         */
+        Log.d("UPLOAD", "uploading files")
+        try {
+            val taskSnap = mReference.putFileOrThrow(uri)
+            val fname: String = taskSnap.metadata?.reference?.name.toString()
+
+            profileFirebaseRepository.setProfileAvatarName(userId, fname)
+            _submitUserDetailsState.value = Lse.success()
+            _submitUserDetailsState.value = null
+        } catch (e: Exception) {
+            e.printStackTrace()
+            _submitUserDetailsState.value =
+                Lse.error(e.message ?: "Unable to upload profile picture")
+            _submitUserDetailsState.value = null
+        }
+    }
+
+    private val _profile = MutableLiveData<ProfileData>()
+    val profile: LiveData<ProfileData> = _profile
+
+    private var listenerRegistration : ListenerRegistration? = null
+
+    fun startWatchingProfile(userId: String?) {
+        listenerRegistration = profileFirebaseRepository.getProfileRef(userId )
+            .addSnapshotListener { value, error ->
+
+                error?.printStackTrace()
+
+                value?.let {
+
+                    val profileData = it.toObject(ProfileData::class.java)!!.apply {
+                        this.id = it.id
+                    }
+                    _profile.value = profileData
+                }
+            }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        listenerRegistration?.remove()
     }
 }

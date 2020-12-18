@@ -138,6 +138,11 @@ class ProfileFirebaseRepository : BaseFirestoreDBRepository() {
             .document(uid).update("profileAvatarName", profileAvatarName)
     }
 
+    fun setProfileAvatarName(userId: String?, profileAvatarName: String) {
+        firebaseDB.collection(profileCollectionName)
+            .document(userId ?: getUID()).update("profileAvatarName", profileAvatarName)
+    }
+
     fun removeProfileTag(tags: ArrayList<String>) {
         for (tag in tags) {
             firebaseDB.collection(profileCollectionName)
@@ -174,6 +179,8 @@ class ProfileFirebaseRepository : BaseFirestoreDBRepository() {
             }
     }
 
+    fun getProfileRef(userId: String?) = getCollectionReference().document(userId ?: getUID())
+
     /**
      * Don't delete while refactoring. Base Repo doesn't cover this function
      */
@@ -192,22 +199,33 @@ class ProfileFirebaseRepository : BaseFirestoreDBRepository() {
 
     suspend fun updateUserDetails(
         uid: String,
+        phoneNumber: String,
         name: String,
         dateOfBirth: Date,
         gender: String,
         highestQualification: String
     ) {
+
+        val profileData = ProfileData(
+            name = name,
+            gender = gender,
+            dateOfBirth = Timestamp(dateOfBirth),
+            highestEducation = highestQualification,
+            contact = ArrayList(
+                listOf(
+                    Contact(
+                        phone = phoneNumber,
+                        email = ""
+                    )
+                )
+            )
+        )
+
+
         firebaseDB
             .collection(profileCollectionName)
             .document(uid)
-            .update(
-                mapOf(
-                    "name" to name,
-                    "dateOfBirth" to Timestamp(dateOfBirth),
-                    "gender" to gender,
-                    "highestEducation" to highestQualification
-                )
-            )
+            .set(profileData)
     }
 
     suspend fun updateCurrentAddressDetails(

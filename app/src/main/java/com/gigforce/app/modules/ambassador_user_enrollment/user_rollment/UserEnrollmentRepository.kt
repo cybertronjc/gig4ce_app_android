@@ -5,8 +5,10 @@ import com.gigforce.app.core.base.basefirestore.BaseFirestoreDBRepository
 import com.gigforce.app.modules.ambassador_user_enrollment.models.CreateUserRequest
 import com.gigforce.app.modules.ambassador_user_enrollment.models.CreateUserResponse
 import com.gigforce.app.modules.ambassador_user_enrollment.models.EnrolledUser
+import com.gigforce.app.modules.ambassador_user_enrollment.models.EnrollmentStepsCompleted
 import com.gigforce.app.modules.verification.service.CreateUserAccEnrollmentAPi
 import com.gigforce.app.modules.verification.service.RetrofitFactory
+import com.gigforce.app.utils.setOrThrow
 import com.google.firebase.Timestamp
 
 class UserEnrollmentRepository constructor(
@@ -15,7 +17,7 @@ class UserEnrollmentRepository constructor(
 
     suspend fun createUser(mobile: String): CreateUserResponse {
         val createUserResponse = createUserApi.createUser(
-            BuildConfig.REFERRAL_BASE_URL, listOf(
+            BuildConfig.CREATE_USER_URL, listOf(
                 CreateUserRequest(mobile)
             )
         )
@@ -25,17 +27,17 @@ class UserEnrollmentRepository constructor(
         } else {
             val response = createUserResponse.body()!!.first()
 
-            //todo addorthrow
             db.collection(COLLECTION_NAME)
                 .document(getUID())
                 .collection(COLLECTION_Enrolled_Users)
-                .add(
-                    EnrolledUser(
-                        uid = response.uid,
-                        enrolledOn = Timestamp.now(),
-                        enrolledBy = getUID()
-                    )
-                )
+                .document(response.uid)
+                .setOrThrow( EnrolledUser(
+                    uid = response.uid,
+                    enrolledOn = Timestamp.now(),
+                    enrolledBy = getUID(),
+                    enrollmentStepsCompleted = EnrollmentStepsCompleted(),
+                    name = mobile
+                ))
 
             return response
         }

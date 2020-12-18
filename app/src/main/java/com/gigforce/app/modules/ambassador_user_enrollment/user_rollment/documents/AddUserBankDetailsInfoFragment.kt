@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.os.bundleOf
 import androidx.core.view.isGone
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -29,7 +30,10 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.storage.FirebaseStorage
 import com.ncorti.slidetoact.SlideToActView
 import kotlinx.android.synthetic.main.fragment_ambsd_add_bank_details_info.*
+import kotlinx.android.synthetic.main.fragment_ambsd_add_bank_details_info.ic_back_iv
+import kotlinx.android.synthetic.main.fragment_ambsd_add_bank_details_info.progressBar
 import kotlinx.android.synthetic.main.fragment_ambsd_add_bank_details_info_main.*
+import kotlinx.android.synthetic.main.fragment_ambsd_add_pan_card_info.*
 import kotlinx.android.synthetic.main.fragment_verification_image_holder.view.*
 import java.util.*
 
@@ -78,9 +82,10 @@ class AddUserBankDetailsInfoFragment : BaseFragment() {
         passbookImageHolder.documentUploadSubLabelTV.text =
             getString(R.string.upload_bank_passbook_sublabel)
 
-        toolbar.setNavigationOnClickListener {
-            findNavController().popBackStack(R.id.gigerVerificationFragment, false)
+        ic_back_iv.setOnClickListener {
+            findNavController().popBackStack(R.id.ambassadorEnrolledUsersListFragment, false)
         }
+
 
         helpIconIV.setOnClickListener {
             showWhyWeNeedThisDialog()
@@ -288,8 +293,16 @@ class AddUserBankDetailsInfoFragment : BaseFragment() {
     private fun documentsUploaded() {
         showToast(getString(R.string.bank_details_uploaded))
 
+        navigate(R.id.addUserInterestFragment, bundleOf(
+            EnrollmentConstants.INTENT_EXTRA_USER_ID to userId
+        ))
+
     }
 
+    override fun onBackPressed(): Boolean {
+        findNavController().popBackStack(R.id.ambassadorEnrolledUsersListFragment, false)
+        return true
+    }
 
     private fun showLoadingState() {
         bankViewLayout.visibility = View.GONE

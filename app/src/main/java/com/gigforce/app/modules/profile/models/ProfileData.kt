@@ -1,5 +1,6 @@
 package com.gigforce.app.modules.profile.models
 
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.Exclude
 import com.google.firebase.firestore.PropertyName
 
@@ -41,7 +42,12 @@ data class ProfileData(
 
     @get:PropertyName("isUserAmbassador")
     @set:PropertyName("isUserAmbassador")
-    var isUserAmbassador: Boolean = false
+    var isUserAmbassador: Boolean = false,
+
+    @get:PropertyName("dateOfBirth")
+    @set:PropertyName("dateOfBirth")
+    var dateOfBirth: Timestamp = Timestamp.now()
+
 ) {
 
     @Exclude

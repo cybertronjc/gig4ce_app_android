@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.os.bundleOf
 import androidx.core.view.isGone
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -32,7 +33,10 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.storage.FirebaseStorage
 import com.ncorti.slidetoact.SlideToActView
 import kotlinx.android.synthetic.main.fragment_ambsd_add_driving_license_info.*
+import kotlinx.android.synthetic.main.fragment_ambsd_add_driving_license_info.ic_back_iv
+import kotlinx.android.synthetic.main.fragment_ambsd_add_driving_license_info.progressBar
 import kotlinx.android.synthetic.main.fragment_ambsd_add_driving_license_info_main.*
+import kotlinx.android.synthetic.main.fragment_ambsd_add_pan_card_info.*
 import kotlinx.android.synthetic.main.fragment_verification_image_holder.view.*
 import java.util.*
 
@@ -42,7 +46,7 @@ enum class DrivingLicenseSides {
     BACK_SIDE
 }
 
-class AddDrivingLicenseInfoFragment : BaseFragment() {
+class AddUserDrivingLicenseInfoFragment : BaseFragment() {
 
     companion object {
         const val REQUEST_CODE_UPLOAD_DL = 2333
@@ -64,7 +68,7 @@ class AddDrivingLicenseInfoFragment : BaseFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ) = inflateView(R.layout.fragment_add_driving_license_info, inflater, container)
+    ) = inflateView(R.layout.fragment_ambsd_add_driving_license_info, inflater, container)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -108,9 +112,10 @@ class AddDrivingLicenseInfoFragment : BaseFragment() {
             getString(R.string.upload_your_driving_license)
         dlSubmitSliderBtn.isEnabled = false
 
-        toolbar.setNavigationOnClickListener {
-            findNavController().popBackStack(R.id.gigerVerificationFragment, false)
+        ic_back_iv.setOnClickListener {
+            findNavController().popBackStack(R.id.ambassadorEnrolledUsersListFragment, false)
         }
+
 
         helpIconIV.setOnClickListener {
             showWhyWeNeedThisDialog()
@@ -216,7 +221,8 @@ class AddDrivingLicenseInfoFragment : BaseFragment() {
                             dlFrontImagePath,
                             dlBackImagePath,
                             state,
-                            dlNo
+                            dlNo,
+                            userId
                         )
 
                     } else if (dlNoRB.isChecked) {
@@ -225,7 +231,8 @@ class AddDrivingLicenseInfoFragment : BaseFragment() {
                             null,
                             null,
                             null,
-                            null
+                            null,
+                            userId
                         )
                     }
                 }
@@ -265,8 +272,7 @@ class AddDrivingLicenseInfoFragment : BaseFragment() {
     }
 
     override fun onBackPressed(): Boolean {
-        findNavController().popBackStack(R.id.gigerVerificationFragment, false)
-        TODO()
+        findNavController().popBackStack(R.id.ambassadorEnrolledUsersListFragment, false)
         return true
     }
 
@@ -298,7 +304,11 @@ class AddDrivingLicenseInfoFragment : BaseFragment() {
     private fun documentUploaded() {
         showToast(getString(R.string.dl_details_uploaded))
 
-        TODO()
+        navigate(
+            R.id.addUserBankDetailsInfoFragment, bundleOf(
+                EnrollmentConstants.INTENT_EXTRA_USER_ID to userId
+            )
+        )
     }
 
     private fun showLoadingState() {
